@@ -68,12 +68,13 @@ Module.noExitRuntime = true;
 		// 如果是 wasm 文件，检查是否应该使用压缩版本
 		if (path.endsWith('.wasm')) {
 			const basePath = path.replace('.wasm', '');
-	  if (supportsGzip()) {
+	    if (supportsGzip()) {
 				// 使用 gzip 压缩版本作为备选
-				return prefix + basePath + '.gz.wasm' + suffix;
-			}else if (supportsBrotli()) {
+				return prefix + basePath + '.wasm.gz' + suffix;
+			}
+      if (supportsBrotli()) {
 				// 使用 brotli 压缩版本作为备选
-				return prefix + basePath + '.br.wasm' + suffix;
+				return prefix + basePath + '.wasm.br' + suffix;
 			}
 		}
 		return prefix + path + suffix;
@@ -620,12 +621,17 @@ function instantiateAsync(binary, binaryFile, imports, callback) {
       // an actual Response.
       // TODO(https://github.com/google/closure-compiler/pull/3913): Remove if/when upstream closure is fixed.
       /** @suppress {checkTypes} */
-      // var result = WebAssembly.instantiateStreaming(response, imports);
-      var result = new Promise((resolve)=>{
-        response.arrayBuffer().then(bytes =>
-          resolve(WebAssembly.instantiate(bytes, imports))
-        );
-      }) 
+      var result = null;
+      if (response.headers.get('Content-Type') === 'application/wasm') {
+        result = WebAssembly.instantiateStreaming(response, imports);
+      }else{
+        result = new Promise((resolve)=>{
+            response.arrayBuffer().then(bytes =>
+                resolve(WebAssembly.instantiate(bytes, imports))
+            );
+          }) 
+      }
+    
 
       return result.then(
         callback,
