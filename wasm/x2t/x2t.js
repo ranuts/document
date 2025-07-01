@@ -70,10 +70,10 @@ Module.noExitRuntime = true;
 			const basePath = path.replace('.wasm', '');
 	  if (supportsGzip()) {
 				// 使用 gzip 压缩版本作为备选
-				return prefix + basePath + '.wasm.gz' + suffix;
+				return prefix + basePath + '.gz.wasm' + suffix;
 			}else if (supportsBrotli()) {
 				// 使用 brotli 压缩版本作为备选
-				return prefix + basePath + '.wasm.br' + suffix;
+				return prefix + basePath + '.br.wasm' + suffix;
 			}
 		}
 		return prefix + path + suffix;
