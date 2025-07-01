@@ -620,10 +620,12 @@ function instantiateAsync(binary, binaryFile, imports, callback) {
       // an actual Response.
       // TODO(https://github.com/google/closure-compiler/pull/3913): Remove if/when upstream closure is fixed.
       /** @suppress {checkTypes} */
-      var result = WebAssembly.instantiateStreaming(response, imports);
-      // var result = response.arrayBuffer().then(bytes =>
-      //   WebAssembly.instantiate(bytes, {})
-      // );
+      // var result = WebAssembly.instantiateStreaming(response, imports);
+      var result = new Promise((resolve)=>{
+        response.arrayBuffer().then(bytes =>
+          resolve(WebAssembly.instantiate(bytes, imports))
+        );
+      }) 
 
       return result.then(
         callback,
