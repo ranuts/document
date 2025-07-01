@@ -42,7 +42,26 @@ Module.noExitRuntime = true;
 	// 	suffix = '';
 	// }
 
+	// 检测浏览器是否支持 brotli 解压缩
+	function supportsBrotli() {
+		// 检查是否支持 Brotli 解压缩
+		// 现代浏览器会自动处理 Content-Encoding: br 头
+		if (typeof window !== 'undefined' && window.navigator) {
+			// 检查是否支持 fetch 和 ArrayBuffer
+			return typeof fetch === 'function' && typeof ArrayBuffer !== 'undefined';
+		}
+		return false;
+	}
+
 	Module.locateFile = function(path, prefix) {
+		// 如果是 wasm 文件，检查是否应该使用压缩版本
+		if (path.endsWith('.wasm')) {
+			const basePath = path.replace('.wasm', '');
+			if (supportsBrotli()) {
+				// 使用 brotli 压缩版本
+				return prefix + basePath + '.wasm.br' + suffix;
+			}
+		}
 		return prefix + path + suffix;
 	};
 })();
@@ -510,12 +529,25 @@ function getBinaryPromise(binaryFile) {
     if (typeof fetch == 'function'
       && !isFileURI(binaryFile)
     ) {
-      return fetch(binaryFile, { credentials: 'same-origin' }).then((response) => {
+      // 检查是否是 brotli 压缩文件
+      const isBrotliFile = binaryFile.endsWith('.br');
+      const fetchOptions = { 
+        credentials: 'same-origin',
+        // 对于 brotli 文件，确保请求头正确
+        headers: isBrotliFile ? {
+          'Accept-Encoding': 'br'
+        } : {}
+      };
+      
+      return fetch(binaryFile, fetchOptions).then((response) => {
         if (!response['ok']) {
           throw `failed to load wasm binary file at '${binaryFile}'`;
         }
         return response['arrayBuffer']();
-      }).catch(() => getBinarySync(binaryFile));
+      }).catch((error) => {
+        console.warn(`Failed to load ${binaryFile}, falling back to sync loading:`, error);
+        return getBinarySync(binaryFile);
+      });
     }
     else if (readAsync) {
       // fetch is not available or url is file => try XHR (readAsync uses XHR internally)
@@ -553,7 +585,18 @@ function instantiateAsync(binary, binaryFile, imports, callback) {
       //   https://github.com/emscripten-core/emscripten/pull/16917
       !ENVIRONMENT_IS_NODE &&
       typeof fetch == 'function') {
-    return fetch(binaryFile, { credentials: 'same-origin' }).then((response) => {
+    
+    // 检查是否是 brotli 压缩文件
+    const isBrotliFile = binaryFile.endsWith('.br');
+    const fetchOptions = { 
+      credentials: 'same-origin',
+      // 对于 brotli 文件，确保请求头正确
+      headers: isBrotliFile ? {
+        'Accept-Encoding': 'br'
+      } : {}
+    };
+    
+    return fetch(binaryFile, fetchOptions).then((response) => {
       // Suppress closure warning here since the upstream definition for
       // instantiateStreaming only allows Promise<Repsponse> rather than
       // an actual Response.
