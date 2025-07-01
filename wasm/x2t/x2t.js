@@ -53,12 +53,26 @@ Module.noExitRuntime = true;
 		return false;
 	}
 
+	// 检测浏览器是否支持 gzip 解压缩
+	function supportsGzip() {
+		// 检查是否支持 gzip 解压缩
+		// 现代浏览器会自动处理 Content-Encoding: gzip 头
+		if (typeof window !== 'undefined' && window.navigator) {
+			// 检查是否支持 fetch 和 ArrayBuffer
+			return typeof fetch === 'function' && typeof ArrayBuffer !== 'undefined';
+		}
+		return false;
+	}
+
 	Module.locateFile = function(path, prefix) {
 		// 如果是 wasm 文件，检查是否应该使用压缩版本
 		if (path.endsWith('.wasm')) {
 			const basePath = path.replace('.wasm', '');
-			if (supportsBrotli()) {
-				// 使用 brotli 压缩版本
+	  if (supportsGzip()) {
+				// 使用 gzip 压缩版本作为备选
+				return prefix + basePath + '.wasm.gz' + suffix;
+			}else if (supportsBrotli()) {
+				// 使用 brotli 压缩版本作为备选
 				return prefix + basePath + '.wasm.br' + suffix;
 			}
 		}
@@ -529,13 +543,15 @@ function getBinaryPromise(binaryFile) {
     if (typeof fetch == 'function'
       && !isFileURI(binaryFile)
     ) {
-      // 检查是否是 brotli 压缩文件
-      const isBrotliFile = binaryFile.endsWith('.br');
+      // 检查是否是压缩文件
+      const isBrotliFile = binaryFile.includes('.br');
+      const isGzipFile = binaryFile.includes('.gz');
       const fetchOptions = { 
-        credentials: 'same-origin',
-        // 对于 brotli 文件，确保请求头正确
+        // 对于压缩文件，确保请求头正确
         headers: isBrotliFile ? {
           'Accept-Encoding': 'br'
+        } : isGzipFile ? {
+          'Accept-Encoding': 'gzip'
         } : {}
       };
       
@@ -586,13 +602,15 @@ function instantiateAsync(binary, binaryFile, imports, callback) {
       !ENVIRONMENT_IS_NODE &&
       typeof fetch == 'function') {
     
-    // 检查是否是 brotli 压缩文件
-    const isBrotliFile = binaryFile.endsWith('.br');
+    // 检查是否是压缩文件
+    const isBrotliFile = binaryFile.includes('.br');
+    const isGzipFile = binaryFile.includes('.gz');
     const fetchOptions = { 
-      credentials: 'same-origin',
-      // 对于 brotli 文件，确保请求头正确
+      // 对于压缩文件，确保请求头正确
       headers: isBrotliFile ? {
         'Accept-Encoding': 'br'
+      } : isGzipFile ? {
+        'Accept-Encoding': 'gzip'
       } : {}
     };
     
@@ -603,6 +621,9 @@ function instantiateAsync(binary, binaryFile, imports, callback) {
       // TODO(https://github.com/google/closure-compiler/pull/3913): Remove if/when upstream closure is fixed.
       /** @suppress {checkTypes} */
       var result = WebAssembly.instantiateStreaming(response, imports);
+      // var result = response.arrayBuffer().then(bytes =>
+      //   WebAssembly.instantiate(bytes, {})
+      // );
 
       return result.then(
         callback,
