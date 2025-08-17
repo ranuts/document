@@ -14,6 +14,6 @@ jobs:
     name: Semantic Pull Request
     steps:
       - name: Validate PR title
-        uses: amannn/action-semantic-pull-request@v5
+        uses: amannn/action-semantic-pull-request@v6
         env:
           GITHUB_TOKEN: ${{ secrets.WEREAD_DEPLOY_KEY }}
