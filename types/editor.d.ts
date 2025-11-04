@@ -76,10 +76,20 @@ interface DocsAPI {
   DocEditor: new (elementId: string, config: DocEditorConfig) => DocEditor;
 }
 
+// 最近文档接口
+interface RecentDocument {
+  id: string;
+  fileName: string;
+  fileType: string;
+  lastModified: number;
+  url?: string;
+}
+
 declare global {
   interface Window {
     onCreateNew: (ext: string) => Promise<void>;
     DocsAPI: DocsAPI;
     editor: DocEditor;
+    updateRecentDocument?: (doc: Omit<RecentDocument, 'id'>) => void;
   }
 }

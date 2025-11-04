@@ -868,6 +868,15 @@ export async function handleDocumentOperation(options: {
       binData: documentData.bin,
       media: documentData.media,
     });
+    
+    // 更新最近文档列表
+    if (window.updateRecentDocument) {
+      window.updateRecentDocument({
+        fileName,
+        fileType,
+        lastModified: file?.lastModified || Date.now(),
+      });
+    }
   } catch (error: any) {
     console.error('文档操作失败：', error);
     alert(`文档操作失败：${error.message}`);
