@@ -84,7 +84,7 @@ window.onCreateNew = onCreateNew;
 // Create a single file input element
 const fileInput = document.createElement('input');
 fileInput.type = 'file';
-fileInput.accept = '.docx,.xlsx,.pptx,.doc,.xls,.ppt';
+fileInput.accept = '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv';
 fileInput.style.setProperty('visibility', 'hidden');
 document.body.appendChild(fileInput);
 

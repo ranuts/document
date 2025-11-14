@@ -672,7 +672,7 @@ export function getDocumentType(fileType: string): string | null {
   const type = fileType.toLowerCase();
   if (type === 'docx' || type === 'doc') {
     return 'word';
-  } else if (type === 'xlsx' || type === 'xls') {
+  } else if (type === 'xlsx' || type === 'xls' || type === 'csv') {
     return 'cell';
   } else if (type === 'pptx' || type === 'ppt') {
     return 'slide';
