@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite --host --force",
     "build": "vite build",
     "preview": "vite preview",
     "tsc": "tsc --noEmit",
@@ -13,30 +13,30 @@
     "lint": "eslint --cache . && tsc --noEmit"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.10.0"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^9.29.0",
-    "@tailwindcss/postcss": "^4.1.8",
-    "@types/node": "^22.15.3",
-    "@typescript-eslint/parser": "^8.34.0",
-    "eslint": "^9.29.0",
-    "eslint-plugin-import-x": "^4.15.2",
-    "eslint-plugin-n": "^17.20.0",
-    "eslint-plugin-regexp": "^2.9.0",
-    "globals": "^16.2.0",
-    "postcss": "^8.5.4",
-    "prettier": "^3.5.3",
-    "tailwindcss": "^4.1.8",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.34.0",
-    "vite": "^6.2.0"
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^24.10.1",
+    "@typescript-eslint/parser": "^8.46.4",
+    "eslint": "^9.39.1",
+    "eslint-plugin-import-x": "^4.16.1",
+    "eslint-plugin-n": "^17.23.1",
+    "eslint-plugin-regexp": "^2.10.0",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.4",
+    "vite": "^7.2.2"
   },
   "dependencies": {
-    "ranui": "0.1.10-alpha.19",
-    "ranuts": "0.1.0-alpha-22"
+    "ranui": "0.1.10-alpha-27",
+    "ranuts": "0.1.0-alpha-23"
   }
 }

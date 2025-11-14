@@ -2,6 +2,7 @@ import { getExtensions } from 'ranuts/utils';
 import 'ranui/message';
 import { g_sEmpty_bin } from './empty_bin';
 import { getDocmentObj } from '@/store';
+import { t, getOnlyOfficeLang } from './i18n';
 
 declare global {
   interface Window {
@@ -27,7 +28,7 @@ declare global {
   }
 }
 
-// types/x2t.d.ts - 类型定义文件
+// types/x2t.d.ts - Type definitions file
 interface EmscriptenFileSystem {
   mkdir(path: string): void;
   readdir(path: string): string[];
@@ -56,7 +57,7 @@ interface BinConversionResult {
 type DocumentType = 'word' | 'cell' | 'slide';
 
 /**
- * X2T 工具类 - 负责文档转换功能
+ * X2T utility class - Handles document conversion functionality
  */
 class X2TConverter {
   private x2tModule: EmscriptenModule | null = null;
@@ -64,7 +65,7 @@ class X2TConverter {
   private initPromise: Promise<EmscriptenModule> | null = null;
   private hasScriptLoaded = false;
 
-  // 支持的文件类型映射
+  // Supported file type mapping
   private readonly DOCUMENT_TYPE_MAP: Record<string, DocumentType> = {
     docx: 'word',
     doc: 'word',
@@ -85,7 +86,7 @@ class X2TConverter {
   private readonly INIT_TIMEOUT = 300000;
 
   /**
-   * 加载 X2T 脚本文件
+   * Load X2T script file
    */
   async loadScript(): Promise<void> {
     if (this.hasScriptLoaded) return;
@@ -110,14 +111,14 @@ class X2TConverter {
   }
 
   /**
-   * 初始化 X2T 模块
+   * Initialize X2T module
    */
   async initialize(): Promise<EmscriptenModule> {
     if (this.isReady && this.x2tModule) {
       return this.x2tModule;
     }
 
-    // 防止重复初始化
+    // Prevent duplicate initialization
     if (this.initPromise) {
       return this.initPromise;
     }
@@ -136,7 +137,7 @@ class X2TConverter {
           return;
         }
 
-        // 设置超时处理
+        // Set timeout handling
         const timeoutId = setTimeout(() => {
           if (!this.isReady) {
             reject(new Error(`X2T initialization timeout after ${this.INIT_TIMEOUT}ms`));
@@ -157,27 +158,27 @@ class X2TConverter {
         };
       });
     } catch (error) {
-      this.initPromise = null; // 重置以允许重试
+      this.initPromise = null; // Reset to allow retry
       throw error;
     }
   }
 
   /**
-   * 创建工作目录
+   * Create working directories
    */
   private createWorkingDirectories(x2t: EmscriptenModule): void {
     this.WORKING_DIRS.forEach((dir) => {
       try {
         x2t.FS.mkdir(dir);
       } catch (error) {
-        // 目录可能已存在，忽略错误
+        // Directory may already exist, ignore error
         console.warn(`Directory ${dir} may already exist:`, error);
       }
     });
   }
 
   /**
-   * 获取文档类型
+   * Get document type
    */
   private getDocumentType(extension: string): DocumentType {
     const docType = this.DOCUMENT_TYPE_MAP[extension.toLowerCase()];
@@ -188,7 +189,7 @@ class X2TConverter {
   }
 
   /**
-   * 清理文件名
+   * Sanitize file name
    */
   private sanitizeFileName(input: string): string {
     if (typeof input !== 'string' || !input.trim()) {
@@ -212,11 +213,11 @@ class X2TConverter {
       .replace(unsafeChars, '');
 
     sanitized = sanitized.trim() || 'file';
-    return `${sanitized.slice(0, 200)}.${ext}`; // 限制长度
+    return `${sanitized.slice(0, 200)}.${ext}`; // Limit length
   }
 
   /**
-   * 执行文档转换
+   * Execute document conversion
    */
   private executeConversion(paramsPath: string): void {
     if (!this.x2tModule) {
@@ -230,7 +231,7 @@ class X2TConverter {
   }
 
   /**
-   * 创建转换参数 XML
+   * Create conversion parameters XML
    */
   private createConversionParams(fromPath: string, toPath: string, additionalParams = ''): string {
     return `<?xml version="1.0" encoding="utf-8"?>
@@ -244,7 +245,7 @@ class X2TConverter {
   }
 
   /**
-   * 读取媒体文件
+   * Read media files
    */
   private readMediaFiles(): Record<string, string> {
     if (!this.x2tModule) return {};
@@ -277,7 +278,7 @@ class X2TConverter {
   }
 
   /**
-   * 将文档转换为 bin 格式
+   * Convert document to bin format
    */
   async convertDocument(file: File): Promise<ConversionResult> {
     await this.initialize();
@@ -287,26 +288,26 @@ class X2TConverter {
     const documentType = this.getDocumentType(fileExt);
 
     try {
-      // 读取文件内容
+      // Read file content
       const arrayBuffer = await file.arrayBuffer();
       const data = new Uint8Array(arrayBuffer);
 
-      // 生成安全的文件名
+      // Generate safe file name
       const sanitizedName = this.sanitizeFileName(fileName);
       const inputPath = `/working/${sanitizedName}`;
       const outputPath = `${inputPath}.bin`;
 
-      // 写入文件到虚拟文件系统
+      // Write file to virtual file system
       this.x2tModule!.FS.writeFile(inputPath, data);
 
-      // 创建转换参数
+      // Create conversion parameters
       const params = this.createConversionParams(inputPath, outputPath);
       this.x2tModule!.FS.writeFile('/working/params.xml', params);
 
-      // 执行转换
+      // Execute conversion
       this.executeConversion('/working/params.xml');
 
-      // 读取转换结果
+      // Read conversion result
       const result = this.x2tModule!.FS.readFile(outputPath);
       const media = this.readMediaFiles();
 
@@ -322,7 +323,7 @@ class X2TConverter {
   }
 
   /**
-   * 将 bin 格式转换为指定格式并下载
+   * Convert bin format to specified format and download
    */
   async convertBinToDocumentAndDownload(
     bin: Uint8Array,
@@ -336,10 +337,10 @@ class X2TConverter {
     const outputFileName = `${sanitizedBase}.${targetExt.toLowerCase()}`;
 
     try {
-      // 写入 bin 文件
+      // Write bin file
       this.x2tModule!.FS.writeFile(`/working/${binFileName}`, bin);
 
-      // 创建转换参数
+      // Create conversion parameters
       let additionalParams = '';
       if (targetExt === 'PDF') {
         additionalParams = '<m_sFontDir>/working/fonts/</m_sFontDir>';
@@ -353,17 +354,17 @@ class X2TConverter {
 
       this.x2tModule!.FS.writeFile('/working/params.xml', params);
 
-      // 执行转换
+      // Execute conversion
       this.executeConversion('/working/params.xml');
 
-      // 读取生成的文档
+      // Read generated document
       const result = this.x2tModule!.FS.readFile(`/working/${outputFileName}`);
 
-      // 确保 result 是 Uint8Array 类型
+      // Ensure result is Uint8Array type
       const resultArray = result instanceof Uint8Array ? result : new Uint8Array(result as ArrayBuffer);
 
-      // 下载文件
-      // TODO: 完善打印功能
+      // Download file
+      // TODO: Improve print functionality
       this.saveWithFileSystemAPI(resultArray, outputFileName);
 
       return {
@@ -376,7 +377,7 @@ class X2TConverter {
   }
 
   /**
-   * 下载文件
+   * Download file
    */
   private downloadFile(data: Uint8Array, fileName: string): void {
     const blob = new Blob([data as BlobPart]);
@@ -390,7 +391,7 @@ class X2TConverter {
     document.body.appendChild(link);
     link.click();
 
-    // 清理资源
+    // Clean up resources
     setTimeout(() => {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
@@ -398,11 +399,11 @@ class X2TConverter {
   }
 
   /**
-   * 根据文件扩展名获取 MIME 类型
+   * Get MIME type from file extension
    */
   private getMimeTypeFromExtension(extension: string): string {
     const mimeMap: Record<string, string> = {
-      // 文档类型
+      // Document types
       docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       doc: 'application/msword',
       odt: 'application/vnd.oasis.opendocument.text',
@@ -410,18 +411,18 @@ class X2TConverter {
       txt: 'text/plain',
       pdf: 'application/pdf',
 
-      // 表格类型
+      // Spreadsheet types
       xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       xls: 'application/vnd.ms-excel',
       ods: 'application/vnd.oasis.opendocument.spreadsheet',
       csv: 'text/csv',
 
-      // 演示文稿类型
+      // Presentation types
       pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
       ppt: 'application/vnd.ms-powerpoint',
       odp: 'application/vnd.oasis.opendocument.presentation',
 
-      // 图片类型
+      // Image types
       png: 'image/png',
       jpg: 'image/jpeg',
       jpeg: 'image/jpeg',
@@ -435,7 +436,7 @@ class X2TConverter {
   }
 
   /**
-   * 获取文件类型描述
+   * Get file type description
    */
   private getFileDescription(extension: string): string {
     const descriptionMap: Record<string, string> = {
@@ -458,7 +459,7 @@ class X2TConverter {
   }
 
   /**
-   * 使用现代文件系统 API 保存文件
+   * Save file using modern File System API
    */
   private async saveWithFileSystemAPI(data: Uint8Array, fileName: string, mimeType?: string): Promise<void> {
     if (!(window as any).showSaveFilePicker) {
@@ -466,11 +467,11 @@ class X2TConverter {
       return;
     }
     try {
-      // 获取文件扩展名并确定 MIME 类型
+      // Get file extension and determine MIME type
       const extension = fileName.split('.').pop()?.toLowerCase() || '';
       const detectedMimeType = mimeType || this.getMimeTypeFromExtension(extension);
 
-      // 显示文件保存对话框
+      // Show file save dialog
       const fileHandle = await (window as any).showSaveFilePicker({
         suggestedName: fileName,
         types: [
@@ -483,11 +484,11 @@ class X2TConverter {
         ],
       });
 
-      // 创建可写流并写入数据
+      // Create writable stream and write data
       const writable = await fileHandle.createWritable();
       await writable.write(data);
       await writable.close();
-      window?.message?.success?.(`文件保存成功：${fileName}`);
+      window?.message?.success?.(`${t('fileSavedSuccess')}${fileName}`);
       console.log('File saved successfully:', fileName);
     } catch (error) {
       if ((error as Error).name === 'AbortError') {
@@ -499,7 +500,7 @@ class X2TConverter {
   }
 
   /**
-   * 销毁实例，清理资源
+   * Destroy instance and clean up resources
    */
   destroy(): void {
     this.x2tModule = null;
@@ -511,26 +512,26 @@ class X2TConverter {
 
 export function loadEditorApi(): Promise<void> {
   return new Promise((resolve, reject) => {
-    // 检查是否已加载
+    // Check if already loaded
     if (window.DocsAPI) {
       resolve();
       return;
     }
 
-    // 加载编辑器 API
+    // Load editor API
     const script = document.createElement('script');
     script.src = './web-apps/apps/api/documents/api.js';
     script.onload = () => resolve();
     script.onerror = (error) => {
       console.error('Failed to load OnlyOffice API:', error);
-      alert('无法加载编辑器组件。请确保已正确安装 OnlyOffice API。');
+      alert(t('failedToLoadEditor'));
       reject(error);
     };
     document.head.appendChild(script);
   });
 }
 
-// 单例实例
+// Singleton instance
 const x2tConverter = new X2TConverter();
 export const loadScript = (): Promise<void> => x2tConverter.loadScript();
 export const initX2T = (): Promise<EmscriptenModule> => x2tConverter.initialize();
@@ -541,7 +542,7 @@ export const convertBinToDocumentAndDownload = (
   targetExt?: string,
 ): Promise<BinConversionResult> => x2tConverter.convertBinToDocumentAndDownload(bin, fileName, targetExt);
 
-// 文件类型常量
+// File type constants
 export const oAscFileType = {
   UNKNOWN: 0,
   PDF: 513,
@@ -633,11 +634,11 @@ async function handleSaveDocument(event: SaveEvent) {
   if (event.data && event.data.data) {
     const { data, option } = event.data;
     const { fileName } = getDocmentObj() || {};
-    // 创建下载
+    // Create download
     await convertBinToDocumentAndDownload(data.data, fileName, c_oAscFileType2[option.outputformat]);
   }
 
-  // 告知编辑器保存完成
+  // Notify editor that save is complete
   window.editor?.sendCommand({
     command: 'asc_onSaveCallback',
     data: { err_code: 0 },
@@ -645,9 +646,9 @@ async function handleSaveDocument(event: SaveEvent) {
 }
 
 /**
- * 根据文件扩展名获取 MIME 类型
- * @param extension - 文件扩展名
- * @returns string - MIME 类型
+ * Get MIME type from file extension
+ * @param extension - File extension
+ * @returns string - MIME type
  */
 function getMimeTypeFromExtension(extension: string): string {
   const mimeMap: Record<string, string> = {
@@ -666,7 +667,7 @@ function getMimeTypeFromExtension(extension: string): string {
   return mimeMap[extension?.toLowerCase()] || 'image/png';
 }
 
-// 获取文档类型
+// Get document type
 export function getDocumentType(fileType: string): string | null {
   const type = fileType.toLowerCase();
   if (type === 'docx' || type === 'doc') {
@@ -678,11 +679,11 @@ export function getDocumentType(fileType: string): string | null {
   }
   return null;
 }
-// 全局 media 映射对象
+// Global media mapping object
 const media: Record<string, string> = {};
 /**
- * 处理文件写入请求（主要用于处理粘贴的图片）
- * @param event - OnlyOffice 编辑器的文件写入事件
+ * Handle file write request (mainly for handling pasted images)
+ * @param event - OnlyOffice editor file write event
  */
 function handleWriteFile(event: any) {
   try {
@@ -695,12 +696,12 @@ function handleWriteFile(event: any) {
     }
 
     const {
-      data: imageData, // Uint8Array 图片数据
-      file: fileName, // 文件名，如 "display8image-174799443357-0.png"
-      _target, // 目标对象，包含 frameOrigin 等信息
+      data: imageData, // Uint8Array image data
+      file: fileName, // File name, e.g., "display8image-174799443357-0.png"
+      _target, // Target object containing frameOrigin and other info
     } = eventData;
 
-    // 验证数据
+    // Validate data
     if (!imageData || !(imageData instanceof Uint8Array)) {
       throw new Error('Invalid image data: expected Uint8Array');
     }
@@ -709,16 +710,16 @@ function handleWriteFile(event: any) {
       throw new Error('Invalid file name');
     }
 
-    // 从文件名中提取扩展名
+    // Extract extension from file name
     const fileExtension = fileName.split('.').pop()?.toLowerCase() || 'png';
     const mimeType = getMimeTypeFromExtension(fileExtension);
 
-    // 创建 Blob 对象
+    // Create Blob object
     const blob = new Blob([imageData as unknown as BlobPart], { type: mimeType });
 
-    // 创建对象 URL
+    // Create object URL
     const objectUrl = window.URL.createObjectURL(blob);
-    // 将图片 URL 添加到媒体映射中，使用原始文件名作为 key
+    // Add image URL to media mapping using original file name as key
     media[`media/${fileName}`] = objectUrl;
     window.editor?.sendCommand({
       command: 'asc_setImageUrls',
@@ -730,7 +731,7 @@ function handleWriteFile(event: any) {
     window.editor?.sendCommand({
       command: 'asc_writeFileCallback',
       data: {
-        // 图片 base64
+        // Image base64
         path: objectUrl,
         imgName: fileName,
       },
@@ -739,7 +740,7 @@ function handleWriteFile(event: any) {
   } catch (error) {
     console.error('Error handling writeFile:', error);
 
-    // 通知编辑器文件处理失败
+    // Notify editor that file processing failed
     if (window.editor && typeof window.editor.sendCommand === 'function') {
       window.editor.sendCommand({
         command: 'asc_writeFileCallback',
@@ -759,14 +760,14 @@ function handleWriteFile(event: any) {
   }
 }
 
-// 公共编辑器创建方法
+// Public editor creation method
 function createEditorInstance(config: {
   fileName: string;
   fileType: string;
   binData: ArrayBuffer | string;
   media?: any;
 }) {
-  // 清理旧编辑器实例
+  // Clean up old editor instance
   if (window.editor) {
     window.editor.destroyEditor();
     window.editor = undefined;
@@ -774,10 +775,13 @@ function createEditorInstance(config: {
 
   const { fileName, fileType, binData, media } = config;
 
+  const editorLang = getOnlyOfficeLang();
+  console.log('Setting OnlyOffice editor language to:', editorLang);
+
   window.editor = new window.DocsAPI.DocEditor('iframe', {
     document: {
       title: fileName,
-      url: fileName, // 使用文件名作为标识
+      url: fileName, // Use file name as identifier
       fileType: fileType,
       permissions: {
         edit: true,
@@ -786,7 +790,7 @@ function createEditorInstance(config: {
       },
     },
     editorConfig: {
-      lang: window.navigator.language,
+      lang: editorLang,
       customization: {
         help: false,
         about: false,
@@ -804,7 +808,7 @@ function createEditorInstance(config: {
     },
     events: {
       onAppReady: () => {
-        // 设置媒体资源
+        // Set media resources
         if (media) {
           window.editor?.sendCommand({
             command: 'asc_setImageUrls',
@@ -812,7 +816,7 @@ function createEditorInstance(config: {
           });
         }
 
-        // 加载文档内容
+        // Load document content
         window.editor?.sendCommand({
           command: 'asc_openDocument',
           // @ts-expect-error binData type is handled by the editor
@@ -820,17 +824,17 @@ function createEditorInstance(config: {
         });
       },
       onDocumentReady: () => {
-        console.log('文档加载完成：', fileName);
+        console.log(`${t('documentLoaded')}${fileName}`);
       },
       onSave: handleSaveDocument,
       // writeFile
-      // todo writeFile 当外部粘贴图片时候处理
+      // TODO: writeFile - handle when pasting images from external sources
       writeFile: handleWriteFile,
     },
   });
 }
 
-// 合并后的文件操作方法
+// Merged file operation method
 export async function handleDocumentOperation(options: {
   isNew: boolean;
   fileName: string;
@@ -841,27 +845,27 @@ export async function handleDocumentOperation(options: {
     const fileType = getExtensions(file?.type || '')[0] || fileName.split('.').pop() || '';
     const _docType = getDocumentType(fileType);
 
-    // 获取文档内容
+    // Get document content
     let documentData: {
       bin: ArrayBuffer | string;
       media?: any;
     };
 
     if (isNew) {
-      // 新建文档使用空模板
+      // New document uses empty template
       const emptyBin = g_sEmpty_bin[`.${fileType}`];
       if (!emptyBin) {
-        throw new Error(`不支持的文件类型：${fileType}`);
+        throw new Error(`${t('unsupportedFileType')}${fileType}`);
       }
       documentData = { bin: emptyBin };
     } else {
-      // 打开现有文档需要转换
-      if (!file) throw new Error('无效的文件对象');
+      // Opening existing document requires conversion
+      if (!file) throw new Error(t('invalidFileObject'));
       // @ts-expect-error convertDocument handles the file type conversion
       documentData = await convertDocument(file);
     }
 
-    // 创建编辑器实例
+    // Create editor instance
     createEditorInstance({
       fileName,
       fileType,
@@ -869,8 +873,8 @@ export async function handleDocumentOperation(options: {
       media: documentData.media,
     });
   } catch (error: any) {
-    console.error('文档操作失败：', error);
-    alert(`文档操作失败：${error.message}`);
+    console.error(`${t('documentOperationFailed')}`, error);
+    alert(`${t('documentOperationFailed')}${error.message}`);
     throw error;
   }
 }

@@ -44,7 +44,7 @@ This project also provides foundational services for document preview components
 
 ### docker run
 
-``` bash
+```bash
 docker run -d --name document -p 8080:8080 ghcr.io/ranui/document:latest
 ```
 

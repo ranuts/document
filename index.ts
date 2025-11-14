@@ -3,6 +3,7 @@ import type { MessageHandler } from 'ranuts/utils';
 import { handleDocumentOperation, initX2T, loadEditorApi, loadScript } from './lib/x2t';
 import { getDocmentObj, setDocmentObj } from './store';
 import { showLoading } from './lib/loading';
+import { type Language, getLanguage, setLanguage, t } from './lib/i18n';
 import 'ranui/button';
 import './styles/base.css';
 
@@ -89,7 +90,7 @@ document.body.appendChild(fileInput);
 
 const onOpenDocument = async () => {
   return new Promise((resolve) => {
-    // 触发文件选择器的点击事件
+    // Trigger file picker click event
     fileInput.click();
     fileInput.onchange = async (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
@@ -105,16 +106,37 @@ const onOpenDocument = async () => {
         await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
         resolve(true);
         removeLoading();
-        // 清空文件选择，这样同一个文件可以重复选择
+        // Clear file selection so the same file can be selected again
         fileInput.value = '';
       }
     };
   });
 };
 
+// Update UI text
+const updateUIText = () => {
+  const title = document.getElementById('title-text');
+  if (title) title.textContent = t('webOffice');
+
+  const uploadButton = document.getElementById('upload-button');
+  if (uploadButton) uploadButton.textContent = t('uploadDocument');
+
+  const newWordButton = document.getElementById('new-word-button');
+  if (newWordButton) newWordButton.textContent = t('newWord');
+
+  const newExcelButton = document.getElementById('new-excel-button');
+  if (newExcelButton) newExcelButton.textContent = t('newExcel');
+
+  const newPptxButton = document.getElementById('new-pptx-button');
+  if (newPptxButton) newPptxButton.textContent = t('newPowerPoint');
+
+  const langButton = document.getElementById('lang-button');
+  if (langButton) langButton.textContent = getLanguage() === 'zh' ? 'English' : '中文';
+};
+
 // Create and append the control panel
 const createControlPanel = () => {
-  // 创建控制面板容器
+  // Create control panel container
   const container = document.createElement('div');
   container.style.cssText = `
     width: 100%;
@@ -136,7 +158,7 @@ const createControlPanel = () => {
     align-items: center;
   `;
 
-  // 创建标题区域
+  // Create title section
   const titleSection = document.createElement('div');
   titleSection.style.cssText = `
     display: flex;
@@ -167,12 +189,13 @@ const createControlPanel = () => {
     font-weight: 600;
     color: #1f1f1f;
   `;
-  title.textContent = 'Web Office';
+  title.textContent = t('webOffice');
+  title.id = 'title-text';
   titleSection.appendChild(title);
 
   controlPanel.appendChild(titleSection);
 
-  // 创建按钮组
+  // Create button group
   const buttonGroup = document.createElement('div');
   buttonGroup.style.cssText = `
     display: flex;
@@ -183,37 +206,68 @@ const createControlPanel = () => {
 
   // Create upload button
   const uploadButton = document.createElement('r-button');
-  uploadButton.textContent = 'Upload Document to view';
+  uploadButton.textContent = t('uploadDocument');
+  uploadButton.id = 'upload-button';
   uploadButton.addEventListener('click', onOpenDocument);
   buttonGroup.appendChild(uploadButton);
 
   // Create new document buttons
   const createDocxButton = document.createElement('r-button');
-  createDocxButton.textContent = 'New Word';
+  createDocxButton.textContent = t('newWord');
+  createDocxButton.id = 'new-word-button';
   createDocxButton.addEventListener('click', () => onCreateNew('.docx'));
   buttonGroup.appendChild(createDocxButton);
 
   const createXlsxButton = document.createElement('r-button');
-  createXlsxButton.textContent = 'New Excel';
+  createXlsxButton.textContent = t('newExcel');
+  createXlsxButton.id = 'new-excel-button';
   createXlsxButton.addEventListener('click', () => onCreateNew('.xlsx'));
   buttonGroup.appendChild(createXlsxButton);
 
   const createPptxButton = document.createElement('r-button');
-  createPptxButton.textContent = 'New PowerPoint';
+  createPptxButton.textContent = t('newPowerPoint');
+  createPptxButton.id = 'new-pptx-button';
   createPptxButton.addEventListener('click', () => onCreateNew('.pptx'));
   buttonGroup.appendChild(createPptxButton);
 
+  // Create language switch button
+  const langButton = document.createElement('r-button');
+  langButton.textContent = getLanguage() === 'zh' ? 'English' : '中文';
+  langButton.id = 'lang-button';
+  langButton.style.cssText = `
+    min-width: 80px;
+  `;
+  langButton.addEventListener('click', () => {
+    const currentLang = getLanguage();
+    const newLang: Language = currentLang === 'zh' ? 'en' : 'zh';
+    setLanguage(newLang);
+    updateUIText();
+    // If editor is loaded, recreate it to apply new language
+    if (window.editor) {
+      const { fileName, file: fileBlob } = getDocmentObj();
+      if (fileName) {
+        handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
+      }
+    }
+  });
+  buttonGroup.appendChild(langButton);
+
   controlPanel.appendChild(buttonGroup);
 
-  // 将控制面板添加到容器中
+  // Append control panel to container
   container.appendChild(controlPanel);
 
-  // 在 body 的最前面插入容器
+  // Insert container at the beginning of body
   document.body.insertBefore(container, document.body.firstChild);
 };
 
 // Initialize the containers
 createControlPanel();
+
+// Listen for language change events
+window.addEventListener('languagechange', () => {
+  updateUIText();
+});
 
 if (!file) {
   // Don't automatically open document dialog, let user choose

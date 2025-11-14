@@ -5,14 +5,14 @@ on:
     branches:
       - main
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write 
+      packages: write
 
     steps:
       - name: Checkout code
@@ -37,7 +37,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           flavor: |
-            latest=false 
+            latest=false
           tags: |
             type=ref,event=branch
             type=ref,event=pr
