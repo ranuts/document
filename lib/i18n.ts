@@ -62,12 +62,15 @@ class I18n {
       this.currentLanguage = savedLang;
     } else {
       // Detect browser language
+      // Extract base language code (e.g., 'en' from 'en-US', 'zh' from 'zh-CN')
       const browserLang =
         // eslint-disable-next-line n/no-unsupported-features/node-builtins
         typeof navigator !== 'undefined' && navigator.language ? navigator.language.toLowerCase() : 'en';
-      if (browserLang.startsWith('zh')) {
+      const baseLang = browserLang.split('-')[0]; // Extract 'en' from 'en-US', 'zh' from 'zh-CN'
+      if (baseLang === 'zh') {
         this.currentLanguage = 'zh';
       } else {
+        // Default to English for any other language
         this.currentLanguage = 'en';
       }
     }
