@@ -48,10 +48,10 @@ export interface I18nMessages {
 const messages: Record<Language, I18nMessages> = {
   [LanguageCode.ZH]: {
     webOffice: 'Web Office',
-    uploadDocument: 'Upload Document to view',
-    newWord: 'New Word',
-    newExcel: 'New Excel',
-    newPowerPoint: 'New PowerPoint',
+    uploadDocument: '查看/编辑文档',
+    newWord: '新建 Word',
+    newExcel: '新建 Excel',
+    newPowerPoint: '新建 PowerPoint',
     fileSavedSuccess: '文件保存成功：',
     documentLoaded: '文档加载完成：',
     failedToLoadEditor: '无法加载编辑器组件。请确保已正确安装 OnlyOffice API。',
@@ -61,7 +61,7 @@ const messages: Record<Language, I18nMessages> = {
   },
   [LanguageCode.EN]: {
     webOffice: 'Web Office',
-    uploadDocument: 'Upload Document to view',
+    uploadDocument: 'View/Edit Document',
     newWord: 'New Word',
     newExcel: 'New Excel',
     newPowerPoint: 'New PowerPoint',

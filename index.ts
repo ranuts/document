@@ -20,6 +20,8 @@ interface RenderOfficeData {
 declare global {
   interface Window {
     onCreateNew: (ext: string) => Promise<void>;
+    hideControlPanel?: () => void;
+    showControlPanel?: () => void;
     DocsAPI: {
       DocEditor: new (elementId: string, config: any) => any;
     };
@@ -31,10 +33,7 @@ let fileChunks: RenderOfficeData[] = [];
 const events: Record<string, MessageHandler<any, unknown>> = {
   RENDER_OFFICE: async (data: RenderOfficeData) => {
     // Hide the control panel when rendering office
-    const controlPanel = document.getElementById('control-panel');
-    if (controlPanel) {
-      controlPanel.style.display = 'none';
-    }
+    hideControlPanel();
     fileChunks.push(data);
     if (fileChunks.length >= data.totalChunks) {
       const { removeLoading } = showLoading();
@@ -65,6 +64,7 @@ const { file } = getAllQueryString();
 
 const onCreateNew = async (ext: string) => {
   const { removeLoading } = showLoading();
+  hideControlPanel();
   setDocmentObj({
     fileName: 'New_Document' + ext,
     file: undefined,
@@ -96,6 +96,7 @@ const onOpenDocument = async () => {
       const file = (event.target as HTMLInputElement).files?.[0];
       const { removeLoading } = showLoading();
       if (file) {
+        hideControlPanel();
         setDocmentObj({
           fileName: file.name,
           file: file,
@@ -115,9 +116,6 @@ const onOpenDocument = async () => {
 
 // Update UI text
 const updateUIText = () => {
-  const title = document.getElementById('title-text');
-  if (title) title.textContent = t('webOffice');
-
   const uploadButton = document.getElementById('upload-button');
   if (uploadButton) uploadButton.textContent = t('uploadDocument');
 
@@ -129,301 +127,450 @@ const updateUIText = () => {
 
   const newPptxButton = document.getElementById('new-pptx-button');
   if (newPptxButton) newPptxButton.textContent = t('newPowerPoint');
+};
 
-  const langButton = document.getElementById('lang-button');
-  if (langButton) {
-    const langText = langButton.querySelector('span:last-child');
-    if (langText) {
-      langText.textContent = getLanguage() === LanguageCode.ZH ? 'English' : '中文';
-    }
+// Hide control panel and show floating bubble
+const hideControlPanel = () => {
+  const container = document.querySelector('#control-panel-container') as HTMLElement;
+  if (container) {
+    container.style.opacity = '0';
+    setTimeout(() => {
+      container.style.display = 'none';
+      showFloatingBubble();
+    }, 300);
   }
 };
 
-// Create and append the control panel
-const createControlPanel = () => {
-  // Create control panel container
-  const container = document.createElement('div');
-  container.style.cssText = `
-    width: 100%;
+// Show control panel and hide floating bubble
+const showControlPanel = () => {
+  const container = document.querySelector('#control-panel-container') as HTMLElement;
+  const bubble = document.querySelector('#floating-bubble') as HTMLElement;
+  if (container) {
+    container.style.display = 'flex';
+    setTimeout(() => {
+      container.style.opacity = '1';
+    }, 10);
+  }
+  if (bubble) {
+    bubble.style.display = 'none';
+  }
+};
+
+// Create floating bubble with drag functionality
+const createFloatingBubble = () => {
+  const bubble = document.createElement('div');
+  bubble.id = 'floating-bubble';
+  bubble.style.cssText = `
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-bottom: none;
-    position: relative;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4), 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: move;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    user-select: none;
     overflow: hidden;
   `;
 
-  // Add subtle pattern overlay
-  const patternOverlay = document.createElement('div');
-  patternOverlay.style.cssText = `
+  // Add subtle animation background
+  const bubbleBg = document.createElement('div');
+  bubbleBg.style.cssText = `
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
-      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
     pointer-events: none;
   `;
-  container.appendChild(patternOverlay);
+  bubble.appendChild(bubbleBg);
 
-  const controlPanel = document.createElement('div');
-  controlPanel.id = 'control-panel';
-  controlPanel.style.cssText = `
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 16px 24px;
-    z-index: 1000;
-    max-width: 1400px;
-    margin: 0 auto;
-    align-items: center;
+  // Bubble icon - using SVG for better quality
+  const bubbleIcon = document.createElement('div');
+  bubbleIcon.innerHTML = `
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 5V19M5 12H19" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `;
+  bubbleIcon.style.cssText = `
     position: relative;
-  `;
-
-  // Create title section
-  const titleSection = document.createElement('div');
-  titleSection.style.cssText = `
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-right: auto;
-  `;
-
-  const logo = document.createElement('div');
-  logo.style.cssText = `
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 10px;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #667eea;
-    font-weight: 700;
-    font-size: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   `;
-  logo.textContent = 'W';
-  logo.addEventListener('mouseenter', () => {
-    logo.style.transform = 'scale(1.05)';
-    logo.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
-  });
-  logo.addEventListener('mouseleave', () => {
-    logo.style.transform = 'scale(1)';
-    logo.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
-  });
-  titleSection.appendChild(logo);
+  bubble.appendChild(bubbleIcon);
 
-  const title = document.createElement('div');
-  title.style.cssText = `
-    font-size: 20px;
-    font-weight: 600;
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    letter-spacing: 0.3px;
+  // Menu panel (shown on hover)
+  const menuPanel = document.createElement('div');
+  menuPanel.id = 'bubble-menu';
+  menuPanel.style.cssText = `
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 180px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
   `;
-  title.textContent = t('webOffice');
-  title.id = 'title-text';
-  titleSection.appendChild(title);
 
-  controlPanel.appendChild(titleSection);
+  // Helper to hide bubble
+  const hideBubble = () => {
+    bubble.style.display = 'none';
+  };
 
-  // Create button group
+  // Create menu buttons
+  const createMenuButton = (text: string, onClick: () => void) => {
+    const button = document.createElement('r-button');
+    button.textContent = text;
+    button.style.cssText = `
+      background: transparent;
+    border: none;
+      color: #333;
+      font-size: 14px;
+    font-weight: 500;
+      padding: 12px 16px;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      transform: scale(1);
+    `;
+    button.addEventListener('mouseenter', () => {
+      button.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%)';
+      button.style.color = '#667eea';
+      button.style.transform = 'scale(1.02) translateX(4px)';
+    });
+    button.addEventListener('mouseleave', () => {
+      button.style.background = 'transparent';
+      button.style.color = '#333';
+      button.style.transform = 'scale(1) translateX(0)';
+    });
+    button.addEventListener('click', () => {
+      onClick();
+      hideBubble();
+      menuPanel.style.display = 'none';
+      menuPanel.style.opacity = '0';
+    });
+    return button;
+  };
+
+  menuPanel.appendChild(createMenuButton(t('uploadDocument'), () => {
+    onOpenDocument();
+  }));
+  menuPanel.appendChild(createMenuButton(t('newWord'), () => {
+    onCreateNew('.docx');
+  }));
+  menuPanel.appendChild(createMenuButton(t('newExcel'), () => {
+    onCreateNew('.xlsx');
+  }));
+  menuPanel.appendChild(createMenuButton(t('newPowerPoint'), () => {
+    onCreateNew('.pptx');
+  }));
+
+  bubble.appendChild(menuPanel);
+
+  // Menu state management
+  let isMenuOpen = false;
+  let hoverTimeout: NodeJS.Timeout;
+
+  const showMenu = () => {
+    clearTimeout(hoverTimeout);
+    isMenuOpen = true;
+    menuPanel.style.display = 'flex';
+    menuPanel.style.pointerEvents = 'auto';
+    setTimeout(() => {
+      menuPanel.style.opacity = '1';
+      menuPanel.style.transform = 'translateY(0) scale(1)';
+    }, 10);
+    bubble.style.transform = 'scale(1.1)';
+    bubble.style.boxShadow = '0 12px 32px rgba(102, 126, 234, 0.5), 0 4px 12px rgba(0, 0, 0, 0.15)';
+    bubbleIcon.style.transform = 'rotate(90deg)';
+  };
+
+  const hideMenu = () => {
+    isMenuOpen = false;
+    menuPanel.style.opacity = '0';
+    menuPanel.style.transform = 'translateY(10px) scale(0.95)';
+    bubble.style.transform = 'scale(1)';
+    bubble.style.boxShadow = '0 8px 24px rgba(102, 126, 234, 0.4), 0 4px 8px rgba(0, 0, 0, 0.1)';
+    bubbleIcon.style.transform = 'rotate(0deg)';
+    hoverTimeout = setTimeout(() => {
+      menuPanel.style.display = 'none';
+      menuPanel.style.pointerEvents = 'none';
+    }, 250);
+  };
+
+  const toggleMenu = () => {
+    if (isMenuOpen) {
+      hideMenu();
+    } else {
+      showMenu();
+    }
+  };
+
+  // Hover to show menu
+  bubble.addEventListener('mouseenter', () => {
+    clearTimeout(hoverTimeout);
+    if (!isMenuOpen) {
+      showMenu();
+    }
+  });
+
+  // Hide menu when mouse leaves bubble and menu
+  const handleMouseLeave = () => {
+    hoverTimeout = setTimeout(() => {
+      hideMenu();
+    }, 200);
+  };
+
+  bubble.addEventListener('mouseleave', (e) => {
+    // Check if mouse is moving to menu panel
+    const relatedTarget = e.relatedTarget as HTMLElement;
+    if (relatedTarget && (relatedTarget === menuPanel || menuPanel.contains(relatedTarget))) {
+      return; // Don't hide if moving to menu
+    }
+    handleMouseLeave();
+  });
+
+  menuPanel.addEventListener('mouseenter', () => {
+    clearTimeout(hoverTimeout);
+  });
+
+  menuPanel.addEventListener('mouseleave', handleMouseLeave);
+
+  // Drag functionality
+  let isDragging = false;
+  let currentX = 0;
+  let currentY = 0;
+  let initialX = 0;
+  let initialY = 0;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragDistance = 0;
+
+  bubble.addEventListener('mousedown', (e) => {
+    // Don't start drag if clicking on menu panel
+    if ((e.target as HTMLElement).closest('#bubble-menu')) return;
+    
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    isDragging = false;
+    dragDistance = 0;
+    initialX = e.clientX - (bubble.offsetLeft || 0);
+    initialY = e.clientY - (bubble.offsetTop || 0);
+    
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = Math.abs(moveEvent.clientX - dragStartX);
+      const deltaY = Math.abs(moveEvent.clientY - dragStartY);
+      dragDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      
+      // Only start dragging if moved more than 8px
+      if (dragDistance > 8 && !isDragging) {
+        isDragging = true;
+        bubble.style.cursor = 'grabbing';
+        // Hide menu when dragging starts
+        if (isMenuOpen) {
+          hideMenu();
+        }
+      }
+      
+      // Handle actual dragging
+      if (isDragging) {
+        moveEvent.preventDefault();
+        currentX = moveEvent.clientX - initialX;
+        currentY = moveEvent.clientY - initialY;
+
+        // Keep bubble within viewport
+        const maxX = window.innerWidth - bubble.offsetWidth;
+        const maxY = window.innerHeight - bubble.offsetHeight;
+        currentX = Math.max(0, Math.min(currentX, maxX));
+        currentY = Math.max(0, Math.min(currentY, maxY));
+
+        bubble.style.left = `${currentX}px`;
+        bubble.style.top = `${currentY}px`;
+        bubble.style.right = 'auto';
+        bubble.style.bottom = 'auto';
+      }
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      
+      if (isDragging) {
+        isDragging = false;
+        bubble.style.cursor = 'move';
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  });
+
+  // Click to toggle menu (only if not dragging)
+  bubble.addEventListener('click', (e) => {
+    // Don't toggle if clicking on menu panel
+    if ((e.target as HTMLElement).closest('#bubble-menu')) return;
+    // Don't toggle if was dragging
+    if (isDragging) {
+      return;
+    }
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  document.body.appendChild(bubble);
+  return bubble;
+};
+
+// Show floating bubble
+const showFloatingBubble = () => {
+  let bubble = document.querySelector('#floating-bubble') as HTMLElement;
+  if (!bubble) {
+    bubble = createFloatingBubble();
+  }
+  bubble.style.display = 'flex';
+};
+
+// Create and append the control panel
+const createControlPanel = () => {
+  // Create control panel container - centered in viewport
+  const container = document.createElement('div');
+  container.id = 'control-panel-container';
+  container.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    padding: 20px;
+    box-sizing: border-box;
+  `;
+
+  // Create button group - centered horizontally with wrap support
   const buttonGroup = document.createElement('div');
   buttonGroup.style.cssText = `
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 16px;
     align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    max-width: 100%;
+    width: 100%;
   `;
 
-  // Create upload button
-  const uploadButton = document.createElement('r-button');
-  uploadButton.textContent = t('uploadDocument');
-  uploadButton.id = 'upload-button';
-  uploadButton.style.cssText = `
-    background: rgba(255, 255, 255, 0.95);
-    color: #667eea;
-    border: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  `;
-  uploadButton.addEventListener('mouseenter', () => {
-    uploadButton.style.background = '#ffffff';
-    uploadButton.style.transform = 'translateY(-1px)';
-    uploadButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+  // Helper function to create text button
+  const createTextButton = (id: string, text: string, onClick: () => void) => {
+    const button = document.createElement('r-button');
+    button.id = id;
+    button.textContent = text;
+    button.setAttribute('variant', 'text');
+    button.setAttribute('type', 'text');
+    button.style.cssText = `
+      background: transparent;
+      border: none;
+      color: #333;
+    font-size: 16px;
+      font-weight: 500;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: color 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transform: scale(1);
+    `;
+    
+    // Responsive font size for small screens
+    const mediaQuery = window.matchMedia('(max-width: 480px)');
+    const updateFontSize = () => {
+      if (mediaQuery.matches) {
+        button.style.fontSize = '14px';
+        button.style.padding = '6px 12px';
+      } else {
+        button.style.fontSize = '16px';
+        button.style.padding = '8px 16px';
+      }
+    };
+    updateFontSize();
+    mediaQuery.addEventListener('change', updateFontSize);
+    
+    button.addEventListener('mouseenter', () => {
+      button.style.color = '#667eea';
+      button.style.transform = 'scale(1.05)';
+    });
+    button.addEventListener('mouseleave', () => {
+      button.style.color = '#333';
+      button.style.transform = 'scale(1)';
+    });
+    button.addEventListener('click', onClick);
+    
+    return button;
+  };
+
+  // Create four buttons
+  const uploadButton = createTextButton('upload-button', t('uploadDocument'), () => {
+    onOpenDocument();
+    hideControlPanel();
   });
-  uploadButton.addEventListener('mouseleave', () => {
-    uploadButton.style.background = 'rgba(255, 255, 255, 0.95)';
-    uploadButton.style.transform = 'translateY(0)';
-    uploadButton.style.boxShadow = 'none';
-  });
-  uploadButton.addEventListener('click', onOpenDocument);
   buttonGroup.appendChild(uploadButton);
 
-  // Create new document buttons
-  const createDocxButton = document.createElement('r-button');
-  createDocxButton.textContent = t('newWord');
-  createDocxButton.id = 'new-word-button';
-  createDocxButton.style.cssText = `
-    background: rgba(255, 255, 255, 0.95);
-    color: #667eea;
-    border: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  `;
-  createDocxButton.addEventListener('mouseenter', () => {
-    createDocxButton.style.background = '#ffffff';
-    createDocxButton.style.transform = 'translateY(-1px)';
-    createDocxButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+  const newWordButton = createTextButton('new-word-button', t('newWord'), () => {
+    onCreateNew('.docx');
+    hideControlPanel();
   });
-  createDocxButton.addEventListener('mouseleave', () => {
-    createDocxButton.style.background = 'rgba(255, 255, 255, 0.95)';
-    createDocxButton.style.transform = 'translateY(0)';
-    createDocxButton.style.boxShadow = 'none';
+  buttonGroup.appendChild(newWordButton);
+
+  const newExcelButton = createTextButton('new-excel-button', t('newExcel'), () => {
+    onCreateNew('.xlsx');
+    hideControlPanel();
   });
-  createDocxButton.addEventListener('click', () => onCreateNew('.docx'));
-  buttonGroup.appendChild(createDocxButton);
+  buttonGroup.appendChild(newExcelButton);
 
-  const createXlsxButton = document.createElement('r-button');
-  createXlsxButton.textContent = t('newExcel');
-  createXlsxButton.id = 'new-excel-button';
-  createXlsxButton.style.cssText = `
-    background: rgba(255, 255, 255, 0.95);
-    color: #667eea;
-    border: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  `;
-  createXlsxButton.addEventListener('mouseenter', () => {
-    createXlsxButton.style.background = '#ffffff';
-    createXlsxButton.style.transform = 'translateY(-1px)';
-    createXlsxButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+  const newPptxButton = createTextButton('new-pptx-button', t('newPowerPoint'), () => {
+    onCreateNew('.pptx');
+    hideControlPanel();
   });
-  createXlsxButton.addEventListener('mouseleave', () => {
-    createXlsxButton.style.background = 'rgba(255, 255, 255, 0.95)';
-    createXlsxButton.style.transform = 'translateY(0)';
-    createXlsxButton.style.boxShadow = 'none';
-  });
-  createXlsxButton.addEventListener('click', () => onCreateNew('.xlsx'));
-  buttonGroup.appendChild(createXlsxButton);
+  buttonGroup.appendChild(newPptxButton);
 
-  const createPptxButton = document.createElement('r-button');
-  createPptxButton.textContent = t('newPowerPoint');
-  createPptxButton.id = 'new-pptx-button';
-  createPptxButton.style.cssText = `
-    background: rgba(255, 255, 255, 0.95);
-    color: #667eea;
-    border: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  `;
-  createPptxButton.addEventListener('mouseenter', () => {
-    createPptxButton.style.background = '#ffffff';
-    createPptxButton.style.transform = 'translateY(-1px)';
-    createPptxButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-  });
-  createPptxButton.addEventListener('mouseleave', () => {
-    createPptxButton.style.background = 'rgba(255, 255, 255, 0.95)';
-    createPptxButton.style.transform = 'translateY(0)';
-    createPptxButton.style.boxShadow = 'none';
-  });
-  createPptxButton.addEventListener('click', () => onCreateNew('.pptx'));
-  buttonGroup.appendChild(createPptxButton);
-
-  // Create language switch button with icon
-  const langButtonContainer = document.createElement('div');
-  langButtonContainer.style.cssText = `
-    position: relative;
-    display: flex;
-    align-items: center;
-  `;
-
-  const langButton = document.createElement('button');
-  langButton.id = 'lang-button';
-  langButton.style.cssText = `
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 90px;
-    justify-content: center;
-  `;
-
-  // Create language icon
-  const langIcon = document.createElement('span');
-  langIcon.style.cssText = `
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    font-size: 16px;
-    line-height: 18px;
-    text-align: center;
-  `;
-  langIcon.textContent = '🌐';
-
-  const langText = document.createElement('span');
-  langText.textContent = getLanguage() === LanguageCode.ZH ? 'English' : '中文';
-
-  langButton.appendChild(langIcon);
-  langButton.appendChild(langText);
-
-  langButton.addEventListener('mouseenter', () => {
-    langButton.style.background = 'rgba(255, 255, 255, 0.3)';
-    langButton.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-    langButton.style.transform = 'translateY(-1px)';
-    langButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-  });
-  langButton.addEventListener('mouseleave', () => {
-    langButton.style.background = 'rgba(255, 255, 255, 0.2)';
-    langButton.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-    langButton.style.transform = 'translateY(0)';
-    langButton.style.boxShadow = 'none';
-  });
-  langButton.addEventListener('click', () => {
-    const currentLang = getLanguage();
-    const newLang: Language = currentLang === LanguageCode.ZH ? LanguageCode.EN : LanguageCode.ZH;
-    setLanguage(newLang);
-    updateUIText();
-    // If editor is loaded, recreate it to apply new language
-    if (window.editor) {
-      const { fileName, file: fileBlob } = getDocmentObj();
-      if (fileName) {
-        handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
-      }
-    }
-  });
-
-  langButtonContainer.appendChild(langButton);
-  buttonGroup.appendChild(langButtonContainer);
-
-  controlPanel.appendChild(buttonGroup);
-
-  // Append control panel to container
-  container.appendChild(controlPanel);
-
-  // Insert container at the beginning of body
-  document.body.insertBefore(container, document.body.firstChild);
+  container.appendChild(buttonGroup);
+  document.body.appendChild(container);
 };
 
 // Initialize the containers
 createControlPanel();
+createFloatingBubble();
 
-// Listen for language change events
-window.addEventListener('languagechange', () => {
-  updateUIText();
-});
+// Export functions for use in other modules if needed
+window.hideControlPanel = hideControlPanel;
+window.showControlPanel = showControlPanel;
 
 if (!file) {
   // Don't automatically open document dialog, let user choose
