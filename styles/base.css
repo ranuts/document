@@ -44,3 +44,20 @@ r-button[type='text']::part(ran-btn-content) {
     font-size: 16px !important;
   }
 }
+
+/* Style for FAB menu buttons using ::part */
+.fab-menu-button::part(ran-btn),
+.fab-menu-button::part(ran-btn-content) {
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+  background: transparent !important;
+}
+
+/* Menu item hover - entire row background */
+.fab-menu-item:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.fab-menu-item:hover .fab-menu-button::part(ran-btn-content) {
+  color: #667eea !important;
+}

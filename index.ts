@@ -129,34 +129,224 @@ const updateUIText = () => {
   if (newPptxButton) newPptxButton.textContent = t('newPowerPoint');
 };
 
-// Hide control panel and show floating bubble
+// Hide control panel and show top floating bar
 const hideControlPanel = () => {
   const container = document.querySelector('#control-panel-container') as HTMLElement;
   if (container) {
     container.style.opacity = '0';
     setTimeout(() => {
       container.style.display = 'none';
-      showFloatingBubble();
+      showTopFloatingBar();
     }, 300);
   }
 };
 
-// Show control panel and hide floating bubble
+// Show control panel and hide FAB
 const showControlPanel = () => {
   const container = document.querySelector('#control-panel-container') as HTMLElement;
-  const bubble = document.querySelector('#floating-bubble') as HTMLElement;
+  const fabContainer = document.querySelector('#fab-container') as HTMLElement;
   if (container) {
     container.style.display = 'flex';
     setTimeout(() => {
       container.style.opacity = '1';
     }, 10);
   }
-  if (bubble) {
-    bubble.style.display = 'none';
+  if (fabContainer) {
+    fabContainer.style.display = 'none';
   }
 };
 
-// Create floating bubble with drag functionality
+// Create fixed action button in bottom right corner
+const createFixedActionButton = () => {
+  const fabContainer = document.createElement('div');
+  fabContainer.id = 'fab-container';
+  fabContainer.style.cssText = `
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+    display: none;
+  `;
+
+  // Main FAB button - simple style
+  const fabButton = document.createElement('button');
+  fabButton.id = 'fab-button';
+  fabButton.textContent = t('menu');
+  fabButton.style.cssText = `
+    min-width: 52px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    user-select: none;
+    white-space: nowrap;
+  `;
+
+  fabButton.addEventListener('mouseenter', () => {
+    fabButton.style.background = 'rgba(0, 0, 0, 0.08)';
+  });
+  fabButton.addEventListener('mouseleave', () => {
+    fabButton.style.background = 'rgba(0, 0, 0, 0.05)';
+  });
+
+  // Menu panel - compact style
+  const menuPanel = document.createElement('div');
+  menuPanel.id = 'fab-menu';
+  menuPanel.style.cssText = `
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    display: none;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 130px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+    z-index: 1001;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  `;
+
+  const createMenuButton = (text: string, onClick: () => void) => {
+    // Create wrapper for the entire menu item
+    const menuItem = document.createElement('div');
+    menuItem.className = 'fab-menu-item';
+    menuItem.style.cssText = `
+      width: 100%;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    `;
+    
+    const button = document.createElement('r-button');
+    button.textContent = text;
+    button.setAttribute('variant', 'text');
+    button.setAttribute('type', 'text');
+    button.className = 'fab-menu-button';
+    button.style.cssText = `
+      cursor: pointer;
+      white-space: nowrap;
+      width: 100%;
+      text-align: left;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+    `;
+    
+    // Handle hover on the wrapper
+    menuItem.addEventListener('mouseenter', () => {
+      menuItem.style.background = '#f5f5f5';
+    });
+    menuItem.addEventListener('mouseleave', () => {
+      menuItem.style.background = 'transparent';
+    });
+    
+    button.addEventListener('click', () => {
+      onClick();
+      hideMenu();
+    });
+    
+    menuItem.appendChild(button);
+    return menuItem;
+  };
+
+  menuPanel.appendChild(createMenuButton(t('uploadDocument'), () => {
+    onOpenDocument();
+  }));
+  menuPanel.appendChild(createMenuButton(t('newWord'), () => {
+    onCreateNew('.docx');
+  }));
+  menuPanel.appendChild(createMenuButton(t('newExcel'), () => {
+    onCreateNew('.xlsx');
+  }));
+  menuPanel.appendChild(createMenuButton(t('newPowerPoint'), () => {
+    onCreateNew('.pptx');
+  }));
+
+  let isMenuOpen = false;
+  let hideMenuTimeout: NodeJS.Timeout;
+  
+  const showMenu = () => {
+    clearTimeout(hideMenuTimeout);
+    isMenuOpen = true;
+    menuPanel.style.display = 'flex';
+    menuPanel.style.pointerEvents = 'auto';
+    setTimeout(() => {
+      menuPanel.style.opacity = '1';
+      menuPanel.style.transform = 'translateY(0) scale(1)';
+    }, 10);
+  };
+
+  const hideMenu = () => {
+    isMenuOpen = false;
+    menuPanel.style.opacity = '0';
+    menuPanel.style.transform = 'translateY(10px) scale(0.95)';
+    setTimeout(() => {
+      menuPanel.style.display = 'none';
+      menuPanel.style.pointerEvents = 'none';
+    }, 200);
+  };
+
+  // Show menu on hover button
+  fabButton.addEventListener('mouseenter', () => {
+    showMenu();
+  });
+
+  // Hide menu when leaving button (if not moving to menu)
+  fabButton.addEventListener('mouseleave', (e) => {
+    const relatedTarget = e.relatedTarget as HTMLElement;
+    // If moving to menu panel, don't hide
+    if (relatedTarget && (relatedTarget === menuPanel || menuPanel.contains(relatedTarget))) {
+      return;
+    }
+    hideMenuTimeout = setTimeout(() => {
+      hideMenu();
+    }, 200);
+  });
+
+  // Keep menu visible when hovering over it
+  menuPanel.addEventListener('mouseenter', () => {
+    clearTimeout(hideMenuTimeout);
+    if (!isMenuOpen) {
+      showMenu();
+    }
+  });
+
+  // Hide menu when leaving menu panel
+  menuPanel.addEventListener('mouseleave', () => {
+    hideMenuTimeout = setTimeout(() => {
+      hideMenu();
+    }, 200);
+  });
+
+  fabContainer.appendChild(menuPanel);
+  fabContainer.appendChild(fabButton);
+  document.body.appendChild(fabContainer);
+  return fabContainer;
+};
+
+// Show fixed action button
+const showTopFloatingBar = () => {
+  const fabContainer = document.querySelector('#fab-container') as HTMLElement;
+  if (fabContainer) {
+    fabContainer.style.display = 'block';
+  }
+};
+
+// Create floating bubble with drag functionality (deprecated, keeping for reference)
 const createFloatingBubble = () => {
   const bubble = document.createElement('div');
   bubble.id = 'floating-bubble';
@@ -230,6 +420,7 @@ const createFloatingBubble = () => {
     pointer-events: none;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 1001;
   `;
 
   // Helper to hide bubble
@@ -443,14 +634,8 @@ const createFloatingBubble = () => {
   return bubble;
 };
 
-// Show floating bubble
-const showFloatingBubble = () => {
-  let bubble = document.querySelector('#floating-bubble') as HTMLElement;
-  if (!bubble) {
-    bubble = createFloatingBubble();
-  }
-  bubble.style.display = 'flex';
-};
+// Initialize fixed action button
+createFixedActionButton();
 
 // Create and append the control panel
 const createControlPanel = () => {
@@ -545,7 +730,6 @@ const createControlPanel = () => {
 
 // Initialize the containers
 createControlPanel();
-createFloatingBubble();
 
 // Export functions for use in other modules if needed
 window.hideControlPanel = hideControlPanel;

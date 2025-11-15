@@ -33,6 +33,7 @@ export interface I18nMessages {
   newWord: string;
   newExcel: string;
   newPowerPoint: string;
+  menu: string;
 
   // Messages
   fileSavedSuccess: string;
@@ -52,6 +53,7 @@ const messages: Record<Language, I18nMessages> = {
     newWord: '新建 Word',
     newExcel: '新建 Excel',
     newPowerPoint: '新建 PowerPoint',
+    menu: '菜单',
     fileSavedSuccess: '文件保存成功：',
     documentLoaded: '文档加载完成：',
     failedToLoadEditor: '无法加载编辑器组件。请确保已正确安装 OnlyOffice API。',
@@ -65,6 +67,7 @@ const messages: Record<Language, I18nMessages> = {
     newWord: 'New Word',
     newExcel: 'New Excel',
     newPowerPoint: 'New PowerPoint',
+    menu: 'Menu',
     fileSavedSuccess: 'File saved successfully: ',
     documentLoaded: 'Document loaded: ',
     failedToLoadEditor: 'Failed to load editor component. Please ensure OnlyOffice API is properly installed.',
