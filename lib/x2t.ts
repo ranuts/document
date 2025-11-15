@@ -57,6 +57,27 @@ interface BinConversionResult {
 type DocumentType = 'word' | 'cell' | 'slide';
 
 /**
+ * Get base path based on deployment environment
+ * - GitHub Pages: uses /document/ path
+ * - Docker/Other: uses root path /
+ */
+const getBasePath = (): string => {
+  if (typeof window === 'undefined') {
+    return '/';
+  }
+  
+  const pathname = window.location.pathname;
+  // Check if we're in GitHub Pages (path starts with /document/ or contains /document/)
+  if (pathname.startsWith('/document/') || pathname === '/document') {
+    return '/document/';
+  }
+  // Docker or other deployments use root path
+  return '/';
+};
+
+const BASE_PATH = getBasePath();
+
+/**
  * X2T utility class - Handles document conversion functionality
  */
 class X2TConverter {
@@ -82,7 +103,7 @@ class X2TConverter {
   };
 
   private readonly WORKING_DIRS = ['/working', '/working/media', '/working/fonts', '/working/themes'];
-  private readonly SCRIPT_PATH = 'wasm/x2t/x2t.js';
+  private readonly SCRIPT_PATH = `${BASE_PATH}wasm/x2t/x2t.js`;
   private readonly INIT_TIMEOUT = 300000;
 
   /**
