@@ -4548,9 +4548,12 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.define.smartArt.textVerticalPictureList': 'Vertical Picture List',
   'Common.define.smartArt.textVerticalProcess': 'Vertical Process',
   'Common.Translation.textMoreButton': 'More',
-  'Common.Translation.tipFileLocked': 'The file is locked and cannot be edited. You can make changes and save them as a local copy.',
-  'Common.Translation.tipFileReadOnly': 'This file has read-only permissions. To save, rename the file or save it in a different location.',
-  'Common.Translation.warnFileLocked': 'Another application is editing this file. You can continue editing and save it as a copy.',
+  'Common.Translation.tipFileLocked':
+    'The file is locked and cannot be edited. You can make changes and save them as a local copy.',
+  'Common.Translation.tipFileReadOnly':
+    'This file has read-only permissions. To save, rename the file or save it in a different location.',
+  'Common.Translation.warnFileLocked':
+    'Another application is editing this file. You can continue editing and save it as a copy.',
   'Common.Translation.warnFileLockedBtnEdit': 'Create Copy',
   'Common.Translation.warnFileLockedBtnView': 'Open to View',
   'Common.UI.ButtonColored.textAutoColor': 'Automatic',
@@ -4561,9 +4564,11 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.UI.ComboDataView.emptyComboText': 'No Style',
   'Common.UI.ExtendedColorDialog.addButtonText': 'OK',
   'Common.UI.ExtendedColorDialog.textCurrent': 'Current',
-  'Common.UI.ExtendedColorDialog.textHexErr': 'The value entered is incorrect.<br>Please enter a value between 000000 and FFFFFF.',
+  'Common.UI.ExtendedColorDialog.textHexErr':
+    'The value entered is incorrect.<br>Please enter a value between 000000 and FFFFFF.',
   'Common.UI.ExtendedColorDialog.textNew': 'New',
-  'Common.UI.ExtendedColorDialog.textRGBErr': 'The value entered is incorrect.<br>Please enter a value between 0 and 255.',
+  'Common.UI.ExtendedColorDialog.textRGBErr':
+    'The value entered is incorrect.<br>Please enter a value between 0 and 255.',
   'Common.UI.HSBColorPicker.textNoColor': 'No Color',
   'Common.UI.InputFieldBtnPassword.textHintHidePwd': 'Hide Password',
   'Common.UI.InputFieldBtnPassword.textHintShowPwd': 'Show Password',
@@ -4582,8 +4587,9 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.UI.SearchDialog.txtBtnHideReplace': 'Hide Replace',
   'Common.UI.SearchDialog.txtBtnReplace': 'Replace',
   'Common.UI.SearchDialog.txtBtnReplaceAll': 'Replace All',
-  'Common.UI.SynchronizeTip.textDontShow': 'Don\'t show this message again',
-  'Common.UI.SynchronizeTip.textSynchronize': 'This document has been changed by another user.<br>Please click to save changes and reload updates.',
+  'Common.UI.SynchronizeTip.textDontShow': "Don't show this message again",
+  'Common.UI.SynchronizeTip.textSynchronize':
+    'This document has been changed by another user.<br>Please click to save changes and reload updates.',
   'Common.UI.ThemeColorPalette.textRecentColors': 'Recent Colors',
   'Common.UI.ThemeColorPalette.textStandartColors': 'Standard Colors',
   'Common.UI.ThemeColorPalette.textThemeColors': 'Theme Colors',
@@ -4597,7 +4603,7 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.UI.Window.noButtonText': 'No',
   'Common.UI.Window.okButtonText': 'OK',
   'Common.UI.Window.textConfirmation': 'Confirmation',
-  'Common.UI.Window.textDontShow': 'Don\'t show this message again',
+  'Common.UI.Window.textDontShow': "Don't show this message again",
   'Common.UI.Window.textError': 'Error',
   'Common.UI.Window.textInformation': 'Information',
   'Common.UI.Window.textWarning': 'Warning',
@@ -4662,7 +4668,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.AutoCorrectDialog.textMathCorrect': 'Math AutoCorrect',
   'Common.Views.AutoCorrectDialog.textNewRowCol': 'Tables with new rows and columns',
   'Common.Views.AutoCorrectDialog.textRecognized': 'Recognized Functions',
-  'Common.Views.AutoCorrectDialog.textRecognizedDesc': 'The following expressions are recognized as math functions. They will not be automatically set to italic.',
+  'Common.Views.AutoCorrectDialog.textRecognizedDesc':
+    'The following expressions are recognized as math functions. They will not be automatically set to italic.',
   'Common.Views.AutoCorrectDialog.textReplace': 'Replace',
   'Common.Views.AutoCorrectDialog.textReplaceText': 'Replace text as you type',
   'Common.Views.AutoCorrectDialog.textReplaceType': 'Replace text as you type',
@@ -4670,11 +4677,15 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.AutoCorrectDialog.textResetAll': 'Reset to Default',
   'Common.Views.AutoCorrectDialog.textRestore': 'Restore',
   'Common.Views.AutoCorrectDialog.textTitle': 'AutoCorrect',
-  'Common.Views.AutoCorrectDialog.textWarnAddRec': 'Recognized functions can only contain letters A to Z, uppercase or lowercase.',
-  'Common.Views.AutoCorrectDialog.textWarnResetRec': 'Expressions added by you will be removed, and those removed by you will be restored. Continue?',
+  'Common.Views.AutoCorrectDialog.textWarnAddRec':
+    'Recognized functions can only contain letters A to Z, uppercase or lowercase.',
+  'Common.Views.AutoCorrectDialog.textWarnResetRec':
+    'Expressions added by you will be removed, and those removed by you will be restored. Continue?',
   'Common.Views.AutoCorrectDialog.warnReplace': 'AutoCorrect entry for %1 already exists. Do you want to replace it?',
-  'Common.Views.AutoCorrectDialog.warnReset': 'This will remove all custom AutoCorrect settings and restore defaults. Continue?',
-  'Common.Views.AutoCorrectDialog.warnRestore': 'AutoCorrect entry for %1 will be reset to its original value. Do you want to continue?',
+  'Common.Views.AutoCorrectDialog.warnReset':
+    'This will remove all custom AutoCorrect settings and restore defaults. Continue?',
+  'Common.Views.AutoCorrectDialog.warnRestore':
+    'AutoCorrect entry for %1 will be reset to its original value. Do you want to continue?',
   'Common.Views.Chat.textSend': 'Send',
   'Common.Views.Comments.mniAuthorAsc': 'Author A to Z',
   'Common.Views.Comments.mniAuthorDesc': 'Author Z to A',
@@ -4701,9 +4712,9 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.Comments.textResolve': 'Resolve',
   'Common.Views.Comments.textResolved': 'Resolved',
   'Common.Views.Comments.textSort': 'Sort Comments',
-  'Common.Views.Comments.textViewResolved': 'You don\'t have permission to reopen comments',
+  'Common.Views.Comments.textViewResolved': "You don't have permission to reopen comments",
   'Common.Views.Comments.txtEmpty': 'There are no comments in the worksheet.',
-  'Common.Views.CopyWarningDialog.textDontShow': 'Don\'t show this message again',
+  'Common.Views.CopyWarningDialog.textDontShow': "Don't show this message again",
   'Common.Views.CopyWarningDialog.textMsg': '',
   'Common.Views.CopyWarningDialog.textTitle': 'Copy, Cut, and Paste Operations',
   'Common.Views.CopyWarningDialog.textToCopy': 'Copy',
@@ -4796,7 +4807,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.OpenDialog.txtOther': 'Other',
   'Common.Views.OpenDialog.txtPassword': 'Password',
   'Common.Views.OpenDialog.txtPreview': 'Preview',
-  'Common.Views.OpenDialog.txtProtected': 'After you enter the password and open the file, the current password for this file will be reset.',
+  'Common.Views.OpenDialog.txtProtected':
+    'After you enter the password and open the file, the current password for this file will be reset.',
   'Common.Views.OpenDialog.txtSemicolon': 'Semicolon',
   'Common.Views.OpenDialog.txtSpace': 'Space',
   'Common.Views.OpenDialog.txtTab': 'Tab',
@@ -4807,7 +4819,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.PasswordDialog.txtPassword': 'Password',
   'Common.Views.PasswordDialog.txtRepeat': 'Re-enter password',
   'Common.Views.PasswordDialog.txtTitle': 'Set Password',
-  'Common.Views.PasswordDialog.txtWarning': 'Warning: If you lose or forget the password, it cannot be recovered. Keep it in a safe place.',
+  'Common.Views.PasswordDialog.txtWarning':
+    'Warning: If you lose or forget the password, it cannot be recovered. Keep it in a safe place.',
   'Common.Views.PluginDlg.textLoading': 'Loading',
   'Common.Views.Plugins.groupCaption': 'Plugins',
   'Common.Views.Plugins.strPlugins': 'Plugins',
@@ -4894,7 +4907,7 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.ReviewPopover.textOpenAgain': 'Reopen',
   'Common.Views.ReviewPopover.textReply': 'Reply',
   'Common.Views.ReviewPopover.textResolve': 'Resolve',
-  'Common.Views.ReviewPopover.textViewResolved': 'You don\'t have permission to reopen comments',
+  'Common.Views.ReviewPopover.textViewResolved': "You don't have permission to reopen comments",
   'Common.Views.ReviewPopover.txtDeleteTip': 'Delete',
   'Common.Views.ReviewPopover.txtEditTip': 'Edit',
   'Common.Views.SaveAsDlg.textLoading': 'Loading',
@@ -4916,7 +4929,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.SearchPanel.textName': 'Name',
   'Common.Views.SearchPanel.textNoMatches': 'No matches found',
   'Common.Views.SearchPanel.textNoSearchResults': 'No search results found',
-  'Common.Views.SearchPanel.textPartOfItemsNotReplaced': '{0}/{1} items replaced successfully. The remaining {2} items are locked by other users.',
+  'Common.Views.SearchPanel.textPartOfItemsNotReplaced':
+    '{0}/{1} items replaced successfully. The remaining {2} items are locked by other users.',
   'Common.Views.SearchPanel.textReplace': 'Replace',
   'Common.Views.SearchPanel.textReplaceAll': 'Replace All',
   'Common.Views.SearchPanel.textReplaceWith': 'Replace With',
@@ -4954,7 +4968,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.SignDialog.tipFontName': 'Font Name',
   'Common.Views.SignDialog.tipFontSize': 'Font Size',
   'Common.Views.SignSettingsDialog.textAllowComment': 'Allow signer to add comment in the signature dialog',
-  'Common.Views.SignSettingsDialog.textDefInstruction': 'Before signing this document, make sure that what you are signing is correct.',
+  'Common.Views.SignSettingsDialog.textDefInstruction':
+    'Before signing this document, make sure that what you are signing is correct.',
   'Common.Views.SignSettingsDialog.textInfoEmail': 'Suggested signer email',
   'Common.Views.SignSettingsDialog.textInfoName': 'Suggested signer',
   'Common.Views.SignSettingsDialog.textInfoTitle': 'Suggested signer title',
@@ -4989,13 +5004,13 @@ define('spreadsheeteditor/main/locale/en.json', {
   'Common.Views.SymbolTableDialog.textSymbols': 'Symbols',
   'Common.Views.SymbolTableDialog.textTitle': 'Symbol',
   'Common.Views.SymbolTableDialog.textTradeMark': 'Trademark',
-  'Common.Views.UserNameDialog.textDontShow': 'Don\'t ask me again',
+  'Common.Views.UserNameDialog.textDontShow': "Don't ask me again",
   'Common.Views.UserNameDialog.textLabel': 'Label:',
   'Common.Views.UserNameDialog.textLabelError': 'Label cannot be empty',
   'SSE.Controllers.DataTab.strSheet': 'Sheet',
   'SSE.Controllers.DataTab.textAddExternalData': 'Add External Data',
   'SSE.Controllers.DataTab.textColumns': 'Columns',
-  'SSE.Controllers.DataTab.textDontUpdate': 'Don\'t Update',
+  'SSE.Controllers.DataTab.textDontUpdate': "Don't Update",
   'SSE.Controllers.DataTab.textEmptyUrl': 'You must specify a URL.',
   'SSE.Controllers.DataTab.textRows': 'Rows',
   'SSE.Controllers.DataTab.textUpdate': 'Update',
@@ -5007,7 +5022,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.DataTab.txtExtendDataValidation': 'Extend Data Validation',
   'SSE.Controllers.DataTab.txtImportWizard': 'Text Import Wizard',
   'SSE.Controllers.DataTab.txtRemDuplicates': 'Remove Duplicates',
-  'SSE.Controllers.DataTab.txtRemoveDataValidation': 'The selected range contains multiple types of data validation.<br> Clear current settings and continue?',
+  'SSE.Controllers.DataTab.txtRemoveDataValidation':
+    'The selected range contains multiple types of data validation.<br> Clear current settings and continue?',
   'SSE.Controllers.DataTab.txtRemSelected': 'Current Selection',
   'SSE.Controllers.DataTab.txtUrlTitle': 'Paste URL Data',
   'SSE.Controllers.DataTab.warnUpdateExternalData': '',
@@ -5016,7 +5032,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.DocumentHolder.deleteColumnText': 'Delete Column',
   'SSE.Controllers.DocumentHolder.deleteRowText': 'Delete Row',
   'SSE.Controllers.DocumentHolder.deleteText': 'Delete',
-  'SSE.Controllers.DocumentHolder.errorInvalidLink': 'The link reference does not exist. Please modify or delete the link.',
+  'SSE.Controllers.DocumentHolder.errorInvalidLink':
+    'The link reference does not exist. Please modify or delete the link.',
   'SSE.Controllers.DocumentHolder.guestText': 'Guest',
   'SSE.Controllers.DocumentHolder.insertColumnLeftText': 'Insert Column Left',
   'SSE.Controllers.DocumentHolder.insertColumnRightText': 'Insert Column Right',
@@ -5048,7 +5065,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.DocumentHolder.txtAddVer': 'Add Vertical Line',
   'SSE.Controllers.DocumentHolder.txtAlignToChar': 'Align to Character',
   'SSE.Controllers.DocumentHolder.txtAll': '(All)',
-  'SSE.Controllers.DocumentHolder.txtAllTableHint': 'Returns all content of a table or specified table column, including column headers, data, and totals row',
+  'SSE.Controllers.DocumentHolder.txtAllTableHint':
+    'Returns all content of a table or specified table column, including column headers, data, and totals row',
   'SSE.Controllers.DocumentHolder.txtAnd': 'And',
   'SSE.Controllers.DocumentHolder.txtBegins': 'Begins With',
   'SSE.Controllers.DocumentHolder.txtBelowAve': 'Below Average',
@@ -5117,7 +5135,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.DocumentHolder.txtLockSort': '',
   'SSE.Controllers.DocumentHolder.txtMatchBrackets': 'Match brackets to argument height',
   'SSE.Controllers.DocumentHolder.txtMatrixAlign': 'Matrix Alignment',
-  'SSE.Controllers.DocumentHolder.txtNoChoices': 'No choices selected for fill cells.<br>You can only select text values in a column for replacement.',
+  'SSE.Controllers.DocumentHolder.txtNoChoices':
+    'No choices selected for fill cells.<br>You can only select text values in a column for replacement.',
   'SSE.Controllers.DocumentHolder.txtNotBegins': 'Does Not Begin With',
   'SSE.Controllers.DocumentHolder.txtNotContains': 'Does Not Contain',
   'SSE.Controllers.DocumentHolder.txtNotEnds': 'Does Not End With',
@@ -5147,7 +5166,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.DocumentHolder.txtRemLimit': 'Remove Limit',
   'SSE.Controllers.DocumentHolder.txtRemoveAccentChar': 'Remove Accent Character',
   'SSE.Controllers.DocumentHolder.txtRemoveBar': 'Remove Bar',
-  'SSE.Controllers.DocumentHolder.txtRemoveWarning': 'Do you want to remove this signature?<br>This action cannot be undone.',
+  'SSE.Controllers.DocumentHolder.txtRemoveWarning':
+    'Do you want to remove this signature?<br>This action cannot be undone.',
   'SSE.Controllers.DocumentHolder.txtRemScripts': 'Remove Subscripts and Superscripts',
   'SSE.Controllers.DocumentHolder.txtRemSubscript': 'Remove Subscript',
   'SSE.Controllers.DocumentHolder.txtRemSuperscript': 'Remove Superscript',
@@ -5169,9 +5189,11 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.DocumentHolder.txtUnderbar': 'Underbar under text',
   'SSE.Controllers.DocumentHolder.txtUndoExpansion': 'Undo Table Auto-Expansion',
   'SSE.Controllers.DocumentHolder.txtUseTextImport': 'Use Text Import Wizard',
-  'SSE.Controllers.DocumentHolder.txtWarnUrl': 'Clicking this link may harm your device or data.<br>Are you sure you want to continue?',
+  'SSE.Controllers.DocumentHolder.txtWarnUrl':
+    'Clicking this link may harm your device or data.<br>Are you sure you want to continue?',
   'SSE.Controllers.DocumentHolder.txtWidth': 'Width',
-  'SSE.Controllers.DocumentHolder.warnFilterError': 'To make the filter work, you need at least one value in the values area.',
+  'SSE.Controllers.DocumentHolder.warnFilterError':
+    'To make the filter work, you need at least one value in the values area.',
   'SSE.Controllers.FormulaDialog.sCategoryAll': 'All',
   'SSE.Controllers.FormulaDialog.sCategoryCube': 'Cube',
   'SSE.Controllers.FormulaDialog.sCategoryDatabase': 'Database',
@@ -5192,7 +5214,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.LeftMenu.textItemEntireCell': 'Match Entire Cell Contents',
   'SSE.Controllers.LeftMenu.textLoadHistory': 'Loading version history...',
   'SSE.Controllers.LeftMenu.textLookin': 'Look In',
-  'SSE.Controllers.LeftMenu.textNoTextFound': 'The data you searched for could not be found. Please adjust your search options.',
+  'SSE.Controllers.LeftMenu.textNoTextFound':
+    'The data you searched for could not be found. Please adjust your search options.',
   'SSE.Controllers.LeftMenu.textReplaceSkipped': 'Replaced. {0} skipped.',
   'SSE.Controllers.LeftMenu.textReplaceSuccess': 'Search completed. Occurrences: {0}',
   'SSE.Controllers.LeftMenu.textSave': 'Save',
@@ -5203,14 +5226,18 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.LeftMenu.textWithin': 'Within',
   'SSE.Controllers.LeftMenu.textWorkbook': 'Workbook',
   'SSE.Controllers.LeftMenu.txtUntitled': 'Untitled',
-  'SSE.Controllers.LeftMenu.warnDownloadAs': 'If you continue saving in this format, all features except text will be lost.<br>Are you sure you want to continue?',
+  'SSE.Controllers.LeftMenu.warnDownloadAs':
+    'If you continue saving in this format, all features except text will be lost.<br>Are you sure you want to continue?',
   'SSE.Controllers.LeftMenu.warnDownloadCsvSheets': '',
   'SSE.Controllers.Main.confirmAddCellWatches': 'This action will add {0} cell watches.<br>Continue?',
-  'SSE.Controllers.Main.confirmAddCellWatchesMax': 'This action will only add {0} cell watches to save memory.<br>Continue?',
+  'SSE.Controllers.Main.confirmAddCellWatchesMax':
+    'This action will only add {0} cell watches to save memory.<br>Continue?',
   'SSE.Controllers.Main.confirmMaxChangesSize': '',
   'SSE.Controllers.Main.confirmMoveCellRange': 'The destination cell range may contain data. Continue?',
-  'SSE.Controllers.Main.confirmPutMergeRange': 'Source data contains merged cells.<br>They have been unmerged before pasting into the table.',
-  'SSE.Controllers.Main.confirmReplaceFormulaInTable': 'Formulas in table headers will be removed and converted to plain text.<br>Continue?',
+  'SSE.Controllers.Main.confirmPutMergeRange':
+    'Source data contains merged cells.<br>They have been unmerged before pasting into the table.',
+  'SSE.Controllers.Main.confirmReplaceFormulaInTable':
+    'Formulas in table headers will be removed and converted to plain text.<br>Continue?',
   'SSE.Controllers.Main.confirmReplaceHFPicture': '',
   'SSE.Controllers.Main.convertationTimeoutText': 'Conversion timeout',
   'SSE.Controllers.Main.criticalErrorExtText': 'Click OK to return to the file list.',
@@ -5219,55 +5246,77 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Main.downloadTextText': 'Downloading spreadsheet...',
   'SSE.Controllers.Main.downloadTitleText': 'Download Spreadsheet',
   'SSE.Controllers.Main.errNoDuplicates': 'No duplicate values found.',
-  'SSE.Controllers.Main.errorAccessDeny': 'You are trying to perform an operation for which you do not have permission.<br>Please contact your document server administrator.',
+  'SSE.Controllers.Main.errorAccessDeny':
+    'You are trying to perform an operation for which you do not have permission.<br>Please contact your document server administrator.',
   'SSE.Controllers.Main.errorArgsRange': 'There is a problem with this formula.<br>Incorrect parameter range used.',
-  'SSE.Controllers.Main.errorAutoFilterChange': 'Operation not allowed because it is trying to move cells in a table on the worksheet.',
+  'SSE.Controllers.Main.errorAutoFilterChange':
+    'Operation not allowed because it is trying to move cells in a table on the worksheet.',
   'SSE.Controllers.Main.errorAutoFilterChangeFormatTable': '',
   'SSE.Controllers.Main.errorAutoFilterDataRange': '',
   'SSE.Controllers.Main.errorAutoFilterHiddenRange': '',
   'SSE.Controllers.Main.errorBadImageUrl': 'Incorrect image URL',
   'SSE.Controllers.Main.errorCannotPasteImg': '',
-  'SSE.Controllers.Main.errorCannotUngroup': 'Cannot ungroup. To start an outline, select detail rows or columns and group them.',
+  'SSE.Controllers.Main.errorCannotUngroup':
+    'Cannot ungroup. To start an outline, select detail rows or columns and group them.',
   'SSE.Controllers.Main.errorCannotUseCommandProtectedSheet': '',
   'SSE.Controllers.Main.errorChangeArray': 'You cannot change part of an array.',
-  'SSE.Controllers.Main.errorChangeFilteredRange': 'This will change the original filter range on the worksheet.<br>To complete this operation, remove AutoFilter.',
+  'SSE.Controllers.Main.errorChangeFilteredRange':
+    'This will change the original filter range on the worksheet.<br>To complete this operation, remove AutoFilter.',
   'SSE.Controllers.Main.errorChangeOnProtectedSheet': '',
   'SSE.Controllers.Main.errorCoAuthoringDisconnect': 'Server connection lost. The document cannot be edited now',
   'SSE.Controllers.Main.errorConnectToServer': '',
-  'SSE.Controllers.Main.errorConvertXml': 'This file has an unsupported format.<br>Only XML Spreadsheet 2003 format can be used.',
-  'SSE.Controllers.Main.errorCopyMultiselectArea': 'This command cannot be used with multiple selections.<br>Select a single range and try again.',
-  'SSE.Controllers.Main.errorCountArg': 'There is a problem with this formula.<br><br>Please enter the correct parameters.',
+  'SSE.Controllers.Main.errorConvertXml':
+    'This file has an unsupported format.<br>Only XML Spreadsheet 2003 format can be used.',
+  'SSE.Controllers.Main.errorCopyMultiselectArea':
+    'This command cannot be used with multiple selections.<br>Select a single range and try again.',
+  'SSE.Controllers.Main.errorCountArg':
+    'There is a problem with this formula.<br><br>Please enter the correct parameters.',
   'SSE.Controllers.Main.errorCountArgExceed': 'Too many arguments entered for this function.',
-  'SSE.Controllers.Main.errorCreateDefName': 'Cannot edit existing named range, so new range cannot be created within it.',
-  'SSE.Controllers.Main.errorCreateRange': 'Existing range cannot be edited, and new range cannot be created<br>because some ranges in the table are being edited.',
-  'SSE.Controllers.Main.errorDatabaseConnection': 'External error.<br>Database connection error. If the error persists, please contact support.',
+  'SSE.Controllers.Main.errorCreateDefName':
+    'Cannot edit existing named range, so new range cannot be created within it.',
+  'SSE.Controllers.Main.errorCreateRange':
+    'Existing range cannot be edited, and new range cannot be created<br>because some ranges in the table are being edited.',
+  'SSE.Controllers.Main.errorDatabaseConnection':
+    'External error.<br>Database connection error. If the error persists, please contact support.',
   'SSE.Controllers.Main.errorDataEncrypted': 'Encrypted changes received, cannot decrypt them.',
   'SSE.Controllers.Main.errorDataRange': 'Incorrect data range',
-  'SSE.Controllers.Main.errorDataValidate': 'The value you entered is invalid.<br>The user has restricted values that can be entered into this cell.',
+  'SSE.Controllers.Main.errorDataValidate':
+    'The value you entered is invalid.<br>The user has restricted values that can be entered into this cell.',
   'SSE.Controllers.Main.errorDefaultMessage': 'Error code: %1',
   'SSE.Controllers.Main.errorDeleteColumnContainsLockedCell': '',
   'SSE.Controllers.Main.errorDeleteRowContainsLockedCell': '',
-  'SSE.Controllers.Main.errorDependentsNoFormulas': 'The Trace Dependents command found no formulas that refer to the active cell.',
-  'SSE.Controllers.Main.errorDirectUrl': 'Please verify the link to the document.<br>This link must be a direct link to the file to be downloaded.',
+  'SSE.Controllers.Main.errorDependentsNoFormulas':
+    'The Trace Dependents command found no formulas that refer to the active cell.',
+  'SSE.Controllers.Main.errorDirectUrl':
+    'Please verify the link to the document.<br>This link must be a direct link to the file to be downloaded.',
   'SSE.Controllers.Main.errorEditingDownloadas': '',
   'SSE.Controllers.Main.errorEditingSaveas': '',
   'SSE.Controllers.Main.errorEditView': '',
   'SSE.Controllers.Main.errorEmailClient': 'Email client not found.',
   'SSE.Controllers.Main.errorFilePassProtect': 'This document is password protected and cannot be opened.',
-  'SSE.Controllers.Main.errorFileRequest': 'External error.<br>File request error. If the error persists, please contact support.',
+  'SSE.Controllers.Main.errorFileRequest':
+    'External error.<br>File request error. If the error persists, please contact support.',
   'SSE.Controllers.Main.errorFileSizeExceed': '',
-  'SSE.Controllers.Main.errorFileVKey': 'External error.<br>Security key error. If the error persists, please contact support.',
-  'SSE.Controllers.Main.errorFillRange': 'Cannot fill the cells in the selected range.<br>All merged cells must be the same size.',
-  'SSE.Controllers.Main.errorForceSave': 'An error occurred while saving the file. Use the Save As option to save the file to your computer\'s hard drive or try again later.',
+  'SSE.Controllers.Main.errorFileVKey':
+    'External error.<br>Security key error. If the error persists, please contact support.',
+  'SSE.Controllers.Main.errorFillRange':
+    'Cannot fill the cells in the selected range.<br>All merged cells must be the same size.',
+  'SSE.Controllers.Main.errorForceSave':
+    "An error occurred while saving the file. Use the Save As option to save the file to your computer's hard drive or try again later.",
   'SSE.Controllers.Main.errorFormulaName': 'There is a problem with this formula.<br>Use the formula name correctly.',
   'SSE.Controllers.Main.errorFormulaParsing': 'Internal error occurred while parsing the formula.',
   'SSE.Controllers.Main.errorFrmlMaxLength': 'Formula cannot exceed 8192 characters.<br>Please edit and try again.',
-  'SSE.Controllers.Main.errorFrmlMaxReference': 'Cannot enter this formula because it contains too many values,<br>cell references, and/or names.',
-  'SSE.Controllers.Main.errorFrmlMaxTextLength': 'Text values in formulas are limited to 255 characters.<br>Use the CONCATENATE function or concatenation operator (&).',
-  'SSE.Controllers.Main.errorFrmlWrongReferences': 'This function refers to a worksheet that does not exist.<br>Please check the data and try again.',
+  'SSE.Controllers.Main.errorFrmlMaxReference':
+    'Cannot enter this formula because it contains too many values,<br>cell references, and/or names.',
+  'SSE.Controllers.Main.errorFrmlMaxTextLength':
+    'Text values in formulas are limited to 255 characters.<br>Use the CONCATENATE function or concatenation operator (&).',
+  'SSE.Controllers.Main.errorFrmlWrongReferences':
+    'This function refers to a worksheet that does not exist.<br>Please check the data and try again.',
   'SSE.Controllers.Main.errorFTChangeTableRangeError': '',
-  'SSE.Controllers.Main.errorFTRangeIncludedOtherTables': 'The selected cell range cannot complete the operation.<br>Select a range that does not include other tables.',
-  'SSE.Controllers.Main.errorInconsistentExt': 'An error occurred while opening the file.<br>The file extension is inconsistent: %1.',
+  'SSE.Controllers.Main.errorFTRangeIncludedOtherTables':
+    'The selected cell range cannot complete the operation.<br>Select a range that does not include other tables.',
+  'SSE.Controllers.Main.errorInconsistentExt':
+    'An error occurred while opening the file.<br>The file extension is inconsistent: %1.',
   'SSE.Controllers.Main.errorInconsistentExtDocx': '',
   'SSE.Controllers.Main.errorInconsistentExtPdf': '',
   'SSE.Controllers.Main.errorInconsistentExtPptx': '',
@@ -5275,47 +5324,59 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Main.errorInvalidRef': 'Enter a valid name or reference for the selection.',
   'SSE.Controllers.Main.errorKeyEncrypt': 'Unknown key description',
   'SSE.Controllers.Main.errorKeyExpire': 'Key expired',
-  'SSE.Controllers.Main.errorLabledColumnsPivot': 'When creating a pivot table, you must use data combined as a list with labeled columns.',
+  'SSE.Controllers.Main.errorLabledColumnsPivot':
+    'When creating a pivot table, you must use data combined as a list with labeled columns.',
   'SSE.Controllers.Main.errorLoadingFont': 'Font not loaded.<br>Please contact the document server administrator.',
   'SSE.Controllers.Main.errorLocationOrDataRangeError': 'The referenced location or data range is invalid.',
-  'SSE.Controllers.Main.errorLockedAll': 'Operation cannot be performed because the worksheet is locked by another user.',
+  'SSE.Controllers.Main.errorLockedAll':
+    'Operation cannot be performed because the worksheet is locked by another user.',
   'SSE.Controllers.Main.errorLockedCellPivot': 'You cannot change data in a pivot table.',
-  'SSE.Controllers.Main.errorLockedWorksheetRename': 'Cannot rename the sheet at this time because another user is renaming it',
+  'SSE.Controllers.Main.errorLockedWorksheetRename':
+    'Cannot rename the sheet at this time because another user is renaming it',
   'SSE.Controllers.Main.errorMaxPoints': 'Maximum number of points per chart series is 4096.',
   'SSE.Controllers.Main.errorMoveRange': 'Cannot change part of a merged cell',
   'SSE.Controllers.Main.errorMoveSlicerError': '',
   'SSE.Controllers.Main.errorMultiCellFormula': 'Multi-cell array formulas are not allowed in tables.',
   'SSE.Controllers.Main.errorNoDataToParse': 'No data selected to parse.',
-  'SSE.Controllers.Main.errorOpenWarning': 'One of the file formulas exceeds the 8192 character limit.<br>The formula has been removed.',
+  'SSE.Controllers.Main.errorOpenWarning':
+    'One of the file formulas exceeds the 8192 character limit.<br>The formula has been removed.',
   'SSE.Controllers.Main.errorOperandExpected': 'This formula is missing a left or right parenthesis.',
   'SSE.Controllers.Main.errorPasswordIsNotCorrect': '',
   'SSE.Controllers.Main.errorPasteMaxRange': '',
-  'SSE.Controllers.Main.errorPasteMultiSelect': 'Cannot complete this operation on multiple range selections.<br>Please select a single range and try again.',
+  'SSE.Controllers.Main.errorPasteMultiSelect':
+    'Cannot complete this operation on multiple range selections.<br>Please select a single range and try again.',
   'SSE.Controllers.Main.errorPasteSlicerError': 'Table slicers cannot be copied from one workbook to another.',
   'SSE.Controllers.Main.errorPivotGroup': 'The selected range cannot be grouped.',
   'SSE.Controllers.Main.errorPivotOverlap': 'Pivot table report cannot overlap with a table',
   'SSE.Controllers.Main.errorPivotWithoutUnderlying': '',
-  'SSE.Controllers.Main.errorPrecedentsNoValidRef': 'The Trace Precedents command requires the active cell to contain a formula that uses valid references.',
+  'SSE.Controllers.Main.errorPrecedentsNoValidRef':
+    'The Trace Precedents command requires the active cell to contain a formula that uses valid references.',
   'SSE.Controllers.Main.errorPrintMaxPagesCount': 'Printing more than 100 pages is not supported.',
   'SSE.Controllers.Main.errorProcessSaveResult': 'Save failed',
   'SSE.Controllers.Main.errorProtectedRange': 'This range cannot be edited.',
-  'SSE.Controllers.Main.errorServerVersion': 'The editor version has been updated. The page will be reloaded to apply changes.',
+  'SSE.Controllers.Main.errorServerVersion':
+    'The editor version has been updated. The page will be reloaded to apply changes.',
   'SSE.Controllers.Main.errorSessionAbsolute': 'Document editing session has expired. Please reload the page.',
   'SSE.Controllers.Main.errorSessionIdle': 'The file has not been edited for quite some time. Please reload the page.',
   'SSE.Controllers.Main.errorSessionToken': 'Connection to server has been interrupted. Please reload the page.',
   'SSE.Controllers.Main.errorSetPassword': 'Cannot set password',
   'SSE.Controllers.Main.errorSingleColumnOrRowError': '',
   'SSE.Controllers.Main.errorStockChart': '',
-  'SSE.Controllers.Main.errorToken': 'Document security token is not properly formed.<br>Please contact your file server administrator.',
-  'SSE.Controllers.Main.errorTokenExpire': 'Document security token has expired.<br>Please contact your document server administrator.',
-  'SSE.Controllers.Main.errorUnexpectedGuid': 'External error.<br>Unexpected GUID. If the error persists, please contact support.',
+  'SSE.Controllers.Main.errorToken':
+    'Document security token is not properly formed.<br>Please contact your file server administrator.',
+  'SSE.Controllers.Main.errorTokenExpire':
+    'Document security token has expired.<br>Please contact your document server administrator.',
+  'SSE.Controllers.Main.errorUnexpectedGuid':
+    'External error.<br>Unexpected GUID. If the error persists, please contact support.',
   'SSE.Controllers.Main.errorUpdateVersion': 'The file version has changed. The page will be reloaded.',
   'SSE.Controllers.Main.errorUpdateVersionOnDisconnect': '',
   'SSE.Controllers.Main.errorUserDrop': 'The file is not accessible now.',
   'SSE.Controllers.Main.errorUsersExceed': 'The number of users allowed by the pricing plan has been exceeded',
   'SSE.Controllers.Main.errorViewerDisconnect': '',
-  'SSE.Controllers.Main.errorWrongBracketsCount': 'There is a problem with this formula.<br>Incorrect use of parentheses.',
-  'SSE.Controllers.Main.errorWrongOperator': 'An error occurred while entering the formula. Incorrect operator, please correct!',
+  'SSE.Controllers.Main.errorWrongBracketsCount':
+    'There is a problem with this formula.<br>Incorrect use of parentheses.',
+  'SSE.Controllers.Main.errorWrongOperator':
+    'An error occurred while entering the formula. Incorrect operator, please correct!',
   'SSE.Controllers.Main.errorWrongPassword': 'The password you provided is incorrect.',
   'SSE.Controllers.Main.errRemDuplicates': 'Duplicate values found: {0}, removed. Only unique values remain: {1}.',
   'SSE.Controllers.Main.leavePageText': '',
@@ -5343,7 +5404,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Main.saveErrorTextDesktop': '',
   'SSE.Controllers.Main.saveTextText': 'Saving spreadsheet...',
   'SSE.Controllers.Main.saveTitleText': 'Save Spreadsheet',
-  'SSE.Controllers.Main.scriptLoadError': 'Connection speed is too slow, some components could not be loaded. Please reload the page.',
+  'SSE.Controllers.Main.scriptLoadError':
+    'Connection speed is too slow, some components could not be loaded. Please reload the page.',
   'SSE.Controllers.Main.textAnonymous': 'Anonymous',
   'SSE.Controllers.Main.textApplyAll': 'Apply to All Formulas',
   'SSE.Controllers.Main.textBuyNow': 'Visit Website',
@@ -5354,11 +5416,14 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Main.textContactUs': 'Contact Sales',
   'SSE.Controllers.Main.textContinue': 'Send',
   'SSE.Controllers.Main.textConvertEquation': '',
-  'SSE.Controllers.Main.textCustomLoader': 'Please note that according to the license terms you do not have the right to change the loader.<br>Please contact our sales department for a quote.',
+  'SSE.Controllers.Main.textCustomLoader':
+    'Please note that according to the license terms you do not have the right to change the loader.<br>Please contact our sales department for a quote.',
   'SSE.Controllers.Main.textDisconnect': 'Network connection lost.',
   'SSE.Controllers.Main.textFillOtherRows': 'Fill Other Rows',
-  'SSE.Controllers.Main.textFormulaFilledAllRows': 'Formula filled {0} rows have data. Filling other empty rows may take several minutes.',
-  'SSE.Controllers.Main.textFormulaFilledAllRowsWithEmpty': 'Formula filled the first {0} rows. Filling other empty rows may take several minutes.',
+  'SSE.Controllers.Main.textFormulaFilledAllRows':
+    'Formula filled {0} rows have data. Filling other empty rows may take several minutes.',
+  'SSE.Controllers.Main.textFormulaFilledAllRowsWithEmpty':
+    'Formula filled the first {0} rows. Filling other empty rows may take several minutes.',
   'SSE.Controllers.Main.textFormulaFilledFirstRowsOtherHaveData': '',
   'SSE.Controllers.Main.textFormulaFilledFirstRowsOtherIsEmpty': '',
   'SSE.Controllers.Main.textGuest': 'Guest',
@@ -5664,16 +5729,22 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Main.uploadImageTitleText': 'Uploading Image',
   'SSE.Controllers.Main.waitText': 'Please wait...',
   'SSE.Controllers.Main.warnBrowserIE9': 'This application has poor functionality on IE9. Use IE10 or higher',
-  'SSE.Controllers.Main.warnBrowserZoom': 'Your browser\'s current zoom setting is not fully supported. Press Ctrl + 0 to reset to default zoom.',
-  'SSE.Controllers.Main.warnLicenseAnonymous': 'Access denied for anonymous users.<br>This document will be opened in view-only mode.',
+  'SSE.Controllers.Main.warnBrowserZoom':
+    "Your browser's current zoom setting is not fully supported. Press Ctrl + 0 to reset to default zoom.",
+  'SSE.Controllers.Main.warnLicenseAnonymous':
+    'Access denied for anonymous users.<br>This document will be opened in view-only mode.',
   'SSE.Controllers.Main.warnLicenseBefore': 'License is not activated.<br>Please contact the administrator.',
   'SSE.Controllers.Main.warnLicenseExceeded': '',
-  'SSE.Controllers.Main.warnLicenseExp': 'Your license has expired.<br>Please update your license and refresh the page.',
-  'SSE.Controllers.Main.warnLicenseLimitedNoAccess': 'License expired<br>You do not have authorization for file editing features<br>Please contact the administrator.',
+  'SSE.Controllers.Main.warnLicenseExp':
+    'Your license has expired.<br>Please update your license and refresh the page.',
+  'SSE.Controllers.Main.warnLicenseLimitedNoAccess':
+    'License expired<br>You do not have authorization for file editing features<br>Please contact the administrator.',
   'SSE.Controllers.Main.warnLicenseLimitedRenewed': '',
-  'SSE.Controllers.Main.warnLicenseUsersExceeded': 'You have reached the user limit for %1 editors. Please contact your administrator for more information.',
+  'SSE.Controllers.Main.warnLicenseUsersExceeded':
+    'You have reached the user limit for %1 editors. Please contact your administrator for more information.',
   'SSE.Controllers.Main.warnNoLicense': '',
-  'SSE.Controllers.Main.warnNoLicenseUsers': 'You have reached the user limit for %1 editors. Please contact the %1 sales team to learn about individual upgrade terms.',
+  'SSE.Controllers.Main.warnNoLicenseUsers':
+    'You have reached the user limit for %1 editors. Please contact the %1 sales team to learn about individual upgrade terms.',
   'SSE.Controllers.Main.warnProcessRightsChange': 'You have been denied permission to edit the file.',
   'SSE.Controllers.PivotTable.strSheet': 'Sheet',
   'SSE.Controllers.Print.strAllSheets': 'All Sheets',
@@ -5682,23 +5753,28 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Print.textFrozenCols': 'Frozen Columns',
   'SSE.Controllers.Print.textFrozenRows': 'Frozen Rows',
   'SSE.Controllers.Print.textInvalidRange': 'Failed! Invalid cell range',
-  'SSE.Controllers.Print.textNoRepeat': 'Don\'t Repeat',
+  'SSE.Controllers.Print.textNoRepeat': "Don't Repeat",
   'SSE.Controllers.Print.textRepeat': 'Repeat...',
   'SSE.Controllers.Print.textSelectRange': 'Select Range',
   'SSE.Controllers.Print.textWarning': 'Warning',
   'SSE.Controllers.Print.txtCustom': 'Custom',
   'SSE.Controllers.Print.warnCheckMargings': 'Incorrect margins',
   'SSE.Controllers.Search.textInvalidRange': 'Error! Invalid cell range',
-  'SSE.Controllers.Search.textNoTextFound': 'The data you searched for could not be found. Please adjust your search options.',
+  'SSE.Controllers.Search.textNoTextFound':
+    'The data you searched for could not be found. Please adjust your search options.',
   'SSE.Controllers.Search.textReplaceSkipped': 'Replace completed. {0} skipped.',
   'SSE.Controllers.Search.textReplaceSuccess': 'Search completed. {0} replaced',
   'SSE.Controllers.Statusbar.errorLastSheet': 'A workbook must have at least one visible worksheet',
   'SSE.Controllers.Statusbar.errorRemoveSheet': 'Cannot delete worksheet',
   'SSE.Controllers.Statusbar.strSheet': 'Sheet',
-  'SSE.Controllers.Statusbar.textDisconnect': '<b>Connection Failed</b><br>Trying to connect. Please check connection settings.',
-  'SSE.Controllers.Statusbar.textSheetViewTip': 'You are in "Sheet View" mode. Filters and sorting are only visible to you and users still in this view.',
-  'SSE.Controllers.Statusbar.textSheetViewTipFilters': 'You are in "Sheet View" mode. Filters are only visible to you and users still in this view.',
-  'SSE.Controllers.Statusbar.warnDeleteSheet': 'The selected worksheet may contain data. Are you sure you want to continue?',
+  'SSE.Controllers.Statusbar.textDisconnect':
+    '<b>Connection Failed</b><br>Trying to connect. Please check connection settings.',
+  'SSE.Controllers.Statusbar.textSheetViewTip':
+    'You are in "Sheet View" mode. Filters and sorting are only visible to you and users still in this view.',
+  'SSE.Controllers.Statusbar.textSheetViewTipFilters':
+    'You are in "Sheet View" mode. Filters are only visible to you and users still in this view.',
+  'SSE.Controllers.Statusbar.warnDeleteSheet':
+    'The selected worksheet may contain data. Are you sure you want to continue?',
   'SSE.Controllers.Statusbar.zoomText': 'Zoom {0}%',
   'SSE.Controllers.Toolbar.confirmAddFontName': '',
   'SSE.Controllers.Toolbar.errorComboSeries': 'To create a combo chart, select at least two data series.',
@@ -5708,7 +5784,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Toolbar.textAccent': 'Accent',
   'SSE.Controllers.Toolbar.textBracket': 'Bracket',
   'SSE.Controllers.Toolbar.textDirectional': 'Directional',
-  'SSE.Controllers.Toolbar.textFontSizeErr': 'The value entered is incorrect.<br>Please enter a value between 1 and 409',
+  'SSE.Controllers.Toolbar.textFontSizeErr':
+    'The value entered is incorrect.<br>Please enter a value between 1 and 409',
   'SSE.Controllers.Toolbar.textFraction': 'Fraction',
   'SSE.Controllers.Toolbar.textFunction': 'Trigonometric Functions',
   'SSE.Controllers.Toolbar.textIndicator': 'Indicator',
@@ -5797,7 +5874,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Toolbar.txtBracket_UppLim_OpenNone': 'Single Bracket',
   'SSE.Controllers.Toolbar.txtDeleteCells': 'Delete Cells',
   'SSE.Controllers.Toolbar.txtExpand': 'Expand Selection',
-  'SSE.Controllers.Toolbar.txtExpandSort': 'There is data next to the selected range. This data is not selected and will not be included in the sort.',
+  'SSE.Controllers.Toolbar.txtExpandSort':
+    'There is data next to the selected range. This data is not selected and will not be included in the sort.',
   'SSE.Controllers.Toolbar.txtFractionDiagonal': 'Skewed Fraction',
   'SSE.Controllers.Toolbar.txtFractionDifferential_1': 'Differential',
   'SSE.Controllers.Toolbar.txtFractionDifferential_2': 'Differential',
@@ -6065,8 +6143,10 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Controllers.Toolbar.txtTable_TableStyleDark': 'Dark',
   'SSE.Controllers.Toolbar.txtTable_TableStyleLight': 'Light',
   'SSE.Controllers.Toolbar.txtTable_TableStyleMedium': 'Medium',
-  'SSE.Controllers.Toolbar.warnLongOperation': 'The operation you are about to perform may take a considerable amount of time to complete.<br>Are you sure you want to continue?',
-  'SSE.Controllers.Toolbar.warnMergeLostData': 'Only data from the upper-left cell will be kept in the merged cell.<br>Are you sure you want to continue?',
+  'SSE.Controllers.Toolbar.warnLongOperation':
+    'The operation you are about to perform may take a considerable amount of time to complete.<br>Are you sure you want to continue?',
+  'SSE.Controllers.Toolbar.warnMergeLostData':
+    'Only data from the upper-left cell will be kept in the merged cell.<br>Are you sure you want to continue?',
   'SSE.Controllers.Toolbar.warnNoRecommended': '',
   'SSE.Controllers.Viewport.textFreezePanes': 'Freeze Panes',
   'SSE.Controllers.Viewport.textFreezePanesShadow': 'Show freeze panes shadow',
@@ -6152,7 +6232,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.AutoFilterDialog.txtValueFilter': 'Filter by Value',
   'SSE.Views.AutoFilterDialog.txtYearToDate': 'Year to Date',
   'SSE.Views.AutoFilterDialog.txtYesterday': 'Yesterday',
-  'SSE.Views.AutoFilterDialog.warnFilterError': 'To make the filter work, you need at least one value in the value area.',
+  'SSE.Views.AutoFilterDialog.warnFilterError':
+    'To make the filter work, you need at least one value in the value area.',
   'SSE.Views.AutoFilterDialog.warnNoSelected': 'You must select at least one value',
   'SSE.Views.CellEditor.textManager': 'Name Manager',
   'SSE.Views.CellEditor.tipFormula': 'Insert Function',
@@ -6211,7 +6292,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.CellSettings.tipRight': 'Right',
   'SSE.Views.CellSettings.tipTop': 'Top',
   'SSE.Views.ChartDataDialog.errorInFormula': 'There is an error in the formula you entered.',
-  'SSE.Views.ChartDataDialog.errorInvalidReference': 'The reference is invalid. The reference must point to an open worksheet.',
+  'SSE.Views.ChartDataDialog.errorInvalidReference':
+    'The reference is invalid. The reference must point to an open worksheet.',
   'SSE.Views.ChartDataDialog.errorMaxPoints': 'Each chart can contain a maximum of 4096 points.',
   'SSE.Views.ChartDataDialog.errorMaxRows': 'Each chart can contain a maximum of 255 data series.',
   'SSE.Views.ChartDataDialog.errorNoSingleRowCol': '',
@@ -6230,7 +6312,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ChartDataDialog.textTitle': 'Select Data',
   'SSE.Views.ChartDataDialog.textUp': 'Up',
   'SSE.Views.ChartDataRangeDialog.errorInFormula': 'There is an error in the formula you entered.',
-  'SSE.Views.ChartDataRangeDialog.errorInvalidReference': 'The reference is invalid. The reference must point to an open worksheet.',
+  'SSE.Views.ChartDataRangeDialog.errorInvalidReference':
+    'The reference is invalid. The reference must point to an open worksheet.',
   'SSE.Views.ChartDataRangeDialog.errorMaxPoints': 'Each chart can contain a maximum of 4096 points.',
   'SSE.Views.ChartDataRangeDialog.errorMaxRows': 'Each chart can contain a maximum of 255 data series.',
   'SSE.Views.ChartDataRangeDialog.errorNoSingleRowCol': '',
@@ -6255,7 +6338,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ChartSettings.text3dRotation': '3-D Rotation',
   'SSE.Views.ChartSettings.textAdvanced': 'Advanced',
   'SSE.Views.ChartSettings.textAutoscale': 'Autoscale',
-  'SSE.Views.ChartSettings.textBorderSizeErr': 'The entered value is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
+  'SSE.Views.ChartSettings.textBorderSizeErr':
+    'The entered value is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
   'SSE.Views.ChartSettings.textChangeType': 'Change Chart Type',
   'SSE.Views.ChartSettings.textChartType': 'Chart Type',
   'SSE.Views.ChartSettings.textDefault': 'Default',
@@ -6413,7 +6497,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ChartSettingsDlg.textZero': 'Zero',
   'SSE.Views.ChartSettingsDlg.txtEmpty': 'Required field',
   'SSE.Views.ChartTypeDialog.errorComboSeries': 'To create a combination chart, select at least two data series.',
-  'SSE.Views.ChartTypeDialog.errorSecondaryAxis': 'The selected chart type requires a secondary axis that is already in use by the existing chart. Please select another chart type.',
+  'SSE.Views.ChartTypeDialog.errorSecondaryAxis':
+    'The selected chart type requires a secondary axis that is already in use by the existing chart. Please select another chart type.',
   'SSE.Views.ChartTypeDialog.textSecondary': 'Secondary Axis',
   'SSE.Views.ChartTypeDialog.textSeries': 'Series',
   'SSE.Views.ChartTypeDialog.textStyle': 'Style',
@@ -6422,7 +6507,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ChartWizardDialog.errorComboSeries': 'To create a combination chart, select at least two data series.',
   'SSE.Views.ChartWizardDialog.errorMaxPoints': 'The maximum number of series points per chart is 4096.',
   'SSE.Views.ChartWizardDialog.errorMaxRows': 'The maximum number of data series per chart is 255.',
-  'SSE.Views.ChartWizardDialog.errorSecondaryAxis': 'The selected chart type requires a secondary axis that is already in use by the existing chart. Select another chart type.',
+  'SSE.Views.ChartWizardDialog.errorSecondaryAxis':
+    'The selected chart type requires a secondary axis that is already in use by the existing chart. Select another chart type.',
   'SSE.Views.ChartWizardDialog.errorStockChart': '',
   'SSE.Views.ChartWizardDialog.textRecommended': 'Recommended',
   'SSE.Views.ChartWizardDialog.textSecondary': 'Secondary Axis',
@@ -6474,14 +6560,17 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.DataValidationDialog.errorFormula': 'This value currently contains an error. Do you want to continue?',
   'SSE.Views.DataValidationDialog.errorInvalid': '',
   'SSE.Views.DataValidationDialog.errorInvalidDate': 'The date you entered for field "{0}" is invalid.',
-  'SSE.Views.DataValidationDialog.errorInvalidList': 'List source must be a delimited list or a reference to a single row or column.',
+  'SSE.Views.DataValidationDialog.errorInvalidList':
+    'List source must be a delimited list or a reference to a single row or column.',
   'SSE.Views.DataValidationDialog.errorInvalidTime': '',
   'SSE.Views.DataValidationDialog.errorMinGreaterMax': 'Field "{1}" must be greater than or equal to field "{0}".',
-  'SSE.Views.DataValidationDialog.errorMustEnterBothValues': 'You must enter a value in both field "{0}" and field "{1}".',
+  'SSE.Views.DataValidationDialog.errorMustEnterBothValues':
+    'You must enter a value in both field "{0}" and field "{1}".',
   'SSE.Views.DataValidationDialog.errorMustEnterValue': '',
   'SSE.Views.DataValidationDialog.errorNamedRange': 'The specified named range cannot be found.',
   'SSE.Views.DataValidationDialog.errorNegativeTextLength': '',
-  'SSE.Views.DataValidationDialog.errorNotNumeric': 'Field "{0}" must be a number, numeric expression, or reference to a cell containing a number.',
+  'SSE.Views.DataValidationDialog.errorNotNumeric':
+    'Field "{0}" must be a number, numeric expression, or reference to a cell containing a number.',
   'SSE.Views.DataValidationDialog.strError': 'Error Alert',
   'SSE.Views.DataValidationDialog.strInput': 'Input Message',
   'SSE.Views.DataValidationDialog.strSettings': 'Settings',
@@ -6866,13 +6955,14 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strRegSettings': 'Regional Settings',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strRegSettingsEx': 'Example: ',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strShowComments': 'Show comments in spreadsheet',
-  'SSE.Views.FileMenuPanels.MainSettingsGeneral.strShowOthersChanges': 'Show other users\' changes',
+  'SSE.Views.FileMenuPanels.MainSettingsGeneral.strShowOthersChanges': "Show other users' changes",
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strShowResolvedComments': 'Show resolved comments',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strStrict': 'Manual',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strTheme': 'Interface Theme',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strThousandsSeparator': 'Thousands Separator',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strUnit': 'Measurement Unit',
-  'SSE.Views.FileMenuPanels.MainSettingsGeneral.strUseSeparatorsBasedOnRegionalSettings': 'Use separators based on regional settings',
+  'SSE.Views.FileMenuPanels.MainSettingsGeneral.strUseSeparatorsBasedOnRegionalSettings':
+    'Use separators based on regional settings',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.strZoom': 'Default Zoom Ratio',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.text10Minutes': 'Every 10 minutes',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.text30Minutes': 'Every 30 minutes',
@@ -6900,7 +6990,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtEl': 'Greek',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtEn': 'English',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtEs': 'Spanish',
-  'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtFastTip': 'Real-time collaborative editing. All changes are saved automatically',
+  'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtFastTip':
+    'Real-time collaborative editing. All changes are saved automatically',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtFi': 'Finnish',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtFr': 'French',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtHu': 'Hungarian',
@@ -6923,7 +7014,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtPtbr': 'Portuguese (Brazil)',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtPtlang': 'Portuguese (Portugal)',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtQuickPrint': 'Show Quick Print button in editor header',
-  'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtQuickPrintTip': 'The file will be printed using the last selected printer or the default printer.',
+  'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtQuickPrintTip':
+    'The file will be printed using the last selected printer or the default printer.',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtRegion': 'Region',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtRo': 'Romanian',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtRu': 'Russian',
@@ -6938,7 +7030,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtTr': 'Turkish',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtUk': 'Ukrainian',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtUseAltKey': 'Use Alt key on keyboard to navigate to user interface',
-  'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtUseOptionKey': 'Use Option key on keyboard to navigate to user interface',
+  'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtUseOptionKey':
+    'Use Option key on keyboard to navigate to user interface',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtVi': 'Vietnamese',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtWarnMacros': 'Show Notification',
   'SSE.Views.FileMenuPanels.MainSettingsGeneral.txtWarnMacrosDesc': 'Disable all macros with notification',
@@ -6950,13 +7043,16 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FileMenuPanels.ProtectDoc.strProtect': 'Protect Spreadsheet',
   'SSE.Views.FileMenuPanels.ProtectDoc.strSignature': 'Sign with Signature',
   'SSE.Views.FileMenuPanels.ProtectDoc.txtAddedSignature': '',
-  'SSE.Views.FileMenuPanels.ProtectDoc.txtAddSignature': '<br>Adding an invisible digital signature ensures the integrity of the spreadsheet',
+  'SSE.Views.FileMenuPanels.ProtectDoc.txtAddSignature':
+    '<br>Adding an invisible digital signature ensures the integrity of the spreadsheet',
   'SSE.Views.FileMenuPanels.ProtectDoc.txtEdit': 'Edit Spreadsheet',
-  'SSE.Views.FileMenuPanels.ProtectDoc.txtEditWarning': 'Editing will remove signatures from the spreadsheet.<br>Are you sure you want to continue?',
+  'SSE.Views.FileMenuPanels.ProtectDoc.txtEditWarning':
+    'Editing will remove signatures from the spreadsheet.<br>Are you sure you want to continue?',
   'SSE.Views.FileMenuPanels.ProtectDoc.txtEncrypted': 'This spreadsheet is password protected',
   'SSE.Views.FileMenuPanels.ProtectDoc.txtProtectSpreadsheet': 'Encrypt this spreadsheet with a password',
   'SSE.Views.FileMenuPanels.ProtectDoc.txtRequestedSignatures': 'This spreadsheet requires signatures.',
-  'SSE.Views.FileMenuPanels.ProtectDoc.txtSigned': 'Valid signature has been added to the spreadsheet. Editing is restricted for this spreadsheet.',
+  'SSE.Views.FileMenuPanels.ProtectDoc.txtSigned':
+    'Valid signature has been added to the spreadsheet. Editing is restricted for this spreadsheet.',
   'SSE.Views.FileMenuPanels.ProtectDoc.txtSignedInvalid': '',
   'SSE.Views.FileMenuPanels.ProtectDoc.txtView': 'View Signatures',
   'SSE.Views.FileMenuPanels.RecentFiles.txtOpenRecent': 'Open Recent Files',
@@ -6979,7 +7075,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FillSeriesDialog.textType': 'Type',
   'SSE.Views.FillSeriesDialog.textWeek': 'Weekday',
   'SSE.Views.FillSeriesDialog.textYear': 'Year',
-  'SSE.Views.FillSeriesDialog.txtErrorNumber': 'Your start value cannot be used. An integer or decimal number may be required.',
+  'SSE.Views.FillSeriesDialog.txtErrorNumber':
+    'Your start value cannot be used. An integer or decimal number may be required.',
   'SSE.Views.FormatRulesEditDlg.fillColor': 'Fill Color',
   'SSE.Views.FormatRulesEditDlg.notcriticalErrorTitle': 'Warning',
   'SSE.Views.FormatRulesEditDlg.text2Scales': '2-Color Scale',
@@ -7005,7 +7102,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FormatRulesEditDlg.textDiagDownBorder': 'Diagonal Down Border',
   'SSE.Views.FormatRulesEditDlg.textDiagUpBorder': 'Diagonal Up Border',
   'SSE.Views.FormatRulesEditDlg.textEmptyFormula': 'Please enter a valid formula.',
-  'SSE.Views.FormatRulesEditDlg.textEmptyFormulaExt': 'The formula you entered cannot evaluate to a number, date, time, or string.',
+  'SSE.Views.FormatRulesEditDlg.textEmptyFormulaExt':
+    'The formula you entered cannot evaluate to a number, date, time, or string.',
   'SSE.Views.FormatRulesEditDlg.textEmptyText': 'Enter a value.',
   'SSE.Views.FormatRulesEditDlg.textEmptyValue': 'The value entered is not a valid number, date, time, or string',
   'SSE.Views.FormatRulesEditDlg.textErrorGreater': '{0} value must be greater than {1} value.',
@@ -7048,7 +7146,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FormatRulesEditDlg.textPositive': 'Positive',
   'SSE.Views.FormatRulesEditDlg.textPresets': 'Presets',
   'SSE.Views.FormatRulesEditDlg.textPreview': 'Preview',
-  'SSE.Views.FormatRulesEditDlg.textRelativeRef': 'Relative references cannot be used in formatting conditions for color scales, data bars, and icon sets.',
+  'SSE.Views.FormatRulesEditDlg.textRelativeRef':
+    'Relative references cannot be used in formatting conditions for color scales, data bars, and icon sets.',
   'SSE.Views.FormatRulesEditDlg.textReverse': 'Reverse Icon Order',
   'SSE.Views.FormatRulesEditDlg.textRight2Left': 'Right to Left',
   'SSE.Views.FormatRulesEditDlg.textRightBorders': 'Right Border',
@@ -7173,8 +7272,10 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.FormulaTab.tipCalculateTheEntireWorkbook': 'Calculate the entire workbook',
   'SSE.Views.FormulaTab.tipRemoveArr': 'Remove all arrows',
   'SSE.Views.FormulaTab.tipShowFormulas': 'Display formulas in each cell instead of their resulting values.',
-  'SSE.Views.FormulaTab.tipTraceDep': 'Show arrows indicating which cells are affected by the value in the currently selected cell.',
-  'SSE.Views.FormulaTab.tipTracePrec': 'Show arrows indicating which cells affect the value in the currently selected cell.',
+  'SSE.Views.FormulaTab.tipTraceDep':
+    'Show arrows indicating which cells are affected by the value in the currently selected cell.',
+  'SSE.Views.FormulaTab.tipTracePrec':
+    'Show arrows indicating which cells affect the value in the currently selected cell.',
   'SSE.Views.FormulaTab.tipWatch': 'Add cells to the Watch Window list',
   'SSE.Views.FormulaTab.txtAdditional': 'More',
   'SSE.Views.FormulaTab.txtAutosum': 'AutoSum',
@@ -7217,7 +7318,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.HeaderFooterDialog.textInsert': 'Insert',
   'SSE.Views.HeaderFooterDialog.textItalic': 'Italic',
   'SSE.Views.HeaderFooterDialog.textLeft': 'Left',
-  'SSE.Views.HeaderFooterDialog.textMaxError': 'The text string you entered is too long. Reduce the number of characters used.',
+  'SSE.Views.HeaderFooterDialog.textMaxError':
+    'The text string you entered is too long. Reduce the number of characters used.',
   'SSE.Views.HeaderFooterDialog.textNewColor': 'More Colors',
   'SSE.Views.HeaderFooterDialog.textOdd': 'Odd Pages',
   'SSE.Views.HeaderFooterDialog.textPageCount': 'Number of Pages',
@@ -7340,17 +7442,20 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.MainSettingsPrint.textRepeatLeft': 'Repeat Rows at Left',
   'SSE.Views.MainSettingsPrint.textRepeatTop': 'Repeat Columns at Top',
   'SSE.Views.MainSettingsPrint.textSettings': 'Settings',
-  'SSE.Views.NamedRangeEditDlg.errorCreateDefName': 'Cannot edit existing named range, so cannot edit new range within it.',
+  'SSE.Views.NamedRangeEditDlg.errorCreateDefName':
+    'Cannot edit existing named range, so cannot edit new range within it.',
   'SSE.Views.NamedRangeEditDlg.namePlaceholder': 'Define Name',
   'SSE.Views.NamedRangeEditDlg.notcriticalErrorTitle': 'Warning',
   'SSE.Views.NamedRangeEditDlg.strWorkbook': 'Workbook',
   'SSE.Views.NamedRangeEditDlg.textDataRange': 'Refers to',
   'SSE.Views.NamedRangeEditDlg.textExistName': 'This name already exists',
-  'SSE.Views.NamedRangeEditDlg.textInvalidName': 'Name must begin with a letter or underscore and cannot contain invalid characters.',
+  'SSE.Views.NamedRangeEditDlg.textInvalidName':
+    'Name must begin with a letter or underscore and cannot contain invalid characters.',
   'SSE.Views.NamedRangeEditDlg.textInvalidRange': 'Error! Invalid cell range',
   'SSE.Views.NamedRangeEditDlg.textIsLocked': 'Error! This element is being edited by another user.',
   'SSE.Views.NamedRangeEditDlg.textName': 'Name',
-  'SSE.Views.NamedRangeEditDlg.textReservedName': 'The name you are trying to use is already referenced in a cell formula. Please use a different name.',
+  'SSE.Views.NamedRangeEditDlg.textReservedName':
+    'The name you are trying to use is already referenced in a cell formula. Please use a different name.',
   'SSE.Views.NamedRangeEditDlg.textScope': 'Scope',
   'SSE.Views.NamedRangeEditDlg.textSelectData': 'Select Data',
   'SSE.Views.NamedRangeEditDlg.txtEmpty': 'Required field',
@@ -7364,7 +7469,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.NameManagerDlg.textDataRange': 'Refers to',
   'SSE.Views.NameManagerDlg.textDelete': 'Delete',
   'SSE.Views.NameManagerDlg.textEdit': 'Edit',
-  'SSE.Views.NameManagerDlg.textEmpty': 'No names have been created.<br>Create at least one name and it will appear in this field.',
+  'SSE.Views.NameManagerDlg.textEmpty':
+    'No names have been created.<br>Create at least one name and it will appear in this field.',
   'SSE.Views.NameManagerDlg.textFilter': 'Filter',
   'SSE.Views.NameManagerDlg.textFilterAll': 'All',
   'SSE.Views.NameManagerDlg.textFilterDefNames': 'Defined Names',
@@ -7667,7 +7773,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.PrintWithPreview.txtTo': 'To',
   'SSE.Views.PrintWithPreview.txtTop': 'Top',
   'SSE.Views.ProtectDialog.textExistName': 'Error! A range with this title already exists',
-  'SSE.Views.ProtectDialog.textInvalidName': 'Range name must begin with a letter and can only contain numbers, letters, and spaces.',
+  'SSE.Views.ProtectDialog.textInvalidName':
+    'Range name must begin with a letter and can only contain numbers, letters, and spaces.',
   'SSE.Views.ProtectDialog.textInvalidRange': 'Error! Invalid cell range.',
   'SSE.Views.ProtectDialog.textSelectData': 'Select Data',
   'SSE.Views.ProtectDialog.txtAllow': 'Allow all users of this sheet to',
@@ -7695,14 +7802,16 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ProtectDialog.txtScen': 'Edit Scenarios',
   'SSE.Views.ProtectDialog.txtSelLocked': 'Select Locked Cells',
   'SSE.Views.ProtectDialog.txtSelUnLocked': 'Select Unlocked Cells',
-  'SSE.Views.ProtectDialog.txtSheetDescription': 'Prevent unwanted changes by restricting others\' ability to edit.',
+  'SSE.Views.ProtectDialog.txtSheetDescription': "Prevent unwanted changes by restricting others' ability to edit.",
   'SSE.Views.ProtectDialog.txtSheetTitle': 'Protect Sheet',
   'SSE.Views.ProtectDialog.txtSort': 'Sort',
-  'SSE.Views.ProtectDialog.txtWarning': 'Warning: If you lose or forget the password, it cannot be recovered. Please keep it in a safe place.',
+  'SSE.Views.ProtectDialog.txtWarning':
+    'Warning: If you lose or forget the password, it cannot be recovered. Please keep it in a safe place.',
   'SSE.Views.ProtectDialog.txtWBDescription': '',
   'SSE.Views.ProtectDialog.txtWBTitle': 'Protect Workbook Structure',
   'SSE.Views.ProtectedRangesEditDlg.textAnonymous': 'Anonymous Users',
-  'SSE.Views.ProtectedRangesEditDlg.textInvalidName': 'Range name must begin with a letter and can only contain numbers, letters, and spaces.',
+  'SSE.Views.ProtectedRangesEditDlg.textInvalidName':
+    'Range name must begin with a letter and can only contain numbers, letters, and spaces.',
   'SSE.Views.ProtectedRangesEditDlg.textInvalidRange': 'Error! Invalid cell range',
   'SSE.Views.ProtectedRangesEditDlg.textSelectData': 'Select Data',
   'SSE.Views.ProtectedRangesEditDlg.textTipAdd': 'Add User',
@@ -7745,7 +7854,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ProtectRangesDlg.textProtect': 'Protect Sheet',
   'SSE.Views.ProtectRangesDlg.textPwd': 'Password',
   'SSE.Views.ProtectRangesDlg.textRange': 'Range',
-  'SSE.Views.ProtectRangesDlg.textRangesDesc': 'When sheet is protected, ranges are password-unlocked (only for locked cells)',
+  'SSE.Views.ProtectRangesDlg.textRangesDesc':
+    'When sheet is protected, ranges are password-unlocked (only for locked cells)',
   'SSE.Views.ProtectRangesDlg.textTitle': 'Title',
   'SSE.Views.ProtectRangesDlg.tipIsLocked': 'This element is being edited by another user.',
   'SSE.Views.ProtectRangesDlg.txtEditRange': 'Edit Range',
@@ -7755,7 +7865,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ProtectRangesDlg.txtYes': 'Yes',
   'SSE.Views.ProtectRangesDlg.warnDelete': 'Are you sure you want to delete the name {0}?',
   'SSE.Views.RemoveDuplicatesDialog.textColumns': 'Columns',
-  'SSE.Views.RemoveDuplicatesDialog.textDescription': 'To remove duplicate values, select one or more columns that contain duplicate values.',
+  'SSE.Views.RemoveDuplicatesDialog.textDescription':
+    'To remove duplicate values, select one or more columns that contain duplicate values.',
   'SSE.Views.RemoveDuplicatesDialog.textHeaders': 'My data has headers',
   'SSE.Views.RemoveDuplicatesDialog.textSelectAll': 'Select All',
   'SSE.Views.RemoveDuplicatesDialog.txtTitle': 'Remove Duplicates',
@@ -7796,7 +7907,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.ShapeSettings.strType': 'Type',
   'SSE.Views.ShapeSettings.textAdvanced': 'Show Advanced Settings',
   'SSE.Views.ShapeSettings.textAngle': 'Angle',
-  'SSE.Views.ShapeSettings.textBorderSizeErr': 'The entered value is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
+  'SSE.Views.ShapeSettings.textBorderSizeErr':
+    'The entered value is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
   'SSE.Views.ShapeSettings.textColor': 'Solid Fill',
   'SSE.Views.ShapeSettings.textDirection': 'Direction',
   'SSE.Views.ShapeSettings.textEditPoints': 'Edit Points',
@@ -7897,11 +8009,15 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.SignatureSettings.strSigner': 'Signer',
   'SSE.Views.SignatureSettings.strValid': 'Valid Signature',
   'SSE.Views.SignatureSettings.txtContinueEditing': 'Continue Editing',
-  'SSE.Views.SignatureSettings.txtEditWarning': 'Editing will remove signatures from the spreadsheet.<br>Are you sure you want to continue?',
-  'SSE.Views.SignatureSettings.txtRemoveWarning': 'Do you want to remove this signature?<br>This action cannot be undone.',
+  'SSE.Views.SignatureSettings.txtEditWarning':
+    'Editing will remove signatures from the spreadsheet.<br>Are you sure you want to continue?',
+  'SSE.Views.SignatureSettings.txtRemoveWarning':
+    'Do you want to remove this signature?<br>This action cannot be undone.',
   'SSE.Views.SignatureSettings.txtRequestedSignatures': 'This spreadsheet requires signatures.',
-  'SSE.Views.SignatureSettings.txtSigned': 'Valid signatures have been added to the spreadsheet. Editing of this spreadsheet is restricted.',
-  'SSE.Views.SignatureSettings.txtSignedInvalid': 'Some digital signatures in the spreadsheet are invalid or cannot be verified. Editing of this spreadsheet is restricted.',
+  'SSE.Views.SignatureSettings.txtSigned':
+    'Valid signatures have been added to the spreadsheet. Editing of this spreadsheet is restricted.',
+  'SSE.Views.SignatureSettings.txtSignedInvalid':
+    'Some digital signatures in the spreadsheet are invalid or cannot be verified. Editing of this spreadsheet is restricted.',
   'SSE.Views.SlicerAddDialog.textColumns': 'Columns',
   'SSE.Views.SlicerAddDialog.txtTitle': 'Insert Slicer',
   'SSE.Views.SlicerSettings.strHideNoData': 'Hide items with no data',
@@ -7972,8 +8088,10 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.SortDialog.errorMoreOneRow': 'Multiple rows are selected.',
   'SSE.Views.SortDialog.errorNotOriginalCol': 'The selected column is not in the original selection range.',
   'SSE.Views.SortDialog.errorNotOriginalRow': 'The selected row is not in the original selection range.',
-  'SSE.Views.SortDialog.errorSameColumnColor': '%1 is sorted by the same color multiple times.<br>Remove duplicate sort criteria and try again.',
-  'SSE.Views.SortDialog.errorSameColumnValue': '%1 is sorted by value multiple times.<br>Remove duplicate sort criteria and try again.',
+  'SSE.Views.SortDialog.errorSameColumnColor':
+    '%1 is sorted by the same color multiple times.<br>Remove duplicate sort criteria and try again.',
+  'SSE.Views.SortDialog.errorSameColumnValue':
+    '%1 is sorted by value multiple times.<br>Remove duplicate sort criteria and try again.',
   'SSE.Views.SortDialog.textAsc': 'Ascending',
   'SSE.Views.SortDialog.textAuto': 'Auto',
   'SSE.Views.SortDialog.textAZ': 'Ascending',
@@ -8099,7 +8217,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.TableOptionsDialog.txtEmpty': 'Required field',
   'SSE.Views.TableOptionsDialog.txtFormat': 'Create Table',
   'SSE.Views.TableOptionsDialog.txtInvalidRange': 'Error! Invalid cell range',
-  'SSE.Views.TableOptionsDialog.txtNote': 'Headers must remain in the same row, and the resulting table range must overlap with the original table range.',
+  'SSE.Views.TableOptionsDialog.txtNote':
+    'Headers must remain in the same row, and the resulting table range must overlap with the original table range.',
   'SSE.Views.TableOptionsDialog.txtTitle': 'My table has headers',
   'SSE.Views.TableSettings.deleteColumnText': 'Delete Column',
   'SSE.Views.TableSettings.deleteRowText': 'Delete Row',
@@ -8131,7 +8250,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.TableSettings.textLongOperation': 'Long Operation',
   'SSE.Views.TableSettings.textPivot': 'Insert PivotTable',
   'SSE.Views.TableSettings.textRemDuplicates': 'Remove Duplicates',
-  'SSE.Views.TableSettings.textReservedName': 'The name you are trying to use is already referenced in a cell formula. Please use a different name.',
+  'SSE.Views.TableSettings.textReservedName':
+    'The name you are trying to use is already referenced in a cell formula. Please use a different name.',
   'SSE.Views.TableSettings.textResize': 'Resize Table',
   'SSE.Views.TableSettings.textRows': 'Rows',
   'SSE.Views.TableSettings.textSelectData': 'Select Data',
@@ -8146,7 +8266,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.TableSettings.txtTable_TableStyleDark': 'Table Style Dark',
   'SSE.Views.TableSettings.txtTable_TableStyleLight': 'Table Style Light',
   'SSE.Views.TableSettings.txtTable_TableStyleMedium': 'Table Style Medium',
-  'SSE.Views.TableSettings.warnLongOperation': 'The operation you are about to perform may take a considerable amount of time to complete.<br>Are you sure you want to continue?',
+  'SSE.Views.TableSettings.warnLongOperation':
+    'The operation you are about to perform may take a considerable amount of time to complete.<br>Are you sure you want to continue?',
   'SSE.Views.TableSettingsAdvanced.textAlt': 'Alternative Text',
   'SSE.Views.TableSettingsAdvanced.textAltDescription': 'Description',
   'SSE.Views.TableSettingsAdvanced.textAltTip': 'Tip',
@@ -8162,7 +8283,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.TextArtSettings.strTransparency': 'Transparency',
   'SSE.Views.TextArtSettings.strType': 'Type',
   'SSE.Views.TextArtSettings.textAngle': 'Angle',
-  'SSE.Views.TextArtSettings.textBorderSizeErr': 'The entered value is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
+  'SSE.Views.TextArtSettings.textBorderSizeErr':
+    'The entered value is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
   'SSE.Views.TextArtSettings.textColor': 'Solid Fill',
   'SSE.Views.TextArtSettings.textDirection': 'Direction',
   'SSE.Views.TextArtSettings.textEmptyPattern': 'No Pattern',
@@ -8436,7 +8558,8 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.Toolbar.tipSelectAll': 'Select All',
   'SSE.Views.Toolbar.tipSendBackward': 'Send Backward',
   'SSE.Views.Toolbar.tipSendForward': 'Bring Forward',
-  'SSE.Views.Toolbar.tipSynchronize': 'This document has been changed by another user. Click to save your changes and reload updates.',
+  'SSE.Views.Toolbar.tipSynchronize':
+    'This document has been changed by another user. Click to save your changes and reload updates.',
   'SSE.Views.Toolbar.tipTextFormatting': 'More Formatting Tools',
   'SSE.Views.Toolbar.tipTextOrientation': 'Orientation',
   'SSE.Views.Toolbar.tipUndo': 'Undo',
@@ -8633,7 +8756,7 @@ define('spreadsheeteditor/main/locale/en.json', {
   'SSE.Views.WBProtection.txtSheetUnlockDescription': 'Enter password to unprotect',
   'SSE.Views.WBProtection.txtSheetUnlockTitle': 'Unprotect Sheet',
   'SSE.Views.WBProtection.txtWBUnlockDescription': 'Enter password to unprotect',
-  'SSE.Views.WBProtection.txtWBUnlockTitle': 'Unprotect Workbook'
+  'SSE.Views.WBProtection.txtWBUnlockTitle': 'Unprotect Workbook',
 });
 
 var params = getUrlParams(),
@@ -91464,11 +91587,31 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                       },
                     }),
                     (i.defaultTitleText = ''),
-                    (i.warnNoLicense = ((i.warnNoLicense || Common.Locale.get('warnNoLicense', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnNoLicenseUsers = ((i.warnNoLicenseUsers || Common.Locale.get('warnNoLicenseUsers', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.textNoLicenseTitle = ((i.textNoLicenseTitle || Common.Locale.get('textNoLicenseTitle', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnLicenseExceeded = ((i.warnLicenseExceeded || Common.Locale.get('warnLicenseExceeded', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnLicenseUsersExceeded = ((i.warnLicenseUsersExceeded || Common.Locale.get('warnLicenseUsersExceeded', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))))
+                    (i.warnNoLicense = (
+                      i.warnNoLicense ||
+                      Common.Locale.get('warnNoLicense', { name: 'SSE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.warnNoLicenseUsers = (
+                      i.warnNoLicenseUsers ||
+                      Common.Locale.get('warnNoLicenseUsers', { name: 'SSE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.textNoLicenseTitle = (
+                      i.textNoLicenseTitle ||
+                      Common.Locale.get('textNoLicenseTitle', { name: 'SSE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.warnLicenseExceeded = (
+                      i.warnLicenseExceeded ||
+                      Common.Locale.get('warnLicenseExceeded', { name: 'SSE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.warnLicenseUsersExceeded = (
+                      i.warnLicenseUsersExceeded ||
+                      Common.Locale.get('warnLicenseUsersExceeded', { name: 'SSE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')))
                   : (Common.Utils.showBrowserRestriction(),
                     Common.Gateway.reportError(void 0, this.unsupportedBrowserErrorText)));
             },
@@ -107985,7 +108128,10 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                       (i.panelPlugins &&
                         ((e = {
                           action: 'plugins',
-                          caption: (i.panelPlugins.groupCaption || Common.Locale.get('groupCaption', { name: 'Common.Views.Plugins' }) || 'Plugins'),
+                          caption:
+                            i.panelPlugins.groupCaption ||
+                            Common.Locale.get('groupCaption', { name: 'Common.Views.Plugins' }) ||
+                            'Plugins',
                           dataHintTitle: 'E',
                           layoutname: 'toolbar-plugins',
                         }),
@@ -113312,7 +113458,7 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
     'spreadsheeteditor/main/locale/en.json',
   ], function (t, e, i, s, o, n, analytics, gateway, locale, deviceScale, en) {
     var a;
-    var currentLang = (function() {
+    var currentLang = (function () {
       var params = getUrlParams();
       return (params.lang || 'en').split(/[\-\_]/)[0];
     })();

@@ -2774,11 +2774,13 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Controllers.Chat.textEnterMessage': 'Enter your message here',
   'Common.Controllers.ExternalDiagramEditor.textAnonymous': 'Anonymous',
   'Common.Controllers.ExternalDiagramEditor.textClose': 'Close',
-  'Common.Controllers.ExternalDiagramEditor.warningText': 'This object is disabled because it is being edited by another user.',
+  'Common.Controllers.ExternalDiagramEditor.warningText':
+    'This object is disabled because it is being edited by another user.',
   'Common.Controllers.ExternalDiagramEditor.warningTitle': 'Warning',
   'Common.Controllers.ExternalOleEditor.textAnonymous': 'Anonymous User',
   'Common.Controllers.ExternalOleEditor.textClose': 'Close',
-  'Common.Controllers.ExternalOleEditor.warningText': 'This object is disabled because it is being edited by another user.',
+  'Common.Controllers.ExternalOleEditor.warningText':
+    'This object is disabled because it is being edited by another user.',
   'Common.Controllers.ExternalOleEditor.warningTitle': 'Warning',
   'Common.define.chartData.textArea': 'Area Chart',
   'Common.define.chartData.textAreaStacked': 'Stacked Area Chart',
@@ -3184,9 +3186,12 @@ define('presentationeditor/main/locale/en.json', {
   'Common.define.smartArt.textVerticalPictureList': 'Vertical Picture List',
   'Common.define.smartArt.textVerticalProcess': 'Vertical Process',
   'Common.Translation.textMoreButton': 'More',
-  'Common.Translation.tipFileLocked': 'The file is locked and cannot be edited. You can make changes and save them as a local copy.',
-  'Common.Translation.tipFileReadOnly': 'This file has read-only permissions. To save, rename the file or save it in a different location.',
-  'Common.Translation.warnFileLocked': 'Another application is editing this file. You can continue editing and save as a copy.',
+  'Common.Translation.tipFileLocked':
+    'The file is locked and cannot be edited. You can make changes and save them as a local copy.',
+  'Common.Translation.tipFileReadOnly':
+    'This file has read-only permissions. To save, rename the file or save it in a different location.',
+  'Common.Translation.warnFileLocked':
+    'Another application is editing this file. You can continue editing and save as a copy.',
   'Common.Translation.warnFileLockedBtnEdit': 'Create Copy',
   'Common.Translation.warnFileLockedBtnView': 'Open to View',
   'Common.UI.ButtonColored.textAutoColor': 'Automatic',
@@ -3197,9 +3202,11 @@ define('presentationeditor/main/locale/en.json', {
   'Common.UI.ComboDataView.emptyComboText': 'No Style',
   'Common.UI.ExtendedColorDialog.addButtonText': 'OK',
   'Common.UI.ExtendedColorDialog.textCurrent': 'Current',
-  'Common.UI.ExtendedColorDialog.textHexErr': 'The value entered is incorrect.<br>Please enter a value between 000000 and FFFFFF.',
+  'Common.UI.ExtendedColorDialog.textHexErr':
+    'The value entered is incorrect.<br>Please enter a value between 000000 and FFFFFF.',
   'Common.UI.ExtendedColorDialog.textNew': 'New',
-  'Common.UI.ExtendedColorDialog.textRGBErr': 'The value entered is incorrect.<br>Please enter a value between 0 and 255.',
+  'Common.UI.ExtendedColorDialog.textRGBErr':
+    'The value entered is incorrect.<br>Please enter a value between 0 and 255.',
   'Common.UI.HSBColorPicker.textNoColor': 'No Color',
   'Common.UI.InputFieldBtnPassword.textHintHidePwd': 'Hide Password',
   'Common.UI.InputFieldBtnPassword.textHintShowPwd': 'Show Password',
@@ -3218,8 +3225,9 @@ define('presentationeditor/main/locale/en.json', {
   'Common.UI.SearchDialog.txtBtnHideReplace': 'Hide Replace',
   'Common.UI.SearchDialog.txtBtnReplace': 'Replace',
   'Common.UI.SearchDialog.txtBtnReplaceAll': 'Replace All',
-  'Common.UI.SynchronizeTip.textDontShow': 'Don\'t show this message again',
-  'Common.UI.SynchronizeTip.textSynchronize': 'This document has been changed by another user.<br>Please click to save changes and reload updates.',
+  'Common.UI.SynchronizeTip.textDontShow': "Don't show this message again",
+  'Common.UI.SynchronizeTip.textSynchronize':
+    'This document has been changed by another user.<br>Please click to save changes and reload updates.',
   'Common.UI.ThemeColorPalette.textRecentColors': 'Recent Colors',
   'Common.UI.ThemeColorPalette.textStandartColors': 'Standard Colors',
   'Common.UI.ThemeColorPalette.textThemeColors': 'Theme Colors',
@@ -3233,7 +3241,7 @@ define('presentationeditor/main/locale/en.json', {
   'Common.UI.Window.noButtonText': 'No',
   'Common.UI.Window.okButtonText': 'OK',
   'Common.UI.Window.textConfirmation': 'Confirmation',
-  'Common.UI.Window.textDontShow': 'Don\'t show this message again',
+  'Common.UI.Window.textDontShow': "Don't show this message again",
   'Common.UI.Window.textError': 'Error',
   'Common.UI.Window.textInformation': 'Information',
   'Common.UI.Window.textWarning': 'Warning',
@@ -3297,7 +3305,7 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.AutoCorrectDialog.textDelete': 'Delete',
   'Common.Views.AutoCorrectDialog.textDoubleSpaces': 'Replace two spaces with a period (.)',
   'Common.Views.AutoCorrectDialog.textFLCells': 'Capitalize first letter of table cells',
-  'Common.Views.AutoCorrectDialog.textFLDont': 'Don\'t capitalize after:',
+  'Common.Views.AutoCorrectDialog.textFLDont': "Don't capitalize after:",
   'Common.Views.AutoCorrectDialog.textFLSentence': 'Capitalize first letter of sentences',
   'Common.Views.AutoCorrectDialog.textForLangFL': 'Language exceptions:',
   'Common.Views.AutoCorrectDialog.textHyperlink': 'Internet and network paths with hyperlinks',
@@ -3306,7 +3314,8 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.AutoCorrectDialog.textNumbered': 'Automatic numbered lists',
   'Common.Views.AutoCorrectDialog.textQuotes': 'Replace "straight quotes" with "smart quotes"',
   'Common.Views.AutoCorrectDialog.textRecognized': 'Recognized functions',
-  'Common.Views.AutoCorrectDialog.textRecognizedDesc': 'The following expressions are recognized as math functions. These expressions will not be automatically italicized.',
+  'Common.Views.AutoCorrectDialog.textRecognizedDesc':
+    'The following expressions are recognized as math functions. These expressions will not be automatically italicized.',
   'Common.Views.AutoCorrectDialog.textReplace': 'Replace',
   'Common.Views.AutoCorrectDialog.textReplaceText': 'Replace text as you type',
   'Common.Views.AutoCorrectDialog.textReplaceType': 'Replace text as you type',
@@ -3315,11 +3324,15 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.AutoCorrectDialog.textRestore': 'Restore',
   'Common.Views.AutoCorrectDialog.textTitle': 'AutoCorrect',
   'Common.Views.AutoCorrectDialog.textWarnAddFL': 'Exceptions must contain only uppercase or lowercase letters.',
-  'Common.Views.AutoCorrectDialog.textWarnAddRec': 'Recognized functions can only contain letters A to Z, uppercase or lowercase.',
-  'Common.Views.AutoCorrectDialog.textWarnResetFL': 'Any exceptions you added will be removed, and any exceptions you removed will be restored. Do you want to continue?',
-  'Common.Views.AutoCorrectDialog.textWarnResetRec': 'Any expressions you added will be removed, and any expressions you removed will be restored. Do you want to continue?',
+  'Common.Views.AutoCorrectDialog.textWarnAddRec':
+    'Recognized functions can only contain letters A to Z, uppercase or lowercase.',
+  'Common.Views.AutoCorrectDialog.textWarnResetFL':
+    'Any exceptions you added will be removed, and any exceptions you removed will be restored. Do you want to continue?',
+  'Common.Views.AutoCorrectDialog.textWarnResetRec':
+    'Any expressions you added will be removed, and any expressions you removed will be restored. Do you want to continue?',
   'Common.Views.AutoCorrectDialog.warnReplace': 'An AutoCorrect entry for %1 already exists. Confirm replacement?',
-  'Common.Views.AutoCorrectDialog.warnReset': 'This will remove all customizations made to AutoCorrect and restore default values. Do you want to continue?',
+  'Common.Views.AutoCorrectDialog.warnReset':
+    'This will remove all customizations made to AutoCorrect and restore default values. Do you want to continue?',
   'Common.Views.AutoCorrectDialog.warnRestore': 'The AutoCorrect entry for %1 will be restored to default. Confirm?',
   'Common.Views.Chat.textSend': 'Send',
   'Common.Views.Comments.mniAuthorAsc': 'Author A to Z',
@@ -3347,9 +3360,9 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.Comments.textResolve': 'Resolve',
   'Common.Views.Comments.textResolved': 'Resolved',
   'Common.Views.Comments.textSort': 'Sort Comments',
-  'Common.Views.Comments.textViewResolved': 'You don\'t have permission to reopen comments',
+  'Common.Views.Comments.textViewResolved': "You don't have permission to reopen comments",
   'Common.Views.Comments.txtEmpty': 'There are no comments in the document.',
-  'Common.Views.CopyWarningDialog.textDontShow': 'Don\'t show this message again',
+  'Common.Views.CopyWarningDialog.textDontShow': "Don't show this message again",
   'Common.Views.CopyWarningDialog.textMsg': 'Common.Views.CopyWarningDialog.textMsg',
   'Common.Views.CopyWarningDialog.textTitle': 'Copy, Cut and Paste Operations',
   'Common.Views.CopyWarningDialog.textToCopy': 'Copy',
@@ -3443,7 +3456,8 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.OpenDialog.txtIncorrectPwd': 'Incorrect password',
   'Common.Views.OpenDialog.txtOpenFile': 'Enter password to open file',
   'Common.Views.OpenDialog.txtPassword': 'Password',
-  'Common.Views.OpenDialog.txtProtected': 'After you enter the password and open the file, the current password for this file will be reset.',
+  'Common.Views.OpenDialog.txtProtected':
+    'After you enter the password and open the file, the current password for this file will be reset.',
   'Common.Views.OpenDialog.txtTitle': 'Select %1 option',
   'Common.Views.OpenDialog.txtTitleProtected': 'Protected File',
   'Common.Views.PasswordDialog.txtDescription': 'Set a password to protect this document',
@@ -3451,7 +3465,8 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.PasswordDialog.txtPassword': 'Password',
   'Common.Views.PasswordDialog.txtRepeat': 'Re-enter password',
   'Common.Views.PasswordDialog.txtTitle': 'Set Password',
-  'Common.Views.PasswordDialog.txtWarning': 'Warning: If you lose or forget the password, it cannot be recovered. Keep it in a safe place.',
+  'Common.Views.PasswordDialog.txtWarning':
+    'Warning: If you lose or forget the password, it cannot be recovered. Keep it in a safe place.',
   'Common.Views.PluginDlg.textLoading': 'Loading',
   'Common.Views.Plugins.groupCaption': 'Plugins',
   'Common.Views.Plugins.strPlugins': 'Plugins',
@@ -3538,7 +3553,7 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.ReviewPopover.textOpenAgain': 'Reopen',
   'Common.Views.ReviewPopover.textReply': 'Reply',
   'Common.Views.ReviewPopover.textResolve': 'Resolve',
-  'Common.Views.ReviewPopover.textViewResolved': 'You don\'t have permission to reopen comments',
+  'Common.Views.ReviewPopover.textViewResolved': "You don't have permission to reopen comments",
   'Common.Views.ReviewPopover.txtDeleteTip': 'Delete',
   'Common.Views.ReviewPopover.txtEditTip': 'Edit',
   'Common.Views.SaveAsDlg.textLoading': 'Loading',
@@ -3552,7 +3567,8 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.SearchPanel.textMatchUsingRegExp': 'Use Regular Expression',
   'Common.Views.SearchPanel.textNoMatches': 'No matches found',
   'Common.Views.SearchPanel.textNoSearchResults': 'No search results found',
-  'Common.Views.SearchPanel.textPartOfItemsNotReplaced': '{0}/{1} items replaced successfully. The remaining {2} items are locked by other users.',
+  'Common.Views.SearchPanel.textPartOfItemsNotReplaced':
+    '{0}/{1} items replaced successfully. The remaining {2} items are locked by other users.',
   'Common.Views.SearchPanel.textReplace': 'Replace',
   'Common.Views.SearchPanel.textReplaceAll': 'Replace All',
   'Common.Views.SearchPanel.textReplaceWith': 'Replace with',
@@ -3581,7 +3597,8 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.SignDialog.tipFontName': 'Font name',
   'Common.Views.SignDialog.tipFontSize': 'Font size',
   'Common.Views.SignSettingsDialog.textAllowComment': 'Allow signer to add comment in signature dialog',
-  'Common.Views.SignSettingsDialog.textDefInstruction': 'Before signing this document, make sure that what you are signing is correct.',
+  'Common.Views.SignSettingsDialog.textDefInstruction':
+    'Before signing this document, make sure that what you are signing is correct.',
   'Common.Views.SignSettingsDialog.textInfoEmail': 'Suggested signer email',
   'Common.Views.SignSettingsDialog.textInfoName': 'Suggested signer',
   'Common.Views.SignSettingsDialog.textInfoTitle': 'Suggested signer title',
@@ -3616,7 +3633,7 @@ define('presentationeditor/main/locale/en.json', {
   'Common.Views.SymbolTableDialog.textSymbols': 'Symbols',
   'Common.Views.SymbolTableDialog.textTitle': 'Symbols',
   'Common.Views.SymbolTableDialog.textTradeMark': 'Trademark',
-  'Common.Views.UserNameDialog.textDontShow': 'Don\'t ask me again',
+  'Common.Views.UserNameDialog.textDontShow': "Don't ask me again",
   'Common.Views.UserNameDialog.textLabel': 'Label:',
   'Common.Views.UserNameDialog.textLabelError': 'Label cannot be empty',
   'PE.Controllers.LeftMenu.leavePageText': 'PE.Controllers.LeftMenu.leavePageText',
@@ -3624,7 +3641,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Controllers.LeftMenu.notcriticalErrorTitle': 'Warning',
   'PE.Controllers.LeftMenu.requestEditRightsText': 'Requesting edit rights...',
   'PE.Controllers.LeftMenu.textLoadHistory': 'Loading version history...',
-  'PE.Controllers.LeftMenu.textNoTextFound': 'The data you searched for could not be found. Please adjust your search options.',
+  'PE.Controllers.LeftMenu.textNoTextFound':
+    'The data you searched for could not be found. Please adjust your search options.',
   'PE.Controllers.LeftMenu.textReplaceSkipped': 'Replaced. {0} skipped.',
   'PE.Controllers.LeftMenu.textReplaceSuccess': 'Search completed. Occurrences: {0}',
   'PE.Controllers.LeftMenu.txtUntitled': 'Untitled',
@@ -3637,24 +3655,29 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Controllers.Main.downloadErrorText': 'Download failed',
   'PE.Controllers.Main.downloadTextText': 'Downloading presentation...',
   'PE.Controllers.Main.downloadTitleText': 'Download File',
-  'PE.Controllers.Main.errorAccessDeny': 'You are trying to perform an operation for which you do not have permission.<br>Please contact your document server administrator.',
+  'PE.Controllers.Main.errorAccessDeny':
+    'You are trying to perform an operation for which you do not have permission.<br>Please contact your document server administrator.',
   'PE.Controllers.Main.errorBadImageUrl': 'Incorrect image URL',
   'PE.Controllers.Main.errorCannotPasteImg': 'PE.Controllers.Main.errorCannotPasteImg',
   'PE.Controllers.Main.errorCoAuthoringDisconnect': 'Server connection lost. The document cannot be edited now',
   'PE.Controllers.Main.errorComboSeries': 'To create a combo chart, select at least two data series.',
   'PE.Controllers.Main.errorConnectToServer': 'PE.Controllers.Main.errorConnectToServer',
-  'PE.Controllers.Main.errorDatabaseConnection': 'External error.<br>Database connection error. If the error persists, please contact support.',
+  'PE.Controllers.Main.errorDatabaseConnection':
+    'External error.<br>Database connection error. If the error persists, please contact support.',
   'PE.Controllers.Main.errorDataEncrypted': 'Encrypted changes have been received and cannot be decrypted.',
   'PE.Controllers.Main.errorDataRange': 'Incorrect data range',
   'PE.Controllers.Main.errorDefaultMessage': 'Error code: %1',
-  'PE.Controllers.Main.errorDirectUrl': 'Please verify the link to the document.<br>This link must be a direct link to the file to be downloaded.',
+  'PE.Controllers.Main.errorDirectUrl':
+    'Please verify the link to the document.<br>This link must be a direct link to the file to be downloaded.',
   'PE.Controllers.Main.errorEditingDownloadas': 'PE.Controllers.Main.errorEditingDownloadas',
   'PE.Controllers.Main.errorEditingSaveas': 'PE.Controllers.Main.errorEditingSaveas',
   'PE.Controllers.Main.errorEmailClient': 'Email client not found.',
   'PE.Controllers.Main.errorFilePassProtect': 'This document is password protected and cannot be opened.',
   'PE.Controllers.Main.errorFileSizeExceed': 'PE.Controllers.Main.errorFileSizeExceed',
-  'PE.Controllers.Main.errorForceSave': 'An error occurred while saving the file. Please use the "Save As" option to save the file to your computer\'s hard drive or try again later.',
-  'PE.Controllers.Main.errorInconsistentExt': 'An error occurred while opening the file.<br>The file extension is inconsistent: %1.',
+  'PE.Controllers.Main.errorForceSave':
+    'An error occurred while saving the file. Please use the "Save As" option to save the file to your computer\'s hard drive or try again later.',
+  'PE.Controllers.Main.errorInconsistentExt':
+    'An error occurred while opening the file.<br>The file extension is inconsistent: %1.',
   'PE.Controllers.Main.errorInconsistentExtDocx': 'PE.Controllers.Main.errorInconsistentExtDocx',
   'PE.Controllers.Main.errorInconsistentExtPdf': 'PE.Controllers.Main.errorInconsistentExtPdf',
   'PE.Controllers.Main.errorInconsistentExtPptx': 'PE.Controllers.Main.errorInconsistentExtPptx',
@@ -3663,14 +3686,18 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Controllers.Main.errorKeyExpire': 'Key expired',
   'PE.Controllers.Main.errorLoadingFont': 'Font not loaded.<br>Please contact the document server administrator.',
   'PE.Controllers.Main.errorProcessSaveResult': 'Save failed',
-  'PE.Controllers.Main.errorServerVersion': 'The editor version has been updated. The page will be reloaded to apply the changes.',
+  'PE.Controllers.Main.errorServerVersion':
+    'The editor version has been updated. The page will be reloaded to apply the changes.',
   'PE.Controllers.Main.errorSessionAbsolute': 'Document editing session has expired. Please reload the page.',
-  'PE.Controllers.Main.errorSessionIdle': 'The file has not been edited for a considerable time. Please reload the page.',
+  'PE.Controllers.Main.errorSessionIdle':
+    'The file has not been edited for a considerable time. Please reload the page.',
   'PE.Controllers.Main.errorSessionToken': 'Connection to server has been interrupted. Please reload the page.',
   'PE.Controllers.Main.errorSetPassword': 'Failed to set password successfully',
   'PE.Controllers.Main.errorStockChart': 'PE.Controllers.Main.errorStockChart',
-  'PE.Controllers.Main.errorToken': 'Document security token is not properly formed.<br>Please contact your file server administrator.',
-  'PE.Controllers.Main.errorTokenExpire': 'Document security token has expired.<br>Please contact your document server administrator.',
+  'PE.Controllers.Main.errorToken':
+    'Document security token is not properly formed.<br>Please contact your file server administrator.',
+  'PE.Controllers.Main.errorTokenExpire':
+    'Document security token has expired.<br>Please contact your document server administrator.',
   'PE.Controllers.Main.errorUpdateVersion': 'The file version has changed. The page will be reloaded.',
   'PE.Controllers.Main.errorUpdateVersionOnDisconnect': 'PE.Controllers.Main.errorUpdateVersionOnDisconnect',
   'PE.Controllers.Main.errorUserDrop': 'The file is not accessible now.',
@@ -3703,7 +3730,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Controllers.Main.saveErrorTextDesktop': 'PE.Controllers.Main.saveErrorTextDesktop',
   'PE.Controllers.Main.saveTextText': 'Saving slides...',
   'PE.Controllers.Main.saveTitleText': 'Saving Slides',
-  'PE.Controllers.Main.scriptLoadError': 'Connection speed is too slow, some components could not be loaded. Please reload the page.',
+  'PE.Controllers.Main.scriptLoadError':
+    'Connection speed is too slow, some components could not be loaded. Please reload the page.',
   'PE.Controllers.Main.splitDividerErrorText': 'The number of rows must be a divisor of %1.',
   'PE.Controllers.Main.splitMaxColsErrorText': 'The number of columns must be less than %1.',
   'PE.Controllers.Main.splitMaxRowsErrorText': 'The number of rows must be less than %1.',
@@ -3716,7 +3744,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Controllers.Main.textContactUs': 'Contact Sales',
   'PE.Controllers.Main.textContinue': 'Send',
   'PE.Controllers.Main.textConvertEquation': 'PE.Controllers.Main.textConvertEquation',
-  'PE.Controllers.Main.textCustomLoader': 'Please note that according to the license terms you do not have the right to change the loader.<br>Please contact our sales department for a quote.',
+  'PE.Controllers.Main.textCustomLoader':
+    'Please note that according to the license terms you do not have the right to change the loader.<br>Please contact our sales department for a quote.',
   'PE.Controllers.Main.textDisconnect': 'Network connection failed',
   'PE.Controllers.Main.textGuest': 'Guest',
   'PE.Controllers.Main.textHasMacros': 'This file contains automatic macros.<br>Do you want to run the macros?',
@@ -4005,25 +4034,32 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Controllers.Main.uploadImageTitleText': 'Uploading Images',
   'PE.Controllers.Main.waitText': 'Please wait...',
   'PE.Controllers.Main.warnBrowserIE9': 'This application has poor functionality on IE9. Use IE10 or higher',
-  'PE.Controllers.Main.warnBrowserZoom': 'Your browser\'s current zoom setting is not fully supported. Please press Ctrl + 0 to reset to default zoom.',
+  'PE.Controllers.Main.warnBrowserZoom':
+    "Your browser's current zoom setting is not fully supported. Please press Ctrl + 0 to reset to default zoom.",
   'PE.Controllers.Main.warnLicenseBefore': 'License is not activated.<br>Please contact the administrator.',
   'PE.Controllers.Main.warnLicenseExceeded': 'PE.Controllers.Main.warnLicenseExceeded',
   'PE.Controllers.Main.warnLicenseExp': 'Your license has expired.<br>Please update your license and refresh the page.',
-  'PE.Controllers.Main.warnLicenseLimitedNoAccess': 'License expired<br>You do not have a license for file editing functionality<br>Please contact the administrator.',
+  'PE.Controllers.Main.warnLicenseLimitedNoAccess':
+    'License expired<br>You do not have a license for file editing functionality<br>Please contact the administrator.',
   'PE.Controllers.Main.warnLicenseLimitedRenewed': 'PE.Controllers.Main.warnLicenseLimitedRenewed',
-  'PE.Controllers.Main.warnLicenseUsersExceeded': 'You have reached the user limit for %1 editor. Please contact your administrator for more information.',
+  'PE.Controllers.Main.warnLicenseUsersExceeded':
+    'You have reached the user limit for %1 editor. Please contact your administrator for more information.',
   'PE.Controllers.Main.warnNoLicense': 'PE.Controllers.Main.warnNoLicense',
-  'PE.Controllers.Main.warnNoLicenseUsers': 'You have reached the user limit for %1 editor. Please contact %1 sales team to learn about individual upgrade terms.',
+  'PE.Controllers.Main.warnNoLicenseUsers':
+    'You have reached the user limit for %1 editor. Please contact %1 sales team to learn about individual upgrade terms.',
   'PE.Controllers.Main.warnProcessRightsChange': 'You have been denied permission to edit the file.',
-  'PE.Controllers.Main.warnLicenseAnonymous': 'Anonymous user access is denied. This document will open for viewing only.',
+  'PE.Controllers.Main.warnLicenseAnonymous':
+    'Anonymous user access is denied. This document will open for viewing only.',
   'PE.Controllers.Print.txtPrintRangeInvalid': 'Invalid print range',
   'PE.Controllers.Print.txtPrintRangeSingleRange': 'PE.Controllers.Print.txtPrintRangeSingleRange',
   'PE.Controllers.Search.notcriticalErrorTitle': 'Warning',
-  'PE.Controllers.Search.textNoTextFound': 'The data you searched for could not be found. Please adjust your search options.',
+  'PE.Controllers.Search.textNoTextFound':
+    'The data you searched for could not be found. Please adjust your search options.',
   'PE.Controllers.Search.textReplaceSkipped': 'Replacement completed. {0} matches skipped.',
   'PE.Controllers.Search.textReplaceSuccess': 'Search completed. {0} matches replaced',
   'PE.Controllers.Search.warnReplaceString': '{0} is not a valid specification',
-  'PE.Controllers.Statusbar.textDisconnect': '<b>Connection failed</b><br>Trying to connect. Please check connection settings.',
+  'PE.Controllers.Statusbar.textDisconnect':
+    '<b>Connection failed</b><br>Trying to connect. Please check connection settings.',
   'PE.Controllers.Statusbar.zoomText': 'Zoom {0}%',
   'PE.Controllers.Toolbar.confirmAddFontName': 'PE.Controllers.Toolbar.confirmAddFontName',
   'PE.Controllers.Toolbar.textAccent': 'Accent',
@@ -4649,7 +4685,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.DocumentHolder.txtTop': 'Top',
   'PE.Views.DocumentHolder.txtUnderbar': 'Underbar',
   'PE.Views.DocumentHolder.txtUngroup': 'Ungroup',
-  'PE.Views.DocumentHolder.txtWarnUrl': 'Clicking this link may harm your device or data.<br>Are you sure you want to continue?',
+  'PE.Views.DocumentHolder.txtWarnUrl':
+    'Clicking this link may harm your device or data.<br>Are you sure you want to continue?',
   'PE.Views.DocumentHolder.unicodeText': 'Unicode',
   'PE.Views.DocumentHolder.vertAlignText': 'Vertical Alignment',
   'PE.Views.DocumentPreview.goToSlideText': 'Go to Slide',
@@ -4720,12 +4757,15 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.FileMenuPanels.ProtectDoc.strProtect': 'Protect Presentation',
   'PE.Views.FileMenuPanels.ProtectDoc.strSignature': 'Add Signature',
   'PE.Views.FileMenuPanels.ProtectDoc.txtAddedSignature': 'PE.Views.FileMenuPanels.ProtectDoc.txtAddedSignature',
-  'PE.Views.FileMenuPanels.ProtectDoc.txtAddSignature': '<br>Adding an invisible digital signature ensures the integrity of the presentation',
+  'PE.Views.FileMenuPanels.ProtectDoc.txtAddSignature':
+    '<br>Adding an invisible digital signature ensures the integrity of the presentation',
   'PE.Views.FileMenuPanels.ProtectDoc.txtEdit': 'Edit Presentation',
-  'PE.Views.FileMenuPanels.ProtectDoc.txtEditWarning': 'Editing will remove signatures from the presentation.<br>Are you sure you want to continue?',
+  'PE.Views.FileMenuPanels.ProtectDoc.txtEditWarning':
+    'Editing will remove signatures from the presentation.<br>Are you sure you want to continue?',
   'PE.Views.FileMenuPanels.ProtectDoc.txtEncrypted': 'This presentation is password protected',
   'PE.Views.FileMenuPanels.ProtectDoc.txtProtectPresentation': 'Encrypt this presentation with a password',
-  'PE.Views.FileMenuPanels.ProtectDoc.txtSigned': 'Valid signature has been added to the presentation. Editing of this presentation is restricted.',
+  'PE.Views.FileMenuPanels.ProtectDoc.txtSigned':
+    'Valid signature has been added to the presentation. Editing of this presentation is restricted.',
   'PE.Views.FileMenuPanels.ProtectDoc.txtSignedInvalid': 'PE.Views.FileMenuPanels.ProtectDoc.txtSignedInvalid',
   'PE.Views.FileMenuPanels.ProtectDoc.txtView': 'View Signature',
   'PE.Views.FileMenuPanels.RecentFiles.txtOpenRecent': 'Open Recent',
@@ -4737,7 +4777,7 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.FileMenuPanels.Settings.strIgnoreWordsWithNumbers': 'Ignore Words with Numbers',
   'PE.Views.FileMenuPanels.Settings.strMacrosSettings': 'Macro Settings',
   'PE.Views.FileMenuPanels.Settings.strPasteButton': 'Show "Paste Options" button after performing paste operation',
-  'PE.Views.FileMenuPanels.Settings.strShowOthersChanges': 'Show Other Users\' Changes',
+  'PE.Views.FileMenuPanels.Settings.strShowOthersChanges': "Show Other Users' Changes",
   'PE.Views.FileMenuPanels.Settings.strStrict': 'Manual',
   'PE.Views.FileMenuPanels.Settings.strTheme': 'Interface Theme',
   'PE.Views.FileMenuPanels.Settings.strUnit': 'Measurement Unit',
@@ -4770,7 +4810,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.FileMenuPanels.Settings.txtProofing': 'Proofing',
   'PE.Views.FileMenuPanels.Settings.txtPt': 'pt',
   'PE.Views.FileMenuPanels.Settings.txtQuickPrint': 'Show Quick Print button in editor header',
-  'PE.Views.FileMenuPanels.Settings.txtQuickPrintTip': 'The file will be printed using the most recently selected printer or the default printer.',
+  'PE.Views.FileMenuPanels.Settings.txtQuickPrintTip':
+    'The file will be printed using the most recently selected printer or the default printer.',
   'PE.Views.FileMenuPanels.Settings.txtRunMacros': 'Enable All',
   'PE.Views.FileMenuPanels.Settings.txtRunMacrosDesc': 'Enable all macros without notification',
   'PE.Views.FileMenuPanels.Settings.txtSpellCheck': 'Spell Check',
@@ -4800,7 +4841,7 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.HeaderFooterDialog.textHFTitle': 'Header and Footer',
   'PE.Views.HeaderFooterDialog.textLang': 'Language',
   'PE.Views.HeaderFooterDialog.textNotes': 'Notes and Handouts',
-  'PE.Views.HeaderFooterDialog.textNotTitle': 'Don\'t show on title slide',
+  'PE.Views.HeaderFooterDialog.textNotTitle': "Don't show on title slide",
   'PE.Views.HeaderFooterDialog.textPageNum': 'Page Number',
   'PE.Views.HeaderFooterDialog.textPreview': 'Preview',
   'PE.Views.HeaderFooterDialog.textSlide': 'Slide',
@@ -4943,7 +4984,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.PrintWithPreview.txtCopies': 'Copies',
   'PE.Views.PrintWithPreview.txtCurrentPage': 'Current Slide',
   'PE.Views.PrintWithPreview.txtCustomPages': 'Custom Print',
-  'PE.Views.PrintWithPreview.txtEmptyTable': 'The presentation does not contain printable content. The presentation is empty.',
+  'PE.Views.PrintWithPreview.txtEmptyTable':
+    'The presentation does not contain printable content. The presentation is empty.',
   'PE.Views.PrintWithPreview.txtHeaderFooterSettings': 'Header/Footer Settings',
   'PE.Views.PrintWithPreview.txtOf': 'of {0}',
   'PE.Views.PrintWithPreview.txtOneSide': 'Print on One Side',
@@ -4977,7 +5019,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.ShapeSettings.strType': 'Type',
   'PE.Views.ShapeSettings.textAdvanced': 'Show Advanced Settings',
   'PE.Views.ShapeSettings.textAngle': 'Angle',
-  'PE.Views.ShapeSettings.textBorderSizeErr': 'The value entered is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
+  'PE.Views.ShapeSettings.textBorderSizeErr':
+    'The value entered is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
   'PE.Views.ShapeSettings.textColor': 'Color',
   'PE.Views.ShapeSettings.textDirection': 'Direction',
   'PE.Views.ShapeSettings.textEditPoints': 'Edit Points',
@@ -5081,10 +5124,14 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.SignatureSettings.strSignature': 'Signature',
   'PE.Views.SignatureSettings.strValid': 'Valid Signature',
   'PE.Views.SignatureSettings.txtContinueEditing': 'Continue Editing',
-  'PE.Views.SignatureSettings.txtEditWarning': 'Editing will remove signatures from the presentation.<br>Are you sure you want to continue?',
-  'PE.Views.SignatureSettings.txtRemoveWarning': 'Do you want to remove this signature?<br>This action cannot be undone.',
-  'PE.Views.SignatureSettings.txtSigned': 'Valid signature has been added to the presentation. Editing of this presentation is restricted.',
-  'PE.Views.SignatureSettings.txtSignedInvalid': 'Some digital signatures in the presentation are invalid or cannot be verified. Editing of this presentation is restricted.',
+  'PE.Views.SignatureSettings.txtEditWarning':
+    'Editing will remove signatures from the presentation.<br>Are you sure you want to continue?',
+  'PE.Views.SignatureSettings.txtRemoveWarning':
+    'Do you want to remove this signature?<br>This action cannot be undone.',
+  'PE.Views.SignatureSettings.txtSigned':
+    'Valid signature has been added to the presentation. Editing of this presentation is restricted.',
+  'PE.Views.SignatureSettings.txtSignedInvalid':
+    'Some digital signatures in the presentation are invalid or cannot be verified. Editing of this presentation is restricted.',
   'PE.Views.SlideSettings.strBackground': 'Background Color',
   'PE.Views.SlideSettings.strColor': 'Color',
   'PE.Views.SlideSettings.strDateTime': 'Show Date and Time',
@@ -5129,7 +5176,7 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.SlideSettings.txtLeather': 'Leather',
   'PE.Views.SlideSettings.txtPapyrus': 'Papyrus',
   'PE.Views.SlideSettings.txtWood': 'Wood',
-  'PE.Views.SlideshowSettings.textLoop': 'Loop continuously until \'Esc\'',
+  'PE.Views.SlideshowSettings.textLoop': "Loop continuously until 'Esc'",
   'PE.Views.SlideshowSettings.textTitle': 'Slideshow Settings',
   'PE.Views.SlideSizeSettings.strLandscape': 'Landscape',
   'PE.Views.SlideSizeSettings.strPortrait': 'Portrait',
@@ -5260,7 +5307,8 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.TextArtSettings.strTransparency': 'Transparency',
   'PE.Views.TextArtSettings.strType': 'Type',
   'PE.Views.TextArtSettings.textAngle': 'Angle',
-  'PE.Views.TextArtSettings.textBorderSizeErr': 'The value entered is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
+  'PE.Views.TextArtSettings.textBorderSizeErr':
+    'The value entered is incorrect.<br>Please enter a value between 0 pt and 1584 pt.',
   'PE.Views.TextArtSettings.textColor': 'Solid Fill',
   'PE.Views.TextArtSettings.textDirection': 'Direction',
   'PE.Views.TextArtSettings.textEmptyPattern': 'No Pattern',
@@ -5558,7 +5606,7 @@ define('presentationeditor/main/locale/en.json', {
   'PE.Views.ViewTab.tipFitToWidth': 'Fit to Width',
   'PE.Views.ViewTab.tipGridlines': 'Show Gridlines',
   'PE.Views.ViewTab.tipGuides': 'Show Guides',
-  'PE.Views.ViewTab.tipInterfaceTheme': 'Interface Theme'
+  'PE.Views.ViewTab.tipInterfaceTheme': 'Interface Theme',
 });
 
 var params = getUrlParams(),
@@ -64792,11 +64840,31 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
                         },
                       })),
                     (i.defaultTitleText = ''),
-                    (i.warnNoLicense = ((i.warnNoLicense || Common.Locale.get('warnNoLicense', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnNoLicenseUsers = ((i.warnNoLicenseUsers || Common.Locale.get('warnNoLicenseUsers', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.textNoLicenseTitle = ((i.textNoLicenseTitle || Common.Locale.get('textNoLicenseTitle', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnLicenseExceeded = ((i.warnLicenseExceeded || Common.Locale.get('warnLicenseExceeded', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnLicenseUsersExceeded = ((i.warnLicenseUsersExceeded || Common.Locale.get('warnLicenseUsersExceeded', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))))
+                    (i.warnNoLicense = (
+                      i.warnNoLicense ||
+                      Common.Locale.get('warnNoLicense', { name: 'PE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.warnNoLicenseUsers = (
+                      i.warnNoLicenseUsers ||
+                      Common.Locale.get('warnNoLicenseUsers', { name: 'PE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.textNoLicenseTitle = (
+                      i.textNoLicenseTitle ||
+                      Common.Locale.get('textNoLicenseTitle', { name: 'PE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.warnLicenseExceeded = (
+                      i.warnLicenseExceeded ||
+                      Common.Locale.get('warnLicenseExceeded', { name: 'PE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')),
+                    (i.warnLicenseUsersExceeded = (
+                      i.warnLicenseUsersExceeded ||
+                      Common.Locale.get('warnLicenseUsersExceeded', { name: 'PE.Controllers.Main' }) ||
+                      ''
+                    ).replace(/%1/g, 'ONLYOFFICE')))
                   : (Common.Utils.showBrowserRestriction(),
                     Common.Gateway.reportError(void 0, this.unsupportedBrowserErrorText)));
             },
@@ -73916,9 +73984,7 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
               return (
                 (this.mode = t),
                 (this.isModeChanged = !0),
-                this.view &&
-                  ((this.view.viewmode = !this.mode.canComments),
-                  this.view.changeLayout(t)),
+                this.view && ((this.view.viewmode = !this.mode.canComments), this.view.changeLayout(t)),
                 this
               );
             },
@@ -76153,7 +76219,10 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
                       (i.panelPlugins &&
                         ((e = {
                           action: 'plugins',
-                          caption: (i.panelPlugins.groupCaption || Common.Locale.get('groupCaption', { name: 'Common.Views.Plugins' }) || 'Plugins'),
+                          caption:
+                            i.panelPlugins.groupCaption ||
+                            Common.Locale.get('groupCaption', { name: 'Common.Views.Plugins' }) ||
+                            'Plugins',
                           dataHintTitle: 'E',
                           layoutname: 'toolbar-plugins',
                         }),
@@ -81137,7 +81206,7 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
     'presentationeditor/main/locale/en.json',
   ], function (t, e, i, n, o, s, analytics, gateway, locale, deviceScale, en) {
     var a;
-    var currentLang = (function() {
+    var currentLang = (function () {
       var params = getUrlParams();
       return (params.lang || 'en').split(/[\-\_]/)[0];
     })();

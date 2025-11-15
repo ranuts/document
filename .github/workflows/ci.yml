@@ -45,8 +45,5 @@ jobs:
       - name: Install deps
         run: pnpm install
 
-      - name: format
-        run: pnpm run format
-
       - name: Lint
         run: pnpm run lint

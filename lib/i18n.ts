@@ -70,7 +70,7 @@ const messages: Record<Language, I18nMessages> = {
     newExcel: 'New Excel',
     newPowerPoint: 'New PowerPoint',
     menu: 'Menu',
-    menuGuide: 'Menu is in the bottom right corner, hover to view (click to close, won\'t show again)',
+    menuGuide: "Menu is in the bottom right corner, hover to view (click to close, won't show again)",
     fileSavedSuccess: 'File saved successfully: ',
     documentLoaded: 'Document loaded: ',
     failedToLoadEditor: 'Failed to load editor component. Please ensure OnlyOffice API is properly installed.',
@@ -144,7 +144,6 @@ class I18n {
 
     // 4. If not found in localStorage, try navigator.language
     if (!detectedLang) {
-       
       const browserLang =
         // eslint-disable-next-line n/no-unsupported-features/node-builtins
         typeof navigator !== 'undefined' && navigator.language

@@ -355,7 +355,10 @@
     "d": "返回特定数值在一组数中的百分比排名 (介于 0 与 1 之间，含 0 与 1)"
   },
   "PERMUT": { "a": "(number; number_chosen)", "d": "返回从给定元素数目的集合中选取若干元素的排列数" },
-  "PERMUTATIONA": { "a": "(number; number_chosen)", "d": "返回可以从对象总数中选取的给定数目对象 (包含重复项) 的排列数" },
+  "PERMUTATIONA": {
+    "a": "(number; number_chosen)",
+    "d": "返回可以从对象总数中选取的给定数目对象 (包含重复项) 的排列数"
+  },
   "PHI": { "a": "(x)", "d": "返回标准正态分布的密度函数值" },
   "POISSON": { "a": "(x; mean; cumulative)", "d": "返回泊松 (POISSON) 分布" },
   "POISSON.DIST": { "a": "(x; mean; cumulative)", "d": "返回泊松 (POISSON) 分布" },

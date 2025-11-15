@@ -65,7 +65,7 @@ const getBasePath = (): string => {
   if (typeof window === 'undefined') {
     return '/';
   }
-  
+
   const pathname = window.location.pathname;
   // Check if we're in GitHub Pages (path starts with /document/ or contains /document/)
   if (pathname.startsWith('/document/') || pathname === '/document') {
