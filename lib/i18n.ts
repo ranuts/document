@@ -2,7 +2,29 @@
  * Internationalization configuration
  */
 
-export type Language = 'zh' | 'en';
+/**
+ * Language codes enum
+ * Internal language codes (simplified): 'zh' | 'en'
+ * OnlyOffice language codes (BCP 47 standard): 'zh-CN' | 'en'
+ */
+export enum LanguageCode {
+  /** Simplified Chinese (internal) */
+  ZH = 'zh',
+  /** English (internal) */
+  EN = 'en',
+}
+
+/**
+ * OnlyOffice language codes (BCP 47 standard)
+ */
+export enum OnlyOfficeLanguageCode {
+  /** Simplified Chinese (Mainland China) - BCP 47 standard */
+  ZH_CN = 'zh-CN',
+  /** English */
+  EN = 'en',
+}
+
+export type Language = LanguageCode.ZH | LanguageCode.EN;
 
 export interface I18nMessages {
   // UI text
@@ -24,7 +46,7 @@ export interface I18nMessages {
 }
 
 const messages: Record<Language, I18nMessages> = {
-  zh: {
+  [LanguageCode.ZH]: {
     webOffice: 'Web Office',
     uploadDocument: 'Upload Document to view',
     newWord: 'New Word',
@@ -37,7 +59,7 @@ const messages: Record<Language, I18nMessages> = {
     invalidFileObject: '无效的文件对象',
     documentOperationFailed: '文档操作失败：',
   },
-  en: {
+  [LanguageCode.EN]: {
     webOffice: 'Web Office',
     uploadDocument: 'Upload Document to view',
     newWord: 'New Word',
@@ -53,28 +75,81 @@ const messages: Record<Language, I18nMessages> = {
 };
 
 class I18n {
-  private currentLanguage: Language = 'en';
+  private currentLanguage: Language = LanguageCode.EN;
+
+  /**
+   * Get cookie value by name
+   */
+  private getCookie(name: string): string | null {
+    if (typeof document === 'undefined') return null;
+    const nameEQ = name + '=';
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  /**
+   * Get URL parameter by name
+   */
+  private getUrlParameter(name: string): string | null {
+    if (typeof window === 'undefined') return null;
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  /**
+   * Normalize language code to LanguageCode enum
+   * Supports: 'zh', 'zh-CN', 'zh_CN', 'en', 'en-US', etc.
+   */
+  private normalizeLanguage(lang: string | null): Language | null {
+    if (!lang) return null;
+    const normalized = lang.toLowerCase().split(/[-_]/)[0];
+    if (normalized === 'zh') return LanguageCode.ZH;
+    if (normalized === 'en') return LanguageCode.EN;
+    return null;
+  }
 
   constructor() {
-    // Read language setting from localStorage, or auto-detect from browser language
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
-    const savedLang = localStorage.getItem('document-lang') as Language;
-    if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
-      this.currentLanguage = savedLang;
-    } else {
-      // Detect browser language
-      // Extract base language code (e.g., 'en' from 'en-US', 'zh' from 'zh-CN')
-      const browserLang =
-        // eslint-disable-next-line n/no-unsupported-features/node-builtins
-        typeof navigator !== 'undefined' && navigator.language ? navigator.language.toLowerCase() : 'en';
-      const baseLang = browserLang.split('-')[0]; // Extract 'en' from 'en-US', 'zh' from 'zh-CN'
-      if (baseLang === 'zh') {
-        this.currentLanguage = 'zh';
-      } else {
-        // Default to English for any other language
-        this.currentLanguage = 'en';
+    // Priority: URL locale -> cookie -> localStorage -> navigator.language -> 'en'
+    let detectedLang: Language | null = null;
+
+    // 1. Try to get from URL parameter 'locale' (highest priority)
+    const urlLocale = this.getUrlParameter('locale');
+    detectedLang = this.normalizeLanguage(urlLocale);
+
+    // 2. If not found in URL, try cookies (locale field)
+    if (!detectedLang) {
+      const cookieLang = this.getCookie('locale');
+      detectedLang = this.normalizeLanguage(cookieLang);
+    }
+
+    // 3. If not found in cookies, try localStorage
+    if (!detectedLang) {
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
+      const savedLang = localStorage.getItem('document-lang') as Language;
+      if (savedLang && (savedLang === LanguageCode.ZH || savedLang === LanguageCode.EN)) {
+        detectedLang = savedLang;
       }
     }
+
+    // 4. If not found in localStorage, try navigator.language
+    if (!detectedLang) {
+       
+      const browserLang =
+        // eslint-disable-next-line n/no-unsupported-features/node-builtins
+        typeof navigator !== 'undefined' && navigator.language
+          ? // eslint-disable-next-line n/no-unsupported-features/node-builtins
+            navigator.language
+          : LanguageCode.EN;
+      detectedLang = this.normalizeLanguage(browserLang);
+    }
+
+    // 5. Default to 'en' if nothing found
+    this.currentLanguage = detectedLang || LanguageCode.EN;
   }
 
   /**
@@ -88,7 +163,7 @@ class I18n {
    * Set language
    */
   setLanguage(lang: Language): void {
-    if (lang === 'zh' || lang === 'en') {
+    if (lang === LanguageCode.ZH || lang === LanguageCode.EN) {
       this.currentLanguage = lang;
       // eslint-disable-next-line n/no-unsupported-features/node-builtins
       localStorage.setItem('document-lang', lang);
@@ -102,7 +177,7 @@ class I18n {
    * Get translated text
    */
   t(key: keyof I18nMessages): string {
-    return messages[this.currentLanguage][key] || messages.en[key] || key;
+    return messages[this.currentLanguage][key] || messages[LanguageCode.EN][key] || key;
   }
 
   /**
@@ -113,17 +188,18 @@ class I18n {
   }
 
   /**
-   * Get OnlyOffice language code
-   * OnlyOffice uses standard language code format
-   * English uses 'en', Chinese uses 'zh-CN'
+   * Get OnlyOffice language code (BCP 47 standard)
+   * OnlyOffice uses BCP 47 standard language codes
+   * - English: 'en'
+   * - Simplified Chinese (Mainland China): 'zh-CN'
    */
   getOnlyOfficeLang(): string {
-    // OnlyOffice supported language code mapping
-    const langMap: Record<Language, string> = {
-      zh: 'zh-CN',
-      en: 'en',
+    // Mapping from internal language code to OnlyOffice BCP 47 standard code
+    const langMap: Record<Language, OnlyOfficeLanguageCode> = {
+      [LanguageCode.ZH]: OnlyOfficeLanguageCode.ZH_CN,
+      [LanguageCode.EN]: OnlyOfficeLanguageCode.EN,
     };
-    return langMap[this.currentLanguage] || 'en';
+    return langMap[this.currentLanguage] || OnlyOfficeLanguageCode.EN;
   }
 }
 

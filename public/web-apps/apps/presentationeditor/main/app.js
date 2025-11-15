@@ -64792,11 +64792,11 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
                         },
                       })),
                     (i.defaultTitleText = ''),
-                    (i.warnNoLicense = i.warnNoLicense.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.warnNoLicenseUsers = i.warnNoLicenseUsers.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.textNoLicenseTitle = i.textNoLicenseTitle.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.warnLicenseExceeded = i.warnLicenseExceeded.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.warnLicenseUsersExceeded = i.warnLicenseUsersExceeded.replace(/%1/g, 'ONLYOFFICE')))
+                    (i.warnNoLicense = ((i.warnNoLicense || Common.Locale.get('warnNoLicense', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnNoLicenseUsers = ((i.warnNoLicenseUsers || Common.Locale.get('warnNoLicenseUsers', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.textNoLicenseTitle = ((i.textNoLicenseTitle || Common.Locale.get('textNoLicenseTitle', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnLicenseExceeded = ((i.warnLicenseExceeded || Common.Locale.get('warnLicenseExceeded', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnLicenseUsersExceeded = ((i.warnLicenseUsersExceeded || Common.Locale.get('warnLicenseUsersExceeded', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))))
                   : (Common.Utils.showBrowserRestriction(),
                     Common.Gateway.reportError(void 0, this.unsupportedBrowserErrorText)));
             },
@@ -76149,14 +76149,15 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
                     e.isEditMailMerge ||
                       e.isEditDiagram ||
                       e.isEditOle ||
-                      ((e = {
-                        action: 'plugins',
-                        caption: i.panelPlugins.groupCaption,
-                        dataHintTitle: 'E',
-                        layoutname: 'toolbar-plugins',
-                      }),
-                      (i.$toolbarPanelPlugins = i.panelPlugins.getPanel()),
-                      (i.toolbar = t).addTab(e, i.$toolbarPanelPlugins, 10));
+                      (i.panelPlugins &&
+                        ((e = {
+                          action: 'plugins',
+                          caption: (i.panelPlugins.groupCaption || Common.Locale.get('groupCaption', { name: 'Common.Views.Plugins' }) || 'Plugins'),
+                          dataHintTitle: 'E',
+                          layoutname: 'toolbar-plugins',
+                        }),
+                        (i.$toolbarPanelPlugins = i.panelPlugins.getPanel()),
+                        (i.toolbar = t).addTab(e, i.$toolbarPanelPlugins, 10)));
                   },
                 },
                 'Common.Views.Plugins': {

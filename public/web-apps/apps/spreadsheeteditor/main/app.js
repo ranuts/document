@@ -1355,6 +1355,7 @@ define('spreadsheeteditor/main/locale/zh.json', {
   'SSE.Controllers.Main.warnLicenseExp': '您的许可证已过期。<br>请更新您的许可证并刷新页面。',
   'SSE.Controllers.Main.warnLicenseLimitedNoAccess': '授权过期<br>您不具备文件编辑功能的授权<br>请联系管理员。',
   'SSE.Controllers.Main.warnLicenseUsersExceeded': '您已达到%1编辑器的用户限制。请联系您的管理员以了解更多。',
+  'SSE.Controllers.Main.warnNoLicense': '',
   'SSE.Controllers.Main.warnNoLicenseUsers': '您已达到%1编辑器的用户限制。请联系%1销售团队以了解个人升级条款。',
   'SSE.Controllers.Main.warnProcessRightsChange': '您被拒绝编辑文件的权限。',
   'SSE.Controllers.PivotTable.strSheet': 'Sheet',
@@ -91463,11 +91464,11 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                       },
                     }),
                     (i.defaultTitleText = ''),
-                    (i.warnNoLicense = i.warnNoLicense.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.warnNoLicenseUsers = i.warnNoLicenseUsers.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.textNoLicenseTitle = i.textNoLicenseTitle.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.warnLicenseExceeded = i.warnLicenseExceeded.replace(/%1/g, 'ONLYOFFICE')),
-                    (i.warnLicenseUsersExceeded = i.warnLicenseUsersExceeded.replace(/%1/g, 'ONLYOFFICE')))
+                    (i.warnNoLicense = ((i.warnNoLicense || Common.Locale.get('warnNoLicense', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnNoLicenseUsers = ((i.warnNoLicenseUsers || Common.Locale.get('warnNoLicenseUsers', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.textNoLicenseTitle = ((i.textNoLicenseTitle || Common.Locale.get('textNoLicenseTitle', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnLicenseExceeded = ((i.warnLicenseExceeded || Common.Locale.get('warnLicenseExceeded', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnLicenseUsersExceeded = ((i.warnLicenseUsersExceeded || Common.Locale.get('warnLicenseUsersExceeded', { name: 'SSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))))
                   : (Common.Utils.showBrowserRestriction(),
                     Common.Gateway.reportError(void 0, this.unsupportedBrowserErrorText)));
             },
@@ -107981,14 +107982,15 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                     e.isEditMailMerge ||
                       e.isEditDiagram ||
                       e.isEditOle ||
-                      ((e = {
-                        action: 'plugins',
-                        caption: i.panelPlugins.groupCaption,
-                        dataHintTitle: 'E',
-                        layoutname: 'toolbar-plugins',
-                      }),
-                      (i.$toolbarPanelPlugins = i.panelPlugins.getPanel()),
-                      (i.toolbar = t).addTab(e, i.$toolbarPanelPlugins, 10));
+                      (i.panelPlugins &&
+                        ((e = {
+                          action: 'plugins',
+                          caption: (i.panelPlugins.groupCaption || Common.Locale.get('groupCaption', { name: 'Common.Views.Plugins' }) || 'Plugins'),
+                          dataHintTitle: 'E',
+                          layoutname: 'toolbar-plugins',
+                        }),
+                        (i.$toolbarPanelPlugins = i.panelPlugins.getPanel()),
+                        (i.toolbar = t).addTab(e, i.$toolbarPanelPlugins, 10)));
                   },
                 },
                 'Common.Views.Plugins': {

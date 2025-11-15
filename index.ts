@@ -3,7 +3,7 @@ import type { MessageHandler } from 'ranuts/utils';
 import { handleDocumentOperation, initX2T, loadEditorApi, loadScript } from './lib/x2t';
 import { getDocmentObj, setDocmentObj } from './store';
 import { showLoading } from './lib/loading';
-import { type Language, getLanguage, setLanguage, t } from './lib/i18n';
+import { type Language, LanguageCode, getLanguage, setLanguage, t } from './lib/i18n';
 import 'ranui/button';
 import './styles/base.css';
 
@@ -134,7 +134,7 @@ const updateUIText = () => {
   if (langButton) {
     const langText = langButton.querySelector('span:last-child');
     if (langText) {
-      langText.textContent = getLanguage() === 'zh' ? 'English' : '中文';
+      langText.textContent = getLanguage() === LanguageCode.ZH ? 'English' : '中文';
     }
   }
 };
@@ -371,10 +371,10 @@ const createControlPanel = () => {
     line-height: 18px;
     text-align: center;
   `;
-  langIcon.textContent = getLanguage() === 'zh' ? '🌐' : '🌐';
+  langIcon.textContent = '🌐';
 
   const langText = document.createElement('span');
-  langText.textContent = getLanguage() === 'zh' ? 'English' : '中文';
+  langText.textContent = getLanguage() === LanguageCode.ZH ? 'English' : '中文';
 
   langButton.appendChild(langIcon);
   langButton.appendChild(langText);
@@ -393,7 +393,7 @@ const createControlPanel = () => {
   });
   langButton.addEventListener('click', () => {
     const currentLang = getLanguage();
-    const newLang: Language = currentLang === 'zh' ? 'en' : 'zh';
+    const newLang: Language = currentLang === LanguageCode.ZH ? LanguageCode.EN : LanguageCode.ZH;
     setLanguage(newLang);
     updateUIText();
     // If editor is loaded, recreate it to apply new language
