@@ -1,8 +1,8 @@
 import { getExtensions } from 'ranuts/utils';
 import 'ranui/message';
 import { g_sEmpty_bin } from './empty_bin';
+import { getOnlyOfficeLang, t } from './i18n';
 import { getDocmentObj } from '@/store';
-import { t, getOnlyOfficeLang } from './i18n';
 
 declare global {
   interface Window {

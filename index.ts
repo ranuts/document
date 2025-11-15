@@ -360,7 +360,7 @@ const createControlPanel = () => {
     min-width: 90px;
     justify-content: center;
   `;
-  
+
   // Create language icon
   const langIcon = document.createElement('span');
   langIcon.style.cssText = `
@@ -372,13 +372,13 @@ const createControlPanel = () => {
     text-align: center;
   `;
   langIcon.textContent = getLanguage() === 'zh' ? '🌐' : '🌐';
-  
+
   const langText = document.createElement('span');
   langText.textContent = getLanguage() === 'zh' ? 'English' : '中文';
-  
+
   langButton.appendChild(langIcon);
   langButton.appendChild(langText);
-  
+
   langButton.addEventListener('mouseenter', () => {
     langButton.style.background = 'rgba(255, 255, 255, 0.3)';
     langButton.style.borderColor = 'rgba(255, 255, 255, 0.5)';
@@ -404,7 +404,7 @@ const createControlPanel = () => {
       }
     }
   });
-  
+
   langButtonContainer.appendChild(langButton);
   buttonGroup.appendChild(langButtonContainer);
 

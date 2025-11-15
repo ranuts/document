@@ -57,6 +57,7 @@ class I18n {
 
   constructor() {
     // Read language setting from localStorage, or auto-detect from browser language
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const savedLang = localStorage.getItem('document-lang') as Language;
     if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
       this.currentLanguage = savedLang;
@@ -89,8 +90,10 @@ class I18n {
   setLanguage(lang: Language): void {
     if (lang === 'zh' || lang === 'en') {
       this.currentLanguage = lang;
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       localStorage.setItem('document-lang', lang);
       // Trigger language change event
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       window.dispatchEvent(new CustomEvent('languagechange', { detail: { language: lang } }));
     }
   }
