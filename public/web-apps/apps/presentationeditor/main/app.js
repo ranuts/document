@@ -64792,11 +64792,11 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
                         },
                       })),
                     (i.defaultTitleText = ''),
-                    (i.warnNoLicense = ((i.warnNoLicense || Common.Locale.get('warnNoLicense', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnNoLicenseUsers = ((i.warnNoLicenseUsers || Common.Locale.get('warnNoLicenseUsers', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.textNoLicenseTitle = ((i.textNoLicenseTitle || Common.Locale.get('textNoLicenseTitle', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnLicenseExceeded = ((i.warnLicenseExceeded || Common.Locale.get('warnLicenseExceeded', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
-                    (i.warnLicenseUsersExceeded = ((i.warnLicenseUsersExceeded || Common.Locale.get('warnLicenseUsersExceeded', { name: 'PSE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))))
+                    (i.warnNoLicense = ((i.warnNoLicense || Common.Locale.get('warnNoLicense', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnNoLicenseUsers = ((i.warnNoLicenseUsers || Common.Locale.get('warnNoLicenseUsers', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.textNoLicenseTitle = ((i.textNoLicenseTitle || Common.Locale.get('textNoLicenseTitle', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnLicenseExceeded = ((i.warnLicenseExceeded || Common.Locale.get('warnLicenseExceeded', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))),
+                    (i.warnLicenseUsersExceeded = ((i.warnLicenseUsersExceeded || Common.Locale.get('warnLicenseUsersExceeded', { name: 'PE.Controllers.Main' }) || '').replace(/%1/g, 'ONLYOFFICE'))))
                   : (Common.Utils.showBrowserRestriction(),
                     Common.Gateway.reportError(void 0, this.unsupportedBrowserErrorText)));
             },
@@ -73916,8 +73916,9 @@ var c_oHyperlinkType = { InternalLink: 0, WebLink: 1 },
               return (
                 (this.mode = t),
                 (this.isModeChanged = !0),
-                (this.view.viewmode = !this.mode.canComments),
-                this.view.changeLayout(t),
+                this.view &&
+                  ((this.view.viewmode = !this.mode.canComments),
+                  this.view.changeLayout(t)),
                 this
               );
             },
