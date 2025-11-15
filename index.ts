@@ -48,6 +48,10 @@ const events: Record<string, MessageHandler<any, unknown>> = {
       await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
       fileChunks = [];
       removeLoading();
+      // Show menu guide after document is loaded
+      setTimeout(() => {
+        showMenuGuide();
+      }, 1000);
     }
   },
   CLOSE_EDITOR: () => {
@@ -75,6 +79,10 @@ const onCreateNew = async (ext: string) => {
   const { fileName, file: fileBlob } = getDocmentObj();
   await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
   removeLoading();
+  // Show menu guide after document is loaded
+  setTimeout(() => {
+    showMenuGuide();
+  }, 1000);
 };
 // example: window.onCreateNew('.docx')
 // example: window.onCreateNew('.xlsx')
@@ -109,6 +117,10 @@ const onOpenDocument = async () => {
         removeLoading();
         // Clear file selection so the same file can be selected again
         fileInput.value = '';
+        // Show menu guide after document is loaded
+        setTimeout(() => {
+          showMenuGuide();
+        }, 1000);
       }
     };
   });
@@ -336,6 +348,138 @@ const createFixedActionButton = () => {
   fabContainer.appendChild(fabButton);
   document.body.appendChild(fabContainer);
   return fabContainer;
+};
+
+// Show menu guide tooltip
+let menuGuideElement: HTMLElement | null = null;
+const MENU_GUIDE_DISMISSED_KEY = 'menu-guide-dismissed';
+
+const showMenuGuide = () => {
+  // Check if guide was dismissed in localStorage
+  if (localStorage.getItem(MENU_GUIDE_DISMISSED_KEY) === 'true') {
+    return;
+  }
+
+  // Check if guide was already shown in this session
+  if (menuGuideElement) {
+    return;
+  }
+
+  const fabButton = document.querySelector('#fab-button') as HTMLElement;
+  if (!fabButton) {
+    return;
+  }
+
+  // Create guide container
+  const guide = document.createElement('div');
+  guide.id = 'menu-guide';
+  guide.style.cssText = `
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    padding: 20px 40px 20px 24px;
+    z-index: 1002;
+    max-width: 300px;
+    animation: guideFadeIn 0.3s ease;
+    pointer-events: auto;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  `;
+
+  // Create arrow pointing down
+  const arrow = document.createElement('div');
+  arrow.style.cssText = `
+    position: absolute;
+    bottom: -10px;
+    right: 40px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid white;
+  `;
+
+  // Create text content
+  const text = document.createElement('div');
+  text.textContent = t('menuGuide');
+  text.style.cssText = `
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    font-weight: 500;
+    padding-right: 0;
+  `;
+
+  // Create close button
+  const closeBtn = document.createElement('button');
+  closeBtn.innerHTML = '×';
+  closeBtn.style.cssText = `
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+  `;
+  closeBtn.addEventListener('mouseenter', () => {
+    closeBtn.style.color = '#333';
+  });
+  closeBtn.addEventListener('mouseleave', () => {
+    closeBtn.style.color = '#999';
+  });
+
+  const hideGuide = (saveToStorage = false) => {
+    if (saveToStorage) {
+      localStorage.setItem(MENU_GUIDE_DISMISSED_KEY, 'true');
+    }
+    if (guide.parentNode) {
+      guide.style.animation = 'guideFadeOut 0.3s ease';
+      setTimeout(() => {
+        if (guide.parentNode) {
+          guide.parentNode.removeChild(guide);
+        }
+        menuGuideElement = null;
+      }, 300);
+    }
+  };
+
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideGuide(true);
+  });
+
+  guide.appendChild(arrow);
+  guide.appendChild(text);
+  guide.appendChild(closeBtn);
+  document.body.appendChild(guide);
+  menuGuideElement = guide;
+
+  // Auto hide after 5 seconds (don't save to storage)
+  setTimeout(() => {
+    if (menuGuideElement === guide) {
+      hideGuide(false);
+    }
+  }, 5000);
+
+  // Hide when hovering over menu button (don't save to storage)
+  fabButton.addEventListener('mouseenter', () => {
+    if (menuGuideElement === guide) {
+      hideGuide(false);
+    }
+  }, { once: true });
 };
 
 // Show fixed action button

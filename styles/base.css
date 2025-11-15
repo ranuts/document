@@ -61,3 +61,26 @@ r-button[type='text']::part(ran-btn-content) {
 .fab-menu-item:hover .fab-menu-button::part(ran-btn-content) {
   color: #667eea !important;
 }
+
+/* Menu guide animations */
+@keyframes guideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes guideFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
