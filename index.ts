@@ -493,34 +493,13 @@ const createControlPanel = () => {
     button.textContent = text;
     button.setAttribute('variant', 'text');
     button.setAttribute('type', 'text');
+    // WebComponent styles are handled via CSS in base.css
     button.style.cssText = `
-      background: transparent;
-      border: none;
-      color: #333;
-    font-size: 16px;
-      font-weight: 500;
-      padding: 8px 16px;
       cursor: pointer;
-      transition: color 0.2s ease, transform 0.2s ease;
-      text-decoration: none;
       white-space: nowrap;
       flex-shrink: 0;
       transform: scale(1);
     `;
-    
-    // Responsive font size for small screens
-    const mediaQuery = window.matchMedia('(max-width: 480px)');
-    const updateFontSize = () => {
-      if (mediaQuery.matches) {
-        button.style.fontSize = '14px';
-        button.style.padding = '6px 12px';
-      } else {
-        button.style.fontSize = '16px';
-        button.style.padding = '8px 16px';
-      }
-    };
-    updateFontSize();
-    mediaQuery.addEventListener('change', updateFontSize);
     
     button.addEventListener('mouseenter', () => {
       button.style.color = '#667eea';

@@ -21,3 +21,26 @@ input {
 h2 {
   font-size: 1.5rem;
 }
+
+/* Style for r-button webcomponent using ::part */
+r-button[type='text']::part(ran-btn) {
+  font-size: 18px !important;
+  font-weight: 500;
+  padding: 10px 20px;
+}
+
+r-button[type='text']::part(ran-btn-content) {
+  font-size: 18px !important;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  r-button[type='text']::part(ran-btn) {
+    font-size: 16px !important;
+    padding: 8px 16px;
+  }
+
+  r-button[type='text']::part(ran-btn-content) {
+    font-size: 16px !important;
+  }
+}
