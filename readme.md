@@ -92,6 +92,34 @@ npm install
 npm run dev
 ```
 
+## 🔤 Font Management
+
+### Font Files in This Project
+
+This project is designed as an open-source solution, and therefore does not include proprietary font files such as **Arial**, **Times New Roman**, **Microsoft YaHei**, **SimSun**, and other Windows system fonts that are subject to copyright restrictions. These font references remain in the configuration files for compatibility with existing documents, but the actual font files have been removed to ensure compliance with open-source licensing requirements.
+
+### Adding Fonts
+
+To add fonts that are already configured in the project (such as Arial, Times New Roman, etc.), simply place the font files in the `public/fonts/` directory and rename them to match their corresponding index in the `__fonts_files` array in `public/sdkjs/common/AllFonts.js`.
+
+**Example: Adding Arial Font**
+
+If you want to add the Arial font to the project:
+
+1. Check `AllFonts.js` and find that Arial regular font uses index `223` in the `__fonts_files` array
+2. Place your Arial font file in `public/fonts/` and rename it to `223` (no extension needed)
+3. The font file should be located at `public/fonts/223`
+4. When the application references index `223`, it will automatically load the font file from `public/fonts/223`
+
+Similarly, for other Arial variants:
+- Arial Bold uses index `226` → place font file as `public/fonts/226`
+- Arial Italic uses index `224` → place font file as `public/fonts/224`
+- Arial Bold Italic uses index `225` → place font file as `public/fonts/225`
+
+You can find the index for any font by checking the `__fonts_infos` array in `AllFonts.js`, where each font entry specifies the indices for its regular, bold, italic, and bold-italic variants.
+
+**Note**: Only use open-source fonts or fonts for which you have proper licensing rights. Ensure compliance with font licensing terms before adding any font files.
+
 ## 📚 References
 
 - [onlyoffice-x2t-wasm](https://github.com/cryptpad/onlyoffice-x2t-wasm) - WebAssembly-based document converter
