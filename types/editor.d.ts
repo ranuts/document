@@ -1,3 +1,9 @@
+interface PluginConfig {
+  name: string;
+  url: string;
+  config?: Record<string, any>;
+}
+
 interface DocEditorConfig {
   document: {
     title: string;
@@ -15,6 +21,8 @@ interface DocEditorConfig {
       help: boolean;
       about: boolean;
       hideRightMenu: boolean;
+      /** Enable/disable plugins. Set to false to disable plugins */
+      plugins?: boolean;
       features: {
         spellcheck: {
           change: boolean;
@@ -25,12 +33,22 @@ interface DocEditorConfig {
         label: string;
       };
     };
+    /** Plugin configuration. Can specify a list of plugins to load */
+    plugins?: {
+      pluginsData?: PluginConfig[];
+    };
   };
   events: {
     onAppReady: () => void;
     onDocumentReady: () => void;
     onSave: (event: SaveEvent) => void;
     writeFile: (event: WriteFileEvent) => void;
+    /** Handle external messages from plugins */
+    onExternalPluginMessage?: (event: {
+      type: string;
+      data: any;
+      pluginName?: string;
+    }) => void;
   };
 }
 
