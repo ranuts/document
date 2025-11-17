@@ -14186,8 +14186,10 @@ function _extend_object(t, e) {
               t = (t / 1e3).toFixed(1) + 's';
             (this.send('1431.7617.gif', [o, e, t]),
               setTimeout(() => {
-                var t = 10 * Math.round(performance.memory.usedJSHeapSize / 1024 / 1024 / 10) + 'mb';
-                this.send('1431.9100.gif', [o, t]);
+                if (performance.memory && performance.memory.usedJSHeapSize) {
+                  var t = 10 * Math.round(performance.memory.usedJSHeapSize / 1024 / 1024 / 10) + 'mb';
+                  this.send('1431.9100.gif', [o, t]);
+                }
               }, 3e3));
           },
         }
