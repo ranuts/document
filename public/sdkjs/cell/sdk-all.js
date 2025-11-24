@@ -128328,8 +128328,8 @@
       var t = new XMLHttpRequest();
       t.sRa = this;
       let w;
-      // Always use local path logic
-      ((n += r[this.jb]), (w = !0));
+      const z = false;
+      z ? ((n += r[this.jb]), (w = !0)) : (n = this.jb);
       t.open('GET', n, !0);
       'undefined' === typeof ArrayBuffer || a.opera || (t.responseType = 'arraybuffer');
       t.overrideMimeType
