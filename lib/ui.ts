@@ -7,12 +7,12 @@ import { onCreateNew, onOpenDocument } from './document';
 export const hideControlPanel = (): void => {
   const container = document.querySelector('#control-panel-container') as HTMLElement;
   const fabContainer = document.querySelector('#fab-container') as HTMLElement;
-  
+
   // Always ensure FAB is visible when hiding control panel
   if (fabContainer) {
     fabContainer.style.display = 'block';
   }
-  
+
   if (container) {
     // Immediately disable pointer events to prevent blocking
     container.style.pointerEvents = 'none';
