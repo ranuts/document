@@ -58,7 +58,7 @@ export const createFixedActionButton = (): HTMLElement => {
   menuPanel.id = 'fab-menu';
   menuPanel.className = 'fab-menu';
 
-  const createMenuButton = (text: string, onClick: () => void | Promise<void>) => {
+  const createMenuButton = (text: string, onClick: () => void | Promise<void>, showLoadingImmediately = true) => {
     // Create wrapper for the entire menu item
     const menuItem = document.createElement('div');
     menuItem.className = 'fab-menu-item';
@@ -77,8 +77,12 @@ export const createFixedActionButton = (): HTMLElement => {
 
     button.addEventListener('click', async () => {
       hideMenu();
-      // Show loading immediately before any async operations
-      const { removeLoading } = showLoading();
+      // Only show loading immediately if specified (for operations that don't require user interaction)
+      let removeLoading: (() => void) | null = null;
+      if (showLoadingImmediately) {
+        const loadingResult = showLoading();
+        removeLoading = loadingResult.removeLoading;
+      }
       try {
         // Small delay to ensure menu hide animation completes
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -88,8 +92,10 @@ export const createFixedActionButton = (): HTMLElement => {
         // Show control panel on error
         showControlPanel();
       } finally {
-        // Always remove loading
-        removeLoading();
+        // Only remove loading if it was shown
+        if (removeLoading) {
+          removeLoading();
+        }
       }
     });
 
@@ -98,14 +104,18 @@ export const createFixedActionButton = (): HTMLElement => {
   };
 
   menuPanel.appendChild(
-    createMenuButton(t('uploadDocument'), async () => {
-      const result = await onOpenDocument();
-      // If user cancelled file selection, show control panel again
-      // (FAB menu will be hidden by hideMenu() call in createMenuButton)
-      if (!result) {
-        showControlPanel();
-      }
-    }),
+    createMenuButton(
+      t('uploadDocument'),
+      async () => {
+        const result = await onOpenDocument();
+        // If user cancelled file selection, show control panel again
+        // (FAB menu will be hidden by hideMenu() call in createMenuButton)
+        if (!result) {
+          showControlPanel();
+        }
+      },
+      false, // Don't show loading immediately - wait for file selection
+    ),
   );
   menuPanel.appendChild(
     createMenuButton(t('newWord'), async () => {
