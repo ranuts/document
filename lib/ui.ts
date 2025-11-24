@@ -6,6 +6,13 @@ import { onCreateNew, onOpenDocument } from './document';
 // Hide control panel and show top floating bar
 export const hideControlPanel = (): void => {
   const container = document.querySelector('#control-panel-container') as HTMLElement;
+  const fabContainer = document.querySelector('#fab-container') as HTMLElement;
+  
+  // Always ensure FAB is visible when hiding control panel
+  if (fabContainer) {
+    fabContainer.style.display = 'block';
+  }
+  
   if (container) {
     // Immediately disable pointer events to prevent blocking
     container.style.pointerEvents = 'none';
@@ -13,7 +20,6 @@ export const hideControlPanel = (): void => {
     // Hide after transition for smooth animation
     setTimeout(() => {
       container.style.display = 'none';
-      showTopFloatingBar();
     }, 300);
   }
 };
@@ -28,16 +34,10 @@ export const showControlPanel = (): void => {
       container.style.opacity = '1';
     }, 10);
   }
-  if (fabContainer) {
+  // Only hide FAB if editor is not open
+  // If editor is already open, keep FAB visible so user can access menu
+  if (fabContainer && !window.editor) {
     fabContainer.style.display = 'none';
-  }
-};
-
-// Show fixed action button
-const showTopFloatingBar = (): void => {
-  const fabContainer = document.querySelector('#fab-container') as HTMLElement;
-  if (fabContainer) {
-    fabContainer.style.display = 'block';
   }
 };
 
@@ -106,13 +106,10 @@ export const createFixedActionButton = (): HTMLElement => {
   menuPanel.appendChild(
     createMenuButton(
       t('uploadDocument'),
-      async () => {
-        const result = await onOpenDocument();
-        // If user cancelled file selection, show control panel again
-        // (FAB menu will be hidden by hideMenu() call in createMenuButton)
-        if (!result) {
-          showControlPanel();
-        }
+      () => {
+        onOpenDocument();
+        // If user cancelled, nothing happens (onchange won't fire)
+        // If user selected file, document will be opened in handleChange
       },
       false, // Don't show loading immediately - wait for file selection
     ),
@@ -320,13 +317,10 @@ export const createControlPanel = (): void => {
   };
 
   // Create four buttons
-  const uploadButton = createTextButton('upload-button', t('uploadDocument'), async () => {
-    const result = await onOpenDocument();
-    // Only hide control panel if file was successfully selected
-    // If user cancelled, control panel remains visible
-    if (result) {
-      hideControlPanel();
-    }
+  const uploadButton = createTextButton('upload-button', t('uploadDocument'), () => {
+    onOpenDocument();
+    // If user cancelled, nothing happens (onchange won't fire, control panel remains visible)
+    // If user selected file, document will be opened and control panel will be hidden in handleChange
   });
   buttonGroup.appendChild(uploadButton);
 

@@ -30,12 +30,9 @@ export const onCreateNew = async (ext: string): Promise<void> => {
   // Note: Loading is now shown in the menu button click handler
   // This function should not show loading again to avoid double loading indicators
   try {
-    // Hide control panel if it's visible
+    // Always hide control panel and ensure FAB is visible when creating new document
     if (hideControlPanelFn) {
-      const container = document.querySelector('#control-panel-container') as HTMLElement;
-      if (container && container.style.display !== 'none') {
-        hideControlPanelFn();
-      }
+      hideControlPanelFn();
     }
     setDocmentObj({
       fileName: 'New_Document' + ext,
@@ -62,88 +59,61 @@ export const onCreateNew = async (ext: string): Promise<void> => {
   }
 };
 
-export const onOpenDocument = async (): Promise<boolean> => {
-  return new Promise((resolve) => {
-    let resolved = false;
-    let cancelTimeout: NodeJS.Timeout | null = null;
+export const onOpenDocument = (): void => {
+  // Clear previous event handler and value
+  fileInput.onchange = null;
+  fileInput.value = '';
 
-    // Clear previous event handler and value
+  // Define the change handler
+  const handleChange = async (event: Event) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    // Clear the handler to prevent multiple triggers
     fileInput.onchange = null;
-    fileInput.value = '';
 
-    // Set up a longer timeout to detect if user cancelled (no change event)
-    // This handles the case where user cancels without triggering onchange
-    // Use a longer timeout (5 seconds) to avoid false positives
-    cancelTimeout = setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        fileInput.value = '';
-        fileInput.onchange = null;
-        resolve(false);
-      }
-    }, 5000);
-
-    // Define the change handler
-    const handleChange = async (event: Event) => {
-      if (cancelTimeout) {
-        clearTimeout(cancelTimeout);
-        cancelTimeout = null;
-      }
-
-      const file = (event.target as HTMLInputElement).files?.[0];
-
-      // Clear the handler to prevent multiple triggers
-      fileInput.onchange = null;
-
-      if (file && !resolved) {
-        resolved = true;
-        const { removeLoading } = showLoading();
-        try {
-          if (hideControlPanelFn) {
-            hideControlPanelFn();
-          }
-          setDocmentObj({
-            fileName: file.name,
-            file: file,
-            url: await createObjectURL(file),
-          });
-          await initX2T();
-          const { fileName, file: fileBlob } = getDocmentObj();
-          await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
-          // Clear file selection so the same file can be selected again
-          fileInput.value = '';
-          // Show menu guide after document is loaded
-          if (showMenuGuideFn) {
-            setTimeout(() => {
-              showMenuGuideFn!();
-            }, 1000);
-          }
-          resolve(true);
-        } catch (error) {
-          console.error('Error opening document:', error);
-          // Ensure control panel is shown on error
-          if (showControlPanelFn) {
-            showControlPanelFn();
-          }
-          resolve(false);
-        } finally {
-          // Always remove loading, even if there's an error
-          removeLoading();
+    // Only process if a file was actually selected
+    // If user cancelled, onchange won't fire, nothing happens
+    if (file) {
+      const { removeLoading } = showLoading();
+      try {
+        if (hideControlPanelFn) {
+          hideControlPanelFn();
         }
-      } else if (!resolved) {
-        // onchange fired but no file selected (user cancelled or cleared selection)
-        resolved = true;
+        setDocmentObj({
+          fileName: file.name,
+          file: file,
+          url: await createObjectURL(file),
+        });
+        await initX2T();
+        const { fileName, file: fileBlob } = getDocmentObj();
+        await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
+        // Clear file selection so the same file can be selected again
         fileInput.value = '';
-        resolve(false);
+        // Show menu guide after document is loaded
+        if (showMenuGuideFn) {
+          setTimeout(() => {
+            showMenuGuideFn!();
+          }, 1000);
+        }
+      } catch (error) {
+        console.error('Error opening document:', error);
+        // Ensure control panel is shown on error
+        if (showControlPanelFn) {
+          showControlPanelFn();
+        }
+      } finally {
+        // Always remove loading, even if there's an error
+        removeLoading();
       }
-    };
+    }
+    // If no file selected, nothing happens (user cancelled)
+  };
 
-    // Set the change handler
-    fileInput.onchange = handleChange;
+  // Set the change handler
+  fileInput.onchange = handleChange;
 
-    // Trigger file picker click event
-    fileInput.click();
-  });
+  // Trigger file picker click event
+  fileInput.click();
 };
 
 export const openDocumentFromUrl = async (url: string, fileName?: string): Promise<void> => {
