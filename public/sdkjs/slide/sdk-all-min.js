@@ -20368,8 +20368,8 @@ function Ff(t, e) {
       (t.AscCommon.C_g = function (e, o) {
         t.NATIVE_EDITOR_ENJINE ||
           p(
-            ('chrome-extension:' == t.location?.protocol
-              ? 'https://bangong.360.cn/office/SmartArts/'
+            (false
+              ? ''
               : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
             function (t) {
               if (t && t.response) {

@@ -50,11 +50,10 @@ var reqerr;
           r.onEndLoadFile({ bSerFormat: !0, data: e.buffer });
         })(o.data);
     };
-    chrome.runtime && chrome.runtime.onMessage
-      ? chrome.runtime.onMessage.addListener(e)
-      : window.attachEvent
-        ? window.attachEvent('onmessage', e)
-        : window.addEventListener('message', e, !1);
+    // Always use window message listener for local deployment
+    window.attachEvent
+      ? window.attachEvent('onmessage', e)
+      : window.addEventListener('message', e, !1);
     var r = new Asc.asc_docs_api({
         'id-view': 'editor_sdk',
         using: 'reporter',

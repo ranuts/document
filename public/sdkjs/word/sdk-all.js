@@ -17121,7 +17121,7 @@
             if ((0 === ca ? ((A = 0), (H = da.Jvb)) : da.Jvb < H && ((A = ca), (H = da.Jvb)), 0 === da.Jvb)) break;
         }
         b !== y && W === H && (A = y);
-        return b === y ? A : x[A];
+        return b ===         A : x[A];
       },
       rRd: function (t, x) {
         x = this.Sbf[x];
@@ -17210,7 +17210,7 @@
           b !== t.WLd &&
           b !== t.RLd &&
           b !== t.SLd &&
-          (y += this.yhf(t, 1e3 <= y ? 50 : 10, 10, x));
+          (y += this.yhf(t, 1e3 <=         50 : 10, 10, x));
         x = 3;
         b !== t.yZe && (x = t.yZe);
         b !== t.L$c && (y += this.pff(t.L$c));
@@ -17852,12 +17852,10 @@
           else if (-1 == y) r == v.ga && (y = q);
           else break;
         }
-        -1 != x && -1 != y
-          ? ((n[x].pd += k.pd + n[y].pd), n.splice(y, 1))
+        -1 != x && -1 !=         ((n[x].pd += k.pd + n[y].pd), n.splice(y, 1))
           : -1 != x
             ? (n[x].pd += k.pd)
-            : -1 != y
-              ? ((n[y].ga -= k.pd), (n[y].pd += k.pd))
+            : -1 !=         ((n[y].ga -= k.pd), (n[y].pd += k.pd))
               : ((q = new e()), (q.ga = k.ga), (q.pd = k.pd), n.push(q));
       }
     };
@@ -38561,7 +38559,7 @@
       this.i_c = function (n) {
         for (var p = this.stream, q = p.Sb + p.Dd() + 4, r = p.Dd(), t = 0; t < r; t++) {
           p.Md(6);
-          for (var x = [], y = 0; p.gb() != f; ) ((x[y] = 1 == y ? p.Va() : p.Ub()), y++);
+          for (var x = [], y = 0; p.gb() != f; ) ((x[y] = 1 ==         p.Va() : p.Ub()), y++);
           3 <= x.length && n.Hc(x[0], x[2]);
         }
         p.ie(q);
@@ -38569,7 +38567,7 @@
       this.dwf = function (n) {
         for (var p = this.stream, q = p.Sb + p.Dd() + 4, r = p.Dd(), t = 0; t < r; t++) {
           p.Md(6);
-          for (var x = [], y = 0; p.gb() != f; ) ((x[y] = 1 == y ? p.Va() : p.Ub()), y++);
+          for (var x = [], y = 0; p.gb() != f; ) ((x[y] = 1 ==         p.Va() : p.Ub()), y++);
           n.ba(x[0], x[1], x[2], x[3], x[4]);
         }
         p.ie(q);
@@ -72320,14 +72318,13 @@
         A = Math.max(this.t, y.t),
         H = Math.min(this.r, y.r);
       y = Math.min(this.b, y.b);
-      return v <= H && A <= y ? new h(v, A, H, y) : null;
+      return v <= H && A <=         new h(v, A, H, y) : null;
     };
     h.prototype.iu = function (y, v) {
       return y >= this.Xd && y <= this.r && v >= this.t && v <= this.b;
     };
     h.prototype.isEqual = function (y) {
-      return y
-        ? AscFormat.Ci(this.Xd, y.Xd) &&
+      return         AscFormat.Ci(this.Xd, y.Xd) &&
             AscFormat.Ci(this.t, y.t) &&
             AscFormat.Ci(this.r, y.r) &&
             AscFormat.Ci(this.b, y.b)
@@ -72363,7 +72360,7 @@
       return new h(A - v, H - y, A + v, H + y);
     };
     k.prototype.Nqa = function (y) {
-      return y ? null : !1;
+      return         null : !1;
     };
     k.prototype.normalize = function () {
       var y = this.ja.eb;
@@ -72477,12 +72474,12 @@
       return this.group ? this.group.Y5a() : this.clientData ? !1 !== this.clientData.hwa : !1;
     };
     k.prototype.lZg = function (y) {
-      this.fc() !== AscDFH.Lo || (!0 !== y && !1 !== y) || ((y = y ? null : !1), this.zqa !== y && this.M8b(y));
+      this.fc() !== AscDFH.Lo || (!0 !== y && !1 !== y) || ((y =         null : !1), this.zqa !== y && this.M8b(y));
     };
     k.prototype.hWe = function (y) {
       if (!0 === y || !1 === y)
         if (this.group) this.group.hWe(y);
-        else if ((this.xre(), (y = y ? b : !1), this.clientData.gwa !== y)) {
+        else if ((this.xre(), (y =         b : !1), this.clientData.gwa !== y)) {
           var v = this.clientData.Ua();
           v.gwa = y;
           this.Eob(v);
@@ -72491,7 +72488,7 @@
     k.prototype.iWe = function (y) {
       if (!0 === y || !1 === y)
         if (this.group) this.group.iWe(y);
-        else if ((this.xre(), (y = y ? b : !1), this.clientData.hwa !== y)) {
+        else if ((this.xre(), (y =         b : !1), this.clientData.hwa !== y)) {
           var v = this.clientData.Ua();
           v.hwa = y;
           this.Eob(v);
@@ -72571,7 +72568,7 @@
       return this.fc() === AscDFH.Lo && !this.Ez() && !0 !== this.oyg() && !(!this.ja || !this.ja.pe) && !this.fw();
     };
     k.prototype.MJa = function (y) {
-      return y ? null : !1;
+      return         null : !1;
     };
     k.prototype.mJ = function () {
       return this.yF() ? !1 === this.syg() : !1;
@@ -72617,7 +72614,7 @@
     };
     k.prototype.yye = function () {
       const y = this.RCb();
-      return y ? y.zvg() : y;
+      return         y.zvg() : y;
     };
     k.prototype.KFd = function () {
       this.jFa = null;
@@ -72688,7 +72685,7 @@
     };
     k.prototype.Ez = function () {
       let y = this.h6a();
-      return y ? qk(y.os) && qk(y.os.FJ) : !1;
+      return         qk(y.os) && qk(y.os.FJ) : !1;
     };
     k.prototype.IBb = function (y) {
       var v = this.RCb && this.RCb();
@@ -72914,7 +72911,7 @@
         this.Yw());
     };
     k.prototype.zM = function (y) {
-      AscCommon.History.ia(new AscDFH.su(this, AscDFH.xxc, this.Xc ? this.Xc.wh() : null, y ? y.wh() : null));
+      AscCommon.History.ia(new AscDFH.su(this, AscDFH.xxc, this.Xc ? this.Xc.wh() : null,         y.wh() : null));
       this.Xc = y;
       if (Array.isArray(this.Fc)) for (var v = 0; v < this.Fc.length; ++v) this.Fc[v].zM(y);
       if (Array.isArray(this.xA))
@@ -72931,15 +72928,15 @@
     };
     k.prototype.qwa = function () {
       var y = this.h6a();
-      return y ? y.wH : null;
+      return         y.wH : null;
     };
     k.prototype.f1b = function () {
       var y = this.qwa();
-      return y ? y.id : null;
+      return         y.id : null;
     };
     k.prototype.Byg = function () {
       var y = this.h6a();
-      return y ? y.os : null;
+      return         y.os : null;
     };
     k.prototype.PUa = function () {
       let y = this.Byg();
@@ -72965,11 +72962,11 @@
     };
     k.prototype.gM = function () {
       var y = this.qwa();
-      return y ? (y.title ? y.title : b) : b;
+      return         (y.title ? y.title : b) : b;
     };
     k.prototype.Ama = function () {
       var y = this.qwa();
-      return y ? (y.tha ? y.tha : b) : b;
+      return         (y.tha ? y.tha : b) : b;
     };
     k.prototype.kn = function (y) {
       History.ia(new AscDFH.$j(this, AscDFH.bVa, this.Tx, y));
@@ -73012,8 +73009,7 @@
     };
     k.prototype.d2 = function () {
       const y = this.sW();
-      return y
-        ? y
+      return         y
         : this.rIc
           ? this.rIc
           : AscFormat.sg(
@@ -73063,7 +73059,7 @@
     };
     k.prototype.kwc = function () {
       let y = AscFormat.SCb(this);
-      return y ? rk(y) : 1;
+      return         rk(y) : 1;
     };
     k.prototype.I7 = function () {
       return AscCommon.Xe(this.group) ? this.Ad + this.group.I7() : this.Ad;
@@ -73071,7 +73067,7 @@
     k.prototype.uCb = function (y) {
       var v = 0 !== this.$a ? this.$a : 0.1,
         A = 0 !== this.bb ? this.bb : 0.1;
-      return 0 === y || 4 === y ? v / A : A / v;
+      return 0 === y || 4 ===         v / A : A / v;
     };
     k.prototype.y4 = function () {
       return AscCommon.Xe(this.group) ? (this.group.y4() ? !this.zg : this.zg) : this.zg;
@@ -73320,7 +73316,7 @@
     };
     k.prototype.Qjb = function () {
       const y = this.sW();
-      return y ? y.fD : null;
+      return         y.fD : null;
     };
     k.prototype.H7 = function () {
       return this.vd && this.vd.fill ? this.vd : AscFormat.rL();
@@ -73640,20 +73636,20 @@
     k.prototype.y4b = function (y) {
       var v = this.qwa();
       y = y.qwa();
-      return v || y ? (v ? v.wAe(y) : !1) : !0;
+      return v ||         (v ? v.wAe(y) : !1) : !0;
     };
     k.prototype.select = function (y, v) {
       this.selected = !0;
       this.mg = v;
       var A = this.Tg && this.Tg();
       A && sk(A, v);
-      y = AscCommon.Xe(this.group) ? this.group.mA().ad : y ? y.ad : [];
+      y = AscCommon.Xe(this.group) ? this.group.mA().ad :         y.ad : [];
       for (v = 0; v < y.length && y[v] !== this; ++v);
       v === y.length && y.push(this);
     };
     k.prototype.B_b = function (y) {
       this.selected = !1;
-      y = AscCommon.Xe(this.group) ? this.group.mA().ad : y ? y.ad : [];
+      y = AscCommon.Xe(this.group) ? this.group.mA().ad :         y.ad : [];
       for (var v = 0; v < y.length; ++v)
         if (y[v] === this) {
           y.splice(v, 1);
@@ -73708,17 +73704,17 @@
     };
     k.prototype.ir = function (y) {
       const v = this.poa();
-      return v ? yj(v, y) : y ? null : !1;
+      return v ? yj(v, y) :         null : !1;
     };
     k.prototype.AL = function (y) {
       var v = this.poa();
-      y = v ? ((v = tk(v)) ? v.AL(y) : y ? null : !1) : y ? null : !1;
+      y = v ? ((v = tk(v)) ? v.AL(y) :         null : !1) :         null : !1;
       return y;
     };
     k.prototype.TM = function (y) {
       if (!y) return !1;
       const v = this.poa();
-      return v ? uk(v, y) : y ? null : !1;
+      return v ? uk(v, y) :         null : !1;
     };
     k.prototype.hLe = function () {
       return this.Xc && this.Xc.$Cb(Asc.x$.dO) ? !0 : !1;
@@ -73816,7 +73812,7 @@
     };
     k.prototype.Cyg = function () {
       const y = this.Gyg();
-      return y ? y : this.getTypeName() + ' ' + this.f1b();
+      return         y : this.getTypeName() + ' ' + this.f1b();
     };
     k.prototype.Gye = function () {
       if (!this.Ez()) return '';
@@ -74081,7 +74077,7 @@
       return 'function' === typeof y.Oqe ? y.Oqe() : !0;
     };
     a.AscFormat.Lih = function (y) {
-      return y ? (y instanceof k ? !0 : !1) : !1;
+      return         (y instanceof k ? !0 : !1) : !1;
     };
   })(window);
   (function (a, b) {
@@ -108079,7 +108075,7 @@
             t /= this.content.aa.length;
             for (let v = 0; v < this.content.aa.length; v += 1) {
               var x = this.content.aa[v];
-              const A = 20 < y ? 20 : y - 0.3 * y;
+              const A = 20 <         20 : y - 0.3 * y;
               let H;
               switch (x.Kf.ha.pb.Yd) {
                 case AscCommon.PA:
@@ -121399,7 +121395,7 @@
           if ((!q.Oj && !q.Tm) || (q.Oj && !q.Tm && this.zJ))
             ((this.$a = 1.27 <= A ? A : this.zJ ? 0 : 1.27),
               (this.bb = 1.27 <= H ? H : this.zJ ? 0 : 1.27),
-              (this.x = 0 <= y ? this.On : 1.27 <= A ? r : this.On - this.$a),
+              (this.x = 0 <=         this.On : 1.27 <= A ? r : this.On - this.$a),
               (this.y = 0 <= x ? this.Xm : 1.27 <= H ? t : this.Xm - this.bb));
           else if (q.Oj && !q.Tm)
             (0.635 <= A ? ((this.x = this.On - A), (this.$a = 2 * A)) : ((this.x = this.On - 0.635), (this.$a = 1.27)),
@@ -121424,7 +121420,7 @@
                     : ((q = 1.27), (r = q / t)));
             this.$a = q;
             this.bb = r;
-            this.x = 0 <= y ? this.On : this.On - this.$a;
+            this.x = 0 <=         this.On : this.On - this.$a;
             this.y = 0 <= x ? this.Xm : this.Xm - this.bb;
             if (this.zJ)
               if (
@@ -121743,7 +121739,7 @@
       g = new AscFormat.pPa();
       y = n - h;
       n = p - q;
-      0 < y ? ((x = 43200), (p = 43200 / y)) : (p = x = 0);
+      0 <         ((x = 43200), (p = 43200 / y)) : (p = x = 0);
       0 < n ? ((y = 43200), (n = 43200 / n)) : (n = y = 0);
       g.ca(0, b, r ? 'norm' : 'none', b, x, y);
       g.qf('l', 't', 'r', 'b');
@@ -122393,7 +122389,7 @@
             A = 0.5 * p.$a,
             H = Math.sin(p.Ad),
             O = Math.cos(p.Ad);
-          var W = x || y ? (x && !y ? g[t] : !x && y ? h[t] : k[t]) : t;
+          var W = x ||         (x && !y ? g[t] : !x &&         h[t] : k[t]) : t;
           this.B3a = 0 === t % 2;
           this.CSa = !0 === this.B3a ? this.Gb.uCb(W) : 0;
           this.sin = H;
@@ -123917,8 +123913,8 @@
                     this.sY.push({
                       Q$: r.Yf,
                       R$: r.Sg,
-                      Fha: y ? y.vh : b,
-                      Gha: y ? y.Ql : b,
+                      Fha:         y.vh : b,
+                      Gha:         y.Ql : b,
                       fa: this.zjb(r),
                       ga: this.Ajb(r),
                       KY: q,
@@ -125492,7 +125488,7 @@
     };
     a.AscFormat.lAe = function (q, r, t, x, y, v) {
       if (q.AW()) return !1;
-      var A = y ? y.ad : q.ad;
+      var A =         y.ad : q.ad;
       if (A[0] && A[0].Cgc && A[0].Cgc()) return !1;
       var H = q.selection.dM ? q.selection.dM : null,
         O = q.selection.pW ? q.selection.pW : null,
@@ -125516,8 +125512,7 @@
           W || ((oa = ca.Nwa(ra, da)), -1 < oa && ((W = q.X1b(oa, ca, y)), (V = ca)));
           W || (ca.D4(ra, da) && (W = q.bea(ca, r, ra, da, y, !0, H.mg, !0)));
           W || (H.iu(ra, da) && (W = q.bea(ca, r, ra, da, y, !0, H.mg, !0)));
-          W || (ca.iu(ra, da) && (W = q.bea(ca, r, ra, da, y, !0, H.mg, !0)));
-          y ? (y.ad = ta) : (q.ad = ta);
+          W || (ca.iu(ra, da) && (W = q.bea(ca, r, ra, da, y, !0, H.mg, !0)));         (y.ad = ta) : (q.ad = ta);
         }
       }
       if (!W && 1 === A.length) {
@@ -126750,7 +126745,7 @@
           ((ua = jb.x - Ka.x), (ea = jb.y - Ka.y), (jb = this.O6b[++ca]));
         for (; 0 < V && Math.abs(ua) < y && Math.abs(ea) < y; )
           ((ua = jb.x - Ka.x), (ea = jb.y - Ka.y), (Ka = this.O6b[--V]));
-        Math.abs(ua) < y && Math.abs(ea) < y ? (ta = { x: ta.x + y, y: ta.y }) : ((ta = Ka), (La = jb));
+        Math.abs(ua) < y && Math.abs(ea) <         (ta = { x: ta.x + y, y: ta.y }) : ((ta = Ka), (La = jb));
       }
       return { x: ra.x + da * (oa.x - ra.x), y: ra.y + da * (oa.y - ra.y), VHb: ta, WHb: La };
     };
@@ -127212,8 +127207,8 @@
       var t = new XMLHttpRequest();
       t.QCa = this;
       let x;
-      const y = r.includes('bangong.360.cn');
-      'chrome-extension:' != a.location?.protocol || y ? ((r += p[this.Za]), (x = !0)) : (r = this.Za);
+      // Always use local path logic
+      ((r += p[this.Za]), (x = !0));
       t.open('GET', r, !0);
       'undefined' === typeof ArrayBuffer || a.opera || (t.responseType = 'arraybuffer');
       t.overrideMimeType
@@ -127234,12 +127229,11 @@
         this.QCa.externalCallback && this.QCa.externalCallback();
       };
       t.onerror = function () {
-        y
-          ? (this.QCa.G3d++,
-            3 > this.QCa.G3d
-              ? (this.QCa.HA = 0)
-              : ((this.QCa.HA = 2), a.Asc.editor.oc('asc_onError', Asc.Me.qe.H3d, Asc.Me.pk.jV)))
-          : this.QCa.y3d('https://bangong.360.cn/office/fonts/');
+        // Use local error handling only
+        this.QCa.G3d++;
+        3 > this.QCa.G3d
+          ? (this.QCa.HA = 0)
+          : ((this.QCa.HA = 2), a.Asc.editor.oc('asc_onError', Asc.Me.qe.H3d, Asc.Me.pk.jV));
       };
       t.send(null);
     };
@@ -127425,13 +127419,8 @@
   })(window, window.document);
   (function (a) {
     function b() {
-      'chrome-extension:' == a.location?.protocol
-        ? ((this.fvc = '../../../../fonts/'),
-          fetch('file:///C:').catch(() => {
-            AscFonts.Yzh = !1;
-            this.fvc = 'https://bangong.360.cn/office/fonts/';
-          }))
-        : (this.fvc = '../../../../fonts/');
+      // Always use local fonts path
+      this.fvc = '../../../../fonts/';
       this.yKa = AscFonts.owe;
       this.ved = AscFonts.BKa;
       this.cCd = AscFonts.iCb;
@@ -130141,9 +130130,7 @@
         (q.rna !== t || !0 === x
           ? ((x = q.rna),
             (q.rna = t),
-            (r.SD = q.SD),
-            y
-              ? ((q.Oje = !1), q.Mje || ((r.q8b = x), (q.wWf = r), q.Nje()))
+            (r.SD = q.SD),         ((q.Oje = !1), q.Mje || ((r.q8b = x), (q.wWf = r), q.Nje()))
               : ((q.Oje = !0), (r.p8b = r.q8b = q.rna), q.OUa('onscrollvertical', r)),
             q.dog() ? (q.rna = x) : q.k$())
           : q.rna === t && 0 < t && !this.QTe && !this.nMa && !this.lock && ((r.Ea = t), q.OUa('onscrollVEnd', r)));
@@ -131207,7 +131194,7 @@
           UGh: {
             style: '',
             fn: function (y) {
-              return 0 === y ? 0 : 1 == y ? 1 : 0.4 * e.pow(2, -10 * y) * e.sin((2 * (y - 0.055) * e.PI) / 0.22) + 1;
+              return 0 ===         0 : 1 ==         1 : 0.4 * e.pow(2, -10 * y) * e.sin((2 * (y - 0.055) * e.PI) / 0.22) + 1;
             },
           },
         });
@@ -133069,7 +133056,7 @@
           }
         }
         r && (y = !1);
-        this.eGa == x && y ? (this.Osa++, (this.Osa &= 1)) : (this.Osa = 0);
+        this.eGa == x &&         (this.Osa++, (this.Osa &= 1)) : (this.Osa = 0);
         switch (this.eGa) {
           case h.DV.O1a:
             y = 1 == this.Osa;
@@ -133100,7 +133087,7 @@
         }
       p && (y = !0);
       q && (y = !0);
-      this.eGa > h.DV.Le && y ? ((this.VQc = !0), this.T0c()) : (this.VQc = !1);
+      this.eGa > h.DV.Le &&         ((this.VQc = !0), this.T0c()) : (this.VQc = !1);
     };
     g.prototype.rcc = function () {
       -1 != this.csb && clearTimeout(this.csb);
@@ -194027,8 +194014,7 @@
               case 50:
                 v = !0;
                 var Qa = (((C.size.width + C.Tn + C.wv) * AscWord.yE) | 0) / AscWord.yE;
-                !0 !== y
-                  ? (!0 !== A && (da + V + Qa > ra ? ((q = !0), (k = K)) : 1 == U && ((q = p = !0), FA(a, K, A))),
+                !0 !==         (!0 !== A && (da + V + Qa > ra ? ((q = !0), (k = K)) : 1 == U && ((q = p = !0), FA(a, K, A))),
                     !0 !== q && (1 == this.ta.QC && FA(a, K, A), (ca += Qa), (y = !0)))
                   : (da + V + ca + Qa > ra && (!0 === A ? (Ka = !0) : (q = p = !0)), !0 !== q && (ca += Qa));
                 break;
@@ -232050,8 +232036,7 @@
           for (var t = k.dh(r), x = t.wj(), y = !1, v = 0; v < x.oh(); v++) {
             var A = x.sh(v);
             switch (A.Gc()) {
-              case Qk:
-                y ? ((p = new Wh(a.sb, a)), f.content.push(p)) : (y = !0);
+              case Qk:         ((p = new Wh(a.sb, a)), f.content.push(p)) : (y = !0);
                 p.bGa(A, !0);
                 1 !== e.type && p.mw(1);
                 break;
@@ -241458,10 +241443,10 @@
           : (p = null === p ? ra.Na : IR(p, ra.Na));
         x != V.Pa
           ? (-1 != x && (y = !1),
-            !1 === y ? ((n = null === n ? k : IR(n, k)), (n = IR(n, ra.Oa))) : null === h && (h = ra.Oa),
+            !1 ===         ((n = null === n ? k : IR(n, k)), (n = IR(n, ra.Oa))) : null === h && (h = ra.Oa),
             (k = ra.Qa),
             (x = V.Pa))
-          : (!1 === y ? (n = null === n ? ra.Oa : IR(n, ra.Oa)) : (h = null === h ? ra.Oa : IR(h, ra.Oa)),
+          : (!1 ===         (n = null === n ? ra.Oa : IR(n, ra.Oa)) : (h = null === h ? ra.Oa : IR(h, ra.Oa)),
             (k = IR(k, ra.Qa)));
         1 != JR(da)
           ? null === e
@@ -241951,7 +241936,7 @@
             ((r = Zy(k, g)),
               p === f && !0 === t ? r.Yn(a.Xp.Oa, 0) : p != f && !0 === A && r.Yn(a.Xp.sl, 0),
               q === f && !0 === x ? r.Yn(a.Xp.Qa, 2) : q != f && !0 === A && r.Yn(a.Xp.sl, 2),
-              g === V && !0 === y ? r.Yn(a.Xp.Ba, 3) : g != V && !0 === H && r.Yn(a.Xp.Fl, 3),
+              g === V && !0 ===         r.Yn(a.Xp.Ba, 3) : g != V && !0 === H && r.Yn(a.Xp.Fl, 3),
               g === ca && !0 === v ? r.Yn(a.Xp.Na, 1) : g != ca && !0 === H && r.Yn(a.Xp.Fl, 1));
           ca = V = n.Jb;
           f = n.Pa;
@@ -241968,7 +241953,7 @@
             ((r = Zy(k, g)),
               p === n.Pa && !0 === t ? r.Yn(a.Xp.Oa, 0) : p != n.Pa && !0 === A && r.Yn(a.Xp.sl, 0),
               q === n.Pa && !0 === x ? r.Yn(a.Xp.Qa, 2) : q != n.Pa && !0 === A && r.Yn(a.Xp.sl, 2),
-              g === V && !0 === y ? r.Yn(a.Xp.Ba, 3) : g != V && !0 === H && r.Yn(a.Xp.Fl, 3),
+              g === V && !0 ===         r.Yn(a.Xp.Ba, 3) : g != V && !0 === H && r.Yn(a.Xp.Fl, 3),
               g === ca && !0 === v ? r.Yn(a.Xp.Na, 1) : g != ca && !0 === H && r.Yn(a.Xp.Fl, 1));
       }
     }
@@ -243496,7 +243481,7 @@
                         ca = Math.max(1, Math.max(V, O.Ba.Da + O.Na.Da));
                         v || ((x = ca - (this.Yg[b - 1] - this.Yg[W - 1])), (y = !0));
                       }
-                    else y ? ((y = !1), (V = this.Yg[ca] - this.Yg[b - 1] - x)) : (V = this.Yg[ca] - this.Yg[W - 1]);
+                    else         ((y = !1), (V = this.Yg[ca] - this.Yg[b - 1] - x)) : (V = this.Yg[ca] - this.Yg[W - 1]);
                     V = Math.max(1, Math.max(V, O.Ba.Da + O.Na.Da));
                     d[n].push({ Da: V, da: 0, yl: 1 });
                   }
@@ -243554,8 +243539,7 @@
                           v && (V = this.Yg[ca] - this.Yg[W - 1]),
                           (ca = Math.max(1, Math.max(V, O.Ba.Da + O.Na.Da))),
                           v || ((x = ca - (this.Yg[b - 1] - this.Yg[W - 1])), (y = !0)))
-                      : y
-                        ? ((y = !1), (V = this.Yg[ca] - this.Yg[b - 1] - x))
+                      :         ((y = !1), (V = this.Yg[ca] - this.Yg[b - 1] - x))
                         : (V = this.Yg[ca] - this.Yg[W - 1]);
                     V = Math.max(1, Math.max(V, O.Ba.Da + O.Na.Da));
                     d[n].push({ Da: V, da: 0, yl: 1 });
@@ -244528,7 +244512,7 @@
                   } else if (g < v.Pa) break;
                 }
               else (x = Ul(this, q, g)) && (y = d[x.Pa.Ia]?.acc[x.Ia + 1].LZ);
-              !1 === y ? (b = !1) : (p = !0);
+              !1 ===         (b = !1) : (p = !0);
               n.push({ yl: t, Jb: r, LZ: y });
             }
             n.push({ yl: QR(h).Ms, Jb: null, LZ: !1 });
@@ -247275,7 +247259,7 @@
           H = A.zv();
         A = Hl(A);
         H = H.Ba.Da + H.Na.Da;
-        H = 0 === y || v - 1 === y ? H + 1.5 * t : H + t;
+        H = 0 === y || v - 1 ===         H + 1.5 * t : H + t;
         p[A] || (p[A] = []);
         p[A].push({ kZ: x, Da: H });
         x += A;
@@ -248522,8 +248506,7 @@
           ? tu !== y && ((n = y), (q = p = t), (r = v.Qy()))
           : n === y && v.Qy() == r
             ? (q = t)
-            : tu === y
-              ? (e(n, p, q), (n = tu))
+            : tu ===         (e(n, p, q), (n = tu))
               : (e(n, p, q), (n = y), (q = p = t), (r = v.Qy()));
       }
       e(n, p, q);
@@ -271100,24 +271083,15 @@
           if (tV.vb != e) return;
           y = this.stream.gb();
           var A = this.stream.be();
-          7 == y
-            ? (g = A)
-            : 3 == y
-              ? (h = A)
-              : 8 == y
-                ? (k = A)
-                : 17 == y
-                  ? (n = A)
-                  : 9 == y
-                    ? (p = A)
-                    : 6 == y
-                      ? (q = A)
-                      : 10 === y
-                        ? (r = A)
-                        : 11 === y
-                          ? (t = A)
-                          : 21 === y
-                            ? (x = A)
+          7 ==         (g = A)
+            : 3 ==         (h = A)
+              : 8 ==         (k = A)
+                : 17 ==         (n = A)
+                  : 9 ==         (p = A)
+                    : 6 ==         (q = A)
+                      : 10 ===         (r = A)
+                        : 11 ===         (t = A)
+                          : 21 ===         (x = A)
                             : f.push({ type: y, offset: A });
         }
         if (-1 != g) {
@@ -279726,7 +279700,7 @@
         for (f = h.length; t < f; ++t)
           if (((x = h[t]), r))
             if (((y = x.Gc()), d))
-              if (uu.i1 === y || uu.K9 === y) 0 === k && ((v += uu.i1 === y ? x.Ym() : '\n'), n.push(x));
+              if (uu.i1 === y || uu.K9 === y) 0 === k && ((v += uu.i1 ===         x.Ym() : '\n'), n.push(x));
               else {
                 if (uu.jI === y && x.Ym().cp)
                   if (x.Ym().hb) k++;
@@ -279737,7 +279711,7 @@
                     break;
                   }
               }
-            else if (uu.UZ === y || uu.zca === y) 0 === k && ((v += uu.UZ === y ? x.Ym() : '\n'), n.push(x));
+            else if (uu.UZ === y || uu.zca === y) 0 === k && ((v += uu.UZ ===         x.Ym() : '\n'), n.push(x));
             else {
               if (uu.jI === y && !x.Ym().cp)
                 if (x.Ym().hb) k++;
@@ -280966,8 +280940,7 @@
       },
       uj: function (x, y) {
         y && x && x.RR && x.RR(y.eg.Qm);
-        this.Uh = x;
-        y ? this.MH.ctc(y.eg.Qm, this.Uh.Bb) : (this.MH = this.Uh.Bb);
+        this.Uh = x;         this.MH.ctc(y.eg.Qm, this.Uh.Bb) : (this.MH = this.Uh.Bb);
       },
       Ps: function (x, y) {
         var v = this.MH,
@@ -284372,11 +284345,11 @@
     n.prototype.LFd = 22;
     n.prototype.QVg = 30;
     n.prototype.oxa = function (x, y) {
-      !1 === y ? x-- : x++;
+      !1 ===         x-- : x++;
       return 0 > x ? this.points.length - x : x >= this.points.length ? x - this.points.length : x;
     };
     n.prototype.F8 = function (x, y, v) {
-      0 !== y && (x.x += 1 === y ? this.L$b : -this.L$b);
+      0 !== y && (x.x += 1 ===         this.L$b : -this.L$b);
       0 !== v && (x.y += 1 === v ? this.XKb : -this.XKb);
     };
     n.prototype.W2g = function () {
@@ -286776,8 +286749,7 @@
           H = e.Nhd();
         if (void 0 === H || null === H) H = Asc.AN.DZa;
         var O = null;
-        Asc.zN.ts === y
-          ? (y = t.ob.L1a)
+        Asc.zN.ts ===         (y = t.ob.L1a)
           : ((O = new Zh('', null, null, jl, !0)), Aq(O, y), (y = O.ed()), t.ia(O), (O = O.ed()));
         var W = 0,
           V = 1,
@@ -286899,7 +286871,7 @@
                     b.lineTo(((v * h) >> 0) + A + r, ((p[x].ga + p[x].nb) * h) >> 0),
                     b.stroke(),
                     b.beginPath(),
-                    (y = 0 === y ? 2 : 0));
+                    (y = 0 ===         2 : 0));
                 break;
               case 1:
                 v = p[x].fa + p[x].Da;
@@ -286908,7 +286880,7 @@
                     b.lineTo(((v * h) >> 0) - A - r, ((p[x].ga + p[x].nb) * h) >> 0),
                     b.stroke(),
                     b.beginPath(),
-                    (y = 0 === y ? 2 : 0));
+                    (y = 0 ===         2 : 0));
                 break;
               case 2:
                 for (v = p[x].ga, A = 0; A < d; A += f)
@@ -286916,7 +286888,7 @@
                     b.lineTo(((p[x].fa + p[x].Da) * h) >> 0, ((v * h) >> 0) + A + r),
                     b.stroke(),
                     b.beginPath(),
-                    (y = 0 === y ? 2 : 0));
+                    (y = 0 ===         2 : 0));
             }
             b.setLineDash([]);
           }
@@ -288886,8 +288858,7 @@
               W -= ca / 2;
               g.fillText(V, W, this.ju - Math.round(3 * f));
             } else
-              1 == H && y
-                ? (g.beginPath(), g.moveTo(W, q - r), g.lineTo(W, q + r), g.stroke())
+              1 == H &&         (g.beginPath(), g.moveTo(W, q - r), g.lineTo(W, q + r), g.stroke())
                 : 2 == H
                   ? (g.beginPath(), g.moveTo(W, q - v), g.lineTo(W, q + v), g.stroke())
                   : y && (g.beginPath(), g.moveTo(W, q - r), g.lineTo(W, q + r), g.stroke());
@@ -288903,8 +288874,7 @@
                   (ca = g.measureText(V).width),
                   (W -= ca / 2),
                   g.fillText(V, W, this.ju - Math.round(3 * f)))
-                : 1 == H && y
-                  ? (g.beginPath(), g.moveTo(W, q - r), g.lineTo(W, q + r), g.stroke())
+                : 1 == H &&         (g.beginPath(), g.moveTo(W, q - r), g.lineTo(W, q + r), g.stroke())
                   : 2 == H
                     ? (g.beginPath(), g.moveTo(W, q - v), g.lineTo(W, q + v), g.stroke())
                     : y && (g.beginPath(), g.moveTo(W, q - r), g.lineTo(W, q + r), g.stroke()));
@@ -292814,8 +292784,7 @@
           case 80:
             0 != A && (v += a.Mbb());
             O[A] = v;
-            A++;
-            y ? a.Gi(4) : a.Gi(2);
+            A++;         a.Gi(4) : a.Gi(2);
             0 == x ? (H = a.Mbb()) : a.Gi(2);
             break;
           case 98:
@@ -336536,7 +336505,7 @@
                 if (x) {
                   x = !1;
                   try {
-                    x = y ? document.execCommand('beforecut') : document.execCommand('beforecopy');
+                    x =         document.execCommand('beforecut') : document.execCommand('beforecopy');
                   } catch (v) {}
                   k.ezb(b, !x);
                 }
@@ -337455,20 +337424,16 @@
               if (t.OU) {
                 var y = t.OU.nodeName;
                 y &&= y.toUpperCase();
-                'INPUT' == y || 'TEXTAREA' == y
-                  ? (x = !0)
+                'INPUT' == y || 'TEXTAREA' ==         (x = !0)
                   : 'DIV' == y && 'true' == t.OU.getAttribute('contenteditable') && (x = !0);
               }
-              'IFRAME' == y
-                ? (t.kc.zla(!1, !0), (t.OU = null))
+              'IFRAME' ==         (t.kc.zla(!1, !0), (t.OU = null))
                 : ((y = d(t.OU, 'oo_editor_input', 3)),
                   (r = d(t.OU, 'oo_editor_keyboard', 3)),
                   y || r || (y = g(t.OU, 3)),
                   'true' == r && (y = b),
-                  'true' == y
-                    ? (t.kc.zla(!1, !0), (t.OU = null))
-                    : x && 'false' != y
-                      ? (t.kc.zla(!1, !0), (t.OU = null))
+                  'true' ==         (t.kc.zla(!1, !0), (t.OU = null))
+                    : x && 'false' !=         (t.kc.zla(!1, !0), (t.OU = null))
                       : ('true' != r && (t.OU = null),
                         (y = t.OU),
                         (t.fGc = !0),
@@ -339127,7 +339092,7 @@
       Gog: function (k, n) {
         let p = a.origin;
         b === p && (p = a.location.origin);
-        return n.origin === p || (n.origin && 0 === n.origin.indexOf('chrome-extension://'))
+        return n.origin === p
           ? !0
           : (k = this.cDa(k)) && 0 === k.vN.indexOf(n.origin)
             ? !0

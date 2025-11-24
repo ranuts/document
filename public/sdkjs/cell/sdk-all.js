@@ -128328,8 +128328,8 @@
       var t = new XMLHttpRequest();
       t.sRa = this;
       let w;
-      const z = n.includes('bangong.360.cn');
-      'chrome-extension:' != a.location?.protocol || z ? ((n += r[this.jb]), (w = !0)) : (n = this.jb);
+      // Always use local path logic
+      ((n += r[this.jb]), (w = !0));
       t.open('GET', n, !0);
       'undefined' === typeof ArrayBuffer || a.opera || (t.responseType = 'arraybuffer');
       t.overrideMimeType
@@ -128350,12 +128350,11 @@
         this.sRa.externalCallback && this.sRa.externalCallback();
       };
       t.onerror = function () {
-        z
-          ? (this.sRa.GFe++,
-            3 > this.sRa.GFe
-              ? (this.sRa.vE = 0)
-              : ((this.sRa.vE = 2), a.Asc.editor.Pe('asc_onError', Asc.Qe.Yb.HFe, Asc.Qe.ee.y4)))
-          : this.sRa.yFe('https://bangong.360.cn/office/fonts/');
+        // Use local error handling only
+        this.sRa.GFe++;
+        3 > this.sRa.GFe
+          ? (this.sRa.vE = 0)
+          : ((this.sRa.vE = 2), a.Asc.editor.Pe('asc_onError', Asc.Qe.Yb.HFe, Asc.Qe.ee.y4));
       };
       t.send(null);
     };
@@ -128541,13 +128540,8 @@
   })(window, window.document);
   (function (a) {
     function b() {
-      'chrome-extension:' == a.location?.protocol
-        ? ((this.xZc = '../../../../fonts/'),
-          fetch('file:///C:').catch(() => {
-            AscFonts.Opi = !1;
-            this.xZc = 'https://bangong.360.cn/office/fonts/';
-          }))
-        : (this.xZc = '../../../../fonts/');
+      // Always use local fonts path
+      this.xZc = '../../../../fonts/';
       this.EZb = AscFonts.odf;
       this.fPd = AscFonts.MZb;
       this.Uvc = AscFonts.OZb;
@@ -407691,7 +407685,7 @@
       Rch: function (p, k) {
         let r = a.origin;
         b === r && (r = a.location.origin);
-        return k.origin === r || (k.origin && 0 === k.origin.indexOf('chrome-extension://'))
+        return k.origin === r
           ? !0
           : (p = this.FRa(p)) && 0 === p.DT.indexOf(k.origin)
             ? !0

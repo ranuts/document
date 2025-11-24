@@ -27025,8 +27025,8 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   t.AscCommon.$Kg = function (e, o) {
     if (!t.NATIVE_EDITOR_ENJINE) {
       d(
-        (t.location?.protocol == 'chrome-extension:'
-          ? 'https://bangong.360.cn/office/SmartArts/'
+        (false
+          ? ''
           : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
         function (t) {
           if (t && t.response) {

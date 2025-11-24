@@ -20659,8 +20659,8 @@ function mg(t, e) {
       (t.AscCommon.sHh = function (e, s) {
         t.NATIVE_EDITOR_ENJINE ||
           d(
-            ('chrome-extension:' == t.location?.protocol
-              ? 'https://bangong.360.cn/office/SmartArts/'
+            (false
+              ? ''
               : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
             function (t) {
               if (t && t.response) {
