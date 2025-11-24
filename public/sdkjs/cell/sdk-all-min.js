@@ -20659,9 +20659,7 @@ function mg(t, e) {
       (t.AscCommon.sHh = function (e, s) {
         t.NATIVE_EDITOR_ENJINE ||
           d(
-            (false
-              ? ''
-              : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
+            (false ? '' : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
             function (t) {
               if (t && t.response) {
                 ((t = AscCommon.a$d(t)),

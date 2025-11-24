@@ -20368,9 +20368,7 @@ function Ff(t, e) {
       (t.AscCommon.C_g = function (e, o) {
         t.NATIVE_EDITOR_ENJINE ||
           p(
-            (false
-              ? ''
-              : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
+            (false ? '' : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
             function (t) {
               if (t && t.response) {
                 ((t = AscCommon.bXe(t)),

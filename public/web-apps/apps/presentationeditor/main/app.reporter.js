@@ -51,9 +51,7 @@ var reqerr;
         })(o.data);
     };
     // Always use window message listener for local deployment
-    window.attachEvent
-      ? window.attachEvent('onmessage', e)
-      : window.addEventListener('message', e, !1);
+    window.attachEvent ? window.attachEvent('onmessage', e) : window.addEventListener('message', e, !1);
     var r = new Asc.asc_docs_api({
         'id-view': 'editor_sdk',
         using: 'reporter',

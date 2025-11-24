@@ -44,11 +44,7 @@ interface DocEditorConfig {
     onSave: (event: SaveEvent) => void;
     writeFile: (event: WriteFileEvent) => void;
     /** Handle external messages from plugins */
-    onExternalPluginMessage?: (event: {
-      type: string;
-      data: any;
-      pluginName?: string;
-    }) => void;
+    onExternalPluginMessage?: (event: { type: string; data: any; pluginName?: string }) => void;
   };
 }
 

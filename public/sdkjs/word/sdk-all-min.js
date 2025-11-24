@@ -27025,9 +27025,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   t.AscCommon.$Kg = function (e, o) {
     if (!t.NATIVE_EDITOR_ENJINE) {
       d(
-        (false
-          ? ''
-          : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
+        (false ? '' : '../../../../sdkjs/common/SmartArts/') + 'SmartArts.bin',
         function (t) {
           if (t && t.response) {
             t = AscCommon.mDc(t);

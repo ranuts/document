@@ -17226,8 +17226,7 @@ function _extend_object(t, e) {
         );
       }
       return (
-        s ||
-          e().then((t) => (s = t)),
+        s || e().then((t) => (s = t)),
         {
           initialize: function (t, e) {
             if (void 0 === t) throw 'Analytics: invalid id.';
@@ -17260,7 +17259,6 @@ function _extend_object(t, e) {
             }
             this.send(n, [t, e, i]);
           },
-          basePath: 'https://dd.browser.360.cn/static/a/',
           init: function (t, e) {
             o = t;
             var t = e.url.startsWith('.'),
@@ -17268,21 +17266,7 @@ function _extend_object(t, e) {
             this.send('1551.7601.gif', ['.' + e.fileType, t ? 'new' : i ? 'online' : 'local']);
           },
           send: function (t, e) {
-            // Analytics disabled - no data will be sent to external servers
             return;
-            // Original code (disabled):
-            // '[object Array]' === Object.prototype.toString.call(e) && (e = e.join('|'));
-            // var i = window.AscCommon && window.AscCommon.g_cBuildNumber,
-            //   n = Date.now() + Math.random().toString().replace('0.', '').substr(0, 10),
-            //   i = {
-            //     build: i,
-            //     mid: s,
-            //     type: o,
-            //     _referer: e,
-            //     r: n,
-            //   },
-            //   e = this.basePath + t + '?' + jQuery.param(i);
-            // new Image().src = e;
           },
           trackPerf: function (t) {
             var e = (performance.now() / 1e3).toFixed(1) + 's',

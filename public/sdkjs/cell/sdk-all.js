@@ -407685,11 +407685,7 @@
       Rch: function (p, k) {
         let r = a.origin;
         b === r && (r = a.location.origin);
-        return k.origin === r
-          ? !0
-          : (p = this.FRa(p)) && 0 === p.DT.indexOf(k.origin)
-            ? !0
-            : !1;
+        return k.origin === r ? !0 : (p = this.FRa(p)) && 0 === p.DT.indexOf(k.origin) ? !0 : !1;
       },
       Kzc: function (p) {
         if (0 !== this.sTa.length) {

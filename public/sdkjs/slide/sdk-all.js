@@ -353493,11 +353493,7 @@
       Yzg: function (n, k) {
         let p = a.origin;
         b === p && (p = a.location.origin);
-        return k.origin === p
-          ? !0
-          : (n = this.HFa(n)) && 0 === n.PN.indexOf(k.origin)
-            ? !0
-            : !1;
+        return k.origin === p ? !0 : (n = this.HFa(n)) && 0 === n.PN.indexOf(k.origin) ? !0 : !1;
       },
       Gec: function (n) {
         if (0 !== this.oHa.length) {
