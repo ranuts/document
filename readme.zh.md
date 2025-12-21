@@ -66,7 +66,7 @@
 
 ```bash
 # docker run
-docker run -d --name document -p 8080:8080 ghcr.io/ranui/document:latest
+docker run -d --name document -p 8080:80 ghcr.io/ranui/document:latest
 
 # docker compose
 services:
@@ -74,7 +74,32 @@ services:
     image: ghcr.io/ranui/document:latest
     container_name: document
     ports:
-      - 8080:8080
+      - 8080:80
+```
+
+#### 进阶配置
+
+```yaml
+nanme: document
+services:
+  document:
+    image: ghcr.io/ranui/document:latest
+    container_name: document
+    ports:
+      - 8080:80
+    # 进阶配置
+    volumes:
+      # 添加证书
+      - 证书路径:/ssl
+    environment:
+      # 设置账号
+      # 格式用户名:密码，必须使用BCrypt密码哈希函数对密码进行编码。
+      # 获取BCrypt加密的结果，把加密结果中的$替换成$$转义。
+      SERVER_BASIC_AUTH: "用户名:BCrypt加密密码"
+      # 使用证书
+      SERVER_HTTP2_TLS: true
+      SERVER_HTTP2_TLS_CERT: 证书路径
+      SERVER_HTTP2_TLS_KEY: 私钥路径
 ```
 
 ### 重要提示

@@ -66,7 +66,7 @@ This project provides foundational services for document preview components in t
 
 ```bash
 # docker run
-docker run -d --name document -p 8080:8080 ghcr.io/ranui/document:latest
+docker run -d --name document -p 8080:80 ghcr.io/ranui/document:latest
 
 # docker compose
 services:
@@ -74,7 +74,32 @@ services:
     image: ghcr.io/ranui/document:latest
     container_name: document
     ports:
-      - 8080:8080
+      - 8080:80
+```
+
+#### Advanced Configuration
+
+```yaml
+nanme: document
+services:
+  document:
+    image: ghcr.io/ranui/document:latest
+    container_name: document
+    ports:
+      - 8080:80
+    # Advanced Configuration
+    volumes:
+      # Add certificates
+      - certificate_path:/ssl
+    environment:
+      # Set account
+      # Format username:password, password must be encoded using BCrypt hash function.
+      # To get BCrypt encryption result, replace $ in the encrypted result with $$ for escaping.
+      SERVER_BASIC_AUTH: "username:BCrypt_encrypted_password"
+      # Use certificate
+      SERVER_HTTP2_TLS: true
+      SERVER_HTTP2_TLS_CERT: certificate_path
+      SERVER_HTTP2_TLS_KEY: private_key_path
 ```
 
 ### Important Notes
