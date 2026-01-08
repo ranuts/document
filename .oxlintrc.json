@@ -1,0 +1,17 @@
+{
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/report/**",
+    "**/assets/**",
+    "**/temp/**",
+    "**/public/**",
+    "**/cache/**",
+    "**/*.snap",
+    "**/node_modules/**"
+  ],
+  "rules": {
+    "no-debugger": "error",
+    "no-console": "off",
+    "no-empty": "off"
+  }
+}

@@ -95,7 +95,7 @@ services:
       # Set account
       # Format username:password, password must be encoded using BCrypt hash function.
       # To get BCrypt encryption result, replace $ in the encrypted result with $$ for escaping.
-      SERVER_BASIC_AUTH: "username:BCrypt_encrypted_password"
+      SERVER_BASIC_AUTH: 'username:BCrypt_encrypted_password'
       # Use certificate
       SERVER_HTTP2_TLS: true
       SERVER_HTTP2_TLS_CERT: certificate_path

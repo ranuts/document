@@ -95,7 +95,7 @@ services:
       # 设置账号
       # 格式用户名:密码，必须使用BCrypt密码哈希函数对密码进行编码。
       # 获取BCrypt加密的结果，把加密结果中的$替换成$$转义。
-      SERVER_BASIC_AUTH: "用户名:BCrypt加密密码"
+      SERVER_BASIC_AUTH: '用户名:BCrypt加密密码'
       # 使用证书
       SERVER_HTTP2_TLS: true
       SERVER_HTTP2_TLS_CERT: 证书路径

@@ -161,7 +161,8 @@ export class X2TConverter {
         } else {
           console.error('Conversion failed. Parameters XML:', paramsContent);
         }
-      } catch (_e) {
+      } catch (e) {
+        console.error('Conversion failed. Parameters XML:', e);
         // Ignore if we can't read the params file
       }
       throw new Error(`Conversion failed with code: ${result}`);

@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "tsc": "tsc --noEmit",
     "format": "prettier --write .",
-    "lint:ts": "eslint --cache . && tsc --noEmit",
+    "lint:ts": "oxlint && tsc --noEmit",
     "lint:docker": "docker compose -f docker-compose.yaml config --quiet",
     "lint": "npm run lint:ts && npm run lint:docker"
   },
@@ -21,20 +21,13 @@
   "author": "",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "oxlint": "^1.0.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^24.10.1",
-    "@typescript-eslint/parser": "^8.46.4",
-    "eslint": "^9.39.1",
-    "eslint-plugin-import-x": "^4.16.1",
-    "eslint-plugin-n": "^17.23.1",
-    "eslint-plugin-regexp": "^2.10.0",
-    "globals": "^16.5.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4",
     "vite": "^7.2.2"
   },
   "dependencies": {
