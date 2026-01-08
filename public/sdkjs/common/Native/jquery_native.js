@@ -1907,7 +1907,6 @@
               : p.set,
               T.length > 0 ? (c = w(u)) : (b = !1);
             T.length;
-
           )
             ((y = g = T.pop()), h.relative[g] ? (y = T.pop()) : (g = ''), null == y && (y = r), h.relative[g](c, y, x));
         else c = T = [];
@@ -4177,7 +4176,6 @@
             c = t.offsetTop,
             f = t.offsetLeft;
           (t = t.parentNode) && t !== s && t !== a && (!o.support.fixedPosition || 'fixed' !== u.position);
-
         )
           ((n = l ? l.getComputedStyle(t, null) : t.currentStyle),
             (c -= t.scrollTop),

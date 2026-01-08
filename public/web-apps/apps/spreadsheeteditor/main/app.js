@@ -10278,7 +10278,6 @@ if (
                     ((a = t.getAttribute('id')) ? (a = a.replace(ht, L)) : t.setAttribute('id', (a = A))),
                     n = (r = m(e)).length;
                   n--;
-
                 )
                   r[n] = (a ? '#' + a : ':scope') + ' ' + R(r[n]);
                 c = r.join(',');
@@ -10740,7 +10739,6 @@ if (
                                   [])[0] === T && s[1]) && s[2],
                               a = l && d.childNodes[l];
                             (a = (++l && a && a[c]) || ((m = l = 0), r.pop()));
-
                           )
                             if (1 === a.nodeType && ++m && a === t) {
                               o[u] = [T, l, m];
@@ -10762,7 +10760,6 @@ if (
                               !++m ||
                               (p && ((o = (n = a[A] || (a[A] = {}))[a.uniqueID] || (n[a.uniqueID] = {}))[u] = [T, m]),
                               a !== t));
-
                           );
                         return (m -= b) === g || (m % g == 0 && 0 <= m / g);
                       }
@@ -12004,7 +12001,6 @@ if (
                 a.innerHTML = l[1] + x.htmlPrefilter(n) + l[2],
                 c = l[0];
               c--;
-
             )
               a = a.lastChild;
             (x.merge(h, a.childNodes), ((a = d.firstChild).textContent = ''));
@@ -12114,7 +12110,6 @@ if (
                 }),
               r = (t = (t || '').match(y) || ['']).length;
             r--;
-
           )
             ((h = m = (p = It.exec(t[r]) || [])[1]),
               (p = (p[2] || '').split('.').sort()),
@@ -12164,7 +12159,6 @@ if (
                   l = l[2] && new RegExp('(^|\\.)' + u.join('\\.(?:.*\\.|)') + '(\\.|$)'),
                   a = n = p.length;
                 n--;
-
               )
                 ((d = p[n]),
                   (!o && g !== d.origType) ||
@@ -14408,7 +14402,6 @@ if (
                 for (
                   e = this.offset(), i = s.ownerDocument, t = s.offsetParent || i.documentElement;
                   t && (t === i.body || t === i.documentElement) && 'static' === x.css(t, 'position');
-
                 )
                   t = t.parentNode;
                 t &&
@@ -18779,7 +18772,6 @@ function _extend_object(t, e) {
                       null !== (s = (s = n.readLine()) && s.length() && 65279 === s.charAt(0) ? s.substring(1) : s) &&
                         i.append(s);
                     null !== (s = n.readLine());
-
                   )
                     (i.append(o), i.append(s));
                   t = String(i.toString());
@@ -24766,7 +24758,6 @@ function toggle() {
                   t.find('.dynamic-empty-color').length !== this.options.dynamiccolors - a &&
                   (this._layoutParams = void 0);
                   ++n < a;
-
                 )
                   ((e = t.find('.color-dynamic-' + n))
                     .removeClass('dynamic-empty-color')
@@ -68082,7 +68073,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                                             o.push(t.toLowerCase());
                                           });
                                           -1 !== n.indexOf(t.toLowerCase()) || -1 !== o.indexOf(t.toLowerCase());
-
                                         )
                                           t = s + '(' + ++e + ')';
                                         a.push(t);
@@ -68337,7 +68327,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                         r = this.api.asc_getActiveWorksheetIndex(),
                         c = this.api.asc_isProtectedWorkbook();
                       ++o < s;
-
                     )
                       ((t = i.api.asc_isWorksheetLockedOrDeleted(o)),
                         (e = (i.api.asc_getActiveNamedSheetView && i.api.asc_getActiveNamedSheetView(o)) || ''),
@@ -68628,7 +68617,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                     this.boxFiltered.is(':visible') && (e += parseInt(this.boxFiltered.css('width'))),
                       this.$el.find('.over-box').removeClass('over-box');
                     e + parseInt(this.boxMath.css('width')) + 100 > t;
-
                   ) {
                     var i = this.boxMath.find('label:not(.hide, .over-box)');
                     if ((0 < i.length && $(i[i.length - 1]).addClass('over-box'), i.length <= 1)) break;
@@ -68819,7 +68807,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                         s = e.asc_getWorksheetsCount(),
                         o = [];
                       s--;
-
                     )
                       i !== s && o.push(e.asc_getWorksheetName(s).toLowerCase());
                   if (o)
@@ -69027,7 +69014,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                 for (
                   var i, s = this.statusbar.tabbar.getCount(), o = this.api.asc_isProtectedWorkbook(), n = s;
                   0 < n--;
-
                 )
                   if (t == (i = this.statusbar.tabbar.getAt(n)).sheetindex) {
                     (i[e ? 'addClass' : 'removeClass']('coauth-locked'),
@@ -69184,7 +69170,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                       n.push(t.toLowerCase());
                     });
                     -1 !== n.indexOf(s.toLowerCase()) || -1 !== e.indexOf(s.toLowerCase());
-
                   )
                     s = this.strSheet + ++o;
                 }
@@ -69196,7 +69181,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                 for (
                   var o, n = /^(.*)\((\d)\)$/.exec(t), a = n ? n[1] : t + ' ', l = 1;
                   !(s.indexOf((o = a + '(' + ++l + ')').toLowerCase()) < 0);
-
                 );
                 if (e && 0 < e.length) {
                   var r = [];
@@ -69205,7 +69189,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                       r.push(t.toLowerCase());
                     });
                     -1 !== r.indexOf(o.toLowerCase());
-
                   )
                     o = a + '(' + ++l + ')';
                 }
@@ -87668,7 +87651,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
         for (
           var i, s = t.store, t = e, o = t.get('type') == r, n = -1, a = s.length, l = t.get('name');
           !o && ++n < a && (i = s.at(n)).get('type') == r;
-
         )
           o = i.get('name') == l;
     }
@@ -98387,7 +98369,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                   n = o && o.value,
                   a = SSE.getController('Statusbar').getSelectTabs();
                 ++i < e;
-
               )
                 this.api.asc_isWorksheetHidden(i) ||
                   (((o && n !== Asc.c_oAscPrintType.ActiveSheets) || -1 !== a.indexOf(i)) &&
@@ -105908,7 +105889,6 @@ var c_paragraphLinerule = { LINERULE_AUTO: 1, LINERULE_EXACT: 2 },
                     i = -1,
                     s = [];
                   ++i < e;
-
                 )
                   this.api.asc_isWorksheetHidden(i) ||
                     s.push({ displayValue: this.api.asc_getWorksheetName(i), value: i });

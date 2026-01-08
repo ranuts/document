@@ -25708,7 +25708,6 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
                 C = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1, 0],
                 _ = 0;
               F > 0;
-
             ) {
               while (C[_] <= F) {
                 D += H[_];
@@ -25928,7 +25927,6 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
                   24218, 30003, 36763, 37193, 22764, 25101, 30328, 20133,
                 ];
               At > mt.length / 2;
-
             ) {
               At -= mt.length / 2;
             }
@@ -25954,7 +25952,6 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
                     12529, 12498, 12514, 12475, 12473, 12531,
                   ]);
               lt > bt.length;
-
             ) {
               lt -= bt.length;
             }

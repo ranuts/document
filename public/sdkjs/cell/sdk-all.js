@@ -79782,7 +79782,6 @@
       for (
         var Z = this.bj, D = 0, H = this.dja.bj[this.Od], ia = C.kl, xa = C.ll, ma = C.uo - C.kl, va = C.Eo - C.ll;
         D < H;
-
       )
         switch (Z[this.Od + D + 1]) {
           case 0:
@@ -113463,7 +113462,6 @@
             (E = n.EC(E.XLb, E.ZLb, E.aMb)),
             (u = Math.abs(E.y - u.y)),
             1e3 < q);
-
           );
         else if (B > w || u > t)
           for (
@@ -113482,7 +113480,6 @@
             (E = n.EC(E.XLb, E.ZLb, E.aMb)),
             (u = Math.abs(E.y - u.y)),
             1e3 < q);
-
           );
       }
       var q = 0,
@@ -116282,7 +116279,6 @@
         for (
           var ea, oa, N, V, Y = this.zf.ay(), ya = this.zf.Am(Y), Ea = this.Jc.lx, Ja = this.Jc.Cw, Xa = 0;
           1 >= Xa;
-
         )
           ((oa = this.S$g(ba, K, da, la, Aa, ra, v, y, Xa)),
             0 === Xa && ((N = this.bx(oa[0], I)), (V = this.bx(oa[1], ha))),
@@ -118318,7 +118314,6 @@
         for (
           var K = ba ? 0 : this.Dd.Rb.length - 1, da = ba ? this.Dd.Rb.length : 0, la, Aa, ra;
           (K < da && ba) || (K >= da && !ba);
-
         )
           ((la = this.Ka.Rb[K]),
             (Aa = la.Zd),
@@ -127862,7 +127857,6 @@
         for (
           var ma = D, va = Z.x - D.x, aa = Z.y - D.y;
           J + 1 < this.Owc.length && Math.abs(va) < z && Math.abs(aa) < z;
-
         )
           ((va = ma.x - ia.x), (aa = ma.y - ia.y), (ma = this.Owc[++J]));
         for (; 0 < C && Math.abs(va) < z && Math.abs(aa) < z; )
@@ -154093,7 +154087,6 @@
           ;
           0 !== Sa.length &&
           (S.Ucd ? S.priority < Sa[Sa.length - 1].priority : S.priority <= Sa[Sa.length - 1].priority);
-
         )
           Ab.$f.push(Sa.pop());
         Sa.push(S);
@@ -154133,7 +154126,6 @@
           bc = null,
           Ab = this;
         Ma.Ck < this.Ek.length;
-
       )
         if (((Ma.Mo = this.Ek[Ma.Ck]), '\n' == Ma.Mo)) Ma.Ck++;
         else if (bb.nvf.call(Ma, this.Ek, Ma.Ck) || bb.GFh.call(Ma, this.Ek, Ma.Ck)) {
@@ -192337,7 +192329,6 @@
           for (
             var Na = 0, pb = 0, xb = 0, Ob = 0, Vb = new AscCommon.dac(), Ua = new AscCommon.dac(), Fb = [], Bb, zb;
             pb < Q.length && Ob < ua.length;
-
           ) {
             Bb = Math.min(ua[Ob].r2, Q[pb].Va.r2);
             Na < Va.length && (Bb = Math.min(Bb, Va[Na].Va.r1));
@@ -222352,7 +222343,6 @@
           U = 0,
           P;
         U < E && u.charAt(U) === B.charAt(U);
-
       )
         ++U;
       P = U + 1;
@@ -223700,7 +223690,6 @@
         this.ALb();
         ((n.bs() && !n.hasFocus) || (!n.mS && !0 !== k.gOd) || n.YT || n.fEa || n.Wta || n.Zya) &&
         (n.mS || !E || 80 !== k.which);
-
       )
         return Z;
       n.sga(!0);
@@ -231012,7 +231001,6 @@
             sa.vs.Azc([Fa]),
             (Fa = sa.vs.Wjc()),
             Fa.width !== La || Fa.height !== Ta);
-
           )
             Fa.width > La || Fa.height > Ta ? (Wa = L - 1) : (ib = L + 1);
           return L;
@@ -243704,7 +243692,6 @@
               xa = (C - ((H + 1) >> 1)) >> 1,
               ma = P ? 255 : 0;
             0 < H;
-
           ) {
             for (var va = 4 * (C * xa + ia), aa = 0; aa < H; aa++)
               ((D[va++] = ma), (D[va++] = ma), (D[va++] = ma), (D[va++] = 255));
@@ -245734,7 +245721,6 @@
                   P = Math.max(Math.abs(z - B), Math.abs(u - E)),
                   C = 2;
                 P < U && C < p.length;
-
               )
                 ((B = r.ic(p[C].x, p[C].y)),
                   (E = r.ec(p[C].x, p[C].y)),
@@ -245888,7 +245874,6 @@
                 for (
                   var u = p.ec(q[1].x, q[1].y), B = Math.max(Math.abs(t - z), Math.abs(k - u)), E = 2;
                   0.001 > B && E < q.length;
-
                 )
                   ((z = p.ic(q[E].x, q[E].y)),
                     (u = p.ec(q[E].x, q[E].y)),
@@ -248086,7 +248071,6 @@
               k.Sz(),
               (r += 3),
               r > t && ((r = 0), (q += 3), q > w));
-
             );
             k.tm();
           }
@@ -258313,7 +258297,6 @@
       for (
         Number.isInteger(a.ZQ) && Number.isInteger(a.y9) && Number.isInteger(a.haa) && e && (h = -1);
         0 > AscCommon.cYb(g, a.haa);
-
       )
         (b.P_(f.GP(d) + '-' + f.GP(g + h)), (d = g), (g += a.ZQ));
       0 === AscCommon.cYb(g, a.haa) ? b.P_(f.GP(d) + '-' + f.GP(g)) : b.P_(f.GP(d) + '-' + f.GP(g + h));
@@ -270904,7 +270887,6 @@
         Qj !== this.aa[b].fa &&
         !0 === this.aa[b].Jba() &&
         this.aa[b - 1].f$();
-
       )
         (b--, this.aa[b].Ui());
       for (
@@ -270916,7 +270898,6 @@
         Qj !== this.aa[b].fa &&
         !0 === this.aa[b].a7() &&
         this.aa[b + 1].f$();
-
       )
         (b++, this.aa[b].ff(!1));
       this.le.eb = b;
@@ -292627,7 +292608,6 @@
             Kc = AJ.xod,
             uc = Je.AI();
           null != uc;
-
         )
           (b.Gib && b.Gib(uc.KMb),
             b.ql(uc.r, uc.yb, uc.b, 255),
@@ -293221,7 +293201,6 @@
         Qj !== a.aa[e].fa &&
         !0 === a.aa[e].Jba() &&
         !1 !== a.aa[e - 1].f$();
-
       )
         (e--, a.aa[e].Ui());
       for (
@@ -293233,7 +293212,6 @@
         Qj !== a.aa[e].fa &&
         !0 === a.aa[e].a7() &&
         !1 !== a.aa[e + 1].f$();
-
       )
         (e++, a.aa[e].ff(!1));
       if (-1 === a.va.Kc) {
@@ -298142,7 +298120,6 @@
       for (
         var b = this.Sa[this.Sa.length - 1].Pu - this.Sa[this.Sa.length - 1].mf + 1, e = this.Sa.length - 2;
         0 <= e && a === this.VA(e);
-
       )
         (0 === e && (b += this.BBa.uOc), (b += this.Sa[e].Pu - this.Sa[e].mf + 1), e--);
       return b;
@@ -307596,7 +307573,6 @@
       for (
         ;
         0 <= e && ((g = e--), (g = this.Fk.qc[g].Rf), (p ||= g.eBa(!0, d, f)), (k ||= g.eBa(!1, d, f)), !p || !k);
-
       );
       return { fr: p, Qu: k, Rf: h };
     };
@@ -315390,7 +315366,6 @@
                     Ic = gd.gW(hd + d.Sa[k].pa, Yc, k - gd.yC()),
                     Ld = gd.lj();
                   !aj(gd.vj(Ic));
-
                 )
                   if ((Ic++, Ic >= Ld)) break b;
                 var Jd = gd.vj(Ic);
@@ -361768,7 +361743,6 @@
         '\u2502' === this.Tc.data ||
         '\u24dc' === this.Tc.data ||
         '\u2502' === this.Tc.data;
-
       )
         if (this.nWa()) {
           let n = this.AGa(['&', '@']);
@@ -367041,7 +367015,6 @@
       for (
         !a.jQ.uwa() && 0 < a.cursor && (a.cursor--, x8(a)), a.jQ instanceof HG || (a.cursor--, x8(a));
         a.jQ.uwa();
-
       ) {
         var b = a.jQ.aP();
         b = String.fromCharCode(b);
@@ -385579,7 +385552,6 @@
       for (
         DC(ka, { Su: { La: 0, mh: 0 }, z4a: [], Hi: [], rh: { Rl: !0, Map: {} } });
         ka.ih.I1 && !((ka.ih.I1 = !1), ka.Op(), void 0 !== L && null !== L && 0 < L && ka.ih.rp >= L + 1);
-
       );
       for (ka.ih.n7a = qa; 0 < ca; ) (ca--, ka.cic());
     };

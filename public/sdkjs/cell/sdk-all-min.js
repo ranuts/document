@@ -19654,7 +19654,6 @@ function mg(t, e) {
                     C = [1e3, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1, 0],
                     k = 0;
                   0 < F;
-
                 ) {
                   for (; C[k] <= F; ) ((D += H[k]), (F -= C[k]));
                   if (++k >= H.length) break;
@@ -19759,7 +19758,6 @@ function mg(t, e) {
                       1508, 1510, 1511, 1512, 1513, 1514,
                     ];
                   22 < q;
-
                 )
                   (++K, (q -= 22));
                 for (X = String.fromCharCode(J[q - 1]); 0 !== K; ) ((X += String.fromCharCode(J[21])), --K);
@@ -19779,7 +19777,6 @@ function mg(t, e) {
                       2309, 2309,
                     ];
                   18 < $;
-
                 )
                   (++et, ($ -= 18));
                 for (var ct = 0; ct < et; ct++)
@@ -19837,7 +19834,6 @@ function mg(t, e) {
                       24218, 30003, 36763, 37193, 22764, 25101, 30328, 20133,
                     ];
                   ft > lt.length / 2;
-
                 )
                   ft -= lt.length / 2;
                 n = '' + (String.fromCharCode(lt[2 * ft - 2]) + String.fromCharCode(lt[2 * ft - 1]));
@@ -19862,7 +19858,6 @@ function mg(t, e) {
                         12513, 12511, 12471, 12529, 12498, 12514, 12475, 12473, 12531,
                       ]);
                   mt > gt.length;
-
                 )
                   mt -= gt.length;
                 n = '' + String.fromCharCode(gt[mt - 1]);
@@ -31204,7 +31199,6 @@ var ng = window,
           for (
             (0 < this.gza.length || 0 < this.Q0a.length) && ((s = !0), this.Ya.trigger('cleanSelection'));
             0 < this.Q0a.length;
-
           ) {
             var n = this.Q0a.shift();
             n.Ro(a.vM, !1);

@@ -21,14 +21,14 @@
   "author": "",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "oxlint": "^1.0.0",
-    "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^24.10.1",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^25.0.3",
+    "oxlint": "^1.38.0",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.17",
+    "prettier": "^3.7.4",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vite": "^7.2.2"
+    "vite": "^7.3.1"
   },
   "dependencies": {
     "ranui": "0.1.10-alpha-27",

@@ -19363,7 +19363,6 @@ function Ff(t, e) {
                     C = [1e3, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1, 0],
                     E = 0;
                   0 < F;
-
                 ) {
                   for (; C[E] <= F; ) ((g += H[E]), (F -= C[E]));
                   if (++E >= H.length) break;
@@ -19468,7 +19467,6 @@ function Ff(t, e) {
                       1508, 1510, 1511, 1512, 1513, 1514,
                     ];
                   22 < Z;
-
                 )
                   (++$, (Z -= 22));
                 for (Y = String.fromCharCode(X[Z - 1]); 0 !== $; ) ((Y += String.fromCharCode(X[21])), --$);
@@ -19488,7 +19486,6 @@ function Ff(t, e) {
                       2309, 2309,
                     ];
                   18 < Q;
-
                 )
                   (++et, (Q -= 18));
                 for (var st = 0; st < et; st++)
@@ -19546,7 +19543,6 @@ function Ff(t, e) {
                       24218, 30003, 36763, 37193, 22764, 25101, 30328, 20133,
                     ];
                   At > lt.length / 2;
-
                 )
                   At -= lt.length / 2;
                 n = '' + (String.fromCharCode(lt[2 * At - 2]) + String.fromCharCode(lt[2 * At - 1]));
@@ -19571,7 +19567,6 @@ function Ff(t, e) {
                         12513, 12511, 12471, 12529, 12498, 12514, 12475, 12473, 12531,
                       ]);
                   mt > Dt.length;
-
                 )
                   mt -= Dt.length;
                 n = '' + String.fromCharCode(Dt[mt - 1]);

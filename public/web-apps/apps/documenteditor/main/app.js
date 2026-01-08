@@ -9625,7 +9625,6 @@ if (
                     ((a = t.getAttribute('id')) ? (a = a.replace(ht, R)) : t.setAttribute('id', (a = T))),
                     s = (r = p(e)).length;
                   s--;
-
                 )
                   r[s] = (a ? '#' + a : ':scope') + ' ' + L(r[s]);
                 c = r.join(',');
@@ -10106,7 +10105,6 @@ if (
                                   [])[0] === A && n[1]) && n[2],
                               a = l && d.childNodes[l];
                             (a = (++l && a && a[c]) || ((p = l = 0), r.pop()));
-
                           )
                             if (1 === a.nodeType && ++p && a === t) {
                               o[u] = [A, l, p];
@@ -10128,7 +10126,6 @@ if (
                               !++p ||
                               (m && ((o = (s = a[T] || (a[T] = {}))[a.uniqueID] || (s[a.uniqueID] = {}))[u] = [A, p]),
                               a !== t));
-
                           );
                         return (p -= b) === g || (p % g == 0 && 0 <= p / g);
                       }
@@ -11432,7 +11429,6 @@ if (
                 a.innerHTML = l[1] + x.htmlPrefilter(s) + l[2],
                 c = l[0];
               c--;
-
             )
               a = a.lastChild;
             (x.merge(h, a.childNodes), ((a = d.firstChild).textContent = ''));
@@ -11549,7 +11545,6 @@ if (
                 }),
               r = (t = (t || '').match(S) || ['']).length;
             r--;
-
           )
             ((h = p = (m = It.exec(t[r]) || [])[1]),
               (m = (m[2] || '').split('.').sort()),
@@ -11599,7 +11594,6 @@ if (
                   l = l[2] && new RegExp('(^|\\.)' + u.join('\\.(?:.*\\.|)') + '(\\.|$)'),
                   a = s = m.length;
                 s--;
-
               )
                 ((d = m[s]),
                   (!o && g !== d.origType) ||
@@ -14053,7 +14047,6 @@ if (
                 for (
                   e = this.offset(), i = n.ownerDocument, t = n.offsetParent || i.documentElement;
                   t && (t === i.body || t === i.documentElement) && 'static' === x.css(t, 'position');
-
                 )
                   t = t.parentNode;
                 t &&
@@ -18997,7 +18990,6 @@ function _extend_object(t, e) {
                       null !== (n = (n = s.readLine()) && n.length() && 65279 === n.charAt(0) ? n.substring(1) : n) &&
                         i.append(n);
                     null !== (n = s.readLine());
-
                   )
                     (i.append(o), i.append(n));
                   t = String(i.toString());
@@ -32238,7 +32230,6 @@ var FONT_TYPE_RECENT = 4,
                     t.find('.dynamic-empty-color').length !== this.options.dynamiccolors - a &&
                     (this._layoutParams = void 0);
                     ++s < a;
-
                   )
                     ((e = t.find('.color-dynamic-' + s))
                       .removeClass('dynamic-empty-color')
@@ -58329,7 +58320,6 @@ var FONT_TYPE_RECENT = 4,
                         return t + (e ? 1 : 0);
                       }) &&
                     0 != h;
-
                   ) {
                     p =
                       h /
@@ -62535,7 +62525,6 @@ var FONT_TYPE_RECENT = 4,
                       _ = !1,
                       w = this.api.asc_IsCursorInFootnote() || this.api.asc_IsCursorInEndnote();
                     ++o < t.length;
-
                   )
                     ((n = t[o].get_ObjectType()),
                       (e = t[o].get_ObjectValue()),
@@ -71890,7 +71879,6 @@ var FONT_TYPE_RECENT = 4,
                   for (
                     var e, i, n, o = -1, s = !1, a = !1, l = !1, r = !1, c = !1, d = !1, h = !1, m = null;
                     ++o < t.length;
-
                   )
                     ((i = t[o].get_ObjectType()),
                       (e = t[o].get_ObjectValue()),
@@ -89673,7 +89661,6 @@ var FONT_TYPE_RECENT = 4,
         for (
           var i, n = t.store, t = e, o = t.get('type') == r, s = -1, a = n.length, l = t.get('name');
           !o && ++s < a && (i = n.at(s)).get('type') == r;
-
         )
           o = i.get('name') == l;
     }
