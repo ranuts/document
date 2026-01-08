@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "tsc": "tsc --noEmit",
     "format": "prettier --write .",
-    "lint": "eslint --cache . && tsc --noEmit"
+    "lint:ts": "eslint --cache . && tsc --noEmit",
+    "lint:docker": "docker compose -f docker-compose.yaml config --quiet",
+    "lint": "npm run lint:ts && npm run lint:docker"
   },
   "engines": {
     "node": ">=20.19.0"

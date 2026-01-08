@@ -1,20 +1,22 @@
-nanme: document
+name: document
 services:
   document:
-    image: ghcr.io/ranui/document:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: document
     ports:
       - 8080:80
-    # 进阶配置
+    # Advanced configuration
     # volumes:
-    #   # 证书
-    #   - 证书路径:/ssl
+    #   # Certificate
+    #   - certificate_path:/ssl
     # environment:
-    #   # 账号
-    #   # 格式用户名:密码，必须使用BCrypt密码哈希函数对密码进行编码。
-    #   # 获取BCrypt加密的结果，把加密结果中的$替换成$$转义。
-    #   SERVER_BASIC_AUTH: "用户名:BCrypt加密密码"
-    #   # 证书
+    #   # Account
+    #   # Format username:password, must use BCrypt password hash function to encode the password.
+    #   # Get the BCrypt encrypted result, replace $ in the encrypted result with $$ for escaping.
+    #   SERVER_BASIC_AUTH: "username:BCrypt_encrypted_password"
+    #   # Certificate
     #   SERVER_HTTP2_TLS: true
-    #   SERVER_HTTP2_TLS_CERT: 证书路径
-    #   SERVER_HTTP2_TLS_KEY: 私钥路径
+    #   SERVER_HTTP2_TLS_CERT: certificate_path
+    #   SERVER_HTTP2_TLS_KEY: private_key_path
