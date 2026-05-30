@@ -20,7 +20,6 @@
     "lint:docker": "docker compose -f docker-compose.yaml config --quiet",
     "lint": "pnpm run lint:ts && pnpm run lint:docker"
   },
-  "packageManager": "pnpm@11.4.0",
   "engines": {
     "node": ">=20.19.0"
   },
