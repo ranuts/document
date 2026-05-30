@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check formatting
+        run: pnpm run format:check
+
       - name: Run oxlint and TypeScript checks
         run: pnpm run lint:ts
 

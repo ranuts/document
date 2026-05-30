@@ -15,6 +15,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint:ts": "oxlint && tsc --noEmit",
     "lint:docker": "docker compose -f docker-compose.yaml config --quiet",
     "lint": "pnpm run lint:ts && pnpm run lint:docker"

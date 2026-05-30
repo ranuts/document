@@ -57,7 +57,8 @@ self.addEventListener('fetch', (event) => {
   if (url.searchParams.has('file') || url.searchParams.has('src')) return;
 
   // 4. Determine Strategy
-  const isHtml = event.request.mode === 'navigate' ||
+  const isHtml =
+    event.request.mode === 'navigate' ||
     url.pathname.endsWith('.html') ||
     url.pathname === '/' ||
     url.pathname.endsWith('/');
@@ -84,7 +85,7 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           // If fetch fails (offline), try cache
           return caches.match(event.request);
-        })
+        }),
     );
   } else {
     // Strategy: Stale-While-Revalidate for other static assets (JS, CSS, Images)

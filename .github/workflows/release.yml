@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Tag name for the release (e.g., v1.0.0)'
+        description: "Tag name for the release (e.g., v1.0.0)"
         required: true
-        default: 'v1.0.0'
+        default: "v1.0.0"
       release_body:
-        description: 'Release description'
+        description: "Release description"
         required: true
-        default: 'Manual release via GitHub Actions'
+        default: "Manual release via GitHub Actions"
 
 jobs:
   build-and-release:
@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm install

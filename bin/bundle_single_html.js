@@ -8,55 +8,55 @@ const DIST_DIR = path.resolve(__dirname, '../dist');
 const OUTPUT_FILE = path.resolve(DIST_DIR, 'single-file.html');
 
 function getBase64(file) {
-    const bitmap = fs.readFileSync(file);
-    return Buffer.from(bitmap).toString('base64');
+  const bitmap = fs.readFileSync(file);
+  return Buffer.from(bitmap).toString('base64');
 }
 
 function getMimeType(filePath) {
-    const ext = path.extname(filePath).toLowerCase();
-    const mimes = {
-        '.js': 'application/javascript',
-        '.css': 'text/css',
-        '.wasm': 'application/wasm',
-        '.png': 'image/png',
-        '.jpg': 'image/jpeg',
-        '.gif': 'image/gif',
-        '.woff': 'font/woff',
-        '.woff2': 'font/woff2',
-        '.ttf': 'font/ttf',
-        '.html': 'text/html',
-    };
-    return mimes[ext] || 'application/octet-stream';
+  const ext = path.extname(filePath).toLowerCase();
+  const mimes = {
+    '.js': 'application/javascript',
+    '.css': 'text/css',
+    '.wasm': 'application/wasm',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
+    '.html': 'text/html',
+  };
+  return mimes[ext] || 'application/octet-stream';
 }
 
 function walkDir(dir, callback) {
-    fs.readdirSync(dir).forEach((f) => {
-        const dirPath = path.join(dir, f);
-        const isDirectory = fs.statSync(dirPath).isDirectory();
-        isDirectory ? walkDir(dirPath, callback) : callback(path.join(dir, f));
-    });
+  fs.readdirSync(dir).forEach((f) => {
+    const dirPath = path.join(dir, f);
+    const isDirectory = fs.statSync(dirPath).isDirectory();
+    isDirectory ? walkDir(dirPath, callback) : callback(path.join(dir, f));
+  });
 }
 
 function bundle() {
-    console.log('Starting Single-File HTML bundling...');
-    let html = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf8');
+  console.log('Starting Single-File HTML bundling...');
+  let html = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf8');
 
-    // 1. Collect all files into VFS
-    const vfs = {};
-    walkDir(DIST_DIR, (filePath) => {
-        const relativePath = path.relative(DIST_DIR, filePath);
-        if (relativePath === 'index.html' || relativePath === 'single-file.html' || relativePath === 'sw.js') return;
+  // 1. Collect all files into VFS
+  const vfs = {};
+  walkDir(DIST_DIR, (filePath) => {
+    const relativePath = path.relative(DIST_DIR, filePath);
+    if (relativePath === 'index.html' || relativePath === 'single-file.html' || relativePath === 'sw.js') return;
 
-        console.log(`Bunding: ${relativePath}`);
-        const content = getBase64(filePath);
-        vfs[`/${relativePath}`] = {
-            content,
-            mime: getMimeType(filePath)
-        };
-    });
+    console.log(`Bunding: ${relativePath}`);
+    const content = getBase64(filePath);
+    vfs[`/${relativePath}`] = {
+      content,
+      mime: getMimeType(filePath),
+    };
+  });
 
-    // 2. Inject VFS and Request Interceptor
-    const interceptorScript = `
+  // 2. Inject VFS and Request Interceptor
+  const interceptorScript = `
 <script>
   (function() {
     const VFS = ${JSON.stringify(vfs)};
@@ -121,14 +121,16 @@ function bundle() {
 </script>
 `;
 
-    // Insert interceptor at the top of head
-    html = html.replace('<head>', '<head>' + interceptorScript);
+  // Insert interceptor at the top of head
+  html = html.replace('<head>', '<head>' + interceptorScript);
 
-    // 3. Fix relative paths in HTML to be absolute for the interceptor
-    html = html.replace(/(src|href)="\.?\//g, '$1="/');
+  // 3. Fix relative paths in HTML to be absolute for the interceptor
+  html = html.replace(/(src|href)="\.?\//g, '$1="/');
 
-    fs.writeFileSync(OUTPUT_FILE, html);
-    console.log(`Successfully generated: ${OUTPUT_FILE} (${(fs.statSync(OUTPUT_FILE).size / 1024 / 1024).toFixed(2)} MB)`);
+  fs.writeFileSync(OUTPUT_FILE, html);
+  console.log(
+    `Successfully generated: ${OUTPUT_FILE} (${(fs.statSync(OUTPUT_FILE).size / 1024 / 1024).toFixed(2)} MB)`,
+  );
 }
 
 bundle();

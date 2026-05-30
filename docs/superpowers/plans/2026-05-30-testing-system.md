@@ -26,6 +26,7 @@
 ### Task 1: Add Test Dependencies And Scripts
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `pnpm-lock.yaml`
 
@@ -84,6 +85,7 @@ git commit -m "test: add testing dependencies"
 ### Task 2: Configure Vitest
 
 **Files:**
+
 - Create: `vitest.config.ts`
 - Create: `test/setup/vitest.ts`
 
@@ -176,6 +178,7 @@ git commit -m "test: configure vitest"
 ### Task 3: Add Unit Tests For Pure Logic
 
 **Files:**
+
 - Create: `test/unit/document-utils.test.ts`
 - Create: `test/unit/i18n.test.ts`
 
@@ -206,9 +209,7 @@ describe('document utils', () => {
   });
 
   it('normalizes extension casing for MIME lookup', () => {
-    expect(getMimeTypeFromExtension('XLSX')).toBe(
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    );
+    expect(getMimeTypeFromExtension('XLSX')).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   });
 
   it('falls back for unknown extensions', () => {
@@ -260,6 +261,7 @@ git commit -m "test: cover document utilities"
 ### Task 4: Add Unit Tests For Editor Error Branches
 
 **Files:**
+
 - Create: `test/unit/onlyoffice-editor.test.ts`
 
 - [ ] **Step 1: Write failing tests for readonly and save errors**
@@ -351,6 +353,7 @@ git commit -m "test: cover editor control errors"
 ### Task 5: Configure Playwright
 
 **Files:**
+
 - Create: `playwright.config.ts`
 - Create: `test/e2e/app-smoke.spec.ts`
 
@@ -437,6 +440,7 @@ git commit -m "test: add playwright smoke tests"
 ### Task 6: Add Embed API E2E Coverage
 
 **Files:**
+
 - Create: `test/e2e/embed-api.spec.ts`
 
 - [ ] **Step 1: Write embed error behavior test**
@@ -513,6 +517,7 @@ git commit -m "test: cover embed api errors"
 ### Task 7: Add CI Test Jobs
 
 **Files:**
+
 - Modify: `.github/workflows/ci.yml`
 
 - [ ] **Step 1: Add coverage to validation job**
@@ -520,8 +525,8 @@ git commit -m "test: cover embed api errors"
 In `.github/workflows/ci.yml`, after `Run oxlint and TypeScript checks`, add:
 
 ```yaml
-      - name: Run unit tests with coverage
-        run: pnpm run test:coverage
+- name: Run unit tests with coverage
+  run: pnpm run test:coverage
 ```
 
 - [ ] **Step 2: Add E2E job**
@@ -529,42 +534,42 @@ In `.github/workflows/ci.yml`, after `Run oxlint and TypeScript checks`, add:
 Add a new job after `lint`:
 
 ```yaml
-  e2e:
-    name: E2E
-    runs-on: ubuntu-latest
-    needs: lint
+e2e:
+  name: E2E
+  runs-on: ubuntu-latest
+  needs: lint
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v6
-        name: Install pnpm
-        with:
-          run_install: false
+    - uses: pnpm/action-setup@v6
+      name: Install pnpm
+      with:
+        run_install: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: "pnpm"
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+        cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+    - name: Install Playwright browsers
+      run: pnpm exec playwright install --with-deps chromium
 
-      - name: Run E2E tests
-        run: pnpm run test:e2e
+    - name: Run E2E tests
+      run: pnpm run test:e2e
 
-      - name: Upload Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
+    - name: Upload Playwright report
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 7
 ```
 
 - [ ] **Step 3: Verify CI YAML**
@@ -587,6 +592,7 @@ git commit -m "ci: run coverage and e2e tests"
 ### Task 8: Final Verification
 
 **Files:**
+
 - Verify all changed files.
 
 - [ ] **Step 1: Run frozen install**

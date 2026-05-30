@@ -10,9 +10,7 @@ describe('document utils', () => {
   });
 
   it('normalizes extension casing for MIME lookup', () => {
-    expect(getMimeTypeFromExtension('XLSX')).toBe(
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    );
+    expect(getMimeTypeFromExtension('XLSX')).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   });
 
   it('uses image/png fallback for unknown MIME extensions', () => {
