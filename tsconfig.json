@@ -16,7 +16,6 @@
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
     "inlineSourceMap": true,
-    "baseUrl": ".",
     "experimentalDecorators": true,
     "jsx": "react-jsx",
     "paths": {
