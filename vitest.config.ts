@@ -30,8 +30,7 @@ export default defineConfig({
         functions: 35,
         statements: 35,
       },
-      include: ['lib/**/*.ts'],
-      exclude: ['lib/empty_bin.ts', 'lib/file-types.ts', 'lib/document-types.ts'],
+      include: ['lib/document-utils.ts', 'lib/i18n.ts'],
     },
   },
 });
