@@ -9,6 +9,11 @@
     "build:single": "node bin/bundle_single_html.js",
     "preview": "vite preview",
     "tsc": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "format": "prettier --write .",
     "lint:ts": "oxlint && tsc --noEmit",
     "lint:docker": "docker compose -f docker-compose.yaml config --quiet",
@@ -45,14 +50,18 @@
     "url": "https://github.com/ranuts/document/issues"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25.0.5",
+    "@vitest/coverage-v8": "^4.0.15",
+    "jsdom": "^27.3.0",
     "oxlint": "^1.38.0",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vite": "^7.3.2"
+    "vite": "^7.3.2",
+    "vitest": "^4.0.15"
   },
   "dependencies": {
     "@khmyznikov/pwa-install": "^0.6.3",
