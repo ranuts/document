@@ -1,9 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(gh pr *)",
-      "Bash(pnpm --version)",
-      "Bash(rtk pnpm *)"
-    ]
+    "allow": ["Bash(gh pr *)", "Bash(pnpm --version)", "Bash(rtk pnpm *)"]
   }
 }
