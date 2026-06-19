@@ -283,14 +283,115 @@ Vite 中间件注入（`[OO vite-patch]`）在每个编辑器加载时均确认�
 
 ---
 
+## 问题二：本地文件打开卡死在 38%（字体 CORS 错误）
+
+### 症状
+
+上传本地 xlsx（206KB，含 Calibri / Segoe UI 字体）后，加载进度条卡在 38% 不动。
+PPT 类似情况。console 报错：
+
+```
+Access to XMLHttpRequest at 'ascdesktop://fonts/C:\Windows\Fonts\calibrili.ttf'
+  has been blocked by CORS policy: Cross origin requests are only supported for
+  protocol schemes: chrome, chrome-extension, data, http, https...
+
+Access to XMLHttpRequest at 'ascdesktop://fonts/C:\Windows\Fonts\seguisym.ttf' ...
+Access to XMLHttpRequest at 'ascdesktop://fonts/C:\Windows\Fonts\seguiemj.ttf' ...
+```
+
+### 根因
+
+`vite.config.ts` 的 `patchFontUrls` IIFE 维护一张硬编码的字体映射表，
+把 `ascdesktop://fonts/<fn>` 重写为 `/fonts/<mapped>`。
+但映射表只覆盖了约 50 个常见字体，以下三个缺失：
+
+| 请求文件 | 字体名称 | 缺失原因 |
+|---------|---------|---------|
+| `calibrili.ttf` | Calibri Light Italic | 只有 `calibril.ttf`（Light）没有 LightItalic 变体 |
+| `seguisym.ttf` | Segoe UI Symbol | 未收录 |
+| `seguiemj.ttf` | Segoe UI Emoji | 未收录 |
+
+当映射命中时，URL 被改写为 `/fonts/X` → XHR 成功。
+当映射未命中时，URL 保持 `ascdesktop://` → CORS 错误 → SDK 字体加载回调永远不触发 → 进度条永久卡住。
+
+### 修复方案：font-map.json + 通用 fallback
+
+**问题**：映射硬编码在构建配置里，用户无法扩展，且漏掉的字体会导致卡死。
+
+**方案**：
+1. 新建 `public/font-map.json`（运行时 JSON，用户可直接编辑）
+2. PATCH 脚本改为 `fetch('/font-map.json')` 异步加载
+3. **任何**未命中映射或 JSON 加载期间的字体，统一 fallback 到 `DejaVuSans.ttf`
+
+关键保证：`ascdesktop://` URL **永远不会**到达浏览器的 XHR 层。
+
+#### `vite.config.ts` patchFontUrls 改动
+
+```javascript
+// 改前：硬编码 50 条映射，未命中时不重写 → CORS 错误
+var mapped = map[fn];
+if (mapped) arguments[1] = '/fonts/' + mapped;
+
+// 改后：运行时加载 font-map.json，始终重写，未命中 fallback DejaVuSans
+(function patchFontUrls() {
+  var FALLBACK = 'DejaVuSans.ttf';
+  var fontMap = null;
+  fetch('/font-map.json')
+    .then(function(r) { return r.ok ? r.json() : {}; })
+    .then(function(m) { fontMap = m; })
+    .catch(function() { fontMap = {}; });
+
+  var origOpen = window.XMLHttpRequest.prototype.open;
+  window.XMLHttpRequest.prototype.open = function(method, url) {
+    if (typeof url === 'string' && url.indexOf('ascdesktop://fonts/') === 0) {
+      var bs = String.fromCharCode(92);
+      var fp = url.slice(19);
+      var ls = Math.max(fp.lastIndexOf('/'), fp.lastIndexOf(bs));
+      var fn = fp.slice(ls + 1).toLowerCase();
+      var mapped = fontMap && fontMap[fn];
+      arguments[1] = '/fonts/' + (mapped || FALLBACK);
+    }
+    return origOpen.apply(this, arguments);
+  };
+})();
+```
+
+#### `public/font-map.json` 覆盖范围
+
+- Arial / Calibri（含 Light Italic）/ Candara / Corbel / Helvetica
+- Segoe UI 系列（Regular/Bold/Italic/Light/Black/Symbol/Emoji）
+- Verdana / Tahoma / Trebuchet / Impact
+- Times / Cambria / Georgia（衬线）
+- Courier / Consolas（等宽）
+- Comic Sans / Franklin Gothic
+- 中文：微软雅黑 / 宋体 / 黑体 / 仿宋 / 等线
+- 繁中：微软正黑
+- 日文：MS Mincho / MS Gothic / 游ゴシック / メイリオ
+- 韓文：Malgun Gothic / Gulim / Batang
+- 符号：Symbol / Wingdings / Webdings / Marlett
+
+**用户扩展方式**：在 `public/font-map.json` 里加一行，刷新即生效，无需改代码或重新构建。
+
+### 验证结果
+
+修复后重新上传相同的本地文件：
+
+| 文件 | 加载结果 | CORS 错误 |
+|------|---------|-----------|
+| `公司工作作息时间.xlsx`（206KB，Calibri + Segoe 字体）| ✅ 完整内容，三个 sheet（IT互联网 / 金融 / 外企）| ✅ 无 |
+| `附件2-述职.pptx`（1.1MB，4 张幻灯片）| ✅ 完整内容，幻灯片缩略图正常 | ✅ 无 |
+
+console 只剩 SW 注册 404（预期）和 WebSocket fallback（预期），无任何字体 CORS 错误。
+
+---
+
 ## 待验证事项
 
 以下场景仍未测试，留待后续：
 
 1. **保存链路**（Word / Excel / PPT）：`requestSaveDocument` → `onDownloadAs` → File 返回给调用方
 2. **格式转换**：docx → pdf / xlsx → csv 等（依赖 x2t WASM）
-3. **打开已有文件**：拖入本地文件后 `pendingCopy` 非 null 的路径
-4. **连续刷新稳定性**：多次 reload 不出现权限初始化时序问题
+3. **连续刷新稳定性**：多次 reload 不出现权限初始化时序问题
 
 ---
 
@@ -299,6 +400,7 @@ Vite 中间件注入（`[OO vite-patch]`）在每个编辑器加载时均确认�
 | 文件 | 变更 |
 |------|------|
 | `src/lib/onlyoffice-editor.ts` | `suppressDialogsInFrame` 同时 patch `Common.UI.warning` 和 `Common.UI.alert` |
-| `vite.config.ts` | `suppressConnectionLost` IIFE 同步更新，等 `alert` 可用后才激活，同时 patch 两个方法 |
+| `vite.config.ts` | `suppressConnectionLost` IIFE 同步更新；`patchFontUrls` 改为 fetch `/font-map.json` + 通用 fallback |
 | `public/themes.json` | 新建，内容 `{"themes": []}` |
 | `public/plugins.json` | 新建，内容 `{"pluginsData": []}` |
+| `public/font-map.json` | 新建，90+ 条 Windows 字体映射，用户可直接扩展 |

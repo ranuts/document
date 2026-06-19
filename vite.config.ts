@@ -73,45 +73,19 @@ function onlyofficeWebModePatch(): Plugin {
   const PATCH = `<script>
 (function () {
   console.log('[OO vite-patch] running in', window.location.href);
-  // Redirect ascdesktop://fonts/ to open-source equivalents served from /fonts/.
-  // Only needed when sdkjs still has ascdesktop:// font references; harmless otherwise.
+  // Rewrite ascdesktop://fonts/<file> → /fonts/<mapped-file>.
+  // Mapping is loaded from /font-map.json so users can extend it without touching code.
+  // Any font NOT in the map (or while the JSON is still loading) falls back to DejaVuSans.ttf,
+  // ensuring no XHR ever reaches the invalid ascdesktop:// scheme (which causes CORS errors
+  // and stalls the loading progress bar).
   (function patchFontUrls() {
-    var map = {
-      'arial.ttf':'LiberationSans-Regular.ttf','arialbd.ttf':'LiberationSans-Bold.ttf',
-      'ariali.ttf':'LiberationSans-Italic.ttf','arialbi.ttf':'LiberationSans-BoldItalic.ttf',
-      'arialn.ttf':'LiberationSans-Regular.ttf','arialnb.ttf':'LiberationSans-Bold.ttf',
-      'arialblk.ttf':'LiberationSans-Bold.ttf','calibri.ttf':'LiberationSans-Regular.ttf',
-      'calibrib.ttf':'LiberationSans-Bold.ttf','calibrii.ttf':'LiberationSans-Italic.ttf',
-      'calibriz.ttf':'LiberationSans-BoldItalic.ttf','calibril.ttf':'LiberationSans-Regular.ttf',
-      'candara.ttf':'LiberationSans-Regular.ttf','candrab.ttf':'LiberationSans-Bold.ttf',
-      'candrai.ttf':'LiberationSans-Italic.ttf','candrabi.ttf':'LiberationSans-BoldItalic.ttf',
-      'corbel.ttf':'LiberationSans-Regular.ttf','corbelb.ttf':'LiberationSans-Bold.ttf',
-      'corbeli.ttf':'LiberationSans-Italic.ttf','corbelbi.ttf':'LiberationSans-BoldItalic.ttf',
-      'helvetica.ttf':'LiberationSans-Regular.ttf','helveticabd.ttf':'LiberationSans-Bold.ttf',
-      'verdana.ttf':'DejaVuSans.ttf','verdanab.ttf':'DejaVuSans-Bold.ttf',
-      'verdanai.ttf':'DejaVuSans-Oblique.ttf','verdanaz.ttf':'DejaVuSans-BoldOblique.ttf',
-      'tahoma.ttf':'DejaVuSans.ttf','tahomabd.ttf':'DejaVuSans-Bold.ttf',
-      'times.ttf':'DejaVuSans.ttf','timesbd.ttf':'DejaVuSans-Bold.ttf',
-      'timesi.ttf':'DejaVuSans-Oblique.ttf','timesbi.ttf':'DejaVuSans-BoldOblique.ttf',
-      'cambria.ttc':'DejaVuSans.ttf','cambriab.ttf':'DejaVuSans-Bold.ttf',
-      'cambriai.ttf':'DejaVuSans-Oblique.ttf','cambriaz.ttf':'DejaVuSans-BoldOblique.ttf',
-      'georgia.ttf':'DejaVuSans.ttf','georgiab.ttf':'DejaVuSans-Bold.ttf',
-      'georgiai.ttf':'DejaVuSans-Oblique.ttf','georgiaz.ttf':'DejaVuSans-BoldOblique.ttf',
-      'cour.ttf':'DejaVuSansMono.ttf','courbd.ttf':'DejaVuSansMono-Bold.ttf',
-      'couri.ttf':'DejaVuSansMono-Oblique.ttf','courbi.ttf':'DejaVuSansMono-BoldOblique.ttf',
-      'consolab.ttf':'DejaVuSansMono-Bold.ttf','consolai.ttf':'DejaVuSansMono-Oblique.ttf',
-      'consolaz.ttf':'DejaVuSansMono-BoldOblique.ttf','comic.ttf':'ComicNeue-Regular.ttf',
-      'comicbd.ttf':'ComicNeue-Bold.ttf','comici.ttf':'ComicNeue-Italic.ttf',
-      'comicz.ttf':'ComicNeue-BoldItalic.ttf','msyh.ttc':'NotoSansSC-VF.ttf',
-      'msyhbd.ttc':'NotoSansSC-VF.ttf','msyhl.ttc':'NotoSansSC-VF.ttf',
-      'simsun.ttc':'NotoSansSC-VF.ttf','simhei.ttf':'NotoSansSC-VF.ttf',
-      'msjh.ttc':'NotoSansTC-VF.ttf','msjhbd.ttc':'NotoSansTC-VF.ttf',
-      'msmincho.ttc':'NotoSansJP-VF.ttf','msgothic.ttc':'NotoSansJP-VF.ttf',
-      'malgun.ttf':'NotoSansKR-VF.ttf','symbol.ttf':'DejaVuSans.ttf',
-      'wingding.ttf':'DejaVuSans.ttf','wingdng2.ttf':'DejaVuSans.ttf',
-      'wingdng3.ttf':'DejaVuSans.ttf','webdings.ttf':'DejaVuSans.ttf',
-      'marlett.ttf':'DejaVuSans.ttf',
-    };
+    var FALLBACK = 'DejaVuSans.ttf';
+    var fontMap = null;
+    fetch('/font-map.json')
+      .then(function(r) { return r.ok ? r.json() : {}; })
+      .then(function(m) { fontMap = m; })
+      .catch(function() { fontMap = {}; });
+
     var origOpen = window.XMLHttpRequest.prototype.open;
     window.XMLHttpRequest.prototype.open = function(method, url) {
       if (typeof url === 'string' && url.indexOf('ascdesktop://fonts/') === 0) {
@@ -119,8 +93,8 @@ function onlyofficeWebModePatch(): Plugin {
         var fp = url.slice(19);
         var ls = Math.max(fp.lastIndexOf('/'), fp.lastIndexOf(bs));
         var fn = fp.slice(ls + 1).toLowerCase();
-        var mapped = map[fn];
-        if (mapped) arguments[1] = '/fonts/' + mapped;
+        var mapped = fontMap && fontMap[fn];
+        arguments[1] = '/fonts/' + (mapped || FALLBACK);
       }
       return origOpen.apply(this, arguments);
     };
