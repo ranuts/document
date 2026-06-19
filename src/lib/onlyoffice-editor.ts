@@ -41,6 +41,39 @@ type EmbeddedSaveRequest = {
 
 let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 
+// Suppress expected serverless-mode dialogs inside the editor iframe.
+// Investigation (2026-06-19) showed that "Connection is lost" (CoAuthoringDisconnect error)
+// goes through Common.UI.alert(o), NOT Common.UI.warning(o). We patch both.
+// Called from onAppReady with same-origin iframe access (more reliable than Vite middleware).
+function suppressDialogsInFrame(frameWindow: any): void {
+  const SUPPRESSED_MSGS = ['Connection is lost', 'error occurred during the work'];
+  const shouldSuppress = (opts: any): boolean => {
+    const msg: string = opts?.msg ?? '';
+    return typeof msg === 'string' && SUPPRESSED_MSGS.some((s) => msg.indexOf(s) !== -1);
+  };
+
+  let attempts = 0;
+  const poll = () => {
+    const ui = frameWindow.Common?.UI;
+    if (ui?.__dlgSuppressed) return;
+    if (!ui || typeof ui.warning !== 'function' || typeof ui.alert !== 'function') {
+      if (attempts++ < 50) setTimeout(poll, 200);
+      return;
+    }
+    ui.__dlgSuppressed = true;
+
+    const origWarning = ui.warning.bind(ui);
+    ui.warning = (opts: any) => (shouldSuppress(opts) ? undefined : origWarning(opts));
+
+    // "Connection is lost" (Asc.c_oAscError.ID.CoAuthoringDisconnect) calls Common.UI.alert
+    const origAlert = ui.alert.bind(ui);
+    ui.alert = (opts: any) => (shouldSuppress(opts) ? undefined : origAlert(opts));
+
+    console.log('[OO] dialog suppression active in iframe (warning + alert)');
+  };
+  poll();
+}
+
 // 9.3.0 renamed sendCommand → serviceCommand; try serviceCommand first for forward compat.
 function editorSendCommand(params: { command: string; data: Record<string, any> }): void {
   const ed = window.editor as any;
@@ -454,6 +487,10 @@ export function createEditorInstance(config: {
             const iwin = iframeEl?.contentWindow as any;
             const api = iwin?.Asc?.editor;
             console.log('[OO] onAppReady', { hasIframe: !!iframeEl, hasApi: !!api });
+
+            // Suppress "Connection is lost" / EditingError -25 dialogs directly in the iframe.
+            // This is the reliable path — Vite middleware injection has proven unreliable.
+            if (iwin) suppressDialogsInFrame(iwin);
             if (typeof api?.asc_openDocumentFromBytes !== 'function') {
               // 7.4.1 fallback
               editorSendCommand({ command: 'asc_openDocument', data: { buf: binData } });

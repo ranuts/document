@@ -72,6 +72,7 @@ function onlyofficeWebModePatch(): Plugin {
   const EDITOR_HTML = /\/web-apps\/apps\/(documenteditor|presentationeditor|spreadsheeteditor)\/main\/index\.html/;
   const PATCH = `<script>
 (function () {
+  console.log('[OO vite-patch] running in', window.location.href);
   // Redirect ascdesktop://fonts/ to open-source equivalents served from /fonts/.
   // Only needed when sdkjs still has ascdesktop:// font references; harmless otherwise.
   (function patchFontUrls() {
@@ -126,37 +127,52 @@ function onlyofficeWebModePatch(): Plugin {
   })();
 
   // Suppress "Connection is lost" dialog — expected in offline Web Mode (no real server).
+  // Investigation showed CoAuthoringDisconnect uses Common.UI.alert, not Common.UI.warning.
   (function suppressConnectionLost() {
     var ui = window.Common && window.Common.UI;
-    if (!ui || typeof ui.warning !== 'function' || ui.__dlgSuppressed) {
+    if (!ui || typeof ui.warning !== 'function' || typeof ui.alert !== 'function' || ui.__dlgSuppressed) {
       setTimeout(suppressConnectionLost, 200);
       return;
     }
     ui.__dlgSuppressed = true;
+    function shouldSuppress(opts) {
+      var msg = opts && opts.msg;
+      if (typeof msg !== 'string') return false;
+      return msg.indexOf('Connection is lost') !== -1 || msg.indexOf('error occurred during the work') !== -1;
+    }
     var origWarning = ui.warning.bind(ui);
     ui.warning = function(opts) {
-      if (opts && typeof opts.msg === 'string') {
-        // Suppress dialogs that are expected in serverless offline mode:
-        // "Connection is lost" and "An error occurred during the work with the document"
-        // (EditingError -25 fires when co-authoring save fails — no real server).
-        if (opts.msg.indexOf('Connection is lost') !== -1) return;
-        if (opts.msg.indexOf('error occurred during the work') !== -1) return;
-      }
+      if (shouldSuppress(opts)) return;
       return origWarning.apply(ui, arguments);
+    };
+    // CoAuthoringDisconnect error goes through Common.UI.alert
+    var origAlert = ui.alert.bind(ui);
+    ui.alert = function(opts) {
+      if (shouldSuppress(opts)) return;
+      return origAlert.apply(ui, arguments);
     };
   })();
 })();
 </script>`;
   const middleware: Connect.NextHandleFunction = async (req, res, next) => {
     if (!req.url || !EDITOR_HTML.test(req.url)) return next();
-    const filePath = path.join(__dirname, 'public', req.url.split('?')[0]);
+    const reqPath = req.url.split('?')[0];
+    const filePath = path.join(__dirname, 'public') + reqPath;
+    console.log('[vite:oo-patch] intercepting', reqPath);
     try {
       const html = await fs.readFile(filePath, 'utf-8');
+      if (res.writableEnded) {
+        console.warn('[vite:oo-patch] response already sent by another middleware — patch missed!');
+        return;
+      }
       const injected = html.replace('<head>', `<head>\n${PATCH}`);
+      const patched = injected !== html;
+      console.log('[vite:oo-patch] injected:', patched, 'bytes:', injected.length);
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'no-store');
       res.end(injected);
-    } catch {
+    } catch (e) {
+      console.error('[vite:oo-patch] readFile failed:', filePath, String(e));
       next();
     }
   };

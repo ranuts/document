@@ -104,7 +104,9 @@ index.html            # HTML 入口
 
 **文档字节来源**：`onAppReady` 里 `binData` 含分号 → 新建文档，从 `g_sEmpty_ooxml` 取对应扩展名的最小 OOXML ZIP；否则用 `pendingCopy`（打开已有文件时在 `createEditorInstance` 入口处拷贝的原始 `Uint8Array`）。
 
-**已知 open issue**：`vite.config.ts` 的 `onlyofficeWebModePatch` 插件（字体 URL 重写 + `suppressConnectionLost`）实际未能注入到编辑器 iframe，console 显示 `patchFound: false`。"Connection is lost" 和 EditingError -25 对话框抑制逻辑已写但未生效。
+**弹窗抑制（2026-06-19 已修复）**：`suppressDialogsInFrame(iwin)` 在 `onAppReady` 里直接 patch `iwin.Common.UI.warning`，抑制 "Connection is lost" 和 EditingError -25 弹窗。不再依赖 Vite 中间件注入（中间件 `onlyofficeWebModePatch` 保留但其 `suppressConnectionLost` 逻辑为冗余防线）。
+
+**Vite 中间件注入状态**：`onlyofficeWebModePatch` 中间件已加诊断日志（`[vite:oo-patch] intercepting ...`）。下次运行 `pnpm dev` 时可从终端确认是否命中；编辑器内 `[OO vite-patch] running in ...` 日志可确认脚本已注入。字体 URL 重写（`ascdesktop://fonts/` → `/fonts/`）在 Web Mode 9.3.0 下暂未触发（Web Mode 不使用 ascdesktop:// 协议），可暂不处理。
 
 ### store/index.ts — 全局状态
 

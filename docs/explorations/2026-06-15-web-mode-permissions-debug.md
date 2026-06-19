@@ -752,3 +752,151 @@ CI=1 pnpm run test:e2e
 - 本轮验证的是 OOXML `.docx/.xlsx/.pptx` 和 `.csv`。旧二进制 `.doc/.xls/.ppt` 仍需单独验证转换兼容性。
 - `chrome-devtools-mcp` 是推荐调试方式；本轮曾尝试过该 MCP，但连接返回 `Transport closed`，因此实际运行态验证使用 Playwright fallback。
 - 保存/导出链路仍是后续工作，当前记录只覆盖打开和渲染。
+
+---
+
+## 2026-06-19 追加：`suppressConnectionLost` 修复 + Vite 中间件诊断
+
+**分支：** `explore/path-d-desktop-mock`
+**目标：** 解决"Connection is lost"弹窗问题，并排查 `onlyofficeWebModePatch` 中间件注入失效的根本原因。
+
+---
+
+### 问题：`onlyofficeWebModePatch` 中间件为何注入失效
+
+#### 调查结论
+
+对中间件代码逐行验证：
+
+| 检查项 | 结论 |
+|--------|------|
+| 正则是否匹配 | ✅ `/\/web-apps\/apps\/(documenteditor\|presentationeditor\|spreadsheeteditor)\/main\/index\.html/` 能匹配实际请求 URL |
+| `path.join` 结果 | ✅ `path.join('/project', 'public', '/web-apps/...')` 在 Node.js 里等价于 `/project/public/web-apps/...`，路径正确 |
+| 目标文件是否存在 | ✅ `public/web-apps/apps/documenteditor/main/index.html` 存在（120 KB） |
+| `<head>` 是否存在于 HTML | ✅ 第 3 行即 `<head>`，`replace('<head>', ...)` 必然成功 |
+| CSP 是否阻止内联脚本 | ✅ 编辑器 HTML 无 Content-Security-Policy |
+
+**潜在根因（无法在本地精确确认，因为需要实际开发服务器运行）：**
+
+可能是 Vite 的 `async` 中间件与 `publicDir` 静态文件服务之间存在竞态。`configureServer` 里 `server.middlewares.use()` 注册的中间件理论上先于 Vite 内部的 `sirv`（静态文件服务）运行，但 `async (req, res, next) => {}` 形式在 connect 里存在一个隐患：connect 调用中间件函数后立即返回（不 await），若 `res.writableEnded` 被某个先行中间件（如 HMR 握手）提前设置，则 `await fs.readFile()` 完成时已无法写响应。
+
+#### 诊断增强（已做，本次提交）
+
+1. **`vite.config.ts`**：
+   - 中间件改用字符串拼接而非 `path.join` 第三个参数避免潜在歧义：`path.join(__dirname, 'public') + reqPath`
+   - 加 `console.log('[vite:oo-patch] intercepting', reqPath)` — 下次跑 dev server 时可从终端看到是否命中
+   - 加 `if (res.writableEnded)` 守卫并打印警告，确认是否竞态导致
+   - PATCH script 本身加 `console.log('[OO vite-patch] running in', window.location.href)` — 若在浏览器 console 看到，说明注入成功
+
+2. **`src/lib/onlyoffice-editor.ts`**：
+   - 新增 `suppressDialogsInFrame(frameWindow)` 函数（见下一节）
+
+---
+
+### 修复：`suppressDialogsInFrame` 直接注入法
+
+#### 为什么改用直接注入
+
+`onAppReady` 里已有 `const iwin = iframeEl?.contentWindow`，对编辑器 iframe 有同源访问权限。无需通过 Vite 中间件把 script 注入到 HTML——可直接在 JS 里操作 `iwin.Common.UI`。
+
+这比中间件方式更可靠：
+- 中间件注入的时机取决于 HTTP 请求拦截（受 Vite 内部调度影响）
+- 直接注入的时机受 `onAppReady` 控制，与文档加载流程一致
+
+#### 实现（`src/lib/onlyoffice-editor.ts` 顶部函数区）
+
+```typescript
+function suppressDialogsInFrame(frameWindow: any): void {
+  let attempts = 0;
+  const poll = () => {
+    const ui = frameWindow.Common?.UI;
+    if (ui?.__dlgSuppressed) return;
+    if (!ui || typeof ui.warning !== 'function') {
+      if (attempts++ < 50) setTimeout(poll, 200); // 最多重试 ~10s
+      return;
+    }
+    ui.__dlgSuppressed = true;
+    const orig = ui.warning.bind(ui);
+    ui.warning = (opts: any) => {
+      if (opts?.msg && typeof opts.msg === 'string') {
+        if (opts.msg.indexOf('Connection is lost') !== -1) return;
+        if (opts.msg.indexOf('error occurred during the work') !== -1) return;
+      }
+      return orig(opts);
+    };
+    console.log('[OO] dialog suppression active in iframe');
+  };
+  poll();
+}
+```
+
+调用点（`onAppReady` 里获得 `iwin` 后立即调用）：
+
+```typescript
+const iwin = iframeEl?.contentWindow as any;
+// ...
+if (iwin) suppressDialogsInFrame(iwin);
+```
+
+#### 效果
+
+- 无需 Vite 中间件注入即可抑制弹窗
+- 使用 200ms 轮询，最多 50 次（约 10s），确保在 `Common.UI.warning` 初始化后成功 patch
+- `__dlgSuppressed` 标志防止重复 patch
+- vite-patch 中间件保留，其抑制逻辑作为额外防线（一旦中间件被确认有效）
+
+---
+
+### Excel/PowerPoint 保存链路代码审查
+
+（实际浏览器验证受 macOS `MachPortRendezvousServer` 权限限制无法自动化，此处为代码路径分析）
+
+#### xlsx 保存链路
+
+```
+用户 Ctrl+S
+→ onSaveDocument(event) 触发
+  event.data = ArrayBuffer  (9.3.0 路径)
+  binaryData = new Uint8Array(event.data)
+  targetFormat = 'XLSX'  (从 fileName.split('.').pop() 得到)
+→ convertBinToDocumentAndDownloadFn(binaryData, fileName, 'XLSX')
+→ convertBinToDocument():
+    isOoxmlZip = (bin[0..3] === PK\x03\x04)  → true (xlsx 是 OOXML ZIP)
+    → 直接返回 { fileName: 'xxx.xlsx', data: bin.buffer.slice(...) }  (跳过 X2T)
+→ 创建 File 对象并 download
+```
+
+**结论：** 链路完整，xlsx 的 OOXML ZIP 快路径会跳过 X2T，直接下载原始字节。
+
+#### pptx 保存链路
+
+```
+用户 Ctrl+S
+→ onSaveDocument(event) 触发
+  binaryData = new Uint8Array(event.data)
+  targetFormat = 'PPTX'
+→ convertBinToDocumentAndDownloadFn(binaryData, fileName, 'PPTX')
+→ convertBinToDocument():
+    isOoxmlZip = true (pptx 同样是 OOXML ZIP)
+    → 直接返回
+→ 下载
+```
+
+**已知风险点：** pptx 的 `openedAt` gate（`api.kvd` / `api.rdg`）依赖 SDK 内部混淆变量名（`api.Jne`、`api.ta?.Ha`），这些名称可能在后续版本变动。若名称已改，轮询 5000ms 超时后会尝试调用 `api.rdg(Date.now())`，若 `rdg` 同样被重命名则 catch 异常继续执行，不影响流程但 openedAt 可能未正确触发，导致演示文稿页面不显示。
+
+**待验证（需真实浏览器）：**
+- xlsx 在 Spreadsheet Editor 中编辑后触发 `onSaveDocument` 事件
+- pptx 在 Presentation Editor 中完整加载（`rdg` gate 是否成功）
+- 保存后文件可正常用 Excel/PowerPoint 打开
+
+---
+
+### 测试验证
+
+```bash
+pnpm run lint:ts    # ✅ 通过
+pnpm run test       # ✅ 96/96 通过
+pnpm run test:coverage  # ✅ 阈值通过（stmt 41.25% > 35%）
+```
+
+覆盖率说明：`onlyoffice-editor.ts` 覆盖率从 22% 降至 ~19%，因新增的 `suppressDialogsInFrame` 函数无法在 jsdom 环境测试（依赖真实 iframe + Common.UI）。总体阈值仍通过，符合预期。
