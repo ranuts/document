@@ -460,7 +460,8 @@ export function createEditorInstance(config: {
               return;
             }
 
-            const mainCtrl = iwin?.DE?.getController?.('Main');
+            const editorApp = iwin?.DE ?? iwin?.SSE ?? iwin?.PE;
+            const mainCtrl = editorApp?.getController?.('Main');
             if (!mainCtrl) return;
 
             // STEP 1: Wait for loadDocument to run (sets mainCtrl.document, registers
@@ -479,13 +480,14 @@ export function createEditorInstance(config: {
             // asc_getEditorPermissions() which requires server license verification. Without
             // a real server the response may set isEdit=false. This patch ensures isEdit=true.
             const versionStr =
-              iwin?.DE?.getController?.('LeftMenu')
+              editorApp
+                ?.getController?.('LeftMenu')
                 ?.leftMenu?.getMenu?.('about')
                 ?.txtVersionNum?.match(/^(\d+\.\d+\.\d+)/)?.[1] ?? '9.3.0';
             const fakePerms = {
-              asc_getLicenseType: () => 3,          // c_oLicenseResult.Success
+              asc_getLicenseType: () => 3, // c_oLicenseResult.Success
               asc_getBuildVersion: () => versionStr,
-              asc_getRights: () => 1,               // c_oRights.Edit
+              asc_getRights: () => 1, // c_oRights.Edit
               asc_getIsAnalyticsEnable: () => false,
               asc_getIsLight: () => false,
               asc_getLicenseMode: () => 0,
@@ -523,7 +525,12 @@ export function createEditorInstance(config: {
                 console.warn('[OO] manual onEditorPermissions failed', e);
               }
             }
-            console.log('[OO] permissions ready: isEdit=', mainCtrl.appOptions?.isEdit, 'inited=', mainCtrl._isPermissionsInited);
+            console.log(
+              '[OO] permissions ready: isEdit=',
+              mainCtrl.appOptions?.isEdit,
+              'inited=',
+              mainCtrl._isPermissionsInited,
+            );
 
             // STEP 4: Inject document bytes.
             let ooxmlBytes: Uint8Array;
@@ -541,6 +548,15 @@ export function createEditorInstance(config: {
             if (ooxmlBytes.byteLength > 0) {
               console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
               api.asc_openDocumentFromBytes(ooxmlBytes);
+              if (!api.I0c && typeof api.Aqg === 'function') {
+                // Serverless Web Mode has no server auth/openedAt response. Without this,
+                // the SDK reaches 100% load progress but never emits asc_onDocumentContentReady.
+                api.Aqg(Date.now());
+              }
+              if (!api.cSd && typeof api.LNg === 'function') {
+                // Spreadsheet editor uses cSd/LNg as the same openedAt gate.
+                api.LNg(Date.now());
+              }
             }
           },
           onDocumentReady: () => {

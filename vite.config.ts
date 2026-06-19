@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import type { Plugin } from 'vite';
+import type { Connect, Plugin } from 'vite';
 
 // Serve a minimal Engine.IO v4 + Socket.IO v4 handshake for OnlyOffice polling.
 //
@@ -21,41 +21,46 @@ import type { Plugin } from 'vite';
 // The document is loaded separately via asc_openDocumentFromBytes in onAppReady.
 function onlyofficeEngineIOHandshake(): Plugin {
   const SID = 'fakesid';
+  const middleware: Connect.NextHandleFunction = (req, res, next) => {
+    if (req.url && /\/doc\/[^/]+\/c\//.test(req.url)) {
+      const url = new URL(req.url, 'http://localhost');
+      const hasSid = url.searchParams.has('sid');
+      res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
+      res.setHeader('Cache-Control', 'no-store');
+      if (req.method === 'POST') {
+        // Acknowledge any client-to-server socket.io packets
+        res.end('ok');
+        return;
+      }
+      if (!hasSid) {
+        // First GET: Engine.IO open packet + Socket.IO v4 namespace connect
+        // Socket.IO v4 requires the namespace connect to include {"sid":"..."} json
+        const open = JSON.stringify({ sid: SID, upgrades: [], pingInterval: 25000, pingTimeout: 5000 });
+        const nsConnect = `40{"sid":"${SID}"}`;
+        const body = `${1 + open.length}:0${open}${nsConnect.length}:${nsConnect}`;
+        res.end(body);
+      } else {
+        // Subsequent GETs: Engine.IO noop keeps the long-poll cycle alive
+        res.end('1:6');
+      }
+      return;
+    }
+    if (req.url && /(^|\/)document_editor_service_worker\.js(?:\?|$)/.test(req.url)) {
+      res.statusCode = 404;
+      res.setHeader('Cache-Control', 'no-store');
+      res.end();
+      return;
+    }
+    next();
+  };
+
   return {
     name: 'onlyoffice-engineio-handshake',
     configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        if (req.url && /\/doc\/[^/]+\/c\//.test(req.url)) {
-          const url = new URL(req.url, 'http://localhost');
-          const hasSid = url.searchParams.has('sid');
-          res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
-          res.setHeader('Cache-Control', 'no-store');
-          if (req.method === 'POST') {
-            // Acknowledge any client-to-server socket.io packets
-            res.end('ok');
-            return;
-          }
-          if (!hasSid) {
-            // First GET: Engine.IO open packet + Socket.IO v4 namespace connect
-            // Socket.IO v4 requires the namespace connect to include {"sid":"..."} json
-            const open = JSON.stringify({ sid: SID, upgrades: [], pingInterval: 25000, pingTimeout: 5000 });
-            const nsConnect = `40{"sid":"${SID}"}`;
-            const body = `${1 + open.length}:0${open}${nsConnect.length}:${nsConnect}`;
-            res.end(body);
-          } else {
-            // Subsequent GETs: Engine.IO noop keeps the long-poll cycle alive
-            res.end('1:6');
-          }
-          return;
-        }
-        if (req.url && /(^|\/)document_editor_service_worker\.js(?:\?|$)/.test(req.url)) {
-          res.statusCode = 404;
-          res.setHeader('Cache-Control', 'no-store');
-          res.end();
-          return;
-        }
-        next();
-      });
+      server.middlewares.use(middleware);
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(middleware);
     },
   };
 }
@@ -142,23 +147,27 @@ function onlyofficeWebModePatch(): Plugin {
   })();
 })();
 </script>`;
+  const middleware: Connect.NextHandleFunction = async (req, res, next) => {
+    if (!req.url || !EDITOR_HTML.test(req.url)) return next();
+    const filePath = path.join(__dirname, 'public', req.url.split('?')[0]);
+    try {
+      const html = await fs.readFile(filePath, 'utf-8');
+      const injected = html.replace('<head>', `<head>\n${PATCH}`);
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-store');
+      res.end(injected);
+    } catch {
+      next();
+    }
+  };
 
   return {
     name: 'onlyoffice-web-mode-patch',
     configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        if (!req.url || !EDITOR_HTML.test(req.url)) return next();
-        const filePath = path.join(__dirname, 'public', req.url.split('?')[0]);
-        try {
-          const html = await fs.readFile(filePath, 'utf-8');
-          const injected = html.replace('<head>', `<head>\n${PATCH}`);
-          res.setHeader('Content-Type', 'text/html; charset=utf-8');
-          res.setHeader('Cache-Control', 'no-store');
-          res.end(injected);
-        } catch {
-          next();
-        }
-      });
+      server.middlewares.use(middleware);
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(middleware);
     },
   };
 }

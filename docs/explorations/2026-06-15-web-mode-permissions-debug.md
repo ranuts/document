@@ -519,17 +519,146 @@ Chrome 插件控制不适用本轮，因为用户没有要求使用既有 Chrome
 - [x] 生产构建通过
 - [x] 现有 E2E 冒烟通过（10 tests）
 - [x] 本轮触碰文件格式检查通过
+- [x] Web Mode `New Word -> asc_openDocumentFromBytes -> canvas render` 新增 E2E 通过
+- [x] Web Mode `New Word` 连续 3 次刷新/重开稳定性通过
+- [x] Web Mode `New Excel -> asc_openDocumentFromBytes -> canvas render` 新增 E2E 通过
 - [ ] 全局 `format:check` 仍因既有文件失败
-- [ ] Web Mode “New Word → asc_openDocumentFromBytes” 真实浏览器验证未完成（当前环境 Chromium 启动受阻）
-- [ ] 连续 3 次刷新稳定性未验证
-- [ ] Excel / PowerPoint 编辑器同路径未验证
-- [ ] Web Mode 下保存链路未重新验证
-- [ ] `onlyofficeWebModePatch` 注入问题未排查
+- [ ] PowerPoint 编辑器同路径未通过，仍停在 `Loading presentation`
+- [ ] Web Mode 下保存链路验证未通过：`downloadAs('DOCX')` 触发 `LocalFileSave` 空引用
+
+### 2026-06-19 追加：调试工具约定
+
+后续继续排查 Web Mode 文档加载时，优先使用 `chrome-devtools-mcp` 进行真实浏览器运行态调试。Playwright trace 适合保留回归证据，但 OnlyOffice iframe 内部状态、controller 字段、network/WebSocket/polling 响应、DOM loading mask、canvas 像素和 console 日志需要通过 Chrome DevTools 直接检查。
+
+本轮验证时再次尝试 `chrome-devtools-mcp`，`list_pages` 返回 `Transport closed`，因此用 Playwright 进行同等运行态采样。后续如果 MCP transport 恢复，仍优先使用它复核 iframe 内部状态。
+
+建议下一轮先用 `chrome-devtools-mcp` 打开本地 preview，然后在 iframe 内采样：
+
+- `DE.getController('Main')` 的 `_isPermissionsInited`、`appOptions.isEdit`、`document`、loading/progress 状态。
+- `Asc.editor` 上与 `asc_openDocumentFromBytes`、内容 ready、错误回调相关的状态。
+- `/doc/{sid}/c/?EIO=4&transport=polling` 是否返回 Engine.IO 文本包，而不是站点 HTML。
+- `ascdesktop://fonts/*.ttf` 是否仍有 CORS/加载错误。
+- `canvas#id_viewer` 尺寸、透明像素比例，以及 `.doc-placeholder` / loading mask 是否消失。
+
+### 2026-06-19 追加：Web Mode ready 门闩
+
+Playwright 回归已覆盖 `New Word -> asc_openDocumentFromBytes -> canvas render` 和 `New Excel -> asc_openDocumentFromBytes -> canvas render`。本轮定位到一个 OnlyOffice 9.x serverless Web Mode 差异：`asc_openDocumentFromBytes()` 注入 OOXML 后，SDK 进度可以到 100%，但没有服务端 auth/openedAt 响应时 Word 的 `Asc.editor.I0c` / Spreadsheet 的 `Asc.editor.cSd` 仍为 `false`，不会继续触发 `asc_onDocumentContentReady`。
+
+当前补丁在注入字节后补齐已验证的 ready 条件：
+
+- Word：`!api.I0c && typeof api.Aqg === 'function'` 时调用 `api.Aqg(Date.now())`。
+- Excel：`!api.cSd && typeof api.LNg === 'function'` 时调用 `api.LNg(Date.now())`。
+
+验证结果：
+
+- loading mask 消失，toolbar 从禁用态变为可编辑态。
+- status bar 显示 `Page 1 of 1`。
+- `canvas#id_viewer` 出现非透明像素。
+- 新增 `test/e2e/onlyoffice-new-document.spec.ts` 通过。
+
+PowerPoint 仍未通过。运行态采样显示 `PE.getController('Main')._isPermissionsInited=true`、`document=true`、`appOptions.isEdit=true`，但 `Asc.editor.kvd=false`、`Asc.editor.Joa=false`，页面停在 `Loading presentation`。直接调用内部 `rdg(Date.now())` 会触发 `Cannot read properties of null (reading 'Ka')`，因此当前不把 PPT ready gate 写入产品代码。
+
+保存链路仍未通过。运行态探测 `window.editor.downloadAs('DOCX')` 可以被调用，但 SDK 进入 `DesktopOfflineAppDocumentStartSave` 后抛出 `Cannot read properties of undefined (reading 'LocalFileSave')`，没有进入当前 `handleSaveDocument` 的成功分支。下一步需要确认 Web Mode 下应补 `AscDesktopEditor.LocalFileSave` mock，还是绕过 DesktopOfflineApp 路径改用 `onDownloadAs`/二进制导出事件。
+
+### 2026-06-19 追加：验证明细
+
+本轮目标是验证 Web Mode 升级路径的真实可用性，而不是只确认 `asc_openDocumentFromBytes` 被调用。判定标准如下：
+
+| 场景 | 输入 | 判定条件 | 结果 |
+| --- | --- | --- | --- |
+| Word 新建稳定性 | `.docx`，连续 3 次 `window.onCreateNew('.docx')` | 出现 `[OO] asc_openDocumentFromBytes`；权限初始化完成；Word ready gate `I0c/Aqg/Fia` 完成；loading mask 消失；`canvas#id_viewer` 有非透明像素；无 pageerror | 通过 |
+| Excel 新建 | `.xlsx`，`window.onCreateNew('.xlsx')` | 出现 `[OO] asc_openDocumentFromBytes`；`SSE.getController('Main')` 权限初始化完成；Spreadsheet ready gate `cSd/LNg/l0` 完成；loading mask 消失；canvas 有非透明像素；无 pageerror | 通过 |
+| PowerPoint 新建 | `.pptx`，`window.onCreateNew('.pptx')` | 同上，但对应 `PE` namespace 和 Presentation ready gate | 未通过 |
+| Word 保存 | `.docx` 打开完成后调用 `window.editor.downloadAs('DOCX')` | 应触发 `onSaveDocument` 或可处理的导出回调，并进入 `handleSaveDocument` 成功分支 | 未通过 |
+
+本轮执行的命令和结果：
+
+```text
+pnpm exec prettier --check src/lib/onlyoffice-editor.ts vite.config.ts test/e2e/onlyoffice-new-document.spec.ts docs/explorations/2026-06-15-web-mode-permissions-debug.md
+=> passed
+
+pnpm run lint:ts
+=> passed
+
+pnpm run test
+=> 7 files / 96 tests passed
+
+pnpm run build
+=> passed，仍有既有 Vite 警告：OnlyOffice api.js 非 module script、主 chunk > 500 kB、module.register() deprecation
+
+CI=1 pnpm run test:e2e
+=> 12 passed, 1 skipped
+```
+
+新增/调整的 E2E 覆盖位于 `test/e2e/onlyoffice-new-document.spec.ts`：
+
+- `New Word opens reliably through OnlyOffice 9.x Web Mode and renders the document canvas`
+  - 同一个测试内连续 3 次打开 `.docx`。
+  - 每次都等待 `[OO] asc_openDocumentFromBytes`。
+  - 采样 iframe 内部 `Asc.editor`、`DE/SSE/PE.getController('Main')`、loading mask 和 canvas 像素。
+- `New Excel opens through OnlyOffice 9.x Web Mode and renders the document canvas`
+  - 验证 `.xlsx` 走 `SSE` namespace。
+  - 确认 `cSd/LNg/l0` ready gate 完成。
+- `New PowerPoint opens through OnlyOffice 9.x Web Mode and renders the document canvas`
+  - 当前 `test.skip`，skip 原因写在测试内：PPTX 停在 `Loading presentation`，`kvd=false/Joa=false`，直接调用 `rdg()` 会触发 `Ka` 空引用。
+
+运行态采样要点：
+
+| 编辑器 | namespace | 权限状态 | ready gate | canvas | 备注 |
+| --- | --- | --- | --- | --- | --- |
+| Word | `DE` | `_isPermissionsInited=true`、`appOptions.isEdit=true` | `I0c=true`、`Fia=true` | `canvas#id_viewer` 非透明像素 > 0 | `api.Aqg(Date.now())` 可补齐 serverless openedAt |
+| Excel | `SSE` | `_isPermissionsInited=true`、`appOptions.isEdit=true` | `cSd=true`、`l0=true` | canvas 非透明像素 > 0 | 最初失败是因为代码只查 `DE`；改为 `DE ?? SSE ?? PE` 后进入注入流程 |
+| PowerPoint | `PE` | `_isPermissionsInited=true`、`document=true`、`appOptions.isEdit=true` | `kvd=false`、`Joa=false` | `id_viewer` 存在，但页面仍显示 `Loading presentation` | 最小 PPTX 注入阶段出现 `Cannot read properties of null (reading 'Ka')` |
+
+PowerPoint 失败细节：
+
+```text
+window.onCreateNew('.pptx')
+-> [OO] onAppReady {hasIframe: true, hasApi: true}
+-> [OO] permissions ready: isEdit= true inited= true
+-> [OO] new doc .pptx 3427 bytes
+-> [OO] asc_openDocumentFromBytes 3427 bytes
+-> pageerror: Cannot read properties of null (reading 'Ka')
+```
+
+PPT 运行态字段：
+
+```json
+{
+  "namespace": "PE",
+  "permissionsInited": true,
+  "hasDocument": true,
+  "appOptions": { "isEdit": true, "canEdit": true },
+  "api": {
+    "Joa": false,
+    "kvd": false,
+    "hasRdg": true,
+    "hasDzj": true,
+    "hasOpenBytes": true
+  },
+  "loading": "Loading presentation"
+}
+```
+
+保存链路失败细节：
+
+```text
+window.editor.downloadAs('DOCX')
+-> called: true
+-> changesError: Cannot read properties of undefined (reading 'LocalFileSave')
+-> stack includes DesktopOfflineAppDocumentStartSave -> Asc.asc_docs_api.$0 -> onDownloadAs
+```
+
+保存链路判断：
+
+- 当前 `handleSaveDocument` 支持 9.3.0 的 `onSaveDocument` ArrayBuffer 事件，但本次 `downloadAs('DOCX')` 没有进入该事件。
+- SDK 选择了 DesktopOfflineApp 保存路径，依赖 `AscDesktopEditor.LocalFileSave`。
+- 下一步应先确认 Web Mode 下 `downloadAs` 是否应被替换为另一个导出 API；如果必须保留当前路径，则需要补一个可控的 `AscDesktopEditor.LocalFileSave` mock，并验证回调数据格式。
 
 下一轮建议顺序：
 
-1. 在可稳定启动浏览器的环境中先验证 `New Word`：确认 `[OO] onAppReady`、`permissions ready`、`asc_openDocumentFromBytes` 日志出现，且无 toolbar 相关 TypeError。
-2. 连续刷新 3 次，确认权限初始化不会随机卡在 `_isPermissionsInited=false`。
-3. 验证 `New Excel` / `New PowerPoint` 是否同样能加载最小 OOXML 模板。
-4. 验证 Ctrl+S / 保存链路在 Web Mode 下仍触发 `onSaveDocument`。
-5. 再处理 `onlyofficeWebModePatch` 注入失败和 EditingError -25 弹窗抑制。
+1. 使用 `chrome-devtools-mcp` 在真实 Chrome 中复核 `New Word`：确认 `[OO] onAppReady`、`permissions ready`、`asc_openDocumentFromBytes` 日志出现，且无 toolbar 相关 TypeError。
+2. 使用 `chrome-devtools-mcp` 复核 `New Excel`：确认 `SSE.getController('Main')`、`cSd/LNg/l0` ready gate 和 canvas 渲染状态。
+3. 继续排查 `New PowerPoint`：重点看 `rdg` 的合法输入/调用时机，以及触发 `Ka` 空引用前缺失的 slide/theme 对象。
+4. 修复保存链路：重点排查 `DesktopOfflineAppDocumentStartSave -> AscDesktopEditor.LocalFileSave` 依赖，以及 `onSaveDocument` / `onDownloadAs` 事件在 Web Mode 下的正确出口。
+5. 再处理 EditingError -25 弹窗抑制。
