@@ -196,17 +196,19 @@ PPT 编辑器正常，有 100 ms 额外 gate，修复后无阻塞弹窗。
 
 ## 已知 404 问题及处理
 
-### `/plugins.json` 404
+### `/plugins.json` 404 → 已修复
 
 **现象**：每次加载时出现 `GET /plugins.json 404`。  
 **原因**：OnlyOffice 在启动时尝试从服务器根路径获取插件配置。  
-**处理**：在 `public/plugins.json` 创建空配置，内容为 `{"pluginsData": []}`，消除 404。
+**处理**：在 `public/plugins.json` 创建空配置，内容为 `{"pluginsData": []}`。  
+**验证**：二次验证确认 `GET /plugins.json [200]` ✅
 
-### `/themes.json` 404
+### `/themes.json` 404 → 已修复
 
 **现象**：每次加载时出现 `GET /themes.json 404`。  
 **原因**：OnlyOffice 从根路径加载自定义主题配置（区别于 `/web-apps/apps/common/main/resources/themes/themes.json`，后者已存在）。  
-**处理**：在 `public/themes.json` 创建空配置，内容为 `{"themes": []}`，消除 404。
+**处理**：在 `public/themes.json` 创建空配置，内容为 `{"themes": []}`。  
+**验证**：二次验证确认 `GET /themes.json [200]` ✅
 
 ### 其他预期 404（无需处理）
 
@@ -224,6 +226,60 @@ OnlyOffice 在内部资源路径（`/web-apps/apps/common/main/resources/themes/
 也会尝试读取同目录下的主题数据。该路径的文件已存在（内容 `{"themes": []}`），
 但加载时仍有 parse warning——可能是 OnlyOffice 期望非空主题列表。
 该警告为非阻塞性，不影响编辑器功能，暂不处理。
+
+---
+
+## 二次验证（2026-06-19 同日）
+
+在所有修复完成后，重新 hard reload 页面并依次点击 New Word → New Excel → New PPT，
+逐一验证 console 输出和网络请求，结果如下：
+
+### Console 关键行（按时序）
+
+**Word：**
+```
+[OO vite-patch] running in .../documenteditor/main/index.html?...     ← Vite 注入确认生效
+[OO] dialog suppression active in iframe (warning + alert)
+[OO] loadDocument ready after 50 ms
+[OO] permissions ready: isEdit= true  inited= true
+[OO] new doc .docx 4204 bytes
+Document loaded: New_Document.docx
+```
+
+**Excel：**
+```
+[OO vite-patch] running in .../spreadsheeteditor/main/index.html?...
+[OO] dialog suppression active in iframe (warning + alert)
+[OO] loadDocument ready after 3000 ms
+[OO] permissions ready: isEdit= true  inited= true
+[OO] new doc .xlsx 1938 bytes
+Document loaded: New_Document.xlsx
+```
+
+**PPT：**
+```
+[OO vite-patch] running in .../presentationeditor/main/index.html?...
+[OO] dialog suppression active in iframe (warning + alert)
+[OO] loadDocument ready after 50 ms
+[OO] permissions ready: isEdit= true  inited= true
+[OO] new doc .pptx 34820 bytes
+[OO] presentation openedAt gate after 100 ms
+Document loaded: New_Document.pptx
+```
+
+### 网络请求状态
+
+| 路径 | 状态 |
+|------|------|
+| `/plugins.json` | **200** ✅（之前 404）|
+| `/themes.json` | **200** ✅（之前 404）|
+| `/document_editor_service_worker.js` | 404（预期） |
+| WebSocket upgrade | 失败→polling 降级（预期） |
+
+### 结论
+
+三个编辑器在同一次会话内连续切换，均无崩溃、无阻塞对话框、无意外 404。
+Vite 中间件注入（`[OO vite-patch]`）在每个编辑器加载时均确认生效。
 
 ---
 
