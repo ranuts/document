@@ -172,6 +172,10 @@ async function writeFixtureFile(outputDir: string, fileName: string): Promise<st
     await fs.writeFile(filePath, 'name,value\nalpha,1\nbeta,2\n');
     return filePath;
   }
+  if (ext === '.pptx') {
+    await fs.copyFile(path.resolve('public/sdkjs/slide/themes/src/01_blank.pptx'), filePath);
+    return filePath;
+  }
 
   const base64 = g_sEmpty_ooxml[ext];
   if (!base64) throw new Error(`Missing fixture for ${fileName}`);
@@ -245,13 +249,41 @@ test('Local Word, Excel, and CSV files open through the upload preview flow', as
   expect(pageErrors).toEqual([]);
 });
 
-test.skip('New PowerPoint opens through OnlyOffice 9.x Web Mode and renders the document canvas', async () => {
-  // PPTX currently remains at "Loading presentation". Runtime sampling shows
-  // Asc.editor.kvd=false/Joa=false after asc_openDocumentFromBytes, and directly
-  // calling the internal rdg() gate throws "Cannot read properties of null (reading 'Ka')".
+test('New PowerPoint opens through OnlyOffice 9.x Web Mode and renders the document canvas', async ({ page }) => {
+  test.setTimeout(150_000);
+
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+
+  const consoleMessages: string[] = [];
+  page.on('console', (message) => {
+    const text = message.text();
+    if (text.includes('[OO]') || message.type() === 'error') {
+      consoleMessages.push(`${message.type()}: ${text}`);
+    }
+  });
+
+  await openNewDocumentAndWaitForRender(page, '.pptx', consoleMessages);
+
+  expect(pageErrors).toEqual([]);
 });
 
-test.skip('Local PowerPoint files open through the upload preview flow', async () => {
-  // PPTX currently fails in asc_openDocumentFromBytes with a Ka null/undefined access
-  // and remains at "Loading presentation".
+test('Local PowerPoint files open through the upload preview flow', async ({ page }, testInfo) => {
+  test.setTimeout(150_000);
+
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+
+  const consoleMessages: string[] = [];
+  page.on('console', (message) => {
+    const text = message.text();
+    if (text.includes('[OO]') || message.type() === 'error') {
+      consoleMessages.push(`${message.type()}: ${text}`);
+    }
+  });
+
+  const filePath = await writeFixtureFile(testInfo.outputPath('fixtures'), 'sample.pptx');
+  await openLocalDocumentAndWaitForRender(page, filePath, consoleMessages);
+
+  expect(pageErrors).toEqual([]);
 });

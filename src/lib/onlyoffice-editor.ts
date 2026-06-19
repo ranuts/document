@@ -537,13 +537,30 @@ export function createEditorInstance(config: {
             if (typeof binData === 'string' && binData.includes(';')) {
               // New document — convert base64 empty template to bytes.
               const ext = '.' + (fileName.split('.').pop()?.toLowerCase() || 'docx');
-              const ooxmlB64 = g_sEmpty_ooxml[ext] || g_sEmpty_ooxml['.docx'];
-              const binaryStr = atob(ooxmlB64);
-              ooxmlBytes = new Uint8Array(binaryStr.length);
-              for (let i = 0; i < binaryStr.length; i++) ooxmlBytes[i] = binaryStr.charCodeAt(i);
+              if (ext === '.pptx') {
+                const templateResponse = await fetch('/sdkjs/slide/themes/src/01_blank.pptx');
+                if (!templateResponse.ok) {
+                  throw new Error(`Failed to load PPTX template: ${templateResponse.status}`);
+                }
+                ooxmlBytes = new Uint8Array(await templateResponse.arrayBuffer());
+              } else {
+                const ooxmlB64 = g_sEmpty_ooxml[ext] || g_sEmpty_ooxml['.docx'];
+                const binaryStr = atob(ooxmlB64);
+                ooxmlBytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) ooxmlBytes[i] = binaryStr.charCodeAt(i);
+              }
               console.log('[OO] new doc', ext, ooxmlBytes.byteLength, 'bytes');
             } else {
-              ooxmlBytes = pendingCopy;
+              const originalFileBytes = (window as unknown as { __pendingOriginalFile?: unknown })
+                .__pendingOriginalFile;
+              const shouldUseOriginalOoxml =
+                ['docx', 'xlsx', 'pptx'].includes(fileType.toLowerCase()) && originalFileBytes instanceof Uint8Array;
+              if (shouldUseOriginalOoxml) {
+                ooxmlBytes = new Uint8Array(originalFileBytes);
+                console.log('[OO] using original OOXML bytes for local preview', ooxmlBytes.byteLength, 'bytes');
+              } else {
+                ooxmlBytes = pendingCopy;
+              }
             }
             if (ooxmlBytes.byteLength > 0) {
               console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
@@ -556,6 +573,19 @@ export function createEditorInstance(config: {
               if (!api.cSd && typeof api.LNg === 'function') {
                 // Spreadsheet editor uses cSd/LNg as the same openedAt gate.
                 api.LNg(Date.now());
+              }
+              if (!api.kvd && typeof api.rdg === 'function') {
+                let presentationWaited = 0;
+                while ((!api.Jne || !api.ta?.Ha) && presentationWaited < 5000) {
+                  await new Promise((r) => setTimeout(r, 100));
+                  presentationWaited += 100;
+                }
+                try {
+                  api.rdg(Date.now());
+                  console.log('[OO] presentation openedAt gate after', presentationWaited, 'ms');
+                } catch (e) {
+                  console.warn('[OO] presentation openedAt gate failed', e);
+                }
               }
             }
           },

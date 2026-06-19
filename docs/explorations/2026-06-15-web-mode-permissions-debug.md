@@ -689,3 +689,66 @@ window.editor.downloadAs('DOCX')
 3. 继续排查 `New PowerPoint`：重点看 `rdg` 的合法输入/调用时机，以及触发 `Ka` 空引用前缺失的 slide/theme 对象。
 4. 修复保存链路：重点排查 `DesktopOfflineAppDocumentStartSave -> AscDesktopEditor.LocalFileSave` 依赖，以及 `onSaveDocument` / `onDownloadAs` 事件在 Web Mode 下的正确出口。
 5. 再处理 EditingError -25 弹窗抑制。
+
+## 2026-06-19 本地预览继续修复：PPT/PPTX 打开链路
+
+本轮目标来自本地预览反馈：Word、XLSX、CSV、PPT 通过本地文件打开时仍有失败风险。先复核现状后确认：
+
+| 项目 | 复核结论 |
+| --- | --- |
+| 本地 `.docx` | 已能通过 upload flow 打开并渲染，E2E 覆盖保持通过 |
+| 本地 `.xlsx` | 已能通过 upload flow 打开并渲染，E2E 覆盖保持通过 |
+| 本地 `.csv` | 已能转换为表格并渲染，E2E 覆盖保持通过 |
+| 本地 `.pptx` | 之前停在 `Loading presentation`，本轮修复后通过 |
+| 新建 `.pptx` | 之前使用最小模板会触发 `Ka` 空引用，本轮改用 SDK 同代 blank theme 模板后通过 |
+
+关键发现：
+
+1. SDK 自带真实模板 `public/sdkjs/slide/themes/src/01_blank.pptx` 通过 upload flow 后，`PE` namespace、权限和 `document` 都已就绪，但 `Asc.editor.kvd=false`、`Asc.editor.Joa=false`，页面停在 `Loading presentation: 39%`。
+2. 在这个状态下调用 `Asc.editor.rdg(Date.now())` 可以补齐 Presentation 的 openedAt gate；之后 `kvd=true`、`Joa=true`、loading mask 消失，`canvas#id_viewer` 采样到非透明像素。
+3. 旧的内联最小 `.pptx` 模板不兼容 9.3 Presentation SDK，过早或直接注入会触发 `Cannot read properties of null (reading 'Ka')`。因此新建 PPT 不再使用 `g_sEmpty_ooxml['.pptx']`，改为读取 SDK 同代的 `01_blank.pptx`。
+4. 本地 `.docx/.xlsx/.pptx` 预览优先使用原始 OOXML ZIP bytes，而不是 `x2t` 转换后的内部 `.bin`。这与已通过的新建 Word/Excel/PPT 输入格式一致；CSV 仍保持现有转换链路。
+
+代码调整：
+
+| 文件 | 调整 |
+| --- | --- |
+| `src/lib/onlyoffice-editor.ts` | 新建 `.pptx` 时 fetch `/sdkjs/slide/themes/src/01_blank.pptx`；本地 OOXML 预览优先注入 `__pendingOriginalFile`；Presentation 编辑器补发受保护的 `rdg(Date.now())` gate |
+| `test/e2e/onlyoffice-new-document.spec.ts` | 本地 PPT fixture 改为复制 SDK blank PPTX；打开 `New PowerPoint` 和 `Local PowerPoint` 两个回归测试 |
+
+验证结果：
+
+```text
+pnpm exec playwright test test/e2e/onlyoffice-new-document.spec.ts --grep "PowerPoint"
+=> 2 passed
+
+pnpm run lint:ts
+=> passed
+
+pnpm run test
+=> 7 files / 96 tests passed
+
+pnpm run build
+=> passed，仍有既有 Vite 警告：OnlyOffice api.js 非 module script、主 chunk > 500 kB、module.register() deprecation
+
+CI=1 pnpm run test:e2e
+=> 15 passed
+```
+
+最终状态：
+
+| 场景 | 当前状态 |
+| --- | --- |
+| New Word | 通过 |
+| New Excel | 通过 |
+| New PowerPoint | 通过 |
+| Local Word upload preview | 通过 |
+| Local Excel upload preview | 通过 |
+| Local CSV upload preview | 通过 |
+| Local PowerPoint upload preview | 通过 |
+
+剩余注意事项：
+
+- 本轮验证的是 OOXML `.docx/.xlsx/.pptx` 和 `.csv`。旧二进制 `.doc/.xls/.ppt` 仍需单独验证转换兼容性。
+- `chrome-devtools-mcp` 是推荐调试方式；本轮曾尝试过该 MCP，但连接返回 `Transport closed`，因此实际运行态验证使用 Playwright fallback。
+- 保存/导出链路仍是后续工作，当前记录只覆盖打开和渲染。
