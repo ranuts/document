@@ -522,6 +522,7 @@ Chrome 插件控制不适用本轮，因为用户没有要求使用既有 Chrome
 - [x] Web Mode `New Word -> asc_openDocumentFromBytes -> canvas render` 新增 E2E 通过
 - [x] Web Mode `New Word` 连续 3 次刷新/重开稳定性通过
 - [x] Web Mode `New Excel -> asc_openDocumentFromBytes -> canvas render` 新增 E2E 通过
+- [x] 本地上传/预览 `.docx`、`.xlsx`、`.csv` 文件通过
 - [ ] 全局 `format:check` 仍因既有文件失败
 - [ ] PowerPoint 编辑器同路径未通过，仍停在 `Loading presentation`
 - [ ] Web Mode 下保存链路验证未通过：`downloadAs('DOCX')` 触发 `LocalFileSave` 空引用
@@ -569,6 +570,8 @@ PowerPoint 仍未通过。运行态采样显示 `PE.getController('Main')._isPer
 | Word 新建稳定性 | `.docx`，连续 3 次 `window.onCreateNew('.docx')` | 出现 `[OO] asc_openDocumentFromBytes`；权限初始化完成；Word ready gate `I0c/Aqg/Fia` 完成；loading mask 消失；`canvas#id_viewer` 有非透明像素；无 pageerror | 通过 |
 | Excel 新建 | `.xlsx`，`window.onCreateNew('.xlsx')` | 出现 `[OO] asc_openDocumentFromBytes`；`SSE.getController('Main')` 权限初始化完成；Spreadsheet ready gate `cSd/LNg/l0` 完成；loading mask 消失；canvas 有非透明像素；无 pageerror | 通过 |
 | PowerPoint 新建 | `.pptx`，`window.onCreateNew('.pptx')` | 同上，但对应 `PE` namespace 和 Presentation ready gate | 未通过 |
+| 本地上传/预览 | `.docx`、`.xlsx`、`.csv`，点击 Upload 后设置 file input | 出现 `[OO] asc_openDocumentFromBytes`；权限初始化完成；对应 ready gate 完成；loading mask 消失；canvas 有非透明像素；无 pageerror | 通过 |
+| 本地 PowerPoint 上传/预览 | `.pptx`，点击 Upload 后设置 file input | 应完成 Presentation ready gate 并渲染 canvas | 未通过 |
 | Word 保存 | `.docx` 打开完成后调用 `window.editor.downloadAs('DOCX')` | 应触发 `onSaveDocument` 或可处理的导出回调，并进入 `handleSaveDocument` 成功分支 | 未通过 |
 
 本轮执行的命令和结果：
@@ -588,6 +591,9 @@ pnpm run build
 
 CI=1 pnpm run test:e2e
 => 12 passed, 1 skipped
+
+CI=1 pnpm run test:e2e -- test/e2e/onlyoffice-new-document.spec.ts
+=> 3 passed, 2 skipped
 ```
 
 新增/调整的 E2E 覆盖位于 `test/e2e/onlyoffice-new-document.spec.ts`：
@@ -599,8 +605,14 @@ CI=1 pnpm run test:e2e
 - `New Excel opens through OnlyOffice 9.x Web Mode and renders the document canvas`
   - 验证 `.xlsx` 走 `SSE` namespace。
   - 确认 `cSd/LNg/l0` ready gate 完成。
+- `Local Word, Excel, and CSV files open through the upload preview flow`
+  - 通过 UI 的 `#upload-button` 触发真实本地文件入口，再设置隐藏 `input[type=file]`。
+  - 使用最小 `.docx` / `.xlsx` OOXML fixture 和简单 CSV fixture。
+  - 复用同一套 iframe runtime、loading mask 和 canvas 像素断言。
 - `New PowerPoint opens through OnlyOffice 9.x Web Mode and renders the document canvas`
   - 当前 `test.skip`，skip 原因写在测试内：PPTX 停在 `Loading presentation`，`kvd=false/Joa=false`，直接调用 `rdg()` 会触发 `Ka` 空引用。
+- `Local PowerPoint files open through the upload preview flow`
+  - 当前 `test.skip`，本地 `.pptx` 上传同样在 `asc_openDocumentFromBytes` 后触发 `Ka` 空引用并停在 `Loading presentation`。
 
 运行态采样要点：
 
@@ -609,6 +621,21 @@ CI=1 pnpm run test:e2e
 | Word | `DE` | `_isPermissionsInited=true`、`appOptions.isEdit=true` | `I0c=true`、`Fia=true` | `canvas#id_viewer` 非透明像素 > 0 | `api.Aqg(Date.now())` 可补齐 serverless openedAt |
 | Excel | `SSE` | `_isPermissionsInited=true`、`appOptions.isEdit=true` | `cSd=true`、`l0=true` | canvas 非透明像素 > 0 | 最初失败是因为代码只查 `DE`；改为 `DE ?? SSE ?? PE` 后进入注入流程 |
 | PowerPoint | `PE` | `_isPermissionsInited=true`、`document=true`、`appOptions.isEdit=true` | `kvd=false`、`Joa=false` | `id_viewer` 存在，但页面仍显示 `Loading presentation` | 最小 PPTX 注入阶段出现 `Cannot read properties of null (reading 'Ka')` |
+
+本地上传/预览复现结果：
+
+| 文件 | namespace | 注入字节 | ready 状态 | canvas | pageerror |
+| --- | --- | --- | --- | --- | --- |
+| `sample.docx` | `DE` | `[OO] asc_openDocumentFromBytes 4581 bytes` | `documentReady=true`、`openedAtReady=true` | `id_viewer` 非透明像素 > 0 | 无 |
+| `sample.xlsx` | `SSE` | `[OO] asc_openDocumentFromBytes 1192 bytes` | `documentReady=true`、`openedAtReady=true` | `ws-canvas` 非透明像素 > 0 | 无 |
+| `sample.csv` | `SSE` | `[OO] asc_openDocumentFromBytes 9693 bytes` | `documentReady=true`、`openedAtReady=true` | `ws-canvas` 非透明像素 > 0 | 无 |
+| `sample.pptx` | `PE` | `[OO] asc_openDocumentFromBytes 1032 bytes` | `documentReady=false`、`openedAtReady=false` | `id_viewer` 非透明像素 = 0 | `Cannot read properties of undefined (reading 'Ka')` |
+
+本地上传/预览判断：
+
+- 当前代码下 `.docx`、`.xlsx`、`.csv` 已能通过真实 upload flow 打开；如果外部“预览功能”仍打不开这三类文件，下一步要优先检查宿主侧传入的是不是同一路径，例如 `RENDER_OFFICE` 分片消息、文件名扩展名、MIME、以及是否传入的是旧格式 `.doc/.xls` 而不是 OOXML `.docx/.xlsx`。
+- `.csv` 会先通过 SheetJS 转成 `.xlsx`，再由 x2t 转换并交给 OnlyOffice；当前最小 CSV fixture 已验证通过。
+- `.pptx` 和新建 PPT 同源失败，问题集中在 Presentation SDK 对注入字节的解析/ready gate，而不是 upload flow 本身。
 
 PowerPoint 失败细节：
 
