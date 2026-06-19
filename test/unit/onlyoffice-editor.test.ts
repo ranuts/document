@@ -4,15 +4,15 @@ vi.mock('ranui/message', () => ({}));
 vi.mock('ranuts/utils', () => ({
   createObjectURL: vi.fn().mockResolvedValue('blob:mock'),
 }));
-vi.mock('../../store', () => ({
+vi.mock('../../src/store', () => ({
   getDocmentObj: vi.fn().mockReturnValue({ fileName: 'test.xlsx', file: undefined }),
 }));
-vi.mock('../../lib/i18n', () => ({
+vi.mock('../../src/lib/i18n', () => ({
   getOnlyOfficeLang: vi.fn().mockReturnValue('en'),
   t: vi.fn((key: string) => key),
 }));
-vi.mock('../../lib/file-types', () => ({ c_oAscFileType2: { 65: 'XLSX', 43: 'DOCX' } }));
-vi.mock('../../lib/document-utils', () => ({ getMimeTypeFromExtension: vi.fn().mockReturnValue('image/png') }));
+vi.mock('../../src/lib/file-types', () => ({ c_oAscFileType2: { 65: 'XLSX', 43: 'DOCX' } }));
+vi.mock('../../src/lib/document-utils', () => ({ getMimeTypeFromExtension: vi.fn().mockReturnValue('image/png') }));
 
 import {
   getNormalizedFile,
@@ -22,7 +22,7 @@ import {
   setConverterCallbacks,
   setReadonlyMode,
   toUint8Array,
-} from '../../lib/onlyoffice-editor';
+} from '../../src/lib/onlyoffice-editor';
 
 function makeEditor(extra: Record<string, unknown> = {}) {
   return { sendCommand: vi.fn(), ...extra };

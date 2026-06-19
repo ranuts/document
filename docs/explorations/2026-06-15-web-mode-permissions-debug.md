@@ -290,3 +290,246 @@ if (opts.msg.indexOf('error occurred during the work') !== -1) return;
 - [ ] Excel / PowerPoint 编辑器同样路径验证
 - [ ] 保存链路在 Web Mode 下仍正常触发
 - [ ] `onlyofficeWebModePatch` 注入问题排查
+
+---
+
+## 2026-06-19 追加：CI / 测试体系恢复记录
+
+**分支：** `explore/path-d-desktop-mock`
+**目标：** 先恢复目录迁移后失效的自动化质量门禁，为后续 Web Mode 浏览器验证提供稳定基线。
+**范围约束：** 本轮不改变 `onAppReady` 四步 Web Mode 加载逻辑，不继续深入 OnlyOffice SDK 行为调试。
+
+### 初始状态
+
+工作区干净，分支与远端同步：
+
+```bash
+git status --short --branch
+# ## explore/path-d-desktop-mock...origin/explore/path-d-desktop-mock
+```
+
+但自动化检查失败：
+
+```bash
+pnpm run lint:ts
+# oxlint 通过
+# tsc --noEmit 失败
+```
+
+主要错误：
+
+1. 测试文件仍从旧目录导入：
+   - `../../lib/document-utils`
+   - `../../lib/embed-api`
+   - `../../lib/i18n`
+   - `../../lib/onlyoffice-editor`
+   - `../../store`
+2. `test/unit/seo-pages.test.ts` 仍读取根目录 `index.html`，但 Vite root 已迁到 `pages/`。
+3. `seo-pages.test.ts` 仍期待旧的 GitHub Pages URL `https://ranuts.github.io/document/{slug}/`，但当前 `public/sitemap.xml` 使用 `https://bybrowser.com/{slug}/`。
+4. TypeScript 6 对 `BlobPart` 的泛型约束更严格，`src/lib/document-converter.ts` 中 `Uint8Array<ArrayBufferLike>` 不能直接作为 `BlobPart` 返回。
+
+`pnpm run test` 同样失败，核心原因与路径迁移一致：
+
+```text
+Failed to resolve import "../../lib/document-utils"
+Failed to resolve import "../../lib/embed-api"
+Failed to resolve import "../../lib/i18n"
+Failed to resolve import "../../lib/onlyoffice-editor"
+ENOENT: no such file or directory, open '/Users/ranzhouhang/Desktop/document/index.html'
+```
+
+### 修复内容
+
+#### 1. `vitest.config.ts`
+
+将 alias 和 coverage include 从旧目录迁到新目录：
+
+```diff
+- '@/lib': resolve(__dirname, 'lib')
+- '@/store': resolve(__dirname, 'store')
++ '@/lib': resolve(__dirname, 'src/lib')
++ '@/store': resolve(__dirname, 'src/store')
+
+- include: ['lib/document-utils.ts', ...]
++ include: ['src/lib/document-utils.ts', ...]
+```
+
+原因：源码已在前序提交中迁入 `src/`，测试配置没有同步，导致动态 import 和 coverage include 仍指向不存在的旧路径。
+
+#### 2. 单元测试导入路径
+
+更新以下测试文件的 import / mock 路径：
+
+- `test/unit/document-utils.test.ts`
+- `test/unit/i18n.test.ts`
+- `test/unit/embed-api.test.ts`
+- `test/unit/onlyoffice-editor.test.ts`
+
+路径从：
+
+```ts
+../../lib/*
+../../store
+```
+
+改为：
+
+```ts
+../../src/lib/*
+../../src/store
+```
+
+注意：`embed-api.test.ts` 使用 `vi.resetModules()` + 动态 `import()`，动态 import 的路径也必须同步更新，否则即使静态 mock 路径正确，测试仍会在运行时解析失败。
+
+#### 3. SEO landing page 测试
+
+`test/unit/seo-pages.test.ts` 同步 Vite root 和 sitemap 域名：
+
+```diff
+- read('index.html')
++ read('pages/index.html')
+
+- path.join(root, slug, 'index.html')
++ path.join(root, 'pages', slug, 'index.html')
+
+- https://ranuts.github.io/document/${slug}/
++ https://bybrowser.com/${slug}/
+```
+
+原因：项目当前 `vite.config.ts` 已设置 `root: 'pages'`，且 `public/sitemap.xml` 的 canonical host 已切到 `bybrowser.com`。
+
+#### 4. TypeScript 6 `BlobPart` 类型修复
+
+`src/lib/document-converter.ts` 的 OOXML ZIP 快路径原来直接返回 `Uint8Array`：
+
+```ts
+return { fileName: outputFileName, data: bin };
+```
+
+在当前 TS / DOM 类型下，`Uint8Array<ArrayBufferLike>` 不能赋给 `BlobPart`，因为其 `buffer` 可能是 `SharedArrayBuffer`。修复为返回当前视图对应范围的 `ArrayBuffer`：
+
+```ts
+return {
+  fileName: outputFileName,
+  data: bin.buffer.slice(bin.byteOffset, bin.byteOffset + bin.byteLength) as ArrayBuffer,
+};
+```
+
+行为影响：只改变类型承载形式，不改变字节内容。该路径仍然表示“SDK 已输出 OOXML ZIP，跳过 X2T，原样作为目标文档返回”。
+
+### 验证结果
+
+以下命令均已通过：
+
+```bash
+pnpm run lint:ts
+# oxlint && tsc --noEmit
+
+pnpm run test
+# 7 test files passed
+# 96 tests passed
+
+pnpm run test:coverage
+# thresholds passed
+# All files: statements 45.72%, branches 46.2%, functions 57.14%, lines 46.13%
+
+pnpm run build
+# Build completed successfully
+
+pnpm run test:e2e
+# 10 passed
+
+pnpm exec prettier --check \
+  src/lib/document-converter.ts \
+  test/unit/document-utils.test.ts \
+  test/unit/embed-api.test.ts \
+  test/unit/i18n.test.ts \
+  test/unit/onlyoffice-editor.test.ts \
+  test/unit/seo-pages.test.ts \
+  vitest.config.ts
+# All matched files use Prettier code style
+
+git diff --check
+# no whitespace errors
+```
+
+`pnpm run build` 和 `pnpm run test:e2e` 仍会打印既有警告：
+
+- Vite 无法 bundle 非 `type="module"` 的 OnlyOffice `api.js` script。
+- 主 chunk 超过 500 kB。
+- Node 26 下 `module.register()` deprecated warning。
+
+这些都是警告，未导致构建或测试失败。
+
+### `format:check` 状态
+
+全局 `pnpm run format:check` 仍失败，但失败来自大量既有文件，不是本轮改动引入：
+
+- `CLAUDE.md`
+- `pages/**/*.html`
+- `src/lib/empty_bin.ts`
+- `src/lib/loading.ts`
+- `src/lib/onlyoffice-editor.ts`
+- `src/lib/ui.ts`
+- `src/styles/base.css`
+
+本轮只对触碰文件执行 Prettier 检查并通过。没有批量格式化全仓库，避免把大量无关 HTML / 生成常量 / 既有样式改动混进当前修复。
+
+### 浏览器专项验证尝试
+
+本轮尝试做一个更贴近主问题的 Playwright 专项验证：
+
+目标流程：
+
+```text
+打开首页 → 点击 New Word → 等待 console 出现 [OO] asc_openDocumentFromBytes
+```
+
+曾临时新增 `test/e2e/web-mode-new-word.spec.ts`，断言：
+
+- 页面点击 `#new-word-button`
+- 30 秒内出现 `[OO] asc_openDocumentFromBytes`
+- 无 `TypeError` pageerror
+
+但测试没有进入应用逻辑，Chromium 在启动阶段失败：
+
+```text
+FATAL: base/apple/mach_port_rendezvous_mac.cc
+bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.*:
+Permission denied (1100)
+```
+
+同样的错误也出现在直接用 Node 脚本 `chromium.launch()` 时。为避免把环境限制引入仓库，临时专项测试已删除。
+
+也尝试接入 Codex in-app browser，返回：
+
+```text
+Browser is not available: iab
+```
+
+Chrome 插件控制不适用本轮，因为用户没有要求使用既有 Chrome 会话，也不需要读取登录态。
+
+### 当前结论
+
+截至 2026-06-19：
+
+- [x] `lint:ts` 恢复通过
+- [x] 单元测试恢复通过（96 tests）
+- [x] coverage 阈值通过
+- [x] 生产构建通过
+- [x] 现有 E2E 冒烟通过（10 tests）
+- [x] 本轮触碰文件格式检查通过
+- [ ] 全局 `format:check` 仍因既有文件失败
+- [ ] Web Mode “New Word → asc_openDocumentFromBytes” 真实浏览器验证未完成（当前环境 Chromium 启动受阻）
+- [ ] 连续 3 次刷新稳定性未验证
+- [ ] Excel / PowerPoint 编辑器同路径未验证
+- [ ] Web Mode 下保存链路未重新验证
+- [ ] `onlyofficeWebModePatch` 注入问题未排查
+
+下一轮建议顺序：
+
+1. 在可稳定启动浏览器的环境中先验证 `New Word`：确认 `[OO] onAppReady`、`permissions ready`、`asc_openDocumentFromBytes` 日志出现，且无 toolbar 相关 TypeError。
+2. 连续刷新 3 次，确认权限初始化不会随机卡在 `_isPermissionsInited=false`。
+3. 验证 `New Excel` / `New PowerPoint` 是否同样能加载最小 OOXML 模板。
+4. 验证 Ctrl+S / 保存链路在 Web Mode 下仍触发 `onSaveDocument`。
+5. 再处理 `onlyofficeWebModePatch` 注入失败和 EditingError -25 弹窗抑制。

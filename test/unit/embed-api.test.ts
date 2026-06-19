@@ -8,13 +8,13 @@ const mockGetReadonlyMode = vi.fn().mockReturnValue(false);
 const mockSetReadonlyMode = vi.fn();
 const mockRequestSaveDocument = vi.fn();
 
-vi.mock('../../lib/document', () => ({ openDocumentFromUrl: mockOpenDocumentFromUrl }));
-vi.mock('../../lib/converter', () => ({
+vi.mock('../../src/lib/document', () => ({ openDocumentFromUrl: mockOpenDocumentFromUrl }));
+vi.mock('../../src/lib/converter', () => ({
   loadEditorApi: mockLoadEditorApi,
   handleDocumentOperation: mockHandleDocumentOperation,
 }));
-vi.mock('../../store', () => ({ setDocmentObj: mockSetDocmentObj }));
-vi.mock('../../lib/onlyoffice-editor', () => ({
+vi.mock('../../src/store', () => ({ setDocmentObj: mockSetDocmentObj }));
+vi.mock('../../src/lib/onlyoffice-editor', () => ({
   getReadonlyMode: mockGetReadonlyMode,
   setReadonlyMode: mockSetReadonlyMode,
   requestSaveDocument: mockRequestSaveDocument,
@@ -79,7 +79,7 @@ describe('embed-api', () => {
       ['?other=1', false],
     ])('URL "%s" → embed mode = %s', async (search, expected) => {
       window.history.pushState({}, '', `/${search}`);
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
       expect(document.body.classList.contains('embed-mode')).toBe(expected);
     });
@@ -88,7 +88,7 @@ describe('embed-api', () => {
   describe('initEmbedApi', () => {
     it('is idempotent - second call does not throw', async () => {
       window.history.pushState({}, '', '/?embed=1');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       expect(() => initEmbedApi()).not.toThrow();
       expect(() => initEmbedApi()).not.toThrow();
       expect(document.body.classList.contains('embed-mode')).toBe(true);
@@ -96,7 +96,7 @@ describe('embed-api', () => {
 
     it('posts document:ready when the load event fires', async () => {
       window.history.pushState({}, '', '/?embed=1');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       window.dispatchEvent(new Event('load'));
@@ -111,7 +111,7 @@ describe('embed-api', () => {
   describe('message handling', () => {
     it('ignores messages that lack a document: prefix', async () => {
       window.history.pushState({}, '', '/?embed=1');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       await dispatchMessage({ type: 'other:ping', id: 'ignore-1' });
@@ -123,7 +123,7 @@ describe('embed-api', () => {
 
     it('ignores messages from disallowed origins when embedOrigin is set', async () => {
       window.history.pushState({}, '', '/?embed=1&embedOrigin=https://allowed.example.com');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       // All active listeners (including accumulated ones) read the current URL's embedOrigin,
@@ -135,7 +135,7 @@ describe('embed-api', () => {
 
     it('accepts messages from a matching embedOrigin', async () => {
       window.history.pushState({}, '', '/?embed=1&embedOrigin=https://allowed.example.com');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       await dispatchMessage({ type: 'document:get-state', id: 'origin-allow-1' }, 'https://allowed.example.com');
@@ -146,7 +146,7 @@ describe('embed-api', () => {
     it('responds to document:get-state with readonly and hasDocument flags', async () => {
       window.history.pushState({}, '', '/?embed=1');
       mockGetReadonlyMode.mockReturnValue(false);
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       await dispatchMessage({ type: 'document:get-state', id: 'state-1' });
@@ -159,7 +159,7 @@ describe('embed-api', () => {
 
     it('responds to document:set-readonly and updates readonly mode', async () => {
       window.history.pushState({}, '', '/?embed=1');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       await dispatchMessage({ type: 'document:set-readonly', id: 'ro-1', payload: { readonly: true } });
@@ -171,7 +171,7 @@ describe('embed-api', () => {
     it('posts document:error when a handler throws', async () => {
       window.history.pushState({}, '', '/?embed=1');
       mockRequestSaveDocument.mockRejectedValueOnce(new Error('Save failed'));
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       await dispatchMessage({ type: 'document:save', id: 'err-1', payload: {} });
@@ -181,7 +181,7 @@ describe('embed-api', () => {
 
     it('opens a document from url payload', async () => {
       window.history.pushState({}, '', '/?embed=1');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
 
       await dispatchMessage({
@@ -205,7 +205,7 @@ describe('embed-api', () => {
 
     async function openWithPayload(payload: Record<string, unknown>, id: string) {
       window.history.pushState({}, '', '/?embed=1');
-      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { initEmbedApi } = await import('../../src/lib/embed-api');
       initEmbedApi();
       await dispatchMessage({ type: 'document:open-buffer', id, payload });
     }

@@ -8,7 +8,7 @@ const read = (relativePath: string) => fs.readFileSync(path.join(root, relativeP
 
 describe('SEO landing pages', () => {
   test('uses a multi-format document editor positioning on the homepage', () => {
-    const html = read('index.html');
+    const html = read('pages/index.html');
 
     expect(html).toContain('<h1>Local Document Editor in Your Browser</h1>');
     expect(html).toContain('Edit DOCX, XLSX, PPTX, and CSV files locally');
@@ -30,8 +30,8 @@ describe('SEO landing pages', () => {
     ];
 
     for (const slug of slugs) {
-      expect(fs.existsSync(path.join(root, slug, 'index.html'))).toBe(true);
-      expect(sitemap).toContain(`https://ranuts.github.io/document/${slug}/`);
+      expect(fs.existsSync(path.join(root, 'pages', slug, 'index.html'))).toBe(true);
+      expect(sitemap).toContain(`https://bybrowser.com/${slug}/`);
       expect(viteConfig).toContain(`${slug}/index.html`);
     }
   });

@@ -127,21 +127,24 @@ const [getDocmentObj, setDocmentObj] = createSignal<{
 ```
 test/unit/
   vitest-smoke.test.ts        # 基础冒烟
-  document-utils.test.ts      # lib/document-utils.ts
-  i18n.test.ts                # lib/i18n.ts
-  embed-api.test.ts           # lib/embed-api.ts（initEmbedApi、消息路由、来源过滤）
-  onlyoffice-editor.test.ts   # lib/onlyoffice-editor.ts（只读模式、requestSaveDocument）
+  document-utils.test.ts      # src/lib/document-utils.ts
+  i18n.test.ts                # src/lib/i18n.ts
+  embed-api.test.ts           # src/lib/embed-api.ts（initEmbedApi、消息路由、来源过滤）
+  onlyoffice-editor.test.ts   # src/lib/onlyoffice-editor.ts（只读模式、requestSaveDocument）
+  seo-pages.test.ts           # pages/ 下 SEO landing pages 和 sitemap 校验
+  sw-routing.test.ts          # Service Worker 路由规则
 test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL、localStorage
 ```
 
-**当前覆盖率（coverage include 范围内）：**
+**当前覆盖率（coverage include 范围内，2026-06-19 `pnpm run test:coverage`）：**
 
-| 文件                 | 语句 | 分支 | 函数 |
-| -------------------- | ---- | ---- | ---- |
-| document-utils.ts    | 89%  | 87%  | 100% |
-| embed-api.ts         | 75%  | 56%  | 85%  |
-| i18n.ts              | 92%  | 65%  | 93%  |
-| onlyoffice-editor.ts | 22%  | 16%  | 31%  |
+| 文件                 | 语句   | 分支   | 函数   | 行     |
+| -------------------- | ------ | ------ | ------ | ------ |
+| document-utils.ts    | 89.47% | 86.95% | 100%   | 89.47% |
+| embed-api.ts         | 97.18% | 90.62% | 100%   | 97.18% |
+| i18n.ts              | 90.56% | 65%    | 93.33% | 91.3%  |
+| onlyoffice-editor.ts | 22.06% | 22.22% | 30.43% | 22.66% |
+| **All files**        | 45.72% | 46.2%  | 57.14% | 46.13% |
 
 覆盖率阈值（全局）：语句 35%、分支 25%、函数 35%、行 35%。
 
@@ -150,6 +153,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 - `embed-api.ts` 有模块级 `initialized` 单例，测试需用 `vi.resetModules()` + 动态 `import()` 获取新实例
 - 旧模块实例的 `window.message` 监听器在 `resetModules` 后仍残留，**不要用 `toHaveBeenCalledTimes` 断言次数**，改用 `toHaveBeenCalledWith` 匹配消息内容或用唯一 ID 定向检索
 - `requestSaveDocument` 有内部超时状态，测试需配合 `vi.useFakeTimers()` + `vi.runAllTimers()` 清理
+- 源码已迁到 `src/`、页面已迁到 `pages/`；新增或修改测试时不要再使用旧的 `../../lib/*`、`../../store` 或根目录 `index.html` 路径。
 
 ### E2E 测试（Playwright）
 
@@ -158,9 +162,38 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 ```
 test/e2e/
   app-smoke.spec.ts   # 应用加载、PWA manifest 冒烟测试
+  embed-api.spec.ts   # embed mode 与 postMessage API 冒烟测试
 ```
 
 E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。本地运行前需先 `pnpm run build`。
+
+### 2026-06-19 CI 恢复记录
+
+本轮修复目标：恢复目录迁移后断掉的基础质量门禁，**不改变 OnlyOffice Web Mode 运行逻辑**。
+
+已修复：
+
+- `vitest.config.ts` alias 和 coverage include 从旧目录 `lib/`、`store/` 改为 `src/lib/`、`src/store/`。
+- 单测导入路径从 `../../lib/*`、`../../store` 改为 `../../src/lib/*`、`../../src/store`。
+- `seo-pages.test.ts` 改为读取 `pages/index.html` 和 `pages/{slug}/index.html`，并匹配当前 sitemap 域名 `https://bybrowser.com/`。
+- `src/lib/document-converter.ts` 中 OOXML ZIP 快路径不再直接返回 `Uint8Array<ArrayBufferLike>`，改为返回切片后的 `ArrayBuffer`，避免 TypeScript 6 对 `BlobPart` 的严格泛型约束报错。
+
+已验证通过：
+
+```bash
+pnpm run lint:ts       # oxlint + tsc --noEmit
+pnpm run test          # 7 files / 96 tests passed
+pnpm run test:coverage # thresholds passed
+pnpm run build         # build completed successfully
+pnpm run test:e2e      # 10 tests passed
+git diff --check
+```
+
+仍需注意：
+
+- `pnpm run format:check` 仍会失败，但失败来自大量既有未格式化文件（`CLAUDE.md`、`pages/*.html`、`src/lib/empty_bin.ts`、`src/lib/ui.ts` 等），不是本轮改动引入。本轮只对触碰文件执行了 Prettier 检查并通过。
+- 曾尝试增加一个专项 E2E 验证“New Word → `[OO] asc_openDocumentFromBytes`”，但当前 macOS 环境多次在 Chromium 启动阶段失败：`bootstrap_check_in ... MachPortRendezvousServer ... Permission denied (1100)`。该临时测试已删除，避免把环境不稳定性提交进仓库。
+- 真实浏览器里的 Web Mode 连续刷新、Excel / PowerPoint、保存链路仍未完成验证；这些仍属于 OnlyOffice 9.3.0 升级主线的待办。
 
 ---
 
@@ -396,14 +429,14 @@ docker rm -f oo
 
 ## 测试覆盖说明
 
-### 当前覆盖率（coverage include 范围内）
+### 当前覆盖率（coverage include 范围内，2026-06-19）
 
-| 文件                   | 语句 | 分支 | 函数 | 备注                       |
-| ---------------------- | ---- | ---- | ---- | -------------------------- |
-| `embed-api.ts`         | 97%  | 91%  | 100% | 接近完整覆盖               |
-| `document-utils.ts`    | 89%  | 87%  | 100% | 接近完整覆盖               |
-| `i18n.ts`              | 92%  | 65%  | 93%  | 未覆盖部分语言的特定翻译键 |
-| `onlyoffice-editor.ts` | ~28% | ~25% | ~41% | 见下方说明                 |
+| 文件                   | 语句   | 分支   | 函数   | 备注                       |
+| ---------------------- | ------ | ------ | ------ | -------------------------- |
+| `embed-api.ts`         | 97.18% | 90.62% | 100%   | 接近完整覆盖               |
+| `document-utils.ts`    | 89.47% | 86.95% | 100%   | 接近完整覆盖               |
+| `i18n.ts`              | 90.56% | 65%    | 93.33% | 未覆盖部分语言的特定翻译键 |
+| `onlyoffice-editor.ts` | 22.06% | 22.22% | 30.43% | 见下方说明                 |
 
 ### 为什么 onlyoffice-editor.ts 覆盖率低
 

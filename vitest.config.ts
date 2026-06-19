@@ -8,11 +8,11 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   resolve: {
     alias: {
-      '@/lib': resolve(__dirname, 'lib'),
-      '@/store': resolve(__dirname, 'store'),
-      '@/assets': resolve(__dirname, 'assets'),
-      '@/types': resolve(__dirname, 'types'),
-      '@/styles': resolve(__dirname, 'styles'),
+      '@/lib': resolve(__dirname, 'src/lib'),
+      '@/store': resolve(__dirname, 'src/store'),
+      '@/assets': resolve(__dirname, 'src/assets'),
+      '@/types': resolve(__dirname, 'src/types'),
+      '@/styles': resolve(__dirname, 'src/styles'),
     },
   },
   test: {
@@ -30,7 +30,7 @@ export default defineConfig({
         functions: 35,
         statements: 35,
       },
-      include: ['lib/document-utils.ts', 'lib/i18n.ts', 'lib/embed-api.ts', 'lib/onlyoffice-editor.ts'],
+      include: ['src/lib/document-utils.ts', 'src/lib/i18n.ts', 'src/lib/embed-api.ts', 'src/lib/onlyoffice-editor.ts'],
     },
   },
 });

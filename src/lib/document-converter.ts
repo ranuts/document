@@ -493,7 +493,10 @@ export class X2TConverter {
       // it directly to the target format (Desktop mock Bsf path). Skip X2T and return as-is.
       const isOoxmlZip = bin.length >= 4 && bin[0] === 0x50 && bin[1] === 0x4b && bin[2] === 0x03 && bin[3] === 0x04;
       if (isOoxmlZip) {
-        return { fileName: outputFileName, data: bin };
+        return {
+          fileName: outputFileName,
+          data: bin.buffer.slice(bin.byteOffset, bin.byteOffset + bin.byteLength) as ArrayBuffer,
+        };
       }
 
       // For all other file types, use standard conversion
