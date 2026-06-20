@@ -119,11 +119,9 @@ index.html            # HTML 入口
 - HarfBuzz 塑形：使用文档字体（msyh.ttc → NotoSansSC，经 XHR patch 拦截）→ 返回 CJK GID（290=新，166=东）
 - FreeType 渲染：使用 DejaVuSans（SDK 启动时通过**直接 HTTP GET `/fonts/DejaVuSans.ttf`** 加载，绕过 JS XHR patch）→ 相同 GID 在 DejaVuSans 里是 Latin 字符（290=Š，166=ä）
 
-修复：`fontRemapMiddleware` 在服务端将 `/fonts/DejaVuSans.ttf` 等系统字体请求重定向到 `/fonts/NotoSansSC-Subset-LongLoca.ttf`，使塑形和渲染使用同一 GID 空间。`public/fonts/NotoSansSC-Subset-LongLoca.ttf`（176KB）是 NotoSansSC 的字符子集，包含测试文档所有汉字 + 完整 Latin，indexToLocFormat=1（LONG loca）。
+修复：`fontRemapMiddleware` 在服务端将 `/fonts/DejaVuSans.ttf` 等系统字体请求重定向到 `/fonts/NotoSansSC-Regular.ttf`，使塑形和渲染使用同一 GID 空间。`public/fonts/NotoSansSC-Regular.ttf`（10.1MB，indexToLocFormat=1 LONG loca）覆盖全部简体中文字符集，已在 `font-map.json` 中全面替换了旧的 `NotoSansSC-Subset-LongLoca.ttf`（176KB 子集，只覆盖 ~501 个字符，导致 Word 页脚/Excel 等文档中的 CJK 字符显示为不可见 tofu）。
 
 详细分析见 [docs/explorations/2026-06-20-cjk-font-split-brain-fix.md](docs/explorations/2026-06-20-cjk-font-split-brain-fix.md)。
-
-> ⚠️ **生产化注意**：当前子集字体仅覆盖特定文档的汉字集，其他 CJK 文档中不在子集内的字符将显示 tofu（□）。生产环境应替换为完整 NotoSansSC-Regular.ttf（~10MB，已在 .gitignore 排除，需另行下载）并更新 font-map.json 中的映射目标。
 
 ### store/index.ts — 全局状态
 
@@ -372,14 +370,14 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
 | `lib/ui.ts`            | 复用现有控制面板的显示/隐藏模式添加 Agent 面板      |
 | `store/index.ts`       | Agent 执行状态可通过同一 signal 机制管理            |
 
-### OnlyOffice Web Apps 版本升级（7.5.0 → 9.4.0）
+### OnlyOffice Web Apps 版本升级（9.3.0 → 9.4.0）
 
 **结论：建议升级，与 Agent 协同计划捆绑进行，主要成本在于获取静态文件而非代码改动。**
 
 #### 当前状态
 
-- **当前版本**：`7.5.0 (build: 2024-10-16)`，文件位于 `public/sdkjs/`（~47 MB）、`public/wasm/`（~74 MB）、`public/web-apps/`
-- **最新版本**：`9.4.0`（2026-05-20 发布），跨越约 1.5 年、2 个大版本
+- **当前版本**：`9.3.0 (build:140)`，文件位于 `public/sdkjs/`、`public/wasm/`、`public/web-apps/`
+- **最新版本**：`9.4.0`（2026-05-20 发布），跨越 1 个小版本
 
 #### 升级带来的主要收益
 

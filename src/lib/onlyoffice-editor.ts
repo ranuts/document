@@ -7,6 +7,7 @@ import type { BinConversionResult, SaveEvent } from './document-types';
 import { getMimeTypeFromExtension } from './document-utils';
 import { g_sEmpty_ooxml } from './empty_bin';
 import { extractDocxMediaUrls } from './docx-zip';
+import { showMediaPlayer } from './media-player';
 
 // Import converter function to avoid circular dependency
 let convertBinToDocumentFn:
@@ -622,6 +623,35 @@ export function createEditorInstance(config: {
                   console.warn('[OO] ZIP media extraction failed:', e);
                 }
               }
+
+              // Intercept api.gqc("showMediaControl", ...) / gqc("play", ...) so that
+              // clicking a video/audio shape in PPTX opens a browser-native overlay player.
+              // In Desktop mode the SDK delegates these calls to AscDesktopEditor; in Web
+              // Mode gqc is a no-op stub. We replace it with our own implementation that
+              // looks up blob URLs from __mediaCache and opens showMediaPlayer.
+              if (api && !('__gqcPatched' in api)) {
+                (api as Record<string, unknown>).__gqcPatched = true;
+                const origGqc = typeof api.gqc === 'function' ? (api.gqc as (...a: unknown[]) => unknown).bind(api) : null;
+                const VIDEO_EXTS = /\.(mp4|webm|mov|avi|mkv|wmv|m4v)$/i;
+                const AUDIO_EXTS = /\.(mp3|wav|ogg|m4a|aac|wma|flac)$/i;
+                (api as Record<string, unknown>).gqc = function (command: unknown, _mediaInfo: unknown) {
+                  if (command === 'showMediaControl' || command === 'play') {
+                    const cache = (window as unknown as Record<string, unknown>).__mediaCache as Record<string, string>;
+                    const entries = Object.entries(cache)
+                      .filter(([k]) => VIDEO_EXTS.test(k) || AUDIO_EXTS.test(k))
+                      .map(([k, url]) => ({ key: k, url, isVideo: VIDEO_EXTS.test(k) }));
+                    if (entries.length > 0) {
+                      showMediaPlayer(entries);
+                    } else {
+                      console.log('[OO] gqc', command, '— no media in cache');
+                    }
+                    return;
+                  }
+                  if (origGqc) return origGqc(command, _mediaInfo);
+                };
+                console.log('[OO] api.gqc patched for browser-native media playback');
+              }
+
               console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
               api.asc_openDocumentFromBytes(ooxmlBytes);
               if (!api.I0c && typeof api.Aqg === 'function') {

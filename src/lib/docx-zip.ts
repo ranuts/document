@@ -15,6 +15,22 @@ const MIME_MAP: Record<string, string> = {
   webp: 'image/webp',
   emf: 'image/x-emf',
   wmf: 'image/x-wmf',
+  // Video
+  mp4: 'video/mp4',
+  webm: 'video/webm',
+  mov: 'video/quicktime',
+  avi: 'video/x-msvideo',
+  wmv: 'video/x-ms-wmv',
+  mkv: 'video/x-matroska',
+  m4v: 'video/mp4',
+  // Audio
+  mp3: 'audio/mpeg',
+  wav: 'audio/wav',
+  ogg: 'audio/ogg',
+  m4a: 'audio/mp4',
+  aac: 'audio/aac',
+  wma: 'audio/x-ms-wma',
+  flac: 'audio/flac',
 };
 
 async function deflateRaw(data: Uint8Array): Promise<Uint8Array> {
