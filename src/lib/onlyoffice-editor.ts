@@ -6,7 +6,7 @@ import { c_oAscFileType2 } from './file-types';
 import type { BinConversionResult, SaveEvent } from './document-types';
 import { getMimeTypeFromExtension } from './document-utils';
 import { g_sEmpty_ooxml } from './empty_bin';
-import { extractDocxMediaUrls } from './docx-zip';
+import { extractDocxMediaUrls, preprocessXlsxLineBreaks } from './docx-zip';
 import { showMediaPlayer } from './media-player';
 
 // Import converter function to avoid circular dependency
@@ -652,6 +652,22 @@ export function createEditorInstance(config: {
                 console.log('[OO] api.gqc patched for browser-native media playback');
               }
 
+              // x2t (v7.5 path) normalised literal "&#10;" text in XLSX cells to real
+              // LF bytes during conversion.  When we bypass x2t and pass raw OOXML,
+              // the SDK's XML parser returns the 5-char text "&#10;" verbatim.
+              // Pre-process XLSX bytes to change &amp;#10; → &#10; (a proper XML
+              // numeric character reference) so the SDK decodes it to U+000A.
+              if (fileType.toLowerCase() === 'xlsx') {
+                try {
+                  const fixed = await preprocessXlsxLineBreaks(ooxmlBytes);
+                  if (fixed !== ooxmlBytes) {
+                    console.log('[OO] XLSX preprocessed: normalised &#10; line-break escapes');
+                    ooxmlBytes = fixed;
+                  }
+                } catch (e) {
+                  console.warn('[OO] XLSX preprocessing failed (continuing with original bytes):', e);
+                }
+              }
               console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
               api.asc_openDocumentFromBytes(ooxmlBytes);
               if (!api.I0c && typeof api.Aqg === 'function') {
