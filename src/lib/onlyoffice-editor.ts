@@ -6,6 +6,7 @@ import { c_oAscFileType2 } from './file-types';
 import type { BinConversionResult, SaveEvent } from './document-types';
 import { getMimeTypeFromExtension } from './document-utils';
 import { g_sEmpty_ooxml } from './empty_bin';
+import { extractDocxMediaUrls } from './docx-zip';
 
 // Import converter function to avoid circular dependency
 let convertBinToDocumentFn:
@@ -418,6 +419,10 @@ export function createEditorInstance(config: {
     const editorLang = getOnlyOfficeLang();
     console.log('Creating new editor instance for:', fileName, 'type:', fileType);
 
+    // Publish media blob URLs so the iframe's HTMLImageElement.src patch can
+    // redirect /media/word/media/<file> requests to the pre-extracted blobs.
+    (window as unknown as Record<string, unknown>).__mediaCache = mediaUrls ?? {};
+
     // Store binary in a window-level slot so the iframe mock can access it
     // via window.parent.__pendingBinary in LocalStartOpen.
     let pendingCopy: Uint8Array;
@@ -600,6 +605,23 @@ export function createEditorInstance(config: {
               }
             }
             if (ooxmlBytes.byteLength > 0) {
+              // For DOCX/XLSX/PPTX opened directly, re-extract images from the ZIP bytes
+              // using their original filenames, because x2t may rename them during conversion
+              // (e.g. image1.tiff → image3.jpg), breaking the SDK's image URL mapping.
+              if (['docx', 'xlsx', 'pptx'].includes(fileType.toLowerCase())) {
+                try {
+                  const zipMedia = await extractDocxMediaUrls(ooxmlBytes);
+                  if (Object.keys(zipMedia).length > 0) {
+                    const cache = (window as unknown as Record<string, unknown>).__mediaCache as Record<string, string>;
+                    for (const [key, url] of Object.entries(zipMedia)) {
+                      cache[key] = url;
+                    }
+                    console.log('[OO] media cache updated from ZIP:', Object.keys(zipMedia));
+                  }
+                } catch (e) {
+                  console.warn('[OO] ZIP media extraction failed:', e);
+                }
+              }
               console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
               api.asc_openDocumentFromBytes(ooxmlBytes);
               if (!api.I0c && typeof api.Aqg === 'function') {

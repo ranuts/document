@@ -183,6 +183,39 @@ function onlyofficeWebModePatch(): Plugin {
     };
   })();
 
+  // Redirect /media/word/media/<file> image requests to pre-extracted blob URLs.
+  // The SDK constructs image URLs as fia+"/media/"+path (fia="" in Web Mode),
+  // producing /media/word/media/image1.png.  Since these are Image object requests
+  // (sec-fetch-dest: image), XHR prototype patching cannot intercept them.
+  // Instead we patch HTMLImageElement.prototype.src to redirect before the browser
+  // sends the network request.  Blob URLs are published by the parent page in
+  // window.__mediaCache = { "media/image1.png": "blob://..." }.
+  (function patchImageUrls() {
+    var srcDesc = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
+    if (!srcDesc || !srcDesc.set) return;
+    var origSet = srcDesc.set;
+    Object.defineProperty(HTMLImageElement.prototype, 'src', {
+      set: function(url) {
+        if (typeof url === 'string' && url.indexOf('/media/') !== -1) {
+          var parts = url.split('/');
+          var fname = parts[parts.length - 1].split('?')[0];
+          var cache = window.parent && window.parent.__mediaCache;
+          if (cache && fname) {
+            var blobUrl = cache['media/' + fname];
+            if (blobUrl) {
+              console.log('[OO vite-patch] image redirect', fname, '->', blobUrl.slice(0, 60));
+              url = blobUrl;
+            }
+          }
+        }
+        origSet.call(this, url);
+      },
+      get: srcDesc.get,
+      configurable: true,
+      enumerable: srcDesc.enumerable,
+    });
+  })();
+
   // Suppress "Connection is lost" dialog — expected in offline Web Mode (no real server).
   // Investigation showed CoAuthoringDisconnect uses Common.UI.alert, not Common.UI.warning.
   (function suppressConnectionLost() {
