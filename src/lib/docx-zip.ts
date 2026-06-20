@@ -83,8 +83,11 @@ export async function extractDocxMediaUrls(docxBytes: Uint8Array): Promise<Recor
     const name = new TextDecoder('utf-8', { fatal: false }).decode(nameBytes);
     cdPos += 46 + fnLen + extraLen + commentLen;
 
-    if (!name.startsWith('word/media/')) continue;
-    const baseName = name.slice('word/media/'.length);
+    // Support all OOXML media paths: word/ (DOCX), xl/ (XLSX), ppt/ (PPTX)
+    const MEDIA_PREFIXES = ['word/media/', 'xl/media/', 'ppt/media/'];
+    const prefix = MEDIA_PREFIXES.find((p) => name.startsWith(p));
+    if (!prefix) continue;
+    const baseName = name.slice(prefix.length);
     if (!baseName || baseName.endsWith('/')) continue;
 
     // Read local file header for exact data offset.
