@@ -65,26 +65,103 @@ function onlyofficeEngineIOHandshake(): Plugin {
   };
 }
 
+// Intercept /fonts/<file> HTTP requests and serve the remapped font file.
+// This works at the HTTP layer so it catches ALL font requests regardless
+// of JS context (main thread XHR, fetch(), Web Worker, WASM emscripten).
+// Without this, DejaVuSans.ttf is loaded directly (bypassing the JS-level
+// XHR patch in the iframe) and used as the FreeType rendering face, causing
+// split-brain: HarfBuzz shapes with NotoSansSC (CJK GIDs) but FreeType
+// renders with DejaVuSans (Latin GIDs), producing garbled characters.
+function fontRemapMiddleware(): Plugin {
+  const FONT_MAP_PATH = path.join(__dirname, 'public', 'font-map.json');
+  const FONTS_DIR = path.join(__dirname, 'public', 'fonts');
+  let cachedMap: Record<string, string> | null = null;
+
+  async function loadMap(): Promise<Record<string, string>> {
+    if (cachedMap !== null) return cachedMap;
+    try {
+      const raw = await fs.readFile(FONT_MAP_PATH, 'utf-8');
+      const parsed = JSON.parse(raw) as Record<string, string>;
+      delete parsed['_comment'];
+      cachedMap = parsed;
+    } catch {
+      cachedMap = {};
+    }
+    return cachedMap;
+  }
+
+  const middleware: Connect.NextHandleFunction = async (req, res, next) => {
+    if (!req.url || req.method !== 'GET') return next();
+    const match = /^\/fonts\/([^?#]+)/.exec(req.url);
+    if (!match) return next();
+
+    const filename = match[1].toLowerCase();
+    const map = await loadMap();
+    const mapped = map[filename];
+    if (!mapped || mapped.toLowerCase() === filename) return next();
+
+    const targetPath = path.join(FONTS_DIR, mapped);
+    try {
+      const data = await fs.readFile(targetPath);
+      console.log(`[vite:font-remap] ${filename} → ${mapped} (${data.length} bytes)`);
+      res.setHeader('Content-Type', 'font/truetype');
+      res.setHeader('Cache-Control', 'no-store');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(data);
+    } catch {
+      next();
+    }
+  };
+
+  return {
+    name: 'font-remap',
+    configureServer(server) {
+      server.middlewares.use(middleware);
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(middleware);
+    },
+  };
+}
+
 // Patch editor index.html in Web Mode (no AscDesktopEditor):
 //  - Rewrite ascdesktop://fonts/ → /fonts/ so the font XHR succeeds
 //  - Suppress "Connection is lost" warning (expected — no real server)
 function onlyofficeWebModePatch(): Plugin {
   const EDITOR_HTML = /\/web-apps\/apps\/(documenteditor|presentationeditor|spreadsheeteditor)\/main\/index\.html/;
-  const PATCH = `<script>
+  const FONT_MAP_PATH = path.join(__dirname, 'public', 'font-map.json');
+
+  // Cache the font map so we only read it once per server lifecycle.
+  // The map is embedded synchronously into every editor iframe HTML response,
+  // eliminating the async-fetch race condition where Chinese fonts fell back to
+  // DejaVuSans.ttf because the fetch hadn't resolved when OnlyOffice requested them.
+  let cachedFontMap: string | null = null;
+
+  async function loadFontMap(): Promise<string> {
+    if (cachedFontMap !== null) return cachedFontMap;
+    try {
+      const raw = await fs.readFile(FONT_MAP_PATH, 'utf-8');
+      // Strip JSON comments (lines starting with "_comment") for safe JS embedding
+      const map = JSON.parse(raw) as Record<string, string>;
+      delete map['_comment'];
+      cachedFontMap = JSON.stringify(map);
+    } catch {
+      cachedFontMap = '{}';
+    }
+    return cachedFontMap;
+  }
+
+  function buildPatch(embeddedFontMap: string): string {
+    return `<script>
 (function () {
   console.log('[OO vite-patch] running in', window.location.href);
   // Rewrite ascdesktop://fonts/<file> → /fonts/<mapped-file>.
-  // Mapping is loaded from /font-map.json so users can extend it without touching code.
-  // Any font NOT in the map (or while the JSON is still loading) falls back to DejaVuSans.ttf,
-  // ensuring no XHR ever reaches the invalid ascdesktop:// scheme (which causes CORS errors
-  // and stalls the loading progress bar).
+  // Font map is embedded at serve time (no async fetch) so every XHR is
+  // rewritten synchronously — no race where fonts fall back to DejaVuSans
+  // before the map loads (which caused garbled CJK in documents).
   (function patchFontUrls() {
     var FALLBACK = 'DejaVuSans.ttf';
-    var fontMap = null;
-    fetch('/font-map.json')
-      .then(function(r) { return r.ok ? r.json() : {}; })
-      .then(function(m) { fontMap = m; })
-      .catch(function() { fontMap = {}; });
+    var fontMap = ${embeddedFontMap};
 
     var origOpen = window.XMLHttpRequest.prototype.open;
     window.XMLHttpRequest.prototype.open = function(method, url) {
@@ -93,8 +170,14 @@ function onlyofficeWebModePatch(): Plugin {
         var fp = url.slice(19);
         var ls = Math.max(fp.lastIndexOf('/'), fp.lastIndexOf(bs));
         var fn = fp.slice(ls + 1).toLowerCase();
-        var mapped = fontMap && fontMap[fn];
+        var mapped = fontMap[fn];
         arguments[1] = '/fonts/' + (mapped || FALLBACK);
+      } else if (typeof url === 'string' && url.indexOf('/fonts/') !== -1) {
+        // SDK may also request fonts via direct /fonts/<name> path (web mode)
+        var fi = url.lastIndexOf('/fonts/') + 7;
+        var fn2 = url.slice(fi).toLowerCase();
+        var mapped2 = fontMap[fn2];
+        if (mapped2) arguments[1] = '/fonts/' + mapped2;
       }
       return origOpen.apply(this, arguments);
     };
@@ -128,17 +211,23 @@ function onlyofficeWebModePatch(): Plugin {
   })();
 })();
 </script>`;
+  }
+
   const middleware: Connect.NextHandleFunction = async (req, res, next) => {
     if (!req.url || !EDITOR_HTML.test(req.url)) return next();
     const reqPath = req.url.split('?')[0];
     const filePath = path.join(__dirname, 'public') + reqPath;
     console.log('[vite:oo-patch] intercepting', reqPath);
     try {
-      const html = await fs.readFile(filePath, 'utf-8');
+      const [html, embeddedFontMap] = await Promise.all([
+        fs.readFile(filePath, 'utf-8'),
+        loadFontMap(),
+      ]);
       if (res.writableEnded) {
         console.warn('[vite:oo-patch] response already sent by another middleware — patch missed!');
         return;
       }
+      const PATCH = buildPatch(embeddedFontMap);
       const injected = html.replace('<head>', `<head>\n${PATCH}`);
       const patched = injected !== html;
       console.log('[vite:oo-patch] injected:', patched, 'bytes:', injected.length);
@@ -210,7 +299,7 @@ export default defineConfig({
   root: 'pages',
   base: './',
   publicDir: resolve(__dirname, 'public'),
-  plugins: [onlyofficeEngineIOHandshake(), onlyofficeWebModePatch(), injectCriticalStyle(), injectGtag()],
+  plugins: [onlyofficeEngineIOHandshake(), fontRemapMiddleware(), onlyofficeWebModePatch(), injectCriticalStyle(), injectGtag()],
   server: {
     fs: {
       // Allow Vite to serve src/ which lives outside the pages/ root

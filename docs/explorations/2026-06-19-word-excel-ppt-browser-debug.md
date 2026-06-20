@@ -385,6 +385,96 @@ console 只剩 SW 注册 404（预期）和 WebSocket fallback（预期），无
 
 ---
 
+## 问题三：本地 DOCX 中文乱码（split-brain 渲染）
+
+**日期：** 2026-06-19 ~ 2026-06-20
+
+### 症状
+
+上传本地 DOCX 文件（字体：Microsoft YaHei / msyh.ttc），中文文字显示为乱码：
+Š、ä、š、ı、ê、ã 等 Latin 字符，而非预期的中文。
+
+### 根因：Split-brain 渲染
+
+SDK 有**两条并行的字体加载路径**：
+
+| 路径 | 触发时机 | 拦截情况 |
+|------|---------|---------|
+| `ascdesktop://fonts/<name>` XHR | 加载文档指定字体（如 msyh.ttc）| ✅ JS-level XHR patch 捕获 |
+| 直接 `GET /fonts/<name>` HTTP | SDK 启动时加载系统字体（DejaVuSans、LiberationSans 等）| ❌ 绕过 JS patch |
+
+**HarfBuzz**（字形塑形）使用文档字体（通过 XHR patch 映射到 NotoSansSC）——正确返回 CJK GID（GID 290 = 新，GID 166 = 东）。
+
+**FreeType**（字形渲染）使用 DejaVuSans（通过独立 HTTP GET 直接加载）——同 GID 在 DejaVuSans 中是 Latin 字符（GID 290 = Š，GID 166 = ä）。
+
+这一"分裂大脑"（split-brain）导致塑形的 GID 在渲染时被错误的字符表示。
+
+证据：
+- DejaVuSans GID 290=Š, 166=ä, 291=š, 238=İ, 243=ı, 172=ê — 与实际乱码字符完全吻合
+- 将 msyh.ttc 临时映射到 DejaVuSans → HarfBuzz 没有 CJK → 显示 □（tofu），验证了塑形路径
+- 将 msyh.ttc 映射到 NotoSansSC-Subset → HarfBuzz 给 CJK GID，渲染仍用 DejaVuSans → 得到对应 Latin 字符
+
+### 为什么 JS-level XHR patch 无效
+
+DejaVuSans.ttf 等系统字体是 SDK 初始化时通过**直接 HTTP GET**（而非 `ascdesktop://fonts/` XHR）加载。
+DevTools 中可见 `GET /fonts/DejaVuSans.ttf`，但 iframe 内 XHR prototype 日志无任何对应条目——
+请求根本未经过 `window.XMLHttpRequest`，而是通过某个不受 JS patch 约束的内部路径发出。
+
+（注：SDK 只有拼写检查用 Web Worker，字体加载无 Worker；`fetch()` 也无字体相关调用。
+ 最终确认为 SDK 初始化阶段在 `window.XMLHttpRequest.prototype.open` 被 patch 之前或通过
+ emscripten 内部机制发起的直接 HTTP 请求。）
+
+### 修复：服务端 HTTP 中间件
+
+在 `vite.config.ts` 新增 `fontRemapMiddleware()` Vite 插件，在 **HTTP 层**拦截所有
+`GET /fonts/<file>` 请求，根据 `public/font-map.json` 映射返回正确文件内容。
+
+```typescript
+// vite.config.ts — fontRemapMiddleware()
+const match = /^\/fonts\/([^?#]+)/.exec(req.url);
+const filename = match[1].toLowerCase();
+const mapped = map[filename];
+if (mapped && mapped.toLowerCase() !== filename) {
+  const data = await fs.readFile(path.join(FONTS_DIR, mapped));
+  res.end(data);  // serve mapped file instead
+}
+```
+
+此方案**与 JS 运行上下文无关**，无论请求来自主线程 XHR、fetch()、Web Worker 还是
+WASM emscripten 内部，均在服务端统一重定向。
+
+### 修复后效果
+
+服务端日志（14 条）：
+```
+[vite:font-remap] dejavusans.ttf → NotoSansSC-Subset-LongLoca.ttf (179980 bytes)
+[vite:font-remap] liberationsans-regular.ttf → NotoSansSC-Subset-LongLoca.ttf (179980 bytes)
+...
+```
+
+网络层：
+- `GET /fonts/DejaVuSans.ttf [200]` → 实际内容为 NotoSansSC-Subset 字节
+- `GET /fonts/NotoSansSC-Subset-LongLoca.ttf [304]` → XHR 拦截的 msyh.ttc 请求（缓存命中）
+
+两条路径现在都服务同一个字体文件 → HarfBuzz 和 FreeType 使用相同 GID 空间 →
+中文正确显示（截图：新东方大学事业部第6期高潜人才联合选拔工作报告）。
+
+### 关键文件
+
+| 文件 | 说明 |
+|------|------|
+| `public/fonts/NotoSansSC-Subset-LongLoca.ttf` | NotoSansSC 子集（含测试文档所有 CJK 字符 + Latin），indexToLocFormat=1（LONG loca） |
+| `public/font-map.json` | `dejavusans.ttf` / `liberationsans-*.ttf` 等系统字体 → NotoSansSC-Subset；CJK 字体同上 |
+| `vite.config.ts` | 新增 `fontRemapMiddleware()` 插件，注册在 `plugins` 数组最前面 |
+
+### 待改进（生产化方向）
+
+- 当前 NotoSansSC-Subset-LongLoca.ttf 仅含测试文档字符集，其他 CJK 字符会显示 tofu
+- 生产环境应替换为完整 NotoSansSC-Regular.ttf（~7MB）或动态生成更大的子集
+- 需验证纯 Latin 文档（Calibri/Verdana 等）在 NotoSansSC 替换后的渲染质量
+
+---
+
 ## 待验证事项
 
 以下场景仍未测试，留待后续：
@@ -392,6 +482,7 @@ console 只剩 SW 注册 404（预期）和 WebSocket fallback（预期），无
 1. **保存链路**（Word / Excel / PPT）：`requestSaveDocument` → `onDownloadAs` → File 返回给调用方
 2. **格式转换**：docx → pdf / xlsx → csv 等（依赖 x2t WASM）
 3. **连续刷新稳定性**：多次 reload 不出现权限初始化时序问题
+4. **完整 CJK 字符集**：当前子集字体仅覆盖测试文档，需切换到完整 NotoSansSC
 
 ---
 
@@ -400,7 +491,8 @@ console 只剩 SW 注册 404（预期）和 WebSocket fallback（预期），无
 | 文件 | 变更 |
 |------|------|
 | `src/lib/onlyoffice-editor.ts` | `suppressDialogsInFrame` 同时 patch `Common.UI.warning` 和 `Common.UI.alert` |
-| `vite.config.ts` | `suppressConnectionLost` IIFE 同步更新；`patchFontUrls` 改为 fetch `/font-map.json` + 通用 fallback |
+| `vite.config.ts` | `suppressConnectionLost` IIFE 同步更新；`patchFontUrls` 内嵌 font-map；新增 `fontRemapMiddleware()` 服务端 HTTP 字体重定向 |
 | `public/themes.json` | 新建，内容 `{"themes": []}` |
 | `public/plugins.json` | 新建，内容 `{"pluginsData": []}` |
-| `public/font-map.json` | 新建，90+ 条 Windows 字体映射，用户可直接扩展 |
+| `public/font-map.json` | 新建，90+ 条 Windows 字体映射；`dejavusans.*`/`liberationsans-*` 新增指向 NotoSansSC-Subset |
+| `public/fonts/NotoSansSC-Subset-LongLoca.ttf` | 新增，NotoSansSC 子集字体（LONG loca，179KB）|
