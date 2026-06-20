@@ -106,7 +106,24 @@ index.html            # HTML 入口
 
 **弹窗抑制（2026-06-19 已修复）**：`suppressDialogsInFrame(iwin)` 在 `onAppReady` 里直接 patch `iwin.Common.UI.warning`，抑制 "Connection is lost" 和 EditingError -25 弹窗。不再依赖 Vite 中间件注入（中间件 `onlyofficeWebModePatch` 保留但其 `suppressConnectionLost` 逻辑为冗余防线）。
 
-**Vite 中间件注入状态**：`onlyofficeWebModePatch` 中间件已加诊断日志（`[vite:oo-patch] intercepting ...`）。下次运行 `pnpm dev` 时可从终端确认是否命中；编辑器内 `[OO vite-patch] running in ...` 日志可确认脚本已注入。字体 URL 重写（`ascdesktop://fonts/` → `/fonts/`）在 Web Mode 9.3.0 下暂未触发（Web Mode 不使用 ascdesktop:// 协议），可暂不处理。
+**Vite 中间件字体重写（两层机制，2026-06-20 完整修复）**：
+
+`vite.config.ts` 包含两个字体相关插件：
+
+1. **`onlyofficeWebModePatch`**：向编辑器 iframe HTML 的 `<head>` 注入内联 `<script>`，patch `window.XMLHttpRequest.prototype.open`，将 `ascdesktop://fonts/<name>` 重写为 `/fonts/<mapped>`（font-map.json 决定映射）。确认：Web Mode 9.3.0 中 `sdk-all-min.js` 确实通过 `ascdesktop://fonts/` XHR 加载**文档字体**（msyh.ttc 等），该 patch 正常拦截。
+
+2. **`fontRemapMiddleware`**（2026-06-20 新增）：在 HTTP 层拦截所有 `GET /fonts/<file>` 请求，根据 font-map.json 直接返回映射后的文件内容。解决了 JS-level patch 无法覆盖的**系统字体直接 HTTP 请求**问题（见下方 CJK 乱码根因）。
+
+**CJK 中文乱码根因（2026-06-20 确认并修复）**：本地 DOCX 中文显示为 Š/ä/š/ı/ê 等乱码，根因是 **split-brain 渲染**：
+
+- HarfBuzz 塑形：使用文档字体（msyh.ttc → NotoSansSC，经 XHR patch 拦截）→ 返回 CJK GID（290=新，166=东）
+- FreeType 渲染：使用 DejaVuSans（SDK 启动时通过**直接 HTTP GET `/fonts/DejaVuSans.ttf`** 加载，绕过 JS XHR patch）→ 相同 GID 在 DejaVuSans 里是 Latin 字符（290=Š，166=ä）
+
+修复：`fontRemapMiddleware` 在服务端将 `/fonts/DejaVuSans.ttf` 等系统字体请求重定向到 `/fonts/NotoSansSC-Subset-LongLoca.ttf`，使塑形和渲染使用同一 GID 空间。`public/fonts/NotoSansSC-Subset-LongLoca.ttf`（176KB）是 NotoSansSC 的字符子集，包含测试文档所有汉字 + 完整 Latin，indexToLocFormat=1（LONG loca）。
+
+详细分析见 [docs/explorations/2026-06-20-cjk-font-split-brain-fix.md](docs/explorations/2026-06-20-cjk-font-split-brain-fix.md)。
+
+> ⚠️ **生产化注意**：当前子集字体仅覆盖特定文档的汉字集，其他 CJK 文档中不在子集内的字符将显示 tofu（□）。生产环境应替换为完整 NotoSansSC-Regular.ttf（~10MB，已在 .gitignore 排除，需另行下载）并更新 font-map.json 中的映射目标。
 
 ### store/index.ts — 全局状态
 
