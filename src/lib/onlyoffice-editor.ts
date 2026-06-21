@@ -6,7 +6,7 @@ import { c_oAscFileType2 } from './file-types';
 import type { BinConversionResult, SaveEvent } from './document-types';
 import { getMimeTypeFromExtension } from './document-utils';
 import { g_sEmpty_ooxml } from './empty_bin';
-import { extractDocxMediaUrls, preprocessXlsxLineBreaks } from './docx-zip';
+import { extractDocxMediaUrls, preprocessXlsxLineBreaks, preprocessPptx } from './docx-zip';
 import { showMediaPlayer } from './media-player';
 
 // Import converter function to avoid circular dependency
@@ -666,6 +666,19 @@ export function createEditorInstance(config: {
                   }
                 } catch (e) {
                   console.warn('[OO] XLSX preprocessing failed (continuing with original bytes):', e);
+                }
+              }
+              // PPTX preprocessing: fix two SDK bugs in Web Mode 9.3.0 before parsing.
+              // See preprocessPptx() in docx-zip.ts for details.
+              if (fileType.toLowerCase() === 'pptx') {
+                try {
+                  const fixed = await preprocessPptx(ooxmlBytes);
+                  if (fixed !== ooxmlBytes) {
+                    console.log('[OO] PPTX preprocessed (showMasterPhAnim stripped, docProps/app.xml injected if missing)');
+                    ooxmlBytes = fixed;
+                  }
+                } catch (e) {
+                  console.warn('[OO] PPTX preprocessing failed (continuing with original bytes):', e);
                 }
               }
               console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
