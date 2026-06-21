@@ -122,3 +122,7 @@ declare global {
     editor: DocEditor;
   }
 }
+
+declare const __IS_BETA__: boolean;
+declare const __STABLE_URL__: string;
+declare const __BETA_URL__: string;

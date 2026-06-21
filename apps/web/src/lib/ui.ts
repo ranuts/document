@@ -808,8 +808,7 @@ export const createLandingNav = (): void => {
   nav.appendChild(createTopLink('Issues', 'https://github.com/ranuts/document/issues', true));
 
   // Tag icon + select version picker
-  const BETA_PATH = '/9.3.0/';
-  const isBeta = window.location.pathname.startsWith(BETA_PATH);
+  const isBeta = __IS_BETA__;
 
   const versionPicker = document.createElement('div');
   versionPicker.className = 'version-picker';
@@ -850,7 +849,7 @@ export const createLandingNav = (): void => {
 
   versionSelect.addEventListener('change', () => {
     betaBadge.hidden = versionSelect.value !== 'beta';
-    window.location.href = versionSelect.value === 'beta' ? BETA_PATH : '/';
+    window.location.href = versionSelect.value === 'beta' ? __BETA_URL__ : __STABLE_URL__;
   });
 
   versionPicker.appendChild(versionIcon);

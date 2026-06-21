@@ -16,7 +16,7 @@ describe('SEO landing pages', () => {
   });
 
   test('publishes private and format-specific landing pages', () => {
-    const sitemap = read('public/sitemap.xml');
+    const sitemap = read('public-beta/sitemap.xml');
     const viteConfig = read('vite.config.ts');
     const slugs = [
       'docx-editor',
