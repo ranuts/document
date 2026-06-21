@@ -28,17 +28,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>Embed Document Editor | iframe postMessage API</title>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Embed Document Editor — ByBrowser",
-      "url": "https://bybrowser.com/embed-document-editor/",
-      "description": "Embed a private browser-based Office editor in your web app via iframe and postMessage API. No backend or Document Server required.",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web Browser",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": "iframe embed, postMessage API, DOCX XLSX PPTX CSV, no upload, no backend required"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Embed Document Editor — ByBrowser",
+        "url": "https://bybrowser.com/embed-document-editor/",
+        "description": "Embed a private browser-based Office editor in your web app via iframe and postMessage API. No backend or Document Server required.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "iframe embed, postMessage API, DOCX XLSX PPTX CSV, no upload, no backend required"
+      }
     </script>
     <script src="../web-apps/apps/api/documents/api.js"></script>
   </head>
@@ -46,12 +46,15 @@
   <body>
     <main id="seo-content">
       <h1>Embed a Private Document Editor</h1>
-      <p>Use an iframe and postMessage API to add local Office editing to your own web application — no backend, no upload, no Document Server required.</p>
+      <p>
+        Use an iframe and postMessage API to add local Office editing to your own web application — no backend, no
+        upload, no Document Server required.
+      </p>
 
       <h2>How Embedding Works</h2>
       <p>
-        Point an <code>&lt;iframe&gt;</code> at <code>https://bybrowser.com/?embed=1</code> and control the editor
-        from your parent page using <code>window.postMessage</code>. Your application handles authentication and file
+        Point an <code>&lt;iframe&gt;</code> at <code>https://bybrowser.com/?embed=1</code> and control the editor from
+        your parent page using <code>window.postMessage</code>. Your application handles authentication and file
         storage; the iframe handles editing only. Because all processing happens in the browser, no document content
         ever passes through a server.
       </p>
@@ -87,10 +90,16 @@ window.addEventListener('message', (e) => {
       <h2>Frequently Asked Questions</h2>
       <dl>
         <dt>Do I need to run a backend server?</dt>
-        <dd>No. The document editor is entirely client-side. Your backend only needs to serve or receive the file — editing and rendering happen in the iframe.</dd>
+        <dd>
+          No. The document editor is entirely client-side. Your backend only needs to serve or receive the file —
+          editing and rendering happen in the iframe.
+        </dd>
 
         <dt>Can I restrict which origins can send messages?</dt>
-        <dd>Yes. Add <code>?embedOrigin=https://yourapp.com</code> to the iframe URL to limit postMessage communication to your domain only.</dd>
+        <dd>
+          Yes. Add <code>?embedOrigin=https://yourapp.com</code> to the iframe URL to limit postMessage communication to
+          your domain only.
+        </dd>
 
         <dt>What file formats can the embedded editor handle?</dt>
         <dd>DOCX, XLSX, PPTX, and CSV are all supported in embedded mode.</dd>

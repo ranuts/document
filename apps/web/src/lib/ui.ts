@@ -210,7 +210,8 @@ const zhLandingPages: Record<string, LandingPage> = {
   '/': {
     eyebrow: '私密 Office 编辑，无需文档服务器',
     title: '在浏览器中本地编辑文档',
-    description: '在浏览器中直接编辑 DOCX、XLSX、PPTX 和 CSV 文件，文件始终留在设备上，无需上传、无需账号、无需文档服务器。',
+    description:
+      '在浏览器中直接编辑 DOCX、XLSX、PPTX 和 CSV 文件，文件始终留在设备上，无需上传、无需账号、无需文档服务器。',
     badge: '多格式支持',
     sections: [
       {
@@ -230,7 +231,8 @@ const zhLandingPages: Record<string, LandingPage> = {
   '/private-document-editor/': {
     eyebrow: '浏览器内私密文档编辑',
     title: '无需上传的隐私文档编辑器',
-    description: '在本地优先的浏览器编辑器中打开 Office 文档，编辑 Word、Excel、PowerPoint 和 CSV 文件，无需将私密文件发送到托管服务。',
+    description:
+      '在本地优先的浏览器编辑器中打开 Office 文档，编辑 Word、Excel、PowerPoint 和 CSV 文件，无需将私密文件发送到托管服务。',
     badge: '无需上传',
     sections: [
       {
@@ -330,7 +332,8 @@ const zhLandingPages: Record<string, LandingPage> = {
   '/onlyoffice-wasm/': {
     eyebrow: '静态 Web 应用中的 OnlyOffice',
     title: 'OnlyOffice WASM 文档编辑器',
-    description: 'OnlyOffice web apps 和 x2t WebAssembly 转换的纯前端集成方案，无需运行 Document Server 即可体验本地 Office 编辑。',
+    description:
+      'OnlyOffice web apps 和 x2t WebAssembly 转换的纯前端集成方案，无需运行 Document Server 即可体验本地 Office 编辑。',
     badge: 'WASM 架构',
     sections: [
       {
@@ -370,7 +373,8 @@ const zhLandingPages: Record<string, LandingPage> = {
   '/self-hosted-document-editor/': {
     eyebrow: '静态托管或 Docker',
     title: '自部署文档编辑器',
-    description: '在自己的基础设施上运行基于浏览器的 Office 编辑器，部署为静态文件或 Docker 容器，支持可选的 HTTPS 和基础认证。',
+    description:
+      '在自己的基础设施上运行基于浏览器的 Office 编辑器，部署为静态文件或 Docker 容器，支持可选的 HTTPS 和基础认证。',
     badge: '自部署',
     sections: [
       {
@@ -416,7 +420,7 @@ const normalizePathname = () => {
 const getLandingPage = () => {
   const lang = getLanguage();
   const key = normalizePathname();
-  return (allLandingPages[lang]?.[key] ?? allLandingPages[lang]?.['/']) ?? landingPages['/'];
+  return allLandingPages[lang]?.[key] ?? allLandingPages[lang]?.['/'] ?? landingPages['/'];
 };
 
 const getSiteRoot = () => {
@@ -793,7 +797,10 @@ export const createLandingNav = (): void => {
     a.className = 'top-link';
     a.href = href;
     a.textContent = text;
-    if (external) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    if (external) {
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    }
     return a;
   };
 
@@ -1051,14 +1058,14 @@ export const createControlPanel = (): void => {
   const root = getSiteRoot();
   const navItems: [string, string][] = [
     [t('navPrivateEditor'), `${root}private-document-editor/`],
-    [t('navDocxEditor'),    `${root}docx-editor/`],
-    [t('navXlsxEditor'),   `${root}xlsx-editor/`],
-    [t('navPptxEditor'),   `${root}pptx-editor/`],
-    [t('navCsvEditor'),    `${root}csv-editor/`],
+    [t('navDocxEditor'), `${root}docx-editor/`],
+    [t('navXlsxEditor'), `${root}xlsx-editor/`],
+    [t('navPptxEditor'), `${root}pptx-editor/`],
+    [t('navCsvEditor'), `${root}csv-editor/`],
     [t('navOnlyofficeWasm'), `${root}onlyoffice-wasm/`],
-    [t('navEmbedApi'),     `${root}embed-document-editor/`],
-    [t('navSelfHosted'),   `${root}self-hosted-document-editor/`],
-    ['GitHub',             'https://github.com/ranuts/document'],
+    [t('navEmbedApi'), `${root}embed-document-editor/`],
+    [t('navSelfHosted'), `${root}self-hosted-document-editor/`],
+    ['GitHub', 'https://github.com/ranuts/document'],
   ];
   navItems.forEach(([label, href]) => {
     const link = document.createElement('a');

@@ -12,16 +12,16 @@ pnpm add @bybrowser/editor-v9
 
 ## 包含内容
 
-| 模块 | 说明 |
-|------|------|
-| `onlyoffice-editor.ts` | 编辑器实例生命周期、只读模式、保存流程 |
+| 模块                    | 说明                                                |
+| ----------------------- | --------------------------------------------------- |
+| `onlyoffice-editor.ts`  | 编辑器实例生命周期、只读模式、保存流程              |
 | `document-converter.ts` | x2t WASM 封装，负责 DOCX/XLSX/PPTX 与内部格式的互转 |
-| `document-utils.ts` | 纯工具函数：文件类型检测、MIME 映射、路径处理 |
-| `document-types.ts` | x2t/Emscripten 相关 TypeScript 类型定义 |
-| `docx-zip.ts` | 纯浏览器 ZIP 解析器，用于 OOXML 预处理 |
-| `empty_bin.ts` | 新建空文档时使用的最小 OOXML 二进制模板 |
-| `i18n.ts` | 国际化字符串（中/英/日/韩/德/法/西/葡/俄） |
-| `media-player.ts` | PPTX 嵌入视频/音频的浏览器原生叠加播放器 |
+| `document-utils.ts`     | 纯工具函数：文件类型检测、MIME 映射、路径处理       |
+| `document-types.ts`     | x2t/Emscripten 相关 TypeScript 类型定义             |
+| `docx-zip.ts`           | 纯浏览器 ZIP 解析器，用于 OOXML 预处理              |
+| `empty_bin.ts`          | 新建空文档时使用的最小 OOXML 二进制模板             |
+| `i18n.ts`               | 国际化字符串（中/英/日/韩/德/法/西/葡/俄）          |
+| `media-player.ts`       | PPTX 嵌入视频/音频的浏览器原生叠加播放器            |
 
 ## 主要导出
 
@@ -34,7 +34,7 @@ import {
   getReadonlyMode,
   requestSaveDocument,
   setConverterCallbacks,
-  setDocumentStateGetter,   // 注入应用层 store getter
+  setDocumentStateGetter, // 注入应用层 store getter
 
   // 格式转换
   X2TConverter,

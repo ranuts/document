@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  DOCUMENT_TYPE_MAP,
-  getBasePath,
-  getDocumentType,
-  getMimeTypeFromExtension,
-} from '@bybrowser/editor-v9';
+import { DOCUMENT_TYPE_MAP, getBasePath, getDocumentType, getMimeTypeFromExtension } from '@bybrowser/editor-v9';
 
 describe('document utils', () => {
   it('classifies common document extensions', () => {

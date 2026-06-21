@@ -89,8 +89,8 @@ interface ZipEntry {
   crc: number;
   compressedSize: number;
   uncompressedSize: number; // from CD offset 24
-  modTime: number;          // from CD offset 12
-  modDate: number;          // from CD offset 14
+  modTime: number; // from CD offset 12
+  modDate: number; // from CD offset 14
   localOffset: number;
   cdEntryStart: number;
   cdEntryEnd: number;
@@ -103,7 +103,10 @@ interface ZipEntry {
 function checkZipHasEntry(bytes: Uint8Array, targetName: string): boolean {
   let eocd = -1;
   for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65558); i--) {
-    if (bytes[i] === 0x50 && bytes[i + 1] === 0x4b && bytes[i + 2] === 0x05 && bytes[i + 3] === 0x06) { eocd = i; break; }
+    if (bytes[i] === 0x50 && bytes[i + 1] === 0x4b && bytes[i + 2] === 0x05 && bytes[i + 3] === 0x06) {
+      eocd = i;
+      break;
+    }
   }
   if (eocd === -1) return false;
   const cdCount = u16(bytes, eocd + 10);
@@ -112,7 +115,8 @@ function checkZipHasEntry(bytes: Uint8Array, targetName: string): boolean {
   const dec = new TextDecoder('utf-8', { fatal: false });
   for (let i = 0; i < cdCount; i++) {
     if (cdPos + 46 > bytes.length) break;
-    if (!(bytes[cdPos] === 0x50 && bytes[cdPos + 1] === 0x4b && bytes[cdPos + 2] === 0x01 && bytes[cdPos + 3] === 0x02)) break;
+    if (!(bytes[cdPos] === 0x50 && bytes[cdPos + 1] === 0x4b && bytes[cdPos + 2] === 0x01 && bytes[cdPos + 3] === 0x02))
+      break;
     const fnLen = u16(bytes, cdPos + 28);
     const exLen = u16(bytes, cdPos + 30);
     const cmLen = u16(bytes, cdPos + 32);
@@ -134,7 +138,7 @@ async function rewriteZipEntries(
   bytes: Uint8Array,
   shouldProcess: (name: string) => boolean,
   transform: (rawXml: string, name: string) => string | null,
-  inject?: Array<{name: string; data: Uint8Array}>,
+  inject?: Array<{ name: string; data: Uint8Array }>,
 ): Promise<Uint8Array> {
   let eocd = -1;
   for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65558); i--) {
@@ -153,7 +157,8 @@ async function rewriteZipEntries(
 
   for (let i = 0; i < cdCount; i++) {
     if (cdPos + 46 > bytes.length) break;
-    if (!(bytes[cdPos] === 0x50 && bytes[cdPos + 1] === 0x4b && bytes[cdPos + 2] === 0x01 && bytes[cdPos + 3] === 0x02)) break;
+    if (!(bytes[cdPos] === 0x50 && bytes[cdPos + 1] === 0x4b && bytes[cdPos + 2] === 0x01 && bytes[cdPos + 3] === 0x02))
+      break;
 
     const compression = u16(bytes, cdPos + 10);
     const modTime = u16(bytes, cdPos + 12);
@@ -176,7 +181,20 @@ async function rewriteZipEntries(
     const cdEntryStart = cdPos;
     cdPos += 46 + cdFnLen + cdExtraLen + cdCommentLen;
 
-    entries.push({ name, nameBytes, compression, crc, compressedSize, uncompressedSize, modTime, modDate, localOffset, cdEntryStart, cdEntryEnd: cdPos, dataStart });
+    entries.push({
+      name,
+      nameBytes,
+      compression,
+      crc,
+      compressedSize,
+      uncompressedSize,
+      modTime,
+      modDate,
+      localOffset,
+      cdEntryStart,
+      cdEntryEnd: cdPos,
+      dataStart,
+    });
   }
 
   let hasChanges = false;
@@ -223,8 +241,8 @@ async function rewriteZipEntries(
       const dv = new DataView(hdr.buffer);
       dv.setUint32(0, 0x04034b50, true);
       dv.setUint16(4, 20, true);
-      dv.setUint16(6, 0, true);  // bit 3 cleared
-      dv.setUint16(8, 0, true);  // STORED
+      dv.setUint16(6, 0, true); // bit 3 cleared
+      dv.setUint16(8, 0, true); // STORED
       dv.setUint32(14, entry.newCrc, true);
       dv.setUint32(18, sz, true);
       dv.setUint32(22, sz, true);
@@ -243,7 +261,7 @@ async function rewriteZipEntries(
       const dv = new DataView(hdr.buffer);
       dv.setUint32(0, 0x04034b50, true);
       dv.setUint16(4, 20, true);
-      dv.setUint16(6, 0, true);  // bit 3 cleared
+      dv.setUint16(6, 0, true); // bit 3 cleared
       dv.setUint16(8, entry.compression, true);
       dv.setUint16(10, entry.modTime, true);
       dv.setUint16(12, entry.modDate, true);
@@ -259,7 +277,12 @@ async function rewriteZipEntries(
   }
 
   // Injected entries (brand-new files appended to the file section).
-  interface InjectedEntry { nameBytes: Uint8Array; data: Uint8Array; crc: number; localOffset: number }
+  interface InjectedEntry {
+    nameBytes: Uint8Array;
+    data: Uint8Array;
+    crc: number;
+    localOffset: number;
+  }
   const injected: InjectedEntry[] = [];
   if (inject) {
     for (const { name: iName, data: iData } of inject) {
@@ -293,9 +316,11 @@ async function rewriteZipEntries(
       const cd = new Uint8Array(46 + entry.nameBytes.length);
       const dv = new DataView(cd.buffer);
       dv.setUint32(0, 0x02014b50, true);
-      dv.setUint16(4, 20, true); dv.setUint16(6, 20, true);
+      dv.setUint16(4, 20, true);
+      dv.setUint16(6, 20, true);
       dv.setUint32(16, entry.newCrc, true);
-      dv.setUint32(20, sz, true); dv.setUint32(24, sz, true);
+      dv.setUint32(20, sz, true);
+      dv.setUint32(24, sz, true);
       dv.setUint16(28, entry.nameBytes.length, true);
       dv.setUint32(42, newOffsets[i]!, true);
       cd.set(entry.nameBytes, 46);
@@ -315,9 +340,11 @@ async function rewriteZipEntries(
     const cd = new Uint8Array(46 + ie.nameBytes.length);
     const dv = new DataView(cd.buffer);
     dv.setUint32(0, 0x02014b50, true);
-    dv.setUint16(4, 20, true); dv.setUint16(6, 20, true);
+    dv.setUint16(4, 20, true);
+    dv.setUint16(6, 20, true);
     dv.setUint32(16, ie.crc, true);
-    dv.setUint32(20, sz, true); dv.setUint32(24, sz, true);
+    dv.setUint32(20, sz, true);
+    dv.setUint32(24, sz, true);
     dv.setUint16(28, ie.nameBytes.length, true);
     dv.setUint32(42, ie.localOffset, true);
     cd.set(ie.nameBytes, 46);
@@ -337,7 +364,10 @@ async function rewriteZipEntries(
   const total = chunks.reduce((n, c) => n + c.length, 0);
   const out = new Uint8Array(total);
   let pos = 0;
-  for (const c of chunks) { out.set(c, pos); pos += c.length; }
+  for (const c of chunks) {
+    out.set(c, pos);
+    pos += c.length;
+  }
   return out;
 }
 
@@ -382,20 +412,20 @@ export async function preprocessXlsxLineBreaks(xlsxBytes: Uint8Array): Promise<U
 // Both notes-slide XMLs and _rels/.rels are typically DEFLATE-compressed, so the
 // pattern check must happen after decompression — a raw-byte ZIP scan won't find them.
 export async function preprocessPptx(pptxBytes: Uint8Array): Promise<Uint8Array> {
-  const hasAppXml  = checkZipHasEntry(pptxBytes, 'docProps/app.xml');
+  const hasAppXml = checkZipHasEntry(pptxBytes, 'docProps/app.xml');
   const hasCoreXml = checkZipHasEntry(pptxBytes, 'docProps/core.xml');
 
   const enc = new TextEncoder();
-  const inject: Array<{name: string; data: Uint8Array}> = [];
+  const inject: Array<{ name: string; data: Uint8Array }> = [];
 
   if (!hasAppXml) {
     inject.push({
       name: 'docProps/app.xml',
       data: enc.encode(
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-        '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">' +
-        '<Application>Microsoft Office PowerPoint</Application>' +
-        '</Properties>',
+          '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">' +
+          '<Application>Microsoft Office PowerPoint</Application>' +
+          '</Properties>',
       ),
     });
   }
@@ -405,13 +435,13 @@ export async function preprocessPptx(pptxBytes: Uint8Array): Promise<Uint8Array>
       name: 'docProps/core.xml',
       data: enc.encode(
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-        '<cp:coreProperties' +
-        ' xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"' +
-        ' xmlns:dc="http://purl.org/dc/elements/1.1/"' +
-        ' xmlns:dcterms="http://purl.org/dc/terms/"' +
-        ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
-        '<dc:title/><dc:creator/>' +
-        '</cp:coreProperties>',
+          '<cp:coreProperties' +
+          ' xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"' +
+          ' xmlns:dc="http://purl.org/dc/elements/1.1/"' +
+          ' xmlns:dcterms="http://purl.org/dc/terms/"' +
+          ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+          '<dc:title/><dc:creator/>' +
+          '</cp:coreProperties>',
       ),
     });
   }
@@ -443,7 +473,8 @@ export async function preprocessPptx(pptxBytes: Uint8Array): Promise<Uint8Array>
             `<Relationship Id="rId${n}" ` +
             `Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" ` +
             `Target="docProps/core.xml"/>`;
-          out = out.slice(0, out.lastIndexOf('</Relationships>')) + rel + out.slice(out.lastIndexOf('</Relationships>'));
+          out =
+            out.slice(0, out.lastIndexOf('</Relationships>')) + rel + out.slice(out.lastIndexOf('</Relationships>'));
         }
         return out === xml ? null : out;
       }
@@ -478,7 +509,15 @@ export async function extractDocxMediaUrls(docxBytes: Uint8Array): Promise<Recor
   let cdPos = cdOffset;
   for (let i = 0; i < cdCount; i++) {
     if (cdPos + 46 > docxBytes.length) break;
-    if (!(docxBytes[cdPos] === 0x50 && docxBytes[cdPos + 1] === 0x4b && docxBytes[cdPos + 2] === 0x01 && docxBytes[cdPos + 3] === 0x02)) break;
+    if (
+      !(
+        docxBytes[cdPos] === 0x50 &&
+        docxBytes[cdPos + 1] === 0x4b &&
+        docxBytes[cdPos + 2] === 0x01 &&
+        docxBytes[cdPos + 3] === 0x02
+      )
+    )
+      break;
 
     const compression = u16(docxBytes, cdPos + 10);
     const compressedSize = u32(docxBytes, cdPos + 20);
@@ -518,9 +557,10 @@ export async function extractDocxMediaUrls(docxBytes: Uint8Array): Promise<Recor
 
       const ext = baseName.split('.').pop()?.toLowerCase() ?? '';
       const mime = MIME_MAP[ext] ?? 'application/octet-stream';
-      const ab: ArrayBuffer = fileData.buffer instanceof ArrayBuffer
-        ? fileData.buffer.slice(fileData.byteOffset, fileData.byteOffset + fileData.byteLength)
-        : new Uint8Array(fileData).buffer;
+      const ab: ArrayBuffer =
+        fileData.buffer instanceof ArrayBuffer
+          ? fileData.buffer.slice(fileData.byteOffset, fileData.byteOffset + fileData.byteLength)
+          : new Uint8Array(fileData).buffer;
       const blob = new Blob([ab], { type: mime });
       result[`media/${baseName}`] = URL.createObjectURL(blob);
     } catch {

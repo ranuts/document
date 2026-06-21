@@ -9,7 +9,10 @@
     <meta name="theme-color" content="#0052cc" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="description" content="将浏览器端 Office 文档编辑器作为静态文件或 Docker 部署到自己的服务器，无需外部云依赖，无需订阅。" />
+    <meta
+      name="description"
+      content="将浏览器端 Office 文档编辑器作为静态文件或 Docker 部署到自己的服务器，无需外部云依赖，无需订阅。"
+    />
     <link rel="canonical" href="https://bybrowser.com/zh-cn/self-hosted-document-editor/" />
     <link rel="alternate" hreflang="en" href="https://bybrowser.com/self-hosted-document-editor/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/self-hosted-document-editor/" />
@@ -22,17 +25,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>自部署文档编辑器 - 私有化部署 Office 编辑工具 | ByBrowser</title>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "自部署文档编辑器 — ByBrowser",
-      "url": "https://bybrowser.com/zh-cn/self-hosted-document-editor/",
-      "description": "将浏览器端 Office 文档编辑器部署到自己的服务器，无外部云依赖，支持 Docker 和静态托管。",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "任意（静态托管或 Docker）",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
-      "inLanguage": "zh-CN"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "自部署文档编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/self-hosted-document-editor/",
+        "description": "将浏览器端 Office 文档编辑器部署到自己的服务器，无外部云依赖，支持 Docker 和静态托管。",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "任意（静态托管或 Docker）",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
     </script>
     <script src="../../web-apps/apps/api/documents/api.js"></script>
   </head>
@@ -44,7 +47,10 @@
 
       <h2>部署方式</h2>
       <ul>
-        <li><strong>静态托管</strong> — 执行 <code>pnpm build</code> 一次构建，将 <code>dist/</code> 目录上传到任意静态托管平台（Nginx、Cloudflare Pages、Vercel、Netlify、S3）</li>
+        <li>
+          <strong>静态托管</strong> — 执行 <code>pnpm build</code> 一次构建，将
+          <code>dist/</code> 目录上传到任意静态托管平台（Nginx、Cloudflare Pages、Vercel、Netlify、S3）
+        </li>
         <li><strong>Docker</strong> — 拉取 <code>ghcr.io/ranuts/document:latest</code>，一条命令即可运行</li>
         <li><strong>内网隔离环境</strong> — 从内部主机提供服务，初始部署后无需外网访问</li>
       </ul>
@@ -72,16 +78,24 @@ docker run -d --name document -p 443:443 \
       <h2>常见问题</h2>
       <dl>
         <dt>服务器有什么配置要求？</dt>
-        <dd>任何能够提供静态文件的主机均可——整个应用由 HTML、CSS、JavaScript 和 WebAssembly 组成，运行时无需 Node.js 或数据库。</dd>
+        <dd>
+          任何能够提供静态文件的主机均可——整个应用由 HTML、CSS、JavaScript 和 WebAssembly 组成，运行时无需 Node.js
+          或数据库。
+        </dd>
 
         <dt>如何升级到新版本？</dt>
         <dd>拉取最新 Docker 镜像，或从源码重新执行 <code>pnpm build</code> 并重新部署 <code>dist/</code> 目录。</dd>
 
         <dt>可以在前面加认证吗？</dt>
-        <dd>可以。使用 Nginx basic auth、Cloudflare Access 或任何支持认证的反向代理来保护编辑器。Docker 镜像支持 <code>SERVER_BASIC_AUTH</code> 配置 BCrypt 密码。</dd>
+        <dd>
+          可以。使用 Nginx basic auth、Cloudflare Access 或任何支持认证的反向代理来保护编辑器。Docker 镜像支持
+          <code>SERVER_BASIC_AUTH</code> 配置 BCrypt 密码。
+        </dd>
 
         <dt>自部署需要许可证吗？</dt>
-        <dd>ByBrowser 采用 AGPL-3.0 协议，私人自部署使用无需付费。如果你分发修改后的版本，需要以相同协议开源你的修改。</dd>
+        <dd>
+          ByBrowser 采用 AGPL-3.0 协议，私人自部署使用无需付费。如果你分发修改后的版本，需要以相同协议开源你的修改。
+        </dd>
       </dl>
 
       <nav aria-label="相关工具">

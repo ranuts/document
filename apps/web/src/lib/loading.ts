@@ -7,7 +7,7 @@ export type LoadingController = {
 
 // Auto-progress stages while waiting for editor to initialize
 const STAGES = [
-  { to: 12, ms: 600,  label: 'Initializing…' },
+  { to: 12, ms: 600, label: 'Initializing…' },
   { to: 45, ms: 3200, label: 'Loading document engine…' },
   { to: 72, ms: 2200, label: 'Processing document…' },
   { to: 90, ms: 1800, label: 'Rendering…' },

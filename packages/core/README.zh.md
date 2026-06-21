@@ -37,9 +37,9 @@ OnlyOffice SDK 使用的文件类型数字常量（v7 和 v9 共用）。
 ```ts
 import { oAscFileType } from '@bybrowser/core';
 
-oAscFileType.DOCX  // 65
-oAscFileType.XLSX  // 257
-oAscFileType.PPTX  // 129
+oAscFileType.DOCX; // 65
+oAscFileType.XLSX; // 257
+oAscFileType.PPTX; // 129
 ```
 
 ### `c_oAscFileType2`
@@ -49,7 +49,7 @@ oAscFileType.PPTX  // 129
 ```ts
 import { c_oAscFileType2 } from '@bybrowser/core';
 
-c_oAscFileType2[65]  // "DOCX"
+c_oAscFileType2[65]; // "DOCX"
 ```
 
 ### `DocumentType`

@@ -26,13 +26,7 @@ export type {
 } from './document-types';
 
 // Utilities
-export {
-  getDocumentType,
-  getBasePath,
-  getMimeTypeFromExtension,
-  BASE_PATH,
-  DOCUMENT_TYPE_MAP,
-} from './document-utils';
+export { getDocumentType, getBasePath, getMimeTypeFromExtension, BASE_PATH, DOCUMENT_TYPE_MAP } from './document-utils';
 
 // i18n
 export { t, getLanguage, setLanguage, getOnlyOfficeLang, LanguageCode } from './i18n';

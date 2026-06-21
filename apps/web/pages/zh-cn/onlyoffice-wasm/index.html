@@ -9,7 +9,10 @@
     <meta name="theme-color" content="#0052cc" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="description" content="纯静态 Web 应用，通过 WebAssembly 在浏览器内运行 OnlyOffice 文档编辑引擎，无需 Document Server，无需后端。" />
+    <meta
+      name="description"
+      content="纯静态 Web 应用，通过 WebAssembly 在浏览器内运行 OnlyOffice 文档编辑引擎，无需 Document Server，无需后端。"
+    />
     <link rel="canonical" href="https://bybrowser.com/zh-cn/onlyoffice-wasm/" />
     <link rel="alternate" hreflang="en" href="https://bybrowser.com/onlyoffice-wasm/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/onlyoffice-wasm/" />
@@ -22,17 +25,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>OnlyOffice WASM 文档编辑器 - 无需 Document Server | ByBrowser</title>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "OnlyOffice WASM 编辑器 — ByBrowser",
-      "url": "https://bybrowser.com/zh-cn/onlyoffice-wasm/",
-      "description": "纯静态 Web 应用，通过 WebAssembly 在浏览器内运行 OnlyOffice 引擎，无需任何服务器基础设施。",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web Browser",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
-      "inLanguage": "zh-CN"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "OnlyOffice WASM 编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/onlyoffice-wasm/",
+        "description": "纯静态 Web 应用，通过 WebAssembly 在浏览器内运行 OnlyOffice 引擎，无需任何服务器基础设施。",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
     </script>
     <script src="../../web-apps/apps/api/documents/api.js"></script>
   </head>
@@ -40,10 +43,17 @@
   <body>
     <main id="seo-content">
       <h1>OnlyOffice WASM 文档编辑器</h1>
-      <p>纯静态 Web 应用，通过 WebAssembly 在浏览器内运行完整的 OnlyOffice 文档编辑引擎——无需 Document Server，无需后端，无需上传。</p>
+      <p>
+        纯静态 Web 应用，通过 WebAssembly 在浏览器内运行完整的 OnlyOffice 文档编辑引擎——无需 Document
+        Server，无需后端，无需上传。
+      </p>
 
       <h2>什么是 OnlyOffice WASM</h2>
-      <p>OnlyOffice 是功能完整的开源办公套件，通常需要专用的 Document Server 来处理文件。ByBrowser 将 OnlyOffice x2t 转换引擎编译为 WebAssembly（WASM），直接在浏览器中加载 web-apps 前端，无需任何服务器基础设施。最终结果是一个完全在静态 HTML 页面中运行的功能完整的 Office 编辑器。</p>
+      <p>
+        OnlyOffice 是功能完整的开源办公套件，通常需要专用的 Document Server 来处理文件。ByBrowser 将 OnlyOffice x2t
+        转换引擎编译为 WebAssembly（WASM），直接在浏览器中加载 web-apps
+        前端，无需任何服务器基础设施。最终结果是一个完全在静态 HTML 页面中运行的功能完整的 Office 编辑器。
+      </p>
 
       <h2>架构说明</h2>
       <ul>
@@ -63,13 +73,18 @@
       <h2>常见问题</h2>
       <dl>
         <dt>与 OnlyOffice Document Server 有什么区别？</dt>
-        <dd>OnlyOffice Document Server 在服务器上进行格式转换。ByBrowser 使用 WebAssembly 在浏览器内完成所有转换，无需服务器。</dd>
+        <dd>
+          OnlyOffice Document Server 在服务器上进行格式转换。ByBrowser 使用 WebAssembly
+          在浏览器内完成所有转换，无需服务器。
+        </dd>
 
         <dt>这是 OnlyOffice 官方产品吗？</dt>
         <dd>不是。ByBrowser 是一个独立的开源项目，基于 OnlyOffice 的开源组件（web-apps、sdkjs、x2t-wasm）构建。</dd>
 
         <dt>可以自行部署吗？</dt>
-        <dd>可以。构建输出是一个静态文件目录，可以部署到任意静态托管平台——Nginx、Cloudflare Pages、Vercel 或 Docker 容器。</dd>
+        <dd>
+          可以。构建输出是一个静态文件目录，可以部署到任意静态托管平台——Nginx、Cloudflare Pages、Vercel 或 Docker 容器。
+        </dd>
       </dl>
 
       <nav aria-label="相关工具">

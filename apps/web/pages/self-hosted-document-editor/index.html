@@ -28,17 +28,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>Self-hosted Document Editor | Static Office Editing</title>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Self-hosted Document Editor — ByBrowser",
-      "url": "https://bybrowser.com/self-hosted-document-editor/",
-      "description": "Self-host a browser-based Office document editor as static files or Docker on your own infrastructure.",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Any (static hosting or Docker)",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": "self-hosted, Docker, static files, no cloud dependency, air-gapped support, AGPL open source"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Self-hosted Document Editor — ByBrowser",
+        "url": "https://bybrowser.com/self-hosted-document-editor/",
+        "description": "Self-host a browser-based Office document editor as static files or Docker on your own infrastructure.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any (static hosting or Docker)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "self-hosted, Docker, static files, no cloud dependency, air-gapped support, AGPL open source"
+      }
     </script>
     <script src="../web-apps/apps/api/documents/api.js"></script>
   </head>
@@ -46,13 +46,22 @@
   <body>
     <main id="seo-content">
       <h1>Self-hosted Document Editor</h1>
-      <p>Deploy a browser-based Office document editor as static files or a Docker container on your own infrastructure — no external cloud dependency, no subscription.</p>
+      <p>
+        Deploy a browser-based Office document editor as static files or a Docker container on your own infrastructure —
+        no external cloud dependency, no subscription.
+      </p>
 
       <h2>Deployment Options</h2>
       <ul>
-        <li><strong>Static hosting</strong> — build once with <code>pnpm build</code>, upload the <code>dist/</code> folder to any static host (Nginx, Cloudflare Pages, Vercel, Netlify, S3)</li>
+        <li>
+          <strong>Static hosting</strong> — build once with <code>pnpm build</code>, upload the
+          <code>dist/</code> folder to any static host (Nginx, Cloudflare Pages, Vercel, Netlify, S3)
+        </li>
         <li><strong>Docker</strong> — pull <code>ghcr.io/ranuts/document:latest</code> and run in one command</li>
-        <li><strong>Air-gapped networks</strong> — serve from an internal host with no external internet access required after initial setup</li>
+        <li>
+          <strong>Air-gapped networks</strong> — serve from an internal host with no external internet access required
+          after initial setup
+        </li>
       </ul>
 
       <h2>Docker Quick Start</h2>
@@ -78,16 +87,28 @@ docker run -d --name document -p 443:443 \
       <h2>Frequently Asked Questions</h2>
       <dl>
         <dt>What are the server requirements?</dt>
-        <dd>Any host that can serve static files works — the entire application is HTML, CSS, JavaScript, and WebAssembly. No Node.js or database is required at runtime.</dd>
+        <dd>
+          Any host that can serve static files works — the entire application is HTML, CSS, JavaScript, and WebAssembly.
+          No Node.js or database is required at runtime.
+        </dd>
 
         <dt>How do I update to a newer version?</dt>
-        <dd>Pull the latest Docker image or rebuild from source with <code>pnpm build</code> and redeploy the <code>dist/</code> folder.</dd>
+        <dd>
+          Pull the latest Docker image or rebuild from source with <code>pnpm build</code> and redeploy the
+          <code>dist/</code> folder.
+        </dd>
 
         <dt>Can I add authentication in front of it?</dt>
-        <dd>Yes. Use Nginx basic auth, Cloudflare Access, or any reverse proxy with authentication to protect the editor. The Docker image supports <code>SERVER_BASIC_AUTH</code> for BCrypt-hashed passwords.</dd>
+        <dd>
+          Yes. Use Nginx basic auth, Cloudflare Access, or any reverse proxy with authentication to protect the editor.
+          The Docker image supports <code>SERVER_BASIC_AUTH</code> for BCrypt-hashed passwords.
+        </dd>
 
         <dt>Is a license required to self-host?</dt>
-        <dd>ByBrowser is AGPL-3.0 licensed. Self-hosting for private use is permitted. If you distribute a modified version, you must open-source your changes under the same license.</dd>
+        <dd>
+          ByBrowser is AGPL-3.0 licensed. Self-hosting for private use is permitted. If you distribute a modified
+          version, you must open-source your changes under the same license.
+        </dd>
       </dl>
 
       <nav aria-label="Related tools">

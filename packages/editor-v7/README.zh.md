@@ -15,12 +15,12 @@
 
 ## 与 `@bybrowser/editor-v9` 的差异
 
-| 特性 | v7 | v9.3.0 |
-|------|----|--------|
-| 保存命令 | `sendCommand` | `serviceCommand` |
-| 字节打开 | 不支持 | `asc_openDocumentFromBytes` |
-| 权限初始化 | 较简单 | 有严格时序要求 |
-| 门控函数 patch | 不需要 | 必须 patch `Shc`/`Mrc`/`K8b` |
+| 特性           | v7            | v9.3.0                       |
+| -------------- | ------------- | ---------------------------- |
+| 保存命令       | `sendCommand` | `serviceCommand`             |
+| 字节打开       | 不支持        | `asc_openDocumentFromBytes`  |
+| 权限初始化     | 较简单        | 有严格时序要求               |
+| 门控函数 patch | 不需要        | 必须 patch `Shc`/`Mrc`/`K8b` |
 
 ## 许可证
 

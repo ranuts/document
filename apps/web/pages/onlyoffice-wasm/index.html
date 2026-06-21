@@ -28,17 +28,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>OnlyOffice WASM Document Editor | Serverless Office Editing</title>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "OnlyOffice WASM Editor — ByBrowser",
-      "url": "https://bybrowser.com/onlyoffice-wasm/",
-      "description": "A pure static web app running the OnlyOffice document engine via WebAssembly in the browser — no Document Server required.",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web Browser",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "featureList": "OnlyOffice WASM, x2t WebAssembly, no server, static deployment, open source"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "OnlyOffice WASM Editor — ByBrowser",
+        "url": "https://bybrowser.com/onlyoffice-wasm/",
+        "description": "A pure static web app running the OnlyOffice document engine via WebAssembly in the browser — no Document Server required.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "OnlyOffice WASM, x2t WebAssembly, no server, static deployment, open source"
+      }
     </script>
     <script src="../web-apps/apps/api/documents/api.js"></script>
   </head>
@@ -46,21 +46,32 @@
   <body>
     <main id="seo-content">
       <h1>OnlyOffice WASM Document Editor</h1>
-      <p>A pure static web app that runs the OnlyOffice document editing engine in the browser via WebAssembly — no Document Server, no backend, no upload required.</p>
+      <p>
+        A pure static web app that runs the OnlyOffice document editing engine in the browser via WebAssembly — no
+        Document Server, no backend, no upload required.
+      </p>
 
       <h2>What Is OnlyOffice WASM?</h2>
       <p>
         OnlyOffice is a full-featured open-source office suite. Normally it requires a dedicated Document Server to
-        handle file processing. ByBrowser compiles the OnlyOffice x2t conversion engine to WebAssembly (WASM) and
-        loads the web-apps frontend directly in the browser, eliminating the need for any server infrastructure.
-        The result is a fully functional Office editor that runs in a static HTML page.
+        handle file processing. ByBrowser compiles the OnlyOffice x2t conversion engine to WebAssembly (WASM) and loads
+        the web-apps frontend directly in the browser, eliminating the need for any server infrastructure. The result is
+        a fully functional Office editor that runs in a static HTML page.
       </p>
 
       <h2>How the Architecture Works</h2>
       <ul>
-        <li><strong>OnlyOffice web-apps</strong> provide the editor UI (document, spreadsheet, presentation editors)</li>
-        <li><strong>x2t WASM</strong> handles format conversion between OOXML formats (DOCX, XLSX, PPTX) and OnlyOffice's internal format</li>
-        <li><strong>No Document Server</strong> — the socket.io backend is replaced with a local fallback so the editor loads in desktop-editor mode</li>
+        <li>
+          <strong>OnlyOffice web-apps</strong> provide the editor UI (document, spreadsheet, presentation editors)
+        </li>
+        <li>
+          <strong>x2t WASM</strong> handles format conversion between OOXML formats (DOCX, XLSX, PPTX) and OnlyOffice's
+          internal format
+        </li>
+        <li>
+          <strong>No Document Server</strong> — the socket.io backend is replaced with a local fallback so the editor
+          loads in desktop-editor mode
+        </li>
         <li><strong>Service Worker</strong> caches assets for repeat visits and PWA installation</li>
       </ul>
 
@@ -74,13 +85,22 @@
       <h2>Frequently Asked Questions</h2>
       <dl>
         <dt>What is the difference between this and OnlyOffice Document Server?</dt>
-        <dd>OnlyOffice Document Server runs format conversion on the server. ByBrowser performs all conversion in the browser using WebAssembly, with no server required.</dd>
+        <dd>
+          OnlyOffice Document Server runs format conversion on the server. ByBrowser performs all conversion in the
+          browser using WebAssembly, with no server required.
+        </dd>
 
         <dt>Is this an official OnlyOffice product?</dt>
-        <dd>No. ByBrowser is an independent open-source project that builds on OnlyOffice's open-source components (web-apps, sdkjs, x2t-wasm).</dd>
+        <dd>
+          No. ByBrowser is an independent open-source project that builds on OnlyOffice's open-source components
+          (web-apps, sdkjs, x2t-wasm).
+        </dd>
 
         <dt>Can I self-host this?</dt>
-        <dd>Yes. The built output is a folder of static files that you can serve from any static host — Nginx, Cloudflare Pages, Vercel, or a Docker container.</dd>
+        <dd>
+          Yes. The built output is a folder of static files that you can serve from any static host — Nginx, Cloudflare
+          Pages, Vercel, or a Docker container.
+        </dd>
       </dl>
 
       <nav aria-label="Related tools">

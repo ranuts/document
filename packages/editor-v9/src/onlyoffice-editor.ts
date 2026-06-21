@@ -68,8 +68,28 @@ function suppressDialogsInFrame(frameWindow: any): void {
   // Build a chainable no-op that satisfies .$window.attr(...) and similar chained calls
   // from app.js error handlers without throwing.
   const jq: Record<string, unknown> = {};
-  ['attr', 'on', 'off', 'show', 'hide', 'css', 'addClass', 'removeClass', 'find', 'remove',
-   'val', 'text', 'html', 'prop', 'data', 'trigger', 'focus', 'blur', 'one', 'click'].forEach((m) => {
+  [
+    'attr',
+    'on',
+    'off',
+    'show',
+    'hide',
+    'css',
+    'addClass',
+    'removeClass',
+    'find',
+    'remove',
+    'val',
+    'text',
+    'html',
+    'prop',
+    'data',
+    'trigger',
+    'focus',
+    'blur',
+    'one',
+    'click',
+  ].forEach((m) => {
     jq[m] = () => jq;
   });
   (jq as any).length = 0;
@@ -652,7 +672,8 @@ export function createEditorInstance(config: {
               // looks up blob URLs from __mediaCache and opens showMediaPlayer.
               if (api && !('__gqcPatched' in api)) {
                 (api as Record<string, unknown>).__gqcPatched = true;
-                const origGqc = typeof api.gqc === 'function' ? (api.gqc as (...a: unknown[]) => unknown).bind(api) : null;
+                const origGqc =
+                  typeof api.gqc === 'function' ? (api.gqc as (...a: unknown[]) => unknown).bind(api) : null;
                 const VIDEO_EXTS = /\.(mp4|webm|mov|avi|mkv|wmv|m4v)$/i;
                 const AUDIO_EXTS = /\.(mp3|wav|ogg|m4a|aac|wma|flac)$/i;
                 (api as Record<string, unknown>).gqc = function (command: unknown, _mediaInfo: unknown) {
@@ -695,7 +716,9 @@ export function createEditorInstance(config: {
                 try {
                   const fixed = await preprocessPptx(ooxmlBytes);
                   if (fixed !== ooxmlBytes) {
-                    console.log('[OO] PPTX preprocessed (showMasterPhAnim stripped, docProps/app.xml injected if missing)');
+                    console.log(
+                      '[OO] PPTX preprocessed (showMasterPhAnim stripped, docProps/app.xml injected if missing)',
+                    );
                     ooxmlBytes = fixed;
                   }
                 } catch (e) {
@@ -724,7 +747,9 @@ export function createEditorInstance(config: {
                         const w = iwin;
                         if (w?.Z$) w.Z$(w.Asc?.editor || w.editor);
                         if (w?.X$) w.X$(w.Asc?.editor || w.editor);
-                        setTimeout(function () { if (w?.UpdateInstallPlugins) w.UpdateInstallPlugins(); }, 10);
+                        setTimeout(function () {
+                          if (w?.UpdateInstallPlugins) w.UpdateInstallPlugins();
+                        }, 10);
                       });
                       if (iwin?.AscCommon?.History) (iwin.AscCommon.History as any)[historyFlag] = true;
                     } catch (_e) {}
@@ -732,9 +757,9 @@ export function createEditorInstance(config: {
                   return a[brjName](d);
                 };
               };
-              patchWebPath('Shc', 'BRj', 'C0a', 'b_');   // Word SDK
-              patchWebPath('Mrc', 'rxk', 'J6a', 'tW');   // Cell SDK
-              patchWebPath('K8b', 'Fzj', '$cb', 'aN');   // Slide SDK
+              patchWebPath('Shc', 'BRj', 'C0a', 'b_'); // Word SDK
+              patchWebPath('Mrc', 'rxk', 'J6a', 'tW'); // Cell SDK
+              patchWebPath('K8b', 'Fzj', '$cb', 'aN'); // Slide SDK
               api.asc_openDocumentFromBytes(ooxmlBytes);
               if (!api.I0c && typeof api.Aqg === 'function') {
                 // Serverless Web Mode has no server auth/openedAt response. Without this,

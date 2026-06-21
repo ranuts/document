@@ -12,16 +12,16 @@ pnpm add @bybrowser/editor-v9
 
 ## What this package contains
 
-| Module | Description |
-|--------|-------------|
-| `onlyoffice-editor.ts` | Editor instance lifecycle, readonly mode, save flow |
-| `document-converter.ts` | x2t WASM wrapper — converts DOCX/XLSX/PPTX to OnlyOffice internal format |
-| `document-utils.ts` | Pure utilities: file type detection, MIME mapping, path helpers |
-| `document-types.ts` | TypeScript types for x2t/Emscripten interfaces |
-| `docx-zip.ts` | In-browser ZIP parser for OOXML preprocessing |
-| `empty_bin.ts` | Minimal OOXML binaries used when creating new blank documents |
-| `i18n.ts` | Internationalization strings (EN / ZH / JA / KO / DE / FR / ES / PT / RU) |
-| `media-player.ts` | Browser-native overlay player for PPTX embedded video/audio |
+| Module                  | Description                                                               |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `onlyoffice-editor.ts`  | Editor instance lifecycle, readonly mode, save flow                       |
+| `document-converter.ts` | x2t WASM wrapper — converts DOCX/XLSX/PPTX to OnlyOffice internal format  |
+| `document-utils.ts`     | Pure utilities: file type detection, MIME mapping, path helpers           |
+| `document-types.ts`     | TypeScript types for x2t/Emscripten interfaces                            |
+| `docx-zip.ts`           | In-browser ZIP parser for OOXML preprocessing                             |
+| `empty_bin.ts`          | Minimal OOXML binaries used when creating new blank documents             |
+| `i18n.ts`               | Internationalization strings (EN / ZH / JA / KO / DE / FR / ES / PT / RU) |
+| `media-player.ts`       | Browser-native overlay player for PPTX embedded video/audio               |
 
 ## Key exports
 
@@ -34,7 +34,7 @@ import {
   getReadonlyMode,
   requestSaveDocument,
   setConverterCallbacks,
-  setDocumentStateGetter,   // inject app-level store getter
+  setDocumentStateGetter, // inject app-level store getter
 
   // Conversion
   X2TConverter,

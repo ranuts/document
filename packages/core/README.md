@@ -37,9 +37,9 @@ Numeric file-type constants used by the OnlyOffice SDK (shared across v7 and v9)
 ```ts
 import { oAscFileType } from '@bybrowser/core';
 
-oAscFileType.DOCX  // 65
-oAscFileType.XLSX  // 257
-oAscFileType.PPTX  // 129
+oAscFileType.DOCX; // 65
+oAscFileType.XLSX; // 257
+oAscFileType.PPTX; // 129
 ```
 
 ### `c_oAscFileType2`
@@ -49,7 +49,7 @@ Reverse map from numeric code back to extension name.
 ```ts
 import { c_oAscFileType2 } from '@bybrowser/core';
 
-c_oAscFileType2[65]  // "DOCX"
+c_oAscFileType2[65]; // "DOCX"
 ```
 
 ### `DocumentType`

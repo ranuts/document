@@ -23,8 +23,5 @@ export interface EditorAdapter {
   /** Trigger save and return the resulting File */
   save(targetExt: string): Promise<File>;
   /** Register app-level callbacks */
-  setCallbacks(callbacks: {
-    onFileOpened?: (file: File) => void;
-    onError?: (message: string) => void;
-  }): void;
+  setCallbacks(callbacks: { onFileOpened?: (file: File) => void; onError?: (message: string) => void }): void;
 }

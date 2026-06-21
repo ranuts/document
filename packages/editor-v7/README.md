@@ -15,12 +15,12 @@ OnlyOffice **7.x** editor adapter for [bybrowser](https://bybrowser.com) — pla
 
 ## Differences from `@bybrowser/editor-v9`
 
-| Feature | v7 | v9.3.0 |
-|---------|----|---------|
-| Save command | `sendCommand` | `serviceCommand` |
-| Open bytes | Not available | `asc_openDocumentFromBytes` |
-| Permissions init | Simpler | Strict ordering required |
-| Gatekeeper patch | Not needed | `Shc`/`Mrc`/`K8b` must be patched |
+| Feature          | v7            | v9.3.0                            |
+| ---------------- | ------------- | --------------------------------- |
+| Save command     | `sendCommand` | `serviceCommand`                  |
+| Open bytes       | Not available | `asc_openDocumentFromBytes`       |
+| Permissions init | Simpler       | Strict ordering required          |
+| Gatekeeper patch | Not needed    | `Shc`/`Mrc`/`K8b` must be patched |
 
 ## License
 

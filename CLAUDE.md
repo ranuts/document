@@ -95,6 +95,7 @@ index.html            # HTML 入口
 正常路径：socket.io 服务器推送 join 事件 → SDK 触发 `asc_onGetEditorPermissions` → `onEditorPermissions` → `_isPermissionsInited=true`。
 
 无服务器的 `onAppReady` 四步流程（`src/lib/onlyoffice-editor.ts`）：
+
 1. 等 `loadDocument` 运行完（`mainCtrl.document` 有值）
 2. 拦截 `mainCtrl.onEditorPermissions`，永远用 `fakePerms`（防止 SDK 的第二次调用把 `isEdit` 重置为 false）
 3. 等 `_isPermissionsInited=true`，超过 2s 后手动触发
@@ -107,9 +108,9 @@ index.html            # HTML 入口
 修复：在步骤 4 之前 patch 三个门控函数，强制走 Web 路径：
 
 ```typescript
-patchWebPath('Shc', 'BRj', 'C0a', 'b_');   // Word SDK
-patchWebPath('Mrc', 'rxk', 'J6a', 'tW');   // Cell SDK
-patchWebPath('K8b', 'Fzj', '$cb', 'aN');   // Slide SDK
+patchWebPath('Shc', 'BRj', 'C0a', 'b_'); // Word SDK
+patchWebPath('Mrc', 'rxk', 'J6a', 'tW'); // Cell SDK
+patchWebPath('K8b', 'Fzj', '$cb', 'aN'); // Slide SDK
 ```
 
 详细分析见 [docs/explorations/2026-06-21-shc-brj-web-path-patch.md](docs/explorations/2026-06-21-shc-brj-web-path-patch.md)。
@@ -123,6 +124,7 @@ patchWebPath('K8b', 'Fzj', '$cb', 'aN');   // Slide SDK
 **AscDesktopEditor polyfill（2026-06-21 新增）**：SDK 假设运行在 Desktop App 内，所有文件选取操作（插入图片、插入视频、插入音频、插入外部文档等）均调用 `window.AscDesktopEditor.OpenFilenameDialog()` 和 `LocalFileGetImageUrl()`。在纯浏览器环境中这个对象不存在，导致所有工具栏文件操作立即 crash。
 
 修复：在 Vite 中间件注入到所有三种编辑器 iframe 的 `<script>` 里实现 polyfill：
+
 - `OpenFilenameDialog(filter, isMultiselect, callback)` → 创建隐藏的 `<input type="file">`，用 filter 类型（`"images"`/`"video"`/`"audio"`/`"word"`/`"cell"`）设置 `accept` 属性
 - `LocalFileGetImageUrl(key)` → 通过内部 `_map` 返回 `URL.createObjectURL()` 生成的 blob URL
 - `AddVideo(key, cb)` / `AddAudio(key, cb)` → 从 `_map` 取 blob URL，以 `cb(0, {url, name})` 格式回调
@@ -138,6 +140,7 @@ patchWebPath('K8b', 'Fzj', '$cb', 'aN');   // Slide SDK
 **不影响保存路径**：SDK 内部保存走 Desktop 路径的条件是 `this.Aja === true`。使用 `asc_openDocumentFromBytes` 打开文档时 `Aja` 始终为 `undefined`，保存仍通过 `onSaveDocument` 服务器路径触发，不受 polyfill 影响。
 
 详细分析见：
+
 - [docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md](docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md)（工具栏崩溃 + $window 修复）
 - [docs/explorations/2026-06-21-asc-desktop-editor-load-crash-stubs.md](docs/explorations/2026-06-21-asc-desktop-editor-load-crash-stubs.md)（execCommand / CreateEditorApi + 完整 stub 补全）
 
@@ -318,27 +321,27 @@ Fork 修改 SDK 代价极高（几十万行 minified 代码，每次升级需 re
 
 **计算层 WASM**（从 C++ 编译，解决"浏览器 JS 太慢"）：
 
-| 文件 | 作用 |
-|------|------|
-| `wasm/x2t/x2t.wasm`（34 MB） | 文件格式转换：DOCX/XLSX/PPTX ↔ OnlyOffice 内部格式（DOCY/XLSY/PPSY） |
+| 文件                                     | 作用                                                                       |
+| ---------------------------------------- | -------------------------------------------------------------------------- |
+| `wasm/x2t/x2t.wasm`（34 MB）             | 文件格式转换：DOCX/XLSX/PPTX ↔ OnlyOffice 内部格式（DOCY/XLSY/PPSY）       |
 | `sdkjs/common/libfont/engine/fonts.wasm` | HarfBuzz（文字塑形）+ FreeType（字体渲染）；CJK split-brain 乱码的根因在此 |
-| `sdkjs/common/zlib/engine/zlib.wasm` | ZIP 解压（OOXML 文件本质是 ZIP） |
-| `sdkjs/common/spell/spell/spell.wasm` | 拼写检查 |
-| `sdkjs/pdf/src/engine/drawingfile.wasm` | PDF 渲染 |
+| `sdkjs/common/zlib/engine/zlib.wasm`     | ZIP 解压（OOXML 文件本质是 ZIP）                                           |
+| `sdkjs/common/spell/spell/spell.wasm`    | 拼写检查                                                                   |
+| `sdkjs/pdf/src/engine/drawingfile.wasm`  | PDF 渲染                                                                   |
 
 **WASM 使零服务器"计算上可行"**：没有 x2t.wasm 就无法在纯浏览器里做格式转换。但我们打开 DOCX/XLSX/PPTX 时实际**绕过了 x2t**（用 `asc_openDocumentFromBytes` 直接喂 OOXML 字节），x2t 目前只在保存时使用。
 
 **WASM 解决不了的问题**（我们需要适配的部分）：
 
-| 需要做的事 | 原本由谁负责 | 我们的替代方案 |
-|-----------|------------|--------------|
-| 文件选择框 | `AscDesktopEditor.OpenFilenameDialog`（C++） | polyfill → `<input type="file">` |
-| 本地文件读取 | `AscDesktopEditor.LocalFileGetImageUrl` | polyfill → `URL.createObjectURL` |
-| License 验证 | Document Server | `fakePerms`（`asc_getLicenseType: () => 3`）|
-| 实时协作同步 | socket.io + Document Server | Vite 里的 Engine.IO noop server |
-| 字体 HTTP 请求 | Desktop App 的字体目录 | `fontRemapMiddleware` + font-map.json |
-| 弹窗（断线提示等） | 正常弹出 | `suppressDialogsInFrame` + mock dialog |
-| PPTX 文件预处理 | Document Server（x2t 预处理） | `preprocessPptx()`（修 ZIP/XML 问题）|
+| 需要做的事         | 原本由谁负责                                 | 我们的替代方案                               |
+| ------------------ | -------------------------------------------- | -------------------------------------------- |
+| 文件选择框         | `AscDesktopEditor.OpenFilenameDialog`（C++） | polyfill → `<input type="file">`             |
+| 本地文件读取       | `AscDesktopEditor.LocalFileGetImageUrl`      | polyfill → `URL.createObjectURL`             |
+| License 验证       | Document Server                              | `fakePerms`（`asc_getLicenseType: () => 3`） |
+| 实时协作同步       | socket.io + Document Server                  | Vite 里的 Engine.IO noop server              |
+| 字体 HTTP 请求     | Desktop App 的字体目录                       | `fontRemapMiddleware` + font-map.json        |
+| 弹窗（断线提示等） | 正常弹出                                     | `suppressDialogsInFrame` + mock dialog       |
+| PPTX 文件预处理    | Document Server（x2t 预处理）                | `preprocessPptx()`（修 ZIP/XML 问题）        |
 
 **一句话总结**：WASM 让零服务器**计算上可行**，我们的 polyfill/patch 体系让它**运行时不崩溃**。两者解决完全不同维度的问题。
 
@@ -498,11 +501,11 @@ docker rm -f oo
 
 需检查的改动点：
 
-| 改动                                       | 版本   | 影响                                    |
-| ------------------------------------------ | ------ | --------------------------------------- |
-| `CreateTable(rows, cols)` 参数顺序变更     | v8.0   | 搜索项目中对 `CreateTable` 的调用       |
-| `customization.commentAuthorOnly` 参数移除 | v8.x   | 检查 `onlyoffice-editor.ts` 中的 config |
-| `installDeveloperPlugin` shim 移除         | v9.3.1 | 若有插件加载逻辑需更新                  |
+| 改动                                       | 版本   | 影响                                              |
+| ------------------------------------------ | ------ | ------------------------------------------------- |
+| `CreateTable(rows, cols)` 参数顺序变更     | v8.0   | 搜索项目中对 `CreateTable` 的调用                 |
+| `customization.commentAuthorOnly` 参数移除 | v8.x   | 检查 `onlyoffice-editor.ts` 中的 config           |
+| `installDeveloperPlugin` shim 移除         | v9.3.1 | 若有插件加载逻辑需更新                            |
 | `DocEditor.sendCommand` → `serviceCommand` | v9.x   | ✅ 已修复：通过 `editorSendCommand()` helper 兼容 |
 
 **3. 功能回归测试（预估 1 天）**

@@ -5,15 +5,15 @@
   "packageManager": "pnpm@11.4.0",
   "description": "Monorepo for bybrowser.com — local-first OnlyOffice document editor",
   "scripts": {
-    "dev": "turbo dev --filter=@bybrowser/web",
-    "build": "turbo build --filter=@bybrowser/web",
-    "preview": "turbo preview --filter=@bybrowser/web",
-    "test": "turbo test --filter=@bybrowser/web",
-    "test:coverage": "turbo test:coverage --filter=@bybrowser/web",
-    "test:e2e": "turbo test:e2e --filter=@bybrowser/web",
-    "lint": "turbo lint --filter=@bybrowser/web",
-    "lint:ts": "turbo lint:ts --filter=@bybrowser/web",
-    "format:check": "turbo format:check --filter=@bybrowser/web",
+    "dev": "pnpm --filter=@bybrowser/web dev",
+    "build": "pnpm --filter=@bybrowser/web build",
+    "preview": "pnpm --filter=@bybrowser/web preview",
+    "test": "pnpm -r run test",
+    "test:coverage": "pnpm -r run test:coverage",
+    "test:e2e": "pnpm --filter=@bybrowser/web test:e2e",
+    "lint": "pnpm -r run lint",
+    "lint:ts": "pnpm -r run lint:ts",
+    "format:check": "pnpm -r run format:check",
     "format": "prettier --write ."
   },
   "keywords": [
@@ -43,7 +43,6 @@
     "url": "https://github.com/ranuts/document/issues"
   },
   "devDependencies": {
-    "prettier": "^3.8.3",
-    "turbo": "^2.5.4"
+    "prettier": "^3.8.3"
   }
 }

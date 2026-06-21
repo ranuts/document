@@ -9,7 +9,10 @@
     <meta name="theme-color" content="#0052cc" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="description" content="通过 iframe 和 postMessage API 将隐私文档编辑器嵌入你的 Web 应用，无需后端服务器，无需上传，无需 Document Server。" />
+    <meta
+      name="description"
+      content="通过 iframe 和 postMessage API 将隐私文档编辑器嵌入你的 Web 应用，无需后端服务器，无需上传，无需 Document Server。"
+    />
     <link rel="canonical" href="https://bybrowser.com/zh-cn/embed-document-editor/" />
     <link rel="alternate" hreflang="en" href="https://bybrowser.com/embed-document-editor/" />
     <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/embed-document-editor/" />
@@ -22,17 +25,17 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>嵌入文档编辑器 - iframe postMessage API | ByBrowser</title>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "嵌入文档编辑器 — ByBrowser",
-      "url": "https://bybrowser.com/zh-cn/embed-document-editor/",
-      "description": "通过 iframe 和 postMessage API 将隐私文档编辑器集成到 Web 应用，无需后端服务器。",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web Browser",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
-      "inLanguage": "zh-CN"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "嵌入文档编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/embed-document-editor/",
+        "description": "通过 iframe 和 postMessage API 将隐私文档编辑器集成到 Web 应用，无需后端服务器。",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
     </script>
     <script src="../../web-apps/apps/api/documents/api.js"></script>
   </head>
@@ -40,10 +43,17 @@
   <body>
     <main id="seo-content">
       <h1>嵌入隐私文档编辑器</h1>
-      <p>通过 iframe 和 postMessage API 将本地文档编辑器集成到你自己的 Web 应用——无需后端服务器，无需上传，无需 Document Server。</p>
+      <p>
+        通过 iframe 和 postMessage API 将本地文档编辑器集成到你自己的 Web 应用——无需后端服务器，无需上传，无需 Document
+        Server。
+      </p>
 
       <h2>嵌入原理</h2>
-      <p>将 <code>&lt;iframe&gt;</code> 指向 <code>https://bybrowser.com/?embed=1</code>，通过 <code>window.postMessage</code> 从父页面控制编辑器。你的应用负责处理认证和文件存储，iframe 只负责编辑。由于所有处理均在浏览器内完成，文档内容不会经过任何服务器。</p>
+      <p>
+        将 <code>&lt;iframe&gt;</code> 指向 <code>https://bybrowser.com/?embed=1</code>，通过
+        <code>window.postMessage</code> 从父页面控制编辑器。你的应用负责处理认证和文件存储，iframe
+        只负责编辑。由于所有处理均在浏览器内完成，文档内容不会经过任何服务器。
+      </p>
 
       <h2>快速集成示例</h2>
       <pre><code>&lt;iframe id="editor" src="https://bybrowser.com/?embed=1"
@@ -79,7 +89,9 @@ window.addEventListener('message', (e) => {
         <dd>不需要。文档编辑器完全在客户端运行，你的后端只需负责文件的提供和接收，编辑和渲染在 iframe 内完成。</dd>
 
         <dt>可以限制哪些来源可以发送消息吗？</dt>
-        <dd>可以。在 iframe URL 中添加 <code>?embedOrigin=https://yourapp.com</code>，将 postMessage 通信限制为你的域名。</dd>
+        <dd>
+          可以。在 iframe URL 中添加 <code>?embedOrigin=https://yourapp.com</code>，将 postMessage 通信限制为你的域名。
+        </dd>
 
         <dt>嵌入编辑器支持哪些文件格式？</dt>
         <dd>嵌入模式支持 DOCX、XLSX、PPTX 和 CSV。</dd>
