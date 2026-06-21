@@ -116,11 +116,18 @@ index.html            # HTML 入口
 - `AddVideo(key, cb)` / `AddAudio(key, cb)` → 从 `_map` 取 blob URL，以 `cb(0, {url, name})` 格式回调
 - `DownloadFiles(urls, extra, cb)` → 用 `fetch()` 下载远程 URL，转为 blob URL（word SDK 专用）
 - `LocalFileGetRelativePath(key)` → 返回 `false`（cell SDK 专用，配合 `LocalFileGetSaved()` 短路）
-- 其余 30+ 方法 → 安全的 no-op stub
+- `DownloadFiles(urls, extra, cb)` → 用 `fetch()` 下载远程 URL，转为 blob URL（word SDK 专用）
+- `LocalFileGetRelativePath(key)` → 返回 `false`（cell SDK 专用，配合 `LocalFileGetSaved()` 短路）
+- `execCommand(cmd, data)` → noop（app.js 在 SDK 初始化最早期**同步调用**，缺失则整个初始化链断开，`onAppReady` 永远不触发，文档永远停留在 loading skeleton）
+- `LocalFileRecents()` → `[]`（`execCommand("doc:onready")` 之后立即调用）
+- `CreateEditorApi(apiObj)` → noop（`sdk-all-min.js` 中 `a.AscDesktopEditor && a.AscDesktopEditor.CreateEditorApi(this)` 将 Asc API 对象注册到 Desktop 宿主；纯浏览器模式不需要此注册）
+- 其余 50+ 方法 → 安全的 no-op stub（全量分析所有 SDK + web-apps 文件中的 `AscDesktopEditor.*` 调用，100% 覆盖）
 
 **不影响保存路径**：SDK 内部保存走 Desktop 路径的条件是 `this.Aja === true`。使用 `asc_openDocumentFromBytes` 打开文档时 `Aja` 始终为 `undefined`，保存仍通过 `onSaveDocument` 服务器路径触发，不受 polyfill 影响。
 
-详细分析见 [docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md](docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md)。
+详细分析见：
+- [docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md](docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md)（工具栏崩溃 + $window 修复）
+- [docs/explorations/2026-06-21-asc-desktop-editor-load-crash-stubs.md](docs/explorations/2026-06-21-asc-desktop-editor-load-crash-stubs.md)（execCommand / CreateEditorApi + 完整 stub 补全）
 
 **Vite 中间件字体重写（两层机制，2026-06-20 完整修复）**：
 
