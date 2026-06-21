@@ -2,7 +2,7 @@ import 'ranui/message';
 import { createObjectURL } from 'ranuts/utils';
 import { getDocmentObj } from '../store';
 import { getOnlyOfficeLang, t } from './i18n';
-import { c_oAscFileType2 } from './file-types';
+import { c_oAscFileType2 } from '@doc/core';
 import type { BinConversionResult, SaveEvent } from './document-types';
 import { getMimeTypeFromExtension } from './document-utils';
 import { g_sEmpty_ooxml } from './empty_bin';

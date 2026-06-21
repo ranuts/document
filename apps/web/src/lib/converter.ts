@@ -16,7 +16,7 @@ export type {
 } from './document-types';
 
 // Export constants
-export { oAscFileType, c_oAscFileType2 } from './file-types';
+export { oAscFileType, c_oAscFileType2 } from '@doc/core';
 
 // Export utilities
 export { getDocumentType, getBasePath, BASE_PATH, DOCUMENT_TYPE_MAP } from './document-utils';
