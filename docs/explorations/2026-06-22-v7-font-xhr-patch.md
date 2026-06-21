@@ -7,19 +7,21 @@
 
 ## 根因
 
-### v7 SDK 的字体加载机制
+### v7 SDK 的字体加载机制（两种 URL 格式）
 
-v7 SDK (`sdkjs/cell/sdk-all-min.js`, line 21258)：
+v7 cell SDK 实际使用 **Windows 绝对路径** 发送字体 XHR 请求（浏览器测试中观察到）：
 
-```js
-e.open('GET', 'ascdesktop://fonts/' + t, !0)
+```
+GET c:\Windows\Fonts\arial.ttf      → net::ERR_FAILED
+GET c:\Windows\Fonts\Deng.ttf       → net::ERR_FAILED  (DengXian 中文字体)
+GET c:\Windows\Fonts\calibri.ttf    → net::ERR_FAILED
 ```
 
-SDK 使用 `ascdesktop://` 自定义协议通过 XHR 请求字体文件。这是 OnlyOffice Desktop App 设计的协议，C++ 宿主层会拦截这些请求并从本地字体目录返回数据。
+注：SDK 代码里也有 `ascdesktop://fonts/` 协议路径（`sdk-all-min.js` line 21258），但在当前 macOS 浏览器环境中，SDK 检测到 Windows UA 特征（或其他条件）走了 Windows 路径分支。两种格式都需要拦截。
 
-**在纯浏览器环境中**，`ascdesktop://` 是无效协议，XHR 请求静默失败（`onerror` 触发，SDK 使用空字体回退）。结果：
+**在纯浏览器环境中**，两种格式都是无效协议/路径，XHR 请求静默失败。结果：
 
-- `msyh.ttc`（微软雅黑，Excel 默认 CJK 字体）→ 无法加载 → 中文日期字符显示为空白（#62）
+- `Deng.ttf`（DengXian，Excel 默认 CJK 字体）→ 无法加载 → 中文日期字符显示为空白（#62）
 - `calibri.ttf`（Excel 默认西文字体）→ 无法加载 → HarfBuzz 按 calibri 字宽塑形，但 FreeType 按 DejaVuSans 渲染，字体度量不匹配，右对齐文字溢出/消失（#64）
 
 ### v9 为何不受影响
@@ -57,9 +59,9 @@ v7 之前没有这两层机制。
 
 `fontRemapMiddleware` 在 HTTP 层把 `/fonts/DejaVuSans.ttf` 重定向到 `NotoSansSC-VF.ttf`，使两层使用相同字体。
 
-**2. `apps/web/public-v7/onlyoffice-v7-iframe-patch.js`（新建）**
+**2. `apps/web/public-v7/onlyoffice-v7-iframe-patch.js`（新建，2026-06-22 更新补 Windows 路径格式）**
 
-最小化 XHR patch 脚本（比 v9 的 patch 简单得多，因为 v7 SDK 在 `AscDesktopEditor` 不存在时优雅降级）：
+XHR patch 脚本，拦截三种字体 URL 格式：
 
 ```js
 (function () {
@@ -69,16 +71,27 @@ v7 之前没有这两层机制。
     .then(function (m) { delete m._comment; fontMap = m; })
     .catch(function () {});
 
-  var FALLBACK = 'DejaVuSans.ttf';
+  var FALLBACK = 'NotoSansSC-VF.ttf';
+
+  function extractFilename(path) {
+    return path.split(/[/\\]/).pop().toLowerCase();
+  }
+
   var origOpen = window.XMLHttpRequest.prototype.open;
   window.XMLHttpRequest.prototype.open = function (method, url) {
     if (typeof url === 'string') {
+      var fn;
       if (url.indexOf('ascdesktop://fonts/') === 0) {
-        var fn = url.slice(19).split(/[\/\\]/).pop().toLowerCase();
+        // Scheme 1: ascdesktop://fonts/<file>
+        fn = extractFilename(url.slice(19));
+        arguments[1] = '/fonts/' + (fontMap[fn] || FALLBACK);
+      } else if (/^[a-zA-Z]:[/\\]/.test(url)) {
+        // Scheme 2: Windows absolute path c:\Windows\Fonts\<file>
+        fn = extractFilename(url);
         arguments[1] = '/fonts/' + (fontMap[fn] || FALLBACK);
       } else if (url.indexOf('/fonts/') !== -1) {
-        var fn2 = url.slice(url.lastIndexOf('/fonts/') + 7).toLowerCase();
-        if (fontMap[fn2]) arguments[1] = '/fonts/' + fontMap[fn2];
+        fn = url.slice(url.lastIndexOf('/fonts/') + 7).toLowerCase();
+        if (fontMap[fn]) arguments[1] = '/fonts/' + fontMap[fn];
       }
     }
     return origOpen.apply(this, arguments);
@@ -132,3 +145,4 @@ v7 的 font-map.json 使用 VF 变体（变量字体），功能等价，只是�
 
 - `pnpm run test`: 96 tests passed
 - `pnpm run lint:ts`: 无新增 TS 错误（现有警告来自 vendor 文件，与本次改动无关）
+- **浏览器实测（2026-06-22）**：修复前 19 个字体请求全部 `net::ERR_FAILED`；修复后全部转为 `/fonts/LiberationSans-*.ttf` 和 `/fonts/NotoSansSC-VF.ttf`，HTTP 200/304 成功返回。Excel 编辑器工具栏文字（Normal/Neutral/Bad/Good）正常渲染，DengXian 字体识别正确。
