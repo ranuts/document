@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "paths": {
-      "@doc/core": ["../../packages/core/src/index.ts"]
+      "@ranuts/core": ["../../packages/core/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts"],

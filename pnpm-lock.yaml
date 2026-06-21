@@ -17,15 +17,15 @@ importers:
 
   apps/web:
     dependencies:
-      '@doc/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@doc/editor-v9':
-        specifier: workspace:*
-        version: link:../../packages/editor-v9
       '@khmyznikov/pwa-install':
         specifier: ^0.6.3
         version: 0.6.3(@lit/react@1.0.8(@types/react@19.2.15))(@types/dom-chromium-installation-events@101.0.4)(@types/web-app-manifest@1.0.9)(lit@3.3.3)
+      '@ranuts/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ranuts/editor-v9':
+        specifier: workspace:*
+        version: link:../../packages/editor-v9
       ranui:
         specifier: 0.1.10-alpha-27
         version: 0.1.10-alpha-27(encoding@0.1.13)
@@ -74,13 +74,13 @@ importers:
 
   packages/editor-v7:
     dependencies:
-      '@doc/core':
+      '@ranuts/core':
         specifier: workspace:*
         version: link:../core
 
   packages/editor-v9:
     dependencies:
-      '@doc/core':
+      '@ranuts/core':
         specifier: workspace:*
         version: link:../core
       ranui:

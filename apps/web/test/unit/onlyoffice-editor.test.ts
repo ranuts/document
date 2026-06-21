@@ -11,7 +11,7 @@ vi.mock('ranuts/utils', () => ({
   getExtensions: vi.fn().mockReturnValue(['docx']),
   scriptOnLoad: vi.fn().mockResolvedValue(undefined),
 }));
-vi.mock('@doc/core', () => ({ c_oAscFileType2: { 65: 'XLSX', 43: 'DOCX' }, oAscFileType: {} }));
+vi.mock('@ranuts/core', () => ({ c_oAscFileType2: { 65: 'XLSX', 43: 'DOCX' }, oAscFileType: {} }));
 
 import {
   getNormalizedFile,
@@ -22,7 +22,7 @@ import {
   setDocumentStateGetter,
   setReadonlyMode,
   toUint8Array,
-} from '@doc/editor-v9';
+} from '@ranuts/editor-v9';
 
 function makeEditor(extra: Record<string, unknown> = {}) {
   return { sendCommand: vi.fn(), ...extra };

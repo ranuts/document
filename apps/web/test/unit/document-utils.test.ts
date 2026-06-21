@@ -4,7 +4,7 @@ import {
   getBasePath,
   getDocumentType,
   getMimeTypeFromExtension,
-} from '@doc/editor-v9';
+} from '@ranuts/editor-v9';
 
 describe('document utils', () => {
   it('classifies common document extensions', () => {

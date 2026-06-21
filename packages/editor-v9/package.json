@@ -1,5 +1,5 @@
 {
-  "name": "@doc/editor-v9",
+  "name": "@ranuts/editor-v9",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "lint:ts": "tsc --noEmit"
   },
   "dependencies": {
-    "@doc/core": "workspace:*"
+    "@ranuts/core": "workspace:*"
   },
   "peerDependencies": {
     "ranui": "*",

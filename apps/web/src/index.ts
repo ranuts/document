@@ -1,5 +1,5 @@
 import { getAllQueryString } from 'ranuts/utils';
-import { setDocumentStateGetter } from '@doc/editor-v9';
+import { setDocumentStateGetter } from '@ranuts/editor-v9';
 import { getDocmentObj } from './store';
 import { initEmbedApi } from './lib/embed-api';
 import { initEvents, setEventUICallbacks } from './lib/events';

@@ -1,7 +1,7 @@
 import { setDocmentObj } from '../store';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { openDocumentFromUrl } from './document';
-import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from '@doc/editor-v9';
+import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from '@ranuts/editor-v9';
 
 type EmbedMessageType =
   | 'document:open'
