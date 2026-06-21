@@ -335,7 +335,7 @@ Failed to resolve import "../../lib/document-utils"
 Failed to resolve import "../../lib/embed-api"
 Failed to resolve import "../../lib/i18n"
 Failed to resolve import "../../lib/onlyoffice-editor"
-ENOENT: no such file or directory, open '/Users/ranzhouhang/Desktop/document/index.html'
+ENOENT: no such file or directory, open '/Users/Desktop/document/index.html'
 ```
 
 ### 修复内容

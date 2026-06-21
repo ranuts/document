@@ -18,11 +18,11 @@ dist
 coverage/
 playwright-report/
 test-results/
-public/fonts/__fallback__/
+apps/web/public/fonts/__fallback__/
 # Large Noto CJK font families (5-24 MB each) — download separately; only the
 # hand-crafted Subset-LongLoca.ttf variants are tracked in the repo.
-public/fonts/NotoSans*-Regular.ttf
-public/fonts/NotoSans*-Bold.ttf
-public/fonts/NotoSans*-VF.ttf
-public/fonts/NotoSerif*-VF.ttf
+apps/web/public/fonts/NotoSans*-Regular.ttf
+apps/web/public/fonts/NotoSans*-Bold.ttf
+apps/web/public/fonts/NotoSans*-VF.ttf
+apps/web/public/fonts/NotoSerif*-VF.ttf
 docs/screenshots/
