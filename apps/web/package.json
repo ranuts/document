@@ -6,7 +6,10 @@
   "description": "A local web-based document editor based on OnlyOffice, allowing you to edit documents directly in your browser without server-side processing, ensuring your privacy and security.",
   "scripts": {
     "dev": "vite --host --force",
+    "dev:stable": "vite --host --force --config vite.stable.config.ts",
     "build": "sh ./bin/build.sh",
+    "build:stable": "vite build --config vite.stable.config.ts",
+    "build:beta": "vite build",
     "build:single": "node bin/bundle_single_html.js",
     "preview": "vite preview",
     "tsc": "tsc --noEmit",

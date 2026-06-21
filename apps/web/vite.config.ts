@@ -9,15 +9,16 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   root: 'pages',
   base: './',
-  publicDir: resolve(__dirname, 'public'),
+  publicDir: resolve(__dirname, 'public-beta'),
   plugins: [onlyofficeEngineIOHandshake(), fontRemapMiddleware(), injectCriticalStyle(), injectGtag()],
   server: {
+    port: 5173,
     fs: {
       allow: [__dirname],
     },
   },
   build: {
-    outDir: resolve(__dirname, 'dist'),
+    outDir: resolve(__dirname, 'dist/9.3.0'),
     emptyOutDir: true,
     rollupOptions: {
       input: {
@@ -49,10 +50,7 @@ export default defineConfig({
       '@/store': resolve(__dirname, 'src/store'),
       '@/types': resolve(__dirname, 'src/types'),
       '@/styles': resolve(__dirname, 'src/styles'),
-      '@bybrowser/editor':
-        process.env.VITE_EDITOR_VERSION === 'v7'
-          ? resolve(__dirname, '../../packages/editor-v7/src/index.ts')
-          : resolve(__dirname, '../../packages/editor-v9/src/index.ts'),
+      '@bybrowser/editor': resolve(__dirname, '../../packages/editor-v9/src/index.ts'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
