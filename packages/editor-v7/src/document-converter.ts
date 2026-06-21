@@ -3,6 +3,21 @@ import 'ranui/message';
 import { t } from './i18n';
 import type { BinConversionResult, ConversionResult, DocumentType, EmscriptenModule } from './document-types';
 import { BASE_PATH, DOCUMENT_TYPE_MAP } from './document-utils';
+import { extractDocxMediaUrls } from './docx-zip';
+
+const MIME_MAP: Record<string, string> = {
+  gif: 'image/gif',
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  svg: 'image/svg+xml',
+  webp: 'image/webp',
+  bmp: 'image/bmp',
+  tiff: 'image/tiff',
+  tif: 'image/tiff',
+  emf: 'image/x-emf',
+  wmf: 'image/x-wmf',
+};
 
 export class X2TConverter {
   private x2tModule: EmscriptenModule | null = null;
@@ -203,7 +218,9 @@ export class X2TConverter {
               encoding: 'binary',
             }) as BlobPart;
 
-            const blob = new Blob([fileData]);
+            const ext = file.split('.').pop()?.toLowerCase() ?? '';
+            const mime = MIME_MAP[ext] ?? 'application/octet-stream';
+            const blob = new Blob([fileData], { type: mime });
             const mediaUrl = await createObjectURL(blob);
             return { key: `media/${file}`, url: mediaUrl };
           } catch (error) {
@@ -364,6 +381,18 @@ export class X2TConverter {
       const inputPath = `/working/${sanitizedName}`;
       const outputPath = `${inputPath}.bin`;
 
+      // Pre-extract media from PPTX ZIP before x2t conversion.
+      // x2t may convert GIF→PNG in its output; the original ZIP preserves GIF animation.
+      // We merge after conversion, with original ZIP entries winning for same-basename files.
+      let originalPptxMedia: Record<string, string> = {};
+      if (fileExt.toLowerCase() === 'pptx') {
+        try {
+          originalPptxMedia = await extractDocxMediaUrls(data);
+        } catch {
+          // non-fatal; fall back to x2t output only
+        }
+      }
+
       // Write file to virtual file system
       this.x2tModule!.FS.writeFile(inputPath, data);
 
@@ -376,7 +405,32 @@ export class X2TConverter {
 
       // Read conversion result
       const result = this.x2tModule!.FS.readFile(outputPath);
-      const media = await this.readMediaFiles();
+      const x2tMedia = await this.readMediaFiles();
+
+      // Merge media: for each x2t output file, if the same basename exists in the
+      // original PPTX ZIP as a GIF, serve the original GIF (preserves animation).
+      const media: Record<string, string> = { ...x2tMedia };
+      if (Object.keys(originalPptxMedia).length > 0) {
+        // Build lookup: "media/image1" → gif blob url
+        const gifByBasename: Record<string, string> = {};
+        for (const [key, url] of Object.entries(originalPptxMedia)) {
+          const ext = key.split('.').pop()?.toLowerCase();
+          if (ext === 'gif') {
+            gifByBasename[key.replace(/\.[^.]+$/, '')] = url;
+          }
+        }
+        // Override x2t output with original where applicable
+        for (const key of Object.keys(media)) {
+          const basename = key.replace(/\.[^.]+$/, '');
+          if (gifByBasename[basename]) {
+            media[key] = gifByBasename[basename]!;
+          }
+        }
+        // Add any original media not produced by x2t (e.g. GIFs kept as GIF by x2t)
+        for (const [key, url] of Object.entries(originalPptxMedia)) {
+          if (!(key in media)) media[key] = url;
+        }
+      }
 
       return {
         fileName: sanitizedName,
