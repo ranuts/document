@@ -1,5 +1,5 @@
 {
-  "name": "@ranuts/web",
+  "name": "@bybrowser/web",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -38,8 +38,8 @@
     "vitest": "^4.1.7"
   },
   "dependencies": {
-    "@ranuts/core": "workspace:*",
-    "@ranuts/editor-v9": "workspace:*",
+    "@bybrowser/core": "workspace:*",
+    "@bybrowser/editor-v9": "workspace:*",
     "@khmyznikov/pwa-install": "^0.6.3",
     "ranui": "0.1.10-alpha-27",
     "ranuts": "0.1.0-alpha-23"

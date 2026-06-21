@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, t } from '@ranuts/editor-v9';
+import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, t } from '@bybrowser/editor-v9';
 
 describe('i18n', () => {
   afterEach(() => {

@@ -8,8 +8,8 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   resolve: {
     alias: {
-      '@ranuts/core': resolve(__dirname, '../../packages/core/src/index.ts'),
-      '@ranuts/editor-v9': resolve(__dirname, '../../packages/editor-v9/src/index.ts'),
+      '@bybrowser/core': resolve(__dirname, '../../packages/core/src/index.ts'),
+      '@bybrowser/editor-v9': resolve(__dirname, '../../packages/editor-v9/src/index.ts'),
       '@/lib': resolve(__dirname, 'src/lib'),
       '@/store': resolve(__dirname, 'src/store'),
       '@/assets': resolve(__dirname, 'src/assets'),

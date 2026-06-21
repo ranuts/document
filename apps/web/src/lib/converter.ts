@@ -1,14 +1,14 @@
 import { getExtensions } from 'ranuts/utils';
-import { t } from '@ranuts/editor-v9';
-import { X2TConverter } from '@ranuts/editor-v9';
+import { t } from '@bybrowser/editor-v9';
+import { X2TConverter } from '@bybrowser/editor-v9';
 import {
   createEditorInstance,
   loadEditorApi,
   setConverterCallbacks,
   g_sEmpty_bin,
   getDocumentType,
-} from '@ranuts/editor-v9';
-import type { BinConversionResult, ConversionResult, EmscriptenModule } from '@ranuts/editor-v9';
+} from '@bybrowser/editor-v9';
+import type { BinConversionResult, ConversionResult, EmscriptenModule } from '@bybrowser/editor-v9';
 
 // Export types
 export type {
@@ -17,13 +17,13 @@ export type {
   EmscriptenModule,
   DocumentType,
   SaveEvent,
-} from '@ranuts/editor-v9';
+} from '@bybrowser/editor-v9';
 
 // Export constants
-export { oAscFileType, c_oAscFileType2 } from '@ranuts/core';
+export { oAscFileType, c_oAscFileType2 } from '@bybrowser/core';
 
 // Export utilities
-export { getDocumentType, getBasePath, BASE_PATH, DOCUMENT_TYPE_MAP } from '@ranuts/editor-v9';
+export { getDocumentType, getBasePath, BASE_PATH, DOCUMENT_TYPE_MAP } from '@bybrowser/editor-v9';
 
 // Singleton instance
 const x2tConverter = new X2TConverter();

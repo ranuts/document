@@ -1,5 +1,5 @@
 {
-  "name": "@ranuts/editor-v7",
+  "name": "@bybrowser/editor-v7",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -9,6 +9,6 @@
     "lint:ts": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@ranuts/core": "workspace:*"
+    "@bybrowser/core": "workspace:*"
   }
 }

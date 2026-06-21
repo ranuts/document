@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { g_sEmpty_ooxml } from '@ranuts/editor-v9';
+import { g_sEmpty_ooxml } from '@bybrowser/editor-v9';
 
 type CanvasSample = {
   id: string;

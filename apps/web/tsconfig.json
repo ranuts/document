@@ -17,8 +17,8 @@
     "experimentalDecorators": true,
     "jsx": "react-jsx",
     "paths": {
-      "@ranuts/core": ["../../packages/core/src/index.ts"],
-      "@ranuts/editor-v9": ["../../packages/editor-v9/src/index.ts"],
+      "@bybrowser/core": ["../../packages/core/src/index.ts"],
+      "@bybrowser/editor-v9": ["../../packages/editor-v9/src/index.ts"],
       "@/*": ["./src/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/store/*": ["./src/store/*"],
