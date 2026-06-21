@@ -454,6 +454,57 @@ body.editor-open .landing-nav {
   color: #14213d;
 }
 
+/* Tag icon + select version picker */
+.version-picker {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 8px;
+  border: 1px solid rgba(20, 33, 61, 0.18);
+  border-radius: 999px;
+  color: #5a6678;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.version-picker:hover {
+  background: rgba(20, 33, 61, 0.06);
+  border-color: rgba(20, 33, 61, 0.28);
+  color: #14213d;
+}
+
+.version-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.version-select {
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-appearance: auto;
+  appearance: auto;
+}
+
+.beta-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #fff;
+  background: #f97316;
+  padding: 1px 6px;
+  border-radius: 999px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
 /* Globe icon + select language picker */
 .lang-picker {
   display: flex;
