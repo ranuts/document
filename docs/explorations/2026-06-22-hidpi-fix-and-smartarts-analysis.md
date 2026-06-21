@@ -108,11 +108,24 @@ e && e();  // 成功回调
 
 文件路径：`apps/web/public-v7/sdkjs/common/SmartArts/SmartArts.bin`（5 bytes, 全零）
 
-### 已知限制
+### 完整修复（2026-06-22 更新）
 
-SmartArt 形状**仍然不会渲染**（空数据）。要真正修复此问题，需要：
-1. 获取与我们本地 v7 `sdk-all-min.js` 同一构建版本的 `SmartArts.bin` 文件
-2. 或将 v7 SDK 替换为与 Docker 镜像完全对齐的版本（使用目录结构）
+**关键发现**：v9 和 v7 的 SmartArt 数字类型 ID 完全一致（均为 0–150 顺序枚举），只是 SDK 内部属性名（混淆变量名）不同。v9 的 `SmartArtData/<name>.bin` 独立文件就是 v7 期望连接在 SmartArts.bin 数据区中的各类型数据。
+
+**重建方法**：
+1. 从 v9 的 `Db` enum（数字 ID 映射）和 `d` dict（属性名 → 文件名）得到完整的 `type_id → filename` 映射（151 个类型全部覆盖）
+2. 将所有 151 个 `SmartArtData/<name>.bin` 文件按 type_id 顺序拼接
+3. 计算每个类型数据在全局 buffer 中的绝对字节偏移
+4. 生成带索引头的 SmartArts.bin：
+
+```
+[1 byte: version=0]
+[4 bytes LE: boundary_marker=756]  ← loop exits when cursor >= 756+4=760
+[151 × 5 bytes: typeId(1B) + offset_in_buffer(4B LE)]  ← index
+[所有 SmartArtData/*.bin 数据拼接]
+```
+
+**结果**：7.8MB 的 SmartArts.bin，覆盖全部 151 种 SmartArt 类型。
 
 **v9 状态**：v9 使用独立文件格式（`SmartArtData/*.bin` + `SmartArtDrawing/SmartArtDrawings.bin`），文件已存在于 `public-v9/`，SmartArt 功能正常。
 
@@ -126,5 +139,5 @@ SmartArt 形状**仍然不会渲染**（空数据）。要真正修复此问题�
 | #12 光标位置偏移 | v9 | ✅ 已修复（同上，DPR 校正启用）|
 | #92 Excel 光标不移动 | v9 | ✅ 已修复（同上）|
 | #15/#12/#92 | v7 | ✅ 本就正常（无 polyfill，SDK 自用默认值）|
-| #20 SmartArts.bin | v7 | ⚠️ 部分修复（404 消除，形状仍不渲染）|
+| #20 SmartArts.bin | v7 | ✅ 已修复（从 v9 SmartArtData 重建 SmartArts.bin，7.8MB）|
 | #20 SmartArts | v9 | ✅ 文件存在，功能正常 |
