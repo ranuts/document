@@ -19,25 +19,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build project
-        run: bash bin/build.sh
+        run: pnpm build
 
       - name: Create Single-File HTML
+        working-directory: apps/web
         run: node bin/bundle_single_html.js
 
       - name: Create ZIP archive
         run: |
-          cd dist
-          zip -r ../document-editor.zip .
-          cd ..
+          cd apps/web/dist
+          zip -r ../../../document-editor.zip .
+          cd -
 
       - name: Create Release
         id: create_release
@@ -48,7 +55,7 @@ jobs:
           body: ${{ github.event.inputs.release_body }}
           files: |
             document-editor.zip
-            dist/single-file.html
+            apps/web/dist/single-file.html
           draft: false
           prerelease: false
         env:
