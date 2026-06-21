@@ -696,6 +696,38 @@ export function createEditorInstance(config: {
                 }
               }
               console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
+              // CRITICAL FIX: SDK's Shc()/Mrc() checks !a.AscDesktopEditor. Our polyfill
+              // makes it truthy, so the Desktop branch runs: calls LocalStartOpen() (our noop)
+              // and discards the document bytes without feeding them to WASM.
+              // BRj()/rxk() is the web path that actually starts document loading.
+              // Patch the SDK-specific gating function to always call the web path.
+              // Keep patches active (no restore): if WASM isn't ready yet, BRj/rxk stores
+              // bytes in KXb/U4b and processes them when the font-load callback fires again.
+              //
+              // Word SDK:  Shc(d) → BRj(d)
+              // Cell SDK:  Mrc(d) → rxk(d)
+              // (Slide SDK uses a different loading path and does not need this patch.)
+              const patchWebPath = (shcName: string, brjName: string, historyFlag: string, contentReadyCb: string) => {
+                const a = api as any;
+                if (typeof a[shcName] !== 'function' || typeof a[brjName] !== 'function') return;
+                a[shcName] = function (d: unknown) {
+                  if (d) {
+                    try {
+                      a[contentReadyCb]?.('asc_onDocumentContentReady', function () {
+                        const w = iwin;
+                        if (w?.Z$) w.Z$(w.Asc?.editor || w.editor);
+                        if (w?.X$) w.X$(w.Asc?.editor || w.editor);
+                        setTimeout(function () { if (w?.UpdateInstallPlugins) w.UpdateInstallPlugins(); }, 10);
+                      });
+                      if (iwin?.AscCommon?.History) (iwin.AscCommon.History as any)[historyFlag] = true;
+                    } catch (_e) {}
+                  }
+                  return a[brjName](d);
+                };
+              };
+              patchWebPath('Shc', 'BRj', 'C0a', 'b_');   // Word SDK
+              patchWebPath('Mrc', 'rxk', 'J6a', 'tW');   // Cell SDK
+              patchWebPath('K8b', 'Fzj', '$cb', 'aN');   // Slide SDK
               api.asc_openDocumentFromBytes(ooxmlBytes);
               if (!api.I0c && typeof api.Aqg === 'function') {
                 // Serverless Web Mode has no server auth/openedAt response. Without this,
