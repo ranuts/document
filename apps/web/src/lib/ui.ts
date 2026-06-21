@@ -1,5 +1,5 @@
 import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
-import { LanguageCode, getLanguage, t } from '@bybrowser/editor-v9';
+import { LanguageCode, getLanguage, t } from '@bybrowser/editor';
 import { showLoading } from './loading';
 import { onCreateNew, onOpenDocument } from './document';
 

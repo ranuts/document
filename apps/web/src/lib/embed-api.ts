@@ -1,7 +1,7 @@
 import { setDocmentObj } from '../store';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { openDocumentFromUrl } from './document';
-import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from '@bybrowser/editor-v9';
+import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from '@bybrowser/editor';
 
 type EmbedMessageType =
   | 'document:open'

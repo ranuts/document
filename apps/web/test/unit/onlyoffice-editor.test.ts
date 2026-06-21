@@ -22,7 +22,7 @@ import {
   setDocumentStateGetter,
   setReadonlyMode,
   toUint8Array,
-} from '@bybrowser/editor-v9';
+} from '@bybrowser/editor';
 
 function makeEditor(extra: Record<string, unknown> = {}) {
   return { sendCommand: vi.fn(), ...extra };

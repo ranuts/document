@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@bybrowser/core": "workspace:*",
+    "@bybrowser/editor-v7": "workspace:*",
     "@bybrowser/editor-v9": "workspace:*",
     "@khmyznikov/pwa-install": "^0.6.3",
     "ranui": "0.1.10-alpha-27",

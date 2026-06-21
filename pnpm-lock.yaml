@@ -17,6 +17,9 @@ importers:
       '@bybrowser/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@bybrowser/editor-v7':
+        specifier: workspace:*
+        version: link:../../packages/editor-v7
       '@bybrowser/editor-v9':
         specifier: workspace:*
         version: link:../../packages/editor-v9
