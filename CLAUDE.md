@@ -98,9 +98,21 @@ index.html            # HTML 入口
 1. 等 `loadDocument` 运行完（`mainCtrl.document` 有值）
 2. 拦截 `mainCtrl.onEditorPermissions`，永远用 `fakePerms`（防止 SDK 的第二次调用把 `isEdit` 重置为 false）
 3. 等 `_isPermissionsInited=true`，超过 2s 后手动触发
-4. 调用 `api.asc_openDocumentFromBytes(ooxmlBytes)`
+4. Patch SDK 门控函数（见下），再调用 `api.asc_openDocumentFromBytes(ooxmlBytes)`
 
 详细分析见 [docs/explorations/2026-06-15-web-mode-permissions-debug.md](docs/explorations/2026-06-15-web-mode-permissions-debug.md)。
+
+**⚠️ 核心 Bug — Shc/Mrc/K8b 门控函数（2026-06-21 修复）**：`asc_openDocumentFromBytes` 内部调用 `Shc`（Word）/`Mrc`（Cell）/`K8b`（Slide），这些函数检测 `!a.AscDesktopEditor`。我们的 polyfill 使其为 truthy，所以走 Desktop 分支（`LocalStartOpen()` noop）而非 Web 路径（`BRj`/`rxk`/`Fzj`），字节被静默丢弃，canvas 永远空白。
+
+修复：在步骤 4 之前 patch 三个门控函数，强制走 Web 路径：
+
+```typescript
+patchWebPath('Shc', 'BRj', 'C0a', 'b_');   // Word SDK
+patchWebPath('Mrc', 'rxk', 'J6a', 'tW');   // Cell SDK
+patchWebPath('K8b', 'Fzj', '$cb', 'aN');   // Slide SDK
+```
+
+详细分析见 [docs/explorations/2026-06-21-shc-brj-web-path-patch.md](docs/explorations/2026-06-21-shc-brj-web-path-patch.md)。
 
 **文档字节来源**：`onAppReady` 里 `binData` 含分号 → 新建文档，从 `g_sEmpty_ooxml` 取对应扩展名的最小 OOXML ZIP；否则用 `pendingCopy`（打开已有文件时在 `createEditorInstance` 入口处拷贝的原始 `Uint8Array`）。
 
