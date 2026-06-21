@@ -6,11 +6,9 @@ import { showLoading } from './loading';
 
 // UI callbacks to avoid circular dependency
 let hideControlPanelFn: (() => void) | null = null;
-let showMenuGuideFn: (() => void) | null = null;
 
-export function setEventUICallbacks(callbacks: { hideControlPanel: () => void; showMenuGuide: () => void }): void {
+export function setEventUICallbacks(callbacks: { hideControlPanel: () => void }): void {
   hideControlPanelFn = callbacks.hideControlPanel;
-  showMenuGuideFn = callbacks.showMenuGuide;
 }
 
 export interface RenderOfficeData {
@@ -46,12 +44,6 @@ export const events: Record<string, MessageHandler<any, unknown>> = {
         const { fileName, file: fileBlob } = getDocmentObj();
         await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
         setProgress(90, 'Opening editor…');
-        // Show menu guide after document is loaded
-        if (showMenuGuideFn) {
-          setTimeout(() => {
-            showMenuGuideFn!();
-          }, 1000);
-        }
       } catch (error) {
         console.error('Error rendering office document:', error);
       } finally {

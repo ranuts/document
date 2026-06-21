@@ -15,8 +15,13 @@
   // Fetch font map early — resolves well before SDK requests any fonts.
   var fontMap = {};
   fetch('/font-map.json')
-    .then(function (r) { return r.json(); })
-    .then(function (m) { delete m._comment; fontMap = m; })
+    .then(function (r) {
+      return r.json();
+    })
+    .then(function (m) {
+      delete m._comment;
+      fontMap = m;
+    })
     .catch(function () {});
 
   var FALLBACK = 'NotoSansSC-VF.ttf';
