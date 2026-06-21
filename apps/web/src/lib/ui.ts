@@ -800,6 +800,57 @@ export const createLandingNav = (): void => {
   nav.appendChild(createTopLink('GitHub', 'https://github.com/ranuts/document', true));
   nav.appendChild(createTopLink('Issues', 'https://github.com/ranuts/document/issues', true));
 
+  // Tag icon + select version picker
+  const BETA_PATH = '/9.3.0/';
+  const isBeta = window.location.pathname.startsWith(BETA_PATH);
+
+  const versionPicker = document.createElement('div');
+  versionPicker.className = 'version-picker';
+
+  const versionIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  versionIcon.setAttribute('class', 'version-icon');
+  versionIcon.setAttribute('viewBox', '0 0 24 24');
+  versionIcon.setAttribute('fill', 'none');
+  versionIcon.setAttribute('stroke', 'currentColor');
+  versionIcon.setAttribute('stroke-width', '2');
+  versionIcon.setAttribute('stroke-linecap', 'round');
+  versionIcon.setAttribute('stroke-linejoin', 'round');
+  versionIcon.setAttribute('aria-hidden', 'true');
+  versionIcon.innerHTML =
+    '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>' +
+    '<line x1="7" y1="7" x2="7.01" y2="7"/>';
+
+  const versionSelect = document.createElement('select');
+  versionSelect.className = 'version-select';
+  versionSelect.setAttribute('aria-label', 'Version');
+
+  const versionOptions: Array<{ value: string; label: string }> = [
+    { value: 'stable', label: 'v7' },
+    { value: 'beta', label: 'v9.3.0' },
+  ];
+  for (const { value, label } of versionOptions) {
+    const opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = label;
+    if ((value === 'beta') === isBeta) opt.selected = true;
+    versionSelect.appendChild(opt);
+  }
+
+  const betaBadge = document.createElement('span');
+  betaBadge.className = 'beta-badge';
+  betaBadge.textContent = 'beta';
+  if (!isBeta) betaBadge.hidden = true;
+
+  versionSelect.addEventListener('change', () => {
+    betaBadge.hidden = versionSelect.value !== 'beta';
+    window.location.href = versionSelect.value === 'beta' ? BETA_PATH : '/';
+  });
+
+  versionPicker.appendChild(versionIcon);
+  versionPicker.appendChild(versionSelect);
+  versionPicker.appendChild(betaBadge);
+  nav.appendChild(versionPicker);
+
   // Globe icon + select language picker
   const picker = document.createElement('div');
   picker.className = 'lang-picker';
