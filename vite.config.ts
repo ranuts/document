@@ -222,9 +222,27 @@ function onlyofficeWebModePatch(): Plugin {
       LocalFileSave:                 function() { setTimeout(function() { if (typeof window.DesktopOfflineAppDocumentEndSave === 'function') window.DesktopOfflineAppDocumentEndSave(0, null, null); }, 0); },
       LocalFileSaveChanges:          noop,
       LocalFileGetOpenChangesCount:  function() { return 0; },
-      LocalFileGetSaved:             function() { return true; },
+      LocalFileGetSaved:             noopFalse,
       LocalFileGetSourcePath:        noopEmpty,
+      LocalFileGetRelativePath:      noopFalse,
       LocalStartOpen:                noop,
+      // word SDK: download a list of remote URLs and return {url: localPath} map
+      DownloadFiles: function(urls, _extra, cb) {
+        if (!urls || !urls.length) { if (typeof cb === 'function') cb({}); return; }
+        var result = {}, done = 0, total = urls.length;
+        urls.forEach(function(url) {
+          fetch(url, { mode: 'cors' })
+            .then(function(r) { return r.ok ? r.blob() : Promise.reject(r.status); })
+            .then(function(blob) {
+              var name = (url.split('/').pop() || 'file').split('?')[0];
+              var key = 'asc-dl-' + (++_seq) + '-' + name;
+              _map[key] = { url: URL.createObjectURL(blob), file: new File([blob], name) };
+              result[url] = key;
+            })
+            .catch(function() { result[url] = ''; })
+            .then(function() { if (++done === total && typeof cb === 'function') cb(result); });
+        });
+      },
       SetAdvancedOptions:            noop,
       SetDocumentName:               noop,
       SetFullscreen:                 noop,
