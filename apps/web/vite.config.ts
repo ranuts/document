@@ -49,6 +49,10 @@ export default defineConfig({
       '@/store': resolve(__dirname, 'src/store'),
       '@/types': resolve(__dirname, 'src/types'),
       '@/styles': resolve(__dirname, 'src/styles'),
+      '@bybrowser/editor-v9':
+        process.env.VITE_EDITOR_VERSION === 'v7'
+          ? resolve(__dirname, '../../packages/editor-v7/src/index.ts')
+          : resolve(__dirname, '../../packages/editor-v9/src/index.ts'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   },
