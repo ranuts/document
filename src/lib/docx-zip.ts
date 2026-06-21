@@ -361,7 +361,7 @@ export async function preprocessXlsxLineBreaks(xlsxBytes: Uint8Array): Promise<U
 
 // Preprocess a PPTX before passing its bytes to asc_openDocumentFromBytes.
 //
-// Two fixes applied in a single ZIP rebuild pass:
+// Three fixes applied in a single ZIP rebuild pass:
 //
 // 1. showMasterPhAnim (SDK bug in 9.3.0 Web Mode): the notes-slide parser class
 //    calls this.l8a() for this attribute, but l8a() is not defined on the notes
@@ -373,38 +373,79 @@ export async function preprocessXlsxLineBreaks(xlsxBytes: Uint8Array): Promise<U
 //    The SDK crashes at f.$Nf (sdk-all-min.js) when it tries to call .Ty() on a
 //    null reader. We inject a minimal app.xml and add its relationship to _rels/.rels.
 //
+// 3. Missing docProps/core.xml: when absent, the SDK's changesError controller is
+//    left partially uninitialised. A socket.io connection failure then triggers
+//    onError(), which crashes with "Cannot read properties of undefined (reading
+//    '$window')", disabling the entire toolbar. Injecting a minimal core.xml
+//    and its core-properties relationship prevents this crash.
+//
 // Both notes-slide XMLs and _rels/.rels are typically DEFLATE-compressed, so the
 // pattern check must happen after decompression — a raw-byte ZIP scan won't find them.
 export async function preprocessPptx(pptxBytes: Uint8Array): Promise<Uint8Array> {
-  const hasAppXml = checkZipHasEntry(pptxBytes, 'docProps/app.xml');
+  const hasAppXml  = checkZipHasEntry(pptxBytes, 'docProps/app.xml');
+  const hasCoreXml = checkZipHasEntry(pptxBytes, 'docProps/core.xml');
 
+  const enc = new TextEncoder();
   const inject: Array<{name: string; data: Uint8Array}> = [];
+
   if (!hasAppXml) {
-    const appXml =
-      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-      '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">' +
-      '<Application>Microsoft Office PowerPoint</Application>' +
-      '</Properties>';
-    inject.push({ name: 'docProps/app.xml', data: new TextEncoder().encode(appXml) });
+    inject.push({
+      name: 'docProps/app.xml',
+      data: enc.encode(
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">' +
+        '<Application>Microsoft Office PowerPoint</Application>' +
+        '</Properties>',
+      ),
+    });
   }
+
+  if (!hasCoreXml) {
+    inject.push({
+      name: 'docProps/core.xml',
+      data: enc.encode(
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<cp:coreProperties' +
+        ' xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"' +
+        ' xmlns:dc="http://purl.org/dc/elements/1.1/"' +
+        ' xmlns:dcterms="http://purl.org/dc/terms/"' +
+        ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+        '<dc:title/><dc:creator/>' +
+        '</cp:coreProperties>',
+      ),
+    });
+  }
+
+  const needsRels = !hasAppXml || !hasCoreXml;
 
   return rewriteZipEntries(
     pptxBytes,
     (name) =>
       ((name.startsWith('ppt/notesSlides/') || name.startsWith('ppt/notesMasters/')) && name.endsWith('.xml')) ||
-      (!hasAppXml && name === '_rels/.rels'),
+      (needsRels && name === '_rels/.rels'),
     (xml, name) => {
       if (name === '_rels/.rels') {
-        if (xml.includes('extended-properties')) return null;
-        const end = xml.lastIndexOf('</Relationships>');
+        let out = xml;
+        const end = out.lastIndexOf('</Relationships>');
         if (end === -1) return null;
         let n = 1;
-        while (xml.includes(`"rId${n}"`)) n++;
-        const rel =
-          `<Relationship Id="rId${n}" ` +
-          `Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" ` +
-          `Target="docProps/app.xml"/>`;
-        return xml.slice(0, end) + rel + xml.slice(end);
+        while (out.includes(`"rId${n}"`)) n++;
+        if (!hasAppXml && !out.includes('extended-properties')) {
+          const rel =
+            `<Relationship Id="rId${n}" ` +
+            `Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" ` +
+            `Target="docProps/app.xml"/>`;
+          out = out.slice(0, end) + rel + out.slice(end);
+          n++;
+        }
+        if (!hasCoreXml && !out.includes('core-properties')) {
+          const rel =
+            `<Relationship Id="rId${n}" ` +
+            `Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" ` +
+            `Target="docProps/core.xml"/>`;
+          out = out.slice(0, out.lastIndexOf('</Relationships>')) + rel + out.slice(out.lastIndexOf('</Relationships>'));
+        }
+        return out === xml ? null : out;
       }
       if (!xml.includes('showMasterPhAnim')) return null;
       const next = xml.replace(/ showMasterPhAnim="[^"]*"/g, '');

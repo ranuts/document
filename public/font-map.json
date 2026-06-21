@@ -1,6 +1,8 @@
 {
   "_comment": "ascdesktop://fonts/<filename> → /fonts/<filename> rewrite map. Add entries here to override or extend. Any font NOT in this map falls back to DejaVuSans.ttf automatically.",
 
+  "notosanssc-subset-longloca.ttf": "NotoSansSC-Regular.ttf",
+
   "dejavusans.ttf":             "NotoSansSC-Regular.ttf",
   "dejavusans-bold.ttf":        "NotoSansSC-Regular.ttf",
   "dejavusans-oblique.ttf":     "NotoSansSC-Regular.ttf",
