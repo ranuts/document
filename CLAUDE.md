@@ -104,7 +104,23 @@ index.html            # HTML 入口
 
 **文档字节来源**：`onAppReady` 里 `binData` 含分号 → 新建文档，从 `g_sEmpty_ooxml` 取对应扩展名的最小 OOXML ZIP；否则用 `pendingCopy`（打开已有文件时在 `createEditorInstance` 入口处拷贝的原始 `Uint8Array`）。
 
-**弹窗抑制（2026-06-19 已修复）**：`suppressDialogsInFrame(iwin)` 在 `onAppReady` 里直接 patch `iwin.Common.UI.warning`，抑制 "Connection is lost" 和 EditingError -25 弹窗。不再依赖 Vite 中间件注入（中间件 `onlyofficeWebModePatch` 保留但其 `suppressConnectionLost` 逻辑为冗余防线）。
+**弹窗抑制（2026-06-21 修复了隐藏 bug）**：`suppressDialogsInFrame(iwin)` 在 `onAppReady` 里 patch `iwin.Common.UI.warning` / `Common.UI.alert`，抑制 "Connection is lost" 弹窗。`vite.config.ts` 的 `suppressConnectionLost` 是冗余防线。
+
+**⚠️ 关键陷阱**：`Common.UI.alert()` 的返回值会被 `app.js` 链式调用：`Common.UI.alert(s).$window.attr("data-value", t)`。如果 suppress 函数返回 `undefined`，下一步访问 `undefined.$window` 会抛 TypeError，产生"Cannot read properties of undefined (reading '$window')"的级联崩溃。正确做法是返回带有 `$window` 属性的 mock 对象。
+
+**AscDesktopEditor polyfill（2026-06-21 新增）**：SDK 假设运行在 Desktop App 内，所有文件选取操作（插入图片、插入视频、插入音频、插入外部文档等）均调用 `window.AscDesktopEditor.OpenFilenameDialog()` 和 `LocalFileGetImageUrl()`。在纯浏览器环境中这个对象不存在，导致所有工具栏文件操作立即 crash。
+
+修复：在 Vite 中间件注入到所有三种编辑器 iframe 的 `<script>` 里实现 polyfill：
+- `OpenFilenameDialog(filter, isMultiselect, callback)` → 创建隐藏的 `<input type="file">`，用 filter 类型（`"images"`/`"video"`/`"audio"`/`"word"`/`"cell"`）设置 `accept` 属性
+- `LocalFileGetImageUrl(key)` → 通过内部 `_map` 返回 `URL.createObjectURL()` 生成的 blob URL
+- `AddVideo(key, cb)` / `AddAudio(key, cb)` → 从 `_map` 取 blob URL，以 `cb(0, {url, name})` 格式回调
+- `DownloadFiles(urls, extra, cb)` → 用 `fetch()` 下载远程 URL，转为 blob URL（word SDK 专用）
+- `LocalFileGetRelativePath(key)` → 返回 `false`（cell SDK 专用，配合 `LocalFileGetSaved()` 短路）
+- 其余 30+ 方法 → 安全的 no-op stub
+
+**不影响保存路径**：SDK 内部保存走 Desktop 路径的条件是 `this.Aja === true`。使用 `asc_openDocumentFromBytes` 打开文档时 `Aja` 始终为 `undefined`，保存仍通过 `onSaveDocument` 服务器路径触发，不受 polyfill 影响。
+
+详细分析见 [docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md](docs/explorations/2026-06-21-toolbar-asc-desktop-editor-polyfill.md)。
 
 **Vite 中间件字体重写（两层机制，2026-06-20 完整修复）**：
 
@@ -254,6 +270,58 @@ git diff --check
 2. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
 3. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
 4. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
+
+---
+
+## OnlyOffice 运行架构与浏览器适配原理
+
+### 为什么需要大量浏览器适配
+
+OnlyOffice `web-apps` + `sdkjs` 的代码虽然开源，但设计上只支持两种宿主环境：
+
+```
+模式 1：Document Server（标准部署）
+  浏览器 → iframe(web-apps/sdkjs) ↔ socket.io ↔ Document Server
+  后端负责：License、文件存储、字体、x2t 转换、实时协作
+
+模式 2：Desktop App（桌面版）
+  Electron/CEF WebView → iframe(web-apps/sdkjs) ↔ window.AscDesktopEditor（C++）
+  C++ 层负责：文件对话框、本地 I/O、字体目录、OS 集成
+```
+
+本项目是**第三种模式**——纯浏览器、零服务器——OnlyOffice 从未设计也未测试过这种运行方式。开源代码解决的是"可以看到"，解决不了"绕过架构假设"。每一个"坑"本质上都是：**原本由 C++ Desktop App 或 Document Server 承担的职责，现在需要用浏览器 API 替换实现**。
+
+Fork 修改 SDK 代价极高（几十万行 minified 代码，每次升级需 rebase）。我们的 polyfill 方案是最小侵入：不动 OnlyOffice 代码，升级时只需替换 `public/` 目录。
+
+### WASM 的作用与边界
+
+项目中的 WASM 文件分两类，解决完全不同维度的问题：
+
+**计算层 WASM**（从 C++ 编译，解决"浏览器 JS 太慢"）：
+
+| 文件 | 作用 |
+|------|------|
+| `wasm/x2t/x2t.wasm`（34 MB） | 文件格式转换：DOCX/XLSX/PPTX ↔ OnlyOffice 内部格式（DOCY/XLSY/PPSY） |
+| `sdkjs/common/libfont/engine/fonts.wasm` | HarfBuzz（文字塑形）+ FreeType（字体渲染）；CJK split-brain 乱码的根因在此 |
+| `sdkjs/common/zlib/engine/zlib.wasm` | ZIP 解压（OOXML 文件本质是 ZIP） |
+| `sdkjs/common/spell/spell/spell.wasm` | 拼写检查 |
+| `sdkjs/pdf/src/engine/drawingfile.wasm` | PDF 渲染 |
+
+**WASM 使零服务器"计算上可行"**：没有 x2t.wasm 就无法在纯浏览器里做格式转换。但我们打开 DOCX/XLSX/PPTX 时实际**绕过了 x2t**（用 `asc_openDocumentFromBytes` 直接喂 OOXML 字节），x2t 目前只在保存时使用。
+
+**WASM 解决不了的问题**（我们需要适配的部分）：
+
+| 需要做的事 | 原本由谁负责 | 我们的替代方案 |
+|-----------|------------|--------------|
+| 文件选择框 | `AscDesktopEditor.OpenFilenameDialog`（C++） | polyfill → `<input type="file">` |
+| 本地文件读取 | `AscDesktopEditor.LocalFileGetImageUrl` | polyfill → `URL.createObjectURL` |
+| License 验证 | Document Server | `fakePerms`（`asc_getLicenseType: () => 3`）|
+| 实时协作同步 | socket.io + Document Server | Vite 里的 Engine.IO noop server |
+| 字体 HTTP 请求 | Desktop App 的字体目录 | `fontRemapMiddleware` + font-map.json |
+| 弹窗（断线提示等） | 正常弹出 | `suppressDialogsInFrame` + mock dialog |
+| PPTX 文件预处理 | Document Server（x2t 预处理） | `preprocessPptx()`（修 ZIP/XML 问题）|
+
+**一句话总结**：WASM 让零服务器**计算上可行**，我们的 polyfill/patch 体系让它**运行时不崩溃**。两者解决完全不同维度的问题。
 
 ---
 
