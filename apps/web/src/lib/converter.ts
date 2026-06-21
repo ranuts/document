@@ -1,10 +1,14 @@
 import { getExtensions } from 'ranuts/utils';
-import { g_sEmpty_bin } from './empty_bin';
-import { t } from './i18n';
-import { X2TConverter } from './document-converter';
-import { createEditorInstance, loadEditorApi, setConverterCallbacks } from './onlyoffice-editor';
-import { getDocumentType } from './document-utils';
-import type { BinConversionResult, ConversionResult, EmscriptenModule } from './document-types';
+import { t } from '@doc/editor-v9';
+import { X2TConverter } from '@doc/editor-v9';
+import {
+  createEditorInstance,
+  loadEditorApi,
+  setConverterCallbacks,
+  g_sEmpty_bin,
+  getDocumentType,
+} from '@doc/editor-v9';
+import type { BinConversionResult, ConversionResult, EmscriptenModule } from '@doc/editor-v9';
 
 // Export types
 export type {
@@ -13,13 +17,13 @@ export type {
   EmscriptenModule,
   DocumentType,
   SaveEvent,
-} from './document-types';
+} from '@doc/editor-v9';
 
 // Export constants
 export { oAscFileType, c_oAscFileType2 } from '@doc/core';
 
 // Export utilities
-export { getDocumentType, getBasePath, BASE_PATH, DOCUMENT_TYPE_MAP } from './document-utils';
+export { getDocumentType, getBasePath, BASE_PATH, DOCUMENT_TYPE_MAP } from '@doc/editor-v9';
 
 // Singleton instance
 const x2tConverter = new X2TConverter();
@@ -77,7 +81,7 @@ export async function handleDocumentOperation(options: {
       // Opening existing document requires conversion
       if (!file) throw new Error(t('invalidFileObject'));
       // Store original file bytes for asc_nativeOpenFile in Desktop mode mock.
-      // asc_nativeOpenFile accepts OOXML (docx/xlsx/pptx) directly without x2t.
+      // asc_openDocumentFromBytes accepts OOXML (docx/xlsx/pptx) directly without x2t.
       const origBuf = await file.arrayBuffer();
       (window as unknown as Record<string, unknown>).__pendingOriginalFile = new Uint8Array(origBuf);
       // @ts-expect-error convertDocument handles the file type conversion

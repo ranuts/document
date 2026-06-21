@@ -1,6 +1,5 @@
 import 'ranui/message';
 import { createObjectURL } from 'ranuts/utils';
-import { getDocmentObj } from '../store';
 import { getOnlyOfficeLang, t } from './i18n';
 import { c_oAscFileType2 } from '@doc/core';
 import type { BinConversionResult, SaveEvent } from './document-types';
@@ -8,6 +7,14 @@ import { getMimeTypeFromExtension } from './document-utils';
 import { g_sEmpty_ooxml } from './empty_bin';
 import { extractDocxMediaUrls, preprocessXlsxLineBreaks, preprocessPptx } from './docx-zip';
 import { showMediaPlayer } from './media-player';
+
+// App-level document state injected via setDocumentStateGetter (avoids store coupling)
+type DocumentState = { fileName?: string; file?: File } | null;
+type DocumentStateGetter = () => DocumentState;
+let _getDocumentState: DocumentStateGetter = () => null;
+export function setDocumentStateGetter(getter: DocumentStateGetter): void {
+  _getDocumentState = getter;
+}
 
 // Import converter function to avoid circular dependency
 let convertBinToDocumentFn:
@@ -299,7 +306,7 @@ async function handleSaveDocument(event: any) {
   // 7.4.1: api.js dispatched onSave with event.data = { data: { data: Uint8Array }, option: { outputformat } }.
   let binaryData: Uint8Array;
   let targetFormat: string;
-  const { fileName } = getDocmentObj() || {};
+  const { fileName } = _getDocumentState() || {};
 
   if (event.data instanceof ArrayBuffer) {
     // 9.3.0 path — onSaveDocument fires with raw binary transferred via postMessage
@@ -328,7 +335,7 @@ async function handleSaveDocument(event: any) {
     cleanupEmbeddedSaveRequest(request);
 
     try {
-      const result = await convertBinToDocumentFn(binaryData, fileName, request.targetExt || targetFormat);
+      const result = await convertBinToDocumentFn(binaryData, fileName ?? '', request.targetExt || targetFormat);
       const bytes = toUint8Array(result.data);
       const file = new File([bytes as BlobPart], result.fileName, { type: getSavedFileMimeType(result.fileName) });
       resolveEmbeddedSaveRequest(request, file);
@@ -339,7 +346,7 @@ async function handleSaveDocument(event: any) {
   } else if (isEmbedMode()) {
     console.warn('Local save is disabled in iframe embed mode. Use document:save from the parent page.');
   } else if (convertBinToDocumentAndDownloadFn) {
-    await convertBinToDocumentAndDownloadFn(binaryData, fileName, targetFormat);
+    await convertBinToDocumentAndDownloadFn(binaryData, fileName ?? '', targetFormat);
   } else {
     throw new Error('Converter callback not set');
   }
@@ -369,7 +376,7 @@ async function handleDownloadAs(event: { data?: { url?: string; fileType?: strin
     }
 
     const blob = await response.blob();
-    const { fileName } = getDocmentObj() || {};
+    const { fileName } = _getDocumentState() || {};
     const baseName = (fileName || 'document').replace(/\.[^/.]+$/, '');
     const ext = (request.targetExt || event.data?.fileType || 'XLSX').toLowerCase();
     const savedFileName = `${baseName}.${ext}`;
@@ -814,7 +821,7 @@ export function requestSaveDocument(
         return;
       }
 
-      const { file, fileName } = getDocmentObj() || {};
+      const { file, fileName } = _getDocumentState() || {};
       const originalExt = getFileExtension(fileName || file?.name || '');
 
       if (options.returnOriginalOnTimeout && file && originalExt === normalizedTargetExt) {

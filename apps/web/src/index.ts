@@ -1,4 +1,6 @@
 import { getAllQueryString } from 'ranuts/utils';
+import { setDocumentStateGetter } from '@doc/editor-v9';
+import { getDocmentObj } from './store';
 import { initEmbedApi } from './lib/embed-api';
 import { initEvents, setEventUICallbacks } from './lib/events';
 import { onCreateNew, openDocumentFromUrl, setUICallbacks } from './lib/document';
@@ -24,6 +26,9 @@ declare global {
     };
   }
 }
+
+// Inject store getter into editor package (breaks circular dep)
+setDocumentStateGetter(() => getDocmentObj());
 
 // Initialize events
 initEvents();

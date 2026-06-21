@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@doc/core": "workspace:*",
+    "@doc/editor-v9": "workspace:*",
     "@khmyznikov/pwa-install": "^0.6.3",
     "ranui": "0.1.10-alpha-27",
     "ranuts": "0.1.0-alpha-23"

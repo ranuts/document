@@ -18,6 +18,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@doc/core": ["../../packages/core/src/index.ts"],
+      "@doc/editor-v9": ["../../packages/editor-v9/src/index.ts"],
       "@/*": ["./src/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/store/*": ["./src/store/*"],

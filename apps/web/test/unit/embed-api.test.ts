@@ -14,7 +14,7 @@ vi.mock('../../src/lib/converter', () => ({
   handleDocumentOperation: mockHandleDocumentOperation,
 }));
 vi.mock('../../src/store', () => ({ setDocmentObj: mockSetDocmentObj }));
-vi.mock('../../src/lib/onlyoffice-editor', () => ({
+vi.mock('@doc/editor-v9', () => ({
   getReadonlyMode: mockGetReadonlyMode,
   setReadonlyMode: mockSetReadonlyMode,
   requestSaveDocument: mockRequestSaveDocument,

@@ -4,7 +4,7 @@ import {
   getBasePath,
   getDocumentType,
   getMimeTypeFromExtension,
-} from '../../src/lib/document-utils';
+} from '@doc/editor-v9';
 
 describe('document utils', () => {
   it('classifies common document extensions', () => {

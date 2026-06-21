@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, t } from '../../src/lib/i18n';
+import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, t } from '@doc/editor-v9';
 
 describe('i18n', () => {
   afterEach(() => {

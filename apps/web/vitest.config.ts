@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@doc/core': resolve(__dirname, '../../packages/core/src/index.ts'),
+      '@doc/editor-v9': resolve(__dirname, '../../packages/editor-v9/src/index.ts'),
       '@/lib': resolve(__dirname, 'src/lib'),
       '@/store': resolve(__dirname, 'src/store'),
       '@/assets': resolve(__dirname, 'src/assets'),
