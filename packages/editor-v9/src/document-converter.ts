@@ -9,6 +9,7 @@ export class X2TConverter {
   private isReady = false;
   private initPromise: Promise<EmscriptenModule> | null = null;
   private hasScriptLoaded = false;
+  private fontsLoaded = false;
 
   // Supported file type mapping
   private readonly DOCUMENT_TYPE_MAP: Record<string, DocumentType> = DOCUMENT_TYPE_MAP;
@@ -89,6 +90,28 @@ export class X2TConverter {
   }
 
   /**
+   * Load core fonts into WASM FS for PDF rendering. Called once per session.
+   * Without fonts, x2t generates a PDF with invisible (empty) text.
+   */
+  private async loadFontsForPdf(): Promise<void> {
+    if (this.fontsLoaded || !this.x2tModule) return;
+    const fontNames = ['DejaVuSans.ttf', 'DejaVuSans-Bold.ttf', 'LiberationSans-Regular.ttf'];
+    await Promise.all(
+      fontNames.map(async (name) => {
+        try {
+          const res = await fetch(`${BASE_PATH}fonts/${name}`);
+          if (!res.ok) return;
+          const buf = new Uint8Array(await res.arrayBuffer());
+          this.x2tModule!.FS.writeFile(`/working/fonts/${name}`, buf);
+        } catch {
+          // Non-fatal — PDF may still render with remaining fonts
+        }
+      }),
+    );
+    this.fontsLoaded = true;
+  }
+
+  /**
    * Create working directories
    */
   private createWorkingDirectories(x2t: EmscriptenModule): void {
@@ -165,7 +188,13 @@ export class X2TConverter {
         console.error('Conversion failed. Parameters XML:', e);
         // Ignore if we can't read the params file
       }
-      throw new Error(`Conversion failed with code: ${result}`);
+      const hints: Record<number, string> = {
+        88: 'The file may be in an unsupported format (.doc binary format), password-protected, or corrupted. Try converting to .docx first.',
+        55: 'DRM-protected or encrypted file cannot be opened.',
+        1: 'Invalid or corrupted file.',
+      };
+      const hint = hints[result] ? ` (${hints[result]})` : '';
+      throw new Error(`Conversion failed with code: ${result}${hint}`);
     }
   }
 
@@ -506,6 +535,7 @@ export class X2TConverter {
       // Create conversion parameters
       let additionalParams = '';
       if (targetExt === 'PDF') {
+        await this.loadFontsForPdf();
         additionalParams = '<m_sFontDir>/working/fonts/</m_sFontDir>';
       }
 
