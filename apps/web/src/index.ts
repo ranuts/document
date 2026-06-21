@@ -54,30 +54,58 @@ window.onCreateNew = onCreateNew;
 window.hideControlPanel = hideControlPanel;
 window.showControlPanel = showControlPanel;
 
+// Map clean editor routes to their document extension.
+// These pages auto-open the corresponding document type without showing the landing UI.
+const EDITOR_ROUTES: Record<string, string> = {
+  '/docx/': '.docx',
+  '/xlsx/': '.xlsx',
+  '/pptx/': '.pptx',
+  '/csv/': '.csv',
+};
+
+// Detect editor route by checking if the pathname ends with one of the known suffixes.
+// Handles both bare deployments (/) and version-prefixed ones (/9.3.0/).
+function getEditorExt(): string | null {
+  const p = location.pathname;
+  for (const [route, ext] of Object.entries(EDITOR_ROUTES)) {
+    if (p.endsWith(route)) return ext;
+  }
+  return null;
+}
+
+const editorExt = getEditorExt();
+
 // Initialize UI components
 createLandingNav();
 createFixedActionButton();
-createControlPanel();
 
-// Check for file or src parameter in URL
-// Both parameters support opening document from URL
-// Priority: file > src (for backward compatibility)
-// Examples:
-//   ?file=https://example.com/doc.docx
-//   ?src=https://example.com/doc.docx
-//   ?file=doc1.docx&src=doc2.xlsx (will use file: doc1.docx)
-const { file, src } = getAllQueryString();
-const documentUrl = file || src;
-if (documentUrl) {
-  // Decode URL if it's encoded
-  try {
-    const decodedUrl = decodeURIComponent(documentUrl);
-    // Open document from URL
-    openDocumentFromUrl(decodedUrl);
-  } catch (error) {
-    // If decoding fails, try using original URL
-    console.warn('Failed to decode URL, using original:', error);
-    openDocumentFromUrl(documentUrl);
+if (editorExt) {
+  // Editor route (/docx/, /xlsx/ …): skip landing panel, auto-open document.
+  // The FAB is still created above so the user can save / open other files.
+  const { file, src } = getAllQueryString();
+  const documentUrl = file || src;
+  if (documentUrl) {
+    try {
+      openDocumentFromUrl(decodeURIComponent(documentUrl));
+    } catch {
+      openDocumentFromUrl(documentUrl);
+    }
+  } else {
+    onCreateNew(editorExt);
+  }
+} else {
+  // Home route: show landing control panel.
+  createControlPanel();
+
+  // Check for file or src parameter in URL (e.g. ?src=https://example.com/doc.docx)
+  const { file, src } = getAllQueryString();
+  const documentUrl = file || src;
+  if (documentUrl) {
+    try {
+      openDocumentFromUrl(decodeURIComponent(documentUrl));
+    } catch {
+      openDocumentFromUrl(documentUrl);
+    }
   }
 }
 

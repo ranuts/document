@@ -8,6 +8,12 @@ export const __dirname = path.dirname(__filename);
 export const rollupInputs = {
   main: resolve(__dirname, 'pages/index.html'),
   privateDocumentEditor: resolve(__dirname, 'pages/private-document-editor/index.html'),
+  // Clean editor routes: /docx/ /xlsx/ /pptx/ /csv/
+  docx: resolve(__dirname, 'pages/docx/index.html'),
+  xlsx: resolve(__dirname, 'pages/xlsx/index.html'),
+  pptx: resolve(__dirname, 'pages/pptx/index.html'),
+  csv: resolve(__dirname, 'pages/csv/index.html'),
+  // Legacy SEO landing pages (kept for backward compatibility)
   docxEditor: resolve(__dirname, 'pages/docx-editor/index.html'),
   xlsxEditor: resolve(__dirname, 'pages/xlsx-editor/index.html'),
   pptxEditor: resolve(__dirname, 'pages/pptx-editor/index.html'),

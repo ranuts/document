@@ -27,10 +27,7 @@ fileInput.style.setProperty('visibility', 'hidden');
 document.body.appendChild(fileInput);
 
 export const onCreateNew = async (ext: string): Promise<void> => {
-  // Note: Loading is now shown in the menu button click handler
-  // This function should not show loading again to avoid double loading indicators
   try {
-    // Always hide control panel and ensure FAB is visible when creating new document
     if (hideControlPanelFn) {
       hideControlPanelFn();
     }

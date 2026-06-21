@@ -977,45 +977,18 @@ export const createControlPanel = (): void => {
   });
   buttonGroup.appendChild(uploadButton);
 
-  const newWordButton = createTextButton('new-word-button', t('newWord'), async () => {
-    hideControlPanel();
-    const { removeLoading } = showLoading();
-    try {
-      await onCreateNew('.docx');
-    } catch (error) {
-      console.error('Error creating new Word document:', error);
-      showControlPanel();
-    } finally {
-      removeLoading();
-    }
+  const newWordButton = createTextButton('new-word-button', t('newWord'), () => {
+    window.location.href = './docx/';
   });
   buttonGroup.appendChild(newWordButton);
 
-  const newExcelButton = createTextButton('new-excel-button', t('newExcel'), async () => {
-    hideControlPanel();
-    const { removeLoading } = showLoading();
-    try {
-      await onCreateNew('.xlsx');
-    } catch (error) {
-      console.error('Error creating new Excel document:', error);
-      showControlPanel();
-    } finally {
-      removeLoading();
-    }
+  const newExcelButton = createTextButton('new-excel-button', t('newExcel'), () => {
+    window.location.href = './xlsx/';
   });
   buttonGroup.appendChild(newExcelButton);
 
-  const newPptxButton = createTextButton('new-pptx-button', t('newPowerPoint'), async () => {
-    hideControlPanel();
-    const { removeLoading } = showLoading();
-    try {
-      await onCreateNew('.pptx');
-    } catch (error) {
-      console.error('Error creating new PowerPoint document:', error);
-      showControlPanel();
-    } finally {
-      removeLoading();
-    }
+  const newPptxButton = createTextButton('new-pptx-button', t('newPowerPoint'), () => {
+    window.location.href = './pptx/';
   });
   buttonGroup.appendChild(newPptxButton);
 
