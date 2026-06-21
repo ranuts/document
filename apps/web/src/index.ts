@@ -3,12 +3,7 @@ import { getDocmentObj } from './store';
 import { initEmbedApi } from './lib/embed-api';
 import { initEvents, setEventUICallbacks } from './lib/events';
 import { onCreateNew, openDocumentFromUrl, setUICallbacks } from './lib/document';
-import {
-  createControlPanel,
-  createLandingNav,
-  hideControlPanel,
-  showControlPanel,
-} from './lib/ui';
+import { createControlPanel, createLandingNav, hideControlPanel, showControlPanel } from './lib/ui';
 import { getStartupAction, registerLocalFilePopstate } from './lib/app-router';
 import 'ranui/button';
 import '@khmyznikov/pwa-install';
@@ -107,10 +102,7 @@ const initPwaInstall = () => {
   pwaInstall.setAttribute('use-local-storage', '');
   pwaInstall.setAttribute('name', 'Document Editor');
   pwaInstall.setAttribute('description', 'A privacy-focused, local web-based document editor.');
-  pwaInstall.setAttribute(
-    'install-description',
-    'Install the App for a better offline experience and quick access.',
-  );
+  pwaInstall.setAttribute('install-description', 'Install the App for a better offline experience and quick access.');
 
   const manifest = document.querySelector<HTMLLinkElement>('link[rel="manifest"]');
   const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');

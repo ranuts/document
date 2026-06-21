@@ -1,4 +1,3 @@
-import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 import { LanguageCode, getLanguage, t } from '@bybrowser/editor';
 import { onOpenDocument } from './document';
 import { navigateNewDocument } from './app-router';
@@ -790,5 +789,4 @@ export const createControlPanel = (): void => {
 
   // Activate landing ad after element is in DOM
   if (landingAdIns) pushAdSlot(landingAdIns);
-
 };

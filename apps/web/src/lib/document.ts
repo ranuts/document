@@ -9,10 +9,7 @@ import { pushLocalFileRoute } from './app-router';
 let hideControlPanelFn: (() => void) | null = null;
 let showControlPanelFn: (() => void) | null = null;
 
-export function setUICallbacks(callbacks: {
-  hideControlPanel: () => void;
-  showControlPanel: () => void;
-}): void {
+export function setUICallbacks(callbacks: { hideControlPanel: () => void; showControlPanel: () => void }): void {
   hideControlPanelFn = callbacks.hideControlPanel;
   showControlPanelFn = callbacks.showControlPanel;
 }
