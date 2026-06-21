@@ -16,11 +16,11 @@ inject_sw_version() {
   fi
 }
 
-echo "Building stable (v7)..."
-pnpm vite build --config vite.stable.config.ts
+echo "Building v7.5.0 (stable)..."
+pnpm vite build --config vite.v7.config.ts
 inject_sw_version "dist/sw.js"
 
-echo "Building beta (v9)..."
+echo "Building v9.3.0 (beta)..."
 pnpm vite build
 inject_sw_version "dist/9.3.0/sw.js"
 

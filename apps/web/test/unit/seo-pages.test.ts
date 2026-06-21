@@ -16,8 +16,9 @@ describe('SEO landing pages', () => {
   });
 
   test('publishes private and format-specific landing pages', () => {
-    const sitemap = read('public-beta/sitemap.xml');
-    const viteConfig = read('vite.config.ts');
+    const sitemap = read('public-v9/sitemap.xml');
+    // Page entries live in the shared config; individual version configs import from there.
+    const sharedConfig = read('vite.shared.ts');
     const slugs = [
       'docx-editor',
       'xlsx-editor',
@@ -32,7 +33,7 @@ describe('SEO landing pages', () => {
     for (const slug of slugs) {
       expect(fs.existsSync(path.join(root, 'pages', slug, 'index.html'))).toBe(true);
       expect(sitemap).toContain(`https://bybrowser.com/${slug}/`);
-      expect(viteConfig).toContain(`${slug}/index.html`);
+      expect(sharedConfig).toContain(`${slug}/index.html`);
     }
   });
 });

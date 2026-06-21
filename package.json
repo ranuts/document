@@ -6,6 +6,8 @@
   "description": "Monorepo for bybrowser.com — local-first OnlyOffice document editor",
   "scripts": {
     "dev": "pnpm --filter=@bybrowser/web dev",
+    "dev:v7": "pnpm --filter=@bybrowser/web dev:v7",
+    "dev:v9": "pnpm --filter=@bybrowser/web dev:v9",
     "build": "pnpm --filter=@bybrowser/web build",
     "preview": "pnpm --filter=@bybrowser/web preview",
     "test": "pnpm -r run test",
