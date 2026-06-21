@@ -9,6 +9,10 @@ import type { Connect, Plugin, ResolvedConfig } from 'vite';
 // XHR patch in the iframe) and used as the FreeType rendering face, causing
 // split-brain: HarfBuzz shapes with NotoSansSC (CJK GIDs) but FreeType
 // renders with DejaVuSans (Latin GIDs), producing garbled characters.
+//
+// The generateBundle hook applies the same remapping to the production build
+// so that static hosting (e.g. GitHub Pages) serves the correct font content
+// without needing a server-side middleware.
 export function fontRemapMiddleware(): Plugin {
   let publicDir = '';
   let cachedMap: Record<string, string> | null = null;
@@ -59,6 +63,35 @@ export function fontRemapMiddleware(): Plugin {
     },
     configurePreviewServer(server) {
       server.middlewares.use(middleware);
+    },
+    // Emit remapped font files into the production build so static hosts
+    // (GitHub Pages, Nginx, etc.) serve the correct font without middleware.
+    // Each src font is emitted with its original filename but the mapped
+    // file's bytes, so the SDK's direct HTTP requests hit the right data.
+    async generateBundle() {
+      const map = await loadMap();
+      // Cache mapped file contents to avoid re-reading the same target file.
+      const contentCache = new Map<string, Buffer>();
+
+      for (const [src, dst] of Object.entries(map)) {
+        if (dst.toLowerCase() === src) continue; // identity mapping, skip
+
+        let data = contentCache.get(dst);
+        if (!data) {
+          try {
+            data = await fs.readFile(path.join(publicDir, 'fonts', dst));
+            contentCache.set(dst, data);
+          } catch {
+            continue; // target font not found, skip this entry
+          }
+        }
+
+        this.emitFile({
+          type: 'asset',
+          fileName: `fonts/${src}`,
+          source: new Uint8Array(data),
+        });
+      }
     },
   };
 }
