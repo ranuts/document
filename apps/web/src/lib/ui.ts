@@ -491,14 +491,7 @@ export const hideControlPanel = (): void => {
     }, 300);
   }
 
-  // Mark editor as active (CSS uses this to show editor-ad-strip)
   document.body.classList.add('editor-open');
-  const strip = document.getElementById('editor-ad-strip');
-  if (strip) {
-    strip.style.display = 'flex';
-    const ins = strip.querySelector('ins.adsbygoogle') as HTMLElement | null;
-    if (ins && !ins.dataset.pushed) pushAdSlot(ins);
-  }
   const landingNav = document.getElementById('landing-nav');
   if (landingNav) landingNav.style.display = 'none';
 };
@@ -521,8 +514,6 @@ export const showControlPanel = (): void => {
 
   // Return to landing mode
   document.body.classList.remove('editor-open');
-  const strip = document.getElementById('editor-ad-strip');
-  if (strip) strip.style.display = 'none';
   const landingNav = document.getElementById('landing-nav');
   if (landingNav) landingNav.style.display = 'flex';
 };
@@ -1087,12 +1078,4 @@ export const createControlPanel = (): void => {
   // Activate landing ad after element is in DOM
   if (landingAdIns) pushAdSlot(landingAdIns);
 
-  // Editor-mode ad strip: thin fixed bar at bottom, hidden until editor opens
-  const editorStrip = document.createElement('div');
-  editorStrip.id = 'editor-ad-strip';
-  editorStrip.className = 'editor-ad-strip';
-  editorStrip.style.display = 'none';
-  const editorAdIns = createInsSlot('ad-editor-strip');
-  editorStrip.appendChild(editorAdIns);
-  document.body.appendChild(editorStrip);
 };

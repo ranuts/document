@@ -574,40 +574,7 @@ body.editor-open .landing-nav {
   min-height: 90px;
 }
 
-/* Editor-mode ad strip: thin fixed bar above FAB */
-.editor-ad-strip {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(247, 244, 238, 0.96);
-  border-top: 1px solid rgba(20, 33, 61, 0.1);
-  backdrop-filter: blur(8px);
-  z-index: 900; /* below FAB (1000) */
-  padding: 0 80px 0 16px; /* right padding avoids FAB overlap */
-}
-
-.editor-ad-strip .ad-unit {
-  margin: 0;
-  max-width: 728px;
-  width: 100%;
-  min-height: 50px;
-}
-
-.editor-ad-strip .ad-unit ins.adsbygoogle {
-  display: block;
-  width: 100%;
-  min-height: 50px;
-}
-
-/* When editor strip is visible, nudge FAB up so it clears the strip */
-body.editor-open #fab-container {
-  bottom: 72px;
-}
+/* When editor is open, FAB stays at default bottom position */
 
 /* ─── Loading overlay ───────────────────────────────────── */
 
