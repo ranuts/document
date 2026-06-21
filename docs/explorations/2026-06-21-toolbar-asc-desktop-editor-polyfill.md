@@ -224,7 +224,21 @@ ui.alert = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origAlert(opts))
 
 ---
 
-## 七、已知局限
+## 七、后续补丁（提交 bc43c6c）
+
+word SDK 和 cell SDK 各自有额外方法未覆盖：
+
+| SDK | 方法 | 用途 |
+|-----|------|------|
+| word | `DownloadFiles(urls, extra, cb)` | 插入外部 .docx 引用时下载远程 URL |
+| cell | `LocalFileGetRelativePath(key)` | Excel 外部单元格引用的相对路径 |
+
+**`DownloadFiles`**：通过 `fetch()` 下载 URL → 生成 blob URL 存入 `_map` → 回调传 `{url: key}`。  
+**`LocalFileGetRelativePath`**：返回 `false`（同时把 `LocalFileGetSaved` 改为也返回 `false`，让 SDK 的 `LocalFileGetSaved() && LocalFileGetRelativePath(k)` 短路，跳过路径计算）。
+
+---
+
+## 八、已知局限
 
 1. **视频/音频插入**：`AddVideo(path, callback)` 的 callback 参数 `g`（数据）在 Desktop 模式下是经过转码的视频数据。我们直接传 blob URL，SDK 能否正确渲染到幻灯片里还需实测。
 2. **input.click() 用户手势要求**：某些浏览器要求 `<input type="file">` 的 `.click()` 在用户手势（event handler）内调用。由于用户点击了工具栏按钮，事件链路满足要求。
