@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import { injectCriticalStyle, injectGtag } from './vite-plugins';
+import { fontRemapMiddleware, injectCriticalStyle, injectGtag } from './vite-plugins';
 import { __dirname, DEV_URLS, PROD_PATHS, rollupInputs, sharedAlias, sharedExtensions } from './vite.shared';
 
 export default defineConfig(({ mode }) => {
@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
     root: 'pages',
     base: './',
     publicDir: resolve(__dirname, 'public-v7'),
-    plugins: [injectCriticalStyle(), injectGtag()],
+    plugins: [fontRemapMiddleware(), injectCriticalStyle(), injectGtag()],
     define: {
       __IS_BETA__: JSON.stringify(false),
       __STABLE_URL__: JSON.stringify(isDev ? DEV_URLS.v7 : PROD_PATHS.v7),
