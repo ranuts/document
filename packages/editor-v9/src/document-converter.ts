@@ -95,7 +95,7 @@ export class X2TConverter {
    */
   private async loadFontsForPdf(): Promise<void> {
     if (this.fontsLoaded || !this.x2tModule) return;
-    const fontNames = ['DejaVuSans.ttf', 'DejaVuSans-Bold.ttf', 'LiberationSans-Regular.ttf'];
+    const fontNames = ['DejaVuSans.ttf', 'DejaVuSans-Bold.ttf', 'LiberationSans-Regular.ttf', 'NotoSansSC-Regular.ttf'];
     await Promise.all(
       fontNames.map(async (name) => {
         try {
