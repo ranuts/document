@@ -155,6 +155,111 @@ function onlyofficeWebModePatch(): Plugin {
     return `<script>
 (function () {
   console.log('[OO vite-patch] running in', window.location.href);
+
+  // ── AscDesktopEditor polyfill ─────────────────────────────────────────────
+  // OnlyOffice Web Apps SDK assumes it runs inside the Desktop App, which
+  // provides window.AscDesktopEditor for native OS operations (file dialogs,
+  // local file I/O, etc.).  Without it, any toolbar action that involves
+  // file selection (Insert Image, Insert Video, Insert Audio, open a .docx
+  // as reference, …) crashes immediately with "Cannot read properties of
+  // undefined (reading 'OpenFilenameDialog')".
+  //
+  // We supply browser-native equivalents:
+  //   • OpenFilenameDialog  →  <input type="file"> picker
+  //   • LocalFileGetImageUrl →  URL.createObjectURL (blob URL)
+  //   • AddVideo / AddAudio  →  blob URL forwarded to SDK callback
+  //   • Everything else      →  safe no-op stubs
+  (function installAscDesktopEditor() {
+    if (window.AscDesktopEditor) return;
+    var _map = {}, _seq = 0;
+
+    function pickFile(acc, multi, cb) {
+      var inp = document.createElement('input');
+      inp.type = 'file';
+      inp.multiple = !!multi;
+      if (acc) inp.accept = acc;
+      inp.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;';
+      document.body.appendChild(inp);
+      function done() { try { document.body.removeChild(inp); } catch(e) {} }
+      inp.addEventListener('change', function() {
+        done();
+        var files = inp.files;
+        if (!files || !files.length) return;
+        var paths = [];
+        for (var i = 0; i < files.length; i++) {
+          var f = files[i], key = 'asc-local-' + (++_seq) + '-' + f.name;
+          _map[key] = { url: URL.createObjectURL(f), file: f };
+          paths.push(key);
+        }
+        cb(multi ? paths : paths[0]);
+      });
+      inp.addEventListener('cancel', done);
+      inp.click();
+    }
+
+    function filterToAccept(f) {
+      if (f === 'images') return 'image/png,image/jpeg,image/gif,image/bmp,image/tiff,image/webp,image/svg+xml,.png,.jpg,.jpeg,.gif,.bmp,.tif,.tiff,.webp,.svg';
+      if (f === 'video')  return 'video/*,.mp4,.webm,.avi,.mov,.mkv,.wmv,.m4v';
+      if (f === 'audio')  return 'audio/*,.mp3,.wav,.ogg,.aac,.m4a,.wma,.flac';
+      if (f === 'word')   return '.docx,.doc,.odt,.rtf,.txt';
+      if (f === 'cell')   return '.xlsx,.xls,.ods,.csv';
+      return '';
+    }
+
+    function getUrl(key) { var e = _map[key]; return e ? e.url : key; }
+    function noop() {}
+    function noopFalse() { return false; }
+    function noopEmpty() { return ''; }
+    function noopArr() { return []; }
+
+    window.AscDesktopEditor = {
+      OpenFilenameDialog:            function(f, m, cb) { pickFile(filterToAccept(f), m, cb); },
+      LocalFileGetImageUrl:          function(k) { return getUrl(k); },
+      LocalFileGetImageUrlCorrect:   function(k, cb) { var u = getUrl(k); if (typeof cb === 'function') cb(u); return u; },
+      AddVideo:  function(k, cb) { var e = _map[k]; if (typeof cb === 'function') cb(e ? 0 : 1, e ? { url: e.url, name: e.file.name } : null); },
+      AddAudio:  function(k, cb) { var e = _map[k]; if (typeof cb === 'function') cb(e ? 0 : 1, e ? { url: e.url, name: e.file.name } : null); },
+      onDocumentModifiedChanged:     noop,
+      LocalFileSave:                 function() { setTimeout(function() { if (typeof window.DesktopOfflineAppDocumentEndSave === 'function') window.DesktopOfflineAppDocumentEndSave(0, null, null); }, 0); },
+      LocalFileSaveChanges:          noop,
+      LocalFileGetOpenChangesCount:  function() { return 0; },
+      LocalFileGetSaved:             function() { return true; },
+      LocalFileGetSourcePath:        noopEmpty,
+      LocalStartOpen:                noop,
+      SetAdvancedOptions:            noop,
+      SetDocumentName:               noop,
+      SetFullscreen:                 noop,
+      SetLocalRestrictions:          noop,
+      SaveQuestion:                  function(cb) { if (typeof cb === 'function') cb(0); },
+      CheckNeedWheel:                noopFalse,
+      CheckUserId:                   noop,
+      convertFile:                   noop,
+      GetDropFiles:                  noopArr,
+      getEngineVersion:              noopEmpty,
+      GetImageBase64:                function(p, cb) { if (typeof cb === 'function') cb(''); },
+      GetInstallPlugins:             noopArr,
+      GetOpenedFile:                 noopEmpty,
+      GetSupportedScaleValues:       noopArr,
+      isBlockchainSupport:           noopFalse,
+      IsFilePrinting:                noopFalse,
+      IsImageFile:                   function(p) { return /\\.(png|jpe?g|gif|bmp|tiff?|webp|svg)$/i.test(String(p)); },
+      IsLocalFile:                   noopFalse,
+      IsLocalFileExist:              noopFalse,
+      IsSupportMedia:                noopFalse,
+      isSupportNetworkFunctionality: noopFalse,
+      isSupportPlugins:              noopFalse,
+      LoadFontBase64:                function(n, cb) { if (typeof cb === 'function') cb(''); },
+      NativeViewerOpen:              noop,
+      startExternalConvertation:     noop,
+      ViewCertificate:               noop,
+      buildCryptedEnd:               noop,
+      buildCryptedStart:             noop,
+      CryptoMode:                    0,
+      Crypto_GetLocalImageBase64:    function(p, cb) { if (typeof cb === 'function') cb(''); },
+      PreloadCryptoImage:            noop,
+    };
+    console.log('[OO] AscDesktopEditor polyfill installed');
+  })();
+
   // Rewrite ascdesktop://fonts/<file> → /fonts/<mapped-file>.
   // Font map is embedded at serve time (no async fetch) so every XHR is
   // rewritten synchronously — no race where fonts fall back to DejaVuSans
@@ -218,6 +323,10 @@ function onlyofficeWebModePatch(): Plugin {
 
   // Suppress "Connection is lost" dialog — expected in offline Web Mode (no real server).
   // Investigation showed CoAuthoringDisconnect uses Common.UI.alert, not Common.UI.warning.
+  //
+  // IMPORTANT: app.js chains .alert(s).$window.attr(...) — if we return undefined
+  // from alert(), the chain crashes with "Cannot read properties of undefined
+  // (reading '$window')".  We must return a mock dialog object instead.
   (function suppressConnectionLost() {
     var ui = window.Common && window.Common.UI;
     if (!ui || typeof ui.warning !== 'function' || typeof ui.alert !== 'function' || ui.__dlgSuppressed) {
@@ -225,6 +334,16 @@ function onlyofficeWebModePatch(): Plugin {
       return;
     }
     ui.__dlgSuppressed = true;
+
+    // Build a chainable no-op that satisfies .$window.attr(...) and similar chains.
+    var jq = {};
+    ['attr','on','off','show','hide','css','addClass','removeClass','find','remove',
+     'val','text','html','prop','data','trigger','focus','blur','one','click'].forEach(function(m) {
+      jq[m] = function() { return jq; };
+    });
+    jq.length = 0;
+    var MOCK_DIALOG = { $window: jq, close: function() {}, show: function() {}, hide: function() {}, remove: function() {} };
+
     function shouldSuppress(opts) {
       var msg = opts && opts.msg;
       if (typeof msg !== 'string') return false;
@@ -232,13 +351,13 @@ function onlyofficeWebModePatch(): Plugin {
     }
     var origWarning = ui.warning.bind(ui);
     ui.warning = function(opts) {
-      if (shouldSuppress(opts)) return;
+      if (shouldSuppress(opts)) return MOCK_DIALOG;
       return origWarning.apply(ui, arguments);
     };
     // CoAuthoringDisconnect error goes through Common.UI.alert
     var origAlert = ui.alert.bind(ui);
     ui.alert = function(opts) {
-      if (shouldSuppress(opts)) return;
+      if (shouldSuppress(opts)) return MOCK_DIALOG;
       return origAlert.apply(ui, arguments);
     };
   })();

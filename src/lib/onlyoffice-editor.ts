@@ -47,12 +47,26 @@ let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 // Investigation (2026-06-19) showed that "Connection is lost" (CoAuthoringDisconnect error)
 // goes through Common.UI.alert(o), NOT Common.UI.warning(o). We patch both.
 // Called from onAppReady with same-origin iframe access (more reliable than Vite middleware).
+//
+// CRITICAL: app.js chains Common.UI.alert(s).$window.attr("data-value", t) in n.onError.
+// Returning undefined from alert() causes "Cannot read properties of undefined (reading
+// '$window')".  We must return a chainable mock dialog instead of undefined.
 function suppressDialogsInFrame(frameWindow: any): void {
   const SUPPRESSED_MSGS = ['Connection is lost', 'error occurred during the work'];
   const shouldSuppress = (opts: any): boolean => {
     const msg: string = opts?.msg ?? '';
     return typeof msg === 'string' && SUPPRESSED_MSGS.some((s) => msg.indexOf(s) !== -1);
   };
+
+  // Build a chainable no-op that satisfies .$window.attr(...) and similar chained calls
+  // from app.js error handlers without throwing.
+  const jq: Record<string, unknown> = {};
+  ['attr', 'on', 'off', 'show', 'hide', 'css', 'addClass', 'removeClass', 'find', 'remove',
+   'val', 'text', 'html', 'prop', 'data', 'trigger', 'focus', 'blur', 'one', 'click'].forEach((m) => {
+    jq[m] = () => jq;
+  });
+  (jq as any).length = 0;
+  const MOCK_DIALOG = { $window: jq, close: () => {}, show: () => {}, hide: () => {}, remove: () => {} };
 
   let attempts = 0;
   const poll = () => {
@@ -65,11 +79,11 @@ function suppressDialogsInFrame(frameWindow: any): void {
     ui.__dlgSuppressed = true;
 
     const origWarning = ui.warning.bind(ui);
-    ui.warning = (opts: any) => (shouldSuppress(opts) ? undefined : origWarning(opts));
+    ui.warning = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origWarning(opts));
 
     // "Connection is lost" (Asc.c_oAscError.ID.CoAuthoringDisconnect) calls Common.UI.alert
     const origAlert = ui.alert.bind(ui);
-    ui.alert = (opts: any) => (shouldSuppress(opts) ? undefined : origAlert(opts));
+    ui.alert = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origAlert(opts));
 
     console.log('[OO] dialog suppression active in iframe (warning + alert)');
   };
