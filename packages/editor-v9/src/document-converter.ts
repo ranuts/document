@@ -111,7 +111,9 @@ export class X2TConverter {
         }
       }),
     );
-    if (loaded > 0) this.fontsLoaded = true;
+    // Only mark complete when ALL fonts loaded; a partial load (e.g. NotoSansSC
+    // 404) would permanently skip CJK fonts on retry if we set the flag early.
+    if (loaded === fontNames.length) this.fontsLoaded = true;
   }
 
   /**

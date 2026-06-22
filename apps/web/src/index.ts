@@ -42,28 +42,30 @@ createLandingNav();
 
 const action = getStartupAction();
 
+const destroyEditor = () => {
+  try {
+    window.editor?.destroyEditor?.();
+  } catch {
+    // ignore
+  }
+  window.editor = undefined;
+  document.getElementById('iframe')?.replaceChildren();
+};
+
 switch (action.type) {
   case 'home': {
     createControlPanel();
     // Register popstate so the back button works after opening a local file
     // (local files use pushState/SPA navigation, not a real page load).
-    registerLocalFilePopstate({
-      showHome: showControlPanel,
-      destroyEditor: () => {
-        try {
-          window.editor?.destroyEditor?.();
-        } catch {
-          // ignore
-        }
-        window.editor = undefined;
-        document.getElementById('iframe')?.replaceChildren();
-      },
-    });
+    registerLocalFilePopstate({ showHome: showControlPanel, destroyEditor });
     break;
   }
 
   case 'editor-new': {
-    onCreateNew(action.ext);
+    // Fire-and-forget: onCreateNew handles its own errors internally (shows
+    // control panel on failure). Suppress the re-thrown rejection here to
+    // avoid an unhandledrejection browser event.
+    onCreateNew(action.ext).catch(() => {});
     break;
   }
 
@@ -76,18 +78,7 @@ switch (action.type) {
     // Local file data can't survive a page reload.
     // Fall back to home so the user can re-open the file.
     createControlPanel();
-    registerLocalFilePopstate({
-      showHome: showControlPanel,
-      destroyEditor: () => {
-        try {
-          window.editor?.destroyEditor?.();
-        } catch {
-          // ignore
-        }
-        window.editor = undefined;
-        document.getElementById('iframe')?.replaceChildren();
-      },
-    });
+    registerLocalFilePopstate({ showHome: showControlPanel, destroyEditor });
     // TODO: surface a toast/banner explaining why the file is gone
     break;
   }

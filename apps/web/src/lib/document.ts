@@ -61,6 +61,11 @@ export const onOpenDocument = (): void => {
     // If user cancelled, onchange won't fire, nothing happens
     if (file) {
       const { removeLoading, setProgress } = showLoading();
+      // Capture the current URL so we can roll back if the open fails.
+      // pushLocalFileRoute updates the address bar immediately (before async
+      // work completes) — without a rollback the URL stays at /docx/?file=…
+      // while the home panel is shown, creating a permanent mismatch.
+      const prevUrl = location.href;
       try {
         // Update URL before opening so the address bar reflects the file type.
         // Uses pushState (no page reload) so the File object stays in memory.
@@ -81,7 +86,7 @@ export const onOpenDocument = (): void => {
         fileInput.value = '';
       } catch (error) {
         console.error('Error opening document:', error);
-        // Ensure control panel is shown on error
+        history.replaceState(null, '', prevUrl);
         if (showControlPanelFn) {
           showControlPanelFn();
         }

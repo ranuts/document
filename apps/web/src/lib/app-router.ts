@@ -49,9 +49,11 @@ const ROUTE_TO_EXT: Record<string, EditorExt> = {
 // Internal helpers
 // ---------------------------------------------------------------------------
 
-/** 获取当前部署版本的路径前缀（v7 = '/'，v9 = '/9.3.0/'） */
 function getVersionPrefix(): string {
-  return location.pathname.startsWith('/9.3.0/') ? '/9.3.0/' : '/';
+  // Detect any semver-style version prefix (/1.2.3/) so this survives
+  // OnlyOffice upgrades (e.g. 9.3.0 → 9.4.0) without code changes.
+  const m = /^(\/\d+\.\d+\.\d+\/)/.exec(location.pathname);
+  return m ? m[1] : '/';
 }
 
 /** 构建编辑器路由的绝对路径 */
@@ -125,7 +127,7 @@ export function getStartupAction(): StartupAction {
     }
   }
 
-  if (file) {
+  if (file !== null) {
     // ?file= 参数仅记录文件名，真实数据无法从 URL 恢复
     return { type: 'editor-file-lost', ext, filename: file };
   }
