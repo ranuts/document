@@ -32,12 +32,19 @@
 - 📦 **PWA 支持** — 可安装，支持离线使用
 - 🌍 **多语言** — 中文、英文及更多语言
 - 🧩 **可嵌入** — 完整的 postMessage API 支持 iframe 集成
+- 🈳 **CJK 支持** — 中文、日文、韩文可正常显示和导出
+- 🆕 **OnlyOffice v9 Beta** — 在稳定版 v7 之外，提供最新 OnlyOffice 9.3.0 引擎的 beta 版本
 
 ---
 
 ## 🚀 快速开始
 
 **在线体验：** [ranuts.github.io/document](https://ranuts.github.io/document/)
+
+| 版本 | 引擎             | 状态   | 地址                                       |
+| ---- | ---------------- | ------ | ------------------------------------------ |
+| v7   | OnlyOffice 7.x   | 稳定版 | `https://ranuts.github.io/document/`       |
+| v9   | OnlyOffice 9.3.0 | Beta   | `https://ranuts.github.io/document/9.3.0/` |
 
 **Docker 运行：**
 
@@ -167,6 +174,8 @@ docker run -d --name document -p 443:443 \
 ## 🔤 字体
 
 本项目不包含 Arial、Times New Roman、微软雅黑等受版权保护的字体文件，以符合开源许可要求。字体名称引用保留以确保文档兼容性。
+
+编辑器内置 [Noto Sans](https://fonts.google.com/noto) 开源字体，中文、日文、韩文（CJK）开箱即用，无需额外配置。
 
 → **[字体管理指南](docs/fonts.zh.md)** — 如何按索引添加字体。
 

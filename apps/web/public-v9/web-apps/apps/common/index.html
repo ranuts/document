@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <title>ONLYOFFICE Documents</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+      <style type="text/css">
+          .loadmask {
+              left: 0;
+              top: 0;
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              overflow: hidden;
+              border: none;
+              background: #e2e2e2;
+              background: var(--canvas-background, #e2e2e2);
+              z-index: 1002;
+          }
+
+          .theme-dark .loadmask, .theme-type-dark .loadmask {
+              background: #555;
+          }
+      </style>
+      <script>
+          function getUrlParams() {
+              var e,
+                  a = /\+/g,  // Regex for replacing addition symbol with a space
+                  r = /([^&=]+)=?([^&]*)/g,
+                  d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+                  q = window.location.search.substring(1),
+                  urlParams = {};
+
+              while (e = r.exec(q))
+                  urlParams[d(e[1])] = d(e[2]);
+
+              return urlParams;
+          }
+
+          var params = getUrlParams(),
+              postfix = params["indexPostfix"] || '',
+              embed = params["type"]==='embedded';
+          params.skipScaling = true;
+          window.frameEditorId = params["frameEditorId"];
+          window.parentOrigin = params["parentOrigin"];
+      </script>
+      <script>
+/*
+ * (c) Copyright Ascensio System SIA 2010-2024
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
++function init_themes() {
+    let localstorage;
+    const local_storage_available = +function () {
+        try {
+            return !!(localstorage = window.localStorage);
+        } catch (e) {
+            console.warn('localStorage is unavailable');
+            localstorage = {
+                getItem: function (key) {return null;},
+            };
+            return false;
+        }
+    }();
+
+    !window.uitheme && (window.uitheme = {});
+
+    window.uitheme.DEFAULT_LIGHT_THEME_ID = !window.isIEBrowser ? 'theme-white' : 'theme-classic-light';
+    window.uitheme.DEFAULT_DARK_THEME_ID = !window.isIEBrowser ? 'theme-night' : 'theme-dark';
+
+    window.uitheme.set_id = function (id) {
+        if ( id == 'theme-system' )
+            this.adapt_to_system_theme();
+        else this.id = id;
+    }
+
+    window.uitheme.is_theme_system = function () {
+        return this.id == 'theme-system';
+    }
+
+    window.uitheme.adapt_to_system_theme = function () {
+        this.id = 'theme-system';
+        this.type = this.is_system_theme_dark() ? 'dark' : 'light';
+    }
+
+    window.uitheme.relevant_theme_id = function () {
+        if ( this.is_theme_system() )
+            return this.is_system_theme_dark() ? window.uitheme.DEFAULT_DARK_THEME_ID : window.uitheme.DEFAULT_LIGHT_THEME_ID;
+        return this.id;
+    }
+
+    if ( !window.uitheme.is_system_theme_dark )
+        window.uitheme.is_system_theme_dark = function () {
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+    // localstorage.setItem('ui-theme-id', 'theme-white');
+    !window.uitheme.id && window.uitheme.set_id(localstorage.getItem("ui-theme-id"));
+    window.uitheme.iscontentdark = localstorage.getItem("content-theme") == 'dark';
+
+    function inject_style_tag(content, id) {
+        if ( id && !!document.getElementById(id) )
+            return;
+
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = content;
+        if (id) style.id = id;
+        document.getElementsByTagName('head')[0].appendChild(style);
+    }
+
+    window.uitheme.apply_icons_from_url = function (themeid, url) {
+        if ( !url ) return;
+
+        let base_url = !url.endsWith('/') ? url + '/' : url;
+        const sp_names = ['small', 'big', 'huge'];
+        const sp_scale = {'100':'', '125':'@1.25x','150':'@1.5x','175':'@1.75x','200':'@2x'};
+        let icons = [];
+        sp_names.forEach(function (n) {
+            for (let key in sp_scale) {
+                const value = sp_scale[key];
+                icons.push('--sprite-button-'+n+'-'+key+':url('+ base_url +'icons' + n + value + '.png)');
+            }
+        });
+
+        inject_style_tag('.' + themeid + '{' + icons.join(';') + ';}', themeid);
+
+        // workaroud for svg sptites relative path that different from png sprites
+        if ( base_url.lastIndexOf('../img/', 0) === 0 )
+            base_url = base_url.replace('..','./resources');
+
+        if ( window.Common && window.Common.Utils )
+            window.Common.Utils.injectSvgIcons([base_url + 'iconssmall@2.5x.svg', base_url + 'iconsbig@2.5x.svg', base_url + 'iconshuge@2.5x.svg', '../../common/main/resources/img/doc-formats/formats@2.5x.svg'], true);
+        else {
+            window.uitheme.svg_icons = [base_url + 'iconssmall@2.5x.svg', base_url + 'iconsbig@2.5x.svg', base_url + 'iconshuge@2.5x.svg'];
+        }
+    }
+
+    inject_style_tag(':root .theme-dark {' +
+                                '--toolbar-header-document: #2a2a2a; --toolbar-header-spreadsheet: #2a2a2a;' +
+                                '--toolbar-header-presentation: #2a2a2a; --toolbar-header-pdf: #2a2a2a; --toolbar-header-visio: #2a2a2a;}' +
+                            ':root .theme-contrast-dark {' +
+                                '--toolbar-header-document: #1e1e1e; --toolbar-header-spreadsheet: #1e1e1e;' +
+                                '--toolbar-header-presentation: #1e1e1e; --toolbar-header-pdf: #1e1e1e; --toolbar-header-visio: #1e1e1e;}');
+
+    let objtheme = window.uitheme.colors ? window.uitheme : localstorage.getItem("ui-theme");
+    const header_tokens = ['toolbar-header-document', 'toolbar-header-spreadsheet', 'toolbar-header-presentation', 'toolbar-header-pdf', 'toolbar-header-visio'];
+    if ( !!objtheme ) {
+        if ( typeof(objtheme) == 'string' && objtheme.lastIndexOf("{", 0) === 0 &&
+                objtheme.indexOf("}", objtheme.length - 1) !== -1 )
+        {
+            objtheme = JSON.parse(objtheme);
+        }
+
+        if ( objtheme ) {
+            if ( window.uitheme.id && window.uitheme.id != objtheme.id ) {
+                local_storage_available && localstorage.removeItem("ui-theme");
+                !window.uitheme.type && /-dark/.test(window.uitheme.id) && (window.uitheme.type = 'dark');
+            } else {
+                window.uitheme.cache = objtheme;
+                if ( !window.uitheme.type && objtheme.type ) {
+                    window.uitheme.type = objtheme.type;
+                }
+
+                if ( objtheme.colors ) {
+                    header_tokens.forEach(function (i) {
+                            !!objtheme.colors[i] && document.documentElement.style.setProperty('--' + i, objtheme.colors[i]);
+                        });
+
+                    let colors = [];
+                    for (let c in objtheme.colors) {
+                        colors.push('--' + c + ':' + objtheme.colors[c]);
+                    }
+
+                    inject_style_tag('.' + objtheme.id + '{' + colors.join(';') + ';}');
+                }
+
+                if ( objtheme.icons && !(window.uitheme.embedicons === true) ) {
+                    window.uitheme.apply_icons_from_url(objtheme.id, objtheme.icons.basepath);
+                }
+
+                if ( objtheme.skeleton ) {
+                    if ( objtheme.skeleton.css )
+                        inject_style_tag(objtheme.skeleton.css);
+
+                    if ( objtheme.skeleton.html ) {
+                        window.skhtml = objtheme.skeleton.html;
+                    }
+                }
+            }
+        }
+    } else {
+        if ( window.uitheme.id && window.uitheme.id.lastIndexOf("theme-gray", 0) === 0 ) {
+            header_tokens.forEach(function (i) {
+                !!document.documentElement.style.setProperty('--' + i, "#f7f7f7");
+            });
+        } else if ( window.uitheme.id && window.uitheme.id.lastIndexOf("theme-white", 0) === 0 ) {
+            header_tokens.forEach(function (i) {
+                !!document.documentElement.style.setProperty('--' + i, "#ffffff");
+            });
+        }
+    }
+}();
+
+</script>
+  </head>
+  <body>
+      <script>
+/*
+ * (c) Copyright Ascensio System SIA 2010-2024
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
+var checkLocalStorage = (function () {
+    try {
+        localStorage.setItem('test', 1);   // for WebView checking !!window.localStorage not enough
+        localStorage.removeItem('test');
+        return true;
+    }
+    catch(e) {
+        return false;
+    }
+})();
+
+if (!window.lang) {
+    window.lang = (/(?:&|^)lang=([^&]+)&?/i).exec(window.location.search.substring(1));
+    window.lang = window.lang ? window.lang[1] : '';
+}
+window.lang && (window.lang = window.lang.split(/[\-\_]/)[0].toLowerCase());
+
+var isLangRtl = function (lang) {
+    return lang && (/^(ar|he|ur)$/i.test(lang));
+}
+
+var ui_rtl = false;
+if ( window.nativeprocvars && window.nativeprocvars.rtl !== undefined ) {
+    ui_rtl = window.nativeprocvars.rtl;
+} else {
+    if ( isLangRtl(lang) )
+        if ( checkLocalStorage && localStorage.getItem("settings-ui-rtl") !== null )
+            ui_rtl = localStorage.getItem("settings-ui-rtl") === '1';
+        else ui_rtl = true;
+}
+
+if ( ui_rtl && window.isIEBrowser !== true ) {
+    document.body.setAttribute('dir', 'rtl');
+    document.body.classList.add('rtl');
+}
+if ( isLangRtl(lang) ) {
+    document.body.classList.add('rtl-font');
+}
+document.body.setAttribute('applang', lang);
+
+function checkScaling() {
+    var matches = {
+        'pixel-ratio__1_25': "screen and (-webkit-min-device-pixel-ratio: 1.25) and (-webkit-max-device-pixel-ratio: 1.49), " +
+                                "screen and (min-resolution: 1.25dppx) and (max-resolution: 1.49dppx)",
+        'pixel-ratio__1_5': "screen and (-webkit-min-device-pixel-ratio: 1.5) and (-webkit-max-device-pixel-ratio: 1.74), " +
+                                "screen and (min-resolution: 1.5dppx) and (max-resolution: 1.74dppx)",
+        'pixel-ratio__1_75': "screen and (-webkit-min-device-pixel-ratio: 1.75) and (-webkit-max-device-pixel-ratio: 1.99), " +
+                                "screen and (min-resolution: 1.75dppx) and (max-resolution: 1.99dppx)",
+    };
+
+    for (var c in matches) {
+        if ( window.matchMedia(matches[c]).matches ) {
+            document.body.classList.add(c);
+            break;
+        }
+    }
+
+    if ( window.isIEBrowser !== true ) {
+        matches = {
+            'pixel-ratio__2_5': 'screen and (-webkit-min-device-pixel-ratio: 2.25), screen and (min-resolution: 2.25dppx)',
+        };
+        for (let c in matches) {
+            if ( window.matchMedia(matches[c]).matches ) {
+                document.body.classList.add(c);
+                Common.Utils.injectSvgIcons();
+                break;
+            }
+        }
+    }
+}
+
+let svg_icons = window.uitheme.svg_icons || [
+    './resources/img/iconssmall@2.5x.svg',
+    './resources/img/iconsbig@2.5x.svg',
+    './resources/img/iconshuge@2.5x.svg',
+    '../../common/main/resources/img/doc-formats/formats@2.5x.svg'
+];
+
+window.Common = {
+    Utils: {
+        injectSvgIcons: function (svg_icons_array, force) {
+            if ( window.isIEBrowser === true ) return;
+
+            window.svgiconsrunonce;
+            // const el = document.querySelector('div.inlined-svg');
+            // if (!el || !el.innerHTML.firstChild) {
+            if ( !window.svgiconsrunonce || force === true ) {
+                window.svgiconsrunonce = true;
+                function htmlToElements(html, id) {
+                    var template = document.createElement('template');
+                    template.innerHTML = html;
+                    // return template.content.childNodes;
+                    if ( !!id ) template.content.firstChild.id = id;
+                    return template.content.firstChild;
+                }
+
+                const sprite_uid = getComputedStyle(document.body).getPropertyValue('--sprite-button-icons-uid');
+
+                !svg_icons_array && (svg_icons_array = svg_icons);
+                svg_icons_array.map(function (url) {
+                            fetch(url)
+                                .then(function (r) {
+                                    if (r.ok) return r.text();
+                                    else {/* error */}
+                                }).then(function (text) {
+                                    const btnMatch = /icons(\w+)(?:@2\.5x)\.svg$/.exec(url);
+                                    const formatMatch = /doc-formats\/(\w+)(?:@2\.5x)\.svg$/.exec(url);
+                                    const type = btnMatch ? btnMatch[1] : (formatMatch ? formatMatch[1] : null);
+
+                                    let el_id;
+                                    if ( type ) {
+                                        const prefix = btnMatch ? 'idx-sprite-btns-' : 'idx-sprite-formats-';
+                                        const el = document.getElementById((el_id = prefix  + type));
+                                        if ( el ) {
+                                            const idx = el.getAttribute('data-sprite-uid');
+                                            if ( idx != sprite_uid )
+                                                el.remove()
+                                            else return;
+                                        };
+                                    }
+
+                                    const el = document.querySelector('div.inlined-svg');
+                                    const child = htmlToElements(text, el_id);
+                                    if ( sprite_uid.length )
+                                        child.setAttribute('data-sprite-uid', sprite_uid);
+                                    el.appendChild(child);
+
+                                    const i = svg_icons_array.findIndex(function (item) {return item == url});
+                                    if ( !(i < 0) ) svg_icons_array.splice(i, 1)
+                                }).catch(console.error.bind(console))
+                        })
+            }
+        }
+    }
+}
+
+!params.skipScaling && checkScaling();
+
+if ( !window.uitheme.id && !!params.uitheme ) {
+    if ( params.uitheme == 'default-dark' ) {
+        window.uitheme.id = window.uitheme.DEFAULT_DARK_THEME_ID;
+        window.uitheme.type = 'dark';
+    } else
+    if ( params.uitheme == 'default-light' ) {
+        window.uitheme.id = window.uitheme.DEFAULT_LIGHT_THEME_ID;
+        window.uitheme.type = 'light';
+    } else
+    if ( params.uitheme == 'theme-system' ) {
+        window.uitheme.adapt_to_system_theme();
+    } else {
+        window.uitheme.id = params.uitheme;
+        window.uitheme.type = params.uithemetype;
+    }
+}
+
+if ( !window.uitheme.id ) {
+    window.uitheme.adapt_to_system_theme();
+} else {
+    !window.uitheme.type && params.uitheme && (window.uitheme.type = params.uithemetype);
+}
+
+document.body.classList.add(window.uitheme.relevant_theme_id());
+
+if ( window.uitheme.type == 'dark' ) {
+    document.body.classList.add("theme-type-dark");
+
+    if ( checkLocalStorage && localStorage.getItem("content-theme") == 'dark' ) {
+        document.body.classList.add("content-theme-dark");
+    } else {
+    // document.body.classList.add("theme-type-ligth");
+    }
+}
+
+if ( !window.is_system_theme_dark )
+    delete window.is_system_theme_dark;
+
+</script>
+      <script>
+/*
+ * (c) Copyright Ascensio System SIA 2010-2024
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+function checkExtendedPDF(directUrl, key, url, token, callback) {
+    //110 is not enough for the new PDF form    
+    var limit = 300;
+    if (directUrl) {
+        downloadPartialy(directUrl, limit, null, function(text) {
+            callback(isExtendedPDFFile(text))
+        });
+    } else {
+        let postData = JSON.stringify({
+            'url': url,
+            "token": token
+        });
+        var handlerUrl = "../../../../downloadfile/"+encodeURIComponent(key);
+        downloadPartialy(handlerUrl, limit, postData, function(text) {
+            callback(isExtendedPDFFile(text))
+        });
+    }
+}
+function isExtendedPDFFile(text) {
+    if (!text) {
+        return false;
+    }
+    const indexFirst = text.indexOf('%\xCD\xCA\xD2\xA9\x0D');
+    if (indexFirst === -1) {
+        return false;
+    }
+
+    let pFirst = text.substring(indexFirst + 6);
+
+    if (!(pFirst.lastIndexOf('1 0 obj\x0A<<\x0A', 0) === 0)) {
+        return false;
+    }
+
+    pFirst = pFirst.substring(11);
+
+    let signature = 'ONLYOFFICEFORM';
+    const indexStream = pFirst.indexOf('stream\x0D\x0A');
+    const indexMeta = pFirst.indexOf(signature);
+
+    if (indexStream === -1 || indexMeta === -1 || indexStream < indexMeta) {
+        return false;
+    }
+
+    let pMeta = pFirst.substring(indexMeta);
+    pMeta = pMeta.substring(signature.length + 3);
+
+    let indexMetaLast = pMeta.indexOf(' ');
+    if (indexMetaLast === -1) {
+        return false;
+    }
+
+    pMeta = pMeta.substring(indexMetaLast + 1);
+
+    indexMetaLast = pMeta.indexOf(' ');
+    if (indexMetaLast === -1) {
+        return false;
+    }
+
+    return true;
+}
+function downloadPartialy(url, limit, postData, callback) {
+    var callbackCalled = false;
+    var xhr = new XMLHttpRequest();
+    //value of responseText always has the current content received from the server, even if it's incomplete
+    // xhr.responseType = "json"; it raises an IE error. bug 66160
+    xhr.overrideMimeType('text/plain; charset=iso-8859-1');
+    xhr.onreadystatechange = function () {
+        if (callbackCalled) {
+            return;
+        }
+        if (xhr.readyState === 4) {
+            callbackCalled = true;
+            callback(xhr.responseText);
+        } else if (xhr.readyState === 3 && xhr.responseText.length >= limit) {
+            callbackCalled = true;
+            var res = xhr.responseText;
+            xhr.abort();
+            callback(res);
+        }
+    };
+    let method = postData ? 'POST' : 'GET';
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Range', 'bytes=0-' + limit); // the bytes (incl.) you request
+    xhr.send(postData);
+}
+
+var startCallback;
+var eventFn = function(msg) {
+    if (msg.origin !== window.parentOrigin && msg.origin !== window.location.origin && !(msg.origin==="null" && (window.parentOrigin==="file://" || window.location.origin==="file://"))) return;
+
+    var data = msg.data;
+    if (Object.prototype.toString.apply(data) !== '[object String]' || !window.JSON) {
+        return;
+    }
+    try {
+        data = window.JSON.parse(data)
+    } catch(e) {
+        data = '';
+    }
+
+    if (data && data.command==="checkParams") {
+        data = data.data || {};
+        checkExtendedPDF(data.directUrl, data.key, data.url, data.token, startCallback);
+        _unbindWindowEvents();
+    }
+};
+
+var _bindWindowEvents = function() {
+    if (window.addEventListener) {
+        window.addEventListener("message", eventFn, false)
+    } else if (window.attachEvent) {
+        window.attachEvent("onmessage", eventFn);
+    }
+};
+
+var _unbindWindowEvents = function() {
+    if (window.removeEventListener) {
+        window.removeEventListener("message", eventFn)
+    } else if (window.detachEvent) {
+        window.detachEvent("onmessage", eventFn);
+    }
+};
+
+function listenApiMsg(callback) {
+    startCallback = callback;
+    _bindWindowEvents();
+}
+
+</script>
+      <div id="loading-mask" class="loadmask"></div>
+      <script>
+          listenApiMsg(function (isform) {
+              var match = window.location.href.match(/(.*)common\/index.html/i);
+              match && window.location.replace(match[1] + (isform || embed ? 'documenteditor' : 'pdfeditor') + '/' + (isform && embed ? 'forms' : embed ? 'embed' : 'main') + '/index' + (isform && embed ? '' : postfix) + '.html' +
+                       window.location.search + ("&isForm=" + !!isform));
+          });
+      </script>
+  </body>
+</html>

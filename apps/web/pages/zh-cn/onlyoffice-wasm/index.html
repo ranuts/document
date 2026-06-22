@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../../img/64.png" />
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="纯静态 Web 应用，通过 WebAssembly 在浏览器内运行 OnlyOffice 文档编辑引擎，无需 Document Server，无需后端。"
+    />
+    <link rel="canonical" href="https://bybrowser.com/zh-cn/onlyoffice-wasm/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/onlyoffice-wasm/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/onlyoffice-wasm/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/onlyoffice-wasm/" />
+    <meta property="og:title" content="OnlyOffice WASM 文档编辑器" />
+    <meta property="og:description" content="通过 WebAssembly 在浏览器内运行 OnlyOffice 引擎，无需 Document Server。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/zh-cn/onlyoffice-wasm/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>OnlyOffice WASM 文档编辑器 - 无需 Document Server | ByBrowser</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "OnlyOffice WASM 编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/onlyoffice-wasm/",
+        "description": "纯静态 Web 应用，通过 WebAssembly 在浏览器内运行 OnlyOffice 引擎，无需任何服务器基础设施。",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
+    </script>
+    <script src="../../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>OnlyOffice WASM 文档编辑器</h1>
+      <p>
+        纯静态 Web 应用，通过 WebAssembly 在浏览器内运行完整的 OnlyOffice 文档编辑引擎——无需 Document
+        Server，无需后端，无需上传。
+      </p>
+
+      <h2>什么是 OnlyOffice WASM</h2>
+      <p>
+        OnlyOffice 是功能完整的开源办公套件，通常需要专用的 Document Server 来处理文件。ByBrowser 将 OnlyOffice x2t
+        转换引擎编译为 WebAssembly（WASM），直接在浏览器中加载 web-apps
+        前端，无需任何服务器基础设施。最终结果是一个完全在静态 HTML 页面中运行的功能完整的 Office 编辑器。
+      </p>
+
+      <h2>架构说明</h2>
+      <ul>
+        <li><strong>OnlyOffice web-apps</strong> 提供编辑器 UI（文档、表格、演示文稿编辑器）</li>
+        <li><strong>x2t WASM</strong> 处理 OOXML 格式（DOCX、XLSX、PPTX）与 OnlyOffice 内部格式之间的转换</li>
+        <li><strong>无 Document Server</strong> — socket.io 后端被本地回退替代，编辑器以桌面编辑器模式加载</li>
+        <li><strong>Service Worker</strong> 缓存资源，支持重复访问和 PWA 安装</li>
+      </ul>
+
+      <h2>适用场景</h2>
+      <ul>
+        <li>希望嵌入文档编辑器但不想运行后端服务器的开发者</li>
+        <li>需要隔离网络文档编辑方案的组织</li>
+        <li>研究如何将 OnlyOffice 作为纯客户端应用运行的技术人员</li>
+      </ul>
+
+      <h2>常见问题</h2>
+      <dl>
+        <dt>与 OnlyOffice Document Server 有什么区别？</dt>
+        <dd>
+          OnlyOffice Document Server 在服务器上进行格式转换。ByBrowser 使用 WebAssembly
+          在浏览器内完成所有转换，无需服务器。
+        </dd>
+
+        <dt>这是 OnlyOffice 官方产品吗？</dt>
+        <dd>不是。ByBrowser 是一个独立的开源项目，基于 OnlyOffice 的开源组件（web-apps、sdkjs、x2t-wasm）构建。</dd>
+
+        <dt>可以自行部署吗？</dt>
+        <dd>
+          可以。构建输出是一个静态文件目录，可以部署到任意静态托管平台——Nginx、Cloudflare Pages、Vercel 或 Docker 容器。
+        </dd>
+      </dl>
+
+      <nav aria-label="相关工具">
+        <h2>更多浏览器端编辑器</h2>
+        <a href="../docx-editor/">DOCX 编辑器 — 无需上传，编辑 Word 文档</a>
+        <a href="../xlsx-editor/">XLSX 编辑器 — 在浏览器中编辑 Excel 表格</a>
+        <a href="../embed-document-editor/">嵌入 API — 将编辑器集成到你的应用</a>
+        <a href="../self-hosted-document-editor/">自部署 — 在自己的服务器上运行</a>
+        <a href="../">所有工具 — ByBrowser 首页</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../../src/index.ts"></script>
+</html>

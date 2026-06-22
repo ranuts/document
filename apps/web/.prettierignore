@@ -1,0 +1,9 @@
+# OnlyOffice vendor files — minified, not our code
+public-v7/
+public-v9/
+
+# Build output and generated reports
+dist/
+coverage/
+playwright-report/
+test-results/

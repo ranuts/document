@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../../img/64.png" />
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="通过 iframe 和 postMessage API 将隐私文档编辑器嵌入你的 Web 应用，无需后端服务器，无需上传，无需 Document Server。"
+    />
+    <link rel="canonical" href="https://bybrowser.com/zh-cn/embed-document-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/embed-document-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/embed-document-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/embed-document-editor/" />
+    <meta property="og:title" content="嵌入文档编辑器 - iframe postMessage API" />
+    <meta property="og:description" content="通过 iframe 和 postMessage 将本地文档编辑器集成到你的应用，无需后端。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/zh-cn/embed-document-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>嵌入文档编辑器 - iframe postMessage API | ByBrowser</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "嵌入文档编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/embed-document-editor/",
+        "description": "通过 iframe 和 postMessage API 将隐私文档编辑器集成到 Web 应用，无需后端服务器。",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
+    </script>
+    <script src="../../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>嵌入隐私文档编辑器</h1>
+      <p>
+        通过 iframe 和 postMessage API 将本地文档编辑器集成到你自己的 Web 应用——无需后端服务器，无需上传，无需 Document
+        Server。
+      </p>
+
+      <h2>嵌入原理</h2>
+      <p>
+        将 <code>&lt;iframe&gt;</code> 指向 <code>https://bybrowser.com/?embed=1</code>，通过
+        <code>window.postMessage</code> 从父页面控制编辑器。你的应用负责处理认证和文件存储，iframe
+        只负责编辑。由于所有处理均在浏览器内完成，文档内容不会经过任何服务器。
+      </p>
+
+      <h2>快速集成示例</h2>
+      <pre><code>&lt;iframe id="editor" src="https://bybrowser.com/?embed=1"
+  style="width:100%;height:720px;border:0"&gt;&lt;/iframe&gt;
+
+&lt;script&gt;
+const editor = document.getElementById('editor').contentWindow;
+
+// 从 URL 打开文档
+editor.postMessage(
+  { type: 'document:open-url', payload: { url: 'https://example.com/doc.docx' } },
+  'https://bybrowser.com'
+);
+
+// 监听保存事件
+window.addEventListener('message', (e) => {
+  if (e.data?.type === 'document:saved') uploadFile(e.data.payload.file);
+});
+&lt;/script&gt;</code></pre>
+
+      <h2>支持的消息类型</h2>
+      <ul>
+        <li><code>document:open-url</code> — 从 URL 打开文档</li>
+        <li><code>document:open</code> — 从 File、Blob 或 ArrayBuffer 打开</li>
+        <li><code>document:save</code> — 触发保存并接收文件回调</li>
+        <li><code>document:set-readonly</code> — 切换编辑器为只读模式</li>
+        <li><code>document:get-state</code> — 查询当前编辑器状态</li>
+      </ul>
+
+      <h2>常见问题</h2>
+      <dl>
+        <dt>需要运行后端服务器吗？</dt>
+        <dd>不需要。文档编辑器完全在客户端运行，你的后端只需负责文件的提供和接收，编辑和渲染在 iframe 内完成。</dd>
+
+        <dt>可以限制哪些来源可以发送消息吗？</dt>
+        <dd>
+          可以。在 iframe URL 中添加 <code>?embedOrigin=https://yourapp.com</code>，将 postMessage 通信限制为你的域名。
+        </dd>
+
+        <dt>嵌入编辑器支持哪些文件格式？</dt>
+        <dd>嵌入模式支持 DOCX、XLSX、PPTX 和 CSV。</dd>
+      </dl>
+
+      <nav aria-label="相关工具">
+        <h2>更多浏览器端编辑器</h2>
+        <a href="../docx-editor/">DOCX 编辑器 — 无需上传，编辑 Word 文档</a>
+        <a href="../xlsx-editor/">XLSX 编辑器 — 在浏览器中编辑 Excel 表格</a>
+        <a href="../onlyoffice-wasm/">OnlyOffice WASM — 了解引擎工作原理</a>
+        <a href="../self-hosted-document-editor/">自部署 — 在自己的服务器上运行</a>
+        <a href="../">所有工具 — ByBrowser 首页</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../../src/index.ts"></script>
+</html>

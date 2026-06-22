@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../../img/64.png" />
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="在浏览器中编辑 PowerPoint PPTX 演示文稿，无需上传到服务器，幻灯片始终留在你的设备上。"
+    />
+    <link rel="canonical" href="https://bybrowser.com/zh-cn/pptx-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/pptx-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/pptx-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/pptx-editor/" />
+    <meta property="og:title" content="在线 PPTX 编辑器 - 无需上传" />
+    <meta property="og:description" content="在浏览器中打开、编辑和保存 PowerPoint 演示文稿，文件不离开你的设备。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/zh-cn/pptx-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>在线 PPTX 编辑器 - 无需上传，浏览器本地编辑 PowerPoint | ByBrowser</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "PPTX 编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/pptx-editor/",
+        "description": "在浏览器中编辑 PowerPoint PPTX 演示文稿，无需上传，幻灯片始终留在本地。",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
+    </script>
+    <script src="../../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>无需上传的在线 PPTX 编辑器</h1>
+      <p>在浏览器中直接编辑 PowerPoint 演示文稿，无需将 PPTX 文件上传到服务器，幻灯片始终留在你的设备上。</p>
+
+      <h2>主要功能</h2>
+      <ul>
+        <li>直接从电脑打开 <strong>.pptx</strong> 演示文稿，无需上传</li>
+        <li>编辑幻灯片文字、图片、形状、切换效果和备注</li>
+        <li>从零开始创建新演示文稿并保存为 PPTX</li>
+        <li>支持全屏预览幻灯片</li>
+        <li>支持通过 <code>?src=</code> 参数从 URL 加载远程文件</li>
+      </ul>
+
+      <h2>为什么不要上传你的演示文稿</h2>
+      <p>
+        路演材料、内部战略PPT和客户提案往往包含机密商业信息。将 PPTX 上传到在线工具意味着内容会经过外部服务器。ByBrowser
+        通过 WebAssembly 完全在浏览器内处理演示文稿，幻灯片不会传输到任何服务器，也无需账号。
+      </p>
+
+      <h2>使用步骤</h2>
+      <ol>
+        <li>点击上传按钮或将 <code>.pptx</code> 文件拖拽到编辑器</li>
+        <li>演示文稿通过 OnlyOffice 引擎在本地完整打开</li>
+        <li>编辑幻灯片、调整内容和格式</li>
+        <li>将完成的演示文稿保存为 PPTX 文件下载到本地</li>
+      </ol>
+
+      <h2>常见问题</h2>
+      <dl>
+        <dt>不安装 PowerPoint 也能编辑 PPTX 吗？</dt>
+        <dd>可以。OnlyOffice 演示文稿引擎支持幻灯片版式、动画和嵌入媒体，无需安装 PowerPoint。</dd>
+
+        <dt>切换效果和动画会保留吗？</dt>
+        <dd>会。保存时 PPTX 格式中定义的切换效果和标准动画均会保留。</dd>
+
+        <dt>幻灯片数量有限制吗？</dt>
+        <dd>没有强制限制，非常大的演示文稿的加载速度取决于设备的可用内存。</dd>
+      </dl>
+
+      <nav aria-label="相关工具">
+        <h2>更多浏览器端编辑器</h2>
+        <a href="../docx-editor/">DOCX 编辑器 — 无需上传，编辑 Word 文档</a>
+        <a href="../xlsx-editor/">XLSX 编辑器 — 在浏览器中编辑 Excel 表格</a>
+        <a href="../csv-editor/">CSV 编辑器 — 本地查看和编辑 CSV 文件</a>
+        <a href="../private-document-editor/">隐私文档编辑器 — 最高隐私保护</a>
+        <a href="../">所有工具 — ByBrowser 首页</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../../src/index.ts"></script>
+</html>

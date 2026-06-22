@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../img/64.png" />
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Edit DOCX Word documents locally in your browser. No upload, no account, and no document server required."
+    />
+    <link rel="canonical" href="https://bybrowser.com/docx-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/docx-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/docx-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/docx-editor/" />
+    <meta property="og:title" content="DOCX Editor With No Server Upload" />
+    <meta
+      property="og:description"
+      content="Open, edit, and save Word documents directly in your browser with a privacy-first DOCX editor."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/docx-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>DOCX Editor With No Upload | Browser Word Editor</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "DOCX Editor — ByBrowser",
+        "url": "https://bybrowser.com/docx-editor/",
+        "description": "Edit Word DOCX documents locally in your browser. No upload, no account, no document server required.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "DOCX editing, no upload, privacy-first, Word-compatible, offline PWA"
+      }
+    </script>
+    <script src="../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>DOCX Editor With No Server Upload</h1>
+      <p>
+        Edit Word documents locally in your browser. Open, edit, and save DOCX files without uploading them to any
+        server.
+      </p>
+
+      <h2>What You Can Do</h2>
+      <ul>
+        <li>Open any <strong>.docx</strong> file directly from your computer — no upload required</li>
+        <li>Edit text, formatting, tables, images, and headers just like in Microsoft Word</li>
+        <li>Save the edited file back to your device as a DOCX file</li>
+        <li>Load a DOCX from a URL using the <code>?src=</code> parameter</li>
+        <li>Works in any modern browser — Chrome, Firefox, Safari, Edge</li>
+      </ul>
+
+      <h2>Why Use a No-Upload DOCX Editor?</h2>
+      <p>
+        Most online Word editors upload your document to their servers for processing. This creates privacy risks,
+        especially for contracts, legal documents, medical records, or any confidential content. ByBrowser processes
+        your DOCX entirely in your browser using WebAssembly — the file never leaves your device.
+      </p>
+
+      <h2>How to Open a Word Document</h2>
+      <ol>
+        <li>Click the upload button or drag and drop a <code>.docx</code> file onto the editor</li>
+        <li>The document opens instantly — all rendering happens locally</li>
+        <li>Make your edits using the full OnlyOffice toolbar</li>
+        <li>Click Save to download the updated DOCX file to your computer</li>
+      </ol>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl>
+        <dt>Can I edit DOCX files without Microsoft Word?</dt>
+        <dd>
+          Yes. ByBrowser uses the OnlyOffice engine to open and edit DOCX files with no Microsoft Office installation
+          needed.
+        </dd>
+
+        <dt>Is my document sent to any server?</dt>
+        <dd>
+          No. All processing happens locally in your browser via WebAssembly. Your document never leaves your device.
+        </dd>
+
+        <dt>Does it support tracked changes and comments?</dt>
+        <dd>Yes. The OnlyOffice engine supports Word-compatible tracked changes, comments, and review mode.</dd>
+
+        <dt>What is the maximum file size?</dt>
+        <dd>
+          There is no enforced limit — the constraint is your browser's available memory. Large documents with many
+          images may load more slowly.
+        </dd>
+      </dl>
+
+      <nav aria-label="Related tools">
+        <h2>More Browser-Only Editors</h2>
+        <a href="../xlsx-editor/">XLSX Editor — edit Excel spreadsheets without uploading</a>
+        <a href="../pptx-editor/">PPTX Editor — open PowerPoint presentations in your browser</a>
+        <a href="../csv-editor/">CSV Editor — edit CSV files locally</a>
+        <a href="../private-document-editor/">Private Document Editor — maximum privacy mode</a>
+        <a href="../">All browser-only tools — ByBrowser home</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../src/index.ts"></script>
+</html>

@@ -1,0 +1,29 @@
+{
+  "exclude": ["node_modules/**", "dist/**", "public"],
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": false,
+    "inlineSourceMap": true,
+    "experimentalDecorators": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@bybrowser/core": ["../../packages/core/src/index.ts"],
+      "@bybrowser/editor": ["../../packages/editor-v9/src/index.ts"],
+      "@/*": ["./src/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/store/*": ["./src/store/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/types/*": ["./src/types/*"]
+    }
+  }
+}

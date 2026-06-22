@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+public/
+docs/explorations/
+
+# OnlyOffice vendor files — minified, not our code
+apps/web/public-v7/
+apps/web/public-v9/

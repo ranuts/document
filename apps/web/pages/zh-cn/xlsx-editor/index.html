@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../../img/64.png" />
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="在浏览器中编辑 Excel XLSX 表格，无需上传到服务器，无需账号，完全本地处理，支持公式和图表。"
+    />
+    <link rel="canonical" href="https://bybrowser.com/zh-cn/xlsx-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/xlsx-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/xlsx-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/xlsx-editor/" />
+    <meta property="og:title" content="在线 XLSX 编辑器 - 无需上传" />
+    <meta property="og:description" content="在浏览器中打开、编辑和保存 Excel 表格，文件不离开你的设备。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/zh-cn/xlsx-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>在线 XLSX 编辑器 - 无需上传，浏览器本地编辑 Excel 表格 | ByBrowser</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "XLSX 编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/xlsx-editor/",
+        "description": "在浏览器中编辑 Excel XLSX 表格，无需上传，支持公式、图表，完全本地处理。",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
+    </script>
+    <script src="../../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>无需上传的在线 XLSX 编辑器</h1>
+      <p>在浏览器中直接编辑 Excel 表格，无需将 XLSX 文件上传到任何服务器。所有处理通过 WebAssembly 在本地完成。</p>
+
+      <h2>主要功能</h2>
+      <ul>
+        <li>直接从电脑打开 <strong>.xlsx</strong> 表格，无需上传</li>
+        <li>编辑单元格、公式、图表和格式，与 Microsoft Excel 完全兼容</li>
+        <li>从零开始创建新表格并保存为 XLSX</li>
+        <li>支持多工作表和命名区域</li>
+        <li>支持通过 <code>?src=</code> 参数从 URL 加载 XLSX 文件</li>
+      </ul>
+
+      <h2>为什么不要上传你的表格</h2>
+      <p>
+        财务模型、工资数据、销售管道和个人预算等 XLSX
+        文件通常包含敏感信息。将这些文件上传到在线服务存在数据泄露风险。ByBrowser 的 XLSX
+        编辑器完全在浏览器内运行，服务器永远不会收到你的文件副本。
+      </p>
+
+      <h2>使用步骤</h2>
+      <ol>
+        <li>点击上传按钮或拖拽 <code>.xlsx</code> 文件到编辑器</li>
+        <li>表格通过 OnlyOffice 引擎在本地打开</li>
+        <li>编辑单元格、套用公式、格式化数据</li>
+        <li>将更新后的文件下载到本地</li>
+      </ol>
+
+      <h2>常见问题</h2>
+      <dl>
+        <dt>不安装 Microsoft Excel 也能打开 XLSX 文件吗？</dt>
+        <dd>可以。ByBrowser 使用 OnlyOffice 表格引擎，完整支持公式，无需安装 Excel。</dd>
+
+        <dt>公式和图表会保留吗？</dt>
+        <dd>会。OnlyOffice 引擎在打开和保存 XLSX 文件时完整保留 Excel 兼容的公式、数据透视表和图表。</dd>
+
+        <dt>可以从零创建新表格吗？</dt>
+        <dd>可以。使用菜单中的「新建 Excel」按钮创建空白工作簿，立即开始编辑。</dd>
+      </dl>
+
+      <nav aria-label="相关工具">
+        <h2>更多浏览器端编辑器</h2>
+        <a href="../docx-editor/">DOCX 编辑器 — 无需上传，编辑 Word 文档</a>
+        <a href="../pptx-editor/">PPTX 编辑器 — 在浏览器中打开 PowerPoint</a>
+        <a href="../csv-editor/">CSV 编辑器 — 本地查看和编辑 CSV 文件</a>
+        <a href="../private-document-editor/">隐私文档编辑器 — 最高隐私保护</a>
+        <a href="../">所有工具 — ByBrowser 首页</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../../src/index.ts"></script>
+</html>

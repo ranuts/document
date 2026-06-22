@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../../img/64.png" />
+    <link rel="manifest" href="../../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="最高隐私保护的文档编辑器：在浏览器中编辑 DOCX、XLSX、PPTX 和 CSV 文件，文件从打开到保存始终留在你的设备上。"
+    />
+    <link rel="canonical" href="https://bybrowser.com/zh-cn/private-document-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/private-document-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/private-document-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/private-document-editor/" />
+    <meta property="og:title" content="隐私文档编辑器 - 无需上传" />
+    <meta property="og:description" content="编辑 Office 文档时最高隐私保护，文件不离开你的设备，无服务器，无账号。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/zh-cn/private-document-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>隐私文档编辑器 - 无需上传，文件不离开设备 | ByBrowser</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "隐私文档编辑器 — ByBrowser",
+        "url": "https://bybrowser.com/zh-cn/private-document-editor/",
+        "description": "最高隐私保护的文档编辑器，在浏览器中处理 Office 文件，文件始终留在本地。",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
+    </script>
+    <script src="../../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>无需上传的隐私文档编辑器</h1>
+      <p>在浏览器中编辑 DOCX、XLSX、PPTX 和 CSV 文件，文件从打开到保存始终留在你的设备上，不会上传到任何服务器。</p>
+
+      <h2>最高隐私保护——工作原理</h2>
+      <p>
+        ByBrowser 通过 WebAssembly 在浏览器内运行完整的 OnlyOffice 办公套件。当你打开文档时，文件由浏览器本地文件 API
+        直接读取，不会通过网络传输。编辑引擎、格式转换和文件保存全部在浏览器标签页内完成，无需任何后端服务器参与。
+      </p>
+
+      <h2>与 Google 文档或 Office 365 有什么区别</h2>
+      <ul>
+        <li><strong>无需上传</strong> — Google 文档和 Office 365 会将你的文件发送到云端服务器，ByBrowser 不会。</li>
+        <li><strong>无需账号</strong> — 无需登录、无需邮箱、无使用跟踪</li>
+        <li><strong>加载后无需联网</strong> — 安装为 PWA 后，无网络也可完整编辑文档</li>
+        <li><strong>开源可审计</strong> — 查看代码、自行部署，亲自验证隐私承诺</li>
+      </ul>
+
+      <h2>支持的文件格式</h2>
+      <ul>
+        <li><a href="../docx-editor/">DOCX</a> — Microsoft Word 文档</li>
+        <li><a href="../xlsx-editor/">XLSX</a> — Microsoft Excel 表格</li>
+        <li><a href="../pptx-editor/">PPTX</a> — Microsoft PowerPoint 演示文稿</li>
+        <li><a href="../csv-editor/">CSV</a> — 逗号分隔值文件</li>
+      </ul>
+
+      <h2>常见问题</h2>
+      <dl>
+        <dt>这款编辑器适合哪些用户？</dt>
+        <dd>适合所有处理敏感文件（法律、医疗、财务或个人文件）、且不希望将内容发送到第三方服务的用户。</dd>
+
+        <dt>我可以验证没有数据被上传吗？</dt>
+        <dd>可以。编辑时打开浏览器 DevTools 的 Network 标签，你会看到没有任何文档内容被传输。</dd>
+
+        <dt>真的完全免费吗？</dt>
+        <dd>是的。ByBrowser 免费且开源，采用 AGPL-3.0 协议，没有付费版或使用限制。</dd>
+
+        <dt>技术上是如何实现的？</dt>
+        <dd>
+          OnlyOffice 文档引擎被编译为
+          WebAssembly，完全在你的浏览器标签页内运行。打开、渲染和保存文件的过程中不涉及任何服务器端进程。
+        </dd>
+      </dl>
+
+      <nav aria-label="相关工具">
+        <h2>更多浏览器端编辑器</h2>
+        <a href="../docx-editor/">DOCX 编辑器 — 无需上传，编辑 Word 文档</a>
+        <a href="../xlsx-editor/">XLSX 编辑器 — 在浏览器中编辑 Excel 表格</a>
+        <a href="../pptx-editor/">PPTX 编辑器 — 在浏览器中打开 PowerPoint</a>
+        <a href="../csv-editor/">CSV 编辑器 — 本地查看和编辑 CSV 文件</a>
+        <a href="../">所有工具 — ByBrowser 首页</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../../src/index.ts"></script>
+</html>

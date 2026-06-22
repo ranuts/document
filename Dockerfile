@@ -23,4 +23,4 @@ RUN pnpm run build
 #COPY --from=builder /app/dist /usr/share/nginx/html
 
 FROM joseluisq/static-web-server:2.42.0
-COPY --from=builder /app/dist /public
+COPY --from=builder /app/apps/web/dist /public

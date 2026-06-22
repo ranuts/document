@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ONLYOFFICE Documents</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE8"/>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #wrap {
+            position:absolute;
+            left:0;
+            top:0;
+            right:0;
+            bottom:0;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="placeholder"></div>
+    </div>
+
+    <script type="text/javascript" src="api.js"></script>
+    <script>
+        (function() {
+
+            // Url parameters
+
+            var urlParams = getUrlParams(),
+                cfg = getEditorConfig(urlParams),
+                doc = getDocumentData(urlParams);
+
+            // Document Editor
+
+            var docEditor = new DocsAPI.DocEditor('placeholder', {
+                type: urlParams['type'],
+                width: '100%',
+                height: '100%',
+                documentType: urlParams['doctype'] || 'word',
+                document: doc,
+                editorConfig: cfg,
+                events: {
+                    onInternalMessage: onInternalMessage,
+                    onRequestClose: e => {return 0;}
+                }
+            });
+
+
+            // helpers
+
+            function getUrlParams() {
+                var e,
+                    a = /\+/g,  // Regex for replacing addition symbol with a space
+                    r = /([^&=]+)=?([^&]*)/g,
+                    d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+                    q = window.location.search.substring(1),
+                    urlParams = {};
+
+                while (e = r.exec(q))
+                    urlParams[d(e[1])] = d(e[2]);
+
+                return urlParams;
+            }
+
+            function getDocumentData(urlParams) {
+                let docparams = {
+                    key: urlParams["key"],
+                    url: urlParams["url"] || '_offline_',
+                    title: urlParams["title"],
+                    fileType: urlParams["filetype"],
+                    vkey: urlParams["vkey"],
+                    permissions: {
+                        edit: true,
+                        download: true
+                    }
+                };
+
+                if (urlParams['mode'] == 'review')
+                    docparams.permissions.edit = !(docparams.permissions.review = true);
+
+                if (urlParams['isForm'] !== undefined)
+                    docparams.isForm = (urlParams['isForm']==='true');
+
+                return docparams;
+            }
+
+            function getEditorConfig(urlParams) {
+                return {
+                    customization   : {
+                        goback: { url: "onlyoffice.com" }
+                        , feedback: {
+                            url: "https://helpdesk.onlyoffice.com/?desktop=true"
+                        }
+                        , uiTheme: urlParams["uitheme"]
+                    },
+                    mode            : urlParams["mode"] || 'edit',
+                    lang            : urlParams["lang"] || 'en',
+                    createUrl       : 'desktop://create.new',
+                    user: {
+                        id: urlParams["userid"] || urlParams["username"] || 'uid-901', name: urlParams["username"] || 'Chuk.Gek'
+                    }
+                };
+            }
+
+            // Mobile version
+
+            function isMobile(){
+                var prefixes = {
+                        ios: 'i(?:Pad|Phone|Pod)(?:.*)CPU(?: iPhone)? OS ',
+                        android: '(Android |HTC_|Silk/)',
+                        blackberry: 'BlackBerry(?:.*)Version\/',
+                        rimTablet: 'RIM Tablet OS ',
+                        webos: '(?:webOS|hpwOS)\/',
+                        bada: 'Bada\/'
+                    },
+                    i, prefix, match;
+
+                for (i in prefixes){
+                    if (prefixes.hasOwnProperty(i)) {
+                        prefix = prefixes[i];
+
+                        if (navigator.userAgent.match(new RegExp('(?:'+prefix+')([^\\s;]+)')))
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+
+            var fixSize = function() {
+                var wrapEl = document.getElementById('wrap');
+                if (wrapEl){
+                    wrapEl.style.height = screen.availHeight + 'px';
+                    window.scrollTo(0, -1);
+                    wrapEl.style.height = window.innerHeight + 'px';
+                }
+            };
+
+            var fixIpadLandscapeIos7 = function() {
+                if (navigator.userAgent.match(/iPad;.*CPU.*OS 7_\d/i)) {
+                    var wrapEl = document.getElementById('wrap');
+                    if (wrapEl){
+                        wrapEl.style.position = "fixed";
+                        wrapEl.style.bottom = 0;
+                        wrapEl.style.width = "100%";
+                    }
+                }
+            };
+
+            function onInternalMessage(event) {
+                let info = event.data;
+                if ( info.type == 'goback' ) {
+                    if ( window.AscDesktopEditor ) {
+                        window.AscDesktopEditor.execCommand('go:folder', info.data.status);
+                    }
+                }
+            };
+
+            function onDocumentReady() {
+                if ( window.AscDesktopEditor ) {
+                    window.AscDesktopEditor.execCommand('doc:onready', '');
+                }
+            }
+
+            if (isMobile()){
+                window.addEventListener('load', fixSize);
+                window.addEventListener('resize', fixSize);
+
+                fixIpadLandscapeIos7();
+            }
+
+        })();
+    </script>
+</body>
+</html>

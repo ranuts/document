@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="img/64.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Edit DOCX, XLSX, PPTX, and CSV files locally in your browser. A private local document editor with no uploads, no server, PWA support, and iframe embedding."
+    />
+    <meta
+      name="keywords"
+      content="local document editor, private document editor, browser document editor, local office editor, docx editor, xlsx editor, pptx editor, onlyoffice wasm"
+    />
+    <link rel="canonical" href="https://bybrowser.com/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/" />
+    <meta property="og:title" content="Local Document Editor in Your Browser" />
+    <meta
+      property="og:description"
+      content="A private local document editor powered by OnlyOffice WASM. Edit Office files locally with no uploads and no account."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Local Document Editor in Your Browser | Private Office Editing</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ByBrowser Document Editor",
+        "url": "https://bybrowser.com/",
+        "description": "Edit DOCX, XLSX, PPTX, and CSV files locally in your browser. No upload, no server, no account required.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "DOCX editing, XLSX editing, PPTX editing, CSV editing, PWA offline support, iframe embed API, no upload, privacy-first",
+        "license": "https://opensource.org/licenses/AGPL-3.0"
+      }
+    </script>
+    <script src="web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>Local Document Editor in Your Browser</h1>
+      <p>
+        Edit DOCX, XLSX, PPTX, and CSV files locally in your browser with a privacy-first OnlyOffice WASM document
+        editor. No upload, no account, and no document server required.
+      </p>
+
+      <h2>Browser-Only Office Tools</h2>
+      <nav>
+        <a href="docx-editor/">DOCX Editor — edit Word documents without uploading</a>
+        <a href="xlsx-editor/">XLSX Editor — edit Excel spreadsheets in your browser</a>
+        <a href="pptx-editor/">PPTX Editor — edit PowerPoint presentations locally</a>
+        <a href="csv-editor/">CSV Editor — open and edit CSV files privately</a>
+        <a href="private-document-editor/">Private Document Editor — maximum privacy, no server</a>
+        <a href="onlyoffice-wasm/">OnlyOffice WASM — serverless office engine in the browser</a>
+        <a href="embed-document-editor/">Embed Document Editor — add editing to your own app via iframe</a>
+        <a href="self-hosted-document-editor/">Self-hosted Document Editor — deploy on your own server</a>
+      </nav>
+
+      <h2>How It Works</h2>
+      <p>
+        ByBrowser runs the full OnlyOffice engine inside your browser using WebAssembly. When you open a document, the
+        file never leaves your device — all rendering, editing, and saving happens locally. There is no backend server
+        processing your documents, and no account is needed to get started.
+      </p>
+
+      <h2>Key Features</h2>
+      <ul>
+        <li><strong>No upload required</strong> — your documents stay on your device at all times</li>
+        <li><strong>Multi-format support</strong> — DOCX, XLSX, PPTX, and CSV in one editor</li>
+        <li><strong>Works offline</strong> — install as a PWA and edit documents without an internet connection</li>
+        <li>
+          <strong>Embeddable</strong> — integrate the editor into your own application via iframe and postMessage API
+        </li>
+        <li><strong>Open source</strong> — AGPL-3.0 licensed, self-hostable on any static host</li>
+        <li><strong>Multi-language</strong> — interface available in English and Chinese</li>
+      </ul>
+
+      <h2>Who Is This For?</h2>
+      <p>
+        ByBrowser is ideal for anyone who needs to open or edit Office documents without sending them to a third-party
+        server. Common use cases include editing confidential contracts or reports, opening DOCX files on a machine
+        without Microsoft Office installed, reviewing XLSX spreadsheets in a shared or restricted environment, and
+        developers who need to embed a lightweight document editor into a web application without managing a backend.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl>
+        <dt>Does ByBrowser upload my documents?</dt>
+        <dd>
+          No. All document processing runs entirely inside your browser using WebAssembly. Nothing is sent to any
+          server.
+        </dd>
+
+        <dt>Do I need to create an account?</dt>
+        <dd>No account or sign-up is required. Open the editor and start working immediately.</dd>
+
+        <dt>Which file formats are supported?</dt>
+        <dd>
+          DOCX (Word), XLSX (Excel), PPTX (PowerPoint), and CSV are fully supported for opening, editing, and saving.
+        </dd>
+
+        <dt>Can I use ByBrowser offline?</dt>
+        <dd>
+          Yes. After the first visit, you can install ByBrowser as a PWA from your browser's address bar and use it
+          without an internet connection.
+        </dd>
+
+        <dt>Is the source code available?</dt>
+        <dd>Yes. ByBrowser is open source under the AGPL-3.0 license and available on GitHub.</dd>
+      </dl>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../src/index.ts"></script>
+</html>

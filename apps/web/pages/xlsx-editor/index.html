@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../img/64.png" />
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Edit XLSX Excel spreadsheets locally in your browser. No upload, no account, and no document server required."
+    />
+    <link rel="canonical" href="https://bybrowser.com/xlsx-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/xlsx-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/xlsx-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/xlsx-editor/" />
+    <meta property="og:title" content="XLSX Editor in Your Browser" />
+    <meta
+      property="og:description"
+      content="Open, edit, and save Excel spreadsheets with a local-first browser editor."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/xlsx-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>XLSX Editor in Your Browser | Local Excel Editing</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "XLSX Editor — ByBrowser",
+        "url": "https://bybrowser.com/xlsx-editor/",
+        "description": "Edit Excel XLSX spreadsheets locally in your browser. No upload, no account, no document server required.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "XLSX editing, Excel-compatible formulas, no upload, privacy-first, offline PWA"
+      }
+    </script>
+    <script src="../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>XLSX Editor in Your Browser</h1>
+      <p>
+        Edit Excel spreadsheets locally in your browser without uploading XLSX files to a document server. All
+        processing happens in your browser via WebAssembly.
+      </p>
+
+      <h2>What You Can Do</h2>
+      <ul>
+        <li>Open <strong>.xlsx</strong> spreadsheets directly from your computer — no upload needed</li>
+        <li>Edit cells, formulas, charts, and formatting exactly as in Microsoft Excel</li>
+        <li>Create new spreadsheets from scratch and save as XLSX</li>
+        <li>Works with multi-sheet workbooks and named ranges</li>
+        <li>Load an XLSX file from a URL using the <code>?src=</code> parameter</li>
+      </ul>
+
+      <h2>Why Avoid Uploading Your Spreadsheets?</h2>
+      <p>
+        Financial models, payroll data, sales pipelines, and personal budgets often contain sensitive information.
+        Uploading these to an online service puts your data at risk. ByBrowser's XLSX editor runs entirely in your
+        browser — your spreadsheet is processed by WebAssembly locally, with no server ever receiving a copy.
+      </p>
+
+      <h2>How to Open an Excel File</h2>
+      <ol>
+        <li>Click the upload button or drag and drop your <code>.xlsx</code> file</li>
+        <li>The spreadsheet opens using the OnlyOffice engine — fully local</li>
+        <li>Edit cells, apply formulas, and format your data</li>
+        <li>Download the updated file to your device</li>
+      </ol>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl>
+        <dt>Can I open XLSX files without Microsoft Excel?</dt>
+        <dd>
+          Yes. ByBrowser uses OnlyOffice's spreadsheet engine to open and edit XLSX files with full formula support, no
+          Excel required.
+        </dd>
+
+        <dt>Are my formulas and charts preserved?</dt>
+        <dd>
+          Yes. The OnlyOffice engine maintains Excel-compatible formulas, pivot tables, and charts when you open and
+          save XLSX files.
+        </dd>
+
+        <dt>Is the editor free to use?</dt>
+        <dd>
+          Yes. ByBrowser is completely free with no account, no subscription, and no file size limits imposed by the
+          service.
+        </dd>
+
+        <dt>Can I create a new spreadsheet from scratch?</dt>
+        <dd>
+          Yes. Use the "New Excel" button in the menu to create a blank XLSX workbook and start editing immediately.
+        </dd>
+      </dl>
+
+      <nav aria-label="Related tools">
+        <h2>More Browser-Only Editors</h2>
+        <a href="../docx-editor/">DOCX Editor — edit Word documents without uploading</a>
+        <a href="../pptx-editor/">PPTX Editor — open PowerPoint presentations in your browser</a>
+        <a href="../csv-editor/">CSV Editor — edit CSV files locally</a>
+        <a href="../private-document-editor/">Private Document Editor — maximum privacy mode</a>
+        <a href="../">All browser-only tools — ByBrowser home</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../src/index.ts"></script>
+</html>

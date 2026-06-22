@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../img/64.png" />
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Open and edit CSV files locally in your browser with a spreadsheet-style document editor. No upload and no account required."
+    />
+    <link rel="canonical" href="https://bybrowser.com/csv-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/csv-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/csv-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/csv-editor/" />
+    <meta property="og:title" content="CSV Editor in Your Browser" />
+    <meta property="og:description" content="Review and edit CSV files locally with a browser-based Office editor." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/csv-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>CSV Editor in Your Browser | Local Spreadsheet Editing</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "CSV Editor — ByBrowser",
+        "url": "https://bybrowser.com/csv-editor/",
+        "description": "Open and edit CSV files locally in your browser with a spreadsheet-style editor. No upload and no account required.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "CSV editing, spreadsheet grid, no upload, privacy-first, delimiter auto-detection"
+      }
+    </script>
+    <script src="../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>CSV Editor in Your Browser</h1>
+      <p>
+        Open and edit CSV files locally in your browser without pasting tabular data into upload-based tools. View and
+        modify comma-separated data in a full spreadsheet grid — privately.
+      </p>
+
+      <h2>What You Can Do</h2>
+      <ul>
+        <li>Open any <strong>.csv</strong> file directly from your device — no upload required</li>
+        <li>View and edit data in a spreadsheet-style grid with column and row controls</li>
+        <li>Add, delete, and reorder rows and columns</li>
+        <li>Save the edited data back as a CSV file</li>
+        <li>Handle large CSV exports from databases, CRMs, or analytics tools</li>
+      </ul>
+
+      <h2>When You Need a Private CSV Editor</h2>
+      <p>
+        CSV files frequently contain exported database records, customer lists, financial transactions, or survey
+        responses. Pasting this data into an online tool or uploading to a third-party service is a data risk.
+        ByBrowser's CSV editor loads and renders your file entirely in the browser — nothing is transmitted anywhere.
+      </p>
+
+      <h2>How to Open a CSV File</h2>
+      <ol>
+        <li>Click the upload button and select your <code>.csv</code> file, or drag and drop it</li>
+        <li>The file opens in a grid view powered by the OnlyOffice spreadsheet engine</li>
+        <li>Edit cells, fix formatting errors, or clean up the data</li>
+        <li>Save the modified CSV back to your device</li>
+      </ol>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl>
+        <dt>Does this support large CSV files?</dt>
+        <dd>
+          Yes. Files with thousands of rows load well in modern browsers. Very large files (hundreds of thousands of
+          rows) may be slower depending on your device's memory.
+        </dd>
+
+        <dt>Will my CSV be sent to a server?</dt>
+        <dd>
+          No. The entire file is read and processed locally by WebAssembly running in your browser tab. Nothing is
+          uploaded.
+        </dd>
+
+        <dt>Can I convert CSV to XLSX?</dt>
+        <dd>Yes. Open the CSV file and use Save As to export the data as an XLSX spreadsheet.</dd>
+
+        <dt>Does it handle different delimiters like semicolons or tabs?</dt>
+        <dd>
+          The OnlyOffice engine auto-detects common delimiters. If detection fails, you can adjust the import settings
+          on open.
+        </dd>
+      </dl>
+
+      <nav aria-label="Related tools">
+        <h2>More Browser-Only Editors</h2>
+        <a href="../docx-editor/">DOCX Editor — edit Word documents without uploading</a>
+        <a href="../xlsx-editor/">XLSX Editor — edit Excel spreadsheets in your browser</a>
+        <a href="../pptx-editor/">PPTX Editor — open PowerPoint presentations locally</a>
+        <a href="../private-document-editor/">Private Document Editor — maximum privacy mode</a>
+        <a href="../">All browser-only tools — ByBrowser home</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../src/index.ts"></script>
+</html>

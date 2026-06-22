@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../img/64.png" />
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Edit Word, Excel, PowerPoint, and CSV files in a private local document editor. No upload, no account, and no document server required."
+    />
+    <link rel="canonical" href="https://bybrowser.com/private-document-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/private-document-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/private-document-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/private-document-editor/" />
+    <meta property="og:title" content="Private Document Editor With No Upload" />
+    <meta
+      property="og:description"
+      content="Open Office documents in a browser editor that keeps files local and avoids hosted upload workflows."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/private-document-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Private Document Editor With No Upload | Local Office Editor</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Private Document Editor — ByBrowser",
+        "url": "https://bybrowser.com/private-document-editor/",
+        "description": "Edit Office documents locally in your browser with maximum privacy. No upload, no server, no account — files never leave your device.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "DOCX XLSX PPTX CSV editing, no upload, privacy-first, WebAssembly, open source AGPL"
+      }
+    </script>
+    <script src="../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>Private Document Editor With No Upload</h1>
+      <p>
+        Edit DOCX, XLSX, PPTX, and CSV files locally in your browser without uploading documents to a server. Your files
+        stay on your device from open to save.
+      </p>
+
+      <h2>Maximum Privacy — How It Works</h2>
+      <p>
+        ByBrowser runs the complete OnlyOffice office suite inside your browser using WebAssembly. When you open a
+        document, the file is read directly by your browser's local file API — it is never transmitted over the network.
+        The editing engine, format conversion, and file saving all happen in your browser tab with no backend
+        involvement.
+      </p>
+
+      <h2>What Makes This Different From Google Docs or Office 365?</h2>
+      <ul>
+        <li>
+          <strong>No upload</strong> — Google Docs and Office 365 send your file to cloud servers. ByBrowser does not.
+        </li>
+        <li><strong>No account</strong> — no sign-in, no email address, no usage tracking</li>
+        <li><strong>No internet required after load</strong> — install as a PWA and edit documents fully offline</li>
+        <li><strong>Open source</strong> — inspect the code, self-host, and verify the privacy claims yourself</li>
+      </ul>
+
+      <h2>Supported File Formats</h2>
+      <ul>
+        <li><a href="../docx-editor/">DOCX</a> — Microsoft Word documents</li>
+        <li><a href="../xlsx-editor/">XLSX</a> — Microsoft Excel spreadsheets</li>
+        <li><a href="../pptx-editor/">PPTX</a> — Microsoft PowerPoint presentations</li>
+        <li><a href="../csv-editor/">CSV</a> — Comma-separated value files</li>
+      </ul>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl>
+        <dt>Who is this editor designed for?</dt>
+        <dd>
+          Anyone who handles sensitive documents — legal, medical, financial, or personal — and needs to edit them
+          without sending the content to a third-party service.
+        </dd>
+
+        <dt>Can I verify that no data is uploaded?</dt>
+        <dd>
+          Yes. Open your browser's Network tab in DevTools while editing and you will see no document content being
+          transmitted.
+        </dd>
+
+        <dt>Is it truly free?</dt>
+        <dd>
+          Yes. ByBrowser is free and open source under the AGPL-3.0 license. There are no paid tiers or usage limits.
+        </dd>
+
+        <dt>How does it work technically?</dt>
+        <dd>
+          The OnlyOffice document engine is compiled to WebAssembly and runs entirely in your browser tab. No
+          server-side process is involved in opening, rendering, or saving your files.
+        </dd>
+      </dl>
+
+      <nav aria-label="Related tools">
+        <h2>More Browser-Only Editors</h2>
+        <a href="../docx-editor/">DOCX Editor — edit Word documents without uploading</a>
+        <a href="../xlsx-editor/">XLSX Editor — edit Excel spreadsheets in your browser</a>
+        <a href="../pptx-editor/">PPTX Editor — open PowerPoint presentations locally</a>
+        <a href="../csv-editor/">CSV Editor — edit CSV files locally</a>
+        <a href="../">All browser-only tools — ByBrowser home</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../src/index.ts"></script>
+</html>

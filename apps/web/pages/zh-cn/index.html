@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../img/64.png" />
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="在浏览器中编辑 DOCX、XLSX、PPTX 和 CSV 文件，无需上传到服务器。完全本地处理，保护隐私，无需账号，支持离线使用。"
+    />
+    <link rel="canonical" href="https://bybrowser.com/zh-cn/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/" />
+    <meta property="og:title" content="浏览器本地文档编辑器 | 无需上传" />
+    <meta
+      property="og:description"
+      content="在浏览器中编辑 Office 文档，文件不离开你的设备。无服务器、无账号，支持离线使用。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/zh-cn/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>浏览器本地文档编辑器 - 无需上传的 Office 工具 | ByBrowser</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "ByBrowser 文档编辑器",
+        "url": "https://bybrowser.com/zh-cn/",
+        "description": "在浏览器中编辑 DOCX、XLSX、PPTX 和 CSV 文件，无需上传，无需账号，完全本地处理。",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+        "inLanguage": "zh-CN"
+      }
+    </script>
+    <script src="../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>直接在浏览器中编辑文档，无需上传</h1>
+      <p>
+        ByBrowser 是一款基于 OnlyOffice WASM 的浏览器端文档编辑器，支持 DOCX、XLSX、PPTX 和 CSV
+        格式。文件始终留在你的设备上，不上传到任何服务器，无需注册账号即可使用。
+      </p>
+
+      <h2>浏览器端 Office 工具</h2>
+      <nav>
+        <a href="docx-editor/">DOCX 编辑器 — 在浏览器中编辑 Word 文档，无需上传</a>
+        <a href="xlsx-editor/">XLSX 编辑器 — 在浏览器中编辑 Excel 表格</a>
+        <a href="pptx-editor/">PPTX 编辑器 — 在浏览器中编辑 PowerPoint 演示文稿</a>
+        <a href="csv-editor/">CSV 编辑器 — 在浏览器中查看和编辑 CSV 文件</a>
+        <a href="private-document-editor/">隐私文档编辑器 — 最高隐私保护，无服务器</a>
+        <a href="onlyoffice-wasm/">OnlyOffice WASM — 无需 Document Server 的浏览器端 Office 引擎</a>
+        <a href="embed-document-editor/">嵌入文档编辑器 — 通过 iframe 集成到你的应用</a>
+        <a href="self-hosted-document-editor/">自部署文档编辑器 — 在自己的服务器上部署</a>
+      </nav>
+
+      <h2>工作原理</h2>
+      <p>
+        ByBrowser 通过 WebAssembly 在浏览器内运行完整的 OnlyOffice 引擎。当你打开文档时，文件由浏览器本地文件 API
+        直接读取，不会通过网络传输。所有渲染、编辑和保存操作均在浏览器标签页内完成，无需任何后端服务器参与。
+      </p>
+
+      <h2>主要功能</h2>
+      <ul>
+        <li><strong>无需上传</strong> — 文档始终留在你的设备上，不会发送到任何服务器</li>
+        <li><strong>多格式支持</strong> — 一个编辑器支持 DOCX、XLSX、PPTX 和 CSV</li>
+        <li><strong>支持离线使用</strong> — 安装为 PWA 后，无需网络即可编辑文档</li>
+        <li><strong>可嵌入集成</strong> — 通过 iframe 和 postMessage API 集成到你的应用中</li>
+        <li><strong>开源免费</strong> — AGPL-3.0 授权，可自行部署到任意静态托管平台</li>
+        <li><strong>多语言界面</strong> — 支持中文和英文界面</li>
+      </ul>
+
+      <h2>适合哪些用户</h2>
+      <p>
+        ByBrowser 适合所有需要在不将文件发送到第三方服务器的情况下打开或编辑 Office
+        文档的用户。常见场景包括：编辑机密合同或报告、在未安装 Microsoft Office 的设备上打开 DOCX
+        文件、在共享或受限环境中查看 XLSX 表格，以及需要将轻量级文档编辑器嵌入自己 Web 应用的开发者。
+      </p>
+
+      <h2>常见问题</h2>
+      <dl>
+        <dt>ByBrowser 会上传我的文档吗？</dt>
+        <dd>不会。所有文档处理完全在你的浏览器内通过 WebAssembly 运行，不会向任何服务器发送任何内容。</dd>
+
+        <dt>需要注册账号吗？</dt>
+        <dd>不需要。无需注册或登录，打开编辑器即可直接使用。</dd>
+
+        <dt>支持哪些文件格式？</dt>
+        <dd>完整支持 DOCX（Word）、XLSX（Excel）、PPTX（PowerPoint）和 CSV 的打开、编辑和保存。</dd>
+
+        <dt>可以离线使用吗？</dt>
+        <dd>可以。首次访问后，你可以从浏览器地址栏将 ByBrowser 安装为 PWA，之后无需联网即可使用。</dd>
+
+        <dt>源代码是否公开？</dt>
+        <dd>是的。ByBrowser 以 AGPL-3.0 协议开源，代码托管在 GitHub 上。</dd>
+      </dl>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../src/index.ts"></script>
+</html>

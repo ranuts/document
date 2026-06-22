@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html style="width:100%; height:100%;">
+<head>
+    <title>ONLYOFFICE Visio Editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE8"/>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="icon" href="resources/img/favicon.ico" type="image/x-icon" />
+
+    <!-- splash -->        
+
+    <style type="text/css">
+        .theme-dark {
+            --romb-start-color: #555;
+        }
+
+        .loadmask {
+            left: 0;
+            top: 0;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            border: none;
+            background-color: #f4f4f4;
+            z-index: 1002;
+        }
+
+        .loader-page {
+            width: 100%;
+            height: 170px;
+            bottom: 42%;
+            position: absolute;
+            text-align: center;
+            line-height: 10px;
+        }
+
+        .loader-logo {
+            max-height: 160px;
+            margin-bottom: 10px;
+        }
+
+        .loader-page-romb {
+            width: 40px;
+            display: inline-block;
+        }
+
+        .loader-page-text {
+            width: 100%;
+            bottom: 42%;
+            position: absolute;
+            text-align: center;
+            color: #888;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 20px;
+        }
+
+        .loader-page-text-loading {
+            font-size: 14px;
+        }
+
+        .loader-page-text-customer {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .theme-dark .loadmask {
+            background-color: #555;
+        }
+
+        .theme-dark .loader-page-text {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .romb {
+            width: 40px;
+            height: 40px;
+            -webkit-transform: rotate(135deg) skew(20deg, 20deg);
+            -moz-transform: rotate(135deg) skew(20deg, 20deg);
+            -ms-transform: rotate(135deg) skew(20deg, 20deg);
+            -o-transform: rotate(135deg) skew(20deg, 20deg);
+            position: absolute;
+            background: red;
+            border-radius: 6px;
+            -webkit-animation: movedown 3s infinite ease;
+            -moz-animation: movedown 3s infinite ease;
+            -ms-animation: movedown 3s infinite ease;
+            -o-animation: movedown 3s infinite ease;
+            animation: movedown 3s infinite ease;
+        }
+
+        #blue {
+            z-index: 3;
+            background: #55bce6;
+            -webkit-animation-name: blue;
+            -moz-animation-name: blue;
+            -ms-animation-name: blue;
+            -o-animation-name: blue;
+            animation-name: blue;
+        }
+
+        #red {
+            z-index:1;
+            background: #de7a59;
+            -webkit-animation-name: red;
+            -moz-animation-name: red;
+            -ms-animation-name: red;
+            -o-animation-name: red;
+            animation-name: red;
+        }
+
+        #green {
+            z-index: 2;
+            background: #a1cb5c;
+            -webkit-animation-name: green;
+            -moz-animation-name: green;
+            -ms-animation-name: green;
+            -o-animation-name: green;
+            animation-name: green;
+        }
+
+        @-webkit-keyframes red {
+              0%    { top:120px; background: #de7a59; }
+             10%    { top:120px; background: #F2CBBF; }
+             14%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:120px; }
+             15%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0;}
+             20%    { background: #E6E4E4; }
+             30%    { background: #D2D2D2; }
+             40%    { top:120px; }
+            100%    { top:120px; background: #de7a59; }
+        }
+
+        @keyframes red {
+              0%    { top:120px; background: #de7a59; }
+             10%    { top:120px; background: #F2CBBF; }
+             14%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:120px; }
+             15%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0;}
+             20%    { background: #E6E4E4; }
+             30%    { background: #D2D2D2; }
+             40%    { top:120px; }
+            100%    { top:120px; background: #de7a59; }
+        }
+
+        @-webkit-keyframes green {
+              0%    { top:110px; background: #a1cb5c; opacity:1; }
+             10%    { top:110px; background: #CBE0AC; opacity:1; }
+             14%    { background: #f4f4f4; top:110px; background: var(--romb-start-color,#f4f4f4); opacity:1; }
+             15%    { background: #f4f4f4; top:0; background: var(--romb-start-color,#f4f4f4); opacity:1; }
+             20%    { background: #f4f4f4; top:0; background: var(--romb-start-color,#f4f4f4); opacity:0; }
+             25%    { background: #EFEFEF; top:0; opacity:1; }
+             30%    { background:#E6E4E4; }
+             70%    { top:110px; }
+            100%    { top:110px; background: #a1cb5c; }
+        }
+
+        @keyframes green {
+              0%    { top:110px; background: #a1cb5c; opacity:1; }
+             10%    { top:110px; background: #CBE0AC; opacity:1; }
+             14%    { background: #f4f4f4; top:110px; background: var(--romb-start-color,#f4f4f4); opacity:1; }
+             15%    { background: #f4f4f4; top:0; background: var(--romb-start-color,#f4f4f4); opacity:1; }
+             20%    { background: #f4f4f4; top:0; background: var(--romb-start-color,#f4f4f4); opacity:0; }
+             25%    { background: #EFEFEF; top:0; opacity:1; }
+             30%    { background:#E6E4E4; }
+             70%    { top:110px; }
+            100%    { top:110px; background: #a1cb5c; }
+        }
+
+        @-webkit-keyframes blue {
+              0%    { top:100px; background: #55bce6; opacity:1; }
+             10%    { top:100px; background: #BFE8F8; opacity:1; }
+             14%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:100px; opacity:1; }
+             15%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0; opacity:1; }
+             20%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0; opacity:0; }
+             25%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0; opacity:0; }
+             45%    { background: #EFEFEF; top:0; opacity:0.2; }
+            100%    { top:100px; background: #55bce6; }
+        }
+
+        @keyframes blue {
+              0%    { top:100px; background: #55bce6; opacity:1; }
+             10%    { top:100px; background: #BFE8F8; opacity:1; }
+             14%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:100px; opacity:1; }
+             15%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0; opacity:1; }
+             20%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0; opacity:0; }
+             25%    { background: #f4f4f4; background: var(--romb-start-color,#f4f4f4); top:0; opacity:0; }
+             45%    { background: #EFEFEF; top:0; opacity:0.2; }
+            100%    { top:100px; background: #55bce6; }
+        }
+    </style>
+
+    <script>
+        var userAgent = navigator.userAgent.toLowerCase(),
+            check = function(regex){ return regex.test(userAgent); },
+            stopLoading = false;
+        if (!check(/opera/) && (check(/msie/) || check(/trident/))) {
+            var m = /msie (\d+\.\d+)/.exec(userAgent);
+            if (m && parseFloat(m[1]) < 10.0) {
+                document.write('<div class="app-error-panel">' +
+                                '<div class="message-block">' +
+                                    '<div class="message-inner">' +
+                                        '<div class="title">Your browser is not supported.</div>' +
+                                        '<div class="text">Sorry, Visio Editor is currently only supported in the latest versions of the Chrome, Firefox, Safari or Internet Explorer web browsers.</div>' +
+                                    '</div>' +
+                                '</div></div>');
+                stopLoading = true;
+            }
+        } else
+        if (check(/windows\snt/i)) {
+            var re = /chrome\/(\d+)/i.exec(userAgent);
+            if (!!re && !!re[1] && !(re[1] > 49)) {
+                setTimeout(function () {
+                    document.getElementsByTagName('body')[0].className += "winxp";
+                },0);
+            }
+        }
+
+        function getUrlParams() {
+            var e,
+                a = /\+/g,  // Regex for replacing addition symbol with a space
+                r = /([^&=]+)=?([^&]*)/g,
+                d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+                q = window.location.search.substring(1),
+                urlParams = {};
+
+            while (e = r.exec(q))
+                urlParams[d(e[1])] = d(e[2]);
+
+            return urlParams;
+        }
+
+        function encodeUrlParam(str) {
+            return str.replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+        }
+
+        var params = getUrlParams(),
+            lang = (params["lang"] || 'en').split(/[\-\_]/)[0],
+            customer = params["customer"] ? ('<div class="loader-page-text-customer">' + encodeUrlParam(params["customer"]) + '</div>') : '',
+            margin = (customer !== '') ? 50 : 20,
+            loading = 'Loading...',
+            logo = params["logo"] ? ((params["logo"] !== 'none') ? ('<img src="' + encodeUrlParam(params["logo"]) + '" class="loader-logo" />') : '') : null;
+
+        window.frameEditorId = params["frameEditorId"];
+        window.parentOrigin = params["parentOrigin"];
+        window.uitype = 'visio';
+
+        if ( lang == 'de')      loading = 'Ladevorgang...';
+        else if ( lang == 'es') loading = 'Cargando...';
+        else if ( lang == 'fr') loading = 'Chargement en cours...';
+        else if ( lang == 'it') loading = 'Caricamento in corso...';
+        else if ( lang == 'pt') loading = 'Carregando...';
+        else if ( lang == 'ru') loading = 'Загрузка...';
+        else if ( lang == 'sl') loading = 'Nalaganje...';
+        else if ( lang == 'tr') loading = 'Yükleniyor...';
+        else if ( lang == 'bg') loading = 'Зареждане...';
+        else if ( lang == 'cs') loading = 'Nahrávám...';
+        else if ( lang == 'hu') loading = 'Betöltés...';
+        else if ( lang == 'ja') loading = '読み込み中...';
+        else if ( lang == 'ko') loading = '로드 중...';
+        else if ( lang == 'lv') loading = 'Ieladēšana ...';
+        else if ( lang == 'nl') loading = 'Laden...';
+        else if ( lang == 'pl') loading = 'Ładowanie...';
+        else if ( lang == 'sk') loading = 'Nahrávam...';
+        else if ( lang == 'uk') loading = 'Завантаження...';
+        else if ( lang == 'vi') loading = 'Đang tải...';
+        else if ( lang == 'zh') loading = '加载中...';
+
+        if (!stopLoading)
+            document.write(
+                '<div id="loading-mask" class="loadmask">' +
+                        '<div class="loader-page" style="margin-bottom: ' + margin + 'px;' + ((logo!==null) ? 'height: auto;' : '') + '">' +
+                            ((logo!==null) ? logo :
+                            '<div class="loader-page-romb">' +
+                                '<div class="romb" id="blue"></div>' +
+                                '<div class="romb" id="green"></div>' +
+                                '<div class="romb" id="red"></div>' +
+                            '</div>') +
+                        '</div>' +
+                        '<div class="loader-page-text">' +  customer +
+                            '<div class="loader-page-text-loading">' + loading + '</div>' +
+                        '</div>' +
+                '</div>');
+    </script>
+
+    <script>
+if(window.AscDesktopEditor){window.desktop=window.AscDesktopEditor;desktop.features={};window.native_message_cmd=[];window.on_native_message=function(cmd,param){if(/window:features/.test(cmd)){var obj=JSON.parse(param);if(obj.singlewindow!==undefined){desktop.features.singlewindow=obj.singlewindow}}else window.native_message_cmd[cmd]=param};if(!!window.RendererProcessVariable){const theme=desktop.theme=window.RendererProcessVariable.theme;const map_themes=window.RendererProcessVariable.localthemes;if(theme){window.uitheme={id:theme.id,type:theme.type};if(/dark|light/.test(theme.system)){window.uitheme.is_system_theme_dark=function(){return theme.system=="dark"}}if(map_themes&&map_themes[theme.id]){window.uitheme.colors=map_themes[theme.id].colors}}if(window.RendererProcessVariable.rtl!==undefined){window.nativeprocvars={rtl:window.RendererProcessVariable.rtl===true||window.RendererProcessVariable.rtl=="yes"||window.RendererProcessVariable.rtl=="true"}}}if(!params||!params["internal"]){!window.features&&(window.features={});window.features.framesize={width:window.innerWidth,height:window.innerHeight};window.desktop.execCommand("webapps:entry",window.features&&JSON.stringify(window.features)||"")}}
+</script>
+    <script>
++function init_themes(){let localstorage;const local_storage_available=+function(){try{return!!(localstorage=window.localStorage)}catch(e){console.warn("localStorage is unavailable");localstorage={getItem:function(key){return null}};return false}}();!window.uitheme&&(window.uitheme={});window.uitheme.DEFAULT_LIGHT_THEME_ID=!window.isIEBrowser?"theme-white":"theme-classic-light";window.uitheme.DEFAULT_DARK_THEME_ID=!window.isIEBrowser?"theme-night":"theme-dark";window.uitheme.set_id=function(id){if(id=="theme-system")this.adapt_to_system_theme();else this.id=id};window.uitheme.is_theme_system=function(){return this.id=="theme-system"};window.uitheme.adapt_to_system_theme=function(){this.id="theme-system";this.type=this.is_system_theme_dark()?"dark":"light"};window.uitheme.relevant_theme_id=function(){if(this.is_theme_system())return this.is_system_theme_dark()?window.uitheme.DEFAULT_DARK_THEME_ID:window.uitheme.DEFAULT_LIGHT_THEME_ID;return this.id};if(!window.uitheme.is_system_theme_dark)window.uitheme.is_system_theme_dark=function(){return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches};!window.uitheme.id&&window.uitheme.set_id(localstorage.getItem("ui-theme-id"));window.uitheme.iscontentdark=localstorage.getItem("content-theme")=="dark";function inject_style_tag(content,id){if(id&&!!document.getElementById(id))return;const style=document.createElement("style");style.type="text/css";style.innerHTML=content;if(id)style.id=id;document.getElementsByTagName("head")[0].appendChild(style)}window.uitheme.apply_icons_from_url=function(themeid,url){if(!url)return;let base_url=!url.endsWith("/")?url+"/":url;const sp_names=["small","big","huge"];const sp_scale={100:"",125:"@1.25x",150:"@1.5x",175:"@1.75x",200:"@2x"};let icons=[];sp_names.forEach(function(n){for(let key in sp_scale){const value=sp_scale[key];icons.push("--sprite-button-"+n+"-"+key+":url("+base_url+"icons"+n+value+".png)")}});inject_style_tag("."+themeid+"{"+icons.join(";")+";}",themeid);if(base_url.lastIndexOf("../img/",0)===0)base_url=base_url.replace("..","./resources");if(window.Common&&window.Common.Utils)window.Common.Utils.injectSvgIcons([base_url+"iconssmall@2.5x.svg",base_url+"iconsbig@2.5x.svg",base_url+"iconshuge@2.5x.svg","../../common/main/resources/img/doc-formats/formats@2.5x.svg"],true);else{window.uitheme.svg_icons=[base_url+"iconssmall@2.5x.svg",base_url+"iconsbig@2.5x.svg",base_url+"iconshuge@2.5x.svg"]}};inject_style_tag(":root .theme-dark {"+"--toolbar-header-document: #2a2a2a; --toolbar-header-spreadsheet: #2a2a2a;"+"--toolbar-header-presentation: #2a2a2a; --toolbar-header-pdf: #2a2a2a; --toolbar-header-visio: #2a2a2a;}"+":root .theme-contrast-dark {"+"--toolbar-header-document: #1e1e1e; --toolbar-header-spreadsheet: #1e1e1e;"+"--toolbar-header-presentation: #1e1e1e; --toolbar-header-pdf: #1e1e1e; --toolbar-header-visio: #1e1e1e;}");let objtheme=window.uitheme.colors?window.uitheme:localstorage.getItem("ui-theme");const header_tokens=["toolbar-header-document","toolbar-header-spreadsheet","toolbar-header-presentation","toolbar-header-pdf","toolbar-header-visio"];if(!!objtheme){if(typeof objtheme=="string"&&objtheme.lastIndexOf("{",0)===0&&objtheme.indexOf("}",objtheme.length-1)!==-1){objtheme=JSON.parse(objtheme)}if(objtheme){if(window.uitheme.id&&window.uitheme.id!=objtheme.id){local_storage_available&&localstorage.removeItem("ui-theme");!window.uitheme.type&&/-dark/.test(window.uitheme.id)&&(window.uitheme.type="dark")}else{window.uitheme.cache=objtheme;if(!window.uitheme.type&&objtheme.type){window.uitheme.type=objtheme.type}if(objtheme.colors){header_tokens.forEach(function(i){!!objtheme.colors[i]&&document.documentElement.style.setProperty("--"+i,objtheme.colors[i])});let colors=[];for(let c in objtheme.colors){colors.push("--"+c+":"+objtheme.colors[c])}inject_style_tag("."+objtheme.id+"{"+colors.join(";")+";}")}if(objtheme.icons&&!(window.uitheme.embedicons===true)){window.uitheme.apply_icons_from_url(objtheme.id,objtheme.icons.basepath)}if(objtheme.skeleton){if(objtheme.skeleton.css)inject_style_tag(objtheme.skeleton.css);if(objtheme.skeleton.html){window.skhtml=objtheme.skeleton.html}}}}}else{if(window.uitheme.id&&window.uitheme.id.lastIndexOf("theme-gray",0)===0){header_tokens.forEach(function(i){!!document.documentElement.style.setProperty("--"+i,"#f7f7f7")})}else if(window.uitheme.id&&window.uitheme.id.lastIndexOf("theme-white",0)===0){header_tokens.forEach(function(i){!!document.documentElement.style.setProperty("--"+i,"#ffffff")})}}}();
+</script>
+</head>
+<body>
+    <div class="inlined-svg"></div>
+    <script>
+var checkLocalStorage=function(){try{localStorage.setItem("test",1);localStorage.removeItem("test");return true}catch(e){return false}}();if(!window.lang){window.lang=/(?:&|^)lang=([^&]+)&?/i.exec(window.location.search.substring(1));window.lang=window.lang?window.lang[1]:""}window.lang&&(window.lang=window.lang.split(/[\-\_]/)[0].toLowerCase());var isLangRtl=function(lang){return lang&&/^(ar|he|ur)$/i.test(lang)};var ui_rtl=false;if(window.nativeprocvars&&window.nativeprocvars.rtl!==undefined){ui_rtl=window.nativeprocvars.rtl}else{if(isLangRtl(lang))if(checkLocalStorage&&localStorage.getItem("settings-ui-rtl")!==null)ui_rtl=localStorage.getItem("settings-ui-rtl")==="1";else ui_rtl=true}if(ui_rtl&&window.isIEBrowser!==true){document.body.setAttribute("dir","rtl");document.body.classList.add("rtl")}if(isLangRtl(lang)){document.body.classList.add("rtl-font")}document.body.setAttribute("applang",lang);function checkScaling(){var matches={"pixel-ratio__1_25":"screen and (-webkit-min-device-pixel-ratio: 1.25) and (-webkit-max-device-pixel-ratio: 1.49), "+"screen and (min-resolution: 1.25dppx) and (max-resolution: 1.49dppx)","pixel-ratio__1_5":"screen and (-webkit-min-device-pixel-ratio: 1.5) and (-webkit-max-device-pixel-ratio: 1.74), "+"screen and (min-resolution: 1.5dppx) and (max-resolution: 1.74dppx)","pixel-ratio__1_75":"screen and (-webkit-min-device-pixel-ratio: 1.75) and (-webkit-max-device-pixel-ratio: 1.99), "+"screen and (min-resolution: 1.75dppx) and (max-resolution: 1.99dppx)"};for(var c in matches){if(window.matchMedia(matches[c]).matches){document.body.classList.add(c);break}}if(window.isIEBrowser!==true){matches={"pixel-ratio__2_5":"screen and (-webkit-min-device-pixel-ratio: 2.25), screen and (min-resolution: 2.25dppx)"};for(let c in matches){if(window.matchMedia(matches[c]).matches){document.body.classList.add(c);Common.Utils.injectSvgIcons();break}}}}let svg_icons=window.uitheme.svg_icons||["./resources/img/iconssmall@2.5x.svg","./resources/img/iconsbig@2.5x.svg","./resources/img/iconshuge@2.5x.svg","../../common/main/resources/img/doc-formats/formats@2.5x.svg"];window.Common={Utils:{injectSvgIcons:function(svg_icons_array,force){if(window.isIEBrowser===true)return;window.svgiconsrunonce;if(!window.svgiconsrunonce||force===true){window.svgiconsrunonce=true;function htmlToElements(html,id){var template=document.createElement("template");template.innerHTML=html;if(!!id)template.content.firstChild.id=id;return template.content.firstChild}const sprite_uid=getComputedStyle(document.body).getPropertyValue("--sprite-button-icons-uid");!svg_icons_array&&(svg_icons_array=svg_icons);svg_icons_array.map(function(url){fetch(url).then(function(r){if(r.ok)return r.text();else{}}).then(function(text){const btnMatch=/icons(\w+)(?:@2\.5x)\.svg$/.exec(url);const formatMatch=/doc-formats\/(\w+)(?:@2\.5x)\.svg$/.exec(url);const type=btnMatch?btnMatch[1]:formatMatch?formatMatch[1]:null;let el_id;if(type){const prefix=btnMatch?"idx-sprite-btns-":"idx-sprite-formats-";const el=document.getElementById(el_id=prefix+type);if(el){const idx=el.getAttribute("data-sprite-uid");if(idx!=sprite_uid)el.remove();else return}}const el=document.querySelector("div.inlined-svg");const child=htmlToElements(text,el_id);if(sprite_uid.length)child.setAttribute("data-sprite-uid",sprite_uid);el.appendChild(child);const i=svg_icons_array.findIndex(function(item){return item==url});if(!(i<0))svg_icons_array.splice(i,1)}).catch(console.error.bind(console))})}}}};!params.skipScaling&&checkScaling();if(!window.uitheme.id&&!!params.uitheme){if(params.uitheme=="default-dark"){window.uitheme.id=window.uitheme.DEFAULT_DARK_THEME_ID;window.uitheme.type="dark"}else if(params.uitheme=="default-light"){window.uitheme.id=window.uitheme.DEFAULT_LIGHT_THEME_ID;window.uitheme.type="light"}else if(params.uitheme=="theme-system"){window.uitheme.adapt_to_system_theme()}else{window.uitheme.id=params.uitheme;window.uitheme.type=params.uithemetype}}if(!window.uitheme.id){window.uitheme.adapt_to_system_theme()}else{!window.uitheme.type&&params.uitheme&&(window.uitheme.type=params.uithemetype)}document.body.classList.add(window.uitheme.relevant_theme_id());if(window.uitheme.type=="dark"){document.body.classList.add("theme-type-dark");if(checkLocalStorage&&localStorage.getItem("content-theme")=="dark"){document.body.classList.add("content-theme-dark")}else{}}if(!window.is_system_theme_dark)delete window.is_system_theme_dark;
+</script>
+    <script>
++function registerServiceWorker(){if("serviceWorker"in navigator&&!(window.location.origin.lastIndexOf("file://",0)===0)){const serviceWorkerName="document_editor_service_worker.js";const serviceWorkerPath="../../../../"+serviceWorkerName;let reg;navigator.serviceWorker.register(serviceWorkerPath).then(function(registration){reg=registration;return navigator.serviceWorker.getRegistrations()}).then(function(registrations){for(let r in registrations){const registration=registrations[r];if(registration!==reg&&registration.active&&registration.active.scriptURL.endsWith(serviceWorkerName)){registration.unregister()}}}).catch(function(err){console.error("Registration failed with "+err)})}}();
+</script>
+
+    <script>
+        window.requireTimeourError = function(){
+            var reqerr;
+
+            if ( lang == 'de')      reqerr = 'Die Verbindung ist zu langsam, einige Komponenten konnten nicht geladen werden. Aktualisieren Sie bitte die Seite.';
+            else if ( lang == 'es') reqerr = 'La conexión es muy lenta, algunos de los componentes no han podido cargar. Por favor recargue la página.';
+            else if ( lang == 'fr') reqerr = 'La connexion est trop lente, certains des composants n\'ons pas pu être chargé. Veuillez recharger la page.';
+            else if ( lang == 'ru') reqerr = 'Слишком медленное соединение, не удается загрузить некоторые компоненты. Пожалуйста, обновите страницу.';
+            else if ( lang == 'tr') reqerr = 'Bağlantı çok yavaş, bileşenlerin bazıları yüklenemedi. Lütfen sayfayı yenileyin.';
+            else reqerr = 'The connection is too slow, some of the components could not be loaded. Please reload the page.';
+
+            return reqerr;
+        };
+
+        var requireTimeoutID = setTimeout(function(){
+            window.alert(window.requireTimeourError());
+            window.location.reload();
+        }, 30000);
+
+        var require = {
+            waitSeconds: 30,
+            callback: function(){
+                clearTimeout(requireTimeoutID);
+            }
+        };
+    </script>
+
+    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="28" height="60"><symbol id="svg-icon-crypted" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3C7 5 4 5 4 5v3.5c0 2 .563 7.477 6 8.5 5.436-1.023 6-6.5 6-8.5V5s-3 0-6-2m4.023 4.965-1.046-.93-3.55 3.993-2.479-2.066-.896 1.076 3.52 2.934z" clip-rule="evenodd"/></symbol><symbol id="svg-icon-users" viewBox="0 0 28 20"><path fill-rule="evenodd" d="M27 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0m1 0c0 5.523-4.477 10-10 10a9.96 9.96 0 0 1-6.798-2.666 8 8 0 1 1 0-14.667A9.96 9.96 0 0 1 18 0c5.523 0 10 4.477 10 10M10.451 3.441A7 7 0 0 0 8 3a7 7 0 0 0-5.69 11.079 11 11 0 0 1 1.124-.76C4.544 12.666 6.132 12 8 12q.1 0 .2.003A10 10 0 0 1 8.05 11H8a3 3 0 1 1 1.198-5.751 10 10 0 0 1 1.253-1.808M8.767 6.152A2 2 0 0 0 8 6a2 2 0 1 0 0 4 10 10 0 0 1 .767-3.848m-.304 6.864A7 7 0 0 0 8 13c-1.632 0-3.043.584-4.059 1.181a10 10 0 0 0-.99.667A6.98 6.98 0 0 0 8 17a7 7 0 0 0 2.451-.441 10 10 0 0 1-1.988-3.543" clip-rule="evenodd"/></symbol></svg>
+
+    <div id="viewport"></div>
+
+    <script>
+"use strict";(function(window,undefined){var supportedScaleValues=[1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.5,4,4.5,5];if(window["AscDesktopEditor"]&&window["AscDesktopEditor"]["GetSupportedScaleValues"])supportedScaleValues=window["AscDesktopEditor"]["GetSupportedScaleValues"]();var isCorrectApplicationScaleEnabled=function(){if(supportedScaleValues.length===0)return false;var userAgent=navigator.userAgent.toLowerCase();var isAndroid=userAgent.indexOf("android")>-1;var isIE=userAgent.indexOf("msie")>-1||userAgent.indexOf("trident")>-1||userAgent.indexOf("edge")>-1;var isChrome=!isIE&&userAgent.indexOf("chrome")>-1;var isOperaOld=!!window.opera;var isMobile=/android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent||navigator.vendor||window.opera);if(isAndroid||!isChrome||isOperaOld||isMobile||!document||!document.firstElementChild||!document.body)return false;return true}();window["AscCommon"]=window["AscCommon"]||{};window["AscCommon"].checkDeviceScale=function(){var retValue={zoom:1,devicePixelRatio:window.devicePixelRatio,applicationPixelRatio:window.devicePixelRatio,correct:false};if(!isCorrectApplicationScaleEnabled)return retValue;var systemScaling=window.devicePixelRatio;var bestIndex=0;var bestDistance=Math.abs(supportedScaleValues[0]-systemScaling);var currentDistance=0;for(var i=1,len=supportedScaleValues.length;i<len;i++){if(true){if(Math.abs(supportedScaleValues[i]-systemScaling)>1e-4){if(supportedScaleValues[i]>systemScaling-1e-4)break}}currentDistance=Math.abs(supportedScaleValues[i]-systemScaling);if(currentDistance<bestDistance-1e-4){bestDistance=currentDistance;bestIndex=i}}retValue.applicationPixelRatio=supportedScaleValues[bestIndex];if(Math.abs(retValue.devicePixelRatio-retValue.applicationPixelRatio)>.01){retValue.zoom=retValue.devicePixelRatio/retValue.applicationPixelRatio;retValue.correct=true}return retValue};var oldZoomValue=1;window["AscCommon"].correctApplicationScale=function(zoomValue){if(!zoomValue.correct&&Math.abs(zoomValue.zoom-oldZoomValue)<1e-4)return;oldZoomValue=zoomValue.zoom;var firstElemStyle=document.firstElementChild.style;if(Math.abs(oldZoomValue-1)<.001)firstElemStyle.zoom="normal";else firstElemStyle.zoom=1/oldZoomValue}})(window);
+</script>
+
+    <script>
+        var userAgent = navigator.userAgent.toLowerCase(),
+            check = function(regex){ return regex.test(userAgent); },
+            isIEBrowser = !check(/opera/) && (check(/msie/) || check(/trident/));
+        isIEBrowser === true &&
+            (document.write('<script src="../../common/main/lib/util/fix-ie-compat.js"><\/script>'),
+            document.write('<script src="../../../../sdkjs/vendor/string.js"><\/script>'));
+    </script>
+    <script src="../../../vendor/requirejs/require.js"></script>
+    <script>
+        isIEBrowser === true ? require(['ie/app']) : require(['app']);
+    </script>
+
+    <link rel="stylesheet" href="../../../apps/visioeditor/main/resources/css/app.css" media="print" onload="this.media='all'">
+</body>
+</html>

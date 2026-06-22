@@ -1,28 +1,22 @@
 {
-  "name": "document",
+  "name": "document-workspace",
   "version": "1.0.0",
+  "private": true,
   "packageManager": "pnpm@11.4.0",
-  "description": "A local web-based document editor based on OnlyOffice, allowing you to edit documents directly in your browser without server-side processing, ensuring your privacy and security.",
-  "type": "module",
+  "description": "Monorepo for bybrowser.com — local-first OnlyOffice document editor",
   "scripts": {
-    "dev": "vite --host --force",
-    "build": "sh ./bin/build.sh",
-    "build:single": "node bin/bundle_single_html.js",
-    "preview": "vite preview",
-    "tsc": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "lint:ts": "oxlint && tsc --noEmit",
-    "lint:docker": "docker compose -f docker-compose.yaml config --quiet",
-    "lint": "pnpm run lint:ts && pnpm run lint:docker"
-  },
-  "engines": {
-    "node": ">=20.19.0"
+    "dev": "pnpm --filter=@bybrowser/web dev",
+    "dev:v7": "pnpm --filter=@bybrowser/web dev:v7",
+    "dev:v9": "pnpm --filter=@bybrowser/web dev:v9",
+    "build": "pnpm --filter=@bybrowser/web build",
+    "preview": "pnpm --filter=@bybrowser/web preview",
+    "test": "pnpm -r run test",
+    "test:coverage": "pnpm -r run test:coverage",
+    "test:e2e": "pnpm --filter=@bybrowser/web test:e2e",
+    "lint": "pnpm -r run lint",
+    "lint:ts": "pnpm -r run lint:ts",
+    "format:check": "pnpm -r run format:check",
+    "format": "prettier --write ."
   },
   "keywords": [
     "onlyoffice",
@@ -46,27 +40,11 @@
     "type": "git",
     "url": "https://github.com/ranuts/document.git"
   },
-  "homepage": "https://ranuts.github.io/document/",
+  "homepage": "https://bybrowser.com/",
   "bugs": {
     "url": "https://github.com/ranuts/document/issues"
   },
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
-    "@tailwindcss/postcss": "^4.3.0",
-    "@types/node": "^25.9.1",
-    "@vitest/coverage-v8": "^4.1.7",
-    "jsdom": "^29.1.1",
-    "oxlint": "^1.67.0",
-    "postcss": "^8.5.15",
-    "prettier": "^3.8.3",
-    "tailwindcss": "^4.3.0",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.14",
-    "vitest": "^4.1.7"
-  },
-  "dependencies": {
-    "@khmyznikov/pwa-install": "^0.6.3",
-    "ranui": "0.1.10-alpha-27",
-    "ranuts": "0.1.0-alpha-23"
+    "prettier": "^3.8.3"
   }
 }

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../img/64.png" />
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Edit PPTX PowerPoint presentations locally in your browser. No upload, no account, and no document server required."
+    />
+    <link rel="canonical" href="https://bybrowser.com/pptx-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/pptx-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/pptx-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/pptx-editor/" />
+    <meta property="og:title" content="PPTX Editor in Your Browser" />
+    <meta
+      property="og:description"
+      content="Open, edit, and save PowerPoint presentations with a private local browser editor."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/pptx-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>PPTX Editor in Your Browser | Local PowerPoint Editing</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "PPTX Editor — ByBrowser",
+        "url": "https://bybrowser.com/pptx-editor/",
+        "description": "Edit PowerPoint PPTX presentations locally in your browser. No upload, no account, no document server required.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "PPTX editing, PowerPoint-compatible, no upload, privacy-first, offline PWA"
+      }
+    </script>
+    <script src="../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>PPTX Editor in Your Browser</h1>
+      <p>
+        Edit PowerPoint presentations locally in your browser without uploading PPTX files to a document server. Your
+        slides never leave your device.
+      </p>
+
+      <h2>What You Can Do</h2>
+      <ul>
+        <li>Open <strong>.pptx</strong> presentation files directly from your computer</li>
+        <li>Edit slide text, images, shapes, transitions, and speaker notes</li>
+        <li>Create new presentations from scratch and save as PPTX</li>
+        <li>Preview slides in a full-screen view before presenting</li>
+        <li>Load a PPTX from a remote URL using the <code>?src=</code> parameter</li>
+      </ul>
+
+      <h2>Why Edit Presentations Without Uploading?</h2>
+      <p>
+        Pitch decks, internal strategy presentations, and client proposals often contain confidential business
+        information. When you upload a PPTX to an online tool, that content passes through an external server. ByBrowser
+        processes your presentation entirely in the browser using WebAssembly — slides are never transmitted to any
+        server, and no account is required.
+      </p>
+
+      <h2>How to Open a PowerPoint File</h2>
+      <ol>
+        <li>Click the upload button or drag and drop your <code>.pptx</code> file onto the editor</li>
+        <li>The presentation opens using the OnlyOffice engine — completely locally</li>
+        <li>Edit slides, rearrange content, and adjust formatting</li>
+        <li>Save the finished presentation back to your device as a PPTX file</li>
+      </ol>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl>
+        <dt>Can I edit PPTX files without Microsoft PowerPoint?</dt>
+        <dd>
+          Yes. The OnlyOffice presentation engine handles PPTX files with slide layouts, animations, and embedded media
+          — no PowerPoint required.
+        </dd>
+
+        <dt>Are slide transitions and animations preserved?</dt>
+        <dd>
+          Yes. Transitions and standard animations defined in the PPTX format are supported and preserved on save.
+        </dd>
+
+        <dt>Can I present directly from the browser?</dt>
+        <dd>
+          You can view slides in the editor's full-page view. Full presentation mode depends on browser capabilities.
+        </dd>
+
+        <dt>Is there a limit on the number of slides?</dt>
+        <dd>
+          No hard limit is imposed by the tool — very large presentations may be slower to load depending on available
+          browser memory.
+        </dd>
+      </dl>
+
+      <nav aria-label="Related tools">
+        <h2>More Browser-Only Editors</h2>
+        <a href="../docx-editor/">DOCX Editor — edit Word documents without uploading</a>
+        <a href="../xlsx-editor/">XLSX Editor — edit Excel spreadsheets in your browser</a>
+        <a href="../csv-editor/">CSV Editor — edit CSV files locally</a>
+        <a href="../private-document-editor/">Private Document Editor — maximum privacy mode</a>
+        <a href="../">All browser-only tools — ByBrowser home</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../src/index.ts"></script>
+</html>

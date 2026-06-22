@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="../img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="../img/64.png" />
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="theme-color" content="#0052cc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta
+      name="description"
+      content="Embed a private document editor in your product with an iframe and postMessage API for open, save, read-only, and document events."
+    />
+    <link rel="canonical" href="https://bybrowser.com/embed-document-editor/" />
+    <link rel="alternate" hreflang="en" href="https://bybrowser.com/embed-document-editor/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/embed-document-editor/" />
+    <link rel="alternate" hreflang="x-default" href="https://bybrowser.com/embed-document-editor/" />
+    <meta property="og:title" content="Embed a Private Document Editor" />
+    <meta
+      property="og:description"
+      content="Use iframe embedding and postMessage events to add local Office editing to your web app."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bybrowser.com/embed-document-editor/" />
+    <meta property="og:image" content="https://bybrowser.com/img/512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Embed Document Editor | iframe postMessage API</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Embed Document Editor — ByBrowser",
+        "url": "https://bybrowser.com/embed-document-editor/",
+        "description": "Embed a private browser-based Office editor in your web app via iframe and postMessage API. No backend or Document Server required.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": "iframe embed, postMessage API, DOCX XLSX PPTX CSV, no upload, no backend required"
+      }
+    </script>
+    <script src="../web-apps/apps/api/documents/api.js"></script>
+  </head>
+
+  <body>
+    <main id="seo-content">
+      <h1>Embed a Private Document Editor</h1>
+      <p>
+        Use an iframe and postMessage API to add local Office editing to your own web application — no backend, no
+        upload, no Document Server required.
+      </p>
+
+      <h2>How Embedding Works</h2>
+      <p>
+        Point an <code>&lt;iframe&gt;</code> at <code>https://bybrowser.com/?embed=1</code> and control the editor from
+        your parent page using <code>window.postMessage</code>. Your application handles authentication and file
+        storage; the iframe handles editing only. Because all processing happens in the browser, no document content
+        ever passes through a server.
+      </p>
+
+      <h2>Quick Integration Example</h2>
+      <pre><code>&lt;iframe id="editor" src="https://bybrowser.com/?embed=1"
+  style="width:100%;height:720px;border:0"&gt;&lt;/iframe&gt;
+
+&lt;script&gt;
+const editor = document.getElementById('editor').contentWindow;
+
+// Open a document from URL
+editor.postMessage(
+  { type: 'document:open-url', payload: { url: 'https://example.com/doc.docx' } },
+  'https://bybrowser.com'
+);
+
+// Listen for save events
+window.addEventListener('message', (e) => {
+  if (e.data?.type === 'document:saved') uploadFile(e.data.payload.file);
+});
+&lt;/script&gt;</code></pre>
+
+      <h2>Supported Message Types</h2>
+      <ul>
+        <li><code>document:open-url</code> — open a document from a URL</li>
+        <li><code>document:open</code> — open from a File, Blob, or ArrayBuffer</li>
+        <li><code>document:save</code> — trigger save and receive the file back</li>
+        <li><code>document:set-readonly</code> — switch the editor to read-only mode</li>
+        <li><code>document:get-state</code> — query current editor state</li>
+      </ul>
+
+      <h2>Frequently Asked Questions</h2>
+      <dl>
+        <dt>Do I need to run a backend server?</dt>
+        <dd>
+          No. The document editor is entirely client-side. Your backend only needs to serve or receive the file —
+          editing and rendering happen in the iframe.
+        </dd>
+
+        <dt>Can I restrict which origins can send messages?</dt>
+        <dd>
+          Yes. Add <code>?embedOrigin=https://yourapp.com</code> to the iframe URL to limit postMessage communication to
+          your domain only.
+        </dd>
+
+        <dt>What file formats can the embedded editor handle?</dt>
+        <dd>DOCX, XLSX, PPTX, and CSV are all supported in embedded mode.</dd>
+      </dl>
+
+      <nav aria-label="Related tools">
+        <h2>More Browser-Only Editors</h2>
+        <a href="../docx-editor/">DOCX Editor — edit Word documents without uploading</a>
+        <a href="../xlsx-editor/">XLSX Editor — edit Excel spreadsheets in your browser</a>
+        <a href="../onlyoffice-wasm/">OnlyOffice WASM — learn how the engine works</a>
+        <a href="../self-hosted-document-editor/">Self-hosted — deploy on your own server</a>
+        <a href="../">All browser-only tools — ByBrowser home</a>
+      </nav>
+    </main>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+  </body>
+  <script type="module" src="../../src/index.ts"></script>
+</html>
