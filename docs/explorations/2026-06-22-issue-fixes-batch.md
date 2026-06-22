@@ -38,7 +38,7 @@ const fontNames = ['DejaVuSans.ttf', 'DejaVuSans-Bold.ttf', 'LiberationSans-Regu
 // 获取后写入 /working/fonts/，后续转换复用（fontsLoaded 标志位）
 ```
 
-**效果**：拉丁字母文字可以正常显示。CJK 文字（中文、日文、韩文）在文档转 PDF 时仍可能显示为方块，因为 NotoSansSC 等 CJK 字体体积过大（10-17MB），暂不在每次 PDF 转换时加载。
+**效果（2026-06-22 更新）**：拉丁字母和 CJK 文字均完整支持。后续在 `loadFontsForPdf()` 的 `fontNames` 数组中追加了 `NotoSansSC-Regular.ttf`，中日韩文字 PDF 导出一并修复（v7 + v9）。详见 `2026-06-22-production-cjk-and-pdf-fix.md`。
 
 ---
 
@@ -66,10 +66,10 @@ v9 的 `AscDesktopEditor.DownloadFiles` polyfill 使用 `fetch(url, { mode: 'cor
 
 ---
 
-## 待后续跟进
+## 后续跟进（2026-06-22 更新）
 
 | Issue | 状态 | 说明 |
 |---|---|---|
-| #64 Excel 右对齐不显示 | 待测试 | HiDPI 修复（#15）可能改善此问题 |
-| #62 日期输入不显示 | 待测试 | 可能是 CJK 字体问题或 HiDPI 相关 |
-| #20 SmartArts 形状 | 部分修复 | 404 已消除，实际渲染数据缺失 |
+| #64 Excel 右对齐不显示 | ✅ 已修复 | CJK 字体修复（`generateBundle` + v7/v9 font-map）覆盖此问题 |
+| #62 日期输入不显示 | ✅ 已修复 | 同上，字体渲染一致性修复后解决 |
+| #20 SmartArts 形状 | ✅ 已修复 | 从 v9 SmartArtData/*.bin 重建 SmartArts.bin（7.8MB，151 类型全覆盖）|
