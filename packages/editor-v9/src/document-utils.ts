@@ -2,21 +2,27 @@ import { getMime } from 'ranuts/utils';
 import type { DocumentType } from './document-types';
 
 /**
- * Get base path based on deployment environment
- * - GitHub Pages: uses /document/ path
- * - Docker/Other: uses root path /
+ * Derive the deployment base path from the current URL.
+ *
+ * v9 always deploys under a semver prefix (e.g. /9.3.0/, /document/9.3.0/).
+ * When a semver segment is present in the path, everything up to and including
+ * it is the base (so WASM, fonts, and SDK assets resolve correctly).
+ *
+ * Examples:
+ *   /document/9.3.0/zh-cn/docx/ → /document/9.3.0/
+ *   /document/9.3.0/docx/       → /document/9.3.0/
+ *   /9.3.0/docx/                → /9.3.0/
+ *   /document/                  → /document/   (fallback, GitHub Pages home)
+ *   /                           → /            (fallback, root deployment)
  */
 export const getBasePath = (): string => {
-  if (typeof window === 'undefined') {
-    return '/';
-  }
-
-  const pathname = window.location.pathname;
-  // Check if we're in GitHub Pages (path starts with /document/ or contains /document/)
-  if (pathname.startsWith('/document/') || pathname === '/document') {
-    return '/document/';
-  }
-  // Docker or other deployments use root path
+  if (typeof window === 'undefined') return '/';
+  const p = window.location.pathname;
+  // Primary: detect semver version prefix (covers all normal v9 deployment paths)
+  const m = /^(.*\/\d+\.\d+\.\d+\/)/.exec(p);
+  if (m) return m[1];
+  // Fallback for unexpected paths (e.g. home page before version prefix is known)
+  if (p.startsWith('/document/') || p === '/document') return '/document/';
   return '/';
 };
 

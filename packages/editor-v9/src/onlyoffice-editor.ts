@@ -3,7 +3,7 @@ import { createObjectURL } from 'ranuts/utils';
 import { getOnlyOfficeLang, t } from './i18n';
 import { c_oAscFileType2 } from '@bybrowser/core';
 import type { BinConversionResult, SaveEvent } from './document-types';
-import { getMimeTypeFromExtension } from './document-utils';
+import { getMimeTypeFromExtension, BASE_PATH } from './document-utils';
 import { g_sEmpty_ooxml } from './empty_bin';
 import { extractDocxMediaUrls, preprocessXlsxLineBreaks, preprocessPptx } from './docx-zip';
 import { showMediaPlayer } from './media-player';
@@ -622,7 +622,7 @@ export function createEditorInstance(config: {
               // New document — convert base64 empty template to bytes.
               const ext = '.' + (fileName.split('.').pop()?.toLowerCase() || 'docx');
               if (ext === '.pptx') {
-                const templateResponse = await fetch('/sdkjs/slide/themes/src/01_blank.pptx');
+                const templateResponse = await fetch(`${BASE_PATH}sdkjs/slide/themes/src/01_blank.pptx`);
                 if (!templateResponse.ok) {
                   throw new Error(`Failed to load PPTX template: ${templateResponse.status}`);
                 }

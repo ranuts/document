@@ -26,6 +26,19 @@ describe('document utils', () => {
     expect(getBasePath()).toBe('/');
   });
 
+  it('detects v9 version prefix in base path', () => {
+    window.history.pushState({}, '', '/document/9.3.0/docx/');
+    expect(getBasePath()).toBe('/document/9.3.0/');
+
+    window.history.pushState({}, '', '/document/9.3.0/zh-cn/pptx/');
+    expect(getBasePath()).toBe('/document/9.3.0/');
+
+    window.history.pushState({}, '', '/9.3.0/docx/');
+    expect(getBasePath()).toBe('/9.3.0/');
+
+    window.history.pushState({}, '', '/');
+  });
+
   it('keeps the supported document type map stable', () => {
     expect(DOCUMENT_TYPE_MAP).toMatchInlineSnapshot(`
       {
