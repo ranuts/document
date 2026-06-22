@@ -41,10 +41,10 @@
 
 **在线体验：** [ranuts.github.io/document](https://ranuts.github.io/document/)
 
-| 版本 | 引擎 | 状态 | 地址 |
-| ---- | ---- | ---- | ---- |
-| v7 | OnlyOffice 7.x | 稳定版 | `https://ranuts.github.io/document/` |
-| v9 | OnlyOffice 9.3.0 | Beta | `https://ranuts.github.io/document/9.3.0/` |
+| 版本 | 引擎             | 状态   | 地址                                       |
+| ---- | ---------------- | ------ | ------------------------------------------ |
+| v7   | OnlyOffice 7.x   | 稳定版 | `https://ranuts.github.io/document/`       |
+| v9   | OnlyOffice 9.3.0 | Beta   | `https://ranuts.github.io/document/9.3.0/` |
 
 **Docker 运行：**
 

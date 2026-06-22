@@ -41,10 +41,10 @@ A privacy-first, browser-based document editor powered by OnlyOffice. Edit DOCX,
 
 **Try it online:** [ranuts.github.io/document](https://ranuts.github.io/document/)
 
-| Version | Engine | Status | URL |
-| ------- | ------ | ------ | --- |
-| v7 | OnlyOffice 7.x | Stable | `https://ranuts.github.io/document/` |
-| v9 | OnlyOffice 9.3.0 | Beta | `https://ranuts.github.io/document/9.3.0/` |
+| Version | Engine           | Status | URL                                        |
+| ------- | ---------------- | ------ | ------------------------------------------ |
+| v7      | OnlyOffice 7.x   | Stable | `https://ranuts.github.io/document/`       |
+| v9      | OnlyOffice 9.3.0 | Beta   | `https://ranuts.github.io/document/9.3.0/` |
 
 **Run with Docker:**
 

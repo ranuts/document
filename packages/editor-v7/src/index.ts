@@ -22,20 +22,8 @@ export type {
   SaveEvent,
 } from './document-types';
 
-export {
-  getDocumentType,
-  getBasePath,
-  BASE_PATH,
-  DOCUMENT_TYPE_MAP,
-  getMimeTypeFromExtension,
-} from './document-utils';
+export { getDocumentType, getBasePath, BASE_PATH, DOCUMENT_TYPE_MAP, getMimeTypeFromExtension } from './document-utils';
 
-export {
-  t,
-  getLanguage,
-  setLanguage,
-  getOnlyOfficeLang,
-  LanguageCode,
-} from './i18n';
+export { t, getLanguage, setLanguage, getOnlyOfficeLang, LanguageCode } from './i18n';
 
 export { g_sEmpty_bin } from './empty_bin';
