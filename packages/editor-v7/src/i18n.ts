@@ -131,6 +131,7 @@ class I18n {
    * Get cookie value by name (using ranuts utility)
    */
   private getCookie(name: string): string | null {
+    if (typeof document === 'undefined') return null;
     return getCookie(name);
   }
 
@@ -138,6 +139,7 @@ class I18n {
    * Get URL parameter by name (using ranuts utility)
    */
   private getUrlParameter(name: string): string | null {
+    if (typeof window === 'undefined') return null;
     return getQuery()?.[name] || null;
   }
 
