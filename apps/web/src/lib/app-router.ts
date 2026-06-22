@@ -49,19 +49,11 @@ const ROUTE_TO_EXT: Record<string, EditorExt> = {
 // Internal helpers
 // ---------------------------------------------------------------------------
 
-function getVersionPrefix(): string {
-  // Detect any semver-style version prefix (/1.2.3/) so this survives
-  // OnlyOffice upgrades (e.g. 9.3.0 → 9.4.0) without code changes.
-  const m = /^(\/\d+\.\d+\.\d+\/)/.exec(location.pathname);
-  return m ? m[1] : '/';
-}
-
-/** 构建编辑器路由的绝对路径 */
+/** 构建编辑器路由的相对路径（相对于当前版本根，自动兼容任意 base path） */
 function editorPath(ext: EditorExt, params?: Record<string, string>): string {
   const slug = ext.slice(1); // '.docx' → 'docx'
-  const prefix = getVersionPrefix();
   const query = params && Object.keys(params).length > 0 ? '?' + new URLSearchParams(params).toString() : '';
-  return `${prefix}${slug}/${query}`;
+  return `${slug}/${query}`;
 }
 
 /** 从文件名提取文档扩展名，不在 VALID_EXTS 内则返回 null */
