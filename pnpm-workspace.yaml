@@ -3,3 +3,6 @@ packages:
   - 'packages/*'
 allowBuilds:
   tesseract.js: false
+
+overrides:
+  undici: ">=7.28.0"
