@@ -422,15 +422,27 @@ const getLandingPage = () => {
   return allLandingPages[lang]?.[key] ?? allLandingPages[lang]?.['/'] ?? landingPages['/'];
 };
 
-const getSiteRoot = () => {
-  const pathname = window.location.pathname;
-  const isZh = getLanguage() === LanguageCode.ZH;
-  const prefix = isZh ? '/zh-cn' : '';
+// Returns the version root (e.g. '/document/' or '/document/9.3.0/'),
+// stripping zh-cn and page slug but keeping the semver prefix.
+const getVersionRoot = (): string => {
+  let p = window.location.pathname;
+  p = p.replace('/zh-cn/', '/');
   for (const slug of pageSlugs) {
-    if (pathname.lastIndexOf(`/${slug}`) !== -1) return `${prefix}/`;
+    if (new RegExp(`/${slug}/?$`).test(p)) {
+      p = p.replace(new RegExp(`/${slug}/?$`), '/');
+      break;
+    }
   }
-  const clean = pathname.replace(/^\/zh-cn/, '') || '/';
-  return prefix + (clean.endsWith('/') ? clean : `${clean}/`);
+  return p || '/';
+};
+
+// Returns the app base (strips semver prefix too), e.g. '/document/'.
+const getAppBase = (): string => getVersionRoot().replace(/\/\d+\.\d+\.\d+\/$/, '/');
+
+const getSiteRoot = () => {
+  const isZh = getLanguage() === LanguageCode.ZH;
+  const vRoot = getVersionRoot();
+  return isZh ? `${vRoot}zh-cn/` : vRoot;
 };
 
 const updatePageMeta = (page: LandingPage) => {
@@ -502,18 +514,20 @@ export const showControlPanel = (): void => {
 // Return the URL for a given target language on the current page.
 const getLangUrl = (targetLang: LanguageCode): string => {
   const pathname = window.location.pathname;
-  if (targetLang === LanguageCode.ZH) {
-    if (pathname.startsWith('/zh-cn/')) return pathname;
-    for (const slug of pageSlugs) {
-      if (pathname.endsWith(`/${slug}`) || pathname.endsWith(`/${slug}/`)) {
-        return `/zh-cn/${slug}/`;
-      }
+  const vRoot = getVersionRoot(); // e.g. '/document/' or '/document/9.3.0/'
+  // Detect current page slug (if any)
+  let currentSlug = '';
+  const pClean = pathname.replace('/zh-cn/', '/');
+  for (const slug of pageSlugs) {
+    if (pClean.endsWith(`/${slug}/`) || pClean.endsWith(`/${slug}`)) {
+      currentSlug = slug;
+      break;
     }
-    return '/zh-cn/';
   }
-  // target EN
-  if (!pathname.startsWith('/zh-cn/')) return pathname;
-  return pathname.replace(/^\/zh-cn/, '') || '/';
+  if (targetLang === LanguageCode.ZH) {
+    return currentSlug ? `${vRoot}zh-cn/${currentSlug}/` : `${vRoot}zh-cn/`;
+  }
+  return currentSlug ? `${vRoot}${currentSlug}/` : vRoot;
 };
 
 // Fixed top navigation — created once, independent of landing shell
@@ -579,7 +593,8 @@ export const createLandingNav = (): void => {
 
   versionSelect.addEventListener('change', () => {
     betaBadge.hidden = versionSelect.value !== 'beta';
-    window.location.href = versionSelect.value === 'beta' ? __BETA_URL__ : __STABLE_URL__;
+    const appBase = getAppBase(); // e.g. '/document/'
+    window.location.href = versionSelect.value === 'beta' ? `${appBase}9.3.0/` : appBase;
   });
 
   versionPicker.appendChild(versionIcon);
