@@ -10,7 +10,7 @@
     "@bybrowser/core": "workspace:*"
   },
   "peerDependencies": {
-    "ranui": "*",
-    "ranuts": "*"
+    "ranui": "0.1.10-alpha-27",
+    "ranuts": "0.1.0-alpha-23"
   }
 }
