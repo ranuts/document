@@ -160,7 +160,9 @@ class I18n {
     let detectedLang: Language | null = null;
 
     // 0. Highest priority: sub-directory path prefix (e.g. /zh-cn/...)
-    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/zh-cn/')) {
+    // Use includes() instead of startsWith() to support sub-path deployments
+    // like GitHub Pages where pathname is /document/zh-cn/... not /zh-cn/...
+    if (typeof window !== 'undefined' && window.location.pathname.includes('/zh-cn/')) {
       detectedLang = LanguageCode.ZH;
     }
 

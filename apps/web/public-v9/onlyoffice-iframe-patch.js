@@ -12,9 +12,15 @@
 (function () {
   console.log('[OO patch] running in', window.location.href);
 
+  // Derive deployment root from this script's URL so the patch works regardless
+  // of the base path (e.g. /document/9.3.0/ on GitHub Pages vs / locally).
+  var _base = (document.currentScript && document.currentScript.src)
+    ? document.currentScript.src.replace(/[^/]+$/, '')
+    : '/';
+
   // ── 1. Font map (fetched early; will resolve before SDK requests any fonts) ────
   var fontMap = {};
-  fetch('/font-map.json')
+  fetch(_base + 'font-map.json')
     .then(function (r) {
       return r.json();
     })
@@ -294,11 +300,11 @@
           var fp = url.slice(19);
           var ls = Math.max(fp.lastIndexOf('/'), fp.lastIndexOf(bs));
           var fn = fp.slice(ls + 1).toLowerCase();
-          arguments[1] = '/fonts/' + (fontMap[fn] || FALLBACK);
+          arguments[1] = _base + 'fonts/' + (fontMap[fn] || FALLBACK);
         } else if (url.indexOf('/fonts/') !== -1) {
           var fi = url.lastIndexOf('/fonts/') + 7;
           var fn2 = url.slice(fi).toLowerCase();
-          if (fontMap[fn2]) arguments[1] = '/fonts/' + fontMap[fn2];
+          if (fontMap[fn2]) arguments[1] = _base + 'fonts/' + fontMap[fn2];
         }
       }
       return origOpen.apply(this, arguments);

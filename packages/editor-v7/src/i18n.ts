@@ -65,6 +65,9 @@ export interface I18nMessages {
   unsupportedFileType: string;
   invalidFileObject: string;
   documentOperationFailed: string;
+
+  // File-lost notice
+  fileLost: string;
 }
 
 const messages: Record<Language, I18nMessages> = {
@@ -94,6 +97,7 @@ const messages: Record<Language, I18nMessages> = {
     unsupportedFileType: '不支持的文件类型：',
     invalidFileObject: '无效的文件对象',
     documentOperationFailed: '文档操作失败：',
+    fileLost: '本地文件链接无法刷新或分享，请重新打开文件。',
   },
   [LanguageCode.EN]: {
     webOffice: 'Web Office',
@@ -160,7 +164,9 @@ class I18n {
     let detectedLang: Language | null = null;
 
     // 0. Highest priority: sub-directory path prefix (e.g. /zh-cn/...)
-    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/zh-cn/')) {
+    // Use includes() instead of startsWith() to support sub-path deployments
+    // like GitHub Pages where pathname is /document/zh-cn/... not /zh-cn/...
+    if (typeof window !== 'undefined' && window.location.pathname.includes('/zh-cn/')) {
       detectedLang = LanguageCode.ZH;
     }
 

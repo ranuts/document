@@ -10,11 +10,20 @@
  *
  * Without this patch, both schemes silently fail in the browser, causing CJK characters
  * (dates, Chinese text, etc.) to render as blank or garbled glyphs (#62, #64).
+ *
+ * Paths are computed relative to this script's own URL so the patch works regardless
+ * of the deployment base path (e.g. /document/ on GitHub Pages vs / locally).
  */
 (function () {
+  // Derive deployment root from this script's URL.
+  // Script lives at <root>/onlyoffice-v7-iframe-patch.js, so strip the filename.
+  var _base = (document.currentScript && document.currentScript.src)
+    ? document.currentScript.src.replace(/[^/]+$/, '')
+    : '/';
+
   // Fetch font map early — resolves well before SDK requests any fonts.
   var fontMap = {};
-  fetch('/font-map.json')
+  fetch(_base + 'font-map.json')
     .then(function (r) {
       return r.json();
     })
@@ -38,15 +47,15 @@
       if (url.indexOf('ascdesktop://fonts/') === 0) {
         // Scheme 1: ascdesktop://fonts/<file> or ascdesktop://fonts/C:\Windows\Fonts\<file>
         fn = extractFilename(url.slice(19));
-        arguments[1] = '/fonts/' + (fontMap[fn] || FALLBACK);
+        arguments[1] = _base + 'fonts/' + (fontMap[fn] || FALLBACK);
       } else if (/^[a-zA-Z]:[/\\]/.test(url)) {
         // Scheme 2: Windows absolute path like c:\Windows\Fonts\arial.ttf
         fn = extractFilename(url);
-        arguments[1] = '/fonts/' + (fontMap[fn] || FALLBACK);
+        arguments[1] = _base + 'fonts/' + (fontMap[fn] || FALLBACK);
       } else if (url.indexOf('/fonts/') !== -1) {
         // Remap already-relative /fonts/<file> requests via font-map
         fn = url.slice(url.lastIndexOf('/fonts/') + 7).toLowerCase();
-        if (fontMap[fn]) arguments[1] = '/fonts/' + fontMap[fn];
+        if (fontMap[fn]) arguments[1] = _base + 'fonts/' + fontMap[fn];
       }
     }
     return origOpen.apply(this, arguments);

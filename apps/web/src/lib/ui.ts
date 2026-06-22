@@ -401,6 +401,11 @@ const pageSlugs = [
   'onlyoffice-wasm',
   'embed-document-editor',
   'self-hosted-document-editor',
+  // Clean editor routes (without -editor suffix)
+  'docx',
+  'xlsx',
+  'pptx',
+  'csv',
 ];
 
 const allLandingPages: Record<string, Record<string, LandingPage>> = {
@@ -409,7 +414,8 @@ const allLandingPages: Record<string, Record<string, LandingPage>> = {
 };
 
 const normalizePathname = () => {
-  const pathname = window.location.pathname.replace(/^\/zh-cn/, '');
+  // Strip /zh-cn/ segment wherever it appears (supports sub-path deployments like GitHub Pages)
+  const pathname = window.location.pathname.replace(/\/zh-cn\//, '/');
   for (const slug of pageSlugs) {
     if (pathname.endsWith(`/${slug}`) || pathname.endsWith(`/${slug}/`)) return `/${slug}/`;
   }
