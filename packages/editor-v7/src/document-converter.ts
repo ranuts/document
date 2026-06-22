@@ -100,6 +100,7 @@ export class X2TConverter {
       });
     } catch (error) {
       this.initPromise = null; // Reset to allow retry
+      this.fontsLoaded = false; // Reset so fonts are reloaded into the new WASM FS on retry
       throw error;
     }
   }
@@ -111,6 +112,7 @@ export class X2TConverter {
   private async loadFontsForPdf(): Promise<void> {
     if (this.fontsLoaded || !this.x2tModule) return;
     const fontNames = ['DejaVuSans.ttf', 'DejaVuSans-Bold.ttf', 'LiberationSans-Regular.ttf', 'NotoSansSC-Regular.ttf'];
+    let loaded = 0;
     await Promise.all(
       fontNames.map(async (name) => {
         try {
@@ -118,12 +120,13 @@ export class X2TConverter {
           if (!res.ok) return;
           const buf = new Uint8Array(await res.arrayBuffer());
           this.x2tModule!.FS.writeFile(`/working/fonts/${name}`, buf);
+          loaded++;
         } catch {
           // Non-fatal — PDF may still render with remaining fonts
         }
       }),
     );
-    this.fontsLoaded = true;
+    if (loaded > 0) this.fontsLoaded = true;
   }
 
   /**

@@ -76,6 +76,18 @@ switch (action.type) {
     // Local file data can't survive a page reload.
     // Fall back to home so the user can re-open the file.
     createControlPanel();
+    registerLocalFilePopstate({
+      showHome: showControlPanel,
+      destroyEditor: () => {
+        try {
+          window.editor?.destroyEditor?.();
+        } catch {
+          // ignore
+        }
+        window.editor = undefined;
+        document.getElementById('iframe')?.replaceChildren();
+      },
+    });
     // TODO: surface a toast/banner explaining why the file is gone
     break;
   }
