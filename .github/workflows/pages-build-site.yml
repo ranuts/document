@@ -40,6 +40,11 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          # Cloudflare Web Analytics beacon token (public client-side value).
+          # Set it under Settings → Secrets and variables → Actions → Variables.
+          # Unset → analytics is tree-shaken out and the site ships tracking-free.
+          VITE_CF_BEACON_TOKEN: ${{ vars.VITE_CF_BEACON_TOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

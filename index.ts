@@ -3,6 +3,8 @@ import { initEmbedApi } from './lib/embed-api';
 import { initEvents, setEventUICallbacks } from './lib/events';
 import { onCreateNew, openDocumentFromUrl, setUICallbacks } from './lib/document';
 import { parseReadonly } from '@ranuts/shared/document-utils';
+import { getDocmentObj } from '@ranuts/shared/store';
+import { initAnalytics } from './lib/analytics';
 import {
   createControlPanel,
   createFixedActionButton,
@@ -28,6 +30,9 @@ declare global {
 // Initialize events
 initEvents();
 initEmbedApi();
+
+// Privacy-friendly analytics (no-op unless VITE_CF_BEACON_TOKEN is set; never in embed mode)
+initAnalytics();
 
 // Set up UI callbacks to avoid circular dependency
 setUICallbacks({
@@ -99,6 +104,26 @@ if (documentUrl) {
 
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
+  // Whether a SW was already controlling this page when it started. Each deploy
+  // rebuilds sw.js with a fresh CACHE_VERSION; the new SW skipWaiting()s and
+  // claims clients, firing `controllerchange`. If a SW was ALREADY in control at
+  // startup, that event means a *new build* took over — not the first install —
+  // so we can reload once to swap the stale assets for the fresh ones. Without
+  // this, the current page keeps rendering the previously-cached build until the
+  // user manually refreshes (the "refresh once more and it's fixed" symptom).
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloadingForUpdate = false;
+
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    // Guard 1: only on a real update (not first install). Guard 2: reload once.
+    // Guard 3: never while a document is open — a reload would discard unsaved
+    // edits. On the landing page fileName is empty, so the reload is invisible.
+    if (!hadController || reloadingForUpdate) return;
+    if (getDocmentObj().fileName) return;
+    reloadingForUpdate = true;
+    window.location.reload();
+  });
+
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('./sw.js')
