@@ -33,7 +33,7 @@ location.replace(base + path + location.search + location.hash);
 
 ## workflow 改造
 
-`.github/workflows/pages-build-site.yml`:去掉 pnpm/node/install/build,只 `upload-pages-artifact` 发布 `./redirect` 目录。加 `workflow_dispatch` 便于 CF 上线后手动触发首发。
+`.github/workflows/pages-build-site.yml`:去掉 pnpm/node/install/build,只 `upload-pages-artifact` 发布 `./redirect` 目录。触发分支从 `release/v0.0.4` 改为 **`main`**(CF 现从 main 部署 app,GH Pages 也统一到 main);加 `workflow_dispatch` 便于 CF 上线后手动触发首发。注意 `release/v0.0.4` 仍是 v7 维护线,只是 CI 不再依赖它、分支保留。
 
 ## 验证
 
@@ -49,4 +49,4 @@ location.replace(base + path + location.search + location.hash);
 3. `workflow_dispatch` 手动触发首发,验证 `ranuts.github.io/document/` → 302/JS 跳 `edit.chaxus.com`
 4. GSC 地址变更 / sitemap / 外链
 
-**待确认**:当前 workflow 触发分支是 `release/v0.0.4`(GH Pages 现从该分支部署)。激活时需确认跳转器改动落到该分支,或调整触发分支。
+**触发分支已统一到 `main`**(原 `release/v0.0.4`):CF 现从 main 部署 app,GH Pages 也随之 main-based → 合并本 PR 到 main 即激活。`release/v0.0.4` 仍是 v7 维护线,分支保留,只是 CI 不再依赖它。
