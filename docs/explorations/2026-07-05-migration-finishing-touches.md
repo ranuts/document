@@ -6,12 +6,12 @@
 
 ## 改动
 
-| 文件 | 改动 |
-|---|---|
+| 文件           | 改动                                                                   |
+| -------------- | ---------------------------------------------------------------------- |
 | `package.json` | `homepage` → `https://edit.chaxus.com/`(npm 页 / 工具链读取的规范主页) |
-| `readme.md` | Live Demo badge 链接 + "Try it online" → edit.chaxus.com |
-| `readme.zh.md` | 在线体验 badge + 链接 → edit.chaxus.com |
-| `CLAUDE.md` | 线上地址 → edit.chaxus.com(注明旧址已跳转至此) |
+| `readme.md`    | Live Demo badge 链接 + "Try it online" → edit.chaxus.com               |
+| `readme.zh.md` | 在线体验 badge + 链接 → edit.chaxus.com                                |
+| `CLAUDE.md`    | 线上地址 → edit.chaxus.com(注明旧址已跳转至此)                         |
 
 **故意保留旧 URL 的地方**:`redirect/{index,404}.html` 的注释——它们描述的正是"从 `ranuts.github.io/document` 搬走",改了反而语义错。
 
