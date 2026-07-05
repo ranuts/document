@@ -36,15 +36,22 @@ export class X2TConverter {
 
   private readonly WORKING_DIRS = ['/working', '/working/media', '/working/fonts', '/working/themes'];
   private readonly SCRIPT_PATH = `${BASE_PATH}wasm/x2t/x2t.js`;
+  private readonly WASM_GZ_PATH = `${BASE_PATH}wasm/x2t/x2t.wasm.gz`;
   private readonly INIT_TIMEOUT = 300000;
 
   /**
-   * Load X2T script file (using ranuts scriptOnLoad utility)
+   * Load X2T script file (using ranuts scriptOnLoad utility).
+   *
+   * We first decompress the gzipped WASM and hand the bytes to Emscripten via
+   * `Module.wasmBinary` (see prepareWasmBinary), so x2t.js never fetches the raw
+   * 55 MB `x2t.wasm` itself. This lets us ship only the ~11 MB `x2t.wasm.gz`,
+   * staying under Cloudflare Pages' 25 MiB-per-file deploy limit.
    */
   async loadScript(): Promise<void> {
     if (this.hasScriptLoaded) return;
 
     try {
+      await this.prepareWasmBinary();
       // scriptOnLoad accepts an array of URLs
       await scriptOnLoad([this.SCRIPT_PATH]);
       this.hasScriptLoaded = true;
@@ -54,6 +61,50 @@ export class X2TConverter {
       console.error(errorMsg, error);
       throw new Error(errorMsg);
     }
+  }
+
+  /**
+   * Fetch the gzipped x2t WASM, decompress it in the browser, and stash the raw
+   * bytes on `window.Module.wasmBinary` *before* x2t.js runs. Emscripten checks
+   * `if (Module['wasmBinary']) wasmBinary = Module['wasmBinary']` and then skips
+   * its own fetch/instantiateStreaming of `x2t.wasm` entirely.
+   *
+   * Uses the native `DecompressionStream('gzip')` — no extra dependency.
+   *
+   * Servers disagree on how they serve a `.gz` file: some (e.g. Vite's dev /
+   * preview server) send it with `Content-Encoding: gzip`, so the browser has
+   * already transparently decompressed it by the time we read the body; others
+   * (static hosts like Cloudflare Pages / GitHub Pages) serve the raw gzip
+   * bytes. We detect which by the leading magic bytes and only decompress when
+   * the payload is still gzip (`1f 8b`) rather than an already-raw wasm module
+   * (`00 61 73 6d`). This keeps it correct on every host.
+   */
+  private async prepareWasmBinary(): Promise<void> {
+    const globalScope = window as unknown as {
+      Module?: Record<string, unknown> & { wasmBinary?: ArrayBuffer };
+    };
+    if (globalScope.Module?.wasmBinary) return; // already prepared
+
+    const response = await fetch(this.WASM_GZ_PATH);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch x2t WASM at '${this.WASM_GZ_PATH}' (${response.status})`);
+    }
+    const raw = await response.arrayBuffer();
+    const head = new Uint8Array(raw, 0, Math.min(2, raw.byteLength));
+    const isGzip = head[0] === 0x1f && head[1] === 0x8b;
+
+    let wasmBinary: ArrayBuffer;
+    if (isGzip) {
+      const stream = new Response(raw).body!.pipeThrough(new DecompressionStream('gzip'));
+      wasmBinary = await new Response(stream).arrayBuffer();
+    } else {
+      // Already decompressed by the browser via Content-Encoding.
+      wasmBinary = raw;
+    }
+
+    // Pre-seed the global Module so x2t.js (which reuses an existing global
+    // Module) picks up the binary. Preserve any properties already set.
+    globalScope.Module = { ...globalScope.Module, wasmBinary };
   }
 
   /**
