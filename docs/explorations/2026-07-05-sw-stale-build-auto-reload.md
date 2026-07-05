@@ -50,7 +50,7 @@ const hadController = !!navigator.serviceWorker.controller;
 let reloadingForUpdate = false;
 navigator.serviceWorker.addEventListener('controllerchange', () => {
   if (!hadController || reloadingForUpdate) return; // 1. 仅更新（非首装）；2. 只 reload 一次
-  if (getDocmentObj().fileName) return;             // 3. 有文档打开时不 reload，避免丢失编辑
+  if (getDocmentObj().fileName) return; // 3. 有文档打开时不 reload，避免丢失编辑
   reloadingForUpdate = true;
   window.location.reload();
 });
@@ -63,11 +63,11 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
 
 在 `vite preview`（dist）上：
 
-| 场景 | 预期 | 实测 |
-| --- | --- | --- |
-| 首次安装（无旧控制器） | 不 reload | ✅ 载入计数停在 1 |
+| 场景                                                         | 预期             | 实测                                                  |
+| ------------------------------------------------------------ | ---------------- | ----------------------------------------------------- |
+| 首次安装（无旧控制器）                                       | 不 reload        | ✅ 载入计数停在 1                                     |
 | 有旧控制器 + 未开文档（模拟新部署，合成 `controllerchange`） | 自动 reload 一次 | ✅ window marker 丢失、sessionStorage 保留 = 同页刷新 |
-| 文档已打开时 `controllerchange` | 不 reload | ✅ marker 仍在、编辑器 iframe 完好 |
+| 文档已打开时 `controllerchange`                              | 不 reload        | ✅ marker 仍在、编辑器 iframe 完好                    |
 
 `pnpm run lint:ts` 通过；`sw-routing.test.ts` 31/31 通过；`pnpm run build` 成功。
 
