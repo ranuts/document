@@ -39,10 +39,10 @@ beacon script 即可，最不破坏隐私定位。
 
 ## 验证（chrome-devtools + 构建产物）
 
-| 构建 | 预期 | 实测 |
-| --- | --- | --- |
-| 无 token（默认） | 不注入 | ✅ bundle 里零 `cloudflareinsights` 引用（死代码消除） |
-| 有 token · 顶层 | 注入 beacon | ✅ `data-cf-beacon={"token":...}` 正确 |
-| 有 token · `?embed=1` | 不注入 | ✅ beacon 缺席，`embed-mode` class 存在 |
+| 构建                  | 预期        | 实测                                                   |
+| --------------------- | ----------- | ------------------------------------------------------ |
+| 无 token（默认）      | 不注入      | ✅ bundle 里零 `cloudflareinsights` 引用（死代码消除） |
+| 有 token · 顶层       | 注入 beacon | ✅ `data-cf-beacon={"token":...}` 正确                 |
+| 有 token · `?embed=1` | 不注入      | ✅ beacon 缺席，`embed-mode` class 存在                |
 
 `lint:ts` ✅ / prettier ✅ / `build` ✅。

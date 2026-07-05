@@ -36,13 +36,13 @@ document 项目计划从 `ranuts.github.io/document` 迁到 `edit.chaxus.com`(Cl
 
 ## 验证(端到端)
 
-| 环节 | 方法 | 结果 |
-|---|---|---|
-| isGzip=false 分支(preview 自动解压) | Node fetch preview 的 .gz → 探测 → compile | 54.7M,magic OK,`WebAssembly.compile` OK(28 exports) |
-| isGzip=true 分支(静态托管原始 gzip) | Node 直接读磁盘 .gz 原始字节 → 手动解压 → compile | 54.7M,compile OK |
-| 浏览器集成 | Playwright:注入 binary → 加载真实 x2t.js → 等 `onRuntimeInitialized` + 监听网络 | **运行时初始化 OK;FS/ccall 可用;对 `x2t.wasm` 请求 0 次(只请求 `x2t.wasm.gz`)** |
-| 构建产物 | `find dist -size +25M` | **空**(最大文件 = x2t.wasm.gz 11M) |
-| 回归 | `pnpm run lint:ts` / `pnpm run test` | 通过 / 19 files · 240 tests 全过 |
+| 环节                                | 方法                                                                            | 结果                                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| isGzip=false 分支(preview 自动解压) | Node fetch preview 的 .gz → 探测 → compile                                      | 54.7M,magic OK,`WebAssembly.compile` OK(28 exports)                             |
+| isGzip=true 分支(静态托管原始 gzip) | Node 直接读磁盘 .gz 原始字节 → 手动解压 → compile                               | 54.7M,compile OK                                                                |
+| 浏览器集成                          | Playwright:注入 binary → 加载真实 x2t.js → 等 `onRuntimeInitialized` + 监听网络 | **运行时初始化 OK;FS/ccall 可用;对 `x2t.wasm` 请求 0 次(只请求 `x2t.wasm.gz`)** |
+| 构建产物                            | `find dist -size +25M`                                                          | **空**(最大文件 = x2t.wasm.gz 11M)                                              |
+| 回归                                | `pnpm run lint:ts` / `pnpm run test`                                            | 通过 / 19 files · 240 tests 全过                                                |
 
 ## 结论 & 影响
 
