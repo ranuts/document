@@ -4,7 +4,7 @@
 
 基于 OnlyOffice 的本地 Web 文档编辑器，所有处理在浏览器端完成，无需服务器，保护用户隐私。支持 docx、xlsx、pptx、csv 等格式。
 
-- **线上地址**：https://ranuts.github.io/document/
+- **线上地址**：https://edit.chaxus.com/ （旧址 https://ranuts.github.io/document/ 已跳转至此）
 - **GitHub**：https://github.com/ranuts/document
 - **技术栈**：TypeScript + Vite + Tailwind CSS + OnlyOffice Web Apps
 

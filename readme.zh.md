@@ -10,7 +10,7 @@
   <a href="https://github.com/ranuts/document/releases">
     <img src="https://img.shields.io/github/v/release/ranuts/document" alt="版本">
   </a>
-  <a href="https://ranuts.github.io/document/">
+  <a href="https://edit.chaxus.com/">
     <img src="https://img.shields.io/badge/在线-体验-brightgreen" alt="在线体验">
   </a>
 </p>
@@ -37,7 +37,7 @@
 
 ## 🚀 快速开始
 
-**在线体验：** [ranuts.github.io/document](https://ranuts.github.io/document/)
+**在线体验：** [edit.chaxus.com](https://edit.chaxus.com/)
 
 **Docker 运行：**
 
