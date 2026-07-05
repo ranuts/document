@@ -1,5 +1,9 @@
 packages:
   - packages/*
+overrides:
+  # Force jsdom's transitive undici past GHSA-hm92-r4w5-c3mj (fixed in 7.28.0).
+  # Dev/test-only dependency; pinned to 7.x to stay within jsdom's supported range.
+  undici: ^7.28.0
 minimumReleaseAgeExclude:
   - ranui@0.2.0-alpha.0
   - ranuts@0.2.0-alpha.0
