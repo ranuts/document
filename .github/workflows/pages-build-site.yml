@@ -1,8 +1,14 @@
 name: pages-build-site
 on:
+  # The editor now lives at https://edit.chaxus.com (Cloudflare Pages).
+  # GitHub Pages publishes ONLY a client-side redirector (redirect/), so old
+  # ranuts.github.io/document/* links keep working (path + query preserved).
+  # workflow_dispatch lets you trigger the first redirector deploy by hand once
+  # the Cloudflare site is confirmed live.
   push:
     branches:
       - release/v0.0.4
+  workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -16,40 +22,18 @@ concurrency:
 
 jobs:
   build:
-    name: Build
+    name: Publish redirector
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v6
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm build
-        env:
-          # Cloudflare Web Analytics beacon token (public client-side value).
-          # Set it under Settings → Secrets and variables → Actions → Variables.
-          # Unset → analytics is tree-shaken out and the site ships tracking-free.
-          VITE_CF_BEACON_TOKEN: ${{ vars.VITE_CF_BEACON_TOKEN }}
-
-      - name: Upload artifact
+      # No build: just ship the static redirector (redirect/index.html + 404.html).
+      - name: Upload redirector artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: "./dist"
+          path: "./redirect"
 
   deploy:
     name: Deploy to GitHub Pages

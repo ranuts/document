@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moved to edit.chaxus.com</title>
+    <!-- The editor moved from ranuts.github.io/document to https://edit.chaxus.com.
+         This page is only a redirector left behind so old links keep working.
+         Google treats JS location.replace + canonical as a soft 301. -->
+    <link rel="canonical" href="https://edit.chaxus.com/" />
+    <script>
+      (function () {
+        var base = 'https://edit.chaxus.com';
+        // Strip the GitHub Pages base ("/document") and keep the rest of the
+        // path. Query + hash MUST be preserved — the editor is driven by params
+        // like ?embed= / ?embedded= / ?agent=1 / ?url= / ?embedOrigin=, and a
+        // dropped query would silently break embed / agent flows.
+        var path = location.pathname.replace(/^\/document/, '') || '/';
+        var canonical = base + path + location.search;
+        var link = document.querySelector('link[rel=canonical]');
+        if (link) link.href = canonical;
+        location.replace(base + path + location.search + location.hash);
+      })();
+    </script>
+    <!-- Fallback for crawlers / JS-disabled clients. Static, so it can only
+         point at the root; the script above handles per-path redirects. -->
+    <meta http-equiv="refresh" content="0; url=https://edit.chaxus.com/" />
+  </head>
+  <body>
+    <p>
+      This editor has moved to
+      <a href="https://edit.chaxus.com/">edit.chaxus.com</a>. Redirecting…
+    </p>
+  </body>
+</html>
