@@ -1,0 +1,33 @@
+# Online Document Editor — https://edit.chaxus.com
+# Strategy: "citable, not trained." Allow search engines and AI retrieval /
+# citation crawlers (so the app can surface in search and be cited by AI
+# assistants), but block training-only crawlers.
+
+# Default: allow everything — search engines + AI retrieval/citation bots
+# (OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-User, Bingbot, …).
+User-agent: *
+Allow: /
+
+# Block training-only crawlers.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+Sitemap: https://edit.chaxus.com/sitemap.xml

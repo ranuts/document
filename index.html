@@ -9,7 +9,57 @@
     <meta name="theme-color" content="#0052cc" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>Document Editor</title>
+
+    <title>Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser</title>
+    <meta
+      name="description"
+      content="A free, privacy-first online document editor. Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no upload, no sign-up, works offline. Powered by OnlyOffice."
+    />
+    <link rel="canonical" href="https://edit.chaxus.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:title" content="Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser" />
+    <meta
+      property="og:description"
+      content="Free, privacy-first document editor. Edit DOCX, XLSX, PPTX and CSV in your browser — no upload, no sign-up, works offline."
+    />
+    <meta property="og:url" content="https://edit.chaxus.com/" />
+    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser" />
+    <meta
+      name="twitter:description"
+      content="Free, privacy-first document editor. Edit DOCX, XLSX, PPTX and CSV in your browser — no upload, no sign-up, works offline."
+    />
+    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <!-- Structured data: helps search engines and AI assistants understand the app -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Online Document Editor",
+        "url": "https://edit.chaxus.com/",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any (web browser)",
+        "browserRequirements": "Requires a modern browser with WebAssembly support",
+        "description": "A free, privacy-first online document editor. Edit DOCX, XLSX, PPTX and CSV files directly in the browser with no upload, no sign-up, and offline support. Powered by OnlyOffice.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": [
+          "Edit DOCX, XLSX, PPTX and CSV files",
+          "100% client-side — files never leave your device",
+          "No account or sign-up required",
+          "Open documents from a URL via ?src= or ?file=",
+          "Installable PWA with offline support",
+          "Embeddable via postMessage API"
+        ]
+      }
+    </script>
+
     <script src="web-apps/apps/api/documents/api.js"></script>
   </head>
 
@@ -17,6 +67,28 @@
     <div id="app" class="w-full h-full">
       <div id="iframe"></div>
     </div>
+
+    <!-- Crawlable content for search engines / AI assistants (hidden once the app boots). -->
+    <noscript>
+      <main style="max-width: 720px; margin: 0 auto; padding: 24px; font-family: system-ui, sans-serif">
+        <h1>Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser</h1>
+        <p>
+          A free, privacy-first document editor that runs entirely in your browser. Edit Microsoft Word (DOCX), Excel
+          (XLSX), PowerPoint (PPTX) and CSV files with no upload, no sign-up, and full offline support. Powered by
+          OnlyOffice.
+        </p>
+        <h2>Key features</h2>
+        <ul>
+          <li>Edit DOCX, XLSX, PPTX and CSV files directly in the browser</li>
+          <li>Privacy-first: all processing happens locally — your files are never uploaded</li>
+          <li>No server and no account required</li>
+          <li>Open documents from a URL with the <code>?src=</code> or <code>?file=</code> parameter</li>
+          <li>Installable as a PWA and usable offline</li>
+          <li>Embeddable in other sites through a postMessage API</li>
+        </ul>
+        <p>This editor requires JavaScript. Please enable JavaScript to start editing.</p>
+      </main>
+    </noscript>
   </body>
   <script type="module" src="./index.ts"></script>
 </html>
