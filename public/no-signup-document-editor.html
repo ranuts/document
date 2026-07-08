@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="/img/64.png" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0052cc" />
+
+    <title>Document Editor — No Sign Up, No Upload · Free &amp; Open Source</title>
+    <meta
+      name="description"
+      content="Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV in your browser with no sign up, no login and no upload. Free, open source (AGPL-3.0) and works offline — your files never leave your device."
+    />
+    <link rel="canonical" href="https://edit.chaxus.com/no-signup-document-editor" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:title" content="Document Editor — No Sign Up, No Upload · Free &amp; Open Source" />
+    <meta
+      property="og:description"
+      content="Edit DOCX, XLSX, PPTX and CSV in your browser — no sign up, no upload, works offline. Free and open source."
+    />
+    <meta property="og:url" content="https://edit.chaxus.com/no-signup-document-editor" />
+    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Document Editor — No Sign Up, No Upload · Free &amp; Open Source" />
+    <meta
+      name="twitter:description"
+      content="Edit DOCX, XLSX, PPTX and CSV in your browser — no sign up, no upload, works offline. Free and open source."
+    />
+    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "Online Document Editor",
+            "url": "https://edit.chaxus.com/no-signup-document-editor",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any (web browser)",
+            "isAccessibleForFree": true,
+            "description": "A free, open-source document editor that runs entirely in the browser with no sign up and no upload. Edit DOCX, XLSX, PPTX and CSV offline.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "Online Document Editor",
+            "codeRepository": "https://github.com/ranuts/document",
+            "programmingLanguage": "TypeScript",
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Do I need to sign up or create an account?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. There is no sign up, no login and no account of any kind. Open the editor and start editing immediately."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are my files uploaded to a server?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. All editing happens locally in your browser using WebAssembly. Your documents never leave your device."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is it really free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. It is free and open source under the AGPL-3.0 license. You can also self-host it from the source code on GitHub."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I use it offline?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. It is an installable PWA and works fully offline once loaded."
+                }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://edit.chaxus.com/" },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "No sign up document editor",
+                "item": "https://edit.chaxus.com/no-signup-document-editor"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #ffffff;
+        --fg: #1f2937;
+        --muted: #6b7280;
+        --accent: #0052cc;
+        --border: #e5e7eb;
+        --card: #f9fafb;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1116;
+          --fg: #e6e8eb;
+          --muted: #9aa2ad;
+          --accent: #5b9bff;
+          --border: #262b33;
+          --card: #171a21;
+        }
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        line-height: 1.65;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--border);
+      }
+      header a {
+        color: var(--fg);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .gh {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: clamp(26px, 5vw, 38px);
+        line-height: 1.2;
+        margin: 32px 0 12px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 36px 0 12px;
+      }
+      p {
+        margin: 12px 0;
+      }
+      .lead {
+        font-size: 18px;
+        color: var(--muted);
+      }
+      .cta {
+        display: inline-block;
+        margin: 20px 0;
+        padding: 14px 28px;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 17px;
+      }
+      ul {
+        padding-left: 20px;
+      }
+      li {
+        margin: 8px 0;
+      }
+      .oss {
+        margin: 28px 0;
+        padding: 18px 20px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      .oss a {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      a {
+        color: var(--accent);
+      }
+      .faq h3 {
+        font-size: 17px;
+        margin: 20px 0 4px;
+      }
+      footer {
+        margin-top: 48px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 14px;
+      }
+      footer a {
+        color: var(--muted);
+        margin-right: 16px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <a href="/">📝 Online Document Editor</a>
+      <a class="gh" href="https://github.com/ranuts/document" rel="noopener">★ Open source on GitHub</a>
+    </header>
+
+    <main class="wrap">
+      <h1>Free Online Document Editor — No Sign Up, No Upload</h1>
+      <p class="lead">
+        Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files right in your browser. No account, no login, no
+        subscription — and your files are never uploaded anywhere.
+      </p>
+
+      <a class="cta" href="/">Open the editor →</a>
+
+      <p>
+        Most "free" online editors ask you to create an account, then quietly upload your document to their servers.
+        This one does neither. Everything runs locally in your browser with WebAssembly, so your files stay on your
+        device. Close the tab and nothing is left behind.
+      </p>
+
+      <h2>Why people use it</h2>
+      <ul>
+        <li><strong>No sign up, no login, no subscription</strong> — open the page and start editing.</li>
+        <li><strong>No upload</strong> — 100% client-side; your documents never leave your device.</li>
+        <li><strong>All the common formats</strong> — DOCX, XLSX, PPTX and CSV, powered by OnlyOffice.</li>
+        <li><strong>Works offline</strong> — installable as a PWA and usable with no connection.</li>
+        <li><strong>Open source</strong> — audit it or self-host it yourself.</li>
+      </ul>
+
+      <div class="oss">
+        <strong>Open source &amp; self-hostable.</strong> This editor is fully open source under the AGPL-3.0 license —
+        there is no hidden telemetry and nothing to trust us on. Read the code, file issues, or run your own copy:
+        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+      </div>
+
+      <h2 class="faq">Frequently asked questions</h2>
+      <div class="faq">
+        <h3>Do I need to sign up or create an account?</h3>
+        <p>
+          No. There is no sign up, no login and no account of any kind. Open the editor and start editing immediately.
+        </p>
+        <h3>Are my files uploaded to a server?</h3>
+        <p>
+          No. All editing happens locally in your browser using WebAssembly. Your documents never leave your device.
+        </p>
+        <h3>Is it really free?</h3>
+        <p>
+          Yes. It is free and open source under the AGPL-3.0 license. You can also self-host it from the
+          <a href="https://github.com/ranuts/document" rel="noopener">source code on GitHub</a>.
+        </p>
+        <h3>Can I use it offline?</h3>
+        <p>Yes. It is an installable PWA and works fully offline once loaded.</p>
+      </div>
+
+      <footer>
+        <a href="/">Open editor</a>
+        <a href="/vs/google-docs">vs Google Docs</a>
+        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      </footer>
+    </main>
+  </body>
+</html>

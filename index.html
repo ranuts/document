@@ -55,8 +55,21 @@
           "No account or sign-up required",
           "Open documents from a URL via ?src= or ?file=",
           "Installable PWA with offline support",
-          "Embeddable via postMessage API"
+          "Embeddable via postMessage API",
+          "Free and open source (AGPL-3.0)"
         ]
+      }
+    </script>
+
+    <!-- Open source: signals a trustworthy, self-hostable tool to search engines and AI assistants. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "Online Document Editor",
+        "codeRepository": "https://github.com/ranuts/document",
+        "programmingLanguage": "TypeScript",
+        "license": "https://www.gnu.org/licenses/agpl-3.0.html"
       }
     </script>
 
@@ -85,7 +98,16 @@
           <li>Open documents from a URL with the <code>?src=</code> or <code>?file=</code> parameter</li>
           <li>Installable as a PWA and usable offline</li>
           <li>Embeddable in other sites through a postMessage API</li>
+          <li>
+            Free and open source (AGPL-3.0) —
+            <a href="https://github.com/ranuts/document" rel="noopener">view the source on GitHub</a>
+          </li>
         </ul>
+        <p>
+          See also:
+          <a href="/no-signup-document-editor">document editor with no sign up</a> and a
+          <a href="/vs/google-docs">private, open-source Google Docs alternative</a>.
+        </p>
         <p>This editor requires JavaScript. Please enable JavaScript to start editing.</p>
       </main>
     </noscript>

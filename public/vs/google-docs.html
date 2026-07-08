@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="/img/64.png" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0052cc" />
+
+    <title>Private, Open-Source Google Docs Alternative — No AI, No Account</title>
+    <meta
+      name="description"
+      content="A private Google Docs alternative that runs entirely in your browser: no account, no cloud upload, no AI trained on your documents. Free, open source (AGPL-3.0), works offline. Edit DOCX, XLSX, PPTX and CSV."
+    />
+    <link rel="canonical" href="https://edit.chaxus.com/vs/google-docs" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:title" content="Private, Open-Source Google Docs Alternative — No AI, No Account" />
+    <meta
+      property="og:description"
+      content="A private Google Docs alternative: no account, no cloud upload, no AI on your files. Free and open source."
+    />
+    <meta property="og:url" content="https://edit.chaxus.com/vs/google-docs" />
+    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Private, Open-Source Google Docs Alternative — No AI, No Account" />
+    <meta
+      name="twitter:description"
+      content="A private Google Docs alternative: no account, no cloud upload, no AI on your files. Free and open source."
+    />
+    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "Online Document Editor",
+            "url": "https://edit.chaxus.com/vs/google-docs",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any (web browser)",
+            "isAccessibleForFree": true,
+            "description": "A private, open-source Google Docs alternative that runs entirely in the browser with no account, no cloud upload and no AI trained on your documents.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "Online Document Editor",
+            "codeRepository": "https://github.com/ranuts/document",
+            "programmingLanguage": "TypeScript",
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is this a Google Docs alternative without AI?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. There are no AI features and nothing is trained on your documents. It is a plain, private document editor that runs locally in your browser."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do I need a Google account or any account?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No account is required. There is no sign up and no login of any kind."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are my documents stored in the cloud?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Everything runs client-side in your browser. Your files are never uploaded and stay on your device."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is it open source?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, it is open source under the AGPL-3.0 license and can be self-hosted from the source code on GitHub."
+                }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://edit.chaxus.com/" },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "vs Google Docs",
+                "item": "https://edit.chaxus.com/vs/google-docs"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #ffffff;
+        --fg: #1f2937;
+        --muted: #6b7280;
+        --accent: #0052cc;
+        --border: #e5e7eb;
+        --card: #f9fafb;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1116;
+          --fg: #e6e8eb;
+          --muted: #9aa2ad;
+          --accent: #5b9bff;
+          --border: #262b33;
+          --card: #171a21;
+        }
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        line-height: 1.65;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--border);
+      }
+      header a {
+        color: var(--fg);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .gh {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: clamp(26px, 5vw, 38px);
+        line-height: 1.2;
+        margin: 32px 0 12px;
+      }
+      h2 {
+        font-size: 22px;
+        margin: 36px 0 12px;
+      }
+      p {
+        margin: 12px 0;
+      }
+      .lead {
+        font-size: 18px;
+        color: var(--muted);
+      }
+      .cta {
+        display: inline-block;
+        margin: 20px 0;
+        padding: 14px 28px;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 17px;
+      }
+      a {
+        color: var(--accent);
+      }
+      .cmp {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+        font-size: 15px;
+      }
+      .cmp th,
+      .cmp td {
+        border: 1px solid var(--border);
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .cmp th {
+        background: var(--card);
+      }
+      .scroll {
+        overflow-x: auto;
+      }
+      .oss {
+        margin: 28px 0;
+        padding: 18px 20px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      .oss a {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .faq h3 {
+        font-size: 17px;
+        margin: 20px 0 4px;
+      }
+      footer {
+        margin-top: 48px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 14px;
+      }
+      footer a {
+        color: var(--muted);
+        margin-right: 16px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <a href="/">📝 Online Document Editor</a>
+      <a class="gh" href="https://github.com/ranuts/document" rel="noopener">★ Open source on GitHub</a>
+    </header>
+
+    <main class="wrap">
+      <h1>A Private, Open-Source Google Docs Alternative</h1>
+      <p class="lead">
+        No account. No cloud upload. No AI trained on your documents. Edit DOCX, XLSX, PPTX and CSV entirely in your
+        browser — your files never leave your device.
+      </p>
+
+      <a class="cta" href="/">Open the editor →</a>
+
+      <p>
+        Google Docs is convenient, but every document lives on Google's servers and is tied to your account. If you just
+        want to open and edit a file without handing it to the cloud — or without AI features you never asked for — this
+        is a lightweight, private alternative that runs 100% client-side.
+      </p>
+
+      <h2>How it compares</h2>
+      <div class="scroll">
+        <table class="cmp">
+          <thead>
+            <tr>
+              <th></th>
+              <th>This editor</th>
+              <th>Google Docs</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Account required</td>
+              <td>No</td>
+              <td>Yes (Google account)</td>
+            </tr>
+            <tr>
+              <td>Files uploaded to cloud</td>
+              <td>No — stays on your device</td>
+              <td>Yes — stored on Google servers</td>
+            </tr>
+            <tr>
+              <td>AI on your documents</td>
+              <td>None</td>
+              <td>Gemini features integrated</td>
+            </tr>
+            <tr>
+              <td>Works offline</td>
+              <td>Yes (PWA)</td>
+              <td>Limited</td>
+            </tr>
+            <tr>
+              <td>Open source</td>
+              <td>Yes (AGPL-3.0)</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Self-hostable</td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Native formats</td>
+              <td>DOCX, XLSX, PPTX, CSV</td>
+              <td>Google formats (convert on import)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="oss">
+        <strong>Don't take our word for it — read the code.</strong> Because it is open source under AGPL-3.0, you can
+        verify that nothing is uploaded and run your own copy:
+        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+      </div>
+
+      <h2 class="faq">Frequently asked questions</h2>
+      <div class="faq">
+        <h3>Is this a Google Docs alternative without AI?</h3>
+        <p>
+          Yes. There are no AI features and nothing is trained on your documents. It is a plain, private document editor
+          that runs locally in your browser.
+        </p>
+        <h3>Do I need a Google account or any account?</h3>
+        <p>No account is required. There is no sign up and no login of any kind.</p>
+        <h3>Are my documents stored in the cloud?</h3>
+        <p>No. Everything runs client-side in your browser. Your files are never uploaded and stay on your device.</p>
+        <h3>Is it open source?</h3>
+        <p>
+          Yes, it is open source under the AGPL-3.0 license and can be self-hosted from the
+          <a href="https://github.com/ranuts/document" rel="noopener">source code on GitHub</a>.
+        </p>
+      </div>
+
+      <footer>
+        <a href="/">Open editor</a>
+        <a href="/no-signup-document-editor">No sign up editor</a>
+        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      </footer>
+    </main>
+  </body>
+</html>
