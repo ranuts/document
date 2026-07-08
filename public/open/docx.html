@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="/img/64.png" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0052cc" />
+
+    <title>Open DOCX Without Word — Free, in Your Browser, No Upload</title>
+    <meta
+      name="description"
+      content="Open and edit a DOCX (Word) file without Microsoft Word, without a Microsoft account and without Copilot. Free, open source, runs in your browser — your file is never uploaded."
+    />
+    <link rel="canonical" href="https://edit.chaxus.com/open/docx" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:title" content="Open DOCX Without Word — Free, in Your Browser, No Upload" />
+    <meta
+      property="og:description"
+      content="Open and edit DOCX files without Microsoft Word or an account. Free, open source, nothing uploaded."
+    />
+    <meta property="og:url" content="https://edit.chaxus.com/open/docx" />
+    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Open DOCX Without Word — Free, in Your Browser, No Upload" />
+    <meta
+      name="twitter:description"
+      content="Open and edit DOCX files without Microsoft Word or an account. Free, open source, nothing uploaded."
+    />
+    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "Online Document Editor",
+            "url": "https://edit.chaxus.com/open/docx",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any (web browser)",
+            "isAccessibleForFree": true,
+            "description": "Open and edit DOCX (Word) files in the browser without Microsoft Word, no account and no upload.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "Online Document Editor",
+            "codeRepository": "https://github.com/ranuts/document",
+            "programmingLanguage": "TypeScript",
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Can I open a DOCX file without Microsoft Word?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. This editor opens DOCX files directly in your browser, so you do not need Microsoft Word, Office or a Microsoft account installed."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is the Word formatting preserved?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. It renders DOCX with the OnlyOffice engine, so fonts, tables, images and layout are preserved — not a stripped-down text view."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my document uploaded anywhere?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. The file is opened locally in your browser with WebAssembly and never leaves your device."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I edit and save it, not just view?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. You can edit the document and download it again as DOCX, PDF or TXT — no account required."
+                }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://edit.chaxus.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Open DOCX", "item": "https://edit.chaxus.com/open/docx" }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <link rel="stylesheet" href="/landing.css" />
+  </head>
+
+  <body>
+    <header>
+      <a href="/">📝 Online Document Editor</a>
+      <a class="gh" href="https://github.com/ranuts/document" rel="noopener">★ Open source on GitHub</a>
+    </header>
+
+    <main class="wrap">
+      <h1>Open a DOCX File Without Microsoft Word</h1>
+      <p class="lead">
+        Got a <strong>.docx</strong> file but no Word installed — or no Microsoft account, and no interest in Copilot?
+        Open it right here in your browser. Nothing to install, nothing uploaded.
+      </p>
+
+      <a class="cta" href="/">Open your DOCX →</a>
+
+      <p>
+        DOCX is the Microsoft Word format, but you do not need Word to read or edit one. This editor renders DOCX with
+        the OnlyOffice engine, so your fonts, tables, images and page layout look right — not a plain-text fallback.
+        Everything runs locally with WebAssembly, so the file stays on your device.
+      </p>
+
+      <h2>What you can do</h2>
+      <ul>
+        <li>Open and read any <strong>.docx</strong> (and .doc) file with full formatting</li>
+        <li>Edit the text, then download again as DOCX, PDF or TXT</li>
+        <li>No Microsoft Word, no Microsoft account, no Copilot</li>
+        <li>No upload — your document never leaves your device</li>
+        <li>Works offline as an installable app</li>
+      </ul>
+
+      <div class="oss">
+        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
+        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+      </div>
+
+      <h2 class="faq">Frequently asked questions</h2>
+      <div class="faq">
+        <h3>Can I open a DOCX file without Microsoft Word?</h3>
+        <p>Yes. It opens DOCX directly in your browser — no Word, Office or Microsoft account needed.</p>
+        <h3>Is the Word formatting preserved?</h3>
+        <p>Yes. It uses the OnlyOffice engine, so fonts, tables, images and layout are preserved.</p>
+        <h3>Is my document uploaded anywhere?</h3>
+        <p>No. The file is opened locally with WebAssembly and never leaves your device.</p>
+        <h3>Can I edit and save it, not just view?</h3>
+        <p>Yes. Edit it and download again as DOCX, PDF or TXT — no account required.</p>
+      </div>
+
+      <footer>
+        <a href="/">Open editor</a>
+        <a href="/open/xlsx">Open XLSX</a>
+        <a href="/open/pptx">Open PPTX</a>
+        <a href="/no-signup-document-editor">No sign up</a>
+        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      </footer>
+    </main>
+  </body>
+</html>
