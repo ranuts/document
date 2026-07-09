@@ -1,2 +1,5 @@
 # Generated lockfile — managed by pnpm, not prettier.
 pnpm-lock.yaml
+
+# Vendored ranui design-token layer (copied from ranui/dist by bin/build.sh).
+public/ran-tokens.css

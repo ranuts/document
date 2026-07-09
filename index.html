@@ -16,6 +16,10 @@
       content="A free, privacy-first online document editor. Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no upload, no sign-up, works offline. Powered by OnlyOffice."
     />
     <link rel="canonical" href="https://edit.chaxus.com/" />
+    <!-- ranui design-token layer (vendored from ranui/dist/ranui.css, re-synced by bin/build.sh).
+         Loaded before home.css so the landing hero's --ran-* tokens resolve on first paint. -->
+    <link rel="stylesheet" href="/ran-tokens.css" />
+    <link rel="stylesheet" href="/home.css" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -57,6 +61,58 @@
           "Installable PWA with offline support",
           "Embeddable via postMessage API",
           "Free and open source (AGPL-3.0)"
+        ],
+        "sameAs": [
+          "https://github.com/ranuts/document",
+          "https://www.npmjs.com/package/@ranui/preview",
+          "https://ran.chaxus.com"
+        ],
+        "isPartOf": {
+          "@type": "SoftwareApplication",
+          "name": "ran ecosystem",
+          "url": "https://ran.chaxus.com"
+        }
+      }
+    </script>
+
+    <!-- FAQ structured data: lets search engines and AI assistants quote answers verbatim. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are my files uploaded anywhere?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. There is no server. Files are opened and saved locally on your device and are never uploaded — you can verify it in the network tab, or read the source."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which formats can I edit?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, powered by OnlyOffice running in WebAssembly."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it work offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. It is an installable PWA — once loaded it keeps working with no internet, because all editing runs locally in your browser."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need an account?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No account, no sign-up, no email. Open the page and edit."
+            }
+          }
         ]
       }
     </script>
@@ -77,47 +133,221 @@
   </head>
 
   <body>
+    <!-- Shared GitHub octocat mark, referenced via <use href="#gh-mark"> below
+         so the path is defined once instead of inlined at every occurrence. -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="gh-mark" viewBox="0 0 16 16">
+        <path
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+        />
+      </symbol>
+    </svg>
     <div id="app" class="w-full h-full">
+      <!-- Crawlable landing hero. Rendered in the served HTML for SEO/GEO; hidden
+           the moment a document opens (body.landing-active toggles it, see index.ts). -->
+      <section id="landing-hero">
+        <header class="bar">
+          <a class="brand" href="/"><span class="dot"></span>Document Editor<small>edit.chaxus.com</small></a>
+          <nav>
+            <a href="/offline-document-editor">Offline</a>
+            <a href="/no-signup-document-editor">No sign-up</a>
+            <a href="/vs/google-docs">vs Google Docs</a>
+            <a class="gh" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+              <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg>
+              Open source
+            </a>
+          </nav>
+        </header>
+
+        <div class="stage">
+          <div class="console">
+            <span class="beacon">● offline-ready</span>
+            <p class="hero-wm" aria-hidden="true">.docx</p>
+
+            <div class="hero">
+              <div class="copy">
+                <span class="eyebrow reveal d1">Local-first · open source</span>
+                <h1 class="reveal d2">
+                  Edit <span class="sel">Word, Excel &amp; PowerPoint</span>
+                  <span class="thin">without leaving your browser.</span>
+                </h1>
+                <p class="lead reveal d3">
+                  A privacy-first document editor that runs entirely on your device. No upload, no sign-up, works
+                  offline.
+                </p>
+                <div class="status reveal d4" role="status">
+                  <b>on-device</b><span class="sep">·</span><span>0&nbsp;bytes uploaded</span> <span class="sep">·</span
+                  ><span class="fmt">.docx .xlsx .pptx .csv</span>
+                </div>
+                <div class="cta-row reveal d5">
+                  <button class="btn primary" id="hero-open" type="button">
+                    Open a file <span class="arrow">→</span>
+                  </button>
+                  <button class="btn ghost" id="hero-new" type="button">New document</button>
+                  <a class="btn ghost" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+                    <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg>
+                    View the source
+                  </a>
+                </div>
+                <p class="crosslink reveal d5">
+                  Only need to <em>view or embed</em> a file, not edit it? →
+                  <a href="https://github.com/ranuts/fileview" rel="noopener" target="_blank">@ranui/preview</a>
+                </p>
+              </div>
+
+              <div class="visual">
+                <div class="frame" aria-hidden="true">
+                  <div class="frame-bar">
+                    <span class="tl"><i></i><i></i><i></i></span>
+                    <span class="frame-file"><span class="ext">DOCX</span> quarterly-report.docx</span>
+                    <span class="frame-lock">local only</span>
+                  </div>
+                  <div class="doc">
+                    <span class="tag">✎ you</span>
+                    <div class="h title"></div>
+                    <div class="l w1"></div>
+                    <div class="l w2 sel"></div>
+                    <div class="l w3"></div>
+                    <div class="doc-tools">
+                      <span>B</span><span>I</span><span>U</span><span>¶ styles</span><span>∑ table</span
+                      ><span>▤ chart</span>
+                    </div>
+                    <div class="l w1"></div>
+                    <div class="l w2"></div>
+                    <div class="l type"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="steps-wrap">
+          <h2 class="steps-title">How it works</h2>
+          <div class="steps">
+            <div class="step">
+              <div class="n">01</div>
+              <h3>Open a file</h3>
+              <p>Drop in a DOCX, XLSX, PPTX or CSV — or start a blank one.</p>
+              <span class="loc">stays on device</span>
+            </div>
+            <div class="step">
+              <div class="n">02</div>
+              <h3>Edit for real</h3>
+              <p>Full formatting, tables, charts and formulas via OnlyOffice.</p>
+              <span class="loc">stays on device</span>
+            </div>
+            <div class="step">
+              <div class="n">03</div>
+              <h3>Save it back</h3>
+              <p>Export to the same format. Nothing was ever uploaded.</p>
+              <span class="loc">stays on device</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="band">
+          <div class="band-inner">
+            <h2 class="band-label">Why it's different</h2>
+            <div class="grid">
+              <div class="cell">
+                <div class="k">100% CLIENT-SIDE</div>
+                <h3>Files never leave your device</h3>
+                <p>Every document is opened, edited and saved locally. There is no server to upload to.</p>
+              </div>
+              <div class="cell">
+                <div class="k">NO ACCOUNT</div>
+                <h3>Nothing to sign up for</h3>
+                <p>No email, no login wall. Open the page and start editing immediately.</p>
+              </div>
+              <div class="cell">
+                <div class="k">PWA · OFFLINE</div>
+                <h3>Install it, use it on a plane</h3>
+                <p>Add it to your home screen and it keeps working with no internet connection.</p>
+              </div>
+              <div class="cell">
+                <div class="k">AGPL-3.0</div>
+                <h3>Open source &amp; self-hostable</h3>
+                <p>Audit exactly what runs, or host your own copy. Powered by OnlyOffice.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-wrap">
+          <div>
+            <h2>Questions, answered</h2>
+            <p>Everything search engines and AI assistants need to describe the tool accurately.</p>
+          </div>
+          <div class="qa">
+            <details open>
+              <summary>Are my files uploaded anywhere?</summary>
+              <p class="a">
+                No. There is no server. Files are opened and saved locally on your device and are never uploaded — you
+                can verify it in the network tab, or read the source.
+              </p>
+            </details>
+            <details>
+              <summary>Which formats can I edit?</summary>
+              <p class="a">
+                Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, powered by OnlyOffice running in WebAssembly.
+              </p>
+            </details>
+            <details>
+              <summary>Does it work offline?</summary>
+              <p class="a">
+                Yes. It is an installable PWA — once loaded it keeps working with no internet, because all editing runs
+                locally in your browser.
+              </p>
+            </details>
+            <details>
+              <summary>Do I need an account?</summary>
+              <p class="a">No account, no sign-up, no email. Open the page and edit.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="eco">
+          <div class="eco-inner">
+            <span class="eco-label">
+              <svg class="gitmark" aria-hidden="true"><use href="#gh-mark"></use></svg>
+              Part of the ran ecosystem · all open source
+            </span>
+            <nav>
+              <span class="here"><b>edit.chaxus.com</b> <small>Office editor</small></span>
+              <a href="https://github.com/ranuts/fileview" rel="noopener" target="_blank">
+                <b>@ranui/preview</b> <small>embed a file viewer</small>
+              </a>
+              <a href="https://ran.chaxus.com" rel="noopener" target="_blank">
+                <b>ran.chaxus.com</b> <small>UI components</small>
+              </a>
+            </nav>
+          </div>
+        </div>
+
+        <footer class="foot">
+          <span>© 2026 Document Editor · runs on your device</span>
+          <nav>
+            <a href="/offline-document-editor">Offline editor</a>
+            <a href="/no-signup-document-editor">No sign-up</a>
+            <a href="/open/docx">Open DOCX</a>
+            <a href="/convert/xlsx-to-csv">XLSX → CSV</a>
+            <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">GitHub</a>
+          </nav>
+          <span class="lic">AGPL-3.0</span>
+        </footer>
+      </section>
+
       <div id="iframe"></div>
     </div>
 
-    <!-- Crawlable content for search engines / AI assistants (hidden once the app boots). -->
+    <!-- The landing hero above is static HTML and already crawlable without JS.
+         This only tells no-JS visitors that the interactive editor needs JS. -->
     <noscript>
-      <main style="max-width: 720px; margin: 0 auto; padding: 24px; font-family: system-ui, sans-serif">
-        <h1>Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser</h1>
-        <p>
-          A free, privacy-first document editor that runs entirely in your browser. Edit Microsoft Word (DOCX), Excel
-          (XLSX), PowerPoint (PPTX) and CSV files with no upload, no sign-up, and full offline support. Powered by
-          OnlyOffice.
-        </p>
-        <h2>Key features</h2>
-        <ul>
-          <li>Edit DOCX, XLSX, PPTX and CSV files directly in the browser</li>
-          <li>Privacy-first: all processing happens locally — your files are never uploaded</li>
-          <li>No server and no account required</li>
-          <li>Open documents from a URL with the <code>?src=</code> or <code>?file=</code> parameter</li>
-          <li>Installable as a PWA and usable offline</li>
-          <li>Embeddable in other sites through a postMessage API</li>
-          <li>
-            Free and open source (AGPL-3.0) —
-            <a href="https://github.com/ranuts/document" rel="noopener">view the source on GitHub</a>
-          </li>
-        </ul>
-        <p>See also:</p>
-        <ul>
-          <li><a href="/no-signup-document-editor">Document editor with no sign up</a></li>
-          <li><a href="/vs/google-docs">Private, open-source Google Docs alternative</a></li>
-          <li><a href="/offline-document-editor">Offline document editor (works with no internet)</a></li>
-          <li>
-            Open a file without the native app:
-            <a href="/open/docx">DOCX</a>, <a href="/open/xlsx">XLSX</a>, <a href="/open/pptx">PPTX</a>
-          </li>
-          <li>
-            Convert: <a href="/convert/xlsx-to-csv">XLSX to CSV</a>, <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
-          </li>
-        </ul>
-        <p>This editor requires JavaScript. Please enable JavaScript to start editing.</p>
-      </main>
+      <p style="max-width: 720px; margin: 0 auto; padding: 24px; font-family: system-ui, sans-serif">
+        This editor requires JavaScript to run — the landing content above describes what it does. Please enable
+        JavaScript to start editing.
+      </p>
     </noscript>
   </body>
   <script type="module" src="./index.ts"></script>

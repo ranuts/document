@@ -28,6 +28,25 @@ body.embed-mode #menu-guide {
   display: none !important;
 }
 
+/* The landing hero is SEO/GEO content only — never show it inside an embed. */
+body.embed-mode #landing-hero {
+  display: none !important;
+}
+
+/* While the landing hero is active, keep the legacy overlay out of the way
+   (it stays in the DOM as a fallback) and let the page scroll past 100vh.
+   Once a document opens, landing-active is removed and the editor reclaims
+   the fixed full-height #app layout. */
+body.landing-active #control-panel-container {
+  display: none !important;
+}
+body.landing-active,
+body.landing-active #app {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+}
+
 /* Style for r-button webcomponent using ::part */
 r-button[type='text']::part(ran-btn) {
   font-size: 18px;

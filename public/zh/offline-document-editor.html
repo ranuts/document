@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="/img/64.png" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0052cc" />
+
+    <title>离线文档编辑器 — 无需联网即可编辑 DOCX、XLSX、PPTX</title>
+    <meta
+      name="description"
+      content="一款无需联网就能用的离线文档编辑器 — 在 Chromebook、笔记本或安卓设备上都好用。在浏览器本地编辑 DOCX、XLSX、PPTX 和 CSV 文件。免费、开源、可安装，文件不上传。"
+    />
+    <link rel="canonical" href="https://edit.chaxus.com/zh/offline-document-editor" />
+    <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/offline-document-editor" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://edit.chaxus.com/zh/offline-document-editor" />
+    <link rel="alternate" hreflang="x-default" href="https://edit.chaxus.com/offline-document-editor" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:title" content="离线文档编辑器 — 无需联网即可编辑 DOCX、XLSX、PPTX" />
+    <meta
+      property="og:description"
+      content="适用于 Chromebook、笔记本和安卓的离线文档编辑器。在本地编辑 DOCX、XLSX、PPTX。开源，文件不上传。"
+    />
+    <meta property="og:url" content="https://edit.chaxus.com/zh/offline-document-editor" />
+    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="离线文档编辑器 — 无需联网即可编辑 DOCX、XLSX、PPTX" />
+    <meta
+      name="twitter:description"
+      content="适用于 Chromebook、笔记本和安卓的离线文档编辑器。在本地编辑 DOCX、XLSX、PPTX。开源，文件不上传。"
+    />
+    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "Online Document Editor",
+            "url": "https://edit.chaxus.com/zh/offline-document-editor",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any (web browser)",
+            "isAccessibleForFree": true,
+            "description": "一款可安装的离线文档编辑器，在浏览器本地编辑 DOCX、XLSX、PPTX 和 CSV，无需联网、文件不上传。",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "Online Document Editor",
+            "codeRepository": "https://github.com/ranuts/document",
+            "programmingLanguage": "TypeScript",
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "它真的能离线使用吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "可以。加载完成后它就是一个可安装的 PWA，在没有网络连接时依然正常工作，因为所有编辑都在你的浏览器本地运行。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "它能在 Chromebook 上用吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "可以。它在任何现代浏览器中运行，因此在 Chromebook、笔记本、Windows、macOS、Linux 和安卓上都能用，无需从应用商店安装 App。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "我的文件会被上传吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "不会。没有服务器。文件在你的设备本地打开和保存，永远不会上传。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "我能编辑哪些格式？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "DOCX、XLSX、PPTX 和 CSV，由 OnlyOffice 提供支持。"
+                }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://edit.chaxus.com/" },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "离线文档编辑器",
+                "item": "https://edit.chaxus.com/zh/offline-document-editor"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <link rel="stylesheet" href="/landing.css" />
+  </head>
+
+  <body>
+    <header>
+      <a href="/">📝 Online Document Editor</a>
+      <a class="gh" href="https://github.com/ranuts/document" rel="noopener">★ 在 GitHub 上开源</a>
+    </header>
+
+    <main class="wrap">
+      <h1>无需联网也能用的离线文档编辑器</h1>
+      <p class="lead">
+        在没有网络的情况下编辑 Word、Excel 和 PowerPoint 文件 — 无论是
+        Chromebook、飞机上的笔记本，还是安卓平板。安装一次， 它就能持续离线工作，完全在你的设备上运行。
+      </p>
+
+      <a class="cta" href="/">打开编辑器 →</a>
+
+      <p>
+        由于所有编辑都通过 WebAssembly 在你的浏览器本地运行 — 没有服务器 — 它不需要联网就能工作。加载一次，把它安装成
+        App （PWA），你就能在任何地方打开和编辑文档，即使完全离线也没问题。你的文件永远不会离开你的设备。
+      </p>
+
+      <h2>为什么它能离线工作</h2>
+      <ul>
+        <li><strong>没有服务器</strong> — 整个编辑器都在你的设备上运行，因此无需任何网络连接</li>
+        <li><strong>可安装的 PWA</strong> — 添加到主屏幕或桌面，像 App 一样启动</li>
+        <li><strong>随处可用</strong> — Chromebook、Windows、macOS、Linux、安卓；任何现代浏览器</li>
+        <li>编辑 DOCX、XLSX、PPTX 和 CSV</li>
+        <li>无需上传、无需账号、无需注册</li>
+      </ul>
+
+      <div class="oss">
+        <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议 — 你可以核实文件确实没有被上传，或者运行你自己的副本：
+        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+      </div>
+
+      <h2 class="faq">常见问题</h2>
+      <div class="faq">
+        <h3>它真的能离线使用吗？</h3>
+        <p>可以。加载完成后它就是一个可安装的 PWA，在没有网络时依然正常工作 — 所有编辑都在本地运行。</p>
+        <h3>它能在 Chromebook 上用吗？</h3>
+        <p>可以。它在任何现代浏览器中运行 — Chromebook、笔记本、Windows、macOS、Linux 和安卓。</p>
+        <h3>我的文件会被上传吗？</h3>
+        <p>不会。没有服务器；文件留在你的设备上，永远不会上传。</p>
+        <h3>我能编辑哪些格式？</h3>
+        <p>DOCX、XLSX、PPTX 和 CSV，由 OnlyOffice 提供支持。</p>
+      </div>
+
+      <footer>
+        <a href="/">打开编辑器</a>
+        <a href="/zh/no-signup-document-editor">免注册</a>
+        <a href="/zh/open/docx">打开 DOCX</a>
+        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      </footer>
+    </main>
+  </body>
+</html>

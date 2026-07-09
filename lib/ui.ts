@@ -4,10 +4,32 @@ import { t } from '@ranuts/shared/i18n';
 import { showLoading } from './loading';
 import { onCreateNew, onOpenDocument } from './document';
 
+// Landing hero visibility. The hero (#landing-hero) lives in the served HTML for
+// SEO/GEO; it toggles in lockstep with the legacy control panel so EVERY show/hide
+// path (including the FAB error fallbacks below) keeps them in sync. Centralizing
+// it here — rather than only in index.ts's callbacks — means no raw
+// showControlPanel()/hideControlPanel() call can surface the legacy overlay on top
+// of the hero. body.landing-active also lets the page scroll and hides the legacy
+// overlay (see styles/base.css); in embed mode CSS force-hides the hero regardless.
+export const showLanding = (): void => {
+  document.body.classList.add('landing-active');
+  const hero = document.getElementById('landing-hero');
+  if (hero) hero.style.display = '';
+};
+
+export const hideLanding = (): void => {
+  document.body.classList.remove('landing-active');
+  const hero = document.getElementById('landing-hero');
+  if (hero) hero.style.display = 'none';
+};
+
 // Hide control panel and show top floating bar
 export const hideControlPanel = (): void => {
   const container = document.querySelector('#control-panel-container') as HTMLElement;
   const fabContainer = document.querySelector('#fab-container') as HTMLElement;
+
+  // A document is taking over — dismiss the crawlable landing hero with the panel.
+  hideLanding();
 
   // Always ensure FAB is visible when hiding control panel
   if (fabContainer) {
@@ -29,6 +51,11 @@ export const hideControlPanel = (): void => {
 export const showControlPanel = (): void => {
   const container = document.querySelector('#control-panel-container') as HTMLElement;
   const fabContainer = document.querySelector('#fab-container') as HTMLElement;
+
+  // Back to the home state (no document, or an error) — bring the hero back so
+  // it, not the legacy overlay, is what the user (and crawlers) see.
+  showLanding();
+
   if (container) {
     container.style.display = 'flex';
     setTimeout(() => {

@@ -1,7 +1,7 @@
 import { getAllQueryString } from 'ranuts/utils';
 import { initEmbedApi } from './lib/embed-api';
 import { initEvents, setEventUICallbacks } from './lib/events';
-import { onCreateNew, openDocumentFromUrl, setUICallbacks } from './lib/document';
+import { onCreateNew, onOpenDocument, openDocumentFromUrl, setUICallbacks } from './lib/document';
 import { parseReadonly } from '@ranuts/shared/document-utils';
 import { getDocmentObj } from '@ranuts/shared/store';
 import { initAnalytics } from './lib/analytics';
@@ -9,7 +9,9 @@ import {
   createControlPanel,
   createFixedActionButton,
   hideControlPanel,
+  hideLanding,
   showControlPanel,
+  showLanding,
   showMenuGuide,
 } from './lib/ui';
 import 'ranui/button';
@@ -19,6 +21,7 @@ import './styles/base.css';
 declare global {
   interface Window {
     onCreateNew: (ext: string) => Promise<void>;
+    onOpenDocument: () => void;
     hideControlPanel?: () => void;
     showControlPanel?: () => void;
     DocsAPI: {
@@ -34,14 +37,18 @@ initEmbedApi();
 // Privacy-friendly analytics (no-op unless VITE_CF_BEACON_TOKEN is set; never in embed mode)
 initAnalytics();
 
-// Set up UI callbacks to avoid circular dependency
+// Set up UI callbacks to avoid circular dependency. The landing hero is toggled
+// inside hideControlPanel/showControlPanel themselves (see lib/ui.ts), so these
+// raw functions already keep the hero in sync — no re-wrapping needed.
 setUICallbacks({
   hideControlPanel,
   showControlPanel,
   showMenuGuide,
 });
 
-// Set up UI callbacks for events module
+// Set up UI callbacks for events module. Opening a document over the desktop
+// integration channel (RENDER_OFFICE) dismisses the landing hero via
+// hideControlPanel's built-in hideLanding() call.
 setEventUICallbacks({
   hideControlPanel,
   showMenuGuide,
@@ -49,6 +56,8 @@ setEventUICallbacks({
 
 // Export onCreateNew to window
 window.onCreateNew = onCreateNew;
+// Expose the upload flow globally so the landing hero (and other host pages) can trigger it.
+window.onOpenDocument = onOpenDocument;
 
 // Export control panel functions for use in other modules
 window.hideControlPanel = hideControlPanel;
@@ -57,6 +66,13 @@ window.showControlPanel = showControlPanel;
 // Initialize UI components
 createFixedActionButton();
 createControlPanel();
+
+// Wire the landing hero CTAs: primary opens the file picker, secondary starts a
+// blank DOCX. Both funnel into the same flows the legacy control panel uses.
+const heroOpen = document.getElementById('hero-open');
+if (heroOpen) heroOpen.addEventListener('click', () => onOpenDocument());
+const heroNew = document.getElementById('hero-new');
+if (heroNew) heroNew.addEventListener('click', () => void window.onCreateNew('.docx'));
 
 // Check for file or src parameter in URL
 // Both parameters support opening document from URL
@@ -89,6 +105,16 @@ const toggleAgentPanelLazy = (): void => {
 window.addEventListener('message', (event: MessageEvent) => {
   if (event.data?.type === 'agent:toggle') toggleAgentPanelLazy();
 });
+// Landing hero orchestration. Only the bare homepage (no ?file/?src, not embedded)
+// shows the crawlable hero. If a document is about to load, or we're embedded,
+// hide it immediately to avoid a flash before the editor takes over.
+const isEmbedded = document.body.classList.contains('embed-mode');
+if (documentUrl || isEmbedded) {
+  hideLanding();
+} else {
+  showLanding();
+}
+
 if (documentUrl) {
   // Decode URL if it's encoded
   try {

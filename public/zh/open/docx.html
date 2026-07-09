@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="/img/64.png" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0052cc" />
+
+    <title>无需 Word 打开 DOCX — 免费、在浏览器中、不上传</title>
+    <meta
+      name="description"
+      content="无需 Microsoft Word、无需微软账号、无需 Copilot，即可打开和编辑 DOCX（Word）文件。免费、开源，在浏览器中运行 — 你的文件永远不会被上传。"
+    />
+    <link rel="canonical" href="https://edit.chaxus.com/zh/open/docx" />
+    <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/open/docx" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://edit.chaxus.com/zh/open/docx" />
+    <link rel="alternate" hreflang="x-default" href="https://edit.chaxus.com/open/docx" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:title" content="无需 Word 打开 DOCX — 免费、在浏览器中、不上传" />
+    <meta
+      property="og:description"
+      content="无需 Microsoft Word 或账号即可打开和编辑 DOCX 文件。免费、开源、文件不上传。"
+    />
+    <meta property="og:url" content="https://edit.chaxus.com/zh/open/docx" />
+    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="无需 Word 打开 DOCX — 免费、在浏览器中、不上传" />
+    <meta
+      name="twitter:description"
+      content="无需 Microsoft Word 或账号即可打开和编辑 DOCX 文件。免费、开源、文件不上传。"
+    />
+    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "Online Document Editor",
+            "url": "https://edit.chaxus.com/zh/open/docx",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any (web browser)",
+            "isAccessibleForFree": true,
+            "description": "在浏览器中打开和编辑 DOCX（Word）文件，无需 Microsoft Word、无需账号、不上传。",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "Online Document Editor",
+            "codeRepository": "https://github.com/ranuts/document",
+            "programmingLanguage": "TypeScript",
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "我能在没有 Microsoft Word 的情况下打开 DOCX 文件吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "可以。这个编辑器直接在你的浏览器中打开 DOCX 文件，因此你无需安装 Microsoft Word、Office 或微软账号。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Word 的排版会被保留吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "会。它用 OnlyOffice 引擎渲染 DOCX，因此字体、表格、图片和排版都会被保留 — 而不是简化的纯文本视图。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "我的文档会被上传到某个地方吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "不会。文件通过 WebAssembly 在你的浏览器本地打开，永远不会离开你的设备。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "我能编辑并保存，而不只是查看吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "可以。你可以编辑文档，再重新下载为 DOCX、PDF 或 TXT — 无需账号。"
+                }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "首页", "item": "https://edit.chaxus.com/" },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "打开 DOCX",
+                "item": "https://edit.chaxus.com/zh/open/docx"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <link rel="stylesheet" href="/landing.css" />
+  </head>
+
+  <body>
+    <header>
+      <a href="/">📝 Online Document Editor</a>
+      <a class="gh" href="https://github.com/ranuts/document" rel="noopener">★ 在 GitHub 上开源</a>
+    </header>
+
+    <main class="wrap">
+      <h1>无需 Microsoft Word 打开 DOCX 文件</h1>
+      <p class="lead">
+        收到一个 <strong>.docx</strong> 文件，却没装 Word — 或者没有微软账号，也不想用
+        Copilot？就在这里的浏览器里打开它。 无需安装，文件不上传。
+      </p>
+
+      <a class="cta" href="/">打开你的 DOCX →</a>
+
+      <p>
+        DOCX 是 Microsoft Word 的格式，但你不需要 Word 就能阅读或编辑它。这个编辑器用 OnlyOffice 引擎渲染
+        DOCX，因此你的字体、表格、图片和页面排版都能正确显示 — 而不是纯文本降级方案。一切都通过 WebAssembly
+        在本地运行，文件始终留在你的设备上。
+      </p>
+
+      <h2>你可以做什么</h2>
+      <ul>
+        <li>打开并阅读任何 <strong>.docx</strong>（以及 .doc）文件，完整保留排版</li>
+        <li>编辑文本，再重新下载为 DOCX、PDF 或 TXT</li>
+        <li>无需 Microsoft Word、无需微软账号、无需 Copilot</li>
+        <li>不上传 — 你的文档永远不会离开你的设备</li>
+        <li>可作为可安装 App 离线使用</li>
+      </ul>
+
+      <div class="oss">
+        <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议 — 你可以核实文件确实没有被上传，或者运行你自己的副本：
+        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+      </div>
+
+      <h2 class="faq">常见问题</h2>
+      <div class="faq">
+        <h3>我能在没有 Microsoft Word 的情况下打开 DOCX 文件吗？</h3>
+        <p>可以。它直接在你的浏览器中打开 DOCX — 无需 Word、Office 或微软账号。</p>
+        <h3>Word 的排版会被保留吗？</h3>
+        <p>会。它使用 OnlyOffice 引擎，因此字体、表格、图片和排版都会被保留。</p>
+        <h3>我的文档会被上传到某个地方吗？</h3>
+        <p>不会。文件通过 WebAssembly 在本地打开，永远不会离开你的设备。</p>
+        <h3>我能编辑并保存，而不只是查看吗？</h3>
+        <p>可以。编辑后再重新下载为 DOCX、PDF 或 TXT — 无需账号。</p>
+      </div>
+
+      <footer>
+        <a href="/">打开编辑器</a>
+        <a href="/zh/open/xlsx">打开 XLSX</a>
+        <a href="/zh/open/pptx">打开 PPTX</a>
+        <a href="/zh/no-signup-document-editor">免注册</a>
+        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      </footer>
+    </main>
+  </body>
+</html>
