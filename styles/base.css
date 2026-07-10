@@ -47,26 +47,19 @@ body.landing-active #app {
   overflow: visible;
 }
 
-/* Style for r-button webcomponent using ::part */
-r-button[type='text']::part(ran-btn) {
+/* Style for r-button webcomponent using ::part.
+   r-button exports parts "button" (container) and "content" (padding/border/
+   typography) — see node_modules/ranui/dist/button-*.js. */
+r-button[type='text']::part(content) {
   font-size: 18px;
   font-weight: 500;
   padding: 10px 20px;
 }
 
-r-button[type='text']::part(ran-btn-content) {
-  font-size: 18px;
-  font-weight: 500;
-}
-
 @media (max-width: 480px) {
-  r-button[type='text']::part(ran-btn) {
+  r-button[type='text']::part(content) {
     font-size: 16px;
     padding: 8px 16px;
-  }
-
-  r-button[type='text']::part(ran-btn-content) {
-    font-size: 16px;
   }
 }
 

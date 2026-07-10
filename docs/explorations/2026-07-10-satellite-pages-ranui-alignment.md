@@ -9,7 +9,7 @@
 ## 问题
 
 16 个 SEO 卫星页（/offline-document-editor、/no-signup-document-editor、
-/open/*、/convert/*、/vs/* 及其 /zh-CN/ 镜像）与刚重设计的首页完全脱节：
+/open/_、/convert/_、/vs/* 及其 /zh-CN/ 镜像）与刚重设计的首页完全脱节：
 
 1. `landing.css` 自造调色板（`#0052cc` + Tailwind 灰阶）+ 系统字体，
    不走 `--ran-*` token

@@ -137,9 +137,15 @@ p {
   margin: var(--ran-space-4) 0 var(--ran-space-5, 20px);
   text-decoration: none;
 }
-.cta r-button::part(ran-btn) {
+/* r-button exports parts "button" (container) and "content" (padding/border/
+   typography). The :not(:defined) fallback below must stay pixel-identical to
+   these values or the custom-element upgrade flashes on load. */
+.cta r-button::part(button) {
   border-radius: var(--ran-radius-md);
-  padding: var(--ran-space-4) var(--ran-space-6);
+}
+.cta r-button::part(content) {
+  border-radius: var(--ran-radius-md);
+  padding: var(--ran-space-3) var(--ran-space-6);
   font-size: 15.5px;
   font-weight: 600;
 }
@@ -150,13 +156,14 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--ran-space-4) var(--ran-space-6);
+  padding: var(--ran-space-3) var(--ran-space-6);
   border-radius: var(--ran-radius-md);
+  border: 1px solid var(--accent);
   background: var(--accent);
   color: #fff;
   font-weight: 600;
   font-size: 15.5px;
-  line-height: 1;
+  line-height: 22px; /* matches .ran-btn-content's default line-height */
 }
 
 ul {
@@ -175,10 +182,13 @@ r-card.oss {
   display: block;
   margin: var(--ran-space-8) 0;
 }
+/* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
+   (border, radius-md, muted background, its built-in 16px padding) */
 r-card.oss:not(:defined) {
   border: 1px solid var(--rule);
-  border-radius: var(--ran-radius-lg);
-  background: var(--ran-color-bg-elevated);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-muted);
+  padding: var(--ran-space-4);
 }
 r-card.oss .card-body {
   padding: var(--ran-space-4) var(--ran-space-6);

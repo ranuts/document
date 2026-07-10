@@ -56,16 +56,19 @@
   padding-right: var(--pad);
 }
 
-/* ---- ranui component sizing via ::part (native look, hero-scaled) ---- */
-#landing-hero r-button::part(ran-btn) {
+/* ---- ranui component sizing via ::part (native look, hero-scaled) ----
+   r-button exports two parts: "button" (container: radius/background) and
+   "content" (padding/border/typography). Keep the :not(:defined) fallbacks
+   below in lockstep with these values — they must render pixel-identical to
+   the upgraded component or the swap flashes on load. */
+#landing-hero .cta r-button::part(button) {
   border-radius: var(--ran-radius-md);
-  padding: var(--ran-space-3) var(--ran-space-5, 20px);
-  font-size: 15px;
-  font-weight: 600;
 }
-#landing-hero .cta r-button::part(ran-btn) {
-  padding: var(--ran-space-4) var(--ran-space-6);
+#landing-hero .cta r-button::part(content) {
+  border-radius: var(--ran-radius-md);
+  padding: var(--ran-space-3) var(--ran-space-6);
   font-size: 15.5px;
+  font-weight: 600;
 }
 
 /* Pre-upgrade fallbacks: the static localized pages register components via
@@ -80,18 +83,18 @@
   align-items: center;
   justify-content: center;
   gap: var(--ran-space-2);
-  padding: var(--ran-space-4) var(--ran-space-6);
+  padding: var(--ran-space-3) var(--ran-space-6);
   border-radius: var(--ran-radius-md);
-  border: 1px solid var(--ran-color-border-hover);
-  background: var(--ran-color-bg);
+  border: 1px solid var(--ran-color-border);
+  background: var(--ran-color-bg-elevated);
   color: var(--ink);
   font-weight: 600;
   font-size: 15.5px;
-  line-height: 1;
+  line-height: 22px; /* matches .ran-btn-content's default line-height */
 }
 #landing-hero r-button[type='primary']:not(:defined) {
   background: var(--accent);
-  border-color: transparent;
+  border-color: var(--accent);
   color: #fff;
 }
 
@@ -471,11 +474,14 @@
   display: block;
   height: 100%;
 }
-/* pre-upgrade fallback: bare card chrome until /ranui.iife.js registers r-card */
+/* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
+   (border, radius-md, muted background, its built-in 16px padding) so the
+   custom-element upgrade doesn't flash */
 #landing-hero .cards r-card:not(:defined) {
   border: 1px solid var(--rule);
-  border-radius: var(--ran-radius-lg);
-  background: var(--ran-color-bg-elevated);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-muted);
+  padding: var(--ran-space-4);
 }
 /* r-card renders its own container chrome; card-body only adds inner padding. */
 #landing-hero .card-body {
