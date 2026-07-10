@@ -1,132 +1,257 @@
-/* Shared styles for SEO landing pages (/no-signup-document-editor, /vs/*, /open/*, /convert/*, ...). */
+/* Shared styles for the SEO satellite pages (/offline-document-editor,
+   /no-signup-document-editor, /open/*, /convert/*, /vs/*, and their /zh-CN/
+   mirrors). Utilitarian document layout, but on the same design system as the
+   homepage: every value comes from the ranui token layer (/ran-tokens.css,
+   loaded before this file), the chrome is real ranui components registered by
+   /ranui.iife.js (<r-button>, <r-card>), and the visual language mirrors
+   home.css — hairline rules, mono type for machine facts, blue spent only on
+   the primary action. Dark mode comes from the token layer for free. */
+
 * {
   box-sizing: border-box;
 }
 :root {
-  --bg: #ffffff;
-  --fg: #1f2937;
-  --muted: #6b7280;
-  --accent: #0052cc;
-  --border: #e5e7eb;
-  --card: #f9fafb;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1116;
-    --fg: #e6e8eb;
-    --muted: #9aa2ad;
-    --accent: #5b9bff;
-    --border: #262b33;
-    --card: #171a21;
-  }
+  --ink: var(--ran-color-text);
+  --ink-2: var(--ran-color-text-secondary);
+  --muted: var(--ran-gray-800);
+  --rule: var(--ran-color-border);
+  --accent: var(--ran-color-primary);
+  --signal: var(--ran-color-success);
+  --sans: var(--ran-font-family);
+  --mono: var(--ran-font-mono);
 }
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--ran-color-bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
   line-height: 1.65;
-}
-.wrap {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 24px;
-}
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--border);
-}
-header a {
-  color: var(--fg);
-  text-decoration: none;
-  font-weight: 600;
-}
-.gh {
-  font-size: 14px;
-  color: var(--muted);
-}
-h1 {
-  font-size: clamp(26px, 5vw, 38px);
-  line-height: 1.2;
-  margin: 32px 0 12px;
-}
-h2 {
-  font-size: 22px;
-  margin: 36px 0 12px;
-}
-p {
-  margin: 12px 0;
-}
-.lead {
-  font-size: 18px;
-  color: var(--muted);
-}
-.cta {
-  display: inline-block;
-  margin: 20px 0;
-  padding: 14px 28px;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 17px;
-}
-ul {
-  padding-left: 20px;
-}
-li {
-  margin: 8px 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 a {
   color: var(--accent);
 }
-.oss {
-  margin: 28px 0;
-  padding: 18px 20px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
-.oss a {
+
+/* ---------- top bar (mirrors the homepage bar) ---------- */
+header.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ran-space-4);
+  padding: var(--ran-space-4) clamp(20px, 5vw, 56px);
+  border-bottom: 1px solid var(--rule);
+}
+header.bar .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+header.bar .logo {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--ran-radius-sm);
+  background: var(--accent);
+  display: inline-grid;
+  place-items: center;
+  color: #fff; /* on-primary: ranui has no on-colour token; white reads on blue in both themes */
+  font-size: 13px;
+  font-weight: 700;
+}
+header.bar nav {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-1);
+}
+header.bar nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-2) var(--ran-space-3);
+  border-radius: var(--ran-radius-sm);
+  font-size: 14px;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: 0.15s ease;
+}
+header.bar nav a:hover {
+  color: var(--ink);
+  background: var(--ran-color-bg-hover);
+}
+.ghmark {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+  flex: none;
+}
+
+/* ---------- article column ---------- */
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--ran-space-6) clamp(20px, 5vw, 56px) var(--ran-space-10);
+}
+.eyebrow {
+  margin: var(--ran-space-8) 0 0;
+  font: 600 12px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--accent);
+}
+h1 {
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: var(--ran-space-3) 0 var(--ran-space-3);
+  text-wrap: balance;
+}
+h2 {
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  margin: var(--ran-space-10) 0 var(--ran-space-4);
+  padding-bottom: var(--ran-space-3);
+  border-bottom: 1px solid var(--rule);
+}
+p {
+  margin: var(--ran-space-3) 0;
+}
+.lead {
+  font-size: 18px;
+  color: var(--ink-2);
+  margin: 0 0 var(--ran-space-4);
+}
+
+/* CTA: a real <r-button> wrapped in a link (static pages navigate, not script) */
+.cta {
+  display: inline-block;
+  margin: var(--ran-space-4) 0 var(--ran-space-5, 20px);
+  text-decoration: none;
+}
+.cta r-button::part(ran-btn) {
+  border-radius: var(--ran-radius-md);
+  padding: var(--ran-space-4) var(--ran-space-6);
+  font-size: 15.5px;
   font-weight: 600;
 }
-.faq h3 {
-  font-size: 17px;
-  margin: 20px 0 4px;
+/* pre-upgrade fallback so the CTA is a styled, clickable button even before
+   (or without) /ranui.iife.js — same progressive-enhancement idea as the
+   static-page fallbacks on the homepage */
+.cta r-button:not(:defined) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ran-space-4) var(--ran-space-6);
+  border-radius: var(--ran-radius-md);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15.5px;
+  line-height: 1;
 }
+
+ul {
+  padding-left: 20px;
+  margin: var(--ran-space-4) 0;
+}
+li {
+  margin: var(--ran-space-2) 0;
+}
+li::marker {
+  color: var(--ran-color-border-hover);
+}
+
+/* open-source note: a real <r-card>, with a pre-upgrade border fallback */
+r-card.oss {
+  display: block;
+  margin: var(--ran-space-8) 0;
+}
+r-card.oss:not(:defined) {
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-lg);
+  background: var(--ran-color-bg-elevated);
+}
+r-card.oss .card-body {
+  padding: var(--ran-space-4) var(--ran-space-6);
+  font-size: 15px;
+}
+r-card.oss a {
+  font-weight: 600;
+}
+
+/* ---------- faq: hairline per question (mirrors homepage FAQ) ---------- */
+.faq h3 {
+  font-size: 16.5px;
+  letter-spacing: -0.01em;
+  margin: 0;
+  padding: var(--ran-space-4) 0 0;
+  border-top: 1px solid var(--rule);
+}
+.faq h3:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.faq p {
+  margin: var(--ran-space-1) 0 var(--ran-space-4);
+  color: var(--ink-2);
+  font-size: 15px;
+}
+h2.faq {
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ---------- comparison table (/vs/*) ---------- */
 .cmp {
   width: 100%;
   border-collapse: collapse;
-  margin: 16px 0;
-  font-size: 15px;
+  margin: var(--ran-space-4) 0;
+  font-size: 14.5px;
 }
 .cmp th,
 .cmp td {
-  border: 1px solid var(--border);
-  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  padding: var(--ran-space-3) var(--ran-space-3);
   text-align: left;
   vertical-align: top;
 }
 .cmp th {
-  background: var(--card);
+  background: var(--ran-color-bg-subtle);
+  font: 600 12px/1.5 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cmp th:nth-child(2) {
+  color: var(--accent);
+}
+.cmp td:first-child {
+  color: var(--ink-2);
 }
 .scroll {
   overflow-x: auto;
 }
+
+/* ---------- footer ---------- */
 footer {
-  margin-top: 48px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
+  margin-top: var(--ran-space-16);
+  padding-top: var(--ran-space-4);
+  border-top: 1px solid var(--rule);
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13.5px;
 }
 footer a {
-  color: var(--muted);
-  margin-right: 16px;
+  color: var(--ink-2);
+  text-decoration: none;
+  margin-right: var(--ran-space-4);
+}
+footer a:hover {
+  color: var(--accent);
 }

@@ -3,3 +3,7 @@ pnpm-lock.yaml
 
 # Vendored ranui design-token layer (copied from ranui/dist by bin/build.sh).
 public/ran-tokens.css
+
+# Vendored ranui component bundle (built from ranui by bin/build.sh via
+# vite.ranui-iife.config.ts) — generated and minified, not hand-written.
+public/ranui.iife.js

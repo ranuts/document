@@ -6,7 +6,7 @@
     <link href="/img/64.png" rel="shortcut icon" />
     <link rel="icon" type="image/png" href="/img/64.png" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#0052cc" />
+    <meta name="theme-color" content="#006bff" />
 
     <title>离线文档编辑器 — 无需联网即可编辑 DOCX、XLSX、PPTX</title>
     <meta
@@ -109,28 +109,43 @@
       }
     </script>
 
+    <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
+    <script src="/ranui.iife.js" defer></script>
   </head>
 
   <body>
-    <header>
-      <a href="/">📝 Online Document Editor</a>
-      <a href="/offline-document-editor" hreflang="en">🌐 EN</a>
-      <a class="gh" href="https://github.com/ranuts/document" rel="noopener">★ 在 GitHub 上开源</a>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="gh-mark" viewBox="0 0 16 16">
+        <path
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+        />
+      </symbol>
+    </svg>
+
+    <header class="bar">
+      <a class="brand" href="/zh-CN/"><span class="logo">文</span>文档编辑器</a>
+      <nav>
+        <a href="/offline-document-editor" hreflang="en">EN</a>
+        <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+          <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+        </a>
+      </nav>
     </header>
 
     <main class="wrap">
+      <p class="eyebrow">离线 · PWA</p>
       <h1>无需联网也能用的离线文档编辑器</h1>
       <p class="lead">
         在没有网络的情况下编辑 Word、Excel 和 PowerPoint 文件 — 无论是
-        Chromebook、飞机上的笔记本，还是安卓平板。安装一次， 它就能持续离线工作，完全在你的设备上运行。
+        Chromebook、飞机上的笔记本，还是安卓平板。安装一次，它就能持续离线工作，完全在你的设备上运行。
       </p>
 
-      <a class="cta" href="/?locale=zh-CN&amp;new=docx">打开编辑器 →</a>
+      <a class="cta" href="/?locale=zh-CN&amp;new=docx"><r-button type="primary">打开编辑器 →</r-button></a>
 
       <p>
         由于所有编辑都通过 WebAssembly 在你的浏览器本地运行 — 没有服务器 — 它不需要联网就能工作。加载一次，把它安装成
-        App （PWA），你就能在任何地方打开和编辑文档，即使完全离线也没问题。你的文件永远不会离开你的设备。
+        App（PWA），你就能在任何地方打开和编辑文档，即使完全离线也没问题。你的文件永远不会离开你的设备。
       </p>
 
       <h2>为什么它能离线工作</h2>
@@ -142,10 +157,12 @@
         <li>文件不外传、无需账号、无需注册</li>
       </ul>
 
-      <div class="oss">
-        <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议 — 你可以核实文件确实没有被上传，或者运行你自己的副本：
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
-      </div>
+      <r-card class="oss"
+        ><div class="card-body">
+          <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议 — 你可以核实文件确实没有被上传，或者运行你自己的副本：
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        </div></r-card
+      >
 
       <h2 class="faq">常见问题</h2>
       <div class="faq">

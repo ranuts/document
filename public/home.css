@@ -68,48 +68,36 @@
   font-size: 15.5px;
 }
 
-/* Plain-button fallback: static pages (e.g. /zh-CN/) use <a class="btn primary">
-   instead of <r-button>; styled to match the ranui button treatment. */
-#landing-hero .btn {
+/* Pre-upgrade fallbacks: the static localized pages register components via
+   the deferred /ranui.iife.js bundle, so :not(:defined) keeps the CTAs styled
+   and clickable before (or without) it — progressive enhancement, not a
+   parallel hand-built component set. */
+#landing-hero .cta a {
+  text-decoration: none;
+}
+#landing-hero r-button:not(:defined) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--ran-space-2);
-  font-family: var(--sans);
+  padding: var(--ran-space-4) var(--ran-space-6);
+  border-radius: var(--ran-radius-md);
+  border: 1px solid var(--ran-color-border-hover);
+  background: var(--ran-color-bg);
+  color: var(--ink);
   font-weight: 600;
   font-size: 15.5px;
   line-height: 1;
-  padding: var(--ran-space-4) var(--ran-space-6);
-  border-radius: var(--ran-radius-md);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
 }
-#landing-hero .btn.primary {
+#landing-hero r-button[type='primary']:not(:defined) {
   background: var(--accent);
+  border-color: transparent;
   color: #fff;
 }
-#landing-hero .btn.primary:hover {
-  background: var(--ran-color-primary-hover);
-  transform: translateY(-1px);
-}
-#landing-hero .btn.ghost {
-  background: var(--ran-color-bg);
-  color: var(--ink);
-  border-color: var(--ran-color-border-hover);
-}
-#landing-hero .btn.ghost:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
 
-/* Language switch. The bundled app homepage uses the ranui <r-select> component
-   (ranui paradigm); the static localized pages can't run web components, so they
-   fall back to a native <select> styled to match — same as the .btn/.card
-   fallbacks. Both stay extensible: add an option per locale. */
+/* Language switch: same ranui <r-select> on the app homepage and the static
+   localized pages (the latter wire navigation with a tiny inline script).
+   Extensible: add an option per locale. */
 #landing-hero .lang-wrap {
   display: inline-flex;
   align-items: center;
@@ -121,19 +109,9 @@
   min-width: 84px;
   font-size: 14px;
 }
-/* native fallback (static pages): borderless, to match r-select type="text" */
-#landing-hero select.lang-select {
-  appearance: auto;
-  font-family: var(--sans);
-  font-size: 14px;
-  color: var(--ink-2);
-  background: transparent;
-  border: none;
-  padding: var(--ran-space-2) 0;
-  cursor: pointer;
-}
-#landing-hero select.lang-select:hover {
-  color: var(--accent);
+/* hide the raw option list pre-upgrade; the reserved width avoids layout shift */
+#landing-hero r-select.lang-select:not(:defined) {
+  visibility: hidden;
 }
 
 /* ---------- top bar ---------- */
@@ -493,10 +471,8 @@
   display: block;
   height: 100%;
 }
-/* Plain-card fallback: static pages (e.g. /zh-CN/) can't run the <r-card> web
-   component, so they use <div class="card"> which mirrors r-card's chrome. */
-#landing-hero .cards .card {
-  height: 100%;
+/* pre-upgrade fallback: bare card chrome until /ranui.iife.js registers r-card */
+#landing-hero .cards r-card:not(:defined) {
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-lg);
   background: var(--ran-color-bg-elevated);
@@ -777,14 +753,12 @@
   }
 
   /* hover lift on cards */
-  #landing-hero .cards r-card,
-  #landing-hero .cards .card {
+  #landing-hero .cards r-card {
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
   }
-  #landing-hero .cards r-card:hover,
-  #landing-hero .cards .card:hover {
+  #landing-hero .cards r-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--ran-shadow-menu);
   }

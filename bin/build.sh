@@ -18,6 +18,13 @@ else
     echo "Warning: $RAN_TOKENS_SRC not found, using existing public/ran-tokens.css."
 fi
 
+# Keep the vendored ranui component bundle in sync (same idea as the token layer
+# above: static pages under public/ have no bundler, so they <script defer>
+# /ranui.iife.js to register <r-button>/<r-card>/<r-select>). Regenerate on every
+# build so it never drifts from the installed ranui version.
+pnpm vite build --config vite.ranui-iife.config.ts
+echo "Synced ranui component bundle -> public/ranui.iife.js"
+
 # Run Vite build
 pnpm vite build
 

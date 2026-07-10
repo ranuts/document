@@ -18,6 +18,7 @@
     <link rel="alternate" hreflang="x-default" href="https://edit.chaxus.com/" />
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/home.css" />
+    <script src="/ranui.iife.js" defer></script>
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="在线文档编辑器" />
@@ -113,10 +114,10 @@
             </a>
             <span class="lang-wrap">
               <span aria-hidden="true">🌐</span>
-              <select class="lang-select" aria-label="语言" onchange="location.href = this.value">
-                <option value="/">EN</option>
-                <option value="/zh-CN/" selected>中文</option>
-              </select>
+              <r-select class="lang-select" type="text" value="zh-CN" aria-label="语言">
+                <r-option value="en">EN</r-option>
+                <r-option value="zh-CN">中文</r-option>
+              </r-select>
             </span>
           </nav>
         </div>
@@ -130,9 +131,11 @@
             隐私优先的文档编辑器，全部在你的设备本地运行——文件不传服务器、免注册，还能离线使用。
           </p>
           <div class="cta reveal d4">
-            <a class="btn primary" href="/?locale=zh-CN&amp;new=docx">打开编辑器 →</a>
-            <a class="btn ghost" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
-              <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> 查看源码
+            <a href="/?locale=zh-CN&amp;new=docx"><r-button type="primary">打开编辑器 →</r-button></a>
+            <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+              <r-button
+                ><svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> 查看源码</r-button
+              >
             </a>
           </div>
           <div class="trust reveal d5">
@@ -177,34 +180,34 @@
           <h2>隐私是设计出来的，不是承诺出来的</h2>
         </div>
         <div class="cards">
-          <div class="card">
+          <r-card>
             <div class="card-body">
               <div class="k">100% 客户端</div>
               <h3>文件永不离开你的设备</h3>
               <p>每个文档都在本地打开、编辑和保存，没有服务器可供上传。</p>
             </div>
-          </div>
-          <div class="card">
+          </r-card>
+          <r-card>
             <div class="card-body">
               <div class="k">免注册</div>
               <h3>没有任何注册环节</h3>
               <p>没有邮箱、没有登录墙，打开页面立即开始编辑。</p>
             </div>
-          </div>
-          <div class="card">
+          </r-card>
+          <r-card>
             <div class="card-body">
               <div class="k">PWA · 离线</div>
               <h3>装上它，飞机上也能用</h3>
               <p>添加到主屏，断网也能继续工作。</p>
             </div>
-          </div>
-          <div class="card">
+          </r-card>
+          <r-card>
             <div class="card-body">
               <div class="k">AGPL-3.0</div>
               <h3>开源 · 可自托管</h3>
               <p>审计运行的每一行，或自建一份。基于 OnlyOffice。</p>
             </div>
-          </div>
+          </r-card>
         </div>
       </div>
 
@@ -296,5 +299,19 @@
         <span class="lic">AGPL-3.0</span>
       </footer>
     </section>
+
+    <script>
+      // Wire the ranui language switch (the app homepage wires it in index.ts;
+      // this static page has no bundle, so a tiny inline script does the same).
+      document.addEventListener('DOMContentLoaded', function () {
+        var langSelect = document.querySelector('r-select.lang-select');
+        if (!langSelect) return;
+        langSelect.addEventListener('change', function (event) {
+          var value = event.detail && event.detail.value;
+          if (value === 'en') location.href = '/';
+          else if (value === 'zh-CN') location.href = '/zh-CN/';
+        });
+      });
+    </script>
   </body>
 </html>
