@@ -4,7 +4,14 @@
    comes from the ranui token layer (public/ran-tokens.css): colours --ran-color-*,
    spacing --ran-space-*, radius --ran-radius-*, fonts --ran-font-*. The UI chrome
    (buttons, cards) is real ranui components (<r-button>, <r-card>). EVERY selector
-   is scoped under #landing-hero; dark mode comes from ranui for free. */
+   is scoped under #landing-hero; dark mode comes from ranui for free.
+
+   Design concept: the page IS a document being edited locally. The hero is an
+   asymmetric split — copy on the left, a CSS-built "document window" on the right
+   (file tabs, paper sheet, a selected line with a live caret, a review comment,
+   and a network readout showing 0 requests — the product's proof, made visual).
+   Mono type carries every "machine fact"; blue is spent only on selection/caret/
+   primary action; green only means "local / saved". */
 
 #landing-hero {
   --ink: var(--ran-color-text);
@@ -13,9 +20,11 @@
   --rule: var(--ran-color-border);
   --accent: var(--ran-color-primary);
   --signal: var(--ran-color-success);
+  /* editor-selection ground: theme-flipped by ran-tokens (light #dfefff / dark #002f62) */
+  --sel: var(--ran-blue-300);
   --sans: var(--ran-font-family);
   --mono: var(--ran-font-mono);
-  --maxw: 1120px;
+  --maxw: 1152px;
   /* fluid page gutter — the only spacing that isn't a fixed step (it scales with
      viewport); bounds are ranui steps (--ran-space-5≈20 not in scale, so raw). */
   --pad: clamp(20px, 5vw, 56px);
@@ -184,11 +193,14 @@
   flex: none;
 }
 
-/* ---------- hero ---------- */
+/* ---------- hero: copy left, document window right ---------- */
 #landing-hero .hero {
-  text-align: center;
-  padding-top: clamp(56px, 9vw, 120px);
-  padding-bottom: clamp(48px, 7vw, 88px);
+  display: grid;
+  grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+  padding-top: clamp(48px, 7vw, 96px);
+  padding-bottom: clamp(48px, 7vw, 96px);
 }
 #landing-hero .chip {
   display: inline-flex;
@@ -198,7 +210,7 @@
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-full);
   background: var(--ran-color-bg-subtle);
-  font-size: 13px;
+  font: 500 12px/1.8 var(--mono);
   color: var(--ink-2);
   margin-bottom: var(--ran-space-6);
 }
@@ -213,44 +225,46 @@
   background: var(--signal);
 }
 #landing-hero h1 {
-  margin: 0 auto;
-  max-width: 15ch;
-  font-size: clamp(38px, 6.2vw, 68px);
-  line-height: 1.04;
+  margin: 0;
+  font-size: clamp(34px, 4.6vw, 58px);
+  line-height: 1.06;
   letter-spacing: -0.035em;
   font-weight: 700;
   text-wrap: balance;
 }
+/* The key phrase reads as text selected in an editor — the product's own way of
+   emphasising — instead of a plain accent colour. */
 #landing-hero h1 .accent {
-  color: var(--accent);
+  background: var(--sel);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0 0.08em;
 }
 #landing-hero .sub {
-  margin: clamp(20px, 2.4vw, 28px) auto 0;
-  max-width: 52ch;
-  font-size: clamp(17px, 1.6vw, 20px);
+  margin: clamp(18px, 2.2vw, 26px) 0 0;
+  max-width: 46ch;
+  font-size: clamp(16.5px, 1.5vw, 19px);
   color: var(--ink-2);
 }
 #landing-hero .cta {
   display: flex;
   flex-wrap: wrap;
   gap: var(--ran-space-3);
-  justify-content: center;
-  margin-top: clamp(28px, 3vw, 40px);
+  margin-top: clamp(24px, 2.8vw, 36px);
 }
 #landing-hero .trust {
   margin-top: var(--ran-space-6);
-  font: 500 13px/1.6 var(--mono);
+  font: 500 12.5px/1.6 var(--mono);
   color: var(--muted);
   display: flex;
   flex-wrap: wrap;
   gap: var(--ran-space-1) var(--ran-space-3);
-  justify-content: center;
 }
 #landing-hero .trust .sep {
   color: var(--rule);
 }
 #landing-hero .crosslink {
-  margin: var(--ran-space-6) 0 0;
+  margin: var(--ran-space-4) 0 0;
   font-size: 13.5px;
   color: var(--muted);
 }
@@ -267,32 +281,213 @@
   font-weight: 600;
 }
 
-/* ---------- section scaffolding ---------- */
+/* ---------- document window (decorative, pure CSS — runs on static pages too) ---------- */
+#landing-hero .docwin {
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-lg);
+  background: var(--ran-color-bg-elevated);
+  box-shadow: var(--ran-shadow-menu);
+  overflow: hidden;
+  font-family: var(--mono);
+}
+#landing-hero .dw-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-3);
+  padding: var(--ran-space-3) var(--ran-space-4);
+  border-bottom: 1px solid var(--rule);
+  background: var(--ran-color-bg-subtle);
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+#landing-hero .dw-dots {
+  display: inline-flex;
+  gap: 6px;
+  flex: none;
+}
+#landing-hero .dw-dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-border-hover);
+}
+#landing-hero .dw-file {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#landing-hero .dw-badge {
+  margin-left: auto;
+  flex: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--signal);
+}
+#landing-hero .dw-tabs {
+  display: flex;
+  gap: 3px;
+  padding: var(--ran-space-2) var(--ran-space-4) 0;
+  border-bottom: 1px solid var(--rule);
+  background: var(--ran-color-bg-subtle);
+  font-size: 11px;
+}
+#landing-hero .dw-tabs span {
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: var(--ran-radius-sm) var(--ran-radius-sm) 0 0;
+  color: var(--muted);
+}
+#landing-hero .dw-tabs .on {
+  position: relative;
+  top: 1px;
+  background: var(--ran-color-bg-elevated);
+  border-color: var(--rule);
+  color: var(--ink);
+  font-weight: 600;
+}
+#landing-hero .dw-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 148px;
+  gap: var(--ran-space-4);
+  padding: clamp(18px, 2vw, 28px) var(--ran-space-4);
+}
+#landing-hero .dw-sheet {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding-top: var(--ran-space-1);
+}
+/* skeleton text lines — the surrounding "document" the real line sits in */
+#landing-hero .dw-sheet .dl {
+  height: 9px;
+  border-radius: 3px;
+  background: var(--ran-color-bg-active);
+}
+#landing-hero .dw-sheet .dl.t {
+  height: 15px;
+  width: 52%;
+  border-radius: 4px;
+  background: var(--ran-color-border-hover);
+  margin-bottom: var(--ran-space-2);
+}
+#landing-hero .dw-sheet .w92 {
+  width: 92%;
+}
+#landing-hero .dw-sheet .w85 {
+  width: 85%;
+}
+#landing-hero .dw-sheet .w78 {
+  width: 78%;
+}
+#landing-hero .dw-sheet .w60 {
+  width: 60%;
+}
+/* the one real line: selected text + live caret */
+#landing-hero .dw-text {
+  margin: 2px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+#landing-hero .dw-text mark {
+  background: var(--sel);
+  color: inherit;
+  padding: 2px 0;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+#landing-hero .dw-text .caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+}
+/* margin annotation, styled like a review comment */
+#landing-hero .dw-note {
+  align-self: start;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--signal);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-subtle);
+  padding: var(--ran-space-2) var(--ran-space-3);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+#landing-hero .dw-note b {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--signal);
+}
+/* status strip: the proof, spelled out */
+#landing-hero .dw-net {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-2) var(--ran-space-4);
+  border-top: 1px solid var(--rule);
+  background: var(--ran-color-bg-subtle);
+  font-size: 11px;
+  color: var(--muted);
+}
+#landing-hero .dw-net .ok {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--ran-radius-full);
+  background: var(--signal);
+  flex: none;
+}
+
+/* ---------- section scaffolding: left-aligned head on a hairline ---------- */
 #landing-hero .section {
-  padding-top: clamp(44px, 6vw, 80px);
+  padding-top: clamp(56px, 7vw, 104px);
 }
 #landing-hero .section-head {
-  text-align: center;
   margin-bottom: clamp(28px, 3vw, 44px);
+  padding-bottom: var(--ran-space-4);
+  border-bottom: 1px solid var(--rule);
 }
 #landing-hero .section-head .eyebrow {
+  display: block;
+  margin-bottom: var(--ran-space-3);
   font: 600 12px/1 var(--mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
 }
 #landing-hero .section-head h2 {
-  margin: var(--ran-space-3) 0 0;
-  font-size: clamp(26px, 3vw, 36px);
+  margin: 0;
+  font-size: clamp(24px, 2.8vw, 34px);
   letter-spacing: -0.025em;
   font-weight: 700;
+  text-wrap: balance;
 }
 
-/* ---------- feature cards (r-card) ---------- */
+/* ---------- feature cards (r-card, diagonal bento) ---------- */
 #landing-hero .cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    'a a b'
+    'c d d';
   gap: var(--ran-space-4);
+}
+#landing-hero .cards > :nth-child(1) {
+  grid-area: a;
+}
+#landing-hero .cards > :nth-child(2) {
+  grid-area: b;
+}
+#landing-hero .cards > :nth-child(3) {
+  grid-area: c;
+}
+#landing-hero .cards > :nth-child(4) {
+  grid-area: d;
 }
 #landing-hero .cards r-card {
   display: block;
@@ -325,22 +520,37 @@
   color: var(--ink-2);
   font-size: 14.5px;
   line-height: 1.55;
+  max-width: 52ch;
+}
+/* the two wide bento cells lead with a bigger claim */
+#landing-hero .cards > :nth-child(1) .card-body h3,
+#landing-hero .cards > :nth-child(4) .card-body h3 {
+  font-size: 21px;
+  letter-spacing: -0.02em;
 }
 
-/* ---------- how it works ---------- */
+/* ---------- how it works: an open rail, not boxes ---------- */
 #landing-hero .steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--ran-space-5, 20px);
+  gap: var(--ran-space-8);
 }
 #landing-hero .step {
-  padding: var(--ran-space-6);
-  border: 1px solid var(--rule);
-  border-radius: var(--ran-radius-lg);
-  background: var(--ran-color-bg-elevated);
+  position: relative;
+  border-top: 2px solid var(--rule);
+  padding-top: var(--ran-space-4);
+}
+#landing-hero .step::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--accent);
 }
 #landing-hero .step .n {
-  font: 700 14px/1 var(--mono);
+  font: 700 13px/1 var(--mono);
   color: var(--accent);
   letter-spacing: 0.04em;
 }
@@ -363,21 +573,31 @@
   color: var(--signal);
 }
 
-/* ---------- faq ---------- */
+/* ---------- faq: head left, answers right ---------- */
+#landing-hero .faq-sec {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+}
+#landing-hero .faq-sec .section-head {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
 #landing-hero .faq {
-  max-width: 780px;
-  margin: 0 auto;
+  min-width: 0;
 }
 #landing-hero .qa details {
-  border: 1px solid var(--rule);
-  border-radius: var(--ran-radius-md);
-  margin-bottom: var(--ran-space-2);
-  background: var(--ran-color-bg-elevated);
+  border-top: 1px solid var(--rule);
+}
+#landing-hero .qa details:last-child {
+  border-bottom: 1px solid var(--rule);
 }
 #landing-hero .qa summary {
   cursor: pointer;
   list-style: none;
-  padding: var(--ran-space-4);
+  padding: var(--ran-space-4) 0;
   font-weight: 600;
   font-size: 16px;
   display: flex;
@@ -399,10 +619,11 @@
 }
 #landing-hero .qa .a {
   margin: 0;
-  padding: 0 var(--ran-space-4) var(--ran-space-4);
+  padding: 0 0 var(--ran-space-4);
   color: var(--ink-2);
   font-size: 15px;
   line-height: 1.65;
+  max-width: 62ch;
 }
 
 /* ---------- ecosystem + footer ---------- */
@@ -497,8 +718,9 @@
 }
 
 /* ---------- motion ---------- */
-/* Pure CSS, no JS: a load-in stagger on the hero, a live pulse on the status dot,
-   and a hover lift on cards. All gated behind prefers-reduced-motion. */
+/* Pure CSS, no JS: a load-in stagger on the hero, a live caret in the document
+   window, a pulse on the status dot, and a hover lift on cards. All gated
+   behind prefers-reduced-motion (the caret stays visible, just static). */
 @media (prefers-reduced-motion: no-preference) {
   /* orchestrated hero load-in */
   #landing-hero .reveal {
@@ -528,6 +750,16 @@
     }
   }
 
+  /* live caret in the document window */
+  #landing-hero .dw-text .caret {
+    animation: lh-blink 1.1s steps(2, start) infinite;
+  }
+  @keyframes lh-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
   /* live status dot on the chip */
   #landing-hero .chip .dot {
     animation: lh-pulse 2.2s ease-out infinite;
@@ -544,36 +776,66 @@
     }
   }
 
-  /* hover lift on cards / step tiles */
+  /* hover lift on cards */
   #landing-hero .cards r-card,
-  #landing-hero .cards .card,
-  #landing-hero .step {
+  #landing-hero .cards .card {
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
   }
   #landing-hero .cards r-card:hover,
-  #landing-hero .cards .card:hover,
-  #landing-hero .step:hover {
-    transform: translateY(-4px);
+  #landing-hero .cards .card:hover {
+    transform: translateY(-3px);
     box-shadow: var(--ran-shadow-menu);
   }
 }
 
 /* ---------- responsive ---------- */
+@media (max-width: 1020px) {
+  #landing-hero .hero {
+    grid-template-columns: 1fr;
+    gap: clamp(32px, 6vw, 48px);
+  }
+  #landing-hero .docwin {
+    max-width: 640px;
+  }
+}
 @media (max-width: 900px) {
   #landing-hero .cards {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'a a'
+      'b c'
+      'd d';
   }
   #landing-hero .steps {
     grid-template-columns: 1fr;
+    gap: var(--ran-space-6);
+  }
+  #landing-hero .faq-sec {
+    grid-template-columns: 1fr;
+  }
+  #landing-hero .faq-sec .section-head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: var(--ran-space-4);
   }
   #landing-hero .bar nav .navlink:not(.gh) {
     display: none;
   }
 }
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   #landing-hero .cards {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      'a'
+      'b'
+      'c'
+      'd';
+  }
+  #landing-hero .dw-body {
+    grid-template-columns: 1fr;
+  }
+  #landing-hero .dw-note {
+    justify-self: start;
   }
 }

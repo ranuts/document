@@ -39,8 +39,8 @@
         "name": "在线文档编辑器",
         "url": "https://edit.chaxus.com/zh-CN/",
         "applicationCategory": "BusinessApplication",
-        "operatingSystem": "任意(网页浏览器)",
-        "description": "隐私优先的在线文档编辑器,在浏览器本地编辑 DOCX、XLSX、PPTX 和 CSV,文件不传服务器、免注册、可离线。基于 OnlyOffice。",
+        "operatingSystem": "任意 (网页浏览器)",
+        "description": "隐私优先的在线文档编辑器，在浏览器本地编辑 DOCX、XLSX、PPTX 和 CSV，文件不传服务器、免注册、可离线。基于 OnlyOffice。",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
         "sameAs": [
           "https://github.com/ranuts/document",
@@ -57,31 +57,31 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "我的文件会被上传吗?",
+            "name": "我的文件会被上传吗？",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "不会。没有服务器。文件在你的设备本地打开和保存,永不外传——你可以在浏览器网络面板里核实,或查看源码。"
+              "text": "不会。没有服务器。文件在你的设备本地打开和保存，永不外传——你可以在浏览器网络面板里核实，或查看源码。"
             }
           },
           {
             "@type": "Question",
-            "name": "能编辑哪些格式?",
+            "name": "能编辑哪些格式？",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX)和 CSV,基于运行在 WebAssembly 里的 OnlyOffice。"
+              "text": "Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX) 和 CSV，基于运行在 WebAssembly 里的 OnlyOffice。"
             }
           },
           {
             "@type": "Question",
-            "name": "能离线使用吗?",
+            "name": "能离线使用吗？",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "能。它是可安装的 PWA——加载一次后断网也能继续用,因为编辑全部在你的浏览器本地进行。"
+              "text": "能。它是可安装的 PWA——加载一次后断网也能继续用，因为编辑全部在你的浏览器本地进行。"
             }
           },
           {
             "@type": "Question",
-            "name": "需要注册账号吗?",
+            "name": "需要注册账号吗？",
             "acceptedAnswer": {
               "@type": "Answer",
               "text": "不需要账号、不需要注册、不需要邮箱。打开页面就能编辑。"
@@ -123,57 +123,86 @@
       </header>
 
       <div class="hero wrap">
-        <span class="chip reveal d1"><span class="dot"></span>本地优先 · <b>开源</b></span>
-        <h1 class="reveal d2">在浏览器里编辑 Word、Excel 和 PowerPoint,<span class="accent">文件不外传。</span></h1>
-        <p class="sub reveal d3">隐私优先的文档编辑器,全部在你的设备本地运行——文件不传服务器、免注册,还能离线使用。</p>
-        <div class="cta reveal d4">
-          <a class="btn primary" href="/?locale=zh-CN&amp;new=docx">打开编辑器 →</a>
-          <a class="btn ghost" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
-            <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> 查看源码
-          </a>
+        <div class="hero-copy">
+          <span class="chip reveal d1"><span class="dot"></span>本地优先 · <b>开源</b></span>
+          <h1 class="reveal d2">在浏览器里编辑 Word、Excel 和 PowerPoint,<span class="accent">文件不外传。</span></h1>
+          <p class="sub reveal d3">
+            隐私优先的文档编辑器，全部在你的设备本地运行——文件不传服务器、免注册，还能离线使用。
+          </p>
+          <div class="cta reveal d4">
+            <a class="btn primary" href="/?locale=zh-CN&amp;new=docx">打开编辑器 →</a>
+            <a class="btn ghost" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+              <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> 查看源码
+            </a>
+          </div>
+          <div class="trust reveal d5">
+            <span>不传服务器</span><span class="sep">·</span><span>免注册</span><span class="sep">·</span
+            ><span>可离线</span><span class="sep">·</span><span>.docx .xlsx .pptx .csv</span>
+          </div>
+          <p class="crosslink reveal d5">
+            只想预览或嵌入、不编辑？→
+            <a href="https://github.com/ranuts/fileview" rel="noopener" target="_blank">@ranui/preview</a>
+          </p>
         </div>
-        <div class="trust reveal d5">
-          <span>不传服务器</span><span class="sep">·</span><span>免注册</span><span class="sep">·</span
-          ><span>可离线</span><span class="sep">·</span><span>.docx .xlsx .pptx .csv</span>
+
+        <!-- 装饰性"正在本地编辑的文档"窗口——纯 CSS、无 JS，与英文首页共用 home.css 的样式 -->
+        <div class="docwin reveal d3" aria-hidden="true">
+          <div class="dw-bar">
+            <span class="dw-dots"><i></i><i></i><i></i></span>
+            <span class="dw-file">报告.docx</span>
+            <span class="dw-badge">已保存到本地 ✓</span>
+          </div>
+          <div class="dw-tabs"><span class="on">.docx</span><span>.xlsx</span><span>.pptx</span><span>.csv</span></div>
+          <div class="dw-body">
+            <div class="dw-sheet">
+              <span class="dl t"></span>
+              <span class="dl w92"></span>
+              <span class="dl w78"></span>
+              <p class="dw-text"><mark>你输入的每一个字，都留在这台设备上。</mark><i class="caret"></i></p>
+              <span class="dl w85"></span>
+              <span class="dl w60"></span>
+            </div>
+            <aside class="dw-note">
+              <b>你 · 刚刚</b>
+              <span>0 字节上传——可在网络面板核实。</span>
+            </aside>
+          </div>
+          <div class="dw-net"><i class="ok"></i>network · 0 请求 · 0 字节外发</div>
         </div>
-        <p class="crosslink reveal d5">
-          只想预览或嵌入、不编辑? →
-          <a href="https://github.com/ranuts/fileview" rel="noopener" target="_blank">@ranui/preview</a>
-        </p>
       </div>
 
       <div class="section wrap">
         <div class="section-head">
           <span class="eyebrow">为什么不一样</span>
-          <h2>隐私是设计出来的,不是承诺出来的</h2>
+          <h2>隐私是设计出来的，不是承诺出来的</h2>
         </div>
         <div class="cards">
           <div class="card">
             <div class="card-body">
               <div class="k">100% 客户端</div>
               <h3>文件永不离开你的设备</h3>
-              <p>每个文档都在本地打开、编辑和保存,没有服务器可供上传。</p>
+              <p>每个文档都在本地打开、编辑和保存，没有服务器可供上传。</p>
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <div class="k">免注册</div>
               <h3>没有任何注册环节</h3>
-              <p>没有邮箱、没有登录墙,打开页面立即开始编辑。</p>
+              <p>没有邮箱、没有登录墙，打开页面立即开始编辑。</p>
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <div class="k">PWA · 离线</div>
-              <h3>装上它,飞机上也能用</h3>
-              <p>添加到主屏,断网也能继续工作。</p>
+              <h3>装上它，飞机上也能用</h3>
+              <p>添加到主屏，断网也能继续工作。</p>
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <div class="k">AGPL-3.0</div>
               <h3>开源 · 可自托管</h3>
-              <p>审计运行的每一行,或自建一份。基于 OnlyOffice。</p>
+              <p>审计运行的每一行，或自建一份。基于 OnlyOffice。</p>
             </div>
           </div>
         </div>
@@ -186,19 +215,19 @@
         </div>
         <div class="steps">
           <div class="step">
-            <div class="n">01 — 打开文件</div>
+            <div class="n">01</div>
             <h3>打开文件</h3>
             <p>拖入 DOCX、XLSX、PPTX 或 CSV——或新建一个空白文档。</p>
             <span class="loc">留在本地设备</span>
           </div>
           <div class="step">
-            <div class="n">02 — 编辑</div>
+            <div class="n">02</div>
             <h3>真正地编辑</h3>
-            <p>完整的排版、表格、图表和公式,由 OnlyOffice 提供。</p>
+            <p>完整的排版、表格、图表和公式，由 OnlyOffice 提供。</p>
             <span class="loc">留在本地设备</span>
           </div>
           <div class="step">
-            <div class="n">03 — 保存</div>
+            <div class="n">03</div>
             <h3>存回本地</h3>
             <p>导出为同样的格式。整个过程从未上传。</p>
             <span class="loc">留在本地设备</span>
@@ -206,7 +235,7 @@
         </div>
       </div>
 
-      <div class="section wrap">
+      <div class="section wrap faq-sec">
         <div class="section-head">
           <span class="eyebrow">FAQ</span>
           <h2>常见问题</h2>
@@ -214,21 +243,23 @@
         <div class="faq">
           <div class="qa">
             <details open>
-              <summary>我的文件会被上传吗?</summary>
+              <summary>我的文件会被上传吗？</summary>
               <p class="a">
-                不会。没有服务器。文件在你的设备本地打开和保存,永不外传——你可以在浏览器网络面板里核实,或查看源码。
+                不会。没有服务器。文件在你的设备本地打开和保存，永不外传——你可以在浏览器网络面板里核实，或查看源码。
               </p>
             </details>
             <details>
-              <summary>能编辑哪些格式?</summary>
-              <p class="a">Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX)和 CSV,基于运行在 WebAssembly 里的 OnlyOffice。</p>
+              <summary>能编辑哪些格式？</summary>
+              <p class="a">
+                Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX) 和 CSV，基于运行在 WebAssembly 里的 OnlyOffice。
+              </p>
             </details>
             <details>
-              <summary>能离线使用吗?</summary>
-              <p class="a">能。它是可安装的 PWA——加载一次后断网也能继续用,因为编辑全部在你的浏览器本地进行。</p>
+              <summary>能离线使用吗？</summary>
+              <p class="a">能。它是可安装的 PWA——加载一次后断网也能继续用，因为编辑全部在你的浏览器本地进行。</p>
             </details>
             <details>
-              <summary>需要注册账号吗?</summary>
+              <summary>需要注册账号吗？</summary>
               <p class="a">不需要账号、不需要注册、不需要邮箱。打开页面就能编辑。</p>
             </details>
           </div>

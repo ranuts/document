@@ -170,26 +170,56 @@
         </header>
 
         <div class="hero wrap">
-          <span class="chip reveal d1"><span class="dot"></span>Local-first · <b>open source</b></span>
-          <h1 class="reveal d2">
-            Edit Word, Excel &amp; PowerPoint, <span class="accent">right in your browser.</span>
-          </h1>
-          <p class="sub reveal d3">
-            A privacy-first document editor that runs entirely on your device. No upload, no sign-up, and it keeps
-            working offline.
-          </p>
-          <div class="cta reveal d4">
-            <r-button type="primary" id="hero-open">Open a file</r-button>
-            <r-button id="hero-new">New document</r-button>
+          <div class="hero-copy">
+            <span class="chip reveal d1"><span class="dot"></span>Local-first · <b>open source</b></span>
+            <h1 class="reveal d2">
+              Edit Word, Excel &amp; PowerPoint, <span class="accent">right in your browser.</span>
+            </h1>
+            <p class="sub reveal d3">
+              A privacy-first document editor that runs entirely on your device. No upload, no sign-up, and it keeps
+              working offline.
+            </p>
+            <div class="cta reveal d4">
+              <r-button type="primary" id="hero-open">Open a file</r-button>
+              <r-button id="hero-new">New document</r-button>
+            </div>
+            <div class="trust reveal d5">
+              <span>0 bytes uploaded</span><span class="sep">·</span><span>no account</span><span class="sep">·</span
+              ><span>works offline</span><span class="sep">·</span><span>.docx .xlsx .pptx .csv</span>
+            </div>
+            <p class="crosslink reveal d5">
+              Only need to <em>view or embed</em> a file, not edit it? →
+              <a href="https://github.com/ranuts/fileview" rel="noopener" target="_blank">@ranui/preview</a>
+            </p>
           </div>
-          <div class="trust reveal d5">
-            <span>0 bytes uploaded</span><span class="sep">·</span><span>no account</span><span class="sep">·</span
-            ><span>works offline</span><span class="sep">·</span><span>.docx .xlsx .pptx .csv</span>
+
+          <!-- Decorative "document being edited locally" window — pure CSS, no JS,
+               so the static localized homepages can reuse it verbatim. -->
+          <div class="docwin reveal d3" aria-hidden="true">
+            <div class="dw-bar">
+              <span class="dw-dots"><i></i><i></i><i></i></span>
+              <span class="dw-file">report.docx</span>
+              <span class="dw-badge">saved locally ✓</span>
+            </div>
+            <div class="dw-tabs">
+              <span class="on">.docx</span><span>.xlsx</span><span>.pptx</span><span>.csv</span>
+            </div>
+            <div class="dw-body">
+              <div class="dw-sheet">
+                <span class="dl t"></span>
+                <span class="dl w92"></span>
+                <span class="dl w78"></span>
+                <p class="dw-text"><mark>Everything you type stays on this device.</mark><i class="caret"></i></p>
+                <span class="dl w85"></span>
+                <span class="dl w60"></span>
+              </div>
+              <aside class="dw-note">
+                <b>You · just now</b>
+                <span>0 bytes uploaded — check the network tab.</span>
+              </aside>
+            </div>
+            <div class="dw-net"><i class="ok"></i>network · 0 requests · 0 bytes out</div>
           </div>
-          <p class="crosslink reveal d5">
-            Only need to <em>view or embed</em> a file, not edit it? →
-            <a href="https://github.com/ranuts/fileview" rel="noopener" target="_blank">@ranui/preview</a>
-          </p>
         </div>
 
         <div class="section wrap">
@@ -236,19 +266,19 @@
           </div>
           <div class="steps">
             <div class="step">
-              <div class="n">01 — Open a file</div>
+              <div class="n">01</div>
               <h3>Open a file</h3>
               <p>Drop in a DOCX, XLSX, PPTX or CSV — or start a blank one.</p>
               <span class="loc">stays on device</span>
             </div>
             <div class="step">
-              <div class="n">02 — Edit</div>
+              <div class="n">02</div>
               <h3>Edit for real</h3>
               <p>Full formatting, tables, charts and formulas via OnlyOffice.</p>
               <span class="loc">stays on device</span>
             </div>
             <div class="step">
-              <div class="n">03 — Save</div>
+              <div class="n">03</div>
               <h3>Save it back</h3>
               <p>Export to the same format. Nothing was ever uploaded.</p>
               <span class="loc">stays on device</span>
@@ -256,7 +286,7 @@
           </div>
         </div>
 
-        <div class="section wrap">
+        <div class="section wrap faq-sec">
           <div class="section-head">
             <span class="eyebrow">FAQ</span>
             <h2>Questions, answered</h2>
