@@ -10,7 +10,7 @@
     <title>在线文档编辑器 —— 在浏览器里编辑 Word、Excel、PPT</title>
     <meta
       name="description"
-      content="隐私优先的在线文档编辑器,全部在你的设备本地运行。免上传、免注册、可离线,直接在浏览器里编辑 Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX)和 CSV。基于 OnlyOffice。"
+      content="隐私优先的在线文档编辑器,全部在你的设备本地运行。文件不传服务器、免注册、可离线,直接在浏览器里编辑 Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX)和 CSV。基于 OnlyOffice。"
     />
     <link rel="canonical" href="https://edit.chaxus.com/zh-CN/" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/" />
@@ -24,7 +24,7 @@
     <meta property="og:title" content="在线文档编辑器 —— 在浏览器里编辑 Word、Excel、PPT" />
     <meta
       property="og:description"
-      content="隐私优先、纯浏览器的文档编辑器。免上传、免注册、可离线,编辑 DOCX、XLSX、PPTX 和 CSV。"
+      content="隐私优先、纯浏览器的文档编辑器。文件不传服务器、免注册、可离线,编辑 DOCX、XLSX、PPTX 和 CSV。"
     />
     <meta property="og:url" content="https://edit.chaxus.com/zh-CN/" />
     <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
@@ -40,7 +40,7 @@
         "url": "https://edit.chaxus.com/zh-CN/",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "任意(网页浏览器)",
-        "description": "隐私优先的在线文档编辑器,在浏览器本地编辑 DOCX、XLSX、PPTX 和 CSV,免上传、免注册、可离线。基于 OnlyOffice。",
+        "description": "隐私优先的在线文档编辑器,在浏览器本地编辑 DOCX、XLSX、PPTX 和 CSV,文件不传服务器、免注册、可离线。基于 OnlyOffice。",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
         "sameAs": [
           "https://github.com/ranuts/document",
@@ -60,7 +60,7 @@
             "name": "我的文件会被上传吗?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "不会。没有服务器。文件在你的设备本地打开和保存,永不上传——你可以在浏览器网络面板里核实,或查看源码。"
+              "text": "不会。没有服务器。文件在你的设备本地打开和保存,永不外传——你可以在浏览器网络面板里核实,或查看源码。"
             }
           },
           {
@@ -108,19 +108,24 @@
           <nav>
             <a class="navlink" href="/zh-CN/offline-document-editor">离线</a>
             <a class="navlink" href="/zh-CN/no-signup-document-editor">免注册</a>
-            <a class="navlink" href="/zh-CN/vs/google-docs">对比 Google Docs</a>
             <a class="navlink gh" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
               <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
             </a>
-            <a class="navlink lang" href="/" hreflang="en" lang="en">🌐 EN</a>
+            <span class="lang-wrap">
+              <span aria-hidden="true">🌐</span>
+              <select class="lang-select" aria-label="语言" onchange="location.href = this.value">
+                <option value="/">EN</option>
+                <option value="/zh-CN/" selected>中文</option>
+              </select>
+            </span>
           </nav>
         </div>
       </header>
 
       <div class="hero wrap">
         <span class="chip reveal d1"><span class="dot"></span>本地优先 · <b>开源</b></span>
-        <h1 class="reveal d2">在浏览器里编辑 Word、Excel 和 PowerPoint,<span class="accent">无需上传。</span></h1>
-        <p class="sub reveal d3">隐私优先的文档编辑器,全部在你的设备本地运行——不上传、不注册,而且可以离线使用。</p>
+        <h1 class="reveal d2">在浏览器里编辑 Word、Excel 和 PowerPoint,<span class="accent">文件不外传。</span></h1>
+        <p class="sub reveal d3">隐私优先的文档编辑器,全部在你的设备本地运行——文件不传服务器、免注册,还能离线使用。</p>
         <div class="cta reveal d4">
           <a class="btn primary" href="/?locale=zh-CN&amp;new=docx">打开编辑器 →</a>
           <a class="btn ghost" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
@@ -128,7 +133,7 @@
           </a>
         </div>
         <div class="trust reveal d5">
-          <span>0 字节上传</span><span class="sep">·</span><span>免注册</span><span class="sep">·</span
+          <span>不传服务器</span><span class="sep">·</span><span>免注册</span><span class="sep">·</span
           ><span>可离线</span><span class="sep">·</span><span>.docx .xlsx .pptx .csv</span>
         </div>
         <p class="crosslink reveal d5">
@@ -211,7 +216,7 @@
             <details open>
               <summary>我的文件会被上传吗?</summary>
               <p class="a">
-                不会。没有服务器。文件在你的设备本地打开和保存,永不上传——你可以在浏览器网络面板里核实,或查看源码。
+                不会。没有服务器。文件在你的设备本地打开和保存,永不外传——你可以在浏览器网络面板里核实,或查看源码。
               </p>
             </details>
             <details>

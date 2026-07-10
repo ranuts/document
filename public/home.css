@@ -97,9 +97,28 @@
   color: var(--accent);
 }
 
-/* Language switch link in the nav (globe + label). */
-#landing-hero .bar nav .lang {
+/* Language switch: a native <select> (works on both the bundled app page and the
+   static localized pages, and stays extensible — add an <option> per locale). */
+#landing-hero .lang-wrap {
+  display: inline-flex;
+  align-items: center;
   gap: var(--ran-space-1);
+  padding-left: var(--ran-space-1);
+}
+#landing-hero .lang-select {
+  appearance: auto;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-sm);
+  padding: var(--ran-space-2) var(--ran-space-2);
+  cursor: pointer;
+}
+#landing-hero .lang-select:hover {
+  border-color: var(--accent);
+  color: var(--ink);
 }
 
 /* ---------- top bar ---------- */

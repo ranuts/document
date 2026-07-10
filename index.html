@@ -155,11 +155,16 @@
             <nav>
               <a class="navlink" href="/offline-document-editor">Offline</a>
               <a class="navlink" href="/no-signup-document-editor">No sign-up</a>
-              <a class="navlink" href="/vs/google-docs">vs Google Docs</a>
               <a class="navlink gh" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
                 <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
               </a>
-              <a class="navlink lang" href="/zh-CN/" hreflang="zh-CN" lang="zh-CN">🌐 中文</a>
+              <span class="lang-wrap">
+                <span aria-hidden="true">🌐</span>
+                <select class="lang-select" aria-label="Language" onchange="location.href = this.value">
+                  <option value="/" selected>EN</option>
+                  <option value="/zh-CN/">中文</option>
+                </select>
+              </span>
             </nav>
           </div>
         </header>
