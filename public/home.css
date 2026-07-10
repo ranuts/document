@@ -97,28 +97,34 @@
   color: var(--accent);
 }
 
-/* Language switch: a native <select> (works on both the bundled app page and the
-   static localized pages, and stays extensible — add an <option> per locale). */
+/* Language switch. The bundled app homepage uses the ranui <r-select> component
+   (ranui paradigm); the static localized pages can't run web components, so they
+   fall back to a native <select> styled to match — same as the .btn/.card
+   fallbacks. Both stay extensible: add an option per locale. */
 #landing-hero .lang-wrap {
   display: inline-flex;
   align-items: center;
   gap: var(--ran-space-1);
   padding-left: var(--ran-space-1);
 }
-#landing-hero .lang-select {
+#landing-hero r-select.lang-select {
+  display: inline-block;
+  min-width: 84px;
+  font-size: 14px;
+}
+/* native fallback (static pages): borderless, to match r-select type="text" */
+#landing-hero select.lang-select {
   appearance: auto;
   font-family: var(--sans);
   font-size: 14px;
   color: var(--ink-2);
   background: transparent;
-  border: 1px solid var(--rule);
-  border-radius: var(--ran-radius-sm);
-  padding: var(--ran-space-2) var(--ran-space-2);
+  border: none;
+  padding: var(--ran-space-2) 0;
   cursor: pointer;
 }
-#landing-hero .lang-select:hover {
-  border-color: var(--accent);
-  color: var(--ink);
+#landing-hero select.lang-select:hover {
+  color: var(--accent);
 }
 
 /* ---------- top bar ---------- */

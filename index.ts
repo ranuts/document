@@ -16,6 +16,7 @@ import {
 } from './lib/ui';
 import 'ranui/button';
 import 'ranui/card';
+import 'ranui/select';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
 
@@ -74,6 +75,18 @@ const heroOpen = document.getElementById('hero-open');
 if (heroOpen) heroOpen.addEventListener('click', () => onOpenDocument());
 const heroNew = document.getElementById('hero-new');
 if (heroNew) heroNew.addEventListener('click', () => void window.onCreateNew('.docx'));
+
+// Wire the ranui <r-select> language switch: it emits a `change` CustomEvent with
+// { value } — map the locale to the localized homepage URL. (Static pages can't
+// run the web component and fall back to a native <select>.)
+const langSelect = document.querySelector('#landing-hero r-select.lang-select');
+if (langSelect) {
+  langSelect.addEventListener('change', (event) => {
+    const value = (event as CustomEvent<{ value?: string }>).detail?.value;
+    if (value === 'zh-CN') location.href = '/zh-CN/';
+    else if (value === 'en') location.href = '/';
+  });
+}
 
 // Check for file or src parameter in URL
 // Both parameters support opening document from URL
