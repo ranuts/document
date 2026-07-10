@@ -22,7 +22,7 @@
     b.prototype.I1 = function () {
       if (this.NQb()) {
         let d = performance.now();
-        for (; this.NQb() && !(20 < performance.now() - d); ) this.eFc();
+        for (; this.NQb() && !(20 < performance.now() - d);) this.eFc();
         this.$Jc();
       }
       let e = this;
@@ -496,7 +496,7 @@
       var V = ea.split(';');
       ea = [];
       for (var Y = 0; Y < V.length; ++Y) {
-        for (var ya = V[Y]; ; ) {
+        for (var ya = V[Y]; ;) {
           var Ea = ya.match(/\\+$/g);
           if (Ea && 0 < Ea.length && 1 === Ea[0].length % 2 && Y + 1 < V.length) ((ya += ';'), (ya += V[++Y]));
           else break;
@@ -584,7 +584,7 @@
       0 > V && (V = -V);
       if (1 > N) return '0';
       oa = !0;
-      for (ea = e(V); oa; ) {
+      for (ea = e(V); oa;) {
         oa = !1;
         var Y = 15 + ea.exponent,
           ya = Math.abs(Y);
@@ -1376,7 +1376,7 @@
         this.dM.push(ea);
       },
       OQc: function (ea) {
-        for (var oa = ''; ; ) {
+        for (var oa = ''; ;) {
           var N = this.fIa();
           if (this.RAa == N || ea == N) break;
           else oa += N;
@@ -1391,7 +1391,7 @@
         this.RAa != ea && this.DY(0, ea);
       },
       KAg: function () {
-        for (var ea = ''; ; ) {
+        for (var ea = ''; ;) {
           var oa = this.fIa();
           if (this.RAa == oa || ']' == oa) break;
           else ea += oa;
@@ -1401,7 +1401,7 @@
         this.F2(ea);
       },
       BVe: function (ea) {
-        for (var oa = ea, N = '', V = !0; (ea = this.fIa()), this.RAa != ea; )
+        for (var oa = ea, N = '', V = !0; (ea = this.fIa()), this.RAa != ea;)
           if ('/' == ea) V = !1;
           else if ('A' == ea || 'a' == ea || 'P' == ea || 'p' == ea || 'M' == ea || 'm' == ea)
             1 == V ? (oa += ea) : (N += ea);
@@ -1414,7 +1414,7 @@
       JAg: function (ea) {
         let oa = !0,
           N = 1;
-        for (; (ea = this.fIa()), this.RAa != ea; )
+        for (; (ea = this.fIa()), this.RAa != ea;)
           if ('t' == ea) N++;
           else {
             2 < N && (oa = !1);
@@ -1459,7 +1459,7 @@
             (Hb = 'S'),
             (Rb = 's'));
         var Zb = oa[0];
-        for (this.OUc = !0; ; ) {
+        for (this.OUc = !0; ;) {
           var x = this.fIa(),
             M = !1;
           if (this.RAa == x) break;
@@ -2791,7 +2791,7 @@
       CZe: function (ea, oa, N, V) {
         oa = ['\u0440.', oa];
         for (var Y = 0, ya = oa.length; Y < ya; Y++) {
-          for (var Ea = oa[Y], Ja = -1, Xa = 0; -1 != (Ja = ea.indexOf(Ea, Ja + 1)); ) Xa++;
+          for (var Ea = oa[Y], Ja = -1, Xa = 0; -1 != (Ja = ea.indexOf(Ea, Ja + 1));) Xa++;
           0 < Xa &&
             ((ea = ea.replace(new RegExp(u(Ea), 'g'), '')),
             (Ja = V[Ea]),
@@ -2810,7 +2810,7 @@
       oJg: function (ea, oa) {
         for (var N = null, V = !1, Y = '', ya = ea.length - 1; 0 <= ya; --ya) Y += ea[ya];
         ya = 0;
-        for (var Ea = oa.wj[ya], Ja = 0, Xa = -1, ab = !1; -1 != (Xa = Y.indexOf(oa.zi, Xa + 1)); ) {
+        for (var Ea = oa.wj[ya], Ja = 0, Xa = -1, ab = !1; -1 != (Xa = Y.indexOf(oa.zi, Xa + 1));) {
           if (Xa - Ja < Ea) {
             ab = !0;
             break;
@@ -16974,7 +16974,7 @@
       z0f: function (t, w, z) {
         var u = '',
           B = w;
-        for (w += z; B < w; )
+        for (w += z; B < w;)
           ((z = t[B]),
             0 == (z & 128)
               ? ((u += this.$bc(z)), ++B)
@@ -17665,7 +17665,7 @@
     a.AscFonts.YAa = { mgb: 0, Wma: 1, Xma: 2, tNa: 3, rai: 4, qai: 8 };
     a.AscFonts.Gue = e;
     a.AscFonts.R8h = function (t) {
-      for (var w = t.length, z = new AscFonts.NFc(AscFonts.DEd(w), w), u = z.data, B = 0; B < w; )
+      for (var w = t.length, z = new AscFonts.NFc(AscFonts.DEd(w), w), u = z.data, B = 0; B < w;)
         ((u[B] = t.charCodeAt(B) & 255), B++);
       return z;
     };
@@ -18012,7 +18012,7 @@
         var h = 0,
           p = g.length - 1;
         if (h > p) return null;
-        for (; h < p; ) {
+        for (; h < p;) {
           var k = (h + p) >> 1;
           var r = g[k];
           if (r.Db > f) p = k - 1;
@@ -18166,7 +18166,7 @@
       var r = d[0];
       g[r] || (g[r] = {});
       r = g[r];
-      for (var q = 3; q < f; ) {
+      for (var q = 3; q < f;) {
         var n = d[q];
         q += 6;
         r[n] || (r[n] = {});
@@ -18621,7 +18621,7 @@
         Z.TE.Qpa = B.rows;
         n.Nxe(this.Jha, B, !0);
         if (this.L3b && this.OHh && !P)
-          for (B = t.Hd.Jj >> 0, 1 > B && (B = 1), Z.TE.Wda += B, E = Z.TE.Wda, U = Z.TE.Qpa, J = w.Mbb.data; 0 < B; )
+          for (B = t.Hd.Jj >> 0, 1 > B && (B = 1), Z.TE.Wda += B, E = Z.TE.Wda, U = Z.TE.Qpa, J = w.Mbb.data; 0 < B;)
             for (--B, C = T = 0; T < U; ++T, C += w.pitch)
               for (D = C + ((E - B) << 2) - 1, J[D] = J[D - 4], D -= 4, P = E - B - 2; 0 < P; --P, D -= 4)
                 J[D] = Math.min(255, J[D - 4] + J[D]);
@@ -30651,7 +30651,7 @@
       var r = 'string' === typeof f;
       b === h && (h = f.length);
       k = b === k ? 0 : k;
-      for (g = b === g ? 0 : g; g < h; ) {
+      for (g = b === g ? 0 : g; g < h;) {
         var q = 0,
           n,
           t = 0;
@@ -30683,7 +30683,7 @@
       h = b === h ? k : h;
       if (g && 'string' === typeof f) {
         h = 0;
-        for (g = Math.max(11, k); p < g; ) {
+        for (g = Math.max(11, k); p < g;) {
           var r = f.charCodeAt(p++);
           if (59 == r) break;
           h *= 10;
@@ -30767,7 +30767,7 @@
           ((p = (g[h[q]] << 8) + p),
             (h[q] = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.charCodeAt(p % 58)),
             (p = (p / 58) >> 0));
-        for (; p; )
+        for (; p;)
           (h.push('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.charCodeAt(p % 58)),
             (p = (p / 58) >> 0));
       }
@@ -30777,7 +30777,7 @@
     };
     a.AscCommon.Utf8 = a.AscCommon.aTe = {};
     a.AscCommon.aTe.encode = function (f, g) {
-      for (var h = f.length, p = new ArrayBuffer(6 * h + 1), k, r = 0, q = 0, n = new Uint8Array(p); r < h; )
+      for (var h = f.length, p = new ArrayBuffer(6 * h + 1), k, r = 0, q = 0, n = new Uint8Array(p); r < h;)
         ((k = f.charCodeAt(r++)),
           55296 <= k && 57343 >= k && r < h && (k = 65536 + (((k & 1023) << 10) | (1023 & f.charCodeAt(r++)))),
           128 > k
@@ -30838,7 +30838,7 @@
       ];
     a.prototype.update = function (f) {
       if (!this.YOd) {
-        for (var g, h = 0, p, k = f.length, r = this.qJd, q = 'string' === typeof f; h < k; ) {
+        for (var g, h = 0, p, k = f.length, r = this.qJd, q = 'string' === typeof f; h < k;) {
           this.p1c &&
             ((this.p1c = !1),
             (r[0] = this.block),
@@ -31874,14 +31874,14 @@
                     (this.data[this.Oa++] = 128 | (ba & 63)));
       };
       this.S7 = function (ba) {
-        for (var K = 0, da = ba.length; K < da; ) {
+        for (var K = 0, da = ba.length; K < da;) {
           var la = ba.charCodeAt(K++);
           55296 <= la && 57343 >= la && K < da && (la = 65536 + (((la & 1023) << 10) | (1023 & ba.charCodeAt(K++))));
           this.qF(la);
         }
       };
       this.oAg = function (ba) {
-        for (var K = 0, da = ba.length; K < da; ) {
+        for (var K = 0, da = ba.length; K < da;) {
           var la = ba.charCodeAt(K++);
           55296 <= la && 57343 >= la && K < da && (la = 65536 + (((la & 1023) << 10) | (1023 & ba.charCodeAt(K++))));
           this.kAg(la);
@@ -34539,7 +34539,7 @@
       this.mPc(g, !0);
       var h = this,
         p = null;
-      if (b !== d && null !== d && !0 === d.Rl) for (; 0 <= this.Qa; ) ((p = this.fp[this.Qa--]), f());
+      if (b !== d && null !== d && !0 === d.Rl) for (; 0 <= this.Qa;) ((p = this.fp[this.Qa--]), f());
       else ((p = this.fp[this.Qa--]), f());
       this.lPc(p, g, !0);
       return !0;
@@ -35606,7 +35606,7 @@
         this.Bc = r ? r.Bc : null;
         this.n7 = {};
         r = 'string' === typeof k;
-        for (var q = 0, n = ''; ; ) {
+        for (var q = 0, n = ''; ;) {
           var t = r ? k.charCodeAt(q) : k[q];
           if (59 == t) break;
           n += String.fromCharCode(t);
@@ -35614,7 +35614,7 @@
         }
         q++;
         if ('PPTY' != n) return !1;
-        for (n = ''; ; ) {
+        for (n = ''; ;) {
           t = r ? k.charCodeAt(q) : k[q];
           if (59 == t) break;
           n += String.fromCharCode(t);
@@ -35624,7 +35624,7 @@
         n = n.substring(1);
         var w = 1;
         0 < n.length && (w = n - 0);
-        for (n = ''; ; ) {
+        for (n = ''; ;) {
           t = r ? k.charCodeAt(q) : k[q];
           if (59 == t) break;
           n += String.fromCharCode(t);
@@ -35718,7 +35718,7 @@
           }
           if (null == this.n7) {
             if (b != k['42'])
-              for (r.Pd(k['42']), r.sb(), r.fd(), r.Td(1), t = 0; ; ) {
+              for (r.Pd(k['42']), r.sb(), r.fd(), r.Td(1), t = 0; ;) {
                 var w = r.sb();
                 if (w == f) break;
                 w = r.Nb();
@@ -35727,7 +35727,7 @@
               }
           } else for (w in ((t = 0), this.n7)) this.Yk.e5a[t++] = w;
           if (b != k['43'])
-            for (r.Pd(k['43']), r.sb(), r.fd(), r.Td(1); ; ) {
+            for (r.Pd(k['43']), r.sb(), r.fd(), r.Td(1); ;) {
               w = r.sb();
               if (w == f) break;
               w = r.Nb();
@@ -35736,7 +35736,7 @@
           if (b != k['41']) for (r.Pd(k['41']), r.Td(5), w = r.fd(), q = 0; q < w; q++) (r.sb(), this.tcg(q));
           if (!this.TGa) {
             if (b != k['40'])
-              for (r.Pd(k['40']), r.Td(6), t = 0; ; ) {
+              for (r.Pd(k['40']), r.Td(6), t = 0; ;) {
                 w = r.sb();
                 if (w == f) break;
                 w = r.fd();
@@ -35745,7 +35745,7 @@
                 t++;
               }
             if (b != k['45'])
-              for (r.Pd(k['45']), r.Td(6), t = 0; ; ) {
+              for (r.Pd(k['45']), r.Td(6), t = 0; ;) {
                 w = r.sb();
                 if (w == f) break;
                 w = r.gb();
@@ -35753,7 +35753,7 @@
                 ++t;
               }
             if (b != k['46'])
-              for (r.Pd(k['46']), r.Td(6), t = 0; ; ) {
+              for (r.Pd(k['46']), r.Td(6), t = 0; ;) {
                 w = r.sb();
                 if (w == f) break;
                 w = r.gb();
@@ -35761,7 +35761,7 @@
                 t++;
               }
             if (b != k['47'])
-              for (r.Pd(k['47']), r.Td(6), k = 0; ; ) {
+              for (r.Pd(k['47']), r.Td(6), k = 0; ;) {
                 w = r.sb();
                 if (w == f) break;
                 w = r.gb();
@@ -35782,7 +35782,7 @@
         var r = this.stream,
           q = r.Bb + r.gb() + 4;
         k = this.Yk.jba[k];
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -35797,7 +35797,7 @@
         }
         var w = r.fd();
         for (t = 0; t < w; t++)
-          for (r.Td(6); ; ) {
+          for (r.Td(6); ;) {
             n = r.sb();
             if (n == f) break;
             switch (n) {
@@ -35829,7 +35829,7 @@
       this.Oeg = function (k) {
         var r = this.stream;
         r.sb();
-        for (var q = r.Bb + r.gb() + 4; r.Bb < q; )
+        for (var q = r.Bb + r.gb() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               r.rg();
@@ -35846,7 +35846,7 @@
         var k = new CShowPr(),
           r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -35863,7 +35863,7 @@
               k.AOi = r.Ua();
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.Wri = !0;
@@ -35899,7 +35899,7 @@
       this.xfg = function (k) {
         var r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -35913,7 +35913,7 @@
         k.bHh = { eea: null };
         var r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -35928,7 +35928,7 @@
         k.show.kc = { start: null, end: null };
         var r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -35946,7 +35946,7 @@
         k.sb();
         var r = k.Bb + k.gb() + 4;
         k.Td(1);
-        for (var q; ; ) {
+        for (var q; ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -35955,7 +35955,7 @@
           }
         }
         k.sb();
-        for (k.Td(4); k.Bb < r; ) (k.Td(1), this.Zud());
+        for (k.Td(4); k.Bb < r;) (k.Td(1), this.Zud());
         'string' === typeof q && this.Yk && this.Yk.vaa && (q = Ch(this.Yk.vaa, q)) && (this.Yk.lnd = q.jb);
         k.Pd(r);
       };
@@ -35963,7 +35963,7 @@
         var r = this.stream,
           q = new Dh('', null, null, Eh),
           n = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var t = r.sb();
           if (t == f) break;
           switch (t) {
@@ -35981,13 +35981,13 @@
               q.Da = r.Nb();
           }
         }
-        for (; r.Bb < n; )
+        for (; r.Bb < n;)
           switch (((t = r.sb()), t)) {
             case 0:
-              for (t = r.Bb + r.gb() + 4; r.Bb < t; )
+              for (t = r.Bb + r.gb() + 4; r.Bb < t;)
                 switch (r.sb()) {
                   case 0:
-                    for (w = r.Bb + r.gb() + 4; r.Bb < w; )
+                    for (w = r.Bb + r.gb() + 4; r.Bb < w;)
                       switch (r.sb()) {
                         case 0:
                           if ((z = this.Vfa()) && z.fill !== b && null != z.fill) {
@@ -36064,12 +36064,12 @@
         this.Yk && this.Yk.vaa && this.Yk.vaa.ja(q);
       };
       this.PBa = function () {
-        for (var k = this.stream, r = new Jh(), q = k.Bb + k.gb() + 4; k.Bb < q; )
+        for (var k = this.stream, r = new Jh(), q = k.Bb + k.gb() + 4; k.Bb < q;)
           switch (k.sb()) {
             case 0:
               var n = k.Bb + k.gb() + 4;
               k.Td(1);
-              for (var t, w; ; ) {
+              for (var t, w; ;) {
                 var z = k.sb();
                 if (z == f) break;
                 switch (z) {
@@ -36082,7 +36082,7 @@
               }
               0 === t ? (r.tb.He = !0) : 1 === t && (r.tb.He = !1);
               0 === w ? (r.tb.Qd = !0) : 1 === w && (r.tb.Qd = !1);
-              for (; k.Bb < n; ) {
+              for (; k.Bb < n;) {
                 var u = k.sb();
                 switch (u) {
                   case 0:
@@ -36098,7 +36098,7 @@
               k.Pd(n);
               break;
             case 1:
-              for (n = k.Bb + k.gb() + 4; k.Bb < n; )
+              for (n = k.Bb + k.gb() + 4; k.Bb < n;)
                 switch (((z = k.sb()), z)) {
                   case 0:
                     this.cgg(r);
@@ -36108,7 +36108,7 @@
                     r.$g.Zb.aW = this.nHa();
                     break;
                   case 2:
-                    for (z = k.Bb + k.gb() + 4; k.Bb < z; )
+                    for (z = k.Bb + k.gb() + 4; k.Bb < z;)
                       switch (((u = k.sb()), u)) {
                         case 0:
                           if ((u = this.Vfa()) && u.fill !== b && null != u.fill) {
@@ -36135,7 +36135,7 @@
         return r;
       };
       this.cgg = function (k) {
-        for (var r = this.stream, q = r.Bb + r.gb() + 4; r.Bb < q; )
+        for (var r = this.stream, q = r.Bb + r.gb() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               k.$g.Yd.Fa = new Kh();
@@ -36170,7 +36170,7 @@
         r.Pd(q);
       };
       this.wSb = function (k) {
-        for (var r = this.stream, q = r.Bb + r.gb() + 4; r.Bb < q; )
+        for (var r = this.stream, q = r.Bb + r.gb() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               this.bib().rcf(k);
@@ -36222,7 +36222,7 @@
               break;
             case h.P3a:
               k.Td(1);
-              for (q.setColor(new AscFormat.lre()); ; ) {
+              for (q.setColor(new AscFormat.lre()); ;) {
                 n = k.sb();
                 if (n == f) break;
                 switch (n) {
@@ -36243,7 +36243,7 @@
               break;
             case h.O3a:
               t = new AscFormat.kre();
-              for (k.Td(1); ; ) {
+              for (k.Td(1); ;) {
                 n = k.sb();
                 if (n == f) break;
                 switch (n) {
@@ -36273,7 +36273,7 @@
           q = r + k.fd() + 4,
           n = null;
         if (r < q)
-          for (k.Td(1), n = new AscFormat.Qea(); ; )
+          for (k.Td(1), n = new AscFormat.Qea(); ;)
             if (((r = k.sb()), 0 == r))
               (n.ek(k.Nb()),
                 (r = n.name.indexOf(':')),
@@ -36295,7 +36295,7 @@
       this.kLe = function (k) {
         var r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -36337,7 +36337,7 @@
         var k = new AscFormat.bcc(),
           r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -36355,7 +36355,7 @@
         var k = new AscFormat.bHc(),
           r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -36374,7 +36374,7 @@
         var q = k.gb();
         r = r + q + 4;
         q = new AscFormat.Wid();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -36396,13 +36396,13 @@
         var q = k.gb();
         r = r + q + 4;
         q = new AscFormat.xjd();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           if (0 == n) q.aka = k.sb();
           else break;
         }
-        for (; k.Bb < r; )
+        for (; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               q.fill = this.Vfa();
@@ -36418,13 +36418,13 @@
           q = k.gb();
         r = r + q + 4;
         q = new AscFormat.Ajd();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           if (0 == n) q.AL = k.gb();
           else break;
         }
-        for (; k.Bb < r; )
+        for (; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               q.color = this.q_();
@@ -36440,7 +36440,7 @@
           q = k.gb();
         r = r + q + 4;
         q = new AscFormat.Kjd();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -36454,7 +36454,7 @@
               q.hN = k.gb();
           }
         }
-        for (; k.Bb < r; )
+        for (; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               q.color = this.q_();
@@ -36470,7 +36470,7 @@
           q = k.gb();
         r = r + q + 4;
         q = new AscFormat.Vjd();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -36502,7 +36502,7 @@
               q.tK = k.Ua();
           }
         }
-        for (; k.Bb < r; )
+        for (; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               q.color = this.q_();
@@ -36518,7 +36518,7 @@
           q = k.gb();
         r = r + q + 4;
         q = new AscFormat.bkd();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -36532,7 +36532,7 @@
               q.i9 = k.sb();
           }
         }
-        for (; k.Bb < r; )
+        for (; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               q.color = this.q_();
@@ -36548,7 +36548,7 @@
           q = k.gb();
         r = r + q + 4;
         q = new AscFormat.dkd();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -36606,7 +36606,7 @@
           q = k.gb();
         r = r + q + 4;
         q = new AscFormat.kkd();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           if (0 == n) q.AL = k.fd();
@@ -36658,7 +36658,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.ykd();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               switch (n) {
@@ -36726,7 +36726,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.vkd();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               switch (n) {
@@ -36746,7 +36746,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.ekd();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               switch (n) {
@@ -36766,7 +36766,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Ljd();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               switch (n) {
@@ -36786,7 +36786,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Gjd();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               switch (n) {
@@ -36818,7 +36818,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.rjd();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               if (0 == n) r.Jd = k.Nb();
@@ -36833,7 +36833,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Pid();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               if (0 == n) r.a = k.gb();
@@ -36848,7 +36848,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Oid();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               if (0 == n) r.AL = k.fd();
@@ -36863,7 +36863,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.c9b();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               if (0 == n) r.I2 = k.gb();
@@ -36878,7 +36878,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Jid();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               if (0 == n) r.N2a = k.gb();
@@ -36893,7 +36893,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Tid();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               if (0 == n) r.N2a = k.gb();
@@ -36908,7 +36908,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.m9b();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               switch (n) {
@@ -36919,7 +36919,7 @@
                   r.type = k.sb();
               }
             }
-            for (; k.Bb < q; )
+            for (; k.Bb < q;)
               switch (((n = k.sb()), n)) {
                 case 0:
                   for (n = k.fd(), t = 0; t < n; ++t) (k.Td(1), (w = this.Cud()) || r.AJa.push(w));
@@ -36933,8 +36933,8 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.wjd();
-            for (k.Td(1); (n = k.sb()), n != f; );
-            for (; k.Bb < q; )
+            for (k.Td(1); (n = k.sb()), n != f;);
+            for (; k.Bb < q;)
               switch (((n = k.sb()), n)) {
                 case 0:
                   r.fill = this.Vfa();
@@ -36948,8 +36948,8 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.djd();
-            for (k.Td(1); (n = k.sb()), n != f; );
-            for (; k.Bb < q; )
+            for (k.Td(1); (n = k.sb()), n != f;);
+            for (; k.Bb < q;)
               switch (((n = k.sb()), n)) {
                 case 0:
                   r.color = this.q_();
@@ -36963,7 +36963,7 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.cjd();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               switch (n) {
@@ -36971,7 +36971,7 @@
                   r.$tb = k.Ua();
               }
             }
-            for (; k.Bb < q; )
+            for (; k.Bb < q;)
               switch (((n = k.sb()), n)) {
                 case 0:
                   r.Bmb = this.q_();
@@ -36988,8 +36988,8 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Mid();
-            for (k.Td(1); (n = k.sb()), n != f; );
-            for (; k.Bb < q; )
+            for (k.Td(1); (n = k.sb()), n != f;);
+            for (; k.Bb < q;)
               switch (((n = k.sb()), n)) {
                 case 0:
                   r.color = this.q_();
@@ -37003,8 +37003,8 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Nid();
-            for (k.Td(1); (n = k.sb()), n != f; );
-            for (; k.Bb < q; )
+            for (k.Td(1); (n = k.sb()), n != f;);
+            for (; k.Bb < q;)
               switch (((n = k.sb()), n)) {
                 case 0:
                   r.Uga = this.Dud();
@@ -37018,13 +37018,13 @@
             n = k.gb();
             q = q + n + 4;
             r = new AscFormat.Uid();
-            for (k.Td(1); ; ) {
+            for (k.Td(1); ;) {
               n = k.sb();
               if (n == f) break;
               if (0 == n) r.aka = k.sb();
               else break;
             }
-            for (; k.Bb < q; )
+            for (; k.Bb < q;)
               switch (((n = k.sb()), n)) {
                 case 0:
                   r.Uga = this.Dud();
@@ -37042,7 +37042,7 @@
         k.sb();
         var r = k.Bb + k.gb() + 4;
         k.KJ(1);
-        for (var q = new AscFormat.m9b(); ; ) {
+        for (var q = new AscFormat.m9b(); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -37053,7 +37053,7 @@
               q.type = k.sb();
           }
         }
-        for (; k.Bb < r; )
+        for (; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               n = k.fd();
@@ -37069,12 +37069,12 @@
       this.SJe = function (k, r, q, n, t, w) {
         var z = this.stream,
           u = z.Bb + z.gb() + 4;
-        for (z.Td(1); ; ) {
+        for (z.Td(1); ;) {
           var B = z.sb();
           if (f == B) break;
           0 == B && z.Td(1);
         }
-        for (; z.Bb < u; )
+        for (; z.Bb < u;)
           switch (z.sb()) {
             case 0:
             case 1:
@@ -37129,7 +37129,7 @@
           switch (z) {
             case p.nE:
               n.Td(1);
-              for (w.Vf(new AscFormat.C3a()); ; ) {
+              for (w.Vf(new AscFormat.C3a()); ;) {
                 z = n.sb();
                 if (z == f) break;
                 switch (z) {
@@ -37140,7 +37140,7 @@
                     n.Td(1);
                 }
               }
-              for (; n.Bb < u; )
+              for (; n.Bb < u;)
                 switch (((z = n.sb()), z)) {
                   case 0:
                     this.SJe(w, k, r, q);
@@ -37152,7 +37152,7 @@
                     var B = new AscFormat.Vid();
                     n = this.stream;
                     var E = n.Bb + n.gb() + 4;
-                    for (n.Td(1); ; ) {
+                    for (n.Td(1); ;) {
                       z = n.sb();
                       if (z == f) break;
                       switch (z) {
@@ -37179,7 +37179,7 @@
                     w.fill.SWh(B);
                     break;
                   case 3:
-                    for (z = n.Bb + n.gb() + 4; n.Bb < z; )
+                    for (z = n.Bb + n.gb() + 4; n.Bb < z;)
                       switch (n.sb()) {
                         case 0:
                           B = this.kLe(!1);
@@ -37201,7 +37201,7 @@
               break;
             case p.HR:
               n.Td(1);
-              for (w.Vf(new AscFormat.fNb()); ; ) {
+              for (w.Vf(new AscFormat.fNb()); ;) {
                 z = n.sb();
                 if (z == f) break;
                 switch (z) {
@@ -37212,7 +37212,7 @@
                     w.fill.gea = n.Ua();
                 }
               }
-              for (; n.Bb < u; )
+              for (; n.Bb < u;)
                 switch (((z = n.sb()), z)) {
                   case 0:
                     r = n.Bb + n.fd() + 4;
@@ -37255,7 +37255,7 @@
               break;
             case p.ZO:
               w.Vf(new AscFormat.cDc());
-              for (n.Td(1); ; ) {
+              for (n.Td(1); ;) {
                 k = n.sb();
                 if (k == f) break;
                 switch (k) {
@@ -37263,7 +37263,7 @@
                     w.fill.HUh(n.sb());
                 }
               }
-              for (; n.Bb < u; )
+              for (; n.Bb < u;)
                 switch (((z = n.sb()), z)) {
                   case 0:
                     w.fill.fGf(this.q_());
@@ -37313,7 +37313,7 @@
         this.m$ && this.P4.push(new d(r, k));
       };
       this.Bbg = function () {
-        for (var k = new AscFormat.jxe(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var k = new AscFormat.jxe(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               k.cie(new AscFormat.Cfb());
@@ -37332,18 +37332,18 @@
       this.sKe = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           0 == n && k.ek(r.Nb());
         }
-        for (; r.Bb < q; ) ((n = r.sb()), k.sP(n, this.q_()));
+        for (; r.Bb < q;) ((n = r.sb()), k.sP(n, this.q_()));
         r.Pd(q);
       };
       this.pSb = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           k.Rza(n, r.sb());
@@ -37362,7 +37362,7 @@
         var r = new AscFormat.Kr(),
           q = this.stream,
           n = q.Bb + q.gb() + 4;
-        for (q.Td(1); ; ) {
+        for (q.Td(1); ;) {
           var t = q.sb();
           if (t == f) break;
           switch (t) {
@@ -37379,7 +37379,7 @@
               r.RS(q.gb());
           }
         }
-        for (; q.Bb < n; )
+        for (; q.Bb < n;)
           switch (((t = q.sb()), t)) {
             case 0:
               r.Vf(this.Vfa(k, null, r));
@@ -37406,7 +37406,7 @@
         var k = this.stream,
           r = k.Bb + k.gb() + 4,
           q = new AscFormat.cra();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -37427,7 +37427,7 @@
         var k = this.stream,
           r = k.Bb + k.gb() + 4,
           q = 6;
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -37442,7 +37442,7 @@
         var k = this.stream,
           r = k.Bb + k.gb() + 4,
           q = new AscFormat.ywa();
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -37469,7 +37469,7 @@
         var r = this.stream;
         r.Td(1);
         var q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -37477,7 +37477,7 @@
               k.Uee = r.Ua();
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               n = new AscFormat.C9b(k);
@@ -37517,7 +37517,7 @@
         return k;
       };
       this.ggg = function () {
-        for (var k = new AscFormat.zPf(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var k = new AscFormat.zPf(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               k.dAa = this.ySb();
@@ -37541,7 +37541,7 @@
         var r = this.stream;
         r.Td(1);
         var q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -37564,7 +37564,7 @@
               k.Ro(r.sb());
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               n = new AscFormat.C9b(k);
@@ -37601,12 +37601,12 @@
         var r = this.stream;
         r.Td(1);
         var q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           0 == n ? k.pWh(r.Ua()) : 1 == n ? k.tWh(r.Ua()) : 2 == n && k.jHf(r.Ua());
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               n = new AscFormat.C9b(k);
@@ -37638,7 +37638,7 @@
         return k;
       };
       this.rSb = function (k) {
-        for (var r = this.stream, q = r.Bb + r.gb() + 4; r.Bb < q; )
+        for (var r = this.stream, q = r.Bb + r.gb() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               r.Td(4);
@@ -37646,7 +37646,7 @@
                 r.Td(1);
                 var w = new AscCommon.CWriteCommentData(),
                   z = r.Bb + r.gb() + 4;
-                for (r.Td(1); ; ) {
+                for (r.Td(1); ;) {
                   var u = r.sb();
                   if (u == f) break;
                   switch (u) {
@@ -37678,11 +37678,11 @@
                       w.fMf = r.Nb();
                   }
                 }
-                for (; r.Bb < z; )
+                for (; r.Bb < z;)
                   switch (r.sb()) {
                     case 0:
                       u = r.Bb + r.gb() + 4;
-                      for (r.Td(1); ; ) {
+                      for (r.Td(1); ;) {
                         var B = r.sb();
                         if (B == f) break;
                         switch (B) {
@@ -37715,7 +37715,7 @@
           q = r.Bb + r.fd() + 4;
         if (r.Bb == q) return k;
         r.Td(1);
-        for (var n = !1; ; ) {
+        for (var n = !1; ;) {
           var t = r.sb();
           if (t == f) break;
           0 == t
@@ -37726,14 +37726,14 @@
                 ? ((k.jUb = r.fd()), (n = !0))
                 : 3 == t && ((t = r.sb()), n || ((k.jUb = 250), 1 == t ? (k.jUb = 750) : 2 == t && (k.jUb = 1e3)));
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               n = '';
               t = [];
               var w = [],
                 z = r.Bb + r.fd() + 4;
-              for (r.Td(1); ; ) {
+              for (r.Td(1); ;) {
                 var u = r.sb();
                 if (u == f) break;
                 switch (u) {
@@ -37760,7 +37760,7 @@
         var k = new AscFormat.HCe(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           0 == n ? k.bGf(r.Ua()) : 1 == n ? k.nGf(r.Ua()) : 2 == n ? k.qGf(r.Ua()) : 3 == n && k.lHf(r.Ua());
@@ -37773,7 +37773,7 @@
         this.VMa();
         this.tT = k;
         this.stream.Td(1);
-        for (var r = this.stream.Bb + this.stream.gb() + 4; this.stream.Bb < r; )
+        for (var r = this.stream.Bb + this.stream.gb() + 4; this.stream.Bb < r;)
           switch (this.stream.sb()) {
             case 0:
               var q = new AscFormat.C9b(k);
@@ -37808,12 +37808,12 @@
         var r = this.stream;
         r.Td(1);
         var q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           0 == n ? k.oMi(r.Ua()) : 1 == n && k.jHf(r.Ua());
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               n = new AscFormat.C9b(k);
@@ -37836,13 +37836,13 @@
       this.ffc = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.name = r.Nb();
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.GFa = this.P9f();
@@ -37860,13 +37860,13 @@
         var k = new AscFormat.cfb(),
           r = this.stream,
           q = r.Bb + r.gb() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.SIa = r.sb();
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.$_ = this.Q9f();
@@ -37884,13 +37884,13 @@
         var k = new AscFormat.dfb(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.Fed = r.Ua();
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.zb = this.Vfa();
@@ -37909,13 +37909,13 @@
         var k = new AscFormat.ljb(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.vl(r.gb());
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.setColor(this.q_());
@@ -37930,13 +37930,13 @@
         var k = new AscFormat.mt(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.vl(r.sb());
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.setColor(this.q_());
@@ -37953,14 +37953,14 @@
         var r = this.stream;
         r.sb();
         var q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.ek(r.Nb());
           else if (1 == n) k.AGf(r.Ua());
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               n = new AscFormat.VRe(k);
@@ -37987,7 +37987,7 @@
         return k;
       };
       this.egg = function (k) {
-        for (var r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               this.sKe(k.YH);
@@ -38006,13 +38006,13 @@
       this.Lbg = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.ek(r.Nb());
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               this.AKe(k.wM);
@@ -38026,7 +38026,7 @@
         r.Pd(q);
       };
       this.AKe = function (k) {
-        for (var r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               k.UTa(this.Lyb());
@@ -38050,7 +38050,7 @@
         var k = this.stream,
           r = k.Bb + k.fd() + 4,
           q = '';
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -38073,13 +38073,13 @@
       this.Kbg = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.ek(r.Nb());
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               r.Td(4);
@@ -38106,7 +38106,7 @@
         r.Pd(q);
       };
       this.Aud = function () {
-        for (var k = new AscFormat.knd(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var k = new AscFormat.knd(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               this.sE(k.la);
@@ -38135,7 +38135,7 @@
         var r = k.Bb,
           q = k.gb();
         r = r + q + 4;
-        for (q = new AscFormat.sjd(); k.Bb < r; )
+        for (q = new AscFormat.sjd(); k.Bb < r;)
           switch (k.sb()) {
             case 0:
               q.blur = this.TJe();
@@ -38180,13 +38180,13 @@
       this.sE = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.Oyc(r.sb());
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.DF(this.Myb());
@@ -38220,13 +38220,13 @@
       this.GKe = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           if (0 == n) k.Oyc(r.sb());
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.DF(this.Myb());
@@ -38252,7 +38252,7 @@
         var k = new AscFormat.lE(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -38297,7 +38297,7 @@
         var k = new AscFormat.hre(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -38345,7 +38345,7 @@
         return k;
       };
       this.h6a = function () {
-        for (var k = new AscFormat.jkd(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var k = new AscFormat.jkd(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               k.Mdb(this.nHa());
@@ -38369,7 +38369,7 @@
         var r = this.stream,
           q = r.Bb + r.gb() + 4;
         r.Td(1);
-        for (var n = 0, t = 0; ; ) {
+        for (var n = 0, t = 0; ;) {
           var w = r.sb();
           if (w == f) break;
           switch (w) {
@@ -38399,7 +38399,7 @@
               k.Vsb(r.Nb());
           }
         }
-        for (z = null; r.Bb < q; )
+        for (z = null; r.Bb < q;)
           switch (((w = r.sb()), w)) {
             case 1:
               r.gb();
@@ -38469,13 +38469,13 @@
             n = r.fd();
             var t = r.Bb;
             n = t + n;
-            for (r.Td(1); ; ) {
+            for (r.Td(1); ;) {
               t = r.sb();
               if (t == f) break;
               if (0 == t) ((t = r.Nb()), (k = AscFormat.iQ(t)), (k.QP = 'line' == t), k.dLb(t));
               else break;
             }
-            for (; r.Bb < n; )
+            for (; r.Bb < n;)
               switch (((t = r.sb()), t)) {
                 case 0:
                   this.Gud(k);
@@ -38484,7 +38484,7 @@
                   r.rg();
               }
           } else if (2 == n)
-            for (n = r.fd(), t = r.Bb, n = t + n, k = AscFormat.iQ(''), k.qK = null; r.Bb < n; )
+            for (n = r.fd(), t = r.Bb, n = t + n, k = AscFormat.iQ(''), k.qK = null; r.Bb < n;)
               switch (((t = r.sb()), t)) {
                 case 0:
                   this.Gud(k);
@@ -38514,7 +38514,7 @@
       this.Gud = function (k) {
         for (var r = this.stream, q = r.Bb + r.fd() + 4, n = r.fd(), t = 0; t < n; t++) {
           r.Td(6);
-          for (var w = [], z = 0; r.sb() != f; ) ((w[z] = 1 == z ? r.gb() : r.Nb()), z++);
+          for (var w = [], z = 0; r.sb() != f;) ((w[z] = 1 == z ? r.gb() : r.Nb()), z++);
           3 <= w.length && k.od(w[0], w[2]);
         }
         r.Pd(q);
@@ -38522,7 +38522,7 @@
       this.Sbg = function (k) {
         for (var r = this.stream, q = r.Bb + r.fd() + 4, n = r.fd(), t = 0; t < n; t++) {
           r.Td(6);
-          for (var w = [], z = 0; r.sb() != f; ) ((w[z] = 1 == z ? r.gb() : r.Nb()), z++);
+          for (var w = [], z = 0; r.sb() != f;) ((w[z] = 1 == z ? r.gb() : r.Nb()), z++);
           k.ba(w[0], w[1], w[2], w[3], w[4]);
         }
         r.Pd(q);
@@ -38533,7 +38533,7 @@
           r.Td(4);
           var w = r.sb();
           r.Td(5);
-          for (var z = []; ; ) {
+          for (var z = []; ;) {
             var u = r.sb();
             if (u == f) break;
             z[u] = r.Nb();
@@ -38548,7 +38548,7 @@
         for (var r = this.stream, q = r.Bb + r.fd() + 4, n = r.fd(), t = 0; t < n; t++) {
           r.sb();
           r.Td(5);
-          for (var w = []; ; ) {
+          for (var w = []; ;) {
             var z = r.sb();
             if (z == f) break;
             w[z] = r.Nb();
@@ -38561,7 +38561,7 @@
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
         r.Td(1);
-        for (var n = ['l', 't', 'r', 'b']; ; ) {
+        for (var n = ['l', 't', 'r', 'b']; ;) {
           var t = r.sb();
           if (t == f) break;
           n[t] = r.Nb();
@@ -38575,7 +38575,7 @@
           var w = r.fd();
           w = r.Bb + w;
           r.Td(1);
-          for (var z = !1, u = 5, B = !0, E = b, U = b; ; ) {
+          for (var z = !1, u = 5, B = !0, E = b, U = b; ;) {
             var P = r.sb();
             if (P == f) break;
             switch (P) {
@@ -38596,7 +38596,7 @@
             }
           }
           k.ca(0, z, 4 == u ? 'none' : 'norm', B, E, U);
-          for (z = !1; r.Bb < w; )
+          for (z = !1; r.Bb < w;)
             switch (((P = r.sb()), P)) {
               case 0:
                 r.Td(4);
@@ -38618,7 +38618,7 @@
         if (3 == q) (k.ca(6), r.Pd(n));
         else {
           r.Td(1);
-          for (var t = !1, w = []; ; ) {
+          for (var t = !1, w = []; ;) {
             var z = r.sb();
             if (z == f) break;
             w[z] = r.Nb();
@@ -38683,7 +38683,7 @@
           r = new AscFormat.Tp(this.tT),
           q = k.Bb + k.fd() + 4;
         r.Po(!1);
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -38691,7 +38691,7 @@
               r.vId = k.Ua();
           }
         }
-        for (var t = null; k.Bb < q; )
+        for (var t = null; k.Bb < q;)
           switch (((n = k.sb()), n)) {
             case 0:
               n = this.cib(r);
@@ -38743,7 +38743,7 @@
         var r = this.stream;
         k = 9 === k ? new AscFormat.$Cc() : new AscFormat.Uea();
         k.Po(!1);
-        for (var q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               var n = this.cib(k);
@@ -38806,7 +38806,7 @@
         var k = this.stream,
           r = [],
           q = k.Bb + k.fd() + 4;
-        for (k.Td(5); k.Bb < q; )
+        for (k.Td(5); k.Bb < q;)
           switch (k.sb()) {
             case 0:
               var n = k.fd();
@@ -38862,7 +38862,7 @@
           q = 6 === k,
           n = q ? new AscFormat.Gva(this.tT) : new AscFormat.U6(this.tT);
         n.Po(!1);
-        for (var t = r.Bb + r.fd() + 4, w; r.Bb < t; )
+        for (var t = r.Bb + r.fd() + 4, w; r.Bb < t;)
           switch (r.sb()) {
             case 0:
               var z = this.cib(n);
@@ -38886,7 +38886,7 @@
               break;
             case 5:
               if (7 === k || 8 === k)
-                for (r.gb(), r.sb(); ; ) {
+                for (r.gb(), r.sb(); ;) {
                   z = r.sb();
                   if (z == f) break;
                   switch (z) {
@@ -38918,7 +38918,7 @@
         var k = this.stream,
           r = new AscFormat.l9b();
         r.Po(!1);
-        for (var q = k.Bb + k.fd() + 4; k.Bb < q; )
+        for (var q = k.Bb + k.fd() + 4; k.Bb < q;)
           switch (k.sb()) {
             case 0:
               var n = this.cib(r);
@@ -38947,7 +38947,7 @@
       this.rKe = function () {
         var k = this.stream,
           r = k.Bb + k.fd() + 4;
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var q = k.sb();
           if (q == f) break;
           switch (q) {
@@ -38955,7 +38955,7 @@
               k.Nb();
           }
         }
-        for (var n = null, t = null, w = null; k.Bb < r; )
+        for (var n = null, t = null, w = null; k.Bb < r;)
           switch (((q = k.sb()), q)) {
             case 0:
               n = this.cib(
@@ -39001,7 +39001,7 @@
           r = k.Bb + k.fd() + 4,
           q = new AscFormat.VV();
         q.XTa(this.tT);
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -39009,7 +39009,7 @@
               k.Nb();
           }
         }
-        for (var t = null, w = null, z = null, u = null, B = null, E = null; k.Bb < r; )
+        for (var t = null, w = null, z = null, u = null, B = null, E = null; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               t = this.cib(q);
@@ -39074,7 +39074,7 @@
       this.Dfg = function () {
         var k = this.stream;
         if ('undefined' === typeof AscFormat.dxa)
-          for (var r = k.Bb + k.fd() + 4; k.Bb < r; )
+          for (var r = k.Bb + k.fd() + 4; k.Bb < r;)
             switch (k.sb()) {
               case 0:
                 var q = this.vLe();
@@ -39088,7 +39088,7 @@
         return q;
       };
       this.vLe = function (k) {
-        for (var r, q = this.stream, n = q.Bb + q.fd() + 4; q.Bb < n; )
+        for (var r, q = this.stream, n = q.Bb + q.fd() + 4; q.Bb < n;)
           switch (q.sb()) {
             case 0:
               var t = this.HKe();
@@ -39108,7 +39108,7 @@
         return r;
       };
       this.cib = function (k) {
-        for (var r = new AscFormat.Tna(), q = this.stream, n = q.Bb + q.fd() + 4; q.Bb < n; )
+        for (var r = new AscFormat.Tna(), q = this.stream, n = q.Bb + q.fd() + 4; q.Bb < n;)
           switch (q.sb()) {
             case 0:
               this.T9f(r.VI);
@@ -39120,7 +39120,7 @@
               if (AscCommon.gg(k))
                 switch (k.Ic()) {
                   case AscDFH.rs:
-                    for (q.Td(1); ; ) {
+                    for (q.Td(1); ;) {
                       var z = q.sb();
                       if (z == f) break;
                       switch (z) {
@@ -39175,7 +39175,7 @@
                     r.mj = w;
                     break;
                   case AscDFH.OE:
-                    for (q.Td(1); ; ) {
+                    for (q.Td(1); ;) {
                       z = q.sb();
                       if (z == f) break;
                       switch (z) {
@@ -39210,7 +39210,7 @@
                     r.mj = w;
                     break;
                   case AscDFH.Ez:
-                    for (q.Td(1); ; ) {
+                    for (q.Td(1); ;) {
                       z = q.sb();
                       if (z == f) break;
                       switch (z) {
@@ -39266,7 +39266,7 @@
                   case AscDFH.KC:
                   case AscDFH.Bt:
                   case AscDFH.vN:
-                    for (q.Td(1); ; ) {
+                    for (q.Td(1); ;) {
                       z = q.sb();
                       if (z == f) break;
                       switch (z) {
@@ -39297,7 +39297,7 @@
                     r.mj = w;
                     break;
                   case AscDFH.Y5:
-                    for (q.Td(1); ; ) {
+                    for (q.Td(1); ;) {
                       z = q.sb();
                       if (z == f) break;
                       switch (z) {
@@ -39371,7 +39371,7 @@
       this.T9f = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39394,7 +39394,7 @@
               k.form = r.Ua();
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.uje(this.Kyb());
@@ -39409,7 +39409,7 @@
       };
       this.B7 = function (k, r) {
         if (null == k) return (this.stream.rg(), null);
-        for (var q = this.stream, n = q.Bb + q.fd() + 4, t = null, w = null, z = 0, u = null; q.Bb < n; )
+        for (var q = this.stream, n = q.Bb + q.fd() + 4, t = null, w = null, z = 0, u = null; q.Bb < n;)
           switch (q.sb()) {
             case 0:
               u = this.Wfg();
@@ -39448,7 +39448,7 @@
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
         r.Td(1);
-        for (var n = 5; ; ) {
+        for (var n = 5; ;) {
           var t = r.sb();
           if (t == f) break;
           switch (t) {
@@ -39465,7 +39465,7 @@
           var z = 1;
           'number' == typeof k.aa[w].ka.fo && (z = k.aa[w].ka.fo);
           z > t - w && ((z = t - w), (k.aa[w].ka.fo = z), 1 == k.aa[w].ka.fo && (k.aa[w].ka.fo = b));
-          for (z--; 0 < z; ) {
+          for (z--; 0 < z;) {
             w++;
             if (w >= t) break;
             r.Td(1);
@@ -39482,7 +39482,7 @@
       this.oSb = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39502,7 +39502,7 @@
               r.Ua() && k.ka.aN != Th && Sh(k, Vh);
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               n = new Wh();
@@ -39522,7 +39522,7 @@
       this.Dag = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39590,7 +39590,7 @@
               r.Td(1);
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.Yd || (k.Yd = {});
@@ -39638,7 +39638,7 @@
         var q = {};
         q.props = new ci();
         q.dza = new AscCommon.Tqa(!1, !1, !1, !1, !1, !1);
-        for (q.style = -1; ; ) {
+        for (q.style = -1; ;) {
           var n = k.sb();
           if (n == f) break;
           switch (n) {
@@ -39667,7 +39667,7 @@
               q.dza.EOe(k.Ua());
           }
         }
-        for (; k.Bb < r; )
+        for (; k.Bb < r;)
           switch (((n = k.sb()), n)) {
             case 0:
               (n = this.Vfa()) &&
@@ -39684,7 +39684,7 @@
       this.zeg = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39695,7 +39695,7 @@
               k.lle(r.Ua());
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.pzc(this.Ceg());
@@ -39714,7 +39714,7 @@
         var k = new AscFormat.dLc(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39741,7 +39741,7 @@
         var k = new di(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39815,7 +39815,7 @@
               k.xj = 12 != r.sb();
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.pj = this.bib();
@@ -39849,8 +39849,8 @@
             case 12:
               n = r.Bb + r.fd() + 4;
               r.Td(1);
-              for (var t; (t = r.sb()), t !== f; );
-              for (; r.Bb < n; )
+              for (var t; (t = r.sb()), t !== f;);
+              for (; r.Bb < n;)
                 switch (((t = r.sb()), t)) {
                   case 0:
                     k.ho = this.q_();
@@ -39867,7 +39867,7 @@
         var k = new AscFormat.mre(),
           r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39923,7 +39923,7 @@
       this.tue = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == f) break;
           switch (n) {
@@ -39988,11 +39988,11 @@
               k.wrap = r.sb();
           }
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               var t = r.Bb + r.fd() + 4;
-              for (r.Td(1); ; ) {
+              for (r.Td(1); ;) {
                 n = r.sb();
                 if (n == f) break;
                 switch (n) {
@@ -40000,7 +40000,7 @@
                     ((n = r.sb()), (k.WE = AscFormat.Qfb(AscFormat.Kph(n))));
                 }
               }
-              for (; r.Bb < t; )
+              for (; r.Bb < t;)
                 switch (((n = r.sb()), n)) {
                   case 0:
                     this.Gud(k.WE);
@@ -40014,7 +40014,7 @@
               t = r.Bb + r.fd() + 4;
               r.Td(1);
               var w = new AscFormat.WUa();
-              for (w.type = -1; ; ) {
+              for (w.type = -1; ;) {
                 n = r.sb();
                 if (n == f) break;
                 switch (n) {
@@ -40045,7 +40045,7 @@
         var r = new ei(),
           q = this.stream,
           n = q.Bb + q.fd() + 4;
-        for (q.Td(1); ; ) {
+        for (q.Td(1); ;) {
           var t = q.sb();
           if (t == f) break;
           switch (t) {
@@ -40107,10 +40107,10 @@
               q.Td(1);
           }
         }
-        for (var w = new AscFormat.Oqa(), z = !1; q.Bb < n; )
+        for (var w = new AscFormat.Oqa(), z = !1; q.Bb < n;)
           switch (((t = q.sb()), t)) {
             case 0:
-              for (q.Td(5); ; ) {
+              for (q.Td(5); ;) {
                 t = q.sb();
                 if (t == f) break;
                 switch (t) {
@@ -40125,7 +40125,7 @@
               }
               break;
             case 1:
-              for (q.Td(5); ; ) {
+              for (q.Td(5); ;) {
                 t = q.sb();
                 if (t == f) break;
                 switch (t) {
@@ -40140,7 +40140,7 @@
               }
               break;
             case 2:
-              for (q.Td(5); ; ) {
+              for (q.Td(5); ;) {
                 t = q.sb();
                 if (t == f) break;
                 switch (t) {
@@ -40192,7 +40192,7 @@
                 else if (w.Zg.type == AscFormat.AMa)
                   (q.Td(5), (t = new AscFormat.g9b()), t.wp(this, k, w), w.Zg.MTa(t));
                 else if (w.Zg.type == AscFormat.Ama)
-                  for (q.Td(5); ; ) {
+                  for (q.Td(5); ;) {
                     t = q.sb();
                     if (t == f) break;
                     switch (t) {
@@ -40339,7 +40339,7 @@
                 var U;
                 for (E = 0; E < u; E++) {
                   q.Td(6);
-                  for (U = B = null; ; ) {
+                  for (U = B = null; ;) {
                     t = q.sb();
                     if (t == f) break;
                     switch (t) {
@@ -40372,7 +40372,7 @@
         return r;
       };
       this.ySb = function () {
-        for (var k = new AscFormat.Byd(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; ) {
+        for (var k = new AscFormat.Byd(), r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;) {
           var n = r.sb();
           k.Ot[n] = this.avd();
         }
@@ -40385,7 +40385,7 @@
           else ((r = new AscFormat.uia()), r.Rd(k));
         else r = new AscFormat.uia();
         k = this.stream;
-        for (var q = k.Bb + k.fd() + 4; k.Bb < q; )
+        for (var q = k.Bb + k.fd() + 4; k.Bb < q;)
           switch (k.sb()) {
             case 0:
               r.Tq(this.GLc());
@@ -40412,7 +40412,7 @@
         return r;
       };
       this.dgg = function (k) {
-        for (var r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q; )
+        for (var r = this.stream, q = r.Bb + r.fd() + 4; r.Bb < q;)
           switch (r.sb()) {
             case 0:
               r.rg();
@@ -40438,7 +40438,7 @@
       this.ofc = function (k) {
         var r = new mi(k.Bc, k, !0);
         k = 0;
-        for (var q = this.stream, n = q.Bb + q.fd() + 4; q.Bb < n; ) {
+        for (var q = this.stream, n = q.Bb + q.fd() + 4; q.Bb < n;) {
           var t = q.sb();
           switch (t) {
             case 0:
@@ -40472,14 +40472,14 @@
                   case AscFormat.VHe:
                     var B = q.Bb + q.fd() + 4;
                     q.Td(1);
-                    for (var E = ''; ; ) {
+                    for (var E = ''; ;) {
                       t = q.sb();
                       if (t == f) break;
                       0 == t && (E = q.Nb());
                     }
                     t = 0;
                     this.m$ && (t = this.P4.length);
-                    for (u = null; q.Bb < B; ) {
+                    for (u = null; q.Bb < B;) {
                       var U = q.sb();
                       0 == U ? (u = this.VWa()) : q.rg();
                     }
@@ -40501,14 +40501,14 @@
                     break;
                   case AscFormat.UHe:
                     B = q.Bb + q.fd() + 4;
-                    for (q.Td(1); ; ) {
+                    for (q.Td(1); ;) {
                       t = q.sb();
                       if (t == f) break;
                       if (0 == t) var C = q.Nb();
                       else if (1 == t) var J = q.Nb();
                       else var T = q.Nb();
                     }
-                    for (E = t = null; q.Bb < B; )
+                    for (E = t = null; q.Bb < B;)
                       switch (q.sb()) {
                         case 0:
                           t = this.VWa();
@@ -40533,7 +40533,7 @@
                     break;
                   case AscFormat.THe:
                     B = q.Bb + q.fd() + 4;
-                    for (u = null; q.Bb < B; ) ((U = q.sb()), 0 == U ? (u = this.VWa()) : q.rg());
+                    for (u = null; q.Bb < B;) ((U = q.sb()), 0 == U ? (u = this.VWa()) : q.rg());
                     q.Pd(B);
                     B = new ni(r, !1);
                     U = null;
@@ -40765,7 +40765,7 @@
         r.Po(!1);
         r.Rd(null == this.tT ? this.KK : null);
         var q = k.Bb + k.fd() + 4;
-        for (k.Td(1); ; ) {
+        for (k.Td(1); ;) {
           var n = k.sb();
           if (n == AscCommon.Kt) break;
           switch (n) {
@@ -40773,7 +40773,7 @@
               r.vId = k.Ua();
           }
         }
-        for (var t = null; k.Bb < q; )
+        for (var t = null; k.Bb < q;)
           switch (((n = k.sb()), n)) {
             case 0:
               n = this.Pv.cib(r);
@@ -40889,7 +40889,7 @@
           r = new AscFormat.l9b();
         r.$la(!0);
         r.Rd(null == this.tT ? this.KK : null);
-        for (var q = k.Bb + k.fd() + 4; k.Bb < q; )
+        for (var q = k.Bb + k.fd() + 4; k.Bb < q;)
           switch (k.sb()) {
             case 0:
               k.rg();
@@ -40917,7 +40917,7 @@
           n = q ? new AscFormat.Gva() : new AscFormat.U6();
         n.Po(!1);
         n.Rd(null == this.tT ? this.KK : null);
-        for (var t = r.Bb + r.fd() + 4, w = ''; r.Bb < t; )
+        for (var t = r.Bb + r.fd() + 4, w = ''; r.Bb < t;)
           switch (r.sb()) {
             case 0:
               var z = this.Pv.cib(n);
@@ -40942,7 +40942,7 @@
               break;
             case 5:
               if (7 === k || 8 === k)
-                for (r.gb(), r.sb(); ; ) {
+                for (r.gb(), r.sb(); ;) {
                   z = r.sb();
                   if (z == f) break;
                   switch (z) {
@@ -40971,7 +40971,7 @@
         var r = this.stream,
           q = r.Bb + r.gb() + 4;
         r.Td(1);
-        for (var n = 0, t = 0; ; ) {
+        for (var n = 0, t = 0; ;) {
           var w = r.sb();
           if (w == f) break;
           switch (w) {
@@ -41001,7 +41001,7 @@
               k.Vsb(r.Nb());
           }
         }
-        for (z = null; r.Bb < q; )
+        for (z = null; r.Bb < q;)
           switch (((w = r.sb()), w)) {
             case 1:
               r.gb();
@@ -41052,7 +41052,7 @@
         r.Rd(null == this.tT ? this.KK : null);
         var q = this.KK;
         this.KK = null;
-        for (var n = k.Bb + k.fd() + 4; k.Bb < n; )
+        for (var n = k.Bb + k.fd() + 4; k.Bb < n;)
           switch (k.sb()) {
             case 0:
               k.rg();
@@ -41114,13 +41114,13 @@
       this.sE = function (k) {
         var r = this.stream,
           q = r.Bb + r.fd() + 4;
-        for (r.Td(1); ; ) {
+        for (r.Td(1); ;) {
           var n = r.sb();
           if (n == AscCommon.Kt) break;
           if (0 == n) k.SIa = r.sb();
           else break;
         }
-        for (; r.Bb < q; )
+        for (; r.Bb < q;)
           switch (((n = r.sb()), n)) {
             case 0:
               k.DF(this.Pv.Myb());
@@ -41190,7 +41190,7 @@
         }
       }
       for (u = 0; u < n; u++)
-        for (w = 0; w < z; ) {
+        for (w = 0; w < z;) {
           B = 1;
           for (E = w + 1; E < z; E++)
             if (!(u >= t.ir[E].TO.length)) {
@@ -41418,7 +41418,7 @@
       };
       this.jAd = function (u) {
         this.EM(u);
-        for (var B = this.data, E = this.Oa, U = this.Oa + u; E < U; ) B[E++] = 0;
+        for (var B = this.data, E = this.Oa, U = this.Oa + u; E < U;) B[E++] = 0;
         this.Oa += u;
       };
       this.py = function (u, B) {
@@ -44075,10 +44075,10 @@
           n += w / 2;
           t += z / 2;
           w /= 2;
-          for (z /= 2; 0 > E; ) E += 2 * Math.PI;
-          for (; E > 2 * Math.PI; ) E -= 2 * Math.PI;
-          for (; 0 > u; ) u += 2 * Math.PI;
-          for (; u >= 2 * Math.PI; ) u -= 2 * Math.PI;
+          for (z /= 2; 0 > E;) E += 2 * Math.PI;
+          for (; E > 2 * Math.PI;) E -= 2 * Math.PI;
+          for (; 0 > u;) u += 2 * Math.PI;
+          for (; u >= 2 * Math.PI;) u -= 2 * Math.PI;
           B
             ? E >= u
               ? e(q, n, t, w, z, E, u, !0)
@@ -44121,10 +44121,10 @@
         w += u / 2;
         z += B / 2;
         u /= 2;
-        for (B /= 2; 0 > P; ) P += 2 * Math.PI;
-        for (; P > 2 * Math.PI; ) P -= 2 * Math.PI;
-        for (; 0 > E; ) E += 2 * Math.PI;
-        for (; E >= 2 * Math.PI; ) E -= 2 * Math.PI;
+        for (B /= 2; 0 > P;) P += 2 * Math.PI;
+        for (; P > 2 * Math.PI;) P -= 2 * Math.PI;
+        for (; 0 > E;) E += 2 * Math.PI;
+        for (; E >= 2 * Math.PI;) E -= 2 * Math.PI;
         q = U
           ? P >= E
             ? p(n, t, q, w, z, u, B, P, E, !0)
@@ -44160,10 +44160,10 @@
           n += w / 2;
           t += z / 2;
           w /= 2;
-          for (z /= 2; 0 > E; ) E += 2 * Math.PI;
-          for (; E > 2 * Math.PI; ) E -= 2 * Math.PI;
-          for (; 0 > u; ) u += 2 * Math.PI;
-          for (; u >= 2 * Math.PI; ) u -= 2 * Math.PI;
+          for (z /= 2; 0 > E;) E += 2 * Math.PI;
+          for (; E > 2 * Math.PI;) E -= 2 * Math.PI;
+          for (; 0 > u;) u += 2 * Math.PI;
+          for (; u >= 2 * Math.PI;) u -= 2 * Math.PI;
           B
             ? E >= u
               ? g(q, n, t, w, z, E, u, !0)
@@ -44252,9 +44252,9 @@
       if (null == N.group) return 1;
       if (null == V.group) return -1;
       var Y = 0;
-      for (N = N.group; null != N; ) (++Y, (N = N.group));
+      for (N = N.group; null != N;) (++Y, (N = N.group));
       var ya = 0;
-      for (N = V.group; null != N; ) (++ya, (N = N.group));
+      for (N = V.group; null != N;) (++ya, (N = N.group));
       return Y - ya;
     }
     function h(N, V) {
@@ -45387,7 +45387,7 @@
         N.select(this, V);
         if (AscFormat.Nsd)
           if (N instanceof AscFormat.Nsd)
-            for (V = this.Uf.length - 1; -1 < V; ) {
+            for (V = this.Uf.length - 1; -1 < V;) {
               N.selected = !1;
               this.Uf.splice(V, 1);
               break;
@@ -49712,7 +49712,7 @@
       return z(V, N, null);
     };
     a.AscFormat.yre = function (N, V) {
-      for (var Y = ''; 0 < V; ) ((Y = N[V % N.length] + Y), (V = (V / N.length) >> 0));
+      for (var Y = ''; 0 < V;) ((Y = N[V % N.length] + Y), (V = (V / N.length) >> 0));
       return Y;
     };
     a.AscFormat.tcf = function (N, V, Y, ya, Ea, Ja, Xa, ab) {
@@ -53699,10 +53699,10 @@
     };
     e.prototype.dm = function () {};
     e.prototype.dyc = function (R) {
-      for (; R.eJc(); ) vj(R);
+      for (; R.eJc();) vj(R);
     };
     e.prototype.lM = function (R, Pa) {
-      if (!Pa || wj(R)) for (this.dyc(R), Pa = R.Vp(); xj(R, Pa); ) vj(R);
+      if (!Pa || wj(R)) for (this.dyc(R), Pa = R.Vp(); xj(R, Pa);) vj(R);
     };
     e.prototype.ve = function (R, Pa) {
       R.Qk(Pa);
@@ -53747,7 +53747,7 @@
     };
     h.prototype.Gc = function (R) {
       var Pa = R.stream;
-      for (Pa.Td(1); ; ) {
+      for (Pa.Td(1); ;) {
         var Gb = Pa.sb();
         if (Gb == Nb) break;
         this.PC(Gb, R);
@@ -53755,7 +53755,7 @@
     };
     h.prototype.PC = function () {};
     h.prototype.Tfe = function (R, Pa) {
-      for (var Gb = Pa.stream; Gb.Bb < R; ) {
+      for (var Gb = Pa.stream; Gb.Bb < R;) {
         var cc = Gb.sb();
         this.IA(cc, Pa);
       }
@@ -55027,7 +55027,7 @@
     };
     Oa.prototype.read = function (R, Pa) {
       let Gb = !0;
-      for (; Gb; )
+      for (; Gb;)
         switch (R[Pa.Oa++]) {
           case 0:
             this.color = new AscFormat.mfb();
@@ -55737,7 +55737,7 @@
     };
     sa.prototype.read = function (R, Pa) {
       let Gb = !0;
-      for (; Gb; )
+      for (; Gb;)
         switch (R[Pa.Oa++]) {
           case 0:
             this.color = new AscFormat.bz();
@@ -59188,7 +59188,7 @@
     od.prototype.Pn = function (R) {
       R.sb();
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -59214,11 +59214,11 @@
             return;
         }
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             var cc = R.Bb + R.gb() + 4;
-            for (R.Td(1); ; ) {
+            for (R.Td(1); ;) {
               Gb = R.sb();
               if (Gb === Nb) break;
               switch (Gb) {
@@ -59488,7 +59488,7 @@
     Yc.prototype.Pn = function (R) {
       R.sb();
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -59544,11 +59544,11 @@
             return;
         }
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             var cc = R.Bb + R.gb() + 4;
-            for (R.Td(1); ; ) {
+            for (R.Td(1); ;) {
               Gb = R.sb();
               if (Gb === Nb) break;
               switch (Gb) {
@@ -59702,11 +59702,11 @@
     Ud.prototype.Pn = function (R) {
       R.sb();
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             R.Td(4);
@@ -59752,7 +59752,7 @@
     g(ld, e, 0);
     ld.prototype.Pn = function (R) {
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -59772,7 +59772,7 @@
             return;
         }
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             this.content = new bd(this);
@@ -59795,7 +59795,7 @@
     g(Sc, e, 0);
     Sc.prototype.Pn = function (R) {
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -59809,7 +59809,7 @@
             return;
         }
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             R.Td(4);
@@ -59836,7 +59836,7 @@
     g(Nc, e, 0);
     Nc.prototype.Pn = function (R) {
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -59853,7 +59853,7 @@
             return;
         }
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             R.Td(4);
@@ -59881,7 +59881,7 @@
     g($c, e, 0);
     $c.prototype.Pn = function (R) {
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -59892,7 +59892,7 @@
             return;
         }
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             this.RLb = R.Nb();
@@ -59911,7 +59911,7 @@
     g(bd, e, 0);
     bd.prototype.Pn = function (R) {
       var Pa = R.fd() + R.Bb;
-      for (R.sb(); ; ) {
+      for (R.sb(); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -59922,7 +59922,7 @@
             return;
         }
       }
-      for (; !(R.Bb >= Pa); )
+      for (; !(R.Bb >= Pa);)
         switch (((Gb = R.sb()), Gb)) {
           case 0:
             this.RLb = R.Nb();
@@ -60036,7 +60036,7 @@
     g(gd, e, 0);
     gd.prototype.zDf = function (R) {
       const Pa = new AscCommonSlide.YOf();
-      for (R.Td(5); ; ) {
+      for (R.Td(5); ;) {
         var Gb = R.sb();
         if (Gb === Nb) break;
         switch (Gb) {
@@ -60059,7 +60059,7 @@
       R.sb();
       var Gb = R.fd() + R.Bb;
       R.sb();
-      for (var cc = Pa.Yk; ; ) {
+      for (var cc = Pa.Yk; ;) {
         var jc = R.sb();
         if (jc === Nb) break;
         switch (jc) {
@@ -60103,7 +60103,7 @@
             return;
         }
       }
-      for (; !(R.Bb >= Gb); )
+      for (; !(R.Bb >= Gb);)
         switch (((jc = R.sb()), jc)) {
           case 0:
             this.rJa = Pa.ySb();
@@ -60126,7 +60126,7 @@
             cc.mHf && cc.mHf(jc);
             break;
           case 6:
-            for (jc = R.Bb + R.fd() + 4; R.Bb < jc; )
+            for (jc = R.Bb + R.fd() + 4; R.Bb < jc;)
               switch (R.sb()) {
                 case 0:
                   R.Td(4);
@@ -60134,7 +60134,7 @@
                     R.Td(1);
                     var Nd = new AscCommon.CCommentAuthor(),
                       rf = R.Bb + R.gb() + 4;
-                    for (R.Td(1); ; ) {
+                    for (R.Td(1); ;) {
                       var Ah = R.sb();
                       if (Ah === Nb) break;
                       switch (Ah) {
@@ -72357,8 +72357,8 @@
   (function (a, b) {
     function e(z) {
       if (AscFormat.ob(z)) {
-        for (; z >= 2 * Math.PI; ) z -= 2 * Math.PI;
-        for (; 0 > z; ) z += 2 * Math.PI;
+        for (; z >= 2 * Math.PI;) z -= 2 * Math.PI;
+        for (; 0 > z;) z += 2 * Math.PI;
         AscFormat.dk(z, 2 * Math.PI, 0.001) && (z = 0);
       }
       return z;
@@ -74710,7 +74710,7 @@
       this.nFa = null;
     }
     function U(K) {
-      for (; K.group; ) K = K.group;
+      for (; K.group;) K = K.group;
       return K.parent instanceof AscCommonWord.KK ? K.parent : null;
     }
     function P(K, da, la) {
@@ -74972,8 +74972,8 @@
       if ((K = this.TC)) {
         if (AscFormat.ob(K.ie) && this.ld) {
           var da;
-          for (K = K.ie; 0 > K; ) K += 2 * Math.PI;
-          for (da = ((2 * K) / Math.PI + 0.5) >> 0; 0 > da; ) da += 4;
+          for (K = K.ie; 0 > K;) K += 2 * Math.PI;
+          for (da = ((2 * K) / Math.PI + 0.5) >> 0; 0 > da;) da += 4;
           switch (da) {
             case 0:
               da = this.ld.Wl ? this.ld.Wl.kb() : new AscFormat.SO();
@@ -76608,7 +76608,7 @@
                   let Aa = 0,
                     ra = da.length - 1,
                     v = Math.floor((Aa + ra) / 2);
-                  for (; Aa !== v && ra !== v; )
+                  for (; Aa !== v && ra !== v;)
                     (this.Ssb(da[v]),
                       this.l$e(!0) || this.sMd() ? (ra = v) : (Aa = v),
                       (v = Math.floor((Aa + ra) / 2)));
@@ -76636,7 +76636,7 @@
               Aa = da.length - 1,
               ra = Math.floor((la + Aa) / 2);
             const v = this.Bch();
-            for (; la !== ra && Aa !== ra; )
+            for (; la !== ra && Aa !== ra;)
               (this.Ssb(da[ra]),
                 (v ? this.l$e() || this.sMd() : this.sMd()) ? (Aa = ra) : (la = ra),
                 (ra = Math.floor((la + Aa) / 2)));
@@ -76748,7 +76748,7 @@
             return;
           }
           K = ba.length - 1;
-          for (ra = -(ba.length / 2); ; )
+          for (ra = -(ba.length / 2); ;)
             if (((K += ra), 0 <= K - 1)) {
               this.b4 = ba[K - 1];
               this.zqa = (0.2 * (1e5 - this.b4)) >> 0;
@@ -76992,18 +76992,16 @@
               (I || (this.Ic && (this.Ic() === AscDFH.Z5 || this.Ic() === AscDFH.aSa || this.Ic() === AscDFH.a0a))) &&
                 (this.style || (this.Zd && this.Zd.fill) || (this.pd && this.pd.zb && this.pd.zb.fill)) &&
                 (K.en(!1), K.Nu(v, !1), (oa = new AscCommon.WS()), oa.fha(this, K, I), oa.td(I));
-              if (
-                !(
-                  K.Evf ||
-                  K.OR ||
-                  this.$q ||
-                  !this.K8() ||
-                  (this.parent && this.parent.kind === AscFormat.LHa.Oxb) ||
-                  (this.pd && this.pd.zb && this.pd.zb.fill && !(this.pd.zb.fill instanceof AscFormat.Eva)) ||
-                  !0 === K.srd ||
-                  AscCommon.cca
-                )
-              )
+              if (!(
+                K.Evf ||
+                K.OR ||
+                this.$q ||
+                !this.K8() ||
+                (this.parent && this.parent.kind === AscFormat.LHa.Oxb) ||
+                (this.pd && this.pd.zb && this.pd.zb.fill && !(this.pd.zb.fill instanceof AscFormat.Eva)) ||
+                !0 === K.srd ||
+                AscCommon.cca
+              ))
                 if (
                   ((I = this.qS()),
                   'undefined' === typeof editor ||
@@ -79264,7 +79262,7 @@
         var J = !1,
           T = this.bj;
         C.hl();
-        for (var Z = 0, D = this.dja.bj[this.Od]; Z < D; )
+        for (var Z = 0, D = this.dja.bj[this.Od]; Z < D;)
           switch (T[this.Od + Z + 1]) {
             case 0:
               J = !0;
@@ -79316,7 +79314,7 @@
     h.prototype.Fz = function (C, J, T) {
       var Z = this.bj;
       C.beginPath();
-      for (var D = 0, H = this.dja.bj[this.Od]; D < H; )
+      for (var D = 0, H = this.dja.bj[this.Od]; D < H;)
         switch (Z[this.Od + D + 1]) {
           case 0:
             C.moveTo(Z[this.Od + D + 2], Z[this.Od + D + 3]);
@@ -79360,7 +79358,7 @@
       return !!C.isPointInPath(J, T);
     };
     h.prototype.CA = function (C, J, T) {
-      for (var Z, D, H, ia, xa = this.bj, ma = 0, va = this.dja.bj[this.Od]; ma < va; )
+      for (var Z, D, H, ia, xa = this.bj, ma = 0, va = this.dja.bj[this.Od]; ma < va;)
         switch (xa[this.Od + ma + 1]) {
           case 0:
             C.moveTo(xa[this.Od + ma + 2], xa[this.Od + ma + 3]);
@@ -79441,7 +79439,7 @@
     h.prototype.lV = function (C, J) {
       var T = Asc.editor || editor;
       T = T ? T.C0a() : !0;
-      for (var Z = 0, D = this.dja.bj[this.Od], H = this.bj; Z < D; )
+      for (var Z = 0, D = this.dja.bj[this.Od], H = this.bj; Z < D;)
         switch (H[this.Od + Z + 1]) {
           case 0:
             C.WX(AscFormat.oF.T6, J, H[this.Od + Z + 2] - 0, H[this.Od + Z + 3] - 0, 0, 0, !1, !1, b, T);
@@ -79490,7 +79488,7 @@
         }
     };
     h.prototype.hha = function (C) {
-      for (var J = 0, T = this.dja.bj, Z = T[this.Od], D = 0; J < Z; ) {
+      for (var J = 0, T = this.dja.bj, Z = T[this.Od], D = 0; J < Z;) {
         switch (T[this.Od + J + 1]) {
           case 0:
             if (C === D) return { id: 0, pa: T[this.Od + J + 2], ra: T[this.Od + J + 3] };
@@ -79546,7 +79544,7 @@
       return null;
     };
     h.prototype.GE = function (C) {
-      for (var J = this.bj, T = 0, Z = this.dja.bj[this.Od]; T < Z; )
+      for (var J = this.bj, T = 0, Z = this.dja.bj[this.Od]; T < Z;)
         switch (J[this.Od + T + 1]) {
           case 0:
             C.dl(J[this.Od + T + 2], J[this.Od + T + 3]);
@@ -79588,7 +79586,7 @@
         }
     };
     h.prototype.yae = function () {
-      for (var C = 0, J = this.dja.bj, T = J[this.Od], Z = 0; C < T; ) {
+      for (var C = 0, J = this.dja.bj, T = J[this.Od], Z = 0; C < T;) {
         if (1 < Z) return !1;
         switch (J[this.Od + C + 1]) {
           case 0:
@@ -79607,7 +79605,7 @@
       return !0;
     };
     h.prototype.zae = function () {
-      for (var C = 0, J = this.dja.bj, T = J[this.Od], Z = 0, D, H, ia, xa, ma, va, aa, wa, Oa, ba, K = !1; C < T; ) {
+      for (var C = 0, J = this.dja.bj, T = J[this.Od], Z = 0, D, H, ia, xa, ma, va, aa, wa, Oa, ba, K = !1; C < T;) {
         if (4 < Z) return !1;
         switch (J[this.Od + C + 1]) {
           case 0:
@@ -79678,7 +79676,7 @@
               Oa = (D = -1e5);
             H = !0;
             ba = 0;
-            for (K = this.dja.bj[this.Od]; ba < K; )
+            for (K = this.dja.bj[this.Od]; ba < K;)
               switch (((la = va[this.Od + ba + 1]), la)) {
                 case 0:
                 case 1:
@@ -79712,7 +79710,7 @@
             T = T.ec(D, Oa) >> 0;
             ma ? ia.rect(va + 0.5, ba + 0.5, K - va, T - ba) : ia.rect(va, ba, K - va, T - ba);
           } else
-            for (var ba = 0, K = this.dja.bj[this.Od], da; ba < K; ) {
+            for (var ba = 0, K = this.dja.bj[this.Od], da; ba < K;) {
               var la = va[this.Od + ba + 1];
               switch (la) {
                 case 0:
@@ -79820,7 +79818,7 @@
         }
     };
     h.prototype.CWc = function (C, J, T, Z, D, H) {
-      for (var ia = this.bj, xa = 0, ma = this.dja.bj[this.Od], va; xa < ma; )
+      for (var ia = this.bj, xa = 0, ma = this.dja.bj[this.Od], va; xa < ma;)
         switch (ia[this.Od + xa + 1]) {
           case 0:
           case 1:
@@ -79858,7 +79856,7 @@
         }
     };
     h.prototype.transform = function (C, J) {
-      for (var T = this.bj, Z = 0, D = this.dja.bj[this.Od], H, ia; Z < D; )
+      for (var T = this.bj, Z = 0, D = this.dja.bj[this.Od], H, ia; Z < D;)
         switch (T[this.Od + Z + 1]) {
           case 0:
           case 1:
@@ -82137,7 +82135,7 @@
       return [this.fill, this.effect];
     };
     q.prototype.$qc = function () {
-      for (var S = this.parent; S && !(S instanceof Ma); ) S = S.parent;
+      for (var S = this.parent; S && !(S instanceof Ma);) S = S.parent;
       return S;
     };
     q.prototype.rM = function () {
@@ -82200,7 +82198,7 @@
       return [this.Lg, this.effect];
     };
     n.prototype.$qc = function () {
-      for (var S = this.parent; S && !(S instanceof Ma); ) S = S.parent;
+      for (var S = this.parent; S && !(S instanceof Ma);) S = S.parent;
       return S;
     };
     n.prototype.sM = function () {
@@ -88189,7 +88187,7 @@
     };
     Ma.prototype.Gc = function () {};
     Ma.prototype.Tfe = function (S, Ka) {
-      for (var hb = Ka.stream; hb.Bb < S; ) {
+      for (var hb = Ka.stream; hb.Bb < S;) {
         var Xb = hb.sb();
         this.IA(Xb, Ka);
       }
@@ -88274,7 +88272,7 @@
       })(this.root);
     };
     Cb.prototype.jne = function (S) {
-      for (var Ka = [], hb = this.root; hb; ) {
+      for (var Ka = [], hb = this.root; hb;) {
         for (var Xb = 0; Xb < hb.children.length; Xb += 1) Ka.push(hb.children[Xb]);
         S(hb);
         hb = Ka.shift();
@@ -90311,7 +90309,7 @@
       this.align = 0 <= M;
       if (AscFormat.ob(this.axis.yR)) this.gbe(this.Vo, x, M, W, na, sa);
       else {
-        for (var ja = Math.sin(Math.PI / 4), pa = [].concat(this.Vo), Ga = pa[0], Qa = 1; !Ga && Qa < pa.length; )
+        for (var ja = Math.sin(Math.PI / 4), pa = [].concat(this.Vo), Ga = pa[0], Qa = 1; !Ga && Qa < pa.length;)
           Ga = pa[Qa++];
         if (Ga)
           if (
@@ -92157,7 +92155,7 @@
               sa || (na && 0 !== (x + W) % Ra) ? M.push(null) : pa ? M.push(pa.GP(W + 1)) : M.push(W + 1 + '');
           else M.splice(Qa, M.length - Qa);
           if (0 < ja.length) {
-            for (; M.length < ja[ja.length - 1]; ) M.push('');
+            for (; M.length < ja[ja.length - 1];) M.push('');
             for (W = 0; W < ja.length && !(0 < ja[W]); ++W) M.splice(0, 0, '');
           }
           break;
@@ -92527,7 +92525,7 @@
           sa = [];
           for (var lb in Ga) Ga.hasOwnProperty(lb) && sa.push(Ga[lb]);
           lb = [];
-          for (Ga = []; 0 < sa.length; )
+          for (Ga = []; 0 < sa.length;)
             if (((M = sa.splice(0, 1)[0]), M.Ic() !== AscDFH.pH)) {
               ja = [];
               ja.push(M);
@@ -92958,7 +92956,7 @@
           }
         } else {
           eb = lb[0];
-          for (ja = 1; eb && eb.dA; ) ((eb = lb[ja]), ++ja);
+          for (ja = 1; eb && eb.dA;) ((eb = lb[ja]), ++ja);
           eb = eb || lb[0];
           this.$Hb = 0;
           if (eb)
@@ -99050,7 +99048,7 @@
       return !0;
     };
     e.prototype.Zz = function () {
-      for (var G = this; G; ) {
+      for (var G = this; G;) {
         if (G.Ic() === AscDFH.Bt) return G;
         G = G.parent;
       }
@@ -101177,7 +101175,7 @@
     h.prototype.Ukh = function () {
       for (var G = [], Da = {}, Ib, Wb, gc = 0; gc < this.$d.length; ++gc) {
         Ib = this.$d[gc];
-        for (Wb = []; Ib && !Da[Ib.jb]; ) (Wb.push(Ib), (Da[Ib.jb] = !0), (Ib = Ib.Jm));
+        for (Wb = []; Ib && !Da[Ib.jb];) (Wb.push(Ib), (Da[Ib.jb] = !0), (Ib = Ib.Jm));
         1 < Wb.length && G.push(Wb);
       }
       return G;
@@ -104216,7 +104214,7 @@
           if (Ib) Wb = Ib;
           else {
             let gc = this;
-            for (; !Wb && gc; ) gc && gc.Qfd === g ? (Wb = gc) : (gc = gc.parent);
+            for (; !Wb && gc;) gc && gc.Qfd === g ? (Wb = gc) : (gc = gc.parent);
           }
           Wb && (Wb.dA = !0);
           this.Zv.update(this.f, G, Da, Wb);
@@ -105259,7 +105257,7 @@
                   var Oc = vc.Va;
                   if (Oc.r1 === Oc.r2) {
                     var Bc = jd.pM(Oc.r1);
-                    for (vc = Oc.ia; 0 === Wb && jd.FDa(vc) && vc <= Oc.qa; ) ++vc;
+                    for (vc = Oc.ia; 0 === Wb && jd.FDa(vc) && vc <= Oc.qa;) ++vc;
                     for (; vc <= Oc.qa; ++vc) {
                       if (!Bc && !jd.FDa(vc)) {
                         var Yb = jd.Hr(Oc.r1, vc);
@@ -105277,7 +105275,7 @@
                     }
                   } else {
                     Bc = jd.FDa(Oc.ia);
-                    for (vc = Oc.r1; 0 === Wb && jd.pM(vc) && vc <= Oc.r2; ) ++vc;
+                    for (vc = Oc.r1; 0 === Wb && jd.pM(vc) && vc <= Oc.r2;) ++vc;
                     for (; vc <= Oc.r2; ++vc)
                       (Bc ||
                         jd.pM(vc) ||
@@ -108667,7 +108665,7 @@
       if (this.wnc(r)) this.NUc = !0;
       else {
         this.NUc = !1;
-        for (var q = 0, n = r.length, t, w; 1 < n - q; )
+        for (var q = 0, n = r.length, t, w; 1 < n - q;)
           ((t = ((n + q) / 2 + 0.5) >> 0), (w = r.slice(0, t - 1)), (w += '...'), this.wnc(w) ? (q = t) : (n = t));
         w = r.slice(0, q - 1);
         if (!this.wnc(w + '...')) {
@@ -111349,7 +111347,7 @@
       K.smh = function (ea) {
         if ((ea = AscCommon.lh.fi(ea))) {
           ea.Ka && ea.Ka.Ic && ea.Ka.Ic() === AscDFH.Bt && (ea = ea.Ka);
-          for (; ea.group; ) ea = ea.group;
+          for (; ea.group;) ea = ea.group;
           if (ea.fj) for (var oa = 0; oa < y.length; oa++) if (y[oa] === ea.fj) return y[oa];
         }
         return null;
@@ -113886,7 +113884,7 @@
           E = 0;
         for (z = 0; z < w.length; z++) q(w[z].index);
         var U = {};
-        for (n = []; ; ) {
+        for (n = []; ;) {
           w = r();
           if (null === w) break;
           n.push({ aLa: w });
@@ -115103,7 +115101,7 @@
         ba = ba.step;
         if (!(da || (0 > K && 0 < ra))) {
           da = [0, 0, 32, 26, 24, 22, 21, 19, 18, 17, 16];
-          for (var I = da[la.length - 1], ha = Math.round(Aa / (la.length - 1)); ha <= I; ) {
+          for (var I = da[la.length - 1], ha = Math.round(Aa / (la.length - 1)); ha <= I;) {
             la = this.RBd(ba);
             ba = this.lFg(la.val) * la.ode;
             la = this.xXe(ba, K, ra, v, y);
@@ -115122,8 +115120,8 @@
         var v = 0;
         if (null != la) v = la;
         else if (null == la && null != K && 0 != K && 0 < K && 0 < da) v = parseInt(K / ba) * ba;
-        else if (0 > K) for (; (!ra && v >= K) || (ra && v > K); ) v -= ba;
-        else if (0 < K) for (; v < K && v > K - ba; ) v += ba;
+        else if (0 > K) for (; (!ra && v >= K) || (ra && v > K);) v -= ba;
+        else if (0 < K) for (; v < K && v > K - ba;) v += ba;
         return this.DEg(v, K, da, ba, la, Aa);
       },
       eFg: function (ba, K, da, la) {
@@ -115133,13 +115131,13 @@
           y = la.Nm && null !== la.Nm.min ? Math.round(1e9 * la.Nm.min) / 1e9 : null,
           I = la.Nm && null !== la.Nm.max ? Math.round(1e9 * la.Nm.max) / 1e9 : null;
         null !== y && (ba = y);
-        if (1 > ba && 0 < ba) for (v = la = this.RBd(ba).ode; 1 > v; ) (ra--, (v *= 10));
+        if (1 > ba && 0 < ba) for (v = la = this.RBd(ba).ode; 1 > v;) (ra--, (v *= 10));
         else la = Math.pow(da, 0);
         1 > da && (da = 2);
         v = 0;
         var ha = 1;
         if (1 > ba && 0 < ba)
-          for (ha < K && (ha = K), null !== I && I > ha && (ha = I); la < ha; )
+          for (ha < K && (ha = K), null !== I && I > ha && (ha = I); la < ha;)
             if (((la = Math.pow(da, ra)), null !== y && y > la)) ra++;
             else {
               if (null !== I && I < la) {
@@ -115152,7 +115150,7 @@
               v++;
             }
         else
-          for (null !== I && I > K && (K = I); la <= K; )
+          for (null !== I && I > K && (K = I); la <= K;)
             if (((la = Math.pow(da, ra)), null !== y && y > la)) ra++;
             else {
               if (null !== I && I < la) {
@@ -115445,7 +115443,7 @@
                   : Aa[Aa.length - 1].Oa - (ba / v) * y),
               !da && (y > Aa[Aa.length - 1].Oa || y < Aa[0].Oa) && (y = Aa[Aa.length - 1].Oa));
           else
-            for (da = 0, la = Aa.length - 1; da <= la; )
+            for (da = 0, la = Aa.length - 1; da <= la;)
               if (((v = Math.floor((da + la) / 2)), ba >= Aa[v].val && Aa[v + 1] && ba <= Aa[v + 1].val)) {
                 da = v;
                 y = Math.abs(Aa[da + 1].Oa - Aa[da].Oa);
@@ -115487,7 +115485,7 @@
             I = Math.abs(K[1].Oa - K[0].Oa);
             y = Math.log(K[K.length - 1].val) / Math.log(la);
             K = K[K.length - 1].Oa;
-            for (var ha = K - I; ; ) {
+            for (var ha = K - I; ;) {
               var ea = Math.pow(la, y),
                 oa = Math.pow(la, y + 1);
               K -= I;
@@ -115500,7 +115498,7 @@
               if (100 < y) break;
             }
           } else if (v < K[0].val)
-            for (I = Math.abs(K[1].Oa - K[0].Oa), y = Math.log(K[0].val) / Math.log(la), K = K[0].Oa, ha = K + I; ; ) {
+            for (I = Math.abs(K[1].Oa - K[0].Oa), y = Math.log(K[0].val) / Math.log(la), K = K[0].Oa, ha = K + I; ;) {
               ea = Math.pow(la, y);
               oa = Math.pow(la, y - 1);
               K += I;
@@ -115579,7 +115577,7 @@
         else if (0 != K[0]) da = Math.pow(10, K[0].toString().length - 1);
         else if (0 == K[0] && K[1] != b) {
           var la = ba;
-          for (ba = 0; 1 > la; ) ((la *= 10), ba--);
+          for (ba = 0; 1 > la;) ((la *= 10), ba--);
           da = Math.pow(10, ba);
           ba = la;
         }
@@ -116276,10 +116274,7 @@
         return K;
       },
       M7e: function (ba, K, da, la, Aa, ra, v, y, I, ha) {
-        for (
-          var ea, oa, N, V, Y = this.zf.ay(), ya = this.zf.Am(Y), Ea = this.Jc.lx, Ja = this.Jc.Cw, Xa = 0;
-          1 >= Xa;
-        )
+        for (var ea, oa, N, V, Y = this.zf.ay(), ya = this.zf.Am(Y), Ea = this.Jc.lx, Ja = this.Jc.Cw, Xa = 0; 1 >= Xa;)
           ((oa = this.S$g(ba, K, da, la, Aa, ra, v, y, Xa)),
             0 === Xa && ((N = this.bx(oa[0], I)), (V = this.bx(oa[1], ha))),
             (ea = this.bx(oa[0], I)),
@@ -119245,7 +119240,7 @@
           ) {
             if (Ea === I.Fn) var Ja = N;
             else ((Ja = I.iG(Ea)), (Ja = Math.abs(2 * parseFloat((Ja ? Ja.val : 0) / ha) * Math.PI)));
-            for (var Xa = 0, ab = 0, tb = ea; ; ) {
+            for (var Xa = 0, ab = 0, tb = ea; ;) {
               Xa =
                 Ea === I.length && 0 > Ja
                   ? tb - Math.PI / 2 > ea + Ja
@@ -121704,8 +121699,8 @@
           (this.ef.jl[this.Ep.oaa] = p <= this.Bce && p >= this.Yyf ? p : p > this.Bce ? this.Bce : this.Yyf));
         if (this.eTc) {
           'mathNotEqual' === this.ef.qK && ((h = -h), (r = -r));
-          for (r = Math.atan2(h, r); 0 > r; ) r += 2 * Math.PI;
-          for (; r >= 2 * Math.PI; ) r -= 2 * Math.PI;
+          for (r = Math.atan2(h, r); 0 > r;) r += 2 * Math.PI;
+          for (; r >= 2 * Math.PI;) r -= 2 * Math.PI;
           r *= AscFormat.W6e;
           r >= this.Kce && r <= this.Ace
             ? (this.ef.jl[this.Ep.K5] = r)
@@ -122909,7 +122904,7 @@
         var u = w[z];
         if (u[0] + 1 > p) break;
         var B = u[0] + 1;
-        for (u = Math.min(u[1], p); B <= u; )
+        for (u = Math.min(u[1], p); B <= u;)
           if (B + 2 <= u) {
             var E = this.VD[B++];
             var U = this.VD[B++];
@@ -124300,8 +124295,8 @@
       };
       this.track = function (p, k) {
         this.XH = !0;
-        for (p += this.Ub.ie; 0 > p; ) p += 2 * Math.PI;
-        for (; p >= 2 * Math.PI; ) p -= 2 * Math.PI;
+        for (p += this.Ub.ie; 0 > p;) p += 2 * Math.PI;
+        for (; p >= 2 * Math.PI;) p -= 2 * Math.PI;
         if (0.07 > p || p > 2 * Math.PI - 0.07) p = 0;
         0.07 > Math.abs(p - 0.5 * Math.PI) && (p = 0.5 * Math.PI);
         0.07 > Math.abs(p - Math.PI) && (p = Math.PI);
@@ -124411,8 +124406,8 @@
       };
       this.track = function (q, n) {
         this.XH = !0;
-        for (q += this.Ub.ie; 0 > q; ) q += 2 * Math.PI;
-        for (; q >= 2 * Math.PI; ) q -= 2 * Math.PI;
+        for (q += this.Ub.ie; 0 > q;) q += 2 * Math.PI;
+        for (; q >= 2 * Math.PI;) q -= 2 * Math.PI;
         if (0.07 > q || q > 2 * Math.PI - 0.07) q = 0;
         0.07 > Math.abs(q - 0.5 * Math.PI) && (q = 0.5 * Math.PI);
         0.07 > Math.abs(q - Math.PI) && (q = Math.PI);
@@ -124576,8 +124571,8 @@
         n = (-90 * (n - this.Xn)) / (this.zWc.w / 2);
         this.Zk.yG = (q && q.yG ? q.yG : 0) + n;
         q.pL() && (0 > this.Zk.yG && (this.Zk.yG = 0), 90 < this.Zk.yG && (this.Zk.yG = 90));
-        for (; 0 > this.Zk.yG; ) this.Zk.yG += 360;
-        for (; 360 <= this.Zk.yG; ) this.Zk.yG -= 360;
+        for (; 0 > this.Zk.yG;) this.Zk.yG += 360;
+        for (; 360 <= this.Zk.yG;) this.Zk.yG -= 360;
         q = q && q.FN ? q.FN : 0;
         n = (90 * (r - this.xo)) / (this.zWc.Oc / 2);
         this.Zk.FN = q + n;
@@ -125054,7 +125049,7 @@
                   ? (w = q + 1)
                   : ((w = k ? (q === p ? null : p + 1) : null), t && ((p = 0 === t.id ? q + 1 : q + 2), (k = !1)));
                 if (0 === n.id) {
-                  for (var u = 1; q + u <= r.length - 1 && 0 !== r[q + u].id; ) ++u;
+                  for (var u = 1; q + u <= r.length - 1 && 0 !== r[q + u].id;) ++u;
                   5 === r[q + u - 1].id && --u;
                   var B = r[p];
                   t = this.TEb(B);
@@ -125334,8 +125329,8 @@
             var p = h.iTa,
               k = g.$m[p].bj;
             g = h.t6;
-            for (var r = h.T0, q = 0, n = g, t = g; k[t] && 0 !== k[t].id; ) (--t, ++q);
-            for (; k[n + 1] && 5 !== k[n + 1].id; ) (++n, ++q);
+            for (var r = h.T0, q = 0, n = g, t = g; k[t] && 0 !== k[t].id;) (--t, ++q);
+            for (; k[n + 1] && 5 !== k[n + 1].id;) (++n, ++q);
             if (2 < q) {
               g > r && k[g - 1] && (k[t] = { id: 0, pa: this.TEb(k[g - 1]), ra: this.UEb(k[g - 1]) });
               p = this.uIa[p];
@@ -126608,14 +126603,12 @@
       var E;
       for (E = n.length - 1; -1 < E; --E) {
         var U = n[E];
-        if (
-          !(
-            U.parent &&
-            AscFormat.ob(U.parent.IU) &&
-            AscFormat.ob(U.parent.ABa) &&
-            (z < U.parent.IU || z > U.parent.ABa)
-          )
-        )
+        if (!(
+          U.parent &&
+          AscFormat.ob(U.parent.IU) &&
+          AscFormat.ob(U.parent.ABa) &&
+          (z < U.parent.IU || z > U.parent.ABa)
+        ))
           switch (U.Ic()) {
             case AscDFH.rs:
             case AscDFH.Ez:
@@ -127842,7 +127835,7 @@
         D = C - Z,
         H;
       var ia = C + 1;
-      for (H = ia < this.qad && this.Y7a[ia] <= T; 0 < D && (this.Y7a[C] > T || H); )
+      for (H = ia < this.qad && this.Y7a[ia] <= T; 0 < D && (this.Y7a[C] > T || H);)
         (H && (Z = C), (C = Z + (D >> 1)), (ia = C + 1), (H = ia < this.qad && this.Y7a[ia] <= T), (D = C - Z));
       ia === this.qad && (--ia, --C);
       Z = this.Y7a[ia] - this.Y7a[C];
@@ -127859,7 +127852,7 @@
           J + 1 < this.Owc.length && Math.abs(va) < z && Math.abs(aa) < z;
         )
           ((va = ma.x - ia.x), (aa = ma.y - ia.y), (ma = this.Owc[++J]));
-        for (; 0 < C && Math.abs(va) < z && Math.abs(aa) < z; )
+        for (; 0 < C && Math.abs(va) < z && Math.abs(aa) < z;)
           ((va = ma.x - ia.x), (aa = ma.y - ia.y), (ia = this.Owc[--C]));
         Math.abs(va) < z && Math.abs(aa) < z ? (H = { x: H.x + z, y: H.y }) : ((H = ia), (xa = ma));
       }
@@ -129124,7 +129117,7 @@
         var u = r.yb;
         var B = r.b;
         r = g.createImageData(n, n);
-        for (t = r.data; 0 < z; ) {
+        for (t = r.data; 0 < z;) {
           for (var E = 4 * (n * w + q), U = 0; U < z; U++) ((t[E++] = k), (t[E++] = u), (t[E++] = B), (t[E++] = 255));
           k >>= 0;
           u >>= 0;
@@ -130778,7 +130771,7 @@
           var D = this.d5a.getContext('2d');
           n = this.f5a.getContext('2d');
           var H = Z.createImageData(this.PU, this.UR);
-          for (z = H.data; 0 < P; ) {
+          for (z = H.data; 0 < P;) {
             for (var ia = 4 * (this.PU * U + E), xa = 0; xa < P; xa++)
               ((z[ia++] = C), (z[ia++] = J), (z[ia++] = T), (z[ia++] = 255));
             C >>= 0;
@@ -130793,7 +130786,7 @@
           z = H.data;
           P = w;
           E = u;
-          for (U = B; 0 < P; ) {
+          for (U = B; 0 < P;) {
             ia = 4 * (this.UR * E + U);
             w = E;
             for (xa = 0; xa < P; xa++)
@@ -130918,7 +130911,7 @@
       return q;
     };
     g.prototype.hRd = function (q) {
-      for (var n = this.canvas, t = 0, w = 0; n && 'BODY' != n.tagName; )
+      for (var n = this.canvas, t = 0, w = 0; n && 'BODY' != n.tagName;)
         ((t += n.offsetTop), (w += n.offsetLeft), (n = n.offsetParent));
       n = p.Jj;
       return {
@@ -132007,7 +132000,7 @@
           r.hasClass(z, u) && (z.className = z.className.replace(new RegExp('(^|\\s)' + u + '(\\s|$)', 'g'), ' '));
         };
         r.offset = function (z) {
-          for (var u = -z.offsetLeft, B = -z.offsetTop; (z = z.offsetParent); )
+          for (var u = -z.offsetLeft, B = -z.offsetTop; (z = z.offsetParent);)
             ((u -= z.offsetLeft), (B -= z.offsetTop));
           return { left: u, top: B };
         };
@@ -132098,13 +132091,11 @@
           (this.IDd(), this.Rcd(this.options.uJd) || ((this.hqb = !1), this.W7('scrollEnd')));
       },
       uBb: function (k) {
-        if (
-          !(
-            (1 != p.f3[k.type] && 0 !== (k.which ? k.button : 2 > k.button ? 0 : 4 == k.button ? 1 : 2)) ||
-            !this.enabled ||
-            (this.m0a && p.f3[k.type] !== this.m0a)
-          )
-        ) {
+        if (!(
+          (1 != p.f3[k.type] && 0 !== (k.which ? k.button : 2 > k.button ? 0 : 4 == k.button ? 1 : 2)) ||
+          !this.enabled ||
+          (this.m0a && p.f3[k.type] !== this.m0a)
+        )) {
           !this.options.preventDefault || p.juc || p.Exc(k.target, this.options.Exc) || k.preventDefault();
           var r = k.touches ? k.touches[0] : k;
           this.m0a = p.f3[k.type];
@@ -132298,13 +132289,13 @@
                 '0.0001ms' === q.X1a[r] && (q.X1a[r] = '0s');
               });
             }
-            if (this.Xka) for (var n = this.Xka.length; n--; ) this.Xka[n].hne(k);
+            if (this.Xka) for (var n = this.Xka.length; n--;) this.Xka[n].hne(k);
           }
         }
       },
       CKg: function (k) {
         this.X1a[p.style.transitionTimingFunction] = k;
-        if (this.Xka) for (var r = this.Xka.length; r--; ) this.Xka[r].transitionTimingFunction(k);
+        if (this.Xka) for (var r = this.Xka.length; r--;) this.Xka[r].transitionTimingFunction(k);
       },
       Hkb: function (k, r) {
         this.options.a8b
@@ -132312,7 +132303,7 @@
           : ((k = e.round(k)), (r = e.round(r)), (this.X1a.left = k + 'px'), (this.X1a.top = r + 'px'));
         this.x = k;
         this.y = r;
-        if (this.Xka) for (k = this.Xka.length; k--; ) this.Xka[k].eQ();
+        if (this.Xka) for (k = this.Xka.length; k--;) this.Xka[k].eQ();
       },
       jCd: function (k) {
         if ('string' == typeof this.F5) {
@@ -132352,7 +132343,7 @@
       },
       $Fg: function () {
         function k(z) {
-          if (t.Xka) for (var u = t.Xka.length; u--; ) z.call(t.Xka[u]);
+          if (t.Xka) for (var u = t.Xka.length; u--;) z.call(t.Xka[u]);
         }
         var r = this.options.wEh,
           q = 'string' != typeof this.options.scrollbars,
@@ -132389,7 +132380,7 @@
             n.push(w));
         }
         this.options.Xka && (n = n.concat(this.options.Xka));
-        for (r = n.length; r--; ) this.Xka.push(new g(this, n[r]));
+        for (r = n.length; r--;) this.Xka.push(new g(this, n[r]));
         this.options.gZc &&
           (this.on('scrollEnd', function () {
             k(function () {
@@ -132491,9 +132482,9 @@
           if (this.CFa && this.gAa && this.Fyc && this.Dyc) {
             if (!0 === this.options.F2a) {
               var B = e.round(z / 2);
-              for (n = e.round(u / 2); t > -this.Fyc; ) {
+              for (n = e.round(u / 2); t > -this.Fyc;) {
                 this.Uy[k] = [];
-                for (w = r = 0; w > -this.Dyc; )
+                for (w = r = 0; w > -this.Dyc;)
                   ((this.Uy[k][r] = {
                     x: e.max(t, this.oK),
                     y: e.max(w, this.vL),
@@ -133058,7 +133049,7 @@
       n === t || (n !== w && u[n - 1] < u[n + 1]) ? ((t = n + 1), (w = u[t])) : ((t = n - 1), (w = u[t] + 1));
       var E = z.left.x;
       var U = E - (z.left.k + n);
-      for (B = Math.min(z.bja, z.A5a + n); w < B && this.j0(this.a[E + w], this.b[U + w]); ) w++;
+      for (B = Math.min(z.bja, z.A5a + n); w < B && this.j0(this.a[E + w], this.b[U + w]);) w++;
       q.set(w, n).translate(z.left);
       u[n] = w;
       return t;
@@ -133069,7 +133060,7 @@
       q.set(w, n).translate(z.left);
       q = z.left.x - 1;
       z = q - (z.left.k + n);
-      for (B = Math.max(n, 0); w > B && this.j0(this.a[q + w], this.b[z + w]); ) w--;
+      for (B = Math.max(n, 0); w > B && this.j0(this.a[q + w], this.b[z + w]);) w--;
       u[n] = w;
       return t;
     };
@@ -133100,7 +133091,7 @@
     f.prototype.wjh = function (q, n, t, w) {
       var z = n.k;
       q = z > q.k ? q.x + 1 : q.x;
-      for (n = n.x; q < n; ) (t.call(w, q, q - z), q++);
+      for (n = n.x; q < n;) (t.call(w, q, q - z), q++);
     };
     d.prototype.tq = function () {
       return new d(this.x, this.k);
@@ -133156,7 +133147,7 @@
       });
       var U = t.children;
       var P = w.children;
-      for (w = u = 0; U[u] || P[w]; ) {
+      for (w = u = 0; U[u] || P[w];) {
         var C = U[u];
         var J = P[w];
         if (C && !this.qza.get(C)) (E.wOh(C), u++);
@@ -133231,7 +133222,7 @@
       return n;
     };
     r.prototype.Scf = function (q, n, t, w, z) {
-      for (var u = [], B = [], E = 0, U = 0, P, C; n[E] || t[U]; )
+      for (var u = [], B = [], E = 0, U = 0, P, C; n[E] || t[U];)
         if (((P = n[E]), (C = t[U]), P && !q.get(P))) (u.push(P), E++);
         else if (C && !q.get(C)) (B.push(C), U++);
         else if (P && C && P === q.get(C))
@@ -134361,7 +134352,7 @@
               if (this.oHb && !Y)
                 ((ya = new f('a')), (ya.Sp.href = h(this.oHb)), I.BB(ya), (Y = I), (I = ya), (ha = !0));
               else if (Y && !this.oHb) {
-                if (0 < V) for (; 0 < V; ) (ea(V), V--);
+                if (0 < V) for (; 0 < V;) (ea(V), V--);
                 I = Y;
                 ha = !1;
                 Y = null;
@@ -134398,7 +134389,7 @@
                       ? (V++, (oa[Ja.hQ] = 1), (ya = new f('a')), (ya.Sp.name = h(Ja.px)), (N[V] = I), (I = ya))
                       : oa[Ja.hQ] && ((oa[Ja.hQ] = 0), ea(V), V--));
         }
-        if (0 < V) for (; 0 < V; ) (ea(V), V--);
+        if (0 < V) for (; 0 < V;) (ea(V), V--);
         this.oHb && (this.oHb = null);
       },
       K$b: function (y, I, ha, ea) {
@@ -137127,7 +137118,7 @@
         var oa = this,
           N = y.nodeName.toLowerCase();
         if (y !== this.$Ib)
-          for (; !1 === this.y7a(N); )
+          for (; !1 === this.y7a(N);)
             if (this.$Ib !== y.parentNode) ((y = y.parentNode), (N = y.nodeName.toLowerCase()));
             else break;
         var V = this.rsa(y);
@@ -137204,7 +137195,7 @@
                 : (ya.Kc = Ja.val);
             !1 === this.qCd(ya) && I.s2(ya);
             ya = null;
-            for (Ea = y; ; ) {
+            for (Ea = y; ;) {
               Ja = this.rsa(Ea);
               if (null == Ja) break;
               ya = this.OI(Ea, Ja, 'background-color');
@@ -137234,7 +137225,7 @@
             if (!0 === ha.rmc)
               if (
                 ((N = function (Hb) {
-                  for (var Rb = y; ; ) {
+                  for (var Rb = y; ;) {
                     for (var Zb = !1, x = 0, M = Rb.childNodes.length; x < M; x++) {
                       var W = Rb.childNodes[x],
                         X = W.nodeType;
@@ -137493,7 +137484,7 @@
             (oa = this.z7a(oa)) &&
             (ra.YD ? (ha.Ba = oa) : oa && (ha.wb = AscFormat.Z6(oa.r, oa.yb, oa.b)));
           (ea = this.OI(y, ea, 'letter-spacing')) && null != (ea = AscCommon.fQ(ea)) && (ha.yc = ea);
-          for (var V = (N = oa = ea = null), Y = y; !0 !== I; ) {
+          for (var V = (N = oa = ea = null), Y = y; !0 !== I;) {
             var ya = this.rsa(Y);
             if (null == ya) break;
             if (null == oa || null == N) {
@@ -137584,7 +137575,7 @@
           var Ja = [1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1e3, 4e3, 5e3, 9e3, 1e4],
             Xa = 'I IV V IX X XL L XC C CD D CM M M&#8577; &#8577; &#8577;&#8578; &#8578;'.split(' ');
           Ea = Ea.toUpperCase();
-          for (var ab = 0, tb = 0, ub = Ja.length - 1; 0 <= ub && tb < Ea.length; )
+          for (var ab = 0, tb = 0, ub = Ja.length - 1; 0 <= ub && tb < Ea.length;)
             Ea.substr(tb, Xa[ub].length) === Xa[ub] ? ((ab += Ja[ub]), (tb += Xa[ub].length)) : ub--;
           return ab;
         }
@@ -137891,7 +137882,7 @@
       },
       EVe: function (y, I, ha, ea, oa) {
         function N() {
-          for (var Ra = M[Rb]; null != Ra && 0 < Ra.Xa; ) (Ra.Xa--, (Rb += Ra.fb), (Zb += Ra.width), (Ra = M[Rb]));
+          for (var Ra = M[Rb]; null != Ra && 0 < Ra.Xa;) (Ra.Xa--, (Rb += Ra.fb), (Zb += Ra.width), (Ra = M[Rb]));
         }
         var V = this.gj,
           Y = y,
@@ -138182,7 +138173,7 @@
       },
       HAg: function (y, I, ha, ea, oa, N, V, Y, ya, Ea) {
         function Ja() {
-          for (var x = oa[fb]; null != x; ) {
+          for (var x = oa[fb]; null != x;) {
             var M = I.vba(I.aa.length, I, null, !1);
             if (x.jf && x.jf.ka && x.jf.ka.Yd) {
               let W = x.jf.ka.Yd,
@@ -138683,7 +138674,7 @@
           function ja(eb) {
             if (!eb || fb.y7a(eb.nodeName.toLowerCase())) return !1;
             let Db = eb.previousSibling;
-            for (; Db; ) {
+            for (; Db;) {
               if (fb.y7a(Db.nodeName.toLowerCase())) return !1;
               let ta = Db.textContent;
               if (ta && ta.length) return 32 !== ta.charCodeAt(ta.length - 1);
@@ -139189,7 +139180,7 @@
     E.prototype.Z_b = function (y, I, ha) {
       let ea = y.Vp();
       I || (I = this.V6e);
-      for (var oa; xj(y, ea); )
+      for (var oa; xj(y, ea);)
         switch (vj(y)) {
           case 'u':
             I.xj = !0;
@@ -140047,7 +140038,7 @@
         };
         n.prototype.push = function (t) {
           this.currentNode = t;
-          for (this.xh = 0; void 0 !== this.currentNode.left; )
+          for (this.xh = 0; void 0 !== this.currentNode.left;)
             (this.stack.push(this.currentNode), (this.currentNode = this.currentNode.left));
         };
         n.prototype.pop = function () {
@@ -140612,7 +140603,7 @@
       return pa;
     };
     d.prototype.$ve = function (ja, pa, Ga, Qa) {
-      for (var Ra = ja.Bb, db = Ra; db - Ra < Ga && db < ja.INa() - 1; ) {
+      for (var Ra = ja.Bb, db = Ra; db - Ra < Ga && db < ja.INa() - 1;) {
         db = ja.sb();
         var lb = !1,
           Ya = null;
@@ -148291,13 +148282,11 @@
           la <= va.r2 + 1;
           la++
         )
-          if (
-            !(
-              0 > la ||
-              (aa || (0 < va.r1 && (la = va.r1 - 1), 0 < va.ia && (Aa = va.ia - 1)),
-              la > va.r1 && la < va.r2 && Aa > va.ia && Aa < va.qa)
-            )
-          ) {
+          if (!(
+            0 > la ||
+            (aa || (0 < va.r1 && (la = va.r1 - 1), 0 < va.ia && (Aa = va.ia - 1)),
+            la > va.r1 && la < va.r2 && Aa > va.ia && Aa < va.qa)
+          )) {
             aa = !0;
             for (var Aa = va.ia - 1; Aa <= va.qa + 1; Aa++)
               0 > Aa ||
@@ -148473,7 +148462,7 @@
         }
         if (!D) return D;
         D = D.clone();
-        for (var xa = 0, ma = this.Ma; ; ) {
+        for (var xa = 0, ma = this.Ma; ;) {
           xa++;
           if (1e7 < xa) break;
           if (D.r1 < D.r2 && ia(D.r1, D.ia, D.r1, D.qa)) D.r1++;
@@ -148864,7 +148853,7 @@
       wEg: function (D, H) {
         for (var ia = [], xa = 0; xa < D.length; xa++) ia[D[xa].Da.toLowerCase()] = 1;
         D = H;
-        for (xa = 2; ; ) {
+        for (xa = 2; ;) {
           if (ia[D.toLowerCase()]) D = H + xa;
           else break;
           xa++;
@@ -149255,14 +149244,14 @@
           ma = xa + 1;
           let aa = '',
             wa = !0;
-          for (; !1 === H(); )
+          for (; !1 === H();)
             (!0 === wa
               ? ((aa += '1'), (ma = parseFloat(xa + '2')))
               : (ma + 1).toString().substr(0, 1) !== xa.toString().substr(0, 1)
                 ? ((aa += '0'), (ma = parseFloat(xa + aa)))
                 : ma++,
               (wa = !1));
-        } else for (ma = 1; !1 === H(); ) ma++;
+        } else for (ma = 1; !1 === H();) ma++;
         return ia + ma;
       },
       QBd: function (D, H, ia) {
@@ -150942,7 +150931,7 @@
       if (La)
         for (;;)
           if (((Ta = Ca[Fa]), jb >= L)) {
-            for (; '*' === Ta && Fa < ka; ) (Fa++, (Ta = Ca[Fa]));
+            for (; '*' === Ta && Fa < ka;) (Fa++, (Ta = Ca[Fa]));
             La = Fa >= ka;
             break;
           } else if ('*' === Ta) {
@@ -152035,7 +152024,7 @@
           this.M2b = !0;
       } else if (ta.hdtcc) {
         this.Oya = [];
-        for (var La = ta.hdtcstart, Ta = ta.hdtcend, jb = /\[(.*?)\]/gi, Fa; null !== (Fa = jb.exec(ta.hdt)); ) {
+        for (var La = ta.hdtcstart, Ta = ta.hdtcend, jb = /\[(.*?)\]/gi, Fa; null !== (Fa = jb.exec(ta.hdt));) {
           Fa = bb.Lef(Fa[1]);
           if (AscCommon.bwa.Ktb == Fa || AscCommon.bwa.headers == Fa || AscCommon.bwa.PAc == Fa) this.M2b = !0;
           this.Oya.push(Fa);
@@ -153548,7 +153537,7 @@
       if (0 === Ca.length) return -1;
       if (Ca[0].value > ta.value) return -2;
       if (Ca[Ca.length - 1].value < ta.value) return Ca.length - 1;
-      for (; La < Ta; ) ((jb = Math.floor(La + (Ta - La) / 2)), ta.value <= Ca[jb].value ? (Ta = jb) : (La = jb + 1));
+      for (; La < Ta;) ((jb = Math.floor(La + (Ta - La) / 2)), ta.value <= Ca[jb].value ? (Ta = jb) : (La = jb + 1));
       return Ca[Ta].value === ta.value ? Ta : Ta - 1;
     };
     lb.l9g = function (ta, Ca) {
@@ -153572,7 +153561,7 @@
       if (0 === Wa.length) return -1;
       if (Wa[0].value > ta.value) return -2;
       if (Wa[Fa].value < ta.value) return Fa;
-      for (var L; Ca < Fa; ) {
+      for (var L; Ca < Fa;) {
         var ka = Math.floor(Ca + (Fa - Ca) / 2);
         L = Wa[ka];
         ta.value <= L.value ? (Fa = ka) : (Ca = ka + 1);
@@ -153946,7 +153935,7 @@
       function L() {
         if (!nb(2)) return !1;
         Ia = ua = !1;
-        for (var S = new E(), Ka = !1, hb = ''; Ma.Ck < Ab.Ek.length && !bb.kGh.call(Ma, Ab.Ek, Ma.Ck); )
+        for (var S = new E(), Ka = !1, hb = ''; Ma.Ck < Ab.Ek.length && !bb.kGh.call(Ma, Ab.Ek, Ma.Ck);)
           if (bb.FEh.call(Ma, Ab.Ek, Ma.Ck, Ca)) Ma.Mo === (Ca ? vb.XVb : vb.QBb) && S.UD();
           else if (bb.q$d.call(Ma, Ab.Ek, Ma.Ck, ta)) S.addElement(new p(Ma.Mo));
           else if (bb.Ivf.call(Ma, Ab.Ek, Ma.Ck)) S.addElement(new h(Ma.Mo));
@@ -153976,7 +153965,7 @@
           ua = !0;
           La.rX = !1;
         } else
-          for (; 0 !== S; ) {
+          for (; 0 !== S;) {
             var hb = Sa[S - 1];
             Ka = S - 1;
             if ('(' === hb.name) {
@@ -154014,7 +154003,7 @@
           var Ka = Ob[Sa.length - 1];
           1 < Ka ? Ab.$f.push(new w()) : (Ob[Sa.length - 1]--, (Ka = Ob[Sa.length - 1]));
         } else {
-          for (; 0 !== Sa.length && '(' !== (S = Sa[Sa.length - 1]).name; ) {
+          for (; 0 !== Sa.length && '(' !== (S = Sa[Sa.length - 1]).name;) {
             if (S.name in Ga && La.rX) return (La.uv(x.Yb.God), (Ab.$f = []), !1);
             Ab.$f.push(Sa.pop());
           }
@@ -154152,7 +154141,7 @@
         } else if (!Wa()) return (Ta && ib(), !1);
       ib();
       if (La.rX) return ((this.$f = []), La.uv(x.Yb.God), !1);
-      for (var O, Ba = !1; 0 !== Sa.length; )
+      for (var O, Ba = !1; 0 !== Sa.length;)
         if (((O = Sa.pop()), '(' === O.name)) ((this.Ek += ')'), (Ba = !0));
         else {
           if ('(' === O.name || ')' === O.name) return ((this.$f = []), La.uv(x.Yb.XFc), !1);
@@ -156171,7 +156160,7 @@
       Hb = Math.floor(Hb);
       var Zb = Math.sign(Hb),
         x = 0;
-      for (Rb = new da(Rb); x !== Hb; ) {
+      for (Rb = new da(Rb); x !== Hb;) {
         Rb = new da(Rb.getTime() + Zb * v);
         var M = bb && bb[0] ? bb[0].ma() : null;
         M = null !== M && 60 > M ? (0 < Rb.getUTCDay() ? Rb.getUTCDay() - 1 : 6) : Rb.getUTCDay();
@@ -156212,7 +156201,7 @@
         let x = 0 < Rb ? 1 : 0 > Rb ? -1 : 0,
           M,
           W = !1;
-        for (; Math.abs(Rb) > Zb; ) {
+        for (; Math.abs(Rb) > Zb;) {
           M = new da(vb.getTime() + x * v);
           k(M, Hb) || bb[M.getUTCDay()] || Zb++;
           if (!(Math.abs(Rb) > Zb)) {
@@ -158435,7 +158424,7 @@
         function Cb(Fb) {
           return '0' <= Fb && '9' >= Fb;
         }
-        for (var Q = 0, fa = 0, ua = 0.1, Ia = 0, Va = 18, Na = 1, pb = !1, xb = !1, Ob = Sa.qLa, Vb, Ua = 0; Na; ) {
+        for (var Q = 0, fa = 0, ua = 0.1, Ia = 0, Va = 18, Na = 1, pb = !1, xb = !1, Ob = Sa.qLa, Vb, Ua = 0; Na;) {
           Vb = Ob[Ua];
           switch (Na) {
             case 1:
@@ -161810,7 +161799,7 @@
           .match(/([^]{1,3})/gi);
         for (var ta = za.length - 1; 0 <= ta; ta--)
           ((Db += za[ta].split('').reverse().join('')), 0 != ta && (Db += ','));
-        if (b != eb) for (; eb.length < Qa.ma(); ) eb += '0';
+        if (b != eb) for (; eb.length < Qa.ma();) eb += '0';
         return '' + Db + (2 == Ya.length ? '.' + eb : '');
       }
       var Ga = X[0],
@@ -161981,7 +161970,7 @@
           .match(/([^]{1,3})/gi);
         for (var ta = za.length - 1; 0 <= ta; ta--)
           ((Db += za[ta].split('').reverse().join('')), 0 != ta && (Db += ','));
-        if (b != eb) for (; eb.length < Qa.ma(); ) eb += '0';
+        if (b != eb) for (; eb.length < Qa.ma();) eb += '0';
         return '' + Db + (2 == Ya.length ? '.' + eb : '');
       }
       var Ga = X[0],
@@ -162199,8 +162188,7 @@
               Ga = Qa ? pa.indexOf(Qa) : 0;
               if (0 !== Ga) {
                 Ra = 0 <= Ga ? pa.substr(0, Ga) : pa;
-                for (var db = 0; db < ja.length; )
-                  ((Ra = Ra.replace(new RegExp(RegExp.escape(ja[db]), 'g'), '')), db++);
+                for (var db = 0; db < ja.length;) ((Ra = Ra.replace(new RegExp(RegExp.escape(ja[db]), 'g'), '')), db++);
                 pa = 0 <= Ga ? Ra + pa.substr(Ga) : Ra;
               }
               pa = pa.replace(Qa, AscCommon.LP.Th);
@@ -162711,7 +162699,7 @@
           let Ya = [];
           for (lb = 0; lb < pa; lb++) (('' === sa[db][lb] && !Ga) || sa[db][lb]) && Ya.push(new tb(sa[db][lb]));
           if (Ya.length || (!Ya.length && !Ga)) {
-            if (pa > Ya.length) for (; pa > Ya.length; ) Ya.push(X);
+            if (pa > Ya.length) for (; pa > Ya.length;) Ya.push(X);
             ja.push(Ya);
           }
         }
@@ -163240,7 +163228,7 @@
         cc = sb,
         jc = 0.5 * (gb + yb),
         xc = !0;
-      for (Kb = 0; 500 > Kb && 1e-307 < Math.abs(cc) && yb - gb > 2.22045e-16 * Math.max(Math.abs(gb), Math.abs(yb)); )
+      for (Kb = 0; 500 > Kb && 1e-307 < Math.abs(cc) && yb - gb > 2.22045e-16 * Math.max(Math.abs(gb), Math.abs(yb));)
         (xc &&
           ($b !== Pa && Pa !== cc && cc !== $b
             ? ((jc =
@@ -164218,30 +164206,30 @@
           gb = 1;
           switch (qb) {
             case 1:
-              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa; ) (Tb.splice($b, 1), --this.Fo);
+              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa;) (Tb.splice($b, 1), --this.Fo);
               break;
             case 7:
-              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa; ) ((Kb += Tb[$b].ra), Tb.splice($b, 1), --this.Fo);
+              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa;) ((Kb += Tb[$b].ra), Tb.splice($b, 1), --this.Fo);
               Tb[$b - 1].ra = Kb;
               break;
             case 2:
             case 3:
-              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa; ) (gb++, Tb.splice($b, 1), --this.Fo);
+              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa;) (gb++, Tb.splice($b, 1), --this.Fo);
               Tb[$b - 1].ra = gb;
               break;
             case 4:
-              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa; )
+              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa;)
                 (Tb[$b].ra > Kb && (Kb = Tb[$b].ra), Tb.splice($b, 1), --this.Fo);
               Tb[$b - 1].ra = Kb;
               break;
             case 5:
               Kb = [];
-              for (Kb.push(Tb[$b - 1].ra); $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa; )
+              for (Kb.push(Tb[$b - 1].ra); $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa;)
                 (Kb.push(Tb[$b].ra), gb++, Tb.splice($b, 1), --this.Fo);
               Tb[$b - 1].ra = gb % 2 ? Kb[gb / 2] : (Kb[gb / 2] + Kb[gb / 2 - 1]) / 2;
               break;
             case 6:
-              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa; )
+              for (; $b < this.Fo && Tb[$b].pa === Tb[$b - 1].pa;)
                 (Tb[$b].ra < Kb && (Kb = Tb[$b].ra), Tb.splice($b, 1), --this.Fo);
               Tb[$b - 1].ra = Kb;
           }
@@ -164361,7 +164349,7 @@
       this.l9();
       if (gb === this.mX && this.mX === sb) ((this.l6 = 0), this.noa ? this.Kva() : this.avb(), this.l9());
       else {
-        for (; yb - qb > this.mnc; )
+        for (; yb - qb > this.mnc;)
           (sb > gb
             ? ((yb = qb), (sb = this.mX), (qb = (Za + qb) / 2))
             : ((Za = qb), (gb = this.mX), (qb = (qb + yb) / 2)),
@@ -164391,7 +164379,7 @@
       this.l9();
       if (gb === this.mX && this.mX === sb) ((this.V8 = 0), this.Kva(), this.l9());
       else {
-        for (; yb - qb > this.mnc; )
+        for (; yb - qb > this.mnc;)
           (sb > gb
             ? ((yb = qb), (sb = this.mX), (qb = (Za + qb) / 2))
             : ((Za = qb), (gb = this.mX), (qb = (qb + yb) / 2)),
@@ -164417,7 +164405,7 @@
       this.l9();
       if (gb === this.mX && this.mX === sb) ((this.Laa = 0), this.l9());
       else {
-        for (; yb - qb > this.mnc; )
+        for (; yb - qb > this.mnc;)
           (sb > gb
             ? ((yb = qb), (sb = this.mX), (qb = (Za + qb) / 2))
             : ((Za = qb), (gb = this.mX), (qb = (qb + yb) / 2)),
@@ -165091,7 +165079,7 @@
                     sb = 0.5;
                     var Tb = 2;
                   } else ((sb = 1 / Math.sqrt(2 * qb * Math.PI)), (Tb = 1));
-                  for (; Tb < Kb; ) ((sb *= qb / Tb), (Tb += 2));
+                  for (; Tb < Kb;) ((sb *= qb / Tb), (Tb += 2));
                   sb = 1425 <= qb ? Math.exp(Math.log(sb) - qb / 2) : sb * Math.exp(-qb / 2);
                 }
                 qb = sb;
@@ -168812,12 +168800,12 @@
     function h(Fa, ib, Wa) {
       ib = new Qa(ib);
       ib.setUTCFullYear(Fa.getUTCFullYear());
-      for (ib < Fa && ib.Zkb(1); ib > Fa; ) ib.Rkb(-12 / Wa);
+      for (ib < Fa && ib.Zkb(1); ib > Fa;) ib.Rkb(-12 / Wa);
       return ib;
     }
     function p(Fa, ib, Wa) {
       ib.setUTCFullYear(Fa.getUTCFullYear());
-      for (ib > Fa && ib.Zkb(-1); ib < Fa; ) ib.Rkb(12 / Wa);
+      for (ib > Fa && ib.Zkb(-1); ib < Fa;) ib.Rkb(12 / Wa);
     }
     function k(Fa, ib, Wa, L) {
       ib = h(Fa, ib, Wa);
@@ -168890,7 +168878,7 @@
         Ab = !mb && 1 != O && 28 < Ba && Ba < new Qa(Ab, O).yRa() ? Pb.K9c() : mb;
         mb = Cb(Pb, 0, Ab);
         bc = bc - 0 + (Pb < mb);
-        for (mb = Cb(mb, Eb, Ab); !(0 < Eb ? mb >= Pb : mb <= Pb); ) ((mb = Cb(mb, Eb, Ab)), bc++);
+        for (mb = Cb(mb, Eb, Ab); !(0 < Eb ? mb >= Pb : mb <= Pb);) ((mb = Cb(mb, Eb, Ab)), bc++);
         return bc;
       }
       var fa = 0,
@@ -169181,14 +169169,14 @@
       let ua;
       var Ia;
       if (Q > Cb && Fa)
-        for (L = new Qa(Cb), ua = Ia = new Qa(Q); !(0 < fa ? L >= ua : L <= ua); ) ((Ia = L), (L = Wa(L, fa, ka)));
+        for (L = new Qa(Cb), ua = Ia = new Qa(Q); !(0 < fa ? L >= ua : L <= ua);) ((Ia = L), (L = Wa(L, fa, ka)));
       else L = Wa(Cb, ca, ka);
       fa = new Qa(ib > L ? ib : L);
       Q = AscCommonExcel.waf(fa, Q, Ma);
       Ia = r(L, Cb, Sa, Ma).ma();
       Cb = Q / Ia;
       ua = new Qa(L);
-      for (Ia = ib; !(0 < ca ? ua >= ib : ua <= ib); )
+      for (Ia = ib; !(0 < ca ? ua >= ib : ua <= ib);)
         ((Ia = ua),
           (ua = Wa(ua, ca, ka)),
           (fa = ib > ua ? ib : ua),
@@ -169393,7 +169381,7 @@
       nb = Math.ceil(1 / nb);
       if (Wa == ca || qa > nb) return new db(0);
       if (0 == qa) return new db(ib);
-      for (; ka <= qa && 1e4 > Fa; ) ((L = L > Sa ? Sa : L), (Wa = Sa - L), (Sa = 0 > Wa ? 0 : Wa), ka++, Fa++);
+      for (; ka <= qa && 1e4 > Fa;) ((L = L > Sa ? Sa : L), (Wa = Sa - L), (Sa = 0 > Wa ? 0 : Wa), ka++, Fa++);
       return new db(Math.floor(L));
     };
     P.prototype = Object.create(Ca.prototype);
@@ -170131,7 +170119,7 @@
       for (var ka = (Wa = !1), ca = 0; ca < L.length; ca++) (0 < L[ca].ma() && (Wa = !0), 0 > L[ca].ma() && (ka = !0));
       if (!Wa || !ka) return new Ya(Ra.gd);
       Fa = (function (qa, nb) {
-        for (var Sa = 1, Ma = 0, Cb, Q = qa; 1e-7 < Sa && 500 > Ma; )
+        for (var Sa = 1, Ma = 0, Cb, Q = qa; 1e-7 < Sa && 500 > Ma;)
           ((Cb = qa - ib(qa, nb) / ((ib(qa + 1e-7, nb) - ib(qa - 1e-7, nb)) / 2e-7)),
             Ma++,
             (Sa = Math.abs(Cb - qa)),
@@ -170546,7 +170534,7 @@
       ib = Sa - 100;
       L = ib = (nb * Fa * 100 - ib) / (0.25 * ib * (1 + 2 * Fa) + 100 * Fa);
       Fa = 1;
-      for (ka = 0; 1e-7 < Fa && 500 > ka; )
+      for (ka = 0; 1e-7 < Fa && 500 > ka;)
         ((ca = L - Wa(L) / ((Wa(L + 1e-7) - Wa(L - 1e-7)) / 2e-7)), ka++, (Fa = Math.abs(ca - L)), (L = ca));
       if (isNaN(L) || Infinity == Math.abs(L)) {
         ka = Number.MAX_VALUE;
@@ -171059,7 +171047,7 @@
       ca -= L * qa;
       ka += L * qa;
       if (Wa === Math.round(Wa)) {
-        for (qa = nb; !Sa && 150 > ib; ) {
+        for (qa = nb; !Sa && 150 > ib;) {
           Fa = Math.pow(1 + qa, Wa - 1);
           var Ma = Fa * (1 + qa);
           Math.TVb(Math.abs(qa), 0)
@@ -171076,7 +171064,7 @@
         }
         Fa = -1 <= qa;
       } else
-        for (qa = -1 > nb ? -1 : nb; Fa && !Sa && 150 > ib; )
+        for (qa = -1 > nb ? -1 : nb; Fa && !Sa && 150 > ib;)
           (Math.TVb(Math.abs(qa), 0)
             ? ((nb = Wa), (Sa = (Wa * (Wa - 1)) / 2))
             : ((nb = (Math.pow(1 + qa, Wa) - 1) / qa), (Sa = (Wa * Math.pow(1 + qa, Wa - 1)) / qa - nb / qa)),
@@ -171494,7 +171482,7 @@
         if (!Q || !fa) return new Ya(Ra.gd);
         Q = 1;
         fa = 0;
-        for (Cb = Ma; 1e-7 < Q && 500 > fa; ) {
+        for (Cb = Ma; 1e-7 < Q && 500 > fa;) {
           var ua = Ma - Wa(nb, Sa, Ma) / ((Wa(nb, Sa, Ma + 1e-7) - Wa(nb, Sa, Ma - 1e-7)) / 2e-7);
           fa++;
           Q = Math.abs(ua - Ma);
@@ -172824,7 +172812,7 @@
               zb = zb[1];
               zb = parseInt(zb);
               if (2 > zb || 36 < zb) return new Ma(ka.gd);
-              for (var Pb = 0, Eb = 0; ' ' === mb[Eb]; ) Eb++;
+              for (var Pb = 0, Eb = 0; ' ' === mb[Eb];) Eb++;
               16 === zb &&
                 ('x' === mb[Eb] || 'X' === mb[Eb]
                   ? Eb++
@@ -172958,7 +172946,7 @@
         if (300 < zb) return Number.Infinity;
         var mb = (zb = Math.floor(zb)),
           Pb = -(zb & 1);
-        for (zb -= 2; zb != Pb; ) ((mb *= zb), (zb -= 2));
+        for (zb -= 2; zb != Pb;) ((mb *= zb), (zb -= 2));
         return mb;
       }
       Ua = Ua[0];
@@ -173087,7 +173075,7 @@
     Aa.prototype.cc = function (Ua) {
       function Fb(Eb, bc) {
         Eb = parseInt(Eb);
-        for (bc = parseInt(bc); 0 != bc; ) bc = Eb % (Eb = bc);
+        for (bc = parseInt(bc); 0 != bc;) bc = Eb % (Eb = bc);
         return Eb;
       }
       for (var Bb = 0, zb, mb = 0; mb < Ua.length; mb++)
@@ -173171,7 +173159,7 @@
       function Fb(Eb, bc) {
         var Ab = Math.abs(parseInt(Eb) * parseInt(bc));
         Eb = parseInt(Eb);
-        for (bc = parseInt(bc); 0 != bc; ) bc = Eb % (Eb = bc);
+        for (bc = parseInt(bc); 0 != bc;) bc = Eb % (Eb = bc);
         return Ab / Eb;
       }
       for (var Bb = 1, zb, mb = 0; mb < Ua.length; mb++)
@@ -173999,7 +173987,7 @@
           )
             if (((Ba = 2 * hb), (S = parseInt(mb / bc[Ba])), 4 == S % 5)) {
               S = 4 == S ? Ba - 1 : Ba - 2;
-              for (Ka = 0; Ka < Pb && Ba < Ab; ) (Ka++, bc[S] - bc[Ba + 1] <= mb ? Ba++ : (Ka = Pb));
+              for (Ka = 0; Ka < Pb && Ba < Ab;) (Ka++, bc[S] - bc[Ba + 1] <= mb ? Ba++ : (Ka = Pb));
               O += Eb[Ba];
               O += Eb[S];
               mb += bc[Ba];
@@ -174971,7 +174959,7 @@
     }
     function d(Ca, La, Ta, jb) {
       function Fa(qa, nb) {
-        for (; ka <= ca; )
+        for (; ka <= ca;)
           if (
             ((ib = Math.floor((ka + ca) / 2)),
             (Wa = b !== La[ib].Mf ? La[ib].Mf : La[ib]),
@@ -176069,18 +176057,16 @@
             : 3 < Ca.length &&
               (0 > Wa ? ((ka.ia = ka.ia + Wa + 1), (ka.qa = ka.ia - Wa - 1)) : (ka.qa = ka.ia + Wa - 1),
               0 > ib ? ((ka.r1 = ka.r1 + ib + 1), (ka.r2 = ka.r1 - ib - 1)) : (ka.r2 = ka.r1 + ib - 1));
-          if (
-            !(
-              0 <= ka.r1 &&
-              ka.r1 <= tb &&
-              0 <= ka.ia &&
-              ka.ia <= ub &&
-              0 <= ka.r2 &&
-              ka.r2 <= tb &&
-              0 <= ka.qa &&
-              ka.qa <= ub
-            )
-          )
+          if (!(
+            0 <= ka.r1 &&
+            ka.r1 <= tb &&
+            0 <= ka.ia &&
+            ka.ia <= ub &&
+            0 <= ka.r2 &&
+            ka.r2 <= tb &&
+            0 <= ka.qa &&
+            ka.qa <= ub
+          ))
             return new M(Hb.su);
           var ca;
           AscCommonExcel.Gm(!1, function () {
@@ -176591,7 +176577,7 @@
       function ib(Ia) {
         qa = 0;
         if (Ia)
-          for (nb = Sa - 1; qa <= nb; ) {
+          for (nb = Sa - 1; qa <= nb;) {
             Ma = Math.ceil((qa + nb) / 2);
             Cb = Ca[Ma];
             Q = Cb.Mf;
@@ -176599,7 +176585,7 @@
             ka(La, Q, '<') ? ((qa = Ma + 1), jb !== b && L(Cb, La, !0)) : ((nb = Ma - 1), jb !== b && L(Cb, La, !1));
           }
         else
-          for (nb = Sa - 1; qa <= nb; ) {
+          for (nb = Sa - 1; qa <= nb;) {
             Ma = Math.floor((qa + nb) / 2);
             Cb = Ca[Ma];
             Q = Cb.Mf;
@@ -176966,7 +176952,7 @@
         ib = 0,
         Wa = Ca.length;
       if (Ta) {
-        for (Fa = Wa - 1; ib <= Fa; ) {
+        for (Fa = Wa - 1; ib <= Fa;) {
           Wa = Math.floor((ib + Fa) / 2);
           Ta = Ca[Wa];
           Ta = Ta.Mf;
@@ -184356,7 +184342,7 @@
       var S = [],
         Ka = 0;
       this.LS();
-      for (var hb = 0; hb < this.qo.length; ) {
+      for (var hb = 0; hb < this.qo.length;) {
         var Xb = Ka + this.mb.ia;
         O.ia <= Xb && O.qa >= Xb ? (S[S.length] = new I()) : ((S[S.length] = this.qo[hb]), hb++);
         Ka++;
@@ -185236,7 +185222,7 @@
     N.prototype.kVc = function (O, Ba) {
       var S = 0,
         Ka = Ba.length - 1;
-      for (O = parseFloat(O); S <= Ka; ) {
+      for (O = parseFloat(O); S <= Ka;) {
         var hb = Math.floor((S + Ka) / 2);
         if (O >= Ba[hb].start && O < Ba[hb].end) return hb;
         O < Ba[hb].start ? (Ka = hb - 1) : (S = hb + 1);
@@ -186110,7 +186096,7 @@
           ((S = parseInt((this.re / 100) * O.length)), 0 === S && (S = 1), (S = O[S - 1]));
         else if (Ba) {
           Ba = 0;
-          for (var hb = (S = O[Ba++]); Ba < O.length && hb < this.re; ) ((S = O[Ba++]), (hb += S));
+          for (var hb = (S = O[Ba++]); Ba < O.length && hb < this.re;) ((S = O[Ba++]), (hb += S));
         } else S = O[this.re - 1];
       null != S && (this.IR = S);
     };
@@ -190846,7 +190832,7 @@
         fa.AE(null, null, function (Vb, Ua, Fb) {
           Vb && !Vb.XT() && pb.push({ fb: Fb, type: Vb.getType() });
         });
-        for (fa = Va = 0; Va < Na.length && fa < pb.length; ) {
+        for (fa = Va = 0; Va < Na.length && fa < pb.length;) {
           var xb = Na[Va],
             Ob = pb[fa];
           if (xb.fb < Ob.fb) Va++;
@@ -190994,7 +190980,7 @@
         );
         if (0 < Eb.length) {
           mb = !0;
-          for (var bc = 0, Ab = 0; ; ) {
+          for (var bc = 0, Ab = 0; ;) {
             for (var O = 0, Ba = Eb.length; O < Ba; ++O) {
               var S = Eb[O];
               Ab = ua.r1 + bc * (Q.r2 - Q.r1 + 1) + S.index;
@@ -191029,7 +191015,7 @@
           },
         );
         if (0 < hb.length)
-          for (mb = !0, Ab = bc = 0; ; ) {
+          for (mb = !0, Ab = bc = 0; ;) {
             O = 0;
             for (
               Ba = hb.length;
@@ -192006,7 +191992,7 @@
         if (!(0 < this.A3b) && (this.RIa(), this.ULg(), this.dZa || this.eZa || this.hDb)) {
           var Q = { type: ta.aFc, MEd: b };
           this.vBg(Q);
-          for (this.pBg(); this.h9a || this.i9a || this.nmb; ) (this.qBg(Q), this.lBg(Q), this.rBg(Q));
+          for (this.pBg(); this.h9a || this.i9a || this.nmb;) (this.qBg(Q), this.lBg(Q), this.rBg(Q));
           this.oBg();
           this.UBg();
           this.J_h();
@@ -192266,7 +192252,7 @@
           var xb = e;
           var Ob = qa;
         }
-        for (; Ia < Q.length && Va < fa.length; ) {
+        for (; Ia < Q.length && Va < fa.length;) {
           var Vb = Asc.Range.prototype.rMd(pb, Na, Ob, xb);
           0 < Vb
             ? (Va++, Va < fa.length && (t(fa[Va]), (xb = e), (Ob = qa)))
@@ -192285,16 +192271,16 @@
             xb = new AscCommon.dac(),
             Ob = [],
             Vb;
-          for (pb < fa.length && t(fa[pb]); Na < Q.length && pb < fa.length; ) {
-            for (Vb = Va < Ia.length ? Math.min(Ia[Va].Va.r1, Q[Na].Va.r2) : Q[Na].Va.r2; pb < fa.length && e < Vb; )
+          for (pb < fa.length && t(fa[pb]); Na < Q.length && pb < fa.length;) {
+            for (Vb = Va < Ia.length ? Math.min(Ia[Va].Va.r1, Q[Na].Va.r2) : Q[Na].Va.r2; pb < fa.length && e < Vb;)
               (this.TVe(xb, e, qa, Ob), pb++, pb < fa.length && t(fa[pb]));
-            for (; Va < Ia.length && Vb === Ia[Va].Va.r1; ) {
+            for (; Va < Ia.length && Vb === Ia[Va].Va.r1;) {
               var Ua = Ia[Va];
               Ua.isActive && xb.mG(Ua.Va.ia, Ua.Va.qa, Ua);
               Va++;
             }
-            for (; pb < fa.length && e <= Vb; ) (this.TVe(xb, e, qa, Ob), pb++, pb < fa.length && t(fa[pb]));
-            for (; Na < Q.length && Vb === Q[Na].Va.r2; )
+            for (; pb < fa.length && e <= Vb;) (this.TVe(xb, e, qa, Ob), pb++, pb < fa.length && t(fa[pb]));
+            for (; Na < Q.length && Vb === Q[Na].Va.r2;)
               ((Ua = Q[Na]), Ua.isActive && xb.remove(Ua.Va.ia, Ua.Va.qa, Ua), Na++);
           }
           this.SVe(Ob, ua);
@@ -192308,17 +192294,17 @@
             pb = 0,
             xb = new AscCommon.dac(),
             Ob;
-          for (pb < Q.length && t(Q[pb].cellIndex); Na < ua.length && pb < Q.length; ) {
-            for (Ob = Va < fa.length ? Math.min(fa[Va].r1, ua[Na].r2) : ua[Na].r2; pb < Q.length && e < Ob; )
+          for (pb < Q.length && t(Q[pb].cellIndex); Na < ua.length && pb < Q.length;) {
+            for (Ob = Va < fa.length ? Math.min(fa[Va].r1, ua[Na].r2) : ua[Na].r2; pb < Q.length && e < Ob;)
               (xb.bba(qa, qa) && this.OAb(Q[pb].listeners, Ia), pb++, pb < Q.length && t(Q[pb].cellIndex));
-            for (; Va < fa.length && Ob === fa[Va].r1; ) {
+            for (; Va < fa.length && Ob === fa[Va].r1;) {
               var Vb = fa[Va];
               xb.mG(Vb.ia, Vb.qa, Vb);
               Va++;
             }
-            for (; pb < Q.length && e <= Ob; )
+            for (; pb < Q.length && e <= Ob;)
               (xb.bba(qa, qa) && this.OAb(Q[pb].listeners, Ia), pb++, pb < Q.length && t(Q[pb].cellIndex));
-            for (; Na < ua.length && Ob === ua[Na].r2; ) ((Vb = ua[Na]), xb.remove(Vb.ia, Vb.qa, Vb), Na++);
+            for (; Na < ua.length && Ob === ua[Na].r2;) ((Vb = ua[Na]), xb.remove(Vb.ia, Vb.qa, Vb), Na++);
           }
         }
       },
@@ -192332,15 +192318,15 @@
           ) {
             Bb = Math.min(ua[Ob].r2, Q[pb].Va.r2);
             Na < Va.length && (Bb = Math.min(Bb, Va[Na].Va.r1));
-            for (xb < fa.length && (Bb = Math.min(Bb, fa[xb].r1)); xb < fa.length && Bb === fa[xb].r1; )
+            for (xb < fa.length && (Bb = Math.min(Bb, fa[xb].r1)); xb < fa.length && Bb === fa[xb].r1;)
               ((zb = fa[xb]), Ua.mG(zb.ia, zb.qa, zb), this.uBg(zb, Vb, Fb), xb++);
-            for (; Na < Va.length && Bb === Va[Na].Va.r1; )
+            for (; Na < Va.length && Bb === Va[Na].Va.r1;)
               ((zb = Va[Na]),
                 zb.isActive &&
                   (Vb.mG(zb.Va.ia, zb.Va.qa, zb), Ua.bba(zb.Va.ia, zb.Va.qa) && this.OAb(zb.listeners, Ia)),
                 Na++);
-            for (; Ob < ua.length && Bb === ua[Ob].r2; ) ((zb = ua[Ob]), Ua.remove(zb.ia, zb.qa, zb), Ob++);
-            for (; pb < Q.length && Bb === Q[pb].Va.r2; )
+            for (; Ob < ua.length && Bb === ua[Ob].r2;) ((zb = ua[Ob]), Ua.remove(zb.ia, zb.qa, zb), Ob++);
+            for (; pb < Q.length && Bb === Q[pb].Va.r2;)
               ((zb = Q[pb]), zb.isActive && Vb.remove(zb.Va.ia, zb.Va.qa, zb), pb++);
           }
           this.SVe(Fb, Ia);
@@ -192715,7 +192701,7 @@
         : (Va = function (xb) {
             return xb.toString();
           });
-      for (fa = this.kg.length; 1e4 > ua; ) {
+      for (fa = this.kg.length; 1e4 > ua;) {
         var Na = Va(ua);
         Ia = Q + Na;
         31 < Ia.length && ((Q = Q.substring(0, 31 - Na.length)), (Ia = Q + Na));
@@ -195895,7 +195881,7 @@
       if (null != Q) {
         var fa = this.kXe(Q);
         if (0 < fa.length)
-          for (Q = Q.clone(); 0 < fa.length; ) {
+          for (Q = Q.clone(); 0 < fa.length;) {
             for (var ua = 0, Ia = fa.length; ua < Ia; ua++) Q.oba(fa[ua].Va);
             fa = this.kXe(Q);
           }
@@ -196986,7 +196972,7 @@
     };
     P.prototype.BEb = function (Q, fa, ua, Ia, Va, Na) {
       Q.wAd();
-      for (var pb = -1; pb !== Q.Bb; )
+      for (var pb = -1; pb !== Q.Bb;)
         if (((pb = Q.Bb), (fa = Q.iVe()), AscCommonExcel.cH.IEf <= fa && fa <= AscCommonExcel.cH.vyc))
           (ua.jf.clear(), ua.Jh.ps(), ua.jf.BEb(Q, fa, ua.Xa.index, Ia, Va, ua), Na(ua));
         else if (AscCommonExcel.cH.LEf === fa)
@@ -199432,7 +199418,7 @@
         else {
           if (y.Number == this.type && null != this.nb) {
             Vb = Na = !1;
-            for (var Ua = Math.ceil(Q), Fb = this.nb; 1 <= Ua; ) {
+            for (var Ua = Math.ceil(Q), Fb = this.nb; 1 <= Ua;) {
               var Bb = AscCommon.fnd(Fb, this.type, Ua);
               null != Bb && (ua = oa.get(Bb));
               if (null != ua)
@@ -199779,13 +199765,13 @@
       0 !== (ua & 4096) && (fa.Yua = Q.xe());
     };
     C.prototype.Kjh = function (Q, fa) {
-      for (var ua = !1, Ia = Q.xe(); 0 < Ia--; ) {
+      for (var ua = !1, Ia = Q.xe(); 0 < Ia--;) {
         var Va = Q.sb();
         if (1 === Va) {
           Va = new AscCommonExcel.t9b();
           Va.text = '';
           Q.Ua() && ((ua = !0), (Va.format = new AscCommonExcel.am()), Va.format.BEb(Q), Va.format.Gnc(this.ws.Ia.te));
-          for (var Na = Q.xe(); 0 < Na--; ) Va.text += Q.jBa();
+          for (var Na = Q.xe(); 0 < Na--;) Va.text += Q.jBa();
           fa.push(Va);
         } else 2 === Va && ((Va = new AscCommonExcel.t9b()), (Va.text = Q.jBa()), fa.push(Va));
       }
@@ -200152,7 +200138,7 @@
             continue;
           }
           if (Q)
-            for (pb.Gke(Ia); (Ua = pb.next()); )
+            for (pb.Gke(Ia); (Ua = pb.next());)
               if (((Ua = Q(Ua, Ia, Ua.Qc, Va.r1, Va.ia, xb)), null != Ua)) return (Q && pb.release(), Ua);
         }
         Q && pb.release();
@@ -201809,7 +201795,7 @@
       for (zb = Vb.length; O < zb; ++O) {
         var Ba = Vb[O];
         if (Va) {
-          for (Bb = O * Ia + Q + Ua; 0 != this.Ma.FDa(Bb); ) (Ua++, (Bb = O * Ia + Q + Ua));
+          for (Bb = O * Ia + Q + Ua; 0 != this.Ma.FDa(Bb);) (Ua++, (Bb = O * Ia + Q + Ua));
           var S = new x(!1, Ba.fb, Bb);
           Fb[Ba.fb] = 1;
           mb < Ba.fb && (mb = Ba.fb);
@@ -201817,7 +201803,7 @@
           Eb > Ba.fb && (Eb = Ba.fb);
           Eb > Bb && (Eb = Bb);
         } else {
-          for (Bb = O * Ob + ua + Ua; 0 != this.Ma.pM(Bb); ) (Ua++, (Bb = O * Ob + ua + Ua));
+          for (Bb = O * Ob + ua + Ua; 0 != this.Ma.pM(Bb);) (Ua++, (Bb = O * Ob + ua + Ua));
           S = new x(!0, Ba.Xa, Bb);
           Fb[Ba.Xa] = 1;
           Pb < Ba.Xa && (Pb = Ba.Xa);
@@ -201834,7 +201820,7 @@
         for (O = Va ? Eb : bc; O <= Ia; ++O)
           if (null == Fb[O] && 0 == Ob.apply(this.Ma, [O])) {
             xb = O;
-            for (S = ++Ab; 0 != Ob.apply(this.Ma, [S]); ) S = ++Ab;
+            for (S = ++Ab; 0 != Ob.apply(this.Ma, [S]);) S = ++Ab;
             xb != S && ((S = new x(!1, xb, S)), fa.push(S));
           }
         Ja.Ge();
@@ -201958,12 +201944,12 @@
       oc = !0;
       if (Va)
         if (ua == fa)
-          for (; 0 == Xb.length && fa <= Ba; )
+          for (; 0 == Xb.length && fa <= Ba;)
             (0 == bc ? O.L7a(Ob) : O.qga(null, Ob),
               0 == Xb.length && (fa++, (O = this.Ma.$l(new ya(fa, Pb, 0), new ya(fa, Q, 0)))));
         else 0 == bc ? O.L7a(Ob) : O.qga(null, Ob);
       else if (Pb == fa)
-        for (; 0 == Xb.length && fa <= S; )
+        for (; 0 == Xb.length && fa <= S;)
           (0 == Eb ? Ka.Is(Ob) : Ka.oCa(null, Ob),
             0 == Xb.length && (fa++, (Ka = this.Ma.$l(new ya(ua, fa, 0), new ya(mb, fa, 0)))));
       else 0 == Eb ? Ka.Is(Ob) : Ka.oCa(null, Ob);
@@ -202213,7 +202199,7 @@
             if (this.jf.xSa(this.D2b, ua, fa)) return (this.eEa++, this.jf);
           } else return (this.eEa++, Ia);
         } else if (fa.NDa() < this.D2b) {
-          for (fa = this.eEa + 1; fa < this.Mnc.length && this.hXc[fa].NDa() < this.D2b; ) fa++;
+          for (fa = this.eEa + 1; fa < this.Mnc.length && this.hXc[fa].NDa() < this.D2b;) fa++;
           this.hXc.splice(this.eEa, fa - this.eEa);
           this.Mnc.splice(this.eEa, fa - this.eEa);
           this.eEa--;
@@ -203031,13 +203017,13 @@
         rb = ec.concat();
       ec.sort(Asc.Range.prototype.aYb);
       rb.sort(Asc.Range.prototype.bYb);
-      for (var Qb = new AscCommon.dac(); ob < rb.length; ) {
-        for (Ub = Nb < ec.length ? Math.min(ec[Nb].r1, rb[ob].r2) : rb[ob].r2; Nb < ec.length && Ub === ec[Nb].r1; ) {
+      for (var Qb = new AscCommon.dac(); ob < rb.length;) {
+        for (Ub = Nb < ec.length ? Math.min(ec[Nb].r1, rb[ob].r2) : rb[ob].r2; Nb < ec.length && Ub === ec[Nb].r1;) {
           var Ha = ec[Nb];
           Qb.bba(Ha.ia, Ha.qa) ? (Sb = !0) : (Qb.mG(Ha.ia, Ha.qa, Ha), hc.push(Ha));
           Nb++;
         }
-        for (; ob < rb.length && Ub === rb[ob].r2; ) ((Ha = rb[ob]), Qb.remove(Ha.ia, Ha.qa, Ha), ob++);
+        for (; ob < rb.length && Ub === rb[ob].r2;) ((Ha = rb[ob]), Qb.remove(Ha.ia, Ha.qa, Ha), ob++);
       }
       Sb && Yb.nj && Yb.nj.ym && AscCommon.aia('error', 'changesError: Error: intersection of merged areas', Yb.nj);
       return hc;
@@ -205174,7 +205160,7 @@
         }
       };
       this.W8e = function (ob) {
-        for (var rb = ob.mlb(); !rb || this.Oz.Tnc[rb]; ) ((rb = AscCommon.Oma()), ob.dUc(rb));
+        for (var rb = ob.mlb(); !rb || this.Oz.Tnc[rb];) ((rb = AscCommon.Oma()), ob.dUc(rb));
         this.Oz.Tnc[rb] = 1;
         if (ob.ZB) for (rb = 0; rb < ob.ZB.length; ++rb) this.W8e(ob.ZB[rb]);
       };
@@ -207091,7 +207077,7 @@
           ((Nb = this.stream.De(Nb)),
             (Nb = AscCommonExcel.jp.Dq(Nb).clone()) && this.qla.jzc(new AscCommonExcel.qtd(null, Nb)));
         else if (lb.wUb == Sb)
-          for (Sb = this.stream.Bb + Nb; this.stream.Bb < Sb; )
+          for (Sb = this.stream.Bb + Nb; this.stream.Bb < Sb;)
             switch (this.stream.sb()) {
               case 0:
                 Nb = this.stream.mxa();
@@ -209075,7 +209061,7 @@
       this.stream = null;
       this.Jl = new y(Yb);
       this.IFb = function (ec) {
-        for (var hc = 'string' === typeof ec, Ub = 0, Sb = AscCommon.DQa.Yib.length, Nb = '', ob = ''; ; ) {
+        for (var hc = 'string' === typeof ec, Ub = 0, Sb = AscCommon.DQa.Yib.length, Nb = '', ob = ''; ;) {
           Sb++;
           var rb = hc ? ec.charCodeAt(Sb) : ec[Sb];
           if (59 == rb)
@@ -211107,7 +211093,7 @@
     };
     ha.prototype.lM = function (Yb) {
       if (wj(Yb) && ('workbook' === vj(Yb) || wj(Yb)) && 'workbook' === vj(Yb))
-        for (var ec = Yb.Vp(); xj(Yb, ec); ) {
+        for (var ec = Yb.Vp(); xj(Yb, ec);) {
           var hc = vj(Yb);
           'sheets' === hc
             ? ((hc = new AscCommonExcel.mPf(this.Ea)), hc.lM(Yb), (this.y2a = hc.y2a))
@@ -211115,7 +211101,7 @@
         }
     };
     ea.prototype.lM = function (Yb) {
-      for (var ec = Yb.Vp(); xj(Yb, ec); )
+      for (var ec = Yb.Vp(); xj(Yb, ec);)
         if ('sheet' === vj(Yb)) {
           var hc = new AscCommonExcel.kPf();
           hc.lM(Yb);
@@ -211130,7 +211116,7 @@
       Yb() && this.mxc(Yb());
     };
     oa.prototype.dyc = function (Yb) {
-      for (var ec; Yb.eJc(); )
+      for (var ec; Yb.eJc();)
         ((ec = vj(Yb)),
           'name' === ec
             ? (this.name = Wl(Yb.text))
@@ -211151,7 +211137,7 @@
       b !== Yb && (this.id = AscCommon.pm(ec(Yb)));
     };
     N.prototype.lM = function (Yb) {
-      for (var ec = Yb.Vp(); xj(Yb, ec); )
+      for (var ec = Yb.Vp(); xj(Yb, ec);)
         if ('pivotCache' === vj(Yb)) {
           var hc = new AscCommonExcel.hPf();
           hc.lM(Yb);
@@ -211166,7 +211152,7 @@
       Yb() && (Yb(), this.mxc(Yb(), ec));
     };
     V.prototype.dyc = function (Yb) {
-      for (; Yb.eJc(); ) {
+      for (; Yb.eJc();) {
         var ec = vj(Yb);
         'id' === ec ? (this.id = Wl(Yb.text)) : 'cacheId' === ec && (this.dC = parseInt(Yb.pp()));
       }
@@ -213819,7 +213805,7 @@
           if ((z = w.ma().split(AscCommon.Yma.KZc)) && z.length)
             for (w = 0; w < z.length; w++)
               if (z[w] && z[w].length) {
-                for (u = 0; u < z[w].length && ' ' == z[w][u]; ) ++u;
+                for (u = 0; u < z[w].length && ' ' == z[w][u];) ++u;
                 z[w] = u ? z[w].substr(u) : z[w];
               }
         } else if ((w = w?.$l())) {
@@ -216383,7 +216369,7 @@
       if (h.length) {
         for (var p = [], k = 0; k < h.length; k++) p[h[k].name] = 1;
         h = 1;
-        for (k = this.name; p[k]; ) ((k = this.name + '_' + h), h++);
+        for (k = this.name; p[k];) ((k = this.name + '_' + h), h++);
         this.name = k;
       }
     };
@@ -217168,7 +217154,7 @@
     };
     e.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -217183,7 +217169,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); ) (aa.sb(), aa.rg());
+      for (; !(aa.Bb >= wa);) (aa.sb(), aa.rg());
       aa.Pd(wa);
     };
     d.prototype.Cy = function (aa) {
@@ -217194,7 +217180,7 @@
     };
     d.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -217206,7 +217192,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -217231,7 +217217,7 @@
     };
     f.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -217243,7 +217229,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -217267,13 +217253,13 @@
     };
     g.prototype.Pn = function (aa, wa, Oa) {
       var ba = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var K = aa.sb();
         if (K === AscCommon.Kt) break;
         aa.Pd(ba);
         return;
       }
-      for (; !(aa.Bb >= ba); )
+      for (; !(aa.Bb >= ba);)
         switch (((K = aa.sb()), K)) {
           case 0:
             aa.Td(4);
@@ -217412,7 +217398,7 @@
     };
     h.prototype.Pn = function (aa, wa, Oa) {
       var ba = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var K = aa.sb();
         if (K === AscCommon.Kt) break;
         switch (K) {
@@ -217456,7 +217442,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= ba); )
+      for (; !(aa.Bb >= ba);)
         switch (((K = aa.sb()), K)) {
           case 0:
             this.ah = new p();
@@ -217495,7 +217481,7 @@
             (aa === wa.kg[K].Xs[da].name && (ba = !0), (Oa[wa.kg[K].Xs[da].name] = 1));
       if (ba) {
         aa += ' ';
-        for (wa = 1; Oa[aa + wa]; ) wa++;
+        for (wa = 1; Oa[aa + wa];) wa++;
         aa += wa;
       }
       return aa;
@@ -217810,7 +217796,7 @@
       var Oa = this.Ea;
       aa = aa.replace(/[-+*\/^&%<=>: ;//),]/g, '_');
       AscCommon.pKb.test(aa) || (aa = aa.replace(/[^a-zA-Z\u0410-\u042f\u0430-\u044f\u0401\u04510-9]/gi, '_'));
-      for (var ba = 1, K = (aa = AscCommon.rk.ma('Slicer') + '_' + aa); wa(K); ) ((K = aa + ba), ba++);
+      for (var ba = 1, K = (aa = AscCommon.rk.ma('Slicer') + '_' + aa); wa(K);) ((K = aa + ba), ba++);
       return K;
     };
     p.prototype.Ni = function (aa) {
@@ -217847,7 +217833,7 @@
     };
     p.prototype.Pn = function (aa, wa) {
       var Oa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var ba = aa.sb();
         if (ba === AscCommon.Kt) break;
         switch (ba) {
@@ -217865,7 +217851,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= Oa); )
+      for (; !(aa.Bb >= Oa);)
         switch (((ba = aa.sb()), ba)) {
           case 0:
           case 2:
@@ -218204,13 +218190,13 @@
     };
     k.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         aa.Pd(wa);
         return;
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             this.bJb = new w();
@@ -218245,7 +218231,7 @@
     };
     r.prototype.Pn = function (aa, wa) {
       var Oa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var ba = aa.sb();
         if (ba === AscCommon.Kt) break;
         switch (ba) {
@@ -218289,7 +218275,7 @@
     };
     q.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218307,7 +218293,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218336,7 +218322,7 @@
     };
     n.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218348,7 +218334,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218386,7 +218372,7 @@
     };
     t.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218410,7 +218396,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218460,7 +218446,7 @@
     };
     w.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218472,7 +218458,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             Oa = new z();
@@ -218506,7 +218492,7 @@
     };
     z.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218518,7 +218504,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218549,7 +218535,7 @@
     };
     u.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218561,7 +218547,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218598,7 +218584,7 @@
     };
     B.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218610,7 +218596,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218639,7 +218625,7 @@
     };
     E.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218687,7 +218673,7 @@
     };
     U.prototype.Pn = function (aa, wa) {
       var Oa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var ba = aa.sb();
         if (ba === AscCommon.Kt) break;
         switch (ba) {
@@ -218765,7 +218751,7 @@
     };
     P.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218789,7 +218775,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             Oa = new T();
@@ -218874,7 +218860,7 @@
     };
     C.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218905,7 +218891,7 @@
     };
     J.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218917,7 +218903,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218948,7 +218934,7 @@
     };
     T.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -218960,7 +218946,7 @@
             return;
         }
       }
-      for (; !(aa.Bb >= wa); )
+      for (; !(aa.Bb >= wa);)
         switch (((Oa = aa.sb()), Oa)) {
           case 0:
             aa.Td(4);
@@ -218993,7 +218979,7 @@
     };
     Z.prototype.Pn = function (aa) {
       var wa = aa.fd() + aa.Bb;
-      for (aa.sb(); ; ) {
+      for (aa.sb(); ;) {
         var Oa = aa.sb();
         if (Oa === AscCommon.Kt) break;
         switch (Oa) {
@@ -219140,13 +219126,13 @@
     };
     a.prototype.Pn = function (r, q) {
       var n = r.fd() + r.Bb;
-      for (r.sb(); ; ) {
+      for (r.sb(); ;) {
         var t = r.sb();
         if (t === AscCommon.Kt) break;
         r.Pd(n);
         return;
       }
-      for (; !(r.Bb >= n); )
+      for (; !(r.Bb >= n);)
         switch (((t = r.sb()), t)) {
           case 0:
             r.Td(4);
@@ -219190,7 +219176,7 @@
     };
     b.prototype.Pn = function (r, q) {
       var n = r.fd() + r.Bb;
-      for (r.sb(); ; ) {
+      for (r.sb(); ;) {
         var t = r.sb();
         if (t === AscCommon.Kt) break;
         switch (t) {
@@ -219205,7 +219191,7 @@
             return;
         }
       }
-      for (; !(r.Bb >= n); )
+      for (; !(r.Bb >= n);)
         switch (((t = r.sb()), t)) {
           case 0:
             r.Td(4);
@@ -219283,11 +219269,11 @@
           (t && t === r.RI[w].name && (n = !0), (q[r.RI[w].name] = 1));
         if (!t) {
           r = 'View';
-          for (n = 1; q[r + n]; ) n++;
+          for (n = 1; q[r + n];) n++;
           t = r + n;
         } else if (n) {
           r = t + ' ';
-          for (n = 2; q[r + '(' + n + ')']; ) n++;
+          for (n = 2; q[r + '(' + n + ')'];) n++;
           t = r + '(' + n + ')';
         }
         return t;
@@ -219340,7 +219326,7 @@
     };
     e.prototype.Pn = function (r, q) {
       var n = r.fd() + r.Bb;
-      for (r.sb(); ; ) {
+      for (r.sb(); ;) {
         var t = r.sb();
         if (t === AscCommon.Kt) break;
         switch (t) {
@@ -219358,7 +219344,7 @@
             return;
         }
       }
-      for (; !(r.Bb >= n); )
+      for (; !(r.Bb >= n);)
         switch (((t = r.sb()), t)) {
           case 0:
             r.Td(4);
@@ -219513,7 +219499,7 @@
     };
     d.prototype.Pn = function (r, q) {
       var n = r.fd() + r.Bb;
-      for (r.sb(); ; ) {
+      for (r.sb(); ;) {
         var t = r.sb();
         if (t === AscCommon.Kt) break;
         switch (t) {
@@ -219529,7 +219515,7 @@
         }
       }
       t = [];
-      for (var w; !(r.Bb >= n); )
+      for (var w; !(r.Bb >= n);)
         switch (((w = r.sb()), w)) {
           case 0:
             w = new AscCommon.$V();
@@ -219600,7 +219586,7 @@
     };
     f.prototype.Pn = function (r, q) {
       var n = r.fd() + r.Bb;
-      for (r.sb(); ; ) {
+      for (r.sb(); ;) {
         var t = r.sb();
         if (t === AscCommon.Kt) break;
         switch (t) {
@@ -219615,7 +219601,7 @@
             return;
         }
       }
-      for (; !(r.Bb >= n); )
+      for (; !(r.Bb >= n);)
         switch (((t = r.sb()), t)) {
           case 0:
             r.Td(4);
@@ -219660,7 +219646,7 @@
     };
     g.prototype.Pn = function (r, q) {
       var n = r.fd() + r.Bb;
-      for (r.sb(); ; ) {
+      for (r.sb(); ;) {
         var t = r.sb();
         if (t === AscCommon.Kt) break;
         switch (t) {
@@ -219676,7 +219662,7 @@
         }
       }
       t = [];
-      for (var w; !(r.Bb >= n); )
+      for (var w; !(r.Bb >= n);)
         switch (((w = r.sb()), w)) {
           case 0:
             w = new AscCommon.$V();
@@ -220927,7 +220913,7 @@
       var u = this.tFg();
       if (-1 !== u) {
         var B = this.PAb(u, u);
-        for (w = this.AO[u]; w.total * B + z + B <= r && (n(), (w.total += 1), 0 !== B); );
+        for (w = this.AO[u]; w.total * B + z + B <= r && (n(), (w.total += 1), 0 !== B););
         0 === w.total &&
           ((t.Rx = [].concat(t.Rx.slice(0, u), t.Rx.slice(u + 1))),
           (t.eK = [].concat(t.eK.slice(0, u), t.eK.slice(u + 1))),
@@ -221040,7 +221026,7 @@
     g.prototype.tBd = function (r) {
       var q,
         n = !0;
-      for (q = this.Wjc(r); this.flags && this.flags.qFa && q.width > r && n; ) {
+      for (q = this.Wjc(r); this.flags && this.flags.qFa && q.width > r && n;) {
         n = !1;
         q = r / q.width;
         for (var t = 0; t < this.og.length; ++t) {
@@ -222018,7 +222004,7 @@
         this.J_e();
         var U = this.bw.Kaa(B, this.NV, this.FRc());
         if (!this.NV.F9 && !this.NV.thd)
-          for (; U.width > this.FRc(); ) {
+          for (; U.width > this.FRc();) {
             if (!this.bEg()) {
               this.NV.thd = !0;
               U = this.bw.Kaa(B, this.NV, this.FRc());
@@ -222026,7 +222012,7 @@
             }
             u = !0;
           }
-        for (; U.height > this.yXe() && this.aEg(); );
+        for (; U.height > this.yXe() && this.aEg(););
         E !== this.bottom &&
           (E > this.bottom && (this.mMa = 0), (u = !0), this.roh && this.Ya.trigger('resizeEditorHeight'));
       }
@@ -222195,7 +222181,7 @@
         Z,
         D = this.bw.lines.length,
         H = this.yn();
-      for (; 1 < D; )
+      for (; 1 < D;)
         if (C + J - 1 > B) {
           T = T === b ? 0 : T + 1;
           if (T === D) break;
@@ -222347,7 +222333,7 @@
         ++U;
       P = U + 1;
       if (P >= E) P = Math.max(u.length, B.length);
-      else for (; P < E && u.charAt(U) !== B.charAt(P); ) ++P;
+      else for (; P < E && u.charAt(U) !== B.charAt(P);) ++P;
       this.U7(B.slice(U, P), U);
     };
     e.prototype.S5 = function () {
@@ -222574,7 +222560,7 @@
     e.prototype.Bxa = function (u) {
       var B;
       u || (u = this.options.og);
-      for (B = 0; B < u.length; )
+      for (B = 0; B < u.length;)
         if (1 > u[B].h_b() && 1 < u.length) u.splice(B, 1);
         else {
           if (B < u.length - 1) {
@@ -225809,7 +225795,7 @@
       }
     };
     g.prototype.FIg = function (ma) {
-      for (var va = this.model.kg.length, aa = this.K6 + ma, wa; aa !== this.K6; ) {
+      for (var va = this.model.kg.length, aa = this.K6 + ma, wa; aa !== this.K6;) {
         0 > aa ? (aa = va - 1) : aa >= va && (aa = 0);
         wa = this.model.Sb(aa);
         if (!wa.$z()) return (this.sqa(aa), !0);
@@ -227255,7 +227241,7 @@
             aa = aa.Nb();
             ma = { bt: ma, G$d: Oa };
             Oa = 0;
-            for (aa = aa.split(','); Oa < aa.length; )
+            for (aa = aa.split(','); Oa < aa.length;)
               (ma.Ec || (ma.Ec = []),
                 Oa + 4 < aa.length &&
                   ma.Ec.push(new Asc.Range(aa[Oa] - 0, aa[Oa + 1] - 0, aa[Oa + 2] - 0, aa[Oa + 3] - 0)),
@@ -227898,7 +227884,7 @@
     };
     h.prototype.Zte = function () {
       let ma = [];
-      for (var va = performance.now(); 20 > performance.now() - va && !(this.aUb >= this.jb); ) {
+      for (var va = performance.now(); 20 > performance.now() - va && !(this.aUb >= this.jb);) {
         let wa = this.aUb++;
         if (!this.qc[wa]) continue;
         let Oa = this.qc[wa].text;
@@ -229428,7 +229414,7 @@
         if (Ma < ua) for (Pb = Ma; Pb < Math.min(ua, Cb + 1); Pb++) Eb += Fa(Pb) * Qa;
         var bc = 0;
         if (Q < M) for (Pb = Q; Pb < Math.min(M, fa + 1); Pb++) bc += Ga(Pb) * Qa;
-        for (; AscCommonExcel.Y6e > X.length && !(sa && 0 < Vb); ) {
+        for (; AscCommonExcel.Y6e > X.length && !(sa && 0 < Vb);) {
           Pb = new ha();
           let O = M,
             Ba = ua;
@@ -230615,7 +230601,7 @@
             if (90 === Ga.angle || -90 === Ga.angle) lb || (za.nx(M, Qa, nb, Sa), (ca = !0));
             else if ((lb || (za.nx(0, Fa, this.yj.Iu(), na), (ca = !0)), !lb && !Ya)) {
               Db = W;
-              if (0 !== jb) for (; 0 != Db && !(jb >= this.Xe(Db)); ) --Db;
+              if (0 !== jb) for (; 0 != Db && !(jb >= this.Xe(Db));) --Db;
               ta = Math.min(W, this.Lp - 1);
               if (0 !== Ra)
                 for (;;) {
@@ -231151,8 +231137,8 @@
       var Fa, ib, Wa, L, ka;
       eb = Fa = Db = ib = Wa = L = ka = null;
       lb = M.r1 - 1;
-      for (var ca = M.ia - 1; 0 <= ca && 0 === this.Xu(ca); ) --ca;
-      for (; 0 <= lb; ) {
+      for (var ca = M.ia - 1; 0 <= ca && 0 === this.Xu(ca);) --ca;
+      for (; 0 <= lb;) {
         if (0 < this.sw(lb)) {
           jb = x[lb];
           for (db = ca; db <= M.qa && db < Qa.Lp; ++db)
@@ -232292,7 +232278,7 @@
                   sa.Koa = M.Moc;
                   na = M.fCd(Qa);
                   Ga.Gke(Qa);
-                  for (var Ra; (Ra = Ga.next()); )
+                  for (var Ra; (Ra = Ga.next());)
                     V.rows & e(M.model.Bz(Ra.Ac, Ra.Qc)) ||
                       (M.yFa = (na && na[Ra.Qc] ? M.PDd(na[Ra.Qc], Qa) : M.OKg(Ra)) || M.yFa);
                   M.yFa &&
@@ -232472,7 +232458,7 @@
     };
     n.prototype.sjc = function (x, M, W, X) {
       function na(Qa, Ra, db, lb) {
-        for (var Ya = ja.Rjc(Qa, Ra), za = Qa + db, eb = Ra + lb; 0 <= za && za < ja.Lp && 0 <= eb && eb < ja.En; ) {
+        for (var Ya = ja.Rjc(Qa, Ra), za = Qa + db, eb = Ra + lb; 0 <= za && za < ja.Lp && 0 <= eb && eb < ja.En;) {
           var Db = ja.Rjc(za, eb);
           if (Db !== Ya) {
             var ta = {};
@@ -233545,7 +233531,7 @@
         Qa = new la(X, sa, (pa = Ga.fb), (ja = Ga.Xa), !0);
       x = Math.sign(x);
       M = Math.sign(M);
-      for (this.zxa(Qa, W); na.isEqual(Qa); ) {
+      for (this.zxa(Qa, W); na.isEqual(Qa);) {
         var Ra = this.sjc(pa, ja, x, M);
         Qa.assign(X, sa, (pa = Ra.fb), (ja = Ra.Xa), !0);
         this.zxa(Qa, W);
@@ -233592,8 +233578,8 @@
         0 > M.r1 && x.r1 < W.r1 && ((Ga = X.r1 - W.r1), (ja = !1)),
         0 === M.ia && 0 === M.qa && 0 === M.r1 && 0 === M.r2 && (ja = sa = !1));
       M = this.KDa();
-      if (sa) for (; this.pCd(na ? X.qa : x.qa, W.ia + pa, M.offsetX); ) ++pa;
-      if (ja) for (; this.xCd(na ? X.r2 : x.r2, W.r1 + Ga, M.offsetY); ) ++Ga;
+      if (sa) for (; this.pCd(na ? X.qa : x.qa, W.ia + pa, M.offsetX);) ++pa;
+      if (ja) for (; this.xCd(na ? X.r2 : x.r2, W.r1 + Ga, M.offsetY);) ++Ga;
       return new AscCommon.Rh(Qa === fb.kF || Qa === fb.Dna ? Ga : 0, Qa === fb.UB || Qa === fb.Dna ? pa : 0);
     };
     n.prototype.S7a = function (x) {
@@ -233646,8 +233632,8 @@
       var sa = M < x.r1 ? M - x.r1 : 0;
       W = W.getType();
       var ja = this.KDa();
-      if (na >= x.qa) for (; this.pCd(na, x.ia + X, ja.offsetX); ) ++X;
-      if (M >= x.r2) for (; this.xCd(M, x.r1 + sa, ja.offsetY); ) ++sa;
+      if (na >= x.qa) for (; this.pCd(na, x.ia + X, ja.offsetX);) ++X;
+      if (M >= x.r2) for (; this.xCd(M, x.r1 + sa, ja.offsetY);) ++sa;
       return new AscCommon.Rh(W === fb.kF || W === fb.Dna ? sa : 0, W === fb.UB || W === fb.Dna ? X : 0);
     };
     n.prototype.qqh = function (x) {
@@ -237264,7 +237250,7 @@
             Ga = null;
             var za = this.VJ(x, ja);
             za = za.qM();
-            for (pa = M.Vda.width + this.Opa * this.yn(!0) * this.qL(); ; ) {
+            for (pa = M.Vda.width + this.Opa * this.yn(!0) * this.qL(); ;) {
               var eb = this.tCa(this.vs.Kaa(za, Ra, pa));
               if (eb.height <= this.Yvc) break;
               if (Ga === eb.height) {
@@ -237402,7 +237388,7 @@
         var db = na.qa;
         var lb = na.r2;
       } else ((Ra = Qa = 0), (db = this.cols.length - 1), (lb = this.rows.length - 1));
-      for (var Ya = x.hqa ? 1 : -1; M(); ) if (((X = this.oCd(ja, pa, x)), null !== X)) return X;
+      for (var Ya = x.hqa ? 1 : -1; M();) if (((X = this.oCd(ja, pa, x)), null !== X)) return X;
       x.hqa
         ? x.b1
           ? ((ja = Qa - 1), (pa = Ra), (lb = sa.Xa))
@@ -237410,7 +237396,7 @@
         : ((ja = db),
           (pa = lb),
           x.b1 ? ((ja = db + 1), (pa = lb), (Ra = sa.Xa)) : ((ja = db), (pa = lb + 1), (Qa = sa.fb)));
-      for (; M(); ) if (((X = this.oCd(ja, pa, x)), null !== X)) return X;
+      for (; M();) if (((X = this.oCd(ja, pa, x)), null !== X)) return X;
       return null;
     };
     n.prototype.qyc = function (x, M, W, X) {
@@ -239750,13 +239736,13 @@
         ja = !0,
         pa = x ? this.model.BN : null;
       if ((pa = pa ? pa.us : 0)) ((na ||= []), na[pa] || (na[pa] = []), na[pa].push({ start: 0, end: x ? H : D }));
-      for (x ? this.model.Le(0, M, 0, W).oCa(X) : this.model.Le(M, 0, W, 0).qga(X); sa; ) {
+      for (x ? this.model.Le(0, M, 0, W).oCa(X) : this.model.Le(M, 0, W, 0).qga(X); sa;) {
         M--;
         if (0 > M) break;
         x ? X(this.model.coa(M)) : this.model.bYa(M, X);
       }
       pa = x ? this.model.KE() : this.model.NE();
-      for (var Ga = x ? H : D; ja; ) {
+      for (var Ga = x ? H : D; ja;) {
         W++;
         if (W > pa || W > Ga) break;
         x ? X(this.model.coa(M)) : this.model.bYa(M, X);
@@ -242565,7 +242551,7 @@
           try {
             r.r6f(k, n, q);
           } catch (t) {}
-          for (this.hf.setTransform(1, 0, 0, 1, 0, 0); ; ) {
+          for (this.hf.setTransform(1, 0, 0, 1, 0, 0); ;) {
             k = r.RZf();
             if (null == k) break;
             null != k.TE && this.Gxc(k);
@@ -242746,11 +242732,11 @@
             (this.ql(155, 187, 277, 255), (t = z.lineWidth = 2), (w = 1));
         }
         if (!0 === this.IB) {
-          for (this.hl(); !(q > n); ) (z.moveTo(q, k), (q += t), z.lineTo(q, k), (q += w));
+          for (this.hl(); !(q > n);) (z.moveTo(q, k), (q += t), z.lineTo(q, k), (q += w));
           this.Fr();
         } else {
           this.en(!0);
-          for (this.hl(); !(q > n); ) (z.moveTo(q, k), (q += t), z.lineTo(q, k), (q += w));
+          for (this.hl(); !(q > n);) (z.moveTo(q, k), (q += t), z.lineTo(q, k), (q += w));
           this.Fr();
           this.en(!1);
         }
@@ -242780,11 +242766,11 @@
         }
         r = this.Kbb;
         if (!0 === this.IB) {
-          for (this.hl(); !(q > r); ) (w.moveTo(q, k), (q += n), w.lineTo(q, k), (q += t));
+          for (this.hl(); !(q > r);) (w.moveTo(q, k), (q += n), w.lineTo(q, k), (q += t));
           this.Fr();
         } else {
           this.en(!0);
-          for (this.hl(); !(q > r); ) (w.moveTo(q, k), (q += n), w.lineTo(q, k), (q += t));
+          for (this.hl(); !(q > r);) (w.moveTo(q, k), (q += n), w.lineTo(q, k), (q += t));
           this.Fr();
           this.en(!1);
         }
@@ -242816,10 +242802,10 @@
             B = 1;
             E = (3 * this.Lo.Nf) >> 0;
             this.hl();
-            for (q = z - 0.5; !(q + w > u); ) (k.moveTo(t + 0.5, q), (q += w), k.lineTo(t + 0.5, q), (q += B));
+            for (q = z - 0.5; !(q + w > u);) (k.moveTo(t + 0.5, q), (q += w), k.lineTo(t + 0.5, q), (q += B));
             q = t + E;
-            for (n = t; !(n > q); ) (k.moveTo(n, z), (n += w), k.lineTo(n, z), (n += B));
-            for (n = t; !(n > q); ) (k.moveTo(n, u), (n += w), k.lineTo(n, u), (n += B));
+            for (n = t; !(n > q);) (k.moveTo(n, z), (n += w), k.lineTo(n, z), (n += B));
+            for (n = t; !(n > q);) (k.moveTo(n, u), (n += w), k.lineTo(n, u), (n += B));
             this.Fr();
             r || this.en(!1);
           }
@@ -242885,10 +242871,10 @@
             B.lineWidth = 1;
             (k = this.IB) || this.en(!0);
             if (t == z)
-              for (z = Math.min(w, u) + 0.5, q = r = 2, u = Math.max(w, u) - 0.5, this.hl(); !(z > u); )
+              for (z = Math.min(w, u) + 0.5, q = r = 2, u = Math.max(w, u) - 0.5, this.hl(); !(z > u);)
                 (B.moveTo(t, z), (z += r), z > u ? B.lineTo(t, z - r + 1) : B.lineTo(t, z), (z += q));
             else if (w == u)
-              for (n = Math.min(t, z) + 0.5, q = r = 2, u = Math.max(t, z) - 0.5, this.hl(); !(n > u); )
+              for (n = Math.min(t, z) + 0.5, q = r = 2, u = Math.max(t, z) - 0.5, this.hl(); !(n > u);)
                 (B.moveTo(n, w), (n += r), n > u ? B.lineTo(n - q + 1, w) : B.lineTo(n, w), (n += q));
             else (this.hl(), editor.Mc.pB.rU.NUa(B, t, w, z, u, 2, 2));
             this.Fr();
@@ -243274,13 +243260,13 @@
     d.prototype.Mdf = function (g) {
       g = (100 * g) >> 0;
       if (100 === g) return '';
-      for (; 0 === g % 10; ) g = (g / 10) >> 0;
+      for (; 0 === g % 10;) g = (g / 10) >> 0;
       if (10 > g) return '@' + g + 'x';
       g = '' + g;
       return '@' + g.substring(0, 1) + '.' + g.substr(1) + 'x';
     };
     d.prototype.tn = function () {
-      for (var g = f.Hd.Jj, h = 0, p = this.support.length; h < p && !(this.support[h] > g + 0.01); ) ++h;
+      for (var g = f.Hd.Jj, h = 0, p = this.support.length; h < p && !(this.support[h] > g + 0.01);) ++h;
       --h;
       return 0 > h ? 0 : h >= p ? p - 1 : h;
     };
@@ -243444,9 +243430,9 @@
       t = t * r + (t - 1) * q;
       var z = p.x - (w >> 1);
       p = p.y - ((k == n ? r : 2 * r + q) >> 1);
-      for (var u = [], B = z, E = p, U = 0; U < n; ) (u.push({ x: B, y: E }), (B += r + q), U++);
+      for (var u = [], B = z, E = p, U = 0; U < n;) (u.push({ x: B, y: E }), (B += r + q), U++);
       B = z + ((w - t) >> 1);
-      for (E = p + r + q; U < k; ) (u.push({ x: B, y: E }), (B += r + q), U++);
+      for (E = p + r + q; U < k;) (u.push({ x: B, y: E }), (B += r + q), U++);
       return u;
     };
     f.prototype.iqb = function (p, k, r, q, n, t) {
@@ -244690,7 +244676,7 @@
         h(w.x, this.points[B].x) && (u = 1);
         this.gSa = 1 === u ? !1 : !0;
         B = this.aLa(this.Vab, 1 === u);
-        for (var E = w.y; h(this.points[B].x, w.x); ) {
+        for (var E = w.y; h(this.points[B].x, w.x);) {
           this.points[B].x -= this.U5b;
           this.points[B].y > E && (E = this.points[B].y);
           if (this.Lda) {
@@ -244715,7 +244701,7 @@
         w = this.aLa(this.Uab);
         h(z.x, this.points[w].x) && (u = 1);
         w = this.aLa(this.Uab, 1 === u);
-        for (B = z.y; h(this.points[w].x, z.x); )
+        for (B = z.y; h(this.points[w].x, z.x);)
           ((this.points[w].x += this.zcd), this.points[w].y < B && (B = this.points[w].y), (w = this.aLa(w, 1 === u)));
         this.OO = { x: z.x, y: B, w: this.zcd, Oc: z.y - B };
         z.x += this.zcd;
@@ -244811,7 +244797,7 @@
         Z.ag = E * C;
         Z.ac = u.left * C;
         Z.Lf = u.top * C;
-        for (r.AA.t7f(Z, J); ; ) {
+        for (r.AA.t7f(Z, J); ;) {
           ++ba;
           if (ba === Oa) {
             P.transform(Z.Nf, Z.ui, Z.oi, Z.ag, Z.ac, Z.Lf);
@@ -244943,7 +244929,7 @@
       } else {
         var Oa = 0 === this.GLa ? 1 : 2,
           ba = 0;
-        for (1 < Oa && null === this.YE && null === this.OO && (Oa = 1); ; ) {
+        for (1 < Oa && null === this.YE && null === this.OO && (Oa = 1); ;) {
           ++ba;
           if (ba === Oa) {
             var K = E * z.Kq.Tod();
@@ -245025,7 +245011,7 @@
                 var I, ha;
                 var ea = (ha = I = 0);
                 var oa = da.createImageData(la, v);
-                for (y = oa.data; 0 < ra; ) {
+                for (y = oa.data; 0 < ra;) {
                   var N = 4 * (la * xa + ia);
                   for (H = 0; H < ra; H++) ((y[N++] = I), (y[N++] = ha), (y[N++] = ea), (y[N++] = 255));
                   I >>= 0;
@@ -245740,7 +245726,7 @@
               E = r.ec(p[C].x, p[C].y);
               U = Math.max(this.jm.Vq.HPb(n), 5);
               P = Math.max(Math.abs(z - B), Math.abs(u - E));
-              for (--C; P < U && 0 <= C; )
+              for (--C; P < U && 0 <= C;)
                 ((B = r.ic(p[C].x, p[C].y)),
                   (E = r.ec(p[C].x, p[C].y)),
                   (P = Math.max(Math.abs(z - B), Math.abs(u - E))),
@@ -245892,7 +245878,7 @@
                 z = p.ic(q[E].x, q[E].y);
                 u = p.ec(q[E].x, q[E].y);
                 B = Math.max(Math.abs(t - z), Math.abs(k - u));
-                for (--E; 0.001 > B && 0 <= E; )
+                for (--E; 0.001 > B && 0 <= E;)
                   ((z = p.ic(q[E].x, q[E].y)),
                     (u = p.ec(q[E].x, q[E].y)),
                     (B = Math.max(Math.abs(t - z), Math.abs(k - u))),
@@ -245935,8 +245921,8 @@
       },
       F_c: function (p, k, r, q, n, t) {
         var w = { Ps: 0, wv: 0, x1: 0, y1: 0 };
-        for (n /= 6e4; 0 > n; ) n += 360;
-        for (; 360 <= n; ) n -= 360;
+        for (n /= 6e4; 0 > n;) n += 360;
+        for (; 360 <= n;) n -= 360;
         if (1 > Math.abs(n)) return ((w.Ps = p), (w.wv = k), (w.x1 = r), (w.y1 = k), w);
         if (1 > Math.abs(n - 90)) return ((w.Ps = p), (w.wv = k), (w.x1 = p), (w.y1 = q), w);
         if (1 > Math.abs(n - 180)) return ((w.Ps = r), (w.wv = k), (w.x1 = p), (w.y1 = k), w);
@@ -248048,13 +248034,13 @@
           var r = this.parent.num;
           k = editor.Mc;
           if (!((k.ih.jb && k.ih.rp - 1 <= r) || 0 > k.Sa.length)) {
-            for (var q = k.ih.jb ? Math.min(k.ih.rp - 1, k.Sa.length - 1) : k.Sa.length - 1, n = r; n <= q; ) {
+            for (var q = k.ih.jb ? Math.min(k.ih.rp - 1, k.Sa.length - 1) : k.Sa.length - 1, n = r; n <= q;) {
               var t = k.Sa[n];
               if (-1 !== t.La && t.La <= t.ya) break;
               n++;
             }
             if (n > q)
-              for (n = r; 0 < n; ) {
+              for (n = r; 0 < n;) {
                 t = k.Sa[n];
                 if (-1 !== t.La && t.La <= t.ya) break;
                 n--;
@@ -248709,7 +248695,7 @@
     };
     h.prototype.Pn = function (Z) {
       var D = Z.fd() + Z.Bb;
-      for (Z.sb(); ; ) {
+      for (Z.sb(); ;) {
         var H = Z.sb();
         if (H === AscCommon.Kt) break;
         switch (H) {
@@ -249025,7 +249011,7 @@
       if (this.name === Z)
         if (this.group) {
           this.group.b6b(this.jb);
-          for (D = this.group; 0 === D.nd.length && D.group; ) (D.group.b6b(D.xc()), (D = D.group));
+          for (D = this.group; 0 === D.nd.length && D.group;) (D.group.b6b(D.xc()), (D = D.group));
           0 === D.nd.length ? D.fj && D.gaa() : (D = this.group.mD()) && D.xFa();
           D = !0;
         } else this.fj && (this.gaa(), (D = !0));
@@ -251077,7 +251063,7 @@
       if (g.Iu() === h.length) {
         var p = new Map();
         for (d = 0; d < h.length; ++d) {
-          for (var k = h[d], r = 1; p.has(k); ) (r++, (k = h[d] + r));
+          for (var k = h[d], r = 1; p.has(k);) (r++, (k = h[d] + r));
           p.set(k, 1);
           r = new zo();
           r.name = k;
@@ -251932,7 +251918,7 @@
   }
   function np(a, b, e, d, f, g) {
     if (b.contains(g, f)) {
-      for (var h = null, p = !1, k = null, r = 0; r < d.length && (null === h || !1 === p); ) {
+      for (var h = null, p = !1, k = null, r = 0; r < d.length && (null === h || !1 === p);) {
         var q = op(a, b, d[r].Hu(), f, g);
         q && ((k = k || q), null === h && (h = q.PHb), (p = p || q.NHb));
         r++;
@@ -252299,7 +252285,7 @@
       Oo(e, r, 0, d.length + f.length);
       No(e, r, 0, d);
       h = new Xn(a.length);
-      for (h.Fi = r.Fi; 0 < g.NKf.length; )
+      for (h.Fi = r.Fi; 0 < g.NKf.length;)
         ((k = g.NKf.shift()),
           (p = !1),
           En.Aub === k.Bza.axis
@@ -252694,7 +252680,7 @@
       var h = g.slice(-1),
         p = '';
       '0' <= h && '9' >= h && (p = '_');
-      for (h = 2; Hp(a.LT, g + p + h); ) h++;
+      for (h = 2; Hp(a.LT, g + p + h);) h++;
       g = g + p + h;
     }
     f.name = g;
@@ -253746,7 +253732,7 @@
         a -= b;
         var g = f[a];
         if (g)
-          for (b = g.r, vq(b, g.x.length, g, d, e); 0 < b && 0 <= --a; ) {
+          for (b = g.r, vq(b, g.x.length, g, d, e); 0 < b && 0 <= --a;) {
             g = f[a];
             var h = g.r;
             vq(h, b - h, g, d, e);
@@ -254243,7 +254229,7 @@
     e = a;
     var d = '';
     a && '0' <= a[a.length - 1] && '9' >= a[a.length - 1] && (d = '_');
-    for (var f = 1; b.has(e); ) (f++, (e = a + d + f));
+    for (var f = 1; b.has(e);) (f++, (e = a + d + f));
     return e;
   };
   mo.prototype.add = function (a) {
@@ -255066,12 +255052,12 @@
     }
   };
   A.Wi = function (a) {
-    for (var b = a.gb(); 0 <= --b; ) {
+    for (var b = a.gb(); 0 <= --b;) {
       var e = new yp();
       e.t = a.Gy();
       e.r = a.gb();
       e.xh = a.gb();
-      for (var d = a.gb(); 0 <= --d; ) {
+      for (var d = a.gb(); 0 <= --d;) {
         var f = new xp();
         f.Mf = a.gb();
         e.x.push(f);
@@ -255175,7 +255161,7 @@
   A.remove = function (a, b) {
     if (0 <= b && b < this.aq.length) return (this.aq.splice(b, 1), [b]);
     b = [];
-    for (var e = Vq(a, this.aq); void 0 !== e; ) (b.push(e), (e = Vq(a, this.aq)));
+    for (var e = Vq(a, this.aq); void 0 !== e;) (b.push(e), (e = Vq(a, this.aq)));
     return b;
   };
   A.find = function (a) {
@@ -255757,10 +255743,10 @@
         (b = (a.haa - a.y9) / 30),
         1 <= b)
       )
-        for (; a.ZQ <= b; ) a.ZQ *= 10;
+        for (; a.ZQ <= b;) a.ZQ *= 10;
       else {
         if (0.1 >= b) {
-          for (; a.ZQ >= b; ) a.ZQ /= 10;
+          for (; a.ZQ >= b;) a.ZQ /= 10;
           a.ZQ *= 10;
         }
       }
@@ -258322,14 +258308,14 @@
       else if (a.dJ === On.hSb)
         ((f = AscCommon.rk.ma('Qtr')), b.P_(f + '1'), b.P_(f + '2'), b.P_(f + '3'), b.P_(f + '4'));
       else if (a.dJ === On.NUb)
-        for (g = new Asc.ww(a.X3.getTime()); g < a.QW; ) (b.P_(g.getUTCFullYear().toString()), g.Zkb(1));
+        for (g = new Asc.ww(a.X3.getTime()); g < a.QW;) (b.P_(g.getUTCFullYear().toString()), g.Zkb(1));
       else if (1 === a.ZQ)
         for (f = AscCommon.lI.get('d-mmm'), g = new Asc.ww(Date.UTC(2e3, 0, 1)), d = 0; 366 > d; ++d)
           (b.P_(f.GP(g.j_a())), g.jYa(1));
       else {
         f = new Asc.ww(a.X3.getTime());
         d = new Asc.ww(f.getTime());
-        for (d.jYa(a.ZQ); d < a.QW; )
+        for (d.jYa(a.ZQ); d < a.QW;)
           (d.jYa(-1), b.P_(e.GP(f.$w()) + ' - ' + e.GP(d.$w())), d.jYa(1), f.jYa(a.ZQ), d.jYa(a.ZQ));
         d = new Asc.ww(a.QW.getTime());
         d.$w() === d.j_a() && (d.jYa(-1), d.getTime() === f.getTime() && d.jYa(1));
@@ -258354,7 +258340,7 @@
     for (b in a) a.hasOwnProperty(b) && (d[b] = e.LE());
     if (e.LE() < this.s0.LE()) {
       a = AscCommon.rk.ma('Group');
-      for (b = 1; f.has(a + b); ) b++;
+      for (b = 1; f.has(a + b);) b++;
       g = new vr();
       g.qe(tn.String, a + b);
       e.BCa(g);
@@ -258980,7 +258966,7 @@
       var e = 0;
       if (0 < AscCommon.cYb(a, this.haa)) e = b;
       else {
-        for (var d = this.y9; 0 >= AscCommon.cYb(d, a) && e < b; ) ((d += this.ZQ), e++);
+        for (var d = this.y9; 0 >= AscCommon.cYb(d, a) && e < b;) ((d += this.ZQ), e++);
         e === b && 0 <= AscCommon.cYb(a, this.haa) && (e = b - 1);
       }
     } else
@@ -263566,7 +263552,7 @@
     e.push(b);
     for (var d in a.Sf) {
       d == b && e.push(b);
-      for (var f = a.Sf[d].Kz, g = []; null != f && void 0 != f; ) {
+      for (var f = a.Sf[d].Kz, g = []; null != f && void 0 != f;) {
         for (var h = !1, p = 0, k = g.length; p < k; p++)
           if (g[p] == f) {
             h = !0;
@@ -268357,7 +268343,7 @@
         h = e.slice(0, e.length - 1);
       if (48 <= g && 57 >= g) {
         h = [];
-        for (var p = d(e, 0), k = null, r = 0; p; ) {
+        for (var p = d(e, 0), k = null, r = 0; p;) {
           f = p.La;
           g = new px();
           '.' === p.KF ? qx(g, ql.iac, r) : ')' === p.KF && qx(g, ql.dnd, r);
@@ -269297,7 +269283,7 @@
       if (0 < a.length) {
         var e = b.RB(this);
         if (e) {
-          for (var d = e.Vp(); 0 < d; ) {
+          for (var d = e.Vp(); 0 < d;) {
             var f = e.xf(d);
             e.OOe(d - 1);
             var g = b.k7(e);
@@ -269308,7 +269294,7 @@
         }
         this.ab.Hp(a);
       } else if ((this.ab.Hp(a), (e = this.ab.RB(this))))
-        for (a.push({ wa: this.ab, Ld: e.xf(0) }), d = e.Vp(), b = 1; b <= d; )
+        for (a.push({ wa: this.ab, Ld: e.xf(0) }), d = e.Vp(), b = 1; b <= d;)
           ((f = e.xf(b)), e.OOe(b - 1), (g = this.ab.k7(e)), ++b, a.push({ wa: g, Ld: f }));
     return a;
   };
@@ -269632,7 +269618,7 @@
       var e = this.le.Selection.za,
         d = this.le.Selection.ya;
       e > d && ((e = this.le.Selection.ya), (d = this.le.Selection.za));
-      for (b = this.aa[e].eY(a); null === b && e < d; ) (e++, (b = this.aa[e].eY(a)));
+      for (b = this.aa[e].eY(a); null === b && e < d;) (e++, (b = this.aa[e].eY(a)));
       for (e += 1; e <= d; e++) ((a = this.aa[e].sh(!1)), null !== a && (b = b.Ki(a)));
     } else ((e = this.le.eb), 0 <= e && e < this.aa.length && (b = this.aa[e].eY(a)));
     return b;
@@ -269748,7 +269734,7 @@
         this.Nk() ||
         (this.Mva() && this instanceof vl && (Sx(this) || this.bO() || this.NH())))
     ) {
-      for (; !1 === this.aa[d].Pk(a, b); ) {
+      for (; !1 === this.aa[d].Pk(a, b);) {
         0 > a ? d-- : d++;
         if (0 > d || d >= this.aa.length) break;
         0 > a ? this.aa[d].Ui(!1) : this.aa[d].ff();
@@ -269826,7 +269812,7 @@
       var d = !0 === b ? a.eb.xf(e) : 0,
         f = this.aa.length;
       if (!(d >= f))
-        for (a.zv(d, e), this.aa[d].kra(a, b, e + 1), d++; d < f && !(0 >= a.Bn); )
+        for (a.zv(d, e), this.aa[d].kra(a, b, e + 1), d++; d < f && !(0 >= a.Bn);)
           (a.zv(d, e), this.aa[d].kra(a, !1, e + 1), d++);
     }
   };
@@ -269834,7 +269820,7 @@
     if (!(0 >= a.Bn)) {
       var d = !0 === b ? a.eb.xf(e) : this.aa.length - 1;
       if (!(0 > d))
-        for (a.zv(d, e), this.aa[d].bY(a, b, e + 1), d--; 0 <= d && !(0 >= a.Bn); )
+        for (a.zv(d, e), this.aa[d].bY(a, b, e + 1), d--; 0 <= d && !(0 >= a.Bn);)
           (a.zv(d, e), this.aa[d].bY(a, !1, e + 1), d--);
     }
   };
@@ -270198,7 +270184,7 @@
     return this.Ok() ? !0 : this.a7();
   };
   A.Jba = function () {
-    for (var a = 0; a < this.le.eb && a < this.aa.length - 1; )
+    for (var a = 0; a < this.le.eb && a < this.aa.length - 1;)
       if (!0 === this.aa[a].tl()) a++;
       else return !1;
     return this.aa[a].Jba();
@@ -270207,7 +270193,7 @@
     return !1;
   };
   A.a7 = function () {
-    for (var a = this.aa.length - 1; a > this.le.eb && 0 < a; )
+    for (var a = this.aa.length - 1; a > this.le.eb && 0 < a;)
       if (!0 === this.aa[a].tl()) a--;
       else return !1;
     return this.aa[a].a7();
@@ -270286,7 +270272,7 @@
     a = this.aa.length;
     if (0 >= a) return null;
     e = 0;
-    for (b = this.aa[e]; null === b && e < a - 1; ) b = this.aa[++e];
+    for (b = this.aa[e]; null === b && e < a - 1;) b = this.aa[++e];
     return b;
   };
   A.eQb = function (a, b) {
@@ -270302,7 +270288,7 @@
     if (!0 === a.cj) return !0;
     f--;
     if (0 <= f && this.aa[f + 1].j_()) return (a.La.Jf(f, e), this.aa[f].ot(!1, a.La, e + 1), (a.cj = !0));
-    for (; 0 <= f; ) {
+    for (; 0 <= f;) {
       a.La.Jf(f, e);
       this.aa[f].fY(a, b, e + 1, !1);
       if (!0 === a.cj) return !0;
@@ -270318,7 +270304,7 @@
     if (!0 === a.cj) return !0;
     g++;
     if (g < this.aa.length && this.aa[g - 1].j_()) return (a.La.Jf(g, e), this.aa[g].Qr(a.La, e + 1), (a.cj = !0));
-    for (; g < this.aa.length; ) {
+    for (; g < this.aa.length;) {
       a.La.Jf(g, e);
       this.aa[g].eW(a, b, e + 1, !1, f);
       if (!0 === a.cj) return !0;
@@ -270334,7 +270320,7 @@
       if ((f--, a.Tr && 0 <= f && this.aa[f].j_())) a.cj = !0;
       else if (0 <= f && this.aa[f + 1].j_()) (this.aa[f].ot(!1, a.La, e + 1), a.La.SU(f, e), (a.cj = !0));
       else
-        for (; 0 <= f; ) {
+        for (; 0 <= f;) {
           d = a.zv;
           this.aa[f].jY(a, b, e + 1, !1);
           !0 === a.zv ? a.La.SU(f, e) : (a.zv = d);
@@ -270360,7 +270346,7 @@
       if ((g++, (d = this.aa.length), a.Tr && g < d && this.aa[g].j_())) a.cj = !0;
       else if (g < d && this.aa[g - 1].j_()) (this.aa[g].Qr(a.La, e + 1), a.La.Jf(g, e), (a.cj = !0), (a.zv = !0));
       else
-        for (; g < d; ) {
+        for (; g < d;) {
           var h = a.zv;
           this.aa[g].iY(a, b, e + 1, !1, f);
           !0 === a.zv ? a.La.Jf(g, e) : (a.zv = h);
@@ -270822,7 +270808,7 @@
       var a = this.Selection.za,
         b = this.Selection.ya;
       a > b && ((a = this.Selection.ya), (b = this.Selection.za));
-      for (; !0 === this.aa[a].To() && a < b; ) a++;
+      for (; !0 === this.aa[a].To() && a < b;) a++;
       return this.aa[a].zr();
     }
     return this.aa[this.le.eb].zr();
@@ -270875,9 +270861,9 @@
   };
   A.pmd = function () {
     if (!this.Mg()) {
-      for (var a = this.aa.length, b = Math.min(Math.max(0, this.le.eb), a - 1); 0 < b && !this.aa[b].f$(); )
+      for (var a = this.aa.length, b = Math.min(Math.max(0, this.le.eb), a - 1); 0 < b && !this.aa[b].f$();)
         (b--, this.aa[b].Ui());
-      for (; b < a && !this.aa[b].f$(); ) (b++, this.aa[b].ff(!1));
+      for (; b < a && !this.aa[b].f$();) (b++, this.aa[b].ff(!1));
       for (
         ;
         0 < b &&
@@ -276932,7 +276918,7 @@
   function raa(a) {
     var b = Cj(a);
     if (!a.Kl() || !b) return null;
-    for (a = b; (b = a.kz(!0)); ) a = b.$a.Table.Aa;
+    for (a = b; (b = a.kz(!0));) a = b.$a.Table.Aa;
     return a && a.Mv ? a.Mv(!0) : null;
   }
   function Yi(a, b) {
@@ -277533,7 +277519,7 @@
         r = this.Na,
         q = this.lc;
       b = this.Iv;
-      for (var n = this.Ex, t = !1; 1 != t; ) {
+      for (var n = this.Ex, t = !1; 1 != t;) {
         t = !0;
         for (var w = 0; w < f.length; w++) {
           var z = f[w];
@@ -278103,7 +278089,7 @@
         f = this.iw,
         g = e.iw,
         h = Math.min(f, g);
-      for (; d < h; ) {
+      for (; d < h;) {
         if (this.Gb[d] > e.Gb[d]) return 1;
         if (this.Gb[d] < e.Gb[d]) return -1;
         ++d;
@@ -278117,7 +278103,7 @@
       if (!e || this.Nk() || e.Nk() || !this.BI() || !e.BI() || this.iw > e.iw) return !1;
       let d = 0,
         f = this.iw;
-      for (; d < f; ) {
+      for (; d < f;) {
         if (this.Gb[d] !== e.Gb[d]) return !1;
         ++d;
       }
@@ -278618,7 +278604,7 @@
         }
         Jk(f) === e && (a = f);
         d = g;
-        for (f = h; d && !a && !(a = d.Tma(e, !0, f)); )
+        for (f = h; d && !a && !(a = d.Tma(e, !0, f));)
           if ((f = d.kz(!0))) {
             d = f.Wd();
             var p = d.pA();
@@ -278629,7 +278615,7 @@
           } else if (d.mY()) ((f = d.Ji()), (d = f.Aa), (f = f.Hh() - 1));
           else break;
         if (!a)
-          for (d = g, f = h + 1; d && !a && !(a = d.Tma(e, !1, f)); )
+          for (d = g, f = h + 1; d && !a && !(a = d.Tma(e, !1, f));)
             if ((f = d.kz(!0))) {
               d = f.Wd();
               p = d.pA();
@@ -278735,17 +278721,17 @@
     a.ao = null;
     if (yB(a))
       if (((b = a.gs.toUpperCase()), 'PAGE' === b))
-        for (a.ao = new jB(); yB(a); ) zB(a) && zB(a) && '*' === a.gs.charAt(1) && yB(a);
+        for (a.ao = new jB(); yB(a);) zB(a) && zB(a) && '*' === a.gs.charAt(1) && yB(a);
       else if ('PAGEREF' === b) {
         b = null;
-        for (var e = !1, d = !1, f = !1, g = !1; yB(a); )
+        for (var e = !1, d = !1, f = !1, g = !1; yB(a);)
           zB(a)
             ? ((f = !0), 'p' === a.gs.charAt(1) ? (d = !0) : 'h' === a.gs.charAt(1) && (e = !0))
             : f || g || ((b = a.gs), (g = !0));
         a.ao = new kB(b, e, d);
       } else if ('TOC' === b) {
         a.ao = new lB();
-        for (e = b = !1; yB(a); )
+        for (e = b = !1; yB(a);)
           if (zB(a))
             if (((d = a.gs.charAt(1)), 'w' === d)) a.ao.eud = !0;
             else if ('x' === d) a.ao.qvd = !1;
@@ -278792,7 +278778,7 @@
       } else if ('ASC' === b) ((a.ao = new oB()), (b = AB(a)), 1 <= b.length && a.ao.kXa(b[0]));
       else if ('REF' === b) CB(a);
       else if ('NOTEREF' === b)
-        for (a.ao = new vB(), b = AB(a), 0 < b.length && a.ao.kXa(b[0]); yB(a); )
+        for (a.ao = new vB(), b = AB(a), 0 < b.length && a.ao.kXa(b[0]); yB(a);)
           zB(a) &&
             ((b = a.gs.charAt(1)),
             '*' === b
@@ -278804,14 +278790,14 @@
                   : 'p' === b && a.ao.Wwd(!0));
       else if ('NUMPAGES' === b) a.ao = new qB();
       else if ('HYPERLINK' === b)
-        for (a.ao = new Ck(), b = AB(a), 0 < b.length && a.ao.nXa(b[0]); yB(a); )
+        for (a.ao = new Ck(), b = AB(a), 0 < b.length && a.ao.nXa(b[0]); yB(a);)
           zB(a) &&
             ((b = a.gs.charAt(1)),
             'o' === b
               ? ((b = AB(a)), 0 < b.length && a.ao.F7(b[0]))
               : 'l' === b && ((b = AB(a)), 0 < b.length && a.ao.kXa(b[0])));
       else if ('SEQ' === b)
-        for (a.ao = new ph(), b = AB(a), 0 < b.length && a.ao.xNc(b[0]); yB(a); )
+        for (a.ao = new ph(), b = AB(a), 0 < b.length && a.ao.xNc(b[0]); yB(a);)
           zB(a) &&
             ((b = a.gs.charAt(1)),
             '*' === b
@@ -278826,7 +278812,7 @@
                       ? ((b = AB(a)), 0 < b.length && a.ao.lxd(b[0]))
                       : 's' === b && ((b = AB(a)), 0 < b.length && a.ao.INc(b[0])));
       else if ('STYLEREF' === b)
-        for (a.ao = new tB(), b = AB(a), 0 < b.length && (a.ao.kjb = b[0]); yB(a); )
+        for (a.ao = new tB(), b = AB(a), 0 < b.length && (a.ao.kjb = b[0]); yB(a);)
           zB(a) &&
             ((b = a.gs.charAt(1)),
             '*' === b
@@ -278845,9 +278831,9 @@
                           ? a.ao.Uib(!0)
                           : 's' === b && a.ao.INc(!0));
       else if ('TIME' === b)
-        for (a.ao = new rB(); yB(a); ) zB(a) && '@' === a.gs.charAt(1) && ((b = AB(a)), 0 < b.length && a.ao.Eu(b[0]));
+        for (a.ao = new rB(); yB(a);) zB(a) && '@' === a.gs.charAt(1) && ((b = AB(a)), 0 < b.length && a.ao.Eu(b[0]));
       else if ('DATE' === b)
-        for (a.ao = new sB(); yB(a); ) zB(a) && '@' === a.gs.charAt(1) && ((b = AB(a)), 0 < b.length && a.ao.Eu(b[0]));
+        for (a.ao = new sB(); yB(a);) zB(a) && '@' === a.gs.charAt(1) && ((b = AB(a)), 0 < b.length && a.ao.Eu(b[0]));
       else if ('ADDIN' === b) ((a.ao = new AscWord.aOf()), (a.gs = a.Kc.substr(a.La).trim()), a.gs && a.ao.ny(a.gs));
       else if ('MERGEFIELD' === b) ((a.ao = new AscWord.cOf()), (b = AB(a)), b.length && a.ao.Zwa(b[0]));
       else if ('FORMTEXT' === b) a.ao = new AscWord.bOf();
@@ -278855,7 +278841,7 @@
         a.ao = new hB();
         b = a.gs.slice(1, a.gs.length);
         e = null;
-        for (f = d = !1; yB(a); )
+        for (f = d = !1; yB(a);)
           zB(a) ? ((d = !0), '#' === a.gs.charAt(1) && (f = !0)) : (d ? f && (e = a.gs) : (b += a.gs), (f = d = !1));
         b = b.toUpperCase();
         null !== e && ((e = AscCommon.lI.get(e, AscCommon.Khb.mTe)), a.ao.Eu(e));
@@ -278876,13 +278862,13 @@
   function yB(a) {
     var b = a.Kc.length,
       e = !1;
-    for (a.gs = ''; a.La < b; ) {
+    for (a.gs = ''; a.La < b;) {
       var d = a.Kc.charCodeAt(a.La);
       if (32 === d || 9 === d) {
         if (e) return !0;
       } else if (34 !== d || (0 !== a.La && 92 === a.Kc.charCodeAt(a.La - 1))) ((a.gs += a.Kc.charAt(a.La)), (e = !0));
       else {
-        for (a.La++; a.La < b; ) {
+        for (a.La++; a.La < b;) {
           d = a.Kc.charCodeAt(a.La);
           if (34 === d && 92 !== a.Kc.charCodeAt(a.La - 1)) {
             a.La++;
@@ -278903,7 +278889,7 @@
     return e ? !0 : !1;
   }
   function AB(a) {
-    for (var b = [], e = DB(a); null !== e; ) (b.push(e), (e = DB(a)));
+    for (var b = [], e = DB(a); null !== e;) (b.push(e), (e = DB(a)));
     return b;
   }
   function DB(a) {
@@ -278922,7 +278908,7 @@
   function CB(a, b) {
     a.ao = new pB();
     void 0 !== b ? a.ao.kXa(b) : ((b = AB(a)), 0 < b.length && a.ao.kXa(b[0]));
-    for (; yB(a); )
+    for (; yB(a);)
       zB(a) &&
         ((b = a.gs.charAt(1)),
         '*' === b
@@ -279442,7 +279428,7 @@
                 gC(C, 'PAGEREF ' + E + ' \\h');
                 C.Oe(-1, new Ty(1, this.Ha));
                 E = B.Sa.length;
-                for (z = 0; B.cD(z, !0) && !(z >= E - 1); ) z++;
+                for (z = 0; B.cD(z, !0) && !(z >= E - 1);) z++;
                 C.wm('' + hC(this.Ha, B.Wp(z)).Ne);
                 C.Oe(-1, new Ty(Fk, this.Ha));
                 U.Xg(P + 1, C);
@@ -280551,7 +280537,7 @@
         e = d[0].ig();
         if (e) {
           d = e.Wm();
-          for (var f = 0; f < d.length; ) {
+          for (var f = 0; f < d.length;) {
             var g = d.charCodeAt(f);
             if (32 !== g && 9 !== g) break;
             f++;
@@ -281403,15 +281389,13 @@
     for (var k = 0; k < p; ++k) {
       var r = this.aa[k],
         q = r.fa;
-      if (
-        !(
-          (!0 === b && Ej === q && !1 === r.Kl()) ||
-          (!0 === e && Dj === q) ||
-          (!0 === d && !0 === r.OM()) ||
-          (!0 === f && xi === q) ||
-          (!0 === g && (Nj === q || Kj === q || (!0 === h && vi === q) || (!0 === a && wi === q)))
-        )
-      )
+      if (!(
+        (!0 === b && Ej === q && !1 === r.Kl()) ||
+        (!0 === e && Dj === q) ||
+        (!0 === d && !0 === r.OM()) ||
+        (!0 === f && xi === q) ||
+        (!0 === g && (Nj === q || Kj === q || (!0 === h && vi === q) || (!0 === a && wi === q)))
+      ))
         return !1;
     }
     return !0;
@@ -281595,7 +281579,7 @@
         this.bd();
         this.le.eb = a;
       } else if (((e = this.le.eb), 0 > a)) {
-        for (; 0 < e && this.aa[e - 1].yra() && !this.aa[e - 1].qA(); ) e--;
+        for (; 0 < e && this.aa[e - 1].yra() && !this.aa[e - 1].qA();) e--;
         if (0 >= e) return !1;
         if (this.aa[e - 1].yra() && this.aa[e - 1].qA()) return this.ab.Aa.gXa(this.aa[e - 1].Ze());
         if (Kj === this.aa[e - 1].fa) {
@@ -281610,7 +281594,7 @@
         this.dj(e - 1, 1, !0);
         this.le.eb = e - 1;
       } else {
-        for (; e < this.aa.length && this.aa[e].yra() && !this.aa[e].qA(); ) e++;
+        for (; e < this.aa.length && this.aa[e].yra() && !this.aa[e].qA();) e++;
         if (e >= this.aa.length || Dj === this.aa[e].fa) return !1;
         if (this.aa[e].yra() && this.aa[e].qA()) return this.ab.Aa.gXa(this.aa[e].Ze());
         if (Kj === this.aa[e].fa) {
@@ -281626,7 +281610,7 @@
     else if (Rx === this.Ip()) {
       if (!0 !== e.Za)
         if (((e = this.le.eb), 0 > a)) {
-          for (; 0 < e && this.aa[e - 1].yra() && !this.aa[e - 1].qA(); ) e--;
+          for (; 0 < e && this.aa[e - 1].yra() && !this.aa[e - 1].qA();) e--;
           if (0 >= e) return !1;
           this.le.eb--;
           YA(this);
@@ -281651,7 +281635,7 @@
     } else {
       e = this.le.eb;
       if (0 > a) {
-        for (; 0 < e && this.aa[e - 1].yra() && !this.aa[e - 1].qA(); ) e--;
+        for (; 0 < e && this.aa[e - 1].yra() && !this.aa[e - 1].qA();) e--;
         if (0 >= e) return !1;
         if (this.aa[e - 1].yra() && this.aa[e - 1].qA()) return this.ab.Aa.gXa(this.aa[e - 1].Ze());
         e = jD(this, e, a);
@@ -281918,7 +281902,7 @@
       a = d - 1;
       d = Hx(this, d - 1) - 1;
       g = Fx(this, a, d);
-      for (h = this.An(a, d); g == h && 0 < a && 0 !== this.aa.length; )
+      for (h = this.An(a, d); g == h && 0 < a && 0 !== this.aa.length;)
         (a--, (g = Fx(this, a, d)), (h = this.An(a, d)));
       return new zx(Hx(this, a) - 1, a + this.mf, 0, 0);
     }
@@ -282506,7 +282490,7 @@
     let r = 0;
     for (let t = 0, w = a.aa.length; t < w; ++t) {
       var q = a.aa[t];
-      if (q.Qz() || q.RF()) for (r++; q.Qz() && t < w - 1 && a.aa[t + 1].Qz() && a.aa[t + 1].ZNa(); ) t++;
+      if (q.Qz() || q.RF()) for (r++; q.Qz() && t < w - 1 && a.aa[t + 1].Qz() && a.aa[t + 1].ZNa();) t++;
     }
     for (let t = 0, w = a.aa.length; t < w; ++t) {
       FD(a, t, h, p, k);
@@ -282520,7 +282504,7 @@
       q.lMe();
       if (q.Qz() && t < w - 1 && a.aa[t + 1].Qz() && a.aa[t + 1].ZNa()) {
         let B = t;
-        for (q.oTb(z, 0, n); a.aa[t].Qz() && t < w - 1 && a.aa[t + 1].Qz() && a.aa[t + 1].ZNa(); )
+        for (q.oTb(z, 0, n); a.aa[t].Qz() && t < w - 1 && a.aa[t + 1].Qz() && a.aa[t + 1].ZNa();)
           (t !== B && a.aa[t].oTb(0, 0, n), t++, a.aa[t].lMe());
         q = a.aa[t];
         z = 0;
@@ -282677,7 +282661,7 @@
                       }
                       let Pb = ub,
                         Eb = new lj();
-                      for (tb.eW(Eb, Pb, !1); Eb.cj; ) {
+                      for (tb.eW(Eb, Pb, !1); Eb.cj;) {
                         Pb = Eb.aT().Ga();
                         let bc = tb.fBa(Pb),
                           Ab = tb.SVa(Pb);
@@ -282710,8 +282694,8 @@
                         }
                         let O = Hb,
                           Ba = bc.length - 1;
-                        for (; 0 < Ba; ) {
-                          for (; Ab[Ba].ZNa() && 0 < Ba; ) Ba--;
+                        for (; 0 < Ba;) {
+                          for (; Ab[Ba].ZNa() && 0 < Ba;) Ba--;
                           if (0 === Ba) {
                             Rb = O;
                             break a;
@@ -284368,7 +284352,7 @@
   A.Ui = function (a) {
     if (!0 === a) ((a = this.le.Selection), (a.Za = !0), (a.za = this.aa.length), (a.ya = this.aa.length));
     else {
-      for (a = this.aa.length; 0 < a; )
+      for (a = this.aa.length; 0 < a;)
         if (Dj === this.aa[a - 1].fa) a--;
         else break;
       this.le.eb = a;
@@ -284479,7 +284463,7 @@
   A.fY = function (a, b, e, d) {
     b = !0 === d ? b.xf(e) : this.aa.length;
     d = a.cT();
-    for (var f = qE(a); ; ) {
+    for (var f = qE(a); ;) {
       b--;
       var g = uD(this.aa[b]);
       0 <= b && Kj === g.fa && (rE(a, -1, g), (d = a.cT()), (f = qE(a)));
@@ -284494,7 +284478,7 @@
   A.eW = function (a, b, e, d, f) {
     b = !0 === d ? b.xf(e) : 0;
     d = a.cT();
-    for (var g = qE(a), h = this.aa.length; ; ) {
+    for (var g = qE(a), h = this.aa.length; ;) {
       b++;
       if (h === b) {
         if (0 === b) return;
@@ -284515,15 +284499,13 @@
       p = uD(this.aa[b - 1]);
       k = p.fa;
       Kj === p.fa && (rE(a, 1, p), (d = a.cT()), (g = qE(a)));
-      if (
-        !(
-          d ||
-          g ||
-          (!0 !== f && Dj === k) ||
-          (Ej === p.fa && !1 === p.Kl()) ||
-          ((Ij === p.fa || Oj === p.fa) && !0 === p.Qia())
-        )
-      )
+      if (!(
+        d ||
+        g ||
+        (!0 !== f && Dj === k) ||
+        (Ej === p.fa && !1 === p.Kl()) ||
+        ((Ij === p.fa || Oj === p.fa) && !0 === p.Qia())
+      ))
         break;
     }
     b <= h && ((a.cj = !0), a.La.Jf(b, e));
@@ -284563,7 +284545,7 @@
           }
         }
       else f = !0 === d ? b.xf(e) : this.aa.length;
-      for (; 0 < f; )
+      for (; 0 < f;)
         if ((f--, (b = uD(this.aa[f])), (d = b.fa), Kj === b.fa && (rE(a, -1, b), (g = a.cT()), (h = qE(a))), !g && !h))
           if (
             (ui !== d && Gm !== d) ||
@@ -284617,7 +284599,7 @@
         }
       if (b >= d) a.La.Jf(b, e);
       else if (vi === this.aa[b].fa || (ui === this.aa[b].fa && !0 === this.aa[b].Ifa())) {
-        for (; b < d - 1; )
+        for (; b < d - 1;)
           if (
             (b++,
             (p = uD(this.aa[b])),
@@ -285549,9 +285531,10 @@
     }
   };
   A.vW = function (a) {
-    if (
-      !((void 0 === this.ka.Zb && void 0 === a) || (void 0 !== this.ka.Zb && void 0 !== a && !0 === this.ka.Zb.Ki(a)))
-    ) {
+    if (!(
+      (void 0 === this.ka.Zb && void 0 === a) ||
+      (void 0 !== this.ka.Zb && void 0 !== a && !0 === this.ka.Zb.Ki(a))
+    )) {
       var b = this.ka.Zb;
       void 0 !== a ? ((this.ka.Zb = new Gh()), this.ka.Zb.Of(a)) : (this.ka.Zb = void 0);
       History.ja(new qF(this, b, this.ka.Zb, zE(this)));
@@ -286549,7 +286532,7 @@
     let f = e.G0a;
     for (var g = 0, h = this.aa.length; g < h; ++g) {
       var p = this.aa[g];
-      for (Ej === p.fa && p.Dr(e, d); 0 < a.nzb && !a.Up(a.nzb, p); )
+      for (Ej === p.fa && p.Dr(e, d); 0 < a.nzb && !a.Up(a.nzb, p);)
         if (f) {
           a.qg();
           break;
@@ -286679,7 +286662,7 @@
     a.y7 = a.Ga();
   }
   function jE(a) {
-    for (var b = a.y7; b; ) {
+    for (var b = a.y7; b;) {
       if (Zx === a.Kwa) return b;
       b = b.y7;
     }
@@ -286700,7 +286683,7 @@
   A.yk = function (a, b) {
     let e = this,
       d = !0;
-    for (; d && e && a; )
+    for (; d && e && a;)
       ((d = e.Uz === a.Uz && e.gw === a.gw && e.RM === a.RM && e.Kwa === a.Kwa),
         b || (d = d && e.Im === a.Im),
         (e = e.y7),
@@ -289102,7 +289085,7 @@
                       h.push([a.aa[k].constructor.name, a.aa[k].aa ? a.aa[k].aa.length : 0]);
                     if (f) {
                       p = 0;
-                      for (f = !0; 2 !== p; ) {
+                      for (f = !0; 2 !== p;) {
                         k = d[d.length - 1 - p];
                         r = h[h.length - 1 - p];
                         q = k ? k[1] : void 0;
@@ -291827,7 +291810,7 @@
     return !1;
   };
   A.jvb = function (a) {
-    for (var b = this.Aa; b instanceof pi && b.mY(); ) b = b.Ji().Ji();
+    for (var b = this.Aa; b instanceof pi && b.mY();) b = b.Ji().Ji();
     if (b instanceof qk && !this.DNa()) return !0;
     a = new aJ(a, this.Vg());
     b = 0;
@@ -292074,9 +292057,13 @@
             var V = this.Jg;
             if (Hm === this.Jg.fa) {
               var Y = e.Cb.eh;
-              if (
-                !(void 0 === Y || void 0 === Y.Af || 0 === Y.Af || '0' === Y.Af || (this.Aa && this.Aa.WHc(this.Hh())))
-              ) {
+              if (!(
+                void 0 === Y ||
+                void 0 === Y.Af ||
+                0 === Y.Af ||
+                '0' === Y.Af ||
+                (this.Aa && this.Aa.WHc(this.Hh()))
+              )) {
                 let si = this.Aa.Rs().Nr(Y.Af).zm(Y.Sc).CGa(),
                   pg = ex(this);
                 var ya = ea;
@@ -292191,20 +292178,20 @@
             }
           }
           b.ZL && b.ZL(AscFormat.Tfb, this.Vb[da], da, 2);
-          for (var sa = hJ.Zb, ja = sa.AI(); null != ja; )
+          for (var sa = hJ.Zb, ja = sa.AI(); null != ja;)
             (b.Xo(ja.r, ja.yb, ja.b, 255),
               b.hO && b.hO(ja.KMb),
               b.rect(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv),
               b.yw(),
               (ja = sa.AI()));
           var pa = hJ.tsd;
-          for (ja = !0 === b.OR ? null : pa.AI(); null != ja; )
+          for (ja = !0 === b.OR ? null : pa.AI(); null != ja;)
             (b.AYc(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv, ja), (ja = pa.AI()));
           var Ga = hJ.vjd;
-          for (ja = !0 === b.OR ? null : Ga.AI(); null != ja; )
+          for (ja = !0 === b.OR ? null : Ga.AI(); null != ja;)
             (b.AYc(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv, ja), (ja = Ga.AI()));
           var Qa = hJ.Wgb;
-          for (ja = Qa.AI(); null != ja; )
+          for (ja = Qa.AI(); null != ja;)
             (b.GHf ? b.GHf(ja.r, ja.yb, ja.b) : b.Xo(ja.r, ja.yb, ja.b, 255),
               b.rect(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv, ja.KMb),
               b.yw(),
@@ -292214,7 +292201,7 @@
           var db;
           if ((db = ja))
             a: {
-              for (var lb = void 0, Ya = this.Aa; (lb = Ya.kz(!0)); ) Ya = lb.$a.Table.Aa;
+              for (var lb = void 0, Ya = this.Aa; (lb = Ya.kz(!0));) Ya = lb.$a.Table.Aa;
               if (Ya.Aa) {
                 if (Ya.Aa.cA) {
                   db = Ya.Aa.cA;
@@ -292227,7 +292214,7 @@
               }
               db = Ya.cA ? Ya.cA : null;
             }
-          for (var za = db; null != ja; )
+          for (var za = db; null != ja;)
             (b.zwe
               ? b.zwe(ja)
               : (!0 === ja.wl.kAa ? b.Xo(240, 200, 120, 255) : b.Xo(248, 231, 195, 255),
@@ -292237,12 +292224,12 @@
               (ja = Ra.AI()));
           b.XO && b.XO();
           var eb = hJ.tvb;
-          for (ja = eb.AI(); null != ja; ) (b.onb(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv, ja), (ja = eb.AI()));
+          for (ja = eb.AI(); null != ja;) (b.onb(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv, ja), (ja = eb.AI()));
           var Db = hJ.CVa;
-          for (ja = Db.AI(); null != ja; ) (b.cZb(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv), (ja = Db.AI()));
+          for (ja = Db.AI(); null != ja;) (b.cZb(ja.Ps, ja.wv, ja.x1 - ja.Ps, ja.y1 - ja.wv), (ja = Db.AI()));
           if (b && b.HD && b.q8b) {
             var ta = hJ.AHc;
-            for (ja = ta.AI(); ja; ) {
+            for (ja = ta.AI(); ja;) {
               var Ca = ja.wl.Ecc,
                 La = Ca.pp(),
                 Ta = Ca.I4a(),
@@ -292315,7 +292302,7 @@
             ) ||
             (tb += e.Cb.yc.Sk);
           if (this.Vb.length - 1 === da) {
-            for (x = this.QVa(); x && sx(x); ) x = x.vj(0);
+            for (x = this.QVa(); x && sx(x);) x = x.vj(0);
             x && aj(x) && x.k$()
               ? (ub = this.Vb[da].ra + this.Vb[da].ai.fv + this.Vb[da].ai.VG)
               : (!0 !== e.Cb.Yc.K4 && (!x || (aj(x) && !0 !== fJ(x, 0)))) ||
@@ -292359,14 +292346,12 @@
         b.ZL && b.ZL(AscFormat.Tfb, Ab, bc, 0);
         var Ba = this.Sa[a].ra + this.Vb[bc].ra,
           S = this.Sa[a].pa;
-        if (
-          !(
-            !this.BBa ||
-            !(1 === O || (1 < O && (0.001 < Ab.sf[0].Na || 0.001 < Ab.sf[0].sAb))) ||
-            (Ab.sn & sJ && !(Ab.sn & tJ) && Ab.sn & uJ) ||
-            (Ab.sn & sJ && Ab.sn & tJ && void 0 !== this.Rf)
-          )
-        ) {
+        if (!(
+          !this.BBa ||
+          !(1 === O || (1 < O && (0.001 < Ab.sf[0].Na || 0.001 < Ab.sf[0].sAb))) ||
+          (Ab.sn & sJ && !(Ab.sn & tJ) && Ab.sn & uJ) ||
+          (Ab.sn & sJ && Ab.sn & tJ && void 0 !== this.Rf)
+        )) {
           var Ka = void 0,
             hb = S,
             Xb = Ba,
@@ -292382,7 +292367,7 @@
             pd = Qc.oY ? Qc.oY.eo : void 0,
             Id = this.BBa.uOc + Jc + Gc;
           if (Asc.TCa.una === xJ(Qc) && 0 < wc) {
-            for (var od = 0, hd = this.VA(wc), Yc = Gc - this.Sa[wc].mf; 0 < wc; ) {
+            for (var od = 0, hd = this.VA(wc), Yc = Gc - this.Sa[wc].mf; 0 < wc;) {
               wc--;
               if (hd !== this.VA(wc)) break;
               od += this.Sa[wc].Pu - this.Sa[wc].mf + 1;
@@ -292613,7 +292598,7 @@
             b.ql(uc.r, uc.yb, uc.b, 255),
             b.Xz(bz.Ta, uc.wv, uc.Ps, uc.x1, uc.w),
             (uc = Je.AI()));
-        for (uc = cf.AI(); null != uc; )
+        for (uc = cf.AI(); null != uc;)
           (b.Gib && b.Gib(uc.KMb),
             b.ql(uc.r, uc.yb, uc.b, 255),
             b.IZa(bz.Ta, uc.wv, uc.Ps, uc.x1, uc.w),
@@ -292633,16 +292618,16 @@
             }
             tf.push(Ee);
           }
-        for (uc = gg.AI(); null != uc; )
+        for (uc = gg.AI(); null != uc;)
           (b.Gib && b.Gib(uc.KMb), b.ql(uc.r, uc.yb, uc.b, 255), b.Xz(0, uc.wv, uc.Ps, uc.x1, uc.w), (uc = gg.AI()));
-        for (uc = ag.AI(); null != uc; )
+        for (uc = ag.AI(); null != uc;)
           (b.Gib && b.Gib(uc.KMb),
             b.ql(uc.r, uc.yb, uc.b, 255),
             b.IZa(bz.Ta, uc.wv, uc.Ps, uc.x1, uc.w),
             (uc = ag.AI()));
         if (qj) {
           var jh = [];
-          for (uc = BJ(Sf); null !== uc; ) {
+          for (uc = BJ(Sf); null !== uc;) {
             if (null === wb || !0 !== wb.sA(uc.wl.MSb))
               (0 < jh.length && dc && (dc.push(jh), (jh = [])),
                 (wb = uc.wl.MSb),
@@ -292659,14 +292644,14 @@
             uc = BJ(Sf);
           }
           0 < jh.length && dc.push(jh);
-          for (uc = Pf.AI(); null !== uc; )
+          for (uc = Pf.AI(); null !== uc;)
             (b.ql(uc.r, uc.yb, uc.b, 255),
               b.HMb(uc.Ps, Ha.ra + Rd.Ta, uc.x1 - uc.Ps, Rd.cb - Rd.Ta, 0),
               (uc = Pf.AI()));
           if (editor && this.Ha && !0 === this.Ha.FHa.Za && !0 !== b.uxb && !0 !== b.QDe && !AscCommon.cca) {
             b.ql(255, 0, 0, 255);
             var Zg = editor.Mc.pB.DGa(1);
-            for (uc = Lg.AI(); null != uc; ) (b.zac(uc.wv, uc.Ps, uc.x1, Zg), (uc = Lg.AI()));
+            for (uc = Lg.AI(); null != uc;) (b.zac(uc.wv, uc.Ps, uc.x1, Zg), (uc = Lg.AI()));
           }
         }
         if ((uc = BJ(Kc)))
@@ -292690,7 +292675,7 @@
             wg || b.Br();
             b.HSb && b.HSb();
           } else {
-            for (var Cf = []; uc; ) {
+            for (var Cf = []; uc;) {
               void 0 !== uc.wl.ra
                 ? ((Rg = uc.wl.ra), (bg = uc.wl.ra + uc.wl.lc))
                 : ((Rg = Ha.ra + Rd.ra - Rd.ai.cn), (bg = Ha.ra + Rd.ra + Rd.ai.fv));
@@ -292811,7 +292796,7 @@
               (!1 === this.g_(cc, xc) || (!0 === Zi && 1 === jc)) && b.gK(bz.Ta, Ah, Tc, Nd, rf, Za, gb));
           b.XO && b.XO();
         }
-        for (var Df = this.Sa[a].Pu, Ri = this.Vb[Df].sn & tJ ? !0 : !1, Fi = !1, Ih = this.QVa(); Ih && sx(Ih); )
+        for (var Df = this.Sa[a].Pu, Ri = this.Vb[Df].sn & tJ ? !0 : !1, Fi = !1, Ih = this.QVa(); Ih && sx(Ih);)
           Ih = Ih.vj(0);
         Lh !== e.Cb.Yc.cb.ta || !0 !== Ri || (!0 !== e.Cb.Yc.K4 && Ih && aj(Ih) && !fJ(Ih, 0)) || (Fi = !0);
         if (!0 === Fi) {
@@ -292955,7 +292940,7 @@
         ((h = this.gi(!1, !1, !1)), (f = new lj()), 0 < a ? this.iY(f, h) : this.jY(f, h), f.cj && 0 !== f.La.Ki(h))
       )
         return (this.II(), this.tt(h, f.La, void 0), this.Pk(1, !1, !1, !1, !1), this.bd(), !0);
-      for (h = this.va.eb; !1 === this.aa[h].Pk(a, d); ) {
+      for (h = this.va.eb; !1 === this.aa[h].Pk(a, d);) {
         0 > a ? h-- : h++;
         if (0 > h || h >= this.aa.length) break;
         0 > a ? this.aa[h].Ui(!1) : this.aa[h].ff();
@@ -293035,7 +293020,7 @@
       f = !1,
       g = yx;
     if (0 > b || b >= a.aa.length) return { cj: !1 };
-    for (; !f; ) {
+    for (; !f;) {
       g = a.aa[d].fa;
       for (b = 0; b < e.length; b++)
         if (e[b] == g) {
@@ -293179,19 +293164,19 @@
       var b = this.aa.length,
         e = this.va.eb;
       if (!0 === a && !0 === this.aa[e].a7()) {
-        for (a = e + 1; a < b && !0 === this.aa[a].tl({ Hzb: !0 }); ) a++;
+        for (a = e + 1; a < b && !0 === this.aa[a].tl({ Hzb: !0 });) a++;
         a < b && !0 === this.aa[a].edc() && ((e = a), this.aa[e].ff());
       }
-      for (; 0 < e && !0 === this.aa[e].T$b() && ti === this.aa[e - 1].fa && !this.aa[e - 1].vwa(); )
+      for (; 0 < e && !0 === this.aa[e].T$b() && ti === this.aa[e - 1].fa && !this.aa[e - 1].vwa();)
         (e--, this.aa[e].Ui());
       this.va.eb = e;
     }
   };
   function CJ(a) {
     if (!a.Mg()) {
-      for (var b = a.aa.length, e = Math.min(Math.max(0, a.va.eb), b - 1); 0 < e && !1 === a.aa[e].f$(); )
+      for (var b = a.aa.length, e = Math.min(Math.max(0, a.va.eb), b - 1); 0 < e && !1 === a.aa[e].f$();)
         (e--, a.aa[e].Ui());
-      for (; e < b && !1 === a.aa[e].f$(); ) (e++, a.aa[e].ff(!1));
+      for (; e < b && !1 === a.aa[e].f$();) (e++, a.aa[e].ff(!1));
       for (
         ;
         0 < e &&
@@ -293351,7 +293336,7 @@
     else {
       d = this.Sa[e].Gf;
       g = this.Sa[e].ra + this.Vb[d].ra + this.Vb[d].ai.fv + this.Vb[d].ai.VG;
-      for (var p = e >= this.Sa.length - 1 ? this.Vb.length - 1 : this.Sa[e + 1].Gf - 1; !(b < g || d >= p); )
+      for (var p = e >= this.Sa.length - 1 ? this.Vb.length - 1 : this.Sa[e + 1].Gf - 1; !(b < g || d >= p);)
         (d++, (g = this.Vb[d].ra + this.Sa[e].ra + this.Vb[d].ai.fv + this.Vb[d].ai.VG));
     }
     g = 0;
@@ -293405,7 +293390,7 @@
     void 0 === b && (b = 0);
     let n;
     f = g;
-    for (d = e = 0; ; ) {
+    for (d = e = 0; ;) {
       a = this.fBa(f);
       p = this.SVa(f);
       if (!(p && a && p.Qz() && a.Qz() && a.ZNa())) break;
@@ -293416,7 +293401,7 @@
       f = n.aT().Ga();
     }
     a = f.Ga();
-    for (f = g; ; ) {
+    for (f = g; ;) {
       g = this.fBa(f);
       p = this.SVa(f);
       if (!(p && g && p.Qz() && g.Qz() && g.ZNa())) break;
@@ -293551,7 +293536,7 @@
   A.QNa = function (a) {
     var b = a.xf(0),
       e = this.aa.length;
-    for (a = this.aa[b].QNa(a, 1); null === a; ) {
+    for (a = this.aa[b].QNa(a, 1); null === a;) {
       b++;
       if (b >= e) break;
       a = this.aa[b].QNa();
@@ -293567,7 +293552,7 @@
     if (!0 === a.cj) return !0;
     e--;
     if (0 <= e && this.aa[e + 1].j_()) return (a.La.Jf(e, 0), this.aa[e].ot(!1, a.La, 1), (a.cj = !0));
-    for (; 0 <= e; ) {
+    for (; 0 <= e;) {
       a.La.Jf(e, 0);
       this.aa[e].fY(a, b, 1, !1);
       if (!0 === a.cj) return !0;
@@ -293583,11 +293568,11 @@
     var d = xE(this, b, !0);
     a.Oj = d;
     d = b.xf(0);
-    for (a.cj = !0; a.cj; ) if (((a.cj = !1), a.La.Jf(d, 0), this.aa[d].eW(a, b, 1, !0, e), a.cj)) return !0;
+    for (a.cj = !0; a.cj;) if (((a.cj = !1), a.La.Jf(d, 0), this.aa[d].eW(a, b, 1, !0, e), a.cj)) return !0;
     d++;
     var f = this.aa.length;
     if (d < f && this.aa[d - 1].j_()) return (a.La.Jf(d, 0), this.aa[d].Qr(a.La, 1), (a.cj = !0));
-    for (; d < f; ) {
+    for (; d < f;) {
       a.La.Jf(d, 0);
       this.aa[d].eW(a, b, 1, !1, e);
       if (!0 === a.cj) return !0;
@@ -293609,7 +293594,7 @@
       if ((e--, a.Tr && 0 <= e && this.aa[e].j_())) a.cj = !0;
       else if (0 <= e && this.aa[e + 1].j_()) (this.aa[e].ot(!1, a.La, 1), a.La.SU(e, 0), (a.cj = !0));
       else {
-        for (; 0 <= e; ) {
+        for (; 0 <= e;) {
           this.aa[e].jY(a, b, 1, !1);
           !0 === a.zv && a.La.SU(e, 0);
           if (!0 === a.cj) return;
@@ -293640,7 +293625,7 @@
       if (a.Tr && d < f && this.aa[d].j_()) a.cj = !0;
       else if (d < f && this.aa[d - 1].j_()) (this.aa[d].Qr(a.La, 1), a.La.SU(d, 0), (a.cj = !0));
       else {
-        for (; d < f; ) {
+        for (; d < f;) {
           this.aa[d].iY(a, b, 1, !1, e);
           !0 === a.zv && a.La.SU(d, 0);
           if (!0 === a.cj) return;
@@ -293728,7 +293713,7 @@
       e = this.aa.length;
     a.zv(b, 0);
     this.aa[b].kra(a, !0, 1);
-    for (b++; b < e && !(0 >= a.Bn); ) {
+    for (b++; b < e && !(0 >= a.Bn);) {
       a.zv(b, 0);
       this.aa[b].kra(a, !1, 1);
       if (0 >= a.Bn) break;
@@ -293739,7 +293724,7 @@
     var b = a.eb.xf(0);
     a.zv(b, 0);
     this.aa[b].bY(a, !0, 1);
-    for (b--; 0 <= b && !(0 >= a.Bn); ) (a.zv(b, 0), this.aa[b].bY(a, !1, 1), b--);
+    for (b--; 0 <= b && !(0 >= a.Bn);) (a.zv(b, 0), this.aa[b].bY(a, !1, 1), b--);
   };
   A.fBa = function (a) {
     a = a ? a : this.gi(this.Selection.Za, !1, !1);
@@ -293968,7 +293953,7 @@
     var d = !1;
     if (0 >= a.aa.length) ((d = !1), (a = void 0));
     else {
-      for (; !d; ) {
+      for (; !d;) {
         var f = a.aa[e].fa;
         for (var g = 0; g < b.length; g++)
           if (b[g] == f) {
@@ -294781,7 +294766,7 @@
     if (!0 === this.bu) {
       var a = mJ(this);
       this.Zh(1);
-      for (var b = 0, e = this.aa.length; !0 !== this.aa[b].f$() && b < e - 1; ) b++;
+      for (var b = 0, e = this.aa.length; !0 !== this.aa[b].f$() && b < e - 1;) b++;
       var d = this.aa[b].eY(!0);
       e = this.aa.length;
       for (b += 1; b < e; b++) {
@@ -294800,8 +294785,8 @@
       else {
         e = !1;
         this.aa.length - 1 === a && !0 !== this.aa[a].To(!0) && (a--, (e = !0));
-        for (d = b; !0 === this.aa[b].To() && b < a; ) b++;
-        for (; !0 !== this.aa[b].f$() && b > d; ) b--;
+        for (d = b; !0 === this.aa[b].To() && b < a;) b++;
+        for (; !0 !== this.aa[b].f$() && b > d;) b--;
         d = e && b === a && this.aa[b].To() ? null : this.aa[b].eY(!0);
         null === d && ((d = this.Jp(!1).tb.Ga()), d.Rc(this.tb.ta), Bw(d));
         for (b += 1; b <= a; b++)
@@ -294902,7 +294887,7 @@
       var p = h.Bn,
         k = e.oc.Fa + e.oc.Gf;
       0 < p && 0 > e.oc.Gf && ((k = e.oc.Fa), p--);
-      for (var r = e.Ih.WVa(); p; ) {
+      for (var r = e.Ih.WVa(); p;) {
         for (var q = !1, n = 0; n < r; n++) {
           var t = e.Ih.xf(n);
           if (t.La > k) {
@@ -294912,7 +294897,7 @@
           }
         }
         if (!1 === q) {
-          for (q = 0; k >= q; ) q += AscCommonWord.vVa;
+          for (q = 0; k >= q;) q += AscCommonWord.vVa;
           k = q;
         }
         p--;
@@ -295135,7 +295120,7 @@
       e = a.Tfa.kf,
       d = null;
     if (e.tBa())
-      for (a = a.cm, d = e.Rqb; null != a && Tj === a.de(); ) {
+      for (a = a.cm, d = e.Rqb; null != a && Tj === a.de();) {
         var f = a.Tfa.ee,
           g = cK(a);
         if (b < f) a = a.cm;
@@ -295166,10 +295151,10 @@
       if (null === g || Tj !== g.de()) g = null;
       else if (((k = g.pQ()), void 0 === k || !0 !== d.Ki(k))) g = null;
     } else {
-      for (; f && aj(f) && void 0 !== f.pQ(); ) f = f.RVa();
-      for (; g && aj(g) && void 0 !== g.pQ(); ) g = g.QVa();
+      for (; f && aj(f) && void 0 !== f.pQ();) f = f.RVa();
+      for (; g && aj(g) && void 0 !== g.pQ();) g = g.QVa();
     }
-    for (; f && sx(f); ) f = f.jwa();
+    for (; f && sx(f);) f = f.jwa();
     f &&
       aj(f) &&
       ((d = f.Jp(!1).Cb),
@@ -295199,7 +295184,7 @@
             a.Cb.yc.Sk = 0;
       } else if (!0 === this.Aa.mY() && !0 === a.Cb.eu) {
         h = null;
-        for (f = this.Aa.Aa; f instanceof ul; ) {
+        for (f = this.Aa.Aa; f instanceof ul;) {
           if ((d = f.cm)) {
             h = d.h7();
             break;
@@ -295211,7 +295196,7 @@
         if (!0 === a.Cb.yc.by || !0 !== this.Ln) a.Cb.yc.Sk = 0;
       }
     else Uj === f.de() && !0 === a.Cb.yc.by && (a.Cb.yc.Sk = 14 * zh);
-    for (f = g; f && sx(f); ) f = f.vj(0);
+    for (f = g; f && sx(f);) f = f.vj(0);
     f &&
       aj(f) &&
       ((h = f.Jp(!1).Cb),
@@ -295245,7 +295230,7 @@
     } else if (!0 === this.Aa.kz() && !0 === a.Cb.yc.ox) a.Cb.yc.Qh = 0;
     else if (this.Aa.mY() && !0 === a.Cb.eu) {
       e = null;
-      for (f = this.Aa.Aa; f instanceof ul; ) {
+      for (f = this.Aa.Aa; f instanceof ul;) {
         if ((g = f.zl)) {
           e = g.LR();
           break;
@@ -295314,7 +295299,7 @@
             if (f === k) h = p;
             else {
               let r = {};
-              for (r[k] = !0; ; ) {
+              for (r[k] = !0; ;) {
                 k = d.xf(k);
                 if (!k) break;
                 k = k.Kz;
@@ -295368,14 +295353,14 @@
       var b = mJ(this);
       this.Zh(1);
       var e = this.aa.length;
-      for (a = 0; !0 === this.aa[a].To() && a < e; ) a++;
+      for (a = 0; !0 === this.aa[a].To() && a < e;) a++;
       a = this.aa[a].zr();
       nJ(this, b);
     } else if (!0 === this.Selection.Za) {
       a = this.Selection.za;
       b = this.Selection.ya;
       a > b && ((a = this.Selection.ya), (b = this.Selection.za));
-      for (; !0 === this.aa[a].To() && a < b; ) a++;
+      for (; !0 === this.aa[a].To() && a < b;) a++;
       a = this.aa[a].zr();
     } else a = this.aa[this.va.eb].zr();
     return (a = a ? a.Ga() : new di());
@@ -296243,8 +296228,7 @@
         if (void 0 != (void 0).Vb) {
           f = a.pQ();
           if (void 0 === f) g = null;
-          else
-            for (g = a.zl; null != g && (Tj !== g.de() || ((h = g.pQ()), void 0 !== h && !1 !== f.Ki(h))); ) g = g.zl;
+          else for (g = a.zl; null != g && (Tj !== g.de() || ((h = g.pQ()), void 0 !== h && !1 !== f.Ki(h)));) g = g.zl;
           if (null === g || 0 >= g.Vb.length) return;
           var p = g.sh().Cb.yc.Sk;
           f = g.Vb[0].cb - g.Vb[0].Ta - p;
@@ -296358,13 +296342,13 @@
       e = a.pQ();
     if (void 0 === e) return b;
     b.push(a);
-    for (var d = a.cm; null != d; )
+    for (var d = a.cm; null != d;)
       if (Tj === d.de()) {
         var f = d.pQ();
         if (void 0 != f && !0 === e.Ki(f)) (b.push(d), (d = d.cm));
         else break;
       } else break;
-    for (a = a.zl; null != a; )
+    for (a = a.zl; null != a;)
       if (Tj === a.de())
         if (((d = a.pQ()), void 0 != d && !0 === e.Ki(d))) (b.push(a), (a = a.zl));
         else break;
@@ -296378,7 +296362,7 @@
   }
   function UK(a, b) {
     if (void 0 != b.WO && Asc.R8a.ye != b.WO) {
-      for (var e = a.pQ(), d = a, f = d.cm; null != f; )
+      for (var e = a.pQ(), d = a, f = d.cm; null != f;)
         if (Tj === f.de()) {
           var g = f.pQ();
           if (void 0 != g && !0 === e.Ki(g)) ((d = f), (f = f.cm));
@@ -297062,7 +297046,7 @@
   };
   A.B2 = function () {
     if (this.Ln && this.Ha && this.Aa) {
-      for (var a = !0, b = this.Aa; b && b !== this.Ha; )
+      for (var a = !0, b = this.Aa; b && b !== this.Ha;)
         if (b.mY()) b = b.Aa.Aa;
         else {
           a = !1;
@@ -297128,7 +297112,7 @@
     e ||= [];
     var d = e.length;
     a = this.gi(a, b);
-    for (b = a.Vp(); 0 < b; ) {
+    for (b = a.Vp(); 0 < b;) {
       var f = a.xf(b);
       a.MAa();
       var g = this.k7(a);
@@ -297966,7 +297950,7 @@
         break;
       }
     if (-1 === e) return a;
-    for (; 1 >= this.Sa[e].Pu - this.Sa[e].mf && 0 !== e; ) e--;
+    for (; 1 >= this.Sa[e].Pu - this.Sa[e].mf && 0 !== e;) e--;
     return this.VA(e);
   };
   function vL(a) {
@@ -298336,7 +298320,7 @@
   function BJ(a) {
     var b = a.qc.length;
     if (0 >= b) return null;
-    for (var e = a.qc[0], d = 1; d < b; ) {
+    for (var e = a.qc[0], d = 1; d < b;) {
       var f = a.qc[d];
       if (BL(f, e)) ((e.x1 = f.x1), d++);
       else break;
@@ -298377,7 +298361,7 @@
       var b = this.qc.length;
       if (0 >= b) return null;
       var e = this.qc[b - 1];
-      for (b--; 0 < b; ) {
+      for (b--; 0 < b;) {
         var d = this.qc[b - 1];
         if (BL(d, e)) (a && e.Rcc.push(e.Ps), (e.Ps = d.Ps), b--);
         else break;
@@ -300318,7 +300302,7 @@
       (1 === a.Vb.length && !0 !== a.Kl())
     )
       return -1;
-    for (var f = e, g = d; 0 <= f; ) {
+    for (var f = e, g = d; 0 <= f;) {
       g--;
       if (0 > g) {
         f--;
@@ -300329,7 +300313,7 @@
     }
     0 > f && ((f = e), (g = d));
     b = e;
-    for (var h = d, p = a.Vb.length; b <= p - 1; ) {
+    for (var h = d, p = a.Vb.length; b <= p - 1;) {
       h++;
       if (h > a.Vb[b].sf.length - 1) {
         b++;
@@ -300348,7 +300332,7 @@
       if (((p = a.Jp(!1).Cb), a.Jg.fa === Hm)) {
         if (((p = p.eh), void 0 !== p && void 0 !== p.Af && 0 !== p.Af && '0' !== p.Af)) return -1;
       } else if ((p = a.Jg.kf) && null !== p.Ij && null !== p.Zbe && null != p.oIb && 0 !== p.oIb.length) return -1;
-    for (var r; f < b || (f === b && g <= h); ) {
+    for (var r; f < b || (f === b && g <= h);) {
       p = NL(a, g, f);
       if (-1 === p) return -1;
       f === e && g === d && (r = p);
@@ -300494,7 +300478,7 @@
       g = 0 < e ? a.Sa[e - 1].Pu + 1 : 0;
     a: {
       if (1 === e && !0 === a.eVa(0) && a.Aa instanceof qk && !1 === f.Tu)
-        for (var h = a.cm; null != h && Tj === h.de() && void 0 === h.Rf; ) {
+        for (var h = a.cm; null != h && Tj === h.de() && void 0 === h.Rf;) {
           var p = h.Jp(!1).Cb.Ts;
           if ((!0 === p && 1 < h.Sa.length) || !1 === p || !0 !== h.Kl() || !0 === h.kvb()) break;
           else {
@@ -300526,9 +300510,9 @@
             var w = !0,
               z = a.cm;
             if (!z && t)
-              for (var u = a.Aa.Aa; u instanceof ul && !(z = u.cm); )
+              for (var u = a.Aa.Aa; u instanceof ul && !(z = u.cm);)
                 u = u.Aa instanceof pi && u.Aa.Aa instanceof ul ? u.Aa.Aa : null;
-            for (; z && z instanceof ul; ) z = z.jwa();
+            for (; z && z instanceof ul;) z = z.jwa();
             if ((!0 === a.Nk() && void 0 !== a.Rf) || null === z) w = !1;
             else if (a.Aa === a.Ha && Tj === z.de() && void 0 !== z.Rf) {
               var B = z.Rf,
@@ -300555,9 +300539,9 @@
                 C = !1,
                 J = a.cm;
               if (!J && t)
-                for (u = a.Aa.Aa; u instanceof ul && !(J = u.cm); )
+                for (u = a.Aa.Aa; u instanceof ul && !(J = u.cm);)
                   u = u.Aa instanceof pi && u.Aa.Aa instanceof ul ? u.Aa.Aa : null;
-              for (; J && J instanceof ul; ) J = J.jwa();
+              for (; J && J instanceof ul;) J = J.jwa();
               var T = a.Ha ? a.Ha.Ye : null;
               null !== J &&
                 Tj === J.In() &&
@@ -300608,7 +300592,7 @@
       var H = b.OHa;
       H instanceof qk && b.rod && H.Ye.vB(b.Pfa, b.wvb, b.rod);
     }
-    for (var ia; ; ) {
+    for (var ia; ;) {
       b.Kc = g;
       b.ow = SG;
       var xa = b.Oj;
@@ -300658,7 +300642,7 @@
           }
         }
         if (0 === oa && !0 === Ea)
-          for (var ab = 0, tb = ea.aa.length; ab < tb; ) {
+          for (var ab = 0, tb = ea.aa.length; ab < tb;) {
             if (!0 === ea.ivb(ab)) {
               Ea = !1;
               break;
@@ -300671,7 +300655,7 @@
         for (var ub = 1; ub < Y.length + 1; ub++) ea.Vb[oa].sf.push(new WL(Y[ub - 1].Uk, ya == ub ? N.Fe : Y[ub].Fl));
         !0 === N.lHa && ((N.lHa = !1), (ea.Vb[oa].sn |= XL));
         a: {
-          for (var fb = aa, vb = wa, bb = ba, Hb = K, Rb = bb.mHa, Zb = 0; Zb <= Rb; ) {
+          for (var fb = aa, vb = wa, bb = ba, Hb = K, Rb = bb.mHa, Zb = 0; Zb <= Rb;) {
             bb.Range = Zb;
             var x = fb,
               M = Zb,
@@ -301292,7 +301276,7 @@
     if (null === a) {
       if (e < f.pa + d.oc.Fa) h = f.pa + d.oc.Fa;
       else if (0.001 > b) h = e;
-      else for (h = f.pa; e >= h - 0.001; ) h += b;
+      else for (h = f.pa; e >= h - 0.001;) h += b;
       b = AscCommon.YA(e);
       e = AscCommon.YA(f.Fe);
       p = AscCommon.YA(h);
@@ -301340,7 +301324,7 @@
   }
   function qJ(a, b, e, d, f) {
     if (0 >= b) {
-      for (e = a.RVa(); e && !e.qA(); ) e = e.RVa();
+      for (e = a.RVa(); e && !e.qA();) e = e.RVa();
       return !e || e.VA(e.bW() - 1) >= d || e.Rf;
     }
     if (!eJ(a, b)) return eJ(a, b, !0) ? !0 : !1;
@@ -301985,7 +301969,7 @@
     let d = a.LH(e);
     if (!e || -1 === d) return !1;
     a = a.vj(b + 1);
-    for (b = e.lj(); !a && d < b - 1; ) {
+    for (b = e.lj(); !a && d < b - 1;) {
       a = e.vj(++d);
       if (!(a && a instanceof ni)) return !0;
       a = a.vj(0);
@@ -302009,7 +301993,7 @@
     if (!b) return !1;
     let e = a.ab.Vb,
       d = a.Kc - 1;
-    for (; 0 <= d && e[d].sn & 1024; ) --d;
+    for (; 0 <= d && e[d].sn & 1024;) --d;
     ++d;
     return a.Kc - d >= b;
   }
@@ -302382,7 +302366,7 @@
             0 === b ? this.Ha.Ll(0, 0) : ((d = this.Ha.Fk.qc[b - 1].Qa + 1), this.Ha.Ll(d, 0));
           else {
             a = AscDFH.c1b === a.fa ? !0 : !1;
-            for (var e = this.Ha.Fk.Qpd(); b < e - 1; ) {
+            for (var e = this.Ha.Fk.Qpd(); b < e - 1;) {
               b++;
               d = this.Ha.Fk.qc[b].Rf;
               if ((!0 === a && null !== d.Iy) || (!0 !== a && null !== d.Fy)) break;
@@ -302397,7 +302381,7 @@
           b = this.Ha;
           a = b.Fk.CVa(this);
           if (-1 !== a) {
-            for (var f = (d = null), g = null, h = null, p = null, k = null; 0 <= a; )
+            for (var f = (d = null), g = null, h = null, p = null, k = null; 0 <= a;)
               ((e = b.Fk.qc[a].Rf),
                 null === d && (d = e.Iy),
                 null === f && (f = e.iz),
@@ -303615,7 +303599,7 @@
     };
     b.prototype.mld = function (d, f) {
       if (1 !== this.vx.length || this.Document.Mg()) return new AscWord.kfb(d, f);
-      for (var g = this.vx[0].GNa(); g && !g.np() && g.Nk(); ) g = g.GNa();
+      for (var g = this.vx[0].GNa(); g && !g.np() && g.Nk();) g = g.GNa();
       if ((g = g ? g.np() : null)) {
         let h = this.Jg.Nr(g.Af).zm(g.Sc),
           p = this.Jg.Nr(d).zm(f);
@@ -303873,8 +303857,8 @@
   }
   function Yy(a, b) {
     b = !0 === b ? 'm;cm;d;cd;c;xc;l;xl;x;ix;v;iv;i; '.split(';') : 'M;CM;D;CD;C;XC;L;XL;X;IX;V;IV;I; '.split(';');
-    for (var e = [1e3, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1, 0], d = '', f = 0; 0 < a; ) {
-      for (; e[f] <= a; ) ((d += b[f]), (a -= e[f]));
+    for (var e = [1e3, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1, 0], d = '', f = 0; 0 < a;) {
+      for (; e[f] <= a;) ((d += b[f]), (a -= e[f]));
       f++;
       if (f >= b.length) break;
     }
@@ -304569,7 +304553,7 @@
   }
   function gO(a, b, e) {
     a.Vi = [];
-    for (var d = 0, f = 0; -1 !== (f = e.indexOf('%', f)) && f < e.length; )
+    for (var d = 0, f = 0; -1 !== (f = e.indexOf('%', f)) && f < e.length;)
       if (f < e.length - 1 && 49 <= e.charCodeAt(f + 1) && e.charCodeAt(f + 1) <= 49 + b) {
         if (f > d) {
           d = e.substring(d, f);
@@ -306463,7 +306447,7 @@
         this.pyb = [];
         this.Ha.qd.ILi(a);
         d = 0;
-        for (var p = DO; EO != p; ) p = this.aa.Op(d++, !0);
+        for (var p = DO; EO != p;) p = this.aa.Op(d++, !0);
         this.Vd.rfc[a] = this.aa.CC();
         this.Vd.KBa[a] = BO(this.Ha, a);
         this.Vd.Rf[a] = b;
@@ -306520,7 +306504,7 @@
         Bj(this.aa, a);
         this.aa.VL();
         a = 0;
-        for (var b = DO; EO !== b; ) b = this.aa.Op(a++, !0);
+        for (var b = DO; EO !== b;) b = this.aa.Op(a++, !0);
         this.Fwa();
       }
     },
@@ -307332,17 +307316,15 @@
       this.Ykd = !0;
       var h = this.Ne,
         p = this.Ha.dW(e);
-      if (
-        !(
-          !(2 <= d.Zn) ||
-          editor.E0 ||
-          editor.e6() ||
-          b <= p.ra ||
-          (null !== (g = this.Sa[e].fr) && !0 === g.WQb(a, b)) ||
-          b >= p.Kg ||
-          (null !== (g = this.Sa[e].Qu) && !0 === g.WQb(a, b))
-        )
-      )
+      if (!(
+        !(2 <= d.Zn) ||
+        editor.E0 ||
+        editor.e6() ||
+        b <= p.ra ||
+        (null !== (g = this.Sa[e].fr) && !0 === g.WQb(a, b)) ||
+        b >= p.Kg ||
+        (null !== (g = this.Sa[e].Qu) && !0 === g.WQb(a, b))
+      ))
         return (null != this.Cf && this.Cf.bd(), (d.Zn = 1), !1);
       this.Ne = e;
       var k = null;
@@ -308456,7 +308438,7 @@
   };
   A.Dgb = function (a, b) {
     if (-1 === a || void 0 === a) a = this.aa.length;
-    for (; 0 <= a; ) {
+    for (; 0 <= a;) {
       if (0 === a) {
         if ((a = this.Ji()) && a.Dgb) return a.Dgb(!0, b);
         break;
@@ -309867,7 +309849,7 @@
                   g.Op(0);
                   q = g.jra(0);
                   if (q.cb - q.Ta > e.lc)
-                    for (k = AscCommon.qmd(f, !0); 1 < k; ) {
+                    for (k = AscCommon.qmd(f, !0); 1 < k;) {
                       h.QK(k);
                       g.Op(0);
                       q = g.jra(0);
@@ -309875,7 +309857,7 @@
                       k -= 0.1;
                     }
                   else {
-                    for ((d = d.ka.tb.Xb) || (d = 12); k <= d; ) {
+                    for ((d = d.ka.tb.Xb) || (d = 12); k <= d;) {
                       h.QK(k);
                       g.Op(0);
                       q = g.jra(0);
@@ -309983,7 +309965,7 @@
           p = p.ROb;
           var r = -1;
           if (!0 === k)
-            for (var q = h, n = a.Fk.qc.length; q < n; ) {
+            for (var q = h, n = a.Fk.qc.length; q < n;) {
               var t = a.Fk.qc[q].Rf;
               if (h === q || null === t.eBa(g, k, p)) {
                 if (!0 === t.N7) {
@@ -310012,7 +309994,7 @@
       if (0 > h) return (a.m7a(), 255);
       h >= a.aa.length && (h = a.aa.length - 1);
       g = hQ(a, h);
-      for (g = -1 !== g && 1 < g ? a.Sa[g - 1].La : 0; h > g; )
+      for (g = -1 !== g && 1 < g ? a.Sa[g - 1].La : 0; h > g;)
         if (((k = a.aa[h - 1]), Tj === k.de() && k.Jp(!1).Cb.Ts)) (h--, (b.Su.mh = k.Wp(k.bW())));
         else break;
       g = a.aa[h];
@@ -310918,7 +310900,7 @@
   }
   function sP(a) {
     a.gna.jb = null;
-    for (var b = a.gna.rp, e = a.Sa.length; b < e; ) {
+    for (var b = a.gna.rp, e = a.Sa.length; b < e;) {
       var d = a.Hi;
       var f = b,
         g = e,
@@ -311169,7 +311151,7 @@
     if (this.DNb()) {
       var e = this.h7(),
         d = e;
-      for (this.Qv(AscDFH.bkf); ; ) {
+      for (this.Qv(AscDFH.bkf); ;) {
         var f = new mi(this.Bc, this),
           g = new ni(f, !1);
         f.Xg(0, g);
@@ -311514,7 +311496,7 @@
     h = this.Sa[e].Al[h];
     e = h.ug.length;
     for (g = 0; g < e - 1 && !(a < (h.ug[g].Fe + h.ug[g + 1].pa) / 2); ++g);
-    for (; 0 < g && (!0 === h.ug[g].BU || h.ug[g].ya < h.ug[g].La); ) g--;
+    for (; 0 < g && (!0 === h.ug[g].BU || h.ug[g].ya < h.ug[g].La);) g--;
     d.Xq = g;
     d.AJ = e;
     h = h.ug[g];
@@ -311918,7 +311900,7 @@
     for (let h = 0, p = a.length; h < p; ++h) d += String.fromCodePoint(a[h]);
     f = this.Ky(void 0);
     a = a.length;
-    for (var g; 0 <= a; ) {
+    for (var g; 0 <= a;) {
       this.hy(!0, !1);
       g = this.Ho(!0);
       if (!g || g === d) break;
@@ -313189,12 +313171,12 @@
     f = a.Fk.qc[d].Rf.Iwa.Db;
     var h = a.Fk.qc[d].Rf.In(),
       p = [];
-    for (p.push({ ZS: g, US: h }); (0 > f || gz.w4 === h) && 0 < d; )
+    for (p.push({ ZS: g, US: h }); (0 > f || gz.w4 === h) && 0 < d;)
       (d--, (g = TQ(a, d, b)), (f = a.Fk.qc[d].Rf.Iwa.Db), (h = a.Fk.qc[d].Rf.In()), p.push({ ZS: g, US: h }));
     0 > f && (f = 1);
     d = p.length - 1;
     g = p[d].ZS;
-    for (h = p[d].ZS; 0 <= d; )
+    for (h = p[d].ZS; 0 <= d;)
       ((g = p[d].ZS),
         (a = p[d].US),
         (f += g - h),
@@ -313462,14 +313444,14 @@
           if (b[0].vd === b[1].vd) {
             d = b[0].vd;
             f = b[0].ra;
-            for (var k = b[1].ra, r = f, q = VQ(h); q.ra < f && r < k; )
+            for (var k = b[1].ra, r = f, q = VQ(h); q.ra < f && r < k;)
               ((r += 10), (h = UQ(this, d, r)) && (q = VQ(h)));
           } else {
             d = b[0].vd;
             f = b[0].ra;
             k = this.Sa[d] ? this.Sa[d].he : 297;
             r = f;
-            for (q = VQ(h); q.ra < f && r < k; ) ((r += 10), (h = UQ(this, d, r)) && (q = VQ(h)));
+            for (q = VQ(h); q.ra < f && r < k;) ((r += 10), (h = UQ(this, d, r)) && (q = VQ(h)));
             r >= k && (h = UQ(this, d + 1, 0));
           }
           h && ((p = h), (g = VQ(p)));
@@ -313714,7 +313696,7 @@
     var k = f.owa();
     g = e.ug.length;
     d === h ? ((f = f.SNa()), (h = Math.min(p + k - 1, g - 1))) : ((f = 0), (h = Math.min(k - p + (d - h) * g, g - 1)));
-    for (; !0 === e.ug[h].BU && h > f; ) h--;
+    for (; !0 === e.ug[h].BU && h > f;) h--;
     for (p = h; f < h; ++f)
       if (b < (e.ug[f].Fe + e.ug[f + 1].pa) / 2) {
         p = f;
@@ -314387,7 +314369,7 @@
           d.MGa(!1, !1);
           var f = [],
             g = a.rn();
-          for (d = g.Ji() ? g.Ji().Mv(!0) : null; d; ) {
+          for (d = g.Ji() ? g.Ji().Mv(!0) : null; d;) {
             d = d.parent;
             for (var h = !1, p = 0, k = f.length; p < k; ++p)
               if (f[p] === g) {
@@ -314517,7 +314499,7 @@
       if (e === Asc.o5.mh) {
         a.ih.I1 = !1;
         a.ih.n7a = !1;
-        for (DC(a); a.ih.I1; ) ((a.ih.I1 = !1), a.Op());
+        for (DC(a); a.ih.I1;) ((a.ih.I1 = !1), a.Op());
         a.ih.n7a = !0;
         b.Jf(!1);
       }
@@ -314556,7 +314538,7 @@
               if (e !== Asc.o5.CMb) {
                 a.ih.I1 = !1;
                 a.ih.n7a = !1;
-                for (DC(a); a.ih.I1; ) ((a.ih.I1 = !1), a.Op());
+                for (DC(a); a.ih.I1;) ((a.ih.I1 = !1), a.Op());
                 a.ih.n7a = !0;
                 d.Jf(!1);
               }
@@ -315206,7 +315188,7 @@
                           var Q = !0;
                           if (0.001 > Math.abs(Ma - d.si[Cb])) (Sa++, (Ma += L));
                           else {
-                            for (; Ma < d.si[Cb]; )
+                            for (; Ma < d.si[Cb];)
                               if ((Sa++, (Ma += L), 0.001 > Math.abs(Ma - d.si[Cb]))) {
                                 Sa++;
                                 Ma += L;
@@ -315961,7 +315943,7 @@
       b = a.aa[d].Or(!0, b);
       if (null != b) return b;
       d++;
-      for (e = a.aa.length; d < e; ) {
+      for (e = a.aa.length; d < e;) {
         b = a.aa[d].Or(!0, !1);
         if (null != b) break;
         d++;
@@ -315969,7 +315951,7 @@
     } else {
       b = a.aa[d].Or(!1, b);
       if (null != b) return b;
-      for (d--; 0 <= d; ) {
+      for (d--; 0 <= d;) {
         b = a.aa[d].Or(!1, !1);
         if (null != b) break;
         d--;
@@ -317490,7 +317472,7 @@
     if (a) {
       a.ff();
       if (!a.Selection.Za)
-        for (var b = a.fBa(); b && xi === b.fa && b.wrd(); ) {
+        for (var b = a.fBa(); b && xi === b.fa && b.wrd();) {
           a.Kx();
           var e = a.fBa();
           if (e === b) break;
@@ -317512,7 +317494,7 @@
       if (f && !((e && (0 >= d || 8 < d)) || (!e && (8 <= d || 0 > d)))) {
         f = [f];
         var g = [d];
-        for (b++; b < a.qc.length; ) {
+        for (b++; b < a.qc.length;) {
           var h = a.qc[b].Sc;
           if (h <= d) break;
           f.push(a.qc[b].ab);
@@ -317580,7 +317562,7 @@
   function mS(a, b) {
     if (0 > b || b >= a.qc.length) return 0;
     var e = a.Awb(b);
-    for (b += 1; b < a.qc.length; ) {
+    for (b += 1; b < a.qc.length;) {
       if (e >= a.Awb(b)) return b;
       b++;
     }
@@ -318803,7 +318785,7 @@
     return r;
   };
   A.kpd = function () {
-    for (var a = this; a.mY(); ) {
+    for (var a = this; a.mY();) {
       if (a.Aa && a.Aa.$C) a = a.Aa.$C(!0);
       else break;
       if (!a) return this;
@@ -318814,7 +318796,7 @@
     Bj(this, e);
     this.qg(0, 0, a, 2e4);
     a = DO;
-    for (b = 0; EO !== a; ) a = this.Op(b++, !0);
+    for (b = 0; EO !== a;) a = this.Op(b++, !0);
   };
   A.uQ = function (a) {
     var b = 0,
@@ -319424,7 +319406,7 @@
       }
       var d = this.h7();
       e = d;
-      for (this.Ha.Qv(AscDFH.akf); ; ) {
+      for (this.Ha.Qv(AscDFH.akf); ;) {
         var f = new mi(this.Bc, this, !0 === this.Aq),
           g = new ni(f, !1);
         f.Xg(0, g);
@@ -320170,7 +320152,7 @@
     var f;
     for (d && (f = cK(d)); b <= e; b++) sl(this.aa[b], a);
     if (d && f && ((e = AscFormat.ob(d.ka.Sc) ? d.ka.Sc : 0), cK(d).tBa()))
-      for (d = d.zl; null != d && Tj === d.de(); ) {
+      for (d = d.zl; null != d && Tj === d.de();) {
         b = d.Tfa.ee;
         var g = cK(d);
         if (e < b) d = d.zl;
@@ -321622,7 +321604,7 @@
         b = this.aa[e].Or(!0, !0);
         if (null != b) return b;
         e++;
-        for (var d = this.aa.length; e < d; ) {
+        for (var d = this.aa.length; e < d;) {
           b = this.aa[e].Or(!0, !1);
           if (null != b) return b;
           e++;
@@ -321630,20 +321612,20 @@
       } else {
         b = this.aa[e].Or(!1, !0);
         if (null != b) return b;
-        for (e--; 0 <= e; ) {
+        for (e--; 0 <= e;) {
           b = this.aa[e].Or(!1, !1);
           if (null != b) return b;
           e--;
         }
       }
     } else if (((d = this.aa.length), !0 === a))
-      for (e = 0; e < d; ) {
+      for (e = 0; e < d;) {
         b = this.aa[e].Or(!0, !1);
         if (null != b) return b;
         e++;
       }
     else
-      for (e = d - 1; 0 <= e; ) {
+      for (e = d - 1; 0 <= e;) {
         b = this.aa[e].Or(!1, !1);
         if (null != b) return b;
         e--;
@@ -322445,7 +322427,7 @@
       if (g >= b.Sa.length) d = !0;
       else {
         rC(b);
-        for (b.MNb = !1; ; ) {
+        for (b.MNb = !1; ;) {
           h -= 0.1;
           if (0 > h || b.Ne < g)
             if (((b.Ne = g), 0 === b.Ne)) {
@@ -322455,7 +322437,7 @@
               b.Ne--;
               f = b.Sa[b.Ne].he;
               h = b.Ne;
-              for (var p; ; )
+              for (var p; ;)
                 if ((b.iy(d, f, a), b.lR(!1, !0, !1), b.Ne > h)) {
                   if (((b.Ne = h), (f -= 0.1), 0 > f))
                     if (0 === b.Ne) {
@@ -322511,7 +322493,7 @@
         var p = b.Sa[b.Ne].he;
         rC(b);
         b.MNb = !1;
-        for (var k; ; ) {
+        for (var k; ;) {
           h += 0.1;
           if (h > p || b.Ne > g)
             if (((b.Ne = g), b.Sa.length - 1 <= b.Ne)) {
@@ -322521,7 +322503,7 @@
               b.Ne++;
               f = 0;
               k = b.Ne;
-              for (h = !1; ; )
+              for (h = !1; ;)
                 if ((b.iy(d, f, a), b.lR(!1, !0, !1), b.Ne < k)) {
                   f += 0.1;
                   if (f > b.Sa[k].he) {
@@ -324577,7 +324559,7 @@
           P = 0;
         k = { $a: 0, Wb: 0 };
         d = 0;
-        for (U = CR(this.aa[n.$a], n.Wb).Uj; d < h.length; ) {
+        for (U = CR(this.aa[n.$a], n.Wb).Uj; d < h.length;) {
           k = h[d];
           if (k.$a != r) break;
           f = this.aa[k.$a];
@@ -324585,7 +324567,7 @@
           P = CR(f, k.Wb).Uj + Lk(p) - 1;
           d++;
         }
-        for (d = 0; d < h.length; ) {
+        for (d = 0; d < h.length;) {
           k = h[d];
           if (k.$a === q) break;
           d++;
@@ -325364,7 +325346,7 @@
     }
   };
   A.vOc = function () {
-    for (var a = 0; a < this.Sa.length && 1 == this.cD(a); ) a++;
+    for (var a = 0; a < this.Sa.length && 1 == this.cD(a);) a++;
     mT(this, a);
   };
   A.zia = function (a) {
@@ -327960,7 +327942,7 @@
       for (g = h; g < h + p; g++)
         if (((r = !0), 0.001 > Math.abs(b - this.si[g]))) (w++, (b += q));
         else {
-          for (; b < this.si[g]; )
+          for (; b < this.si[g];)
             if (
               (0 === f[g] && (k[g] = b - this.si[g - 1]), (f[g] += 1), w++, (b += q), 0.001 > Math.abs(b - this.si[g]))
             ) {
@@ -328790,7 +328772,7 @@
   function Mk(a, b, e, d) {
     var f = 1;
     for (b += 1; b < a.aa.length; b++) {
-      for (var g = a.aa[b], h = Km(g).Cn, p = 0, k = g.aa.length, r = !1; h <= e && p < k; ) {
+      for (var g = a.aa[b], h = Km(g).Cn, p = 0, k = g.aa.length, r = !1; h <= e && p < k;) {
         var q = AR(g, p),
           n = Lk(q);
         q = Kk(q);
@@ -328825,7 +328807,7 @@
     for (--b; 0 <= b; b--) {
       g = a.aa[b];
       h = Km(g).Cn;
-      for (var p = 0, k = g.aa.length, r = !1; h <= e && p < k; ) {
+      for (var p = 0, k = g.aa.length, r = !1; h <= e && p < k;) {
         var q = AR(g, p),
           n = Lk(q);
         q = Kk(q);
@@ -328893,9 +328875,9 @@
             }
           null !== h && a.Wd(d).ZBa(h, bl);
         }
-        for (g = 0; g < f.length; ) {
+        for (g = 0; g < f.length;) {
           B = 1;
-          for (b = f[g]; g + B < f.length && f[g] + B === f[g + B]; ) B++;
+          for (b = f[g]; g + B < f.length && f[g] + B === f[g + B];) B++;
           a.oe[b - 1 + B].wt === a.oe[b - 1].wt &&
             ((e = a.oe[b - 1 + B].wt),
             Ml(a.aa[b - 1], a.oe[b - 1 + B].lc[e] + a.oe[b - 1 + B].ra[e] - a.oe[b - 1].ra[e], bl));
@@ -328969,7 +328951,7 @@
             : (b[g][b[g].length - 1] = { Na: 0, fa: 1, fo: 0 }));
     }
     h = [];
-    for (var p = !1, k = 0; 1 != p; ) {
+    for (var p = !1, k = 0; 1 != p;) {
       p = -1;
       for (g = 0; g < b.length; g++)
         !(-1 === p || f[g] < p) || (b[g].length - 1 === d[g] && 1 === b[g][d[g]].fa) || (p = f[g]);
@@ -329059,7 +329041,7 @@
   }
   function eU(a, b, e, d) {
     for (var f = null; 0 <= b; b--) {
-      for (var g = a.aa[b], h = Km(g).Cn, p = 0, k = g.aa.length, r = !1; h <= e && p < k; ) {
+      for (var g = a.aa[b], h = Km(g).Cn, p = 0, k = g.aa.length, r = !1; h <= e && p < k;) {
         var q = AR(g, p),
           n = Lk(q),
           t = Kk(q);
@@ -329080,7 +329062,7 @@
   }
   function hU(a, b, e, d) {
     for (var f = null, g = b, h = a.aa.length; g < h; g++) {
-      for (var p = a.aa[g], k = Km(p).Cn, r = 0, q = p.aa.length, n = !1; k <= e && r < q; ) {
+      for (var p = a.aa[g], k = Km(p).Cn, r = 0, q = p.aa.length, n = !1; k <= e && r < q;) {
         var t = AR(p, r),
           w = Lk(t),
           z = Kk(t);
@@ -329283,10 +329265,10 @@
         k < g && (g = k);
         f = p;
         f < h && (f = h);
-        for (h = 0.1; g < a.si.length - 1 && g < f; )
+        for (h = 0.1; g < a.si.length - 1 && g < f;)
           if (a.si[g] - a.si[g - 1] < h) ((h -= a.si[g] - a.si[g - 1]), g++);
           else break;
-        for (h = 0.1; 0 < f && f > g; )
+        for (h = 0.1; 0 < f && f > g;)
           if (a.si[f] - a.si[f - 1] < h) ((h -= a.si[f] - a.si[f - 1]), f--);
           else break;
         for (; d <= b; ++d) {
@@ -329419,7 +329401,7 @@
     p[0] = f[0];
     k = 1;
     for (a = f.length; k < a; ++k) p[k] = f[k] - f[k - 1];
-    for (b = b[b.length - 1]; 0 < g && 0.001 < b; ) {
+    for (b = b[b.length - 1]; 0 < g && 0.001 < b;) {
       w = e / b;
       r = [];
       for (f = 0; f < h.length; f++) r[f] = h[f];
@@ -329827,7 +329809,7 @@
           t = q.nwa().fa,
           w = q.nwa().Na;
         if (k < r - 1)
-          for (var z = k + 1; z < r; ) {
+          for (var z = k + 1; z < r;) {
             var u = h.xi(z);
             if (Vh === u.sh(!1).kY) ((n += Lk(u)), Rh(h, z), r--, z--, t === u.nwa().fa && (w += u.nwa().ta));
             else break;
@@ -330009,7 +329991,7 @@
     vU(e);
     var d = Vk(this, a, b);
     if (d && ((a = d.Qa), (b = d.$a.Qa), !(b >= this.sm()))) {
-      for (var f = e.sm() + b - this.sm(); 0 < f; )
+      for (var f = e.sm() + b - this.sm(); 0 < f;)
         (this.bd(), (this.rd = this.Wd(this.sm() - 1).xi(0)), this.LX(!1, void 0, !1), f--, vU(this));
       f = [];
       for (var g = !1, h = NS(this), p = null, k = 0, r = e.sm(); k < r; ++k)
@@ -330151,7 +330133,7 @@
           k[g] = !0;
           b += r;
         }
-        for (q = []; ; ) {
+        for (q = []; ;) {
           r = E = !1;
           g = 0;
           for (h = this.sm(); g < h; ++g)
@@ -330200,7 +330182,7 @@
         e = 0;
         for (h = this.yB.length; e < h; ++e) ((f[e] = this.yB[e]), (g += f[e]), (d[e] = !0));
         a = g + a;
-        for (p = []; ; ) {
+        for (p = []; ;) {
           r = E = !1;
           e = 0;
           for (h = this.yB.length; e < h; ++e)
@@ -330754,7 +330736,7 @@
       a = this.Na;
       b = this.lc;
       e = this.Iv;
-      for (var p = this.Ex, k = !1; 1 != k; ) {
+      for (var p = this.Ex, k = !1; 1 != k;) {
         k = !0;
         for (var r = 0; r < g.length; r++) {
           var q = g[r];
@@ -331829,7 +331811,7 @@
     }
     this.ife(a);
     if (!0 === this.Kl() && this.Ha && this.Aa === this.Ha) {
-      for (var ib = !1, Wa = !1, L = this.cm; L && L instanceof ul; ) L = L.jwa();
+      for (var ib = !1, Wa = !1, L = this.cm; L && L instanceof ul;) L = L.jwa();
       if (null !== L && Tj === L.In() && !0 === L.tl() && void 0 !== L.Rf) {
         var ka = L.Rf,
           ca = this.Ha.Fk.rt(this.Qa).Rf;
@@ -332283,7 +332265,7 @@
             k[w].push({ Db: u, Na: B }),
             r++);
     }
-    for (; 0 < r; ) {
+    for (; 0 < r;) {
       n = r;
       w = 2;
       for (u = k.length; w < u; ++w)
@@ -332351,7 +332333,7 @@
       for (k = Math.min(k.gv - d, f); B < k; ++B) t.push(w);
     }
     if (-1 !== q)
-      for (; n <= d + f - 1 && q < p; ) {
+      for (; n <= d + f - 1 && q < p;) {
         w = b.xi(q);
         z = Lk(w);
         Vh === Kk(w) && b === a.Wd(e - 1) && (w = hU(a, e - 1, n, z));
@@ -333806,7 +333788,7 @@
       b.Xo(d.r, d.yb, d.b, 255);
       e = wT(k).gv;
       a = a.yx.length - xU(k).gv;
-      for (k = f; e < a; ) {
+      for (k = f; e < a;) {
         d = !1;
         for (var q = 0, n = r.length; q < n; ++q) {
           var t = r[q];
@@ -333915,12 +333897,10 @@
     a.ka.Uu !== b && (a.Go(), History.ja(new KU(a, a.ka.Uu, b)), (a.ka.Uu = b), a.Og(), a.Vy());
   }
   function Ml(a, b, e) {
-    if (
-      !(
-        (void 0 === a.ka.he && void 0 === b) ||
-        (void 0 != a.ka.he && e === a.ka.he.Nq && 0.001 > Math.abs(b - a.ka.he.ta))
-      )
-    ) {
+    if (!(
+      (void 0 === a.ka.he && void 0 === b) ||
+      (void 0 != a.ka.he && e === a.ka.he.Nq && 0.001 > Math.abs(b - a.ka.he.ta))
+    )) {
       var d = a.ka.he;
       b = void 0 != b ? new vw(b, e) : void 0;
       a.Go();
@@ -337693,7 +337673,7 @@
     b.prototype.Obc = function (e) {
       if (e && e.p7()) return this.pXf(e);
       let d = this.lze(e);
-      for (; !this.xQf(d); ) d = this.lze(e);
+      for (; !this.xQf(d);) d = this.lze(e);
       return d;
     };
     b.prototype.xQf = function (e) {
@@ -337716,7 +337696,7 @@
       for (let g = 0, h = d.length; g < h; ++g) e[d[g].f7()] = d;
       d = d.length;
       let f = 'Choice' + d;
-      for (; e[f]; ) (d++, (f = 'Choice' + d));
+      for (; e[f];) (d++, (f = 'Choice' + d));
       return f;
     };
     a.AscWord = a.AscWord || {};
@@ -341956,7 +341936,7 @@
   }
   function rea(a, b) {
     if (0 == a.indexOf('teamlab_data:'))
-      for (a = { data: a, Oa: 13 }; ; ) {
+      for (a = { data: a, Oa: 13 }; ;) {
         var e = C4(a);
         if (-1 == e) break;
         var d = C4(a);
@@ -346175,7 +346155,7 @@
           k.memory.Ra(g.BSa);
         });
       if (null != g.Jpa) {
-        for (; this.Tnc[g.Jpa]; ) g.Jpa = AscCommon.nOb();
+        for (; this.Tnc[g.Jpa];) g.Jpa = AscCommon.nOb();
         this.Tnc[g.Jpa] = 1;
         this.oa.sa(11, function () {
           k.memory.Hs(g.Jpa);
@@ -352457,7 +352437,7 @@
   function Q5(a, b, e) {
     if (a && a.SK && a.Ip)
       if (((e = e.Ga()), vx !== a.Ip())) {
-        for (a = a.Nz(); a.y7; ) a = a.y7;
+        for (a = a.Nz(); a.y7;) a = a.y7;
         a.Kwa = b;
         a.y7 = e;
       } else a.SK(b, e, !1);
@@ -352503,7 +352483,7 @@
     this.wd.b8 = b.b8;
     this.wd.kM = b.kM;
     this.IFb = function (e) {
-      for (var d = 'string' === typeof e, f = 0, g = AscCommon.DQa.Yib.length, h = '', p = ''; ; ) {
+      for (var d = 'string' === typeof e, f = 0, g = AscCommon.DQa.Yib.length, h = '', p = ''; ;) {
         g++;
         var k = d ? e.charCodeAt(g) : e[g];
         if (59 == k)
@@ -352644,7 +352624,7 @@
               break;
             case 13:
               this.stream.Pd(B);
-              for (B = this.stream.Bb + g; this.stream.Bb < B; )
+              for (B = this.stream.Bb + g; this.stream.Bb < B;)
                 switch (this.stream.sb()) {
                   case 0:
                     z = this.stream.mxa();
@@ -352936,7 +352916,7 @@
               g.wm(String.fromCharCode(r.vAc.char), -1),
               h.Oe(E, g, !1));
       for (k = 0; k < this.wd.xyc.length; ++k)
-        for (Z = this.wd.xyc[k], h = Z.Z9(), E = Z.LH(h); Z.lj() > Asc.LCb; ) Uk(Z, Z.lj() - Asc.LCb, h, E);
+        for (Z = this.wd.xyc[k], h = Z.Z9(), E = Z.LH(h); Z.lj() > Asc.LCb;) Uk(Z, Z.lj() - Asc.LCb, h, E);
       Z = {};
       for (k in this.wd.nua)
         ((E = this.wd.nua[k]), (h = new AscCommon.MFa(this.Document.hk, d(E))), this.Document.hk.ja(h), (Z[E.jb] = h));
@@ -353074,7 +353054,7 @@
       for (n in t) q.push(n);
       for (n = 0; n < this.wd.xyc.length; ++n) {
         t = this.wd.xyc[n];
-        for (var z = t.Z9(), u = t.LH(z); t.lj() > Asc.LCb; ) Uk(t, t.lj() - Asc.LCb, z, u);
+        for (var z = t.Z9(), u = t.LH(z); t.lj() > Asc.LCb;) Uk(t, t.lj() - Asc.LCb, z, u);
       }
       t = {};
       z = this.Document && this.Document.Aa && this.Document.Aa instanceof AscFormat.Tp;
@@ -354317,7 +354297,7 @@
       }
     if (!a) return null;
     if (0 >= a.qc.length) {
-      for (b = g - 1; 0 <= b; ) {
+      for (b = g - 1; 0 <= b;) {
         if (0 < f.ug[b].qc.length) {
           a = f.ug[b];
           g = b;
@@ -354326,7 +354306,7 @@
         b--;
       }
       if (0 > b)
-        for (b = g + 1; b <= f.ug.length - 1; ) {
+        for (b = g + 1; b <= f.ug.length - 1;) {
           if (0 < f.ug[b].qc.length) {
             a = f.ug[b];
             g = b;
@@ -354343,12 +354323,12 @@
   function v6(a, b, e, d) {
     b = x6(a, b, e, d);
     if (null !== b) return b;
-    for (e = d - 1; 0 <= e; ) {
+    for (e = d - 1; 0 <= e;) {
       b = x6(a, GD, GD, e);
       if (null !== b) return b;
       e--;
     }
-    for (e = d + 1; e < a.Sa.length; ) {
+    for (e = d + 1; e < a.Sa.length;) {
       b = x6(a, -GD, -GD, e);
       if (null !== b) return b;
       e++;
@@ -355885,7 +355865,7 @@
             }
           if (h) {
             if (0 >= h.qc.length) {
-              for (r = k - 1; 0 <= r; ) {
+              for (r = k - 1; 0 <= r;) {
                 if (0 < p.ug[r].qc.length) {
                   h = p.ug[r];
                   k = r;
@@ -355894,7 +355874,7 @@
                 r--;
               }
               if (0 > r)
-                for (r = k + 1; r <= p.ug.length - 1; ) {
+                for (r = k + 1; r <= p.ug.length - 1;) {
                   if (0 < p.ug[r].qc.length) {
                     h = p.ug[r];
                     k = r;
@@ -355918,12 +355898,12 @@
   function F6(a, b, e, d) {
     b = H6(a, b, e, d);
     if (null !== b) return b;
-    for (e = d - 1; 0 <= e; ) {
+    for (e = d - 1; 0 <= e;) {
       b = H6(a, GD, GD, e);
       if (null !== b) return b;
       e--;
     }
-    for (e = d + 1; e < a.Sa.length; ) {
+    for (e = d + 1; e < a.Sa.length;) {
       b = H6(a, -GD, -GD, e);
       if (null !== b) return b;
       e++;
@@ -358635,7 +358615,7 @@
             if ('\\' === ra[0]) {
               let v = '\\',
                 y = 1;
-              for (; ra[y] && /[a-zA-Z]/.test(ra[y]); ) ((v += ra[y]), y++);
+              for (; ra[y] && /[a-zA-Z]/.test(ra[y]);) ((v += ra[y]), y++);
               return v;
             }
           },
@@ -359038,11 +359018,11 @@
         [
           function (ra) {
             if ('\\' === ra[0]) {
-              for (var v = '\\', y = 1; ra[y] && /[a-zA-Z]/.test(ra[y]); ) ((v += ra[y]), y++);
+              for (var v = '\\', y = 1; ra[y] && /[a-zA-Z]/.test(ra[y]);) ((v += ra[y]), y++);
               if (ba.includes(v.slice(1)) || K.includes(v.slice(1))) return v;
             } else {
               v = 0;
-              for (y = ''; ra[v] && /[a-zA-Z]/.test(ra[v]); ) ((y += ra[v]), v++);
+              for (y = ''; ra[v] && /[a-zA-Z]/.test(ra[v]);) ((y += ra[v]), v++);
               if (K.includes(y) || ba.includes(y)) return y;
             }
           },
@@ -359106,7 +359086,7 @@
     };
     T.prototype.r9f = function (ra, v) {
       let y = 0;
-      for (; y <= v.length - 1; )
+      for (; y <= v.length - 1;)
         if (v[y] === ra[y]) y++;
         else return;
       return v;
@@ -360597,7 +360577,7 @@
       y = CG(ra, AscMath.rQ.Lrb) || '(' === ea || ')' === ea;
       var oa = new D(ra);
       ' ' === ea && (ha = !0);
-      for (ea = ''; oa.uwa(); ) {
+      for (ea = ''; oa.uwa();) {
         var N = oa.zl();
         if (!1 === N) break;
         if (1 !== oa.counter || !ha) {
@@ -360937,7 +360917,7 @@
         var t = this.ik(q[0]).data;
         n.push({ type: q[1], value: -1 === this.buc ? t : r[t][this.buc] });
       } else {
-        for (t = ''; this.Tc.Ae === q[0]; ) t += this.ik(q[0]).data;
+        for (t = ''; this.Tc.Ae === q[0];) t += this.ik(q[0]).data;
         n.push({ type: q[1], value: t });
       }
       return this.J4a(n);
@@ -360955,7 +360935,7 @@
     };
     b.prototype.rXf = function () {
       let q = [];
-      for (; this.Tc.data; )
+      for (; this.Tc.data;)
         if (this.k5a()) q.push(this.Cbc());
         else {
           let n = this.$Sa.jBe(this.Tc.index, !0);
@@ -361034,12 +361014,12 @@
     b.prototype.yPb = function (q) {
       let n = [],
         t = 1;
-      for (; this.k5a() || '\u2223' === this.Tc.data || '\\mid' === this.Tc.data || '\u24dc' === this.Tc.data; )
+      for (; this.k5a() || '\u2223' === this.Tc.data || '\\mid' === this.Tc.data || '\u24dc' === this.Tc.data;)
         if (this.k5a()) {
           let w = [this.Cbc(q)];
           ((w && !Array.isArray(w)) || (Array.isArray(w) && 0 < w.length)) && n.push(w);
         } else (this.ik(this.Tc.Ae), t++);
-      for (; n.length < t; ) n.push([]);
+      for (; n.length < t;) n.push([]);
       return n;
     };
     b.prototype.k5a = function () {
@@ -361139,7 +361119,7 @@
     };
     b.prototype.r0f = function () {
       let q = '';
-      for (this.ik(this.Tc.Ae); '}' !== this.Tc.data && void 0 !== this.Tc.data; ) q += this.ik(this.Tc.Ae).data;
+      for (this.ik(this.Tc.Ae); '}' !== this.Tc.data && void 0 !== this.Tc.data;) q += this.ik(this.Tc.Ae).data;
       this.ik(this.Tc.Ae);
       return q;
     };
@@ -361341,15 +361321,15 @@
       }
     };
     b.prototype.NZf = function () {
-      for ('\\substack' === this.ik(this.Tc.Ae).data && this.ik(this.Tc.Ae); '[' === this.Tc.data; ) this.Uba(1);
-      for (this.E4f(); '[' === this.Tc.data; ) this.Uba(1);
+      for ('\\substack' === this.ik(this.Tc.Ae).data && this.ik(this.Tc.Ae); '[' === this.Tc.data;) this.Uba(1);
+      for (this.E4f(); '[' === this.Tc.data;) this.Uba(1);
       let q = [];
-      for (var n = 0; '}' !== this.Tc.data && 'endOfMatrix' !== this.Tc.Ae; ) {
+      for (var n = 0; '}' !== this.Tc.data && 'endOfMatrix' !== this.Tc.Ae;) {
         var t = this.A_f();
         void 0 === t && ((t = []), n++);
         q.push(t);
       }
-      for (; q.length < n + 1; ) q.push([]);
+      for (; q.length < n + 1;) q.push([]);
       n = -Infinity;
       t = -1;
       for (var w = 0; w < q.length; w++) ((n = q[w]), void 0 === n && (q[w] = n = []), (n = n.length), (t = w));
@@ -361363,7 +361343,7 @@
     };
     b.prototype.A_f = function () {
       let q;
-      for (; '\\\\' !== this.Tc.data && '}' !== this.Tc.data && 'endOfMatrix' !== this.Tc.Ae; ) q = this.GYf();
+      for (; '\\\\' !== this.Tc.data && '}' !== this.Tc.data && 'endOfMatrix' !== this.Tc.Ae;) q = this.GYf();
       '\\\\' === this.Tc.data && this.ik(this.Tc.Ae);
       return q;
     };
@@ -361372,7 +361352,7 @@
       var n = 0;
       let t = 0,
         w = !1;
-      for (; this.k5a() || '&' === this.Tc.Ae; ) {
+      for (; this.k5a() || '&' === this.Tc.Ae;) {
         let z = n;
         '&' !== this.Tc.Ae
           ? (q.push(this.Cbc('&')), n++, (w = !0))
@@ -361388,7 +361368,7 @@
     b.prototype.Cbc = function (q) {
       this.AFc = q;
       const n = [];
-      for (; this.X4f(q); ) this.yrd() ? n.push(this.QPb()) : n.push(this.sBe());
+      for (; this.X4f(q);) this.yrd() ? n.push(this.QPb()) : n.push(this.sBe());
       this.AFc = void 0;
       return this.J4a(n);
     };
@@ -361403,7 +361383,7 @@
     };
     b.prototype.Uba = function (q) {
       let n = [];
-      for (; 0 < q; )
+      for (; 0 < q;)
         ('{' === this.Tc.data ? (this.ik(this.Tc.Ae), n.push(this.Cbc()), this.ik(this.Tc.Ae)) : n.push(this.sBe()),
           q--);
       return 1 === n.length && Array.isArray(n) ? n[0] : n;
@@ -361438,7 +361418,7 @@
     };
     b.prototype.v9f = function () {
       const r = [];
-      for (; this.Tc.data; ) this.nWa() ? r.push(this.AGa()) : this.avg(r);
+      for (; this.Tc.data;) this.nWa() ? r.push(this.AGa()) : this.avg(r);
       return { type: 'UnicodeEquation', body: r };
     };
     b.prototype.avg = function (r) {
@@ -361481,7 +361461,7 @@
     };
     b.prototype.xYf = function () {
       const r = [this.pwb()];
-      for (; 'nASCII' === this.Tc.Ae; ) r.push(this.pwb());
+      for (; 'nASCII' === this.Tc.Ae;) r.push(this.pwb());
       return this.J4a(r);
     };
     b.prototype.R4f = function () {
@@ -361532,7 +361512,7 @@
     };
     b.prototype.J0f = function () {
       const r = [this.pwb()];
-      for (; this.Tc.Ae === d.R4e[0]; ) r.push(this.pwb());
+      for (; this.Tc.Ae === d.R4e[0];) r.push(this.pwb());
       return { type: d.iH[1], value: this.J4a(r) };
     };
     b.prototype.O5f = function () {
@@ -361565,7 +361545,7 @@
     b.prototype.bqd = function () {
       this.ik(this.Tc.Ae);
       let r = '';
-      for (; '"' !== this.Tc.data && void 0 !== this.Tc.Ae; ) r += this.ik(this.Tc.Ae).data;
+      for (; '"' !== this.Tc.data && void 0 !== this.Tc.Ae;) r += this.ik(this.Tc.Ae).data;
       '"' === this.Tc.data && this.ik(this.Tc.Ae);
       return { type: d.Ume[1], value: r };
     };
@@ -361784,7 +361764,7 @@
     };
     b.prototype.WAe = function (r) {
       function q(z) {
-        for (; z.mrd(); ) {
+        for (; z.mrd();) {
           if (z.Tc.Ae === d.bva[0]) {
             var u = z.Fna(d.bva, !0);
             w.push(u);
@@ -361795,7 +361775,7 @@
         }
       }
       function n(z) {
-        for (; z.Ard(); ) {
+        for (; z.Ard();) {
           if (z.Tc.Ae === d.cva[0]) {
             var u = z.Fna(d.cva, !0);
             t.push(u);
@@ -361975,7 +361955,7 @@
     };
     b.prototype.Pze = function () {
       const r = [];
-      for (; this.RHc(); ) (r.push(this.Tc.data), this.ik(e.My.id));
+      for (; this.RHc();) (r.push(this.Tc.data), this.ik(e.My.id));
       return this.J4a(r);
     };
     b.prototype.RHc = function () {
@@ -361990,7 +361970,7 @@
     };
     b.prototype.GXf = function () {
       const r = [];
-      for (; this.LDe(); ) r.push(this.FXf());
+      for (; this.LDe();) r.push(this.FXf());
       return this.J4a(r);
     };
     b.prototype.MDe = function () {
@@ -362016,7 +361996,7 @@
       if ('(' === this.Tc.data) {
         this.ik(this.Tc.Ae);
         let r = [];
-        for (; this.tEe() || '@' === this.Tc.Ae || '&' === this.Tc.Ae; )
+        for (; this.tEe() || '@' === this.Tc.Ae || '&' === this.Tc.Ae;)
           ('@' === this.Tc.Ae && this.ik('@'), '&' === this.Tc.Ae ? this.ik('&') : r.push(this.SAe()));
         if (')' === this.Tc.data) return (this.ik(this.Tc.Ae), { type: d.E0e[1], value: r });
       } else return { type: d.iH[1], value: '\u2588' };
@@ -362063,7 +362043,7 @@
       const q = [];
       void 0 === r && (r = !1);
       let n = !1;
-      for (; this.grd() && !this.XHc() && !n; )
+      for (; this.grd() && !this.XHc() && !n;)
         if (
           (this.grd() &&
             !this.XHc() &&
@@ -362071,7 +362051,7 @@
           this.zEe(r) && q[q.length - 1])
         ) {
           let t = q[q.length - 1];
-          for (; this.zEe(r); )
+          for (; this.zEe(r);)
             if (this.Tc.data === r || (!r && this.fIc())) t = this.Vze(t);
             else if (this.Tc.data === r || (!r && this.eIc())) t = this.VAe(t);
             else if (this.Tc.data === r || (!r && this.hIc())) t = this.WAe(t);
@@ -362106,7 +362086,7 @@
       var q = 0;
       let n = 0,
         t = !1;
-      for (; this.nWa() || '&' === this.Tc.Ae; ) {
+      for (; this.nWa() || '&' === this.Tc.Ae;) {
         let w = q;
         '&' !== this.Tc.Ae
           ? (r.push(this.AGa()), q++, (t = !0))
@@ -362118,8 +362098,8 @@
     b.prototype.I_f = function () {
       let r = [],
         q = 0;
-      for (; this.tEe() || '@' === this.Tc.Ae; ) '@' === this.Tc.Ae ? (this.ik('@'), q++) : r.push(this.SAe());
-      if (r.length !== q + 1) for (; r.length != q + 1; ) r.push([]);
+      for (; this.tEe() || '@' === this.Tc.Ae;) '@' === this.Tc.Ae ? (this.ik('@'), q++) : r.push(this.SAe());
+      if (r.length !== q + 1) for (; r.length != q + 1;) r.push([]);
       return r;
     };
     b.prototype.zXf = function () {
@@ -362158,7 +362138,7 @@
     b.prototype.AGa = function (r) {
       r ||= [];
       const q = [];
-      for (; this.nWa() || r.includes(this.Tc.data); ) {
+      for (; this.nWa() || r.includes(this.Tc.data);) {
         if ('/' === this.Tc.data || '\u00a6' === this.Tc.data || '\u249e' === this.Tc.data) {
           var n = d.Upc[1];
           '\u00a6' === this.Tc.data && (n = d.Emc[1]);
@@ -362182,7 +362162,7 @@
     b.prototype.Fna = function (r, q) {
       let n = [],
         t = '';
-      for (; this.Tc.Ae === r[0]; ) q ? (t += f[this.ik(r[0]).data]) : ((t += this.Tc.data), this.ik(r[0]));
+      for (; this.Tc.Ae === r[0];) q ? (t += f[this.ik(r[0]).data]) : ((t += this.Tc.data), this.ik(r[0]));
       n.push({ type: r[1], value: t });
       return 1 === n.length ? n[0] : n;
     };
@@ -362198,7 +362178,7 @@
       return Array.isArray(r) && 1 === r.length ? r[0] : r;
     };
     b.prototype.CQe = function () {
-      for (; this.Tc.Ae === d.AK[0]; ) this.ik(d.AK[0]);
+      for (; this.Tc.Ae === d.AK[0];) this.ik(d.AK[0]);
     };
     b.prototype.RMc = function () {
       this.sae = !0;
@@ -364222,7 +364202,7 @@
       for (var b = this.aa.length; a < b; a++) Ly === this.aa[a].fa && this.aa[a].As(!0);
     }
     var e = this.aa.length;
-    for (a = 0; a < e; ) {
+    for (a = 0; a < e;) {
       b = this.aa[a];
       var d = 0 < a ? this.aa[a - 1].fa == Sj : !1;
       var f = a < e - 1 ? this.aa[a + 1].fa === Sj : !1;
@@ -364308,13 +364288,13 @@
         a = this.aa.length - 1;
       } else
         ((d = this.Selection.za), (a = this.Selection.ya), d > a && ((d = this.Selection.ya), (a = this.Selection.za)));
-      for (; null === e && d <= a; ) {
+      for (; null === e && d <= a;) {
         var f = this.aa[d].fa == Ly,
           g = this.aa[d].fa == Sj && !0 === this.aa[d].To();
         if (f || !g || b) e = this.aa[d].eY(!0);
         d++;
       }
-      for (; this.aa[a].fa == Sj && !0 === this.aa[a].To() && d < a + 1 && 0 == b; ) a--;
+      for (; this.aa[a].fa == Sj && !0 === this.aa[a].To() && d < a + 1 && 0 == b;) a--;
       for (b = d; b < a + 1; b++) ((d = this.aa[b].eY(!1)), null !== d && (e = e.Ki(d)));
     } else ((b = this.va), 0 <= b && b < this.aa.length && (e = this.aa[b].eY(a)));
     return e;
@@ -364497,11 +364477,11 @@
     return this.aa[a];
   };
   A.jwa = function () {
-    for (var a = this.aa.length - 1; this.aa[a].fa == Sj && this.aa[a].tl() && 0 < a; ) a--;
+    for (var a = this.aa.length - 1; this.aa[a].fa == Sj && this.aa[a].tl() && 0 < a;) a--;
     return this.aa[a].fa == Sj ? this.aa[a] : this.aa[a].jwa();
   };
   A.wwb = function () {
-    for (var a = 0; this.aa[a].fa == Sj && this.aa[a].tl() && a < this.aa.length - 1; ) a++;
+    for (var a = 0; this.aa[a].fa == Sj && this.aa[a].tl() && a < this.aa.length - 1;) a++;
     return this.aa[a].fa == Sj ? this.aa[a] : this.aa[a].wwb();
   };
   A.Ni = function (a) {
@@ -366044,7 +366024,7 @@
     if (!0 === a.cj) return !0;
     f--;
     if (!0 === d && Ly === this.aa[f + 1].fa) return (this.aa[f].ot(!1, a.La, e + 1), a.La.Jf(f, e), (a.cj = !0));
-    for (; 0 <= f; ) {
+    for (; 0 <= f;) {
       this.aa[f].fY(a, b, e + 1, !1);
       a.La.Jf(f, e);
       if (!0 === a.cj) return !0;
@@ -366064,7 +366044,7 @@
     if (!0 === a.cj) return !0;
     g++;
     if (!0 === d && Ly === this.aa[g - 1].fa) return (this.aa[g].Qr(a.La, e + 1), a.La.Jf(g, e), (a.cj = !0));
-    for (; g < h; ) {
+    for (; g < h;) {
       this.aa[g].eW(a, b, e + 1, !1, f);
       a.La.Jf(g, e);
       if (!0 === a.cj) return !0;
@@ -366092,7 +366072,7 @@
           if (!0 === d && Ly === this.aa[g + 1].fa)
             (this.aa[g].ot(!1, a.La, e + 1), a.La.Jf(g, e), (a.cj = !0), (a.zv = !0));
           else {
-            for (Sj === this.aa[g + 1].fa && !0 === a.Tr && (p = !0); 0 <= g; ) {
+            for (Sj === this.aa[g + 1].fa && !0 === a.Tr && (p = !0); 0 <= g;) {
               if (!0 !== p || Sj === this.aa[g].fa) {
                 d = a.zv;
                 if (49 !== this.aa[g].fa) {
@@ -366136,7 +366116,7 @@
           if (!0 === d && Ly === this.aa[g - 1].fa)
             (this.aa[g].Qr(a.La, e + 1), a.La.Jf(g, e), (a.cj = !0), (a.zv = !0));
           else {
-            for (Sj === this.aa[g - 1].fa && !0 === a.Tr && (k = !0); g < h; ) {
+            for (Sj === this.aa[g - 1].fa && !0 === a.Tr && (k = !0); g < h;) {
               if (!0 !== k || Sj === this.aa[g].fa) {
                 d = a.zv;
                 if (49 !== this.aa[g].fa) {
@@ -366471,7 +366451,7 @@
     d = !0;
     if (f == e) d = this.aa[f].g_(a, b);
     else
-      for (; f <= e; ) {
+      for (; f <= e;) {
         if (0 == this.aa[f].g_(a, b)) {
           d = !1;
           break;
@@ -366814,11 +366794,11 @@
     }
   }
   function xG(a) {
-    for (; a && a.aa && 0 < a.aa.length; ) a = a.aa[a.aa.length - 1];
+    for (; a && a.aa && 0 < a.aa.length;) a = a.aa[a.aa.length - 1];
     if (a) return String.fromCharCode(a.value);
   }
   function DG(a) {
-    for (; a && a.aa && 0 < a.aa.length; )
+    for (; a && a.aa && 0 < a.aa.length;)
       a =
         a.aa[a.aa.length - 1] && a.aa[a.aa.length - 1].aa && 2 <= a.aa[a.aa.length - 1].aa.length
           ? a.aa[a.aa.length - 1]
@@ -366904,7 +366884,7 @@
           else {
             var d = [];
             let p = this.gs.length - 1;
-            for (; 2 !== d && 0 <= p; ) ((d = this.gs[p]), p--);
+            for (; 2 !== d && 0 <= p;) ((d = this.gs[p]), p--);
             d = d ? d : !1;
             e[2] = this.Ld[0];
             0 === e[1]
@@ -366981,13 +366961,13 @@
       if (!a.jQ.uwa() && 0 >= a.cursor) return !1;
       let d = 0,
         f;
-      for (; a.jQ.uwa(); ) {
+      for (; a.jQ.uwa();) {
         let g = f,
           h = (f = a.jQ.aP());
         var e = String.fromCharCode(f);
         if ('"' !== a.LEc && '"' === e) {
           a: {
-            for (; a.jQ && !(0 > a.jQ.K1); )
+            for (; a.jQ && !(0 > a.jQ.K1);)
               if ((!a.jQ.uwa() && 0 < a.cursor && (a.cursor--, x8(a)), !(a.jQ instanceof HG) || 0 > a.jQ.K1))
                 (a.cursor--, x8(a));
               else if (a.jQ.uwa() && ((b = a.jQ.aP()), String.fromCharCode(b) === e)) {
@@ -367011,11 +366991,8 @@
     return !0;
   }
   function z8(a) {
-    for (a.o0a--; a.jQ && 0 !== a.o0a; )
-      for (
-        !a.jQ.uwa() && 0 < a.cursor && (a.cursor--, x8(a)), a.jQ instanceof HG || (a.cursor--, x8(a));
-        a.jQ.uwa();
-      ) {
+    for (a.o0a--; a.jQ && 0 !== a.o0a;)
+      for (!a.jQ.uwa() && 0 < a.cursor && (a.cursor--, x8(a)), a.jQ instanceof HG || (a.cursor--, x8(a)); a.jQ.uwa();) {
         var b = a.jQ.aP();
         b = String.fromCharCode(b);
         if (AscMath.rQ.ddb.GU(b)) z8(a);
@@ -368080,7 +368057,7 @@
     return this.aa[a.xf(b)].c_(a, b + 1);
   };
   A.eY = function () {
-    for (var a = null, b = 0, e = this.aa.length; null === a && b < e; )
+    for (var a = null, b = 0, e = this.aa.length; null === a && b < e;)
       (this.q5a(this.aa[b]) && (a = this.aa[b].eY(!0, !0)), b++);
     for (; b < e; ++b) {
       var d = this.aa[b].eY(!1, !0);
@@ -368371,7 +368348,7 @@
     q = a.ra;
     var n = null,
       t = 0;
-    for (k = 0; t < g; ) {
+    for (k = 0; t < g;) {
       p = h[t];
       if (null !== p) {
         var w = p.pa,
@@ -370899,7 +370876,7 @@
     this.Kzd.length = 0;
     this.fp.length = 0;
     this.Fsd.length = 0;
-    for (e[0] = 0; d < this.Ac; ) {
+    for (e[0] = 0; d < this.Ac;) {
       for (var q = (k = p = h = g = f = 0); q < this.Ac; q++) {
         var n = this.elements[q][0].d_.hVa.vz,
           t = n.length;
@@ -377150,7 +377127,7 @@
       return !this.W9b.length;
     };
     b.prototype.ORf = function () {
-      for (; !this.NHc(); ) this.bmd();
+      for (; !this.NHc();) this.bmd();
     };
     b.prototype.jOh = function (e) {
       if (!this.a$b[e]) return !1;
@@ -378220,8 +378197,8 @@
       if ('' === fa.trim() && !1 === Q) return fa;
       if (!this.bqb)
         if (f(ua.hg.Da)) {
-          for (Ia = L.Jbd(); Ia && '' === Ia.af.Wm().trim(); ) Ia = Ia.Jbd();
-          for (Cb = L.Kbd(); Cb && '' === Cb.af.Wm().trim(); ) Cb = Cb.Kbd();
+          for (Ia = L.Jbd(); Ia && '' === Ia.af.Wm().trim();) Ia = Ia.Jbd();
+          for (Cb = L.Kbd(); Cb && '' === Cb.af.Wm().trim();) Cb = Cb.Kbd();
           L = ca(Ia);
           Q = ca(Cb);
           'html' === ka || this.yU.jHb
@@ -378237,8 +378214,8 @@
                   : (fa = this.yca(fa, this.Zia.fVa, 'open'))
                 : (fa = this.yca(fa, this.Zia.fVa, 'wholly')));
         } else {
-          for (Ia = L.Jbd(); Ia && '' === Ia.af.Wm().trim(); ) Ia = Ia.Jbd();
-          for (Cb = L.Kbd(); Cb && '' === Cb.af.Wm().trim(); ) Cb = Cb.Kbd();
+          for (Ia = L.Jbd(); Ia && '' === Ia.af.Wm().trim();) Ia = Ia.Jbd();
+          for (Cb = L.Kbd(); Cb && '' === Cb.af.Wm().trim();) Cb = Cb.Kbd();
           var Va = Ia ? !!Ia.af.sh().Qd : !1,
             Na = Cb ? !!Cb.af.sh().Qd : !1,
             pb = Ia ? !!Ia.af.sh().He : !1,
@@ -385544,7 +385521,7 @@
     r.prototype.cPb = function (L) {
       let ka = this.Document,
         ca = 0;
-      for (; 0 !== ka.QHa; ) (ca++, ka.dic(!1));
+      for (; 0 !== ka.QHa;) (ca++, ka.dic(!1));
       let qa = ka.ih.n7a;
       ka.ih.n7a = !1;
       ka.ih.I1 = !1;
@@ -385553,7 +385530,7 @@
         DC(ka, { Su: { La: 0, mh: 0 }, z4a: [], Hi: [], rh: { Rl: !0, Map: {} } });
         ka.ih.I1 && !((ka.ih.I1 = !1), ka.Op(), void 0 !== L && null !== L && 0 < L && ka.ih.rp >= L + 1);
       );
-      for (ka.ih.n7a = qa; 0 < ca; ) (ca--, ka.cic());
+      for (ka.ih.n7a = qa; 0 < ca;) (ca--, ka.cic());
     };
     t.prototype.VE = function () {
       return this.ab;
@@ -388026,7 +388003,7 @@
     };
     P.prototype.wNh = function (C) {
       C = this.LGc(C);
-      for (var J = [], T = 0, Z = 0, D = C.iBa(1, T); '' !== D.pp(); ) (Z++, T++, (D = C.iBa(1, T)));
+      for (var J = [], T = 0, Z = 0, D = C.iBa(1, T); '' !== D.pp();) (Z++, T++, (D = C.iBa(1, T)));
       for (var H = 0; H < Z; H++)
         ((D = C.iBa(0, H)), (T = D.pp()), '' !== T ? J.push(D.pp()) : J.push('F' + String(H + 1)));
       return J;
@@ -388039,8 +388016,8 @@
         H = 0,
         ia = 0,
         xa;
-      for (xa = C.iBa(Z, 0); '' !== xa.pp(); ) (D++, Z++, (xa = C.iBa(Z, 0)));
-      for (xa = C.iBa(1, H); '' !== xa.pp(); ) (ia++, H++, (xa = C.iBa(1, H)));
+      for (xa = C.iBa(Z, 0); '' !== xa.pp();) (D++, Z++, (xa = C.iBa(Z, 0)));
+      for (xa = C.iBa(1, H); '' !== xa.pp();) (ia++, H++, (xa = C.iBa(1, H)));
       for (H = 1; H < D + 1; H++) {
         Z = [];
         for (var ma = 0; ma < ia; ma++) ((xa = C.iBa(H, ma)), (xa = J ? xa.Wm() : xa.pp()), Z.push(xa));
@@ -388569,7 +388546,7 @@
       switch (C) {
         case 'xlUp':
           var T = 0 < J.r1 ? J.r1 - 1 : J.r1;
-          for (C = this.kc.Ma.Le(0, J.ia, 0, J.ia); T; ) {
+          for (C = this.kc.Ma.Le(0, J.ia, 0, J.ia); T;) {
             var Z = this.kc.Ma.Le(T, J.ia, T, J.ia);
             if ('' !== Z.ma()) {
               C = Z;
@@ -388580,7 +388557,7 @@
           break;
         case 'xlDown':
           T = J.r1 < AscCommon.uF ? J.r1 + 1 : J.r1;
-          for (C = this.kc.Ma.Le(AscCommon.uF, J.ia, AscCommon.uF, J.ia); T < AscCommon.uF; ) {
+          for (C = this.kc.Ma.Le(AscCommon.uF, J.ia, AscCommon.uF, J.ia); T < AscCommon.uF;) {
             Z = this.kc.Ma.Le(T, J.ia, T, J.ia);
             if ('' !== Z.ma()) {
               C = Z;
@@ -388591,7 +388568,7 @@
           break;
         case 'xlToRight':
           T = J.ia < AscCommon.JE ? J.ia + 1 : J.ia;
-          for (C = this.kc.Ma.Le(J.r1, AscCommon.JE, J.r1, AscCommon.JE); T < AscCommon.JE; ) {
+          for (C = this.kc.Ma.Le(J.r1, AscCommon.JE, J.r1, AscCommon.JE); T < AscCommon.JE;) {
             Z = this.kc.Ma.Le(J.r1, T, J.r1, T);
             if ('' !== Z.ma()) {
               C = Z;
@@ -388602,7 +388579,7 @@
           break;
         case 'xlToLeft':
           T = 0 < J.ia ? J.ia - 1 : J.ia;
-          for (C = this.kc.Ma.Le(J.r1, 0, J.r1, 0); T; ) {
+          for (C = this.kc.Ma.Le(J.r1, 0, J.r1, 0); T;) {
             Z = this.kc.Ma.Le(J.r1, T, J.r1, T);
             if ('' !== Z.ma()) {
               C = Z;
@@ -405073,7 +405050,7 @@
         this.yia.f9g = document.body.style['background-color'];
         document.body.style['background-color'] = 'transparent';
         var r = this.ZFa;
-        for (r.style.display = 'block'; r.hasChildNodes(); ) r.removeChild(r.lastChild);
+        for (r.style.display = 'block'; r.hasChildNodes();) r.removeChild(r.lastChild);
         document.body.style.MozUserSelect = 'text';
         delete document.body.style['-khtml-user-select'];
         delete document.body.style['-o-user-select'];
@@ -406681,10 +406658,10 @@
         var h = this.RL();
         g = h;
         this.nhc(d, g);
-        for (var p = 0; 1 < this.Sa.length && 5 > p; ) ((g += h), this.nhc(d, g), ++p);
+        for (var p = 0; 1 < this.Sa.length && 5 > p;) ((g += h), this.nhc(d, g), ++p);
         h = g;
         if (1 < this.cW())
-          for (; 0.1 < g - f; ) ((p = f + (g - f) / 2), this.nhc(d, p), 1 < this.Sa.length ? (f = p) : (h = g = p));
+          for (; 0.1 < g - f;) ((p = f + (g - f) / 2), this.nhc(d, p), 1 < this.Sa.length ? (f = p) : (h = g = p));
         this.nhc(d, h + 0.01);
       }
     };
@@ -406885,7 +406862,7 @@
       g = this.Sa[g].Al[p];
       r = g.ug.length;
       for (p = 0; p < r - 1 && !(d < (g.ug[p].Fe + g.ug[p + 1].pa) / 2); ++p);
-      for (; 0 < p && !0 === g.ug[p].BU; ) p--;
+      for (; 0 < p && !0 === g.ug[p].BU;) p--;
       h.Xq = p;
       h.AJ = r;
       d = g.ug[p];
@@ -406913,7 +406890,7 @@
               h === r
                 ? ((p = p.SNa()), (r = Math.min(q + n - 1, k - 1)))
                 : ((p = 0), (r = Math.min(n - q + (h - r) * k, k - 1)));
-              for (; !0 === g.ug[r].BU && r > p; ) r--;
+              for (; !0 === g.ug[r].BU && r > p;) r--;
               for (q = r; p < r; ++p)
                 if (f < (g.ug[p].Fe + g.ug[p + 1].pa) / 2) {
                   q = p;
@@ -407441,14 +407418,12 @@
         for (let p = 0; p < this.Ftb.length; p++) this.MS(this.Ftb[p].Py, 0, '');
       },
       MS: function (p, k, r, q) {
-        if (
-          !(
-            (a.AscDesktopEditor && a.AscDesktopEditor.isSupportPlugins && !a.AscDesktopEditor.isSupportPlugins()) ||
-            (this.Ug.$k && !this.Ug.$k.Yth()) ||
-            this.ysb ||
-            this.Sha[p] === b
-          )
-        ) {
+        if (!(
+          (a.AscDesktopEditor && a.AscDesktopEditor.isSupportPlugins && !a.AscDesktopEditor.isSupportPlugins()) ||
+          (this.Ug.$k && !this.Ug.$k.Yth()) ||
+          this.ysb ||
+          this.Sha[p] === b
+        )) {
           var n = this.FRa(p);
           if (n && this.uch(n, k)) {
             var t = this.Sha[p].QHb();
@@ -408354,16 +408329,14 @@
       for (;;) {
         if (++ra >= y) return ((J = '#4950 invalid node'), -1);
         ha = xa.charCodeAt(ra);
-        if (
-          !(
-            (96 < ha && 123 > ha) ||
-            (64 < ha && 91 > ha) ||
-            (47 < ha && 59 > ha) ||
-            45 === ha ||
-            46 === ha ||
-            95 === ha
-          )
-        ) {
+        if (!(
+          (96 < ha && 123 > ha) ||
+          (64 < ha && 91 > ha) ||
+          (47 < ha && 59 > ha) ||
+          45 === ha ||
+          46 === ha ||
+          95 === ha
+        )) {
           if (32 === ha || 9 === ha || 10 === ha || 11 === ha || 12 === ha || 13 === ha) {
             K = xa.substring(v, ra);
             break;
@@ -408382,13 +408355,13 @@
           return -1;
         }
       }
-      for (ra += 1; ; ) {
+      for (ra += 1; ;) {
         v = xa.indexOf('=', ra);
         if (v > I || -1 === v) break;
         ra = xa.substring(ra, v);
         C && ((ra = ra.trim()), 120 === ra.charCodeAt(0) && 'xmlns' === ra.substr(0, 6) && (ba = !0));
         Oa[wa++] = ra;
-        for (ha = xa.charCodeAt(++v); 32 === ha || 9 === ha || 10 === ha || 11 === ha || 12 === ha || 13 === ha; )
+        for (ha = xa.charCodeAt(++v); 32 === ha || 9 === ha || 10 === ha || 11 === ha || 12 === ha || 13 === ha;)
           ha = xa.charCodeAt(++v);
         ra = 34 === ha ? xa.indexOf('"', v + 1) : xa.indexOf("'", v + 1);
         if (-1 === ra) return ((J = '#5858 invalid node'), -1);
@@ -408519,7 +408492,7 @@
       if ('string' === typeof ra && !T) {
         ia || ((ia = !0), C && ((D = X$(null)), (D.qLf = Z)), (U = 0), (J = ''), (T = !1), (xa = ''));
         xa = xa ? xa + ra : ra;
-        a: for (J = null; -1 !== U; ) {
+        a: for (J = null; -1 !== U;) {
           var v = 0 < Aa;
           ra = 60 === xa.charCodeAt(U) ? U : xa.indexOf('<', U);
           if (-1 === ra) {
@@ -408714,7 +408687,7 @@
       if (47 !== b) {
         a: {
           b = a = +a + 1;
-          for (var e = this.xml.charCodeAt(b); b < this.length; )
+          for (var e = this.xml.charCodeAt(b); b < this.length;)
             if ((96 < e && 123 > e) || (64 < e && 91 > e) || (47 < e && 59 > e) || 45 === e || 46 === e || 95 === e)
               e = this.xml.charCodeAt(++b);
             else {
@@ -408750,7 +408723,7 @@
     }
   };
   A.eJc = function () {
-    for (var a = this.index, b = this.xml.charCodeAt(a); a < this.length; ) {
+    for (var a = this.index, b = this.xml.charCodeAt(a); a < this.length;) {
       if (61 === b && a + 1 < this.length) {
         this.name = this.xml.substring(this.index, a);
         this.name = this.name.trim();
@@ -408779,11 +408752,11 @@
     return a;
   };
   function wj(a) {
-    for (var b = 0; 1 !== b && !a.stop; ) b = a.next();
+    for (var b = 0; 1 !== b && !a.stop;) b = a.next();
     return 1 === b;
   }
   function xj(a, b) {
-    for (var e; !a.stop; ) {
+    for (var e; !a.stop;) {
       e = a.next();
       var d = a.depth;
       if (d < b) break;
@@ -408795,7 +408768,7 @@
   function gn(a) {
     var b = void 0;
     b = a.depth;
-    for (var e; !a.stop; ) {
+    for (var e; !a.stop;) {
       e = a.next();
       var d = a.Vp();
       if (d < b) break;
@@ -408865,7 +408838,7 @@
     return (' ' + a).substr(1);
   }
   A.Wm = function () {
-    for (var a = '', b = this.depth, e; !this.stop; ) {
+    for (var a = '', b = this.depth, e; !this.stop;) {
       e = this.next();
       var d = this.Vp();
       if (d < b) break;
@@ -409196,7 +409169,7 @@
       this.nPd && ((t = this.nPd.uri.lastIndexOf('/')), (t = -1 === t ? '/' : this.nPd.uri.substring(0, t) + '/'));
       if (n === g.ORe.external) this.BAc = this.target;
       else {
-        for (; h.startsWith('../'); ) {
+        for (; h.startsWith('../');) {
           t.endsWith('/') && (t = t.substring(0, t.length - 1));
           n = t.lastIndexOf('/');
           if (-1 === n) throw 'internal error when processing relationships';

@@ -51,28 +51,28 @@
     "url": "https://github.com/ranuts/document/issues"
   },
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
-    "@tailwindcss/postcss": "^4.3.0",
-    "@types/node": "^25.9.1",
-    "@vitest/coverage-v8": "^4.1.7",
+    "@playwright/test": "^1.61.1",
+    "@tailwindcss/postcss": "^4.3.2",
+    "@types/node": "^26.1.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "jsdom": "^29.1.1",
-    "oxlint": "^1.67.0",
-    "postcss": "^8.5.15",
-    "prettier": "^3.8.3",
-    "tailwindcss": "^4.3.0",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.14",
-    "vitest": "^4.1.7"
+    "oxlint": "^1.73.0",
+    "postcss": "^8.5.16",
+    "prettier": "^3.9.4",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.106.0",
-    "@khmyznikov/pwa-install": "^0.6.3",
+    "@anthropic-ai/sdk": "^0.110.0",
+    "@khmyznikov/pwa-install": "^0.6.4",
     "@mlc-ai/web-llm": "^0.2.84",
     "@ranuts/agent-core": "workspace:*",
     "@ranuts/chat-ui": "workspace:*",
     "@ranuts/converter": "workspace:*",
     "@ranuts/shared": "workspace:*",
-    "ranui": "0.2.0-alpha.0",
+    "ranui": "0.2.0-alpha.1",
     "ranuts": "0.2.0-alpha.0"
   }
 }

@@ -96,7 +96,7 @@ var A;
       S[t] = !0;
     }
     function h(t, e, s, c, o) {
-      for (var n, i, a = H.length, r = t.charAt(s), A = null; a--; )
+      for (var n, i, a = H.length, r = t.charAt(s), A = null; a--;)
         if (
           !(
             ((i = H[a]).leadChar && i.leadChar !== r) ||
@@ -193,7 +193,7 @@ var A;
           F[s] || (F[s] = {}),
           !F[s][o])
         ) {
-          for (A = (n = a(s, o)).pattern, u = n.flags; m < A.length; ) {
+          for (A = (n = a(s, o)).pattern, u = n.flags; m < A.length;) {
             do {
               (n = h(A, u, m, p, d)) && n.reparse && (A = A.slice(0, m) + n.output + A.slice(m + n.matchLength));
             } while (n && n.reparse);
@@ -254,7 +254,7 @@ var A;
         );
       }),
       (f.forEach = function (t, e, s) {
-        for (var c, o = 0, n = -1; (c = f.exec(t, e, o)); ) (s(c, ++n, t, e), (o = c.index + (c[0].length || 1)));
+        for (var c, o = 0, n = -1; (c = f.exec(t, e, o));) (s(c, ++n, t, e), (o = c.index + (c[0].length || 1)));
       }),
       (f.globalize = function (t) {
         return c(t, { addG: !0 });
@@ -463,7 +463,7 @@ var A;
             return (
               '\\u' +
               (function (t) {
-                for (; t.length < 4; ) t = '0' + t;
+                for (; t.length < 4;) t = '0' + t;
                 return t;
               })(
                 (function (t) {
@@ -675,7 +675,7 @@ var A;
         return t.replace(/[- _]+/g, '').toLowerCase();
       }
       function s(t) {
-        for (; t.length < 4; ) t = '0' + t;
+        for (; t.length < 4;) t = '0' + t;
         return t;
       }
       function c(t) {
@@ -4398,13 +4398,13 @@ function mg(t, e) {
         (this.dAf = r.ur()),
         (this.OIf = r.ur()),
         (this.mcf = r.ur()));
-      for (var e = r.ur(); e; )
+      for (var e = r.ur(); e;)
         ((this.tya +=
           65536 > e
             ? String.fromCharCode(e)
             : String.fromCharCode(55296 | (e >> 10)) + String.fromCharCode(56320 | (1023 & e))),
           (e = r.ur()));
-      for (e = r.ur(); e; ) ((this.tAc += String.fromCharCode(e)), (e = r.ur()));
+      for (e = r.ur(); e;) ((this.tAc += String.fromCharCode(e)), (e = r.ur()));
       ((this.dxc = r.ur()),
         (this.ree = r.ur()),
         (this.jee = r.ur()),
@@ -4458,7 +4458,7 @@ function mg(t, e) {
       ) {
         s.start(e);
         let t = 15;
-        for (; t < c; )
+        for (; t < c;)
           switch ((t++, r.ur())) {
             case 0:
               (s.hHg(r.ur(), r.ur(), e), (t += 2));
@@ -4522,7 +4522,7 @@ function mg(t, e) {
     (i.prototype.rj = function (t) {
       this.qoc += this.fXc;
       let e = 0;
-      if (!(t < this.poc)) for (; this.poc < t; ) ((this.poc += this.Ydh[this.qoc + e]), e++);
+      if (!(t < this.poc)) for (; this.poc < t;) ((this.poc += this.Ydh[this.qoc + e]), e++);
       this.fXc = e;
     }),
     (i.prototype.LE = function () {
@@ -8085,7 +8085,7 @@ function mg(t, e) {
         null !== t && 'object' == typeof t && (0 < this.N_ ? this.hfd.send(JSON.stringify(t)) : this.vaf.push(t));
       }),
       (e.prototype.aKg = function () {
-        for (var t; 0 < this.N_ && void 0 !== (t = this.vaf.shift()); ) this.g5(t);
+        for (var t; 0 < this.N_ && void 0 !== (t = this.vaf.shift());) this.g5(t);
       }),
       (e.prototype.GIg = function (t) {
         t.spellCheckData && this.L4b && this.L4b(t.spellCheckData);
@@ -9082,7 +9082,7 @@ function mg(t, e) {
         this.zn = t;
       }),
       (n.prototype.read = function (t, e) {
-        for (var s = !0; s; )
+        for (var s = !0; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.ALa(t[e.Oa++]);
@@ -9314,7 +9314,7 @@ function mg(t, e) {
         this.uw = t;
       }),
       (t.prototype.read = function (t, e) {
-        for (var s = !0; s; )
+        for (var s = !0; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.CJb(t[e.Oa++]);
@@ -9747,7 +9747,7 @@ function mg(t, e) {
         this.oh && this.oh.AV();
       }),
       (w.prototype.read = function (e, s) {
-        for (var c, o = !0, i = null, a = null, r = null, A = null; o; )
+        for (var c, o = !0, i = null, a = null, r = null, A = null; o;)
           switch (e[s.Oa++]) {
             case 0:
               this.F1a(e[s.Oa++]);
@@ -10168,7 +10168,7 @@ function mg(t, e) {
       }),
       (B.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.type = t[e.Oa++];
@@ -10812,7 +10812,7 @@ function mg(t, e) {
       }),
       (wa.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.Fa = t[e.Oa++];
@@ -11077,7 +11077,7 @@ function mg(t, e) {
       }),
       (Oa.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.type = t[e.Oa++];
@@ -11545,7 +11545,7 @@ function mg(t, e) {
       }),
       (v.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.type = t[e.Oa++];
@@ -11599,7 +11599,7 @@ function mg(t, e) {
       }),
       (y.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.type = t[e.Oa++];
@@ -11641,7 +11641,7 @@ function mg(t, e) {
       }),
       (I.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.MBa = t[e.Oa++];
@@ -11715,7 +11715,7 @@ function mg(t, e) {
       }),
       (ha.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.TNa = t[e.Oa++];
@@ -11734,7 +11734,7 @@ function mg(t, e) {
               0 < c && ((this.Ova = []), (this.Sfa = []));
               for (var o = 0; o < c; o++) {
                 ((this.Ova[o] = null), (this.Sfa[o] = null));
-                for (var n = !0; n; )
+                for (var n = !0; n;)
                   switch (t[e.Oa++]) {
                     case 0:
                       this.Ova[o] = p(t, e);
@@ -11763,7 +11763,7 @@ function mg(t, e) {
       }),
       (ea.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           if (0 === t[e.Oa++]) ((this.color = new Rb.R_()), this.color.read(t, e));
           else s = !1;
       }),
@@ -11853,7 +11853,7 @@ function mg(t, e) {
       }),
       (oa.prototype.read = function (t, e) {
         let s = !0;
-        for (; s; )
+        for (; s;)
           switch (t[e.Oa++]) {
             case 0:
               this.type = t[e.Oa++];
@@ -12532,7 +12532,7 @@ function mg(t, e) {
       (bb.prototype.Cqc = function () {
         if (!this.version) return 0;
         let t = this.version.split('.');
-        for (; 3 > t.length; ) t.push('0');
+        for (; 3 > t.length;) t.push('0');
         try {
           return 1e4 * parseInt(t[0]) + 100 * parseInt(t[1]) + parseInt(t[2]);
         } catch (t) {}
@@ -14006,7 +14006,7 @@ function mg(t, e) {
         return ((e = this.stream.VAa(s)), a.Fb != e ? e : this.hb(s, t));
       }),
       (s.prototype.hb = function (t, e) {
-        for (var s = a.Fb, c = 0; c < t; ) {
+        for (var s = a.Fb, c = 0; c < t;) {
           ((this.stream.PId = !1), (s = this.stream.sb()));
           var o = this.stream.xe();
           if ((c + o + 5 >= t && (this.stream.PId = !0), (s = e(s, o)) === a.Lb)) {
@@ -14017,7 +14017,7 @@ function mg(t, e) {
         return s;
       }),
       (s.prototype.Bh = function (t, e) {
-        for (var s = a.Fb, c = 0; c < t; ) {
+        for (var s = a.Fb, c = 0; c < t;) {
           s = this.stream.sb();
           var o = 2;
           switch (this.stream.sb()) {
@@ -14055,7 +14055,7 @@ function mg(t, e) {
         return s;
       }),
       (s.prototype.mz = function (t, e) {
-        for (var s = a.Fb, c = 0; c < t; ) {
+        for (var s = a.Fb, c = 0; c < t;) {
           s = this.stream.sb();
           var o = 2;
           switch (this.stream.sb()) {
@@ -14323,7 +14323,7 @@ function mg(t, e) {
           var e = this.PQc[t];
           if (!e) {
             if (((e = ''), 0 < t))
-              for (var s, c = t; 0 < c; )
+              for (var s, c = t; 0 < c;)
                 ((s = (c - 1) % 26), (e = String.fromCharCode(s + 65) + e), (c = (c - (s + 1)) / 26));
             this.PQc[t] = e;
           }
@@ -14370,9 +14370,9 @@ function mg(t, e) {
       (n.prototype.tsa = function (t, e) {
         if (t && this.Pjc) {
           ((this.Pjc = !1), (t = this.id), (this.Xa = this.fb = 0), (e = {}));
-          for (var s = -1, c = 0; -1 != (s = t.indexOf('$', s + 1)); ) e[s - c++] = 1;
+          for (var s = -1, c = 0; -1 != (s = t.indexOf('$', s + 1));) e[s - c++] = 1;
           if (2 >= c && (0 < c && (t = t.replace(/\$/g, '')), 0 < (s = t.length))) {
-            for (var o = 0; this.sGg(t.charAt(o)) && o < s; ) o++;
+            for (var o = 0; this.sGg(t.charAt(o)) && o < s;) o++;
             (0 == o
               ? ((this.OId = !0),
                 (this.fb = 1),
@@ -14493,7 +14493,7 @@ function mg(t, e) {
           (this.JKe = function () {
             var t = 0,
               e = this.Bb + this.fd() + 4;
-            for (this.Td(1); ; ) {
+            for (this.Td(1); ;) {
               var s = this.sb();
               if (251 === s) break;
               0 === s && (t = this.fd());
@@ -14503,7 +14503,7 @@ function mg(t, e) {
           (this.Dyb = function () {
             var t = 0,
               e = this.Bb + this.fd() + 4;
-            for (this.Td(1); ; ) {
+            for (this.Td(1); ;) {
               var s = this.sb();
               if (251 === s) break;
               0 === s && (t = this.sb());
@@ -14587,7 +14587,7 @@ function mg(t, e) {
         if (t.Bb + e > t.size) return '';
         var s,
           c = '';
-        for (e = t.Bb + e; t.Bb < e; )
+        for (e = t.Bb + e; t.Bb < e;)
           0 == (128 & (s = t.data[t.Bb]))
             ? ((c += i(s)), ++t.Bb)
             : 0 == (32 & s)
@@ -14704,7 +14704,7 @@ function mg(t, e) {
           if (1 / 0 == t) throw new RangeError('repeat count must be less than infinity');
           if (((t = Math.floor(t)), 0 == e.length || 0 == t)) return '';
           if (268435456 <= e.length * t) throw new RangeError('repeat count must not overflow maximum string size');
-          for (var s = ''; 1 == (1 & t) && (s += e), 0 != (t >>>= 1); ) e += e;
+          for (var s = ''; 1 == (1 & t) && (s += e), 0 != (t >>>= 1);) e += e;
           return s;
         }),
         (String.prototype.repeat = String.prototype.repeat)),
@@ -14764,7 +14764,7 @@ function mg(t, e) {
   (function (t, e) {
     function s(t, e) {
       if ('number' == typeof t) {
-        for (var s = []; 0 < t; ) {
+        for (var s = []; 0 < t;) {
           var c = t % e;
           (0 === c ? s.unshift(0) : (s.unshift(c), (t -= c)), (t /= e));
         }
@@ -14817,7 +14817,7 @@ function mg(t, e) {
         var s = (t = new VBArray(t.responseBody).toArray()).length;
         e = lg.lAa(s);
         var c = new AscCommon.$V(e.data, s);
-        for (c.Fp = e.Fp, e = c.data, c = 0; c < s; ) ((e[c] = t[c]), c++);
+        for (c.Fp = e.Fp, e = c.data, c = 0; c < s;) ((e[c] = t[c]), c++);
       }
       return e;
     }
@@ -16265,19 +16265,19 @@ function mg(t, e) {
         var e = 1;
         if (0 > (t = this.floor(t))) return NaN;
         if (170 < t) return 1 / 0;
-        for (; 0 !== t; ) e *= t--;
+        for (; 0 !== t;) e *= t--;
         return e;
       }),
       (Math.hvi = function (t) {
         var e = 1;
         if (0 > (t = this.floor(t))) return NaN;
         if (170 < t) return 1 / 0;
-        for (; 0 < t; ) ((e *= t), (t -= 2));
+        for (; 0 < t;) ((e *= t), (t -= 2));
         return e;
       }),
       (Math.factor = function (t) {
         var e = 1;
-        for (t = this.floor(t); 0 !== t; ) e *= t--;
+        for (t = this.floor(t); 0 !== t;) e *= t--;
         return e;
       }),
       (Math.Lg = Math.log),
@@ -16320,7 +16320,7 @@ function mg(t, e) {
             var s = Object(this),
               c = s.length >>> 0;
             if (0 === c) return !1;
-            for (e |= 0, e = Math.max(0 <= e ? e : c - Math.abs(e), 0); e < c; ) {
+            for (e |= 0, e = Math.max(0 <= e ? e : c - Math.abs(e), 0); e < c;) {
               var o = s[e];
               if (o === t || ('number' == typeof o && 'number' == typeof t && isNaN(o) && isNaN(t))) return !0;
               e++;
@@ -16335,7 +16335,7 @@ function mg(t, e) {
             var c = Object(this),
               o = c.length >>> 0;
             if ('function' != typeof t) throw new TypeError('predicate must be a function');
-            for (var n = 0; n < o; ) {
+            for (var n = 0; n < o;) {
               var i = c[n];
               if (t.call(s, i, n, c)) return i;
               n++;
@@ -16785,13 +16785,13 @@ function mg(t, e) {
     }),
       (L.prototype.nvf = function (t, e) {
         this instanceof L && this.f5();
-        for (var s, c = !1, o = t.length; e !== o; ) {
+        for (var s, c = !1, o = t.length; e !== o;) {
           if (((s = t.charCodeAt(e)), -1 !== re.indexOf(s))) {
             ((this.Mo = t[e]), ++e, (c = !0));
             break;
           }
           if (60 <= s && 62 >= s) {
-            for (this.Mo = t[e], ++e; e !== o && !(60 > (s = t.charCodeAt(e)) || 62 < s); ) ((this.Mo += t[e]), ++e);
+            for (this.Mo = t[e], ++e; e !== o && !(60 > (s = t.charCodeAt(e)) || 62 < s);) ((this.Mo += t[e]), ++e);
             c = !0;
             break;
           }
@@ -16799,7 +16799,7 @@ function mg(t, e) {
           ++e;
         }
         if (c) {
-          for (; e !== o && (32 === (s = t.charCodeAt(e)) || 10 === s); ) ++e;
+          for (; e !== o && (32 === (s = t.charCodeAt(e)) || 10 === s);) ++e;
           return ((this.Ck = e), !0);
         }
         return !1;
@@ -16995,7 +16995,7 @@ function mg(t, e) {
       }),
       (L.prototype.sFh = function (t, e) {
         this instanceof L && this.f5();
-        for (var s, c = !1, o = t.length; e !== o; ) {
+        for (var s, c = !1, o = t.length; e !== o;) {
           if (40 === (s = t.charCodeAt(e))) {
             ((this.Mo = t[e]), ++e, (c = !0));
             break;
@@ -17004,14 +17004,14 @@ function mg(t, e) {
           ++e;
         }
         if (c) {
-          for (; e !== o && 32 === (s = t.charCodeAt(e)); ) ++e;
+          for (; e !== o && 32 === (s = t.charCodeAt(e));) ++e;
           return ((this.Ck = e), !0);
         }
         return !1;
       }),
       (L.prototype.lGh = function (t, e) {
         this instanceof L && this.f5();
-        for (var s, c = !1, o = t.length; e !== o; ) {
+        for (var s, c = !1, o = t.length; e !== o;) {
           if (41 === (s = t.charCodeAt(e))) {
             ((this.Mo = t[e]), ++e, (c = !0));
             break;
@@ -17020,7 +17020,7 @@ function mg(t, e) {
           ++e;
         }
         if (c) {
-          for (; e !== o && 32 === (s = t.charCodeAt(e)); ) ++e;
+          for (; e !== o && 32 === (s = t.charCodeAt(e));) ++e;
           return ((this.Ck = e), !0);
         }
       }),
@@ -17074,7 +17074,7 @@ function mg(t, e) {
       }),
       (L.prototype.rFh = function (t, e) {
         this instanceof L && this.f5();
-        for (var s, c = !1, o = t.length; e !== o; ) {
+        for (var s, c = !1, o = t.length; e !== o;) {
           if (123 === (s = t.charCodeAt(e))) {
             ((this.Mo = t[e]), ++e, (c = !0));
             break;
@@ -17083,13 +17083,13 @@ function mg(t, e) {
           ++e;
         }
         if (c) {
-          for (; e !== o && 32 === (s = t.charCodeAt(e)); ) ++e;
+          for (; e !== o && 32 === (s = t.charCodeAt(e));) ++e;
           return ((this.Ck = e), !0);
         }
       }),
       (L.prototype.kGh = function (t, e) {
         this instanceof L && this.f5();
-        for (var s, c = !1, o = t.length; e !== o; ) {
+        for (var s, c = !1, o = t.length; e !== o;) {
           if (125 === (s = t.charCodeAt(e))) {
             ((this.Mo = t[e]), ++e, (c = !0));
             break;
@@ -17098,7 +17098,7 @@ function mg(t, e) {
           ++e;
         }
         if (c) {
-          for (; e !== o && 32 === (s = t.charCodeAt(e)); ) ++e;
+          for (; e !== o && 32 === (s = t.charCodeAt(e));) ++e;
           return ((this.Ck = e), !0);
         }
       }),
@@ -17759,8 +17759,8 @@ function mg(t, e) {
       }),
       (pt.prototype.fill = function (t) {
         if (((this.qAb.length = 0), !(0 >= t.length))) {
-          for (var s, c = 0, o = 0, n = t.length; c < t.length; ) {
-            for (s = t[c].length; o < s && 0.001 > t[c][o].Na; ) o++;
+          for (var s, c = 0, o = 0, n = t.length; c < t.length;) {
+            for (s = t[c].length; o < s && 0.001 > t[c][o].Na;) o++;
             if (o < s) break;
             (c++, (o = 0));
           }
@@ -17797,8 +17797,8 @@ function mg(t, e) {
       }),
       (pt.prototype.DDe = function (t, s, c, o) {
         var n = {};
-        if (((n[s] = c), (t = t[o]), s > c)) for (; 1 == this.CDe(n, t); );
-        else for (; 1 == this.CDe(t, n); );
+        if (((n[s] = c), (t = t[o]), s > c)) for (; 1 == this.CDe(n, t););
+        else for (; 1 == this.CDe(t, n););
         for (var i in n) ((s = parseInt(i)) !== (c = n[s]) || t[s] === e) && (t[s] = c);
       }),
       (pt.prototype.CDe = function (t, e) {
@@ -17863,7 +17863,7 @@ function mg(t, e) {
                 f = h;
               if (-1 !== d) {
                 var l = u > d ? 1 : -1;
-                for (l = h - l * t, A.tLc(u, l); (u = d), (d = h), -1 != (h = i[u][d]); ) {
+                for (l = h - l * t, A.tLc(u, l); (u = d), (d = h), -1 != (h = i[u][d]);) {
                   if (h == e) return [];
                   i[u][d] = -1;
                   var m = d > h ? 1 : -1;
@@ -18336,9 +18336,9 @@ function mg(t, e) {
       }),
       (St.prototype.get = function (t, e) {
         this.XHb > t && this.reset();
-        for (var s; this.e8c < this.Ala.length && t >= this.Ala[this.e8c].Va.r1; )
+        for (var s; this.e8c < this.Ala.length && t >= this.Ala[this.e8c].Va.r1;)
           t <= (s = this.Ala[this.e8c++]).Va.r2 && ((s.V8c = !0), this.Y3b.set(s.id, s), (this.Xbb = null));
-        for (; this.c8c < this.Dua.length && t > this.Dua[this.c8c].Va.r2; )
+        for (; this.c8c < this.Dua.length && t > this.Dua[this.c8c].Va.r2;)
           (s = this.Dua[this.c8c++]).V8c && ((s.V8c = !1), this.Y3b.delete(s.id), (this.Xbb = null));
         var c = this;
         return (
@@ -18476,8 +18476,8 @@ function mg(t, e) {
                               var c = A.IQa;
                               let e = [],
                                 o = new AscCommon.$V(s, s.length);
-                              for (; 10 !== o.Gy(); );
-                              for (; o.Bb < o.INa(); ) {
+                              for (; 10 !== o.Gy(););
+                              for (; o.Bb < o.INa();) {
                                 let t = o.Bb,
                                   c = o.fd();
                                 (e.push(s.subarray(t, t + c)), o.Td(c));
@@ -18577,9 +18577,9 @@ function mg(t, e) {
       (t.AscCommon.LXa = function (t, e) {
         var s = 0,
           c = s + e;
-        for (e = s; t[e] && !(e >= c); ) ++e;
+        for (e = s; t[e] && !(e >= c);) ++e;
         if (16 < e - s && t.subarray && jt) return jt.decode(t.subarray(s, e));
-        for (c = ''; s < e; ) {
+        for (c = ''; s < e;) {
           var o = t[s++];
           if (128 & o) {
             var n = 63 & t[s++];
@@ -19069,7 +19069,7 @@ function mg(t, e) {
         return null;
       }),
       (t.AscCommon.xxi = function (t) {
-        for (var e, s, c; t.eJc(); )
+        for (var e, s, c; t.eJc();)
           if ('auto' !== t.KH())
             if ('theme' === t.KH()) e = t.pp();
             else if ('tint' === t.KH()) c = t.pp();
@@ -19655,7 +19655,7 @@ function mg(t, e) {
                     k = 0;
                   0 < F;
                 ) {
-                  for (; C[k] <= F; ) ((D += H[k]), (F -= C[k]));
+                  for (; C[k] <= F;) ((D += H[k]), (F -= C[k]));
                   if (++k >= H.length) break;
                 }
                 n = D;
@@ -19664,7 +19664,7 @@ function mg(t, e) {
                 var x = t,
                   E = '',
                   _ = 1;
-                for (x = ((x - 1) % 46) + 1; 46 < x; ) (++_, (x -= 46));
+                for (x = ((x - 1) % 46) + 1; 46 < x;) (++_, (x -= 46));
                 for (var v = 0 == x % 45 ? 65382 : 0 == x % 46 ? 65437 : 65393 + x - 1, w = 0; w < _; w++)
                   E += String.fromCharCode(v);
                 n = E;
@@ -19674,7 +19674,7 @@ function mg(t, e) {
                   S = t,
                   P = '',
                   T = 1;
-                for (S = ((S - 1) % 46) + 1; 46 < S; ) (++T, (S -= 46));
+                for (S = ((S - 1) % 46) + 1; 46 < S;) (++T, (S -= 46));
                 1 <= S && 5 >= S
                   ? (B = 12450 + 2 * (S - 1))
                   : 6 <= S && 17 >= S
@@ -19732,7 +19732,7 @@ function mg(t, e) {
                             44032, 45208, 45796, 46972, 47560, 48148, 49324, 50500, 51088, 52264, 52852, 53440, 54028,
                             54616,
                           ]));
-                for (; I > G.length; ) (++L, (I -= G.length));
+                for (; I > G.length;) (++L, (I -= G.length));
                 for (var Q = 0; Q < L; Q++) O += String.fromCharCode(G[I - 1]);
                 n = O;
                 break;
@@ -19760,7 +19760,7 @@ function mg(t, e) {
                   22 < q;
                 )
                   (++K, (q -= 22));
-                for (X = String.fromCharCode(J[q - 1]); 0 !== K; ) ((X += String.fromCharCode(J[21])), --K);
+                for (X = String.fromCharCode(J[q - 1]); 0 !== K;) ((X += String.fromCharCode(J[21])), --K);
                 n = X;
                 break;
               case Asc.nc.rBa:
@@ -19803,7 +19803,7 @@ function mg(t, e) {
                 var At = t,
                   ht = '';
                 At = ((At - 1) % 304) + 1;
-                for (var ut = 1; 37 < At; ) (++ut, (At -= 37));
+                for (var ut = 1; 37 < At;) (++ut, (At -= 37));
                 for (var dt = 0; dt < ut; dt++) ht += String.fromCharCode(2325 + At - 1);
                 n = ht;
                 break;
@@ -19882,7 +19882,7 @@ function mg(t, e) {
                 10 > Dt && 0 < Dt
                   ? (0 !== Ft && (bt = yt[Ft] + bt), (bt = yt[10] + bt), 1 === Dt && (Dt = 0))
                   : (bt = yt[Ft] + bt);
-                for (var Ht = Dt; 0 < Dt; ) ((bt = yt[(Ft = Ht - 10 * (Dt = (Ht / 10) | 0))] + bt), (Ht = Dt));
+                for (var Ht = Dt; 0 < Dt;) ((bt = yt[(Ft = Ht - 10 * (Dt = (Ht / 10) | 0))] + bt), (Ht = Dt));
                 n = bt;
                 break;
               case Asc.nc.QNb:
@@ -19904,7 +19904,7 @@ function mg(t, e) {
                     1e4: String.fromCharCode(19975),
                   };
                 if (1e6 > t)
-                  for (var xt = t; ; ) {
+                  for (var xt = t; ;) {
                     var Et = (xt / 1e4) | 0,
                       _t = xt - 1e4 * Et,
                       vt = '',
@@ -19946,7 +19946,7 @@ function mg(t, e) {
                     1e4: String.fromCharCode(33836),
                   };
                 if (1e6 > t)
-                  for (var Mt = t; ; ) {
+                  for (var Mt = t; ;) {
                     var It = (Mt / 1e4) | 0,
                       Ot = Mt - 1e4 * It,
                       Lt = '',
@@ -20661,7 +20661,7 @@ function mg(t, e) {
                   (AscCommon.GEb = { THf: {}, stream: t }),
                   (t = new AscCommon.WAa(t, t.length)).sb());
                 const s = t.fd();
-                for (; s + 4 > t.Bb; ) {
+                for (; s + 4 > t.Bb;) {
                   const e = t.sb(),
                     s = t.fd();
                   AscCommon.GEb.THf[e] = s;
@@ -28552,7 +28552,7 @@ var ng = window,
         }
         var e = new this.constructor(this.Ma);
         t(this.Ec, e);
-        for (var s, c = !0; c && !e.Zta(); )
+        for (var s, c = !0; c && !e.Zta();)
           ((s = new this.constructor(this.Ma)), t(e.Ec, s), (c = e.Ec.length !== s.Ec.length), (e = s));
         return e;
       }),
@@ -28564,7 +28564,7 @@ var ng = window,
         }
         var i = this.yg.Xa,
           a = this.yg.fb;
-        for (this.yg.Xa += t, this.yg.fb += e; !r; ) {
+        for (this.yg.Xa += t, this.yg.fb += e; !r;) {
           var r = !0;
           if (
             !(n = this.Ec[this.qP]).zDb(this.yg) &&
@@ -28600,10 +28600,10 @@ var ng = window,
                 : 0 > t && (A || this.yg.Xa < o.r2 || this.yg.fb !== o.ia) && ((this.yg.Xa = o.r1 - 1), (r = !1)));
           }
           if (r) {
-            for (; this.yg.fb >= n.ia && this.yg.fb <= n.qa && c(-1, this.yg.fb); )
+            for (; this.yg.fb >= n.ia && this.yg.fb <= n.qa && c(-1, this.yg.fb);)
               ((this.yg.fb += e || (0 < t ? 1 : -1)), (r = !1));
             if (r) {
-              for (; this.yg.Xa >= n.r1 && this.yg.Xa <= n.r2 && c(this.yg.Xa, -1); )
+              for (; this.yg.Xa >= n.r1 && this.yg.Xa <= n.r2 && c(this.yg.Xa, -1);)
                 ((this.yg.Xa += t || (0 < e ? 1 : -1)), (r = !1));
               if (r) break;
             }
@@ -29327,7 +29327,7 @@ var ng = window,
         );
       }),
       (v.prototype.oXe = function (t, e) {
-        for (var s, c = this.forward ? 0 : e.length - 1, o = this.forward ? 1 : -1; (s = e[c]); ) {
+        for (var s, c = this.forward ? 0 : e.length - 1, o = this.forward ? 1 : -1; (s = e[c]);) {
           if (0 <= (s = o * ((s >> 0) - t))) return 0 === s ? c : c - o;
           c += o;
         }
@@ -31852,13 +31852,13 @@ var ng = window,
       }),
       (s.prototype.Pn = function (t) {
         var e = t.fd() + t.Bb;
-        for (t.sb(); ; ) {
+        for (t.sb(); ;) {
           var s = t.sb();
           if (s === AscCommon.Kt) break;
           if (0 !== s) return void t.Pd(e);
           this.filename = t.Nb();
         }
-        for (; !(t.Bb >= e); )
+        for (; !(t.Bb >= e);)
           switch (((s = t.sb()), s)) {
             case 0:
               (t.fd(), (this.aoe = t.Nb()));
@@ -36157,8 +36157,8 @@ var ng = window,
       (g.prototype.put_Angle = g.prototype.zfe =
         function (t) {
           if (AscFormat.ob(t)) {
-            for (; 0 > t; ) t += 360;
-            for (; 360 <= t; ) t -= 360;
+            for (; 0 > t;) t += 360;
+            for (; 360 <= t;) t -= 360;
             this.p3a = t;
           }
         }),
@@ -39392,13 +39392,13 @@ var ng = window,
           for (var u = this.Gn.R$d, d = 0; d < o.length; d++)
             (this.Gn.Guf && o[d].match(/\d+/) && (c[d] = !0),
               (a[o[d]] || i[o[d]] || 1 === o[d].length || (u && AscCommon.GDe(o[d]))) && (c[d] = !0));
-          for (; !h && c[r]; ) ++r;
+          for (; !h && c[r];) ++r;
           if (((this.Gn.Gpa = !1), (this.Gn.lastIndex = r), (o = n[r]) && (o.fb !== s.fb || o.Xa !== s.Xa))) var p = !0;
-          for (; h && p && c[r]; )
+          for (; h && p && c[r];)
             ((n[r + 1] && n[r + 1].fb === n[r].fb) || ((o = n[r]), A.push(new Asc.Range(o.fb, o.Xa, o.fb, o.Xa))), ++r);
           if (e === n[r]) (this.Gn.Tzf(), this.Dlc());
           else {
-            for (h = 0; n[h].fb !== n[r].fb; ) h++;
+            for (h = 0; n[h].fb !== n[r].fb;) h++;
             (t.usrWords.splice(0, h),
               t.usrCorrect.splice(0, h),
               t.usrLang.splice(0, h),
@@ -39469,7 +39469,7 @@ var ng = window,
               var u = t[h];
               (n[u] || i[u]) && (o[h] = !0);
             }
-            for (; c[a].fb === e.fb && c[a].Xa === e.Xa; ) {
+            for (; c[a].fb === e.fb && c[a].Xa === e.Xa;) {
               if (
                 ((n = null),
                 (h = t[a]),
@@ -39477,7 +39477,7 @@ var ng = window,
                 null !== n)
               ) {
                 if (((h = u || i[h]), ((u = new RegExp(t[a], 'y')).lastIndex = s[a]), (r = r.replace(u, h)), 0 !== n))
-                  for (h = a + 1; h < t.length && c[h].fb === c[a].fb; ) ((s[h] += n), h++);
+                  for (h = a + 1; h < t.length && c[h].fb === c[a].fb;) ((s[h] += n), h++);
                 ((this.Gn.j4b = r), (this.Gn.zwc = null));
               }
               if (
@@ -39508,7 +39508,7 @@ var ng = window,
               p = [],
               f = [];
             c = [];
-            for (var l = [], m = !1; ; ) {
+            for (var l = [], m = !1; ;) {
               if (this.Gn.E9c && i.Xa > e.Xa) break;
               if (
                 (i.Xa > s && ((i.Xa = 0), (i.fb = 0), (this.Gn.E9c = !0)),

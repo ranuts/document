@@ -2178,8 +2178,8 @@ var FS = {
       this.node_ops = {};
       this.stream_ops = {};
       this.rdev = rdev;
-      this.readMode = 292 /*292*/ | 73 /*73*/;
-      this.writeMode = 146 /*146*/;
+      this.readMode = 292 /*292*/ | 73; /*73*/
+      this.writeMode = 146; /*146*/
     }
     get read() {
       return (this.mode & this.readMode) === this.readMode;
@@ -2640,13 +2640,13 @@ var FS = {
     return parent.node_ops.mknod(parent, name, mode, dev);
   },
   create(path, mode) {
-    mode = mode !== undefined ? mode : 438 /* 0666 */;
+    mode = mode !== undefined ? mode : 438; /* 0666 */
     mode &= 4095;
     mode |= 32768;
     return FS.mknod(path, mode, 0);
   },
   mkdir(path, mode) {
-    mode = mode !== undefined ? mode : 511 /* 0777 */;
+    mode = mode !== undefined ? mode : 511; /* 0777 */
     mode &= 511 | 512;
     mode |= 16384;
     return FS.mknod(path, mode, 0);
@@ -2667,7 +2667,7 @@ var FS = {
   mkdev(path, mode, dev) {
     if (typeof dev == 'undefined') {
       dev = mode;
-      mode = 438 /* 0666 */;
+      mode = 438; /* 0666 */
     }
     mode |= 8192;
     return FS.mknod(path, mode, dev);
@@ -4416,7 +4416,7 @@ var growMemory = (size) => {
     // round size grow request up to wasm page size (fixed 64KB per spec)
     wasmMemory.grow(pages); // .grow() takes a delta compared to the previous size
     updateMemoryViews();
-    return 1 /*success*/;
+    return 1; /*success*/
   } catch (e) {}
   // implicit 0 return to save code size (caller will cast "undefined" into 0
   // anyhow)

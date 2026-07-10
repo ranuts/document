@@ -95,7 +95,7 @@
       I[t] = !0;
     }
     function d(t, e, o, s, c) {
-      for (var n, i, a = H.length, r = t.charAt(o), u = null; a--; )
+      for (var n, i, a = H.length, r = t.charAt(o), u = null; a--;)
         if (
           !(
             ((i = H[a]).leadChar && i.leadChar !== r) ||
@@ -192,7 +192,7 @@
           F[o] || (F[o] = {}),
           !F[o][c])
         ) {
-          for (u = (n = a(o, c)).pattern, h = n.flags; m < u.length; ) {
+          for (u = (n = a(o, c)).pattern, h = n.flags; m < u.length;) {
             do {
               (n = d(u, h, m, f, p)) && n.reparse && (u = u.slice(0, m) + n.output + u.slice(m + n.matchLength));
             } while (n && n.reparse);
@@ -253,7 +253,7 @@
         );
       }),
       (A.forEach = function (t, e, o) {
-        for (var s, c = 0, n = -1; (s = A.exec(t, e, c)); ) (o(s, ++n, t, e), (c = s.index + (s[0].length || 1)));
+        for (var s, c = 0, n = -1; (s = A.exec(t, e, c));) (o(s, ++n, t, e), (c = s.index + (s[0].length || 1)));
       }),
       (A.globalize = function (t) {
         return s(t, { addG: !0 });
@@ -462,7 +462,7 @@
             return (
               '\\u' +
               (function (t) {
-                for (; t.length < 4; ) t = '0' + t;
+                for (; t.length < 4;) t = '0' + t;
                 return t;
               })(
                 (function (t) {
@@ -674,7 +674,7 @@
         return t.replace(/[- _]+/g, '').toLowerCase();
       }
       function o(t) {
-        for (; t.length < 4; ) t = '0' + t;
+        for (; t.length < 4;) t = '0' + t;
         return t;
       }
       function s(t) {
@@ -4403,13 +4403,13 @@ function Ff(t, e) {
         (this.N2e = r.mp()),
         (this.Baf = r.mp()),
         (this.dKe = r.mp()));
-      for (var e = r.mp(); e; )
+      for (var e = r.mp(); e;)
         ((this.Cna +=
           65536 > e
             ? String.fromCharCode(e)
             : String.fromCharCode(55296 | (e >> 10)) + String.fromCharCode(56320 | (1023 & e))),
           (e = r.mp()));
-      for (e = r.mp(); e; ) ((this.jfc += String.fromCharCode(e)), (e = r.mp()));
+      for (e = r.mp(); e;) ((this.jfc += String.fromCharCode(e)), (e = r.mp()));
       ((this.BOc = r.mp()),
         (this.kQd = r.mp()),
         (this.cQd = r.mp()),
@@ -4463,7 +4463,7 @@ function Ff(t, e) {
       ) {
         o.start(e);
         let t = 15;
-        for (; t < s; )
+        for (; t < s;)
           switch ((t++, r.mp())) {
             case 0:
               (o.Zbg(r.mp(), r.mp(), e), (t += 2));
@@ -4527,7 +4527,7 @@ function Ff(t, e) {
     (i.prototype.Aj = function (t) {
       this.l5b += this.Lzc;
       let e = 0;
-      if (!(t < this.k5b)) for (; this.k5b < t; ) ((this.k5b += this.MAg[this.l5b + e]), e++);
+      if (!(t < this.k5b)) for (; this.k5b < t;) ((this.k5b += this.MAg[this.l5b + e]), e++);
       this.Lzc = e;
     }),
     (i.prototype.dIb = function () {
@@ -8078,7 +8078,7 @@ function Ff(t, e) {
         null !== t && 'object' == typeof t && (0 < this.sU ? this.ySc.send(JSON.stringify(t)) : this.tIe.push(t));
       }),
       (e.prototype.jdg = function () {
-        for (var t; 0 < this.sU && void 0 !== (t = this.tIe.shift()); ) this.YX(t);
+        for (var t; 0 < this.sU && void 0 !== (t = this.tIe.shift());) this.YX(t);
       }),
       (e.prototype.pcg = function (t) {
         t.spellCheckData && this.BNb && this.BNb(t.spellCheckData);
@@ -9074,7 +9074,7 @@ function Ff(t, e) {
         this.Ml = t;
       }),
       (r.prototype.read = function (t, e) {
-        for (var o = !0; o; )
+        for (var o = !0; o;)
           switch (t[e.Da++]) {
             case 0:
               this.Jza(t[e.Da++]);
@@ -9306,7 +9306,7 @@ function Ff(t, e) {
         this.yt = t;
       }),
       (t.prototype.read = function (t, e) {
-        for (var o = !0; o; )
+        for (var o = !0; o;)
           switch (t[e.Da++]) {
             case 0:
               this.zsb(t[e.Da++]);
@@ -9739,7 +9739,7 @@ function Ff(t, e) {
         this.qg && this.qg.QY();
       }),
       (w.prototype.read = function (e, o) {
-        for (var s, c = !0, n = null, i = null, a = null, u = null; c; )
+        for (var s, c = !0, n = null, i = null, a = null, u = null; c;)
           switch (e[o.Da++]) {
             case 0:
               this.Jta(e[o.Da++]);
@@ -10160,7 +10160,7 @@ function Ff(t, e) {
       }),
       (A.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.type = t[e.Da++];
@@ -10804,7 +10804,7 @@ function Ff(t, e) {
       }),
       (Ga.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.ya = t[e.Da++];
@@ -11069,7 +11069,7 @@ function Ff(t, e) {
       }),
       (Da.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.type = t[e.Da++];
@@ -11537,7 +11537,7 @@ function Ff(t, e) {
       }),
       (u.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.type = t[e.Da++];
@@ -11591,7 +11591,7 @@ function Ff(t, e) {
       }),
       (y.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.type = t[e.Da++];
@@ -11633,7 +11633,7 @@ function Ff(t, e) {
       }),
       (C.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.Gqa = t[e.Da++];
@@ -11703,7 +11703,7 @@ function Ff(t, e) {
       }),
       (N.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.ZBa = t[e.Da++];
@@ -11722,7 +11722,7 @@ function Ff(t, e) {
               0 < s && ((this.Nka = []), (this.q7 = []));
               for (var c = 0; c < s; c++) {
                 ((this.Nka[c] = null), (this.q7[c] = null));
-                for (var i = !0; i; )
+                for (var i = !0; i;)
                   switch (t[e.Da++]) {
                     case 0:
                       this.Nka[c] = n(t, e);
@@ -11751,7 +11751,7 @@ function Ff(t, e) {
       }),
       (T.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           if (0 === t[e.Da++]) ((this.color = new ub.j2()), this.color.read(t, e));
           else o = !1;
       }),
@@ -11841,7 +11841,7 @@ function Ff(t, e) {
       }),
       (X.prototype.read = function (t, e) {
         let o = !0;
-        for (; o; )
+        for (; o;)
           switch (t[e.Da++]) {
             case 0:
               this.type = t[e.Da++];
@@ -12516,7 +12516,7 @@ function Ff(t, e) {
       (vb.prototype.X6b = function () {
         if (!this.version) return 0;
         let t = this.version.split('.');
-        for (; 3 > t.length; ) t.push('0');
+        for (; 3 > t.length;) t.push('0');
         try {
           return 1e4 * parseInt(t[0]) + 100 * parseInt(t[1]) + parseInt(t[2]);
         } catch (t) {}
@@ -13990,7 +13990,7 @@ function Ff(t, e) {
         return ((e = this.stream.vBa(o)), a.ub != e ? e : this.Ua(o, t));
       }),
       (o.prototype.Ua = function (t, e) {
-        for (var o = a.ub, s = 0; s < t; ) {
+        for (var o = a.ub, s = 0; s < t;) {
           ((this.stream.Kid = !1), (o = this.stream.jb()));
           var c = this.stream.ee();
           if ((s + c + 5 >= t && (this.stream.Kid = !0), (o = e(o, c)) === a.xb)) {
@@ -14001,7 +14001,7 @@ function Ff(t, e) {
         return o;
       }),
       (o.prototype.wg = function (t, e) {
-        for (var o = a.ub, s = 0; s < t; ) {
+        for (var o = a.ub, s = 0; s < t;) {
           o = this.stream.jb();
           var c = 2;
           switch (this.stream.jb()) {
@@ -14039,7 +14039,7 @@ function Ff(t, e) {
         return o;
       }),
       (o.prototype.fw = function (t, e) {
-        for (var o = a.ub, s = 0; s < t; ) {
+        for (var o = a.ub, s = 0; s < t;) {
           o = this.stream.jb();
           var c = 2;
           switch (this.stream.jb()) {
@@ -14307,7 +14307,7 @@ function Ff(t, e) {
           var e = this.jvc[t];
           if (!e) {
             if (((e = ''), 0 < t))
-              for (var o, s = t; 0 < s; )
+              for (var o, s = t; 0 < s;)
                 ((o = (s - 1) % 26), (e = String.fromCharCode(o + 65) + e), (s = (s - (o + 1)) / 26));
             this.jvc[t] = e;
           }
@@ -14354,9 +14354,9 @@ function Ff(t, e) {
       (n.prototype.cxa = function (t, e) {
         if (t && this.a2b) {
           ((this.a2b = !1), (t = this.id), (this.Ld = this.$e = 0), (e = {}));
-          for (var o = -1, s = 0; -1 != (o = t.indexOf('$', o + 1)); ) e[o - s++] = 1;
+          for (var o = -1, s = 0; -1 != (o = t.indexOf('$', o + 1));) e[o - s++] = 1;
           if (2 >= s && (0 < s && (t = t.replace(/\$/g, '')), 0 < (o = t.length))) {
-            for (var c = 0; this.Cbg(t.charAt(c)) && c < o; ) c++;
+            for (var c = 0; this.Cbg(t.charAt(c)) && c < o;) c++;
             (0 == c
               ? ((this.Jid = !0),
                 (this.$e = 1),
@@ -14477,7 +14477,7 @@ function Ff(t, e) {
           (this.Vke = function () {
             var t = 0,
               e = this.Wb + this.Cd() + 4;
-            for (this.Od(1); ; ) {
+            for (this.Od(1); ;) {
               var o = this.jb();
               if (251 === o) break;
               0 === o && (t = this.Cd());
@@ -14487,7 +14487,7 @@ function Ff(t, e) {
           (this.kib = function () {
             var t = 0,
               e = this.Wb + this.Cd() + 4;
-            for (this.Od(1); ; ) {
+            for (this.Od(1); ;) {
               var o = this.jb();
               if (251 === o) break;
               0 === o && (t = this.jb());
@@ -14571,7 +14571,7 @@ function Ff(t, e) {
         if (t.Wb + e > t.size) return '';
         var o,
           s = '';
-        for (e = t.Wb + e; t.Wb < e; )
+        for (e = t.Wb + e; t.Wb < e;)
           0 == (128 & (o = t.data[t.Wb]))
             ? ((s += i(o)), ++t.Wb)
             : 0 == (32 & o)
@@ -14688,7 +14688,7 @@ function Ff(t, e) {
           if (1 / 0 == t) throw new RangeError('repeat count must be less than infinity');
           if (((t = Math.floor(t)), 0 == e.length || 0 == t)) return '';
           if (268435456 <= e.length * t) throw new RangeError('repeat count must not overflow maximum string size');
-          for (var o = ''; 1 == (1 & t) && (o += e), 0 != (t >>>= 1); ) e += e;
+          for (var o = ''; 1 == (1 & t) && (o += e), 0 != (t >>>= 1);) e += e;
           return o;
         }),
         (String.prototype.repeat = String.prototype.repeat)),
@@ -14748,7 +14748,7 @@ function Ff(t, e) {
   (function (t, e) {
     function o(t, e) {
       if ('number' == typeof t) {
-        for (var o = []; 0 < t; ) {
+        for (var o = []; 0 < t;) {
           var s = t % e;
           (0 === s ? o.unshift(0) : (o.unshift(s), (t -= s)), (t /= e));
         }
@@ -14801,7 +14801,7 @@ function Ff(t, e) {
         var o = (t = new VBArray(t.responseBody).toArray()).length;
         e = Ef.DAa(o);
         var s = new AscCommon.wca(e.data, o);
-        for (s.Oz = e.Oz, e = s.data, s = 0; s < o; ) ((e[s] = t[s]), s++);
+        for (s.Oz = e.Oz, e = s.data, s = 0; s < o;) ((e[s] = t[s]), s++);
       }
       return e;
     }
@@ -16246,19 +16246,19 @@ function Ff(t, e) {
         var e = 1;
         if (0 > (t = this.floor(t))) return NaN;
         if (170 < t) return 1 / 0;
-        for (; 0 !== t; ) e *= t--;
+        for (; 0 !== t;) e *= t--;
         return e;
       }),
       (Math.$Vh = function (t) {
         var e = 1;
         if (0 > (t = this.floor(t))) return NaN;
         if (170 < t) return 1 / 0;
-        for (; 0 < t; ) ((e *= t), (t -= 2));
+        for (; 0 < t;) ((e *= t), (t -= 2));
         return e;
       }),
       (Math.factor = function (t) {
         var e = 1;
-        for (t = this.floor(t); 0 !== t; ) e *= t--;
+        for (t = this.floor(t); 0 !== t;) e *= t--;
         return e;
       }),
       (Math.Zf = Math.log),
@@ -16301,7 +16301,7 @@ function Ff(t, e) {
             var o = Object(this),
               s = o.length >>> 0;
             if (0 === s) return !1;
-            for (e |= 0, e = Math.max(0 <= e ? e : s - Math.abs(e), 0); e < s; ) {
+            for (e |= 0, e = Math.max(0 <= e ? e : s - Math.abs(e), 0); e < s;) {
               var c = o[e];
               if (c === t || ('number' == typeof c && 'number' == typeof t && isNaN(c) && isNaN(t))) return !0;
               e++;
@@ -16316,7 +16316,7 @@ function Ff(t, e) {
             var s = Object(this),
               c = s.length >>> 0;
             if ('function' != typeof t) throw new TypeError('predicate must be a function');
-            for (var n = 0; n < c; ) {
+            for (var n = 0; n < c;) {
               var i = s[n];
               if (t.call(o, i, n, s)) return i;
               n++;
@@ -16754,13 +16754,13 @@ function Ff(t, e) {
       (O.prototype.xLb = function (t) {
         var e;
         this instanceof O && this.x6a();
-        for (var o, s = !1, c = t.length; e !== c; ) {
+        for (var o, s = !1, c = t.length; e !== c;) {
           if (((o = t.charCodeAt(e)), -1 !== ie.indexOf(o))) {
             ((this.U8 = t[e]), ++e, (s = !0));
             break;
           }
           if (60 <= o && 62 >= o) {
-            for (this.U8 = t[e], ++e; e !== c && !(60 > (o = t.charCodeAt(e)) || 62 < o); ) ((this.U8 += t[e]), ++e);
+            for (this.U8 = t[e], ++e; e !== c && !(60 > (o = t.charCodeAt(e)) || 62 < o);) ((this.U8 += t[e]), ++e);
             s = !0;
             break;
           }
@@ -16768,7 +16768,7 @@ function Ff(t, e) {
           ++e;
         }
         if (s) {
-          for (; e !== c && (32 === (o = t.charCodeAt(e)) || 10 === o); ) ++e;
+          for (; e !== c && (32 === (o = t.charCodeAt(e)) || 10 === o);) ++e;
           return ((this.jO = e), !0);
         }
         return !1;
@@ -17465,8 +17465,8 @@ function Ff(t, e) {
       }),
       (pt.prototype.fill = function (t) {
         if (((this.Wjb.length = 0), !(0 >= t.length))) {
-          for (var o, s = 0, c = 0, n = t.length; s < t.length; ) {
-            for (o = t[s].length; c < o && 0.001 > t[s][c].Ia; ) c++;
+          for (var o, s = 0, c = 0, n = t.length; s < t.length;) {
+            for (o = t[s].length; c < o && 0.001 > t[s][c].Ia;) c++;
             if (c < o) break;
             (s++, (c = 0));
           }
@@ -17503,8 +17503,8 @@ function Ff(t, e) {
       }),
       (pt.prototype.Sde = function (t, o, s, c) {
         var n = {};
-        if (((n[o] = s), (t = t[c]), o > s)) for (; 1 == this.Rde(n, t); );
-        else for (; 1 == this.Rde(t, n); );
+        if (((n[o] = s), (t = t[c]), o > s)) for (; 1 == this.Rde(n, t););
+        else for (; 1 == this.Rde(t, n););
         for (var i in n) ((o = parseInt(i)) !== (s = n[o]) || t[o] === e) && (t[o] = s);
       }),
       (pt.prototype.Rde = function (t, e) {
@@ -17569,7 +17569,7 @@ function Ff(t, e) {
                 A = d;
               if (-1 !== p) {
                 var l = h > p ? 1 : -1;
-                for (l = d - l * t, u.Ppc(h, l); (h = p), (p = d), -1 != (d = i[h][p]); ) {
+                for (l = d - l * t, u.Ppc(h, l); (h = p), (p = d), -1 != (d = i[h][p]);) {
                   if (d == e) return [];
                   i[h][p] = -1;
                   var m = p > d ? 1 : -1;
@@ -18050,9 +18050,9 @@ function Ff(t, e) {
       }),
       (kt.prototype.get = function (t, e) {
         this.Bac > t && this.reset();
-        for (var o; this.DKc < this.Nta.length && t >= this.Nta[this.DKc].Zb.r1; )
+        for (var o; this.DKc < this.Nta.length && t >= this.Nta[this.DKc].Zb.r1;)
           t <= (o = this.Nta[this.DKc++]).Zb.r2 && ((o.oLc = !0), this.TMb.set(o.id, o), (this.LZa = null));
-        for (; this.CKc < this.pHa.length && t > this.pHa[this.CKc].Zb.r2; )
+        for (; this.CKc < this.pHa.length && t > this.pHa[this.CKc].Zb.r2;)
           (o = this.pHa[this.CKc++]).oLc && ((o.oLc = !1), this.TMb.delete(o.id), (this.LZa = null));
         var s = this;
         return (
@@ -18190,8 +18190,8 @@ function Ff(t, e) {
                               var s = u.PMa;
                               let e = [],
                                 c = new AscCommon.wca(o, o.length);
-                              for (; 10 !== c.Av(); );
-                              for (; c.Wb < c.egb(); ) {
+                              for (; 10 !== c.Av(););
+                              for (; c.Wb < c.egb();) {
                                 let t = c.Wb,
                                   s = c.Cd();
                                 (e.push(o.subarray(t, t + s)), c.Od(s));
@@ -18291,9 +18291,9 @@ function Ff(t, e) {
       (t.AscCommon.L5a = function (t, e) {
         var o = 0,
           s = o + e;
-        for (e = o; t[e] && !(e >= s); ) ++e;
+        for (e = o; t[e] && !(e >= s);) ++e;
         if (16 < e - o && t.subarray && jt) return jt.decode(t.subarray(o, e));
-        for (s = ''; o < e; ) {
+        for (s = ''; o < e;) {
           var c = t[o++];
           if (128 & c) {
             var n = 63 & t[o++];
@@ -18778,7 +18778,7 @@ function Ff(t, e) {
         return null;
       }),
       (t.AscCommon.XYh = function (t) {
-        for (var e, o, s; t.I5c(); )
+        for (var e, o, s; t.I5c();)
           if ('auto' !== t.JT())
             if ('theme' === t.JT()) e = t.xo();
             else if ('tint' === t.JT()) s = t.xo();
@@ -19364,7 +19364,7 @@ function Ff(t, e) {
                     E = 0;
                   0 < F;
                 ) {
-                  for (; C[E] <= F; ) ((g += H[E]), (F -= C[E]));
+                  for (; C[E] <= F;) ((g += H[E]), (F -= C[E]));
                   if (++E >= H.length) break;
                 }
                 n = g;
@@ -19373,7 +19373,7 @@ function Ff(t, e) {
                 var _ = t,
                   w = '',
                   v = 1;
-                for (_ = ((_ - 1) % 46) + 1; 46 < _; ) (++v, (_ -= 46));
+                for (_ = ((_ - 1) % 46) + 1; 46 < _;) (++v, (_ -= 46));
                 for (var S = 0 == _ % 45 ? 65382 : 0 == _ % 46 ? 65437 : 65393 + _ - 1, T = 0; T < v; T++)
                   w += String.fromCharCode(S);
                 n = w;
@@ -19383,7 +19383,7 @@ function Ff(t, e) {
                   I = t,
                   x = '',
                   P = 1;
-                for (I = ((I - 1) % 46) + 1; 46 < I; ) (++P, (I -= 46));
+                for (I = ((I - 1) % 46) + 1; 46 < I;) (++P, (I -= 46));
                 1 <= I && 5 >= I
                   ? (k = 12450 + 2 * (I - 1))
                   : 6 <= I && 17 >= I
@@ -19441,7 +19441,7 @@ function Ff(t, e) {
                             44032, 45208, 45796, 46972, 47560, 48148, 49324, 50500, 51088, 52264, 52852, 53440, 54028,
                             54616,
                           ]));
-                for (; L > q.length; ) (++M, (L -= q.length));
+                for (; L > q.length;) (++M, (L -= q.length));
                 for (var R = 0; R < M; R++) O += String.fromCharCode(q[L - 1]);
                 n = O;
                 break;
@@ -19469,7 +19469,7 @@ function Ff(t, e) {
                   22 < Z;
                 )
                   (++$, (Z -= 22));
-                for (Y = String.fromCharCode(X[Z - 1]); 0 !== $; ) ((Y += String.fromCharCode(X[21])), --$);
+                for (Y = String.fromCharCode(X[Z - 1]); 0 !== $;) ((Y += String.fromCharCode(X[21])), --$);
                 n = Y;
                 break;
               case Asc.Sb.hqa:
@@ -19512,7 +19512,7 @@ function Ff(t, e) {
                 var ut = t,
                   dt = '';
                 ut = ((ut - 1) % 304) + 1;
-                for (var ht = 1; 37 < ut; ) (++ht, (ut -= 37));
+                for (var ht = 1; 37 < ut;) (++ht, (ut -= 37));
                 for (var pt = 0; pt < ht; pt++) dt += String.fromCharCode(2325 + ut - 1);
                 n = dt;
                 break;
@@ -19591,7 +19591,7 @@ function Ff(t, e) {
                 10 > gt && 0 < gt
                   ? (0 !== Ft && (yt = bt[Ft] + yt), (yt = bt[10] + yt), 1 === gt && (gt = 0))
                   : (yt = bt[Ft] + yt);
-                for (var Ht = gt; 0 < gt; ) ((yt = bt[(Ft = Ht - 10 * (gt = (Ht / 10) | 0))] + yt), (Ht = gt));
+                for (var Ht = gt; 0 < gt;) ((yt = bt[(Ft = Ht - 10 * (gt = (Ht / 10) | 0))] + yt), (Ht = gt));
                 n = yt;
                 break;
               case Asc.Sb.Pwb:
@@ -19613,7 +19613,7 @@ function Ff(t, e) {
                     1e4: String.fromCharCode(19975),
                   };
                 if (1e6 > t)
-                  for (var _t = t; ; ) {
+                  for (var _t = t; ;) {
                     var wt = (_t / 1e4) | 0,
                       vt = _t - 1e4 * wt,
                       St = '',
@@ -19655,7 +19655,7 @@ function Ff(t, e) {
                     1e4: String.fromCharCode(33836),
                   };
                 if (1e6 > t)
-                  for (var Bt = t; ; ) {
+                  for (var Bt = t; ;) {
                     var Lt = (Bt / 1e4) | 0,
                       Ot = Bt - 1e4 * Lt,
                       Mt = '',
@@ -20370,7 +20370,7 @@ function Ff(t, e) {
                   (AscCommon.Knb = { v$e: {}, stream: t }),
                   (t = new AscCommon.Mpa(t, t.length)).jb());
                 const o = t.Cd();
-                for (; o + 4 > t.Wb; ) {
+                for (; o + 4 > t.Wb;) {
                   const e = t.jb(),
                     o = t.Cd();
                   AscCommon.Knb.v$e[e] = o;
@@ -27409,7 +27409,7 @@ function Jf() {
         if (!(t = Math.min(t, this.iB.length))) return [];
         let e = this.iB.length - 1,
           o = [];
-        for (; e >= this.iB.length - t; ) {
+        for (; e >= this.iB.length - t;) {
           var s = this.iB[e--];
           if (s)
             if (s.YJa()) for (let t = (s = s.EZc()).length - 1; 0 <= t; --t) (s[t].Rl(), o.push(s[t]));
@@ -28584,13 +28584,13 @@ function Jf() {
       }),
       (o.prototype.KD = function (t) {
         var e = t.Cd() + t.Wb;
-        for (t.jb(); ; ) {
+        for (t.jb(); ;) {
           var o = t.jb();
           if (o === AscCommon.xXa) break;
           if (0 !== o) return void t.fe(e);
           this.filename = t.Ub();
         }
-        for (; !(t.Wb >= e); )
+        for (; !(t.Wb >= e);)
           switch (((o = t.jb()), o)) {
             case 0:
               (t.Cd(), (this.rZd = t.Ub()));
@@ -32830,8 +32830,8 @@ function Jf() {
       (D.prototype.put_Angle = D.prototype.fRd =
         function (t) {
           if (AscFormat.Ta(t)) {
-            for (; 0 > t; ) t += 360;
-            for (; 360 <= t; ) t -= 360;
+            for (; 0 > t;) t += 360;
+            for (; 360 <= t;) t -= 360;
             this.iRa = t;
           }
         }),
@@ -33865,7 +33865,7 @@ function Jf() {
             o = e;
         }
         e = this.bx.length - 1;
-        for (var s = !1; 0 <= e; ) {
+        for (var s = !1; 0 <= e;) {
           if (this.bx[e].da == t) {
             ((this.bx[e].la = o), (s = !0));
             break;
@@ -38592,7 +38592,7 @@ function Jf() {
         }
         var e = new this.constructor(this.md);
         t(this.gm, e);
-        for (var o, s = !0; s && !e.FLb(); )
+        for (var o, s = !0; s && !e.FLb();)
           ((o = new this.constructor(this.md)), t(e.gm, o), (s = e.gm.length !== o.gm.length), (e = o));
         return e;
       }),
@@ -39244,7 +39244,7 @@ function Jf() {
         );
       }),
       (S.prototype.Nwe = function (t, e) {
-        for (var o, s = this.forward ? 0 : e.length - 1, c = this.forward ? 1 : -1; (o = e[s]); ) {
+        for (var o, s = this.forward ? 0 : e.length - 1, c = this.forward ? 1 : -1; (o = e[s]);) {
           if (0 <= (o = c * ((o >> 0) - t))) return 0 === o ? s : s - c;
           s += c;
         }

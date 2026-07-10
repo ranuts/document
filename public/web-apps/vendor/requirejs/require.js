@@ -432,7 +432,7 @@ var requirejs, require, define;
     }
     function A() {
       var e;
-      for (S(); p.length; ) {
+      for (S(); p.length;) {
         if (null === (e = p.shift())[0])
           return y(makeError('mismatch', 'Mismatched anonymous define() module: ' + e[e.length - 1]));
         j(e);
@@ -821,7 +821,7 @@ var requirejs, require, define;
             r,
             n = getOwn(o.shim, e) || {},
             a = n.exports;
-          for (S(); p.length; ) {
+          for (S(); p.length;) {
             if (null === (i = p.shift())[0]) {
               if (((i[0] = e), t)) break;
               t = !0;

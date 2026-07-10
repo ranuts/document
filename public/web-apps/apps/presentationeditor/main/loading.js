@@ -2,7 +2,7 @@ function getUrlParams() {
   function e(e) {
     return decodeURIComponent(e.replace(t, ' '));
   }
-  for (var o, t = /\+/g, l = /([^&=]+)=?([^&]*)/g, r = window.location.search.substring(1), c = {}; (o = l.exec(r)); )
+  for (var o, t = /\+/g, l = /([^&=]+)=?([^&]*)/g, r = window.location.search.substring(1), c = {}; (o = l.exec(r));)
     c[e(o[1])] = e(o[2]);
   return c;
 }

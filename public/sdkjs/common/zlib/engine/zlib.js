@@ -39,7 +39,7 @@
     (e !== String.prototype.fromUtf8 && e !== String.prototype.toUtf8) ||
       ((String.prototype.fromUtf8 = function (t, n, r) {
         (e === n && (n = 0), e === r && (r = t.length));
-        for (var i = '', o = n, a = n + r; o < a; ) {
+        for (var i = '', o = n, a = n + r; o < a;) {
           var s = t[o++];
           if (128 & s) {
             var u = 63 & t[o++];
@@ -62,7 +62,7 @@
         return i;
       }),
       (String.prototype.toUtf8 = function (t) {
-        for (var e = this.length, n = new ArrayBuffer(6 * e + 1), r = 0, i = 0, o = 0, a = new Uint8Array(n); i < e; )
+        for (var e = this.length, n = new ArrayBuffer(6 * e + 1), r = 0, i = 0, o = 0, a = new Uint8Array(n); i < e;)
           ((r = this.charCodeAt(i++)) >= 55296 &&
             r <= 57343 &&
             i < e &&
@@ -148,9 +148,9 @@
     R = !1,
     E = 'undefined' != typeof TextDecoder ? new TextDecoder('utf8') : e;
   function Z(t, e, n) {
-    for (var r = e + n, i = e; t[i] && !(i >= r); ) ++i;
+    for (var r = e + n, i = e; t[i] && !(i >= r);) ++i;
     if (i - e > 16 && t.buffer && E) return E.decode(t.subarray(e, i));
-    for (var o = ''; e < i; ) {
+    for (var o = ''; e < i;) {
       var a = t[e++];
       if (128 & a) {
         var s = 63 & t[e++];
@@ -225,7 +225,7 @@
     }
   }
   function W(t) {
-    for (; t.length > 0; ) {
+    for (; t.length > 0;) {
       var n = t.shift();
       if ('function' != typeof n) {
         var r = n.func;
@@ -686,7 +686,7 @@
           o.onRuntimeInitialized && o.onRuntimeInitialized(),
           (function () {
             if (o.postRun)
-              for ('function' == typeof o.postRun && (o.postRun = [o.postRun]); o.postRun.length; )
+              for ('function' == typeof o.postRun && (o.postRun = [o.postRun]); o.postRun.length;)
                 ((t = o.postRun.shift()), G.unshift(t));
             var t;
             W(G);
@@ -696,7 +696,7 @@
       H > 0 ||
         (!(function () {
           if (o.preRun)
-            for ('function' == typeof o.preRun && (o.preRun = [o.preRun]); o.preRun.length; )
+            for ('function' == typeof o.preRun && (o.preRun = [o.preRun]); o.preRun.length;)
               ((t = o.preRun.shift()), P.unshift(t));
           var t;
           W(P);
@@ -719,7 +719,7 @@
     (o.run = nt),
     o.preInit)
   )
-    for ('function' == typeof o.preInit && (o.preInit = [o.preInit]); o.preInit.length > 0; ) o.preInit.pop()();
+    for ('function' == typeof o.preInit && (o.preInit = [o.preInit]); o.preInit.length > 0;) o.preInit.pop()();
   function rt() {
     ((this.engine = 0), (this.files = {}));
   }
@@ -737,7 +737,7 @@
       if (0 == a) return (o._Zlib_Close(this.engine), o._Zlib_Free(i), !1);
       var s = new Int32Array(o.HEAP8.buffer, a, 4)[0];
       s -= 4;
-      for (var u = new Uint8Array(o.HEAP8.buffer, a + 4, s), f = 0; f < s; ) {
+      for (var u = new Uint8Array(o.HEAP8.buffer, a + 4, s), f = 0; f < s;) {
         var l = u[f] | (u[f + 1] << 8) | (u[f + 2] << 16) | (u[f + 3] << 24),
           c = ''.fromUtf8(u, (f += 4), l);
         ((this.files[c] = null), (f += l));

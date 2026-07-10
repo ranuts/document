@@ -152,7 +152,7 @@
     function h(t, e, o, s, c) {
       var n;
       var a;
-      for (var i = H.length, r = t.charAt(o), u = null; i--; ) {
+      for (var i = H.length, r = t.charAt(o), u = null; i--;) {
         if (
           (!(a = H[i]).leadChar || a.leadChar === r) &&
           (a.scope === s || a.scope === 'all') &&
@@ -366,7 +366,7 @@
       return n;
     };
     A.forEach = function (t, e, o) {
-      for (var s, c = 0, n = -1; (s = A.exec(t, e, c)); ) {
+      for (var s, c = 0, n = -1; (s = A.exec(t, e, c));) {
         o(s, ++n, t, e);
         c = s.index + (s[0].length || 1);
       }
@@ -6626,14 +6626,14 @@ function Cf(t, e) {
       this.SPe = r.Eo();
       this.TXe = r.Eo();
       this.rve = r.Eo();
-      for (var e = r.Eo(); e; ) {
+      for (var e = r.Eo(); e;) {
         this.Jda +=
           e < 65536
             ? String.fromCharCode(e)
             : String.fromCharCode((e >> 10) | 55296) + String.fromCharCode((e & 1023) | 56320);
         e = r.Eo();
       }
-      for (e = r.Eo(); e; ) {
+      for (e = r.Eo(); e;) {
         this.N9b += String.fromCharCode(e);
         e = r.Eo();
       }
@@ -11414,7 +11414,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     }
   };
   e.prototype.n0f = function () {
-    for (var t; this.cU > 0 && (t = this.$te.shift()) !== undefined; ) {
+    for (var t; this.cU > 0 && (t = this.$te.shift()) !== undefined;) {
       this.TX(t);
     }
   };
@@ -12592,7 +12592,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     this.pl = t;
   };
   r.prototype.read = function (t, e) {
-    for (var o = true; o; ) {
+    for (var o = true; o;) {
       switch (t[e.Ea++]) {
         case 0:
           this.Fxa(t[e.Ea++]);
@@ -12872,7 +12872,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     this.kt = t;
   };
   t.prototype.read = function (t, e) {
-    for (var o = true; o; ) {
+    for (var o = true; o;) {
       switch (t[e.Ea++]) {
         case 0:
           this.Rnb(t[e.Ea++]);
@@ -13529,7 +13529,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   };
   x.prototype.read = function (e, o) {
     var s;
-    for (var c = true, n = null, a = null, i = null, u = null; c; ) {
+    for (var c = true, n = null, a = null, i = null, u = null; c;) {
       switch (e[o.Ea++]) {
         case 0:
           this.k9a(e[o.Ea++]);
@@ -15817,7 +15817,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
           for (var c = 0; c < s; c++) {
             this.Cba[c] = null;
             this.F6[c] = null;
-            for (var n = true; n; ) {
+            for (var n = true; n;) {
               switch (t[e.Ea++]) {
                 case 0:
                   this.Cba[c] = k(t, e);
@@ -18433,7 +18433,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   };
   o.prototype.Ra = function (t, e) {
     var o = i.vb;
-    for (var s = 0; s < t; ) {
+    for (var s = 0; s < t;) {
       this.stream.R$c = false;
       o = this.stream.gb();
       var c = this.stream.be();
@@ -18454,7 +18454,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   };
   o.prototype.Bg = function (t, e) {
     var o = i.vb;
-    for (var s = 0; s < t; ) {
+    for (var s = 0; s < t;) {
       o = this.stream.gb();
       var c = 2;
       switch (this.stream.gb()) {
@@ -18499,7 +18499,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   };
   o.prototype.Zv = function (t, e) {
     var o = i.vb;
-    for (var s = 0; s < t; ) {
+    for (var s = 0; s < t;) {
       o = this.stream.gb();
       var c = 2;
       switch (this.stream.gb()) {
@@ -18862,7 +18862,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
         e = '';
         if (t > 0) {
           var o;
-          for (var s = t; s > 0; ) {
+          for (var s = t; s > 0;) {
             o = (s - 1) % 26;
             e = String.fromCharCode(o + 65) + e;
             s = (s - (o + 1)) / 26;
@@ -18925,11 +18925,11 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
       t = this.id;
       this.Kd = this.$e = 0;
       e = {};
-      for (var o = -1, s = 0; (o = t.indexOf('$', o + 1)) != -1; ) {
+      for (var o = -1, s = 0; (o = t.indexOf('$', o + 1)) != -1;) {
         e[o - s++] = 1;
       }
       if (s <= 2 && (s > 0 && (t = t.replace(/\$/g, '')), (o = t.length) > 0)) {
-        for (var c = 0; this.GZf(t.charAt(c)) && c < o; ) {
+        for (var c = 0; this.GZf(t.charAt(c)) && c < o;) {
           c++;
         }
         if (c == 0) {
@@ -19115,7 +19115,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     this.Y7d = function () {
       var t = 0;
       var e = this.Sb + this.Dd() + 4;
-      for (this.Md(1); ; ) {
+      for (this.Md(1); ;) {
         var o = this.gb();
         if (o === 251) {
           break;
@@ -19130,7 +19130,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     this.neb = function () {
       var t = 0;
       var e = this.Sb + this.Dd() + 4;
-      for (this.Md(1); ; ) {
+      for (this.Md(1); ;) {
         var o = this.gb();
         if (o === 251) {
           break;
@@ -19257,7 +19257,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     }
     var o;
     var s = '';
-    for (e = t.Sb + e; t.Sb < e; ) {
+    for (e = t.Sb + e; t.Sb < e;) {
       if (((o = t.data[t.Sb]) & 128) == 0) {
         s += a(o);
         ++t.Sb;
@@ -19425,7 +19425,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
       if (e.length * t >= 268435456) {
         throw new RangeError('repeat count must not overflow maximum string size');
       }
-      for (var o = ''; (t & 1) == 1 && (o += e), (t >>>= 1) != 0; ) {
+      for (var o = ''; (t & 1) == 1 && (o += e), (t >>>= 1) != 0;) {
         e += e;
       }
       return o;
@@ -19511,7 +19511,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   function o(t, e) {
     if (typeof t == 'number') {
       var o = [];
-      for (; t > 0; ) {
+      for (; t > 0;) {
         var s = t % e;
         if (s === 0) {
           o.unshift(0);
@@ -21592,7 +21592,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   };
   Math.factor = function (t) {
     var e = 1;
-    for (t = this.floor(t); t !== 0; ) {
+    for (t = this.floor(t); t !== 0;) {
       e *= t--;
     }
     return e;
@@ -21671,7 +21671,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
         if (typeof t != 'function') {
           throw new TypeError('predicate must be a function');
         }
-        for (var n = 0; n < c; ) {
+        for (var n = 0; n < c;) {
           var a = s[n];
           if (t.call(o, a, n, s)) {
             return a;
@@ -22191,7 +22191,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     }
     var e;
     var o = false;
-    for (var s = undefined.length; t !== s; ) {
+    for (var s = undefined.length; t !== s;) {
       e = undefined.charCodeAt(t);
       if (ae.indexOf(e) !== -1) {
         this.i8 = undefined[t];
@@ -23296,8 +23296,8 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     this.Tfb.length = 0;
     if (!(t.length <= 0)) {
       var o;
-      for (var s = 0, c = 0, n = t.length; s < t.length; ) {
-        for (o = t[s].length; c < o && t[s][c].Da < 0.001; ) {
+      for (var s = 0, c = 0, n = t.length; s < t.length;) {
+        for (o = t[s].length; c < o && t[s][c].Da < 0.001;) {
           c++;
         }
         if (c < o) {
@@ -24100,7 +24100,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     if (this.i5b > t) {
       this.reset();
     }
-    for (var o; this.hDc < this.Fra.length && t >= this.Fra[this.hDc].Vb.r1; ) {
+    for (var o; this.hDc < this.Fra.length && t >= this.Fra[this.hDc].Vb.r1;) {
       if (t <= (o = this.Fra[this.hDc++]).Vb.r2) {
         o.YDc = true;
         this.uHb.set(o.id, o);
@@ -24461,13 +24461,13 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
   t.AscCommon.a2a = function (t, e) {
     var o = 0;
     var s = o + e;
-    for (e = o; t[e] && !(e >= s); ) {
+    for (e = o; t[e] && !(e >= s);) {
       ++e;
     }
     if (e - o > 16 && t.subarray && qt) {
       return qt.decode(t.subarray(o, e));
     }
-    for (s = ''; o < e; ) {
+    for (s = ''; o < e;) {
       var c = t[o++];
       if (c & 128) {
         var n = t[o++] & 63;
@@ -25082,7 +25082,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
     var e;
     var o;
     var s;
-    for (; t.lYc(); ) {
+    for (; t.lYc();) {
       if (t.vL() !== 'auto') {
         if (t.vL() === 'theme') {
           e = t.Ym();
@@ -25723,7 +25723,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
             var v = t;
             var G = '';
             var x = 1;
-            for (v = ((v - 1) % 46) + 1; v > 46; ) {
+            for (v = ((v - 1) % 46) + 1; v > 46;) {
               ++x;
               v -= 46;
             }
@@ -25738,7 +25738,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
             var E = t;
             var P = '';
             var M = 1;
-            for (E = ((E - 1) % 46) + 1; E > 46; ) {
+            for (E = ((E - 1) % 46) + 1; E > 46;) {
               ++M;
               E -= 46;
             }
@@ -25829,11 +25829,11 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
               1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1497, 1499, 1500, 1502, 1504, 1505, 1506, 1508,
               1510, 1511, 1512, 1513, 1514,
             ];
-            for (; $ > 22; ) {
+            for (; $ > 22;) {
               ++X;
               $ -= 22;
             }
-            for (Y = String.fromCharCode(J[$ - 1]); X !== 0; ) {
+            for (Y = String.fromCharCode(J[$ - 1]); X !== 0;) {
               Y += String.fromCharCode(J[21]);
               --X;
             }
@@ -25853,7 +25853,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
               2309, 2310, 2311, 2312, 2313, 2314, 2315, 2316, 2317, 2318, 2319, 2320, 2321, 2322, 2323, 2324, 2309,
               2309,
             ];
-            for (; Q > 18; ) {
+            for (; Q > 18;) {
               ++et;
               Q -= 18;
             }
@@ -25890,7 +25890,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
             var ht = '';
             ut = ((ut - 1) % 304) + 1;
             var pt = 1;
-            for (; ut > 37; ) {
+            for (; ut > 37;) {
               ++pt;
               ut -= 37;
             }
@@ -25986,7 +25986,7 @@ bc.Asc.c_oAscDateTimeFormat = bc.Asc.ZYb = xf;
               yt = gt[Ft] + yt;
             }
             var Ht = Dt;
-            for (; Dt > 0; ) {
+            for (; Dt > 0;) {
               yt = gt[(Ft = Ht - (Dt = (Ht / 10) | 0) * 10)] + yt;
               Ht = Dt;
             }
@@ -37266,7 +37266,7 @@ window.AscCommon.od = new jh();
   };
   o.prototype.UC = function (t) {
     var e = t.Dd() + t.Sb;
-    for (t.gb(); ; ) {
+    for (t.gb(); ;) {
       var o = t.gb();
       if (o === AscCommon.z5a) {
         break;
@@ -44263,7 +44263,7 @@ window.AscCommon.od = new jh();
     }
     e = this.jG.length - 1;
     var c = false;
-    for (; e >= 0; ) {
+    for (; e >= 0;) {
       if (this.jG[e].da == t) {
         this.jG[e].pa = o;
         c = true;
@@ -47839,7 +47839,7 @@ window.AscCommon.od = new jh();
         o = null;
       } else {
         if (c) {
-          for (e = 1; s.PP(o + '_' + e); ) {
+          for (e = 1; s.PP(o + '_' + e);) {
             e++;
           }
           o += '_' + e;
@@ -48200,7 +48200,7 @@ window.AscCommon.od = new jh();
       var c = s.wV();
       var n = s.nX();
       e[c] ||= [];
-      for (var a = 0, i = (c = e[c]).length; a < i && !(n < c[a].ub.nX()); ) {
+      for (var a = 0, i = (c = e[c]).length; a < i && !(n < c[a].ub.nX());) {
         a++;
       }
       c.splice(a, 0, {
@@ -49733,7 +49733,7 @@ window.AscCommon.od = new jh();
       }
       if (o[e[s]] !== undefined) {
         var n = 1;
-        for (var a = e[s] + n; o[a] !== undefined; ) {
+        for (var a = e[s] + n; o[a] !== undefined;) {
           n++;
           a = e[s] + n;
         }
@@ -49948,7 +49948,7 @@ window.AscCommon.od = new jh();
         var i = a.J1b();
         var r = a.Zgd();
         e[i] ||= [];
-        for (var u = 0, h = (i = e[i]).length; u < h && !(r < i[u].Zgd()); ) {
+        for (var u = 0, h = (i = e[i]).length; u < h && !(r < i[u].Zgd());) {
           u++;
         }
         i.splice(u, 0, a);
@@ -54900,7 +54900,7 @@ window.AscCommon.j0h = function () {
     var e = new this.constructor(this.Xc);
     t(this.Hl, e);
     var o;
-    for (var s = true; s && !e.kGb(); ) {
+    for (var s = true; s && !e.kGb();) {
       o = new this.constructor(this.Xc);
       t(e.Hl, o);
       s = e.Hl.length !== o.Hl.length;
@@ -55713,7 +55713,7 @@ window.AscCommon.j0h = function () {
     );
   };
   S.prototype.Bie = function (t, e) {
-    for (var o, s = this.forward ? 0 : e.length - 1, c = this.forward ? 1 : -1; (o = e[s]); ) {
+    for (var o, s = this.forward ? 0 : e.length - 1, c = this.forward ? 1 : -1; (o = e[s]);) {
       if ((o = c * ((o >> 0) - t)) >= 0) {
         if (o === 0) {
           return s;

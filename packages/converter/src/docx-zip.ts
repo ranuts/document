@@ -509,14 +509,12 @@ export async function extractDocxMediaUrls(docxBytes: Uint8Array): Promise<Recor
   let cdPos = cdOffset;
   for (let i = 0; i < cdCount; i++) {
     if (cdPos + 46 > docxBytes.length) break;
-    if (
-      !(
-        docxBytes[cdPos] === 0x50 &&
-        docxBytes[cdPos + 1] === 0x4b &&
-        docxBytes[cdPos + 2] === 0x01 &&
-        docxBytes[cdPos + 3] === 0x02
-      )
-    )
+    if (!(
+      docxBytes[cdPos] === 0x50 &&
+      docxBytes[cdPos + 1] === 0x4b &&
+      docxBytes[cdPos + 2] === 0x01 &&
+      docxBytes[cdPos + 3] === 0x02
+    ))
       break;
 
     const compression = u16(docxBytes, cdPos + 10);

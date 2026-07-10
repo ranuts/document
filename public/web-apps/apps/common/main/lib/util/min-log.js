@@ -571,7 +571,7 @@
             return e(t, n.slice(arguments, 1));
           }),
           (n.remove = function (t, r) {
-            for (var i = n.len(t) || 0, o = []; i--; ) r(t[i], i, t) && o.push(i);
+            for (var i = n.len(t) || 0, o = []; i--;) r(t[i], i, t) && o.push(i);
             return e(t, o);
           }),
           (n.fill = function (e, r, i, o) {

@@ -261,10 +261,10 @@
             if (r)
               if (s) {
                 for (i in e) if (!1 === n.apply(e[i], r)) break;
-              } else for (; o < a && !1 !== n.apply(e[o++], r); );
+              } else for (; o < a && !1 !== n.apply(e[o++], r););
             else if (s) {
               for (i in e) if (!1 === n.call(e[i], i, e[i])) break;
-            } else for (; o < a && !1 !== n.call(e[o], o, e[o++]); );
+            } else for (; o < a && !1 !== n.call(e[o], o, e[o++]););
             return e;
           },
           trim: F
@@ -297,7 +297,7 @@
             var r = e.length,
               i = 0;
             if ('number' == typeof n.length) for (var o = n.length; i < o; i++) e[r++] = n[i];
-            else for (; n[i] !== t; ) e[r++] = n[i++];
+            else for (; n[i] !== t;) e[r++] = n[i++];
             return ((e.length = r), e);
           },
           grep: function (e, t, n) {
@@ -945,7 +945,7 @@
         function d() {
           --l || i.resolveWith(a, [a]);
         }
-        for (; s--; )
+        for (; s--;)
           (r =
             o.data(a[s], u, t, !0) ||
             ((o.data(a[s], c, t, !0) || o.data(a[s], f, t, !0)) && o.data(a[s], u, o.Callbacks('once memory'), !0))) &&
@@ -1028,7 +1028,7 @@
           })
         : this.each(function () {
             if ('string' === n)
-              for (var i, a = 0, s = o(this), l = t, u = e.split(y); (i = u[a++]); )
+              for (var i, a = 0, s = o(this), l = t, u = e.split(y); (i = u[a++]);)
                 ((l = r ? l : !s.hasClass(i)), s[l ? 'addClass' : 'removeClass'](i));
             else
               ('undefined' !== n && 'boolean' !== n) ||
@@ -1587,7 +1587,7 @@
         a = e,
         s = o.event.fixHooks[e.type] || {},
         l = s.props ? this.props.concat(s.props) : this.props;
-      for (e = o.Event(a), r = l.length; r; ) e[(i = l[--r])] = a[i];
+      for (e = o.Event(a), r = l.length; r;) e[(i = l[--r])] = a[i];
       return (
         e.target || (e.target = a.srcElement || n),
         3 === e.target.nodeType && (e.target = e.target.parentNode),
@@ -1823,7 +1823,7 @@
             var i = (o._data(this, 'lastToggle' + e.guid) || 0) % r;
             return (o._data(this, 'lastToggle' + e.guid, i + 1), n.preventDefault(), t[i].apply(this, arguments) || !1);
           };
-        for (i.guid = n; r < t.length; ) t[r++].guid = n;
+        for (i.guid = n; r < t.length;) t[r++].guid = n;
         return this.click(i);
       },
       hover: function (e, t) {
@@ -1883,7 +1883,7 @@
         if (T.length > 1 && m.exec(t))
           if (2 === T.length && h.relative[T[0]]) u = C(T[0] + T[1], r, o);
           else
-            for (u = h.relative[T[0]] ? [r] : d(T.shift(), r); T.length; )
+            for (u = h.relative[T[0]] ? [r] : d(T.shift(), r); T.length;)
               ((t = T.shift()), h.relative[t] && (t += T.shift()), (u = C(t, u, o)));
         else if (
           (!o &&
@@ -1948,7 +1948,7 @@
           return (r || (r = void 0 !== t.getElementsByTagName ? t.getElementsByTagName('*') : []), { set: r, expr: e });
         }),
         (d.filter = function (e, n, r, i) {
-          for (var o, a, s, l, u, c, f, p, m, g = e, y = [], v = n, b = n && n[0] && d.isXML(n[0]); e && n.length; ) {
+          for (var o, a, s, l, u, c, f, p, m, g = e, y = [], v = n, b = n && n[0] && d.isXML(n[0]); e && n.length;) {
             for (s in h.filter)
               if (null != (o = h.leftMatch[s].exec(e)) && o[2]) {
                 if (((c = h.filter[s]), (f = o[1]), (a = !1), o.splice(1, 1), '\\' === f.substr(f.length - 1)))
@@ -2023,7 +2023,7 @@
               r && (t = t.toLowerCase());
               for (var o, a = 0, s = e.length; a < s; a++)
                 if ((o = e[a])) {
-                  for (; (o = o.previousSibling) && 1 !== o.nodeType; );
+                  for (; (o = o.previousSibling) && 1 !== o.nodeType;);
                   e[a] = i || (o && o.nodeName.toLowerCase() === t) ? o || !1 : o === t;
                 }
               i && d.filter(t, e, !0);
@@ -2240,11 +2240,11 @@
               switch (u) {
                 case 'only':
                 case 'first':
-                  for (; (c = c.previousSibling); ) if (1 === c.nodeType) return !1;
+                  for (; (c = c.previousSibling);) if (1 === c.nodeType) return !1;
                   if ('first' === u) return !0;
                   c = e;
                 case 'last':
-                  for (; (c = c.nextSibling); ) if (1 === c.nodeType) return !1;
+                  for (; (c = c.nextSibling);) if (1 === c.nodeType) return !1;
                   return !0;
                 case 'nth':
                   if (((n = t[2]), (i = t[3]), 1 === n && 0 === i)) return !0;
@@ -2321,7 +2321,7 @@
           var u = i[s];
           if (u) {
             var c = !1;
-            for (u = u[e]; u; ) {
+            for (u = u[e]; u;) {
               if (u[r] === n) {
                 c = i[u.sizset];
                 break;
@@ -2341,7 +2341,7 @@
           var u = i[s];
           if (u) {
             var c = !1;
-            for (u = u[e]; u; ) {
+            for (u = u[e]; u;) {
               if (u[r] === n) {
                 c = i[u.sizset];
                 break;
@@ -2387,15 +2387,15 @@
             if (a === l) return b(e, t);
             if (!a) return -1;
             if (!l) return 1;
-            for (; u; ) (i.unshift(u), (u = u.parentNode));
-            for (u = l; u; ) (o.unshift(u), (u = u.parentNode));
+            for (; u;) (i.unshift(u), (u = u.parentNode));
+            for (u = l; u;) (o.unshift(u), (u = u.parentNode));
             ((n = i.length), (r = o.length));
             for (var c = 0; c < n && c < r; c++) if (i[c] !== o[c]) return b(i[c], o[c]);
             return c === n ? b(e, o[c], -1) : b(i[c], t, 1);
           }),
           (b = function (e, t, n) {
             if (e === t) return n;
-            for (var r = e.nextSibling; r; ) {
+            for (var r = e.nextSibling; r;) {
               if (r === t) return -1;
               r = r.nextSibling;
             }
@@ -2541,7 +2541,7 @@
           return !!t && 'HTML' !== t.nodeName;
         }));
       var C = function (e, t, n) {
-        for (var r, i = [], o = '', a = t.nodeType ? [t] : t; (r = h.match.PSEUDO.exec(e)); )
+        for (var r, i = [], o = '', a = t.nodeType ? [t] : t; (r = h.match.PSEUDO.exec(e));)
           ((o += r[0]), (e = e.replace(h.match.PSEUDO, '')));
         e = h.relative[e] ? e + '*' : e;
         for (var s = 0, l = a.length; s < l; s++) d(e, a[s], i, n);
@@ -2638,7 +2638,7 @@
         i = [],
         a = this[0];
       if (o.isArray(e)) {
-        for (var s = 1; a && a.ownerDocument && a !== t; ) {
+        for (var s = 1; a && a.ownerDocument && a !== t;) {
           for (n = 0; n < e.length; n++) o(a).is(e[n]) && i.push({ selector: e[n], elem: a, level: s });
           ((a = a.parentNode), s++);
         }
@@ -2646,7 +2646,7 @@
       }
       var l = W.test(e) || 'string' != typeof e ? o(e, t || this.context) : 0;
       for (n = 0, r = this.length; n < r; n++)
-        for (a = this[n]; a; ) {
+        for (a = this[n]; a;) {
           if (l ? l.index(a) > -1 : o.find.matchesSelector(a, e)) {
             i.push(a);
             break;
@@ -2734,7 +2734,7 @@
         );
       },
       dir: function (e, n, r) {
-        for (var i = [], a = e[n]; a && 9 !== a.nodeType && (r === t || 1 !== a.nodeType || !o(a).is(r)); )
+        for (var i = [], a = e[n]; a && 9 !== a.nodeType && (r === t || 1 !== a.nodeType || !o(a).is(r));)
           (1 === a.nodeType && i.push(a), (a = a[n]));
         return i;
       },
@@ -2772,7 +2772,7 @@
   !(function (e) {
     var t = X.split('|'),
       n = e.createDocumentFragment();
-    if (n.createElement) for (; t.length; ) n.createElement(t.pop());
+    if (n.createElement) for (; t.length;) n.createElement(t.pop());
   })(n);
   function te(e, t) {
     (t.src
@@ -2805,7 +2805,7 @@
           (this[0].parentNode && t.insertBefore(this[0]),
             t
               .map(function () {
-                for (var e = this; e.firstChild && 1 === e.firstChild.nodeType; ) e = e.firstChild;
+                for (var e = this; e.firstChild && 1 === e.firstChild.nodeType;) e = e.firstChild;
                 return e;
               })
               .append(this));
@@ -2875,8 +2875,7 @@
       },
       empty: function () {
         for (var e, t = 0; null != (e = this[t]); t++)
-          for (1 === e.nodeType && o.cleanData(e.getElementsByTagName('*')); e.firstChild; )
-            e.removeChild(e.firstChild);
+          for (1 === e.nodeType && o.cleanData(e.getElementsByTagName('*')); e.firstChild;) e.removeChild(e.firstChild);
         return this;
       },
       clone: function (e, t) {
@@ -3430,7 +3429,7 @@
             getResponseHeader: function (e) {
               var n;
               if (2 === x) {
-                if (!a) for (a = {}; (n = we.exec(i)); ) a[n[1].toLowerCase()] = n[2];
+                if (!a) for (a = {}; (n = we.exec(i));) a[n[1].toLowerCase()] = n[2];
                 n = a[e.toLowerCase()];
               }
               return n === t ? null : n;
@@ -3461,7 +3460,7 @@
                       u = e.dataTypes,
                       c = e.responseFields;
                     for (o in c) o in r && (n[c[o]] = r[o]);
-                    for (; '*' === u[0]; )
+                    for (; '*' === u[0];)
                       (u.shift(), i === t && (i = e.mimeType || n.getResponseHeader('content-type')));
                     if (i)
                       for (o in l)
@@ -3945,7 +3944,7 @@
           if ((r || o._unmark(!0, this), null == e))
             for (t in a) a[t] && a[t].stop && t.indexOf('.run') === t.length - 4 && s(this, a, t);
           else a[(t = e + '.run')] && a[t].stop && s(this, a, t);
-          for (t = i.length; t--; )
+          for (t = i.length; t--;)
             i[t].elem !== this ||
               (null != e && i[t].queue !== e) ||
               (r ? i[t](!0) : i[t].saveState(), (n = !0), i.splice(t, 1));
@@ -4247,7 +4246,7 @@
       },
       offsetParent: function () {
         return this.map(function () {
-          for (var e = this.offsetParent || n.body; e && !ot.test(e.nodeName) && 'static' === o.css(e, 'position'); )
+          for (var e = this.offsetParent || n.body; e && !ot.test(e.nodeName) && 'static' === o.css(e, 'position');)
             e = e.offsetParent;
           return e;
         });

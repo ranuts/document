@@ -8,11 +8,9 @@ import { getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
 
 // Import converter function to avoid circular dependency
 let convertBinToDocumentFn:
-  | ((bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>)
-  | null = null;
+  ((bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>) | null = null;
 let convertBinToDocumentAndDownloadFn:
-  | ((bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>)
-  | null = null;
+  ((bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>) | null = null;
 
 export function setConverterCallbacks(callbacks: {
   convert: (bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>;

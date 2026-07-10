@@ -48,7 +48,7 @@
       (r !== String.prototype.fromUtf8 && r !== String.prototype.toUtf8) ||
         ((String.prototype.fromUtf8 = function (t, e, n) {
           (r === e && (e = 0), r === n && (n = t.length - e));
-          for (var a = '', i = e, o = e + n; i < o; ) {
+          for (var a = '', i = e, o = e + n; i < o;) {
             var u = t[i++];
             if (128 & u) {
               var _ = 63 & t[i++];
@@ -71,7 +71,7 @@
           return a;
         }),
         (String.prototype.toUtf8 = function (t) {
-          for (var r = this.length, e = new ArrayBuffer(6 * r + 1), n = 0, a = 0, i = 0, o = new Uint8Array(e); a < r; )
+          for (var r = this.length, e = new ArrayBuffer(6 * r + 1), n = 0, a = 0, i = 0, o = new Uint8Array(e); a < r;)
             ((n = this.charCodeAt(a++)) >= 55296 &&
               n <= 57343 &&
               a < r &&
@@ -166,9 +166,9 @@
     C = !1,
     T = 'undefined' != typeof TextDecoder ? new TextDecoder('utf8') : r;
   function w(t, r, e) {
-    for (var n = r + e, a = r; t[a] && !(a >= n); ) ++a;
+    for (var n = r + e, a = r; t[a] && !(a >= n);) ++a;
     if (a - r > 16 && t.buffer && T) return T.decode(t.subarray(r, a));
-    for (var i = ''; r < a; ) {
+    for (var i = ''; r < a;) {
       var o = t[r++];
       if (128 & o) {
         var u = 63 & t[r++];
@@ -240,7 +240,7 @@
     }
   }
   function D(t) {
-    for (; t.length > 0; ) {
+    for (; t.length > 0;) {
       var e = t.shift();
       if ('function' != typeof e) {
         var n = e.func;
@@ -799,7 +799,7 @@
           o.onRuntimeInitialized && o.onRuntimeInitialized(),
           (function () {
             if (o.postRun)
-              for ('function' == typeof o.postRun && (o.postRun = [o.postRun]); o.postRun.length; )
+              for ('function' == typeof o.postRun && (o.postRun = [o.postRun]); o.postRun.length;)
                 ((t = o.postRun.shift()), R.unshift(t));
             var t;
             D(R);
@@ -809,7 +809,7 @@
       E > 0 ||
         (!(function () {
           if (o.preRun)
-            for ('function' == typeof o.preRun && (o.preRun = [o.preRun]); o.preRun.length; )
+            for ('function' == typeof o.preRun && (o.preRun = [o.preRun]); o.preRun.length;)
               ((t = o.preRun.shift()), H.unshift(t));
           var t;
           D(H);
@@ -832,7 +832,7 @@
     (o.run = ut),
     o.preInit)
   )
-    for ('function' == typeof o.preInit && (o.preInit = [o.preInit]); o.preInit.length > 0; ) o.preInit.pop()();
+    for ('function' == typeof o.preInit && (o.preInit = [o.preInit]); o.preInit.length > 0;) o.preInit.pop()();
   function _t() {
     ((this.error = 0), (this.freeObj = 0));
   }
