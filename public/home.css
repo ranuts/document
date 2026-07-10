@@ -1,114 +1,113 @@
-/* Landing hero for the homepage (edit.chaxus.com).
-   EVERY selector is scoped under #landing-hero so nothing leaks into the
-   OnlyOffice editor iframe host or the Tailwind layer. Theme tokens live on
-   #landing-hero itself (with dark overrides) so the hero is self-contained. */
+/* Landing hero for the homepage (edit.chaxus.com) — native ranui product style.
+   home.css holds ONLY page layout/composition (grid, spacing rhythm, type scale,
+   responsive) — the things tokens and components can't provide. Every design VALUE
+   comes from the ranui token layer (public/ran-tokens.css): colours --ran-color-*,
+   spacing --ran-space-*, radius --ran-radius-*, fonts --ran-font-*. The UI chrome
+   (buttons, cards) is real ranui components (<r-button>, <r-card>). EVERY selector
+   is scoped under #landing-hero; dark mode comes from ranui for free. */
 
 #landing-hero {
-  /* Consume the ranui design-token layer (public/ran-tokens.css) so the hero
-     matches ran.chaxus.com and the editor, and inherits ranui's dark theme for
-     free. Local aliases keep the rules below readable. */
-  --paper: var(--ran-color-bg);
-  --paper-2: var(--ran-color-bg-muted);
-  --panel: var(--ran-color-bg-elevated);
   --ink: var(--ran-color-text);
   --ink-2: var(--ran-color-text-secondary);
   --muted: var(--ran-gray-800);
-  --line: var(--ran-color-border);
-  --line-2: var(--ran-color-border-hover);
+  --rule: var(--ran-color-border);
   --accent: var(--ran-color-primary);
-  --accent-hot: var(--ran-color-primary-hover);
-  --accent-ink: #fff;
-  --accent-wash: var(--ran-blue-200);
-  --grid: var(--ran-gray-alpha-200);
-  --glow: 0 0 0 1px var(--ran-blue-400), 0 30px 80px -34px rgba(0, 110, 255, 0.28);
   --signal: var(--ran-color-success);
-  --signal-wash: var(--ran-green-200);
-  --ghost: var(--ran-gray-alpha-200);
-  --shadow: var(--ran-shadow-modal);
-  --radius: var(--ran-radius-lg);
-  --maxw: 1180px;
-  --mono: var(--ran-font-mono);
   --sans: var(--ran-font-family);
+  --mono: var(--ran-font-mono);
+  --maxw: 1120px;
+  /* fluid page gutter — the only spacing that isn't a fixed step (it scales with
+     viewport); bounds are ranui steps (--ran-space-5≈20 not in scale, so raw). */
+  --pad: clamp(20px, 5vw, 56px);
 
   position: relative;
   z-index: 1;
   width: 100%;
   min-height: 100%;
-  background: var(--paper);
+  background: var(--ran-color-bg);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
-
 #landing-hero * {
   box-sizing: border-box;
+}
+#landing-hero a {
+  color: inherit;
+  text-decoration: none;
+}
+#landing-hero .wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: var(--pad);
+  padding-right: var(--pad);
+}
+
+/* ---- ranui component sizing via ::part (native look, hero-scaled) ---- */
+#landing-hero r-button::part(ran-btn) {
+  border-radius: var(--ran-radius-md);
+  padding: var(--ran-space-3) var(--ran-space-5, 20px);
+  font-size: 15px;
+  font-weight: 600;
+}
+#landing-hero .cta r-button::part(ran-btn) {
+  padding: var(--ran-space-4) var(--ran-space-6);
+  font-size: 15.5px;
 }
 
 /* ---------- top bar ---------- */
 #landing-hero .bar {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 22px 26px;
+  border-bottom: 1px solid var(--rule);
+}
+#landing-hero .bar .wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  position: relative;
-  z-index: 3;
+  gap: var(--ran-space-4);
+  padding-top: var(--ran-space-4);
+  padding-bottom: var(--ran-space-4);
 }
 #landing-hero .brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 11px;
-  text-decoration: none;
-  color: var(--ink);
+  align-items: center;
+  gap: var(--ran-space-2);
   font-weight: 700;
-  letter-spacing: -0.01em;
   font-size: 16px;
+  letter-spacing: -0.01em;
 }
-#landing-hero .brand .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
+#landing-hero .brand .logo {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--ran-radius-sm);
   background: var(--accent);
-  align-self: center;
-  box-shadow: 0 0 0 4px var(--accent-wash);
-}
-#landing-hero .brand small {
-  font: 500 12px/1 var(--mono);
-  color: var(--muted);
+  display: inline-grid;
+  place-items: center;
+  color: #fff; /* on-primary: ranui has no on-colour token; white reads on blue in both themes */
+  font-size: 13px;
+  font-weight: 700;
 }
 #landing-hero .bar nav {
   display: flex;
   align-items: center;
-  gap: 24px;
-  font-size: 14px;
+  gap: var(--ran-space-1);
 }
-#landing-hero .bar nav a {
-  color: var(--ink-2);
-  text-decoration: none;
-}
-#landing-hero .bar nav a:hover {
-  color: var(--accent);
-}
-#landing-hero .bar nav a.gh {
+#landing-hero .bar nav .navlink {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--mono);
-  font-size: 12.5px;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-2) var(--ran-space-3);
+  border-radius: var(--ran-radius-sm);
+  font-size: 14px;
   color: var(--ink-2);
-  border: 1px solid var(--line-2);
-  padding: 7px 12px;
-  border-radius: 9px;
-  transition: 0.15s;
+  transition: 0.15s ease;
 }
-#landing-hero .bar nav a.gh:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+#landing-hero .bar nav .navlink:hover {
+  color: var(--ink);
+  background: var(--ran-color-bg-hover);
 }
 #landing-hero .ghmark {
   width: 15px;
@@ -116,21 +115,80 @@
   fill: currentColor;
   flex: none;
 }
-#landing-hero .btn .ghmark {
-  width: 16px;
-  height: 16px;
-}
 
-/* intent-differentiated cross-link */
+/* ---------- hero ---------- */
+#landing-hero .hero {
+  text-align: center;
+  padding-top: clamp(56px, 9vw, 120px);
+  padding-bottom: clamp(48px, 7vw, 88px);
+}
+#landing-hero .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-1) var(--ran-space-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-bg-subtle);
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-bottom: var(--ran-space-6);
+}
+#landing-hero .chip b {
+  color: var(--signal);
+  font-weight: 600;
+}
+#landing-hero .chip .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--ran-radius-full);
+  background: var(--signal);
+}
+#landing-hero h1 {
+  margin: 0 auto;
+  max-width: 15ch;
+  font-size: clamp(38px, 6.2vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+#landing-hero h1 .accent {
+  color: var(--accent);
+}
+#landing-hero .sub {
+  margin: clamp(20px, 2.4vw, 28px) auto 0;
+  max-width: 52ch;
+  font-size: clamp(17px, 1.6vw, 20px);
+  color: var(--ink-2);
+}
+#landing-hero .cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ran-space-3);
+  justify-content: center;
+  margin-top: clamp(28px, 3vw, 40px);
+}
+#landing-hero .trust {
+  margin-top: var(--ran-space-6);
+  font: 500 13px/1.6 var(--mono);
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ran-space-1) var(--ran-space-3);
+  justify-content: center;
+}
+#landing-hero .trust .sep {
+  color: var(--rule);
+}
 #landing-hero .crosslink {
-  margin: 18px 0 0;
+  margin: var(--ran-space-6) 0 0;
   font-size: 13.5px;
   color: var(--muted);
 }
 #landing-hero .crosslink a {
   color: var(--accent);
-  text-decoration: none;
-  font-weight: 650;
+  font-weight: 600;
 }
 #landing-hero .crosslink a:hover {
   text-decoration: underline;
@@ -138,32 +196,162 @@
 #landing-hero .crosslink em {
   font-style: normal;
   color: var(--ink-2);
-  font-weight: 650;
+  font-weight: 600;
 }
 
-/* ran ecosystem strip */
-#landing-hero .eco {
-  border-top: 1px solid var(--line);
-  background: var(--paper-2);
+/* ---------- section scaffolding ---------- */
+#landing-hero .section {
+  padding-top: clamp(44px, 6vw, 80px);
 }
-#landing-hero .eco-inner {
-  max-width: var(--maxw);
+#landing-hero .section-head {
+  text-align: center;
+  margin-bottom: clamp(28px, 3vw, 44px);
+}
+#landing-hero .section-head .eyebrow {
+  font: 600 12px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+#landing-hero .section-head h2 {
+  margin: var(--ran-space-3) 0 0;
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+/* ---------- feature cards (r-card) ---------- */
+#landing-hero .cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ran-space-4);
+}
+#landing-hero .cards r-card {
+  display: block;
+  height: 100%;
+}
+/* r-card renders its own container chrome; card-body only adds inner padding. */
+#landing-hero .card-body {
+  padding: var(--ran-space-6);
+}
+#landing-hero .card-body .k {
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+#landing-hero .card-body h3 {
+  margin: var(--ran-space-4) 0 var(--ran-space-2);
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+#landing-hero .card-body p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* ---------- how it works ---------- */
+#landing-hero .steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ran-space-5, 20px);
+}
+#landing-hero .step {
+  padding: var(--ran-space-6);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-lg);
+  background: var(--ran-color-bg-elevated);
+}
+#landing-hero .step .n {
+  font: 700 14px/1 var(--mono);
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+#landing-hero .step h3 {
+  margin: var(--ran-space-3) 0 var(--ran-space-2);
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+#landing-hero .step p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+#landing-hero .step .loc {
+  display: inline-block;
+  margin-top: var(--ran-space-4);
+  font: 600 10.5px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+
+/* ---------- faq ---------- */
+#landing-hero .faq {
+  max-width: 780px;
   margin: 0 auto;
-  padding: 22px 26px;
+}
+#landing-hero .qa details {
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-md);
+  margin-bottom: var(--ran-space-2);
+  background: var(--ran-color-bg-elevated);
+}
+#landing-hero .qa summary {
+  cursor: pointer;
+  list-style: none;
+  padding: var(--ran-space-4);
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ran-space-4);
+}
+#landing-hero .qa summary::-webkit-details-marker {
+  display: none;
+}
+#landing-hero .qa summary::after {
+  content: '+';
+  font: 400 20px/1 var(--mono);
+  color: var(--accent);
+  transition: transform 0.15s ease;
+}
+#landing-hero .qa details[open] summary::after {
+  transform: rotate(45deg);
+}
+#landing-hero .qa .a {
+  margin: 0;
+  padding: 0 var(--ran-space-4) var(--ran-space-4);
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ---------- ecosystem + footer ---------- */
+#landing-hero .eco {
+  margin-top: clamp(56px, 7vw, 96px);
+  border-top: 1px solid var(--rule);
+  background: var(--ran-color-bg-subtle);
+}
+#landing-hero .eco .wrap {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px 26px;
+  gap: var(--ran-space-4) var(--ran-space-6);
+  padding-top: var(--ran-space-6);
+  padding-bottom: var(--ran-space-6);
 }
 #landing-hero .eco-label {
-  font: 700 11px/1.5 var(--mono);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  font: 600 11px/1.4 var(--mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
 }
 #landing-hero .eco-label .gitmark {
   width: 15px;
@@ -174,678 +362,88 @@
 #landing-hero .eco nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: var(--ran-space-3);
 }
 #landing-hero .eco nav a,
 #landing-hero .eco nav .here {
   display: inline-flex;
   align-items: baseline;
-  gap: 8px;
+  gap: var(--ran-space-2);
   font-size: 13.5px;
-  text-decoration: none;
-  padding: 9px 14px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--panel);
+  padding: var(--ran-space-2) var(--ran-space-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg);
 }
 #landing-hero .eco nav a {
   color: var(--ink-2);
-  transition: 0.15s;
+  transition: 0.15s ease;
 }
 #landing-hero .eco nav a:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-1px);
 }
 #landing-hero .eco nav b {
-  font-family: var(--mono);
-  font-size: 12.5px;
-  font-weight: 700;
+  font: 700 12.5px/1 var(--mono);
 }
 #landing-hero .eco nav small {
   color: var(--muted);
-  font-weight: 400;
 }
 #landing-hero .eco nav .here {
   color: var(--ink);
   border-color: var(--accent);
   box-shadow: inset 0 0 0 1px var(--accent);
 }
-
-/* ---------- hero shell ---------- */
-#landing-hero .stage {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 26px 26px 70px;
-  position: relative;
-}
-
-/* the "device boundary" console */
-#landing-hero .console {
-  position: relative;
-  border: 1.5px solid var(--line-2);
-  border-radius: 24px;
-  background:
-    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 100% 34px,
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 34px 100%,
-    var(--panel);
-  box-shadow: var(--glow);
-  padding: 30px clamp(24px, 4vw, 56px) clamp(40px, 5vw, 60px);
-  overflow: hidden;
-}
-#landing-hero .console::before {
-  content: '▚ your device — nothing leaves this boundary';
-  position: absolute;
-  top: 14px;
-  left: 20px;
-  font: 600 11px/1 var(--mono);
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  opacity: 0.85;
-}
-#landing-hero .console .beacon {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font: 600 11px/1 var(--mono);
-  letter-spacing: 0.08em;
-  color: var(--signal);
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-#landing-hero .console .beacon::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--signal);
-  box-shadow: 0 0 0 0 var(--signal);
-  animation: lh-pulse 2.4s ease-out infinite;
-}
-@keyframes lh-pulse {
-  0% {
-    box-shadow: 0 0 0 0 var(--signal-wash);
-  }
-  70% {
-    box-shadow: 0 0 0 7px transparent;
-  }
-  100% {
-    box-shadow: 0 0 0 0 transparent;
-  }
-}
-
-/* giant ghost watermark. NOTE: class is `hero-wm`, NOT `ghost` — `.ghost` is the
-   button variant (.btn.ghost); a `.console .ghost` selector would wrongly capture
-   those buttons and blow them up to watermark size. */
-#landing-hero .console .hero-wm {
-  position: absolute;
-  right: -2%;
-  bottom: -14%;
-  margin: 0;
-  font: 900 clamp(150px, 26vw, 340px) / 0.8 var(--sans);
-  letter-spacing: -0.04em;
-  color: var(--ghost);
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-
-#landing-hero .hero {
-  position: relative;
-  z-index: 1;
-  margin-top: 26px;
-  display: grid;
-  grid-template-columns: 1.02fr 0.98fr;
-  gap: 52px;
-  align-items: center;
-}
-
-#landing-hero .eyebrow {
-  font: 700 12px/1 var(--mono);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-#landing-hero .eyebrow::before {
-  content: '';
-  width: 26px;
-  height: 2px;
-  background: var(--accent);
-}
-
-#landing-hero h1 {
-  font-size: clamp(38px, 6vw, 74px);
-  line-height: 0.98;
-  letter-spacing: -0.035em;
-  font-weight: 850;
-  margin: 0 0 22px;
-  text-wrap: balance;
-  color: var(--ink);
-}
-#landing-hero h1 .thin {
-  font-weight: 300;
-  color: var(--ink-2);
-  letter-spacing: -0.02em;
-}
-/* selection-highlight flourish */
-#landing-hero h1 .sel {
-  position: relative;
-  white-space: nowrap;
-  background: var(--accent-wash);
-  box-shadow: 0 0 0 1.5px var(--accent);
-  border-radius: 4px;
-  padding: 0 0.12em;
-}
-#landing-hero h1 .sel::after {
-  content: '';
-  display: inline-block;
-  width: 2.5px;
-  height: 0.82em;
-  background: var(--accent);
-  margin-left: 0.1em;
-  vertical-align: -0.06em;
-  animation: lh-blink 1.05s steps(1) infinite;
-}
-@keyframes lh-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-#landing-hero .lead {
-  font-size: clamp(17px, 1.6vw, 20px);
-  color: var(--ink-2);
-  margin: 0 0 26px;
-  max-width: 33ch;
-}
-
-#landing-hero .status {
-  font: 500 13px/1.7 var(--mono);
-  color: var(--muted);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 5px 13px;
-  padding: 12px 15px;
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  background: var(--paper-2);
-  margin-bottom: 30px;
-  width: fit-content;
-  max-width: 100%;
-}
-#landing-hero .status b {
-  color: var(--signal);
-  font-weight: 700;
-}
-#landing-hero .status .sep {
-  color: var(--line-2);
-}
-#landing-hero .status .fmt {
-  color: var(--ink-2);
-}
-
-#landing-hero .cta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-#landing-hero .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  font-weight: 650;
-  font-size: 15.5px;
-  text-decoration: none;
-  padding: 14px 24px;
-  border-radius: 11px;
-  border: 1.5px solid transparent;
-  cursor: pointer;
-  font-family: inherit;
-  transition:
-    transform 0.14s ease,
-    background 0.14s,
-    border-color 0.14s,
-    box-shadow 0.14s;
-}
-#landing-hero .btn.primary {
-  background: var(--accent);
-  color: var(--accent-ink);
-  box-shadow: 0 8px 22px -8px var(--accent);
-}
-#landing-hero .btn.primary:hover {
-  background: var(--accent-hot);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px -10px var(--accent);
-}
-#landing-hero .btn.ghost {
-  color: var(--ink);
-  border-color: var(--line-2);
-  background: transparent;
-}
-#landing-hero .btn.ghost:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-2px);
-}
-#landing-hero .btn .arrow {
-  transition: transform 0.14s;
-}
-#landing-hero .btn.primary:hover .arrow {
-  transform: translateX(4px);
-}
-
-/* ---------- document window ---------- */
-#landing-hero .frame {
-  position: relative;
-  background: var(--panel);
-  border: 1px solid var(--line-2);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-#landing-hero .frame-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 15px;
-  background: var(--paper-2);
-  border-bottom: 1px solid var(--line);
-}
-#landing-hero .tl {
-  display: flex;
-  gap: 7px;
-}
-#landing-hero .tl i {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--line-2);
-  display: block;
-}
-#landing-hero .frame-file {
-  margin-left: 7px;
-  font: 500 12.5px/1 var(--mono);
-  color: var(--muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-#landing-hero .frame-file .ext {
-  color: var(--accent);
-  background: var(--accent-wash);
-  padding: 4px 7px;
-  border-radius: 6px;
-  font-size: 11px;
-  letter-spacing: 0.03em;
-}
-#landing-hero .frame-lock {
-  margin-left: auto;
-  font: 500 11.5px/1 var(--mono);
-  color: var(--signal);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-#landing-hero .frame-lock::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--signal);
-}
-#landing-hero .doc {
-  padding: 26px 30px 30px;
-  background: var(--panel);
-  position: relative;
-}
-#landing-hero .doc .h {
-  height: 15px;
-  border-radius: 4px;
-  background: var(--ink);
-  opacity: 0.8;
-}
-#landing-hero .doc .h.title {
-  width: 60%;
-  height: 22px;
-  margin-bottom: 22px;
-  opacity: 0.92;
-}
-#landing-hero .doc .l {
-  height: 9px;
-  border-radius: 4px;
-  background: var(--line-2);
-  margin: 12px 0;
-}
-#landing-hero .doc .l.w1 {
-  width: 96%;
-}
-#landing-hero .doc .l.w2 {
-  width: 86%;
-}
-#landing-hero .doc .l.w3 {
-  width: 92%;
-}
-#landing-hero .doc .l.sel {
-  background: var(--accent-wash);
-  box-shadow: 0 0 0 1px var(--accent) inset;
-}
-#landing-hero .doc .l.type {
-  width: 44%;
-  position: relative;
-}
-#landing-hero .doc .l.type::after {
-  content: '';
-  position: absolute;
-  right: -6px;
-  top: -2px;
-  width: 2px;
-  height: 13px;
-  background: var(--accent);
-  animation: lh-blink 1.05s steps(1) infinite;
-}
-#landing-hero .doc-tools {
-  display: flex;
-  gap: 7px;
-  margin: 22px 0 6px;
-  flex-wrap: wrap;
-}
-#landing-hero .doc-tools span {
-  font: 500 11px/1 var(--mono);
-  color: var(--muted);
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  padding: 6px 9px;
-}
-#landing-hero .doc .tag {
-  position: absolute;
-  right: 20px;
-  top: 66px;
-  font: 600 10.5px/1 var(--mono);
-  color: var(--accent-ink);
-  background: var(--accent);
-  padding: 5px 8px;
-  border-radius: 6px 6px 6px 0;
-  box-shadow: 0 6px 16px -6px var(--accent);
-}
-
-/* ---------- steps (real sequence) ---------- */
-#landing-hero .steps-wrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 8px 26px 4px;
-}
-/* Section label for the steps band — matches the .band-label eyebrow treatment
-   so the real <h2> reads as a small uppercase label, not a large heading. */
-#landing-hero .steps-title {
-  font: 700 12px/1 var(--mono);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 0 0 18px;
-}
-#landing-hero .steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-#landing-hero .step {
-  position: relative;
-  padding: 22px 22px 24px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--panel);
-}
-#landing-hero .step .n {
-  font: 800 13px/1 var(--mono);
-  color: var(--accent);
-  letter-spacing: 0.05em;
-}
-#landing-hero .step h4 {
-  margin: 12px 0 6px;
-  font-size: 17px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-#landing-hero .step p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-#landing-hero .step .loc {
-  display: inline-block;
-  margin-top: 12px;
-  font: 600 10.5px/1 var(--mono);
-  color: var(--signal);
-  background: var(--signal-wash);
-  padding: 5px 8px;
-  border-radius: 6px;
-  letter-spacing: 0.04em;
-}
-#landing-hero .step:not(:last-child)::after {
-  content: '→';
-  position: absolute;
-  right: -14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--line-2);
-  font-weight: 700;
-  z-index: 2;
-}
-
-/* ---------- feature band ---------- */
-#landing-hero .band {
-  background: var(--paper-2);
-  border-top: 1px solid var(--line);
-  margin-top: 56px;
-}
-#landing-hero .band-inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 58px 26px;
-}
-#landing-hero .band-label {
-  font: 700 12px/1 var(--mono);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 0 0 28px;
-}
-#landing-hero .grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-#landing-hero .cell {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 24px 22px 26px;
-  position: relative;
-  overflow: hidden;
-  transition:
-    transform 0.16s,
-    border-color 0.16s,
-    box-shadow 0.16s;
-}
-#landing-hero .cell::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 3px;
-  width: 0;
-  background: var(--accent);
-  transition: width 0.22s ease;
-}
-#landing-hero .cell:hover {
-  transform: translateY(-4px);
-  border-color: var(--line-2);
-  box-shadow: var(--shadow);
-}
-#landing-hero .cell:hover::before {
-  width: 100%;
-}
-#landing-hero .cell .k {
-  font: 700 11px/1 var(--mono);
-  color: var(--accent);
-  letter-spacing: 0.06em;
-}
-#landing-hero .cell h3 {
-  font-size: 17px;
-  margin: 15px 0 8px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-#landing-hero .cell p {
-  margin: 0;
-  font-size: 14.5px;
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-/* ---------- faq ---------- */
-#landing-hero .faq-wrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 60px 26px 62px;
-  display: grid;
-  grid-template-columns: 0.5fr 1fr;
-  gap: 44px;
-}
-#landing-hero .faq-wrap h2 {
-  font-size: clamp(24px, 3vw, 30px);
-  letter-spacing: -0.025em;
-  margin: 0;
-  color: var(--ink);
-}
-#landing-hero .faq-wrap h2 + p {
-  color: var(--muted);
-  font-size: 15px;
-  margin-top: 12px;
-  max-width: 30ch;
-}
-#landing-hero .qa details {
-  border-top: 1px solid var(--line);
-}
-#landing-hero .qa details:last-child {
-  border-bottom: 1px solid var(--line);
-}
-#landing-hero .qa summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 18px 0;
-  font-weight: 650;
-  font-size: 16.5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  color: var(--ink);
-}
-#landing-hero .qa summary::-webkit-details-marker {
-  display: none;
-}
-#landing-hero .qa summary::after {
-  content: '+';
-  font-family: var(--mono);
-  color: var(--accent);
-  font-weight: 400;
-  font-size: 21px;
-  transition: transform 0.16s;
-}
-#landing-hero .qa details[open] summary::after {
-  transform: rotate(45deg);
-}
-#landing-hero .qa p.a {
-  margin: -2px 0 20px;
-  color: var(--ink-2);
-  font-size: 15px;
-  max-width: 62ch;
-  line-height: 1.65;
-}
-#landing-hero .qa code {
-  font: 500 12.5px/1 var(--mono);
-  background: var(--accent-wash);
-  color: var(--accent);
-  padding: 2px 6px;
-  border-radius: 5px;
-}
-
-/* ---------- footer ---------- */
 #landing-hero .foot {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 30px 26px 46px;
+  border-top: 1px solid var(--rule);
+}
+#landing-hero .foot .wrap {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--ran-space-4);
+  padding-top: var(--ran-space-8);
+  padding-bottom: var(--ran-space-10);
   color: var(--muted);
   font-size: 13.5px;
 }
 #landing-hero .foot nav {
   display: flex;
-  gap: 20px;
   flex-wrap: wrap;
-}
-#landing-hero .foot a {
-  color: var(--muted);
-  text-decoration: none;
+  gap: var(--ran-space-4);
 }
 #landing-hero .foot a:hover {
   color: var(--accent);
 }
 #landing-hero .foot .lic {
-  font-family: var(--mono);
-  font-size: 12px;
+  font: 500 12px/1 var(--mono);
 }
 
-/* ---------- load orchestration ---------- */
+/* ---------- motion ---------- */
+/* Pure CSS, no JS: a load-in stagger on the hero, a live pulse on the status dot,
+   and a hover lift on cards. All gated behind prefers-reduced-motion. */
 @media (prefers-reduced-motion: no-preference) {
-  #landing-hero .console {
-    animation: lh-drawin 0.7s ease both;
-  }
+  /* orchestrated hero load-in */
   #landing-hero .reveal {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(16px);
     animation: lh-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
   #landing-hero .d1 {
-    animation-delay: 0.12s;
+    animation-delay: 0.06s;
   }
   #landing-hero .d2 {
-    animation-delay: 0.2s;
+    animation-delay: 0.16s;
   }
   #landing-hero .d3 {
     animation-delay: 0.28s;
   }
   #landing-hero .d4 {
-    animation-delay: 0.36s;
+    animation-delay: 0.4s;
   }
   #landing-hero .d5 {
-    animation-delay: 0.46s;
-  }
-  #landing-hero .visual .frame {
-    animation: lh-floatin 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    animation-delay: 0.3s;
-  }
-  @keyframes lh-drawin {
-    from {
-      opacity: 0;
-      transform: translateY(10px) scale(0.995);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+    animation-delay: 0.52s;
   }
   @keyframes lh-rise {
     to {
@@ -853,60 +451,51 @@
       transform: none;
     }
   }
-  @keyframes lh-floatin {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
+
+  /* live status dot on the chip */
+  #landing-hero .chip .dot {
+    animation: lh-pulse 2.2s ease-out infinite;
+  }
+  @keyframes lh-pulse {
+    0% {
+      box-shadow: 0 0 0 0 var(--ran-green-500);
     }
-    to {
-      opacity: 1;
-      transform: none;
+    70% {
+      box-shadow: 0 0 0 6px transparent;
     }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+
+  /* hover lift on cards / step tiles */
+  #landing-hero .cards r-card,
+  #landing-hero .step {
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  #landing-hero .cards r-card:hover,
+  #landing-hero .step:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ran-shadow-menu);
   }
 }
 
+/* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  #landing-hero .hero {
-    grid-template-columns: 1fr;
-    gap: 34px;
-  }
-  #landing-hero .hero .visual {
-    order: 2;
-  }
-  #landing-hero .grid {
+  #landing-hero .cards {
     grid-template-columns: repeat(2, 1fr);
   }
   #landing-hero .steps {
     grid-template-columns: 1fr;
   }
-  #landing-hero .step:not(:last-child)::after {
-    content: '↓';
-    right: 50%;
-    top: auto;
-    bottom: -14px;
-    transform: translateX(50%);
-  }
-  #landing-hero .faq-wrap {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
-  #landing-hero .bar nav a:not(.gh) {
-    display: none;
-  }
-  #landing-hero .console .hero-wm {
+  #landing-hero .bar nav .navlink:not(.gh) {
     display: none;
   }
 }
-@media (max-width: 540px) {
-  #landing-hero .grid {
+@media (max-width: 520px) {
+  #landing-hero .cards {
     grid-template-columns: 1fr;
-  }
-  #landing-hero h1 {
-    font-size: clamp(34px, 11vw, 46px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  #landing-hero * {
-    animation: none !important;
   }
 }

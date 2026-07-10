@@ -15,6 +15,7 @@ import {
   showMenuGuide,
 } from './lib/ui';
 import 'ranui/button';
+import 'ranui/card';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
 
