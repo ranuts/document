@@ -106,11 +106,20 @@ const toggleAgentPanelLazy = (): void => {
 window.addEventListener('message', (event: MessageEvent) => {
   if (event.data?.type === 'agent:toggle') toggleAgentPanelLazy();
 });
-// Landing hero orchestration. Only the bare homepage (no ?file/?src, not embedded)
-// shows the crawlable hero. If a document is about to load, or we're embedded,
-// hide it immediately to avoid a flash before the editor takes over.
+// Deep-link to a blank document: ?new=docx|xlsx|pptx opens the editor straight
+// into a new file (skipping the landing hero). The localized homepages use it —
+// e.g. /zh-CN/ links to `/?locale=zh-CN&new=docx`, so i18n (which reads ?locale)
+// boots the editor UI in Chinese and drops the user directly into editing.
+const newExtRaw = getAllQueryString()['new'];
+const newExt = typeof newExtRaw === 'string' ? newExtRaw.replace(/^\./, '').toLowerCase() : '';
+const createNewOnLoad = ['docx', 'xlsx', 'pptx'].includes(newExt) && !documentUrl;
+
+// Landing hero orchestration. Only the bare homepage (no ?file/?src/?new, not
+// embedded) shows the crawlable hero. If a document is about to load or be
+// created, or we're embedded, hide it immediately to avoid a flash before the
+// editor takes over.
 const isEmbedded = document.body.classList.contains('embed-mode');
-if (documentUrl || isEmbedded) {
+if (documentUrl || isEmbedded || createNewOnLoad) {
   hideLanding();
 } else {
   showLanding();
@@ -127,6 +136,8 @@ if (documentUrl) {
     console.warn('Failed to decode URL, using original:', error);
     openDocumentFromUrl(documentUrl, undefined, { readonly: isReadonly });
   }
+} else if (createNewOnLoad && !isEmbedded) {
+  void onCreateNew(`.${newExt}`);
 }
 
 // Register Service Worker for PWA

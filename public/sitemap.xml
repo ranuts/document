@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://edit.chaxus.com/zh-CN/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://edit.chaxus.com/no-signup-document-editor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -46,42 +51,42 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/no-signup-document-editor</loc>
+    <loc>https://edit.chaxus.com/zh-CN/no-signup-document-editor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/vs/google-docs</loc>
+    <loc>https://edit.chaxus.com/zh-CN/vs/google-docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/open/docx</loc>
+    <loc>https://edit.chaxus.com/zh-CN/open/docx</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/open/xlsx</loc>
+    <loc>https://edit.chaxus.com/zh-CN/open/xlsx</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/open/pptx</loc>
+    <loc>https://edit.chaxus.com/zh-CN/open/pptx</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/offline-document-editor</loc>
+    <loc>https://edit.chaxus.com/zh-CN/offline-document-editor</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/convert/xlsx-to-csv</loc>
+    <loc>https://edit.chaxus.com/zh-CN/convert/xlsx-to-csv</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://edit.chaxus.com/zh/convert/csv-to-xlsx</loc>
+    <loc>https://edit.chaxus.com/zh-CN/convert/csv-to-xlsx</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

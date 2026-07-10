@@ -59,6 +59,49 @@
   font-size: 15.5px;
 }
 
+/* Plain-button fallback: static pages (e.g. /zh-CN/) use <a class="btn primary">
+   instead of <r-button>; styled to match the ranui button treatment. */
+#landing-hero .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ran-space-2);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 15.5px;
+  line-height: 1;
+  padding: var(--ran-space-4) var(--ran-space-6);
+  border-radius: var(--ran-radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+#landing-hero .btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+#landing-hero .btn.primary:hover {
+  background: var(--ran-color-primary-hover);
+  transform: translateY(-1px);
+}
+#landing-hero .btn.ghost {
+  background: var(--ran-color-bg);
+  color: var(--ink);
+  border-color: var(--ran-color-border-hover);
+}
+#landing-hero .btn.ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Language switch link in the nav (globe + label). */
+#landing-hero .bar nav .lang {
+  gap: var(--ran-space-1);
+}
+
 /* ---------- top bar ---------- */
 #landing-hero .bar {
   border-bottom: 1px solid var(--rule);
@@ -229,6 +272,14 @@
 #landing-hero .cards r-card {
   display: block;
   height: 100%;
+}
+/* Plain-card fallback: static pages (e.g. /zh-CN/) can't run the <r-card> web
+   component, so they use <div class="card"> which mirrors r-card's chrome. */
+#landing-hero .cards .card {
+  height: 100%;
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-lg);
+  background: var(--ran-color-bg-elevated);
 }
 /* r-card renders its own container chrome; card-body only adds inner padding. */
 #landing-hero .card-body {
@@ -470,12 +521,14 @@
 
   /* hover lift on cards / step tiles */
   #landing-hero .cards r-card,
+  #landing-hero .cards .card,
   #landing-hero .step {
     transition:
       transform 0.18s ease,
       box-shadow 0.18s ease;
   }
   #landing-hero .cards r-card:hover,
+  #landing-hero .cards .card:hover,
   #landing-hero .step:hover {
     transform: translateY(-4px);
     box-shadow: var(--ran-shadow-menu);
