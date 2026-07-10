@@ -18,12 +18,24 @@ else
     echo "Warning: $RAN_TOKENS_SRC not found, using existing public/ran-tokens.css."
 fi
 
-# Keep the vendored ranui component bundle in sync (same idea as the token layer
-# above: static pages under public/ have no bundler, so they <script defer>
-# /ranui.iife.js to register <r-button>/<r-card>/<r-select>). Regenerate on every
-# build so it never drifts from the installed ranui version.
-pnpm vite build --config vite.ranui-iife.config.ts
-echo "Synced ranui component bundle -> public/ranui.iife.js"
+# Keep the vendored ranui component bundles in sync (same idea as the token layer
+# above: static pages under public/ have no bundler, so they <script defer> these
+# to register <r-button>/<r-card>/<r-select>). ranui ships official standalone
+# per-component IIFEs since 0.2.0-alpha.2; re-copy on every build so they never
+# drift from the installed version. Registration is guarded upstream, so loading
+# several files together is safe. The file list is derived from the pages'
+# <script src="/ranui-iife/..."> tags, so the pages stay the single source of
+# truth — adding a component to a page automatically adds it to the sync.
+RAN_IIFE_SRC="node_modules/ranui/dist/iife"
+if [ -d "$RAN_IIFE_SRC" ]; then
+    mkdir -p public/ranui-iife
+    grep -rhoE 'ranui-iife/[a-z-]+\.iife\.js' public --include='*.html' | sort -u | while read -r ref; do
+        cp "$RAN_IIFE_SRC/$(basename "$ref")" public/ranui-iife/
+    done
+    echo "Synced ranui component bundles -> public/ranui-iife/"
+else
+    echo "Warning: $RAN_IIFE_SRC not found, using existing public/ranui-iife/."
+fi
 
 # Run Vite build
 pnpm vite build

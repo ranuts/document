@@ -72,9 +72,9 @@
 }
 
 /* Pre-upgrade fallbacks: the static localized pages register components via
-   the deferred /ranui.iife.js bundle, so :not(:defined) keeps the CTAs styled
-   and clickable before (or without) it — progressive enhancement, not a
-   parallel hand-built component set. */
+   the deferred /ranui-iife/<name>.iife.js bundles, so :not(:defined) keeps the
+   CTAs styled and clickable before (or without) them — progressive enhancement,
+   not a parallel hand-built component set. */
 #landing-hero .cta a {
   text-decoration: none;
 }

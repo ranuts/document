@@ -30,8 +30,8 @@ importers:
         specifier: workspace:*
         version: link:packages/shared
       ranui:
-        specifier: 0.2.0-alpha.1
-        version: 0.2.0-alpha.1
+        specifier: 0.2.0-alpha.2
+        version: 0.2.0-alpha.2
       ranuts:
         specifier: 0.2.0-alpha.0
         version: 0.2.0-alpha.0
@@ -1099,8 +1099,8 @@ packages:
     resolution: {integrity: sha512-XD8WmFGYg+TRdDWCHTu0yhGRala7fOoNx3AO+LcPeTboXq0VrWgrwEmaEHIWshDQ3M1VwS9WYbhyhxd3b132cw==}
     engines: {node: '>=20.19.0'}
 
-  ranui@0.2.0-alpha.1:
-    resolution: {integrity: sha512-9cOxFKN3wCvXLmL0h3vpyKm4F+cBq/JpmkCURKdSEa2LntqoPNKLY3yjLv8T7QmdidwihAOdsIU1iHy6hpUcYw==}
+  ranui@0.2.0-alpha.2:
+    resolution: {integrity: sha512-w49wk6RlPAlWdprdYuG0i66Yc3C3O1bY1rM+Csm6jnxXx6+yO1M/O2gXRspb+fQ+vkKtGdP7hhVErR9DCr6dSQ==}
     engines: {node: '>=20.19.0'}
 
   ranuts@0.2.0-alpha.0:
@@ -2064,7 +2064,7 @@ snapshots:
     dependencies:
       ranuts: 0.2.0-alpha.0
 
-  ranui@0.2.0-alpha.1:
+  ranui@0.2.0-alpha.2:
     dependencies:
       ranuts: 0.2.0-alpha.0
 

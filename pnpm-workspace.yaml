@@ -1,5 +1,5 @@
 packages:
   - packages/*
 minimumReleaseAgeExclude:
-  - ranui@0.2.0-alpha.0
-  - ranuts@0.2.0-alpha.0
+  - ranui
+  - ranuts

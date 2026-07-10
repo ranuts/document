@@ -3,7 +3,8 @@
    mirrors). Utilitarian document layout, but on the same design system as the
    homepage: every value comes from the ranui token layer (/ran-tokens.css,
    loaded before this file), the chrome is real ranui components registered by
-   /ranui.iife.js (<r-button>, <r-card>), and the visual language mirrors
+   the /ranui-iife/<name>.iife.js bundles (<r-button>, <r-card>), and the
+   visual language mirrors
    home.css — hairline rules, mono type for machine facts, blue spent only on
    the primary action. Dark mode comes from the token layer for free. */
 
@@ -150,8 +151,8 @@ p {
   font-weight: 600;
 }
 /* pre-upgrade fallback so the CTA is a styled, clickable button even before
-   (or without) /ranui.iife.js — same progressive-enhancement idea as the
-   static-page fallbacks on the homepage */
+   (or without) the /ranui-iife/*.iife.js bundles — same progressive-enhancement
+   idea as the static-page fallbacks on the homepage */
 .cta r-button:not(:defined) {
   display: inline-flex;
   align-items: center;
