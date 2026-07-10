@@ -10,7 +10,7 @@ echo "Starting build process..."
 # it never drifts from the installed ranui version, prepending a provenance header
 # (the file is minified, so the header explains where it came from and not to edit).
 RAN_TOKENS_SRC="node_modules/ranui/dist/ranui.css"
-RAN_TOKENS_HEADER="/* VENDORED — DO NOT EDIT. Generated from ranui/dist/ranui.css (the ranui design-token :root layer) by bin/build.sh on every build, so it never drifts from the installed ranui version. Landing pages <link> this so the --ran-* tokens resolve at first paint; static pages under public/ have no bundler and cannot import from node_modules. Change tokens in ranui (chaxus/ran), not here. */"
+RAN_TOKENS_HEADER="/* VENDORED — DO NOT EDIT. Generated from ranui/dist/ranui.css (the ranui design-token :root layer) by bin/build.sh on every build, so it never drifts from the installed ranui version. Landing pages <link> this so the --ran-* tokens resolve at first paint; static pages under public/ have no bundler and cannot import from node_modules. Source of truth: ranui in https://github.com/chaxus/ran (package: ranui) — change tokens there, not here. */"
 if [ -f "$RAN_TOKENS_SRC" ]; then
     { echo "$RAN_TOKENS_HEADER"; cat "$RAN_TOKENS_SRC"; } > public/ran-tokens.css
     echo "Synced ranui design tokens -> public/ran-tokens.css"
