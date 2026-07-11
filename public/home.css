@@ -218,9 +218,14 @@
   text-wrap: balance;
 }
 /* The key phrase reads as text selected in an editor — the product's own way of
-   emphasising — instead of a plain accent colour. */
+   emphasising — instead of a plain accent colour.
+   The highlight is a gradient rect inset 0.14em from the fragment's top, not a
+   full background: at tight leading a later line's inline background paints
+   OVER the previous line's descenders (the "g" of "right" was clipped by the
+   next fragment). The inset stays above cap height, so glyph coverage is
+   unchanged while the line above keeps its descenders. */
 #landing-hero h1 .accent {
-  background: var(--sel);
+  background: linear-gradient(var(--sel), var(--sel)) 0 0.14em / 100% calc(100% - 0.14em) no-repeat;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   padding: 0 0.08em;
