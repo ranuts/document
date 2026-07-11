@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="/img/64.png" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#006bff" />
+
+    <title>404 — Page Not Found · Online Document Editor</title>
+    <!-- Presence of this file switches Cloudflare Pages from SPA-fallback mode
+         (unknown URLs got the app homepage with HTTP 200 — soft 404s) to real
+         404 responses with this page as the body. -->
+    <link rel="stylesheet" href="/ran-tokens.css" />
+    <link rel="stylesheet" href="/landing.css" />
+    <script src="/ranui-iife/button.iife.js" defer></script>
+    <style>
+      /* page-specific: a "document window" that failed to find its file,
+         reusing the homepage hero's visual language */
+      .nf-win {
+        max-width: 560px;
+        margin: 0 0 28px;
+        border: 1px solid var(--rule);
+        border-radius: var(--ran-radius-lg);
+        background: var(--ran-color-bg-elevated);
+        box-shadow: var(--ran-shadow-menu);
+        overflow: hidden;
+        font-family: var(--mono);
+      }
+      .nf-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--rule);
+        background: var(--ran-color-bg-subtle);
+        font-size: 11.5px;
+        color: var(--ink-2);
+      }
+      .nf-bar i {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: var(--ran-color-border-hover);
+        flex: none;
+      }
+      .nf-bar i + i {
+        margin-left: -6px;
+      }
+      .nf-code {
+        padding: 36px 24px;
+        text-align: center;
+        font-size: clamp(56px, 10vw, 88px);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--ink);
+        line-height: 1;
+      }
+      .nf-code small {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .nf-net {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-top: 1px solid var(--rule);
+        background: var(--ran-color-bg-subtle);
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .nf-net i {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--signal);
+        flex: none;
+      }
+      .nf-zh {
+        color: var(--ink-2);
+        font-size: 15px;
+      }
+      .nf-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="gh-mark" viewBox="0 0 16 16">
+        <path
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+        />
+      </symbol>
+    </svg>
+
+    <header class="bar">
+      <a class="brand" href="/"><span class="logo">D</span>Document Editor</a>
+      <nav>
+        <a href="/zh-CN/" hreflang="zh-CN">中文</a>
+        <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+          <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+        </a>
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <p class="eyebrow">HTTP 404 · Not found</p>
+      <h1>This page doesn't exist</h1>
+      <p class="lead">
+        Nothing was found at this address. Your documents aren't here either — they never left your device.
+      </p>
+      <p class="nf-zh">这个页面不存在。你的文件当然也不在这里——它们从未离开过你的设备。</p>
+
+      <div class="nf-win" aria-hidden="true">
+        <div class="nf-bar"><i></i><i></i><i></i><span>file-not-found.docx</span></div>
+        <div class="nf-code">404<small>document not found</small></div>
+        <div class="nf-net"><i></i>network · 0 requests · 0 bytes out</div>
+      </div>
+
+      <div class="nf-actions">
+        <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
+        <a href="/zh-CN/">中文首页</a>
+        <a href="/offline-document-editor">Offline editor</a>
+        <a href="/open/docx">Open DOCX</a>
+      </div>
+
+      <footer>
+        <a href="/">Home</a>
+        <a href="/zh-CN/">中文</a>
+        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      </footer>
+    </main>
+  </body>
+</html>

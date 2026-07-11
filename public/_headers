@@ -1,0 +1,8 @@
+# Cloudflare Pages headers (copied into dist/ by the build).
+# Vendored ranui assets have no content hash in their names; they only change
+# when the ranui dependency is upgraded. Cache for an hour and let clients
+# revalidate in the background — the service worker covers offline anyway.
+/ranui-iife/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+/ran-tokens.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400

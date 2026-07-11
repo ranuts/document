@@ -7,29 +7,46 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-// Dev-only: resolve clean URLs to the static .html files under public/ so the
-// landing pages (e.g. /offline-document-editor, /zh-CN/open/docx) work in
-// `pnpm dev` exactly like on Cloudflare Pages in production, where extensionless
-// URLs auto-resolve. Without this the nav links 404 / no-op in dev.
-const cleanUrlsDev = (): Plugin => ({
-  name: 'clean-urls-dev',
-  apply: 'serve',
-  configureServer(server) {
-    const pub = path.join(__dirname, 'public');
-    server.middlewares.use((req, _res, next) => {
-      const pathname = (req.url ?? '/').split('?')[0];
+// Resolve clean URLs to the static .html files under public/ so the landing
+// pages (e.g. /offline-document-editor, /zh-CN/open/docx) work in `pnpm dev`
+// and `vite preview` exactly like on Cloudflare Pages in production, where
+// extensionless URLs auto-resolve and /dir 308-redirects to /dir/. Without
+// this the nav links 404 / no-op locally.
+const cleanUrls = (): Plugin => {
+  const middlewareFor = (root: string) => {
+    return (
+      req: import('node:http').IncomingMessage,
+      res: import('node:http').ServerResponse,
+      next: () => void,
+    ): void => {
+      const [pathname, query] = (req.url ?? '/').split('?');
       if (pathname === '/' || pathname.includes('.')) return next();
+      if (!pathname.endsWith('/') && fs.existsSync(path.join(root, pathname, 'index.html'))) {
+        // directory URL without slash: redirect like Cloudflare Pages does
+        res.writeHead(308, { Location: `${pathname}/${query ? `?${query}` : ''}` });
+        res.end();
+        return;
+      }
       const candidate = pathname.endsWith('/') ? `${pathname}index.html` : `${pathname}.html`;
-      if (fs.existsSync(path.join(pub, candidate))) req.url = candidate;
+      if (fs.existsSync(path.join(root, candidate))) req.url = candidate + (query ? `?${query}` : '');
       next();
-    });
-  },
-});
+    };
+  };
+  return {
+    name: 'clean-urls',
+    configureServer(server) {
+      server.middlewares.use(middlewareFor(path.join(__dirname, 'public')));
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(middlewareFor(path.join(__dirname, 'dist')));
+    },
+  };
+};
 
 export default defineConfig({
   base: './',
   publicDir: 'public',
-  plugins: [cleanUrlsDev()],
+  plugins: [cleanUrls()],
   resolve: {
     alias: {
       '@/lib': resolve(__dirname, 'lib'),
