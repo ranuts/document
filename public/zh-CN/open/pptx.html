@@ -6,7 +6,8 @@
     <link href="/img/64.png" rel="shortcut icon" />
     <link rel="icon" type="image/png" href="/img/64.png" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#006bff" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
 
     <title>无需 PowerPoint 打开 PPTX — 免费在线、不外传</title>
     <meta
@@ -103,12 +104,25 @@
       }
     </script>
 
+    <!-- No-flash theme restore: apply a forced light/dark before first paint so a
+         dark-mode visitor never sees a white flash. 'system' leaves the attributes
+         off and the token layer's media query decides. Kept inline and tiny. -->
+    <script>
+      try {
+        var t = localStorage.getItem('ran-theme');
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.setAttribute('data-ran-theme', t);
+          document.documentElement.setAttribute('theme', t);
+        }
+      } catch (e) {}
+    </script>
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
     <script src="/ranui-iife/card.iife.js" defer></script>
     <script src="/ranui-iife/select.iife.js" defer></script>
     <script src="/lang-switch.js" defer></script>
+    <script src="/theme.js" defer></script>
   </head>
 
   <body>
@@ -116,6 +130,29 @@
       <symbol id="gh-mark" viewBox="0 0 16 16">
         <path
           d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+        />
+      </symbol>
+      <!-- Theme-switch glyphs (16px, stroke = currentColor) for the footer toggle. -->
+      <symbol id="th-system" viewBox="0 0 16 16">
+        <rect x="1.5" y="2.5" width="13" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path d="M5.5 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </symbol>
+      <symbol id="th-sun" viewBox="0 0 16 16">
+        <circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path
+          d="M8 1v1.8M8 13.2V15M15 8h-1.8M2.8 8H1m11.4-4.4-1.3 1.3M4.9 11.1l-1.3 1.3m9.8 0-1.3-1.3M4.9 4.9 3.6 3.6"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="th-moon" viewBox="0 0 16 16">
+        <path
+          d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
         />
       </symbol>
     </svg>
@@ -144,7 +181,7 @@
         幻灯片、图片和版式原样保留。无需安装，文件不外传。
       </p>
 
-      <a class="cta" href="/?locale=zh-CN&amp;new=docx"><r-button type="primary">打开你的 PPTX →</r-button></a>
+      <a class="cta" href="/?locale=zh-CN&amp;new=docx"><r-button type="contrast">打开你的 PPTX →</r-button></a>
 
       <p>
         PPTX 是 Microsoft PowerPoint 的格式。这个编辑器用 OnlyOffice
@@ -186,6 +223,17 @@
         <a href="/zh-CN/open/xlsx">打开 XLSX</a>
         <a href="/zh-CN/no-signup-document-editor">免注册</a>
         <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+        <div class="theme-switch" role="group" aria-label="主题">
+          <button type="button" data-theme-choice="system" aria-label="跟随系统" aria-pressed="true">
+            <svg aria-hidden="true"><use href="#th-system"></use></svg>
+          </button>
+          <button type="button" data-theme-choice="light" aria-label="浅色" aria-pressed="false">
+            <svg aria-hidden="true"><use href="#th-sun"></use></svg>
+          </button>
+          <button type="button" data-theme-choice="dark" aria-label="深色" aria-pressed="false">
+            <svg aria-hidden="true"><use href="#th-moon"></use></svg>
+          </button>
+        </div>
       </footer>
     </main>
   </body>

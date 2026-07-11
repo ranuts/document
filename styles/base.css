@@ -63,7 +63,8 @@ r-button[type='text']::part(content) {
   }
 }
 
-/* Style for FAB menu buttons */
+/* Style for FAB menu buttons — editor chrome consumes the ranui token layer
+   (/ran-tokens.css is linked globally), so dark mode comes for free. */
 .fab-menu-button {
   font-size: 16px;
   padding: 10px 14px;
@@ -72,21 +73,16 @@ r-button[type='text']::part(content) {
   box-shadow: none;
   outline: none;
   cursor: pointer;
-  color: #333;
+  color: var(--ran-color-text);
   width: 100%;
   text-align: left;
-  transition: color 0.2s ease;
   line-height: 1.5;
   white-space: nowrap;
 }
 
-/* Menu item hover - entire row background */
+/* Menu item hover - entire row background (monochrome, Geist state ladder) */
 .fab-menu-item:hover {
-  background-color: #f5f5f5;
-}
-
-.fab-menu-item:hover .fab-menu-button {
-  color: #667eea;
+  background-color: var(--ran-color-bg-hover);
 }
 
 /* Menu guide animations */
@@ -126,19 +122,21 @@ r-button[type='text']::part(content) {
   min-width: 52px;
   height: 40px;
   padding: 0 16px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-gray-alpha-100);
+  border: 1px solid var(--ran-color-border);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease;
-  color: #333;
+  color: var(--ran-color-text);
   font-size: 14px;
   font-weight: 500;
   user-select: none;
   white-space: nowrap;
+}
+.fab-button:hover {
+  background: var(--ran-gray-alpha-200);
 }
 
 /* FAB Menu */
@@ -146,9 +144,9 @@ r-button[type='text']::part(content) {
   position: absolute;
   bottom: 50px;
   right: 0;
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--ran-color-bg-elevated);
+  border-radius: var(--ran-radius-sm);
+  box-shadow: var(--ran-shadow-menu);
   padding: 8px;
   display: none;
   flex-direction: column;
@@ -161,13 +159,12 @@ r-button[type='text']::part(content) {
     transform 0.2s ease;
   pointer-events: none;
   z-index: 1001;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--ran-color-border);
 }
 
 .fab-menu-item {
   width: 100%;
   border-radius: 4px;
-  transition: background 0.2s ease;
 }
 
 /* Menu Guide */
@@ -175,15 +172,15 @@ r-button[type='text']::part(content) {
   position: fixed;
   bottom: 90px;
   right: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  background: var(--ran-color-bg-elevated);
+  border-radius: var(--ran-radius-md);
+  box-shadow: var(--ran-shadow-modal);
   padding: 20px 40px 20px 24px;
   z-index: 1002;
   max-width: 300px;
   animation: guideFadeIn 0.3s ease;
   pointer-events: auto;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--ran-color-border);
 }
 
 .menu-guide-arrow {
@@ -194,12 +191,12 @@ r-button[type='text']::part(content) {
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid white;
+  border-top: 10px solid var(--ran-color-bg-elevated);
 }
 
 .menu-guide-text {
   font-size: 16px;
-  color: #333;
+  color: var(--ran-color-text);
   line-height: 1.6;
   margin: 0;
   font-weight: 500;
@@ -213,7 +210,7 @@ r-button[type='text']::part(content) {
   background: none;
   border: none;
   font-size: 24px;
-  color: #999;
+  color: var(--ran-color-text-disabled);
   cursor: pointer;
   padding: 0;
   width: 24px;
@@ -258,6 +255,10 @@ r-button[type='text']::part(content) {
   white-space: nowrap;
   flex-shrink: 0;
   transform: scale(1);
+  transition: transform 0.15s ease;
+}
+.control-panel-button:hover {
+  transform: scale(1.05);
 }
 
 /* ── AI Agent panel (experimental, ?agent=1) ───────────────────────────── */
@@ -271,9 +272,9 @@ r-button[type='text']::part(content) {
   width: 360px;
   max-width: 90vw;
   height: 100vh;
-  background: #fff;
-  border-left: 1px solid #e5e7eb;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.08);
+  background: var(--ran-color-bg-elevated);
+  border-left: 1px solid var(--ran-color-border);
+  box-shadow: var(--ran-shadow-menu);
   font-size: 14px;
 }
 /* Dock mode: the editor gives up 360px so the panel sits beside it instead of
@@ -299,7 +300,7 @@ body.agent-docked #app iframe {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--ran-color-border);
 }
 .agent-panel-title {
   font-weight: 600;
@@ -310,7 +311,10 @@ body.agent-docked #app iframe {
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  color: #888;
+  color: var(--ran-color-text-disabled);
+}
+.agent-panel-close:hover {
+  color: var(--ran-color-text);
 }
 /* Gear button: toggles the settings block. Sits left of the close button. */
 .agent-panel-settings-toggle {
@@ -321,17 +325,17 @@ body.agent-docked #app iframe {
   font-size: 16px;
   line-height: 1;
   cursor: pointer;
-  color: #888;
+  color: var(--ran-color-text-disabled);
 }
 .agent-panel-settings-toggle:hover {
-  color: #333;
+  color: var(--ran-color-text);
 }
 .agent-panel-settings {
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 10px 16px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--ran-color-border);
 }
 /* Collapsed by default; the header gear toggles it. */
 .agent-panel-settings-hidden {
@@ -339,7 +343,7 @@ body.agent-docked #app iframe {
 }
 .agent-panel-key-label {
   font-size: 12px;
-  color: #666;
+  color: var(--ran-color-text-secondary);
 }
 /* ranui r-input draws its own field — host carries layout only (no border). */
 .agent-panel-key-input,
@@ -363,21 +367,21 @@ body.agent-docked #app iframe {
 }
 .agent-panel-note {
   font-size: 12px;
-  color: #888;
+  color: var(--ran-color-text-disabled);
   white-space: pre-line; /* honour \n so multi-line hints (e.g. cache status + chat-only note) stack */
 }
 .agent-panel-note:empty {
   display: none;
 }
 .agent-panel-link {
-  color: #2563eb;
+  color: var(--ran-color-link);
   cursor: pointer;
   white-space: nowrap;
   text-decoration: underline;
 }
 .agent-panel-link:hover,
 .agent-panel-link:focus-visible {
-  color: #1d4ed8;
+  color: var(--ran-color-primary-hover);
 }
 /* (Review / quote / clear moved into ChatView's `.cui-actions` slot above the
    input; the old top toolbar is gone.) */
@@ -391,7 +395,7 @@ r-dropdown[role='listbox'] {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #555;
+  color: var(--ran-color-text-secondary);
   cursor: pointer;
 }
 .agent-panel-model-row {
@@ -416,12 +420,13 @@ r-dropdown[role='listbox'] {
   height: 48px;
   border-radius: 50%;
   border: none;
-  background: #2563eb;
-  color: #fff;
+  /* monochrome contrast FAB — inverts with the theme */
+  background: var(--ran-color-contrast-bg, var(--ran-gray-1000));
+  color: var(--ran-color-contrast-text, var(--ran-background-100));
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--ran-shadow-menu);
 }
 .agent-launcher-hidden {
   display: none;

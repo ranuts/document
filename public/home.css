@@ -62,10 +62,10 @@
    below in lockstep with these values — they must render pixel-identical to
    the upgraded component or the swap flashes on load. */
 #landing-hero .cta r-button::part(button) {
-  border-radius: var(--ran-radius-md);
+  border-radius: var(--ran-radius-full);
 }
 #landing-hero .cta r-button::part(content) {
-  border-radius: var(--ran-radius-md);
+  border-radius: var(--ran-radius-full);
   padding: var(--ran-space-3) var(--ran-space-6);
   font-size: 15.5px;
   font-weight: 600;
@@ -84,7 +84,7 @@
   justify-content: center;
   gap: var(--ran-space-2);
   padding: var(--ran-space-3) var(--ran-space-6);
-  border-radius: var(--ran-radius-md);
+  border-radius: var(--ran-radius-full);
   border: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-elevated);
   color: var(--ink);
@@ -92,10 +92,10 @@
   font-size: 15.5px;
   line-height: 22px; /* matches .ran-btn-content's default line-height */
 }
-#landing-hero r-button[type='primary']:not(:defined) {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+#landing-hero r-button[type='contrast']:not(:defined) {
+  background: var(--ran-color-contrast-bg, var(--ran-gray-1000));
+  border-color: var(--ran-color-contrast-bg, var(--ran-gray-1000));
+  color: var(--ran-color-contrast-text, var(--ran-background-100));
 }
 
 /* Language switch: same ranui <r-select> on the app homepage and the static
@@ -141,10 +141,11 @@
   width: 24px;
   height: 24px;
   border-radius: var(--ran-radius-sm);
-  background: var(--accent);
+  /* monochrome mark (Geist): ink on page bg, inverts with the theme */
+  background: var(--ink);
   display: inline-grid;
   place-items: center;
-  color: #fff; /* on-primary: ranui has no on-colour token; white reads on blue in both themes */
+  color: var(--ran-color-bg);
   font-size: 13px;
   font-weight: 700;
 }
@@ -190,7 +191,8 @@
   padding: var(--ran-space-1) var(--ran-space-3);
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-full);
-  background: var(--ran-color-bg-subtle);
+  /* bordered pill on the plain page bg (Geist badge), no fill */
+  background: transparent;
   font: 500 12px/1.8 var(--mono);
   color: var(--ink-2);
   margin-bottom: var(--ran-space-6);
@@ -207,9 +209,9 @@
 }
 #landing-hero h1 {
   margin: 0;
-  font-size: clamp(34px, 4.6vw, 58px);
-  line-height: 1.06;
-  letter-spacing: -0.035em;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
   font-weight: 700;
   text-wrap: balance;
 }
@@ -249,7 +251,8 @@
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-lg);
   background: var(--ran-color-bg-elevated);
-  box-shadow: var(--ran-shadow-menu);
+  /* in-flow bordered surface → the quiet elevated tier, not the overlay tier */
+  box-shadow: var(--ran-shadow-elevated);
   overflow: hidden;
   font-family: var(--mono);
 }
@@ -421,7 +424,8 @@
   font: 600 12px/1 var(--mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  /* gray mono label — blue is reserved for links and the hero selection */
+  color: var(--muted);
 }
 #landing-hero .section-head h2 {
   margin: 0;
@@ -456,13 +460,21 @@
   display: block;
   height: 100%;
 }
+/* Vercel card hover: border darkens (gray 400 → 500) and the surface gets the
+   quiet elevated shadow — no lift. --ran-card-border-color inherits through
+   the closed shadow root, which is exactly why the component token exists. */
+#landing-hero .cards r-card:hover {
+  --ran-card-border-color: var(--ran-color-border-hover);
+  box-shadow: var(--ran-shadow-elevated);
+  border-radius: var(--ran-radius-md); /* keep the host shadow on the card's own curve */
+}
 /* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
-   (border, radius-md, muted background, its built-in 16px padding) so the
+   (border, radius-md, page background, its built-in 16px padding) so the
    custom-element upgrade doesn't flash */
 #landing-hero .cards r-card:not(:defined) {
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-md);
-  background: var(--ran-color-bg-muted);
+  background: var(--ran-color-bg);
   padding: var(--ran-space-4);
 }
 /* r-card renders its own container chrome; card-body only adds inner padding. */
@@ -472,7 +484,7 @@
 #landing-hero .card-body .k {
   font: 600 11px/1 var(--mono);
   letter-spacing: 0.06em;
-  color: var(--accent);
+  color: var(--muted);
 }
 #landing-hero .card-body h3 {
   margin: var(--ran-space-4) 0 var(--ran-space-2);
@@ -511,11 +523,11 @@
   left: 0;
   width: 48px;
   height: 2px;
-  background: var(--accent);
+  background: var(--ink);
 }
 #landing-hero .step .n {
   font: 700 13px/1 var(--mono);
-  color: var(--accent);
+  color: var(--muted);
   letter-spacing: 0.04em;
 }
 #landing-hero .step h3 {
@@ -575,7 +587,7 @@
 #landing-hero .qa summary::after {
   content: '+';
   font: 400 20px/1 var(--mono);
-  color: var(--accent);
+  color: var(--muted);
   transition: transform 0.15s ease;
 }
 #landing-hero .qa details[open] summary::after {
@@ -641,8 +653,8 @@
   transition: 0.15s ease;
 }
 #landing-hero .eco nav a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--ran-color-border-hover);
+  color: var(--ink);
 }
 #landing-hero .eco nav b {
   font: 700 12.5px/1 var(--mono);
@@ -652,8 +664,7 @@
 }
 #landing-hero .eco nav .here {
   color: var(--ink);
-  border-color: var(--accent);
-  box-shadow: inset 0 0 0 1px var(--accent);
+  border-color: var(--ink);
 }
 /* the footer carries both classes (<footer class="foot wrap">), so the layout
    sits on the compound selector — a descendant `.foot .wrap` never matches */
@@ -677,10 +688,51 @@
   gap: var(--ran-space-4);
 }
 #landing-hero .foot a:hover {
-  color: var(--accent);
+  color: var(--ink);
 }
 #landing-hero .foot .lic {
   font: 500 12px/1 var(--mono);
+}
+
+/* ---------- theme switch (footer, Vercel-style segmented pill) ----------
+   Plain <button>s wired by /theme.js; harmlessly inert before it loads.
+   Keep these values in lockstep with the identical block in landing.css. */
+#landing-hero .theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-full);
+}
+#landing-hero .theme-switch button {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--ran-radius-full);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  /* color only — transitioning background would fade on a theme flip */
+  transition: color 0.15s ease;
+}
+#landing-hero .theme-switch button:hover {
+  color: var(--ink);
+}
+#landing-hero .theme-switch button[aria-pressed='true'] {
+  background: var(--ran-color-bg-hover);
+  color: var(--ink);
+}
+#landing-hero .theme-switch button:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+#landing-hero .theme-switch svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* ---------- motion ---------- */
@@ -742,15 +794,9 @@
     }
   }
 
-  /* hover lift on cards */
+  /* soften the card hover (border darken + elevated shadow live outside this gate) */
   #landing-hero .cards r-card {
-    transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease;
-  }
-  #landing-hero .cards r-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--ran-shadow-menu);
+    transition: box-shadow 0.18s ease;
   }
 }
 

@@ -62,10 +62,11 @@ header.bar .logo {
   width: 24px;
   height: 24px;
   border-radius: var(--ran-radius-sm);
-  background: var(--accent);
+  /* monochrome mark (Geist): ink on page bg, inverts with the theme */
+  background: var(--ink);
   display: inline-grid;
   place-items: center;
-  color: #fff; /* on-primary: ranui has no on-colour token; white reads on blue in both themes */
+  color: var(--ran-color-bg);
   font-size: 13px;
   font-weight: 700;
 }
@@ -124,7 +125,8 @@ r-select.lang-select:not(:defined) {
   font: 600 12px/1 var(--mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  /* gray mono label — blue is reserved for links */
+  color: var(--muted);
 }
 h1 {
   font-size: clamp(28px, 5vw, 40px);
@@ -159,26 +161,26 @@ p {
    typography). The :not(:defined) fallback below must stay pixel-identical to
    these values or the custom-element upgrade flashes on load. */
 .cta r-button::part(button) {
-  border-radius: var(--ran-radius-md);
+  border-radius: var(--ran-radius-full);
 }
 .cta r-button::part(content) {
-  border-radius: var(--ran-radius-md);
+  border-radius: var(--ran-radius-full);
   padding: var(--ran-space-3) var(--ran-space-6);
   font-size: 15.5px;
   font-weight: 600;
 }
 /* pre-upgrade fallback so the CTA is a styled, clickable button even before
    (or without) the /ranui-iife/*.iife.js bundles — same progressive-enhancement
-   idea as the static-page fallbacks on the homepage */
+   idea as the static-page fallbacks on the homepage. Mirrors type="contrast". */
 .cta r-button:not(:defined) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: var(--ran-space-3) var(--ran-space-6);
-  border-radius: var(--ran-radius-md);
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  color: #fff;
+  border-radius: var(--ran-radius-full);
+  border: 1px solid var(--ran-color-contrast-bg, var(--ran-gray-1000));
+  background: var(--ran-color-contrast-bg, var(--ran-gray-1000));
+  color: var(--ran-color-contrast-text, var(--ran-background-100));
   font-weight: 600;
   font-size: 15.5px;
   line-height: 22px; /* matches .ran-btn-content's default line-height */
@@ -201,11 +203,11 @@ r-card.oss {
   margin: var(--ran-space-8) 0;
 }
 /* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
-   (border, radius-md, muted background, its built-in 16px padding) */
+   (border, radius-md, page background, its built-in 16px padding) */
 r-card.oss:not(:defined) {
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-md);
-  background: var(--ran-color-bg-muted);
+  background: var(--ran-color-bg);
   padding: var(--ran-space-4);
 }
 r-card.oss .card-body {
@@ -258,7 +260,8 @@ h2.faq {
   text-transform: uppercase;
 }
 .cmp th:nth-child(2) {
-  color: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
 }
 .cmp td:first-child {
   color: var(--ink-2);
@@ -281,5 +284,51 @@ footer a {
   margin-right: var(--ran-space-4);
 }
 footer a:hover {
-  color: var(--accent);
+  color: var(--ink);
+}
+
+/* ---------- theme switch (footer, Vercel-style segmented pill) ----------
+   Plain <button>s wired by /theme.js; harmlessly inert before it loads.
+   Keep these values in lockstep with the identical block in home.css. */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--rule);
+  border-radius: var(--ran-radius-full);
+  vertical-align: middle;
+}
+.theme-switch button {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--ran-radius-full);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  /* color only — transitioning background would fade on a theme flip */
+  transition: color 0.15s ease;
+}
+.theme-switch button:hover {
+  color: var(--ink);
+}
+.theme-switch button[aria-pressed='true'] {
+  background: var(--ran-color-bg-hover);
+  color: var(--ink);
+}
+.theme-switch button:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.theme-switch svg {
+  width: 16px;
+  height: 16px;
+}
+/* footer rows on the satellites are plain text; give the pill its own line spacing */
+footer .theme-switch {
+  margin-top: var(--ran-space-4);
 }

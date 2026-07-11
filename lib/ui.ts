@@ -102,13 +102,6 @@ export const createFixedActionButton = (): HTMLElement => {
   ): HTMLDivElement =>
     Div()
       .class('fab-menu-item')
-      // Handle hover on the wrapper
-      .on('mouseenter', function () {
-        this.style.background = '#f5f5f5';
-      })
-      .on('mouseleave', function () {
-        this.style.background = 'transparent';
-      })
       .children(
         ButtonBuilder()
           .class('fab-menu-button')
@@ -262,12 +255,6 @@ export const showMenuGuide = (): void => {
       ButtonBuilder()
         .class('menu-guide-close')
         .text('×')
-        .on('mouseenter', function () {
-          this.style.color = '#333';
-        })
-        .on('mouseleave', function () {
-          this.style.color = '#999';
-        })
         .on('click', (e) => {
           e.stopPropagation();
           hideGuide(true);
@@ -300,7 +287,9 @@ export const showMenuGuide = (): void => {
 
 // Create and append the control panel
 export const createControlPanel = (): void => {
-  // Helper: a text-style r-button with the panel's hover treatment
+  // Helper: a text-style r-button. Hover treatment lives in CSS
+  // (.control-panel-button:hover in styles/base.css) so it stays tokenized;
+  // the old inline host `color` never reached the shadow content anyway.
   const createTextButton = (id: string, text: string, onClick: () => void): HTMLElement =>
     View('r-button')
       .id(id)
@@ -308,14 +297,6 @@ export const createControlPanel = (): void => {
       .text(text)
       .attr('variant', 'text')
       .attr('type', 'text')
-      .on('mouseenter', function () {
-        this.style.color = '#667eea';
-        this.style.transform = 'scale(1.05)';
-      })
-      .on('mouseleave', function () {
-        this.style.color = '#333';
-        this.style.transform = 'scale(1)';
-      })
       .on('click', onClick)
       .build();
 
