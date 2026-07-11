@@ -8,10 +8,10 @@
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
 
-    <title>在线文档编辑器 —— 在浏览器里编辑 Word、Excel、PPT</title>
+    <title>在浏览器打开 DOCX、XLSX、PPT 文件 —— 免装 Office 的在线查看与编辑器</title>
     <meta
       name="description"
-      content="隐私优先的在线文档编辑器,全部在你的设备本地运行。文件不传服务器、免注册、可离线,直接在浏览器里编辑 Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX)和 CSV。基于 OnlyOffice。"
+      content="不装 Office 也能直接在浏览器里打开、查看 Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX)和 CSV,需要时还能编辑保存。文件不传服务器、免注册、可离线。基于 OnlyOffice。"
     />
     <link rel="canonical" href="https://edit.chaxus.com/zh-CN/" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/" />
@@ -40,15 +40,15 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="在线文档编辑器" />
-    <meta property="og:title" content="在线文档编辑器 —— 在浏览器里编辑 Word、Excel、PPT" />
+    <meta property="og:title" content="在浏览器打开 DOCX、XLSX、PPT 文件 —— 免装 Office 的在线查看与编辑器" />
     <meta
       property="og:description"
-      content="隐私优先、纯浏览器的文档编辑器。文件不传服务器、免注册、可离线,编辑 DOCX、XLSX、PPTX 和 CSV。"
+      content="不装 Office 直接在浏览器打开、查看、编辑 DOCX、XLSX、PPTX 和 CSV。文件不传服务器、免注册、可离线。"
     />
     <meta property="og:url" content="https://edit.chaxus.com/zh-CN/" />
     <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="在线文档编辑器 —— 在浏览器里编辑 Word、Excel、PPT" />
+    <meta name="twitter:title" content="在浏览器打开 DOCX、XLSX、PPT 文件 —— 免装 Office 的在线查看与编辑器" />
     <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
 
     <script type="application/ld+json">
@@ -59,7 +59,7 @@
         "url": "https://edit.chaxus.com/zh-CN/",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "任意 (网页浏览器)",
-        "description": "隐私优先的在线文档编辑器，在浏览器本地编辑 DOCX、XLSX、PPTX 和 CSV，文件不传服务器、免注册、可离线。基于 OnlyOffice。",
+        "description": "不装 Office 直接在浏览器打开、查看、编辑 DOCX、XLSX、PPTX 和 CSV，文件不传服务器、免注册、可离线。基于 OnlyOffice。",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
         "sameAs": [
           "https://github.com/ranuts/document",
@@ -144,9 +144,9 @@
       <div class="hero wrap">
         <div class="hero-copy">
           <span class="chip reveal d1"><span class="dot"></span>本地优先 · <b>开源</b></span>
-          <h1 class="reveal d2">在浏览器里编辑 Word、Excel 和 PowerPoint,<span class="accent">文件不外传。</span></h1>
+          <h1 class="reveal d2">在浏览器里直接打开 Word、Excel 和 PPT,<span class="accent">文件不外传。</span></h1>
           <p class="sub reveal d3">
-            隐私优先的文档编辑器，全部在你的设备本地运行——文件不传服务器、免注册，还能离线使用。
+            没装 Office？任何 DOCX、XLSX、PPTX 文件即开即看，需要时随手编辑——全部在你的设备本地运行，免注册、可离线。
           </p>
           <div class="cta reveal d4">
             <a href="/?locale=zh-CN&amp;new=docx"><r-button type="contrast">打开编辑器 →</r-button></a>
@@ -185,6 +185,56 @@
             </aside>
           </div>
           <div class="dw-net"><i class="ok"></i>network · 0 请求 · 0 字节外发</div>
+        </div>
+      </div>
+
+      <!-- 最高频场景:拿到文件却没装 Office。四个格式入口,各自有专属落地页。 -->
+      <div class="section wrap">
+        <div class="section-head">
+          <span class="eyebrow">打开文件</span>
+          <h2>没装 Office？没关系。</h2>
+        </div>
+        <div class="formats">
+          <a class="fmt" href="/zh-CN/open/docx">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.DOCX</div>
+                <h3>不装 Word 打开 DOCX</h3>
+                <p>完整排版查看任何 Word 文档——字体、表格、图片都在。</p>
+                <span class="fmt-go">打开 DOCX →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/zh-CN/open/xlsx">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.XLSX</div>
+                <h3>不装 Excel 打开 XLSX</h3>
+                <p>公式、图表、多工作表完整呈现，不是纯文本导出。</p>
+                <span class="fmt-go">打开 XLSX →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/zh-CN/open/pptx">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.PPTX</div>
+                <h3>不装 PPT 打开 PPTX</h3>
+                <p>版式、主题、媒体都保留，直接在浏览器里看。</p>
+                <span class="fmt-go">打开 PPTX →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/zh-CN/convert/xlsx-to-csv">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.XLSX → .CSV</div>
+                <h3>格式互转</h3>
+                <p>表格与 CSV 互转，全程本地，一个字节都不上传。</p>
+                <span class="fmt-go">转换文件 →</span>
+              </div>
+            </r-card>
+          </a>
         </div>
       </div>
 

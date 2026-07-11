@@ -472,7 +472,9 @@
 /* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
    (border, radius-md, page background, its built-in 16px padding) so the
    custom-element upgrade doesn't flash */
-#landing-hero .cards r-card:not(:defined) {
+#landing-hero .cards r-card:not(:defined),
+#landing-hero .formats r-card:not(:defined) {
+  display: block;
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg);
@@ -504,6 +506,47 @@
 #landing-hero .cards > :nth-child(4) .card-body h3 {
   font-size: 21px;
   letter-spacing: -0.02em;
+}
+
+/* ---------- format entry points (open a file without Office) ---------- */
+#landing-hero .formats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ran-space-4);
+}
+#landing-hero .formats .fmt {
+  display: block;
+  min-width: 0;
+  color: inherit;
+}
+#landing-hero .formats r-card {
+  display: block;
+  height: 100%;
+}
+#landing-hero .formats .card-body {
+  padding: var(--ran-space-4) var(--ran-space-4) var(--ran-space-6);
+}
+#landing-hero .formats .card-body h3 {
+  font-size: 16px;
+}
+#landing-hero .formats .card-body p {
+  font-size: 13.5px;
+}
+#landing-hero .fmt-go {
+  display: inline-block;
+  margin-top: var(--ran-space-4);
+  font: 600 12.5px/1 var(--mono);
+  color: var(--accent);
+}
+@media (max-width: 900px) {
+  #landing-hero .formats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  #landing-hero .formats {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- how it works: an open rail, not boxes ---------- */

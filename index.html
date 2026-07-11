@@ -11,10 +11,10 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-    <title>Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser</title>
+    <title>Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor</title>
     <meta
       name="description"
-      content="A free, privacy-first online document editor. Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no upload, no sign-up, works offline. Powered by OnlyOffice."
+      content="Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice."
     />
     <link rel="canonical" href="https://edit.chaxus.com/" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/" />
@@ -41,20 +41,20 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Online Document Editor" />
-    <meta property="og:title" content="Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser" />
+    <meta property="og:title" content="Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor" />
     <meta
       property="og:description"
-      content="Free, privacy-first document editor. Edit DOCX, XLSX, PPTX and CSV in your browser — no upload, no sign-up, works offline."
+      content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser — no Office, no upload, no sign-up. Free and offline-capable."
     />
     <meta property="og:url" content="https://edit.chaxus.com/" />
     <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Online Document Editor — Edit DOCX, XLSX, PPTX in Your Browser" />
+    <meta name="twitter:title" content="Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor" />
     <meta
       name="twitter:description"
-      content="Free, privacy-first document editor. Edit DOCX, XLSX, PPTX and CSV in your browser — no upload, no sign-up, works offline."
+      content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser — no Office, no upload, no sign-up. Free and offline-capable."
     />
     <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
 
@@ -68,9 +68,10 @@
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Any (web browser)",
         "browserRequirements": "Requires a modern browser with WebAssembly support",
-        "description": "A free, privacy-first online document editor. Edit DOCX, XLSX, PPTX and CSV files directly in the browser with no upload, no sign-up, and offline support. Powered by OnlyOffice.",
+        "description": "Open, view and edit DOCX, XLSX, PPTX and CSV files directly in the browser — no Microsoft Office needed, no upload, no sign-up, offline-capable. Powered by OnlyOffice.",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
         "featureList": [
+          "Open and view DOCX, XLSX, PPTX and CSV without Microsoft Office",
           "Edit DOCX, XLSX, PPTX and CSV files",
           "100% client-side — files never leave your device",
           "No account or sign-up required",
@@ -187,11 +188,11 @@
           <div class="hero-copy">
             <span class="chip reveal d1"><span class="dot"></span>Local-first · <b>open source</b></span>
             <h1 class="reveal d2">
-              Edit Word, Excel &amp; PowerPoint, <span class="accent">right in your browser.</span>
+              Open Word, Excel &amp; PowerPoint files, <span class="accent">right in your browser.</span>
             </h1>
             <p class="sub reveal d3">
-              A privacy-first document editor that runs entirely on your device. No upload, no sign-up, and it keeps
-              working offline.
+              No Office installed? View any DOCX, XLSX or PPTX instantly — and edit it when you need to. Everything runs
+              on your device: no upload, no sign-up, works offline.
             </p>
             <div class="cta reveal d4">
               <r-button type="contrast" id="hero-open">Open a file</r-button>
@@ -229,6 +230,57 @@
               </aside>
             </div>
             <div class="dw-net"><i class="ok"></i>network · 0 requests · 0 bytes out</div>
+          </div>
+        </div>
+
+        <!-- The highest-frequency job: someone got a file and has no Office.
+             Format entry points, each backed by a dedicated landing page. -->
+        <div class="section wrap">
+          <div class="section-head">
+            <span class="eyebrow">Open a file</span>
+            <h2>No Office installed? No problem.</h2>
+          </div>
+          <div class="formats">
+            <a class="fmt" href="/open/docx">
+              <r-card hoverable>
+                <div class="card-body">
+                  <div class="k">.DOCX</div>
+                  <h3>Open DOCX without Word</h3>
+                  <p>View any Word document with full formatting — fonts, tables, images intact.</p>
+                  <span class="fmt-go">Open a DOCX →</span>
+                </div>
+              </r-card>
+            </a>
+            <a class="fmt" href="/open/xlsx">
+              <r-card hoverable>
+                <div class="card-body">
+                  <div class="k">.XLSX</div>
+                  <h3>Open XLSX without Excel</h3>
+                  <p>Spreadsheets with formulas, charts and sheets — rendered, not dumped as text.</p>
+                  <span class="fmt-go">Open an XLSX →</span>
+                </div>
+              </r-card>
+            </a>
+            <a class="fmt" href="/open/pptx">
+              <r-card hoverable>
+                <div class="card-body">
+                  <div class="k">.PPTX</div>
+                  <h3>Open PPTX without PowerPoint</h3>
+                  <p>Slides with layouts, themes and media preserved, straight in the browser.</p>
+                  <span class="fmt-go">Open a PPTX →</span>
+                </div>
+              </r-card>
+            </a>
+            <a class="fmt" href="/convert/xlsx-to-csv">
+              <r-card hoverable>
+                <div class="card-body">
+                  <div class="k">.XLSX → .CSV</div>
+                  <h3>Convert between formats</h3>
+                  <p>Turn spreadsheets into CSV and back — locally, without uploading a byte.</p>
+                  <span class="fmt-go">Convert a file →</span>
+                </div>
+              </r-card>
+            </a>
           </div>
         </div>
 
