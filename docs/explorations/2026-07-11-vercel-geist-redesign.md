@@ -57,6 +57,34 @@ ranui@0.2.0-alpha.2/node_modules/ranui/dist/`，站点 `pnpm build` 自动再生
 - Chrome 实测：亮/暗/system 三档、切换持久化 + 无闪烁、卫星页与 zh 镜像、
   404、移动端 390px、编辑器 FAB 菜单与 agent 面板暗色表现，全部符合预期。
 
+## 第二轮：能力下沉到 ranui（同日跟进）
+
+用户复核后提出：能进组件库的改动直接在组件层做。三项能力从站点层迁到上游：
+
+1. **`<r-theme-switch>` 组件**取代站点的 `public/theme.js` + 手写按钮组：
+   三态圆丸、实例间/跨标签页同步、`label-*` 属性本地化、`change` 事件、
+   theme-color meta 用解析后的 `--ran-color-bg` 同步（system 档还原原值）。
+   19 页统一替换为组件 + `:not(:defined)` 兜底（94×34px 占位防抖动），
+   卫星页加载 `/ranui-iife/theme-switch.iife.js`，app 入口 `import 'ranui/theme-switch'`；
+   head 的无闪烁内联片段保留（组件加载前的首绘保障）。theme.js 已删除。
+2. **Geist 字体入包（`ranui/fonts`）**：此前 token 只声明了 `'Geist'` 字体名
+   但没有任何页面真的加载它，实际渲染是系统字体。现在 ranui 打包可变字重
+   `Geist-Variable.woff2` + `GeistMono-Variable.woff2`（共 ~138KB，OFL 1.1
+   许可随包分发），站点 bin/build.sh 新增 vendor 步骤同步到
+   `public/ran-fonts/`，所有页面在 token 层之前 `<link>` 它——纯本地自托管，
+   契合离线 PWA 定位，比各站点自己接 CDN/自存一份更防漂移。
+3. **`r-card hoverable` 属性**：卡片 hover（边框 400→500 + elevated 阴影）
+   进组件层，语义化 opt-in（不可点的卡片不该有 hover 反馈）；站点删掉
+   `--ran-card-border-color` 覆写 hack，bento 卡片改挂 `hoverable` 属性。
+
+另修两问题：hero h1 `line-height` 1.05 → 1.1（`.accent` 选区背景按行盒绘制，
+过紧的行高会盖掉上一行的降部，出现"字体重叠"）；"首页无法滚动"实为本地
+验证时 DevTools 视口仿真残留（真实页面 `body.landing-active` 布局正常），
+用 `viewport 0x0x0` 清除仿真即恢复。
+
+**本地联调注意**：dist 拷贝现在还需连带 `package.json`（新增了
+`./theme-switch`、`./fonts` exports，构建工具按安装副本的 exports 解析）。
+
 ## 踩坑记录
 
 1. **Vite 依赖预打包缓存**：dev server 启动时的 ranui 会被 optimizeDeps

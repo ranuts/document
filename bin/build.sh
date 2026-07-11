@@ -37,6 +37,18 @@ else
     echo "Warning: $RAN_IIFE_SRC not found, using existing public/ranui-iife/."
 fi
 
+# Keep the vendored Geist faces in sync (same idea: ranui ships them as
+# dist/fonts/ since 0.2.0-alpha.3 — fonts.css + variable woff2 + OFL license).
+# Copied wholesale because fonts.css references the woff2 files relatively.
+RAN_FONTS_SRC="node_modules/ranui/dist/fonts"
+if [ -d "$RAN_FONTS_SRC" ]; then
+    mkdir -p public/ran-fonts
+    cp "$RAN_FONTS_SRC"/fonts.css "$RAN_FONTS_SRC"/*.woff2 "$RAN_FONTS_SRC"/OFL-LICENSE.txt public/ran-fonts/
+    echo "Synced Geist faces -> public/ran-fonts/"
+else
+    echo "Warning: $RAN_FONTS_SRC not found, using existing public/ran-fonts/."
+fi
+
 # Run Vite build
 pnpm vite build
 

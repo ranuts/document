@@ -210,7 +210,9 @@
 #landing-hero h1 {
   margin: 0;
   font-size: clamp(36px, 5vw, 64px);
-  line-height: 1.05;
+  /* 1.1, not tighter: the .accent selection paints the full line box, so at
+     1.05 it clips the descenders of the line above (glyphs overlapped). */
+  line-height: 1.1;
   letter-spacing: -0.045em;
   font-weight: 700;
   text-wrap: balance;
@@ -460,14 +462,8 @@
   display: block;
   height: 100%;
 }
-/* Vercel card hover: border darkens (gray 400 → 500) and the surface gets the
-   quiet elevated shadow — no lift. --ran-card-border-color inherits through
-   the closed shadow root, which is exactly why the component token exists. */
-#landing-hero .cards r-card:hover {
-  --ran-card-border-color: var(--ran-color-border-hover);
-  box-shadow: var(--ran-shadow-elevated);
-  border-radius: var(--ran-radius-md); /* keep the host shadow on the card's own curve */
-}
+/* Card hover (border darken + elevated shadow) is the component's own
+   `hoverable` behavior now — see <r-card hoverable> in the markup. */
 /* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
    (border, radius-md, page background, its built-in 16px padding) so the
    custom-element upgrade doesn't flash */
@@ -694,45 +690,16 @@
   font: 500 12px/1 var(--mono);
 }
 
-/* ---------- theme switch (footer, Vercel-style segmented pill) ----------
-   Plain <button>s wired by /theme.js; harmlessly inert before it loads.
-   Keep these values in lockstep with the identical block in landing.css. */
-#landing-hero .theme-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 2px;
+/* ---------- theme switch (footer) ----------
+   Real ranui <r-theme-switch> (three-state pill wired to setTheme). The
+   pre-upgrade fallback reserves the pill's exact footprint (3×28px buttons +
+   2px gaps + 2px padding + 1px border) so the upgrade doesn't shift layout. */
+#landing-hero r-theme-switch.theme-switch:not(:defined) {
+  display: inline-block;
+  width: 94px;
+  height: 34px;
   border: 1px solid var(--rule);
   border-radius: var(--ran-radius-full);
-}
-#landing-hero .theme-switch button {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border: none;
-  border-radius: var(--ran-radius-full);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 0;
-  /* color only — transitioning background would fade on a theme flip */
-  transition: color 0.15s ease;
-}
-#landing-hero .theme-switch button:hover {
-  color: var(--ink);
-}
-#landing-hero .theme-switch button[aria-pressed='true'] {
-  background: var(--ran-color-bg-hover);
-  color: var(--ink);
-}
-#landing-hero .theme-switch button:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
-  outline-offset: 2px;
-}
-#landing-hero .theme-switch svg {
-  width: 16px;
-  height: 16px;
 }
 
 /* ---------- motion ---------- */
@@ -792,11 +759,6 @@
     100% {
       box-shadow: 0 0 0 0 transparent;
     }
-  }
-
-  /* soften the card hover (border darken + elevated shadow live outside this gate) */
-  #landing-hero .cards r-card {
-    transition: box-shadow 0.18s ease;
   }
 }
 

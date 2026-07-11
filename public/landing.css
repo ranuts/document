@@ -287,46 +287,18 @@ footer a:hover {
   color: var(--ink);
 }
 
-/* ---------- theme switch (footer, Vercel-style segmented pill) ----------
-   Plain <button>s wired by /theme.js; harmlessly inert before it loads.
-   Keep these values in lockstep with the identical block in home.css. */
-.theme-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 2px;
-  border: 1px solid var(--rule);
-  border-radius: var(--ran-radius-full);
+/* ---------- theme switch (footer) ----------
+   Real ranui <r-theme-switch>. The pre-upgrade fallback reserves the pill's
+   exact footprint (3×28px buttons + gaps + padding + border) — no shift. */
+r-theme-switch.theme-switch {
   vertical-align: middle;
 }
-.theme-switch button {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border: none;
+r-theme-switch.theme-switch:not(:defined) {
+  display: inline-block;
+  width: 94px;
+  height: 34px;
+  border: 1px solid var(--rule);
   border-radius: var(--ran-radius-full);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 0;
-  /* color only — transitioning background would fade on a theme flip */
-  transition: color 0.15s ease;
-}
-.theme-switch button:hover {
-  color: var(--ink);
-}
-.theme-switch button[aria-pressed='true'] {
-  background: var(--ran-color-bg-hover);
-  color: var(--ink);
-}
-.theme-switch button:focus-visible {
-  outline: 2px solid var(--ran-color-primary);
-  outline-offset: 2px;
-}
-.theme-switch svg {
-  width: 16px;
-  height: 16px;
 }
 /* footer rows on the satellites are plain text; give the pill its own line spacing */
 footer .theme-switch {

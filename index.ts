@@ -17,6 +17,7 @@ import {
 import 'ranui/button';
 import 'ranui/card';
 import 'ranui/select';
+import 'ranui/theme-switch';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
 
