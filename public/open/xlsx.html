@@ -140,7 +140,15 @@
       <a class="brand" href="/"><span class="logo">D</span>Document Editor</a>
       <nav>
         <span class="lang-wrap">
-          <span aria-hidden="true">🌐</span>
+          <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+          </svg>
           <r-select class="lang-select" type="text" value="en" aria-label="Language">
             <r-option value="en" data-href="/open/xlsx">EN</r-option>
             <r-option value="zh-CN" data-href="/zh-CN/open/xlsx">中文</r-option>

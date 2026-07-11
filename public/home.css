@@ -107,6 +107,12 @@
   gap: var(--ran-space-1);
   padding-left: var(--ran-space-1);
 }
+#landing-hero .langmark {
+  width: 15px;
+  height: 15px;
+  color: var(--muted);
+  flex: none;
+}
 #landing-hero r-select.lang-select {
   display: inline-block;
   min-width: 84px;
