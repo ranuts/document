@@ -244,24 +244,6 @@
 #landing-hero .trust .sep {
   color: var(--rule);
 }
-#landing-hero .crosslink {
-  margin: var(--ran-space-4) 0 0;
-  font-size: 13.5px;
-  color: var(--muted);
-}
-#landing-hero .crosslink a {
-  color: var(--accent);
-  font-weight: 600;
-}
-#landing-hero .crosslink a:hover {
-  text-decoration: underline;
-}
-#landing-hero .crosslink em {
-  font-style: normal;
-  color: var(--ink-2);
-  font-weight: 600;
-}
-
 /* ---------- document window (decorative, pure CSS — runs on static pages too) ---------- */
 #landing-hero .docwin {
   border: 1px solid var(--rule);
@@ -673,10 +655,12 @@
   border-color: var(--accent);
   box-shadow: inset 0 0 0 1px var(--accent);
 }
+/* the footer carries both classes (<footer class="foot wrap">), so the layout
+   sits on the compound selector — a descendant `.foot .wrap` never matches */
 #landing-hero .foot {
   border-top: 1px solid var(--rule);
 }
-#landing-hero .foot .wrap {
+#landing-hero .foot.wrap {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
