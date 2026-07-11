@@ -21,6 +21,7 @@
     <script src="/ranui-iife/button.iife.js" defer></script>
     <script src="/ranui-iife/card.iife.js" defer></script>
     <script src="/ranui-iife/select.iife.js" defer></script>
+    <script src="/lang-switch.js" defer></script>
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="在线文档编辑器" />
@@ -117,8 +118,8 @@
             <span class="lang-wrap">
               <span aria-hidden="true">🌐</span>
               <r-select class="lang-select" type="text" value="zh-CN" aria-label="语言">
-                <r-option value="en">EN</r-option>
-                <r-option value="zh-CN">中文</r-option>
+                <r-option value="en" data-href="/">EN</r-option>
+                <r-option value="zh-CN" data-href="/zh-CN/">中文</r-option>
               </r-select>
             </span>
           </nav>
@@ -301,19 +302,5 @@
         <span class="lic">AGPL-3.0</span>
       </footer>
     </section>
-
-    <script>
-      // Wire the ranui language switch (the app homepage wires it in index.ts;
-      // this static page has no bundle, so a tiny inline script does the same).
-      document.addEventListener('DOMContentLoaded', function () {
-        var langSelect = document.querySelector('r-select.lang-select');
-        if (!langSelect) return;
-        langSelect.addEventListener('change', function (event) {
-          var value = event.detail && event.detail.value;
-          if (value === 'en') location.href = '/';
-          else if (value === 'zh-CN') location.href = '/zh-CN/';
-        });
-      });
-    </script>
   </body>
 </html>

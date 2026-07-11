@@ -95,6 +95,23 @@ header.bar nav a:hover {
   fill: currentColor;
   flex: none;
 }
+/* language switch: same ranui <r-select> as the homepages, wired by the shared
+   /lang-switch.js (targets declared as data-href on the options) */
+.lang-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-1);
+  padding-left: var(--ran-space-1);
+}
+r-select.lang-select {
+  display: inline-block;
+  min-width: 84px;
+  font-size: 14px;
+}
+/* hide the raw option list pre-upgrade; the reserved width avoids layout shift */
+r-select.lang-select:not(:defined) {
+  visibility: hidden;
+}
 
 /* ---------- article column ---------- */
 .wrap {

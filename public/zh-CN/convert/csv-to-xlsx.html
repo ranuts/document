@@ -107,6 +107,8 @@
     <link rel="stylesheet" href="/landing.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
     <script src="/ranui-iife/card.iife.js" defer></script>
+    <script src="/ranui-iife/select.iife.js" defer></script>
+    <script src="/lang-switch.js" defer></script>
   </head>
 
   <body>
@@ -121,7 +123,13 @@
     <header class="bar">
       <a class="brand" href="/zh-CN/"><span class="logo">文</span>文档编辑器</a>
       <nav>
-        <a href="/convert/csv-to-xlsx" hreflang="en">EN</a>
+        <span class="lang-wrap">
+          <span aria-hidden="true">🌐</span>
+          <r-select class="lang-select" type="text" value="zh-CN" aria-label="语言">
+            <r-option value="en" data-href="/convert/csv-to-xlsx">EN</r-option>
+            <r-option value="zh-CN" data-href="/zh-CN/convert/csv-to-xlsx">中文</r-option>
+          </r-select>
+        </span>
         <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">
           <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
         </a>
