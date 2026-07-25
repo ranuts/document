@@ -4,9 +4,11 @@ import { readZipEntries, readZipEntry } from 'ranuts/utils';
 import { extractDocxMediaUrls, preprocessPptx, preprocessXlsxLineBreaks } from '@ranuts/converter';
 
 /**
- * OOXML 就是 ZIP，所以这些函数处理的是真实二进制。构造真归档来测，而不是打桩：
- * DEFLATE 条目、STORED 条目、以及「本地头里填 0、真值在数据描述符里」这种流式写入器
- * 产物都要覆盖到——最后一种正是手写 ZIP 解析器最容易翻车的地方。
+ * OOXML files are ZIP archives, so these functions operate on real binaries.
+ * Hence real archives as fixtures rather than stubs, covering DEFLATE entries,
+ * STORED entries, and streaming-writer output (zeros in the local header, real
+ * values only in the data descriptor) — that last case being exactly where
+ * hand-rolled ZIP parsers tend to break.
  */
 
 const enc = new TextEncoder();
@@ -14,9 +16,9 @@ const enc = new TextEncoder();
 interface FixtureEntry {
   name: string;
   content: string | Uint8Array;
-  /** 压缩存储（method 8）；默认 STORED */
+  /** Store the entry DEFLATE-compressed (method 8); defaults to STORED. */
   deflate?: boolean;
-  /** 模拟流式写入器：本地头写 0，真值只留在中央目录 */
+  /** Mimic a streaming writer: zeros in the local header, real values only in the central directory. */
   streamed?: boolean;
 }
 
@@ -36,7 +38,7 @@ const crc32 = (data: Uint8Array): number => {
   return (c ^ 0xffffffff) >>> 0;
 };
 
-/** 组装一个真正的 ZIP（本地头 + 中央目录 + EOCD）。 */
+/** Assemble a genuine ZIP archive (local headers + central directory + EOCD). */
 const buildZip = (entries: FixtureEntry[]): Uint8Array => {
   const locals: Uint8Array[] = [];
   const centrals: Uint8Array[] = [];
@@ -48,7 +50,8 @@ const buildZip = (entries: FixtureEntry[]): Uint8Array => {
     const nameBytes = enc.encode(entry.name);
     const crc = crc32(raw);
     const method = entry.deflate ? 8 : 0;
-    // 流式写入器：本地头置 0 并打上通用位 3，真值只出现在中央目录
+    // Streaming writer: zero the local header, set general-purpose bit 3, and
+    // leave the real values only in the central directory.
     const flags = entry.streamed ? 0x08 : 0;
 
     const local = new Uint8Array(30 + nameBytes.length + stored.length);
@@ -110,14 +113,14 @@ const textOf = async (zip: Uint8Array, name: string): Promise<string> => {
 const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3, 4, 5, 6, 7, 8]);
 
 beforeAll(() => {
-  // jsdom 没有实现 createObjectURL
+  // jsdom does not implement createObjectURL.
   if (!URL.createObjectURL) {
     Object.defineProperty(URL, 'createObjectURL', { value: vi.fn(() => 'blob:stub'), configurable: true });
   }
 });
 
 describe('extractDocxMediaUrls', () => {
-  it('提取 DOCX 的 word/media 条目（DEFLATE 压缩）', async () => {
+  it('extracts word/media entries from a DOCX (DEFLATE-compressed)', async () => {
     const zip = buildZip([
       { name: 'word/document.xml', content: '<w:document/>' },
       { name: 'word/media/image1.png', content: PNG, deflate: true },
@@ -126,20 +129,21 @@ describe('extractDocxMediaUrls', () => {
     expect(Object.keys(urls)).toEqual(['media/image1.png']);
   });
 
-  it('同样覆盖 XLSX 与 PPTX 的媒体目录', async () => {
+  it('covers the XLSX and PPTX media directories too', async () => {
     const xlsx = buildZip([{ name: 'xl/media/image2.jpg', content: PNG }]);
     const pptx = buildZip([{ name: 'ppt/media/image3.gif', content: PNG }]);
     expect(Object.keys(await extractDocxMediaUrls(xlsx))).toEqual(['media/image2.jpg']);
     expect(Object.keys(await extractDocxMediaUrls(pptx))).toEqual(['media/image3.gif']);
   });
 
-  it('读取流式写入器产物：本地头是 0，尺寸要从中央目录取', async () => {
-    // 回归护栏：照本地头读尺寸会拿到 0 字节，媒体全部丢失
+  it('reads streaming-writer output: local header is 0, sizes come from the central directory', async () => {
+    // Regression guard: reading sizes from the local header yields 0 bytes and
+    // silently loses every media file.
     const zip = buildZip([{ name: 'word/media/image1.png', content: PNG, deflate: true, streamed: true }]);
     expect(Object.keys(await extractDocxMediaUrls(zip))).toEqual(['media/image1.png']);
   });
 
-  it('忽略目录条目与非媒体文件', async () => {
+  it('ignores directory entries and non-media files', async () => {
     const zip = buildZip([
       { name: 'word/media/', content: '' },
       { name: 'word/document.xml', content: '<w:document/>' },
@@ -147,13 +151,13 @@ describe('extractDocxMediaUrls', () => {
     expect(await extractDocxMediaUrls(zip)).toEqual({});
   });
 
-  it('对不是 ZIP 的输入返回空而不是抛错', async () => {
+  it('returns empty instead of throwing on input that is not a ZIP', async () => {
     expect(await extractDocxMediaUrls(enc.encode('not a zip at all'))).toEqual({});
   });
 });
 
 describe('preprocessXlsxLineBreaks', () => {
-  it('把双重转义的换行还原成 &#10;', async () => {
+  it('restores double-escaped line breaks back to &#10;', async () => {
     const zip = buildZip([
       { name: 'xl/sharedStrings.xml', content: '<t>a&amp;#10;b</t>', deflate: true },
       { name: 'xl/workbook.xml', content: '<workbook/>' },
@@ -162,7 +166,7 @@ describe('preprocessXlsxLineBreaks', () => {
     expect(await textOf(out, 'xl/sharedStrings.xml')).toBe('<t>a&#10;b</t>');
   });
 
-  it('不动其它条目，且归档仍可读', async () => {
+  it('leaves other entries untouched and keeps the archive readable', async () => {
     const zip = buildZip([
       { name: 'xl/sharedStrings.xml', content: '<t>a&amp;#10;b</t>' },
       { name: 'xl/workbook.xml', content: '<workbook/>' },
@@ -177,7 +181,7 @@ describe('preprocessXlsxLineBreaks', () => {
     expect(await textOf(out, 'xl/workbook.xml')).toBe('<workbook/>');
   });
 
-  it('没有需要改的内容时原样返回', async () => {
+  it('returns the input as-is when there is nothing to rewrite', async () => {
     const zip = buildZip([{ name: 'xl/workbook.xml', content: '<workbook/>' }]);
     expect(await preprocessXlsxLineBreaks(zip)).toBe(zip);
   });
@@ -189,7 +193,7 @@ describe('preprocessPptx', () => {
     '<Relationship Id="rId1" Type="http://x/officeDocument" Target="ppt/presentation.xml"/>' +
     '</Relationships>';
 
-  it('缺 app.xml / core.xml 时注入，并在 .rels 里补上关系', async () => {
+  it('injects app.xml / core.xml when missing and adds their relationships to .rels', async () => {
     const zip = buildZip([
       { name: '_rels/.rels', content: RELS },
       { name: 'ppt/presentation.xml', content: '<p:presentation/>' },
@@ -202,12 +206,12 @@ describe('preprocessPptx', () => {
     const rels = await textOf(out, '_rels/.rels');
     expect(rels).toContain('docProps/app.xml');
     expect(rels).toContain('docProps/core.xml');
-    // 新关系 id 必须避开已用的 rId1
+    // New relationship ids must avoid the already-used rId1.
     expect(rels).toContain('rId2');
     expect(rels).toContain('rId3');
   });
 
-  it('已有 app.xml / core.xml 时不重复注入', async () => {
+  it('does not re-inject when app.xml / core.xml already exist', async () => {
     const zip = buildZip([
       { name: '_rels/.rels', content: RELS },
       { name: 'docProps/app.xml', content: '<Properties/>' },
@@ -220,7 +224,7 @@ describe('preprocessPptx', () => {
     expect(await textOf(out, '_rels/.rels')).toBe(RELS);
   });
 
-  it('剥掉 notes slide 上的 showMasterPhAnim', async () => {
+  it('strips showMasterPhAnim from notes slides', async () => {
     const zip = buildZip([
       { name: '_rels/.rels', content: RELS },
       { name: 'docProps/app.xml', content: '<Properties/>' },
@@ -235,7 +239,7 @@ describe('preprocessPptx', () => {
     expect(await textOf(out, 'ppt/notesSlides/notesSlide1.xml')).toBe('<p:notes><x/></p:notes>');
   });
 
-  it('重建后的归档所有条目仍可解出原内容', async () => {
+  it('keeps every entry of the rebuilt archive decodable to its original content', async () => {
     const zip = buildZip([
       { name: '_rels/.rels', content: RELS },
       { name: 'ppt/presentation.xml', content: '<p:presentation/>', deflate: true },

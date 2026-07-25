@@ -1,13 +1,16 @@
 import { readZipEntries, readZipEntry, rewriteZip, zipHasEntry } from 'ranuts/utils';
 import type { ZipEntry } from 'ranuts/utils';
 
-// OOXML (DOCX / XLSX / PPTX) 就是 ZIP。ZIP 本身的读写——中央目录解析、DEFLATE 解压、
-// CRC、重建归档——已经由 ranuts 提供，这里只留 OOXML 特有的部分：媒体文件的 MIME 映射，
-// 以及三个针对 OnlyOffice 的预处理。
+// OOXML (DOCX / XLSX / PPTX) files are ZIP archives. The ZIP plumbing itself —
+// central-directory parsing, DEFLATE inflation, CRC, archive rebuilding — comes
+// from ranuts, so all that is left here is the OOXML-specific part: the MIME map
+// for embedded media, plus three OnlyOffice-specific preprocessing passes.
 //
-// 注意 ranuts 的 readZipEntries 从**中央目录**取尺寸与 CRC，而不是本地头：流式写入器
-// 会在本地头里填 0 并把真值放在数据描述符里（通用位 3），照本地头读是手写 ZIP 解析器
-// 在真实文件上翻车最常见的原因。
+// Note that ranuts' readZipEntries takes sizes and CRCs from the **central
+// directory**, not the local headers: streaming writers leave zeros in the local
+// header and put the real values in the data descriptor (general-purpose bit 3),
+// and trusting the local header is the single most common way hand-rolled ZIP
+// parsers break on real-world files.
 
 const MIME_MAP: Record<string, string> = {
   png: 'image/png',
@@ -40,8 +43,9 @@ const MIME_MAP: Record<string, string> = {
 };
 
 /**
- * `rewriteZip` 的适配层：本文件两个预处理器都以「解码后的 XML 字符串」为单位工作，
- * 而 ranuts 的 transform 收到的是原始字节。签名保持不变，两个预处理器的函数体一行未动。
+ * Adapter over `rewriteZip`: both preprocessors in this file work on *decoded XML
+ * strings*, whereas ranuts' `transform` hands over raw bytes. Keeping the
+ * signature here means neither preprocessor body has to care about decoding.
  */
 const rewriteXmlEntries = (
   bytes: Uint8Array,
@@ -168,7 +172,8 @@ export async function preprocessPptx(pptxBytes: Uint8Array): Promise<Uint8Array>
 // word/media/* entries.  Blob URLs must be revoked by the caller when no longer needed.
 export async function extractDocxMediaUrls(docxBytes: Uint8Array): Promise<Record<string, string>> {
   const result: Record<string, string> = {};
-  // 覆盖三种 OOXML 的媒体目录：word/（DOCX）、xl/（XLSX）、ppt/（PPTX）
+  // Covers the media directory of all three OOXML formats: word/ (DOCX),
+  // xl/ (XLSX) and ppt/ (PPTX).
   const MEDIA_PREFIXES = ['word/media/', 'xl/media/', 'ppt/media/'];
 
   for (const entry of readZipEntries(docxBytes)) {
@@ -178,7 +183,8 @@ export async function extractDocxMediaUrls(docxBytes: Uint8Array): Promise<Recor
     if (!baseName || baseName.endsWith('/')) continue;
 
     try {
-      // 不支持的压缩方式与损坏条目由 readZipEntry 返回 null，跳过即可
+      // readZipEntry returns null for unsupported compression methods and for
+      // corrupt entries — skipping them is the right behaviour.
       const fileData = await readZipEntry(docxBytes, entry);
       if (!fileData) continue;
 

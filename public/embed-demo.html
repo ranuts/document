@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -154,33 +154,35 @@
     <main class="shell">
       <aside class="panel">
         <div>
-          <h1 class="title">iframe 嵌入示例</h1>
-          <p class="hint">父页面负责获取文件和上传结果，iframe 只负责编辑文档。</p>
+          <h1 class="title">iframe embedding demo</h1>
+          <p class="hint">
+            The parent page owns fetching the file and uploading the result; the iframe only edits the document.
+          </p>
         </div>
 
         <label class="field">
-          选择本地文件
+          Pick a local file
           <input id="fileInput" type="file" accept=".xlsx,.xls,.csv,.docx,.doc,.pptx,.ppt" />
         </label>
 
-        <button id="openLocalBtn">打开选择的文件</button>
-        <button id="openGeneratedBtn" class="secondary">打开示例 Excel</button>
+        <button id="openLocalBtn">Open the selected file</button>
+        <button id="openGeneratedBtn" class="secondary">Open a sample Excel file</button>
 
         <label class="field">
-          文件 URL
+          File URL
           <input id="urlInput" type="text" placeholder="https://example.com/demo.xlsx" />
         </label>
 
-        <button id="openUrlBtn" class="secondary">通过 URL 打开</button>
+        <button id="openUrlBtn" class="secondary">Open from URL</button>
 
         <label class="row">
           <input id="readonlyInput" type="checkbox" />
-          只读模式
+          Read-only mode
         </label>
 
-        <button id="saveBtn">保存并获取 File</button>
+        <button id="saveBtn">Save and get the File</button>
 
-        <pre id="log">等待 iframe 初始化...</pre>
+        <pre id="log">Waiting for the iframe to initialize...</pre>
       </aside>
 
       <section class="viewer">
@@ -241,13 +243,13 @@
 
       function createDemoExcelFile() {
         const rows = [
-          ['日期', '客户', '金额', '状态'],
-          ['2026-05-19', '示例客户 A', 1280, '待确认'],
-          ['2026-05-20', '示例客户 B', 2360, '已完成'],
+          ['Date', 'Customer', 'Amount', 'Status'],
+          ['2026-05-19', 'Sample customer A', 1280, 'Pending'],
+          ['2026-05-20', 'Sample customer B', 2360, 'Completed'],
         ];
         const worksheet = XLSX.utils.aoa_to_sheet(rows);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, '订单');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders');
         const data = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         return new File([data], 'iframe-demo.xlsx', {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -262,12 +264,12 @@
 
         if (type === 'document:ready') {
           statusEl.textContent = 'ready';
-          log('iframe 已就绪');
+          log('iframe is ready');
           return;
         }
 
         if (type === 'document:error') {
-          log('iframe 返回错误', payload);
+          log('iframe returned an error', payload);
           if (id && pending.has(id)) {
             pending.get(id).reject(new Error(payload.message));
             pending.delete(id);
@@ -275,7 +277,7 @@
           return;
         }
 
-        log(`收到 ${type}`, payload);
+        log(`received ${type}`, payload);
         if (id && pending.has(id)) {
           pending.get(id).resolve(payload);
           pending.delete(id);
@@ -285,7 +287,7 @@
       document.getElementById('openLocalBtn').addEventListener('click', async () => {
         const file = fileInput.files && fileInput.files[0];
         if (!file) {
-          log('请先选择一个文件');
+          log('pick a file first');
           return;
         }
         await post('document:open-file', { file, readonly: readonlyInput.checked });
@@ -303,7 +305,7 @@
       document.getElementById('openUrlBtn').addEventListener('click', async () => {
         const url = document.getElementById('urlInput').value.trim();
         if (!url) {
-          log('请先输入文件 URL');
+          log('enter a file URL first');
           return;
         }
         await post('document:open-url', {
@@ -321,7 +323,7 @@
         const result = await post('document:save', { targetExt: 'XLSX' });
         const file = result.file;
         window.lastSavedFile = file;
-        log('父页面已拿到 File，可在这里 fetch 上传', {
+        log('parent page received the File — upload it with fetch from here', {
           fileName: file.name,
           size: file.size,
           type: file.type,
@@ -329,7 +331,7 @@
           firstSheetB3: await readFirstSheetCell(file, 'B3'),
         });
 
-        // 示例上传写法：
+        // Example upload:
         // await fetch('/api/upload', {
         //   method: 'POST',
         //   headers: { Authorization: `Bearer ${token}` },

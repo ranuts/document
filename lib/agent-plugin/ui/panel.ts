@@ -171,7 +171,7 @@ export function createAgentPanel(): HTMLElement {
   // Local: model picker + load button
   const modelSelect = ranSelect(
     'agent-panel-model',
-    WEBLLM_MODELS.map((model) => ({ value: model.id, label: `${model.label}（${model.size}）` })),
+    WEBLLM_MODELS.map((model) => ({ value: model.id, label: `${model.label} (${model.size})` })),
     DEFAULT_WEBLLM_MODEL,
   );
   const loadBtn = ranButton(t('agentLoadModel'), 'agent-panel-load');

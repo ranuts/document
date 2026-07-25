@@ -36,9 +36,13 @@ export interface WebLLMModel {
  * These are 7–8B, hence the ~4 GB+ downloads.
  */
 export const WEBLLM_MODELS: WebLLMModel[] = [
-  { id: 'Hermes-3-Llama-3.1-8B-q4f16_1-MLC', label: 'Hermes 3 · Llama 3.1 8B（推荐，工具最佳）', size: '~4.7 GB' },
+  {
+    id: 'Hermes-3-Llama-3.1-8B-q4f16_1-MLC',
+    label: 'Hermes 3 · Llama 3.1 8B (recommended, best at tools)',
+    size: '~4.7 GB',
+  },
   { id: 'Hermes-2-Pro-Llama-3-8B-q4f16_1-MLC', label: 'Hermes 2 Pro · Llama 3 8B', size: '~4.7 GB' },
-  { id: 'Hermes-2-Pro-Mistral-7B-q4f16_1-MLC', label: 'Hermes 2 Pro · Mistral 7B（最小）', size: '~4.0 GB' },
+  { id: 'Hermes-2-Pro-Mistral-7B-q4f16_1-MLC', label: 'Hermes 2 Pro · Mistral 7B (smallest)', size: '~4.0 GB' },
 ];
 
 /** The default tool-capable model — the strongest of the supported set. */
