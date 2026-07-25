@@ -7,6 +7,14 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# The vendored ranui token layer, fingerprinted by bin/build.sh. It used to sit in the
+# no-cache group below with a stable name; a stable name whose content changes every deploy
+# is the one combination caching cannot get right, and it did go wrong (a stale copy kept
+# refilling itself from the browser's disk cache across deploys). Now the name carries the
+# content hash, so it is immutable like any other build output.
+/ran-tokens.*.css
+  Cache-Control: public, max-age=31536000, immutable
+
 # The service worker must never be cached, or clients keep running an old
 # version (and its old caching strategy) long after a deploy.
 /sw.js
@@ -17,8 +25,6 @@
 /home.css
   Cache-Control: no-cache
 /landing.css
-  Cache-Control: no-cache
-/ran-tokens.css
   Cache-Control: no-cache
 /lang-switch.js
   Cache-Control: no-cache

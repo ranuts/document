@@ -52,17 +52,58 @@ fi
 # Run Vite build
 pnpm vite build
 
+# Fingerprint the vendored design tokens.
+#
+# The file's *name* was stable while its *content* changed every deploy — the one combination
+# a cache cannot get right. A returning browser could hold it as fresh and never revalidate,
+# and the service worker's background refresh would then be answered from that same disk
+# cache and write the stale bytes back into its own cache: the old copy survived deploy after
+# deploy, and only a manual cache clear fixed it. A content hash removes the category — a new
+# build is a new URL, so there is nothing to invalidate.
+#
+# Only dist/ is rewritten. public/ keeps referencing /ran-tokens.css so `vite dev` still
+# works, and no build artefact lands in a tracked source file.
+TOKENS_DIST="dist/ran-tokens.css"
+if [ -f "$TOKENS_DIST" ]; then
+    if command -v shasum >/dev/null 2>&1; then
+        TOKENS_HASH=$(shasum -a 256 "$TOKENS_DIST" | cut -c1-8)
+    else
+        TOKENS_HASH=$(sha256sum "$TOKENS_DIST" | cut -c1-8)
+    fi
+    TOKENS_NAME="ran-tokens.$TOKENS_HASH.css"
+    mv "$TOKENS_DIST" "dist/$TOKENS_NAME"
+
+    REWROTE=0
+    for f in $(grep -rl '/ran-tokens\.css' dist --include='*.html' 2>/dev/null); do
+        sed "s|/ran-tokens\.css|/$TOKENS_NAME|g" "$f" > "$f.tmp"
+        mv "$f.tmp" "$f"
+        REWROTE=$((REWROTE + 1))
+    done
+
+    # A missed reference 404s in production while dev still works off public/ — exactly the
+    # kind of asymmetry that ships. Fail the build instead.
+    LEFT=$(grep -rl '/ran-tokens\.css' dist --include='*.html' 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$LEFT" != "0" ]; then
+        echo "[build] $LEFT page(s) still point at the unhashed /ran-tokens.css" >&2
+        exit 1
+    fi
+    echo "Fingerprinted design tokens -> $TOKENS_NAME ($REWROTE pages rewritten)"
+else
+    echo "Warning: $TOKENS_DIST not found, skipping token fingerprint."
+fi
+
 # Inject timestamp into sw.js for versioning
 SW_PATH="dist/sw.js"
 if [ -f "$SW_PATH" ]; then
     TIMESTAMP=$(date +%s)
-    # Use sed to replace the placeholder with the actual timestamp
-    # Handling cross-platform sed (macOS vs Linux)
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s/SW_VERSION_PLACEHOLDER/$TIMESTAMP/g" "$SW_PATH"
-    else
-        sed -i "s/SW_VERSION_PLACEHOLDER/$TIMESTAMP/g" "$SW_PATH"
-    fi
+    # `sed -i` differs between BSD and GNU, so write to a temp file and move it back —
+    # that works identically everywhere. The previous `[[ "$OSTYPE" == darwin* ]]` branch
+    # was a bashism, and package.json runs this through `sh`, which ignores the shebang:
+    # on Cloudflare's image /bin/sh is dash, where `[[` prints "not found". It survived only
+    # because a failing *condition* is exempt from `set -e`, so it silently took the else
+    # branch — which happens to be the right one on Linux. Luck, not design.
+    sed "s/SW_VERSION_PLACEHOLDER/$TIMESTAMP/g" "$SW_PATH" > "$SW_PATH.tmp"
+    mv "$SW_PATH.tmp" "$SW_PATH"
     echo "Service Worker version updated with timestamp: $TIMESTAMP"
 else
     echo "Warning: dist/sw.js not found, skipping version injection."

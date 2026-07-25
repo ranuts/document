@@ -15,6 +15,17 @@ import { describe, expect, it } from 'vitest';
 
 const FONT_REGEX = /\.(ttf|woff2?|otf|eot)(\?.*)?$/;
 
+/** Keep in sync with DEPLOY_COUPLED in public/sw.js and the no-cache group in public/_headers. */
+const DEPLOY_COUPLED = /^\/(?:home|landing)\.css$|^\/(?:lang-switch|onlyoffice-v7-iframe-patch)\.js$|^\/ranui-iife\//;
+
+const isHtmlRequest = (mode: string, pathname: string): boolean =>
+  mode === 'navigate' || pathname.endsWith('.html') || pathname === '/' || pathname.endsWith('/');
+
+/** Which of the two strategies sw.js picks. */
+function strategyFor(pathname: string, mode = 'no-cors'): 'network-first' | 'stale-while-revalidate' {
+  return isHtmlRequest(mode, pathname) || DEPLOY_COUPLED.test(pathname) ? 'network-first' : 'stale-while-revalidate';
+}
+
 const ORIGIN = 'http://localhost:5173';
 
 function swShouldHandle(method: string, urlStr: string): boolean {
@@ -106,5 +117,64 @@ describe('SW fetch routing', () => {
     ])('%s', (url) => {
       expect(swShouldHandle('GET', url)).toBe(true);
     });
+  });
+});
+
+/**
+ * Deploy-coupled assets keep a stable filename while their content changes with every
+ * deploy, so they must never be served stale.
+ *
+ * The bug this guards against: stale-while-revalidate returns the cached copy first, so a
+ * deploy that changes a design token renders with the previous one; and because the
+ * background refresh used a plain `fetch`, the browser could answer it from its own HTTP
+ * disk cache and write the stale bytes straight back into the SW cache — the old copy then
+ * survived deploy after deploy (`200 OK (from disk cache)` long after the tokens changed).
+ */
+describe('deploy-coupled assets use network-first', () => {
+  it('covers the other unhashed, deploy-coupled files', () => {
+    for (const path of [
+      '/home.css',
+      '/landing.css',
+      '/lang-switch.js',
+      '/onlyoffice-v7-iframe-patch.js',
+      '/ranui-iife/button.iife.js',
+      '/ranui-iife/card.iife.js',
+    ]) {
+      expect(strategyFor(path)).toBe('network-first');
+    }
+  });
+
+  it('leaves hashed build output on stale-while-revalidate — its filename already busts the cache', () => {
+    expect(strategyFor('/assets/index-BX1VO-Oz.css')).toBe('stale-while-revalidate');
+    expect(strategyFor('/assets/lib-CF3G5uGZ.js')).toBe('stale-while-revalidate');
+  });
+
+  it('treats the fingerprinted token layer as immutable, not deploy-coupled', () => {
+    // bin/build.sh renames it to ran-tokens.<hash>.css and rewrites every <link>, so a new
+    // build is a new URL. SWR is then both correct and faster than revalidating each load.
+    expect(strategyFor('/ran-tokens.a1b2c3d4.css')).toBe('stale-while-revalidate');
+  });
+
+  it('still would not serve a bare /ran-tokens.css stale — but the build makes sure none is referenced', () => {
+    // Kept as a tripwire: if a page ever ships pointing at the unhashed name again, the build
+    // fails first (it greps dist/ and exits non-zero), so this path should never be requested.
+    expect(strategyFor('/ran-tokens.css')).toBe('stale-while-revalidate');
+  });
+
+  it('leaves the OnlyOffice long tail on stale-while-revalidate', () => {
+    // Hundreds of files; revalidating each on every load is exactly what SWR exists to avoid.
+    expect(strategyFor('/web-apps/apps/documenteditor/main/index.html')).toBe('network-first'); // .html
+    expect(strategyFor('/sdkjs/word/sdk-all.js')).toBe('stale-while-revalidate');
+  });
+
+  it('does not match a lookalike path outside the group', () => {
+    expect(strategyFor('/vendor/ran-tokens.css')).toBe('stale-while-revalidate');
+    expect(strategyFor('/ran-tokens.css.map')).toBe('stale-while-revalidate');
+  });
+
+  it('still treats HTML and navigations as network-first', () => {
+    expect(strategyFor('/', 'navigate')).toBe('network-first');
+    expect(strategyFor('/open/docx')).toBe('stale-while-revalidate'); // extensionless, non-navigate
+    expect(strategyFor('/open/docx', 'navigate')).toBe('network-first');
   });
 });
