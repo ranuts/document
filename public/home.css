@@ -18,9 +18,6 @@
   --ink-2: var(--ran-color-text-secondary);
   --muted: var(--ran-gray-800);
   --rule: var(--ran-color-border);
-  /* Blue accent. ranui 0.4 repurposed --ran-color-primary as the monochrome action
-     colour (near-black ↔ near-white); the blue lives in --ran-color-link. */
-  --accent: var(--ran-color-link);
   --signal: var(--ran-color-success);
   /* editor-selection ground: theme-flipped by ran-tokens (light #dfefff / dark #002f62) */
   --sel: var(--ran-blue-300);
@@ -378,13 +375,15 @@
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+/* A text caret is ink, not an accent — matching what the mocked-up editor would really show.
+   The selection ground below stays blue, because that is what a real editor's selection is. */
 #landing-hero .dw-text .caret {
   display: inline-block;
   width: 2px;
   height: 1.05em;
   margin-left: 1px;
   vertical-align: -0.15em;
-  background: var(--accent);
+  background: var(--ran-color-text);
 }
 /* margin annotation, styled like a review comment */
 #landing-hero .dw-note {
@@ -540,11 +539,15 @@
 #landing-hero .formats .card-body p {
   font-size: 13.5px;
 }
+/* The whole card is the <a>; this is its affordance label, not an inline prose link — the
+   arrow and the bold mono face already carry that. Rendering it blue while the card title
+   inside the *same* anchor stays ink would mean blue is decoration here, not link semantics,
+   which is exactly what ranui's design standard reserves blue against. */
 #landing-hero .fmt-go {
   display: inline-block;
   margin-top: var(--ran-space-4);
   font: 600 12.5px/1 var(--mono);
-  color: var(--accent);
+  color: var(--ran-color-text);
 }
 @media (max-width: 900px) {
   #landing-hero .formats {
@@ -792,6 +795,8 @@
   }
 
   /* live caret in the document window */
+  /* A text caret is ink, not an accent — matching what the mocked-up editor would really show.
+   The selection ground below stays blue, because that is what a real editor's selection is. */
   #landing-hero .dw-text .caret {
     animation: lh-blink 1.1s steps(2, start) infinite;
   }

@@ -168,6 +168,13 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。本地�
 
 ## 代码规范
 
+- **注释与代码内字符串一律英文**：主体语言是英文，包括行内注释、JSDoc、`it()` /
+  `describe()` 测试标题、以及代码里拼出来的 UI 文案。标点也用 ASCII（`(` 而不是 `（`）。
+  中文只允许出现在这几处：`packages/shared/src/i18n.ts` 的 zh-CN 词条、
+  `public/zh-CN/**` 的中文落地页、语言切换器里的 `中文` 自称标签、双语 `public/404.html`
+  的那一行，以及 `docs/**` 与本文件。共用页面（如 `public/embed-demo.html`，英文和中文落地页
+  都链到它）必须用英文。复查见
+  [docs/explorations/2026-07-25-english-first-comments.md](docs/explorations/2026-07-25-english-first-comments.md)。
 - **Lint**：oxlint（规则见 `.oxlintrc.json`）+ TypeScript 6 严格模式
 - **格式化**：prettier（配置见 `.prettierrc.json`）
 - **TypeScript**：`strict: true`，`noImplicitAny: true`，目标 ESNext，模块解析 bundler

@@ -16,9 +16,10 @@
   --ink-2: var(--ran-color-text-secondary);
   --muted: var(--ran-gray-800);
   --rule: var(--ran-color-border);
-  /* Blue accent. ranui 0.4 repurposed --ran-color-primary as the monochrome action
-     colour (near-black ↔ near-white); the blue lives in --ran-color-link. */
-  --accent: var(--ran-color-link);
+  /* Named --link, not --accent: it feeds only `a {}` and the focus ring, which are the two
+     places ranui's design standard reserves blue for. Everything else on the page is
+     monochrome by design. */
+  --link: var(--ran-color-link);
   --signal: var(--ran-color-success);
   --sans: var(--ran-font-family);
   --mono: var(--ran-font-mono);
@@ -34,10 +35,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 a {
-  color: var(--accent);
+  color: var(--link);
 }
 a:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--link);
   outline-offset: 2px;
 }
 

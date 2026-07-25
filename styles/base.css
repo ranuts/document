@@ -235,9 +235,9 @@ r-button[type='text']::part(content) {
   backdrop-filter: blur(2px);
 }
 .loading-mask r-loading {
-  /* Accent spinner. ranui 0.4 repurposed --ran-color-primary as the monochrome
-     action colour; the blue accent now lives in --ran-color-link. */
-  color: var(--ran-color-link);
+  /* Monochrome, per ranui's design standard: blue is reserved for links and the focus
+     ring; a loading indicator is neither. --ran-color-primary flips with the theme. */
+  color: var(--ran-color-primary);
   font-size: 24px;
 }
 
