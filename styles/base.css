@@ -53,7 +53,7 @@ body.landing-active #app {
 r-button[type='text']::part(content) {
   font-size: 18px;
   font-weight: 500;
-  padding: 10px 20px;
+  padding: var(--ran-space-3) var(--ran-space-6);
 }
 
 @media (max-width: 480px) {
@@ -67,7 +67,7 @@ r-button[type='text']::part(content) {
    (/ran-tokens.css is linked globally), so dark mode comes for free. */
 .fab-menu-button {
   font-size: 16px;
-  padding: 10px 14px;
+  padding: var(--ran-space-3) var(--ran-space-4);
   background: transparent;
   border: none;
   box-shadow: none;
@@ -111,8 +111,8 @@ r-button[type='text']::part(content) {
 /* FAB Container */
 .fab-container {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: var(--ran-space-6);
+  right: var(--ran-space-6);
   z-index: 1000;
   display: none;
 }
@@ -142,21 +142,26 @@ r-button[type='text']::part(content) {
 /* FAB Menu */
 .fab-menu {
   position: absolute;
-  bottom: 50px;
+  /* Anchoring geometry, not rhythm: derived from the trigger it sits above, so it stays
+     attached if the button's height changes. ranui's spacing scale governs the gaps
+     *between* things — the 100% here is the container's own height. */
+  bottom: calc(100% + var(--ran-space-2));
   right: 0;
   background: var(--ran-color-bg-elevated);
-  border-radius: var(--ran-radius-sm);
+  /* md, not sm: this is a floating surface (a menu panel), and ranui maps sm to controls,
+     md to cards and dialogs. The items inside it are the controls, and they take sm. */
+  border-radius: var(--ran-radius-md);
   box-shadow: var(--ran-shadow-menu);
-  padding: 8px;
+  padding: var(--ran-space-2);
   display: none;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--ran-space-1);
   min-width: 220px;
   opacity: 0;
   transform: translateY(10px) scale(0.95);
   transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+    opacity var(--ran-motion-duration-base) ease,
+    transform var(--ran-motion-duration-base) ease;
   pointer-events: none;
   z-index: 1001;
   border: 1px solid var(--ran-color-border);
@@ -164,18 +169,22 @@ r-button[type='text']::part(content) {
 
 .fab-menu-item {
   width: 100%;
-  border-radius: 4px;
+  border-radius: var(--ran-radius-sm);
 }
 
 /* Menu Guide */
 .menu-guide {
   position: fixed;
+  /* Clears the FAB (24 bottom + 40 tall) plus a gap plus the 10px arrow below this bubble.
+     A sum of derived values, so it is deliberately not a single scale step. */
   bottom: 90px;
-  right: 20px;
+  right: var(--ran-space-6);
   background: var(--ran-color-bg-elevated);
   border-radius: var(--ran-radius-md);
-  box-shadow: var(--ran-shadow-modal);
-  padding: 20px 40px 20px 24px;
+  /* Overlay tier, not modal: this is a pointer bubble that guides, it does not block.
+     ranui reserves --ran-shadow-modal for r-modal-class dialogs. */
+  box-shadow: var(--ran-shadow-menu);
+  padding: var(--ran-space-6) var(--ran-space-10) var(--ran-space-6) var(--ran-space-6);
   z-index: 1002;
   max-width: 300px;
   animation: guideFadeIn 0.3s ease;
@@ -183,6 +192,8 @@ r-button[type='text']::part(content) {
   border: 1px solid var(--ran-color-border);
 }
 
+/* Pure CSS triangle: the three border widths *are* the arrow's shape, not spacing.
+   Snapping them to the 4px scale would just change how the arrow looks. */
 .menu-guide-arrow {
   position: absolute;
   bottom: -10px;
@@ -219,7 +230,10 @@ r-button[type='text']::part(content) {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease;
+  /* No transition on `color`. CSS cannot tell *why* a property changed, so a palette prop
+     listed here also fades when the theme flips its token — this button would cross-fade at
+     its own pace while the rest of the page has already switched. Hover feedback snapping is
+     the intended trade (ranui DESIGN.md §5). */
 }
 
 /* Full-screen loading overlay (lib/loading.ts). gray-alpha rides the token
@@ -254,7 +268,7 @@ r-button[type='text']::part(content) {
   z-index: 1000;
   transition: opacity 0.3s ease;
   pointer-events: none;
-  padding: 20px;
+  padding: var(--ran-space-6);
   box-sizing: border-box;
 }
 
@@ -274,7 +288,7 @@ r-button[type='text']::part(content) {
   white-space: nowrap;
   flex-shrink: 0;
   transform: scale(1);
-  transition: transform 0.15s ease;
+  transition: transform var(--ran-motion-duration-fast) ease;
 }
 .control-panel-button:hover {
   transform: scale(1.05);
@@ -301,7 +315,7 @@ r-button[type='text']::part(content) {
    editor <iframe> (name="frameEditor", no id) inside #app, so target that iframe
    directly. Narrowing it makes OnlyOffice reflow its content. */
 #app iframe {
-  transition: width 0.2s ease;
+  transition: width var(--ran-motion-duration-base) ease;
 }
 body.agent-docked #app iframe {
   width: calc(100% - 360px) !important;
@@ -435,7 +449,8 @@ r-dropdown[role='listbox'] {
 
 .agent-launcher {
   position: fixed;
-  right: 16px;
+  right: var(--ran-space-4);
+  /* Stacks above the main FAB: its 24 bottom + 40 height + a 16 gap. Derived, not arbitrary. */
   bottom: 80px;
   z-index: 9999;
   width: 48px;
@@ -456,3 +471,18 @@ r-dropdown[role='listbox'] {
   display: none;
 }
 /* .agent-panel-quote / .agent-panel-clear are r-buttons — no host styling needed. */
+
+/* ranui DESIGN.md §5: motion is a preference, not a given. Everything animated here is
+   decoration on a state that is already visible from the layout change, so honouring the
+   setting costs nothing and removes the vestibular trigger. Kept to this file's own
+   selectors — ranui's components carry their own reduced-motion rules. */
+@media (prefers-reduced-motion: reduce) {
+  .fab-menu,
+  .menu-guide,
+  .loading-mask,
+  .agent-launcher {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

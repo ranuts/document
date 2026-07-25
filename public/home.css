@@ -10,19 +10,20 @@
    asymmetric split — copy on the left, a CSS-built "document window" on the right
    (file tabs, paper sheet, a selected line with a live caret, a review comment,
    and a network readout showing 0 requests — the product's proof, made visual).
-   Mono type carries every "machine fact"; blue is spent only on selection/caret/
-   primary action; green only means "local / saved". */
+   Mono type carries every "machine fact"; blue is spent only on the editor selection
+   ground; green only means "local / saved".
+
+   Colours come straight from ranui's tokens — there is deliberately no local alias layer
+   (--ink / --rule / --muted and friends are gone). A 1:1 passthrough alias adds a name
+   without adding meaning, and it hides drift: when ranui repurposed --ran-color-primary
+   from blue to monochrome, one alias line was all that stood between this page and the
+   new design language, so nothing here looked wrong until someone happened to notice.
+   Reading `var(--ran-color-text)` at the call site says which token is in play; reading
+   `var(--ink)` requires a lookup. Only genuinely local values keep a name below. */
 
 #landing-hero {
-  --ink: var(--ran-color-text);
-  --ink-2: var(--ran-color-text-secondary);
-  --muted: var(--ran-gray-800);
-  --rule: var(--ran-color-border);
-  --signal: var(--ran-color-success);
   /* editor-selection ground: theme-flipped by ran-tokens (light #dfefff / dark #002f62) */
   --sel: var(--ran-blue-300);
-  --sans: var(--ran-font-family);
-  --mono: var(--ran-font-mono);
   --maxw: 1152px;
   /* fluid page gutter — the only spacing that isn't a fixed step (it scales with
      viewport); bounds are ranui steps (--ran-space-5≈20 not in scale, so raw). */
@@ -33,8 +34,8 @@
   width: 100%;
   min-height: 100%;
   background: var(--ran-color-bg);
-  color: var(--ink);
-  font-family: var(--sans);
+  color: var(--ran-color-text);
+  font-family: var(--ran-font-family);
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -86,7 +87,7 @@
   border-radius: var(--ran-radius-full);
   border: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-elevated);
-  color: var(--ink);
+  color: var(--ran-color-text);
   font-weight: 600;
   font-size: 15.5px;
   line-height: 22px; /* matches .ran-btn-content's default line-height */
@@ -109,7 +110,7 @@
 #landing-hero .langmark {
   width: 15px;
   height: 15px;
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
   flex: none;
 }
 #landing-hero r-select.lang-select {
@@ -124,7 +125,7 @@
 
 /* ---------- top bar ---------- */
 #landing-hero .bar {
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
 }
 #landing-hero .bar .wrap {
   display: flex;
@@ -147,7 +148,7 @@
   height: 24px;
   border-radius: var(--ran-radius-sm);
   /* monochrome mark (Geist): ink on page bg, inverts with the theme */
-  background: var(--ink);
+  background: var(--ran-color-text);
   display: inline-grid;
   place-items: center;
   color: var(--ran-color-bg);
@@ -166,11 +167,11 @@
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   transition: 0.15s ease;
 }
 #landing-hero .bar nav .navlink:hover {
-  color: var(--ink);
+  color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
 }
 #landing-hero .ghmark {
@@ -194,23 +195,23 @@
   align-items: center;
   gap: var(--ran-space-2);
   padding: var(--ran-space-1) var(--ran-space-3);
-  border: 1px solid var(--rule);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-full);
   /* bordered pill on the plain page bg (Geist badge), no fill */
   background: transparent;
-  font: 500 12px/1.8 var(--mono);
-  color: var(--ink-2);
+  font: 500 12px/1.8 var(--ran-font-mono);
+  color: var(--ran-color-text-secondary);
   margin-bottom: var(--ran-space-6);
 }
 #landing-hero .chip b {
-  color: var(--signal);
+  color: var(--ran-color-success);
   font-weight: 600;
 }
 #landing-hero .chip .dot {
   width: 7px;
   height: 7px;
   border-radius: var(--ran-radius-full);
-  background: var(--signal);
+  background: var(--ran-color-success);
 }
 #landing-hero h1 {
   margin: 0;
@@ -239,44 +240,80 @@
   margin: clamp(18px, 2.2vw, 26px) 0 0;
   max-width: 46ch;
   font-size: clamp(16.5px, 1.5vw, 19px);
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
 }
+/* Four buttons never fit one line in this column, so they always broke 3 + 1 and left the
+   fourth stranded. Give the primary action its own row and let the three "new document"
+   actions sit together underneath: the same two rows, but now they read as a hierarchy
+   (one primary path, three peers) instead of an accident. `max-content` columns keep each
+   button its natural width — a stretched full-width primary would read as a form submit. */
 #landing-hero .cta {
   display: flex;
   flex-wrap: wrap;
   gap: var(--ran-space-3);
   margin-top: clamp(24px, 2.8vw, 36px);
 }
+@media (min-width: 700px) {
+  #landing-hero .cta {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: start;
+  }
+  #landing-hero .cta > :first-child {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
 #landing-hero .trust {
   margin-top: var(--ran-space-6);
-  font: 500 12.5px/1.6 var(--mono);
-  color: var(--muted);
+  font: 500 12.5px/1.6 var(--ran-font-mono);
+  color: var(--ran-color-text-secondary);
   display: flex;
   flex-wrap: wrap;
   gap: var(--ran-space-1) var(--ran-space-3);
 }
-#landing-hero .trust .sep {
-  color: var(--rule);
+/* Separators are generated, not authored. Two reasons, and the second is the important one:
+   as their own flex items they could land at the end of a wrapped line, leaving a stranded
+   "·"; as a ::before they belong to the item that follows and wrap with it. And they no
+   longer appear in the DOM text, so a crawler or an LLM reads
+   "0 bytes uploaded no account works offline" instead of that string glued together by
+   decorative punctuation. */
+/* This line carries two different kinds of thing: three claims, and a format list. Giving
+   the list its own row says so, and it also removes the reason the separators kept landing
+   at a line edge — first stranded at the end, then leading the next line once they became
+   ::before. A separator has to sit *between* two items, so whenever the line wraps one of
+   them is at an edge; the fix is to stop the wrap happening between separated items, not to
+   move the separator. Below 700px the claims themselves wrap, so the dots go away entirely
+   and the gap does the separating. */
+#landing-hero .trust > span:last-child {
+  flex-basis: 100%;
+}
+@media (min-width: 700px) {
+  #landing-hero .trust > span:not(:first-child):not(:last-child)::before {
+    content: '·';
+    margin-right: var(--ran-space-3);
+    color: var(--ran-color-border);
+  }
 }
 /* ---------- document window (decorative, pure CSS — runs on static pages too) ---------- */
 #landing-hero .docwin {
-  border: 1px solid var(--rule);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-lg);
   background: var(--ran-color-bg-elevated);
   /* in-flow bordered surface → the quiet elevated tier, not the overlay tier */
   box-shadow: var(--ran-shadow-elevated);
   overflow: hidden;
-  font-family: var(--mono);
+  font-family: var(--ran-font-mono);
 }
 #landing-hero .dw-bar {
   display: flex;
   align-items: center;
   gap: var(--ran-space-3);
   padding: var(--ran-space-3) var(--ran-space-4);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-subtle);
   font-size: 11.5px;
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .dw-dots {
   display: inline-flex;
@@ -299,13 +336,13 @@
   flex: none;
   font-size: 10.5px;
   font-weight: 600;
-  color: var(--signal);
+  color: var(--ran-color-success);
 }
 #landing-hero .dw-tabs {
   display: flex;
   gap: 3px;
   padding: var(--ran-space-2) var(--ran-space-4) 0;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-subtle);
   font-size: 11px;
 }
@@ -314,14 +351,14 @@
   border: 1px solid transparent;
   border-bottom: none;
   border-radius: var(--ran-radius-sm) var(--ran-radius-sm) 0 0;
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .dw-tabs .on {
   position: relative;
   top: 1px;
   background: var(--ran-color-bg-elevated);
-  border-color: var(--rule);
-  color: var(--ink);
+  border-color: var(--ran-color-border);
+  color: var(--ran-color-text);
   font-weight: 600;
 }
 #landing-hero .dw-body {
@@ -366,7 +403,7 @@
   margin: 2px 0;
   font-size: 13px;
   line-height: 1.7;
-  color: var(--ink);
+  color: var(--ran-color-text);
 }
 #landing-hero .dw-text mark {
   background: var(--sel);
@@ -388,21 +425,21 @@
 /* margin annotation, styled like a review comment */
 #landing-hero .dw-note {
   align-self: start;
-  border: 1px solid var(--rule);
-  border-left: 3px solid var(--signal);
+  border: 1px solid var(--ran-color-border);
+  border-left: 3px solid var(--ran-color-success);
   border-radius: var(--ran-radius-sm);
   background: var(--ran-color-bg-subtle);
   padding: var(--ran-space-2) var(--ran-space-3);
   font-size: 10.5px;
   line-height: 1.6;
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .dw-note b {
   display: block;
   margin-bottom: 2px;
   font-size: 10px;
   font-weight: 600;
-  color: var(--signal);
+  color: var(--ran-color-success);
 }
 /* status strip: the proof, spelled out */
 #landing-hero .dw-net {
@@ -410,16 +447,16 @@
   align-items: center;
   gap: var(--ran-space-2);
   padding: var(--ran-space-2) var(--ran-space-4);
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-subtle);
   font-size: 11px;
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .dw-net .ok {
   width: 7px;
   height: 7px;
   border-radius: var(--ran-radius-full);
-  background: var(--signal);
+  background: var(--ran-color-success);
   flex: none;
 }
 
@@ -430,16 +467,16 @@
 #landing-hero .section-head {
   margin-bottom: clamp(28px, 3vw, 44px);
   padding-bottom: var(--ran-space-4);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
 }
 #landing-hero .section-head .eyebrow {
   display: block;
   margin-bottom: var(--ran-space-3);
-  font: 600 12px/1 var(--mono);
+  font: 600 12px/1 var(--ran-font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   /* gray mono label — blue is reserved for links and the hero selection */
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .section-head h2 {
   margin: 0;
@@ -482,7 +519,7 @@
 #landing-hero .cards r-card:not(:defined),
 #landing-hero .formats r-card:not(:defined) {
   display: block;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg);
   padding: var(--ran-space-4);
@@ -492,9 +529,9 @@
   padding: var(--ran-space-6);
 }
 #landing-hero .card-body .k {
-  font: 600 11px/1 var(--mono);
+  font: 600 11px/1 var(--ran-font-mono);
   letter-spacing: 0.06em;
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .card-body h3 {
   margin: var(--ran-space-4) 0 var(--ran-space-2);
@@ -503,7 +540,7 @@
 }
 #landing-hero .card-body p {
   margin: 0;
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   font-size: 14.5px;
   line-height: 1.55;
   max-width: 52ch;
@@ -546,7 +583,7 @@
 #landing-hero .fmt-go {
   display: inline-block;
   margin-top: var(--ran-space-4);
-  font: 600 12.5px/1 var(--mono);
+  font: 600 12.5px/1 var(--ran-font-mono);
   color: var(--ran-color-text);
 }
 @media (max-width: 900px) {
@@ -568,7 +605,7 @@
 }
 #landing-hero .step {
   position: relative;
-  border-top: 2px solid var(--rule);
+  border-top: 2px solid var(--ran-color-border);
   padding-top: var(--ran-space-4);
 }
 #landing-hero .step::before {
@@ -578,11 +615,11 @@
   left: 0;
   width: 48px;
   height: 2px;
-  background: var(--ink);
+  background: var(--ran-color-text);
 }
 #landing-hero .step .n {
-  font: 700 13px/1 var(--mono);
-  color: var(--muted);
+  font: 700 13px/1 var(--ran-font-mono);
+  color: var(--ran-color-text-secondary);
   letter-spacing: 0.04em;
 }
 #landing-hero .step h3 {
@@ -592,16 +629,16 @@
 }
 #landing-hero .step p {
   margin: 0;
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   font-size: 14.5px;
 }
 #landing-hero .step .loc {
   display: inline-block;
   margin-top: var(--ran-space-4);
-  font: 600 10.5px/1 var(--mono);
+  font: 600 10.5px/1 var(--ran-font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--signal);
+  color: var(--ran-color-success);
 }
 
 /* ---------- faq: head left, answers right ---------- */
@@ -620,10 +657,10 @@
   min-width: 0;
 }
 #landing-hero .qa details {
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--ran-color-border);
 }
 #landing-hero .qa details:last-child {
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
 }
 #landing-hero .qa summary {
   cursor: pointer;
@@ -641,8 +678,8 @@
 }
 #landing-hero .qa summary::after {
   content: '+';
-  font: 400 20px/1 var(--mono);
-  color: var(--muted);
+  font: 400 20px/1 var(--ran-font-mono);
+  color: var(--ran-color-text-secondary);
   transition: transform 0.15s ease;
 }
 #landing-hero .qa details[open] summary::after {
@@ -651,7 +688,7 @@
 #landing-hero .qa .a {
   margin: 0;
   padding: 0 0 var(--ran-space-4);
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   font-size: 15px;
   line-height: 1.65;
   max-width: 62ch;
@@ -660,7 +697,7 @@
 /* ---------- ecosystem + footer ---------- */
 #landing-hero .eco {
   margin-top: clamp(56px, 7vw, 96px);
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--ran-color-border);
   background: var(--ran-color-bg-subtle);
 }
 #landing-hero .eco .wrap {
@@ -676,10 +713,10 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ran-space-2);
-  font: 600 11px/1.4 var(--mono);
+  font: 600 11px/1.4 var(--ran-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .eco-label .gitmark {
   width: 15px;
@@ -699,32 +736,32 @@
   gap: var(--ran-space-2);
   font-size: 13.5px;
   padding: var(--ran-space-2) var(--ran-space-4);
-  border: 1px solid var(--rule);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg);
 }
 #landing-hero .eco nav a {
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   transition: 0.15s ease;
 }
 #landing-hero .eco nav a:hover {
   border-color: var(--ran-color-border-hover);
-  color: var(--ink);
+  color: var(--ran-color-text);
 }
 #landing-hero .eco nav b {
-  font: 700 12.5px/1 var(--mono);
+  font: 700 12.5px/1 var(--ran-font-mono);
 }
 #landing-hero .eco nav small {
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
 }
 #landing-hero .eco nav .here {
-  color: var(--ink);
-  border-color: var(--ink);
+  color: var(--ran-color-text);
+  border-color: var(--ran-color-text);
 }
 /* the footer carries both classes (<footer class="foot wrap">), so the layout
    sits on the compound selector — a descendant `.foot .wrap` never matches */
 #landing-hero .foot {
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--ran-color-border);
 }
 #landing-hero .foot.wrap {
   display: flex;
@@ -734,7 +771,7 @@
   gap: var(--ran-space-4);
   padding-top: var(--ran-space-8);
   padding-bottom: var(--ran-space-10);
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
   font-size: 13.5px;
 }
 #landing-hero .foot nav {
@@ -743,10 +780,10 @@
   gap: var(--ran-space-4);
 }
 #landing-hero .foot a:hover {
-  color: var(--ink);
+  color: var(--ran-color-text);
 }
 #landing-hero .foot .lic {
-  font: 500 12px/1 var(--mono);
+  font: 500 12px/1 var(--ran-font-mono);
 }
 
 /* ---------- theme switch (footer) ----------
@@ -757,7 +794,7 @@
   display: inline-block;
   width: 94px;
   height: 34px;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-full);
 }
 
@@ -849,7 +886,7 @@
     grid-template-columns: 1fr;
   }
   #landing-hero .faq-sec .section-head {
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--ran-color-border);
     padding-bottom: var(--ran-space-4);
   }
   #landing-hero .bar nav .navlink:not(.gh) {

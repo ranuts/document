@@ -11,34 +11,21 @@
 * {
   box-sizing: border-box;
 }
-:root {
-  --ink: var(--ran-color-text);
-  --ink-2: var(--ran-color-text-secondary);
-  --muted: var(--ran-gray-800);
-  --rule: var(--ran-color-border);
-  /* Named --link, not --accent: it feeds only `a {}` and the focus ring, which are the two
-     places ranui's design standard reserves blue for. Everything else on the page is
-     monochrome by design. */
-  --link: var(--ran-color-link);
-  --signal: var(--ran-color-success);
-  --sans: var(--ran-font-family);
-  --mono: var(--ran-font-mono);
-}
 body {
   margin: 0;
   background: var(--ran-color-bg);
-  color: var(--ink);
-  font-family: var(--sans);
+  color: var(--ran-color-text);
+  font-family: var(--ran-font-family);
   font-size: 16px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 a {
-  color: var(--link);
+  color: var(--ran-color-link);
 }
 a:focus-visible {
-  outline: 2px solid var(--link);
+  outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
 }
 
@@ -49,7 +36,7 @@ header.bar {
   justify-content: space-between;
   gap: var(--ran-space-4);
   padding: var(--ran-space-4) clamp(20px, 5vw, 56px);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
 }
 header.bar .brand {
   display: inline-flex;
@@ -58,7 +45,7 @@ header.bar .brand {
   font-weight: 700;
   font-size: 16px;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--ran-color-text);
   text-decoration: none;
 }
 header.bar .logo {
@@ -66,7 +53,7 @@ header.bar .logo {
   height: 24px;
   border-radius: var(--ran-radius-sm);
   /* monochrome mark (Geist): ink on page bg, inverts with the theme */
-  background: var(--ink);
+  background: var(--ran-color-text);
   display: inline-grid;
   place-items: center;
   color: var(--ran-color-bg);
@@ -85,12 +72,12 @@ header.bar nav a {
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   text-decoration: none;
   transition: 0.15s ease;
 }
 header.bar nav a:hover {
-  color: var(--ink);
+  color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
 }
 .ghmark {
@@ -110,7 +97,7 @@ header.bar nav a:hover {
 .langmark {
   width: 15px;
   height: 15px;
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
   flex: none;
 }
 r-select.lang-select {
@@ -131,11 +118,11 @@ r-select.lang-select:not(:defined) {
 }
 .eyebrow {
   margin: var(--ran-space-8) 0 0;
-  font: 600 12px/1 var(--mono);
+  font: 600 12px/1 var(--ran-font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   /* gray mono label — blue is reserved for links */
-  color: var(--muted);
+  color: var(--ran-color-text-secondary);
 }
 h1 {
   font-size: clamp(28px, 5vw, 40px);
@@ -149,14 +136,14 @@ h2 {
   letter-spacing: -0.02em;
   margin: var(--ran-space-10) 0 var(--ran-space-4);
   padding-bottom: var(--ran-space-3);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
 }
 p {
   margin: var(--ran-space-3) 0;
 }
 .lead {
   font-size: 18px;
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   margin: 0 0 var(--ran-space-4);
 }
 
@@ -214,7 +201,7 @@ r-card.oss {
 /* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
    (border, radius-md, page background, its built-in 16px padding) */
 r-card.oss:not(:defined) {
-  border: 1px solid var(--rule);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg);
   padding: var(--ran-space-4);
@@ -233,7 +220,7 @@ r-card.oss a {
   letter-spacing: -0.01em;
   margin: 0;
   padding: var(--ran-space-4) 0 0;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--ran-color-border);
 }
 .faq h3:first-child {
   border-top: none;
@@ -241,28 +228,28 @@ r-card.oss a {
 }
 .faq p {
   margin: var(--ran-space-1) 0 var(--ran-space-4);
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   font-size: 15px;
 }
 h2.faq {
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--ran-color-border);
 }
 
 /* ---------- footer ---------- */
 footer {
   margin-top: var(--ran-space-16);
   padding-top: var(--ran-space-4);
-  border-top: 1px solid var(--rule);
-  color: var(--muted);
+  border-top: 1px solid var(--ran-color-border);
+  color: var(--ran-color-text-secondary);
   font-size: 13.5px;
 }
 footer a {
-  color: var(--ink-2);
+  color: var(--ran-color-text-secondary);
   text-decoration: none;
   margin-right: var(--ran-space-4);
 }
 footer a:hover {
-  color: var(--ink);
+  color: var(--ran-color-text);
 }
 
 /* ---------- theme switch (footer) ----------
@@ -275,7 +262,7 @@ r-theme-switch.theme-switch:not(:defined) {
   display: inline-block;
   width: 94px;
   height: 34px;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-full);
 }
 /* footer rows on the satellites are plain text; give the pill its own line spacing */
