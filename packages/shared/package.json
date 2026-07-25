@@ -38,7 +38,7 @@
     "prepare": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "ranuts": "0.2.0-alpha.0"
+    "ranuts": "0.4.0-alpha.1"
   },
   "devDependencies": {
     "typescript": "^6.0.3"

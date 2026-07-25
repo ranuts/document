@@ -30,11 +30,11 @@ importers:
         specifier: workspace:*
         version: link:packages/shared
       ranui:
-        specifier: 0.4.1-alpha.2
-        version: 0.4.1-alpha.2
+        specifier: 0.4.2-alpha.2
+        version: 0.4.2-alpha.2
       ranuts:
-        specifier: 0.3.0-alpha.1
-        version: 0.3.0-alpha.1
+        specifier: 0.4.0-alpha.1
+        version: 0.4.0-alpha.1
     devDependencies:
       '@playwright/test':
         specifier: ^1.61.1
@@ -89,11 +89,11 @@ importers:
   packages/chat-ui:
     dependencies:
       ranui:
-        specifier: 0.2.0-alpha.5
-        version: 0.2.0-alpha.5
+        specifier: 0.4.2-alpha.2
+        version: 0.4.2-alpha.2
       ranuts:
-        specifier: 0.2.0-alpha.0
-        version: 0.2.0-alpha.0
+        specifier: 0.4.0-alpha.1
+        version: 0.4.0-alpha.1
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -105,11 +105,11 @@ importers:
         specifier: workspace:*
         version: link:../shared
       ranui:
-        specifier: 0.2.0-alpha.5
-        version: 0.2.0-alpha.5
+        specifier: 0.4.2-alpha.2
+        version: 0.4.2-alpha.2
       ranuts:
-        specifier: 0.2.0-alpha.0
-        version: 0.2.0-alpha.0
+        specifier: 0.4.0-alpha.1
+        version: 0.4.0-alpha.1
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -118,8 +118,8 @@ importers:
   packages/shared:
     dependencies:
       ranuts:
-        specifier: 0.2.0-alpha.0
-        version: 0.2.0-alpha.0
+        specifier: 0.4.0-alpha.1
+        version: 0.4.0-alpha.1
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -1447,20 +1447,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  ranui@0.2.0-alpha.5:
-    resolution: {integrity: sha512-phtTfqMTEQkxQ/+Q1xcNBmiyk9XXxLMoNsYFpy7JBH956m9lxjRA1vK39JSi535QKPvUZEG0m7dBLU5wdTcGRA==}
+  ranui@0.4.2-alpha.2:
+    resolution: {integrity: sha512-NewyXXE6xGpaz2Yohq2ZomnMz9uiim5gBjhGpYqiUV+gh/xTTMT43EUzXyHz7UnMGviJxtzNGVDRW8jZlmkCug==}
     engines: {node: '>=20.19.0'}
 
-  ranui@0.4.1-alpha.2:
-    resolution: {integrity: sha512-9lbQxigfDwuLpKTkqiyi2V5NYWQTJlnAf+2xFGxPtGWJR4/1mDIOFUNKqx1YPQn5ikVKkNeKSWyjBhj7z22Jgg==}
-    engines: {node: '>=20.19.0'}
-
-  ranuts@0.2.0-alpha.0:
-    resolution: {integrity: sha512-2DVeuyd9qaNTMIvcjSo6mQczJgoDuuoE2NdsPl0DuSNl8ib1HC5pGj0qqMYGXhInFs6FR+F+1cO1cabKRRHt1Q==}
-    engines: {node: '>=23.10.0'}
-
-  ranuts@0.3.0-alpha.1:
-    resolution: {integrity: sha512-Joo1GyorO9VXo3fwQsKybsWVm+eLmXRIEyjjGH1BV+wPHTIY2TYD/HnpjqxAMHEhtnSNnlpL+g0Cu7HNkVQ/lQ==}
+  ranuts@0.4.0-alpha.1:
+    resolution: {integrity: sha512-6cRgAnSOvVFwSappyTFRDW3dQDzQ/wF95ksQjPgA5RRe8ZfUYecQMUMqSS+XUDvW7lFs+t1YEz9R0TcQP9tuUg==}
     engines: {node: '>=23.10.0'}
 
   require-from-string@2.0.2:
@@ -2857,23 +2849,13 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  ranui@0.2.0-alpha.5:
-    dependencies:
-      ranuts: 0.2.0-alpha.0
-
-  ranui@0.4.1-alpha.2:
+  ranui@0.4.2-alpha.2:
     dependencies:
       mermaid: 11.16.0
-      ranuts: 0.3.0-alpha.1
+      ranuts: 0.4.0-alpha.1
       temml: 0.13.3
 
-  ranuts@0.2.0-alpha.0:
-    dependencies:
-      earcut: 3.2.3
-      jschardet: 3.1.4
-      magic-string: 0.30.21
-
-  ranuts@0.3.0-alpha.1:
+  ranuts@0.4.0-alpha.1:
     dependencies:
       earcut: 3.2.3
       jschardet: 3.1.4
