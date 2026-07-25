@@ -16,7 +16,9 @@
   --ink-2: var(--ran-color-text-secondary);
   --muted: var(--ran-gray-800);
   --rule: var(--ran-color-border);
-  --accent: var(--ran-color-primary);
+  /* Blue accent. ranui 0.4 repurposed --ran-color-primary as the monochrome action
+     colour (near-black ↔ near-white); the blue lives in --ran-color-link. */
+  --accent: var(--ran-color-link);
   --signal: var(--ran-color-success);
   --sans: var(--ran-font-family);
   --mono: var(--ran-font-mono);
@@ -177,16 +179,16 @@ p {
 }
 /* pre-upgrade fallback so the CTA is a styled, clickable button even before
    (or without) the /ranui-iife/*.iife.js bundles — same progressive-enhancement
-   idea as the static-page fallbacks on the homepage. Mirrors type="contrast". */
+   idea as the static-page fallbacks on the homepage. Mirrors type="primary". */
 .cta r-button:not(:defined) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: var(--ran-space-3) var(--ran-space-6);
   border-radius: var(--ran-radius-full);
-  border: 1px solid var(--ran-color-contrast-bg, var(--ran-gray-1000));
-  background: var(--ran-color-contrast-bg, var(--ran-gray-1000));
-  color: var(--ran-color-contrast-text, var(--ran-background-100));
+  border: 1px solid var(--ran-color-primary);
+  background: var(--ran-color-primary);
+  color: var(--ran-color-primary-text);
   font-weight: 600;
   font-size: 15.5px;
   line-height: 22px; /* matches .ran-btn-content's default line-height */

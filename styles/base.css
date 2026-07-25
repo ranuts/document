@@ -235,7 +235,9 @@ r-button[type='text']::part(content) {
   backdrop-filter: blur(2px);
 }
 .loading-mask r-loading {
-  color: var(--ran-color-primary);
+  /* Accent spinner. ranui 0.4 repurposed --ran-color-primary as the monochrome
+     action colour; the blue accent now lives in --ran-color-link. */
+  color: var(--ran-color-link);
   font-size: 24px;
 }
 
@@ -398,7 +400,10 @@ body.agent-docked #app iframe {
 }
 .agent-panel-link:hover,
 .agent-panel-link:focus-visible {
-  color: var(--ran-color-primary-hover);
+  /* One step up the blue ladder from --ran-color-link. Not --ran-color-primary-hover:
+     since ranui 0.4 that is the near-black #383838, a light-only literal that would
+     leave the hover state invisible in dark mode. */
+  color: var(--ran-blue-900);
 }
 /* (Review / quote / clear moved into ChatView's `.cui-actions` slot above the
    input; the old top toolbar is gone.) */
@@ -437,9 +442,11 @@ r-dropdown[role='listbox'] {
   height: 48px;
   border-radius: 50%;
   border: none;
-  /* monochrome contrast FAB — inverts with the theme */
-  background: var(--ran-color-contrast-bg, var(--ran-gray-1000));
-  color: var(--ran-color-contrast-text, var(--ran-background-100));
+  /* Monochrome FAB, inverted against the page. ranui 0.4 renamed the contrast action
+     tokens: --ran-color-contrast-bg/-text are now --ran-color-primary/-primary-text,
+     and both flip with the theme. */
+  background: var(--ran-color-primary);
+  color: var(--ran-color-primary-text);
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;

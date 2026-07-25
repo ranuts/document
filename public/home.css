@@ -18,7 +18,9 @@
   --ink-2: var(--ran-color-text-secondary);
   --muted: var(--ran-gray-800);
   --rule: var(--ran-color-border);
-  --accent: var(--ran-color-primary);
+  /* Blue accent. ranui 0.4 repurposed --ran-color-primary as the monochrome action
+     colour (near-black ↔ near-white); the blue lives in --ran-color-link. */
+  --accent: var(--ran-color-link);
   --signal: var(--ran-color-success);
   /* editor-selection ground: theme-flipped by ran-tokens (light #dfefff / dark #002f62) */
   --sel: var(--ran-blue-300);
@@ -92,10 +94,10 @@
   font-size: 15.5px;
   line-height: 22px; /* matches .ran-btn-content's default line-height */
 }
-#landing-hero r-button[type='contrast']:not(:defined) {
-  background: var(--ran-color-contrast-bg, var(--ran-gray-1000));
-  border-color: var(--ran-color-contrast-bg, var(--ran-gray-1000));
-  color: var(--ran-color-contrast-text, var(--ran-background-100));
+#landing-hero r-button[type='primary']:not(:defined) {
+  background: var(--ran-color-primary);
+  border-color: var(--ran-color-primary);
+  color: var(--ran-color-primary-text);
 }
 
 /* Language switch: same ranui <r-select> on the app homepage and the static
