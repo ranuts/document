@@ -252,6 +252,30 @@ describe('embed-api', () => {
       expectMessagePosted(postMessageSpy, 'document:opened', 'uint8-1');
     });
 
+    it('decodes a base64 string payload (via "data" key) into a File', async () => {
+      const original = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 1, 2, 3]);
+      const base64 = btoa(String.fromCharCode(...original));
+
+      await openWithPayload({ data: base64, fileName: 'from-base64.docx' }, 'base64-1');
+
+      const [callArg] = mockHandleDocumentOperation.mock.calls.at(-1)!;
+      expect(callArg.fileName).toBe('from-base64.docx');
+      const bytes = new Uint8Array(await callArg.file.arrayBuffer());
+      expect(Array.from(bytes)).toEqual(Array.from(original));
+      expectMessagePosted(postMessageSpy, 'document:opened', 'base64-1');
+    });
+
+    it('strips a data-URL prefix before decoding a base64 payload', async () => {
+      const original = new Uint8Array([1, 2, 3, 4]);
+      const base64 = btoa(String.fromCharCode(...original));
+
+      await openWithPayload({ data: `data:application/octet-stream;base64,${base64}`, fileName: 'x.docx' }, 'base64-2');
+
+      const [callArg] = mockHandleDocumentOperation.mock.calls.at(-1)!;
+      const bytes = new Uint8Array(await callArg.file.arrayBuffer());
+      expect(Array.from(bytes)).toEqual(Array.from(original));
+    });
+
     it('uses default filename "document.xlsx" when no name is supplied', async () => {
       const buffer = new Uint8Array([1]).buffer;
 

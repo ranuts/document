@@ -87,7 +87,7 @@ interface DocEditor {
       urls?: Record<string, string>;
       path?: string;
       imgName?: string;
-      buf?: ArrayBuffer;
+      buf?: ArrayBuffer | string;
       success?: boolean;
       error?: string;
       enabled?: boolean;

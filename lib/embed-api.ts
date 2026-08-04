@@ -69,6 +69,23 @@ function postToParent(type: string, payload: EmbedResponsePayload = {}, id?: str
   );
 }
 
+// Some hosts (e.g. a Qt WebEngine app driving the page via
+// QWebEngineView.page().runJavaScript()) can only inject JSON-serializable
+// literals -- there is no way to hand over a real ArrayBuffer from the host
+// language. Base64-encoding the file content is the standard workaround, so
+// accept a base64 string alongside the binary forms below. Strips an optional
+// data-URL prefix ("data:...;base64,") for convenience.
+function decodeBase64ToUint8Array(base64: string): Uint8Array {
+  const commaIndex = base64.indexOf(',');
+  const raw = base64.startsWith('data:') && commaIndex !== -1 ? base64.slice(commaIndex + 1) : base64;
+  const binaryString = atob(raw);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
+
 function makeFileFromPayload(payload: Record<string, any>): File {
   const fileName = payload.fileName || payload.name || 'document.xlsx';
 
@@ -82,7 +99,7 @@ function makeFileFromPayload(payload: Record<string, any>): File {
     });
   }
 
-  const buffer = payload.buffer || payload.arrayBuffer || payload.bytes || payload.data;
+  const buffer = payload.buffer || payload.arrayBuffer || payload.bytes || payload.data || payload.base64;
   if (buffer instanceof ArrayBuffer) {
     return new File([buffer], fileName, {
       type: payload.mimeType || 'application/octet-stream',
@@ -96,7 +113,14 @@ function makeFileFromPayload(payload: Record<string, any>): File {
     });
   }
 
-  throw new Error('document:open requires url, file, blob, buffer, arrayBuffer, bytes, or data');
+  if (typeof buffer === 'string') {
+    const bytes = decodeBase64ToUint8Array(buffer);
+    return new File([bytes.buffer as ArrayBuffer], fileName, {
+      type: payload.mimeType || 'application/octet-stream',
+    });
+  }
+
+  throw new Error('document:open requires url, file, blob, buffer, arrayBuffer, bytes, data, or base64');
 }
 
 async function openFile(file: File, readonly = false): Promise<void> {
