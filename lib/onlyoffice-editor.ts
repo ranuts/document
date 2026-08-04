@@ -72,6 +72,27 @@ export function toUint8Array(data: BlobPart): Uint8Array {
   throw new Error('Unsupported saved data type');
 }
 
+/**
+ * Base64-encode binary data in chunks (avoids blowing the call stack on
+ * String.fromCharCode(...bytes) for large documents).
+ *
+ * asc_openDocument's `buf` is sent to OnlyOffice's internal editor iframe via
+ * window.postMessage. Some embedding hosts (e.g. Qt WebEngine, see #113) have
+ * been observed losing ArrayBuffer/TypedArray contents across that boundary,
+ * which OnlyOffice then can't recognize as a valid document and reports as a
+ * format mismatch. A base64 string survives postMessage/structured-clone
+ * universally, so we send that instead -- the same approach already used for
+ * the empty "new document" template in empty_bin.ts.
+ */
+function toBase64(bytes: Uint8Array): string {
+  const CHUNK_SIZE = 0x8000;
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK_SIZE));
+  }
+  return btoa(binary);
+}
+
 function getFileExtension(fileName: string): string {
   return fileName.split('.').pop()?.toUpperCase() || '';
 }
@@ -419,11 +440,12 @@ export function createEditorInstance(config: {
               });
             }
 
-            // Load document content
+            // Load document content. See toBase64() for why this is sent as a
+            // base64 string rather than the raw ArrayBuffer/Uint8Array.
+            const buf = typeof binData === 'string' ? binData : toBase64(toUint8Array(binData));
             window.editor?.sendCommand({
               command: 'asc_openDocument',
-              // @ts-expect-error binData type is handled by the editor
-              data: { buf: binData },
+              data: { buf },
             });
           },
           onDocumentReady: () => {

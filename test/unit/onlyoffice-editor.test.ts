@@ -167,6 +167,55 @@ describe('onlyoffice-editor', () => {
       expect(config.document.permissions.edit).toBe(false);
       expect(config.document.permissions.download).toBe(false);
     });
+
+    it('sends binData as a base64 string to asc_openDocument (#113)', async () => {
+      vi.useFakeTimers();
+      const DocEditor = vi.fn();
+      (window as any).DocsAPI = { DocEditor };
+      const original = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 9, 8, 7]);
+
+      const promise = createEditorInstance({
+        fileName: 'report.docx',
+        fileType: 'docx',
+        binData: original.buffer,
+      });
+      await vi.advanceTimersByTimeAsync(200);
+      await promise;
+
+      const config = DocEditor.mock.calls[0][1] as any;
+      const editor = { sendCommand: vi.fn() };
+      (window as any).editor = editor;
+      config.events.onAppReady();
+
+      const call = editor.sendCommand.mock.calls.find((c: any[]) => c[0].command === 'asc_openDocument');
+      expect(call).toBeDefined();
+      const buf = call![0].data.buf;
+      expect(typeof buf).toBe('string');
+      const decoded = Uint8Array.from(atob(buf), (c) => c.charCodeAt(0));
+      expect(Array.from(decoded)).toEqual(Array.from(original));
+    });
+
+    it('passes a string binData (empty-template case) through to asc_openDocument unchanged', async () => {
+      vi.useFakeTimers();
+      const DocEditor = vi.fn();
+      (window as any).DocsAPI = { DocEditor };
+
+      const promise = createEditorInstance({
+        fileName: 'New_Document.docx',
+        fileType: 'docx',
+        binData: 'already-base64==',
+      });
+      await vi.advanceTimersByTimeAsync(200);
+      await promise;
+
+      const config = DocEditor.mock.calls[0][1] as any;
+      const editor = { sendCommand: vi.fn() };
+      (window as any).editor = editor;
+      config.events.onAppReady();
+
+      const call = editor.sendCommand.mock.calls.find((c: any[]) => c[0].command === 'asc_openDocument');
+      expect(call![0].data.buf).toBe('already-base64==');
+    });
   });
 
   describe('setConverterCallbacks', () => {
