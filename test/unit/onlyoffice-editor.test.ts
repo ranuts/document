@@ -64,6 +64,17 @@ describe('onlyoffice-editor', () => {
       expect(editor.sendCommand).toHaveBeenCalledWith(expect.objectContaining({ command: 'processRightsChange' }));
     });
 
+    it('prefers serviceCommand over sendCommand when the editor exposes both (v9 renamed it)', () => {
+      const serviceCommand = vi.fn();
+      const editor = makeEditor({ serviceCommand });
+      (window as any).editor = editor;
+
+      setReadonlyMode(true);
+
+      expect(serviceCommand).toHaveBeenCalledWith(expect.objectContaining({ command: 'processRightsChange' }));
+      expect(editor.sendCommand).not.toHaveBeenCalled();
+    });
+
     it('does not throw when no editor is present', () => {
       expect(() => setReadonlyMode(true)).not.toThrow();
     });
@@ -215,6 +226,69 @@ describe('onlyoffice-editor', () => {
 
       const call = editor.sendCommand.mock.calls.find((c: any[]) => c[0].command === 'asc_openDocument');
       expect(call![0].data.buf).toBe('already-base64==');
+    });
+
+    it('does not add v9-only editorConfig fields or the onSaveDocument event under the default (v7) test mode', async () => {
+      vi.useFakeTimers();
+      const DocEditor = vi.fn();
+      (window as any).DocsAPI = { DocEditor };
+
+      const promise = createEditorInstance({
+        fileName: 'report.docx',
+        fileType: 'docx',
+        binData: new ArrayBuffer(4),
+      });
+      await vi.advanceTimersByTimeAsync(200);
+      await promise;
+
+      const config = DocEditor.mock.calls[0][1] as any;
+      expect(config.editorConfig.canCoAuthoring).toBeUndefined();
+      expect(config.editorConfig.coEditing).toBeUndefined();
+      expect(config.events.onSave).toBeTypeOf('function');
+      expect(config.events.onSaveDocument).toBeUndefined();
+    });
+
+    describe('handleSaveDocument (via events.onSave)', () => {
+      async function createAndGetOnSave() {
+        vi.useFakeTimers();
+        const DocEditor = vi.fn();
+        (window as any).DocsAPI = { DocEditor };
+
+        const promise = createEditorInstance({
+          fileName: 'report.docx',
+          fileType: 'docx',
+          binData: new ArrayBuffer(4),
+        });
+        await vi.advanceTimersByTimeAsync(200);
+        await promise;
+
+        (window as any).editor = makeEditor();
+        const config = DocEditor.mock.calls[0][1] as any;
+        return config.events.onSave as (event: unknown) => Promise<void>;
+      }
+
+      it('handles the v7 nested-object event shape', async () => {
+        const convertAndDownload = vi.fn().mockResolvedValue({ fileName: 'report.docx', data: new Uint8Array([1]) });
+        setConverterCallbacks({ convert: vi.fn(), convertAndDownload });
+        const onSave = await createAndGetOnSave();
+
+        const savedBytes = new Uint8Array([1, 2, 3]);
+        await onSave({ data: { data: { data: savedBytes }, option: { outputformat: 65 } } });
+
+        expect(convertAndDownload).toHaveBeenCalledWith(savedBytes, 'test.xlsx', 'XLSX');
+      });
+
+      it('handles the v9 raw-ArrayBuffer event shape', async () => {
+        const convertAndDownload = vi.fn().mockResolvedValue({ fileName: 'report.docx', data: new Uint8Array([1]) });
+        setConverterCallbacks({ convert: vi.fn(), convertAndDownload });
+        const onSave = await createAndGetOnSave();
+
+        const savedBuffer = new Uint8Array([4, 5, 6]).buffer;
+        await onSave({ data: savedBuffer });
+
+        const [bytesArg] = convertAndDownload.mock.calls.at(-1)!;
+        expect(Array.from(bytesArg as Uint8Array)).toEqual([4, 5, 6]);
+      });
     });
   });
 
