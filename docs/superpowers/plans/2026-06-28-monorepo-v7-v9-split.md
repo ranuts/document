@@ -1,5 +1,13 @@
 # v7 / v9 单 Monorepo 拆分与共享包规划
 
+> **状态（2026-08-05）：已废弃，改用更轻量的方案。** 阶段 1-3（`packages/agent-core`/
+> `shared`/`converter` 抽包）已经落地，但 `apps/web-v7` + `apps/web-v9` 双 app
+> 这条路线判定太重（合并已分叉分支、git 资源翻倍、Agent 接口适配都是硬骨头），
+> 阶段 4-6 没有执行。v9 集成改成了"单一 app 的构建变体"（`vite --mode v9` 切
+> `publicDir`/`outDir`，不新建 `apps/` 目录），详见
+> [2026-08-05-v9-web-mode-build-variant.md](../../explorations/2026-08-05-v9-web-mode-build-variant.md)。
+> 本文档保留作为决策过程的历史记录，不要按下面的实施阶段继续推进。
+>
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 把 OnlyOffice **v7** 与 **v9** 两条长期维护线收敛进**单一 monorepo、同一分支**，让"版本无关"的能力（Agent、格式互转、工具/i18n）抽成共享包，做到**修一次、两个版本都生效**；"版本相关"的部分（编辑器壳、SDK/WASM/字体资源、Agent 编辑器适配层）按 v7/v9 各自独立。
