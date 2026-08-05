@@ -5,6 +5,92 @@ import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
 import { c_oAscFileType2 } from './file-types';
 import type { BinConversionResult, SaveEvent } from '@ranuts/shared/document-types';
 import { getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
+import { extractDocxMediaUrls, preprocessPptx, preprocessXlsxLineBreaks } from '@ranuts/converter';
+import { g_sEmpty_ooxml } from './empty_bin-v9';
+import { showMediaPlayer } from './media-player';
+
+// Selected via `vite --mode v9` / `vite build --mode v9` (see vite.config.ts); defaults
+// to v7 for the normal dev/build/test commands. See docs/explorations for why v9 needs
+// a materially different document-loading path (Web Mode) instead of a small config diff.
+export const OO_VARIANT: 'v7' | 'v9' = import.meta.env.MODE === 'v9' ? 'v9' : 'v7';
+
+// v9.3.0 renamed sendCommand -> serviceCommand. Try serviceCommand first so this
+// works unchanged on both versions instead of gating every call site on OO_VARIANT.
+function editorSendCommand(params: { command: string; data: Record<string, any> }): void {
+  const editor = window.editor as any;
+  if (!editor) return;
+  if (typeof editor.serviceCommand === 'function') {
+    editor.serviceCommand(params);
+  } else if (typeof editor.sendCommand === 'function') {
+    editor.sendCommand(params);
+  }
+}
+
+/**
+ * v9 Web Mode has no real collaboration server, so the SDK's "Connection is lost"
+ * dialog (and its generic error dialog) fire on every load. Both go through
+ * Common.UI.alert, not .warning, despite the message reading like a warning.
+ * Called with same-origin access to the editor iframe's window from onAppReady.
+ *
+ * app.js chains `Common.UI.alert(o).$window.attr(...)` in its own error handler, so
+ * returning undefined from our patched alert() throws downstream -- return a
+ * chainable no-op dialog instead.
+ */
+function suppressDialogsInFrame(frameWindow: any): void {
+  const SUPPRESSED_MSGS = ['Connection is lost', 'error occurred during the work'];
+  const shouldSuppress = (opts: any): boolean => {
+    const msg: string = opts?.msg ?? '';
+    return typeof msg === 'string' && SUPPRESSED_MSGS.some((s) => msg.indexOf(s) !== -1);
+  };
+
+  const jq: Record<string, unknown> = {};
+  [
+    'attr',
+    'on',
+    'off',
+    'show',
+    'hide',
+    'css',
+    'addClass',
+    'removeClass',
+    'find',
+    'remove',
+    'val',
+    'text',
+    'html',
+    'prop',
+    'data',
+    'trigger',
+    'focus',
+    'blur',
+    'one',
+    'click',
+  ].forEach((m) => {
+    jq[m] = () => jq;
+  });
+  (jq as any).length = 0;
+  const MOCK_DIALOG = { $window: jq, close: () => {}, show: () => {}, hide: () => {}, remove: () => {} };
+
+  let attempts = 0;
+  const poll = () => {
+    const ui = frameWindow.Common?.UI;
+    if (ui?.__dlgSuppressed) return;
+    if (!ui || typeof ui.warning !== 'function' || typeof ui.alert !== 'function') {
+      if (attempts++ < 50) setTimeout(poll, 200);
+      return;
+    }
+    ui.__dlgSuppressed = true;
+
+    const origWarning = ui.warning.bind(ui);
+    ui.warning = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origWarning(opts));
+
+    const origAlert = ui.alert.bind(ui);
+    ui.alert = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origAlert(opts));
+
+    console.log('[OO] dialog suppression active in iframe (warning + alert)');
+  };
+  poll();
+}
 
 // Import converter function to avoid circular dependency
 let convertBinToDocumentFn:
@@ -213,14 +299,14 @@ async function handleWriteFile(event: any) {
     const objectUrl = await createObjectURL(blob);
     // Add image URL to media mapping using original file name as key
     media[`media/${fileName}`] = objectUrl;
-    window.editor?.sendCommand({
+    editorSendCommand({
       command: 'asc_setImageUrls',
       data: {
         urls: media,
       },
     });
 
-    window.editor?.sendCommand({
+    editorSendCommand({
       command: 'asc_writeFileCallback',
       data: {
         // Image base64
@@ -233,15 +319,13 @@ async function handleWriteFile(event: any) {
     console.error('Error handling writeFile:', error);
 
     // Notify editor that file processing failed
-    if (window.editor && typeof window.editor.sendCommand === 'function') {
-      window.editor.sendCommand({
-        command: 'asc_writeFileCallback',
-        data: {
-          success: false,
-          error: error.message,
-        },
-      });
-    }
+    editorSendCommand({
+      command: 'asc_writeFileCallback',
+      data: {
+        success: false,
+        error: error.message,
+      },
+    });
 
     if (event.callback && typeof event.callback === 'function') {
       event.callback({
@@ -252,56 +336,61 @@ async function handleWriteFile(event: any) {
   }
 }
 
-async function handleSaveDocument(event: SaveEvent) {
+async function handleSaveDocument(event: { data: SaveEvent['data'] | ArrayBuffer }) {
   console.log('Save document event:', event);
 
-  if (event.data && event.data.data) {
+  // v9's onSaveDocument fires with event.data as a raw ArrayBuffer (transferred
+  // straight over postMessage). v7's onSave fires with the nested
+  // { data: { data: Uint8Array }, option: { outputformat } } shape instead.
+  let binaryData: Uint8Array;
+  let targetFormat: string;
+  const { fileName } = getDocmentObj() || {};
+
+  if (event.data instanceof ArrayBuffer) {
+    binaryData = new Uint8Array(event.data);
+    const ext = (fileName?.split('.').pop() || 'docx').toUpperCase();
+    targetFormat = fileName?.toLowerCase().endsWith('.csv') ? 'CSV' : ext;
+    console.log(`Saving v9 binary ${binaryData.byteLength} bytes as ${targetFormat} format`);
+  } else if (event.data?.data?.data) {
     const { data, option } = event.data;
-    const { fileName } = getDocmentObj() || {};
+    binaryData = data.data;
+    // Only force CSV format if the original file is CSV. This check ensures XLSX
+    // and other file types are not affected -- CSV files are converted to XLSX
+    // internally, so the editor may return XLSX format for them.
+    targetFormat = fileName?.toLowerCase().endsWith('.csv') ? 'CSV' : c_oAscFileType2[option.outputformat];
+    console.log(`Saving as ${targetFormat} format (original file: ${fileName})`);
+  } else {
+    console.warn('handleSaveDocument: unrecognized event shape', typeof event.data);
+    return;
+  }
 
-    // Determine target format from editor's output format
-    let targetFormat = c_oAscFileType2[option.outputformat];
-
-    // Only force CSV format if the original file is CSV
-    // This check ensures XLSX and other file types are not affected
-    // CSV files are converted to XLSX internally, so editor may return XLSX format
-    if (fileName && fileName.toLowerCase().endsWith('.csv')) {
-      targetFormat = 'CSV';
-      console.log('Original file is CSV, forcing save as CSV format');
-    } else {
-      // For non-CSV files (XLSX, DOCX, PPTX, etc.), use the format returned by editor
-      // This ensures XLSX files are saved as XLSX, not CSV
-      console.log(`Saving as ${targetFormat} format (original file: ${fileName})`);
-    }
-
-    if (embeddedSaveRequest) {
-      if (!convertBinToDocumentFn) {
-        throw new Error('Converter callback not set');
-      }
-
-      const request = embeddedSaveRequest;
-      cleanupEmbeddedSaveRequest(request);
-
-      try {
-        const result = await convertBinToDocumentFn(data.data, fileName, request.targetExt || targetFormat);
-        const bytes = toUint8Array(result.data);
-        const file = new File([bytes as BlobPart], result.fileName, { type: getSavedFileMimeType(result.fileName) });
-        resolveEmbeddedSaveRequest(request, file);
-      } catch (error) {
-        rejectEmbeddedSaveRequest(request, error instanceof Error ? error : new Error(String(error)));
-        throw error;
-      }
-    } else if (isEmbedMode()) {
-      console.warn('Local save is disabled in iframe embed mode. Use document:save from the parent page.');
-    } else if (convertBinToDocumentAndDownloadFn) {
-      await convertBinToDocumentAndDownloadFn(data.data, fileName, targetFormat);
-    } else {
+  if (embeddedSaveRequest) {
+    if (!convertBinToDocumentFn) {
       throw new Error('Converter callback not set');
     }
+
+    const request = embeddedSaveRequest;
+    cleanupEmbeddedSaveRequest(request);
+
+    try {
+      const result = await convertBinToDocumentFn(binaryData, fileName, request.targetExt || targetFormat);
+      const bytes = toUint8Array(result.data);
+      const file = new File([bytes as BlobPart], result.fileName, { type: getSavedFileMimeType(result.fileName) });
+      resolveEmbeddedSaveRequest(request, file);
+    } catch (error) {
+      rejectEmbeddedSaveRequest(request, error instanceof Error ? error : new Error(String(error)));
+      throw error;
+    }
+  } else if (isEmbedMode()) {
+    console.warn('Local save is disabled in iframe embed mode. Use document:save from the parent page.');
+  } else if (convertBinToDocumentAndDownloadFn) {
+    await convertBinToDocumentAndDownloadFn(binaryData, fileName, targetFormat);
+  } else {
+    throw new Error('Converter callback not set');
   }
 
   // Notify editor that save is complete
-  window.editor?.sendCommand({
+  editorSendCommand({
     command: 'asc_onSaveCallback',
     data: { err_code: 0 },
   });
@@ -336,6 +425,257 @@ async function handleDownloadAs(event: { data?: { url?: string; fileType?: strin
     resolveEmbeddedSaveRequest(request, file);
   } catch (error) {
     rejectEmbeddedSaveRequest(request, error instanceof Error ? error : new Error(String(error)));
+  }
+}
+
+/**
+ * v9 Web Mode has no document server, so `asc_openDocument`'s postMessage-based
+ * `buf` transport doesn't apply -- the SDK's own OOXML importer is invoked
+ * directly via `asc_openDocumentFromBytes` on the (same-origin) editor iframe's
+ * `Asc.editor`, bypassing x2t entirely for the open path (x2t is still used for
+ * saving/exporting, via convertBinToDocumentFn as before).
+ *
+ * This is a faithful port of the "Web Mode" implementation validated in
+ * docs/explorations/2026-06-19-word-excel-ppt-browser-debug.md against the exact
+ * SDK build vendored in public-v9/ -- the internal function names it patches
+ * (Shc/BRj/Mrc/rxk/K8b/Fzj, Aqg/LNg/rdg) are minified symbols specific to that
+ * build. Don't "clean this up" without re-verifying against the real SDK: every
+ * step here works around a specific, debugged failure mode, not a style choice.
+ */
+async function runWebModeOnAppReady(params: {
+  fileName: string;
+  fileType: string;
+  binData: ArrayBuffer | string;
+  mediaUrls: Record<string, string> | undefined;
+}): Promise<void> {
+  const { fileName, fileType, binData, mediaUrls } = params;
+
+  (window as unknown as Record<string, unknown>).__mediaCache = mediaUrls ?? {};
+
+  const iframeEl = document.querySelector('iframe') as HTMLIFrameElement | null;
+  const iwin = iframeEl?.contentWindow as any;
+  const api = iwin?.Asc?.editor;
+  console.log('[OO] onAppReady', { hasIframe: !!iframeEl, hasApi: !!api });
+
+  // Reliable path for "Connection is lost" / EditingError dialogs -- more
+  // reliable than trying to inject this from outside the iframe beforehand.
+  if (iwin) suppressDialogsInFrame(iwin);
+
+  if (typeof api?.asc_openDocumentFromBytes !== 'function') {
+    // SDK didn't expose the Web Mode entry point -- fall back to the v7 path.
+    const buf = typeof binData === 'string' ? binData : toBase64(toUint8Array(binData));
+    editorSendCommand({ command: 'asc_openDocument', data: { buf } });
+    return;
+  }
+
+  const editorApp = iwin?.DE ?? iwin?.SSE ?? iwin?.PE;
+  const mainCtrl = editorApp?.getController?.('Main');
+  if (!mainCtrl) return;
+
+  // STEP 1: wait for loadDocument to run (sets mainCtrl.document, registers the
+  // asc_onGetEditorPermissions callback). api.js sends 'init' + 'opendocument'
+  // postMessages in the same turn as onAppReady, so the iframe hasn't processed
+  // them yet -- poll until it has.
+  let waited = 0;
+  while ((!mainCtrl.appOptions?.user || !mainCtrl.document) && waited < 3000) {
+    await new Promise((r) => setTimeout(r, 50));
+    waited += 50;
+  }
+  console.log('[OO] loadDocument ready after', waited, 'ms');
+
+  // STEP 2: the SDK fires asc_onGetEditorPermissions after a license check that
+  // requires a real server; without one it may resolve isEdit=false. Patch
+  // onEditorPermissions so any call substitutes a permissive fake response.
+  const versionStr =
+    editorApp
+      ?.getController?.('LeftMenu')
+      ?.leftMenu?.getMenu?.('about')
+      ?.txtVersionNum?.match(/^(\d+\.\d+\.\d+)/)?.[1] ?? '9.3.0';
+  const fakePerms = {
+    asc_getLicenseType: () => 3, // c_oLicenseResult.Success
+    asc_getBuildVersion: () => versionStr,
+    asc_getRights: () => 1, // c_oRights.Edit
+    asc_getIsAnalyticsEnable: () => false,
+    asc_getIsLight: () => false,
+    asc_getLicenseMode: () => 0,
+    asc_getIsBeta: () => false,
+    asc_getCanBranding: () => false,
+    asc_getCustomization: () => false,
+    asc_getLiveViewerSupport: () => false,
+  };
+  if (!mainCtrl._isPermissionsInited && typeof mainCtrl.onEditorPermissions === 'function') {
+    const origPerms = mainCtrl.onEditorPermissions.bind(mainCtrl);
+    mainCtrl.onEditorPermissions = (_perms: any) => {
+      try {
+        return origPerms(fakePerms);
+      } catch (e) {
+        console.warn('[OO] onEditorPermissions(fakePerms) failed', e);
+      }
+    };
+  }
+
+  // STEP 3: the SDK normally fires asc_onGetEditorPermissions after a socket.io
+  // round-trip that never happens here. Give it 2s, then trigger manually.
+  waited = 0;
+  while (!mainCtrl._isPermissionsInited && waited < 2000) {
+    await new Promise((r) => setTimeout(r, 100));
+    waited += 100;
+  }
+  if (!mainCtrl._isPermissionsInited) {
+    console.log('[OO] SDK did not fire permissions after 2s, calling manually');
+    try {
+      mainCtrl.onEditorPermissions(fakePerms);
+    } catch (e) {
+      console.warn('[OO] manual onEditorPermissions failed', e);
+    }
+  }
+  console.log('[OO] permissions ready: isEdit=', mainCtrl.appOptions?.isEdit, 'inited=', mainCtrl._isPermissionsInited);
+
+  // STEP 4: resolve the bytes to inject. A string binData means the "new
+  // document" empty-template path (lib/converter.ts's handleDocumentOperation
+  // picks it for isNew); substitute the raw-OOXML template instead of the
+  // x2t .bin-format one that string actually contains, since it's the wrong
+  // format for the Web Mode importer. Otherwise binData is already raw OOXML
+  // -- converter.ts skips x2t entirely for v9's open path (see OO_VARIANT
+  // check there), so no further decoding is needed here.
+  let ooxmlBytes: Uint8Array;
+  if (typeof binData === 'string') {
+    const ext = `.${fileName.split('.').pop()?.toLowerCase() || 'docx'}`;
+    const ooxmlB64 = g_sEmpty_ooxml[ext] || g_sEmpty_ooxml['.docx'];
+    const binaryStr = atob(ooxmlB64);
+    ooxmlBytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) ooxmlBytes[i] = binaryStr.charCodeAt(i);
+    console.log('[OO] new doc', ext, ooxmlBytes.byteLength, 'bytes');
+  } else {
+    ooxmlBytes = toUint8Array(binData);
+  }
+
+  if (ooxmlBytes.byteLength === 0) return;
+
+  // x2t may rename images during conversion (e.g. image1.tiff -> image3.jpg),
+  // breaking the SDK's image URL mapping -- re-extract from the ZIP bytes
+  // using their original filenames when opening docx/xlsx/pptx directly.
+  if (['docx', 'xlsx', 'pptx'].includes(fileType.toLowerCase())) {
+    try {
+      const zipMedia = await extractDocxMediaUrls(ooxmlBytes);
+      if (Object.keys(zipMedia).length > 0) {
+        const cache = (window as unknown as Record<string, unknown>).__mediaCache as Record<string, string>;
+        Object.assign(cache, zipMedia);
+        console.log('[OO] media cache updated from ZIP:', Object.keys(zipMedia));
+      }
+    } catch (e) {
+      console.warn('[OO] ZIP media extraction failed:', e);
+    }
+  }
+
+  // In Desktop mode the SDK delegates api.gqc("showMediaControl"/"play", ...)
+  // to AscDesktopEditor; in Web Mode it's a no-op stub. Replace it with a
+  // browser-native overlay player backed by __mediaCache.
+  if (api && !('__gqcPatched' in api)) {
+    (api as Record<string, unknown>).__gqcPatched = true;
+    const origGqc = typeof api.gqc === 'function' ? (api.gqc as (...a: unknown[]) => unknown).bind(api) : null;
+    const VIDEO_EXTS = /\.(mp4|webm|mov|avi|mkv|wmv|m4v)$/i;
+    const AUDIO_EXTS = /\.(mp3|wav|ogg|m4a|aac|wma|flac)$/i;
+    (api as Record<string, unknown>).gqc = function (command: unknown, mediaInfo: unknown) {
+      if (command === 'showMediaControl' || command === 'play') {
+        const cache = (window as unknown as Record<string, unknown>).__mediaCache as Record<string, string>;
+        const entries = Object.entries(cache)
+          .filter(([k]) => VIDEO_EXTS.test(k) || AUDIO_EXTS.test(k))
+          .map(([k, url]) => ({ key: k, url, isVideo: VIDEO_EXTS.test(k) }));
+        if (entries.length > 0) {
+          showMediaPlayer(entries);
+        } else {
+          console.log('[OO] gqc', command, '— no media in cache');
+        }
+        return;
+      }
+      if (origGqc) return origGqc(command, mediaInfo);
+    };
+    console.log('[OO] api.gqc patched for browser-native media playback');
+  }
+
+  // x2t (v7 path) normalises literal "&#10;" text in XLSX cells to real LF
+  // bytes during conversion. Raw OOXML bypasses that, so the SDK's XML parser
+  // sees the 5-char text "&#10;" verbatim -- fix it up before parsing.
+  if (fileType.toLowerCase() === 'xlsx') {
+    try {
+      const fixed = await preprocessXlsxLineBreaks(ooxmlBytes);
+      if (fixed !== ooxmlBytes) {
+        console.log('[OO] XLSX preprocessed: normalised &#10; line-break escapes');
+        ooxmlBytes = fixed;
+      }
+    } catch (e) {
+      console.warn('[OO] XLSX preprocessing failed (continuing with original bytes):', e);
+    }
+  }
+  // See preprocessPptx() in packages/converter/src/docx-zip.ts for what this fixes.
+  if (fileType.toLowerCase() === 'pptx') {
+    try {
+      const fixed = await preprocessPptx(ooxmlBytes);
+      if (fixed !== ooxmlBytes) {
+        console.log('[OO] PPTX preprocessed (showMasterPhAnim stripped, docProps/app.xml injected if missing)');
+        ooxmlBytes = fixed;
+      }
+    } catch (e) {
+      console.warn('[OO] PPTX preprocessing failed (continuing with original bytes):', e);
+    }
+  }
+
+  console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
+  // The SDK's Shc()/Mrc() gating functions check `!a.AscDesktopEditor` to decide
+  // whether to run the Desktop path (which calls LocalStartOpen and discards
+  // the bytes without feeding them to WASM) or the Web path (BRj/rxk, which
+  // actually starts loading). Our AscDesktopEditor polyfill makes that check
+  // truthy, so we patch the gate itself to always take the Web path.
+  //   Word SDK:  Shc(d) -> BRj(d)
+  //   Cell SDK:  Mrc(d) -> rxk(d)
+  //   Slide SDK: K8b(d) -> Fzj(d)
+  const patchWebPath = (shcName: string, brjName: string, historyFlag: string, contentReadyCb: string) => {
+    const a = api as any;
+    if (typeof a[shcName] !== 'function' || typeof a[brjName] !== 'function') return;
+    a[shcName] = function (d: unknown) {
+      if (d) {
+        try {
+          a[contentReadyCb]?.('asc_onDocumentContentReady', function () {
+            const w = iwin;
+            if (w?.Z$) w.Z$(w.Asc?.editor || w.editor);
+            if (w?.X$) w.X$(w.Asc?.editor || w.editor);
+            setTimeout(function () {
+              if (w?.UpdateInstallPlugins) w.UpdateInstallPlugins();
+            }, 10);
+          });
+          if (iwin?.AscCommon?.History) (iwin.AscCommon.History as any)[historyFlag] = true;
+        } catch {}
+      }
+      return a[brjName](d);
+    };
+  };
+  patchWebPath('Shc', 'BRj', 'C0a', 'b_');
+  patchWebPath('Mrc', 'rxk', 'J6a', 'tW');
+  patchWebPath('K8b', 'Fzj', '$cb', 'aN');
+
+  api.asc_openDocumentFromBytes(ooxmlBytes);
+
+  // Serverless Web Mode has no server auth/openedAt response. Without these,
+  // the SDK reaches 100% load progress but never emits asc_onDocumentContentReady.
+  if (!api.I0c && typeof api.Aqg === 'function') {
+    api.Aqg(Date.now()); // word/cell openedAt gate
+  }
+  if (!api.cSd && typeof api.LNg === 'function') {
+    api.LNg(Date.now()); // spreadsheet openedAt gate (separate flag from word/cell)
+  }
+  if (!api.kvd && typeof api.rdg === 'function') {
+    let presentationWaited = 0;
+    while ((!api.Jne || !api.ta?.Ha) && presentationWaited < 5000) {
+      await new Promise((r) => setTimeout(r, 100));
+      presentationWaited += 100;
+    }
+    try {
+      api.rdg(Date.now());
+      console.log('[OO] presentation openedAt gate after', presentationWaited, 'ms');
+    } catch (e) {
+      console.warn('[OO] presentation openedAt gate failed', e);
+    }
   }
 }
 
@@ -429,12 +769,25 @@ export function createEditorInstance(config: {
               label: 'Guest',
             },
           },
+          // v9 Web Mode: explicitly opt out of collaboration/co-authoring so the
+          // SDK doesn't wait on a real coauthoring server that will never answer.
+          ...(OO_VARIANT === 'v9'
+            ? {
+                canCoAuthoring: false,
+                coEditing: { mode: 'strict', change: false },
+              }
+            : {}),
         },
         events: {
           onAppReady: () => {
+            if (OO_VARIANT === 'v9') {
+              void runWebModeOnAppReady({ fileName, fileType, binData, mediaUrls });
+              return;
+            }
+
             // Set media resources
             if (mediaUrls) {
-              window.editor?.sendCommand({
+              editorSendCommand({
                 command: 'asc_setImageUrls',
                 data: { urls: mediaUrls },
               });
@@ -443,7 +796,7 @@ export function createEditorInstance(config: {
             // Load document content. See toBase64() for why this is sent as a
             // base64 string rather than the raw ArrayBuffer/Uint8Array.
             const buf = typeof binData === 'string' ? binData : toBase64(toUint8Array(binData));
-            window.editor?.sendCommand({
+            editorSendCommand({
               command: 'asc_openDocument',
               data: { buf },
             });
@@ -453,11 +806,13 @@ export function createEditorInstance(config: {
             // Note: For CSV files, the save dialog may show XLSX format,
             // but the actual save will be forced to CSV format in handleSaveDocument
           },
-          onSave: handleSaveDocument,
           onDownloadAs: handleDownloadAs,
           // writeFile
           // TODO: writeFile - handle when pasting images from external sources
           writeFile: handleWriteFile,
+          // v9 renamed this event from onSave to onSaveDocument (and changed its
+          // payload shape -- handleSaveDocument handles both, see there).
+          ...(OO_VARIANT === 'v9' ? { onSaveDocument: handleSaveDocument } : { onSave: handleSaveDocument }),
         },
       });
     } catch (error) {
@@ -469,7 +824,7 @@ export function createEditorInstance(config: {
 
 export function setReadonlyMode(readonly: boolean): void {
   isReadonlyMode = readonly;
-  window.editor?.sendCommand({
+  editorSendCommand({
     command: 'processRightsChange',
     data: {
       enabled: !readonly,

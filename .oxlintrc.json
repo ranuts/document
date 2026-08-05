@@ -5,6 +5,7 @@
     "**/assets/**",
     "**/temp/**",
     "**/public/**",
+    "**/public-v9/**",
     "**/cache/**",
     "**/*.snap",
     "**/node_modules/**"

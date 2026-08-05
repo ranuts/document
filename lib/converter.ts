@@ -2,7 +2,7 @@ import { getExtensions } from 'ranuts/utils';
 import { g_sEmpty_bin } from './empty_bin';
 import { t } from '@ranuts/shared/i18n';
 import { X2TConverter } from '@ranuts/converter';
-import { createEditorInstance, loadEditorApi, setConverterCallbacks } from './onlyoffice-editor';
+import { OO_VARIANT, createEditorInstance, loadEditorApi, setConverterCallbacks } from './onlyoffice-editor';
 import { getDocumentType } from '@ranuts/shared/document-utils';
 import type { BinConversionResult, ConversionResult, EmscriptenModule } from '@ranuts/shared/document-types';
 
@@ -73,6 +73,13 @@ export async function handleDocumentOperation(options: {
         throw new Error(`${t('unsupportedFileType')}${fileType}`);
       }
       documentData = { bin: emptyBin };
+    } else if (OO_VARIANT === 'v9') {
+      // v9 Web Mode's asc_openDocumentFromBytes parses raw OOXML directly via the
+      // SDK's own importer -- x2t's .bin format (what v7 needs) isn't applicable
+      // and running the conversion would be wasted work. x2t is still used for
+      // saving/exporting (convertBinToDocument*), unaffected by this branch.
+      if (!file) throw new Error(t('invalidFileObject'));
+      documentData = { bin: await file.arrayBuffer() };
     } else {
       // Opening existing document requires conversion
       if (!file) throw new Error(t('invalidFileObject'));

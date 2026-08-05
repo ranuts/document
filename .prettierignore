@@ -1,6 +1,11 @@
 # Generated lockfile — managed by pnpm, not prettier.
 pnpm-lock.yaml
 
+# Vendored OnlyOffice v9 SDK assets (sdkjs/web-apps/wasm/fonts) — huge minified
+# bundles that crash prettier's parser (V8 stack overflow), not hand-written.
+# Mirrors public/** being oxlint-ignored; see .oxlintrc.json.
+public-v9/
+
 # Vendored ranui design-token layer (copied from ranui/dist by bin/build.sh).
 public/ran-tokens.css
 

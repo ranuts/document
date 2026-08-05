@@ -59,6 +59,24 @@ declare global {
           message?: string;
         };
       }) => void;
+      /** v9 renamed sendCommand -> serviceCommand */
+      serviceCommand?: ({
+        command,
+        data,
+      }: {
+        command: string;
+        data: {
+          err_code?: number;
+          urls?: Record<string, string>;
+          path?: string;
+          imgName?: string;
+          buf?: ArrayBuffer | string;
+          success?: boolean;
+          error?: string;
+          enabled?: boolean;
+          message?: string;
+        };
+      }) => void;
       downloadAs?: (data?: string) => void;
       destroyEditor: () => void;
     };

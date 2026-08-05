@@ -38,11 +38,20 @@ interface DocEditorConfig {
     plugins?: {
       pluginsData?: PluginConfig[];
     };
+    /** v9: opt out of real-time collaboration (no document server behind Web Mode) */
+    canCoAuthoring?: boolean;
+    coEditing?: {
+      mode: string;
+      change: boolean;
+    };
   };
   events: {
     onAppReady: () => void;
     onDocumentReady: () => void;
-    onSave: (event: SaveEvent) => void;
+    /** v7 */
+    onSave?: (event: SaveEvent) => void;
+    /** v9 renamed onSave -> onSaveDocument (and changed its event.data shape) */
+    onSaveDocument?: (event: SaveDocumentEventV9) => void;
     onDownloadAs?: (event: DownloadAsEvent) => void;
     writeFile: (event: WriteFileEvent) => void;
     /** Handle external messages from plugins */
@@ -59,6 +68,11 @@ interface SaveEvent {
       outputformat: number;
     };
   };
+}
+
+/** v9's onSaveDocument fires with the raw saved bytes, not the nested v7 shape. */
+interface SaveDocumentEventV9 {
+  data: ArrayBuffer;
 }
 
 interface WriteFileEvent {
@@ -94,6 +108,8 @@ interface DocEditor {
       message?: string;
     };
   }) => void;
+  /** v9 renamed sendCommand -> serviceCommand */
+  serviceCommand?: DocEditor['sendCommand'];
   downloadAs?: (data?: string) => void;
   destroyEditor: () => void;
 }
