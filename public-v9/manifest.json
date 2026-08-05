@@ -1,0 +1,29 @@
+{
+  "name": "ByBrowser — Browser-Only Document Editor",
+  "short_name": "ByBrowser",
+  "description": "Edit DOCX, XLSX, PPTX and CSV files directly in your browser. No upload, no server, no account required.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0052cc",
+  "icons": [
+    {
+      "src": "img/64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://bybrowser.com/</loc>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/</loc>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/docx-editor/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/docx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/docx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/docx-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/docx-editor/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/docx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/docx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/docx-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/xlsx-editor/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/xlsx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/xlsx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/xlsx-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/xlsx-editor/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/xlsx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/xlsx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/xlsx-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/pptx-editor/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/pptx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/pptx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/pptx-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/pptx-editor/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/pptx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/pptx-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/pptx-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/csv-editor/</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/csv-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/csv-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/csv-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/csv-editor/</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/csv-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/csv-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/csv-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/private-document-editor/</loc>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/private-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/private-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/private-document-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/private-document-editor/</loc>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/private-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/private-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/private-document-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/onlyoffice-wasm/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/onlyoffice-wasm/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/onlyoffice-wasm/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/onlyoffice-wasm/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/onlyoffice-wasm/</loc>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/onlyoffice-wasm/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/onlyoffice-wasm/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/onlyoffice-wasm/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/embed-document-editor/</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/embed-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/embed-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/embed-document-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/embed-document-editor/</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/embed-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/embed-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/embed-document-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/self-hosted-document-editor/</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/self-hosted-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/self-hosted-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/self-hosted-document-editor/"/>
+  </url>
+  <url>
+    <loc>https://bybrowser.com/zh-cn/self-hosted-document-editor/</loc>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bybrowser.com/self-hosted-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://bybrowser.com/zh-cn/self-hosted-document-editor/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bybrowser.com/self-hosted-document-editor/"/>
+  </url>
+</urlset>
