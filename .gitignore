@@ -14,6 +14,7 @@ cache
 vite.config.ts.timestamp*
 config.ts.timestamp*
 dist
+dist-v9
 # test artifacts
 coverage/
 playwright-report/
