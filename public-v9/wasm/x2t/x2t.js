@@ -21,7 +21,7 @@ var ENVIRONMENT_IS_WEB=typeof window=="object";var ENVIRONMENT_IS_WORKER=typeof 
 var ENVIRONMENT_IS_NODE=typeof process=="object"&&process.versions?.node&&process.type!="renderer";// --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
 // include: /pre-js.js
-Module.noInitialRun=true;Module.noExitRuntime=true;(function(){let suffix;if(typeof document!="undefined"){const myScript=document.currentScript;const mySrc=myScript.getAttribute("src");suffix=new URL(mySrc).search}else{suffix=""}Module.locateFile=function(path,prefix){return prefix+path+suffix}})();// end include: /pre-js.js
+Module.noInitialRun=true;Module.noExitRuntime=true;(function(){let suffix;if(typeof document!="undefined"){const myScript=document.currentScript;const mySrc=myScript.getAttribute("src");suffix=new URL(mySrc,document.baseURI).search}else{suffix=""}Module.locateFile=function(path,prefix){return prefix+path+suffix}})();// end include: /pre-js.js
 var arguments_=[];var thisProgram="./this.program";var quit_=(status,toThrow)=>{throw toThrow};// In MODULARIZE mode _scriptName needs to be captured already at the very top of the page immediately when the page is parsed, so it is generated there
 // before the page load. In non-MODULARIZE modes generate it here.
 var _scriptName=typeof document!="undefined"?document.currentScript?.src:undefined;if(typeof __filename!="undefined"){// Node

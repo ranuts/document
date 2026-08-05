@@ -37,7 +37,17 @@ function editorSendCommand(params: { command: string; data: Record<string, any> 
  * chainable no-op dialog instead.
  */
 function suppressDialogsInFrame(frameWindow: any): void {
-  const SUPPRESSED_MSGS = ['Connection is lost', 'error occurred during the work'];
+  // The SDK localizes these messages, so matching by English substring only
+  // catches the en-US UI. Add the translation here as each locale is verified
+  // against a live editor (see docs/explorations for how this list grew) --
+  // matching by Asc.c_oAscError.ID would be more robust than message text, but
+  // the error object passed to Common.UI.alert/warning wasn't confirmed to
+  // carry that code through to opts. zh-CN confirmed 2026-08-05.
+  const SUPPRESSED_MSGS = [
+    'Connection is lost',
+    'error occurred during the work',
+    '使用文档时出错', // zh-CN: "An error occurred while working with the document"
+  ];
   const shouldSuppress = (opts: any): boolean => {
     const msg: string = opts?.msg ?? '';
     return typeof msg === 'string' && SUPPRESSED_MSGS.some((s) => msg.indexOf(s) !== -1);

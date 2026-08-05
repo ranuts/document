@@ -6,9 +6,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host --force",
+    "dev:v9": "vite --host --force --mode v9",
     "build": "sh ./bin/build.sh",
+    "build:v9": "sh ./bin/build.sh v9",
     "build:single": "node bin/bundle_single_html.js",
     "preview": "vite preview",
+    "preview:v9": "vite preview --mode v9",
     "tsc": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

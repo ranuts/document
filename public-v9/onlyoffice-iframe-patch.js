@@ -450,11 +450,16 @@
       hide: function () {},
       remove: function () {},
     };
+    // Locale-dependent (see the matching list in onlyoffice-editor.ts's
+    // suppressDialogsInFrame, which is the primary suppression path -- this is
+    // only a fallback).
     function suppress(opts) {
       var msg = opts && opts.msg;
       return (
         typeof msg === 'string' &&
-        (msg.indexOf('Connection is lost') !== -1 || msg.indexOf('error occurred during the work') !== -1)
+        (msg.indexOf('Connection is lost') !== -1 ||
+          msg.indexOf('error occurred during the work') !== -1 ||
+          msg.indexOf('使用文档时出错') !== -1)
       );
     }
     var origAlert = ui.alert.bind(ui);
