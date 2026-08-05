@@ -1,0 +1,26 @@
+/* Geist Sans + Geist Mono (variable weight), self-hosted.
+   © Vercel, in collaboration with basement.studio — SIL Open Font License 1.1
+   (see ./OFL-LICENSE.txt). Shipped with ranui so consumers of the design
+   system get the canonical faces behind --ran-font-family / --ran-font-mono
+   with one import, offline-friendly (no CDN):
+
+     import 'ranui/fonts';              // bundlers
+     <link rel="stylesheet" href=".../ranui/dist/fonts/fonts.css" />  // static
+
+   URLs are relative, so keep this file next to the .woff2 files when copying. */
+
+@font-face {
+  font-family: 'Geist';
+  src: url('./Geist-Variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('./GeistMono-Variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
