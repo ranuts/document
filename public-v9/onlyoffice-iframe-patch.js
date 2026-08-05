@@ -1,10 +1,16 @@
 /**
  * OnlyOffice iframe patch — injected into each editor iframe before any SDK scripts.
  *
- * Provides three things that OnlyOffice's Desktop-only SDK needs in a pure-browser env:
+ * Provides four things that OnlyOffice's Web/Desktop-oriented SDK needs to run
+ * against a purely static host with no document server behind it:
  *   1. window.AscDesktopEditor  — native OS file-dialog & I/O polyfill
  *   2. XHR font URL rewrite     — ascdesktop://fonts/ → /fonts/<mapped>
  *   3. Image URL redirect       — /media/…/image.png → parent.__mediaCache blob URL
+ *   4. Engine.IO/Socket.IO XHR mock — fakes the collaboration-server handshake the
+ *      SDK's socket.io client makes to /doc/{id}/c/, so it settles into "connected,
+ *      no server" instead of retrying forever. There is no dev-server middleware
+ *      equivalent to fall back on here (this file runs unchanged in production),
+ *      so the mock has to be complete on its own.
  *
  * Dialog suppression (Common.UI.alert/.warning) is handled from onlyoffice-editor.ts
  * via same-origin iframe access in onAppReady; the below is a defence-in-depth fallback.
@@ -285,7 +291,68 @@
     console.log('[OO] AscDesktopEditor polyfill installed');
   })();
 
-  // ── 3. XHR font URL rewrite ──────────────────────────────────────────────────────
+  // ── 3. Engine.IO/Socket.IO handshake mock ───────────────────────────────────────
+  // The SDK's socket.io client polls GET/POST http(s)://host/doc/{sessionId}/c/
+  // (Engine.IO v4 transport) expecting a real document/collaboration server. There
+  // is none here, so we answer entirely client-side with the same bytes a minimal
+  // Engine.IO v4 + Socket.IO v4 handshake would produce:
+  //   first GET (no ?sid)  → "open" packet (type 0) + namespace CONNECT (type 40)
+  //   subsequent GET ?sid= → "noop" packet (type 6), to keep the poll loop idle
+  //   POST                 → "ok" (acks whatever the client just sent)
+  // engine.io-client's polling transport uses XMLHttpRequest, not fetch, so
+  // patching XHR is sufficient. The document itself is loaded separately via
+  // asc_openDocumentFromBytes in onAppReady, independent of this connection.
+  (function patchEngineIOHandshake() {
+    var DOC_C_RE = /\/doc\/[^/]+\/c\//;
+    var SID = 'fakesid';
+    var NativeXHR = window.XMLHttpRequest;
+    var origOpen = NativeXHR.prototype.open;
+    var origSend = NativeXHR.prototype.send;
+
+    function fakeResponse(xhr, body) {
+      Object.defineProperty(xhr, 'readyState', { value: 4, configurable: true });
+      Object.defineProperty(xhr, 'status', { value: 200, configurable: true });
+      Object.defineProperty(xhr, 'statusText', { value: 'OK', configurable: true });
+      Object.defineProperty(xhr, 'responseText', { value: body, configurable: true });
+      Object.defineProperty(xhr, 'response', { value: body, configurable: true });
+      if (typeof xhr.onreadystatechange === 'function') xhr.onreadystatechange();
+      if (typeof xhr.onload === 'function') xhr.onload();
+      try {
+        xhr.dispatchEvent(new Event('readystatechange'));
+        xhr.dispatchEvent(new Event('load'));
+        xhr.dispatchEvent(new Event('loadend'));
+      } catch (e) {}
+    }
+
+    NativeXHR.prototype.open = function (method, url) {
+      this.__ooEngineIoUrl = typeof url === 'string' && DOC_C_RE.test(url) ? url : null;
+      this.__ooEngineIoMethod = method;
+      return origOpen.apply(this, arguments);
+    };
+
+    NativeXHR.prototype.send = function () {
+      var url = this.__ooEngineIoUrl;
+      if (!url) return origSend.apply(this, arguments);
+
+      var xhr = this;
+      var hasSid = new URL(url, window.location.href).searchParams.has('sid');
+      setTimeout(function () {
+        if (xhr.__ooEngineIoMethod === 'POST') {
+          fakeResponse(xhr, 'ok');
+          return;
+        }
+        if (!hasSid) {
+          var open = JSON.stringify({ sid: SID, upgrades: [], pingInterval: 25000, pingTimeout: 5000 });
+          var nsConnect = '40{"sid":"' + SID + '"}';
+          fakeResponse(xhr, (1 + open.length) + ':0' + open + nsConnect.length + ':' + nsConnect);
+        } else {
+          fakeResponse(xhr, '1:6');
+        }
+      }, 0);
+    };
+  })();
+
+  // ── 4. XHR font URL rewrite ──────────────────────────────────────────────────────
   // Rewrites ascdesktop://fonts/<file> → /fonts/<mapped> using the font map
   // fetched above.  The XHR interceptor is installed synchronously; the fontMap
   // object is populated by the time the SDK actually requests any fonts (which
@@ -311,7 +378,7 @@
     };
   })();
 
-  // ── 4. Image URL redirect ────────────────────────────────────────────────────────
+  // ── 5. Image URL redirect ────────────────────────────────────────────────────────
   // SDK constructs image URLs as /media/word/media/<file>.  Redirect these to
   // blob URLs pre-extracted from the OOXML ZIP and published by the parent page
   // in window.__mediaCache = { "media/image1.png": "blob://…" }.
@@ -338,7 +405,7 @@
     });
   })();
 
-  // ── 5. Dialog suppression (fallback) ────────────────────────────────────────────
+  // ── 6. Dialog suppression (fallback) ────────────────────────────────────────────
   // Primary suppression is in onlyoffice-editor.ts (suppressDialogsInFrame).
   // This polls as a defence-in-depth fallback for the "Connection is lost" dialog.
   (function suppressConnectionLost() {
