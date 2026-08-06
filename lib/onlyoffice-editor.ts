@@ -4,7 +4,7 @@ import { getDocmentObj } from '@ranuts/shared/store';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
 import { c_oAscFileType2 } from './file-types';
 import type { BinConversionResult, SaveEvent } from '@ranuts/shared/document-types';
-import { getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
+import { BASE_PATH, getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
 import { extractDocxMediaUrls, preprocessPptx, preprocessXlsxLineBreaks } from '@ranuts/converter';
 import { g_sEmpty_ooxml } from './empty_bin-v9';
 import { showMediaPlayer } from './media-player';
@@ -551,10 +551,23 @@ async function runWebModeOnAppReady(params: {
   let ooxmlBytes: Uint8Array;
   if (typeof binData === 'string') {
     const ext = `.${fileName.split('.').pop()?.toLowerCase() || 'docx'}`;
-    const ooxmlB64 = g_sEmpty_ooxml[ext] || g_sEmpty_ooxml['.docx'];
-    const binaryStr = atob(ooxmlB64);
-    ooxmlBytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) ooxmlBytes[i] = binaryStr.charCodeAt(i);
+    if (ext === '.pptx') {
+      // g_sEmpty_ooxml's pptx entry is missing parts the slide engine's own
+      // loader expects (preprocessPptx patches around some of it, but not
+      // all -- it still crashes deep inside sdk-all-min.js's loader).
+      // sdkjs ships a real, complete blank presentation for this exact
+      // purpose; fetch that instead of the minimal blob for the other types.
+      const templateResponse = await fetch(`${BASE_PATH}sdkjs/slide/themes/src/01_blank.pptx`);
+      if (!templateResponse.ok) {
+        throw new Error(`Failed to load PPTX template: ${templateResponse.status}`);
+      }
+      ooxmlBytes = new Uint8Array(await templateResponse.arrayBuffer());
+    } else {
+      const ooxmlB64 = g_sEmpty_ooxml[ext] || g_sEmpty_ooxml['.docx'];
+      const binaryStr = atob(ooxmlB64);
+      ooxmlBytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) ooxmlBytes[i] = binaryStr.charCodeAt(i);
+    }
     console.log('[OO] new doc', ext, ooxmlBytes.byteLength, 'bytes');
   } else {
     ooxmlBytes = toUint8Array(binData);
