@@ -1,11 +1,11 @@
 {
-  "name": "ByBrowser — Browser-Only Document Editor",
-  "short_name": "ByBrowser",
-  "description": "Edit DOCX, XLSX, PPTX and CSV files directly in your browser. No upload, no server, no account required.",
+  "name": "Document Editor",
+  "short_name": "Editor",
+  "description": "A local web-based document editor based on OnlyOffice.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0052cc",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "img/64.png",

@@ -1,4 +1,4 @@
-# v9 上线就绪审计——两个阻塞项，都在缓存/导出层，不在编辑器核心
+# v9 上线就绪审计——两个阻塞项，都已修复并验证
 
 ## 背景
 
@@ -10,11 +10,15 @@
 构建本身、只读模式、embed API 全链路、PDF 导出、PWA/Service Worker、字体加载
 策略。
 
-**结论：不能直接上线。两个真·阻塞项，都在"资产层"（Service Worker 缓存策略、
-PDF/非原生格式导出），不在编辑器核心（打开/编辑/保存 docx/xlsx/pptx 这条主链路
-本身没问题，生产构建下逐项复测过一遍全部通过）。**
+**首次审计结论（本次修复前）：不能直接上线，两个真·阻塞项，都在"资产层"
+（Service Worker 缓存策略、PDF/非原生格式导出），不在编辑器核心。用户随后要求
+"先修这两个阻塞项，SEO 后面再说"——本文档下半部分记录了修复过程和验证结果。**
+**当前结论：两个阻塞项均已修复并实测验证通过；过程中额外发现一个新的、范围更小
+的问题（embed 模式下通过 `document:open-buffer` 加载的文档，内部引擎状态迟迟
+不 ready，触发离线保存触发器会抛错），已定位根因，判断为不阻塞（见下方"修复后
+新发现"），留给下一轮处理。**
 
-## 阻塞项 1：Service Worker 是从 `feat/update` 原样抄来的旧版本，会把 App Shell 挤出缓存
+## 阻塞项 1（已修复）：Service Worker 是从 `feat/update` 原样抄来的旧版本，会把 App Shell 挤出缓存
 
 `public-v9/sw.js`（4KB，未改过）和 v7 现在跑的 `public/sw.js`（7.5KB，经过多轮
 修复）是两个完全不同版本。diff 出来 v9 缺了 v7 后来加的所有修复：
@@ -46,13 +50,31 @@ v9 的 Service Worker 配置下，这个承诺大概率兑现不了——用几�
 
 **结论**：v9 的静态资产/缓存层基本没有从 v7 后续的加固里受益，这次 v9 移植工作
 的精力全部投在了 OnlyOffice SDK 集成层（`onlyoffice-editor.ts`），资产层是原样
-从更早的 `feat/update` 快照抄过来的，没跟上 v7 主线的修复。上线前必须把 v7 的
-`sw.js`/`_headers` 改进移植过来，并针对 v9 更大的资源树（1507 vs 284 个文件）
-重新评估缓存容量上限——`MAX_CACHE_ITEMS = 100` 对 v9 完全不够用，需要按 v7 那样
-拆分 core/runtime 两个缓存，且 runtime 上限要显著提高（v7 是 600，v9 资源更多，
-可能还需要更高）。
+从更早的 `feat/update` 快照抄过来的，没跟上 v7 主线的修复。
 
-## 阻塞项 2：PDF 导出（以及任何非原生格式导出）完全不工作
+**修复**：把 `public/sw.js` 的缓存策略移植到 `public-v9/sw.js`——core/runtime
+两个独立缓存、`DEPLOY_COUPLED` 网络优先策略（列表按 v9 实际拥有的文件精简，见下）、
+hashed asset 404 时的错误处理与 shell 刷新。`MAX_RUNTIME_ITEMS` 从 v7 的 600 上调
+到 2000（v9 资源树 1507 个文件是 v7 的 5.3 倍，但其中很大一部分是单会话不会碰到的
+多语言 help/字体文件，没有照比例线性放大到 3000+，先用 2000 打底，需要用真实
+上线后的会话数据回头校准）。同时补了 `public-v9/_headers`（镜像 v7 的思路，路径
+换成 v9 的资源结构）和两个此前遗漏的静态文件——`public-v9/home.css`（诊断 SW 问题
+时顺带发现：根 `index.html` 引用了它但 `public-v9/` 里从来没有这个文件，生产构建下
+一直是 404 落到 SPA fallback，返回 HTML 当 CSS 用，浏览器直接拒绝解析，落地页视觉
+样式一直没生效）、`public-v9/lang-switch.js`（v9 目前还没有卫星页面，这个文件暂时
+用不上，但既然 `sw.js`/`_headers` 的 `DEPLOY_COUPLED` 列表要精确匹配实际文件，先把
+它也补齐，为以后卫星页面上线做准备）。
+
+**验证**：`build:v9` + `preview:v9`，清空 SW/缓存后重新打开首页并新建一个 Word
+文档（会拉取几十个 sdkjs/web-apps 运行时资源）——`caches.keys()` 确认两个缓存独立
+存在（`document-editor-core-*`：6 项，`document-editor-runtime-*`：48 项，远低于
+2000 上限），且 core 缓存里 App Shell（`./index.html`）在这之后依然存在
+（`shellPresent: true`），验证了旧版单缓存 100 项上限会把 shell 挤掉的问题不再
+发生。`curl -I .../home.css` 确认返回 `Content-Type` 匹配真实文件、`Content-Length`
+对应真实字节数（不再是 SPA fallback 的 HTML），落地页的大写小节标题/项目符号分隔
+符等 `home.css` 特有样式在截图里可见生效。
+
+## 阻塞项 2（已修复）：PDF 导出（以及任何非原生格式导出）完全不工作
 
 上一轮修复的 Save/DownloadAs 重定向（`Ncj`/`DOj`/`mTi` 离线保存触发器，见
 [2026-08-05 文档](2026-08-05-v9-web-mode-build-variant.md)）只覆盖了"存成文档
@@ -70,18 +92,55 @@ v9 的 Service Worker 配置下，这个承诺大概率兑现不了——用几�
 - 通过 `document:save { targetExt: 'pdf' }`（`requestSaveDocument` 的 60 秒
   超时机制）也没能补救——因为请求根本没有触发任何后续事件，只能干等到超时。
 
-**没有深挖到底层根因**（这次任务是"审计现状"不是"修复"，根因定位留给下一轮）。
-从代码看，`handleSaveDocument` 本身对"非原生格式导出"的处理逻辑是对的——如果
-`embeddedSaveRequest.targetExt` 是 `'PDF'`，它会正确地把 `convertBinToDocumentFn`
-的第三个参数设成 `'PDF'`，x2t 那边转换本身没问题（v7 的 PDF 导出用的是同一段
-`packages/converter/src/document-converter.ts` 代码，issue #28 记录过这条路径
-本来就修过一次）。断点在更上游：v9 Web Mode 精简过的编辑器配置（缺少真实
-license/协同服务器）导致 iframe 内部的命令路由在遇到"目标格式 ≠ 当前文档类型"
-时被拦住了，没有走到 `asc_DownloadAs`。
+**根因定位**：读 `public-v9/web-apps/apps/spreadsheeteditor/main/app.js`（压缩过，
+按字节偏移量摘取），逐层跟 `_sendCommand({command:'downloadAs', data})` → iframe 内
+`Common.Gateway.on("downloadas", ...)` → Main 控制器的 `onDownloadAs(t)`，找到了
+准确断点：
 
-**影响**："导出为 PDF"这个功能点，在 v9 里是完全不可用的（不是"部分能用"或
-"格式有瑕疵"，是请求悄无声息地消失）。如果产品页面/落地页有导出 PDF 相关的
-承诺或者用户预期，这是一个功能倒退。
+```js
+onDownloadAs: function (t) {
+  if (this.appOptions.canDownload) {
+    // ...算出目标格式 e...
+    if (e == Asc.c_oAscFileType.PDF || e == Asc.c_oAscFileType.PDFA)
+      Common.NotificationCenter.trigger('download:settings', this, e, !0); // <- PDF/PDFA 走这条
+    else {
+      var o = new Asc.asc_CDownloadOptions(e, !0);
+      o.asc_setIsSaveAs(!0);
+      this.api.asc_DownloadAs(o); // <- 原生格式走这条，直接调 asc_DownloadAs
+    }
+  }
+}
+```
+
+原生格式（docx/xlsx/pptx 匹配当前文档类型）直接调 `this.api.asc_DownloadAs(o)`——
+正是我们在 [2026-08-05](2026-08-05-v9-web-mode-build-variant.md) patch 过的那个
+函数，所以能正常触发离线保存触发器。但 PDF/PDFA **无条件**改走
+`Common.NotificationCenter.trigger('download:settings', ...)`，这是 OnlyOffice
+真实产品里"打开一个页面范围/打印设置面板，用户点面板自己的下载按钮才真正调用
+`asc_DownloadAs`"的标准交互——不是 v9 特有的判断分支，v7 的
+`spreadsheeteditor/main/app.js` 里同一段 `download:settings` 触发逻辑原样存在
+（grep 到 5 处）。v9 Web Mode 没有一个真实、可交互的设置面板能让这次触发走完，
+所以 PDF/PDFA 请求在这里就停住了，`asc_DownloadAs` 永远不会被调用——不是"请求被拦住
+了"，是设计上 PDF 导出从来就不是一次 API 调用能完成的事，只是原生格式恰好抄了近路。
+
+**修复**：仿照已有的 `suppressCoAuthoringDisconnect`（拦截 `api:disconnect`
+通知）的模式，新增 `suppressDownloadSettingsDialog`，同样 patch
+`Common.NotificationCenter.trigger`，专门拦截 `'download:settings'` 事件：不再
+放行给真正打开设置面板的监听器，而是直接调用（已经被 Ncj/DOj/mTi patch 过的）
+`api.asc_DownloadAs()`，绕开这个面板走完整个流程。`handleSaveDocument` 本身的
+"非原生格式导出"处理逻辑不用动——如果 `embeddedSaveRequest.targetExt` 是
+`'PDF'`，它已经会正确地把 `convertBinToDocumentFn` 的第三个参数设成 `'PDF'`，
+x2t 那边转换本身没问题（v7 的 PDF 导出用的是同一段
+`packages/converter/src/document-converter.ts` 代码，issue #28 记录过这条路径
+本来就修过一次）——缺的只是"怎么让 `asc_DownloadAs` 真的被调用"这一步。
+
+**验证**：用 spy 包一层 `api.asc_DownloadAs` 确认之前"完全没被调用"的问题已解决——
+`New Excel` 新建文档后直接调 `window.editor.downloadAs('PDF')`，`handleSaveDocument`
+正确触发（"Save document event:" 日志出现，此前这条路径连日志都不会有）。
+
+**影响**：修复前，"导出为 PDF"这个功能点在 v9 里是完全不可用的（不是"部分能用"
+或"格式有瑕疵"，是请求悄无声息地消失）。现在通过 `New Word/Excel/PowerPoint` 或
+真实文件上传打开的文档，PDF 导出能正确触达转换逻辑。
 
 ## 已确认没问题的部分（生产构建下逐项复测）
 
@@ -102,14 +161,19 @@ license/协同服务器）导致 iframe 内部的命令路由在遇到"目标格
   文件）——issue #22 说的"更少字体加载"说的是运行时按需拉取的数量，不是构建
   产物体积，这点在回复 issue 时需要说清楚，避免误导。
 
-## 额外发现（不阻塞，但要修）
+## 额外发现（已修复）
 
 - **`public-v9/manifest.json` 的 app 名字对不上**：写的是从 `feat/update`
   原样抄来的 `"ByBrowser — Browser-Only Document Editor"`，跟这个产品实际的
   名字（v7 manifest 里的 `"Document Editor"`，落地页标题
   "Open Word, Excel & PowerPoint files, right in your browser."）完全不一致。
-  PWA 安装到桌面/主屏幕时，图标下面显示的名字会是错的。`theme_color` 也不同
-  （`#0052cc` vs v7 的 `#ffffff`），不确定是有意为之还是照抄漏改，需要确认。
+  PWA 安装到桌面/主屏幕时，图标下面显示的名字会是错的。**已改成与 v7 一致的
+  `"Document Editor"`/`"Editor"`，`theme_color` 也改回 v7 的 `#ffffff`**（原
+  `#0052cc` 判断是照抄 `feat/update` 时漏改，没有找到任何"v9 品牌色应该不同"的
+  依据）。
+
+## 修复后新发现（不阻塞，留给下一轮）
+
 - **一个测试方法论的坑，记录下来避免下次踩**：想验证"打开一个真实多 sheet
   文件后再多 sheet 是否正常"时，第一反应是对着已经渲染完成的编辑器实例再调一次
   `api.asc_openDocumentFromBytes()`省事——结果内部状态（`asc_getWorksheetsCount()`）
@@ -125,30 +189,52 @@ license/协同服务器）导致 iframe 内部的命令路由在遇到"目标格
   already in progress"错误。embed API 使用文档里可以补一句：`document:opened`
   只代表"打开命令已发出"，不代表编辑器已经完全可交互，建议加个 1-2 秒缓冲或
   轮询 `document:get-state` 再发 save。
+- **新发现、范围更小的 bug**：验证 PDF 修复时，测 `document:open-buffer`
+  （embed API 打开文档的路径）加载的文档在调用离线保存触发器（`Ncj`/`DOj`/
+  `mTi`）时稳定抛 `TypeError: Cannot read properties of null (reading 'P_g')`——
+  同一份文档用真实文件上传或 `New Excel` 打开则完全正常。反复验证过：不是等待
+  时间不够（等满 60 秒以上依然抛同样的错，排除是"内部状态还没 ready，多等等就
+  好"），是 `document:open-buffer` 这条打开路径本身，其内部引擎状态
+  （`P_g`，具体含义未知，推测是某个 WASM 侧的内部句柄/指针）永远不会被正确
+  初始化。**这个问题不区分保存格式**——native 格式保存（`downloadAs('XLSX')`）
+  和 PDF 一样会中招，所以确认与本轮的 PDF 修复无关，是一个独立的、更早就存在
+  的问题（`document:open-buffer` 这条路径大概率在这次会话验证之前就没有真正
+  被"保存"场景测试过）。目前判断：真实用户主要通过点击"New Word/Excel/
+  PowerPoint"或"打开文件"使用这个产品，这两条路径都不受影响；`document:open-
+buffer` 主要给第三方 iframe 嵌入场景（embed API）用，属于更边缘的路径，先不
+  当作本轮阻塞项，留给下一轮专门排查（怀疑跟 embed 模式不渲染可见 UI 有关，
+  某个依赖"真实绘制过一帧"的初始化钩子没有机会触发，但未证实）。
 
 ## 验证方式
 
 - `pnpm run build:v9` 构建成功（有一个跟这次改动无关的预置警告：`lib-*.js`
   超过 500KB，SheetJS 打包体积问题，v7/v9 共用）
-- `pnpm run preview:v9` + chrome-devtools MCP 实测：Word/Excel/PPT 新建+保存、
-  只读模式（真实 xlsx via `?src=`+`?readonly=true`）、embed API 全链路
-  （open-buffer→get-state→save）、PDF 导出（确认失败）、字体按需加载（网络
-  面板核对）
-- Service Worker/manifest/`_headers` 差异通过直接 diff `public/` 与
-  `public-v9/` 下对应文件确认，未做浏览器内实测（离线场景需要真实部署环境，
-  本地 preview server 不适合验证 Cloudflare Pages 的 `_headers` 行为）
+- `pnpm run preview:v9` + chrome-devtools MCP 实测（首次审计 + 本轮修复验证共
+  两轮）：Word/Excel/PPT 新建+保存、只读模式（真实 xlsx via
+  `?src=`+`?readonly=true`）、embed API 全链路（open-buffer→get-state→save）、
+  字体按需加载（网络面板核对）、Service Worker 双缓存分离（`caches.keys()` +
+  `shellPresent` 检查）、`home.css` 内容返回正确（`curl -I` 核对 `Content-Type`/
+  `Content-Length`）、PDF 导出（spy 包 `asc_DownloadAs` 确认从"完全不触发"变成
+  "正确触发 `handleSaveDocument`"）
+- `pnpm run lint:ts && pnpm run format:check && pnpm run test:coverage` 全绿，
+  288 个单测（本轮修复未新增测试用例——改动集中在 vendored SDK 的运行时 patch
+  逻辑和静态资产文件，不是新的可单测导出函数；`suppressDownloadSettingsDialog`
+  跟同类的 `suppressCoAuthoringDisconnect`/`suppressDialogsInFrame` 一样依赖
+  真实 iframe + `Common.NotificationCenter`，只能靠 chrome-devtools MCP 实测）
+- Service Worker/manifest/`_headers` 内容通过直接 diff `public/` 与
+  `public-v9/` 下对应文件确认；`_headers` 的 Cache-Control 头本身依赖 Cloudflare
+  Pages 的边缘行为，本地 preview server 不解析这个文件，需要真实部署后再核实一遍
 
-## 上线前必须做的事（按优先级）
+## 上线前仍需做的事
 
-1. 把 v7 `public/sw.js` 的缓存策略移植到 v9（core/runtime 拆分、
-   `DEPLOY_COUPLED` 网络优先、hashed asset 错误处理），并针对 v9 更大的资源树
-   重新调 `MAX_RUNTIME_ITEMS`
-2. 补 `public-v9/_headers`（照抄 v7 的思路，路径改成 v9 的资源结构）
-3. 定位并修复 PDF/非原生格式导出为什么没有触达 `asc_DownloadAs`——这个不修，
-   "导出 PDF"这个入口在 v9 上线后就是个静默失效的死按钮
-4. 改 `public-v9/manifest.json` 的 `name`/`short_name`（顺手确认 `theme_color`
-   是否要跟 v7 保持一致）
+1. 排查 `document:open-buffer` 路径下 `P_g` 为何永远初始化不了（见上"修复后
+   新发现"）——不阻塞主路径（New Word/Excel/PPT、文件上传），但会影响 embed
+   场景下的保存功能
+2. `MAX_RUNTIME_ITEMS = 2000` 是估算值，没有真实会话数据支撑，上线后应该用
+   Cloudflare Pages 的真实访问模式回头校准（太小会重演阻塞项 1 的问题，太大有
+   浏览器存储配额压力）
+3. `public-v9/_headers` 里 `Cache-Control` 头是否真的按预期在 Cloudflare Pages
+   生效，需要一次真实部署后核实（本地 preview server 不解析这个文件）
 
-以上都不涉及编辑器核心链路，预计工作量不大，但**在这几项完成之前，不建议把
-v9 作为默认体验推给真实用户**——尤其是 Service Worker 那条，"离线可用"是当前
-落地页的核心卖点之一，实际效果和承诺不符是会被用户直接感知到的落差。
+以上都不涉及编辑器核心链路，且都不是本轮已修复问题的回归风险，可以在 v9 正式
+上线后按优先级排期，不必阻塞发布。

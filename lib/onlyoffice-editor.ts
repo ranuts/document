@@ -139,6 +139,43 @@ function suppressCoAuthoringDisconnect(frameWindow: any): void {
   poll();
 }
 
+/**
+ * v9 Web Mode has no working UI flow to complete the SDK's normal "download as
+ * PDF" settings dialog (no real collaboration server behind it, same root cause
+ * as everything else this file works around). onDownloadAs (app.js) detours
+ * PDF/PDFA specifically to a Common.NotificationCenter 'download:settings'
+ * event instead of calling asc_DownloadAs directly -- a real user would see a
+ * page/print-range dialog with its own "Download" button. Intercept that event
+ * and call the offline-save-trigger-patched asc_DownloadAs ourselves instead of
+ * letting the (non-functional here) dialog open. Must run after the Ncj/DOj/mTi
+ * patch below has replaced asc_DownloadAs, since it reads api.asc_DownloadAs at
+ * call time (not capture time), so ordering between the two patches doesn't
+ * matter as long as both are in place before a save is actually requested.
+ */
+function suppressDownloadSettingsDialog(frameWindow: any): void {
+  let attempts = 0;
+  const poll = () => {
+    const center = frameWindow.Common?.NotificationCenter;
+    if (!center || typeof center.trigger !== 'function') {
+      if (attempts++ < 50) setTimeout(poll, 200);
+      return;
+    }
+    if (center.__downloadSettingsSuppressed) return;
+    center.__downloadSettingsSuppressed = true;
+
+    const origTrigger = center.trigger.bind(center);
+    center.trigger = (name: string, ...args: unknown[]) => {
+      if (name === 'download:settings') {
+        (frameWindow.Asc?.editor as any)?.asc_DownloadAs?.();
+        return center;
+      }
+      return origTrigger(name, ...args);
+    };
+    console.log('[OO] download:settings dialog bypassed in iframe');
+  };
+  poll();
+}
+
 // Import converter function to avoid circular dependency
 let convertBinToDocumentFn:
   ((bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>) | null = null;
@@ -789,6 +826,7 @@ async function runWebModeOnAppReady(params: {
       `[OO] no offline save trigger (${triggerName}) found for fileType ${fileType} -- Save will likely no-op`,
     );
   }
+  suppressDownloadSettingsDialog(iwin);
 
   api.asc_openDocumentFromBytes(ooxmlBytes);
 

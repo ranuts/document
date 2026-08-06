@@ -1,0 +1,37 @@
+# Cloudflare Pages headers (copied into dist-v9/ by the build).
+# Pin the caching contract explicitly instead of relying on Pages defaults.
+# The failure mode being prevented: a stale HTML referencing hashed assets
+# that no longer exist after a deploy ("Refused to apply style… text/html").
+# Mirrors public/_headers (v7) — keep the two in sync when either changes.
+
+# Hashed build outputs: the filename changes every deploy → cache forever.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The vendored ranui token layer, fingerprinted by bin/build.sh. A stable name
+# whose content changes every deploy is the one combination caching cannot get
+# right (see public/_headers for the incident this line prevents). The name
+# carries the content hash, so it is immutable like any other build output.
+/ran-tokens.*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# The service worker must never be cached, or clients keep running an old
+# version (and its old caching strategy) long after a deploy.
+/sw.js
+  Cache-Control: no-cache
+
+# Unhashed, deploy-coupled files: stable filenames whose content changes with
+# deploys — browsers must revalidate so they always match the current HTML.
+# Keep this list in sync with sw.js's DEPLOY_COUPLED regex. Smaller than v7's:
+# v9 only ships the root landing page for now (no satellite pages), so
+# landing.css/lang-switch.js/ranui-iife/* aren't part of this build yet —
+# add them here (and to DEPLOY_COUPLED) if/when v9 gets its own copies.
+/home.css
+  Cache-Control: no-cache
+/onlyoffice-iframe-patch.js
+  Cache-Control: no-cache
+
+# Self-hosted fonts: unhashed but they only change with a ranui release; a
+# week of browser cache with revalidation after is a fine trade.
+/ran-fonts/*
+  Cache-Control: public, max-age=604800, must-revalidate
