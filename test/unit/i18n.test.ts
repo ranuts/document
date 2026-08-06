@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, t } from '@ranuts/shared/i18n';
 
 describe('i18n', () => {
@@ -47,5 +47,41 @@ describe('i18n', () => {
         expect(t(key), `${key} (${lang})`).toBeTruthy();
       }
     }
+  });
+
+  // GitHub #37/#32 "UI defaults to Chinese, can't switch to English": the module-load-time
+  // language detection reads `?locale=` first (see i18n.ts constructor priority chain).
+  // The singleton is constructed once at import time, so each case needs a fresh module
+  // instance via resetModules + dynamic import rather than the shared `getLanguage()`.
+  describe('locale detection at module init (URL "locale" param)', () => {
+    afterEach(() => {
+      window.history.pushState({}, '', '/');
+      localStorage.clear();
+    });
+
+    it.each([
+      ['?locale=zh', LanguageCode.ZH],
+      ['?locale=zh-CN', LanguageCode.ZH],
+      ['?locale=en', LanguageCode.EN],
+      ['?locale=en-US', LanguageCode.EN],
+    ])('URL "%s" selects language %s regardless of saved preference', async (search, expected) => {
+      localStorage.setItem('document-lang', expected === LanguageCode.ZH ? LanguageCode.EN : LanguageCode.ZH);
+      window.history.pushState({}, '', `/${search}`);
+
+      vi.resetModules();
+      const { getLanguage: freshGetLanguage } = await import('@ranuts/shared/i18n');
+
+      expect(freshGetLanguage()).toBe(expected);
+    });
+
+    it('falls back to localStorage when the URL has no locale param', async () => {
+      localStorage.setItem('document-lang', LanguageCode.ZH);
+      window.history.pushState({}, '', '/');
+
+      vi.resetModules();
+      const { getLanguage: freshGetLanguage } = await import('@ranuts/shared/i18n');
+
+      expect(freshGetLanguage()).toBe(LanguageCode.ZH);
+    });
   });
 });

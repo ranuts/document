@@ -179,6 +179,31 @@ describe('embed-api', () => {
       expectMessagePosted(postMessageSpy, 'document:error', 'err-1', { message: 'Save failed' });
     });
 
+    // GitHub #4 "save to remote server": the parent page's documented recovery path
+    // is listening for this success payload and uploading `file` itself.
+    it('posts document:saved with the saved File and its metadata (#4)', async () => {
+      window.history.pushState({}, '', '/?embed=1');
+      const savedFile = new File(['xlsx bytes'], 'report.xlsx', {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      mockRequestSaveDocument.mockResolvedValueOnce(savedFile);
+      const { initEmbedApi } = await import('../../lib/embed-api');
+      initEmbedApi();
+
+      await dispatchMessage({ type: 'document:save', id: 'save-1', payload: { targetExt: 'xlsx' } });
+
+      expect(mockRequestSaveDocument).toHaveBeenCalledWith(
+        'xlsx',
+        expect.objectContaining({ returnOriginalOnTimeout: false }),
+      );
+      expectMessagePosted(postMessageSpy, 'document:saved', 'save-1', {
+        file: savedFile,
+        fileName: 'report.xlsx',
+        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        size: savedFile.size,
+      });
+    });
+
     it('opens a document from url payload', async () => {
       window.history.pushState({}, '', '/?embed=1');
       const { initEmbedApi } = await import('../../lib/embed-api');
