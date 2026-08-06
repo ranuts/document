@@ -746,6 +746,50 @@ async function runWebModeOnAppReady(params: {
   patchWebPath('Mrc', 'rxk', 'J6a', 'tW');
   patchWebPath('K8b', 'Fzj', '$cb', 'aN');
 
+  // Both the toolbar Save button and our own requestSaveDocument() ->
+  // downloadAs() ultimately call the SDK's internal asc_Save (raw name: oja
+  // for word/slide, xxa for cell) or, for cell specifically, a separate
+  // asc_DownloadAs raw entry point (iZd) that doesn't route through xxa at
+  // all. Like Shc/Mrc/K8b above, these functions' "has a real desktop host"
+  // check is fooled by the AscDesktopEditor polyfill, so they take the
+  // Desktop branch (DesktopOfflineAppDocumentStartSave ->
+  // AscDesktopEditor.LocalFileSave) -- which is built for a native app
+  // writing to disk via OS APIs and never hands the document bytes back to
+  // this page. Unlike opening, there's no "give me the web-path version of
+  // asc_Save" swap here; instead, each engine has its own separate offline-
+  // save entry point (Ncj/DOj/mTi per editor type) that calls
+  // asc_onSaveDocument directly with the serialized bytes when
+  // asc_isSupportFeature('ooxml') is true (confirmed true in this build) --
+  // redirect straight to that instead of trying to fix up asc_Save's Desktop
+  // branch. The three names are NOT mutually exclusive on the api object --
+  // sdk-all-min.js bundles all three engines together, so e.g. the cell
+  // editor's api also exposes a `Ncj` method (word's trigger name) that is
+  // unrelated and silently no-ops; picking by existence (`a.Ncj ?? a.DOj`)
+  // therefore picks the wrong one for cell. Select by the known fileType
+  // instead. Confirmed working via direct testing (chrome-devtools MCP):
+  // after this patch, downloadAs(), the toolbar Save button, and Excel's
+  // separate DownloadAs entry point all reach handleSaveDocument with real
+  // serialized bytes.
+  const a = api as any;
+  const lowerFileType = fileType.toLowerCase();
+  const triggerName = ['pptx', 'ppt'].includes(lowerFileType)
+    ? 'mTi'
+    : ['xlsx', 'xls', 'csv'].includes(lowerFileType)
+      ? 'DOj'
+      : 'Ncj';
+  if (typeof a[triggerName] === 'function') {
+    const triggerSave = () => a[triggerName]?.call(a, true);
+    for (const rawName of ['oja', 'xxa', 'iZd']) {
+      if (typeof a[rawName] === 'function') a[rawName] = triggerSave;
+    }
+    if (typeof a.asc_Save === 'function') a.asc_Save = triggerSave;
+    if (typeof a.asc_DownloadAs === 'function') a.asc_DownloadAs = triggerSave;
+  } else {
+    console.warn(
+      `[OO] no offline save trigger (${triggerName}) found for fileType ${fileType} -- Save will likely no-op`,
+    );
+  }
+
   api.asc_openDocumentFromBytes(ooxmlBytes);
 
   // Serverless Web Mode has no server auth/openedAt response. Without these,

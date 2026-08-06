@@ -155,43 +155,67 @@ true})` 之后又被悄悄改回 `false`（`onDownloadAs` 在 `canDownload` 为
 3. `suppressDialogsInFrame` 的匹配列表补了第二条 zh-CN 字符串
    （"连接失败"），跟第一条（"使用文档时出错"）是同一个
    `CoAuthoringDisconnect` 事件的两种不同措辞。
+4. **保存/下载不产生文件——已修复**（原第二轮末尾记录的架构性缺口）。读
+   `sdk-all-min.js` 源码确认：`asc_DownloadAs`(`.iZd`，仅 cell 有这个独立
+   入口)/`asc_Save`(`.oja` word/slide、`.xxa` cell)最终都走
+   `DesktopOfflineAppDocumentStartSave` → `AscDesktopEditor.LocalFileSave`，
+   这条链路是给真实桌面壳"原生写盘"用的，浏览器端的 `LocalFileSave` 桩函数
+   参数里根本不含文档字节，只有文件名/另存为选项——跟"打开文档"的
+   `Shc/BRj`、`Mrc/rxk`、`K8b/Fzj` 不同，这里**没有**现成的"网页路径"可以
+   直接切过去。但每个引擎另外各自暴露一个独立的"离线保存触发器"内部方法
+   （word `Ncj`、cell `DOj`、slide `mTi`），在 `asc_isSupportFeature('ooxml')`
+   为 true 时（这份构建里确认为 true）会直接序列化并触发
+   `asc_onSaveDocument`，完全绕开上面那条断链——把 `oja`/`xxa`/`iZd` 和
+   `asc_Save`/`asc_DownloadAs` 全部重定向到对应引擎的这个触发器即可。
+   **踩的坑**：`sdk-all-min.js` 把三个引擎打包在一起，`Ncj`/`DOj`/`mTi` 并
+   不互斥——cell 编辑器的 api 对象上 `Ncj`（word 的触发器名）同样存在且是
+   函数，但调用它是静默 no-op（属于别的引擎，含义不同）。最初按"哪个存在
+   就用哪个"(`a.Ncj ?? a.DOj ?? a.mTi`) 挑选，导致 Word 走 toolbar 保存按钮
+   验证通过，但 Excel 的 `downloadAs()`/`asc_DownloadAs` 路径断续失败，一度
+   误判成"函数引用缓存过早导致 stale"（换成运行时懒查找，问题表面消失了一
+   部分，但不可靠）。真正原因是**选错了触发器**，不是时序问题——改成按
+   `runWebModeOnAppReady` 已知的 `fileType` 显式映射
+   （docx→`Ncj`、xlsx/xls/csv→`DOj`、pptx/ppt→`mTi`）后，Word/Excel/PPT
+   三种文档通过真实 `downloadAs()` 调用（不是直接调 `Ncj`/`DOj`/`mTi`）全部
+   稳定复现"进 `handleSaveDocument`、拿到真实序列化字节"。
 
 ## 已知遗留问题
 
-**阻塞（需要先解决才能说"v9 可用"）：**
-
-1. **保存/下载不产生文件**——见上文"第二轮"最后一条。这不是"待验证"，是
-   已确认的架构缺口：v9 Web Mode 的 `asc_Save`/`asc_DownloadAs` 硬编码走
-   桌面本地保存路径，没有类似 `asc_openDocumentFromBytes` 的"网页路径"变体
-   可以强制切换。需要继续深挖 sdk-all(-min).js，找类似 `Shc`/`Mrc`/`K8b`
-   那样的另一半"Web 路径"函数（如果存在的话），或者找到另一条能拿到保存后
-   字节的 API（比如某个直接返回 blob/ArrayBuffer 而不经过
-   `AscDesktopEditor` 的导出方法）。在这个解决之前，v9 变体只能算"能看"，
-   不能算"能编辑保存"。
-
 **不阻塞，但要知道：**
 
-2. **`systemThemeSupported` 抛 `TypeError: Cannot read properties of undefined
+1. **`systemThemeSupported` 抛 `TypeError: Cannot read properties of undefined
 (reading 'theme')`**：文档加载完成后必现，日志里是 catch 住的
    `changesError`。根因已定位：`Common.Controllers.Desktop.isActive()`
    因为 `window.AscDesktopEditor` 存在而返回 true，走进只有真实桌面壳才会
    填充的 `r.theme` 读取逻辑。不影响工具栏/编辑/文档加载，暂不处理。
-3. **WebSocket 升级尝试**：握手响应里 `upgrades: []` 应该阻止 SDK 尝试升级
+2. **WebSocket 升级尝试**：握手响应里 `upgrades: []` 应该阻止 SDK 尝试升级
    到 WebSocket，但控制台还是看到一次 `ws://` 连接失败（错误被吞掉）。这很
    可能正是 CoAuthoringDisconnect 最终触发的诱因（没有真正的 ping/pong 保活）
    ——已经用"抑制副作用"绕过了表现症状，但没有从根上解决协议层面的问题。
-4. **对话框消息匹配仅覆盖 en / zh-CN**：`suppressDialogsInFrame` 靠字符串
+3. **对话框消息匹配仅覆盖 en / zh-CN**：`suppressDialogsInFrame` 靠字符串
    匹配，其他 7 种支持语言（i18n.ts 里的语言列表）没有验证，用到时会看到
    未抑制的错误弹窗，需要补对应译文到匹配列表。
-5. **文字输入未在自动化测试中验证**：确认是 chrome-devtools MCP 的已知
+4. **文字输入未在自动化测试中验证**：确认是 chrome-devtools MCP 的已知
    局限（真实存在且已 focus 的 iframe 内 `<textarea>` 收不到 dispatch 的
-   按键），不是产品代码问题，需要人工在真实浏览器里点几下确认。
+   按键），不是产品代码问题，需要人工在真实浏览器里点几下确认。同理，
+   Save 修复目前也只在 `downloadAs()`/toolbar 按钮点击层面验证过，"编辑内
+   容后保存、内容确实落盘"这个端到端闭环仍需人工在真实浏览器里点几下确认。
+5. **x2t 转换/写盘之后的收尾链路未验证**：`handleSaveDocument` 拿到字节
+   之后走的 `saveWithFileSystemAPI`（`packages/converter/src/
+document-converter.ts`）依赖 `showSaveFilePicker()`，这是原生 OS 对话框，
+   chrome-devtools/CDP 自动化无法交互，测试到"字节已生成"这一步即止。这段
+   代码 v7/v9 完全共用、这次改动完全没碰，判断不是 v9 特有问题，不在本次
+   范围内继续深挖。
 
 ## 验证方式
 
 - `pnpm run lint:ts && pnpm run format:check && pnpm run test:coverage` 全绿，
-  267 个单测（含本轮新增的 5 个：`editorSendCommand` 优先级、v7 默认配置不
-  泄漏 v9 字段、`handleSaveDocument` 双 event 形状）
-- `pnpm run dev:v9` + `pnpm run build:v9` + `pnpm run preview:v9` 均通过
-  chrome-devtools MCP 实测（新建 Word/Excel/PPT、打开已有 docx、
-  CoAuthoringDisconnect 场景、Save/DownloadAs 直接 API 调用）
+  267 个单测（含前一轮新增的 5 个：`editorSendCommand` 优先级、v7 默认配置
+  不泄漏 v9 字段、`handleSaveDocument` 双 event 形状）
+- `pnpm run dev:v9` chrome-devtools MCP 实测（本轮）：Word/Excel/PPT 三种
+  新建文档，均通过 `window.editor.downloadAs(ext)`（真实调用链，不是直接
+  调 `Ncj`/`DOj`/`mTi`）触发 `handleSaveDocument`，拿到非零长度的真实序列化
+  字节（Word 34451 字节、Excel 3658 字节、PPT 28303 字节）；Word 额外通过
+  真实点击 toolbar"保存"按钮复测过一遍，行为一致
+- 上一轮（新建 Word/Excel/PPT、打开已有 docx、CoAuthoringDisconnect 场景、
+  生产构建 `build:v9`+`preview:v9`）验证结论仍然有效，本轮未重跑
