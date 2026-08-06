@@ -95,7 +95,9 @@ v7 迭代、刚做完 #113 修复）的 `lib/onlyoffice-editor.ts` 里，用一�
 - **`.gitignore` 里 `dist` 不是前缀匹配**：`dist-v9/` 构建产物一开始没被忽略，
   gitignore 的裸 `dist` 只精确匹配这个名字，补了一条 `dist-v9`。
 
-## 已验证（chrome-devtools MCP 实测）
+## 已验证（chrome-devtools MCP 实测，两轮）
+
+**第一轮**（新建文档 + 生产构建）：
 
 - `pnpm run dev:v9`：新建 Word、Excel 都能打开，工具栏完整（对照
   Desktop Mock 时代"工具栏永远空白"的失败模式，这是最关键的回归验证）、
@@ -103,25 +105,87 @@ v7 迭代、刚做完 #113 修复）的 `lib/onlyoffice-editor.ts` 里，用一�
 - `pnpm run build:v9` → `pnpm run preview:v9`：生产构建同样验证通过，
   确认客户端 Engine.IO 握手拦截在真·静态环境下也生效（不只是 dev 模式）
 
-## 已知遗留问题（不阻塞，但要知道）
+**第二轮**（"把功能都验证一遍"，逐项补全上一轮标记为"未验证"的项）：
 
-1. **`systemThemeSupported` 抛 `TypeError: Cannot read properties of undefined
+- **New PowerPoint**：第一次测试直接卡死在"正在载入演示文稿"，控制台里是
+  `sdk-all-min.js` 内部一个未捕获的 Promise rejection（`K8b`/`Fzj` 网关
+  patch 触发路径）。根因是 `lib/empty_bin-v9.ts` 的 pptx 模板缺 SDK 加载器
+  依赖的部分（`preprocessPptx` 打了补丁但没补全），改成 fetch
+  `sdkjs/slide/themes/src/01_blank.pptx`（一份真实完整的空白演示文稿，跟
+  `feat/update` 原实现一致）后解决——**这是真 bug，已修**（见下方修复列表）。
+- **打开已上传的真实 docx**：通过 chrome-devtools 的 `upload_file` 传了一个
+  4KB 的真实 docx，`asc_openDocumentFromBytes` 直接吃原始字节（没有走 x2t），
+  工具栏完整、`文档加载完成`——确认"打开已有文件"这条路径（不只是"新建空白
+  文档"）也是通的。
+- **CoAuthoringDisconnect 导致 Save/Print 被隐藏**：测 PowerPoint 点"文件"
+  菜单时第一次弹出了一个此前没见过的 zh-CN 对话框（"连接失败。您仍然可以
+  查看文档...但无法下载或打印"），同时工具栏上保存/打印相关按钮全部变灰。
+  读 `app.js` 源码确认根因：假的 Engine.IO 握手没有实现真正的 ping/pong
+  保活，SDK 过一段时间就判定协同连接断开，触发
+  `asc_onCoAuthoringDisconnect`/`Common.NotificationCenter` 的
+  `"api:disconnect"` 事件，两条路径都会隐藏下载/打印按钮——**这是真 bug，
+  已修**（见下方）。
+- **Save / "下载为" 实际不产生文件——确认是真问题，不是测试假象**：
+  绕过所有 UI 点击（工具栏按钮点击、`window.editor.downloadAs()` 直接调用、
+  甚至直接调 iframe 内部的 `mainCtrl.onDownloadAs()`），全部会静默"成功"但
+  不触发我们的 `handleSaveDocument`。用 monkey-patch 确认 `AscDesktopEditor.
+LocalFileSave` 真的被调用了——顺着 `asc_DownloadAs`→`asc_Save`(`.oja`)→
+  `window.DesktopOfflineAppDocumentStartSave`→`AscDesktopEditor.LocalFileSave`
+  这条链路读源码，发现 v9 的 `asc_Save` 内部**无条件**走这条"桌面本地保存"
+  路径（不像打开文档的 `Shc/BRj` 那样有一个"网页路径"可以强制切过去）——这条
+  路径是为真实桌面 App 设计的：native 层写文件，浏览器端的 `LocalFileSave`
+  参数里根本不包含文档字节，只有"另存为/文件名"这类选项。也就是说，v9 Web
+  Mode 目前**没有等价于"打开文档"的、能把保存后的字节交还给页面的路径**。
+  文字输入本身也验证不了（`type_text`/`press_key` 无法让内容落进 iframe 里
+  那个真实存在、且确认已 focus 的隐藏 `<textarea id="area_id">`，这部分是
+  chrome-devtools 自动化的已知局限，跟这次改动无关），但 Save 这个问题已经
+  绕过了所有 UI 层面的不确定性，是可以在真人操作下同样复现的架构性缺口。
+
+## 本轮修复（2026-08-06）
+
+1. `lib/onlyoffice-editor.ts`：pptx 新建文档改成 fetch 真实的
+   `01_blank.pptx` 模板（`.docx`/`.xlsx` 仍用 `empty_bin-v9.ts` 的 base64）。
+2. `lib/onlyoffice-editor.ts`：新增 `suppressCoAuthoringDisconnect()`，
+   patch `Common.NotificationCenter.trigger` 吞掉 `'api:disconnect'`；
+   把 `mainCtrl.appOptions.canDownload`/`canPrint` 用
+   `Object.defineProperty` 钉死为 `true`，防止 `setMode({isDisconnected:
+true})` 之后又被悄悄改回 `false`（`onDownloadAs` 在 `canDownload` 为
+   false 时会静默走 `Gateway.reportError`，没有任何控制台输出，非常容易被
+   误判成"点击没生效"）。
+3. `suppressDialogsInFrame` 的匹配列表补了第二条 zh-CN 字符串
+   （"连接失败"），跟第一条（"使用文档时出错"）是同一个
+   `CoAuthoringDisconnect` 事件的两种不同措辞。
+
+## 已知遗留问题
+
+**阻塞（需要先解决才能说"v9 可用"）：**
+
+1. **保存/下载不产生文件**——见上文"第二轮"最后一条。这不是"待验证"，是
+   已确认的架构缺口：v9 Web Mode 的 `asc_Save`/`asc_DownloadAs` 硬编码走
+   桌面本地保存路径，没有类似 `asc_openDocumentFromBytes` 的"网页路径"变体
+   可以强制切换。需要继续深挖 sdk-all(-min).js，找类似 `Shc`/`Mrc`/`K8b`
+   那样的另一半"Web 路径"函数（如果存在的话），或者找到另一条能拿到保存后
+   字节的 API（比如某个直接返回 blob/ArrayBuffer 而不经过
+   `AscDesktopEditor` 的导出方法）。在这个解决之前，v9 变体只能算"能看"，
+   不能算"能编辑保存"。
+
+**不阻塞，但要知道：**
+
+2. **`systemThemeSupported` 抛 `TypeError: Cannot read properties of undefined
 (reading 'theme')`**：文档加载完成后必现，日志里是 catch 住的
-   `changesError`，不影响工具栏/编辑/文档加载，但值得后续查一下根因
-   （大概率是我们的 `AscDesktopEditor` polyfill 缺了某个主题相关字段）。
-2. **PPTX 这次没有重新手动验证**：`K8b/Fzj` 那条 patch 路径结构上和
-   Word/Excel 一致，但没有实测确认。
-3. **自动化测试里点 Save 按钮没有观察到 `handleSaveDocument` 触发**：
-   不确定是真的功能缺口还是 chrome-devtools 自动化点击/焦点路由到 canvas
-   编辑器内部时的已知局限（前面测试打字输入也遇到类似问题）。单元测试层面
-   `handleSaveDocument` 的双 event 形状分支逻辑已经覆盖，但完整的
-   保存→下载链路建议找人工实测一次。
-4. **WebSocket 升级尝试**：握手响应里 `upgrades: []` 应该阻止 SDK 尝试升级
-   到 WebSocket，但控制台还是看到一次 `ws://` 连接失败（错误被吞掉，不影响
-   功能）。协议层面没有完全按预期工作，暂不影响使用。
-5. **对话框消息匹配仅覆盖 en / zh-CN**：`suppressDialogsInFrame` 靠字符串
+   `changesError`。根因已定位：`Common.Controllers.Desktop.isActive()`
+   因为 `window.AscDesktopEditor` 存在而返回 true，走进只有真实桌面壳才会
+   填充的 `r.theme` 读取逻辑。不影响工具栏/编辑/文档加载，暂不处理。
+3. **WebSocket 升级尝试**：握手响应里 `upgrades: []` 应该阻止 SDK 尝试升级
+   到 WebSocket，但控制台还是看到一次 `ws://` 连接失败（错误被吞掉）。这很
+   可能正是 CoAuthoringDisconnect 最终触发的诱因（没有真正的 ping/pong 保活）
+   ——已经用"抑制副作用"绕过了表现症状，但没有从根上解决协议层面的问题。
+4. **对话框消息匹配仅覆盖 en / zh-CN**：`suppressDialogsInFrame` 靠字符串
    匹配，其他 7 种支持语言（i18n.ts 里的语言列表）没有验证，用到时会看到
    未抑制的错误弹窗，需要补对应译文到匹配列表。
+5. **文字输入未在自动化测试中验证**：确认是 chrome-devtools MCP 的已知
+   局限（真实存在且已 focus 的 iframe 内 `<textarea>` 收不到 dispatch 的
+   按键），不是产品代码问题，需要人工在真实浏览器里点几下确认。
 
 ## 验证方式
 
@@ -129,4 +193,5 @@ v7 迭代、刚做完 #113 修复）的 `lib/onlyoffice-editor.ts` 里，用一�
   267 个单测（含本轮新增的 5 个：`editorSendCommand` 优先级、v7 默认配置不
   泄漏 v9 字段、`handleSaveDocument` 双 event 形状）
 - `pnpm run dev:v9` + `pnpm run build:v9` + `pnpm run preview:v9` 均通过
-  chrome-devtools MCP 实测（见上）
+  chrome-devtools MCP 实测（新建 Word/Excel/PPT、打开已有 docx、
+  CoAuthoringDisconnect 场景、Save/DownloadAs 直接 API 调用）
