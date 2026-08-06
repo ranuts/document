@@ -47,6 +47,10 @@ function suppressDialogsInFrame(frameWindow: any): void {
     'Connection is lost',
     'error occurred during the work',
     '使用文档时出错', // zh-CN: "An error occurred while working with the document"
+    '连接失败', // zh-CN: "Connection failed. You can still view the document..." (a second,
+    // distinct dialog from the one above -- same underlying CoAuthoringDisconnect
+    // event, different message. See suppressCoAuthoringDisconnect for why the
+    // dialog is only half the problem.)
   ];
   const shouldSuppress = (opts: any): boolean => {
     const msg: string = opts?.msg ?? '';
@@ -98,6 +102,39 @@ function suppressDialogsInFrame(frameWindow: any): void {
     ui.alert = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origAlert(opts));
 
     console.log('[OO] dialog suppression active in iframe (warning + alert)');
+  };
+  poll();
+}
+
+/**
+ * v9 Web Mode's fake Engine.IO handshake doesn't implement real ping/pong
+ * keep-alive, so the SDK eventually decides the collaboration connection has
+ * dropped and fires asc_onCoAuthoringDisconnect / the "api:disconnect"
+ * notification. Every editor's Main controller listens for both and responds
+ * by *hiding* the Download/Print/Edit header buttons (see
+ * onApiCoAuthoringDisconnect in app.js) -- suppressing the dialog alone still
+ * leaves Save/Print/Download disabled. Common.NotificationCenter is a
+ * Backbone Events bus; swallowing this one event name here (from onAppReady,
+ * before any real disconnect can have been detected yet) stops that specific
+ * side effect without touching the dialog suppression above.
+ */
+function suppressCoAuthoringDisconnect(frameWindow: any): void {
+  let attempts = 0;
+  const poll = () => {
+    const center = frameWindow.Common?.NotificationCenter;
+    if (!center || typeof center.trigger !== 'function') {
+      if (attempts++ < 50) setTimeout(poll, 200);
+      return;
+    }
+    if (center.__disconnectSuppressed) return;
+    center.__disconnectSuppressed = true;
+
+    const origTrigger = center.trigger.bind(center);
+    center.trigger = (name: string, ...args: unknown[]) => {
+      if (name === 'api:disconnect') return center;
+      return origTrigger(name, ...args);
+    };
+    console.log('[OO] api:disconnect notification suppressed in iframe');
   };
   poll();
 }
@@ -469,7 +506,10 @@ async function runWebModeOnAppReady(params: {
 
   // Reliable path for "Connection is lost" / EditingError dialogs -- more
   // reliable than trying to inject this from outside the iframe beforehand.
-  if (iwin) suppressDialogsInFrame(iwin);
+  if (iwin) {
+    suppressDialogsInFrame(iwin);
+    suppressCoAuthoringDisconnect(iwin);
+  }
 
   if (typeof api?.asc_openDocumentFromBytes !== 'function') {
     // SDK didn't expose the Web Mode entry point -- fall back to the v7 path.
@@ -540,6 +580,35 @@ async function runWebModeOnAppReady(params: {
     }
   }
   console.log('[OO] permissions ready: isEdit=', mainCtrl.appOptions?.isEdit, 'inited=', mainCtrl._isPermissionsInited);
+
+  // onDownloadAs (fired by our own downloadAs()/Save button) checks
+  // appOptions.canDownload and silently no-ops via Gateway.reportError if
+  // false -- no dialog, no console output, easy to mistake for the click
+  // simply not registering. It starts true (derived from our own
+  // permissions.download config) but setMode() flips it back to false the
+  // moment anything treats the connection as lost (isDisconnected), same
+  // root cause as suppressCoAuthoringDisconnect above. Pin it true with a
+  // property so a later setMode() call can't quietly re-disable it.
+  if (mainCtrl.appOptions) {
+    let canDownload = true;
+    let canPrint = true;
+    Object.defineProperty(mainCtrl.appOptions, 'canDownload', {
+      get: () => canDownload,
+      set: (v) => {
+        canDownload = true;
+        if (!v) console.log('[OO] blocked an attempt to disable canDownload');
+      },
+      configurable: true,
+    });
+    Object.defineProperty(mainCtrl.appOptions, 'canPrint', {
+      get: () => canPrint,
+      set: (v) => {
+        canPrint = true;
+        if (!v) console.log('[OO] blocked an attempt to disable canPrint');
+      },
+      configurable: true,
+    });
+  }
 
   // STEP 4: resolve the bytes to inject. A string binData means the "new
   // document" empty-template path (lib/converter.ts's handleDocumentOperation
