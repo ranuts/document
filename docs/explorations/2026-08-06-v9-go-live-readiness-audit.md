@@ -1,4 +1,4 @@
-# v9 上线就绪审计——两个阻塞项，都已修复并验证
+# v9 上线就绪审计——三个问题，都已修复并验证
 
 ## 背景
 
@@ -13,10 +13,12 @@
 **首次审计结论（本次修复前）：不能直接上线，两个真·阻塞项，都在"资产层"
 （Service Worker 缓存策略、PDF/非原生格式导出），不在编辑器核心。用户随后要求
 "先修这两个阻塞项，SEO 后面再说"——本文档下半部分记录了修复过程和验证结果。**
-**当前结论：两个阻塞项均已修复并实测验证通过；过程中额外发现一个新的、范围更小
-的问题（embed 模式下通过 `document:open-buffer` 加载的文档，内部引擎状态迟迟
-不 ready，触发离线保存触发器会抛错），已定位根因，判断为不阻塞（见下方"修复后
-新发现"），留给下一轮处理。**
+**第二轮结论：两个阻塞项均已修复并实测验证通过；过程中额外发现一个新的、范围
+更小的问题（`document:open-buffer` 加载的文档触发保存时可能抛
+`P_g` 空指针异常或静默挂起），当时判断为不阻塞、留给下一轮。**
+**当前结论：这个问题也已定位真正根因（保存路径的通用异步初始化时序竞争，与
+embed/内容都无关）并修复验证通过，三个问题目前全部清零（见下方"修复后新发现，
+第二轮也已修复"）。**
 
 ## 阻塞项 1（已修复）：Service Worker 是从 `feat/update` 原样抄来的旧版本，会把 App Shell 挤出缓存
 
@@ -172,7 +174,7 @@ x2t 那边转换本身没问题（v7 的 PDF 导出用的是同一段
   `#0052cc` 判断是照抄 `feat/update` 时漏改，没有找到任何"v9 品牌色应该不同"的
   依据）。
 
-## 修复后新发现（不阻塞，留给下一轮）
+## 修复后新发现，第二轮也已修复：`document:open-buffer` 保存时 `P_g` 空指针
 
 - **一个测试方法论的坑，记录下来避免下次踩**：想验证"打开一个真实多 sheet
   文件后再多 sheet 是否正常"时，第一反应是对着已经渲染完成的编辑器实例再调一次
@@ -181,29 +183,62 @@ x2t 那边转换本身没问题（v7 的 PDF 导出用的是同一段
   `asc_openDocumentFromBytes` 本身只设计给"编辑器刚创建、第一次加载"这个
   场景用，不支持对运行中的编辑器"热替换文档"。后续测"已打开文档"相关的行为，
   必须走真实的文件上传或全新页面加载，不能用这个捷径。
-- **`document:save` 在文档尚未完全加载完成时调用会卡住整整 60 秒**：不是
-  bug（`requestSaveDocument` 的锁+超时机制本身设计上就是这样，v7 也共享同一段
-  逻辑），但值得记录：如果宿主页面在收到 `document:opened` 后立刻发
-  `document:save`，而编辑器内部还没真正 ready，这次 save 请求会静默挂起直到
-  60 秒超时才释放锁，期间任何后续 save 请求都会立刻收到"A save request is
-  already in progress"错误。embed API 使用文档里可以补一句：`document:opened`
-  只代表"打开命令已发出"，不代表编辑器已经完全可交互，建议加个 1-2 秒缓冲或
-  轮询 `document:get-state` 再发 save。
-- **新发现、范围更小的 bug**：验证 PDF 修复时，测 `document:open-buffer`
-  （embed API 打开文档的路径）加载的文档在调用离线保存触发器（`Ncj`/`DOj`/
-  `mTi`）时稳定抛 `TypeError: Cannot read properties of null (reading 'P_g')`——
-  同一份文档用真实文件上传或 `New Excel` 打开则完全正常。反复验证过：不是等待
-  时间不够（等满 60 秒以上依然抛同样的错，排除是"内部状态还没 ready，多等等就
-  好"），是 `document:open-buffer` 这条打开路径本身，其内部引擎状态
-  （`P_g`，具体含义未知，推测是某个 WASM 侧的内部句柄/指针）永远不会被正确
-  初始化。**这个问题不区分保存格式**——native 格式保存（`downloadAs('XLSX')`）
-  和 PDF 一样会中招，所以确认与本轮的 PDF 修复无关，是一个独立的、更早就存在
-  的问题（`document:open-buffer` 这条路径大概率在这次会话验证之前就没有真正
-  被"保存"场景测试过）。目前判断：真实用户主要通过点击"New Word/Excel/
-  PowerPoint"或"打开文件"使用这个产品，这两条路径都不受影响；`document:open-
-buffer` 主要给第三方 iframe 嵌入场景（embed API）用，属于更边缘的路径，先不
-  当作本轮阻塞项，留给下一轮专门排查（怀疑跟 embed 模式不渲染可见 UI 有关，
-  某个依赖"真实绘制过一帧"的初始化钩子没有机会触发，但未证实）。
+
+**结论**：最初以为是 `document:open-buffer` 这条打开路径特有、与内容
+（SheetJS 生成的 xlsx）相关的 bug，排查了八轮假设都被推翻（详见下方"排查过程"），
+最终真相是一个**通用的时序竞争**，任何调用方式都可能触发，只是 embed API
+场景下最容易踩中：`asc_openDocumentFromBytes` 调用后立即返回，但引擎内部初始化
+（字体异步加载、`za` 等内部状态类的构造）还要再等约 5–6 秒才真正完成；这期间
+如果触发保存（无论是原生格式还是 PDF），会在 SDK 内部深处抛
+`TypeError: Cannot read properties of null (reading 'P_g')`，或者更隐蔽地——
+`editor.downloadAs()` 的 postMessage 握手本身也没准备好，保存请求直接静默挂起、
+最终吃满 60 秒超时，且完全不留错误日志。之前"New Word/Excel/PowerPoint"和真实
+文件上传路径之所以没有暴露这个问题，只是因为人工点击操作天然有几秒钟的反应
+延迟，凑巧总是晚于这个 5–6 秒窗口，不是这两条路径有什么特殊之处。
+
+**修复**：在 `lib/onlyoffice-editor.ts` 里监听 SDK 官方公开的
+`asc_onDocumentContentReady` 事件（`runWebModeOnAppReady` 里本来就已经注册了这个
+回调，用来做别的 UI 收尾工作，这次只是多接了一个"标记就绪"的信号），并用它同时
+网住两条保存入口：
+
+1. **离线保存触发器**（`Ncj`/`DOj`/`mTi`，工具栏 Save 按钮、`asc_Save`、
+   `asc_DownloadAs` 最终都会落到这里）——未就绪时不再直接调用，而是把调用推进
+   一个等就绪后再执行的队列，就绪信号一到就按顺序补跑。
+2. **`requestSaveDocument()`**（embed API `document:save` 的唯一入口，也是本次
+   问题的实际触发点）——`embeddedSaveRequest`
+   锁和两级超时仍然同步立即生效（保证"重复 save 请求"的报错时机不变），但真正
+   调用 `editor.downloadAs()` 那一步会等就绪后再执行；已就绪（正常情况，包括
+   v7 全程和 v9 就绪之后的 v9）时仍然完全同步调用，不引入任何延迟。
+
+有个中间版本踩了一个坑记录一下：一开始把等待逻辑写成 `async`/`await`——哪怕
+`await` 的是一个已经 resolve 的 Promise，也会让后续代码推迟到下一个微任务再跑。
+SDK 自己的 `downloadAs` postMessage 握手期望离线保存触发器在被调用的**同一个
+事件循环 tick 内同步执行完**，这个几乎无感的延迟就足以让握手对不上、保存请求
+彻底没有任何响应（不报错，也不成功）。改回"已就绪就直接同步调用，未就绪才用
+普通回调队列（不是 Promise 链）延后"之后问题才真正消失。加了 15 秒兜底：万一
+`asc_onDocumentContentReady` 因为某些未知原因没有触发，也会强制放行排队的保存
+请求，避免无限挂起。
+
+**验证**：chrome-devtools MCP 实测两种场景——(1) `document:open-buffer` 打开后
+立刻（约 170ms 后）发 `document:save`，不再抛 `P_g` 异常，保存被延后到约
+6 秒后自动补跑，`document:saved` 正常带回真实文件（约 6.2 KB）；(2) 打开后等待
+8 秒（超过就绪窗口）再发 `document:save`，229ms 内同步完成，与修复前行为一致，
+证明快速路径没有引入延迟回归。`pnpm run lint:ts`、`pnpm run test:coverage`
+（288 个单测）、`pnpm run format:check` 全绿。
+
+**排查过程（八轮被推翻的假设，记录下来避免下次重复踩坑）**：最初怀疑是
+"embed 模式不渲染可见 UI，某个依赖真实绘制过一帧的初始化钩子没机会触发"，
+或者是 SheetJS 生成的 xlsx 比预置模板多出 `xl/metadata.xml`（XLDAPR 动态数组
+扩展）导致导入器少初始化了什么，逐一用 chrome-devtools MCP 实测排除：iframe
+尺寸正常、非隐藏；同样的预置模板内容走 `document:open-buffer` 完全正常；
+手工剥离 `xl/metadata.xml` 后问题依旧存在；base64 编解码往返字节级校验无损坏；
+x2t 初始化状态对 v9 的打开路径完全不起作用（`handleDocumentOperation` 对 v9
+非新建文档直接跳过 x2t）；`createEditorInstance` 只被调用一次，无并发竞争。
+真正的突破口是给 `api.za`（保存路径依赖的一个内部状态对象）加了一个属性
+setter 陷阱去抓调用栈：它是被一个字体加载队列（`Ncd`/`pUg`，每 50ms 轮询一次
+"字体是否加载完成"）处理完毕后才异步赋值的，且这个赋值时间点与官方公开事件
+`asc_onDocumentContentReady` 几乎同时触发（实测相差仅 64ms）——这才定位到"是
+异步初始化的时序问题，不是 embed/内容特有的问题"这一真正根因。
 
 ## 验证方式
 
@@ -227,13 +262,10 @@ buffer` 主要给第三方 iframe 嵌入场景（embed API）用，属于更边�
 
 ## 上线前仍需做的事
 
-1. 排查 `document:open-buffer` 路径下 `P_g` 为何永远初始化不了（见上"修复后
-   新发现"）——不阻塞主路径（New Word/Excel/PPT、文件上传），但会影响 embed
-   场景下的保存功能
-2. `MAX_RUNTIME_ITEMS = 2000` 是估算值，没有真实会话数据支撑，上线后应该用
+1. `MAX_RUNTIME_ITEMS = 2000` 是估算值，没有真实会话数据支撑，上线后应该用
    Cloudflare Pages 的真实访问模式回头校准（太小会重演阻塞项 1 的问题，太大有
    浏览器存储配额压力）
-3. `public-v9/_headers` 里 `Cache-Control` 头是否真的按预期在 Cloudflare Pages
+2. `public-v9/_headers` 里 `Cache-Control` 头是否真的按预期在 Cloudflare Pages
    生效，需要一次真实部署后核实（本地 preview server 不解析这个文件）
 
 以上都不涉及编辑器核心链路，且都不是本轮已修复问题的回归风险，可以在 v9 正式

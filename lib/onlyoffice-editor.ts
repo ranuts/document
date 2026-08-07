@@ -208,6 +208,55 @@ type EmbeddedSaveRequest = {
 
 let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 
+// v9 Web Mode only: asc_openDocumentFromBytes returns before the engine has
+// finished internal setup (fonts load asynchronously; a class the save path
+// depends on -- the cell engine's `za` metadata handler, at minimum -- is
+// only constructed once that finishes, ~5-6s after open in testing). Calling
+// editor.downloadAs() (requestSaveDocument's own save path) that early either
+// crashes deep inside the SDK ("Cannot read properties of null (reading
+// 'P_g')") or, worse, silently produces no response at all if the DocEditor
+// wrapper's own postMessage handshake with the iframe isn't ready yet either
+// -- reliably reproduced by calling document:save immediately after
+// document:opened via the embed API, since a scripted parent has no natural
+// "give the user a few seconds to look at it" delay the way a human clicking
+// Save does. asc_onDocumentContentReady fires right around when the engine
+// actually becomes ready (confirmed via live timing: e.g. za set at
+// +6033ms, asc_onDocumentContentReady at +6097ms), so gate on it instead of
+// assuming readiness. v7 never sets this true (no Web Mode init path calls
+// markDocumentContentReady), so it must default true there or every v7 save
+// would eat a pointless 15s timeout.
+let documentContentReady = OO_VARIANT !== 'v9';
+let contentReadyWaiters: Array<() => void> = [];
+
+function markDocumentContentReady(): void {
+  if (documentContentReady) return;
+  documentContentReady = true;
+  const waiters = contentReadyWaiters;
+  contentReadyWaiters = [];
+  waiters.forEach((waiter) => waiter());
+}
+
+// Called once per document open (v9 only) to drop any stale ready-state from
+// a previously open document before the new one's own readiness is known.
+function resetDocumentContentReady(): void {
+  documentContentReady = false;
+  contentReadyWaiters = [];
+}
+
+// Resolves immediately if already ready; otherwise waits for
+// markDocumentContentReady() (or a safety-net timeout -- see
+// runWebModeOnAppReady) so callers never hang forever.
+function waitForDocumentContentReady(timeoutMs = 15000): Promise<void> {
+  if (documentContentReady) return Promise.resolve();
+  return new Promise((resolve) => {
+    const timer = setTimeout(resolve, timeoutMs);
+    contentReadyWaiters.push(() => {
+      clearTimeout(timer);
+      resolve();
+    });
+  });
+}
+
 export function getSavedFileMimeType(fileName: string): string {
   const extension = fileName.split('.').pop()?.toLowerCase() || '';
   const mimeMap: Record<string, string> = {
@@ -759,6 +808,20 @@ async function runWebModeOnAppReady(params: {
   //   Word SDK:  Shc(d) -> BRj(d)
   //   Cell SDK:  Mrc(d) -> rxk(d)
   //   Slide SDK: K8b(d) -> Fzj(d)
+  //
+  // See markDocumentContentReady/waitForDocumentContentReady near the top of
+  // this file for why the save path needs to wait for this signal rather
+  // than assuming readiness right after asc_openDocumentFromBytes returns.
+  resetDocumentContentReady();
+  // Safety net in case asc_onDocumentContentReady never fires for some reason
+  // -- force any deferred/waiting save(s) through rather than hanging forever.
+  setTimeout(() => {
+    if (!documentContentReady) {
+      console.warn('[OO] asc_onDocumentContentReady did not fire within 15s -- forcing deferred save(s) anyway');
+      markDocumentContentReady();
+    }
+  }, 15000);
+
   const patchWebPath = (shcName: string, brjName: string, historyFlag: string, contentReadyCb: string) => {
     const a = api as any;
     if (typeof a[shcName] !== 'function' || typeof a[brjName] !== 'function') return;
@@ -766,6 +829,7 @@ async function runWebModeOnAppReady(params: {
       if (d) {
         try {
           a[contentReadyCb]?.('asc_onDocumentContentReady', function () {
+            markDocumentContentReady();
             const w = iwin;
             if (w?.Z$) w.Z$(w.Asc?.editor || w.editor);
             if (w?.X$) w.X$(w.Asc?.editor || w.editor);
@@ -815,7 +879,13 @@ async function runWebModeOnAppReady(params: {
       ? 'DOj'
       : 'Ncj';
   if (typeof a[triggerName] === 'function') {
-    const triggerSave = () => a[triggerName]?.call(a, true);
+    const triggerSave = () => {
+      if (documentContentReady) {
+        return a[triggerName]?.call(a, true);
+      }
+      console.log('[OO] save requested before document content ready -- deferring');
+      contentReadyWaiters.push(() => a[triggerName]?.call(a, true));
+    };
     for (const rawName of ['oja', 'xxa', 'iZd']) {
       if (typeof a[rawName] === 'function') a[rawName] = triggerSave;
     }
@@ -1073,7 +1143,21 @@ export function requestSaveDocument(
       return;
     }
 
-    editor.downloadAs(normalizedTargetExt);
+    // embeddedSaveRequest above is armed synchronously (so a concurrent call
+    // still sees "already in progress" immediately). The ready case below
+    // calls downloadAs() synchronously, same as before this gate existed
+    // (tests assert this happens synchronously, and it's simply the normal
+    // case for v7 and for v9 saves that aren't racing the initial open);
+    // only the not-yet-ready case (v9 only) defers until
+    // waitForDocumentContentReady resolves. See markDocumentContentReady.
+    const downloadAs = editor.downloadAs.bind(editor);
+    if (documentContentReady) {
+      downloadAs(normalizedTargetExt);
+    } else {
+      void waitForDocumentContentReady().then(() => {
+        downloadAs(normalizedTargetExt);
+      });
+    }
   });
 }
 
