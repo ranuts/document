@@ -144,4 +144,67 @@ describe('X2TConverter', () => {
       expect(runWithExitCode(0)).not.toThrow();
     });
   });
+
+  describe('writeMediaFiles (private) — GitHub #72 "pasted image saves blank"', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    const makeConverter = () => {
+      const converter = new X2TConverter();
+      const writeFile = vi.fn();
+      (converter as any).x2tModule = { FS: { writeFile } };
+      return { converter, writeFile };
+    };
+
+    it('does nothing when no media map is given', async () => {
+      const { converter, writeFile } = makeConverter();
+      await (converter as any).writeMediaFiles(undefined);
+      expect(writeFile).not.toHaveBeenCalled();
+    });
+
+    it('fetches each URL and writes its bytes into /working/media/', async () => {
+      const bytes = new Uint8Array([1, 2, 3]);
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, arrayBuffer: async () => bytes.buffer }));
+      const { converter, writeFile } = makeConverter();
+
+      await (converter as any).writeMediaFiles({ 'media/pasted.png': 'blob:http://localhost/abc' });
+
+      expect(fetch).toHaveBeenCalledWith('blob:http://localhost/abc');
+      expect(writeFile).toHaveBeenCalledWith('/working/media/pasted.png', new Uint8Array([1, 2, 3]));
+    });
+
+    it('adds the "media/" prefix when the key does not already have one', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({ ok: true, arrayBuffer: async () => new Uint8Array([9]).buffer }),
+      );
+      const { converter, writeFile } = makeConverter();
+
+      await (converter as any).writeMediaFiles({ 'pasted.png': 'blob:http://localhost/abc' });
+
+      expect(writeFile).toHaveBeenCalledWith('/working/media/pasted.png', new Uint8Array([9]));
+    });
+
+    it('skips an entry whose fetch fails without throwing or blocking the others', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockImplementation(async (url: string) => {
+          if (url.includes('bad')) return { ok: false };
+          return { ok: true, arrayBuffer: async () => new Uint8Array([7]).buffer };
+        }),
+      );
+      const { converter, writeFile } = makeConverter();
+
+      await expect(
+        (converter as any).writeMediaFiles({
+          'media/bad.png': 'blob:http://localhost/bad',
+          'media/good.png': 'blob:http://localhost/good',
+        }),
+      ).resolves.not.toThrow();
+
+      expect(writeFile).toHaveBeenCalledTimes(1);
+      expect(writeFile).toHaveBeenCalledWith('/working/media/good.png', new Uint8Array([7]));
+    });
+  });
 });

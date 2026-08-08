@@ -32,12 +32,14 @@ export const convertBinToDocument = (
   bin: Uint8Array,
   fileName: string,
   targetExt?: string,
-): Promise<BinConversionResult> => x2tConverter.convertBinToDocument(bin, fileName, targetExt);
+  media?: Record<string, string>,
+): Promise<BinConversionResult> => x2tConverter.convertBinToDocument(bin, fileName, targetExt, media);
 export const convertBinToDocumentAndDownload = (
   bin: Uint8Array,
   fileName: string,
   targetExt?: string,
-): Promise<BinConversionResult> => x2tConverter.convertBinToDocumentAndDownload(bin, fileName, targetExt);
+  media?: Record<string, string>,
+): Promise<BinConversionResult> => x2tConverter.convertBinToDocumentAndDownload(bin, fileName, targetExt, media);
 
 // Export editor functions
 export { createEditorInstance, loadEditorApi };

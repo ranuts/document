@@ -275,7 +275,7 @@ describe('onlyoffice-editor', () => {
         const savedBytes = new Uint8Array([1, 2, 3]);
         await onSave({ data: { data: { data: savedBytes }, option: { outputformat: 65 } } });
 
-        expect(convertAndDownload).toHaveBeenCalledWith(savedBytes, 'test.xlsx', 'XLSX');
+        expect(convertAndDownload).toHaveBeenCalledWith(savedBytes, 'test.xlsx', 'XLSX', {});
       });
 
       it('handles the v9 raw-ArrayBuffer event shape', async () => {

@@ -284,6 +284,41 @@ export class X2TConverter {
   }
 
   /**
+   * Write media files into x2t's virtual FS before a bin -> document conversion.
+   *
+   * The bin format (the editor's serialized internal state) references inserted
+   * images by relative path (e.g. "media/image1.png") rather than embedding their
+   * bytes inline. On the open/forward direction, x2t itself populates
+   * /working/media/ as a side effect of unzipping the source docx/xlsx/pptx, and
+   * readMediaFiles() above reads that back out. But an image inserted into an
+   * already-open document (paste, or "Insert > Image > From File" -- both go
+   * through the SDK's writeFile event, see handleWriteFile in
+   * lib/onlyoffice-editor.ts) only ever exists as an in-memory blob: URL on our
+   * side; x2t's WASM sandbox has no access to the browser's Blob URL store, so
+   * without this step the bin -> document conversion has no way to find those
+   * bytes and the image comes out blank in the saved file (GitHub #72). Fetching
+   * each URL and writing it into /working/media/ here gives x2t the same files it
+   * would have found had they been present in the original document.
+   */
+  private async writeMediaFiles(media?: Record<string, string>): Promise<void> {
+    if (!this.x2tModule || !media) return;
+
+    await Promise.all(
+      Object.entries(media).map(async ([key, url]) => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) return;
+          const bytes = new Uint8Array(await response.arrayBuffer());
+          const relativePath = key.startsWith('media/') ? key : `media/${key}`;
+          this.x2tModule!.FS.writeFile(`/working/${relativePath}`, bytes);
+        } catch (error) {
+          console.warn(`Failed to write media file ${key}:`, error);
+        }
+      }),
+    );
+  }
+
+  /**
    * Read media files
    */
   private async readMediaFiles(): Promise<Record<string, string>> {
@@ -578,6 +613,7 @@ export class X2TConverter {
     bin: Uint8Array,
     originalFileName: string,
     targetExt = 'DOCX',
+    media?: Record<string, string>,
   ): Promise<BinConversionResult> {
     await this.initialize();
 
@@ -586,6 +622,8 @@ export class X2TConverter {
     const outputFileName = `${sanitizedBase}.${targetExt.toLowerCase()}`;
 
     try {
+      await this.writeMediaFiles(media);
+
       // Handle CSV files specially - need to convert bin -> XLSX -> CSV
       if (targetExt.toUpperCase() === 'CSV') {
         // First convert bin to XLSX
@@ -666,8 +704,9 @@ export class X2TConverter {
     bin: Uint8Array,
     originalFileName: string,
     targetExt = 'DOCX',
+    media?: Record<string, string>,
   ): Promise<BinConversionResult> {
-    const result = await this.convertBinToDocument(bin, originalFileName, targetExt);
+    const result = await this.convertBinToDocument(bin, originalFileName, targetExt, media);
     const data = result.data instanceof Uint8Array ? result.data : new Uint8Array(result.data as ArrayBuffer);
 
     // TODO: Improve print functionality

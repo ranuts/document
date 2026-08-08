@@ -177,15 +177,16 @@ function suppressDownloadSettingsDialog(frameWindow: any): void {
 }
 
 // Import converter function to avoid circular dependency
-let convertBinToDocumentFn:
-  ((bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>) | null = null;
-let convertBinToDocumentAndDownloadFn:
-  ((bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>) | null = null;
+type ConvertBinFn = (
+  bin: Uint8Array,
+  fileName: string,
+  targetExt?: string,
+  media?: Record<string, string>,
+) => Promise<BinConversionResult>;
+let convertBinToDocumentFn: ConvertBinFn | null = null;
+let convertBinToDocumentAndDownloadFn: ConvertBinFn | null = null;
 
-export function setConverterCallbacks(callbacks: {
-  convert: (bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>;
-  convertAndDownload: (bin: Uint8Array, fileName: string, targetExt?: string) => Promise<BinConversionResult>;
-}): void {
+export function setConverterCallbacks(callbacks: { convert: ConvertBinFn; convertAndDownload: ConvertBinFn }): void {
   convertBinToDocumentFn = callbacks.convert;
   convertBinToDocumentAndDownloadFn = callbacks.convertAndDownload;
 }
@@ -506,7 +507,7 @@ async function handleSaveDocument(event: { data: SaveEvent['data'] | ArrayBuffer
     cleanupEmbeddedSaveRequest(request);
 
     try {
-      const result = await convertBinToDocumentFn(binaryData, fileName, request.targetExt || targetFormat);
+      const result = await convertBinToDocumentFn(binaryData, fileName, request.targetExt || targetFormat, media);
       const bytes = toUint8Array(result.data);
       const file = new File([bytes as BlobPart], result.fileName, { type: getSavedFileMimeType(result.fileName) });
       resolveEmbeddedSaveRequest(request, file);
@@ -517,7 +518,7 @@ async function handleSaveDocument(event: { data: SaveEvent['data'] | ArrayBuffer
   } else if (isEmbedMode()) {
     console.warn('Local save is disabled in iframe embed mode. Use document:save from the parent page.');
   } else if (convertBinToDocumentAndDownloadFn) {
-    await convertBinToDocumentAndDownloadFn(binaryData, fileName, targetFormat);
+    await convertBinToDocumentAndDownloadFn(binaryData, fileName, targetFormat, media);
   } else {
     throw new Error('Converter callback not set');
   }
