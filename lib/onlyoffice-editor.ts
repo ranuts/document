@@ -1113,6 +1113,10 @@ export function createEditorInstance(config: {
             console.log(`${t('documentLoaded')}${fileName}`);
             // Note: For CSV files, the save dialog may show XLSX format,
             // but the actual save will be forced to CSV format in handleSaveDocument
+            // (v9's stuck status-bar "loading" label -- same underlying cause as the
+            // busy-counter leak -- is handled generally by the watchdog in
+            // public-v9/onlyoffice-iframe-patch.js section 4c, not here: it recurs on
+            // more than just initial load, e.g. opening the numbering gallery.)
           },
           onDownloadAs: handleDownloadAs,
           // writeFile

@@ -22,7 +22,9 @@
  *      just the collaboration-lock-gated cases in item 2). A low-frequency
  *      watchdog clamps that counter back to 0 if it ever gets stuck via some
  *      other, still-unidentified leak site -- this SDK is too large to find
- *      and patch every individual one.
+ *      and patch every individual one. The same watchdog also clears the status
+ *      bar's "数据加载中" label when it's stuck with nothing actually pending --
+ *      a different symptom of the same class of problem.
  *   5. Image URL redirect       — /media/…/image.png → parent.__mediaCache blob URL,
  *      both for on-screen <img src> and for the SDK's own exporter, which fetches
  *      each embedded image via a real XHR GET to /media/<file> when building the
@@ -567,6 +569,28 @@
   // as a low-frequency safety net alongside (not instead of) the specific fixes
   // above -- 2s is comfortably longer than any real start/end-action pair in normal
   // use, which complete synchronously within a single call stack.
+  //
+  // Same interval also clears a stuck status bar "数据加载中" ("Loading...") label
+  // (#label-action) -- confirmed live this is a DIFFERENT symptom of the same root
+  // cause, not just the l5d counter. Main.stackLongActions (app.js's own
+  // start/end-action bookkeeping, driving what setLongActionView shows) is a custom
+  // stack object -- NOT a plain array/object (Object.keys() on it always returns
+  // its 5 methods {push,pop,get,exist,length}, never the real entry count; call
+  // .length() to get that). First seen stuck right after document load; confirmed
+  // via stack.get(0) the leaked entry is consistently {id: 2, type: 0} -- this is
+  // app.js's own `onLongActionBegin(Asc.c_oAscAsyncActionType.BlockInteraction,
+  // LoadingDocument)` call from its native document-open flow (confirmed live by
+  // reading its call site), whose matching end never fires in Web Mode (same
+  // "depends on a real server round-trip" shape as everything else this file works
+  // around) -- NOT Asc.c_oAscAsyncActionType.BlockInteraction's own enum value,
+  // which is 1, not 0 (a first attempt at this fix matched on that symbolic
+  // constant and silently never fired; match on the concrete {id,type} pair
+  // instead of trusting the enum name). Reproduced a second time later just from
+  // opening the numbering gallery, so this isn't a one-time startup fluke --
+  // handled generally here rather than once at document-ready. Scoped to this
+  // specific entry only (not "clear whatever's on top of the stack") since forcing
+  // a real save/print/download action to end early, if one were ever legitimately
+  // still in flight, could be worse than the stuck label it's meant to fix.
   (function watchBusyCounterLeak() {
     setInterval(function () {
       var Uc = window.AscCommon && window.AscCommon.Uc;
@@ -574,6 +598,23 @@
         console.warn('[OO] AscCommon.Uc.l5d stuck at', Uc.l5d, '-- resetting (patch section 4c watchdog)');
         Uc.l5d = 0;
       }
+      try {
+        var app = window.DE || window.SSE || window.PE;
+        var mainCtrl = app && app.getController && app.getController('Main');
+        var stack = mainCtrl && mainCtrl.stackLongActions;
+        if (mainCtrl && stack && typeof stack.length === 'function') {
+          while (stack.length() > 0) {
+            var entry = stack.get(0);
+            if (!entry || entry.type !== 0 || entry.id !== 2) break;
+            console.warn(
+              '[OO] stuck long-action',
+              JSON.stringify(entry),
+              '-- force-ending (patch section 4c watchdog)',
+            );
+            mainCtrl.onLongActionEnd(entry.type, entry.id);
+          }
+        }
+      } catch (e) {}
     }, 2000);
   })();
 
@@ -727,15 +768,32 @@
           if (ctx && typeof f === 'string' && f.length) {
             var w = this.WBa,
               h = this.Swa;
+            // w/h are the canvas's own raw pixel dimensions, not its CSS display
+            // size (104x40 per the itemTemplate) -- confirmed live these render at
+            // 2x (208x80), matching devicePixelRatio. A hardcoded "11px" font size
+            // is 11 *canvas* px, which renders at roughly half the intended visual
+            // size once the browser scales the bitmap down to the CSS box. Scale by
+            // the actual canvas/CSS ratio so the overlay text reads at a normal,
+            // legible size regardless of devicePixelRatio.
+            // Covering only the bottom portion (leaving whatever the SDK's own
+            // drawing left in the top area) was tried first, but that leftover
+            // content (e.g. the heading-level numeral glyph some styles show) sits
+            // right against our caption with no consistent gap -- confirmed live,
+            // reads as visually "stuck together". Rather than chase per-style
+            // vertical metrics to carve out a clean gap, replace the WHOLE icon
+            // with just the caption, centered -- consistently clean across every
+            // style instead of a hybrid that only sometimes has room to breathe.
+            var scale = w / 104;
+            var fontPx = Math.round(12 * scale);
             ctx.save();
             ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.fillStyle = 'rgba(255,255,255,0.92)';
-            ctx.fillRect(0, h * 0.62, w, h * 0.38);
-            ctx.font = '11px "' + CJK_FONT_FAMILY + '", sans-serif';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, w, h);
+            ctx.font = fontPx + 'px "' + CJK_FONT_FAMILY + '", sans-serif';
             ctx.fillStyle = '#333333';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(f, w / 2, h * 0.8, w - 6);
+            ctx.fillText(f, w / 2, h / 2, w - 6 * scale);
             ctx.restore();
           }
         } catch (ex) {
