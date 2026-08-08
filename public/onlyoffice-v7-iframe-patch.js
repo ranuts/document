@@ -91,6 +91,56 @@
     return origOpen.apply(this, arguments);
   };
 
+  // ── "Image from URL" (#72) ────────────────────────────────────────────────
+  // AddImageUrl (word/cell/slide SDKs, toolbar "Insert > Image > From URL" and
+  // the "paste an image with a link" clipboard path) hands external URLs to
+  // AscCommon.G2. Absent a native/desktop host, G2 packages them into a
+  // {c: 'imgurls', ...} command and expects a real OnlyOffice Document Server
+  // to fetch them server-side (sidestepping the browser's CORS restrictions)
+  // and post back local paths -- this project has no such server, so that
+  // command has nowhere to go. The request it does fire ends up hitting this
+  // very iframe's own origin with an unset download-callback path (observed:
+  // GET .../documenteditor/main/undefined -> 404), and the image is silently
+  // never inserted. Not a CORS problem (confirmed live: the target URL itself
+  // fetches fine) -- a missing-server one. Replace G2 with a version that
+  // fetches each URL directly from the browser instead of routing through the
+  // absent server; this still respects CORS (a fetch to a CORS-blocked host
+  // fails exactly as it would server-side-less anyway), it just stops paying
+  // the tax of a request that could never have succeeded.
+  function patchAddImageUrl() {
+    var AC = window.AscCommon;
+    if (!AC || typeof AC.G2 !== 'function') {
+      setTimeout(patchAddImageUrl, 50);
+      return;
+    }
+    if (AC.__g2Patched) return;
+    AC.__g2Patched = true;
+    AC.G2 = function (api, urls, callback) {
+      Promise.all(
+        urls.map(function (url) {
+          return fetch(url)
+            .then(function (resp) {
+              if (!resp.ok) throw new Error('HTTP ' + resp.status);
+              return resp.blob();
+            })
+            .then(function (blob) {
+              var ext = (blob.type.split('/')[1] || 'png').split('+')[0].replace('jpeg', 'jpg');
+              var name = 'image' + Date.now() + Math.random().toString(36).slice(2) + '.' + ext;
+              return { url: URL.createObjectURL(blob), path: 'media/' + name };
+            })
+            .catch(function () {
+              // Matches the shape G2's own native-editor/error branches already
+              // produce -- callers (e.g. AddImageUrl) treat a literal 'error' URL
+              // as "this one failed", which surfaces the SDK's own error UI
+              // instead of silently doing nothing.
+              return { url: 'error', path: 'error' };
+            });
+        }),
+      ).then(callback);
+    };
+  }
+  patchAddImageUrl();
+
   // ── AI button in OnlyOffice's left menu ───────────────────────────────────
   // The editor's left rail (#left-menu) is rendered at runtime by app.js with
   // icon buttons of class .btn-category (search, navigation, comments, ...).

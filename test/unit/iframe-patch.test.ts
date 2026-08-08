@@ -149,4 +149,91 @@ describe('onlyoffice-v7-iframe-patch', () => {
       expect(openUrl('c:\\Windows\\Fonts\\arial.ttf')).toBe('c:\\Windows\\Fonts\\arial.ttf');
     });
   });
+
+  describe('AscCommon.G2 "Image from URL" patch (#72)', () => {
+    afterEach(() => {
+      // @ts-expect-error test-only global
+      delete window.AscCommon;
+    });
+
+    it('waits for AscCommon to exist before patching, then replaces G2', async () => {
+      runPatch();
+      await flush();
+      // AscCommon isn't defined yet (it loads after this script, from sdk-all-min.js) --
+      // the patch must not throw, and must keep polling.
+      // @ts-expect-error test-only global
+      window.AscCommon = { G2: vi.fn() };
+      // Poll interval is 50ms; give it a couple of ticks.
+      await new Promise((r) => setTimeout(r, 120));
+      // @ts-expect-error test-only global
+      expect(window.AscCommon.__g2Patched).toBe(true);
+    });
+
+    it('fetches each URL directly and resolves {url, path} pairs shaped like the SDK expects', async () => {
+      const blob = new Blob(['fake-image-bytes'], { type: 'image/png' });
+      vi.stubGlobal(
+        'fetch',
+        vi.fn((url: string) =>
+          url.includes('font-map')
+            ? Promise.resolve({ json: () => Promise.resolve({ ...FONT_MAP }) })
+            : Promise.resolve({ ok: true, blob: () => Promise.resolve(blob) }),
+        ),
+      );
+      vi.stubGlobal('URL', { ...URL, createObjectURL: vi.fn(() => 'blob:mock-url') });
+
+      runPatch();
+      await flush();
+      // @ts-expect-error test-only global
+      window.AscCommon = { G2: vi.fn() };
+      await new Promise((r) => setTimeout(r, 120));
+
+      const callback = vi.fn();
+      // @ts-expect-error test-only global
+      window.AscCommon.G2(null, ['https://example.com/pic.png'], callback);
+      await flush();
+      await flush();
+
+      expect(callback).toHaveBeenCalledTimes(1);
+      const [results] = callback.mock.calls[0] as [Array<{ url: string; path: string }>];
+      expect(results).toHaveLength(1);
+      expect(results[0].url).toBe('blob:mock-url');
+      expect(results[0].path).toMatch(/^media\/image\d+[a-z0-9]+\.png$/);
+    });
+
+    it('resolves a failed fetch to {url: "error", path: "error"} instead of throwing', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn((url: string) =>
+          url.includes('font-map')
+            ? Promise.resolve({ json: () => Promise.resolve({ ...FONT_MAP }) })
+            : Promise.resolve({ ok: false, status: 404 }),
+        ),
+      );
+
+      runPatch();
+      await flush();
+      // @ts-expect-error test-only global
+      window.AscCommon = { G2: vi.fn() };
+      await new Promise((r) => setTimeout(r, 120));
+
+      const callback = vi.fn();
+      // @ts-expect-error test-only global
+      window.AscCommon.G2(null, ['https://blocked.example.com/pic.png'], callback);
+      await flush();
+      await flush();
+
+      expect(callback).toHaveBeenCalledWith([{ url: 'error', path: 'error' }]);
+    });
+
+    it('does not re-patch an already-patched AscCommon.G2', async () => {
+      runPatch();
+      await flush();
+      const patchedOnce = vi.fn();
+      // @ts-expect-error test-only global
+      window.AscCommon = { G2: patchedOnce, __g2Patched: true };
+      await new Promise((r) => setTimeout(r, 120));
+      // @ts-expect-error test-only global
+      expect(window.AscCommon.G2).toBe(patchedOnce);
+    });
+  });
 });
