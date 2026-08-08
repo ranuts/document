@@ -1,0 +1,254 @@
+# v9：新建文档完全无法输入文字（打字没反应），根因是假 WebSocket 连接泄漏了一个"忙碌计数器"
+
+> **现状（本文档写作完成时）**：本文档记录的三个问题全部已修复并验证通过——
+> ① 打字完全无反应（假 WebSocket 连接泄漏忙碌计数器）；② 同一个忙碌计数器
+> 还有其它未定位的泄漏源，加了看门狗兜底；③ 段落样式库缩略图 CJK 文字不显示
+> （SDK 内部字形渲染器丢字，改用浏览器原生 API 自己画一层盖上去）。三个都已用
+> 真实工具栏交互（不是直接调 API）验证过，全部单测/lint/format 绿。
+
+## 背景
+
+用户在本地测试环境（跟当时正在验证 [issue #72 v9 修复](2026-08-08-issue-72-pasted-image-blank-on-save.md)
+的是同一个浏览器标签页）反馈截图：新建 Word 文档后光标能看到、能点，但打字完全
+没反应，工具栏右上角还有一块区域是空白的。
+
+这是一个此前从未被发现过的、**比 #72 图片问题严重得多的 bug**——之前"三个
+上线阻塞项都已清零"的结论（见
+[2026-08-06 go-live 审计](2026-08-06-v9-go-live-readiness-audit.md)）里验证过的
+"可编辑"，回头看很可能是用 `asc_getCanUndo()`/API 直调验证的，从没有真正用
+键盘敲过字——这次是第一次用真实键盘事件（chrome-devtools MCP 的
+`type_text`/`press_key`，不是直接调 API）测试 v9 的打字功能，一测就复现。
+
+## 复现
+
+1. `pnpm run dev:v9`，"New Word" 新建空白文档。
+2. 点文档正文区域，用真实键盘事件输入任意文字。
+3. **完全没有反应**：光标不动，没有任何字符出现，控制台也没有报错弹窗——是
+   静默失效，不是崩溃。
+
+## 排查过程
+
+### 第一个线索：`AscCommon.Uc.l5d` 卡在非 0
+
+这个变量在这次会话调查 v9 版 #72 时已经摸清楚了含义（见
+[issue #72 文档"第四轮"](2026-08-08-issue-72-pasted-image-blank-on-save.md#第四轮真正根因找到了v9-现已修复并验证截至本节写作时最新状态)）：
+`AscCommon.Uc.l5d` 是一个"进行中操作"嵌套计数器，通过
+`asc_onStartAction`/`asc_onEndAction`（压缩名 `Zx`/`Xo`）成对维护，`Uc.PZ(!0)`
+自增、`Uc.PZ(!1)` 自减。只要 `l5d !== 0`，`AscCommon.Uc.Tra()` 就返回 `true`，
+而这是几乎所有文档修改操作最终都会走到的 `Cf()`/`ugb()` 限制检查链路的
+**第一道、无条件的门**——不像 #72 那次只挡图片插入（`Cf(1)` 一种类型），`l5d`
+非 0 会挡住**所有**类型的 `Cf()` 调用，包括普通文字输入。
+
+实测：新建文档后什么都还没做，`AscCommon.Uc.l5d` 就已经是 `1`。手动清零后
+打字确实短暂能用了一下，但没过几秒钟又卡住——说明有什么东西在**持续地**、
+反复地把它加回去，光清一次没用，得找到泄漏源头才能真正修好。
+
+### 第二个线索：一次真实的 WebSocket 连接尝试
+
+控制台里有一条容易被忽略的 warning：
+
+```
+WebSocket connection to 'ws://localhost:5173/doc/df97202e78c2105858b7/c/?shardkey=...&EIO=4&transport=websocket' failed:
+WebSocket is closed before the connection is established.
+```
+
+`public-v9/onlyoffice-iframe-patch.js` 第 4 节已经有一个"Engine.IO/Socket.IO
+握手 mock"，通过拦截 `XMLHttpRequest` 伪造轮询（polling）传输的握手响应，让
+SDK 的 socket.io 客户端"以为"自己连上了协作服务器、不再无限重试——但那个 mock
+**只覆盖 XHR**，SDK 的 socket.io 客户端还会独立地、真实地发起一次
+`new WebSocket('ws://.../doc/{id}/c/?...')` 连接尝试。这个项目没有真实的
+collaboration server，这个 WebSocket 连接会真的失败。
+
+**实测确认这就是泄漏源**：用 chrome-devtools MCP 把 `window.WebSocket`（iframe
+内）替换成一个对 `/doc/.../c/` 路径直接同步抛错的假构造函数后，`l5d`
+在接下来 8 秒的持续采样里稳定停在 `0`，不再复发；同时打字恢复正常
+（`asc_getCanUndo()` 从 `false` 变成 `true`，说明真的写进了文档模型，不只是
+画面上看起来正常）。反之，仅仅手动把 `l5d` 清零、不阻止这个 WebSocket，几秒后
+就又会变回非 0——因为 socket.io 有自己的重连策略，会反复重试、反复失败、反复
+泄漏。
+
+**根因**：每次这个真实 WebSocket 连接尝试失败，都会在 SDK 内部触发一次
+"连接中/连接失败"的 start-action，但配套的 end-action 没有被正确调用到（可能
+是因为失败发生在某个 SDK 认为"理应总会成功走到清理逻辑"的分支之外），于是
+`l5d` 每次重连尝试都净增 1、永远不会回到 0。
+
+### 第三个线索：一个独立的、也会泄漏计数器的小 bug——主题选择器崩溃
+
+同一个浏览器会话里还发现了另一条独立的报错（`changesError`），这个跟 WebSocket
+完全无关，但**碰巧也会泄漏同一个计数器**，值得一起记录清楚：
+
+```
+TypeError: Cannot read properties of undefined (reading 'theme')
+  at Object.systemThemeSupported (app.js:8:207556)
+  at Object.map (app.js:8:183184)
+  at n.o (app.js:8:1813897)
+```
+
+反混淆后，`Common.Controllers.Desktop.systemThemeSupported = function(){return r.theme && "disabled"!==r.theme.system}`——
+`r` 是这个控制器内部一个闭包私有变量，正常应该由真实桌面宿主通过
+`Common.Controllers.Desktop.init(config)` 传入主题配置来赋值。而
+`Common.Controllers.Desktop.isActive()` 返回 `true` 只是因为我们自己的
+`window.AscDesktopEditor` polyfill 的存在骗过了这个检测（这正是 v9 Web Mode能
+让工具栏正常渲染的机制本身），但我们从没提供一个完整的、包含主题信息的桌面宿主
+配置，所以 `r` 永远是 `undefined`，一读 `.theme` 就抛异常。
+
+这个崩溃恰好也发生在一次 start-action 内部（渲染工具栏"大纲级别"那块 UI 时
+触发的），异常把配对的 end-action 跳过了，效果和 WebSocket 泄漏一模一样：
+`l5d` 净增 1，且这次崩溃每次新建文档都必现（不像 WebSocket 重连那样要等一会儿
+才发生），所以哪怕修好了 WebSocket 那部分，这个崩溃单独一个就足够让每篇新文档
+一开始就带着 `l5d=1` 出生，永远打不了字。**两个问题必须都修，只修一个不够。**
+
+这个崩溃还有个肉眼可见的副作用：工具栏右上角"大纲级别"下拉框那块地方，因为这次
+渲染直接抛出异常中断了，一直是空白的——正是用户截图里红框标出来的那块区域。
+
+## 修复
+
+### 1. 阻止真实 WebSocket 连接尝试（`public-v9/onlyoffice-iframe-patch.js` 第 4b 节）
+
+紧跟在第 4 节 Engine.IO XHR mock 后面新增一段：把 `window.WebSocket` 替换成一个
+构造函数，遇到 URL 匹配 `/doc/{id}/c/` 就直接同步抛 `NetworkError`（不发起任何
+真实网络请求），其余 URL 原样透传给真正的 `WebSocket`。跟 XHR mock"让 SDK
+以为已连接、不再重试"是同一个哲学，只是这次是"直接不让它有机会尝试，而不是
+伪造一个假的成功响应"——因为 WebSocket 协议本身没有 XHR 那种能在 `onreadystatechange`
+里插手伪造响应帧的钩子，直接拒绝连接、让客户端保留使用已经在正常工作的 polling
+传输，是更简单可靠的做法。
+
+### 2. 给主题检测方法加防御性 try/catch（`lib/onlyoffice-editor.ts` 新增 `patchDesktopThemeCrash`）
+
+跟 `suppressDialogsInFrame`/`suppressCoAuthoringDisconnect` 同一个"轮询等目标
+对象出现，然后打补丁"模式：等 `frameWindow.Common.Controllers.Desktop`
+出现后，把 `systemThemeSupported`/`systemThemeType` 包一层 try/catch，异常时
+返回安全默认值（`false`/`'light'`）而不是向上抛。在 `runWebModeOnAppReady`
+里紧跟着另外两个 suppress 调用之后调用。
+
+两处修复都不需要理解"为什么真实桌面宿主没配好主题/WebSocket 会怎样"这类问题
+的完整原理——用的是这个项目里已经反复验证有效的思路：**这个纯客户端、无服务器
+的场景里，凡是设计给"真实协作服务器/真实桌面宿主"用的检测机制，只要它一失败
+就会产生比它本身更严重的副作用（这次是"静默锁死所有编辑"），就应该在客户端
+直接短路掉，而不是试图真的实现一套假的协作/桌面协议。**
+
+## 验证
+
+- **新建文档后持续采样 `AscCommon.Uc.l5d` 8 秒**：稳定为 `0`，不再复发（修复前
+  同样的采样会在几秒内变回非 0）。
+- **控制台**：不再出现 `changesError`/主题崩溃的报错，也不再出现 WebSocket
+  连接失败的 warning。
+- **工具栏"大纲级别"下拉框**：不再空白，正常显示"1"。
+- **真实键盘输入**：用 chrome-devtools MCP 的 `type_text`/`press_key`
+  （不是直接调 API）敲字，文字正常出现在文档里；`asc_getCanUndo()` 从
+  修复前的恒 `false` 变成 `true`，确认是真的写进了文档模型，不是画面假象。
+- `pnpm run lint:ts && pnpm run format:check && pnpm run test:coverage`
+  全绿（296 个单测，覆盖率阈值达标）。
+
+## 未解决的小问题（不阻塞，记录一下）
+
+用 chrome-devtools MCP 的合成键盘事件（`type_text`/连续 `press_key`）测试时，
+偶尔会出现打出来的字符跟敲的不一致（比如连续按 `h`、`i` 两个键，文档里只出现
+了一个 `g`）。没有深入排查，判断是 CDP 合成键盘事件对这类 canvas/WASM 渲染的
+文本编辑器输入法层面的还原度问题（真实物理键盘输入会走完整的操作系统/浏览器
+输入法组合路径，CDP 的按键注入不一定能完全还原），跟这次修复的两个 bug
+（`l5d` 泄漏导致完全打不了字）是性质不同的两件事——这次要修的是"完全没反应"，
+不是"敲对但显示错"。如果以后有真实用户反馈"打字会乱码"，需要单独立项排查，
+不要跟这次的根因混为一谈。
+
+## 后续加固：忙碌计数器看门狗（已实现并验证）
+
+上面两个泄漏源（WebSocket、主题崩溃）修完之后，实测又在**打开段落样式库下拉
+菜单**这个操作上复现了同一个症状——但这次控制台**没有任何报错**，说明是第三个、
+还没找到具体位置的独立泄漏源。这个 SDK 体量太大，一个一个去找、去补每个泄漏点
+不现实。
+
+改用更省事、也足够安全的思路：在 `public-v9/onlyoffice-iframe-patch.js` 新增
+第 4c 节"忙碌计数器看门狗"——每 2 秒检查一次 `AscCommon.Uc.l5d`，只要非 0
+就直接清零并打印警告日志。之所以敢这么做：`l5d` 只影响"当前是否允许做文档
+修改操作"这一个判断（`AscCommon.Uc.Tra()`），跟文档/撤销栈的完整性完全无关
+（那部分状态在每个文档自己的 `Ga.Bd` 里单独维护）——**这个方案只适合本项目
+这种单用户、没有真实协作服务器的场景，如果是真的桌面版/服务器版这么做就不安全
+了**（会掩盖真实的多用户锁冲突）。
+
+验证：手动把 `l5d` 设成 5 模拟一次未知来源的泄漏，2 秒内看门狗自动清零、控制台
+打出预期的警告日志，全程不需要人工干预。
+
+## 顺带发现：段落样式库预览图标显示数字，不是真实预览（根因已定位，已修复并验证）
+
+同一次交互还看到工具栏"样式库"下拉菜单里的九宫格缩略图显示的是数字 1-9，不是
+应该显示的真实预览（比如"标题 1"应该显示用该样式格式化过的示例文字）。
+
+**排查结论：这是一个真实存在、但确认纯粹是视觉层面的字体渲染 bug，样式数据和
+套用逻辑完全没问题。已经修复并用真实工具栏点击验证通过。**
+
+### 排查过程
+
+用同源 iframe 访问 + 一路跟到具体的绘制函数（调用链：
+`api.GenerateStyles()` → `mub` → `AscCommonWord.pFf` 实例的 `mub` → `W_b` →
+`FK`（20ms 时间片批处理循环）→ `ek` → `qJh`（取到真实样式名，如 `pc()` 返回的
+`"Normal"`、`"Heading 1"` 等，确认全部正确）→ `tBg` → `yFi`（真正往 canvas 上
+画字的地方）），发现：
+
+- `qJh` 取到的样式名全部正确（`Normal`/`Header`/`Footer`/……），翻译、套用都
+  没问题；工具栏样式库下拉实际展示的是一个"快速样式"子集（`Normal`/
+  `No Spacing`/`Heading 1`~`Heading 9`/`Title`/`Subtitle`/……），跟 Word
+  默认的快速样式库对得上——**看到的"1"到"9"，就是"Heading 1"到"Heading 9"
+  这 9 个样式，只是"Heading "这个单词部分没画出来，只剩下后面那个数字**；
+  "Normal"（无数字可"幸存"）缩略图是完全空白的。
+- 直接给 `yFi` 加 spy，实测传入的 caption 参数 `f` **在所有 28 个样式上都是
+  正确的、已翻译好的中文**（"正文"、"标题 1"……），不是数据错——问题 100% 出
+  在绘制这一步本身。
+- 全局给 `CanvasRenderingContext2D.prototype.fillText`/`strokeText` 加 spy，
+  实测**在整个生成过程中一次都没被调用过**——说明 SDK 画这些字压根不走浏览器
+  原生的文字渲染 API，是它自己的一套内部字形光栅化系统（大概率直接从预解析好
+  的字体轮廓数据里取字形描边/位图画上去），而这套内部系统在这一条代码路径上，
+  CJK 字形会静默丢失（不报错），拉丁字母和数字能正常画出来。
+- 没有任何字体相关的 XHR 请求在这次生成过程中发生（也用 spy 确认过），说明
+  不是"字体文件没取到/取错了"这种、这个项目之前遇到过很多次的坑，是 SDK 自己
+  内部某个字形缓存/光栅化环节的问题，从 JS 这一层够不着直接修。
+
+### 修复思路：不修 SDK 内部渲染器，浏览器原生 API 自己画一遍盖上去
+
+既然 SDK 自己的内部文字渲染在这条路径上认不出 CJK 字形，而**浏览器原生的
+`fillText` 反而是可靠的**（前提是有一个真的支持中文的字体可用）——干脆不管
+SDK 内部是怎么画的，等它画完之后，我们自己在同一个 canvas 上用原生 `fillText`
+把正确的 caption 文字盖上去一层。
+
+具体做法（`public-v9/onlyoffice-iframe-patch.js` 新增第 6c 节）：
+
+1. 用 `FontFace` API 加载这个项目本来就有的 `NotoSansSC-Regular.ttf`（同一个
+   字体文件，文档正文的中文渲染已经在用，见 `font-map.json`），注册成一个新的
+   字体族名。
+2. 包一层 `yFi`：先调用原始实现（保留它还能画出来的部分，比如某些样式确实能
+   正确套用斜体/下划线格式预览），再在图标底部约 38% 的区域画一个半透明白色
+   底、用刚加载的 CJK 字体把正确的 caption 文字居中画上去。
+
+踩的一个坑：**`yFi` 不是挂在共享的原型（prototype）上的，是每个 `mpf` 实例
+自己的属性（own property），挡住了原型上的同名方法**——第一次直接
+patch `Object.getPrototypeOf(mpf).yFi` 完全没生效（实测调用次数是 0）。
+另外还有第二个坑：手动重新调用 `api.GenerateStyles()` 之后，虽然确认新图确实
+生成了（直接从 `qJh` 的返回值里取出来验证过，byte-for-byte 是新内容），但工具栏
+UI 显示用的 `listStyles.store.models[i].imageUrl` 并不会跟着自动刷新——**这只是
+手动重新触发时的验证假象，不是修复本身的问题**：真实场景下文档一打开就会自然
+触发一次生成，我们的补丁只要在那第一次生成之前就位即可，不需要处理"如何让 UI
+刷新已经过时的图"这件事。
+
+最终方案：patch `AscCommonWord.pFf` 这个构造函数本身（每次 `new
+AscCommonWord.pFf()` 被调用时，立刻给刚创建出来的实例的 `.mpf.yFi` 打上补丁），
+确保补丁在 SDK 自己第一次真正生成缩略图之前就已经就位，不依赖任何"手动重新
+触发"的技巧。只对 Word 编辑器生效（`AscCommonWord`）——Excel/PPT 是完全独立、
+各自单独混淆过的 SDK 包，内部名字大概率不一样，这次没有验证，以后如果那边也报
+类似问题需要单独排查，不能当作"这个补丁已经顺带覆盖了"。
+
+### 验证
+
+用真实工具栏点击（"开始"标签页 → 样式库展开按钮），不做任何手动干预，样式库
+九宫格里全部 28 个样式的缩略图都正确显示中文名称（"正文"、"标题 1"到
+"标题 9"、"引用"、"强调"、"页眉"、"页脚"……），原有能正确显示的格式预览
+效果（比如标题几个格子顶部的加粗数字样式、"强调引用"的下划线）也都还在——
+两者叠加显示，没有互相覆盖。`pnpm run lint:ts && pnpm run format:check &&
+pnpm run test:coverage` 全绿（296 个单测）。
+
+## 需要回头更新的地方
+
+[2026-08-06 v9 go-live 审计](2026-08-06-v9-go-live-readiness-audit.md)里"三个
+问题都已修复并验证"的结论，验证方式主要是 API 直调 + 截图看，没有用真实键盘
+测过打字——这次发现的 bug 说明那份审计的"可编辑"结论不完整，应该在那篇文档里
+补一条指向这里的说明，避免以后又被那份"全部清零"的结论误导，跳过真实键盘测试
+这一步。

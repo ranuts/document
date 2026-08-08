@@ -140,6 +140,59 @@ function suppressCoAuthoringDisconnect(frameWindow: any): void {
 }
 
 /**
+ * Common.Controllers.Desktop.systemThemeSupported()/-Type() read a "theme"
+ * field off a config object (r.theme) that a real native desktop host
+ * populates via Desktop.init(); our AscDesktopEditor polyfill makes
+ * Desktop.isActive() report true without ever providing that config, so the
+ * very first UI pass that renders the theme picker crashes with "Cannot read
+ * properties of undefined (reading 'theme')" (confirmed live -- leaves that
+ * toolbar area blank, see the "changesError" console entry).
+ *
+ * Worse than cosmetic: this crash fires from inside an
+ * asc_onStartAction/asc_onEndAction pair, so the exception skips the matching
+ * end-action and permanently leaks AscCommon.Uc's start/end-action nesting
+ * counter by one. Once that counter is nonzero, AscCommon.Uc.Tra() is true --
+ * the first guard in every document-mutation restriction check (Cf -> ugb),
+ * so ALL edits silently stop working, not just this theme UI: confirmed live
+ * that typing into a fresh document does nothing while the counter is stuck,
+ * and works again as soon as it's back to 0. Guarding these two methods so
+ * the exception never escapes fixes both the blank UI and the stuck counter.
+ */
+function patchDesktopThemeCrash(frameWindow: any): void {
+  let attempts = 0;
+  const poll = () => {
+    const desktop = frameWindow.Common?.Controllers?.Desktop;
+    if (!desktop || typeof desktop.systemThemeSupported !== 'function') {
+      if (attempts++ < 50) setTimeout(poll, 200);
+      return;
+    }
+    if (desktop.__themeCrashPatched) return;
+    desktop.__themeCrashPatched = true;
+
+    const origSupported = desktop.systemThemeSupported.bind(desktop);
+    desktop.systemThemeSupported = () => {
+      try {
+        return origSupported();
+      } catch {
+        return false;
+      }
+    };
+    if (typeof desktop.systemThemeType === 'function') {
+      const origType = desktop.systemThemeType.bind(desktop);
+      desktop.systemThemeType = () => {
+        try {
+          return origType();
+        } catch {
+          return 'light';
+        }
+      };
+    }
+    console.log('[OO] Desktop.systemThemeSupported/-Type crash-guarded in iframe');
+  };
+  poll();
+}
+
+/**
  * v9 Web Mode has no working UI flow to complete the SDK's normal "download as
  * PDF" settings dialog (no real collaboration server behind it, same root cause
  * as everything else this file works around). onDownloadAs (app.js) detours
@@ -585,6 +638,15 @@ async function runWebModeOnAppReady(params: {
   const { fileName, fileType, binData, mediaUrls } = params;
 
   (window as unknown as Record<string, unknown>).__mediaCache = mediaUrls ?? {};
+  // Bridge for the iframe's AddImageUrl patch (public-v9/onlyoffice-iframe-patch.js,
+  // section 3) to register a resolved remote-image blob into the SAME `media` map
+  // handleWriteFile uses, so requestSaveDocument's convertBinToDocumentFn call
+  // writes real bytes for it instead of x2t fetching the (nonexistent, dev-server
+  // 404) '/media/<path>' URL over HTTP. __mediaCache above is a separate map used
+  // only for on-screen <img> redirect and is not visible to the converter.
+  (window as unknown as Record<string, unknown>).__registerSaveMedia = (path: string, blobUrl: string) => {
+    media[path] = blobUrl;
+  };
 
   const iframeEl = document.querySelector('iframe') as HTMLIFrameElement | null;
   const iwin = iframeEl?.contentWindow as any;
@@ -596,6 +658,7 @@ async function runWebModeOnAppReady(params: {
   if (iwin) {
     suppressDialogsInFrame(iwin);
     suppressCoAuthoringDisconnect(iwin);
+    patchDesktopThemeCrash(iwin);
   }
 
   if (typeof api?.asc_openDocumentFromBytes !== 'function') {

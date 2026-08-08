@@ -1,16 +1,38 @@
 /**
  * OnlyOffice iframe patch — injected into each editor iframe before any SDK scripts.
  *
- * Provides four things that OnlyOffice's Web/Desktop-oriented SDK needs to run
+ * Provides six things that OnlyOffice's Web/Desktop-oriented SDK needs to run
  * against a purely static host with no document server behind it:
  *   1. window.AscDesktopEditor  — native OS file-dialog & I/O polyfill
- *   2. XHR font URL rewrite     — ascdesktop://fonts/ → /fonts/<mapped>
- *   3. Image URL redirect       — /media/…/image.png → parent.__mediaCache blob URL
+ *   2. AddImageUrl remote-URL resolution — "Insert > Image > From URL" (#72):
+ *      once AscDesktopEditor exists, the SDK swaps in a synchronous AddImageUrl
+ *      that can't resolve raw http(s) URLs on its own (see the patch itself for
+ *      the full mechanism); pre-resolve them via DownloadFiles first, and bypass
+ *      the collaborative-editing-lock check (Cf(1)) that uHa's insert branch is
+ *      gated behind -- meaningless in a single-user, no-server session.
+ *   3. XHR font URL rewrite     — ascdesktop://fonts/ → /fonts/<mapped>
  *   4. Engine.IO/Socket.IO XHR mock — fakes the collaboration-server handshake the
  *      SDK's socket.io client makes to /doc/{id}/c/, so it settles into "connected,
  *      no server" instead of retrying forever. There is no dev-server middleware
  *      equivalent to fall back on here (this file runs unchanged in production),
- *      so the mock has to be complete on its own.
+ *      so the mock has to be complete on its own. Also blocks the client's separate
+ *      real WebSocket connection attempt to the same endpoint -- left unblocked,
+ *      its repeated failures leak an unpaired start/end-action nesting counter
+ *      that eventually blocks ALL document edits, including plain typing (not
+ *      just the collaboration-lock-gated cases in item 2). A low-frequency
+ *      watchdog clamps that counter back to 0 if it ever gets stuck via some
+ *      other, still-unidentified leak site -- this SDK is too large to find
+ *      and patch every individual one.
+ *   5. Image URL redirect       — /media/…/image.png → parent.__mediaCache blob URL,
+ *      both for on-screen <img src> and for the SDK's own exporter, which fetches
+ *      each embedded image via a real XHR GET to /media/<file> when building the
+ *      saved .docx/.xlsx/.pptx zip.
+ *   6. Style-gallery CJK caption overlay (word editor only) — the paragraph
+ *      style-gallery dropdown's preview icons are drawn by the SDK's own internal
+ *      glyph renderer, which silently drops CJK glyphs (Latin letters/digits still
+ *      render); overlay each icon's correct caption ourselves with the browser's
+ *      native, unaffected canvas text APIs instead of trying to fix the SDK's
+ *      internal renderer.
  *
  * Dialog suppression (Common.UI.alert/.warning) is handled from onlyoffice-editor.ts
  * via same-origin iframe access in onAppReady; the below is a defence-in-depth fallback.
@@ -291,7 +313,147 @@
     console.log('[OO] AscDesktopEditor polyfill installed');
   })();
 
-  // ── 3. Engine.IO/Socket.IO handshake mock ───────────────────────────────────────
+  // ── 3. "Image from URL" via the Desktop-mode AddImageUrl override (#72) ─────────
+  // The SDK detects window.AscDesktopEditor (the polyfill above) and, at init time,
+  // replaces AddImageUrl on the editor instance's prototype with a version that
+  // resolves each URL *synchronously* -- confirmed live via chrome-devtools MCP:
+  //   function(a,b,d,e){a=a.map(f=>AscCommon.Ys.KS(AscDesktopEditor.LocalFileGetImageUrl(f)));this.uHa(a,e)}
+  // Two compounding problems, both confirmed by instrumenting every step live:
+  //   1. LocalFileGetImageUrl(url) only recognizes keys OpenFilenameDialog/
+  //      DownloadFiles generated (_map[key]) and passes any other string straight
+  //      through unresolved -- a raw http(s) URL comes back unchanged. Not a CORS
+  //      problem (the target URL itself was confirmed to fetch fine), a
+  //      synchronous-API-can't-fetch-asynchronously one.
+  //   2. Even after DownloadFiles resolves a URL to a real local key (see the
+  //      first attempt at this fix, superseded below), LocalFileGetImageUrl(key)
+  //      correctly returns a `blob:` URL for it -- but Ys.KS() unconditionally
+  //      *prepends* '/media/' onto whatever it's given, assuming its input is
+  //      always a bare filename, not a full URL. Observed live:
+  //      Ys.KS('blob:http://host/2dd6...') -> '/media/blob:http://host/2dd6...',
+  //      a nonsense path -- not "/media/<filename>", which is the one shape our
+  //      own image-URL-redirect patch (section 6 below) knows how to resolve via
+  //      window.parent.__mediaCache. uHa() (the method that actually commits the
+  //      image into the document) receives that garbage path and silently drops
+  //      it: no error, no image, nothing in the saved file's word/media/.
+  //
+  // v7 has the same first-layer bug (AscCommon.G2, see onlyoffice-v7-iframe-
+  // patch.js) but reaches it via a different path (a real Document Server round-
+  // trip with a missing callback URL) since v7 has no AscDesktopEditor polyfill
+  // to trigger this Desktop-mode branch at all -- v9's *second* layer (Ys.KS's
+  // '/media/' assumption) has no v7 equivalent.
+  //
+  // Fix: don't route through the broken LocalFileGetImageUrl -> Ys.KS chain at
+  // all for remote URLs. Fetch via the already-working DownloadFiles, register
+  // the result directly into window.parent.__mediaCache under the exact
+  // 'media/<key>' path our own section-6 redirect reads from (the same
+  // convention Ys.KS would have produced for a *bare filename* input -- we're
+  // just doing that step ourselves instead of routing a blob: URL through it by
+  // mistake), and call uHa() directly with that path already resolved.
+  //
+  // AddImageUrl isn't just reassigned once: live testing showed the SDK
+  // reassigns it on the prototype again on every document open, silently
+  // clobbering a plain function-reference patch installed only once (confirmed:
+  // patch flag survives, but proto.AddImageUrl.toString() reverts to the raw
+  // desktop version between opens). Use an accessor property instead -- the
+  // getter always returns our wrapper; the setter intercepts the SDK's own
+  // reassignment attempts and stashes the value it tried to set as the "real"
+  // implementation to delegate to (still used for the local-file/non-remote
+  // case), rather than letting it overwrite anything.
+  //
+  // A correctly-shaped '/media/<key>' path reaching uHa() still wasn't enough --
+  // live tracing into uHa's internals (this.ep.Tba -> BJe -> AscCommon.Oe.Ug ->
+  // Cf -> Dzc) found a THIRD, deeper problem: uHa's fallback branch (the one
+  // meant for exactly this case -- no active selection object, ba/context
+  // undefined) is gated behind `false === this.ta.Ga.Cf(W)` where W resolves to
+  // 1. Cf(1) delegates to `ugb(...)`, whose very first guard is
+  // `AscCommon.Uc.Tra()` -- true whenever a start/end-action nesting counter
+  // (Uc.l5d, toggled by the SDK's own asc_onStartAction/asc_onEndAction pair)
+  // is nonzero. Confirmed live: even forcing that counter back to 0 wasn't
+  // sufficient (ugb's second check, a local function bound to real-time
+  // co-authoring lock state, also came back falsy) -- Cf(1) is fundamentally a
+  // "do I hold the collaborative-editing lock for this insert" check, and Web
+  // Mode has no real Document Server to grant one. Confirmed via live
+  // monkey-patch + save-and-inspect-the-zip round-trip that forcing Cf(1) to
+  // report "not restricted" (false) is what actually lets uHa reach Dzc/VX and
+  // commit the image into the document model -- nothing else in the chain was
+  // still broken once this gate was bypassed. Scoped to arg===1 only (the
+  // image/media-insert restriction type observed live) so unrelated Cf checks
+  // (track changes, content-control locks, etc., which use different type
+  // constants) are untouched.
+  function patchImageInsertRestrictionCheck(api) {
+    var Ga = api && api.ta && api.ta.Ga;
+    if (!Ga) return;
+    var proto = Object.getPrototypeOf(Ga);
+    while (proto && !Object.prototype.hasOwnProperty.call(proto, 'Cf')) proto = Object.getPrototypeOf(proto);
+    if (!proto || proto.__imageCfPatched) return;
+    proto.__imageCfPatched = true;
+    var origCf = proto.Cf;
+    proto.Cf = function (type) {
+      if (type === 1) return false;
+      return origCf.apply(this, arguments);
+    };
+  }
+
+  (function patchAddImageUrlForRemoteUrls() {
+    var api = window.Asc && window.Asc.editor;
+    if (!api || typeof api.AddImageUrl !== 'function') {
+      setTimeout(patchAddImageUrlForRemoteUrls, 50);
+      return;
+    }
+    var proto = Object.getPrototypeOf(api);
+    if (proto.__addImageUrlPatched) return;
+    proto.__addImageUrlPatched = true;
+
+    function isRemote(u) {
+      return typeof u === 'string' && /^https?:\/\//i.test(u);
+    }
+
+    var realImpl = proto.AddImageUrl; // whatever the SDK already assigned
+    function wrapped(urls, b, d, e) {
+      var self = this;
+      if (!realImpl || !urls.some(isRemote)) return realImpl && realImpl.apply(self, arguments);
+      patchImageInsertRestrictionCheck(self);
+      var remote = urls.filter(isRemote);
+      window.AscDesktopEditor.DownloadFiles(remote, null, function (resultMap) {
+        var resolved = urls.map(function (u) {
+          if (isRemote(u) && resultMap[u]) {
+            var key = resultMap[u];
+            var blobUrl = window.AscDesktopEditor.LocalFileGetImageUrl(key);
+            var mediaPath = 'media/' + key;
+            try {
+              if (window.parent && window.parent.__mediaCache) window.parent.__mediaCache[mediaPath] = blobUrl;
+              // Also register for the SAVE path: x2t/writeMediaFiles reads from
+              // the top page's `media` map (via __registerSaveMedia), a
+              // separate object from __mediaCache (display-only). Without this,
+              // the image shows on screen but the saved .docx's word/media/
+              // entry is whatever fetching '/media/<key>' from the dev/prod
+              // origin returns (a 404 page) instead of the real image bytes --
+              // confirmed live via save + unzip.
+              if (window.parent && window.parent.__registerSaveMedia) window.parent.__registerSaveMedia(mediaPath, blobUrl);
+            } catch (ex) {}
+            return '/' + mediaPath;
+          }
+          // Not remote (a local key some other caller mixed in), or a remote
+          // fetch that failed: fall back to the SDK's own original resolution
+          // so this entry behaves exactly as it would have before this patch.
+          return window.AscCommon.Ys.KS(window.AscDesktopEditor.LocalFileGetImageUrl(u));
+        });
+        self.uHa(resolved, e);
+      });
+    }
+
+    Object.defineProperty(proto, 'AddImageUrl', {
+      configurable: true,
+      get: function () {
+        return wrapped;
+      },
+      set: function (fn) {
+        realImpl = fn;
+      },
+    });
+  })();
+
+  // ── 4. Engine.IO/Socket.IO handshake mock ───────────────────────────────────────
   // The SDK's socket.io client polls GET/POST http(s)://host/doc/{sessionId}/c/
   // (Engine.IO v4 transport) expecting a real document/collaboration server. There
   // is none here, so we answer entirely client-side with the same bytes a minimal
@@ -352,7 +514,70 @@
     };
   })();
 
-  // ── 4. XHR font URL rewrite ──────────────────────────────────────────────────────
+  // ── 4b. Block real WebSocket connections to the collaboration endpoint ──────────
+  // The Engine.IO handshake mock above answers XHR polling, but engine.io-client
+  // separately tries a native `new WebSocket('ws://host/doc/{id}/c/?...')` too --
+  // confirmed live (chrome-devtools MCP) that this attempt is real and fails
+  // (there is no server), and each failure leaves an unpaired
+  // asc_onStartAction/asc_onEndAction: AscCommon.Uc.l5d (a start/end-action
+  // nesting counter) climbs by one and never comes back down. Once l5d is
+  // nonzero, AscCommon.Uc.Tra() is true, which is the FIRST guard in every
+  // restriction check (Cf -> ugb) gating document mutations -- not just the
+  // image-insert path patched in section 3, ALL of them, including plain text
+  // input. Confirmed by reproduction: typing into a fresh document does nothing
+  // (no error, cursor doesn't advance) whenever l5d is stuck nonzero, and works
+  // normally as soon as it's 0. The reconnect loop retries periodically, so
+  // without this patch l5d eventually goes nonzero again even if manually reset
+  // once. Fix: prevent the real WebSocket attempt from ever running, the same
+  // "settle into connected, no server" approach as the XHR mock above -- the
+  // client is left relying solely on the (working) polling transport.
+  (function blockRealWebSocket() {
+    var DOC_C_RE = /\/doc\/[^/]+\/c\//;
+    var NativeWebSocket = window.WebSocket;
+    if (!NativeWebSocket) return;
+    function FakeWebSocket(url) {
+      if (typeof url === 'string' && DOC_C_RE.test(url)) {
+        throw new DOMException('blocked: no collaboration server in Web Mode', 'NetworkError');
+      }
+      return new (Function.prototype.bind.apply(NativeWebSocket, [null].concat([].slice.call(arguments))))();
+    }
+    FakeWebSocket.prototype = NativeWebSocket.prototype;
+    FakeWebSocket.CONNECTING = NativeWebSocket.CONNECTING;
+    FakeWebSocket.OPEN = NativeWebSocket.OPEN;
+    FakeWebSocket.CLOSING = NativeWebSocket.CLOSING;
+    FakeWebSocket.CLOSED = NativeWebSocket.CLOSED;
+    window.WebSocket = FakeWebSocket;
+  })();
+
+  // ── 4c. Busy-counter watchdog (defense in depth) ─────────────────────────────────
+  // Section 4b above fixes the confirmed WebSocket-driven leak of AscCommon.Uc.l5d
+  // (a start/end-action nesting counter -- nonzero blocks ALL document mutations,
+  // not just the collaboration-lock-gated ones section 3 patches around; see 4b's
+  // comment for the full mechanism). lib/onlyoffice-editor.ts's
+  // patchDesktopThemeCrash guards a second, independent leak source (a theme-picker
+  // crash). Live testing found at least a THIRD leak trigger -- opening the
+  // paragraph style gallery -- with no console error at all, so it isn't either of
+  // the two known crashes; this SDK is too large to find and patch every individual
+  // leak site one at a time. l5d only gates "is a document mutation currently
+  // allowed" (AscCommon.Uc.Tra(), read by every Cf() restriction check); it has no
+  // bearing on document/undo integrity, which is tracked completely separately, per
+  // document, in Ga.Bd -- so periodically clamping l5d back to 0 when stuck is safe
+  // in this single-user, no-real-collaboration-server context, even though it would
+  // not be a safe blanket fix in a real multi-user desktop/server deployment. Runs
+  // as a low-frequency safety net alongside (not instead of) the specific fixes
+  // above -- 2s is comfortably longer than any real start/end-action pair in normal
+  // use, which complete synchronously within a single call stack.
+  (function watchBusyCounterLeak() {
+    setInterval(function () {
+      var Uc = window.AscCommon && window.AscCommon.Uc;
+      if (Uc && Uc.l5d > 0) {
+        console.warn('[OO] AscCommon.Uc.l5d stuck at', Uc.l5d, '-- resetting (patch section 4c watchdog)');
+        Uc.l5d = 0;
+      }
+    }, 2000);
+  })();
+
+  // ── 5. XHR font URL rewrite ──────────────────────────────────────────────────────
   // Rewrites ascdesktop://fonts/<file> → /fonts/<mapped> using the font map
   // fetched above.  The XHR interceptor is installed synchronously; the fontMap
   // object is populated by the time the SDK actually requests any fonts (which
@@ -378,7 +603,7 @@
     };
   })();
 
-  // ── 5. Image URL redirect ────────────────────────────────────────────────────────
+  // ── 6. Image URL redirect ────────────────────────────────────────────────────────
   // SDK constructs image URLs as /media/word/media/<file>.  Redirect these to
   // blob URLs pre-extracted from the OOXML ZIP and published by the parent page
   // in window.__mediaCache = { "media/image1.png": "blob://…" }.
@@ -405,7 +630,142 @@
     });
   })();
 
-  // ── 6. Dialog suppression (fallback) ────────────────────────────────────────────
+  // ── 6b. Image URL redirect for the SDK's own exporter (downloadAs/Save) ─────────
+  // <img src> above only covers on-screen rendering. Confirmed live (save + unzip
+  // the result) that window.editor.downloadAs()/the toolbar Save button go through
+  // the SDK's OWN internal OOXML exporter (not this project's x2t pipeline --
+  // that's only reached via the embed/agent-driven requestSaveDocument path), and
+  // that exporter fetches each image via a real XMLHttpRequest GET to
+  // /media/<file> to embed its bytes into the zip. There is no file at that path
+  // (it only ever existed as an AddImageUrl-resolved blob, see section 3) --  the
+  // request falls through to the SPA and comes back as index.html, so the saved
+  // .docx's word/media/ entry was literal HTML instead of the image (confirmed:
+  // same content-length in every case, and content starting with "<!doctype").
+  // Fix: same idea as the <img src> redirect above, but for XHR -- rewrite the
+  // request URL itself to the cached blob: URL so the browser's own XHR
+  // implementation loads it directly (blob: URLs are readable via a normal XHR).
+  (function patchImageXhr() {
+    var origOpen = window.XMLHttpRequest.prototype.open;
+    window.XMLHttpRequest.prototype.open = function (method, url) {
+      if (typeof url === 'string' && url.indexOf('/media/') !== -1) {
+        var parts = url.split('/');
+        var fname = parts[parts.length - 1].split('?')[0];
+        var cache = window.parent && window.parent.__mediaCache;
+        var blobUrl = cache && fname && cache['media/' + fname];
+        if (blobUrl) arguments[1] = blobUrl;
+      }
+      return origOpen.apply(this, arguments);
+    };
+  })();
+
+  // ── 6c. Paragraph style-gallery thumbnails: CJK captions don't render ───────────
+  // The "开始" tab's style-gallery dropdown (Common.UI.ComboDataView, "combo-styles")
+  // draws each entry's preview icon into an offscreen <canvas> per style
+  // (AscCommonWord.pFf's inner "mpf" object: mub -> W_b -> FK -> ek -> qJh -> tBg ->
+  // yFi). Confirmed live (chrome-devtools MCP) that the caption text reaching yFi is
+  // always correct (the properly localized zh-CN display name, e.g. "标题 1" for
+  // Heading 1) -- the bug is entirely inside the SDK's own drawing: it never calls
+  // the native canvas fillText/strokeText APIs at all (instrumented and confirmed
+  // zero calls), so it must rasterize glyphs through its own internal font/glyph
+  // cache, and that cache silently drops CJK glyphs in this specific code path
+  // (Latin letters and digits still render -- confirmed live that "Heading 1".."9"
+  // show only their trailing ASCII digit, "标题" doesn't render, and "Normal"/"正文"
+  // -- no digit to survive -- renders as a fully blank icon). No font XHR request
+  // fires during this generation (confirmed live), so this isn't a missing/unmapped
+  // font file the way most of this file's other font issues are -- some other,
+  // still-unidentified internal cache is at fault, and it isn't reachable from here
+  // to fix directly.
+  //
+  // Fix: don't try to fix the SDK's internal renderer -- overlay the caption
+  // ourselves using the browser's own (unaffected) native canvas text APIs, which
+  // we confirmed DO render CJK correctly once a CJK-capable font is available. Load
+  // this project's own vendored NotoSansSC (already used for CJK document body text
+  // elsewhere -- see the font map above) as a real FontFace, then wrap yFi to draw a
+  // light backing rectangle plus the correct caption over the bottom of each icon
+  // after the SDK's own (still useful for non-CJK locales, and for whatever
+  // formatting hint it manages to draw, e.g. italic/underlined sample glyphs)
+  // drawing finishes.
+  //
+  // yFi is patched on each individual "mpf" INSTANCE, not a shared prototype --
+  // confirmed live that mpf carries its own *own-property* yFi (shadowing
+  // whatever's on its prototype), so a prototype-level patch here would silently
+  // never run. AscCommonWord.pFf's constructor is wrapped instead, so every fresh
+  // "mpf" (there's one per pFf instance, and pFf itself is created lazily, once per
+  // document, the first time the style gallery needs to generate) gets patched right
+  // after construction, before the SDK's own first-generation pass can run.
+  //
+  // Scoped to the word editor only (AscCommonWord) -- cell/slide ship entirely
+  // separate, independently-minified SDK bundles with their own internal names for
+  // this same mechanism (if they even have an equivalent style gallery at all); this
+  // hasn't been verified against either, so treat a similar report there as a
+  // separate investigation, not "already covered by this patch."
+  (function patchStyleGalleryCjkCaptions() {
+    var CJK_FONT_FAMILY = 'OOStyleGalleryCJK';
+    var cjkFontFace = null;
+    try {
+      cjkFontFace = new FontFace(CJK_FONT_FAMILY, 'url(' + _base + 'fonts/NotoSansSC-Regular.ttf)');
+      cjkFontFace
+        .load()
+        .then(function (loaded) {
+          document.fonts.add(loaded);
+        })
+        .catch(function (e) {
+          console.warn('[OO] style-gallery CJK font failed to load, falling back to sans-serif', e);
+        });
+    } catch (e) {
+      console.warn('[OO] FontFace unavailable for style-gallery CJK caption fix', e);
+    }
+
+    function patchMpf(mpf) {
+      if (!mpf || mpf.__cjkCaptionPatched || typeof mpf.yFi !== 'function') return;
+      mpf.__cjkCaptionPatched = true;
+      var origYFi = mpf.yFi;
+      mpf.yFi = function (d, e, f) {
+        var result = origYFi.apply(this, arguments);
+        try {
+          var ctx = d && d.Pd;
+          if (ctx && typeof f === 'string' && f.length) {
+            var w = this.WBa,
+              h = this.Swa;
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.fillStyle = 'rgba(255,255,255,0.92)';
+            ctx.fillRect(0, h * 0.62, w, h * 0.38);
+            ctx.font = '11px "' + CJK_FONT_FAMILY + '", sans-serif';
+            ctx.fillStyle = '#333333';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(f, w / 2, h * 0.8, w - 6);
+            ctx.restore();
+          }
+        } catch (ex) {
+          console.warn('[OO] style-gallery CJK caption overlay failed', ex);
+        }
+        return result;
+      };
+    }
+
+    var attempts = 0;
+    function tryPatch() {
+      var Word = window.AscCommonWord;
+      if (!Word || typeof Word.pFf !== 'function') {
+        if (attempts++ < 100) setTimeout(tryPatch, 100);
+        return;
+      }
+      if (Word.__pFfCjkCaptionPatched) return;
+      Word.__pFfCjkCaptionPatched = true;
+
+      var OrigPFf = Word.pFf;
+      Word.pFf = function () {
+        var inst = new OrigPFf();
+        patchMpf(inst.mpf);
+        return inst;
+      };
+    }
+    tryPatch();
+  })();
+
+  // ── 7. Dialog suppression (fallback) ────────────────────────────────────────────
   // Primary suppression is in onlyoffice-editor.ts (suppressDialogsInFrame).
   // This polls as a defence-in-depth fallback for the "Connection is lost" dialog.
   (function suppressConnectionLost() {
