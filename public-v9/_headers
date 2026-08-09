@@ -4,6 +4,16 @@
 # that no longer exist after a deploy ("Refused to apply style… text/html").
 # Mirrors public/_headers (v7) — keep the two in sync when either changes.
 
+# v9 has no marketing/SEO purpose of its own -- its landing page is a
+# near-duplicate of v7's, and a search engine indexing both would read as
+# duplicate content competing with (and diluting) v7's ranking. This is a
+# site-wide opt-out via HTTP header rather than a per-page <meta> tag: it
+# covers every route including ones added later, and search engines honor it
+# even for non-HTML responses. Do not remove this while v9 stays an unlisted
+# preview channel intentionally excluded from v7's nav/sitemap.
+/*
+  X-Robots-Tag: noindex, nofollow
+
 # Hashed build outputs: the filename changes every deploy → cache forever.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
