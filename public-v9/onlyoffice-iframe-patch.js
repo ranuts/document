@@ -410,6 +410,27 @@
     };
   }
 
+  // Registers a blob URL into both media maps the same way for every entry
+  // any of the image-insert patches below resolve themselves (remote-
+  // downloaded or local-file-picker), so the commit call gets a real
+  // '/media/<key>' path instead of Ys.KS's/uu.IR's mangled one. Shared across
+  // section 3 (AddImageUrl) and 3b (slide's AddImage) since both hit the
+  // same class of bug. See "Also register for the SAVE path" below for why
+  // both maps matter.
+  function registerMedia(mediaPath, blobUrl) {
+    try {
+      if (window.parent && window.parent.__mediaCache) window.parent.__mediaCache[mediaPath] = blobUrl;
+      // Also register for the SAVE path: x2t/writeMediaFiles reads from
+      // the top page's `media` map (via __registerSaveMedia), a
+      // separate object from __mediaCache (display-only). Without this,
+      // the image shows on screen but the saved .docx's word/media/
+      // entry is whatever fetching '/media/<key>' from the dev/prod
+      // origin returns (a 404 page) instead of the real image bytes --
+      // confirmed live via save + unzip.
+      if (window.parent && window.parent.__registerSaveMedia) window.parent.__registerSaveMedia(mediaPath, blobUrl);
+    } catch (ex) {}
+  }
+
   (function patchAddImageUrlForRemoteAndLocalUrls() {
     var api = window.Asc && window.Asc.editor;
     if (!api || typeof api.AddImageUrl !== 'function') {
@@ -422,24 +443,6 @@
 
     function isRemote(u) {
       return typeof u === 'string' && /^https?:\/\//i.test(u);
-    }
-
-    // Registers a blob URL into both media maps the same way for every entry
-    // this patch resolves itself (remote-downloaded or local-file-picker), so
-    // uHa() gets a real '/media/<key>' path instead of Ys.KS's mangled one.
-    // See "Also register for the SAVE path" below for why both maps matter.
-    function registerMedia(mediaPath, blobUrl) {
-      try {
-        if (window.parent && window.parent.__mediaCache) window.parent.__mediaCache[mediaPath] = blobUrl;
-        // Also register for the SAVE path: x2t/writeMediaFiles reads from
-        // the top page's `media` map (via __registerSaveMedia), a
-        // separate object from __mediaCache (display-only). Without this,
-        // the image shows on screen but the saved .docx's word/media/
-        // entry is whatever fetching '/media/<key>' from the dev/prod
-        // origin returns (a 404 page) instead of the real image bytes --
-        // confirmed live via save + unzip.
-        if (window.parent && window.parent.__registerSaveMedia) window.parent.__registerSaveMedia(mediaPath, blobUrl);
-      } catch (ex) {}
     }
 
     var realImpl = proto.AddImageUrl; // whatever the SDK already assigned
@@ -483,7 +486,25 @@
           }
           return window.AscCommon.Ys.KS(localBlobUrl);
         });
-        self.uHa(resolved, e);
+        // Word/cell/slide are three independently-obfuscated bundles sharing
+        // this one patch file -- the internal "commit this path into the
+        // document" method the comment above calls uHa is that name ONLY in
+        // Word's bundle. Confirmed live: slide's own AddImageUrl real impl
+        // (tgd) ultimately calls its OWN differently-named commit method
+        // (F4d), and calling a hardcoded self.uHa there throws
+        // "self.uHa is not a function" -- silently breaking "Image from URL"
+        // for PowerPoint even for the ALREADY-fixed remote-URL case (this
+        // bug predates today's local-file extension above; it was never
+        // caught because the only automated test of the remote-URL path
+        // used a data: URI, rejected by the dialog's own validation before
+        // reaching this code, so it never actually exercised this line on
+        // slide). AddImageUrlAction is a stable, non-mangled alias present
+        // on both bundles (confirmed live: word's g.prototype.
+        // AddImageUrlAction and slide's f.prototype.AddImageUrlAction ===
+        // f.prototype.F4d) -- use it instead of the internal name so this
+        // works across editors without knowing each bundle's obfuscation.
+        var commit = self.AddImageUrlAction || self.uHa;
+        if (typeof commit === 'function') commit.call(self, resolved, e);
       }
       if (remote.length) window.AscDesktopEditor.DownloadFiles(remote, null, finish);
       else finish({});
@@ -499,6 +520,113 @@
       },
     });
   })();
+
+  // ── 3b. "Image from file" (local file picker) across all three bundles ─────────
+  // The Insert-tab "Image" -> "Image from file" toolbar action does NOT go
+  // through AddImageUrl at all. Confirmed live it's a THIRD, independent entry
+  // point per bundle, each with its own name and its own copy of the exact
+  // same '/media/'-prepending bug as Ys.KS above:
+  //   - slide:  api.AddImage      -> AscCommon.uu.IR  -> commit via F4d
+  //     (`function(a){OpenFilenameDialog("images",!1,function(b){...
+  //     editor.F4d(AscCommon.uu.IR(b),void 0,a))})}`, `uu.IR`:
+  //     `a=this.nda+"/media/"+a`)
+  //   - cell:   api.asc_addImage  -> AscCommon.Hw.Z1  -> commit via P6a
+  //     (`function(f){OpenFilenameDialog("images",!1,function(k){...
+  //     g.P6a([AscCommon.Hw.Z1(k)],f))})}`, `Hw.Z1`: `a=this.Dpa+"/media/"+a`)
+  //   - word:   api.AddImage also matches this same OpenFilenameDialog-inline
+  //     shape live (confirmed: gets caught and patched by the shape check
+  //     below, and a real insert -> canUndo:true, image visibly appears with
+  //     resize handles) -- an earlier static grep of a same-named Lfb/OTa/mrb
+  //     path in the bundle was chasing an unrelated, differently-scoped
+  //     function (minified single/double-letter names collide across many
+  //     unrelated classes; live introspection is the reliable source here,
+  //     not grep).
+  // Every case: the mangled path gets silently dropped by the commit method
+  // with zero console output -- confirmed live (Tab-cycling the document's
+  // objects afterward shows nothing new).
+  //
+  // Detection is by shape (realImpl.toString() containing 'OpenFilenameDialog')
+  // rather than a window.PE/DE/SSE global check, because those globals aren't
+  // set yet when this script runs (injected before the SDK bundle that
+  // defines them) -- a one-shot existence check would never retry and this
+  // patch would silently never install (this bit us once already, see the
+  // retry loop below). The shape check self-selects only matching
+  // implementations, so it's safe to run against every bundle without an
+  // editor-type guard.
+  function patchLocalImageInsertMethod(methodName, commitNames, attemptsLeft) {
+    if (attemptsLeft === undefined) attemptsLeft = 400; // ~20s at 50ms/attempt
+    var api = window.Asc && window.Asc.editor;
+    var proto = api && Object.getPrototypeOf(api);
+    var patchedFlag = '__' + methodName + 'Patched';
+    if (proto && proto[patchedFlag]) return;
+    var realImpl = proto && proto[methodName];
+    // Retry while the method hasn't settled into its final (desktop-aware)
+    // shape yet -- confirmed live it starts as something else and only
+    // becomes the OpenFilenameDialog-calling version once the SDK detects
+    // window.AscDesktopEditor, same swap-in timing as AddImageUrl above.
+    if (typeof realImpl !== 'function' || realImpl.toString().indexOf('OpenFilenameDialog') === -1) {
+      if (attemptsLeft > 0) {
+        setTimeout(function () {
+          patchLocalImageInsertMethod(methodName, commitNames, attemptsLeft - 1);
+        }, 50);
+      }
+      return;
+    }
+    proto[patchedFlag] = true;
+    function wrapped(a) {
+      var self = this;
+      if (!window.AscDesktopEditor || typeof window.AscDesktopEditor.OpenFilenameDialog !== 'function') {
+        return realImpl && realImpl.apply(self, arguments);
+      }
+      window.AscDesktopEditor.OpenFilenameDialog('images', false, function (b) {
+        if (Array.isArray(b)) b = b[0];
+        if (!b) return;
+        patchImageInsertRestrictionCheck(self);
+        var blobUrl = window.AscDesktopEditor.LocalFileGetImageUrl(b);
+        var mediaPath = 'media/' + b;
+        registerMedia(mediaPath, blobUrl);
+        var commit, commitName;
+        for (var i = 0; i < commitNames.length && !commit; i++) {
+          if (typeof self[commitNames[i]] === 'function') {
+            commit = self[commitNames[i]];
+            commitName = commitNames[i];
+          }
+        }
+        if (!commit) return;
+        // Two incompatible call signatures confirmed live from each bundle's
+        // own (uninstrumented) call site:
+        //   - cell's P6a: `g.P6a([path], f)` -- an ARRAY of paths, 2 args.
+        //     Calling it with a bare string instead (as the other signature
+        //     does) makes P6a index into the string's characters instead of
+        //     an array of paths, which surfaces to the user as a very
+        //     confusing "Image URL is incorrect" dialog -- confirmed live,
+        //     this was the first (wrong) version of this fix.
+        //   - word/slide's uHa/F4d (and the AddImageUrlAction alias to
+        //     whichever of those a bundle has): `editor.F4d(path, void 0, a)`
+        //     -- a bare string path, 3 args.
+        if (commitName === 'P6a') commit.call(self, ['/' + mediaPath], a);
+        else commit.call(self, '/' + mediaPath, undefined, a);
+      });
+    }
+
+    Object.defineProperty(proto, methodName, {
+      configurable: true,
+      get: function () {
+        return wrapped;
+      },
+      set: function (fn) {
+        realImpl = fn;
+      },
+    });
+  }
+
+  // Prefer the stable AddImageUrlAction alias where the bundle exposes one
+  // (confirmed live: present on both word and slide, pointing at their real
+  // commit method under whatever internal name it has); cell has no such
+  // alias (grepped -- absent), so P6a is named explicitly as a same-bundle
+  // fallback, confirmed live against this exact SDK build.
+  patchLocalImageInsertMethod('AddImage', ['AddImageUrlAction', 'uHa', 'F4d']);
+  patchLocalImageInsertMethod('asc_addImage', ['AddImageUrlAction', 'P6a']);
 
   // ── 4. Engine.IO/Socket.IO handshake mock ───────────────────────────────────────
   // The SDK's socket.io client polls GET/POST http(s)://host/doc/{sessionId}/c/
