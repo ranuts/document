@@ -1066,6 +1066,28 @@ async function runWebModeOnAppReady(params: {
   // after this patch, downloadAs(), the toolbar Save button, and Excel's
   // separate DownloadAs entry point all reach handleSaveDocument with real
   // serialized bytes.
+  //
+  // Deliberately does NOT also override the raw low-level names (oja/xxa
+  // for word/cell, and iZd for cell's DownloadAs) the way earlier revisions
+  // of this patch did. Those raw names aren't only "asc_Save under another
+  // name" -- the cell engine's own periodic autosave timer (running every
+  // 40ms via an internal setInterval, unconditional unless a real native-app
+  // flag we don't set is present) calls `xxa` directly on its own debounced
+  // schedule, expecting xxa's real implementation to update its "last saved"
+  // bookkeeping as a side effect. Confirmed live (chrome-devtools MCP,
+  // 2026-08-09): overriding `xxa` with this trigger skips that bookkeeping
+  // update, so the debounce check sees the deadline as permanently elapsed
+  // and re-fires on every single 40ms tick forever -- a real, observed
+  // infinite save-and-download loop on a completely untouched new xlsx
+  // document, logged as "Save document event" firing dozens of times a
+  // second with "Uncaught (in promise)" alongside each one. Overriding only
+  // the public asc_Save/asc_DownloadAs entry points still covers every
+  // user-facing save path (toolbar Save button, requestSaveDocument's
+  // downloadAs() call) while leaving the SDK's own internal autosave timer
+  // free to fall through to its original (Desktop-branch, effectively inert
+  // in Web Mode -- no real desktop host to save to) behavior instead of
+  // triggering a full download on every tick. See the 2026-08-09
+  // excel-autosave-infinite-loop exploration doc for the full trace.
   const a = api as any;
   const lowerFileType = fileType.toLowerCase();
   const triggerName = ['pptx', 'ppt'].includes(lowerFileType)
@@ -1081,9 +1103,6 @@ async function runWebModeOnAppReady(params: {
       console.log('[OO] save requested before document content ready -- deferring');
       contentReadyWaiters.push(() => a[triggerName]?.call(a, true));
     };
-    for (const rawName of ['oja', 'xxa', 'iZd']) {
-      if (typeof a[rawName] === 'function') a[rawName] = triggerSave;
-    }
     if (typeof a.asc_Save === 'function') a.asc_Save = triggerSave;
     if (typeof a.asc_DownloadAs === 'function') a.asc_DownloadAs = triggerSave;
   } else {

@@ -315,7 +315,8 @@
     console.log('[OO] AscDesktopEditor polyfill installed');
   })();
 
-  // ── 3. "Image from URL" via the Desktop-mode AddImageUrl override (#72) ─────────
+  // ── 3. Image insert (URL + local file) via the Desktop-mode AddImageUrl override (#72) ─
+
   // The SDK detects window.AscDesktopEditor (the polyfill above) and, at init time,
   // replaces AddImageUrl on the editor instance's prototype with a version that
   // resolves each URL *synchronously* -- confirmed live via chrome-devtools MCP:
@@ -345,12 +346,25 @@
   // '/media/' assumption) has no v7 equivalent.
   //
   // Fix: don't route through the broken LocalFileGetImageUrl -> Ys.KS chain at
-  // all for remote URLs. Fetch via the already-working DownloadFiles, register
-  // the result directly into window.parent.__mediaCache under the exact
+  // all. Fetch remote URLs via the already-working DownloadFiles; register the
+  // result directly into window.parent.__mediaCache under the exact
   // 'media/<key>' path our own section-6 redirect reads from (the same
   // convention Ys.KS would have produced for a *bare filename* input -- we're
   // just doing that step ourselves instead of routing a blob: URL through it by
   // mistake), and call uHa() directly with that path already resolved.
+  //
+  // 2026-08-09 update: local files ("Insert Image" -> pick a file, not "Image
+  // from URL") hit this exact same bug and were NOT covered by the original
+  // fix above -- the key OpenFilenameDialog hands back already resolves to a
+  // real blob: URL via LocalFileGetImageUrl (no DownloadFiles round-trip
+  // needed), but it was still being routed through Ys.KS same as a downloaded
+  // remote one, producing the identical '/media/blob:...' garbage path.
+  // Confirmed live: silent failure, zero console output, Select-All /
+  // Tab-cycle after the insert shows no new shape on the slide, network panel
+  // shows a real GET to that literal garbage path returning 200 (the dev
+  // server's SPA fallback, not actual image bytes). Local keys now go through
+  // the same direct-registration path as remote ones below, just skipping the
+  // DownloadFiles fetch since the blob URL is already in hand.
   //
   // AddImageUrl isn't just reassigned once: live testing showed the SDK
   // reassigns it on the prototype again on every document open, silently
@@ -359,8 +373,8 @@
   // desktop version between opens). Use an accessor property instead -- the
   // getter always returns our wrapper; the setter intercepts the SDK's own
   // reassignment attempts and stashes the value it tried to set as the "real"
-  // implementation to delegate to (still used for the local-file/non-remote
-  // case), rather than letting it overwrite anything.
+  // implementation (kept only as a last-resort fallback if wrapped() itself
+  // isn't callable), rather than letting it overwrite anything.
   //
   // A correctly-shaped '/media/<key>' path reaching uHa() still wasn't enough --
   // live tracing into uHa's internals (this.ep.Tba -> BJe -> AscCommon.Oe.Ug ->
@@ -396,10 +410,10 @@
     };
   }
 
-  (function patchAddImageUrlForRemoteUrls() {
+  (function patchAddImageUrlForRemoteAndLocalUrls() {
     var api = window.Asc && window.Asc.editor;
     if (!api || typeof api.AddImageUrl !== 'function') {
-      setTimeout(patchAddImageUrlForRemoteUrls, 50);
+      setTimeout(patchAddImageUrlForRemoteAndLocalUrls, 50);
       return;
     }
     var proto = Object.getPrototypeOf(api);
@@ -410,38 +424,69 @@
       return typeof u === 'string' && /^https?:\/\//i.test(u);
     }
 
+    // Registers a blob URL into both media maps the same way for every entry
+    // this patch resolves itself (remote-downloaded or local-file-picker), so
+    // uHa() gets a real '/media/<key>' path instead of Ys.KS's mangled one.
+    // See "Also register for the SAVE path" below for why both maps matter.
+    function registerMedia(mediaPath, blobUrl) {
+      try {
+        if (window.parent && window.parent.__mediaCache) window.parent.__mediaCache[mediaPath] = blobUrl;
+        // Also register for the SAVE path: x2t/writeMediaFiles reads from
+        // the top page's `media` map (via __registerSaveMedia), a
+        // separate object from __mediaCache (display-only). Without this,
+        // the image shows on screen but the saved .docx's word/media/
+        // entry is whatever fetching '/media/<key>' from the dev/prod
+        // origin returns (a 404 page) instead of the real image bytes --
+        // confirmed live via save + unzip.
+        if (window.parent && window.parent.__registerSaveMedia) window.parent.__registerSaveMedia(mediaPath, blobUrl);
+      } catch (ex) {}
+    }
+
     var realImpl = proto.AddImageUrl; // whatever the SDK already assigned
     function wrapped(urls, b, d, e) {
       var self = this;
-      if (!realImpl || !urls.some(isRemote)) return realImpl && realImpl.apply(self, arguments);
+      if (!realImpl) return;
+      // Local ("Image from file") entries hit this same broken chain: the key
+      // OpenFilenameDialog produced already resolves to a real blob: URL via
+      // LocalFileGetImageUrl (no download needed), but the SDK's own
+      // AddImageUrl still runs it through Ys.KS, which mangles it into
+      // '/media/blob:...' the exact same way it mangles a downloaded remote
+      // URL -- confirmed live (silent failure, zero console output, network
+      // panel shows a GET to that literal garbage path). Route local entries
+      // through the same direct-registration fix as remote ones instead of
+      // falling through to realImpl.
       patchImageInsertRestrictionCheck(self);
       var remote = urls.filter(isRemote);
-      window.AscDesktopEditor.DownloadFiles(remote, null, function (resultMap) {
+      function finish(resultMap) {
         var resolved = urls.map(function (u) {
-          if (isRemote(u) && resultMap[u]) {
+          if (isRemote(u)) {
+            if (!resultMap[u]) {
+              // Download failed: fall back to the SDK's own original
+              // resolution so this entry behaves as it would have before
+              // this patch (still broken, but no worse than upstream).
+              return window.AscCommon.Ys.KS(window.AscDesktopEditor.LocalFileGetImageUrl(u));
+            }
             var key = resultMap[u];
             var blobUrl = window.AscDesktopEditor.LocalFileGetImageUrl(key);
             var mediaPath = 'media/' + key;
-            try {
-              if (window.parent && window.parent.__mediaCache) window.parent.__mediaCache[mediaPath] = blobUrl;
-              // Also register for the SAVE path: x2t/writeMediaFiles reads from
-              // the top page's `media` map (via __registerSaveMedia), a
-              // separate object from __mediaCache (display-only). Without this,
-              // the image shows on screen but the saved .docx's word/media/
-              // entry is whatever fetching '/media/<key>' from the dev/prod
-              // origin returns (a 404 page) instead of the real image bytes --
-              // confirmed live via save + unzip.
-              if (window.parent && window.parent.__registerSaveMedia) window.parent.__registerSaveMedia(mediaPath, blobUrl);
-            } catch (ex) {}
+            registerMedia(mediaPath, blobUrl);
             return '/' + mediaPath;
           }
-          // Not remote (a local key some other caller mixed in), or a remote
-          // fetch that failed: fall back to the SDK's own original resolution
-          // so this entry behaves exactly as it would have before this patch.
-          return window.AscCommon.Ys.KS(window.AscDesktopEditor.LocalFileGetImageUrl(u));
+          // Local file-picker key: already has a real blob URL, just needs
+          // registering under its own key instead of being routed through
+          // Ys.KS.
+          var localBlobUrl = window.AscDesktopEditor.LocalFileGetImageUrl(u);
+          if (typeof localBlobUrl === 'string' && localBlobUrl.indexOf('blob:') === 0) {
+            var localMediaPath = 'media/' + u;
+            registerMedia(localMediaPath, localBlobUrl);
+            return '/' + localMediaPath;
+          }
+          return window.AscCommon.Ys.KS(localBlobUrl);
         });
         self.uHa(resolved, e);
-      });
+      }
+      if (remote.length) window.AscDesktopEditor.DownloadFiles(remote, null, finish);
+      else finish({});
     }
 
     Object.defineProperty(proto, 'AddImageUrl', {
@@ -699,6 +744,61 @@
             console.warn('[OO] Statusbar btnDocLang stuck disabled -- resetting (patch section 4c watchdog)');
             btnDocLang3.setDisabled(false);
           }
+        }
+      } catch (e) {}
+      try {
+        // A seventh symptom, found 2026-08-09 verifying the Header & Footer menu's
+        // three siblings (Edit footer / Remove header / Remove footer) next to the
+        // Edit Header crash fixed earlier the same day: Edit footer -> type -> Close
+        // leaves the WHOLE document silently uneditable, with zero console output and
+        // every other watchdog signal in this file (l5d, isDisconnected, Toolbar.editMode,
+        // stackLongActions) reporting healthy -- confirmed via a header/footer A-B
+        // comparison that the identical Edit header -> type -> Close sequence does NOT
+        // reproduce this, so it isn't the Close button itself.
+        //
+        // Root cause (confirmed live, not guessed): AscCommon.Xr is the singleton that
+        // owns the hidden off-screen <textarea id="area_id"> every keystroke actually
+        // lands in -- Xr.zL is that element. Xr.qHc forces Xr.zL.readOnly = true
+        // whenever set, overriding every other caller of Xr.tGb(false) (confirmed live
+        // in sdk-all.js: `k.tGb=function(n){this.zL.readOnly=this.qHc?!0:n}`). Xr.qHc is
+        // itself recomputed from Xr.zb.Vo (`k.Bwg=function(){...this.qHc=this.zb.Vo...}`,
+        // where Xr.zb === the same window.Asc.editor api object everywhere else in this
+        // file). api.Vo is a generic, temporary "suppress redraw" flag used all over
+        // sdk-all.js as a save/restore pair (`var g=editor.Vo;editor.Vo=!0;<draw
+        // something>;editor.Vo=g`) around dozens of unrelated internal render/thumbnail
+        // operations -- too many call sites to find and fix the one specific leak (some
+        // footer-close-triggered redraw whose restore never runs). Confirmed live that
+        // api.Vo is stuck `true` right after the repro, and that api.appOptions.isEdit
+        // stays `true` throughout (the SDK still thinks the document is editable -- it's
+        // only this literal DOM readOnly attribute silently swallowing every keystroke).
+        //
+        // Fix mirrors the rest of this watchdog: don't chase the one broken call site
+        // inside sdk-all.js, reset the flag it left behind. Gated on appOptions.isEdit
+        // so a genuine readonly/view-mode document (?readonly=1, or setReadonlyMode(true))
+        // is never overridden -- api.Vo legitimately supporting a real block is exactly
+        // what isEdit=false would mean, and this watchdog only fires when isEdit is true.
+        // Re-running Xr.Bwg() (the SDK's own qHc recompute) after resetting api.Vo, rather
+        // than setting qHc/readOnly directly, keeps the rest of Bwg's fallback logic
+        // (the Fm/xR/iEa switch) intact for any case this file's investigation didn't
+        // cover.
+        var editorApp4 = window.DE || window.SSE || window.PE;
+        var mainCtrl4 = editorApp4 && editorApp4.getController && editorApp4.getController('Main');
+        var api4 = window.Asc && window.Asc.editor;
+        var Xr4 = window.AscCommon && window.AscCommon.Xr;
+        if (
+          mainCtrl4 &&
+          mainCtrl4.appOptions &&
+          mainCtrl4.appOptions.isEdit &&
+          api4 &&
+          api4.Vo &&
+          Xr4 &&
+          Xr4.zL &&
+          Xr4.zL.readOnly &&
+          typeof Xr4.Bwg === 'function'
+        ) {
+          console.warn('[OO] input-capture textarea stuck read-only (api.Vo leaked) -- resetting (patch section 4c watchdog)');
+          api4.Vo = false;
+          Xr4.Bwg();
         }
       } catch (e) {}
     }, 2000);
