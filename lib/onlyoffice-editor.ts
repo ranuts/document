@@ -254,6 +254,74 @@ function patchDesktopThemeCrash(frameWindow: any): void {
 }
 
 /**
+ * A document containing a table with text, fully selected (Ctrl+A spanning
+ * text + table) with a comment added on that selection, crashes the moment
+ * the user clicks Insert > Header & Footer > Edit header: "Cannot read
+ * properties of undefined (reading 'Oc')" three frames deep inside a `new Ff`
+ * construction (Ff = window.AscWord.v7, the SDK's sub-document container --
+ * body/header/footer are each an `Ff` instance). See the 2026-08-09
+ * header-edit-crash exploration doc for the full repro and stack trace.
+ *
+ * Root cause (confirmed by reading public-v9/sdkjs/word/sdk-all.js, matched
+ * live against the running iframe's `Ff.prototype.$j.toString()`): `$j` is
+ * `Ff`'s undo-history serializer, and its ONLY use of `this.Aa` (the parent
+ * back-reference set by the constructor's first argument) is an unguarded
+ * `this.Aa.Oc()` call. `$j`'s deserialize counterpart (`gk`) only assigns
+ * `this.Aa` when a registry lookup succeeds (`$g.Ug(...)`) -- otherwise it
+ * stays undefined. Some path that constructs/deserializes a header/footer
+ * sub-document while a comment range spans it and the body leaves `this.Aa`
+ * unset; the next undo-snapshot on that instance then crashes unconditionally.
+ * This is a real defect in the vendored SDK build, not something introduced
+ * by this project's code.
+ *
+ * Worse than the crash itself: like patchDesktopThemeCrash above, this throw
+ * happens inside a start/end-action pair, leaking AscCommon.Uc's nesting
+ * counter and leaving the document silently uneditable afterward (confirmed
+ * live: typing produces no model change and asc_getCanUndo() stays false),
+ * with no visible error and no watchdog signal covering this specific state.
+ *
+ * There is no legitimate value for `this.Aa` to synthesize here -- it's a
+ * parent-container reference, not serializable data -- so this guards the
+ * SAME failure mode patchDesktopThemeCrash does: stub just enough of the
+ * missing object (`Oc()`, the only method `$j` calls on it) for the ORIGINAL,
+ * unmodified serializer to complete without throwing, then remove the stub
+ * immediately after so no other code path can observe a fake parent. Since
+ * `this.Aa.Oc()` was an unconditional crash on every path that reaches here
+ * with `this.Aa` unset, this cannot make any previously-working path behave
+ * differently -- it only replaces a hard crash (and the resulting silent
+ * document corruption) with a no-op undo-snapshot for that one instance.
+ */
+function patchHeaderSerializeCrash(frameWindow: any): void {
+  let attempts = 0;
+  const poll = () => {
+    const ctor = frameWindow.AscWord?.v7;
+    const proto = ctor?.prototype;
+    if (!proto || typeof proto.$j !== 'function') {
+      if (attempts++ < 50) setTimeout(poll, 200);
+      return;
+    }
+    if (proto.__headerSerializeCrashPatched) return;
+    proto.__headerSerializeCrashPatched = true;
+
+    const origSerialize = proto.$j;
+    proto.$j = function (this: { Aa?: { Oc: () => number } }, writer: unknown) {
+      if (!this.Aa) {
+        const fakeParent = { Oc: () => 0 };
+        this.Aa = fakeParent;
+        try {
+          return origSerialize.call(this, writer);
+        } finally {
+          this.Aa = undefined;
+        }
+      }
+      return origSerialize.call(this, writer);
+    };
+    console.log('[OO] Ff.prototype.$j (header/footer undo-serialize) crash-guarded in iframe');
+  };
+  poll();
+}
+
+/**
  * v9 Web Mode has no working UI flow to complete the SDK's normal "download as
  * PDF" settings dialog (no real collaboration server behind it, same root cause
  * as everything else this file works around). onDownloadAs (app.js) detours
@@ -721,6 +789,7 @@ async function runWebModeOnAppReady(params: {
     suppressCoAuthoringDisconnect(iwin);
     blockCoAuthoringDisconnectDispatch(iwin);
     patchDesktopThemeCrash(iwin);
+    patchHeaderSerializeCrash(iwin);
   }
 
   if (typeof api?.asc_openDocumentFromBytes !== 'function') {
