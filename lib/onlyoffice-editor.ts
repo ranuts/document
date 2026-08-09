@@ -140,6 +140,67 @@ function suppressCoAuthoringDisconnect(frameWindow: any): void {
 }
 
 /**
+ * Root cause of a whole family of v9 Web Mode lockups (see the 2026-08-08
+ * typing-broken exploration doc, "看门狗第四/五次扩展"): a fake-disconnect
+ * signal fires spuriously (no real collaboration server ever legitimately
+ * disconnects here), and roughly ten independent controllers (Toolbar,
+ * LeftMenu, Statusbar, Header, ReviewChanges, ...) each register their OWN
+ * asc_onCoAuthoringDisconnect handler directly via api.asc_registerCallback,
+ * each locking its own slice of UI (Save, Comments, Track changes, language
+ * menu, ...) with no shared cleanup path. Chasing each one down and reversing
+ * its lock reactively (which is what the onlyoffice-iframe-patch.js watchdog
+ * still does, as a safety net) is whack-a-mole -- new lock sites keep
+ * surfacing as more of the UI gets exercised.
+ *
+ * This intercepts at the single point ALL of those handlers are actually
+ * invoked from: api.bc(name, ...args), the SDK's internal event dispatcher
+ * (confirmed live -- it's directly reachable as a property on the api
+ * object, and asc_registerCallback/asc_unregisterCallback close over the
+ * exact same listener-array object it reads). Two signatures route through
+ * it for this one root cause: api.bc('asc_onCoAuthoringDisconnect', ...) and
+ * api.bc('asc_onStartAction'/'asc_onEndAction', type, Asc.c_oAscAsyncAction.
+ * Disconnect) -- the latter is what pushes the stuck long-action entry that
+ * shows "Connection is lost" and blocks the status bar. Swallowing exactly
+ * these two, and nothing else, stops the entire cascade before any
+ * controller ever sees it -- verified live that Save/Comments/Track changes/
+ * language menu never lock at all (not even transiently) across repeated
+ * real table-insert triggers, while other asc_onStartAction/-EndAction ids
+ * (e.g. LoadingDocument) still push/pop the long-action stack normally, so
+ * legitimate "loading..." spinners are untouched.
+ *
+ * Deliberately in addition to (not instead of) suppressCoAuthoringDisconnect
+ * above: that one blocks Common.NotificationCenter.trigger('api:disconnect'),
+ * a SEPARATE app.js-level trigger path some controllers also listen for.
+ * Neither alone is a substitute for the other; keeping both plus the
+ * reactive watchdog is defense in depth against whichever path some
+ * not-yet-found trigger site turns out to use.
+ */
+function blockCoAuthoringDisconnectDispatch(frameWindow: any): void {
+  let attempts = 0;
+  const poll = () => {
+    const api = frameWindow.Asc?.editor;
+    const disconnectId = frameWindow.Asc?.c_oAscAsyncAction?.Disconnect;
+    if (!api || typeof api.bc !== 'function' || typeof disconnectId !== 'number') {
+      if (attempts++ < 50) setTimeout(poll, 200);
+      return;
+    }
+    if (api.__disconnectDispatchBlocked) return;
+    api.__disconnectDispatchBlocked = true;
+
+    const origBc = api.bc.bind(api);
+    api.bc = (name: string, ...args: unknown[]) => {
+      if (name === 'asc_onCoAuthoringDisconnect') return false;
+      if ((name === 'asc_onStartAction' || name === 'asc_onEndAction') && args[1] === disconnectId) {
+        return false;
+      }
+      return origBc(name, ...args);
+    };
+    console.log('[OO] asc_onCoAuthoringDisconnect dispatch blocked at the source in iframe');
+  };
+  poll();
+}
+
+/**
  * Common.Controllers.Desktop.systemThemeSupported()/-Type() read a "theme"
  * field off a config object (r.theme) that a real native desktop host
  * populates via Desktop.init(); our AscDesktopEditor polyfill makes
@@ -658,6 +719,7 @@ async function runWebModeOnAppReady(params: {
   if (iwin) {
     suppressDialogsInFrame(iwin);
     suppressCoAuthoringDisconnect(iwin);
+    blockCoAuthoringDisconnectDispatch(iwin);
     patchDesktopThemeCrash(iwin);
   }
 

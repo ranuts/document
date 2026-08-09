@@ -15,6 +15,22 @@
 > 是系统性地显示成别的字符），根因是 `font-map.json` 把 Times New Roman
 > 等西文字体错误指向了中文字体 NotoSansSC。已定位、已修复，详见
 > [2026-08-09：默认字体打字全乱码](2026-08-09-v9-latin-text-garbled-notosanssc-substitution.md)。
+>
+> **2026-08-09 再补充**：继续排查表格插入等功能时，发现看门狗第三次扩展
+> （`isDisconnected` 复位）只解决了症状的一半——同一次假断连触发的
+> `Asc.c_oAscAsyncAction.Disconnect`（id 20）长动作，其对应的 `onLongActionEnd`
+> 从未被调用，导致 Save/Comments/Track changes/语言菜单等一大片工具栏按钮
+> 静默永久失效（现象比 isDisconnected 那次更严重、覆盖面更大）。看门狗第四次
+> 扩展修复了单次触发的情况，但同一操作连续触发两次后发现 Toolbar/LeftMenu/
+> Statusbar 还各自独立锁了一部分按钮，第四次扩展覆盖不到——看门狗第五次扩展
+> 已修复并用连续两次真实表格插入验证通过。**之后又找到了这一整类问题的真正
+> 根因**：约十个互相独立的控制器都直接监听同一个 SDK 内部事件
+> `asc_onCoAuthoringDisconnect`，而这十个监听器最终都是通过 SDK 内部唯一的
+> 事件分发函数 `api.bc(...)` 调用的——直接在这一个出口把这个事件（以及带
+> `Disconnect` id 的长动作）拦下来，就能让十个控制器谁都收不到、从源头上
+> 完全不会锁，不再需要等看门狗每次反应式解锁。已实现并用连续两次真实表格
+> 插入验证通过（全程零锁定，看门狗一次都没触发）。详见下方"看门狗第四次
+> 扩展""看门狗第五次扩展"和"真正的根因修复"三节。
 
 ## 背景
 
@@ -231,6 +247,197 @@ app.js 原生打开文档流程里的 `onLongActionBegin(Asc.c_oAscAsyncActionTy
 控制台打出 `[OO] stuck long-action {"id":2,"type":0} -- force-ending`，状态栏
 文字同步清空，全程不需要人工干预。`pnpm run lint:ts && pnpm run
 format:check && pnpm run test:coverage` 全绿。
+
+### 看门狗第三次扩展：`isDisconnected` 卡 `true`，整个编辑器静默变只读
+
+排查完样式库中文缺失、默认字体乱码（见
+[2026-08-09 乱码文档](2026-08-09-v9-latin-text-garbled-notosanssc-substitution.md)）
+之后继续用真实交互过其它功能点，测表格插入的时候又撞上了同一大类问题的
+**第四种**表现形式：工具栏所有按钮突然全部变灰不可点，正文区域的隐藏输入框
+也带上了 `readonly`。
+
+排查确认是 `mainCtrl.appOptions.isDisconnected` 被置成了 `true`——这个标志
+一旦为真，SDK 自己的 `setMode()` 会级联把 `isEdit`/`canEdit` 都设成
+`false`，整个编辑器静默变成只读（没有任何弹窗提示）。这个机制在这次会话
+更早之前排查"WebSocket 连接失败"那次已经见过（见本文档最上面"排查过程"
+一节），当时是文档刚打开时必现；这次是**已经正常编辑了一段时间之后，从
+点开表格插入这种完全普通的操作里又冒出来一次**，说明这不是"只在打开文档
+那一刻会发生一次"的问题，而是整个会话生命周期里随时可能复发的同一类问题，
+现有的 `suppressCoAuthoringDisconnect`（只拦截了这个状态的一个副作用——
+隐藏保存/打印按钮，没有碰 `isEdit` 本身）覆盖不到。
+
+**修复**：沿用同一个第 4c 节看门狗，每 2 秒也检查一次
+`mainCtrl.appOptions.isDisconnected`，一旦发现是 `true` 就重置
+`isDisconnected`/`isEdit`/`canEdit`，并额外调用一次
+`api.asc_setViewMode(false)`——光重置这几个 UI 层的标志位不够，SDK 内部
+真正的"是否只读"状态是分开维护的，两边都要修正过来才能让编辑真正恢复
+（这一点是这次会话更早排查 WebSocket 问题时就已经验证过的经验，这次直接
+复用）。这个重置在单用户、没有真实协作服务器的场景下是安全的——这份文档
+永远不会有正当理由需要进入"已断线"状态。
+
+**验证**：手动把 `isDisconnected` 强制设成 `true`（模拟一次未知来源的
+触发），2 秒内看门狗自动清零、控制台打出预期的警告日志；紧接着实际打字，
+`asc_getCanUndo()` 从 `false` 变成 `true`，确认不只是标志位被清空，编辑
+能力也确实恢复了。`pnpm run lint:ts && pnpm run format:check && pnpm run
+test:coverage` 全绿。
+
+### 看门狗第四次扩展：`Disconnect` 长动作卡死，Save/Comments/Track changes 等一整片按钮永久失效
+
+修完上面的 `isDisconnected` 之后继续用真实交互测别的功能（Insert > Table
+网格选择器，插入一个 3x3 表格），发现同一个假断连触发点还有**第二条**独立
+的泄漏路径，表现比 `isDisconnected` 那次更严重：工具栏里 Save、Comments、
+Headings（左侧面板）、Track changes、Set document language、语言切换菜单
+全部永久变灰不可点，状态栏一度显示"Connection is lost"——但 `Bold`/
+`Italic`/表格插入本身等功能不受影响（跟 `isDisconnected` 那次"整个编辑器
+只读"不是同一种表现，容易被误判成两个无关的 bug）。
+
+排查确认 `mainCtrl.appOptions.isDisconnected` 和 `AscCommon.Uc.l5d` 这次
+都是正常的（`false`/`0`），说明看门狗已有的两个检查点都没覆盖到这次的
+根因。用同源访问翻 `public-v9/web-apps/apps/documenteditor/main/app.js`
+（未压缩但变量名混淆的 bundle）定位到：Toolbar/Header/Statusbar 等**十几个
+控制器各自独立**用 `api.asc_registerCallback("asc_onCoAuthoringDisconnect", ...)`
+注册了自己的断连处理函数，互不经过统一的调度——其中 Toolbar 那份会把
+`this.editMode` 置为 `false` 并调用 `DisableToolbar(true, true)`，级联调用
+`toolbar.setMode({isDisconnected: true, ...})`，最终靠 `lockToolbar(Common.
+enumLock.lostConnect, true)` 把一大批按钮打上 `disabled`。
+
+关键发现：这批断连处理函数注册的同时，**也会往 `mainCtrl.stackLongActions`
+里插入一条 `{id: 20, type: ...}` 的长动作**（`20` 就是 SDK 常量
+`Asc.c_oAscAsyncAction.Disconnect` 的值）。app.js 自己在处理"连接恢复"时，
+走的是 `mainCtrl.onLongActionEnd(type, id)` ——只要这条长动作被正常
+结束，SDK 会自己触发完整的恢复级联（状态栏显示"Connection is restored"，
+Save/Comments/Track changes 等全部一起解锁），不需要我们逐个控制器去反向
+硬改内部状态。问题是：这次会话已有的看门狗（section 4c 第二段）只认
+`{type: 0, id: 2}` 这一种卡死的长动作签名（那是"数据加载中"状态栏那次的
+signature），遇到 `id: 20` 的条目直接 `break` 跳出循环，从未处理——所以
+它在栈里永久卡死，SDK 自己的恢复级联永远不会被触发。
+
+**修复**：把 section 4c 里检查 `stackLongActions` 的循环从只认
+`{type:0, id:2}` 一种签名，扩展成同时认 `id === 20`（Disconnect，不锁
+`type`，因为实测这个字段随触发路径变化，见 patch 里的注释）。命中任意一种
+时都调用同一个 `mainCtrl.onLongActionEnd(entry.type, entry.id)`，让 SDK
+走自己原生的"连接恢复"清理路径，而不是逐个控制器手动 patch。
+
+**验证**：
+
+1. 直接调用 `mainCtrl.onLongActionBegin(1, Asc.c_oAscAsyncAction.Disconnect)`
+   人工复现——工具栏立刻出现同样的大片变灰、状态栏"Connection is lost"。
+2. 不做任何手动干预，只等看门狗的 2 秒轮询——`stackLongActions` 自动清空，
+   状态栏变回"Connection is restored"，所有按钮恢复可点。
+3. 用**真实的 UI 操作**（重新走一遍 Insert > Table 网格选择器插入表格）
+   复现最初发现问题的路径，同样在 2~3 秒内自动恢复，确认修的是真实触发
+   路径，不是只对准我自己构造的测试条件。
+4. `pnpm run lint:ts && pnpm run format:check && pnpm run test:coverage`
+   全绿（296 个单测）。
+
+### 看门狗第五次扩展：单次触发能自愈，但连续触发两次会留下残余——Toolbar/LeftMenu/Statusbar 各自独立的锁
+
+上面第四次扩展验证时只连续走了**一次**真实的 Insert > Table 网格选择器操作，
+确认能自愈。继续排查时把同一个操作**连续做两次**（更接近真实用户反复插入
+表格/图片等操作的使用模式），发现第二次触发后，即使 `stackLongActions`
+已经清空、`mainCtrl.appOptions.isDisconnected` 也是 `false`，Save、
+Comments、Headings（左侧面板）、Track changes、Set document language
+这一批按钮**依然卡死不可点**——说明这次的假断连事件还有第三条独立泄漏路径，
+不经过 `stackLongActions`，第四次扩展覆盖不到。
+
+**排查**：同源翻 app.js 确认，除了 Toolbar 控制器自己的
+`onApiCoAuthoringDisconnect`（`this.editMode=false` +
+`DisableToolbar(true,true)`，最终靠 `lockToolbar(Common.enumLock.
+lostConnect, true)` 批量上锁），还有至少三处**互相独立**、直接调用
+`SetDisabled(true)`/`setDisabled(true)` 的地方，谁都不经过
+`stackLongActions`，谁的解锁也不会被其他任何一处触发：
+
+| 卡住的按钮                            | 拥有者                                                             | 直接调用                         |
+| ------------------------------------- | ------------------------------------------------------------------ | -------------------------------- |
+| 全部工具栏格式化按钮                  | `Toolbar` 控制器自己的 `editMode`/`mode.isDisconnected`            | `lockToolbar(lostConnect, true)` |
+| Comments / Headings（左侧面板）       | `LeftMenu` 控制器                                                  | `this.SetDisabled(true)`         |
+| Track changes / Set document language | `Statusbar` 控制器持有的 `btnTurnReview`/`btnDocLang` 两个按钮实例 | 各自的 `setDisabled(true)`       |
+
+一开始尝试的通用做法（`mainCtrl.onLongActionEnd(type, 20)`、
+`mainCtrl.disableEditing(false, 'reconnect')`）都试过，两个都只能恢复
+Toolbar 那一片和状态栏文案，碰不到 LeftMenu/Statusbar 这两处——它们的
+`onApiCoAuthoringDisconnect` 是完全独立注册的回调，没有走同一条清理路径。
+
+**修复**：在 section 4c 看门狗里新增第三个检查块，每 2 秒：
+
+1. `toolbarCtrl.editMode === false` 时，重置 `editMode`/`toolbar.mode.
+isDisconnected`，调用 `lockToolbar(Common.enumLock.lostConnect, false)`
+   和 `DisableToolbar(false, false)`；
+2. `#left-btn-comments`/`#left-btn-navigation` 任一带 `disabled` class 时，
+   调用 `LeftMenu` 控制器的 `SetDisabled(false)`；
+3. `Statusbar` 控制器的 `btnTurnReview`/`btnDocLang` 各自的 `isDisabled()`
+   为真时，分别调用对应的 `setDisabled(false)`。
+
+三个检查各自独立、互不依赖，每一个都单独在浏览器里手动验证过确实能解锁
+对应的按钮，命中条件都做了判断（不是无条件每 2 秒硬调），空跑时是无操作。
+
+**验证**：不做任何手动干预，把"打开 Insert > Table 网格选择器插入表格"这个
+真实操作连续做两次（复现最初发现残留问题的确切路径），等待看门狗的 2~3 秒
+轮询——Save、Comments、Headings、Track changes、Set document language
+全部恢复可点，状态栏正常显示"Connection is restored"。`pnpm run lint:ts
+&& pnpm run format:check && pnpm run test:coverage` 全绿（296 个单测）。
+
+### 真正的根因修复：在 SDK 内部事件分发的唯一出口拦一次，而不是追着每个控制器修
+
+五次看门狗扩展修完之后，用户明确要求"最好可以发现根本原因，这样修好一处，
+其他地方都好了"——回头看，前五次扩展全都是**反应式**的：每 2 秒巡检一次
+已知的几个卡死信号，命中就手动逆转。这个模式天然追不完：每次换一个新的
+真实操作去测，都可能撞上第 6、第 7 个从未见过的独立锁点（Toolbar 自己的
+`editMode`、LeftMenu 的 `SetDisabled`、Statusbar 两个按钮各自的
+`setDisabled`……），因为这一大类问题的根源——**大约十个互相独立的控制器
+（Toolbar、LeftMenu、Statusbar、Header、ReviewChanges……）都各自直接调用
+`api.asc_registerCallback("asc_onCoAuthoringDisconnect", 自己的处理函数)`**，
+彼此之间没有任何统一的分发或清理路径，谁的按钮该怎么锁、怎么解，完全是
+各写各的。
+
+**关键突破**：既然十个处理函数最终都是被同一个地方调用的，那就不用挨个去堵，
+直接在那"同一个地方"拦一次就够了。用同源访问翻 `public-v9/sdkjs/word/
+sdk-all-min.js`（压缩但没有 sourcemap 的 SDK bundle）顺着调用链网上找：
+
+1. 触发断连事件的函数是 `d.prototype.oce = function(r){this.ZWb.cancel();
+this.bc("asc_onCoAuthoringDisconnect",r);this.zQb(!0)}`——真正的分发点是
+   `this.bc(...)`。
+2. 浏览器里直接检查 `window.Asc.editor.bc`，确认它就是 `asc_registerCallback`
+   注册时写入的同一个监听器列表的读取端：`function(){this.J3j.apply(this,
+arguments);var N=arguments[0];if(Wa.hasOwnProperty(N)){for(var
+ba=0;ba<Wa[N].length;++ba)Wa[N][ba].apply(this||a,Array.prototype.slice.
+call(arguments,1));return!0}return!1}`——`api.bc(eventName, ...args)`
+   就是 SDK 内部**唯一**的事件分发出口，`asc_registerCallback` 只是往
+   `Wa[eventName]` 这个数组里 push，`bc` 才是真正挨个调用的地方。
+3. 同时确认 `stackLongActions` 卡死的 `Disconnect`（id 20）长动作也走同一个
+   出口：`api.bc('asc_onStartAction'/'asc_onEndAction', type, 20)`。
+
+**修复**（`lib/onlyoffice-editor.ts` 新增 `blockCoAuthoringDisconnectDispatch`，
+`onAppReady` 时对 iframe 内的 `api.bc` 打一次猴子补丁）：包一层，遇到
+`name === 'asc_onCoAuthoringDisconnect'`，或者 `name` 是
+`asc_onStartAction`/`asc_onEndAction` 且 `id === Asc.c_oAscAsyncAction.
+Disconnect` 这两种情况，直接返回 `false`、不转发给原始 `bc`；其余事件名
+一律原样放行。这样无论触发源是什么（WebSocket 重试、SDK 内部的连接保活
+超时，还是别的没找到的路径），**十个控制器谁都收不到这个事件**，从源头
+上不会有任何一处被锁——不再是"锁了再等 2 秒解锁"，而是压根不会锁。
+
+与已有的 `suppressCoAuthoringDisconnect`（拦截
+`Common.NotificationCenter.trigger('api:disconnect')`）是两条不同的触发
+路径，不能互相替代：后者堵的是 app.js 层面另一条独立的通知总线，前者堵
+的是 SDK 内部的事件分发核心。两个都保留，看门狗也保留（当防御纵深——万一
+以后又冒出一条完全不同的第三条触发路径，看门狗还能兜底）。
+
+**验证**：
+
+1. 手动直接调用 `api.bc('asc_onStartAction', 1, 20)` 和
+   `api.bc('asc_onCoAuthoringDisconnect', true)`，确认补丁拦截计数器命中，
+   且工具栏、Comments、Track changes 全程未受影响（不像之前那样先锁住、
+   再等看门狗解锁——这次全程根本没锁过）。
+2. 单独验证没有误伤：手动调用 `api.bc('asc_onStartAction', 0, 2)`
+   （`LoadingDocument`，一个完全不同的 id）确认仍然正常压栈、
+   `asc_onEndAction` 后正常弹栈——"加载中"这类正常状态栏提示没有被误伤。
+3. 用真实的 Insert > Table 网格选择器**连续插入两次表格**（最初发现残留
+   问题的确切路径）——这次控制台除了补丁自己打印的"blocked at the
+   source"确认日志外，**全程没有任何看门狗警告**，说明五次扩展里堆的那些
+   反应式检查这次一次都没触发，Save/Comments/Headings/Track changes/
+   语言菜单全程保持可用。
+4. `pnpm run lint:ts && pnpm run format:check && pnpm run test:coverage`
+   全绿（296 个单测）。
 
 ## 顺带发现：段落样式库预览图标显示数字，不是真实预览（根因已定位，已修复并验证）
 

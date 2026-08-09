@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host --force",
-    "dev:v9": "vite --host --force --mode v9",
+    "dev:v9": "vite --host --force --mode v9 --port 5183",
     "build": "sh ./bin/build.sh",
     "build:v9": "sh ./bin/build.sh v9",
     "build:single": "node bin/bundle_single_html.js",

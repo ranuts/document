@@ -605,13 +605,99 @@
         if (mainCtrl && stack && typeof stack.length === 'function') {
           while (stack.length() > 0) {
             var entry = stack.get(0);
-            if (!entry || entry.type !== 0 || entry.id !== 2) break;
+            var isStuckLoading = entry && entry.type === 0 && entry.id === 2;
+            // Asc.c_oAscAsyncAction.Disconnect (id 20): the SAME fake-disconnect
+            // trigger that leaks appOptions.isDisconnected (below) also pushes this
+            // long-action entry via each controller's own asc_onCoAuthoringDisconnect
+            // handler. Its matching onLongActionEnd is what actually reverses the
+            // cascade -- it's the SDK's own "connection restored" cleanup path
+            // (confirmed live: fires "Connection is restored", re-enables Save/
+            // Comments/Track changes/language menu -- all of which the isDisconnected
+            // reset below does NOT touch, since those are locked by each controller's
+            // own onApiCoAuthoringDisconnect handler, not by appOptions). type varies
+            // by call site (seen both 0 and 1 live), so match on id alone here.
+            var isStuckDisconnect = entry && entry.id === 20;
+            if (!isStuckLoading && !isStuckDisconnect) break;
             console.warn(
               '[OO] stuck long-action',
               JSON.stringify(entry),
               '-- force-ending (patch section 4c watchdog)',
             );
             mainCtrl.onLongActionEnd(entry.type, entry.id);
+          }
+        }
+      } catch (e) {}
+      try {
+        // A fourth, independent symptom of the same root cause: confirmed live
+        // (reproduced from plain, ordinary UI actions -- e.g. just opening the
+        // Insert > Table grid picker, not any of our own patches/experiments)
+        // that mainCtrl.appOptions.isDisconnected can flip to true mid-session,
+        // which cascades (via the SDK's own setMode()) into isEdit/canEdit both
+        // going false -- silently turning the whole editor read-only with no
+        // dialog (suppressCoAuthoringDisconnect in onlyoffice-editor.ts only
+        // stops ONE side effect of this, hiding Download/Print/Edit buttons; it
+        // doesn't touch isEdit). There is no real collaboration server here, so
+        // this document can never legitimately need to be disconnected --
+        // resetting these flags whenever the watchdog finds them stuck is safe
+        // in this single-user context. asc_setViewMode(false) is also needed:
+        // the appOptions flags are just the UI-facing mirror, the SDK's actual
+        // edit-mode state is separate and doesn't follow from fixing them alone.
+        var editorApp2 = window.DE || window.SSE || window.PE;
+        var mainCtrl2 = editorApp2 && editorApp2.getController && editorApp2.getController('Main');
+        if (mainCtrl2 && mainCtrl2.appOptions && mainCtrl2.appOptions.isDisconnected) {
+          console.warn('[OO] appOptions.isDisconnected stuck true -- resetting (patch section 4c watchdog)');
+          mainCtrl2.appOptions.isDisconnected = false;
+          mainCtrl2.appOptions.isEdit = true;
+          mainCtrl2.appOptions.canEdit = true;
+          var api2 = window.Asc && window.Asc.editor;
+          if (api2 && typeof api2.asc_setViewMode === 'function') api2.asc_setViewMode(false);
+        }
+      } catch (e) {}
+      try {
+        // A sixth symptom, confirmed live to compound with REPEATED real
+        // triggers (a single Insert > Table use recovered fully via the checks
+        // above; a second one in the same session left this residual behind):
+        // several other controllers register their OWN independent
+        // asc_onCoAuthoringDisconnect handler that calls their own
+        // SetDisabled(true)/setDisabled(true) directly -- NOT through
+        // stackLongActions, NOT through appOptions.isDisconnected, and not
+        // undone by mainCtrl.onLongActionEnd's own cleanup (verified live:
+        // calling that alone restores the Toolbar-level lock and the status
+        // bar caption, but leaves these three untouched). Toolbar's own
+        // editMode flag is a separate lock from the stack-based one already
+        // handled above -- DisableToolbar(true,true) sets it directly from the
+        // same disconnect handler. Each reset call below was individually
+        // confirmed live to un-stick its target and is a no-op when not
+        // needed, so it's safe to run unconditionally every tick.
+        var editorApp3 = window.DE || window.SSE || window.PE;
+        var toolbarCtrl3 = editorApp3 && editorApp3.getController && editorApp3.getController('Toolbar');
+        if (toolbarCtrl3 && toolbarCtrl3.editMode === false) {
+          console.warn('[OO] Toolbar.editMode stuck false -- resetting (patch section 4c watchdog)');
+          toolbarCtrl3.editMode = true;
+          var tbView3 = toolbarCtrl3.toolbar;
+          if (tbView3 && tbView3.mode) tbView3.mode.isDisconnected = false;
+          if (tbView3 && typeof tbView3.lockToolbar === 'function' && window.Common && window.Common.enumLock) {
+            tbView3.lockToolbar(window.Common.enumLock.lostConnect, false);
+          }
+          if (typeof toolbarCtrl3.DisableToolbar === 'function') toolbarCtrl3.DisableToolbar(false, false);
+        }
+        var leftMenuCtrl3 = editorApp3 && editorApp3.getController && editorApp3.getController('LeftMenu');
+        var leftMenuBtn3 = document.getElementById('left-btn-comments') || document.getElementById('left-btn-navigation');
+        if (leftMenuCtrl3 && leftMenuBtn3 && leftMenuBtn3.className.indexOf('disabled') !== -1) {
+          console.warn('[OO] LeftMenu stuck disabled -- resetting (patch section 4c watchdog)');
+          leftMenuCtrl3.SetDisabled(false);
+        }
+        var statusbarCtrl3 = editorApp3 && editorApp3.getController && editorApp3.getController('Statusbar');
+        if (statusbarCtrl3) {
+          var btnTurnReview3 = statusbarCtrl3.btnTurnReview;
+          var btnDocLang3 = statusbarCtrl3.btnDocLang;
+          if (btnTurnReview3 && typeof btnTurnReview3.isDisabled === 'function' && btnTurnReview3.isDisabled()) {
+            console.warn('[OO] Statusbar btnTurnReview stuck disabled -- resetting (patch section 4c watchdog)');
+            btnTurnReview3.setDisabled(false);
+          }
+          if (btnDocLang3 && typeof btnDocLang3.isDisabled === 'function' && btnDocLang3.isDisabled()) {
+            console.warn('[OO] Statusbar btnDocLang stuck disabled -- resetting (patch section 4c watchdog)');
+            btnDocLang3.setDisabled(false);
           }
         }
       } catch (e) {}
