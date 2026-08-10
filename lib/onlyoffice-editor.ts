@@ -411,6 +411,23 @@ let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 let documentContentReady = OO_VARIANT !== 'v9';
 let contentReadyWaiters: Array<() => void> = [];
 
+// v9's asc_DownloadAs is redirected (see the triggerSave patch below) to a
+// generic offline-save trigger that always re-serializes the document in its
+// OWN native format -- it has no way to actually produce a different target
+// format (e.g. PDF) itself. That's fine for a plain "Save", but "Print to
+// PDF" / "Export to PDF" / "Save As <other format>" all call asc_DownloadAs
+// with an Asc.asc_CDownloadOptions carrying the REAL requested format, which
+// the redirect silently drops -- confirmed live (2026-08-09): clicking
+// "Print to PDF" logged "Saving v9 binary ... as XLSX format" and downloaded
+// a renamed XLSX, not a PDF. Stash whatever format was actually requested
+// here (set by the asc_DownloadAs override just before it fires the save;
+// consumed and cleared by handleSaveDocument) so the save handler can pass
+// the real target format to convertBinToDocumentAndDownloadFn's x2t
+// conversion (which already supports PDF and other formats fine -- the gap
+// was purely in knowing what format to ask it for) instead of guessing from
+// the original file's own extension.
+let pendingDownloadAsFormat: string | null = null;
+
 function markDocumentContentReady(): void {
   if (documentContentReady) return;
   documentContentReady = true;
@@ -438,6 +455,57 @@ function waitForDocumentContentReady(timeoutMs = 15000): Promise<void> {
       resolve();
     });
   });
+}
+
+// Tag used to mark asc_CDownloadOptions instances with the file type they
+// were actually constructed with -- see patchDownloadOptionsFileTypeCapture.
+const REQUESTED_FILE_TYPE_TAG = '__ooRequestedFileType';
+
+// Asc.asc_CDownloadOptions (the options object asc_DownloadAs is called
+// with) has no public getter for the file type its constructor stashed --
+// confirmed live, its full prototype chain exposes only asc_set* methods.
+// Worse, the internal property holding it is NOT stable across construction
+// call sites: constructing one directly gave `{oV: 513, ...}`, but the
+// Print controller's own construction (same class, confirmed via
+// `instanceof`) gave `{V_: 513, ...}` instead -- same logical field,
+// different minified name, most likely because Print's UI code lives in a
+// separately-minified bundle chunk from the general SDK. Reading either
+// specific property name is therefore unreliable.
+//
+// Fix: don't read the internal field at all -- wrap the CONSTRUCTOR itself
+// (once, the first time it's seen) to record its first argument (the
+// requested file type; confirmed live across every asc_CDownloadOptions
+// construction site grepped from the app bundle: always
+// `new Asc.asc_CDownloadOptions(fileType, ...)`) onto a property under our
+// own control. This sidesteps the internal-naming question entirely and
+// survives whatever the minifier does to the class's own fields.
+export function patchDownloadOptionsFileTypeCapture(iwin: { Asc?: Record<string, unknown> } | undefined): void {
+  const AscNs = iwin?.Asc as { asc_CDownloadOptions?: { new (...args: unknown[]): unknown } } | undefined;
+  const OriginalCtor = AscNs?.asc_CDownloadOptions as
+    ({ new (...args: unknown[]): unknown } & { __ooPatched?: boolean }) | undefined;
+  if (!AscNs || typeof OriginalCtor !== 'function' || OriginalCtor.__ooPatched) return;
+  function PatchedCtor(this: unknown, ...args: unknown[]) {
+    const instance = Reflect.construct(OriginalCtor as new (...a: unknown[]) => object, args, PatchedCtor as any);
+    (instance as Record<string, unknown>)[REQUESTED_FILE_TYPE_TAG] = args[0];
+    return instance;
+  }
+  PatchedCtor.prototype = OriginalCtor.prototype;
+  (PatchedCtor as unknown as { __ooPatched: boolean }).__ooPatched = true;
+  (AscNs as Record<string, unknown>).asc_CDownloadOptions = PatchedCtor;
+}
+
+// Reads the requested output format off whatever asc_DownloadAs was called
+// with (see patchDownloadOptionsFileTypeCapture for how it gets tagged).
+// Defensive at every step: any unexpected shape (no argument, not an
+// object, untagged, a value with no c_oAscFileType2 mapping) falls through
+// to `null`, which callers treat as "no override, fall back to the
+// existing extension-based guess" -- never worse than the pre-fix
+// behavior, only sometimes not better.
+export function extractRequestedDownloadFormat(options: unknown): string | null {
+  if (!options || typeof options !== 'object') return null;
+  const fileTypeValue = (options as Record<string, unknown>)[REQUESTED_FILE_TYPE_TAG];
+  if (typeof fileTypeValue !== 'number') return null;
+  return c_oAscFileType2[fileTypeValue] || null;
 }
 
 export function getSavedFileMimeType(fileName: string): string {
@@ -664,8 +732,17 @@ async function handleSaveDocument(event: { data: SaveEvent['data'] | ArrayBuffer
 
   if (event.data instanceof ArrayBuffer) {
     binaryData = new Uint8Array(event.data);
+    // A real, explicit format request (e.g. "Print to PDF") always wins over
+    // both the CSV-preservation rule below and the plain extension guess --
+    // see extractRequestedDownloadFormat's own comment for why this can be
+    // trusted, and the 2026-08-09 print-to-pdf exploration doc for the bug
+    // this replaces (every asc_DownloadAs call silently saved in the
+    // original file's format, ignoring the format it was actually asked
+    // for).
+    const requestedFormat = pendingDownloadAsFormat;
+    pendingDownloadAsFormat = null;
     const ext = (fileName?.split('.').pop() || 'docx').toUpperCase();
-    targetFormat = fileName?.toLowerCase().endsWith('.csv') ? 'CSV' : ext;
+    targetFormat = requestedFormat || (fileName?.toLowerCase().endsWith('.csv') ? 'CSV' : ext);
     console.log(`Saving v9 binary ${binaryData.byteLength} bytes as ${targetFormat} format`);
   } else if (event.data?.data?.data) {
     const { data, option } = event.data;
@@ -1088,6 +1165,7 @@ async function runWebModeOnAppReady(params: {
   // in Web Mode -- no real desktop host to save to) behavior instead of
   // triggering a full download on every tick. See the 2026-08-09
   // excel-autosave-infinite-loop exploration doc for the full trace.
+  patchDownloadOptionsFileTypeCapture(iwin);
   const a = api as any;
   const lowerFileType = fileType.toLowerCase();
   const triggerName = ['pptx', 'ppt'].includes(lowerFileType)
@@ -1103,8 +1181,27 @@ async function runWebModeOnAppReady(params: {
       console.log('[OO] save requested before document content ready -- deferring');
       contentReadyWaiters.push(() => a[triggerName]?.call(a, true));
     };
-    if (typeof a.asc_Save === 'function') a.asc_Save = triggerSave;
-    if (typeof a.asc_DownloadAs === 'function') a.asc_DownloadAs = triggerSave;
+    // asc_Save clears any stale pendingDownloadAsFormat before saving --
+    // guards against a prior asc_DownloadAs call that set the flag but whose
+    // save never actually completed (dialog cancelled, etc.) leaking its
+    // requested format into this unrelated plain save.
+    if (typeof a.asc_Save === 'function') {
+      a.asc_Save = () => {
+        pendingDownloadAsFormat = null;
+        return triggerSave();
+      };
+    }
+    // asc_DownloadAs gets its own wrapper (not a bare reference to
+    // triggerSave) so it can stash the caller's requested format before
+    // handing off to the same underlying trigger -- asc_Save is always a
+    // plain "save in the original format" call and never carries this, so
+    // it doesn't need the extra step.
+    if (typeof a.asc_DownloadAs === 'function') {
+      a.asc_DownloadAs = (options?: unknown) => {
+        pendingDownloadAsFormat = extractRequestedDownloadFormat(options);
+        return triggerSave();
+      };
+    }
   } else {
     console.warn(
       `[OO] no offline save trigger (${triggerName}) found for fileType ${fileType} -- Save will likely no-op`,

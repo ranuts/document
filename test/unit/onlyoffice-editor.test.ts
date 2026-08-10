@@ -16,9 +16,11 @@ vi.mock('@ranuts/shared/document-utils', () => ({ getMimeTypeFromExtension: vi.f
 
 import {
   createEditorInstance,
+  extractRequestedDownloadFormat,
   getNormalizedFile,
   getReadonlyMode,
   getSavedFileMimeType,
+  patchDownloadOptionsFileTypeCapture,
   requestSaveDocument,
   setConverterCallbacks,
   setReadonlyMode,
@@ -323,6 +325,83 @@ describe('onlyoffice-editor', () => {
       expect(getSavedFileMimeType('REPORT.DOCX')).toBe(
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       );
+    });
+  });
+
+  // Print to PDF / Export to PDF (and any "save as a different format" action)
+  // silently saved in the ORIGINAL file's format instead of the one actually
+  // requested, because asc_DownloadAs's options object exposes no public
+  // getter for the file type it was constructed with, and the internal
+  // property holding it isn't even stable across construction call sites
+  // (confirmed live: `oV` from a direct construction vs `V_` from the same
+  // build's Print controller). patchDownloadOptionsFileTypeCapture +
+  // extractRequestedDownloadFormat fix this by tagging instances at
+  // construction time instead of reading an internal field. See the
+  // 2026-08-09 print-to-pdf-ignores-target-format exploration doc.
+  describe('patchDownloadOptionsFileTypeCapture / extractRequestedDownloadFormat', () => {
+    it('tags a constructed instance with its first constructor argument', () => {
+      class FakeDownloadOptions {
+        constructor(public fileType: number) {}
+      }
+      const iwin = { Asc: { asc_CDownloadOptions: FakeDownloadOptions } };
+
+      patchDownloadOptionsFileTypeCapture(iwin);
+      const instance = new iwin.Asc.asc_CDownloadOptions(65);
+
+      expect(extractRequestedDownloadFormat(instance)).toBe('XLSX');
+    });
+
+    it('preserves the original constructor behaviour (instance still usable normally)', () => {
+      class FakeDownloadOptions {
+        public fileType: number;
+        constructor(fileType: number) {
+          this.fileType = fileType;
+        }
+      }
+      const iwin = { Asc: { asc_CDownloadOptions: FakeDownloadOptions } };
+
+      patchDownloadOptionsFileTypeCapture(iwin);
+      const instance = new iwin.Asc.asc_CDownloadOptions(43);
+
+      expect(instance).toBeInstanceOf(FakeDownloadOptions);
+      expect(instance.fileType).toBe(43);
+    });
+
+    it('is idempotent -- patching twice does not double-wrap the constructor', () => {
+      class FakeDownloadOptions {
+        constructor(public fileType: number) {}
+      }
+      const iwin = { Asc: { asc_CDownloadOptions: FakeDownloadOptions } };
+
+      patchDownloadOptionsFileTypeCapture(iwin);
+      const onceWrapped = iwin.Asc.asc_CDownloadOptions;
+      patchDownloadOptionsFileTypeCapture(iwin);
+
+      expect(iwin.Asc.asc_CDownloadOptions).toBe(onceWrapped);
+    });
+
+    it('does nothing when asc_CDownloadOptions is not a function', () => {
+      const iwin = { Asc: {} };
+      expect(() => patchDownloadOptionsFileTypeCapture(iwin)).not.toThrow();
+    });
+
+    it('does nothing when iwin/Asc is undefined', () => {
+      expect(() => patchDownloadOptionsFileTypeCapture(undefined)).not.toThrow();
+      expect(() => patchDownloadOptionsFileTypeCapture({})).not.toThrow();
+    });
+
+    it.each([
+      [undefined, null],
+      [null, null],
+      ['a string', null],
+      [42, null],
+      [{}, null], // untagged object
+      [{ __ooRequestedFileType: 'not-a-number' }, null],
+      [{ __ooRequestedFileType: 999999 }, null], // no c_oAscFileType2 mapping
+      [{ __ooRequestedFileType: 65 }, 'XLSX'],
+      [{ __ooRequestedFileType: 43 }, 'DOCX'],
+    ])('extractRequestedDownloadFormat(%j) → %j', (input, expected) => {
+      expect(extractRequestedDownloadFormat(input)).toBe(expected);
     });
   });
 

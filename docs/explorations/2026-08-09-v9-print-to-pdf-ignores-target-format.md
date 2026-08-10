@@ -1,18 +1,19 @@
-# v9："Print to PDF" / "Export to PDF" 等格式转换类保存全部悄悄变成原格式保存（未修复，架构性问题）；开真实文件验证通过
+# v9："Print to PDF" 等格式转换类保存曾悄悄按原格式保存（已修复并验证）；修复后暴露出 x2t 转 PDF 本身会失败（未修复，新问题）；开真实文件验证通过
 
-日期：2026-08-09
+日期：2026-08-09 ～ 2026-08-10
 分支：feat/v9-web-mode
-状态：**已定位根因，未修复，已在 Excel 和 Word 两个编辑器上现场复现**——
-根因在于早前为修 Excel 无限保存循环而加的离线保存补丁，这次发现它有一个
-之前没预料到的副作用；修复涉及区分"纯保存"和"转换成别的格式"两种语义
-完全不同的调用，属于需要谨慎设计的架构性改动，这次只记录、不动手改。
+状态：**"请求的格式被忽略"这个 bug 已修复并现场验证**（Excel 上确认
+`Saving v9 binary ... as PDF format`，不再是 XLSX）；**修复过程中意外暴露出
+一个更深层、此前完全没被触发过的问题**——x2t 把 v9 引擎序列化出的 `.bin`
+实际转换成 PDF 时会失败（错误码 80），这个新问题**未修复**，需要单独排查。
 开真实文件（不是新建文档）这一项验证通过，无问题。
 
 ## 背景
 
 用户问"还有其他问题吗"，继续排查。先验证了一直没测过的"打开真实文件"
 （而不是每次都用 `?new=xlsx` 这种全新空白文档），然后顺手测了一下打印
-预览里的 "Print to PDF" 按钮，意外发现了这个问题。
+预览里的 "Print to PDF" 按钮，发现它悄悄按原格式保存，不是真的转成 PDF。
+用户要求继续修复，这次的记录就是修复过程和修复后暴露出的新问题。
 
 ## 开真实文件——验证通过，无问题
 
@@ -29,136 +30,140 @@
 
 这条路径没有问题。
 
-## "Print to PDF" 等格式转换类保存——会悄悄按原文件格式保存，不是用户要的格式
+## "Print to PDF" 悄悄按原格式保存——已定位根因并修复
 
-### 复现
+### 复现（修复前）
 
-打开上面那个真实的 xlsx 文件，File -> Print，弹出打印预览面板（面板本身
-渲染正常，预览内容跟工作表数据一致），点 **"Print to PDF"** 按钮。
-
-控制台打出：
+打开一个有数据的 xlsx 文件，File -> Print -> 点 "Print to PDF"。控制台
+打出：
 
 ```
 Save document event: [object Object]
 Saving v9 binary 5539 bytes as XLSX format
 ```
 
-**注意最后一行——明明点的是"Print to PDF"，日志却说存成了 "XLSX format"**。
-连续点了两次，两次都是同样的 5539 字节、同样的 "XLSX format"，第二次还
-额外触发了一条 `Uncaught (in promise)`。用 `URL.createObjectURL` 拦截确认
-（虽然这次没直接抓到这条特定调用用的哪种下载机制，但字节数和格式标签本身
-已经是决定性证据）：**"Print to PDF" 产出的不是 PDF，是原始 xlsx 格式的
-文件**，用户点了"导出 PDF"，实际拿到的是一个换了皮的 Excel 文件。
+明明点的是"Print to PDF"，日志却说存成了 "XLSX format"。Word 上模拟同样
+操作（直接调用 `api.asc_DownloadAs({...请求 PDF...})`）也复现：
+`Saving v9 binary 34424 bytes as DOCX format`。用户点了"导出 PDF"，实际
+拿到的是一个换了皮的原格式文件，而且**没有任何报错提示**——比"完全不
+工作"更危险的失败模式。
 
 ### 根因
 
-顺着 `Saving v9 binary ... as XLSX format` 这行日志找到
-`lib/onlyoffice-editor.ts` 里 `handleSaveDocument` 的 v9 分支
-（约 665-669 行）：
+`lib/onlyoffice-editor.ts` 里 `handleSaveDocument` 的 v9 分支，`targetFormat`
+完全是从**原始文件名的扩展名**推出来的，跟用户实际点了哪个按钮
+（Print to PDF / Save / 普通 Print）毫无关系。往上追一层，发现是早前为修
+"Excel 新建文档零操作就无限保存循环"那个 bug 加的补丁（详见
+[2026-08-09 excel-autosave-infinite-loop 文档](2026-08-09-v9-excel-autosave-infinite-loop.md)）
+的一个副作用：`asc_DownloadAs`（真实 SDK 里本该带着"转成什么格式"这个
+参数的方法）被整个换成了一个不接受任何参数的通用保存触发器，导致"转成
+PDF"这个请求在半路就被丢弃了。
 
-```ts
-if (event.data instanceof ArrayBuffer) {
-  binaryData = new Uint8Array(event.data);
-  const ext = (fileName?.split('.').pop() || 'docx').toUpperCase();
-  targetFormat = fileName?.toLowerCase().endsWith('.csv') ? 'CSV' : ext;
-  // ...
-}
+### 修复
+
+在 `handleSaveDocument` 里新增一个模块级状态 `pendingDownloadAsFormat`，
+由 `asc_DownloadAs` 的包装函数在触发保存**之前**设置，v9 分支的
+`targetFormat` 计算优先读取这个值（读到就清空，避免残留污染下一次不相关
+的保存；`asc_Save`——纯保存、从不携带格式请求——也会主动清空它，防止一次
+被取消的 `asc_DownloadAs` 请求残留下来污染后面一次普通 Save）。
+
+难点在于**怎么从 `asc_DownloadAs(options)` 的 `options` 参数里读出真正
+请求的格式**。`Asc.asc_CDownloadOptions` 这个类完全没有公开的 getter
+（现场确认整条原型链只有 `asc_set*` 方法），数值存在一个内部属性上，而且
+**这个内部属性名在不同调用路径下不一样**——现场直接构造一个实例得到
+`{oV: 513, ...}`，但 Print 面板自己内部构造的实例（同一个类，`instanceof`
+确认过）却是 `{V_: 513, ...}`——大概率是 Print 面板的 UI 代码跟 SDK 主体
+分属不同的压缩产物分片，各自独立压缩出了不同的属性名。读任何一个具体
+属性名都不可靠。
+
+最终方案：不读内部字段，改成**包一层构造函数**——`asc_CDownloadOptions`
+被替换成一个包装类，`Reflect.construct` 出真正的实例后，把构造函数收到
+的**第一个参数**（现场从 app.js 里 grep 到的每一处调用都是
+`new Asc.asc_CDownloadOptions(fileType, ...)`，格式常量永远是第一个参数）
+打到实例自己控制的属性上——彻底绕开"内部字段叫什么名字"这个问题，也不怕
+压缩器以后再改名字。
+
+### 验证
+
+现场用真实的 "File -> Print -> Print to PDF" 完整走了一遍：
+
+- 修复前：`Saving v9 binary 5539 bytes as XLSX format`。
+- 修复后：`Saving v9 binary 4003 bytes as PDF format`——**格式识别本身
+  已经完全正确**。
+- 中途排查用的临时调试手段（直接监视真实点击触发的 `asc_DownloadAs`
+  调用、打印 `options` 对象的自有属性）确认了上面提到的属性名不一致这个
+  现象是真实存在的，不是猜测。
+- `pnpm run lint:ts`、`pnpm run format:check`、`pnpm run build:v9`
+  全部通过。
+- 新增的两个纯函数（`patchDownloadOptionsFileTypeCapture`、
+  `extractRequestedDownloadFormat`）已导出并补了单元测试（覆盖：正常打标签
+  取值、不破坏原构造行为、重复打补丁不会套娃、各种异常输入都优雅回退到
+  `null`），`pnpm run test:coverage` 310 个测试全过，覆盖率阈值达标。
+
+## 修复后暴露出的新问题：x2t 把 v9 的 `.bin` 转成 PDF 时会失败（错误码 80，未修复）
+
+### 现象
+
+格式识别修好之后，"Print to PDF" 不再静默存错格式了，但也没能真的产出
+PDF——控制台紧接着报出：
+
+```
+Conversion failed. Parameters XML: ...
+  <m_sFileFrom>/working/New_Document.bin</m_sFileFrom>
+  <m_sFileTo>/working/New_Document.pdf</m_sFileTo>
+  <m_sFontDir>/working/fonts/</m_sFontDir>
+...
+Uncaught (in promise)
 ```
 
-`targetFormat` 完全是从**原始文件名的扩展名**推出来的，跟用户实际点了
-哪个按钮（Print to PDF / Save / 普通 Print）毫无关系。对照 v7 的分支
-（676 行）：
+直接重放同一份 `params.xml` 调用 `x2tModule.ccall('main1', ...)`，拿到的
+返回码是 **80**（`packages/converter/src/document-converter.ts` 里
+`executeConversion` 已知的错误码提示表只覆盖了 88/55/1，不包含 80，
+这次没能查到 80 具体对应什么原因）。
 
-```ts
-targetFormat = fileName?.toLowerCase().endsWith('.csv') ? 'CSV' : c_oAscFileType2[option.outputformat];
-```
+### 这不是这次修复引入的新 bug，是一个此前从未被真正触发过的既有问题
 
-v7 是从事件自带的 `option.outputformat` 读取真正的目标格式——v7 的
-`onSave` 事件本身就带着这个信息。v9 的 `onSaveDocument` 事件只传一个裸
-`ArrayBuffer`，**没有任何格式信息**，所以 v9 这边只能靠猜（用原文件的
-扩展名当替身），猜的结果自然跟用户实际请求的格式对不上。
+在这次修复之前，"Print to PDF"（以及任何"转换成别的格式"的保存）从来没有
+真的把 v9 序列化出的 `.bin` 送进 x2t 转换成目标格式过——因为 `targetFormat`
+一直被错误地设成"原格式"，而"转成同一种格式"这种转换要么走了另一条更简单
+的路径、要么本来就是 x2t 擅长的场景，从未失败过，所以这个更深层的问题一直
+被那个格式识别的 bug 挡在外面，没人见过。这次修复让格式识别对了，"转成
+PDF"这个请求第一次真的被送到 x2t 面前，才第一次暴露出 x2t 本身处理不了
+v9 引擎输出的这份 `.bin`。
 
-再往上追一层，找到为什么 v9 的 `onSaveDocument` 会丢失格式信息——同一个
-文件里稍早的 `runWebModeOnAppReady`（就是这次会话早前为了修 Excel"新建
-文档零操作就无限保存循环"那个 bug 加的补丁，详见
-[2026-08-09 excel-autosave-infinite-loop 文档](2026-08-09-v9-excel-autosave-infinite-loop.md)）：
+从积极的角度看：**这次修复让失败方式变得诚实了**——以前是"什么都不说，
+悄悄给你一个换皮的错误文件"，现在是"明确地转换失败，产生一个可以在控制台
+看到的报错"（虽然目前还是一个未被前端妥善捕获的 uncaught rejection，用户
+界面上不会弹出提示，这也是一个可以顺手改进但这次没有动手的点）。
 
-```ts
-const triggerSave = () => {
-  if (documentContentReady) {
-    return a[triggerName]?.call(a, true);
-  }
-  // ...
-};
-if (typeof a.asc_Save === 'function') a.asc_Save = triggerSave;
-if (typeof a.asc_DownloadAs === 'function') a.asc_DownloadAs = triggerSave;
-```
+### 遗留（下一步排查方向）
 
-`asc_DownloadAs` 在真实的 SDK 里是一个**接受目标格式参数**的方法
-（比如 `asc_DownloadAs({fileType: AscCommon.c_oAscFileType.PDF})`），是
-"Print to PDF"/"Export to PDF"这些功能内部实际调用的入口。这个补丁把
-`asc_DownloadAs` 整个换成了一个**不接受、也不透传任何参数**的
-`triggerSave`——不管调用方传了什么目标格式，`triggerSave` 一律只调用
-`a[triggerName]?.call(a, true)`（`Ncj`/`DOj`/`mTi`，各引擎自己的"离线
-保存触发器"），而这几个触发器只会把文档序列化成**它自己引擎原生的格式**
-（word 引擎序列化出 docx，cell 引擎序列化出 xlsx，slide 引擎序列化出
-pptx），从设计上就不支持"序列化成别的格式"这件事。
-
-**这不是一个孤立的新 bug，是早前那次修复的一个副作用，当时没有预料到**：
-那次修复的注释里明确写了"Deliberately does NOT also override the raw
-low-level names... Overriding only the public asc_Save/asc_DownloadAs
-entry points still covers every user-facing save path"——**当时验证的
-"every user-facing save path"指的是"保存成原格式"这条路（工具栏 Save
-按钮、`requestSaveDocument()`），没有覆盖到"转换成别的格式再保存"这条
-语义完全不同的路**（Print to PDF、Export to PDF，大概率也包括"另存为其它
-格式"）。
-
-### 影响范围
-
-- **确认受影响**：Excel 的 "Print to PDF"（现场复现两次，稳定复现，
-  5539 字节，标记为 XLSX）。**Word 也已现场复现**：直接调用
-  `api.asc_DownloadAs({...请求 PDF...})` 模拟"Export to PDF"，日志显示
-  `Saving v9 binary 34424 bytes as DOCX format`——同样完全忽略了请求的
-  PDF 格式，按原格式（DOCX）保存。两个编辑器复现出的现象完全一致，印证了
-  "`asc_DownloadAs` 补丁是三个编辑器共用同一段代码"这个根因判断。
-- **推测同样受影响，未逐一验证**：PPT 的 Print to PDF / Export to PDF
-  （用的是同一段共用补丁代码，Word 和 Excel 都已复现，没有理由 PPT
-  例外）；如果存在"另存为其它格式"这类功能，理论上也会受影响。
-- **确认不受影响**：落地页上独立的".XLSX → .CSV Convert between formats"
-  这类功能——那些是应用自己的、走 `document-converter.ts`/x2t 转换器的
-  独立页面，不经过编辑器内的 `asc_DownloadAs`，是完全不同的代码路径。
-
-### 为什么这次没有动手修
-
-这不是一个可以像其它这次会话里发现的 bug 一样"改一行、验证一下"就能
-解决的小问题——需要重新设计 `asc_DownloadAs` 的补丁，让它能区分"这是一次
-普通保存"和"这是一次要求转换成 PDF/别的格式的保存"两种语义完全不同的
-调用，前者继续走现有的 `triggerSave`（保留 Excel 无限循环那个已验证的
-修复），后者需要一条全新的、真正支持格式转换的路径（可能需要复用应用
-自己已有的 x2t 转换器逻辑，把 v9 引擎序列化出的原生二进制转换成目标格式，
-类似 `document-converter.ts` 现在做的事，但触发时机和调用约定都不一样）。
-这次判断为"发现问题、记录清楚根因，不在这轮排查里现场设计和验证一个新的
-架构性修复"，留给下一轮专门处理。
-
-### 遗留
-
-- Word 已复现（见上文"影响范围"），PPT 还没有单独复现，但架构上没有理由
-  例外。
-- 没有验证"Export to PDF"（File 菜单里那个，跟 Print 面板里的 "Print to
-  PDF" 是不是同一个入口）是否受影响——大概率是，但没有单独点一遍确认。
-- 没有检查这个问题在 v7 是否存在——从代码看 v7 的 `onSave` 事件本身就带
-  `option.outputformat`，理论上不会有这个问题，但没有专门在 v7 上复现
-  "Print to PDF"操作来交叉确认。
-- 第二次点击 "Print to PDF" 时出现的 `Uncaught (in promise)` 没有深入
-  排查具体原因（可能是连续触发保存时某个 promise 链没有被正确处理，
-  也可能是这次测试环境本身在长时间会话后偶尔出现的干扰噪声）。
+- 错误码 80 具体代表什么，需要进一步排查（x2t 是 OnlyOffice 官方的转换
+  引擎，理论上会有一份错误码对照表，这次没有找到/查证）。
+- 没有确认这个转换失败是 v9 特有的（比如 v9 引擎序列化出的 `.bin` 内部
+  格式跟 v7/x2t 原生预期的 `.bin` 有细微差异），还是 x2t 转 PDF 这条路径
+  本身存在更通用的问题（比如字体目录 `/working/fonts/` 里实际有的字体
+  文件不够、某种资源缺失）——网络面板确认了 `DejaVuSans.ttf` /
+  `DejaVuSans-Bold.ttf` / `LiberationSans-Regular.ttf` 这几个核心字体
+  确实成功加载了，所以"完全没有字体"不是原因，但没有进一步排查是不是
+  缺了某个更具体的资源。
+- 没有测试 Word/PPT 上是否复现同样的错误码 80（Excel 上已确认复现，
+  架构上 bin->PDF 转换这条路径是三个编辑器共用的同一段 x2t 代码，没有
+  理由例外，但没有逐一验证）。
+- `handleSaveDocument` 调用 `convertBinToDocumentAndDownloadFn` 时没有
+  自己的 try/catch，转换失败会变成一个未被捕获的 promise rejection——
+  这是修复之前就存在的既有行为（任何转换失败都会这样，不是这次新引入
+  的），只是之前从未被触发过。给这里补一层错误处理、在界面上给用户一个
+  提示（而不是静默的控制台报错），是一个值得做但这次没有顺手做的改进。
 
 ## 对"v9 是否可以直接替换 v7 上线"这个问题的当前判断
 
-**新增一个需要认真权衡的因素**：如果 "Export to PDF" 这类功能对用户来说
-是常用/重要的功能，这个问题应该在替换上线前修复或者至少明确下线（不建议
-让用户点一个"导出 PDF"的按钮，实际却悄悄拿到一个换皮的原格式文件——这是
-一种比"完全不工作、报错"更危险的失败模式，因为它不会让用户第一时间意识到
-出了问题）。如果这个功能使用频率很低、或者可以先在 UI 上临时隐藏/禁用
-相关按钮，则不必阻塞这次的上线决定。建议跟用户确认这个功能的实际重要程度
-再做决定。
+**这次修复本身是纯粹的改进**（消除了"用户以为导出了 PDF、实际拿到错误
+格式文件"这种最危险的静默失败模式），但同时也说明**"Print to PDF"这个
+功能在 v9 上实际还是不能用**——只是从"悄悄给错文件"变成了"明确转换失败"。
+如果这个功能对用户重要，仍然需要先排查清楚错误码 80 的真正原因才能真正
+可用；如果这个功能使用频率很低，可以考虑在 UI 上先临时隐藏"转换成 PDF/
+其它格式"这一类按钮（仅保留"另存为原格式"），把这次的格式识别修复保留
+下来（消除了静默给错文件的风险），但把"格式转换"这个功能本身标记为
+"v9 上暂不可用"，避免用户遇到一个不明不白的失败。建议跟用户确认这个功能
+的实际重要程度、以及是否值得投入时间继续排查错误码 80。
