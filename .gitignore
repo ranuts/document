@@ -19,3 +19,6 @@ coverage/
 playwright-report/
 test-results/
 public/fonts/__fallback__/
+
+# demo local environments
+demo/qt-webengine/.venv/

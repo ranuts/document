@@ -85,3 +85,25 @@ ArrayBuffer 那样失真）。v5 bin 容器本身是纯 ASCII，latin1 只是保
 
 另外测试者日志里 "onAppReady 被调用 4 次"，多半是宿主重复发送了 4 次
 open 消息（每次都会销毁重建编辑器），与 -85 无关，但值得在宿主侧排查。
+
+## 后续（同日）：场景复现 demo + e2e 回归测试
+
+这次事故暴露两个缺口：没有贴近用户场景（Qt WebEngine）的本地复现手段、
+embed open-buffer 全链路没有自动化回归。补齐如下：
+
+1. **`demo/qt-webengine/`**（PySide6 宿主 demo）：QWebEngineView 加载本地
+   preview，注入 base64 docx，回显页面 console 并 hook `sendCommand` 打印
+   `asc_openDocument` 的 buf 前缀诊断。已在 PySide6 6.11.1 / macOS 实测：
+   - **修复后代码**：`bufHead="DOCY;v5;"` → `onDocumentReady`，打开成功；
+   - **18bb045 坏代码**（worktree 构建对照）：`bufHead="RE9DWTt2"` →
+     **onError**（对应测试者的 -85）→ 超时不打开。
+
+   由此确认：同一根因在 Qt WebEngine 表现为 -85 报错、在桌面 Chrome 表现
+   为静默挂起，症状差异只是引擎错误上报路径不同，最后的疑点闭环。
+
+2. **`test/e2e/embed-open-buffer.spec.ts`**：Playwright 用例走完整链路
+   （postMessage base64 → x2t 转换 → `asc_openDocument` → `onDocumentReady`），
+   并断言 buf 前缀必须是 `DOCY;v5;`——如果再出现格式回归，会立刻红而不是
+   超时。fixture 为手工构造的 932 字节最小 docx
+   （`test/e2e/fixtures/minimal.docx`）。本地全套 e2e 11 用例通过（新用例
+   2.3s）。
