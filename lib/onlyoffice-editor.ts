@@ -73,24 +73,30 @@ export function toUint8Array(data: BlobPart): Uint8Array {
 }
 
 /**
- * Base64-encode binary data in chunks (avoids blowing the call stack on
- * String.fromCharCode(...bytes) for large documents).
+ * Decode bin bytes to a latin1 string, chunked so String.fromCharCode(...bytes)
+ * doesn't blow the call stack on large documents.
  *
  * asc_openDocument's `buf` is sent to OnlyOffice's internal editor iframe via
  * window.postMessage. Some embedding hosts (e.g. Qt WebEngine, see #113) have
  * been observed losing ArrayBuffer/TypedArray contents across that boundary,
- * which OnlyOffice then can't recognize as a valid document and reports as a
- * format mismatch. A base64 string survives postMessage/structured-clone
- * universally, so we send that instead -- the same approach already used for
- * the empty "new document" template in empty_bin.ts.
+ * so we send a string instead -- strings survive postMessage/structured-clone
+ * universally.
+ *
+ * The string MUST be the bin content verbatim, NOT base64 of it: x2t already
+ * emits Editor.bin as an ASCII text container ("DOCY;v5;<len>;<base64>", same
+ * shape as the empty "new document" templates in empty_bin.ts), and the SDK
+ * identifies a string buf by literally checking its first characters against
+ * "DOCY"/"XLSY"/"PPTY" without any base64 decoding. Wrapping the bin in
+ * another base64 layer (as an earlier attempt at #113 did) makes the sniff
+ * fail and the editor hangs at "Loading document" in every environment.
  */
-function toBase64(bytes: Uint8Array): string {
+function toBinaryString(bytes: Uint8Array): string {
   const CHUNK_SIZE = 0x8000;
   let binary = '';
   for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
     binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK_SIZE));
   }
-  return btoa(binary);
+  return binary;
 }
 
 function getFileExtension(fileName: string): string {
@@ -440,9 +446,9 @@ export function createEditorInstance(config: {
               });
             }
 
-            // Load document content. See toBase64() for why this is sent as a
-            // base64 string rather than the raw ArrayBuffer/Uint8Array.
-            const buf = typeof binData === 'string' ? binData : toBase64(toUint8Array(binData));
+            // Load document content. See toBinaryString() for why this is sent
+            // as a string rather than the raw ArrayBuffer/Uint8Array.
+            const buf = typeof binData === 'string' ? binData : toBinaryString(toUint8Array(binData));
             window.editor?.sendCommand({
               command: 'asc_openDocument',
               data: { buf },
