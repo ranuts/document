@@ -168,16 +168,20 @@ describe('onlyoffice-editor', () => {
       expect(config.document.permissions.download).toBe(false);
     });
 
-    it('sends binData as a base64 string to asc_openDocument (#113)', async () => {
+    it('sends binary binData to asc_openDocument as a verbatim latin1 string (#113)', async () => {
       vi.useFakeTimers();
       const DocEditor = vi.fn();
       (window as any).DocsAPI = { DocEditor };
-      const original = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 9, 8, 7]);
+      // Simulate x2t output: Editor.bin is an ASCII text container whose
+      // leading "DOCY" signature the SDK checks literally on string bufs.
+      // Include a high byte (0xFF) to prove latin1 decoding is lossless.
+      const original = Uint8Array.from('DOCY;v5;4;AAAA', (c) => c.charCodeAt(0) as number);
+      const withHighByte = new Uint8Array([...original, 0xff]);
 
       const promise = createEditorInstance({
         fileName: 'report.docx',
         fileType: 'docx',
-        binData: original.buffer,
+        binData: withHighByte.buffer,
       });
       await vi.advanceTimersByTimeAsync(200);
       await promise;
@@ -191,8 +195,11 @@ describe('onlyoffice-editor', () => {
       expect(call).toBeDefined();
       const buf = call![0].data.buf;
       expect(typeof buf).toBe('string');
-      const decoded = Uint8Array.from(atob(buf), (c) => c.charCodeAt(0));
-      expect(Array.from(decoded)).toEqual(Array.from(original));
+      // The SDK sniffs strings via buf.slice(0, 4) === 'DOCY' -- no base64
+      // decoding. The bin must therefore be sent verbatim, byte-for-byte.
+      expect(buf.startsWith('DOCY;v5;')).toBe(true);
+      const roundTripped = Uint8Array.from(buf as string, (c: string) => c.charCodeAt(0));
+      expect(Array.from(roundTripped)).toEqual(Array.from(withHighByte));
     });
 
     it('passes a string binData (empty-template case) through to asc_openDocument unchanged', async () => {
