@@ -16,12 +16,23 @@ import { extractDocxMediaUrls } from './docx-zip';
 // carries no format signature, so x2t must be told the input format explicitly.
 export const CANVAS_PDF_INPUT_FORMAT = 8196;
 
+// x2t output-format constant for PDF (AVS_OFFICESTUDIO_FILE_CROSSPLATFORM_PDF).
+// Declared explicitly because x2t cannot infer the conversion direction from
+// file extensions alone when the input is a canvas render stream.
+export const PDF_OUTPUT_FORMAT = 513;
+
 // Serialized editor documents start with a 4-byte engine signature.
 const EDITOR_BIN_SIGNATURES = new Set(['DOCY', 'XLSY', 'PPTY', 'VSDY']);
 
 export function hasEditorBinSignature(bin: Uint8Array): boolean {
   if (bin.length < 4) return false;
   return EDITOR_BIN_SIGNATURES.has(String.fromCharCode(bin[0]!, bin[1]!, bin[2]!, bin[3]!));
+}
+
+// The v9 engine's offline save trigger emits a finished OOXML document (a ZIP
+// container starting with "PK\x03\x04"), not an editor bin at all.
+export function isZipContainer(bin: Uint8Array): boolean {
+  return bin.length >= 4 && bin[0] === 0x50 && bin[1] === 0x4b && bin[2] === 0x03 && bin[3] === 0x04;
 }
 
 const MIME_MAP: Record<string, string> = {
@@ -287,13 +298,13 @@ export class X2TConverter {
   /**
    * Create conversion parameters XML
    */
-  private createConversionParams(fromPath: string, toPath: string, additionalParams = ''): string {
+  private createConversionParams(fromPath: string, toPath: string, additionalParams = '', noBase64 = false): string {
     return `<?xml version="1.0" encoding="utf-8"?>
 <TaskQueueDataConvert xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <m_sFileFrom>${fromPath}</m_sFileFrom>
   <m_sThemeDir>/working/themes</m_sThemeDir>
   <m_sFileTo>${toPath}</m_sFileTo>
-  <m_bIsNoBase64>false</m_bIsNoBase64>
+  <m_bIsNoBase64>${noBase64}</m_bIsNoBase64>
   ${additionalParams}
 </TaskQueueDataConvert>`;
   }
@@ -686,14 +697,17 @@ export class X2TConverter {
       let additionalParams = '';
       if (targetExt === 'PDF') {
         await this.loadFontsForPdf();
-        additionalParams = '<m_sFontDir>/working/fonts/</m_sFontDir>';
+        additionalParams = `<m_sFontDir>/working/fonts/</m_sFontDir><m_nFormatTo>${PDF_OUTPUT_FORMAT}</m_nFormatTo>`;
       }
 
       // A bin without a DOCY/XLSY/PPTY/VSDY signature is the editor's canvas
       // render stream ("Print to PDF" and similar), which x2t cannot identify
       // from the bytes alone -- it fails with exit code 80 unless the input
-      // format is declared explicitly. Signed editor bins are left untouched.
-      if (!hasEditorBinSignature(bin)) {
+      // format is declared explicitly. The stream is also raw binary (unlike
+      // signed editor bins, which are base64-wrapped text), so m_bIsNoBase64
+      // must be true for it. Signed editor bins are left untouched.
+      const isCanvasRenderStream = !hasEditorBinSignature(bin);
+      if (isCanvasRenderStream) {
         additionalParams += `<m_nFormatFrom>${CANVAS_PDF_INPUT_FORMAT}</m_nFormatFrom>`;
       }
 
@@ -701,6 +715,7 @@ export class X2TConverter {
         `/working/${binFileName}`,
         `/working/${outputFileName}`,
         additionalParams,
+        isCanvasRenderStream,
       );
 
       this.x2tModule!.FS.writeFile('/working/params.xml', params);
