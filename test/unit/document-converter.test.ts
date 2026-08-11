@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { CANVAS_PDF_INPUT_FORMAT, X2TConverter, hasEditorBinSignature } from '@ranuts/converter';
+import { CANVAS_PDF_INPUT_FORMAT, X2TConverter, hasEditorBinSignature, isZipContainer } from '@ranuts/converter';
 
 /**
  * X2TConverter wraps the x2t WASM module (loaded onto window.Module by the host).
@@ -258,6 +258,40 @@ describe('X2TConverter', () => {
       await converter.convertBinToDocument(signed('XLSY'), 'doc.xlsx', 'XLSX');
 
       expect(writtenParams(writeFile)).not.toContain('<m_nFormatFrom>');
+    });
+
+    describe('isZipContainer / v9 OOXML zip saves', () => {
+      const zip = () => new Uint8Array([0x50, 0x4b, 0x03, 0x04, 1, 2, 3]);
+
+      it('detects the PK zip signature and rejects other data', () => {
+        expect(isZipContainer(zip())).toBe(true);
+        expect(isZipContainer(new Uint8Array([0x50, 0x4b, 0x05, 0x06]))).toBe(false); // empty-zip EOCD, not a local header
+        expect(isZipContainer(new Uint8Array([0xde, 0xad, 0xbe, 0xef]))).toBe(false);
+        expect(isZipContainer(new Uint8Array(0))).toBe(false);
+      });
+
+      it('returns a same-format zip save as-is without invoking x2t', async () => {
+        const { converter } = makeBinConverter();
+        const bin = zip();
+
+        const result = await converter.convertBinToDocument(bin, 'doc.xlsx', 'XLSX');
+
+        expect(result.fileName).toBe('doc.xlsx');
+        expect(result.data).toBe(bin);
+        expect((converter as any).x2tModule.ccall).not.toHaveBeenCalled();
+      });
+
+      it('converts a cross-format zip save as a real document with the source extension', async () => {
+        const { converter, writeFile } = makeBinConverter();
+
+        await converter.convertBinToDocument(zip(), 'doc.xlsx', 'PDF');
+
+        const params = writtenParams(writeFile);
+        expect(params).toContain('<m_sFileFrom>/working/doc.xlsx</m_sFileFrom>');
+        expect(params).toContain('<m_sFileTo>/working/doc.pdf</m_sFileTo>');
+        expect(params).toContain('<m_bIsNoBase64>true</m_bIsNoBase64>');
+        expect(params).not.toContain('<m_nFormatFrom>');
+      });
     });
   });
 });

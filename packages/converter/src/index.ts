@@ -5,5 +5,11 @@
  * package wraps it with a typed converter plus DOCX/PPTX media + line-break
  * preprocessing. Depends on @ranuts/shared for types / file-type utils / i18n.
  */
-export { X2TConverter, hasEditorBinSignature, CANVAS_PDF_INPUT_FORMAT } from './document-converter';
+export {
+  X2TConverter,
+  hasEditorBinSignature,
+  isZipContainer,
+  CANVAS_PDF_INPUT_FORMAT,
+  PDF_OUTPUT_FORMAT,
+} from './document-converter';
 export { extractDocxMediaUrls, preprocessPptx, preprocessXlsxLineBreaks } from './docx-zip';

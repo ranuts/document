@@ -650,6 +650,14 @@ export class X2TConverter {
     try {
       await this.writeMediaFiles(media);
 
+      // The v9 engine's offline save hands us a finished OOXML zip rather than
+      // an editor bin. Same-format saves need no conversion at all; cross-format
+      // ones go through x2t as a real document, with the source extension spelled
+      // out so x2t can infer the conversion direction.
+      if (isZipContainer(bin)) {
+        return await this.convertZipDocument(bin, originalFileName, targetExt);
+      }
+
       // Handle CSV files specially - need to convert bin -> XLSX -> CSV
       if (targetExt.toUpperCase() === 'CSV') {
         // First convert bin to XLSX
@@ -665,27 +673,9 @@ export class X2TConverter {
         const xlsxResult = this.x2tModule!.FS.readFile(`/working/${xlsxFileName}`);
         const xlsxArray = xlsxResult instanceof Uint8Array ? xlsxResult : new Uint8Array(xlsxResult as ArrayBuffer);
 
-        // Convert XLSX to CSV using SheetJS
-        const XLSX = await this.loadXlsxLibrary();
-        const workbook = XLSX.read(xlsxArray, { type: 'array' });
-
-        // Get the first sheet
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-
-        // Convert to CSV
-        const csvText = XLSX.utils.sheet_to_csv(worksheet);
-
-        // Convert CSV text to Uint8Array (UTF-8 with BOM for better compatibility)
-        const csvBOM = new Uint8Array([0xef, 0xbb, 0xbf]);
-        const csvTextBytes = new TextEncoder().encode(csvText);
-        const csvArray = new Uint8Array(csvBOM.length + csvTextBytes.length);
-        csvArray.set(csvBOM, 0);
-        csvArray.set(csvTextBytes, csvBOM.length);
-
         return {
           fileName: outputFileName,
-          data: csvArray,
+          data: await this.xlsxToCsvBytes(xlsxArray),
         };
       }
 
@@ -733,6 +723,66 @@ export class X2TConverter {
     } catch (error) {
       throw new Error(`Bin to document conversion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
+  }
+
+  /**
+   * Convert XLSX bytes to CSV bytes (UTF-8 with BOM) via SheetJS.
+   */
+  private async xlsxToCsvBytes(xlsxArray: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
+    const XLSX = await this.loadXlsxLibrary();
+    const workbook = XLSX.read(xlsxArray, { type: 'array' });
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    const csvText = XLSX.utils.sheet_to_csv(worksheet);
+    const csvBOM = new Uint8Array([0xef, 0xbb, 0xbf]);
+    const csvTextBytes = new TextEncoder().encode(csvText);
+    const csvArray = new Uint8Array(csvBOM.length + csvTextBytes.length);
+    csvArray.set(csvBOM, 0);
+    csvArray.set(csvTextBytes, csvBOM.length);
+    return csvArray;
+  }
+
+  /**
+   * Convert a finished OOXML document (v9 offline save output) to the target
+   * format. The editor already produced a complete docx/xlsx/pptx zip, so a
+   * same-format save returns the bytes as-is, CSV goes straight to SheetJS,
+   * and everything else is a plain document-to-document x2t conversion.
+   */
+  private async convertZipDocument(
+    bin: Uint8Array,
+    originalFileName: string,
+    targetExt: string,
+  ): Promise<BinConversionResult> {
+    const sanitizedBase = this.sanitizeFileName(originalFileName).replace(/\.[^/.]+$/, '');
+    const nameExt = (originalFileName.split('.').pop() || targetExt).toLowerCase();
+    // The editor opens CSV files as spreadsheets internally, so the zip it
+    // emits for them is an XLSX regardless of the original file's name.
+    const sourceExt = nameExt === 'csv' ? 'xlsx' : nameExt;
+    const outputFileName = `${sanitizedBase}.${targetExt.toLowerCase()}`;
+
+    if (sourceExt === targetExt.toLowerCase()) {
+      return { fileName: outputFileName, data: bin as BlobPart };
+    }
+
+    if (targetExt.toUpperCase() === 'CSV') {
+      return { fileName: outputFileName, data: await this.xlsxToCsvBytes(bin) };
+    }
+
+    const inputPath = `/working/${sanitizedBase}.${sourceExt}`;
+    const outputPath = `/working/${outputFileName}`;
+    this.x2tModule!.FS.writeFile(inputPath, bin);
+
+    let additionalParams = '';
+    if (targetExt === 'PDF') {
+      await this.loadFontsForPdf();
+      additionalParams = `<m_sFontDir>/working/fonts/</m_sFontDir><m_nFormatTo>${PDF_OUTPUT_FORMAT}</m_nFormatTo>`;
+    }
+
+    const params = this.createConversionParams(inputPath, outputPath, additionalParams, true);
+    this.x2tModule!.FS.writeFile('/working/params.xml', params);
+    this.executeConversion('/working/params.xml');
+
+    return { fileName: outputFileName, data: this.x2tModule!.FS.readFile(outputPath) };
   }
 
   /**
