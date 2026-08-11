@@ -777,7 +777,17 @@ async function handleSaveDocument(event: { data: SaveEvent['data'] | ArrayBuffer
   } else if (isEmbedMode()) {
     console.warn('Local save is disabled in iframe embed mode. Use document:save from the parent page.');
   } else if (convertBinToDocumentAndDownloadFn) {
-    await convertBinToDocumentAndDownloadFn(binaryData, fileName, targetFormat, media);
+    try {
+      await convertBinToDocumentAndDownloadFn(binaryData, fileName, targetFormat, media);
+    } catch (error) {
+      // Surface the failure to the user instead of leaving an uncaught
+      // rejection with no UI feedback; still fall through so the editor's
+      // save state is cleared below.
+      console.error('Failed to convert and save document:', error);
+      (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
+        `${t('documentOperationFailed')}${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
   } else {
     throw new Error('Converter callback not set');
   }

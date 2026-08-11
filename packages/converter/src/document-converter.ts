@@ -10,6 +10,20 @@ import type {
 import { BASE_PATH, DOCUMENT_TYPE_MAP } from '@ranuts/shared/document-utils';
 import { extractDocxMediaUrls } from './docx-zip';
 
+// x2t input-format constant for the editor's canvas render stream. When the
+// editor exports via "Print to PDF" (and similar render-based paths) it emits a
+// stream of drawing commands instead of a serialized document, and that stream
+// carries no format signature, so x2t must be told the input format explicitly.
+export const CANVAS_PDF_INPUT_FORMAT = 8196;
+
+// Serialized editor documents start with a 4-byte engine signature.
+const EDITOR_BIN_SIGNATURES = new Set(['DOCY', 'XLSY', 'PPTY', 'VSDY']);
+
+export function hasEditorBinSignature(bin: Uint8Array): boolean {
+  if (bin.length < 4) return false;
+  return EDITOR_BIN_SIGNATURES.has(String.fromCharCode(bin[0]!, bin[1]!, bin[2]!, bin[3]!));
+}
+
 const MIME_MAP: Record<string, string> = {
   gif: 'image/gif',
   png: 'image/png',
@@ -263,6 +277,7 @@ export class X2TConverter {
         88: 'The file may be in an unsupported format (.doc binary format), password-protected, or corrupted. Try converting to .docx first.',
         55: 'DRM-protected or encrypted file cannot be opened.',
         1: 'Invalid or corrupted file.',
+        80: 'x2t could not recognize the input format. An unsigned editor render stream needs an explicit m_nFormatFrom (see hasEditorBinSignature).',
       };
       const hint = hints[result] ? ` (${hints[result]})` : '';
       throw new Error(`Conversion failed with code: ${result}${hint}`);
@@ -672,6 +687,14 @@ export class X2TConverter {
       if (targetExt === 'PDF') {
         await this.loadFontsForPdf();
         additionalParams = '<m_sFontDir>/working/fonts/</m_sFontDir>';
+      }
+
+      // A bin without a DOCY/XLSY/PPTY/VSDY signature is the editor's canvas
+      // render stream ("Print to PDF" and similar), which x2t cannot identify
+      // from the bytes alone -- it fails with exit code 80 unless the input
+      // format is declared explicitly. Signed editor bins are left untouched.
+      if (!hasEditorBinSignature(bin)) {
+        additionalParams += `<m_nFormatFrom>${CANVAS_PDF_INPUT_FORMAT}</m_nFormatFrom>`;
       }
 
       const params = this.createConversionParams(

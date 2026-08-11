@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { X2TConverter } from '@ranuts/converter';
+import { CANVAS_PDF_INPUT_FORMAT, X2TConverter, hasEditorBinSignature } from '@ranuts/converter';
 
 /**
  * X2TConverter wraps the x2t WASM module (loaded onto window.Module by the host).
@@ -205,6 +205,59 @@ describe('X2TConverter', () => {
 
       expect(writeFile).toHaveBeenCalledTimes(1);
       expect(writeFile).toHaveBeenCalledWith('/working/media/good.png', new Uint8Array([7]));
+    });
+  });
+
+  describe('hasEditorBinSignature / canvas render stream detection — "Print to PDF" exit code 80', () => {
+    const signed = (sig: string) => new Uint8Array([...sig].map((c) => c.charCodeAt(0)).concat([0x3b, 0x76]));
+
+    it('recognizes the four engine signatures', () => {
+      for (const sig of ['DOCY', 'XLSY', 'PPTY', 'VSDY']) {
+        expect(hasEditorBinSignature(signed(sig))).toBe(true);
+      }
+    });
+
+    it('rejects unsigned data, short buffers, and near-miss signatures', () => {
+      expect(hasEditorBinSignature(new Uint8Array([0x01, 0x02, 0x03, 0x04]))).toBe(false);
+      expect(hasEditorBinSignature(new Uint8Array([0x44, 0x4f]))).toBe(false); // "DO" only
+      expect(hasEditorBinSignature(new Uint8Array(0))).toBe(false);
+      expect(hasEditorBinSignature(signed('DOCX'))).toBe(false);
+    });
+
+    const makeBinConverter = () => {
+      const converter = new X2TConverter();
+      const writeFile = vi.fn();
+      vi.spyOn(converter, 'initialize').mockResolvedValue({} as any);
+      (converter as any).x2tModule = {
+        ccall: vi.fn().mockReturnValue(0),
+        FS: {
+          writeFile,
+          readFile: vi.fn().mockReturnValue(new Uint8Array([1])),
+        },
+      };
+      (converter as any).fontsLoaded = true; // skip the font fetch in loadFontsForPdf
+      return { converter, writeFile };
+    };
+
+    const writtenParams = (writeFile: ReturnType<typeof vi.fn>): string =>
+      writeFile.mock.calls.find(([path]) => path === '/working/params.xml')?.[1] as string;
+
+    it('declares m_nFormatFrom 8196 for an unsigned render stream converted to PDF', async () => {
+      const { converter, writeFile } = makeBinConverter();
+
+      await converter.convertBinToDocument(new Uint8Array([0xde, 0xad, 0xbe, 0xef]), 'doc.xlsx', 'PDF');
+
+      const params = writtenParams(writeFile);
+      expect(params).toContain(`<m_nFormatFrom>${CANVAS_PDF_INPUT_FORMAT}</m_nFormatFrom>`);
+      expect(params).toContain('<m_sFontDir>/working/fonts/</m_sFontDir>');
+    });
+
+    it('leaves a signed editor bin without an explicit input format (v7 behavior unchanged)', async () => {
+      const { converter, writeFile } = makeBinConverter();
+
+      await converter.convertBinToDocument(signed('XLSY'), 'doc.xlsx', 'XLSX');
+
+      expect(writtenParams(writeFile)).not.toContain('<m_nFormatFrom>');
     });
   });
 });
