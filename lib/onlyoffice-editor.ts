@@ -5,6 +5,7 @@ import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
 import { c_oAscFileType2, oAscFileType } from './file-types';
 import type { BinConversionResult, SaveEvent } from '@ranuts/shared/document-types';
 import { DOCUMENT_TYPE_MAP, getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
+import { X2TConverter } from '@ranuts/converter';
 
 // Selected via `vite --mode v9` / `vite build --mode v9` (see vite.config.ts); defaults
 // to v7 for the normal dev/build/test commands. See docs/explorations for why v9 needs
@@ -266,19 +267,12 @@ interface FileStreamMessage {
   buffer?: ArrayBuffer;
 }
 
-function handleFileStreamMessage(event: MessageEvent): void {
-  const data = event.data as FileStreamMessage | undefined;
-  if (!data || data.type !== 'onlyoffice-file-stream' || !(data.buffer instanceof ArrayBuffer)) {
-    return;
-  }
+// SheetJS-only converter for the CSV save-back path below; never touches the
+// x2t WASM, so instantiating it here is cheap and avoids a circular import of
+// lib/converter's singleton.
+let sheetJsConverter: X2TConverter | null = null;
 
-  const { fileName: docName } = getDocmentObj() || {};
-  const ext = (data.fileType || data.fileName?.split('.').pop() || 'bin').toLowerCase();
-  const baseName = (docName || data.fileName || 'document').replace(/\.[^/.]+$/, '');
-  const savedName = `${baseName}.${ext}`;
-  const file = new File([data.buffer], savedName, { type: getSavedFileMimeType(savedName) });
-  console.log(`[OO] file stream received: ${savedName} (${data.buffer.byteLength} bytes)`);
-
+function routeSavedFile(file: File): void {
   if (embeddedSaveRequest) {
     const request = embeddedSaveRequest;
     cleanupEmbeddedSaveRequest(request);
@@ -292,6 +286,42 @@ function handleFileStreamMessage(event: MessageEvent): void {
   }
 
   void saveFileLocally(file);
+}
+
+function handleFileStreamMessage(event: MessageEvent): void {
+  const data = event.data as FileStreamMessage | undefined;
+  if (!data || data.type !== 'onlyoffice-file-stream' || !(data.buffer instanceof ArrayBuffer)) {
+    return;
+  }
+
+  const buffer = data.buffer;
+  const { fileName: docName } = getDocmentObj() || {};
+  const ext = (data.fileType || data.fileName?.split('.').pop() || 'bin').toLowerCase();
+  const baseName = (docName || data.fileName || 'document').replace(/\.[^/.]+$/, '');
+  console.log(`[OO] file stream received: ${baseName}.${ext} (${buffer.byteLength} bytes)`);
+
+  // A CSV original is opened as XLSX (the vendor editor can't ingest raw CSV,
+  // see handleDocumentOperation), so its saves come back as XLSX -- convert
+  // them back so a CSV in still means a CSV out (GitHub #13/#33). The embed
+  // API's explicit "save as xlsx" requests keep the XLSX untouched.
+  const wantsCsvBack =
+    ext === 'xlsx' && !!docName?.toLowerCase().endsWith('.csv') && embeddedSaveRequest?.targetExt !== 'XLSX';
+  if (wantsCsvBack) {
+    void (async () => {
+      try {
+        sheetJsConverter ??= new X2TConverter();
+        const csvBytes = await sheetJsConverter.xlsxToCsvBytes(new Uint8Array(buffer));
+        routeSavedFile(new File([csvBytes], `${baseName}.csv`, { type: 'text/csv' }));
+      } catch (error) {
+        console.error('Failed to convert saved XLSX back to CSV, keeping XLSX:', error);
+        routeSavedFile(new File([buffer], `${baseName}.xlsx`, { type: getSavedFileMimeType('a.xlsx') }));
+      }
+    })();
+    return;
+  }
+
+  const savedName = `${baseName}.${ext}`;
+  routeSavedFile(new File([buffer], savedName, { type: getSavedFileMimeType(savedName) }));
 }
 
 if (OO_VARIANT === 'v9' && typeof window !== 'undefined') {
@@ -550,6 +580,28 @@ async function handleDownloadAs(event: { data?: { url?: string; fileType?: strin
 let currentDocumentBlobUrl: string | null = null;
 
 /**
+ * Strip OnlyOffice chrome that has no place in a pure single-user local
+ * editor: the header logo and the current-user / co-users widgets. There is
+ * no DocEditor config switch for these in this build, but the editor iframe
+ * is same-origin, so a stylesheet injected into it does the job for every
+ * editor type. Idempotent per document (keyed element id).
+ */
+function hideEditorBrandingChrome(): void {
+  for (let i = 0; i < window.frames.length; i++) {
+    try {
+      const doc = (window.frames[i] as Window).document;
+      if (!doc || doc.getElementById('oo-local-chrome-css')) continue;
+      const style = doc.createElement('style');
+      style.id = 'oo-local-chrome-css';
+      style.textContent = '#header-logo, .btn-current-user, #tlb-box-users { display: none !important; }';
+      (doc.head || doc.documentElement).appendChild(style);
+    } catch {
+      // cross-origin frame -- not the editor, skip
+    }
+  }
+}
+
+/**
  * v9 editor creation against the OnlyOffice Personal vendor build. Unlike the
  * old Web Mode path, this build is driven entirely through the public
  * DocEditor config: document.url is a real (blob) URL the editor fetches and
@@ -621,8 +673,13 @@ function createPersonalEditorInstance(config: {
       },
     },
     events: {
+      onAppReady: () => {
+        hideEditorBrandingChrome();
+      },
       onDocumentReady: () => {
         markDocumentContentReady();
+        // Re-apply in case the header rendered after onAppReady.
+        hideEditorBrandingChrome();
         console.log(`${t('documentLoaded')}${fileName}`);
       },
       // Must be declared even as a no-op: the api layer only runs downloadAs

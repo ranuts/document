@@ -65,6 +65,9 @@ export async function handleDocumentOperation(options: {
     const { isNew, fileName, file, readonly = false } = options;
     const fileType = fileName.split('.').pop() || getExtensions(file?.type || '')[0] || '';
     const _docType = getDocumentType(fileType);
+    // The type the editor is asked to open as; differs from the file's own
+    // extension only for the v9 CSV case below.
+    let openFileType = fileType;
 
     // Get document content
     let documentData: {
@@ -80,12 +83,24 @@ export async function handleDocumentOperation(options: {
       }
       documentData = { bin: emptyBin };
     } else if (OO_VARIANT === 'v9') {
-      // v9 Web Mode's asc_openDocumentFromBytes parses raw OOXML directly via the
-      // SDK's own importer -- x2t's .bin format (what v7 needs) isn't applicable
-      // and running the conversion would be wasted work. x2t is still used for
-      // saving/exporting (convertBinToDocument*), unaffected by this branch.
+      // v9 opens documents through the editor's own internal converter (the
+      // page hands it a blob URL, see createPersonalEditorInstance) -- the
+      // page-level x2t is not involved at all.
       if (!file) throw new Error(t('invalidFileObject'));
-      documentData = { bin: await file.arrayBuffer() };
+      if (fileType.toLowerCase() === 'csv') {
+        // The vendor editor's internal x2t cannot ingest raw CSV (its import
+        // needs delimiter/encoding parameters the bundled helper never
+        // passes; opening one fails with a generic error dialog). Reuse the
+        // proven v7 SheetJS conversion and open the equivalent XLSX instead;
+        // saves are converted back to CSV in handleFileStreamMessage so the
+        // user still gets a .csv out (GitHub #13/#33).
+        const csvData = new Uint8Array(await file.arrayBuffer());
+        const xlsxFile = await x2tConverter.convertCsvToXlsx(csvData, fileName);
+        documentData = { bin: await xlsxFile.arrayBuffer() };
+        openFileType = 'xlsx';
+      } else {
+        documentData = { bin: await file.arrayBuffer() };
+      }
     } else {
       // Opening existing document requires conversion
       if (!file) throw new Error(t('invalidFileObject'));
@@ -96,7 +111,7 @@ export async function handleDocumentOperation(options: {
     // Create editor instance (now returns a Promise, uses queue internally)
     await createEditorInstance({
       fileName,
-      fileType,
+      fileType: openFileType,
       binData: documentData.bin,
       media: documentData.media,
       readonly,

@@ -418,7 +418,7 @@ export class X2TConverter {
    * Convert CSV to XLSX format using SheetJS library
    * This is a workaround since x2t may not support CSV directly
    */
-  private async convertCsvToXlsx(csvData: Uint8Array, fileName: string): Promise<File> {
+  async convertCsvToXlsx(csvData: Uint8Array, fileName: string): Promise<File> {
     try {
       // Load xlsx library
       const XLSX = await this.loadXlsxLibrary();
@@ -728,7 +728,7 @@ export class X2TConverter {
   /**
    * Convert XLSX bytes to CSV bytes (UTF-8 with BOM) via SheetJS.
    */
-  private async xlsxToCsvBytes(xlsxArray: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
+  async xlsxToCsvBytes(xlsxArray: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
     const XLSX = await this.loadXlsxLibrary();
     const workbook = XLSX.read(xlsxArray, { type: 'array' });
     const firstSheetName = workbook.SheetNames[0];
