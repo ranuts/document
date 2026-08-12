@@ -159,10 +159,13 @@ export const openDocumentFromUrl = async (
         }
       }
 
-      // If still no filename, extract from URL
+      // If still no filename, extract from URL. Resolve against the current
+      // page so relative URLs (?file=/docs/report.xlsx) keep their real file
+      // name instead of falling back to the extensionless "document", which
+      // then fails the editor's fileType validation.
       if (!finalFileName) {
         try {
-          const urlObj = new URL(url);
+          const urlObj = new URL(url, window.location.href);
           const pathname = urlObj.pathname;
           finalFileName = pathname.split('/').pop() || 'document';
           // Remove query parameters if any

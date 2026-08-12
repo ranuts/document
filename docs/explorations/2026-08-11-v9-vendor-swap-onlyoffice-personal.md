@@ -82,10 +82,13 @@ vendor 整体替换。本篇是实施记录。
 
 ## 已知问题 / 遗留
 
-1. **🔴 部署阻塞：`sdkjs/common/wasm/x2t/x2t.wasm` 40MB 超过 CF Pages 25MB
-   单文件限制**（仓库里唯一超限文件）。修法：给 x2t_helper.js / x2t.js 加
-   v7 同款 gz 预解压（fetch `.gz` + DecompressionStream 预置
-   `Module.wasmBinary`，gzip 后 9.9MB），只发布 gz、不发布裸 wasm。本次未做。
+1. ~~部署阻塞：x2t.wasm 40MB 超 CF Pages 25MB 限制~~ **已解决（2026-08-12）**：
+   `x2t_helper.js` 新增 `prepareWasmBinary()`——加载 x2t.js 前 fetch
+   `x2t.wasm.gz`（9.4MB），按魔数判断是否需要 `DecompressionStream('gzip')`
+   解压（兼容 Content-Encoding 已解压的服务器），预置到
+   `window.Module.wasmBinary`，Emscripten 检测到后跳过自己的 wasm fetch。
+   裸 `x2t.wasm` 已从仓库删除，`public-v9` 与 `dist-v9` 均无超限文件。
+   现场验证：gz-only 路径下 xlsx→PDF 导出流照常产出（4982 字节）。
 2. PPT 打开时 `sdkjs/slide/themes//themes.js` 404（双斜杠）——OnlyofficePersonal
    自己的 demo 也有（其控制台同样报 themes.json 解析失败），不阻塞编辑与保
    存；幻灯片主题库可能受限，待查它 demo 的 `assets/office-config.js` 是否有
@@ -96,9 +99,11 @@ vendor 整体替换。本篇是实施记录。
    端到端验证（e2e 的 open-buffer 用例跑的是 v7）。
 5. `setReadonlyMode` 的运行时切换（`processRightsChange` serviceCommand）在
    新构建上未验证；打开时的 readonly（`mode:'view'`）已走配置。
-6. 顺手发现的既有 bug（v7/v9 同样存在）：`?file=` 传相对 URL 时
-   `openDocumentFromUrl` 里 `new URL(相对路径)` 抛异常，文件名回退成
-   `document`、丢失扩展名，触发 fileType 校验 alert。绝对 URL 正常。
+6. ~~既有 bug：`?file=` 相对 URL 丢文件名~~ **已修复（2026-08-12）**：
+   `lib/document.ts` 的 `openDocumentFromUrl` 改为
+   `new URL(url, window.location.href)` 解析，相对 URL 保留真实文件名。
+   现场验证：`?file=/sheetjs-upload-test.xlsx` 正确以
+   `sheetjs-upload-test.xlsx` / `xlsx` 打开，不再弹 fileType 校验 alert。
 7. 三端"编辑→保存→重新打开"的完整往返、插图、打印预览等深度回归尚未在新
    底座上重跑——旧底座上修过的 15+ 个 bug 大多因 patch 栈删除而不再适用，
    但需要一轮系统回归确认新底座没有自己的坑。

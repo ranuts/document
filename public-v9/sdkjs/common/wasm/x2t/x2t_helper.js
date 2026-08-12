@@ -353,6 +353,10 @@
         this.initPromise = null;
         this.hasScriptLoaded = false;
         this.SCRIPT_PATH = '../../../../sdkjs/common/wasm/x2t/x2t.js'
+        // The raw x2t.wasm is ~40 MB, over Cloudflare Pages' 25 MiB per-file
+        // deploy limit, so only the gzipped copy is shipped and decompressed
+        // in the browser (see prepareWasmBinary).
+        this.WASM_GZ_PATH = '../../../../sdkjs/common/wasm/x2t/x2t.wasm.gz'
         this.binFileName = 'Editor.bin';
 
         this.DOCUMENT_TYPE_MAP = {
@@ -393,10 +397,43 @@
         this.initPromise = this.doInitialize();
         return this.initPromise;
     };
+    // Fetch the gzipped x2t WASM, decompress it in the browser, and stash the
+    // raw bytes on `window.Module.wasmBinary` BEFORE x2t.js runs. Emscripten
+    // checks `Module['wasmBinary']` first and then skips its own fetch of the
+    // raw `x2t.wasm` entirely, so only the ~10 MB .gz needs to be deployed
+    // (the raw 40 MB file exceeds Cloudflare Pages' 25 MiB per-file limit).
+    //
+    // Servers disagree on how they serve a `.gz` file: some send it with
+    // `Content-Encoding: gzip` (the browser has already decompressed the body
+    // by the time we read it), others serve the raw gzip bytes. Detect which
+    // by the leading magic bytes and only decompress a real gzip payload
+    // (`1f 8b`), passing through an already-raw wasm module (`00 61 73 6d`).
+    X2TConverter.prototype.prepareWasmBinary = function () {
+        if (window.Module && window.Module.wasmBinary) return Promise.resolve();
+
+        var gzPath = this.WASM_GZ_PATH;
+        return fetch(gzPath).then(function (response) {
+            if (!response.ok) {
+                throw new Error("Failed to fetch x2t WASM at '" + gzPath + "' (" + response.status + ')');
+            }
+            return response.arrayBuffer();
+        }).then(function (raw) {
+            var head = new Uint8Array(raw, 0, Math.min(2, raw.byteLength));
+            var isGzip = head[0] === 0x1f && head[1] === 0x8b;
+            if (!isGzip) return raw;
+            var stream = new Response(raw).body.pipeThrough(new DecompressionStream('gzip'));
+            return new Response(stream).arrayBuffer();
+        }).then(function (wasmBinary) {
+            // Pre-seed the global Module so x2t.js (which reuses an existing
+            // global Module) picks up the binary; preserve existing props.
+            window.Module = Object.assign({}, window.Module, { wasmBinary: wasmBinary });
+        });
+    };
+
     X2TConverter.prototype.loadScript = function () {
         if (this.hasScriptLoaded) return
 
-        return new Promise((resolve, reject) => {
+        return this.prepareWasmBinary().then(() => new Promise((resolve, reject) => {
             const script = document.createElement('script')
             script.src = this.SCRIPT_PATH
             script.onload = () => {
@@ -412,7 +449,7 @@
             }
 
             document.head.appendChild(script)
-        })
+        }))
     };
 
     X2TConverter.prototype.doInitialize = function () {
