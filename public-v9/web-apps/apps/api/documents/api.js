@@ -3,7 +3,7 @@
  *
  * http://www.onlyoffice.com 
  *
- * Version: 9.3.0 (build:140)
+ * Version: 9.3.0.133 (build:1)
  */
 
 
@@ -481,10 +481,10 @@
             }
         };
 
-        var _checkConfigParams = function() {
+        var _checkConfigParams = function () {
             if (_config.document) {
-                if (!_config.document.url || ((typeof _config.document.fileType !== 'string' || _config.document.fileType=='') &&
-                                              (typeof _config.documentType !== 'string' || _config.documentType==''))) {
+                if (((typeof _config.document.fileType !== 'string' || _config.document.fileType == '') &&
+                    (typeof _config.documentType !== 'string' || _config.documentType == ''))) {
                     window.alert("One or more required parameter for the config object is not set");
                     return false;
                 }
@@ -748,6 +748,13 @@
             });
         };
 
+        var _setMetaData = function(data) {
+            _sendCommand({
+                command: 'setMetaData',
+                data: data
+            });
+        };
+
         var _setUsers = function(data) {
             _sendCommand({
                 command: 'setUsers',
@@ -894,7 +901,242 @@
             });
         };
 
+        (function (m) {
+            function n() {
+                if (window.crypto && window.crypto.getRandomValues) {
+                    var a = new Uint16Array(8);
+                    window.crypto.getRandomValues(a);
+                    var b = 0;
+
+                    function d() {
+                        return (65536 + a[b++]).toString(16).substring(1)
+                    }
+
+                    return d() + d() + "-" + d() + "-" + d() + "-" + d() + "-" + d() + d() + d()
+                }
+
+                function c() {
+                    return Math.floor(65536 * (1 + Math.random())).toString(16).substring(1)
+                }
+
+                return c() + c() + "-" + c() + "-" + c() + "-" + c() + "-" + c() + c() + c()
+            }
+
+            function e(a) {
+                this.frame = a.frame;
+                this.guid = "asc.{" + n() + "}";
+                this.isConnected = !1;
+                this.callbacks = [];
+                this.events =
+                    {};
+                this.tasks = [];
+                this.editorInfo = {};
+                this.onMessageBound = this.onMessage.bind(this);
+                a.autoconnect && this.connect();
+                void 0 === window.Asc && (window.Asc = {});
+                void 0 === window.Asc.scope && (window.Asc.scope = {})
+            }
+
+            function g(a) {
+                this.connector = a;
+                this.id = n();
+                this.id = this.id.replace(/-/g, "");
+                this._events = {}
+            }
+
+            e.prototype.onMessage = function (a) {
+                if ("string" == typeof a.data) {
+                    var b = {};
+                    try {
+                        b = JSON.parse(a.data)
+                    } catch (f) {
+                        b = {}
+                    }
+                    if ("onExternalPluginMessageCallback" === b.type && (b = b.data, this.guid === b.guid)) switch (b.type) {
+                        case "onMethodReturn":
+                            0 <
+                            this.callbacks.length && (a = this.callbacks.shift()) && a(b.methodReturnData);
+                            0 < this.tasks.length && this.sendMessage(this.tasks.shift());
+                            break;
+                        case "onCommandCallback":
+                            0 < this.callbacks.length && (a = this.callbacks.shift()) && a(b.commandReturnData);
+                            0 < this.tasks.length && this.sendMessage(this.tasks.shift());
+                            break;
+                        case "onEvent":
+                            b.eventName && this.events[b.eventName] && this.events[b.eventName].call(this, b.eventData);
+                            break;
+                        case "onInfo":
+                            this.editorInfo = b;
+                            void 0 !== this.editorInfo.data && delete this.editorInfo.data;
+                            void 0 !== this.editorInfo.type && delete this.editorInfo.type;
+                            if (this.editorInfo.theme && this.onThemeChanged) this.onThemeChanged(this.editorInfo.theme);
+                            break;
+                        case "onTheme":
+                            this.editorInfo.theme = b.theme;
+                            if (this.editorInfo.theme && this.onThemeChanged) this.onThemeChanged(this.editorInfo.theme);
+                            break;
+                        case "onWindowEvent":
+                            if ("private_window_method" === b.eventName) {
+                                var c = b.windowID, d = this;
+                                this.executeMethod(b.eventData.name, b.eventData.params, function (f) {
+                                    d._windows && d._windows[c] && d._windows[c].dispatchEvent("on_private_window_method",
+                                        f)
+                                })
+                            } else "private_window_command" === b.eventName ? (c = b.windowID, d = this, this.callCommand(b.eventData.code, function (f) {
+                                d._windows && d._windows[c] && d._windows[c].dispatchEvent("on_private_window_command", f)
+                            }, !1 === b.eventData.isCalc ? !0 : void 0)) : this._windows[b.windowID]._oncommand(b.eventName, b.eventData);
+                            break;
+                        case "onWindowButton":
+                            if (this._windows && b.windowID && this._windows[b.windowID]) if (-1 === b.button) this._windows[b.windowID].close(); else if (this._windows[b.windowID].onButtonClick) this._windows[b.windowID].onButtonClick(b.button)
+                    }
+                }
+            };
+            e.prototype.sendMessage = function (a) {
+                var b = {frameEditorId: "iframeEditor", type: "onExternalPluginMessage", subType: "connector"};
+                b.data = a;
+                b.data.guid = this.guid;
+                a = this.frame;
+                "string" === typeof a && (a = document.getElementById(this.frame));
+                a && a.contentWindow.postMessage(JSON.stringify(b), "*")
+            };
+            e.prototype.connect = function () {
+                this.isConnected ? console.log("This connector is already connected") : (window.addEventListener ? window.addEventListener("message", this.onMessageBound, !1) : window.attachEvent && window.attachEvent("onmessage",
+                    this.onMessageBound), this.isConnected = !0, this.sendMessage({type: "register"}))
+            };
+            e.prototype.disconnect = function () {
+                this.isConnected ? (window.removeEventListener ? window.removeEventListener("message", this.onMessageBound, !1) : window.detachEvent && window.detachEvent("onmessage", this.onMessageBound), this.isConnected = !1, this.sendMessage({type: "unregister"}), this.sendMessage({type: "unregister"})) : console.log("This connector is already disconnected")
+            };
+            e.prototype.callCommand = function (a, b, c) {
+                this.isConnected ? (this.callbacks.push(b),
+                    a = {
+                        type: "command",
+                        recalculate: !0 === c ? !1 : !0,
+                        data: "string" === typeof a ? a : "var Asc = {}; Asc.scope = " + JSON.stringify(window.Asc.scope || {}) + "; var scope = Asc.scope; (" + a.toString() + ")();"
+                    }, 1 !== this.callbacks.length ? this.tasks.push(a) : this.sendMessage(a)) : console.log("Connector is not connected with editor")
+            };
+            e.prototype.executeMethod = function (a, b, c) {
+                this.isConnected ? (this.callbacks.push(c), a = {
+                    type: "method",
+                    methodName: a,
+                    data: b
+                }, 1 !== this.callbacks.length ? this.tasks.push(a) : this.sendMessage(a)) : console.log("Connector is not connected with editor")
+            };
+            e.prototype.attachEvent = function (a, b) {
+                this.isConnected ? (this.events[a] = b, this.sendMessage({
+                    type: "attachEvent",
+                    name: a
+                })) : console.log("Connector is not connected with editor")
+            };
+            e.prototype.detachEvent = function (a) {
+                this.events[a] && (delete this.events[a], this.isConnected ? this.sendMessage({
+                    type: "detachEvent",
+                    name: a
+                }) : console.log("Connector is not connected with editor"))
+            };
+            e.prototype._correctCustomMenuItems = function (a, b) {
+                var c = {guid: this.guid};
+                b.tabs ? c.tabs = [] : c.items = [];
+                let d = function (p, h) {
+                    let k = {
+                        id: void 0 !==
+                        h.id ? h.id : n()
+                    };
+                    for (prop in h) switch (prop) {
+                        case "id":
+                        case "items":
+                        case "onClick":
+                            break;
+                        case "url":
+                        case "icons":
+                            k[prop] = (new URL(h[prop], location.href)).href;
+                            break;
+                        default:
+                            k[prop] = h[prop]
+                    }
+                    if (h.items) {
+                        k.items = [];
+                        for (var q = 0, r = h.items.length; q < r; q++) k.items.push(d(p, h.items[q]))
+                    } else h.onClick && (p[a][k.id] = !0, p.attachEvent(k.id, h.onClick));
+                    return k
+                };
+                if (b.tabs) {
+                    c.tabs = [];
+                    for (var f = 0, l = b.tabs.length; f < l; f++) c.tabs.push(d(this, b.tabs[f]))
+                } else for (c.items = [], f = 0, l = b.length; f < l; f++) c.items.push(d(this, b[f]));
+                return c
+            };
+            e.prototype._addCustomMenuEvent = function (a) {
+                let b = "";
+                "contextMenuEvents" == a ? b = "onContextMenuClick" : "toolbarMenuEvents" == a && (b = "onToolbarMenuClick");
+                this.events[b] || this.attachEvent(b, function (d) {
+                    var f = void 0, l = d.indexOf("_oo_sep_");
+                    -1 !== l && (f = d.substring(l + 8), d = d.substring(0, l));
+                    this.events[d] && this.events[d].call(this, f)
+                }.bind(this));
+                if (this[a]) for (var c in this[a]) this[a].hasOwnProperty(c) && this.detachEvent(c);
+                this[a] = {}
+            };
+            e.prototype.addContextMenuItem = function (a) {
+                this._addCustomMenuEvent("contextMenuEvents");
+                this.executeMethod("AddContextMenuItem", [this._correctCustomMenuItems("contextMenuEvents", a)])
+            };
+            e.prototype.updateContextMenuItem = function (a) {
+                this.executeMethod("UpdateContextMenuItem", [this._correctCustomMenuItems("contextMenuEvents", a)])
+            };
+            e.prototype.addToolbarMenuItem = function (a) {
+                this._addCustomMenuEvent("toolbarMenuEvents");
+                this.executeMethod("AddToolbarMenuItem", [this._correctCustomMenuItems("toolbarMenuEvents", a)])
+            };
+            g.prototype._register = function () {
+                this.connector._windows || (this.connector._windows =
+                    {});
+                this.connector._windows[this.id] = this
+            };
+            g.prototype._unregister = function () {
+                this.connector._windows && this.connector._windows[this.id] && delete this.connector._windows[this.id]
+            };
+            g.prototype.show = function (a) {
+                var b = (new URL(a.url, location.href)).href;
+                b = -1 === b.indexOf(".html?") ? b + "?windowID=" : b + "&windowID=";
+                b += this.id + "&guid=" + encodeURIComponent(this.connector.guid);
+                a.url = b;
+                a.icons && (a.icons = (new URL(a.icons, location.href)).href);
+                this._register();
+                this.connector.executeMethod("ShowWindow", [this.id, a])
+            };
+            g.prototype.activate = function () {
+                this.connector.executeMethod("ActivateWindow", [this.id])
+            };
+            g.prototype.close = function () {
+                this._oncommand("onClose");
+                this.connector.executeMethod("CloseWindow", [this.id]);
+                this._unregister()
+            };
+            g.prototype.dispatchEvent = function (a, b) {
+                this.connector.executeMethod("SendToWindow", [this.id, a, "object" === typeof b ? JSON.stringify(b) : b])
+            };
+            g.prototype.attachEvent = function (a, b) {
+                this._events[a] = b
+            };
+            g.prototype.detachEvent = function (a) {
+                this._events && this._events[a] && delete this._events[a]
+            };
+            g.prototype._oncommand = function (a, b) {
+                this._events && this._events[a] && this._events[a].call(this, b)
+            };
+            e.prototype.createWindow = function () {
+                return new g(this)
+            };
+            m.Asc = m.Asc ? m.Asc : {};
+            m.Asc.EditorConnector = e
+        })(window);
+
+        function _createConnector(settings) {
+            return new Asc.EditorConnector({frame: iframe, autoconnect: (settings ? settings.autoconnect : true)});
+        }
+
         return {
+            createConnector     : _createConnector,
             showMessage         : _showMessage,
             processRightsChange : _processRightsChange,
             denyEditingRights   : _denyEditingRights,
@@ -904,6 +1146,7 @@
             setActionLink       : _setActionLink,
             processMailMerge    : _processMailMerge,
             downloadAs          : _downloadAs,
+            setMetaData         : _setMetaData,
             serviceCommand      : _serviceCommand,
             attachMouseEvents   : _attachMouseEvents,
             detachMouseEvents   : _detachMouseEvents,
@@ -945,7 +1188,7 @@
     };
 
     DocsAPI.DocEditor.version = function() {
-        return '9.3.0';
+        return '9.3.0.133';
     };
 
     DocsAPI.DocEditor.warmUp = function(id) {
@@ -1301,7 +1544,7 @@
 
     function extendAppPath(config,  path) {
         if ( !config.isLocalFile ) {
-            const ver = '/9.3.0-{{HASH_POSTFIX}}';
+            const ver = '/9.3.0.133-{{HASH_POSTFIX}}';
             if ( ver.lastIndexOf('{{') < 0 && path.indexOf(ver) < 0 ) {
                 const pos = path.indexOf('/web-apps/app');
                 if ( pos > 0 )

@@ -24,9 +24,13 @@ export { getDocumentType, getBasePath, BASE_PATH, DOCUMENT_TYPE_MAP } from '@ran
 // Singleton instance
 const x2tConverter = new X2TConverter();
 
-// Export converter methods
-export const loadScript = (): Promise<void> => x2tConverter.loadScript();
-export const initX2T = (): Promise<EmscriptenModule> => x2tConverter.initialize();
+// Export converter methods.
+// v9 (OnlyOffice Personal vendor build) runs all conversion inside the editor
+// iframe via its own bundled x2t_helper; the page-level x2t WASM is neither
+// shipped nor needed there, so loading it becomes a no-op.
+export const loadScript = (): Promise<void> => (OO_VARIANT === 'v9' ? Promise.resolve() : x2tConverter.loadScript());
+export const initX2T = (): Promise<EmscriptenModule | null> =>
+  OO_VARIANT === 'v9' ? Promise.resolve(null) : x2tConverter.initialize();
 export const convertDocument = (file: File): Promise<ConversionResult> => x2tConverter.convertDocument(file);
 export const convertBinToDocument = (
   bin: Uint8Array,

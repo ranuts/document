@@ -98,8 +98,6 @@
   "DE.Controllers.ApplicationController.errorBadImageUrl": "Image URL is incorrect",
   "DE.Controllers.ApplicationController.errorConnectToServer": "The document could not be saved. Please check connection settings or contact your administrator.<br>When you click the 'OK' button, you will be prompted to download the document.",
   "DE.Controllers.ApplicationController.errorCopyDisabled": "For security reasons, the contents of this document cannot be copied.",
-  "DE.Controllers.ApplicationController.errorFileNotAssembled": "This file is opened from a server backup copy and is not saved to storage.<br>Use the 'Save as...' option to save it to a drive.",
-  "DE.Controllers.ApplicationController.errorForcedViewMode": "This file is opened in view mode.<br>The file is locked for editing or your access rights do not allow editing.",
   "DE.Controllers.ApplicationController.errorDataEncrypted": "Encrypted changes have been received, they cannot be deciphered.",
   "DE.Controllers.ApplicationController.errorDefaultMessage": "Error code: %1",
   "DE.Controllers.ApplicationController.errorEditingDownloadas": "An error occurred during the work with the document.<br>Use the 'Download as...' option to save the file backup copy to your computer hard drive.",

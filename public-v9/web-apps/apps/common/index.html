@@ -360,8 +360,9 @@ window.Common = {
                     var template = document.createElement('template');
                     template.innerHTML = html;
                     // return template.content.childNodes;
-                    if ( !!id ) template.content.firstChild.id = id;
-                    return template.content.firstChild;
+                    var child = template.content.firstElementChild;
+                    if ( child && !!id ) child.id = id;
+                    return child;
                 }
 
                 const sprite_uid = getComputedStyle(document.body).getPropertyValue('--sprite-button-icons-uid');
@@ -371,7 +372,7 @@ window.Common = {
                             fetch(url)
                                 .then(function (r) {
                                     if (r.ok) return r.text();
-                                    else {/* error */}
+                                    throw new Error('Failed to load svg icons: ' + url + ' (' + r.status + ')');
                                 }).then(function (text) {
                                     const btnMatch = /icons(\w+)(?:@2\.5x)\.svg$/.exec(url);
                                     const formatMatch = /doc-formats\/(\w+)(?:@2\.5x)\.svg$/.exec(url);
@@ -391,6 +392,7 @@ window.Common = {
 
                                     const el = document.querySelector('div.inlined-svg');
                                     const child = htmlToElements(text, el_id);
+                                    if ( !el || !child ) return;
                                     if ( sprite_uid.length )
                                         child.setAttribute('data-sprite-uid', sprite_uid);
                                     el.appendChild(child);

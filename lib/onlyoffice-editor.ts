@@ -2,12 +2,9 @@ import 'ranui/message';
 import { createObjectURL } from 'ranuts/utils';
 import { getDocmentObj } from '@ranuts/shared/store';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
-import { c_oAscFileType2 } from './file-types';
+import { c_oAscFileType2, oAscFileType } from './file-types';
 import type { BinConversionResult, SaveEvent } from '@ranuts/shared/document-types';
-import { BASE_PATH, getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
-import { extractDocxMediaUrls, preprocessPptx, preprocessXlsxLineBreaks } from '@ranuts/converter';
-import { g_sEmpty_ooxml } from './empty_bin-v9';
-import { showMediaPlayer } from './media-player';
+import { DOCUMENT_TYPE_MAP, getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
 
 // Selected via `vite --mode v9` / `vite build --mode v9` (see vite.config.ts); defaults
 // to v7 for the normal dev/build/test commands. See docs/explorations for why v9 needs
@@ -24,338 +21,6 @@ function editorSendCommand(params: { command: string; data: Record<string, any> 
   } else if (typeof editor.sendCommand === 'function') {
     editor.sendCommand(params);
   }
-}
-
-/**
- * v9 Web Mode has no real collaboration server, so the SDK's "Connection is lost"
- * dialog (and its generic error dialog) fire on every load. Both go through
- * Common.UI.alert, not .warning, despite the message reading like a warning.
- * Called with same-origin access to the editor iframe's window from onAppReady.
- *
- * app.js chains `Common.UI.alert(o).$window.attr(...)` in its own error handler, so
- * returning undefined from our patched alert() throws downstream -- return a
- * chainable no-op dialog instead.
- */
-function suppressDialogsInFrame(frameWindow: any): void {
-  // The SDK localizes these messages, so matching by English substring only
-  // catches the en-US UI. Add the translation here as each locale is verified
-  // against a live editor (see docs/explorations for how this list grew) --
-  // matching by Asc.c_oAscError.ID would be more robust than message text, but
-  // the error object passed to Common.UI.alert/warning wasn't confirmed to
-  // carry that code through to opts. zh-CN confirmed 2026-08-05.
-  const SUPPRESSED_MSGS = [
-    'Connection is lost',
-    'error occurred during the work',
-    '使用文档时出错', // zh-CN: "An error occurred while working with the document"
-    '连接失败', // zh-CN: "Connection failed. You can still view the document..." (a second,
-    // distinct dialog from the one above -- same underlying CoAuthoringDisconnect
-    // event, different message. See suppressCoAuthoringDisconnect for why the
-    // dialog is only half the problem.)
-  ];
-  const shouldSuppress = (opts: any): boolean => {
-    const msg: string = opts?.msg ?? '';
-    return typeof msg === 'string' && SUPPRESSED_MSGS.some((s) => msg.indexOf(s) !== -1);
-  };
-
-  const jq: Record<string, unknown> = {};
-  [
-    'attr',
-    'on',
-    'off',
-    'show',
-    'hide',
-    'css',
-    'addClass',
-    'removeClass',
-    'find',
-    'remove',
-    'val',
-    'text',
-    'html',
-    'prop',
-    'data',
-    'trigger',
-    'focus',
-    'blur',
-    'one',
-    'click',
-  ].forEach((m) => {
-    jq[m] = () => jq;
-  });
-  (jq as any).length = 0;
-  const MOCK_DIALOG = { $window: jq, close: () => {}, show: () => {}, hide: () => {}, remove: () => {} };
-
-  let attempts = 0;
-  const poll = () => {
-    const ui = frameWindow.Common?.UI;
-    if (ui?.__dlgSuppressed) return;
-    if (!ui || typeof ui.warning !== 'function' || typeof ui.alert !== 'function') {
-      if (attempts++ < 50) setTimeout(poll, 200);
-      return;
-    }
-    ui.__dlgSuppressed = true;
-
-    const origWarning = ui.warning.bind(ui);
-    ui.warning = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origWarning(opts));
-
-    const origAlert = ui.alert.bind(ui);
-    ui.alert = (opts: any) => (shouldSuppress(opts) ? MOCK_DIALOG : origAlert(opts));
-
-    console.log('[OO] dialog suppression active in iframe (warning + alert)');
-  };
-  poll();
-}
-
-/**
- * v9 Web Mode's fake Engine.IO handshake doesn't implement real ping/pong
- * keep-alive, so the SDK eventually decides the collaboration connection has
- * dropped and fires asc_onCoAuthoringDisconnect / the "api:disconnect"
- * notification. Every editor's Main controller listens for both and responds
- * by *hiding* the Download/Print/Edit header buttons (see
- * onApiCoAuthoringDisconnect in app.js) -- suppressing the dialog alone still
- * leaves Save/Print/Download disabled. Common.NotificationCenter is a
- * Backbone Events bus; swallowing this one event name here (from onAppReady,
- * before any real disconnect can have been detected yet) stops that specific
- * side effect without touching the dialog suppression above.
- */
-function suppressCoAuthoringDisconnect(frameWindow: any): void {
-  let attempts = 0;
-  const poll = () => {
-    const center = frameWindow.Common?.NotificationCenter;
-    if (!center || typeof center.trigger !== 'function') {
-      if (attempts++ < 50) setTimeout(poll, 200);
-      return;
-    }
-    if (center.__disconnectSuppressed) return;
-    center.__disconnectSuppressed = true;
-
-    const origTrigger = center.trigger.bind(center);
-    center.trigger = (name: string, ...args: unknown[]) => {
-      if (name === 'api:disconnect') return center;
-      return origTrigger(name, ...args);
-    };
-    console.log('[OO] api:disconnect notification suppressed in iframe');
-  };
-  poll();
-}
-
-/**
- * Root cause of a whole family of v9 Web Mode lockups (see the 2026-08-08
- * typing-broken exploration doc, "看门狗第四/五次扩展"): a fake-disconnect
- * signal fires spuriously (no real collaboration server ever legitimately
- * disconnects here), and roughly ten independent controllers (Toolbar,
- * LeftMenu, Statusbar, Header, ReviewChanges, ...) each register their OWN
- * asc_onCoAuthoringDisconnect handler directly via api.asc_registerCallback,
- * each locking its own slice of UI (Save, Comments, Track changes, language
- * menu, ...) with no shared cleanup path. Chasing each one down and reversing
- * its lock reactively (which is what the onlyoffice-iframe-patch.js watchdog
- * still does, as a safety net) is whack-a-mole -- new lock sites keep
- * surfacing as more of the UI gets exercised.
- *
- * This intercepts at the single point ALL of those handlers are actually
- * invoked from: api.bc(name, ...args), the SDK's internal event dispatcher
- * (confirmed live -- it's directly reachable as a property on the api
- * object, and asc_registerCallback/asc_unregisterCallback close over the
- * exact same listener-array object it reads). Two signatures route through
- * it for this one root cause: api.bc('asc_onCoAuthoringDisconnect', ...) and
- * api.bc('asc_onStartAction'/'asc_onEndAction', type, Asc.c_oAscAsyncAction.
- * Disconnect) -- the latter is what pushes the stuck long-action entry that
- * shows "Connection is lost" and blocks the status bar. Swallowing exactly
- * these two, and nothing else, stops the entire cascade before any
- * controller ever sees it -- verified live that Save/Comments/Track changes/
- * language menu never lock at all (not even transiently) across repeated
- * real table-insert triggers, while other asc_onStartAction/-EndAction ids
- * (e.g. LoadingDocument) still push/pop the long-action stack normally, so
- * legitimate "loading..." spinners are untouched.
- *
- * Deliberately in addition to (not instead of) suppressCoAuthoringDisconnect
- * above: that one blocks Common.NotificationCenter.trigger('api:disconnect'),
- * a SEPARATE app.js-level trigger path some controllers also listen for.
- * Neither alone is a substitute for the other; keeping both plus the
- * reactive watchdog is defense in depth against whichever path some
- * not-yet-found trigger site turns out to use.
- */
-function blockCoAuthoringDisconnectDispatch(frameWindow: any): void {
-  let attempts = 0;
-  const poll = () => {
-    const api = frameWindow.Asc?.editor;
-    const disconnectId = frameWindow.Asc?.c_oAscAsyncAction?.Disconnect;
-    if (!api || typeof api.bc !== 'function' || typeof disconnectId !== 'number') {
-      if (attempts++ < 50) setTimeout(poll, 200);
-      return;
-    }
-    if (api.__disconnectDispatchBlocked) return;
-    api.__disconnectDispatchBlocked = true;
-
-    const origBc = api.bc.bind(api);
-    api.bc = (name: string, ...args: unknown[]) => {
-      if (name === 'asc_onCoAuthoringDisconnect') return false;
-      if ((name === 'asc_onStartAction' || name === 'asc_onEndAction') && args[1] === disconnectId) {
-        return false;
-      }
-      return origBc(name, ...args);
-    };
-    console.log('[OO] asc_onCoAuthoringDisconnect dispatch blocked at the source in iframe');
-  };
-  poll();
-}
-
-/**
- * Common.Controllers.Desktop.systemThemeSupported()/-Type() read a "theme"
- * field off a config object (r.theme) that a real native desktop host
- * populates via Desktop.init(); our AscDesktopEditor polyfill makes
- * Desktop.isActive() report true without ever providing that config, so the
- * very first UI pass that renders the theme picker crashes with "Cannot read
- * properties of undefined (reading 'theme')" (confirmed live -- leaves that
- * toolbar area blank, see the "changesError" console entry).
- *
- * Worse than cosmetic: this crash fires from inside an
- * asc_onStartAction/asc_onEndAction pair, so the exception skips the matching
- * end-action and permanently leaks AscCommon.Uc's start/end-action nesting
- * counter by one. Once that counter is nonzero, AscCommon.Uc.Tra() is true --
- * the first guard in every document-mutation restriction check (Cf -> ugb),
- * so ALL edits silently stop working, not just this theme UI: confirmed live
- * that typing into a fresh document does nothing while the counter is stuck,
- * and works again as soon as it's back to 0. Guarding these two methods so
- * the exception never escapes fixes both the blank UI and the stuck counter.
- */
-function patchDesktopThemeCrash(frameWindow: any): void {
-  let attempts = 0;
-  const poll = () => {
-    const desktop = frameWindow.Common?.Controllers?.Desktop;
-    if (!desktop || typeof desktop.systemThemeSupported !== 'function') {
-      if (attempts++ < 50) setTimeout(poll, 200);
-      return;
-    }
-    if (desktop.__themeCrashPatched) return;
-    desktop.__themeCrashPatched = true;
-
-    const origSupported = desktop.systemThemeSupported.bind(desktop);
-    desktop.systemThemeSupported = () => {
-      try {
-        return origSupported();
-      } catch {
-        return false;
-      }
-    };
-    if (typeof desktop.systemThemeType === 'function') {
-      const origType = desktop.systemThemeType.bind(desktop);
-      desktop.systemThemeType = () => {
-        try {
-          return origType();
-        } catch {
-          return 'light';
-        }
-      };
-    }
-    console.log('[OO] Desktop.systemThemeSupported/-Type crash-guarded in iframe');
-  };
-  poll();
-}
-
-/**
- * A document containing a table with text, fully selected (Ctrl+A spanning
- * text + table) with a comment added on that selection, crashes the moment
- * the user clicks Insert > Header & Footer > Edit header: "Cannot read
- * properties of undefined (reading 'Oc')" three frames deep inside a `new Ff`
- * construction (Ff = window.AscWord.v7, the SDK's sub-document container --
- * body/header/footer are each an `Ff` instance). See the 2026-08-09
- * header-edit-crash exploration doc for the full repro and stack trace.
- *
- * Root cause (confirmed by reading public-v9/sdkjs/word/sdk-all.js, matched
- * live against the running iframe's `Ff.prototype.$j.toString()`): `$j` is
- * `Ff`'s undo-history serializer, and its ONLY use of `this.Aa` (the parent
- * back-reference set by the constructor's first argument) is an unguarded
- * `this.Aa.Oc()` call. `$j`'s deserialize counterpart (`gk`) only assigns
- * `this.Aa` when a registry lookup succeeds (`$g.Ug(...)`) -- otherwise it
- * stays undefined. Some path that constructs/deserializes a header/footer
- * sub-document while a comment range spans it and the body leaves `this.Aa`
- * unset; the next undo-snapshot on that instance then crashes unconditionally.
- * This is a real defect in the vendored SDK build, not something introduced
- * by this project's code.
- *
- * Worse than the crash itself: like patchDesktopThemeCrash above, this throw
- * happens inside a start/end-action pair, leaking AscCommon.Uc's nesting
- * counter and leaving the document silently uneditable afterward (confirmed
- * live: typing produces no model change and asc_getCanUndo() stays false),
- * with no visible error and no watchdog signal covering this specific state.
- *
- * There is no legitimate value for `this.Aa` to synthesize here -- it's a
- * parent-container reference, not serializable data -- so this guards the
- * SAME failure mode patchDesktopThemeCrash does: stub just enough of the
- * missing object (`Oc()`, the only method `$j` calls on it) for the ORIGINAL,
- * unmodified serializer to complete without throwing, then remove the stub
- * immediately after so no other code path can observe a fake parent. Since
- * `this.Aa.Oc()` was an unconditional crash on every path that reaches here
- * with `this.Aa` unset, this cannot make any previously-working path behave
- * differently -- it only replaces a hard crash (and the resulting silent
- * document corruption) with a no-op undo-snapshot for that one instance.
- */
-function patchHeaderSerializeCrash(frameWindow: any): void {
-  let attempts = 0;
-  const poll = () => {
-    const ctor = frameWindow.AscWord?.v7;
-    const proto = ctor?.prototype;
-    if (!proto || typeof proto.$j !== 'function') {
-      if (attempts++ < 50) setTimeout(poll, 200);
-      return;
-    }
-    if (proto.__headerSerializeCrashPatched) return;
-    proto.__headerSerializeCrashPatched = true;
-
-    const origSerialize = proto.$j;
-    proto.$j = function (this: { Aa?: { Oc: () => number } }, writer: unknown) {
-      if (!this.Aa) {
-        const fakeParent = { Oc: () => 0 };
-        this.Aa = fakeParent;
-        try {
-          return origSerialize.call(this, writer);
-        } finally {
-          this.Aa = undefined;
-        }
-      }
-      return origSerialize.call(this, writer);
-    };
-    console.log('[OO] Ff.prototype.$j (header/footer undo-serialize) crash-guarded in iframe');
-  };
-  poll();
-}
-
-/**
- * v9 Web Mode has no working UI flow to complete the SDK's normal "download as
- * PDF" settings dialog (no real collaboration server behind it, same root cause
- * as everything else this file works around). onDownloadAs (app.js) detours
- * PDF/PDFA specifically to a Common.NotificationCenter 'download:settings'
- * event instead of calling asc_DownloadAs directly -- a real user would see a
- * page/print-range dialog with its own "Download" button. Intercept that event
- * and call the offline-save-trigger-patched asc_DownloadAs ourselves instead of
- * letting the (non-functional here) dialog open. Must run after the Ncj/DOj/mTi
- * patch below has replaced asc_DownloadAs, since it reads api.asc_DownloadAs at
- * call time (not capture time), so ordering between the two patches doesn't
- * matter as long as both are in place before a save is actually requested.
- */
-function suppressDownloadSettingsDialog(frameWindow: any): void {
-  let attempts = 0;
-  const poll = () => {
-    const center = frameWindow.Common?.NotificationCenter;
-    if (!center || typeof center.trigger !== 'function') {
-      if (attempts++ < 50) setTimeout(poll, 200);
-      return;
-    }
-    if (center.__downloadSettingsSuppressed) return;
-    center.__downloadSettingsSuppressed = true;
-
-    const origTrigger = center.trigger.bind(center);
-    center.trigger = (name: string, ...args: unknown[]) => {
-      if (name === 'download:settings') {
-        (frameWindow.Asc?.editor as any)?.asc_DownloadAs?.();
-        return center;
-      }
-      return origTrigger(name, ...args);
-    };
-    console.log('[OO] download:settings dialog bypassed in iframe');
-  };
-  poll();
 }
 
 // Import converter function to avoid circular dependency
@@ -411,23 +76,6 @@ let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 let documentContentReady = OO_VARIANT !== 'v9';
 let contentReadyWaiters: Array<() => void> = [];
 
-// v9's asc_DownloadAs is redirected (see the triggerSave patch below) to a
-// generic offline-save trigger that always re-serializes the document in its
-// OWN native format -- it has no way to actually produce a different target
-// format (e.g. PDF) itself. That's fine for a plain "Save", but "Print to
-// PDF" / "Export to PDF" / "Save As <other format>" all call asc_DownloadAs
-// with an Asc.asc_CDownloadOptions carrying the REAL requested format, which
-// the redirect silently drops -- confirmed live (2026-08-09): clicking
-// "Print to PDF" logged "Saving v9 binary ... as XLSX format" and downloaded
-// a renamed XLSX, not a PDF. Stash whatever format was actually requested
-// here (set by the asc_DownloadAs override just before it fires the save;
-// consumed and cleared by handleSaveDocument) so the save handler can pass
-// the real target format to convertBinToDocumentAndDownloadFn's x2t
-// conversion (which already supports PDF and other formats fine -- the gap
-// was purely in knowing what format to ask it for) instead of guessing from
-// the original file's own extension.
-let pendingDownloadAsFormat: string | null = null;
-
 function markDocumentContentReady(): void {
   if (documentContentReady) return;
   documentContentReady = true;
@@ -455,57 +103,6 @@ function waitForDocumentContentReady(timeoutMs = 15000): Promise<void> {
       resolve();
     });
   });
-}
-
-// Tag used to mark asc_CDownloadOptions instances with the file type they
-// were actually constructed with -- see patchDownloadOptionsFileTypeCapture.
-const REQUESTED_FILE_TYPE_TAG = '__ooRequestedFileType';
-
-// Asc.asc_CDownloadOptions (the options object asc_DownloadAs is called
-// with) has no public getter for the file type its constructor stashed --
-// confirmed live, its full prototype chain exposes only asc_set* methods.
-// Worse, the internal property holding it is NOT stable across construction
-// call sites: constructing one directly gave `{oV: 513, ...}`, but the
-// Print controller's own construction (same class, confirmed via
-// `instanceof`) gave `{V_: 513, ...}` instead -- same logical field,
-// different minified name, most likely because Print's UI code lives in a
-// separately-minified bundle chunk from the general SDK. Reading either
-// specific property name is therefore unreliable.
-//
-// Fix: don't read the internal field at all -- wrap the CONSTRUCTOR itself
-// (once, the first time it's seen) to record its first argument (the
-// requested file type; confirmed live across every asc_CDownloadOptions
-// construction site grepped from the app bundle: always
-// `new Asc.asc_CDownloadOptions(fileType, ...)`) onto a property under our
-// own control. This sidesteps the internal-naming question entirely and
-// survives whatever the minifier does to the class's own fields.
-export function patchDownloadOptionsFileTypeCapture(iwin: { Asc?: Record<string, unknown> } | undefined): void {
-  const AscNs = iwin?.Asc as { asc_CDownloadOptions?: { new (...args: unknown[]): unknown } } | undefined;
-  const OriginalCtor = AscNs?.asc_CDownloadOptions as
-    ({ new (...args: unknown[]): unknown } & { __ooPatched?: boolean }) | undefined;
-  if (!AscNs || typeof OriginalCtor !== 'function' || OriginalCtor.__ooPatched) return;
-  function PatchedCtor(this: unknown, ...args: unknown[]) {
-    const instance = Reflect.construct(OriginalCtor as new (...a: unknown[]) => object, args, PatchedCtor as any);
-    (instance as Record<string, unknown>)[REQUESTED_FILE_TYPE_TAG] = args[0];
-    return instance;
-  }
-  PatchedCtor.prototype = OriginalCtor.prototype;
-  (PatchedCtor as unknown as { __ooPatched: boolean }).__ooPatched = true;
-  (AscNs as Record<string, unknown>).asc_CDownloadOptions = PatchedCtor;
-}
-
-// Reads the requested output format off whatever asc_DownloadAs was called
-// with (see patchDownloadOptionsFileTypeCapture for how it gets tagged).
-// Defensive at every step: any unexpected shape (no argument, not an
-// object, untagged, a value with no c_oAscFileType2 mapping) falls through
-// to `null`, which callers treat as "no override, fall back to the
-// existing extension-based guess" -- never worse than the pre-fix
-// behavior, only sometimes not better.
-export function extractRequestedDownloadFormat(options: unknown): string | null {
-  if (!options || typeof options !== 'object') return null;
-  const fileTypeValue = (options as Record<string, unknown>)[REQUESTED_FILE_TYPE_TAG];
-  if (typeof fileTypeValue !== 'number') return null;
-  return c_oAscFileType2[fileTypeValue] || null;
 }
 
 export function getSavedFileMimeType(fileName: string): string {
@@ -599,6 +196,137 @@ function cleanupEmbeddedSaveRequest(request: EmbeddedSaveRequest): void {
   if (embeddedSaveRequest === request) {
     embeddedSaveRequest = null;
   }
+}
+
+/**
+ * Save a finished file to the user's disk: File System Access API when
+ * available (native save dialog), plain anchor download otherwise.
+ */
+async function saveFileLocally(file: File): Promise<void> {
+  const picker = (
+    window as unknown as {
+      showSaveFilePicker?: (opts: {
+        suggestedName: string;
+        types: Array<{ description: string; accept: Record<string, string[]> }>;
+      }) => Promise<{
+        createWritable: () => Promise<{ write: (d: Blob) => Promise<void>; close: () => Promise<void> }>;
+      }>;
+    }
+  ).showSaveFilePicker;
+
+  if (typeof picker !== 'function') {
+    const url = await createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = file.name;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+    return;
+  }
+
+  try {
+    const ext = file.name.split('.').pop()?.toLowerCase() || '';
+    const mime = getSavedFileMimeType(file.name);
+    const handle = await picker.call(window, {
+      suggestedName: file.name,
+      types: [{ description: 'Document', accept: { [mime]: [`.${ext}`] } }],
+    });
+    const writable = await handle.createWritable();
+    await writable.write(file);
+    await writable.close();
+    (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
+      `${t('fileSavedSuccess')}${file.name}`,
+    );
+  } catch (error) {
+    if ((error as Error).name === 'AbortError') return;
+    (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
+      `${t('documentOperationFailed')}${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
+// ---- v9 file-stream save channel (OnlyOffice Personal vendor build) ----
+//
+// The vendored sdkjs/web-apps build performs every export inside the editor
+// iframe (its own x2t_helper converts the editor's canvas render stream /
+// document), then posts the finished bytes to the parent window as an
+// 'onlyoffice-file-stream' message. Setting OO_FILE_STREAM_ONLY on this
+// window tells the helper (which walks up the parent chain looking for it)
+// to suppress its own <a download> fallback and let us own the save UX.
+
+interface FileStreamMessage {
+  type: 'onlyoffice-file-stream';
+  fileName?: string;
+  fileType?: string;
+  buffer?: ArrayBuffer;
+}
+
+function handleFileStreamMessage(event: MessageEvent): void {
+  const data = event.data as FileStreamMessage | undefined;
+  if (!data || data.type !== 'onlyoffice-file-stream' || !(data.buffer instanceof ArrayBuffer)) {
+    return;
+  }
+
+  const { fileName: docName } = getDocmentObj() || {};
+  const ext = (data.fileType || data.fileName?.split('.').pop() || 'bin').toLowerCase();
+  const baseName = (docName || data.fileName || 'document').replace(/\.[^/.]+$/, '');
+  const savedName = `${baseName}.${ext}`;
+  const file = new File([data.buffer], savedName, { type: getSavedFileMimeType(savedName) });
+  console.log(`[OO] file stream received: ${savedName} (${data.buffer.byteLength} bytes)`);
+
+  if (embeddedSaveRequest) {
+    const request = embeddedSaveRequest;
+    cleanupEmbeddedSaveRequest(request);
+    resolveEmbeddedSaveRequest(request, file);
+    return;
+  }
+
+  if (isEmbedMode()) {
+    console.warn('Local save is disabled in iframe embed mode. Use document:save from the parent page.');
+    return;
+  }
+
+  void saveFileLocally(file);
+}
+
+if (OO_VARIANT === 'v9' && typeof window !== 'undefined') {
+  (window as unknown as { OO_FILE_STREAM_ONLY?: boolean }).OO_FILE_STREAM_ONLY = true;
+  window.addEventListener('message', handleFileStreamMessage);
+}
+
+/**
+ * v9: the api layer's `downloadAs(format)` silently drops the request in the
+ * Personal vendor build (observed live -- its own demo has the same gap), so
+ * trigger the export directly on the same-origin editor iframe's API with the
+ * numeric file-type constant. Returns false when no editor frame is ready.
+ */
+function triggerPersonalDownloadAs(targetExt: string): boolean {
+  const code = (oAscFileType as Record<string, number>)[targetExt.toUpperCase()];
+  if (!code) return false;
+  for (let i = 0; i < window.frames.length; i++) {
+    try {
+      const win = window.frames[i] as unknown as {
+        Asc?: {
+          editor?: { asc_DownloadAs?: (options: unknown) => void };
+          asc_CDownloadOptions?: new (fileType: number) => unknown;
+        };
+      };
+      const AscNs = win.Asc;
+      const api = AscNs?.editor;
+      if (api && typeof api.asc_DownloadAs === 'function' && AscNs?.asc_CDownloadOptions) {
+        api.asc_DownloadAs(new AscNs.asc_CDownloadOptions(code));
+        return true;
+      }
+    } catch {
+      // cross-origin frame or editor not booted yet -- keep looking
+    }
+  }
+  return false;
 }
 
 /**
@@ -720,31 +448,17 @@ async function handleWriteFile(event: any) {
   }
 }
 
-async function handleSaveDocument(event: { data: SaveEvent['data'] | ArrayBuffer }) {
+// v7's onSave handler. v9 never registers this event -- its saves arrive as
+// finished files over the onlyoffice-file-stream message instead (see
+// handleFileStreamMessage).
+async function handleSaveDocument(event: { data: SaveEvent['data'] }) {
   console.log('Save document event:', event);
 
-  // v9's onSaveDocument fires with event.data as a raw ArrayBuffer (transferred
-  // straight over postMessage). v7's onSave fires with the nested
-  // { data: { data: Uint8Array }, option: { outputformat } } shape instead.
   let binaryData: Uint8Array;
   let targetFormat: string;
   const { fileName } = getDocmentObj() || {};
 
-  if (event.data instanceof ArrayBuffer) {
-    binaryData = new Uint8Array(event.data);
-    // A real, explicit format request (e.g. "Print to PDF") always wins over
-    // both the CSV-preservation rule below and the plain extension guess --
-    // see extractRequestedDownloadFormat's own comment for why this can be
-    // trusted, and the 2026-08-09 print-to-pdf exploration doc for the bug
-    // this replaces (every asc_DownloadAs call silently saved in the
-    // original file's format, ignoring the format it was actually asked
-    // for).
-    const requestedFormat = pendingDownloadAsFormat;
-    pendingDownloadAsFormat = null;
-    const ext = (fileName?.split('.').pop() || 'docx').toUpperCase();
-    targetFormat = requestedFormat || (fileName?.toLowerCase().endsWith('.csv') ? 'CSV' : ext);
-    console.log(`Saving v9 binary ${binaryData.byteLength} bytes as ${targetFormat} format`);
-  } else if (event.data?.data?.data) {
+  if (event.data?.data?.data) {
     const { data, option } = event.data;
     binaryData = data.data;
     // Only force CSV format if the original file is CSV. This check ensures XLSX
@@ -831,417 +545,95 @@ async function handleDownloadAs(event: { data?: { url?: string; fileType?: strin
   }
 }
 
+// Blob URL handed to the current v9 editor via document.url; revoked when the
+// next document replaces it.
+let currentDocumentBlobUrl: string | null = null;
+
 /**
- * v9 Web Mode has no document server, so `asc_openDocument`'s postMessage-based
- * `buf` transport doesn't apply -- the SDK's own OOXML importer is invoked
- * directly via `asc_openDocumentFromBytes` on the (same-origin) editor iframe's
- * `Asc.editor`, bypassing x2t entirely for the open path (x2t is still used for
- * saving/exporting, via convertBinToDocumentFn as before).
- *
- * This is a faithful port of the "Web Mode" implementation validated in
- * docs/explorations/2026-06-19-word-excel-ppt-browser-debug.md against the exact
- * SDK build vendored in public-v9/ -- the internal function names it patches
- * (Shc/BRj/Mrc/rxk/K8b/Fzj, Aqg/LNg/rdg) are minified symbols specific to that
- * build. Don't "clean this up" without re-verifying against the real SDK: every
- * step here works around a specific, debugged failure mode, not a style choice.
+ * v9 editor creation against the OnlyOffice Personal vendor build. Unlike the
+ * old Web Mode path, this build is driven entirely through the public
+ * DocEditor config: document.url is a real (blob) URL the editor fetches and
+ * converts internally, saves come back over the 'onlyoffice-file-stream'
+ * message (see handleFileStreamMessage), and no SDK-internal patching is
+ * needed. `binData` as a string (the v7 empty-template constant) or an empty
+ * buffer means "new document": the SDK creates a blank one when url is
+ * undefined.
  */
-async function runWebModeOnAppReady(params: {
+function createPersonalEditorInstance(config: {
   fileName: string;
   fileType: string;
   binData: ArrayBuffer | string;
-  mediaUrls: Record<string, string> | undefined;
-}): Promise<void> {
-  const { fileName, fileType, binData, mediaUrls } = params;
+  readonly: boolean;
+  editorLang: string;
+}): void {
+  const { fileName, fileType, binData, readonly, editorLang } = config;
 
-  (window as unknown as Record<string, unknown>).__mediaCache = mediaUrls ?? {};
-  // Bridge for the iframe's AddImageUrl patch (public-v9/onlyoffice-iframe-patch.js,
-  // section 3) to register a resolved remote-image blob into the SAME `media` map
-  // handleWriteFile uses, so requestSaveDocument's convertBinToDocumentFn call
-  // writes real bytes for it instead of x2t fetching the (nonexistent, dev-server
-  // 404) '/media/<path>' URL over HTTP. __mediaCache above is a separate map used
-  // only for on-screen <img> redirect and is not visible to the converter.
-  (window as unknown as Record<string, unknown>).__registerSaveMedia = (path: string, blobUrl: string) => {
-    media[path] = blobUrl;
-  };
-
-  const iframeEl = document.querySelector('iframe') as HTMLIFrameElement | null;
-  const iwin = iframeEl?.contentWindow as any;
-  const api = iwin?.Asc?.editor;
-  console.log('[OO] onAppReady', { hasIframe: !!iframeEl, hasApi: !!api });
-
-  // Reliable path for "Connection is lost" / EditingError dialogs -- more
-  // reliable than trying to inject this from outside the iframe beforehand.
-  if (iwin) {
-    suppressDialogsInFrame(iwin);
-    suppressCoAuthoringDisconnect(iwin);
-    blockCoAuthoringDisconnectDispatch(iwin);
-    patchDesktopThemeCrash(iwin);
-    patchHeaderSerializeCrash(iwin);
+  if (currentDocumentBlobUrl) {
+    URL.revokeObjectURL(currentDocumentBlobUrl);
+    currentDocumentBlobUrl = null;
   }
-
-  if (typeof api?.asc_openDocumentFromBytes !== 'function') {
-    // SDK didn't expose the Web Mode entry point -- fall back to the v7 path.
-    const buf = typeof binData === 'string' ? binData : toBase64(toUint8Array(binData));
-    editorSendCommand({ command: 'asc_openDocument', data: { buf } });
-    return;
-  }
-
-  const editorApp = iwin?.DE ?? iwin?.SSE ?? iwin?.PE;
-  const mainCtrl = editorApp?.getController?.('Main');
-  if (!mainCtrl) return;
-
-  // STEP 1: wait for loadDocument to run (sets mainCtrl.document, registers the
-  // asc_onGetEditorPermissions callback). api.js sends 'init' + 'opendocument'
-  // postMessages in the same turn as onAppReady, so the iframe hasn't processed
-  // them yet -- poll until it has.
-  let waited = 0;
-  while ((!mainCtrl.appOptions?.user || !mainCtrl.document) && waited < 3000) {
-    await new Promise((r) => setTimeout(r, 50));
-    waited += 50;
-  }
-  console.log('[OO] loadDocument ready after', waited, 'ms');
-
-  // STEP 2: the SDK fires asc_onGetEditorPermissions after a license check that
-  // requires a real server; without one it may resolve isEdit=false. Patch
-  // onEditorPermissions so any call substitutes a permissive fake response.
-  const versionStr =
-    editorApp
-      ?.getController?.('LeftMenu')
-      ?.leftMenu?.getMenu?.('about')
-      ?.txtVersionNum?.match(/^(\d+\.\d+\.\d+)/)?.[1] ?? '9.3.0';
-  const fakePerms = {
-    asc_getLicenseType: () => 3, // c_oLicenseResult.Success
-    asc_getBuildVersion: () => versionStr,
-    asc_getRights: () => 1, // c_oRights.Edit
-    asc_getIsAnalyticsEnable: () => false,
-    asc_getIsLight: () => false,
-    asc_getLicenseMode: () => 0,
-    asc_getIsBeta: () => false,
-    asc_getCanBranding: () => false,
-    asc_getCustomization: () => false,
-    asc_getLiveViewerSupport: () => false,
-  };
-  if (!mainCtrl._isPermissionsInited && typeof mainCtrl.onEditorPermissions === 'function') {
-    const origPerms = mainCtrl.onEditorPermissions.bind(mainCtrl);
-    mainCtrl.onEditorPermissions = (_perms: any) => {
-      try {
-        return origPerms(fakePerms);
-      } catch (e) {
-        console.warn('[OO] onEditorPermissions(fakePerms) failed', e);
-      }
-    };
-  }
-
-  // STEP 3: the SDK normally fires asc_onGetEditorPermissions after a socket.io
-  // round-trip that never happens here. Give it 2s, then trigger manually.
-  waited = 0;
-  while (!mainCtrl._isPermissionsInited && waited < 2000) {
-    await new Promise((r) => setTimeout(r, 100));
-    waited += 100;
-  }
-  if (!mainCtrl._isPermissionsInited) {
-    console.log('[OO] SDK did not fire permissions after 2s, calling manually');
-    try {
-      mainCtrl.onEditorPermissions(fakePerms);
-    } catch (e) {
-      console.warn('[OO] manual onEditorPermissions failed', e);
-    }
-  }
-  console.log('[OO] permissions ready: isEdit=', mainCtrl.appOptions?.isEdit, 'inited=', mainCtrl._isPermissionsInited);
-
-  // onDownloadAs (fired by our own downloadAs()/Save button) checks
-  // appOptions.canDownload and silently no-ops via Gateway.reportError if
-  // false -- no dialog, no console output, easy to mistake for the click
-  // simply not registering. It starts true (derived from our own
-  // permissions.download config) but setMode() flips it back to false the
-  // moment anything treats the connection as lost (isDisconnected), same
-  // root cause as suppressCoAuthoringDisconnect above. Pin it true with a
-  // property so a later setMode() call can't quietly re-disable it.
-  if (mainCtrl.appOptions) {
-    let canDownload = true;
-    let canPrint = true;
-    Object.defineProperty(mainCtrl.appOptions, 'canDownload', {
-      get: () => canDownload,
-      set: (v) => {
-        canDownload = true;
-        if (!v) console.log('[OO] blocked an attempt to disable canDownload');
-      },
-      configurable: true,
-    });
-    Object.defineProperty(mainCtrl.appOptions, 'canPrint', {
-      get: () => canPrint,
-      set: (v) => {
-        canPrint = true;
-        if (!v) console.log('[OO] blocked an attempt to disable canPrint');
-      },
-      configurable: true,
-    });
-  }
-
-  // STEP 4: resolve the bytes to inject. A string binData means the "new
-  // document" empty-template path (lib/converter.ts's handleDocumentOperation
-  // picks it for isNew); substitute the raw-OOXML template instead of the
-  // x2t .bin-format one that string actually contains, since it's the wrong
-  // format for the Web Mode importer. Otherwise binData is already raw OOXML
-  // -- converter.ts skips x2t entirely for v9's open path (see OO_VARIANT
-  // check there), so no further decoding is needed here.
-  let ooxmlBytes: Uint8Array;
-  if (typeof binData === 'string') {
-    const ext = `.${fileName.split('.').pop()?.toLowerCase() || 'docx'}`;
-    if (ext === '.pptx') {
-      // g_sEmpty_ooxml's pptx entry is missing parts the slide engine's own
-      // loader expects (preprocessPptx patches around some of it, but not
-      // all -- it still crashes deep inside sdk-all-min.js's loader).
-      // sdkjs ships a real, complete blank presentation for this exact
-      // purpose; fetch that instead of the minimal blob for the other types.
-      const templateResponse = await fetch(`${BASE_PATH}sdkjs/slide/themes/src/01_blank.pptx`);
-      if (!templateResponse.ok) {
-        throw new Error(`Failed to load PPTX template: ${templateResponse.status}`);
-      }
-      ooxmlBytes = new Uint8Array(await templateResponse.arrayBuffer());
-    } else {
-      const ooxmlB64 = g_sEmpty_ooxml[ext] || g_sEmpty_ooxml['.docx'];
-      const binaryStr = atob(ooxmlB64);
-      ooxmlBytes = new Uint8Array(binaryStr.length);
-      for (let i = 0; i < binaryStr.length; i++) ooxmlBytes[i] = binaryStr.charCodeAt(i);
-    }
-    console.log('[OO] new doc', ext, ooxmlBytes.byteLength, 'bytes');
-  } else {
-    ooxmlBytes = toUint8Array(binData);
-  }
-
-  if (ooxmlBytes.byteLength === 0) return;
-
-  // x2t may rename images during conversion (e.g. image1.tiff -> image3.jpg),
-  // breaking the SDK's image URL mapping -- re-extract from the ZIP bytes
-  // using their original filenames when opening docx/xlsx/pptx directly.
-  if (['docx', 'xlsx', 'pptx'].includes(fileType.toLowerCase())) {
-    try {
-      const zipMedia = await extractDocxMediaUrls(ooxmlBytes);
-      if (Object.keys(zipMedia).length > 0) {
-        const cache = (window as unknown as Record<string, unknown>).__mediaCache as Record<string, string>;
-        Object.assign(cache, zipMedia);
-        console.log('[OO] media cache updated from ZIP:', Object.keys(zipMedia));
-      }
-    } catch (e) {
-      console.warn('[OO] ZIP media extraction failed:', e);
-    }
-  }
-
-  // In Desktop mode the SDK delegates api.gqc("showMediaControl"/"play", ...)
-  // to AscDesktopEditor; in Web Mode it's a no-op stub. Replace it with a
-  // browser-native overlay player backed by __mediaCache.
-  if (api && !('__gqcPatched' in api)) {
-    (api as Record<string, unknown>).__gqcPatched = true;
-    const origGqc = typeof api.gqc === 'function' ? (api.gqc as (...a: unknown[]) => unknown).bind(api) : null;
-    const VIDEO_EXTS = /\.(mp4|webm|mov|avi|mkv|wmv|m4v)$/i;
-    const AUDIO_EXTS = /\.(mp3|wav|ogg|m4a|aac|wma|flac)$/i;
-    (api as Record<string, unknown>).gqc = function (command: unknown, mediaInfo: unknown) {
-      if (command === 'showMediaControl' || command === 'play') {
-        const cache = (window as unknown as Record<string, unknown>).__mediaCache as Record<string, string>;
-        const entries = Object.entries(cache)
-          .filter(([k]) => VIDEO_EXTS.test(k) || AUDIO_EXTS.test(k))
-          .map(([k, url]) => ({ key: k, url, isVideo: VIDEO_EXTS.test(k) }));
-        if (entries.length > 0) {
-          showMediaPlayer(entries);
-        } else {
-          console.log('[OO] gqc', command, '— no media in cache');
-        }
-        return;
-      }
-      if (origGqc) return origGqc(command, mediaInfo);
-    };
-    console.log('[OO] api.gqc patched for browser-native media playback');
-  }
-
-  // x2t (v7 path) normalises literal "&#10;" text in XLSX cells to real LF
-  // bytes during conversion. Raw OOXML bypasses that, so the SDK's XML parser
-  // sees the 5-char text "&#10;" verbatim -- fix it up before parsing.
-  if (fileType.toLowerCase() === 'xlsx') {
-    try {
-      const fixed = await preprocessXlsxLineBreaks(ooxmlBytes);
-      if (fixed !== ooxmlBytes) {
-        console.log('[OO] XLSX preprocessed: normalised &#10; line-break escapes');
-        ooxmlBytes = fixed;
-      }
-    } catch (e) {
-      console.warn('[OO] XLSX preprocessing failed (continuing with original bytes):', e);
-    }
-  }
-  // See preprocessPptx() in packages/converter/src/docx-zip.ts for what this fixes.
-  if (fileType.toLowerCase() === 'pptx') {
-    try {
-      const fixed = await preprocessPptx(ooxmlBytes);
-      if (fixed !== ooxmlBytes) {
-        console.log('[OO] PPTX preprocessed (showMasterPhAnim stripped, docProps/app.xml injected if missing)');
-        ooxmlBytes = fixed;
-      }
-    } catch (e) {
-      console.warn('[OO] PPTX preprocessing failed (continuing with original bytes):', e);
-    }
-  }
-
-  console.log('[OO] asc_openDocumentFromBytes', ooxmlBytes.byteLength, 'bytes');
-  // The SDK's Shc()/Mrc() gating functions check `!a.AscDesktopEditor` to decide
-  // whether to run the Desktop path (which calls LocalStartOpen and discards
-  // the bytes without feeding them to WASM) or the Web path (BRj/rxk, which
-  // actually starts loading). Our AscDesktopEditor polyfill makes that check
-  // truthy, so we patch the gate itself to always take the Web path.
-  //   Word SDK:  Shc(d) -> BRj(d)
-  //   Cell SDK:  Mrc(d) -> rxk(d)
-  //   Slide SDK: K8b(d) -> Fzj(d)
-  //
-  // See markDocumentContentReady/waitForDocumentContentReady near the top of
-  // this file for why the save path needs to wait for this signal rather
-  // than assuming readiness right after asc_openDocumentFromBytes returns.
   resetDocumentContentReady();
-  // Safety net in case asc_onDocumentContentReady never fires for some reason
-  // -- force any deferred/waiting save(s) through rather than hanging forever.
-  setTimeout(() => {
-    if (!documentContentReady) {
-      console.warn('[OO] asc_onDocumentContentReady did not fire within 15s -- forcing deferred save(s) anyway');
-      markDocumentContentReady();
-    }
-  }, 15000);
 
-  const patchWebPath = (shcName: string, brjName: string, historyFlag: string, contentReadyCb: string) => {
-    const a = api as any;
-    if (typeof a[shcName] !== 'function' || typeof a[brjName] !== 'function') return;
-    a[shcName] = function (d: unknown) {
-      if (d) {
-        try {
-          a[contentReadyCb]?.('asc_onDocumentContentReady', function () {
-            markDocumentContentReady();
-            const w = iwin;
-            if (w?.Z$) w.Z$(w.Asc?.editor || w.editor);
-            if (w?.X$) w.X$(w.Asc?.editor || w.editor);
-            setTimeout(function () {
-              if (w?.UpdateInstallPlugins) w.UpdateInstallPlugins();
-            }, 10);
-          });
-          if (iwin?.AscCommon?.History) (iwin.AscCommon.History as any)[historyFlag] = true;
-        } catch {}
-      }
-      return a[brjName](d);
-    };
-  };
-  patchWebPath('Shc', 'BRj', 'C0a', 'b_');
-  patchWebPath('Mrc', 'rxk', 'J6a', 'tW');
-  patchWebPath('K8b', 'Fzj', '$cb', 'aN');
+  let url: string | undefined;
+  if (binData instanceof ArrayBuffer && binData.byteLength > 0) {
+    currentDocumentBlobUrl = URL.createObjectURL(new Blob([binData]));
+    url = currentDocumentBlobUrl;
+  }
 
-  // Both the toolbar Save button and our own requestSaveDocument() ->
-  // downloadAs() ultimately call the SDK's internal asc_Save (raw name: oja
-  // for word/slide, xxa for cell) or, for cell specifically, a separate
-  // asc_DownloadAs raw entry point (iZd) that doesn't route through xxa at
-  // all. Like Shc/Mrc/K8b above, these functions' "has a real desktop host"
-  // check is fooled by the AscDesktopEditor polyfill, so they take the
-  // Desktop branch (DesktopOfflineAppDocumentStartSave ->
-  // AscDesktopEditor.LocalFileSave) -- which is built for a native app
-  // writing to disk via OS APIs and never hands the document bytes back to
-  // this page. Unlike opening, there's no "give me the web-path version of
-  // asc_Save" swap here; instead, each engine has its own separate offline-
-  // save entry point (Ncj/DOj/mTi per editor type) that calls
-  // asc_onSaveDocument directly with the serialized bytes when
-  // asc_isSupportFeature('ooxml') is true (confirmed true in this build) --
-  // redirect straight to that instead of trying to fix up asc_Save's Desktop
-  // branch. The three names are NOT mutually exclusive on the api object --
-  // sdk-all-min.js bundles all three engines together, so e.g. the cell
-  // editor's api also exposes a `Ncj` method (word's trigger name) that is
-  // unrelated and silently no-ops; picking by existence (`a.Ncj ?? a.DOj`)
-  // therefore picks the wrong one for cell. Select by the known fileType
-  // instead. Confirmed working via direct testing (chrome-devtools MCP):
-  // after this patch, downloadAs(), the toolbar Save button, and Excel's
-  // separate DownloadAs entry point all reach handleSaveDocument with real
-  // serialized bytes.
-  //
-  // Deliberately does NOT also override the raw low-level names (oja/xxa
-  // for word/cell, and iZd for cell's DownloadAs) the way earlier revisions
-  // of this patch did. Those raw names aren't only "asc_Save under another
-  // name" -- the cell engine's own periodic autosave timer (running every
-  // 40ms via an internal setInterval, unconditional unless a real native-app
-  // flag we don't set is present) calls `xxa` directly on its own debounced
-  // schedule, expecting xxa's real implementation to update its "last saved"
-  // bookkeeping as a side effect. Confirmed live (chrome-devtools MCP,
-  // 2026-08-09): overriding `xxa` with this trigger skips that bookkeeping
-  // update, so the debounce check sees the deadline as permanently elapsed
-  // and re-fires on every single 40ms tick forever -- a real, observed
-  // infinite save-and-download loop on a completely untouched new xlsx
-  // document, logged as "Save document event" firing dozens of times a
-  // second with "Uncaught (in promise)" alongside each one. Overriding only
-  // the public asc_Save/asc_DownloadAs entry points still covers every
-  // user-facing save path (toolbar Save button, requestSaveDocument's
-  // downloadAs() call) while leaving the SDK's own internal autosave timer
-  // free to fall through to its original (Desktop-branch, effectively inert
-  // in Web Mode -- no real desktop host to save to) behavior instead of
-  // triggering a full download on every tick. See the 2026-08-09
-  // excel-autosave-infinite-loop exploration doc for the full trace.
-  patchDownloadOptionsFileTypeCapture(iwin);
-  const a = api as any;
-  const lowerFileType = fileType.toLowerCase();
-  const triggerName = ['pptx', 'ppt'].includes(lowerFileType)
-    ? 'mTi'
-    : ['xlsx', 'xls', 'csv'].includes(lowerFileType)
-      ? 'DOj'
-      : 'Ncj';
-  if (typeof a[triggerName] === 'function') {
-    const triggerSave = () => {
-      if (documentContentReady) {
-        return a[triggerName]?.call(a, true);
-      }
-      console.log('[OO] save requested before document content ready -- deferring');
-      contentReadyWaiters.push(() => a[triggerName]?.call(a, true));
-    };
-    // asc_Save clears any stale pendingDownloadAsFormat before saving --
-    // guards against a prior asc_DownloadAs call that set the flag but whose
-    // save never actually completed (dialog cancelled, etc.) leaking its
-    // requested format into this unrelated plain save.
-    if (typeof a.asc_Save === 'function') {
-      a.asc_Save = () => {
-        pendingDownloadAsFormat = null;
-        return triggerSave();
-      };
-    }
-    // asc_DownloadAs gets its own wrapper (not a bare reference to
-    // triggerSave) so it can stash the caller's requested format before
-    // handing off to the same underlying trigger -- asc_Save is always a
-    // plain "save in the original format" call and never carries this, so
-    // it doesn't need the extra step.
-    if (typeof a.asc_DownloadAs === 'function') {
-      a.asc_DownloadAs = (options?: unknown) => {
-        pendingDownloadAsFormat = extractRequestedDownloadFormat(options);
-        return triggerSave();
-      };
-    }
-  } else {
-    console.warn(
-      `[OO] no offline save trigger (${triggerName}) found for fileType ${fileType} -- Save will likely no-op`,
-    );
-  }
-  suppressDownloadSettingsDialog(iwin);
-
-  api.asc_openDocumentFromBytes(ooxmlBytes);
-
-  // Serverless Web Mode has no server auth/openedAt response. Without these,
-  // the SDK reaches 100% load progress but never emits asc_onDocumentContentReady.
-  if (!api.I0c && typeof api.Aqg === 'function') {
-    api.Aqg(Date.now()); // word/cell openedAt gate
-  }
-  if (!api.cSd && typeof api.LNg === 'function') {
-    api.LNg(Date.now()); // spreadsheet openedAt gate (separate flag from word/cell)
-  }
-  if (!api.kvd && typeof api.rdg === 'function') {
-    let presentationWaited = 0;
-    while ((!api.Jne || !api.ta?.Ha) && presentationWaited < 5000) {
-      await new Promise((r) => setTimeout(r, 100));
-      presentationWaited += 100;
-    }
-    try {
-      api.rdg(Date.now());
-      console.log('[OO] presentation openedAt gate after', presentationWaited, 'ms');
-    } catch (e) {
-      console.warn('[OO] presentation openedAt gate failed', e);
-    }
-  }
+  const normalizedType = fileType.toLowerCase();
+  window.editor = new window.DocsAPI.DocEditor('iframe', {
+    document: {
+      title: fileName,
+      url,
+      fileType: normalizedType,
+      // A fresh key per open bypasses the editor's own document cache
+      // (same-name documents with different content would collide otherwise).
+      key: `doc-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
+      permissions: {
+        edit: !readonly,
+        download: true,
+        print: true,
+        chat: false,
+        protect: false,
+      },
+    },
+    documentType: DOCUMENT_TYPE_MAP[normalizedType],
+    editorConfig: {
+      mode: readonly ? 'view' : 'edit',
+      lang: editorLang,
+      user: {
+        id: 'local-user',
+        name: 'Guest',
+      },
+      customization: {
+        help: false,
+        about: false,
+        hideRightMenu: true,
+        features: {
+          spellcheck: {
+            change: false,
+          },
+        },
+        anonymous: {
+          request: false,
+          label: 'Guest',
+        },
+      },
+    },
+    events: {
+      onDocumentReady: () => {
+        markDocumentContentReady();
+        console.log(`${t('documentLoaded')}${fileName}`);
+      },
+      // Must be declared even as a no-op: the api layer only runs downloadAs
+      // when this callback exists. Actual bytes arrive via the
+      // onlyoffice-file-stream message, not through this event.
+      onDownloadAs: () => {},
+      onError: (event: unknown) => {
+        console.error('[OO] editor error:', event);
+      },
+    },
+  } as unknown as ConstructorParameters<typeof window.DocsAPI.DocEditor>[1]);
 }
 
 // Public editor creation method
@@ -1298,6 +690,11 @@ export function createEditorInstance(config: {
     const editorLang = getOnlyOfficeLang();
     console.log('Creating new editor instance for:', fileName, 'type:', fileType);
 
+    if (OO_VARIANT === 'v9') {
+      createPersonalEditorInstance({ fileName, fileType, binData, readonly, editorLang });
+      return;
+    }
+
     try {
       window.editor = new window.DocsAPI.DocEditor('iframe', {
         document: {
@@ -1334,22 +731,9 @@ export function createEditorInstance(config: {
               label: 'Guest',
             },
           },
-          // v9 Web Mode: explicitly opt out of collaboration/co-authoring so the
-          // SDK doesn't wait on a real coauthoring server that will never answer.
-          ...(OO_VARIANT === 'v9'
-            ? {
-                canCoAuthoring: false,
-                coEditing: { mode: 'strict', change: false },
-              }
-            : {}),
         },
         events: {
           onAppReady: () => {
-            if (OO_VARIANT === 'v9') {
-              void runWebModeOnAppReady({ fileName, fileType, binData, mediaUrls });
-              return;
-            }
-
             // Set media resources
             if (mediaUrls) {
               editorSendCommand({
@@ -1370,18 +754,12 @@ export function createEditorInstance(config: {
             console.log(`${t('documentLoaded')}${fileName}`);
             // Note: For CSV files, the save dialog may show XLSX format,
             // but the actual save will be forced to CSV format in handleSaveDocument
-            // (v9's stuck status-bar "loading" label -- same underlying cause as the
-            // busy-counter leak -- is handled generally by the watchdog in
-            // public-v9/onlyoffice-iframe-patch.js section 4c, not here: it recurs on
-            // more than just initial load, e.g. opening the numbering gallery.)
           },
           onDownloadAs: handleDownloadAs,
           // writeFile
           // TODO: writeFile - handle when pasting images from external sources
           writeFile: handleWriteFile,
-          // v9 renamed this event from onSave to onSaveDocument (and changed its
-          // payload shape -- handleSaveDocument handles both, see there).
-          ...(OO_VARIANT === 'v9' ? { onSaveDocument: handleSaveDocument } : { onSave: handleSaveDocument }),
+          onSave: handleSaveDocument,
         },
       });
     } catch (error) {
@@ -1475,13 +853,19 @@ export function requestSaveDocument(
     // case for v7 and for v9 saves that aren't racing the initial open);
     // only the not-yet-ready case (v9 only) defers until
     // waitForDocumentContentReady resolves. See markDocumentContentReady.
+    // v9 exports go straight through the editor iframe's asc_DownloadAs (see
+    // triggerPersonalDownloadAs); v7 keeps the api-level downloadAs path.
     const downloadAs = editor.downloadAs.bind(editor);
-    if (documentContentReady) {
+    const fireExport = () => {
+      if (OO_VARIANT === 'v9' && triggerPersonalDownloadAs(normalizedTargetExt)) {
+        return;
+      }
       downloadAs(normalizedTargetExt);
+    };
+    if (documentContentReady) {
+      fireExport();
     } else {
-      void waitForDocumentContentReady().then(() => {
-        downloadAs(normalizedTargetExt);
-      });
+      void waitForDocumentContentReady().then(fireExport);
     }
   });
 }

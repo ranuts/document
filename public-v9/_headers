@@ -38,8 +38,6 @@
 # add them here (and to DEPLOY_COUPLED) if/when v9 gets its own copies.
 /home.css
   Cache-Control: no-cache
-/onlyoffice-iframe-patch.js
-  Cache-Control: no-cache
 
 # Self-hosted fonts: unhashed but they only change with a ranui release; a
 # week of browser cache with revalidation after is a fine trade.

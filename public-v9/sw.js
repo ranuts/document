@@ -14,7 +14,7 @@ const ASSETS_TO_CACHE = ['./', './index.html', './manifest.json', './img/64.png'
 // in sync. Smaller list than v7's: v9 currently ships only the root landing page (no
 // satellite pages yet), so lang-switch.js/landing.css/ranui-iife (satellite-page-only
 // assets) aren't part of this build and don't belong here until they are.
-const DEPLOY_COUPLED = /^\/home\.css$|^\/onlyoffice-iframe-patch\.js$/;
+const DEPLOY_COUPLED = /^\/home\.css$/;
 
 // v7 uses 600 for ~280 sdkjs/web-apps files. v9's tree is ~1500 files, but most of
 // that is per-locale help/font duplication a single session in one language never

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Documents</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- splash -->
+
+    <style type="text/css">
+        .loadmask {
+            left: 0;
+            top: 0;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            border: none;
+            background-color: #f4f4f4;
+            z-index: 1000;
+        }
+
+        .loadmask > .brendpanel {
+            width: 100%;
+            position: absolute;
+            height: 28px;
+            background-color: #F7F7F7;
+            -webkit-box-shadow: inset 0 -1px 0 #dbdbdb, inset 0 1px 0 #FAFAFA;
+            box-shadow: inset 0 -1px 0 #dbdbdb, inset 0 1px 0 #FAFAFA;
+        }
+
+        .loadmask > .brendpanel > div {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .loadmask > .brendpanel .doc-title {
+            flex-grow: 1;
+        }
+
+        .loadmask > .brendpanel .circle {
+            vertical-align: middle;
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            margin: 4px 10px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .loadmask > .placeholder {
+            background: #f5f5f5;
+            width: 100%;
+            height: 100%;
+            padding-top: 48px;
+        }
+
+        .loadmask > .placeholder .slide-h {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .loadmask > .placeholder .slide-v {
+            display: flex;
+            position: relative;
+            flex-direction: column;
+            padding-bottom: 90%;
+        }
+
+        .loadmask > .placeholder .slide-container {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: #fbfbfb;
+            border: 1px solid #dfdfdf;
+
+            -webkit-animation: flickerAnimation 2s infinite ease-in-out;
+            -moz-animation: flickerAnimation 2s infinite ease-in-out;
+            -o-animation: flickerAnimation 2s infinite ease-in-out;
+            animation: flickerAnimation 2s infinite ease-in-out;
+        }
+
+        .loadmask > .placeholder .slide-container > .line {
+            height: 20%;
+            margin: 0 120px;
+            border-radius: 6px;
+            background: #f5f5f5;
+        }
+
+        .loadmask > .placeholder .slide-container > .line.empty {
+            height: 10%;
+            background: transparent;
+        }
+
+        .loadmask > .placeholder .slide-container > .line:nth-child(1) {
+            margin: 120px 80px 0;
+        }
+
+        @keyframes flickerAnimation {
+            0%   { opacity:1; }
+            50%  { opacity:0.3; }
+            100% { opacity:1; }
+        }
+        @-o-keyframes flickerAnimation{
+            0%   { opacity:1; }
+            50%  { opacity:0.3; }
+            100% { opacity:1; }
+        }
+        @-moz-keyframes flickerAnimation{
+            0%   { opacity:1; }
+            50%  { opacity:0.3; }
+            100% { opacity:1; }
+        }
+        @-webkit-keyframes flickerAnimation{
+            0%   { opacity:1; }
+            50%  { opacity:0.3; }
+            100% { opacity:1; }
+        }
+
+        .loadmask.none-animation > .placeholder .slide-container {
+            animation: none;
+        }
+    </style>
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="embed-body">
+      <script>
+const isIE=/msie|trident/i.test(navigator.userAgent);var checkLocalStorage=function(){try{var storage=window["localStorage"];return true}catch(e){return false}}();if(!window.lang){window.lang=/(?:&|^)lang=([^&]+)&?/i.exec(window.location.search.substring(1));window.lang=window.lang?window.lang[1]:""}window.lang&&(window.lang=window.lang.split(/[\-\_]/)[0].toLowerCase());var isLangRtl=function(lang){return lang&&/^(ar|he|ur)$/i.test(lang)};var ui_rtl=false;if(window.nativeprocvars&&window.nativeprocvars.rtl!==undefined){ui_rtl=window.nativeprocvars.rtl}else{if(isLangRtl(lang))if(checkLocalStorage&&localStorage.getItem("ui-rtl")!==null)ui_rtl=localStorage.getItem("ui-rtl")==="1";else ui_rtl=true}if(ui_rtl&&!isIE){document.body.setAttribute("dir","rtl");document.body.classList.add("rtl")}if(isLangRtl(lang)){document.body.classList.add("rtl-font")}document.body.setAttribute("applang",lang);window.isrtl=window.getComputedStyle(document.body).direction==="rtl";
+</script>
+      <script>
++function registerServiceWorker(){if("serviceWorker"in navigator&&!(window.location.origin.lastIndexOf("file://",0)===0)){const serviceWorkerName="document_editor_service_worker.js";const serviceWorkerPath="../../../../"+serviceWorkerName;let reg;navigator.serviceWorker.register(serviceWorkerPath).then(function(registration){reg=registration;return navigator.serviceWorker.getRegistrations()}).then(function(registrations){for(let r in registrations){const registration=registrations[r];if(registration!==reg&&registration.active&&registration.active.scriptURL.endsWith(serviceWorkerName)){registration.unregister()}}}).catch(function(err){console.error("Registration failed with "+err)})}}();
+</script>
+      <div id="loading-mask" class="loadmask">
+          <div class="brendpanel">
+              <div>
+                  <div class="doc-title"></div>
+                  <div class="circle"></div>
+              </div>
+          </div>
+          <div class="placeholder">
+              <div class="slide-h">
+                  <div class="slide-v">
+                      <div class="slide-container">
+                          <div class="line"></div>
+                          <div class="line empty"></div>
+                          <div class="line"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <script>
+         var  userAgent = navigator.userAgent.toLowerCase(),
+              check = function(regex){ return regex.test(userAgent); };
+         if (!check(/opera/) && (check(/msie/) || check(/trident/))) {
+              var m = /msie (\d+\.\d+)/.exec(userAgent);
+              if (m && parseFloat(m[1]) < 10.0) {
+                  document.write(
+                      '<div id="id-error-mask" class="errormask">',
+                          '<div class="error-body" align="center">',
+                              '<div id="id-error-mask-title" class="title">Your browser is not supported.</div>',
+                              '<div id="id-error-mask-text">Sorry, ONLYOFFICE Document is currently only supported in the latest versions of the Chrome, Firefox, Safari or Internet Explorer web browsers.</div>',
+                          '</div>',
+                      '</div>'
+                  );
+              }
+         }
+
+        function getUrlParams() {
+            var e,
+                a = /\+/g,  // Regex for replacing addition symbol with a space
+                r = /([^&=]+)=?([^&]*)/g,
+                d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+                q = window.location.search.substring(1),
+                urlParams = {};
+
+            while (e = r.exec(q))
+                urlParams[d(e[1])] = d(e[2]);
+
+            return urlParams;
+        }
+
+        function encodeUrlParam(str) {
+            return str.replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+        }
+
+        var params = getUrlParams(),
+               lang = (params["lang"] || 'en').split(/[\-\_]/)[0];
+
+           window.frameEditorId = params["frameEditorId"];
+           window.parentOrigin = params["parentOrigin"];
+      </script>
+
+      <div id="box-preview">
+          <div id="id-preview" tabindex="-1"></div>
+      </div>
+      <div id="editor_sdk" class="viewer" style="overflow: hidden;" tabindex="-1"></div>
+
+      <div class="overlay-controls" style="margin-left: -32px">
+          <ul class="left">
+              <li id="btn-left"><button class="overlay svg-icon slide-prev"></button></li>
+              <li id="btn-play"><button class="overlay svg-icon play"></button></li>
+              <li id="btn-right"><button class="overlay svg-icon slide-next"></button></li>
+          </ul>
+      </div>
+
+      <div class="toolbar" id="toolbar">
+          <div class="group left">
+              <div class="margin-right-large"><a id="header-logo" class="brand-logo" href="http://www.onlyoffice.com/" target="_blank"></a></div>
+          </div>     
+          <div class="group center">
+              <span id="title-doc-name"></span>
+          </div>
+          <div class="group right">
+              <div class="item margin-right-small"><input id="page-number" class="form-control input-xs masked" type="text" value="0"><span class="text" id="pages" tabindex="-1">of 0</span></div>
+              <div id="box-tools" class="dropdown">
+                  <button class="control-btn svg-icon more-vertical"></button>
+              </div>
+              <button id="id-btn-close-editor" class="control-btn svg-icon search-close hidden"></button>
+          </div>
+      </div>
+
+      <div class="hyperlink-tooltip" data-toggle="tooltip" title="" style="display:none;"></div>
+
+      <!--vendor-->
+      <script type="text/javascript" src="../../../vendor/jquery/jquery.min.js"></script>
+      <script type="text/javascript" src="../../../vendor/jquery/jquery.browser.min.js"></script>
+      <script type="text/javascript" src="../../../vendor/socketio/socket.io.min.js"></script>
+      <script type="text/javascript" src="../../../vendor/xregexp/xregexp-all-min.js"></script>
+      <script src="../../../vendor/requirejs/require.js"></script>
+      <script>
+          require.config({
+              baseUrl: '../../'
+          });
+      </script>
+      <!--sdk-->
+      <script type="text/javascript" src="../../../../sdkjs/common/AllFonts.js"></script>
+      <script type="text/javascript" src="../../../../sdkjs/slide/sdk-all-min.js"></script>
+
+      <!--application-->
+      <script>
+"use strict";(function(window,undefined){var supportedScaleValues=[1,1.25,1.5,1.75,2,2.25,2.5,2.75,3,3.5,4,4.5,5];if(window["AscDesktopEditor"]&&window["AscDesktopEditor"]["GetSupportedScaleValues"])supportedScaleValues=window["AscDesktopEditor"]["GetSupportedScaleValues"]();var isCorrectApplicationScaleEnabled=function(){if(supportedScaleValues.length===0)return false;var userAgent=navigator.userAgent.toLowerCase();var isAndroid=userAgent.indexOf("android")>-1;var isIE=userAgent.indexOf("msie")>-1||userAgent.indexOf("trident")>-1||userAgent.indexOf("edge")>-1;var isChrome=!isIE&&userAgent.indexOf("chrome")>-1;var isOperaOld=!!window.opera;var isMobile=/android|avantgo|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent||navigator.vendor||window.opera);if(isAndroid||!isChrome||isOperaOld||isMobile||!document||!document.firstElementChild||!document.body)return false;return true}();window["AscCommon"]=window["AscCommon"]||{};window["AscCommon"].checkDeviceScale=function(){var retValue={zoom:1,devicePixelRatio:window.devicePixelRatio,applicationPixelRatio:window.devicePixelRatio,correct:false};if(!isCorrectApplicationScaleEnabled)return retValue;var systemScaling=window.devicePixelRatio;var bestIndex=0;var bestDistance=Math.abs(supportedScaleValues[0]-systemScaling);var currentDistance=0;for(var i=1,len=supportedScaleValues.length;i<len;i++){if(true){if(Math.abs(supportedScaleValues[i]-systemScaling)>1e-4){if(supportedScaleValues[i]>systemScaling-1e-4)break}}currentDistance=Math.abs(supportedScaleValues[i]-systemScaling);if(currentDistance<bestDistance-1e-4){bestDistance=currentDistance;bestIndex=i}}retValue.applicationPixelRatio=supportedScaleValues[bestIndex];if(Math.abs(retValue.devicePixelRatio-retValue.applicationPixelRatio)>.01){retValue.zoom=retValue.devicePixelRatio/retValue.applicationPixelRatio;retValue.correct=true}return retValue};var oldZoomValue=1;window["AscCommon"].correctApplicationScale=function(zoomValue){if(!zoomValue.correct&&Math.abs(zoomValue.zoom-oldZoomValue)<1e-4)return;oldZoomValue=zoomValue.zoom;var firstElemStyle=document.firstElementChild.style;if(Math.abs(oldZoomValue-1)<.001)firstElemStyle.zoom="normal";else firstElemStyle.zoom=1/oldZoomValue}})(window);
+</script>
+      <script type="text/javascript" src="../../../apps/presentationeditor/embed/app-all.js"></script>
+      <link href="../../../apps/presentationeditor/embed/resources/css/app-all.css" rel="stylesheet" media="print" onload="this.media='all'">
+      <script type="text/javascript">
+          var isBrowserSupported = function() {
+              return  ($.browser.msie     && parseFloat($.browser.version) > 9)     ||
+                      ($.browser.chrome   && parseFloat($.browser.version) > 7)     ||
+                      ($.browser.safari   && parseFloat($.browser.version) > 4)     ||
+                      ($.browser.opera    && parseFloat($.browser.version) > 10.4)  ||
+                      ($.browser.webkit   && parseFloat($.browser.version) > 534.53)  ||
+                      ($.browser.mozilla  && parseFloat($.browser.version) > 3.9);
+          };
+
+          if (!isBrowserSupported()){
+              document.write(
+                  '<div id="id-error-mask" class="errormask">',
+                      '<div class="error-body" align="center">',
+                          '<div id="id-error-mask-title" class="title">Your browser is not supported.</div>',
+                          '<div id="id-error-mask-text">Sorry, ONLYOFFICE Presentation is currently only supported in the latest versions of the Chrome, Firefox, Safari or Internet Explorer web browsers.</div>',
+                      '</div>',
+                  '</div>'
+              );
+          }
+      </script>
+  </body>
+</html>
