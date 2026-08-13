@@ -81,15 +81,8 @@ jobs:
       # actually builds the image and runs the full e2e suite against the
       # container, proving the production image serves the editor correctly
       # (this is what caught the workspace-manifest install breakage).
-      - name: Build Docker image
-        run: docker build -t document:e2e .
-
       - name: Run E2E tests against the Docker image
-        run: pnpm exec playwright test --config playwright.docker.config.ts
-
-      - name: Remove Docker E2E container
-        if: always()
-        run: docker rm -f document-e2e-docker 2>/dev/null || true
+        run: pnpm run test:e2e:docker
 
       - name: Upload Playwright report
         if: failure()

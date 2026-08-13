@@ -22,6 +22,7 @@ pnpm run format:check            # prettier 格式检查（CI 必跑）
 pnpm run test                    # 单元测试（Vitest）
 pnpm run test:coverage           # 带覆盖率的单元测试
 pnpm run test:e2e                # E2E 测试（Playwright，自动 build+preview）
+pnpm run test:e2e:docker         # 同套 E2E 跑在生产 Docker 镜像上（bin/test-e2e-docker.sh）
 pnpm run lint                    # lint:ts + lint:docker
 ```
 
@@ -149,6 +150,13 @@ fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEdito
 本地调试时注意 **杀干净 4173 上的残留 preview 服务器**——Playwright 的
 `reuseExistingServer` 会复用旧构建，让你调试一个根本没包含新代码的产物。
 
+**Docker 镜像回归**（`pnpm run test:e2e:docker`，配置
+`playwright.docker.config.ts`）：构建生产镜像后把同一套 test/e2e 全部 spec
+跑在容器（static-web-server）上，证明镜像端到端可用——正是这条链路抓出了
+"Dockerfile 缺 workspace manifest、安装必挂"的问题（CI 原本只查 compose
+config 和 hadolint，从不真正 build）。容器由 `bin/test-e2e-docker.sh` 前后
+强制清理，绝不复用（残留容器会静默服务陈旧镜像）。
+
 E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 
 ---
@@ -173,7 +181,8 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 1. 同上安装步骤
 2. `playwright install --with-deps chromium`
 3. `pnpm run test:e2e`
-4. 失败时上传 `playwright-report/` artifact
+4. `pnpm run test:e2e:docker`（构建镜像 + 同套 E2E 打容器）
+5. 失败时上传 `playwright-report/` 与 `playwright-report-docker/` artifact
 
 ---
 

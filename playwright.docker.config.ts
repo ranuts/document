@@ -29,11 +29,13 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // Foreground `docker run` so Playwright owns the lifecycle: the SIGTERM it
-    // sends on shutdown is proxied into the container, and --rm cleans it up.
+    // Foreground `docker run` so Playwright owns the lifecycle. The kill it
+    // sends on shutdown does not always reach the container, so the wrapper
+    // (bin/test-e2e-docker.sh) and CI both force-remove the container --
+    // never reuse one, or a stale image could be served silently.
     command: 'docker run --rm --name document-e2e-docker -p 8090:80 document:e2e',
     url: 'http://127.0.0.1:8090',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 60_000,
   },
 });
