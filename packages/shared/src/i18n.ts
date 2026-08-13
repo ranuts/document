@@ -1,4 +1,4 @@
-import { getCookie, getQuery, localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
+import { getAllQueryString, getCookie, localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 
 /**
  * Internationalization configuration
@@ -206,7 +206,7 @@ class I18n {
    * Get URL parameter by name (using ranuts utility)
    */
   private getUrlParameter(name: string): string | null {
-    return getQuery()?.[name] || null;
+    return getAllQueryString()?.[name] || null;
   }
 
   /**

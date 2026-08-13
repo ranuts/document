@@ -5,7 +5,12 @@ import { createEditorInstance, loadEditorApi } from './onlyoffice-editor';
 import { getDocumentType } from '@ranuts/shared/document-utils';
 
 // Export types
-export type { ConversionResult, BinConversionResult, EmscriptenModule, DocumentType } from '@ranuts/shared/document-types';
+export type {
+  ConversionResult,
+  BinConversionResult,
+  EmscriptenModule,
+  DocumentType,
+} from '@ranuts/shared/document-types';
 
 // Export constants
 export { oAscFileType, c_oAscFileType2 } from './file-types';

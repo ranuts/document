@@ -166,9 +166,9 @@ docker run -d --name document -p 443:443 \
 
 ## 🔤 Fonts
 
-This project does not include proprietary fonts (Arial, Times New Roman, etc.) to comply with open-source licensing. Font name references are preserved for document compatibility.
+The editor ships with the font library bundled in the vendored OnlyOffice build (`public/fonts/`, indexed by `public/sdkjs/common/AllFonts.js`). Fonts are fetched on demand — only the ones a document actually uses are downloaded.
 
-→ **[Font management guide](docs/fonts.md)** — how to add fonts by index.
+→ **[Font management guide](docs/fonts.md)** — note: this guide describes the previous (v7) font system and is pending a rewrite for the indexed font layout.
 
 ---
 

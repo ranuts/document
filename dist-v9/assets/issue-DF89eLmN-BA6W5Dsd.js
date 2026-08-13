@@ -1,2 +1,0 @@
-import{n as e}from"./index-DBvnK2jz.js";var t=e({default:()=>n}),n={success:!0,_identification:!0,data:`<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/></svg>
-`};export{t as n};

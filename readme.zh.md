@@ -166,9 +166,9 @@ docker run -d --name document -p 443:443 \
 
 ## 🔤 字体
 
-本项目不包含 Arial、Times New Roman、微软雅黑等受版权保护的字体文件，以符合开源许可要求。字体名称引用保留以确保文档兼容性。
+编辑器字体库随内置的 OnlyOffice 编译产物一起提供（`public/fonts/`，由 `public/sdkjs/common/AllFonts.js` 索引），按需加载——文档用到哪个字体才会下载哪个。
 
-→ **[字体管理指南](docs/fonts.zh.md)** — 如何按索引添加字体。
+→ **[字体管理指南](docs/fonts.zh.md)** — 注意：该指南描述的是旧版（v7）字体机制，待按新的索引字体布局重写。
 
 ---
 

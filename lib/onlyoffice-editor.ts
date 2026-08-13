@@ -5,7 +5,6 @@ import { oAscFileType } from './file-types';
 import { DOCUMENT_TYPE_MAP, getDocumentMimeType } from '@ranuts/shared/document-utils';
 import { X2TConverter, saveFileToDisk } from '@ranuts/converter';
 
-
 // v9.3.0 renamed sendCommand -> serviceCommand; keep the fallback for safety.
 function editorSendCommand(params: { command: string; data: Record<string, any> }): void {
   const editor = window.editor as any;

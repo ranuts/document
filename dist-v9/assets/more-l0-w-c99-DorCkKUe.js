@@ -1,2 +1,0 @@
-import{n as e}from"./index-DBvnK2jz.js";var t=e({default:()=>n}),n={success:!0,_identification:!0,data:`<svg t="1738503407752" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="19504" width="200" height="200"><path d="M298.666667 409.002667l213.333333 213.333333 213.333333-213.333333 60.330667 60.330666L512 742.997333 238.336 469.333333l60.330667-60.330666z" p-id="19505"></path></svg>
-`};export{t as n};

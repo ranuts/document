@@ -21,14 +21,8 @@ pnpm run lint:ts                 # oxlint + tsc --noEmit（CI 必跑）
 pnpm run format:check            # prettier 格式检查（CI 必跑）
 pnpm run test                    # 单元测试（Vitest）
 pnpm run test:coverage           # 带覆盖率的单元测试
-pnpm run test:e2e                # E2E 测试（Playwright，v7，自动 build+preview）
-pnpm run test:e2e:v9             # v9 E2E 回归套件（Playwright，自动 build+preview）
+pnpm run test:e2e                # E2E 测试（Playwright，自动 build+preview）
 pnpm run lint                    # lint:ts + lint:docker
-
-# v9 构建变体（OnlyOffice Personal vendor，见 public-v9/）
-pnpm run dev:v9                  # v9 开发服务器（端口 5183）
-pnpm run build:v9                # v9 生产构建（public-v9/ → dist-v9/）
-pnpm run preview:v9              # 预览 dist-v9
 ```
 
 ---
@@ -135,16 +129,14 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 
 ### E2E 测试（Playwright）
 
-两套独立配置，webServer 均自动 build + preview（不需要手动先 build）：
+单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
+不需要手动先 build），`test/e2e/` 三个 spec：
 
-| 套件 | 配置                      | 端口 | 内容                                                       |
-| ---- | ------------------------- | ---- | ---------------------------------------------------------- |
-| v7   | `playwright.config.ts`    | 4173 | `test/e2e/app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟 |
-| v9   | `playwright.v9.config.ts` | 4174 | `test/e2e-v9/embed-regression.spec.ts` — 编辑器真实回归    |
-
-**v9 回归套件**（`pnpm run test:e2e:v9`）通过 embed-demo.html 的 postMessage API
-驱动真实编辑器，用 SheetJS 在页面内生成/解析工作簿（仓库里不放二进制 fixture），
-覆盖 v9 迁移期修过的每一类 bug：
+- `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
+- `embed-api.spec.ts` — embed postMessage 协议
+- `embed-regression.spec.ts` — **真实编辑器回归**：通过 embed-demo.html 驱动
+  真实编辑器 + 真实 x2t，用 SheetJS 在页面内生成/解析工作簿（仓库里不放二进制
+  fixture），覆盖 v9 迁移期修过的每一类 bug：
 
 - 多 sheet 工作簿 open-buffer 打开 + 保存往返数据完整（#113、#31）
 - xlsx → PDF 导出（canvas 渲染管线，#28 / 错误码 80 的场景）
@@ -154,7 +146,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 **这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
 "全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、
 fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEditorIframe`）。
-本地调试时注意 **杀干净 4174 上的残留 preview 服务器**——Playwright 的
+本地调试时注意 **杀干净 4173 上的残留 preview 服务器**——Playwright 的
 `reuseExistingServer` 会复用旧构建，让你调试一个根本没包含新代码的产物。
 
 E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
@@ -180,9 +172,8 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 
 1. 同上安装步骤
 2. `playwright install --with-deps chromium`
-3. `pnpm run test:e2e`（v7 冒烟）
-4. `pnpm run test:e2e:v9`（v9 编辑器回归）
-5. 失败时上传 `playwright-report/` 与 `playwright-report-v9/` artifact
+3. `pnpm run test:e2e`
+4. 失败时上传 `playwright-report/` artifact
 
 ---
 
@@ -337,14 +328,15 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
 | `lib/ui.ts`            | 复用现有控制面板的显示/隐藏模式添加 Agent 面板      |
 | `store/index.ts`       | Agent 执行状态可通过同一 signal 机制管理            |
 
-### OnlyOffice v9 升级（已实施：并行构建变体，基于 OnlyofficePersonal vendor）
+### OnlyOffice v9（已转正：public/ 即 v9，v7 已移除）
 
-**状态：v9 已在 `feat/v9-web-mode` 分支落地为与 v7 并行的构建变体，
-三端打开/编辑/保存/转 PDF 全部验证通过并有 E2E 回归守护；v7 仍是生产路径。**
+**状态：v9 已是唯一路径。** `public/` 直接承载 v9 vendor，v7 引擎资源与全部
+v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v7 iframe patch）
+已删除；E2E 回归守护齐全。
 
 - **底座**：fernfei 的 OnlyofficePersonal（OnlyOffice 9.3.0.133 编译产物 +
   9.4 版 x2t.wasm，AGPL-3.0），vendor 整体位于 `public-v9/`
-  （sdkjs / web-apps（help 已裁剪）/ 索引字体），构建产物 `dist-v9/`。
+  （sdkjs / web-apps（help 已裁剪）/ 索引字体），位于 `public/`。
 - **集成方式**：纯公开 DocEditor 配置驱动（blob URL 打开、每次打开唯一
   key），保存经编辑器内部 x2t 转换后由 `onlyoffice-file-stream` postMessage
   抛回页面（`OO_FILE_STREAM_ONLY` 抑制其自带下载）。旧 v9 方案那套 1207 行
@@ -359,8 +351,9 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
   流转回 CSV（`packages/converter` 的 `convertCsvToXlsx` / `xlsxToCsvBytes`）。
 - **详细历史**：docs/explorations/ 下 2026-08-11 ～ 08-13 的 v9 系列文档
   （根因链、迁移记录、issue 回归排查、E2E 固化）。
-- **待办**：PDF 打开（新 vendor 有 pdfeditor，未接入）、运行时只读切换验证、
-  上线切换决策（届时更新 README 与本节）。
+- **待办**：PDF 打开（新 vendor 有 pdfeditor，未接入）、运行时只读切换
+  （processRightsChange 在新构建上的行为）验证、docs/fonts.md 按索引字体体系
+  重写。
 
 ---
 
