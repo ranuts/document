@@ -145,9 +145,40 @@ vendor 改动脚本化成同样的"导出 + 自动 patch"管道。
 - 语言状态模块级全局，多实例互相污染；
 - 批注/修订逆向层零 E2E。
 
-## 本次落地项
+## 本次落地项（已实施并验证）
 
-1. **CSV 编码/分隔符嗅探**（`packages/converter`）：GBK 检测 + 逗号/分号/
-   Tab 嗅探，进 SheetJS 前先解码为字符串，配单测。
-2. **运行时只读切换**（`lib/onlyoffice-editor.ts`）：验证并接入
-   `asc_setRestriction` 路径（细节与结果见当日后续记录/commit）。
+### 1. CSV 编码嗅探（packages/converter/src/document-converter.ts）
+
+原实现的编码回退是**死代码**：`new TextDecoder('utf-8')` 非 fatal 模式对非法
+序列只产出 U+FFFD、永远不抛错，所以 catch 里的 latin1 分支从未执行，GBK CSV
+一律变成替换符乱码。新实现 `decodeCsvBytes` 三级严格嗅探：
+
+1. UTF-8 BOM → 去 BOM 后按 UTF-8；
+2. `TextDecoder('utf-8', { fatal: true })` 严格解码，失败说明是遗留编码；
+3. `TextDecoder('gb18030', { fatal: true })`（GBK 超集，覆盖 zh-CN Excel
+   的 "ANSI" 导出），再失败才落 latin1。
+
+分隔符无需自嗅探——SheetJS 的 CSV 解析自带逗号/分号/Tab 猜测。
+单测新增 GBK 字节解码与 latin1 回退两例（注意：单测跑的是
+`packages/converter/dist`，改 src 后必须先 `pnpm run build` 该包）。
+
+### 2. 运行时只读切换（lib/onlyoffice-editor.ts）
+
+完全按参考实现的配方落地：
+
+- 挂载配置改为**始终** `permissions.edit: true` + `mode: 'edit'`（此前
+  readonly 打开走 view 模式挂载，是"单向门"，运行时无法切回编辑）；
+- `onDocumentReady` 里若 `isReadonlyMode` 为真，经同源 iframe 拿 SDK 实例
+  （`Asc.editor` 或 frame 的 `editor` 全局）调 `asc_setRestriction(128)`；
+- `setReadonlyMode` 运行时双向切换：锁 = `asc_setRestriction(128)`，
+  解锁 = `asc_removeRestriction(128)` + `asc_setRestriction(0)`；原
+  `processRightsChange` serviceCommand 保留为兜底（无实现的构建上是 no-op）。
+
+**验证**：新增真实编辑器 E2E（embed-regression.spec.ts "runtime readonly
+toggle"）——可编辑打开 → set-readonly 锁定（断言 iframe 内 SDK 实例的
+`restrictions` 属性真变成 128，而不只是 embed-api 标志）→ 保存被拒 →
+解锁（restrictions 回 0）→ 保存成功且内容完整。一个 vendor 细节：该构建
+**没有导出 `asc_getRestriction`**（只有 `asc_getRestrictionSettings`），但
+`restrictions` 实例属性未被混淆，E2E 直接读它。
+
+全套验证：oxlint + tsc 通过，单测 295 全绿，E2E 15 全绿。

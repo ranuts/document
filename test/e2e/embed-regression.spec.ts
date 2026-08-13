@@ -131,4 +131,76 @@ test.describe('embed regression (real editor)', () => {
     expect(result.state).toEqual({ readonly: true, hasDocument: true });
     expect(result.saveError).not.toBe('');
   });
+
+  test('runtime readonly toggle locks and unlocks the live editor without a rebuild', async ({ page }) => {
+    const result = await page.evaluate(async () => {
+      // Read the restriction value off the live SDK instance inside the
+      // (same-origin, nested) editor iframe: 0 = none, 128 = view. This
+      // asserts the lock actually reached the editor, not just the
+      // embed-api readonly flag.
+      const readRestriction = (): number | null => {
+        type SdkApi = { restrictions?: unknown; asc_setRestriction?: unknown };
+        const visit = (win: Window): number | null => {
+          try {
+            // The vendor build has no asc_getRestriction getter, but the
+            // backing `restrictions` property is not name-mangled.
+            const scope = win as unknown as { Asc?: { editor?: SdkApi }; editor?: SdkApi };
+            const api = scope.Asc?.editor || scope.editor;
+            if (api && typeof api.asc_setRestriction === 'function' && typeof api.restrictions === 'number') {
+              return api.restrictions;
+            }
+          } catch {
+            // cross-origin frame -- skip
+          }
+          for (let i = 0; i < win.frames.length; i++) {
+            const found = visit(win.frames[i]);
+            if (found !== null) return found;
+          }
+          return null;
+        };
+        return visit(window);
+      };
+      const waitForRestriction = async (expected: number, timeoutMs = 30_000) => {
+        const start = Date.now();
+        while (readRestriction() !== expected) {
+          if (Date.now() - start > timeoutMs) {
+            throw new Error(`restriction did not become ${expected}, got ${readRestriction()}`);
+          }
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        }
+      };
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['toggle', 1]]), 'Sheet1');
+      const data = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+      await post('document:open-buffer', {
+        fileName: 'toggle.xlsx',
+        buffer: new Uint8Array(data).buffer,
+        readonly: false,
+      });
+      await waitForRestriction(0);
+
+      await post('document:set-readonly', { readonly: true });
+      await waitForRestriction(128);
+      let lockedSaveError = '';
+      try {
+        await post('document:save', {});
+      } catch (error) {
+        lockedSaveError = String((error as Error).message || error);
+      }
+
+      await post('document:set-readonly', { readonly: false });
+      await waitForRestriction(0);
+      const saved = await post('document:save', {});
+      const parsed = XLSX.read(new Uint8Array(await saved.file.arrayBuffer()), { type: 'array' });
+      const text = XLSX.utils.sheet_to_csv(parsed.Sheets[parsed.SheetNames[0]]).trim();
+
+      return { lockedSaveError, savedFileName: saved.file.name as string, text };
+    });
+
+    expect(result.lockedSaveError).not.toBe('');
+    expect(result.savedFileName).toBe('toggle.xlsx');
+    expect(result.text).toBe('toggle,1');
+  });
 });
