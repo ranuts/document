@@ -17,7 +17,7 @@ vendor 整体替换。本篇是实施记录。
 ## 资源替换
 
 - 删除 `public-v9/{sdkjs,web-apps,fonts,wasm,font-map.json,onlyoffice-iframe-patch.js}`。
-- 从 `/Users/ranzhouhang/Desktop/OnlyofficePersonal-9.3.0.133/9.3.0.133-*/vendor/`
+- 从本地解压的 OnlyofficePersonal 9.3.0.133 包的 `9.3.0.133-*/vendor/` 目录
   拷入 `sdkjs/`（185M，内含 9.4 版 x2t 40M）、`web-apps/`（141M，**裁掉了全部
   `apps/*/main/resources/help`，省 508M**）、`fonts/`（327M，按索引 000-266
   命名 + `AllFonts.js` 索引表，按需加载）。

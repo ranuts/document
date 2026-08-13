@@ -8,9 +8,9 @@ converter 侧修复**，需要按"路线 A"更换 vendor（见结论）。
 
 ## 背景
 
-用户提供了 `/Users/ranzhouhang/Desktop/OnlyofficePersonal-9.3.0.133/`
-（fernfei 的 OnlyOffice Personal 离线静态包：OnlyOffice 9.3.0.133 编译产物 +
-9.4 版 x2t.wasm，AGPL-3.0），要求分析它与当前分支的差异、找出可借鉴的点，
+用户提供了本地解压的 OnlyofficePersonal 9.3.0.133 离线静态包
+（fernfei 编译的 OnlyOffice 9.3.0.133 产物 + 9.4 版 x2t.wasm，
+AGPL-3.0），要求分析它与当前分支的差异、找出可借鉴的点，
 并推进"升级 v9 直接替换 v7"。用户选定路线："先 B 验证再转 A"——先把关键修复
 移植进现有 public-v9 验证错误码 80，再决定是否整体换底座。
 

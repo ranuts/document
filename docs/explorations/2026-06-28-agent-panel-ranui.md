@@ -7,10 +7,10 @@
 `ranui@0.1.10-alpha-27` 本就是依赖且已在用 (`import 'ranui/button'` 等)。把它指到本地源码：
 
 ```bash
-pnpm link /Users/chaxus/Documents/code/ran/packages/ranui
+pnpm link <本地 ran 仓库路径>/packages/ranui
 ```
 
-- pnpm 把链接记录为 `pnpm-workspace.yaml` 的 override：`ranui: link:../../Documents/code/ran/packages/ranui`，并更新 `pnpm-lock.yaml`。
+- pnpm 把链接记录为 `pnpm-workspace.yaml` 的 override：`ranui: link:<指向本地 ran 仓库的相对路径>/packages/ranui`，并更新 `pnpm-lock.yaml`。
 - **这两个文件是 link 标记，不要提交**(CI 解析不到本地路径)。
 - 验证:Vite 把 `import 'ranui/button'` 解析为 `/@fs/.../ran/packages/ranui/dist/button.js`,实时服务本地源 (非预打包),Vite 8 自动放行符号链接真实路径，无需改 vite.config。
 - 调试循环：改 ranui 源 → 在 ran 仓库 `pnpm build` 重建 dist → 刷新本项目。

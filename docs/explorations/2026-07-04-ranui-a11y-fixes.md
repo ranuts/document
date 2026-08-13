@@ -1,6 +1,6 @@
 # ranui 组件库 a11y 修复（2026-07-04）
 
-> 改动在 **ran 仓库**（`~/Documents/code/ran/packages/ranui`），非本项目。记录于此
+> 改动在 **ran 仓库**（chaxus/ran 的 `packages/ranui`），非本项目。记录于此
 > 便于统一追溯。审计结论见对话；本轮按优先级修了 P0/P1 若干项。
 
 ## 背景
