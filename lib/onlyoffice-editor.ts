@@ -553,8 +553,55 @@ export function createEditorInstance(config: {
   });
 }
 
+// Asc.c_oAscRestrictionType values (public SDK enum).
+const ASC_RESTRICTION_NONE = 0;
+const ASC_RESTRICTION_VIEW = 128;
+
+type SdkEditorApi = {
+  asc_setRestriction?: (value: number) => void;
+  asc_removeRestriction?: (value: number) => void;
+};
+
+// Locate the SDK API instance inside the (same-origin) editor iframe. The
+// vendor build exposes it as Asc.editor and aliases it to the frame's own
+// `editor` global.
+function getSdkEditorApi(): SdkEditorApi | null {
+  for (let i = 0; i < window.frames.length; i++) {
+    try {
+      const win = window.frames[i] as Window & {
+        Asc?: { editor?: SdkEditorApi };
+        editor?: SdkEditorApi;
+      };
+      const api = win.Asc?.editor || win.editor;
+      if (api && typeof api.asc_setRestriction === 'function') {
+        return api;
+      }
+    } catch {
+      // cross-origin frame -- not the editor, skip
+    }
+  }
+  return null;
+}
+
 export function setReadonlyMode(readonly: boolean): void {
   isReadonlyMode = readonly;
+
+  // Primary path: the SDK restriction API switches the live editor between
+  // view and edit in place, no rebuild. The editor must be mounted with full
+  // edit permissions for this to be reversible (see
+  // createPersonalEditorInstance: restriction is applied after load, never
+  // via permissions.edit=false at mount).
+  const api = getSdkEditorApi();
+  if (api) {
+    if (readonly) {
+      api.asc_setRestriction?.(ASC_RESTRICTION_VIEW);
+    } else {
+      api.asc_removeRestriction?.(ASC_RESTRICTION_VIEW);
+      api.asc_setRestriction?.(ASC_RESTRICTION_NONE);
+    }
+  }
+
+  // Fallback/legacy path; harmless no-op on builds that ignore the command.
   editorSendCommand({
     command: 'processRightsChange',
     data: {

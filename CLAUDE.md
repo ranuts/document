@@ -44,7 +44,6 @@ lib/                  # 核心业务逻辑（纯 TypeScript）
   loading.ts            # 加载状态 UI
   onlyoffice-editor.ts  # 编辑器实例生命周期、保存、只读模式
   ui.ts                 # 控制面板、菜单、FAB 等 UI 组件
-  empty_bin.ts          # 新建文档时使用的空文档二进制数据
 store/
   index.ts              # 全局状态（当前文档对象），基于 ranuts/utils createSignal
 types/
@@ -109,10 +108,9 @@ test/unit/
   document-utils.test.ts      # 共享工具函数
   i18n.test.ts                # 国际化
   embed-api.test.ts           # embed postMessage API（initEmbedApi、消息路由、来源过滤）
-  onlyoffice-editor.test.ts   # 编辑器生命周期（只读模式、requestSaveDocument、onSave）
+  onlyoffice-editor.test.ts   # 编辑器生命周期（只读模式、requestSaveDocument、编辑器配置）
   document-converter.test.ts  # packages/converter（CSV、签名嗅探、zip 直通、错误码提示）
   docx-zip.test.ts            # OOXML zip 媒体提取/预处理
-  iframe-patch.test.ts        # public/onlyoffice-v7-iframe-patch.js（v7 专属）
   sw-routing.test.ts          # sw.js 缓存策略路由
   agent-*.test.ts             # agent-plugin 相关（LLM provider、工具、UI 状态）
 test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL、localStorage

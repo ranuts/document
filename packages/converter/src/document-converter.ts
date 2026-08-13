@@ -491,6 +491,29 @@ export class X2TConverter {
   }
 
   /**
+   * Decode CSV bytes with encoding sniffing. A non-fatal utf-8 TextDecoder
+   * never throws (invalid sequences become U+FFFD), so strict decoding is the
+   * only way to detect legacy encodings at all. Excel on zh-CN Windows still
+   * exports CSV in the ANSI code page (GBK), which is why gb18030 (its
+   * superset) is tried before the latin1 last resort.
+   */
+  private decodeCsvBytes(csvData: Uint8Array): string {
+    if (csvData.length >= 3 && csvData[0] === 0xef && csvData[1] === 0xbb && csvData[2] === 0xbf) {
+      return new TextDecoder('utf-8').decode(csvData.slice(3));
+    }
+    try {
+      return new TextDecoder('utf-8', { fatal: true }).decode(csvData);
+    } catch {
+      try {
+        return new TextDecoder('gb18030', { fatal: true }).decode(csvData);
+      } catch {
+        // gb18030 decoder unavailable, or bytes invalid in it too
+        return new TextDecoder('latin1').decode(csvData);
+      }
+    }
+  }
+
+  /**
    * Convert CSV to XLSX format using SheetJS library
    * This is a workaround since x2t may not support CSV directly
    */
@@ -499,18 +522,7 @@ export class X2TConverter {
       // Load xlsx library
       const XLSX = await this.loadXlsxLibrary();
 
-      // Remove UTF-8 BOM if present
-      let csvText: string;
-      if (csvData.length >= 3 && csvData[0] === 0xef && csvData[1] === 0xbb && csvData[2] === 0xbf) {
-        csvText = new TextDecoder('utf-8').decode(csvData.slice(3));
-      } else {
-        // Try UTF-8 first, fallback to other encodings if needed
-        try {
-          csvText = new TextDecoder('utf-8').decode(csvData);
-        } catch {
-          csvText = new TextDecoder('latin1').decode(csvData);
-        }
-      }
+      const csvText = this.decodeCsvBytes(csvData);
 
       // Parse CSV using SheetJS
       const workbook = XLSX.read(csvText, { type: 'string', raw: false });

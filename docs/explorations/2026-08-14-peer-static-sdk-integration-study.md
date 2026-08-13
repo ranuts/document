@@ -20,16 +20,16 @@ demo 站，下称「参考实现」），做了一次完整拆解，目的是对
 
 与我们的差异：
 
-| 维度 | 我们（v9 现行） | 参考实现 |
-| --- | --- | --- |
-| vendor 来源 | fernfei OnlyofficePersonal 编译产物（AGPL） | 官方 documentserver-de 9.4.0-develop 镜像导出（DE，商业版） |
-| 文档喂入 | blob URL + 公开 DocEditor 配置 | mock 协作握手 `documentOpen` 下发 urlsMap，XHR 代理回放 |
-| 保存通道 | `onlyoffice-file-stream` postMessage | 劫持 `/downloadas/` 分片 POST，内存拼片 |
-| x2t 位置 | 编辑器内部（保存路径） | 独立 module Web Worker，主线程零阻塞 |
-| wasm 压缩 | gzip 9.4MB，客户端 DecompressionStream 解压 | brotli 9.2MB，DecompressionStream("br") + vendored JS 解码器双通道兜底 |
-| vendor 体积 | 裁剪后入库 | **1.1 GB 未裁剪**（web-apps 695MB、fonts 182MB） |
-| 并发防护 | editorOperationQueue 操作队列 | 无队列，loadSession 令牌失效丢弃旧初始化 |
-| Connector | 未启用 | mock license `advancedApi: true` 解锁官方 Connector |
+| 维度        | 我们（v9 现行）                             | 参考实现                                                               |
+| ----------- | ------------------------------------------- | ---------------------------------------------------------------------- |
+| vendor 来源 | fernfei OnlyofficePersonal 编译产物（AGPL） | 官方 documentserver-de 9.4.0-develop 镜像导出（DE，商业版）            |
+| 文档喂入    | blob URL + 公开 DocEditor 配置              | mock 协作握手 `documentOpen` 下发 urlsMap，XHR 代理回放                |
+| 保存通道    | `onlyoffice-file-stream` postMessage        | 劫持 `/downloadas/` 分片 POST，内存拼片                                |
+| x2t 位置    | 编辑器内部（保存路径）                      | 独立 module Web Worker，主线程零阻塞                                   |
+| wasm 压缩   | gzip 9.4MB，客户端 DecompressionStream 解压 | brotli 9.2MB，DecompressionStream("br") + vendored JS 解码器双通道兜底 |
+| vendor 体积 | 裁剪后入库                                  | **1.1 GB 未裁剪**（web-apps 695MB、fonts 182MB）                       |
+| 并发防护    | editorOperationQueue 操作队列               | 无队列，loadSession 令牌失效丢弃旧初始化                               |
+| Connector   | 未启用                                      | mock license `advancedApi: true` 解锁官方 Connector                    |
 
 ## 关键机制记录
 
@@ -108,7 +108,7 @@ CSV 会乱码或整行进一格。**编码/分隔符嗅探这块已借鉴落地*
 - 所谓 catalog 字体文件就是**裸 TTF/OTF 前 32 字节与一个 16 字节固定
   XOR key 异或**，对称可逆，输出无扩展名的 `fonts/{id}`。
 - 注册机制：`AllFonts.js` 末尾挂 `window["__custom_font_registry__"] =
-  { "{id}": ["FamilyName", "别名1", ...] }`，随后 IIFE 在 SDK 初始化前
+{ "{id}": ["FamilyName", "别名1", ...] }`，随后 IIFE 在 SDK 初始化前
   把 registry 同步进 `__fonts_files` / `__fonts_infos`（每个别名一行
   info 指向同一 fileIndex）。
 - 坑：Word SDK 初始化后会 `delete __fonts_files`，Cell SDK 后加载需靠

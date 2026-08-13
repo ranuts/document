@@ -105,3 +105,17 @@
 - README / readme.zh：字体章节改写（旧文案称"不含专有字体"，与新 vendor 的
   索引字体库相反）；docs/fonts.md 标记待重写。
 - CLAUDE.md：开发命令、E2E 说明、CI 流程、v9 章节全部改为单轨现状。
+
+## 七、Docker 功能固化进回归（用户要求）
+
+- 新增 `playwright.docker.config.ts`：把 **同一套 test/e2e 全部 spec** 跑在
+  生产镜像容器上（baseURL 8090，webServer 即前台 `docker run`），14 用例
+  全过——含真实编辑器往返/PDF/CSV/只读，等于每次回归都证明"镜像端到端可用"。
+- 入口 `pnpm run test:e2e:docker`（`bin/test-e2e-docker.sh`：build 镜像 →
+  强删残留容器 → 跑套件 → 再强删容器）。容器**绝不复用**
+  （`reuseExistingServer: false`）：实测 Playwright 杀掉前台 docker CLI 后
+  信号不一定到达容器，残留容器会静默服务陈旧镜像——preview 服务器同款陷阱
+  的 Docker 版。
+- CI e2e job 追加 `pnpm run test:e2e:docker` 步骤，失败上传
+  `playwright-report-docker/`；从此 Dockerfile 的可构建性与镜像的可服务性
+  都有真实验证（此前 CI 只查 compose config 和 hadolint）。
