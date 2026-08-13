@@ -17,5 +17,6 @@ dist
 # test artifacts
 coverage/
 playwright-report/
+playwright-report-docker/
 test-results/
 public/fonts/__fallback__/
