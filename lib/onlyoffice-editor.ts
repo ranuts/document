@@ -302,10 +302,14 @@ function handleFileStreamMessage(event: MessageEvent): void {
 
   // A CSV original is opened as XLSX (the vendor editor can't ingest raw CSV,
   // see handleDocumentOperation), so its saves come back as XLSX -- convert
-  // them back so a CSV in still means a CSV out (GitHub #13/#33). The embed
-  // API's explicit "save as xlsx" requests keep the XLSX untouched.
+  // them back so a CSV in still means a CSV out (GitHub #13/#33), and honor
+  // an explicit embed-API "save as CSV" the same way (the editor's own CSV
+  // export stalls on a delimiter dialog, see triggerPersonalDownloadAs).
+  // Explicit non-CSV requests (e.g. the embed default XLSX) keep the stream.
+  const requestedExt = embeddedSaveRequest?.targetExt;
   const wantsCsvBack =
-    ext === 'xlsx' && !!docName?.toLowerCase().endsWith('.csv') && embeddedSaveRequest?.targetExt !== 'XLSX';
+    ext === 'xlsx' &&
+    (requestedExt === 'CSV' || (requestedExt === undefined && !!docName?.toLowerCase().endsWith('.csv')));
   if (wantsCsvBack) {
     void (async () => {
       try {
@@ -336,7 +340,11 @@ if (OO_VARIANT === 'v9' && typeof window !== 'undefined') {
  * numeric file-type constant. Returns false when no editor frame is ready.
  */
 function triggerPersonalDownloadAs(targetExt: string): boolean {
-  const code = (oAscFileType as Record<string, number>)[targetExt.toUpperCase()];
+  // A CSV export request pops the editor's delimiter-options dialog and stalls
+  // a headless save forever; ask the editor for XLSX instead and convert the
+  // returned stream to CSV in handleFileStreamMessage.
+  const effectiveExt = targetExt.toUpperCase() === 'CSV' ? 'XLSX' : targetExt.toUpperCase();
+  const code = (oAscFileType as Record<string, number>)[effectiveExt];
   if (!code) return false;
   for (let i = 0; i < window.frames.length; i++) {
     try {
@@ -347,8 +355,21 @@ function triggerPersonalDownloadAs(targetExt: string): boolean {
         };
       };
       const AscNs = win.Asc;
-      const api = AscNs?.editor;
+      const api = AscNs?.editor as
+        | {
+            asc_DownloadAs?: (options: unknown) => void;
+            isLoadFullApi?: boolean;
+            isDocumentLoadComplete?: boolean;
+          }
+        | undefined;
       if (api && typeof api.asc_DownloadAs === 'function' && AscNs?.asc_CDownloadOptions) {
+        // onDocumentReady fires while the full API bundle (sdk-all.js) may
+        // still be loading on a cold cache; an export fired in that window
+        // crashes inside the SDK's font collector ("Cannot read properties
+        // of undefined (reading 'forEach')") or is silently dropped. Only
+        // fire once the SDK itself reports full readiness -- the caller's
+        // retry loop keeps polling until then.
+        if (!api.isLoadFullApi || !api.isDocumentLoadComplete) return false;
         api.asc_DownloadAs(new AscNs.asc_CDownloadOptions(code));
         return true;
       }
@@ -580,21 +601,67 @@ async function handleDownloadAs(event: { data?: { url?: string; fileType?: strin
 let currentDocumentBlobUrl: string | null = null;
 
 /**
- * Strip OnlyOffice chrome that has no place in a pure single-user local
- * editor: the header logo and the current-user / co-users widgets. There is
- * no DocEditor config switch for these in this build, but the editor iframe
- * is same-origin, so a stylesheet injected into it does the job for every
- * editor type. Idempotent per document (keyed element id).
+ * Same-origin preparation of the editor iframe, applied from onAppReady /
+ * onDocumentReady (idempotent):
+ *
+ * 1. Strip OnlyOffice chrome that has no place in a pure single-user local
+ *    editor -- the header logo and the current-user / co-users widgets.
+ *    There is no DocEditor config switch for these in this build.
+ * 2. Shadow SharedWorker inside the editor iframe. The SDK's local
+ *    spellchecker prefers `new SharedWorker(spell.js, ...)`, and loading
+ *    that script on a cold profile of a service-worker-controlled origin
+ *    hangs forever in Chromium (request never settles; warm profiles are
+ *    immune only because the previous page's named SharedWorker is still
+ *    alive and gets reused without a fetch). The stuck load keeps the
+ *    editor's isDocumentLoadComplete flag false, which silently breaks
+ *    every save/export. With SharedWorker absent, CSpellchecker falls back
+ *    to a plain dedicated Worker, which loads fine.
  */
-function hideEditorBrandingChrome(): void {
+function prepareEditorIframe(): void {
   for (let i = 0; i < window.frames.length; i++) {
     try {
-      const doc = (window.frames[i] as Window).document;
-      if (!doc || doc.getElementById('oo-local-chrome-css')) continue;
-      const style = doc.createElement('style');
-      style.id = 'oo-local-chrome-css';
-      style.textContent = '#header-logo, .btn-current-user, #tlb-box-users { display: none !important; }';
-      (doc.head || doc.documentElement).appendChild(style);
+      const win = window.frames[i] as Window & { __ooSharedWorkerShadowed?: boolean };
+      const doc = win.document;
+      if (!doc) continue;
+
+      if (!doc.getElementById('oo-local-chrome-css')) {
+        const style = doc.createElement('style');
+        style.id = 'oo-local-chrome-css';
+        style.textContent = '#header-logo, .btn-current-user, #tlb-box-users { display: none !important; }';
+        (doc.head || doc.documentElement).appendChild(style);
+      }
+
+      if (!win.__ooSharedWorkerShadowed) {
+        Object.defineProperty(win, 'SharedWorker', { value: undefined, configurable: true });
+        win.__ooSharedWorkerShadowed = true;
+        console.log('[OO] SharedWorker shadowed in editor iframe (spellchecker uses a dedicated worker)');
+      }
+
+      // 3. Guard the vendor build's AscCommon.fetchFonts: it reads
+      //    AscFonts.g_font_infos.forEach unconditionally, but on a cold
+      //    profile the open-document conversion can run before the font
+      //    system has populated that array, crashing the conversion
+      //    ("Cannot read properties of undefined (reading 'forEach')") and
+      //    leaving the document permanently half-open. Import conversions
+      //    don't need fonts, so report "no fonts" until the font system is
+      //    up; exports (PDF) happen much later, when it always is.
+      const ooWin = win as unknown as {
+        AscCommon?: { fetchFonts?: (cb: (fonts: unknown[]) => void) => unknown };
+        AscFonts?: { g_font_infos?: unknown };
+        __ooFetchFontsGuarded?: boolean;
+      };
+      if (ooWin.AscCommon && typeof ooWin.AscCommon.fetchFonts === 'function' && !ooWin.__ooFetchFontsGuarded) {
+        const origFetchFonts = ooWin.AscCommon.fetchFonts;
+        ooWin.AscCommon.fetchFonts = function (cb: (fonts: unknown[]) => void) {
+          if (!ooWin.AscFonts || !Array.isArray(ooWin.AscFonts.g_font_infos)) {
+            cb([]);
+            return;
+          }
+          return origFetchFonts.call(this, cb);
+        };
+        ooWin.__ooFetchFontsGuarded = true;
+        console.log('[OO] AscCommon.fetchFonts guarded against uninitialized font system');
+      }
     } catch {
       // cross-origin frame -- not the editor, skip
     }
@@ -662,7 +729,13 @@ function createPersonalEditorInstance(config: {
         about: false,
         hideRightMenu: true,
         features: {
+          // Spellcheck is fully disabled (mode:false turns it off, not just
+          // locks the toggle): its engine is imported inside a worker on
+          // first document load and that request has been observed to hang
+          // forever on cold profiles, which keeps isDocumentLoadComplete
+          // false and silently breaks every save/export.
           spellcheck: {
+            mode: false,
             change: false,
           },
         },
@@ -674,12 +747,17 @@ function createPersonalEditorInstance(config: {
     },
     events: {
       onAppReady: () => {
-        hideEditorBrandingChrome();
+        prepareEditorIframe();
+        // The spell engine class registers with the SDK bundle, which can
+        // land after onAppReady; keep re-applying (idempotent, cheap) so the
+        // stub is in place before the document-load code spawns the worker.
+        const timer = window.setInterval(prepareEditorIframe, 200);
+        window.setTimeout(() => window.clearInterval(timer), 15_000);
       },
       onDocumentReady: () => {
         markDocumentContentReady();
         // Re-apply in case the header rendered after onAppReady.
-        hideEditorBrandingChrome();
+        prepareEditorIframe();
         console.log(`${t('documentLoaded')}${fileName}`);
       },
       // Must be declared even as a no-op: the api layer only runs downloadAs
@@ -913,16 +991,33 @@ export function requestSaveDocument(
     // v9 exports go straight through the editor iframe's asc_DownloadAs (see
     // triggerPersonalDownloadAs); v7 keeps the api-level downloadAs path.
     const downloadAs = editor.downloadAs.bind(editor);
-    const fireExport = () => {
-      if (OO_VARIANT === 'v9' && triggerPersonalDownloadAs(normalizedTargetExt)) {
-        return;
-      }
+    if (OO_VARIANT === 'v9') {
+      // An asc_DownloadAs that fires before the editor finished importing the
+      // document is silently dropped by the SDK, and a cold editor boot can
+      // take well over the default ready-gate cap (observed in headless CI /
+      // first preview visits). onDocumentReady is a dependable signal on v9
+      // (createPersonalEditorInstance wires it), so wait for it with a cap
+      // matching the request's own 60 s timeout, then retry the trigger
+      // briefly in case the editor frame is still being attached.
+      void (async () => {
+        await waitForDocumentContentReady(60_000);
+        // Keep retrying until the SDK reports full readiness (see
+        // triggerPersonalDownloadAs) -- a cold cache can spend a long time
+        // loading the full API bundle after onDocumentReady. The request's
+        // own 60 s timeout is the overall bound.
+        const retryDeadline = Date.now() + 45_000;
+        while (!triggerPersonalDownloadAs(normalizedTargetExt)) {
+          if (Date.now() > retryDeadline) {
+            downloadAs(normalizedTargetExt);
+            return;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+      })();
+    } else if (documentContentReady) {
       downloadAs(normalizedTargetExt);
-    };
-    if (documentContentReady) {
-      fireExport();
     } else {
-      void waitForDocumentContentReady().then(fireExport);
+      void waitForDocumentContentReady().then(() => downloadAs(normalizedTargetExt));
     }
   });
 }

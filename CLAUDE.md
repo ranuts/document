@@ -21,8 +21,14 @@ pnpm run lint:ts                 # oxlint + tsc --noEmit（CI 必跑）
 pnpm run format:check            # prettier 格式检查（CI 必跑）
 pnpm run test                    # 单元测试（Vitest）
 pnpm run test:coverage           # 带覆盖率的单元测试
-pnpm run test:e2e                # E2E 测试（Playwright，需先 build）
+pnpm run test:e2e                # E2E 测试（Playwright，v7，自动 build+preview）
+pnpm run test:e2e:v9             # v9 E2E 回归套件（Playwright，自动 build+preview）
 pnpm run lint                    # lint:ts + lint:docker
+
+# v9 构建变体（OnlyOffice Personal vendor，见 public-v9/）
+pnpm run dev:v9                  # v9 开发服务器（端口 5183）
+pnpm run build:v9                # v9 生产构建（public-v9/ → dist-v9/）
+pnpm run preview:v9              # 预览 dist-v9
 ```
 
 ---
@@ -105,23 +111,21 @@ const [getDocmentObj, setDocmentObj] = createSignal<{
 ```
 test/unit/
   vitest-smoke.test.ts        # 基础冒烟
-  document-utils.test.ts      # lib/document-utils.ts
-  i18n.test.ts                # lib/i18n.ts
-  embed-api.test.ts           # lib/embed-api.ts（initEmbedApi、消息路由、来源过滤）
-  onlyoffice-editor.test.ts   # lib/onlyoffice-editor.ts（只读模式、requestSaveDocument）
+  document-utils.test.ts      # 共享工具函数
+  i18n.test.ts                # 国际化
+  embed-api.test.ts           # embed postMessage API（initEmbedApi、消息路由、来源过滤）
+  onlyoffice-editor.test.ts   # 编辑器生命周期（只读模式、requestSaveDocument、onSave）
+  document-converter.test.ts  # packages/converter（CSV、签名嗅探、zip 直通、错误码提示）
+  docx-zip.test.ts            # OOXML zip 媒体提取/预处理
+  iframe-patch.test.ts        # public/onlyoffice-v7-iframe-patch.js（v7 专属）
+  sw-routing.test.ts          # sw.js 缓存策略路由
+  agent-*.test.ts             # agent-plugin 相关（LLM provider、工具、UI 状态）
 test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL、localStorage
 ```
 
-**当前覆盖率（coverage include 范围内）：**
-
-| 文件                 | 语句 | 分支 | 函数 |
-| -------------------- | ---- | ---- | ---- |
-| document-utils.ts    | 89%  | 87%  | 100% |
-| embed-api.ts         | 75%  | 56%  | 85%  |
-| i18n.ts              | 92%  | 65%  | 93%  |
-| onlyoffice-editor.ts | 22%  | 16%  | 31%  |
-
-覆盖率阈值（全局）：语句 35%、分支 25%、函数 35%、行 35%。
+覆盖率阈值（全局）：语句 34%、分支 25%、函数 35%、行 35%（当前实际约
+45%/49%/49%，具体以 `pnpm run test:coverage` 输出为准，不要在本文件里维护
+逐文件数字——它们过期得很快）。
 
 **注意事项：**
 
@@ -131,14 +135,29 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 
 ### E2E 测试（Playwright）
 
-配置文件：`playwright.config.ts`，使用 Chromium，baseURL `http://127.0.0.1:4173`。
+两套独立配置，webServer 均自动 build + preview（不需要手动先 build）：
 
-```
-test/e2e/
-  app-smoke.spec.ts   # 应用加载、PWA manifest 冒烟测试
-```
+| 套件 | 配置                      | 端口 | 内容                                                       |
+| ---- | ------------------------- | ---- | ---------------------------------------------------------- |
+| v7   | `playwright.config.ts`    | 4173 | `test/e2e/app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟 |
+| v9   | `playwright.v9.config.ts` | 4174 | `test/e2e-v9/embed-regression.spec.ts` — 编辑器真实回归    |
 
-E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。本地运行前需先 `pnpm run build`。
+**v9 回归套件**（`pnpm run test:e2e:v9`）通过 embed-demo.html 的 postMessage API
+驱动真实编辑器，用 SheetJS 在页面内生成/解析工作簿（仓库里不放二进制 fixture），
+覆盖 v9 迁移期修过的每一类 bug：
+
+- 多 sheet 工作簿 open-buffer 打开 + 保存往返数据完整（#113、#31）
+- xlsx → PDF 导出（canvas 渲染管线，#28 / 错误码 80 的场景）
+- CSV 打开 + 存回 CSV 内容一致（#13、#33）
+- 只读打开：状态正确且保存被拒（#25、#87）
+
+**这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
+"全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、
+fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEditorIframe`）。
+本地调试时注意 **杀干净 4174 上的残留 preview 服务器**——Playwright 的
+`reuseExistingServer` 会复用旧构建，让你调试一个根本没包含新代码的产物。
+
+E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 
 ---
 
@@ -161,8 +180,9 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。本地�
 
 1. 同上安装步骤
 2. `playwright install --with-deps chromium`
-3. `pnpm run test:e2e`
-4. 失败时上传 `playwright-report/` artifact
+3. `pnpm run test:e2e`（v7 冒烟）
+4. `pnpm run test:e2e:v9`（v9 编辑器回归）
+5. 失败时上传 `playwright-report/` 与 `playwright-report-v9/` artifact
 
 ---
 
@@ -317,93 +337,38 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
 | `lib/ui.ts`            | 复用现有控制面板的显示/隐藏模式添加 Agent 面板      |
 | `store/index.ts`       | Agent 执行状态可通过同一 signal 机制管理            |
 
-### OnlyOffice Web Apps 版本升级（7.5.0 → 9.4.0）
+### OnlyOffice v9 升级（已实施：并行构建变体，基于 OnlyofficePersonal vendor）
 
-**结论：建议升级，与 Agent 协同计划捆绑进行，主要成本在于获取静态文件而非代码改动。**
+**状态：v9 已在 `feat/v9-web-mode` 分支落地为与 v7 并行的构建变体，
+三端打开/编辑/保存/转 PDF 全部验证通过并有 E2E 回归守护；v7 仍是生产路径。**
 
-#### 当前状态
-
-- **当前版本**：`7.5.0 (build: 2024-10-16)`，文件位于 `public/sdkjs/`（~47 MB）、`public/wasm/`（~74 MB）、`public/web-apps/`
-- **最新版本**：`9.4.0`（2026-05-20 发布），跨越约 1.5 年、2 个大版本
-
-#### 升级带来的主要收益
-
-| 版本 | 关键改进                                                              |
-| ---- | --------------------------------------------------------------------- |
-| v8.0 | `CreateTable(rows, cols)` API 重构，性能大幅提升                      |
-| v9.2 | **Plugin API 大幅扩展**（新增 Form / CheckBox API），插件调试文档完善 |
-| v9.3 | 多页视图、REGEX 函数族（spreadsheet）、图片/形状超链接、PDF API       |
-| v9.4 | 25 个演示主题、20 种幻灯片切换动画、表格深色模式、单进程架构简化      |
-
-**对 Agent 协同计划尤为重要**：v9.2 的 Plugin API 扩展是 Agent 工具层的基础，在旧版本上构建 Agent 集成可能遇到 API 不完整的问题。建议**先升级，再做 Agent 开发**。
-
-#### 升级成本
-
-**1. 获取静态文件（最大障碍，预估 1 天）**
-
-OnlyOffice 没有为"仅静态文件"提供官方分发渠道，可行路径：
-
-```bash
-# 最可靠：从官方 Docker 镜像提取
-docker run -d --name oo onlyoffice/documentserver:9.4.0
-docker cp oo:/var/www/onlyoffice/documentserver/web-apps ./public/web-apps
-docker cp oo:/var/www/onlyoffice/documentserver/sdkjs   ./public/sdkjs
-docker rm -f oo
-
-# x2t WASM 需单独处理（社区维护）
-# 参考：https://github.com/cryptpad/onlyoffice-x2t-wasm
-```
-
-**2. 代码层的 Breaking Changes（预估 0.5 天）**
-
-需检查的改动点：
-
-| 改动                                       | 版本   | 影响                                    |
-| ------------------------------------------ | ------ | --------------------------------------- |
-| `CreateTable(rows, cols)` 参数顺序变更     | v8.0   | 搜索项目中对 `CreateTable` 的调用       |
-| `customization.commentAuthorOnly` 参数移除 | v8.x   | 检查 `onlyoffice-editor.ts` 中的 config |
-| `installDeveloperPlugin` shim 移除         | v9.3.1 | 若有插件加载逻辑需更新                  |
-
-**3. 功能回归测试（预估 1 天）**
-
-- docx / xlsx / pptx / csv 打开与保存
-- 格式转换（x2t WASM）
-- 只读模式切换
-- 现有 E2E smoke test 重跑
-
-**4. 包体积变化**
-
-新版本预计比当前（121 MB）更大，需评估对 GitHub Pages 首屏加载的影响。可配合 Service Worker 预缓存策略缓解。
-
-#### 与 Agent 计划的关系
-
-```
-建议顺序：
-  升级 OnlyOffice 9.4.0
-    ↓
-  阶段零：验证新版 Plugin API 可用性
-    ↓
-  Agent 工具层开发（基于完整的 v9.2+ Plugin API）
-```
-
-若先做 Agent 开发、后升级 OnlyOffice，可能需要在旧 API 基础上写兼容代码，升级时再改一遍，事倍功半。
+- **底座**：fernfei 的 OnlyofficePersonal（OnlyOffice 9.3.0.133 编译产物 +
+  9.4 版 x2t.wasm，AGPL-3.0），vendor 整体位于 `public-v9/`
+  （sdkjs / web-apps（help 已裁剪）/ 索引字体），构建产物 `dist-v9/`。
+- **集成方式**：纯公开 DocEditor 配置驱动（blob URL 打开、每次打开唯一
+  key），保存经编辑器内部 x2t 转换后由 `onlyoffice-file-stream` postMessage
+  抛回页面（`OO_FILE_STREAM_ONLY` 抑制其自带下载）。旧 v9 方案那套 1207 行
+  iframe patch 与混淆符号 hook 已全部删除。
+- **关键代码**：`lib/onlyoffice-editor.ts` 的 `createPersonalEditorInstance` /
+  `handleFileStreamMessage` / `triggerPersonalDownloadAs` / `prepareEditorIframe`
+  （最后一个含三个冷启动守卫：品牌元素隐藏、SharedWorker 遮蔽、fetchFonts
+  字体竞态守卫——都是首次访问才会踩中的生产 bug，别删）。
+- **部署约束**：x2t.wasm 只发布 gzip（9.4 MB，x2t_helper 里浏览器端解压
+  预置 `Module.wasmBinary`），裸 40 MB 文件超 CF Pages 25 MB 限制、不入库。
+- **CSV**：新 vendor 编辑器不能直接吃 CSV——打开前用 SheetJS 转 XLSX、保存
+  流转回 CSV（`packages/converter` 的 `convertCsvToXlsx` / `xlsxToCsvBytes`）。
+- **详细历史**：docs/explorations/ 下 2026-08-11 ～ 08-13 的 v9 系列文档
+  （根因链、迁移记录、issue 回归排查、E2E 固化）。
+- **待办**：PDF 打开（新 vendor 有 pdfeditor，未接入）、运行时只读切换验证、
+  上线切换决策（届时更新 README 与本节）。
 
 ---
 
 ## 测试覆盖说明
 
-### 当前覆盖率（coverage include 范围内）
-
-| 文件                   | 语句 | 分支 | 函数 | 备注                       |
-| ---------------------- | ---- | ---- | ---- | -------------------------- |
-| `embed-api.ts`         | 97%  | 91%  | 100% | 接近完整覆盖               |
-| `document-utils.ts`    | 89%  | 87%  | 100% | 接近完整覆盖               |
-| `i18n.ts`              | 92%  | 65%  | 93%  | 未覆盖部分语言的特定翻译键 |
-| `onlyoffice-editor.ts` | ~28% | ~25% | ~41% | 见下方说明                 |
-
 ### 为什么 onlyoffice-editor.ts 覆盖率低
 
-这是预期行为，**不需要强行提升**。该文件 542 行中约 400 行是 OnlyOffice 编辑器的事件回调，必须有真实编辑器运行才能触发：
+这是预期行为，**不需要强行提升**。该文件大量代码是 OnlyOffice 编辑器的事件回调，必须有真实编辑器运行才能触发：
 
 | 函数                             | 无法单测的原因                                                        |
 | -------------------------------- | --------------------------------------------------------------------- |
@@ -414,7 +379,9 @@ docker rm -f oo
 | `queueEditorOperation` (~40 行)  | `createEditorInstance` 内部队列，连带未覆盖                           |
 | `loadEditorApi` (~20 行)         | 动态创建 `<script>` 标签加载外部 JS，jsdom 不执行                     |
 
-这些函数理论上可以通过 E2E 覆盖，但需要 OnlyOffice WebAssembly 完整加载并打开真实文档（耗时 10–30 秒，稳定性差）。强行用单测 mock 覆盖反而会让测试代码比被测代码更复杂，没有实际价值。
+这些函数不适合单测 mock 覆盖（测试代码会比被测代码更复杂）。**真实编辑器路径由
+v9 E2E 回归套件覆盖**（`pnpm run test:e2e:v9`，打开/编辑/保存/转 PDF/CSV 往返/
+只读，全程真实编辑器 + 真实 x2t，单跑约 15 秒）。
 
 **已覆盖的可测部分**（纯函数 + 状态管理）：
 

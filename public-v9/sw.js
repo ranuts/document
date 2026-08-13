@@ -79,6 +79,14 @@ self.addEventListener('fetch', (event) => {
   // causes a crash in OnlyOffice's fallback font code path.
   if (/\.(ttf|woff2?|otf|eot)(\?.*)?$/.test(url.pathname)) return;
 
+  // 4b. Skip the spellchecker engine: it is importScripts'd from inside a
+  // dedicated worker during the editor's first boot, and routing that request
+  // through a just-activated service worker hangs forever on a cold profile
+  // (observed on every first visit: the request stays pending, the editor's
+  // full API never finishes loading -- isLoadFullApi:false -- and every
+  // save/export silently breaks). The browser's HTTP cache handles these.
+  if (url.pathname.includes('/sdkjs/common/spell/')) return;
+
   // 5. Determine Strategy
   const isHtml =
     event.request.mode === 'navigate' ||
