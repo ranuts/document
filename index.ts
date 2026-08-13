@@ -82,28 +82,6 @@ for (const ext of ['docx', 'xlsx', 'pptx']) {
   if (btn) btn.addEventListener('click', () => void window.onCreateNew(`.${ext}`));
 }
 
-// Local-dev convenience only: a nav link to the v9 build variant's own dev
-// server (`pnpm run dev:v9`, fixed at port 5183 so it never collides with this
-// server's own port -- the default `dev` script has no fixed port and falls
-// back past 5173 whenever something else on the machine already holds it).
-// Injected via JS (not static HTML) so it never ships in a production build
-// -- import.meta.env.DEV is false there. v9 has no live deployment of its own
-// yet (see docs/explorations), so there's nowhere real for this link to point
-// outside local development.
-if (import.meta.env.DEV) {
-  const nav = document.querySelector('#landing-hero header.bar nav');
-  const githubLink = nav?.querySelector('a.gh');
-  if (nav && githubLink) {
-    const v9Link = document.createElement('a');
-    v9Link.className = 'navlink';
-    v9Link.href = 'http://localhost:5183/';
-    v9Link.target = '_blank';
-    v9Link.rel = 'noopener';
-    v9Link.textContent = 'v9 (dev)';
-    nav.insertBefore(v9Link, githubLink);
-  }
-}
-
 // Wire the ranui <r-select> language switch: it emits a `change` CustomEvent with
 // { value } — map the locale to the localized homepage URL. (Static pages can't
 // run the web component and fall back to a native <select>.)

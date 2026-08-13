@@ -3,22 +3,11 @@
 # Exit on error
 set -e
 
-# Usage: bin/build.sh [v9]
-# No argument builds the default v7 app (public/ -> dist/), unchanged.
-# "v9" builds the OnlyOffice 9.3.0 Web Mode variant (public-v9/ -> dist-v9/),
-# entirely separate output, never touching the v7 build.
-VARIANT="${1:-}"
-if [ "$VARIANT" = "v9" ]; then
-    PUBLIC_DIR="public-v9"
-    DIST_DIR="dist-v9"
-    VITE_MODE_ARGS="--mode v9"
-else
-    PUBLIC_DIR="public"
-    DIST_DIR="dist"
-    VITE_MODE_ARGS=""
-fi
+PUBLIC_DIR="public"
+DIST_DIR="dist"
+VITE_MODE_ARGS=""
 
-echo "Starting build process (variant: ${VARIANT:-v7}, publicDir: $PUBLIC_DIR, outDir: $DIST_DIR)..."
+echo "Starting build process (publicDir: $PUBLIC_DIR, outDir: $DIST_DIR)..."
 
 # Keep the vendored ranui design-token layer in sync (the landing hero consumes
 # its --ran-* variables via $PUBLIC_DIR/ran-tokens.css). Regenerate on every build

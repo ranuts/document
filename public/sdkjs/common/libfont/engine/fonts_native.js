@@ -1,111 +1,17 @@
-!(function (e, n) {
-  e.AscFonts = e.AscFonts || {};
-  var r = e.AscFonts,
-    t = CreateEmbedObject('CTextMeasurerEmbed');
-  function o() {
-    this.error = 0;
-  }
-  o.prototype.free = function () {};
-  let _ = new o(),
-    i = new o();
-  function u(e) {
-    ((this.size = e), (this.pointer = new Uint8Array(e)));
-  }
-  ((i.count = 0),
-    (r.CopyStreamToMemory = function (e, n) {
-      return e;
-    }),
-    (r.GetUint8ArrayFromPointer = function (e, n) {
-      return e;
-    }),
-    (u.prototype.getBuffer = function () {
-      return this.pointer;
-    }),
-    (u.prototype.free = function () {}),
-    (u.prototype.set = function (e, n) {
-      this.pointer[e] = n;
-    }),
-    (r.AllocString = function (e) {
-      return new u(e);
-    }),
-    (r.FT_CreateLibrary = function (e) {
-      return t.FT_Init(e);
-    }),
-    (r.FT_Done_Library = function (e) {
-      e && t.FT_Free(e);
-    }),
-    (r.FT_Set_TrueType_HintProp = function (e, n) {
-      return t.FT_Set_TrueType_HintProp(e, n);
-    }),
-    (r.FT_Open_Face = function (e, n, r, o) {
-      return t.FT_Open_Face2(e, n, o);
-    }),
-    (r.FT_Done_Face = function (e) {
-      e && t.FT_Free(e);
-    }),
-    (r.FT_SetCMapForCharCode = function (e, n) {
-      return t.FT_SetCMapForCharCode(e, n);
-    }),
-    (r.FT_GetKerningX = function (e, n, r) {
-      return t.FT_GetKerningX(e, n, r);
-    }),
-    (r.FT_GetFaceMaxAdvanceX = function (e) {
-      return t.FT_GetFaceMaxAdvanceX(e);
-    }),
-    (r.FT_Set_Transform = function (e, n, r, o, _) {
-      return t.FT_Set_Transform(e, n, r, o, _);
-    }),
-    (r.FT_Set_Char_Size = function (e, n, r, o, _) {
-      return t.FT_Set_Char_Size(e, n, r, o, _);
-    }),
-    (r.FT_GetFaceInfo = function (e, n) {
-      var r = t.FT_GetFaceInfo(e);
-      return r ? ((_.error = 0), n.init(r, 0, r.length), _) : ((_.error = 1), _);
-    }),
-    (r.FT_Load_Glyph = function (e, n, r) {
-      return t.FT_Load_Glyph(e, n, r);
-    }),
-    (r.FT_SetCMapForCharCode = function (e, n) {
-      return t.FT_SetCMapForCharCode(e, n);
-    }),
-    (r.FT_Get_Glyph_Measure_Params = function (e, n, r) {
-      var o = t.FT_Get_Glyph_Measure_Params(e, !!n);
-      return o
-        ? (r.init(new Uint8Array(o, 0, o.length)), (i.count = r.readInt()), (i.error = 0), i)
-        : ((i.error = 1), i);
-    }),
-    (r.FT_Get_Glyph_Render_Params = function (e, n, r) {
-      var o = t.FT_Get_Glyph_Render_Params(e, n);
-      return o ? ((_.error = 0), r.init(o, 0, o.length), _) : ((_.error = 1), _);
-    }),
-    (r.FT_Get_Glyph_Render_Buffer = function (e, n) {
-      return t.FT_Get_Glyph_Render_Buffer(e, n);
-    }));
-  let a = {};
-  ((r.HB_FontFree = function (e) {
-    e && t.FT_Free(e);
-  }),
-    (r.HB_ShapeText = function (e, n, r, o, _, u, F) {
-      (a[u] || (a[u] = t.HB_LanguageFromString()), e.GetHBFont() || e.SetHBFont(t.HB_FontMalloc()));
-      let c = t.HB_ShapeText(e.GetFace(), e.GetHBFont(), n.pointer, r, o, _, a[u]);
-      if (!c) return ((i.error = 1), i);
-      F.init(new Uint8Array(c, 0, c.length));
-      let f = F.readUInt();
-      F.readPointer64();
-      return ((i.count = (f - 12) / 26), (i.error = 0), i);
-    }),
-    (r.Hyphen_Init = function () {}),
-    (r.Hyphen_Destroy = function () {}),
-    (r.Hyphen_CheckDictionary = function (e) {
-      return t.Hyphen_IsDictionaryExist(e);
-    }),
-    (r.Hyphen_LoadDictionary = function (e, n) {
-      return !1;
-    }),
-    (r.Hyphen_Word = function (e, n) {
-      let r = t.Hyphen_Word(e, n);
-      return r || [];
-    }),
-    r.onLoadModule(),
-    r.onLoadModule());
-})(window);
+/*
+ * Copyright (C) Ascensio System SIA 2012-2026. All rights reserved
+ *
+ * https://www.onlyoffice.com/
+ *
+ * Version: 9.3.0.133 (build:1)
+ */
+
+(function(window,undefined){function CReturnObject(){this.error=0}function CShapeString(size){this.size=size;this.pointer=new Uint8Array(size)}window["AscFonts"]=window["AscFonts"]||{};var AscFonts=window["AscFonts"];var g_native_engine=null;CReturnObject.prototype.free=function(){};var g_return_obj=new CReturnObject;var g_return_obj_count=new CReturnObject;g_return_obj_count.count=0;AscFonts.CopyStreamToMemory=function(data,size){return data};AscFonts.GetUint8ArrayFromPointer=function(pointer,size){return pointer};
+CShapeString.prototype.getBuffer=function(){return this.pointer};CShapeString.prototype.free=function(){};CShapeString.prototype.set=function(index,value){this.pointer[index]=value};AscFonts.AllocString=function(size){return new CShapeString(size)};AscFonts.FT_CreateLibrary=function(library){return g_native_engine["FT_Init"](library)};AscFonts.FT_Done_Library=function(face){if(face)g_native_engine.FT_Free(face)};AscFonts.FT_Set_TrueType_HintProp=function(library,tt_interpreter){return g_native_engine["FT_Set_TrueType_HintProp"](library,
+tt_interpreter)};AscFonts.FT_Open_Face=function(library,memory,len,face_index){return g_native_engine["FT_Open_Face2"](library,memory,face_index)};AscFonts.FT_Done_Face=function(face){if(face)g_native_engine["FT_Free"](face)};AscFonts.FT_SetCMapForCharCode=function(face,unicode){return g_native_engine["FT_SetCMapForCharCode"](face,unicode)};AscFonts.FT_GetKerningX=function(face,gid1,gid2){return g_native_engine["FT_GetKerningX"](face,gid1,gid2)};AscFonts.FT_GetFaceMaxAdvanceX=function(face){return g_native_engine["FT_GetFaceMaxAdvanceX"](face)};
+AscFonts.FT_Set_Transform=function(face,xx,yx,xy,yy){return g_native_engine["FT_Set_Transform"](face,xx,yx,xy,yy)};AscFonts.FT_Set_Char_Size=function(face,cw,ch,hres,vres){return g_native_engine["FT_Set_Char_Size"](face,cw,ch,hres,vres)};AscFonts.FT_GetFaceInfo=function(face,reader){var data=g_native_engine["FT_GetFaceInfo"](face);if(!data){g_return_obj.error=1;return g_return_obj}g_return_obj.error=0;reader.init(data,0,data.length);return g_return_obj};AscFonts.FT_Load_Glyph=function(face,gid,mode){return g_native_engine["FT_Load_Glyph"](face,
+gid,mode)};AscFonts.FT_SetCMapForCharCode=function(face,unicode){return g_native_engine["FT_SetCMapForCharCode"](face,unicode)};AscFonts.FT_Get_Glyph_Measure_Params=function(face,vector_worker,reader){var data=g_native_engine["FT_Get_Glyph_Measure_Params"](face,vector_worker?true:false);if(!data){g_return_obj_count.error=1;return g_return_obj_count}reader.init(new Uint8Array(data,0,data.length));g_return_obj_count.count=reader.readInt();g_return_obj_count.error=0;return g_return_obj_count};AscFonts.FT_Get_Glyph_Render_Params=
+function(face,render_mode,reader){var data=g_native_engine["FT_Get_Glyph_Render_Params"](face,render_mode);if(!data){g_return_obj.error=1;return g_return_obj}g_return_obj.error=0;reader.init(data,0,data.length);return g_return_obj};AscFonts.FT_Get_Glyph_Render_Buffer=function(face,size){return g_native_engine["FT_Get_Glyph_Render_Buffer"](face,size)};var hb_cache_languages={};AscFonts.HB_FontFree=function(font){if(font)g_native_engine["FT_Free"](font)};AscFonts.HB_ShapeText=function(fontFile,text,
+features,script,direction,language,reader){if(!hb_cache_languages[language])hb_cache_languages[language]=g_native_engine["HB_LanguageFromString"]();if(!fontFile["GetHBFont"]())fontFile["SetHBFont"](g_native_engine["HB_FontMalloc"]());var data=g_native_engine["HB_ShapeText"](fontFile["GetFace"](),fontFile["GetHBFont"](),text.pointer,features,script,direction,hb_cache_languages[language]);if(!data){g_return_obj_count.error=1;return g_return_obj_count}reader.init(new Uint8Array(data,0,data.length));
+var len=reader.readUInt();var fontPointer=reader.readPointer64();g_return_obj_count.count=(len-12)/26;g_return_obj_count.error=0;return g_return_obj_count};AscFonts.Hyphen_Init=function(){};AscFonts.Hyphen_Destroy=function(){};AscFonts.Hyphen_CheckDictionary=function(lang){return g_native_engine["Hyphen_IsDictionaryExist"](lang)};AscFonts.Hyphen_LoadDictionary=function(lang,data){return false};AscFonts.Hyphen_Word=function(lang,word){var ret=g_native_engine["Hyphen_Word"](lang,word);return ret?ret:
+[]};AscFonts.onLoadModule();AscFonts.onLoadModule();window["InitNativeTextMeasurer"]=function(){g_native_engine=CreateEmbedObject("CTextMeasurerEmbed")}})(window,undefined);

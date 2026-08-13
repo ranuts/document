@@ -43,20 +43,14 @@ const cleanUrls = (publicDirName: string): Plugin => {
   };
 };
 
-// `vite --mode v9` / `vite build --mode v9` switches to the OnlyOffice 9.3.0
-// "Web Mode" build variant: a different publicDir (v9's SDK assets instead of
-// v7's) and output dir, so it never touches the default v7 dev/build/deploy
-// path. lib/onlyoffice-editor.ts reads the same `mode` via import.meta.env.MODE
-// to pick its document-loading strategy (see OO_VARIANT there).
-export default defineConfig(({ mode }) => {
-  const isV9 = mode === 'v9';
-  const publicDirName = isV9 ? 'public-v9' : 'public';
+export default defineConfig(() => {
+  const publicDirName = 'public';
 
   return {
     base: './',
     publicDir: publicDirName,
     build: {
-      outDir: isV9 ? 'dist-v9' : 'dist',
+      outDir: 'dist',
     },
     plugins: [cleanUrls(publicDirName)],
     resolve: {

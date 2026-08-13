@@ -28,8 +28,6 @@
   Cache-Control: no-cache
 /lang-switch.js
   Cache-Control: no-cache
-/onlyoffice-v7-iframe-patch.js
-  Cache-Control: no-cache
 /ranui-iife/*
   Cache-Control: no-cache
 

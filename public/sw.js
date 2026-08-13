@@ -22,9 +22,13 @@ const ASSETS_TO_CACHE = ['./', './index.html', './manifest.json', './img/64.png'
 // after deploy. (Symptom: `200 OK (from disk cache)` for a deploy-coupled file long after
 // its content changed.) Network-first with `cache: 'no-cache'` is what the HTML branch already
 // does, for exactly the same reason.
-const DEPLOY_COUPLED = /^\/(?:home|landing)\.css$|^\/(?:lang-switch|onlyoffice-v7-iframe-patch)\.js$|^\/ranui-iife\//;
+const DEPLOY_COUPLED = /^\/(?:home|landing)\.css$|^\/lang-switch\.js$|^\/ranui-iife\//;
 
-const MAX_RUNTIME_ITEMS = 600;
+// The OnlyOffice 9 tree is ~2600 files, but most of that is per-locale help
+// and on-demand font duplication a single session in one language never
+// touches -- a full proportional scale-up would over-reserve. Starting
+// estimate, not a measured figure; tune against real session traces.
+const MAX_RUNTIME_ITEMS = 2000;
 
 // Helper: Trim cache to a certain size
 const limitCacheSize = (name, maxItems) => {
@@ -81,6 +85,14 @@ self.addEventListener('fetch', (event) => {
   // interception latency triggering Chrome's font-loading intervention, which
   // causes a crash in OnlyOffice v7.5's fallback font code path.
   if (/\.(ttf|woff2?|otf|eot)(\?.*)?$/.test(url.pathname)) return;
+
+  // 4b. Skip the spellchecker engine: it is importScripts'd from inside a
+  // dedicated worker during the editor's first boot, and routing that request
+  // through a just-activated service worker hangs forever on a cold profile
+  // (observed on every first visit: the request stays pending, the editor's
+  // full API never finishes loading -- isLoadFullApi:false -- and every
+  // save/export silently breaks). The browser's HTTP cache handles these.
+  if (url.pathname.includes('/sdkjs/common/spell/')) return;
 
   // 5. Determine Strategy
   const isHtml =

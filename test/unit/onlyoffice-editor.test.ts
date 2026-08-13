@@ -11,7 +11,6 @@ vi.mock('@ranuts/shared/i18n', () => ({
   getOnlyOfficeLang: vi.fn().mockReturnValue('en'),
   t: vi.fn((key: string) => key),
 }));
-vi.mock('../../lib/file-types', () => ({ c_oAscFileType2: { 65: 'XLSX', 43: 'DOCX' } }));
 vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
   const actual = await importOriginal();
   return { ...actual, getMimeTypeFromExtension: vi.fn().mockReturnValue('image/png') };
@@ -23,7 +22,6 @@ import {
   getReadonlyMode,
   getSavedFileMimeType,
   requestSaveDocument,
-  setConverterCallbacks,
   setReadonlyMode,
   toUint8Array,
 } from '../../lib/onlyoffice-editor';
@@ -124,22 +122,57 @@ describe('onlyoffice-editor', () => {
       await first;
     });
 
-    it('normalises the target extension to uppercase', () => {
-      const downloadAs = vi.fn();
-      (window as any).editor = makeEditor({ downloadAs });
+    // The export path goes through the same-origin editor iframe's
+    // asc_DownloadAs with a numeric file-type constant (see
+    // triggerPersonalDownloadAs). Emulate the editor frame with a real
+    // <iframe> whose window carries a fake fully-ready Asc API.
+    function installEditorFrame() {
+      const iframe = document.createElement('iframe');
+      document.body.appendChild(iframe);
+      const win = iframe.contentWindow as any;
+      const requestedFileTypes: number[] = [];
+      class FakeDownloadOptions {
+        fileType: number;
+        constructor(fileType: number) {
+          this.fileType = fileType;
+        }
+      }
+      win.Asc = {
+        editor: {
+          asc_DownloadAs: (options: { fileType: number }) => requestedFileTypes.push(options.fileType),
+          isLoadFullApi: true,
+          isDocumentLoadComplete: true,
+        },
+        asc_CDownloadOptions: FakeDownloadOptions,
+      };
+      return { iframe, requestedFileTypes };
+    }
 
-      void requestSaveDocument('xlsx').catch(() => {});
+    it('fires the editor-frame export with the numeric file type, uppercase-normalised', async () => {
+      const { iframe, requestedFileTypes } = installEditorFrame();
+      (window as any).editor = makeEditor({ downloadAs: vi.fn() });
 
-      expect(downloadAs).toHaveBeenCalledWith('XLSX');
+      const promise = requestSaveDocument('pdf').catch(() => {});
+      // The readiness gate caps at 45 s when onDocumentReady never fires.
+      await vi.advanceTimersByTimeAsync(45_000);
+
+      expect(requestedFileTypes).toEqual([513]); // oAscFileType.PDF
+      iframe.remove();
+      vi.runAllTimers();
+      await promise;
     });
 
-    it('defaults target extension to XLSX', () => {
-      const downloadAs = vi.fn();
-      (window as any).editor = makeEditor({ downloadAs });
+    it('requests XLSX from the editor for a CSV target (CSV export stalls on a delimiter dialog)', async () => {
+      const { iframe, requestedFileTypes } = installEditorFrame();
+      (window as any).editor = makeEditor({ downloadAs: vi.fn() });
 
-      void requestSaveDocument().catch(() => {});
+      const promise = requestSaveDocument('csv').catch(() => {});
+      await vi.advanceTimersByTimeAsync(45_000);
 
-      expect(downloadAs).toHaveBeenCalledWith('XLSX');
+      expect(requestedFileTypes).toEqual([257]); // oAscFileType.XLSX
+      iframe.remove();
+      vi.runAllTimers();
+      await promise;
     });
 
     it('rejects after 60 s timeout if no save event arrives', async () => {
@@ -159,138 +192,69 @@ describe('onlyoffice-editor', () => {
       delete (window as any).editor;
     });
 
-    it('always passes a non-empty Guest user to avoid the getInitials crash (#25)', async () => {
+    async function createAndGetConfig(options: Parameters<typeof createEditorInstance>[0]) {
       vi.useFakeTimers();
       const DocEditor = vi.fn();
       (window as any).DocsAPI = { DocEditor };
 
-      const promise = createEditorInstance({
-        fileName: 'preview.docx',
-        fileType: 'docx',
-        binData: new ArrayBuffer(8),
-        readonly: true,
-      });
+      const promise = createEditorInstance(options);
       // Skip the internal cleanup delay (150ms when no prior editor exists).
       await vi.advanceTimersByTimeAsync(200);
       await promise;
 
       expect(DocEditor).toHaveBeenCalledTimes(1);
-      const config = DocEditor.mock.calls[0][1] as any;
-      expect(config.editorConfig.user).toEqual({ id: 'guest', name: 'Guest' });
-      // readonly:true must disable edit + download permissions.
+      return DocEditor.mock.calls[0][1] as any;
+    }
+
+    it('always passes a non-empty Guest user to avoid the getInitials crash (#25)', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'preview.docx',
+        fileType: 'docx',
+        binData: new ArrayBuffer(8),
+        readonly: true,
+      });
+
+      expect(config.editorConfig.user).toEqual({ id: 'local-user', name: 'Guest' });
+      // readonly:true opens in view mode with editing disabled; download and
+      // print stay available for a pure preview.
+      expect(config.editorConfig.mode).toBe('view');
       expect(config.document.permissions.edit).toBe(false);
-      expect(config.document.permissions.download).toBe(false);
+      expect(config.document.permissions.download).toBe(true);
     });
 
-    it('sends binData as a base64 string to asc_openDocument (#113)', async () => {
-      vi.useFakeTimers();
-      const DocEditor = vi.fn();
-      (window as any).DocsAPI = { DocEditor };
-      const original = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 9, 8, 7]);
+    it('opens document bytes through a blob URL with a fresh cache key', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'Report.DOCX',
+        fileType: 'DOCX',
+        binData: new Uint8Array([0x50, 0x4b, 0x03, 0x04]).buffer,
+      });
 
-      const promise = createEditorInstance({
-        fileName: 'report.docx',
+      expect(String(config.document.url)).toMatch(/^blob:/);
+      expect(config.document.fileType).toBe('docx');
+      expect(config.documentType).toBe('word');
+      expect(config.document.key).toMatch(/^doc-/);
+    });
+
+    it('creates a blank document (no url) when binData is absent', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'New_Document.xlsx',
+        fileType: 'xlsx',
+      });
+
+      expect(config.document.url).toBeUndefined();
+      expect(config.documentType).toBe('cell');
+      // downloadAs only runs when the callback is declared -- see the config.
+      expect(config.events.onDownloadAs).toBeTypeOf('function');
+      expect(config.events.onDocumentReady).toBeTypeOf('function');
+    });
+
+    it('fully disables the spellchecker (mode + toggle), not just the toggle', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'a.docx',
         fileType: 'docx',
-        binData: original.buffer,
       });
-      await vi.advanceTimersByTimeAsync(200);
-      await promise;
 
-      const config = DocEditor.mock.calls[0][1] as any;
-      const editor = { sendCommand: vi.fn() };
-      (window as any).editor = editor;
-      config.events.onAppReady();
-
-      const call = editor.sendCommand.mock.calls.find((c: any[]) => c[0].command === 'asc_openDocument');
-      expect(call).toBeDefined();
-      const buf = call![0].data.buf;
-      expect(typeof buf).toBe('string');
-      const decoded = Uint8Array.from(atob(buf), (c) => c.charCodeAt(0));
-      expect(Array.from(decoded)).toEqual(Array.from(original));
-    });
-
-    it('passes a string binData (empty-template case) through to asc_openDocument unchanged', async () => {
-      vi.useFakeTimers();
-      const DocEditor = vi.fn();
-      (window as any).DocsAPI = { DocEditor };
-
-      const promise = createEditorInstance({
-        fileName: 'New_Document.docx',
-        fileType: 'docx',
-        binData: 'already-base64==',
-      });
-      await vi.advanceTimersByTimeAsync(200);
-      await promise;
-
-      const config = DocEditor.mock.calls[0][1] as any;
-      const editor = { sendCommand: vi.fn() };
-      (window as any).editor = editor;
-      config.events.onAppReady();
-
-      const call = editor.sendCommand.mock.calls.find((c: any[]) => c[0].command === 'asc_openDocument');
-      expect(call![0].data.buf).toBe('already-base64==');
-    });
-
-    it('does not add v9-only editorConfig fields or the onSaveDocument event under the default (v7) test mode', async () => {
-      vi.useFakeTimers();
-      const DocEditor = vi.fn();
-      (window as any).DocsAPI = { DocEditor };
-
-      const promise = createEditorInstance({
-        fileName: 'report.docx',
-        fileType: 'docx',
-        binData: new ArrayBuffer(4),
-      });
-      await vi.advanceTimersByTimeAsync(200);
-      await promise;
-
-      const config = DocEditor.mock.calls[0][1] as any;
-      expect(config.editorConfig.canCoAuthoring).toBeUndefined();
-      expect(config.editorConfig.coEditing).toBeUndefined();
-      expect(config.events.onSave).toBeTypeOf('function');
-      expect(config.events.onSaveDocument).toBeUndefined();
-    });
-
-    describe('handleSaveDocument (via events.onSave)', () => {
-      async function createAndGetOnSave() {
-        vi.useFakeTimers();
-        const DocEditor = vi.fn();
-        (window as any).DocsAPI = { DocEditor };
-
-        const promise = createEditorInstance({
-          fileName: 'report.docx',
-          fileType: 'docx',
-          binData: new ArrayBuffer(4),
-        });
-        await vi.advanceTimersByTimeAsync(200);
-        await promise;
-
-        (window as any).editor = makeEditor();
-        const config = DocEditor.mock.calls[0][1] as any;
-        return config.events.onSave as (event: unknown) => Promise<void>;
-      }
-
-      it('handles the v7 nested-object event shape', async () => {
-        const convertAndDownload = vi.fn().mockResolvedValue({ fileName: 'report.docx', data: new Uint8Array([1]) });
-        setConverterCallbacks({ convert: vi.fn(), convertAndDownload });
-        const onSave = await createAndGetOnSave();
-
-        const savedBytes = new Uint8Array([1, 2, 3]);
-        await onSave({ data: { data: { data: savedBytes }, option: { outputformat: 65 } } });
-
-        expect(convertAndDownload).toHaveBeenCalledWith(savedBytes, 'test.xlsx', 'XLSX', {});
-      });
-    });
-  });
-
-  describe('setConverterCallbacks', () => {
-    it('accepts converter and convertAndDownload functions without throwing', () => {
-      expect(() =>
-        setConverterCallbacks({
-          convert: vi.fn(),
-          convertAndDownload: vi.fn(),
-        }),
-      ).not.toThrow();
+      expect(config.editorConfig.customization.features.spellcheck).toEqual({ mode: false, change: false });
     });
   });
 

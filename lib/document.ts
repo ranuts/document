@@ -1,7 +1,7 @@
 import { createObjectURL } from 'ranuts/utils';
 import { View } from 'ranui/builder';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
-import { handleDocumentOperation, initX2T, loadEditorApi, loadScript } from './converter';
+import { handleDocumentOperation, loadEditorApi } from './converter';
 import { showLoading } from './loading';
 
 // Import UI functions with type-only to avoid circular dependency
@@ -40,9 +40,7 @@ export const onCreateNew = async (ext: string): Promise<void> => {
       fileName: 'New_Document' + ext,
       file: undefined,
     });
-    await loadScript();
     await loadEditorApi();
-    await initX2T();
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
     // Show menu guide after document is loaded
@@ -74,7 +72,6 @@ export const openLocalFile = async (file: File): Promise<void> => {
       file: file,
       url: await createObjectURL(file),
     });
-    await initX2T();
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
     // Show menu guide after document is loaded
@@ -188,7 +185,6 @@ export const openDocumentFromUrl = async (
     });
 
     // Initialize and open document
-    await initX2T();
     const { fileName: docFileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({
       file: fileBlob,

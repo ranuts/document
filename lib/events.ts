@@ -1,7 +1,7 @@
 import { MessageCodec, Platform, createObjectURL } from 'ranuts/utils';
 import type { MessageHandler } from 'ranuts/utils';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
-import { handleDocumentOperation, initX2T } from './converter';
+import { handleDocumentOperation } from './converter';
 import { showLoading } from './loading';
 
 // UI callbacks to avoid circular dependency
@@ -41,7 +41,6 @@ export const events: Record<string, MessageHandler<any, unknown>> = {
           file: file,
           url: await createObjectURL(file),
         });
-        await initX2T();
         const { fileName, file: fileBlob } = getDocmentObj();
         await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
         // Show menu guide after document is loaded

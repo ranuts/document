@@ -16,7 +16,7 @@ import { describe, expect, it } from 'vitest';
 const FONT_REGEX = /\.(ttf|woff2?|otf|eot)(\?.*)?$/;
 
 /** Keep in sync with DEPLOY_COUPLED in public/sw.js and the no-cache group in public/_headers. */
-const DEPLOY_COUPLED = /^\/(?:home|landing)\.css$|^\/(?:lang-switch|onlyoffice-v7-iframe-patch)\.js$|^\/ranui-iife\//;
+const DEPLOY_COUPLED = /^\/(?:home|landing)\.css$|^\/lang-switch\.js$|^\/ranui-iife\//;
 
 const isHtmlRequest = (mode: string, pathname: string): boolean =>
   mode === 'navigate' || pathname.endsWith('.html') || pathname === '/' || pathname.endsWith('/');
@@ -34,6 +34,7 @@ function swShouldHandle(method: string, urlStr: string): boolean {
   if (url.origin !== ORIGIN) return false;
   if (url.searchParams.has('file') || url.searchParams.has('src')) return false;
   if (FONT_REGEX.test(url.pathname)) return false;
+  if (url.pathname.includes('/sdkjs/common/spell/')) return false;
   return true;
 }
 
@@ -82,6 +83,15 @@ describe('SW fetch routing', () => {
       ['/fonts/legacy.eot', '.eot'],
       ['/fonts/font.ttf?v=123', '.ttf with query string'],
     ])('%s (%s)', (pathname) => {
+      expect(swShouldHandle('GET', `${ORIGIN}${pathname}`)).toBe(false);
+    });
+  });
+
+  describe('spellchecker engine is not intercepted (cold-profile hang prevention)', () => {
+    // The spell engine is importScripts'd from inside a dedicated worker
+    // during the editor's first boot; routing it through a just-activated SW
+    // hangs forever on a cold profile and leaves every save/export broken.
+    it.each(['/sdkjs/common/spell/spell/spell.js', '/sdkjs/common/spell/spell/spell.wasm'])('%s', (pathname) => {
       expect(swShouldHandle('GET', `${ORIGIN}${pathname}`)).toBe(false);
     });
   });
@@ -136,7 +146,6 @@ describe('deploy-coupled assets use network-first', () => {
       '/home.css',
       '/landing.css',
       '/lang-switch.js',
-      '/onlyoffice-v7-iframe-patch.js',
       '/ranui-iife/button.iife.js',
       '/ranui-iife/card.iife.js',
     ]) {

@@ -1,77 +1,9 @@
 /*!
- * Copyright (c) Ascensio System SIA 2024. All rights reserved
- * Version: 7.4.1 (build:1)
+ * Copyright (c) Ascensio System SIA 2026. All rights reserved
+ *
+ * http://www.onlyoffice.com 
+ *
+ * Version: 9.3.0.133 (build:1)
  */
 
-'use strict';
-var reqerr;
-(require.config({
-  baseUrl: '../../',
-  paths: {
-    jquery: '../vendor/jquery/jquery.min',
-    underscore: '../vendor/underscore/underscore-min',
-    xregexp: '../vendor/xregexp/xregexp-all-min',
-    socketio: '../vendor/socketio/socket.io.min',
-    allfonts: '../../sdkjs/common/AllFonts',
-    sdk: '../../sdkjs/slide/sdk-all-min',
-  },
-  shim: { underscore: { exports: '_' }, sdk: { deps: ['jquery', 'allfonts', 'xregexp', 'socketio'] } },
-}),
-  require(['jquery'], function () {
-    var e = function (e) {
-      var o,
-        n = e.data;
-      try {
-        o = n;
-      } catch (e) {}
-      o &&
-        'file:open' == o.type &&
-        (function (e) {
-          var o = {};
-          e &&
-            ((o = new Asc.asc_CDocInfo()).put_Id(e.key),
-            o.put_Url(e.url),
-            o.put_DirectUrl(e.directUrl),
-            o.put_Title(e.title),
-            o.put_Format(e.fileType),
-            o.put_VKey(e.vkey),
-            o.put_Options(e.options),
-            o.put_Token(e.token),
-            o.put_Permissions(e.permissions || {}),
-            t(e.title));
-          (r.preloadReporter(e),
-            r.SetThemesPath('../../../../sdkjs/slide/themes/'),
-            r.asc_setDocInfo(o),
-            r.asc_getEditorPermissions(),
-            r.asc_setViewMode(!0),
-            r._onAuth({ type: 'auth', result: 1 }),
-            AscCommon.g_oDocumentUrls.init(e.imageUrls),
-            e.buffer instanceof Uint8ClampedArray || (e.buffer = new Uint8ClampedArray(Object.values(e.buffer))));
-          r.onEndLoadFile({ bSerFormat: !0, data: e.buffer });
-        })(o.data);
-    };
-    // Always use window message listener for local deployment
-    window.attachEvent ? window.attachEvent('onmessage', e) : window.addEventListener('message', e, !1);
-    var r = new Asc.asc_docs_api({
-        'id-view': 'editor_sdk',
-        using: 'reporter',
-        skin: localStorage.getItem('ui-theme-id'),
-      }),
-      t = function (e) {
-        e && (window.document.title += ' - ' + e);
-      };
-    (r.asc_registerCallback('asc_onDocumentContentReady', function () {
-      (r.SetDrawingFreeze(!1), $('#loading-mask').hide().remove());
-    }),
-      r.asc_registerCallback('asc_onGetEditorPermissions', function (e) {
-        r.asc_LoadDocument();
-      }),
-      setTimeout(function () {
-        r.sendFromReporter('i:am:ready');
-      }, 0));
-  }, function (e) {
-    'timeout' == e.requireType &&
-      !reqerr &&
-      window.requireTimeourError &&
-      ((reqerr = window.requireTimeourError()), window.alert(reqerr), window.location.reload());
-  }));
+"use strict";var reqerr;require.config({baseUrl:"../../",paths:{jquery:"../vendor/jquery/jquery.min",underscore:"../vendor/underscore/underscore-min",xregexp:"../vendor/xregexp/xregexp-all-min",socketio:"../vendor/socketio/socket.io.min",allfonts:"../../sdkjs/common/AllFonts",sdk:"../../sdkjs/slide/sdk-all-min"},shim:{sdk:{deps:["jquery","allfonts","xregexp","socketio"]}}}),require(["underscore","sdk"],(function(e){window._=e;var r=function(e){var r,t=e.data;try{r=window.JSON.parse(t)}catch(e){}r&&"file:open"==r.type&&function(e){var r={};e&&((r=new Asc.asc_CDocInfo).put_Id(e.key),r.put_Url(e.url),r.put_DirectUrl(e.directUrl),r.put_Title(e.title),r.put_Format(e.fileType),r.put_VKey(e.vkey),r.put_Options(e.options),r.put_Token(e.token),r.put_Permissions(e.permissions||{}),i(e.title));o.preloadReporter(e),o.SetThemesPath("../../../../sdkjs/slide/themes/"),o.asc_setDocInfo(r),o.asc_getEditorPermissions(),o.asc_setViewMode(!0)}(r.data)};window.attachEvent?window.attachEvent("onmessage",r):window.addEventListener("message",r,!1);var t=/(?:&|^)lang=([^&]+)&?/i.exec(window.location.search.substring(1));t=t&&t[1]?t[1].split(/[\-\_]/)[0].toLowerCase():"";var o=new Asc.asc_docs_api({"id-view":"editor_sdk",using:"reporter",skin:localStorage.getItem("ui-theme-id"),isRtlInterface:t&&(0===t.lastIndexOf("ar",0)||0===t.lastIndexOf("he",0))}),i=function(e){e&&(window.document.title+=" - "+e)};o.asc_registerCallback("asc_onDocumentContentReady",(function(){o.SetDrawingFreeze(!1),$("#loading-mask").hide().remove()})),o.asc_registerCallback("asc_onGetEditorPermissions",(function(e){o.asc_LoadDocument()})),setTimeout((function(){o.sendFromReporter("i:am:ready")}),500)}),(function(e){"timeout"==e.requireType&&!reqerr&&window.requireTimeourError&&(reqerr=window.requireTimeourError(),window.alert(reqerr),window.location.reload())}));
