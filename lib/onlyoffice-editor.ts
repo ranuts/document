@@ -404,10 +404,9 @@ function createPersonalEditorInstance(config: {
   fileName: string;
   fileType: string;
   binData?: ArrayBuffer;
-  readonly: boolean;
   editorLang: string;
 }): void {
-  const { fileName, fileType, binData, readonly, editorLang } = config;
+  const { fileName, fileType, binData, editorLang } = config;
 
   if (currentDocumentBlobUrl) {
     URL.revokeObjectURL(currentDocumentBlobUrl);
@@ -431,7 +430,11 @@ function createPersonalEditorInstance(config: {
       // (same-name documents with different content would collide otherwise).
       key: `doc-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
       permissions: {
-        edit: !readonly,
+        // Always mount with edit permission. Readonly is enforced after load
+        // via asc_setRestriction (see onDocumentReady) so it stays
+        // runtime-togglable in both directions -- a view-mode mount is a
+        // one-way door that only a full editor rebuild could reopen.
+        edit: true,
         download: true,
         print: true,
         chat: false,
@@ -440,7 +443,7 @@ function createPersonalEditorInstance(config: {
     },
     documentType: DOCUMENT_TYPE_MAP[normalizedType],
     editorConfig: {
-      mode: readonly ? 'view' : 'edit',
+      mode: 'edit',
       lang: editorLang,
       user: {
         id: 'local-user',
@@ -482,6 +485,13 @@ function createPersonalEditorInstance(config: {
         markDocumentContentReady();
         // Re-apply in case the header rendered after onAppReady.
         prepareEditorIframe();
+        // Readonly opens mount with full edit permissions and get locked
+        // here instead (asc_setRestriction only works once the document is
+        // loaded). Read the live flag rather than the captured config value:
+        // setReadonlyMode may have been called while the document loaded.
+        if (isReadonlyMode) {
+          getSdkEditorApi()?.asc_setRestriction?.(ASC_RESTRICTION_VIEW);
+        }
         console.log(`${t('documentLoaded')}${fileName}`);
       },
       // Must be declared even as a no-op: the api layer only runs downloadAs
@@ -549,7 +559,7 @@ export function createEditorInstance(config: {
     const editorLang = getOnlyOfficeLang();
     console.log('Creating new editor instance for:', fileName, 'type:', fileType);
 
-    createPersonalEditorInstance({ fileName, fileType, binData, readonly, editorLang });
+    createPersonalEditorInstance({ fileName, fileType, binData, editorLang });
   });
 }
 

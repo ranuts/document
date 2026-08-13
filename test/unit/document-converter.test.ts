@@ -82,6 +82,31 @@ describe('X2TConverter', () => {
       expect(file.type).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     });
 
+    it('decodes GBK bytes (Excel zh-CN "ANSI" CSV) instead of producing U+FFFD mojibake', async () => {
+      const readSpy = vi.fn().mockReturnValue({});
+      stubXlsx(readSpy);
+      // "姓名,值\n张三,1" encoded as GBK: 姓=0xD0D5 名=0xC3FB 张=0xD5C5 三=0xC8FD
+      const data = new Uint8Array([
+        0xd0, 0xd5, 0xc3, 0xfb, 0x2c, 0xd6, 0xb5, 0x0a, 0xd5, 0xc5, 0xc8, 0xfd, 0x2c, 0x31,
+      ]);
+
+      await convert(data, 'gbk.csv');
+
+      expect(readSpy).toHaveBeenCalledWith('姓名,值\n张三,1', expect.objectContaining({ type: 'string' }));
+    });
+
+    it('falls back to latin1 for bytes invalid in both UTF-8 and GB18030', async () => {
+      const readSpy = vi.fn().mockReturnValue({});
+      stubXlsx(readSpy);
+      // "café,1" in latin1: 0xE9 is an invalid UTF-8 sequence, and as a GB18030
+      // lead byte it cannot be followed by 0x2C, so both strict decoders throw.
+      const data = new Uint8Array([0x63, 0x61, 0x66, 0xe9, 0x2c, 0x31]);
+
+      await convert(data, 'latin1.csv');
+
+      expect(readSpy).toHaveBeenCalledWith('café,1', expect.objectContaining({ type: 'string' }));
+    });
+
     it('wraps SheetJS errors with actionable guidance instead of the raw parser error', async () => {
       (window as any).XLSX = {
         read: vi.fn(() => {

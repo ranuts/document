@@ -77,10 +77,45 @@ jobs:
       - name: Run E2E tests
         run: pnpm run test:e2e
 
-      # The lint job only validates compose config and Dockerfile style; this
-      # actually builds the image and runs the full e2e suite against the
-      # container, proving the production image serves the editor correctly
-      # (this is what caught the workspace-manifest install breakage).
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # The lint job only validates compose config and Dockerfile style; this job
+  # actually builds the image and runs the full e2e suite against the running
+  # container, proving the production image serves the editor correctly (this
+  # is what caught the workspace-manifest install breakage). Runs in parallel
+  # with the main e2e job.
+  e2e-docker:
+    name: E2E (Docker image)
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Run E2E tests against the Docker image
         run: pnpm run test:e2e:docker
 
@@ -88,8 +123,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: |
-            playwright-report/
-            playwright-report-docker/
+          name: playwright-report-docker
+          path: playwright-report-docker/
           retention-days: 7

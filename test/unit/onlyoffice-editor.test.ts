@@ -79,6 +79,38 @@ describe('onlyoffice-editor', () => {
     it('does not throw when no editor is present', () => {
       expect(() => setReadonlyMode(true)).not.toThrow();
     });
+
+    // Runtime toggling goes through the SDK restriction API inside the
+    // same-origin editor iframe (Asc.c_oAscRestrictionType: 128 = view, 0 = none).
+    describe('SDK restriction path', () => {
+      function installRestrictionFrame() {
+        const iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        const asc_setRestriction = vi.fn();
+        const asc_removeRestriction = vi.fn();
+        (iframe.contentWindow as any).Asc = { editor: { asc_setRestriction, asc_removeRestriction } };
+        return { iframe, asc_setRestriction, asc_removeRestriction };
+      }
+
+      it('locks the live editor with the view restriction on setReadonlyMode(true)', () => {
+        const { iframe, asc_setRestriction } = installRestrictionFrame();
+
+        setReadonlyMode(true);
+
+        expect(asc_setRestriction).toHaveBeenCalledWith(128);
+        iframe.remove();
+      });
+
+      it('removes the view restriction and restores none on setReadonlyMode(false)', () => {
+        const { iframe, asc_setRestriction, asc_removeRestriction } = installRestrictionFrame();
+
+        setReadonlyMode(false);
+
+        expect(asc_removeRestriction).toHaveBeenCalledWith(128);
+        expect(asc_setRestriction).toHaveBeenCalledWith(0);
+        iframe.remove();
+      });
+    });
   });
 
   describe('requestSaveDocument', () => {
@@ -215,11 +247,49 @@ describe('onlyoffice-editor', () => {
       });
 
       expect(config.editorConfig.user).toEqual({ id: 'local-user', name: 'Guest' });
-      // readonly:true opens in view mode with editing disabled; download and
-      // print stay available for a pure preview.
-      expect(config.editorConfig.mode).toBe('view');
-      expect(config.document.permissions.edit).toBe(false);
+      // readonly:true still mounts with full edit permissions: the lock is
+      // applied post-load via asc_setRestriction so it stays togglable at
+      // runtime (a view-mode mount could never switch back to edit).
+      expect(config.editorConfig.mode).toBe('edit');
+      expect(config.document.permissions.edit).toBe(true);
       expect(config.document.permissions.download).toBe(true);
+    });
+
+    it('applies the view restriction on onDocumentReady when opened readonly', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'preview.docx',
+        fileType: 'docx',
+        binData: new ArrayBuffer(8),
+        readonly: true,
+      });
+
+      const iframe = document.createElement('iframe');
+      document.body.appendChild(iframe);
+      const asc_setRestriction = vi.fn();
+      (iframe.contentWindow as any).Asc = { editor: { asc_setRestriction } };
+
+      config.events.onDocumentReady();
+
+      expect(asc_setRestriction).toHaveBeenCalledWith(128); // ASC_RESTRICTION_VIEW
+      iframe.remove();
+    });
+
+    it('does not apply any restriction on onDocumentReady when opened editable', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'edit.docx',
+        fileType: 'docx',
+        binData: new ArrayBuffer(8),
+      });
+
+      const iframe = document.createElement('iframe');
+      document.body.appendChild(iframe);
+      const asc_setRestriction = vi.fn();
+      (iframe.contentWindow as any).Asc = { editor: { asc_setRestriction } };
+
+      config.events.onDocumentReady();
+
+      expect(asc_setRestriction).not.toHaveBeenCalled();
+      iframe.remove();
     });
 
     it('opens document bytes through a blob URL with a fresh cache key', async () => {

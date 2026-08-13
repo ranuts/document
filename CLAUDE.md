@@ -161,7 +161,7 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 
 ## CI 流程（.github/workflows/ci.yml）
 
-两个 job，触发条件：push/PR 到 main/master。
+三个 job，触发条件：push/PR 到 main/master。
 
 **lint job（串行步骤）：**
 
@@ -179,8 +179,13 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 1. 同上安装步骤
 2. `playwright install --with-deps chromium`
 3. `pnpm run test:e2e`
-4. `pnpm run test:e2e:docker`（构建镜像 + 同套 E2E 打容器）
-5. 失败时上传 `playwright-report/` 与 `playwright-report-docker/` artifact
+4. 失败时上传 `playwright-report/` artifact
+
+**e2e-docker job（需 lint 通过，与 e2e 并行）：**
+
+1. 同上安装步骤 + `playwright install --with-deps chromium`
+2. `pnpm run test:e2e:docker`（构建生产镜像 + 同套 E2E 打容器）
+3. 失败时上传 `playwright-report-docker/` artifact
 
 ---
 
