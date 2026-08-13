@@ -80,6 +80,26 @@
   "New Excel" → v9 编辑器正常打开，纯净 UI，控制台零报错；zh-CN 落地页、
   卫星页、embed-demo 均 200。
 
+## 六、Docker 验证（用户追问"对 docker 有影响吗"）
+
+- **镜像方案不受 v9 影响**：多阶段构建（node 内跑 `pnpm run build`）+
+  `joseluisq/static-web-server` 纯静态托管 dist，没有 nginx 配置、没有任何
+  v7 专属条目。x2t.wasm.gz 靠魔数嗅探兼容"服务器发原始 gzip 字节"与
+  "Content-Encoding 已解压"两种情况，静态服务器怎么发都对；无扩展名的索引
+  字体走 XHR arraybuffer，MIME 无关。
+- **发现并修复一个与 v9 无关的既有问题**：Dockerfile 在
+  `pnpm install --frozen-lockfile` 前只拷根 package.json——monorepo 化之后
+  workspace 包的 manifest 缺失，安装必然失败；CI 只跑 `docker compose config`
+  和 hadolint、从不真正 build，所以一直没暴露。修复：安装前补拷四个
+  `packages/*/package.json`（`--ignore-scripts` 保住依赖层缓存），拷完源码后
+  `pnpm -r run prepare` 再构建。`.dockerignore` 顺带排除测试产物与 docs。
+- **实测**：`docker build` 成功；容器起在 8091，根页/卫星页/x2t.wasm.gz/
+  索引字体全部 200；**在容器服务的站点上完整走通编辑器往返**（全新 profile：
+  多 sheet open-buffer → 保存 xlsx 两 sheet 完整 → 导出 PDF `%PDF-` 魔数
+  30KB）。hadolint 零告警、compose 校验通过。
+- **代价**：镜像 662MB（v7 时代约 250MB）——v9 vendor 体积所致，与 CF Pages
+  部署同源；后续可裁剪 `ie/` legacy bundle、mobile 变体等再瘦身。
+
 ## 文档同步
 
 - README / readme.zh：字体章节改写（旧文案称"不含专有字体"，与新 vendor 的
