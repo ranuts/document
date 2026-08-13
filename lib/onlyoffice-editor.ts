@@ -8,8 +8,10 @@ import { DOCUMENT_TYPE_MAP, getDocumentMimeType, getMimeTypeFromExtension } from
 import { X2TConverter, saveFileToDisk } from '@ranuts/converter';
 
 // Selected via `vite --mode v9` / `vite build --mode v9` (see vite.config.ts); defaults
-// to v7 for the normal dev/build/test commands. See docs/explorations for why v9 needs
-// a materially different document-loading path (Web Mode) instead of a small config diff.
+// to v7 for the normal dev/build/test commands. v7 drives the editor over its command
+// channel with page-level x2t conversion; v9 (the OnlyOffice Personal vendor build in
+// public-v9/) is driven purely through the public DocEditor config and returns saves
+// over the onlyoffice-file-stream message -- see createPersonalEditorInstance.
 export const OO_VARIANT: 'v7' | 'v9' = import.meta.env.MODE === 'v9' ? 'v9' : 'v7';
 
 // v9.3.0 renamed sendCommand -> serviceCommand. Try serviceCommand first so this
@@ -57,23 +59,14 @@ type EmbeddedSaveRequest = {
 
 let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 
-// v9 Web Mode only: asc_openDocumentFromBytes returns before the engine has
-// finished internal setup (fonts load asynchronously; a class the save path
-// depends on -- the cell engine's `za` metadata handler, at minimum -- is
-// only constructed once that finishes, ~5-6s after open in testing). Calling
-// editor.downloadAs() (requestSaveDocument's own save path) that early either
-// crashes deep inside the SDK ("Cannot read properties of null (reading
-// 'P_g')") or, worse, silently produces no response at all if the DocEditor
-// wrapper's own postMessage handshake with the iframe isn't ready yet either
-// -- reliably reproduced by calling document:save immediately after
-// document:opened via the embed API, since a scripted parent has no natural
-// "give the user a few seconds to look at it" delay the way a human clicking
-// Save does. asc_onDocumentContentReady fires right around when the engine
-// actually becomes ready (confirmed via live timing: e.g. za set at
-// +6033ms, asc_onDocumentContentReady at +6097ms), so gate on it instead of
-// assuming readiness. v7 never sets this true (no Web Mode init path calls
-// markDocumentContentReady), so it must default true there or every v7 save
-// would eat a pointless 15s timeout.
+// v9 only: an export fired before the document finished loading is silently
+// dropped by the SDK, and the embed API makes that easy to hit (a scripted
+// parent can call document:save right after document:opened, which resolves
+// when the editor is constructed, not when the document is loaded). Gate
+// exports on the DocEditor onDocumentReady event (marked in
+// createPersonalEditorInstance) instead of assuming readiness. v7 never
+// marks this, so it must default true there or every v7 save would eat a
+// pointless wait.
 let documentContentReady = OO_VARIANT !== 'v9';
 let contentReadyWaiters: Array<() => void> = [];
 
@@ -93,8 +86,8 @@ function resetDocumentContentReady(): void {
 }
 
 // Resolves immediately if already ready; otherwise waits for
-// markDocumentContentReady() (or a safety-net timeout -- see
-// runWebModeOnAppReady) so callers never hang forever.
+// markDocumentContentReady() (or the safety-net timeout) so callers never
+// hang forever.
 function waitForDocumentContentReady(timeoutMs = 15000): Promise<void> {
   if (documentContentReady) return Promise.resolve();
   return new Promise((resolve) => {
@@ -558,8 +551,12 @@ let currentDocumentBlobUrl: string | null = null;
  *    editor's isDocumentLoadComplete flag false, which silently breaks
  *    every save/export. With SharedWorker absent, CSpellchecker falls back
  *    to a plain dedicated Worker, which loads fine.
+ *
+ * Returns true once every treatment is in place on some frame, so the caller
+ * can stop re-applying.
  */
-function prepareEditorIframe(): void {
+function prepareEditorIframe(): boolean {
+  let fullyApplied = false;
   for (let i = 0; i < window.frames.length; i++) {
     try {
       const win = window.frames[i] as Window & { __ooSharedWorkerShadowed?: boolean };
@@ -604,10 +601,15 @@ function prepareEditorIframe(): void {
         ooWin.__ooFetchFontsGuarded = true;
         console.log('[OO] AscCommon.fetchFonts guarded against uninitialized font system');
       }
+
+      if (win.__ooSharedWorkerShadowed && ooWin.__ooFetchFontsGuarded) {
+        fullyApplied = true;
+      }
     } catch {
       // cross-origin frame -- not the editor, skip
     }
   }
+  return fullyApplied;
 }
 
 /**
@@ -689,11 +691,13 @@ function createPersonalEditorInstance(config: {
     },
     events: {
       onAppReady: () => {
-        prepareEditorIframe();
-        // The spell engine class registers with the SDK bundle, which can
-        // land after onAppReady; keep re-applying (idempotent, cheap) so the
-        // stub is in place before the document-load code spawns the worker.
-        const timer = window.setInterval(prepareEditorIframe, 200);
+        // The SDK pieces the preparation patches can land after onAppReady;
+        // keep re-applying (idempotent, cheap) until everything is in place
+        // or the safety cap expires, whichever comes first.
+        if (prepareEditorIframe()) return;
+        const timer = window.setInterval(() => {
+          if (prepareEditorIframe()) window.clearInterval(timer);
+        }, 200);
         window.setTimeout(() => window.clearInterval(timer), 15_000);
       },
       onDocumentReady: () => {
@@ -924,14 +928,10 @@ export function requestSaveDocument(
     }
 
     // embeddedSaveRequest above is armed synchronously (so a concurrent call
-    // still sees "already in progress" immediately). The ready case below
-    // calls downloadAs() synchronously, same as before this gate existed
-    // (tests assert this happens synchronously, and it's simply the normal
-    // case for v7 and for v9 saves that aren't racing the initial open);
-    // only the not-yet-ready case (v9 only) defers until
-    // waitForDocumentContentReady resolves. See markDocumentContentReady.
-    // v9 exports go straight through the editor iframe's asc_DownloadAs (see
-    // triggerPersonalDownloadAs); v7 keeps the api-level downloadAs path.
+    // still sees "already in progress" immediately). v7 fires the api-level
+    // downloadAs synchronously (unit tests assert this); v9 goes through the
+    // editor iframe's asc_DownloadAs asynchronously, gated on readiness (see
+    // triggerPersonalDownloadAs).
     const downloadAs = editor.downloadAs.bind(editor);
     if (OO_VARIANT === 'v9') {
       // An asc_DownloadAs that fires before the editor finished importing the
@@ -941,14 +941,15 @@ export function requestSaveDocument(
       // (createPersonalEditorInstance wires it), so wait for it with a cap
       // matching the request's own 60 s timeout, then retry the trigger
       // briefly in case the editor frame is still being attached.
+      const request = embeddedSaveRequest;
       void (async () => {
         await waitForDocumentContentReady(60_000);
         // Keep retrying until the SDK reports full readiness (see
         // triggerPersonalDownloadAs) -- a cold cache can spend a long time
-        // loading the full API bundle after onDocumentReady. The request's
-        // own 60 s timeout is the overall bound.
+        // loading the full API bundle after onDocumentReady. Stop as soon as
+        // the request settles (stream arrived or its own 60 s timeout hit).
         const retryDeadline = Date.now() + 45_000;
-        while (!triggerPersonalDownloadAs(normalizedTargetExt)) {
+        while (!request?.settled && !triggerPersonalDownloadAs(normalizedTargetExt)) {
           if (Date.now() > retryDeadline) {
             downloadAs(normalizedTargetExt);
             return;
