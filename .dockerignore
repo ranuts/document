@@ -15,3 +15,9 @@ readme.zh.md
 docker-compose.yaml
 Dockerfile
 .DS_Store
+coverage
+playwright-report
+test-results
+docs
+.scratch
+.claude
