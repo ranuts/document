@@ -16,7 +16,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "docker:build": "docker build -t document:e2e .",
-    "test:e2e:docker": "pnpm run docker:build && playwright test --config playwright.docker.config.ts",
+    "test:e2e:docker": "sh ./bin/test-e2e-docker.sh",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:ts": "oxlint && tsc --noEmit",
