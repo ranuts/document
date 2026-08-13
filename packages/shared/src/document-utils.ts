@@ -57,6 +57,34 @@ export function getMimeTypeFromExtension(extension: string): string {
   return mime || 'image/png';
 }
 
+// Canonical MIME map for the document formats this project saves/exports.
+// Single source of truth -- lib/onlyoffice-editor.ts and @ranuts/converter
+// both delegate here instead of keeping their own copies.
+const DOCUMENT_MIME_MAP: Record<string, string> = {
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  doc: 'application/msword',
+  odt: 'application/vnd.oasis.opendocument.text',
+  rtf: 'application/rtf',
+  txt: 'text/plain',
+  pdf: 'application/pdf',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xls: 'application/vnd.ms-excel',
+  ods: 'application/vnd.oasis.opendocument.spreadsheet',
+  csv: 'text/csv',
+  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  ppt: 'application/vnd.ms-powerpoint',
+  odp: 'application/vnd.oasis.opendocument.presentation',
+};
+
+/**
+ * MIME type for a document file name or bare extension; octet-stream for
+ * anything outside the supported document formats.
+ */
+export function getDocumentMimeType(fileNameOrExt: string): string {
+  const ext = fileNameOrExt.split('.').pop()?.toLowerCase() || '';
+  return DOCUMENT_MIME_MAP[ext] || 'application/octet-stream';
+}
+
 /**
  * Document type mapping
  */

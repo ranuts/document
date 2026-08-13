@@ -4,8 +4,8 @@ import { getDocmentObj } from '@ranuts/shared/store';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
 import { c_oAscFileType2, oAscFileType } from './file-types';
 import type { BinConversionResult, SaveEvent } from '@ranuts/shared/document-types';
-import { DOCUMENT_TYPE_MAP, getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
-import { X2TConverter } from '@ranuts/converter';
+import { DOCUMENT_TYPE_MAP, getDocumentMimeType, getMimeTypeFromExtension } from '@ranuts/shared/document-utils';
+import { X2TConverter, saveFileToDisk } from '@ranuts/converter';
 
 // Selected via `vite --mode v9` / `vite build --mode v9` (see vite.config.ts); defaults
 // to v7 for the normal dev/build/test commands. See docs/explorations for why v9 needs
@@ -107,18 +107,7 @@ function waitForDocumentContentReady(timeoutMs = 15000): Promise<void> {
 }
 
 export function getSavedFileMimeType(fileName: string): string {
-  const extension = fileName.split('.').pop()?.toLowerCase() || '';
-  const mimeMap: Record<string, string> = {
-    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    doc: 'application/msword',
-    xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    xls: 'application/vnd.ms-excel',
-    csv: 'text/csv',
-    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    ppt: 'application/vnd.ms-powerpoint',
-    pdf: 'application/pdf',
-  };
-  return mimeMap[extension] || 'application/octet-stream';
+  return getDocumentMimeType(fileName);
 }
 
 export function getNormalizedFile(file: File): File {
@@ -199,56 +188,11 @@ function cleanupEmbeddedSaveRequest(request: EmbeddedSaveRequest): void {
   }
 }
 
-/**
- * Save a finished file to the user's disk: File System Access API when
- * available (native save dialog), plain anchor download otherwise.
- */
-async function saveFileLocally(file: File): Promise<void> {
-  const picker = (
-    window as unknown as {
-      showSaveFilePicker?: (opts: {
-        suggestedName: string;
-        types: Array<{ description: string; accept: Record<string, string[]> }>;
-      }) => Promise<{
-        createWritable: () => Promise<{ write: (d: Blob) => Promise<void>; close: () => Promise<void> }>;
-      }>;
-    }
-  ).showSaveFilePicker;
-
-  if (typeof picker !== 'function') {
-    const url = await createObjectURL(file);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = file.name;
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(() => {
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    }, 100);
-    return;
-  }
-
-  try {
-    const ext = file.name.split('.').pop()?.toLowerCase() || '';
-    const mime = getSavedFileMimeType(file.name);
-    const handle = await picker.call(window, {
-      suggestedName: file.name,
-      types: [{ description: 'Document', accept: { [mime]: [`.${ext}`] } }],
-    });
-    const writable = await handle.createWritable();
-    await writable.write(file);
-    await writable.close();
-    (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
-      `${t('fileSavedSuccess')}${file.name}`,
-    );
-  } catch (error) {
-    if ((error as Error).name === 'AbortError') return;
-    (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
-      `${t('documentOperationFailed')}${error instanceof Error ? error.message : String(error)}`,
-    );
-  }
+// ranui/message registers a global `window.message` toast API (untyped).
+function notifyOperationFailed(error: unknown): void {
+  (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
+    `${t('documentOperationFailed')}${error instanceof Error ? error.message : String(error)}`,
+  );
 }
 
 // ---- v9 file-stream save channel (OnlyOffice Personal vendor build) ----
@@ -285,7 +229,7 @@ function routeSavedFile(file: File): void {
     return;
   }
 
-  void saveFileLocally(file);
+  saveFileToDisk(file, file.name).catch(notifyOperationFailed);
 }
 
 function handleFileStreamMessage(event: MessageEvent): void {
@@ -549,9 +493,7 @@ async function handleSaveDocument(event: { data: SaveEvent['data'] }) {
       // rejection with no UI feedback; still fall through so the editor's
       // save state is cleared below.
       console.error('Failed to convert and save document:', error);
-      (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
-        `${t('documentOperationFailed')}${error instanceof Error ? error.message : String(error)}`,
-      );
+      notifyOperationFailed(error);
     }
   } else {
     throw new Error('Converter callback not set');

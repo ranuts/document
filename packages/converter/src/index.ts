@@ -9,6 +9,7 @@ export {
   X2TConverter,
   hasEditorBinSignature,
   isZipContainer,
+  saveFileToDisk,
   CANVAS_PDF_INPUT_FORMAT,
   PDF_OUTPUT_FORMAT,
 } from './document-converter';

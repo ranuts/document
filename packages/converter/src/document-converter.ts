@@ -7,7 +7,7 @@ import type {
   DocumentType,
   EmscriptenModule,
 } from '@ranuts/shared/document-types';
-import { BASE_PATH, DOCUMENT_TYPE_MAP } from '@ranuts/shared/document-utils';
+import { BASE_PATH, DOCUMENT_TYPE_MAP, getDocumentMimeType } from '@ranuts/shared/document-utils';
 import { extractDocxMediaUrls } from './docx-zip';
 
 // x2t input-format constant for the editor's canvas render stream. When the
@@ -33,6 +33,82 @@ export function hasEditorBinSignature(bin: Uint8Array): boolean {
 // container starting with "PK\x03\x04"), not an editor bin at all.
 export function isZipContainer(bin: Uint8Array): boolean {
   return bin.length >= 4 && bin[0] === 0x50 && bin[1] === 0x4b && bin[2] === 0x03 && bin[3] === 0x04;
+}
+
+const FILE_DESCRIPTION_MAP: Record<string, string> = {
+  docx: 'Word Document',
+  doc: 'Word 97-2003 Document',
+  odt: 'OpenDocument Text',
+  pdf: 'PDF Document',
+  xlsx: 'Excel Workbook',
+  xls: 'Excel 97-2003 Workbook',
+  ods: 'OpenDocument Spreadsheet',
+  pptx: 'PowerPoint Presentation',
+  ppt: 'PowerPoint 97-2003 Presentation',
+  odp: 'OpenDocument Presentation',
+  txt: 'Text Document',
+  rtf: 'Rich Text Format',
+  csv: 'CSV File',
+};
+
+/**
+ * Save a finished file to the user's disk: File System Access API when
+ * available (native save dialog, success toast), plain anchor download
+ * otherwise. A user-cancelled dialog resolves silently; any other failure
+ * rejects so the caller can surface it. Shared by the v7 convert-and-download
+ * path and the v9 file-stream save path (lib/onlyoffice-editor.ts).
+ */
+export async function saveFileToDisk(data: Blob | Uint8Array, fileName: string, mimeType?: string): Promise<void> {
+  const picker = (
+    window as unknown as {
+      showSaveFilePicker?: (opts: {
+        suggestedName: string;
+        types: Array<{ description: string; accept: Record<string, string[]> }>;
+      }) => Promise<{
+        createWritable: () => Promise<{ write: (d: Blob | Uint8Array) => Promise<void>; close: () => Promise<void> }>;
+      }>;
+    }
+  ).showSaveFilePicker;
+
+  if (typeof picker !== 'function') {
+    const blob = data instanceof Blob ? data : new Blob([data as BlobPart]);
+    const url = await createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+    return;
+  }
+
+  try {
+    const extension = fileName.split('.').pop()?.toLowerCase() || '';
+    const detectedMimeType = mimeType || getDocumentMimeType(fileName);
+    const fileHandle = await picker.call(window, {
+      suggestedName: fileName,
+      types: [
+        {
+          description: FILE_DESCRIPTION_MAP[extension] || 'Document',
+          accept: { [detectedMimeType]: [`.${extension}`] },
+        },
+      ],
+    });
+    const writable = await fileHandle.createWritable();
+    await writable.write(data);
+    await writable.close();
+    // ranui/message registers a global `window.message` toast API (untyped).
+    (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
+      `${t('fileSavedSuccess')}${fileName}`,
+    );
+  } catch (error) {
+    if ((error as Error).name === 'AbortError') return;
+    throw error;
+  }
 }
 
 const MIME_MAP: Record<string, string> = {
@@ -798,134 +874,8 @@ export class X2TConverter {
     const data = result.data instanceof Uint8Array ? result.data : new Uint8Array(result.data as ArrayBuffer);
 
     // TODO: Improve print functionality
-    await this.saveWithFileSystemAPI(data, result.fileName);
+    await saveFileToDisk(data, result.fileName);
     return result;
-  }
-
-  /**
-   * Download file
-   */
-  private async downloadFile(data: Uint8Array, fileName: string): Promise<void> {
-    const blob = new Blob([data as BlobPart]);
-    const url = await createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = fileName;
-    link.style.display = 'none';
-
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up resources
-    setTimeout(() => {
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    }, 100);
-  }
-
-  /**
-   * Get MIME type from file extension
-   */
-  private getMimeTypeFromExtension(extension: string): string {
-    const mimeMap: Record<string, string> = {
-      // Document types
-      docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      doc: 'application/msword',
-      odt: 'application/vnd.oasis.opendocument.text',
-      rtf: 'application/rtf',
-      txt: 'text/plain',
-      pdf: 'application/pdf',
-
-      // Spreadsheet types
-      xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      xls: 'application/vnd.ms-excel',
-      ods: 'application/vnd.oasis.opendocument.spreadsheet',
-      csv: 'text/csv',
-
-      // Presentation types
-      pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      ppt: 'application/vnd.ms-powerpoint',
-      odp: 'application/vnd.oasis.opendocument.presentation',
-
-      // Image types
-      png: 'image/png',
-      jpg: 'image/jpeg',
-      jpeg: 'image/jpeg',
-      gif: 'image/gif',
-      bmp: 'image/bmp',
-      webp: 'image/webp',
-      svg: 'image/svg+xml',
-    };
-
-    return mimeMap[extension.toLowerCase()] || 'application/octet-stream';
-  }
-
-  /**
-   * Get file type description
-   */
-  private getFileDescription(extension: string): string {
-    const descriptionMap: Record<string, string> = {
-      docx: 'Word Document',
-      doc: 'Word 97-2003 Document',
-      odt: 'OpenDocument Text',
-      pdf: 'PDF Document',
-      xlsx: 'Excel Workbook',
-      xls: 'Excel 97-2003 Workbook',
-      ods: 'OpenDocument Spreadsheet',
-      pptx: 'PowerPoint Presentation',
-      ppt: 'PowerPoint 97-2003 Presentation',
-      odp: 'OpenDocument Presentation',
-      txt: 'Text Document',
-      rtf: 'Rich Text Format',
-      csv: 'CSV File',
-    };
-
-    return descriptionMap[extension.toLowerCase()] || 'Document';
-  }
-
-  /**
-   * Save file using modern File System API
-   */
-  private async saveWithFileSystemAPI(data: Uint8Array, fileName: string, mimeType?: string): Promise<void> {
-    if (!(window as any).showSaveFilePicker) {
-      await this.downloadFile(data, fileName);
-      return;
-    }
-    try {
-      // Get file extension and determine MIME type
-      const extension = fileName.split('.').pop()?.toLowerCase() || '';
-      const detectedMimeType = mimeType || this.getMimeTypeFromExtension(extension);
-
-      // Show file save dialog
-      const fileHandle = await (window as any).showSaveFilePicker({
-        suggestedName: fileName,
-        types: [
-          {
-            description: this.getFileDescription(extension),
-            accept: {
-              [detectedMimeType]: [`.${extension}`],
-            },
-          },
-        ],
-      });
-
-      // Create writable stream and write data
-      const writable = await fileHandle.createWritable();
-      await writable.write(data);
-      await writable.close();
-      // ranui/message registers a global `window.message` toast API (untyped).
-      (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
-        `${t('fileSavedSuccess')}${fileName}`,
-      );
-      console.log('File saved successfully:', fileName);
-    } catch (error) {
-      if ((error as Error).name === 'AbortError') {
-        console.log('User cancelled the save operation');
-        return;
-      }
-      throw error;
-    }
   }
 
   /**
