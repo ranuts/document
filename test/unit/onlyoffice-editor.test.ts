@@ -12,7 +12,10 @@ vi.mock('@ranuts/shared/i18n', () => ({
   t: vi.fn((key: string) => key),
 }));
 vi.mock('../../lib/file-types', () => ({ c_oAscFileType2: { 65: 'XLSX', 43: 'DOCX' } }));
-vi.mock('@ranuts/shared/document-utils', () => ({ getMimeTypeFromExtension: vi.fn().mockReturnValue('image/png') }));
+vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, getMimeTypeFromExtension: vi.fn().mockReturnValue('image/png') };
+});
 
 import {
   createEditorInstance,
