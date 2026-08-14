@@ -118,6 +118,83 @@ describe('X2TConverter', () => {
     });
   });
 
+  describe('loadFontsForPdf (private) — indexed catalog fonts for x2t PDF export', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    // A fake catalog font: TTF magic 00 01 00 00 followed by padding, with
+    // the first 32 bytes XOR-obfuscated using the OnlyOffice catalog key.
+    const CATALOG_KEY = [160, 102, 214, 32, 20, 150, 71, 250, 149, 105, 184, 80, 176, 65, 73, 72];
+    const makeCatalogBytes = () => {
+      const plain = new Uint8Array(40);
+      plain.set([0x00, 0x01, 0x00, 0x00]);
+      for (let i = 4; i < plain.length; i++) plain[i] = i;
+      const wire = new Uint8Array(plain);
+      for (let i = 0; i < 32; i++) wire[i] ^= CATALOG_KEY[i % 16];
+      return { plain, wire };
+    };
+
+    it('decodeCatalogFont restores the TTF magic and leaves bytes past 32 untouched', () => {
+      const { plain, wire } = makeCatalogBytes();
+
+      const decoded = (new X2TConverter() as any).decodeCatalogFont(wire) as Uint8Array;
+
+      expect(Array.from(decoded)).toEqual(Array.from(plain));
+      // Input is not mutated (decode returns a copy).
+      expect(wire[0]).toBe(0xa0);
+    });
+
+    it('fetches catalog indexes and writes every alias with decoded TTF bytes', async () => {
+      const { plain, wire } = makeCatalogBytes();
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        arrayBuffer: async () => wire.buffer.slice(0),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      const converter = new X2TConverter();
+      const writeFile = vi.fn();
+      (converter as any).x2tModule = { FS: { writeFile } };
+
+      await (converter as any).loadFontsForPdf();
+
+      // Catalog indexes are fetched, not the old (nonexistent) named TTFs.
+      const fetchedUrls = fetchMock.mock.calls.map((call) => String(call[0]));
+      expect(fetchedUrls.some((url) => url.endsWith('fonts/072'))).toBe(true);
+      expect(fetchedUrls.some((url) => url.endsWith('fonts/017'))).toBe(true);
+
+      const writtenPaths = writeFile.mock.calls.map((call) => String(call[0]));
+      expect(writtenPaths).toContain('/working/fonts/Arial.ttf');
+      expect(writtenPaths).toContain('/working/fonts/SimSun.ttf');
+      expect(writtenPaths).toContain('/working/fonts/宋体.ttf');
+      expect(writtenPaths).toContain('/working/fonts/DejaVuSans.ttf');
+
+      // Written bytes are the decoded TTF, not the wire format.
+      const arialWrite = writeFile.mock.calls.find((call) => String(call[0]).endsWith('Arial.ttf'));
+      expect(Array.from(arialWrite![1].slice(0, 4))).toEqual(Array.from(plain.slice(0, 4)));
+    });
+
+    it('is non-fatal when a font fetch fails: remaining fonts still load', async () => {
+      const { wire } = makeCatalogBytes();
+      const fetchMock = vi.fn().mockImplementation(async (url: string) => {
+        if (String(url).endsWith('fonts/072')) throw new Error('network down');
+        return { ok: true, arrayBuffer: async () => wire.buffer.slice(0) };
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      const converter = new X2TConverter();
+      const writeFile = vi.fn();
+      (converter as any).x2tModule = { FS: { writeFile } };
+
+      await (converter as any).loadFontsForPdf();
+
+      const writtenPaths = writeFile.mock.calls.map((call) => String(call[0]));
+      expect(writtenPaths).not.toContain('/working/fonts/Arial.ttf');
+      expect(writtenPaths).toContain('/working/fonts/SimSun.ttf');
+    });
+  });
+
   describe('convertDocument — empty CSV (GitHub #33/#13)', () => {
     it('rejects with "CSV file is empty" for a zero-byte CSV, without invoking x2t', async () => {
       const converter = new X2TConverter();

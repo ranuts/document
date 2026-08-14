@@ -262,19 +262,79 @@ export class X2TConverter {
   }
 
   /**
-   * Load core fonts into WASM FS for PDF rendering. Called once per session.
-   * Without fonts, x2t generates a PDF with invisible (empty) text.
+   * The indexed catalog fonts under public/fonts/{index} are raw TTFs whose
+   * first 32 bytes are XOR-obfuscated with this fixed 16-byte key (the same
+   * wire format the editor's own font loader decodes).
+   */
+  private static readonly CATALOG_FONT_XOR_KEY = [160, 102, 214, 32, 20, 150, 71, 250, 149, 105, 184, 80, 176, 65, 73, 72];
+
+  /**
+   * PDF-export font manifest: catalog file index -> alias file names x2t
+   * matches against inside m_sFontDir. One decoded byte set is written once
+   * per alias. Indexes come from __fonts_infos in public/sdkjs/common/
+   * AllFonts.js (file position, then __fonts_files lookup). Keep Arial and
+   * other western families on their own files -- aliasing them to the CJK
+   * fallback garbles latin text and digits. The CJK alias entries carry the
+   * literal zh font names documents reference; they are data, not UI copy.
+   */
+  private static readonly PDF_FONT_MANIFEST: ReadonlyArray<{ file: string; aliases: string[] }> = [
+    { file: '072', aliases: ['Arial.ttf'] },
+    { file: '074', aliases: ['Arial_Bold.ttf'] },
+    { file: '076', aliases: ['Arial_Italic.ttf'] },
+    { file: '075', aliases: ['Arial_Bold_Italic.ttf'] },
+    // Calibri regular is present; Carlito (metric-compatible) fills the
+    // missing bold/italic faces under both names.
+    { file: '049', aliases: ['Calibri.ttf'] },
+    { file: '109', aliases: ['Calibri_Bold.ttf', 'Carlito_Bold.ttf'] },
+    { file: '111', aliases: ['Calibri_Italic.ttf', 'Carlito_Italic.ttf'] },
+    { file: '110', aliases: ['Calibri_Bold_Italic.ttf', 'Carlito_Bold_Italic.ttf'] },
+    { file: '018', aliases: ['Times_New_Roman.ttf', 'Times New Roman.ttf'] },
+    { file: '088', aliases: ['Times_New_Roman_Bold.ttf'] },
+    { file: '090', aliases: ['Times_New_Roman_Italic.ttf'] },
+    { file: '089', aliases: ['Times_New_Roman_Bold_Italic.ttf'] },
+    { file: '079', aliases: ['Courier_New.ttf', 'Courier New.ttf'] },
+    // Names the previous implementation fetched directly (kept for the same
+    // default-latin coverage).
+    { file: '117', aliases: ['DejaVuSans.ttf'] },
+    { file: '050', aliases: ['DejaVuSans-Bold.ttf'] },
+    { file: '062', aliases: ['LiberationSans-Regular.ttf'] },
+    // CJK: SimSun (017) and Microsoft YaHei (016) exist as real files in
+    // this vendor; PingFang maps to YaHei as the closest match.
+    // 017 aliases include SimSun's zh display name, 016 includes YaHei's.
+    { file: '017', aliases: ['SimSun.ttf', 'NSimSun.ttf', '宋体.ttf'] },
+    { file: '016', aliases: ['Microsoft YaHei.ttf', '微软雅黑.ttf', 'PingFang SC.ttf'] },
+    { file: '130', aliases: ['DroidSansFallback.ttf', 'Droid Sans Fallback.ttf'] },
+  ];
+
+  /** Undo the catalog XOR obfuscation, returning a plain TTF byte copy. */
+  private decodeCatalogFont(bytes: Uint8Array): Uint8Array {
+    const out = new Uint8Array(bytes);
+    const key = X2TConverter.CATALOG_FONT_XOR_KEY;
+    const n = Math.min(32, out.length);
+    for (let i = 0; i < n; i++) {
+      out[i] ^= key[i % key.length];
+    }
+    return out;
+  }
+
+  /**
+   * Load fonts into WASM FS for PDF rendering. Called once per session.
+   * Without fonts, x2t generates a PDF with invisible (empty) text. Fonts
+   * are fetched from the indexed catalog (public/fonts/{index}) -- the same
+   * files the editor loads, so they are usually already HTTP-cached -- and
+   * XOR-decoded before being written under their alias names.
    */
   private async loadFontsForPdf(): Promise<void> {
     if (this.fontsLoaded || !this.x2tModule) return;
-    const fontNames = ['DejaVuSans.ttf', 'DejaVuSans-Bold.ttf', 'LiberationSans-Regular.ttf'];
     await Promise.all(
-      fontNames.map(async (name) => {
+      X2TConverter.PDF_FONT_MANIFEST.map(async ({ file, aliases }) => {
         try {
-          const res = await fetch(`${BASE_PATH}fonts/${name}`);
+          const res = await fetch(`${BASE_PATH}fonts/${file}`);
           if (!res.ok) return;
-          const buf = new Uint8Array(await res.arrayBuffer());
-          this.x2tModule!.FS.writeFile(`/working/fonts/${name}`, buf);
+          const bytes = this.decodeCatalogFont(new Uint8Array(await res.arrayBuffer()));
+          for (const alias of aliases) {
+            this.x2tModule!.FS.writeFile(`/working/fonts/${alias}`, bytes);
+          }
         } catch {
           // Non-fatal — PDF may still render with remaining fonts
         }
