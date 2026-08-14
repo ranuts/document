@@ -14,7 +14,7 @@ Three registries in `AllFonts.js` drive everything:
   `"072"`.
 - `__fonts_infos` — one row per font family:
   `[family, regularPos, regularFace, italicPos, italicFace, boldPos, boldFace,
-  boldItalicPos, boldItalicFace]`, where each `Pos` is a **position in
+boldItalicPos, boldItalicFace]`, where each `Pos` is a **position in
   `__fonts_files`** and `-1` means that face is missing. Multiple rows may
   point at the same file — that is how aliases work.
 - `__fonts_ranges` — unicode-range hints for fallback picking.
@@ -47,7 +47,7 @@ node bin/font-catalog.mjs verify public/fonts/000
 ## Adding a font
 
 1. Encode the TTF: `node bin/font-catalog.mjs encode MyFont.ttf
-   public/fonts/<new-name>` (pick an unused file name; by convention a
+public/fonts/<new-name>` (pick an unused file name; by convention a
    zero-padded number).
 2. In `AllFonts.js`, append `"<new-name>"` to `__fonts_files` and note its
    array position `P`.

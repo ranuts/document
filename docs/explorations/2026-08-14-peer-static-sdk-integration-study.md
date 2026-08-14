@@ -182,3 +182,46 @@ toggle"）——可编辑打开 → set-readonly 锁定（断言 iframe 内 SDK 
 `restrictions` 实例属性未被混淆，E2E 直接读它。
 
 全套验证：oxlint + tsc 通过，单测 295 全绿，E2E 15 全绿。
+
+## 第二轮落地项（同日追加）
+
+### 3. converter PDF 字体加载修复（此前全 404）
+
+`loadFontsForPdf` 原来 fetch 三个命名 TTF（DejaVuSans.ttf 等），但
+`public/fonts/` 里**只有数字索引文件**——三个请求全 404，x2t 转 PDF
+一直在无字体裸奔。排查中确认了关键事实：**我们 vendor 的索引字体与参考
+实现的 catalog 线格式完全同源**——裸 TTF 前 32 字节与同一把 16 字节
+XOR key 异或（用参考实现的 key 实测解出合法 TTF magic）。
+
+修复：新增 `PDF_FONT_MANIFEST`（catalog 索引 → x2t 别名文件名），fetch
+索引文件 → `decodeCatalogFont` XOR 解码 → 按别名写入 `/working/fonts/`。
+索引从 AllFonts.js `__fonts_infos` 反查（注意 infos 存的是
+`__fonts_files` 的**数组位置**，不是文件名）。本 vendor 有真实的
+SimSun(017)/Microsoft YaHei(016)/Droid Sans Fallback(130)，中文别名
+（宋体/微软雅黑/PingFang SC）直接指向真字体；Arial(072 系)按参考实现的
+教训**独立映射，绝不指向 CJK fallback**。配三个单测（解码、别名注入、
+单字体失败不致命）。
+
+### 4. bin/font-catalog.mjs + docs/fonts.md 重写（消掉 v9 待办）
+
+- 新脚本 `bin/font-catalog.mjs`：encode / decode / verify 三命令，
+  对真实 vendor 字体实测 round-trip 字节一致。
+- docs/fonts.md 全文重写：旧文档说"把 TTF 放到 `public/fonts/223`"是
+  **错的**（裸 TTF 不经 XOR 编码放进去无效，且 223 是 v7 时代的索引；
+  v9 里 Arial regular 是 `__fonts_infos` 位置 75 → 文件 "072"）。新文档
+  讲清三张注册表结构、线格式、加字体全流程与 PDF 导出字体的关系。
+
+### 5. 粘贴 XSS 排查（结论：无需动作）
+
+参考实现给 sdk-all.js 的粘贴临时 iframe 打了剥 `<script>`/`on*` 的
+patch。排查我们的 vendor：word/cell/slide 三个 `sdk-all.js` 的粘贴解析
+iframe 都带 `sandbox="allow-same-origin"`（**无 allow-scripts**），粘贴
+HTML 里的脚本与事件属性在解析期被浏览器 sandbox 直接禁掉，参考实现那个
+patch 对我们是冗余的。结论已记入 CLAUDE.md，防止未来误引入。
+
+### 未做（记录原因）
+
+- **vendor 升级管道脚本化**：我们的 vendor 改动全部是运行时 patch
+  （`prepareEditorIframe`）+ x2t_helper 一处，没有散落的 vendor 文件
+  patch，暂无脚本化必要；等下次换底座时再按"导出 + 自动 patch"模式做。
+- **brotli / preload 预热 / 多实例隔离**：收益低或不适用，见正文。

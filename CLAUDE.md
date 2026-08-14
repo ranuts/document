@@ -141,6 +141,8 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 - xlsx → PDF 导出（canvas 渲染管线，#28 / 错误码 80 的场景）
 - CSV 打开 + 存回 CSV 内容一致（#13、#33）
 - 只读打开：状态正确且保存被拒（#25、#87）
+- 运行时只读切换：restriction 真实生效（iframe 内 `restrictions` 属性）、
+  锁定期保存被拒、解锁后保存往返完整
 
 **这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
 "全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、
@@ -371,11 +373,20 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   预置 `Module.wasmBinary`），裸 40 MB 文件超 CF Pages 25 MB 限制、不入库。
 - **CSV**：新 vendor 编辑器不能直接吃 CSV——打开前用 SheetJS 转 XLSX、保存
   流转回 CSV（`packages/converter` 的 `convertCsvToXlsx` / `xlsxToCsvBytes`）。
-- **详细历史**：docs/explorations/ 下 2026-08-11 ～ 08-13 的 v9 系列文档
-  （根因链、迁移记录、issue 回归排查、E2E 固化）。
-- **待办**：PDF 打开（新 vendor 有 pdfeditor，未接入）、运行时只读切换
-  （processRightsChange 在新构建上的行为）验证、docs/fonts.md 按索引字体体系
-  重写。
+  解码带严格编码嗅探（fatal UTF-8 → GB18030 → latin1），GBK CSV 不再乱码。
+- **运行时只读**：挂载永远 `edit: true`，只读经 `asc_setRestriction(128)`
+  在 onDocumentReady 后施加、`setReadonlyMode` 双向切换（详见
+  `lib/onlyoffice-editor.ts` 的 `getSdkEditorApi`；E2E "runtime readonly
+  toggle" 守护）。别改回 view 模式挂载——那是单向门。
+- **字体**：`public/fonts/{index}` 是 XOR 混淆的 catalog 线格式（裸 TTF
+  放进去无效），编解码用 `bin/font-catalog.mjs`，体系说明见 docs/fonts.md；
+  x2t 转 PDF 的字体注入见 `packages/converter` 的 `PDF_FONT_MANIFEST`。
+- **粘贴 XSS**：三个编辑器的粘贴解析 iframe 均带
+  `sandbox="allow-same-origin"`（无 allow-scripts），粘贴的 script/on*
+  不会执行，无需额外过滤 patch（2026-08-14 排查结论）。
+- **详细历史**：docs/explorations/ 下 2026-08-11 ～ 08-14 的 v9 系列文档
+  （根因链、迁移记录、issue 回归排查、E2E 固化、同类方案研究）。
+- **待办**：PDF 打开（新 vendor 有 pdfeditor，未接入）。
 
 ---
 

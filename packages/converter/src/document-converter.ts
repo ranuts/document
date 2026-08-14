@@ -266,7 +266,9 @@ export class X2TConverter {
    * first 32 bytes are XOR-obfuscated with this fixed 16-byte key (the same
    * wire format the editor's own font loader decodes).
    */
-  private static readonly CATALOG_FONT_XOR_KEY = [160, 102, 214, 32, 20, 150, 71, 250, 149, 105, 184, 80, 176, 65, 73, 72];
+  private static readonly CATALOG_FONT_XOR_KEY = [
+    160, 102, 214, 32, 20, 150, 71, 250, 149, 105, 184, 80, 176, 65, 73, 72,
+  ];
 
   /**
    * PDF-export font manifest: catalog file index -> alias file names x2t
