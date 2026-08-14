@@ -24,13 +24,13 @@ git grep -n -E '[a-zA-Z0-9._%+-]+@(gmail|qq|163|outlook)\.[a-z]+'
 
 ## 第一轮：本机路径（5 处，5 个文件）
 
-| 文件                                     | 原内容                                     | 改为                                   |
-| ---------------------------------------- | ------------------------------------------ | -------------------------------------- |
-| v9 PDF 根因文档（2026-08-11）            | `/Users/<用户名>/Desktop/<离线包目录>/`    | "本地解压的第三方离线静态包"           |
-| v9 vendor 换底座文档（2026-08-11）       | 同上路径 + `9.3.0.133-*/vendor/`           | "本地解压的离线包的 `vendor/` 目录"    |
-| `2026-06-28-agent-panel-ranui.md`        | `pnpm link /Users/<用户名>/...` 及相对路径 | `<本地 ran 仓库路径>/packages/ranui`   |
-| `2026-07-04-ranui-a11y-fixes.md`         | `~/Documents/code/ran/packages/ranui`      | "chaxus/ran 的 `packages/ranui`"       |
-| `2026-07-09-seo-geo-traffic-playbook.md` | `~/Desktop/survival`（2 处）               | "chaxus/survival 仓库"                 |
+| 文件                                     | 原内容                                     | 改为                                 |
+| ---------------------------------------- | ------------------------------------------ | ------------------------------------ |
+| v9 PDF 根因文档（2026-08-11）            | `/Users/<用户名>/Desktop/<离线包目录>/`    | "本地解压的第三方离线静态包"         |
+| v9 vendor 换底座文档（2026-08-11）       | 同上路径 + `9.3.0.133-*/vendor/`           | "本地解压的离线包的 `vendor/` 目录"  |
+| `2026-06-28-agent-panel-ranui.md`        | `pnpm link /Users/<用户名>/...` 及相对路径 | `<本地 ran 仓库路径>/packages/ranui` |
+| `2026-07-04-ranui-a11y-fixes.md`         | `~/<本地目录>/ran/packages/ranui`          | "chaxus/ran 的 `packages/ranui`"     |
+| `2026-07-09-seo-geo-traffic-playbook.md` | `~/<本地目录>/survival`（2 处）            | "chaxus/survival 仓库"               |
 
 ## 第二轮：第三方个人信息（网名、个人仓库名）
 

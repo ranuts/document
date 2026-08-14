@@ -210,9 +210,9 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
   2. 机器用户名、个人邮箱、任何凭据；
   3. 第三方个人的姓名、网名、社交账号、个人仓库名——引用第三方来源用中性
      描述（如"第三方编译的离线包"），不点名到人；
-  例外：`chaxus` / `ranuts` 作为项目所有者的公开 GitHub handle、组织名及其
-  公开仓库（chaxus/ran 等）可以出现。发现存量泄露：清理正文并在
-  docs/explorations/ 记录；git 历史中的残留默认不重写（除非泄露凭据）。
+     例外：`chaxus` / `ranuts` 作为项目所有者的公开 GitHub handle、组织名及其
+     公开仓库（chaxus/ran 等）可以出现。发现存量泄露：清理正文并在
+     docs/explorations/ 记录；git 历史中的残留默认不重写（除非泄露凭据）。
 
 ---
 

@@ -22,7 +22,7 @@ demo 站，下称「参考实现」），做了一次完整拆解，目的是对
 
 | 维度        | 我们（v9 现行）                             | 参考实现                                                               |
 | ----------- | ------------------------------------------- | ---------------------------------------------------------------------- |
-| vendor 来源 | 第三方编译的离线包产物（AGPL） | 官方 documentserver-de 9.4.0-develop 镜像导出（DE，商业版）            |
+| vendor 来源 | 第三方编译的离线包产物（AGPL）              | 官方 documentserver-de 9.4.0-develop 镜像导出（DE，商业版）            |
 | 文档喂入    | blob URL + 公开 DocEditor 配置              | mock 协作握手 `documentOpen` 下发 urlsMap，XHR 代理回放                |
 | 保存通道    | `onlyoffice-file-stream` postMessage        | 劫持 `/downloadas/` 分片 POST，内存拼片                                |
 | x2t 位置    | 编辑器内部（保存路径）                      | 独立 module Web Worker，主线程零阻塞                                   |
