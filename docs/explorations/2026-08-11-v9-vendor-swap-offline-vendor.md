@@ -1,4 +1,4 @@
-# v9 路线 A 落地：整体换用 OnlyofficePersonal vendor，删除 1207 行 patch 栈，三端打开/编辑/保存/转 PDF 全部验证通过
+# v9 路线 A 落地：整体换用第三方离线包 vendor，删除 1207 行 patch 栈，三端打开/编辑/保存/转 PDF 全部验证通过
 
 日期：2026-08-11
 分支：feat/v9-web-mode
@@ -9,15 +9,15 @@ coverage（45%，远超 34% 阈值）/ `build:v9` / `build`（v7）全部通过�
 
 ## 背景
 
-前一篇（[2026-08-11-v9-pdf-export-root-cause-and-onlyoffice-personal.md](2026-08-11-v9-pdf-export-root-cause-and-onlyoffice-personal.md)）
+前一篇（[2026-08-11-v9-pdf-export-root-cause-and-offline-vendor.md](2026-08-11-v9-pdf-export-root-cause-and-offline-vendor.md)）
 定案：PDF 导出在旧 v9 sdkjs 底座上无解，用户拍板转"路线 A"——用
-OnlyofficePersonal（fernfei，AGPL-3.0，OnlyOffice 9.3.0.133 编译产物）的
+第三方离线包（AGPL-3.0，OnlyOffice 9.3.0.133 编译产物，下称"离线包"）的
 vendor 整体替换。本篇是实施记录。
 
 ## 资源替换
 
 - 删除 `public-v9/{sdkjs,web-apps,fonts,wasm,font-map.json,onlyoffice-iframe-patch.js}`。
-- 从本地解压的 OnlyofficePersonal 9.3.0.133 包的 `9.3.0.133-*/vendor/` 目录
+- 从本地解压的离线包的 `9.3.0.133-*/vendor/` 目录
   拷入 `sdkjs/`（185M，内含 9.4 版 x2t 40M）、`web-apps/`（141M，**裁掉了全部
   `apps/*/main/resources/help`，省 508M**）、`fonts/`（327M，按索引 000-266
   命名 + `AllFonts.js` 索引表，按需加载）。
@@ -89,8 +89,8 @@ vendor 整体替换。本篇是实施记录。
    `window.Module.wasmBinary`，Emscripten 检测到后跳过自己的 wasm fetch。
    裸 `x2t.wasm` 已从仓库删除，`public-v9` 与 `dist-v9` 均无超限文件。
    现场验证：gz-only 路径下 xlsx→PDF 导出流照常产出（4982 字节）。
-2. PPT 打开时 `sdkjs/slide/themes//themes.js` 404（双斜杠）——OnlyofficePersonal
-   自己的 demo 也有（其控制台同样报 themes.json 解析失败），不阻塞编辑与保
+2. PPT 打开时 `sdkjs/slide/themes//themes.js` 404（双斜杠）——离线包
+   自带的 demo 也有（其控制台同样报 themes.json 解析失败），不阻塞编辑与保
    存；幻灯片主题库可能受限，待查它 demo 的 `assets/office-config.js` 是否有
    规避配置。
 3. PDF 打开（`openDocument({buffer})` + `localOpenFromBinary`）尚未接——新

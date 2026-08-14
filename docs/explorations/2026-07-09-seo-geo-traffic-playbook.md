@@ -1,11 +1,11 @@
-# edit.chaxus.com SEO / GEO 流量经验(哥飞「出海做站」方法论 × 本项目现状)
+# edit.chaxus.com SEO / GEO 流量经验(「出海做站」方法论 × 本项目现状)
 
 > 2026-07-09
 
 ## 背景
 
 首页太素(JS 用户直接进编辑器、可爬正文只有 `<noscript>`)引出一轮讨论,顺带把
-chaxus/survival 仓库(哥飞 68 篇「出海做站」文章提炼的 8 个 skill:demand-mining /
+chaxus/survival 仓库(「出海做站」系列文章提炼的 8 个 skill:demand-mining /
 keyword-research / seo-optimization / site-building / adsense-monetization /
 overseas-indie / content-ip / product-design)的方法论对齐到本项目,沉淀成可执行经验。
 
@@ -148,5 +148,5 @@ overseas-indie / content-ip / product-design)的方法论对齐到本项目,沉�
 
 ## 参考
 
-- 方法论来源:chaxus/survival 仓库(哥飞「出海做站」skill 市场)。
+- 方法论来源:chaxus/survival 仓库(「出海做站」方法论 skill 集)。
 - 上一轮 SEO 上线:[2026-07-05-seo-geo-launch.md](2026-07-05-seo-geo-launch.md)。

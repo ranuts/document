@@ -1,4 +1,4 @@
-# v9 x2t 转 PDF 错误码 80 根因定案 + OnlyofficePersonal 包对比分析：同格式保存已绕开 x2t，PDF 导出需换 sdkjs 底座（路线 A）
+# v9 x2t 转 PDF 错误码 80 根因定案 + 第三方离线包对比分析：同格式保存已绕开 x2t，PDF 导出需换 sdkjs 底座（路线 A）
 
 日期：2026-08-11
 分支：feat/v9-web-mode
@@ -8,13 +8,13 @@ converter 侧修复**，需要按"路线 A"更换 vendor（见结论）。
 
 ## 背景
 
-用户提供了本地解压的 OnlyofficePersonal 9.3.0.133 离线静态包
-（fernfei 编译的 OnlyOffice 9.3.0.133 产物 + 9.4 版 x2t.wasm，
-AGPL-3.0），要求分析它与当前分支的差异、找出可借鉴的点，
+用户提供了本地解压的第三方 OnlyOffice 9.3.0.133 离线静态包
+（含 9.4 版 x2t.wasm，AGPL-3.0，下称"离线包"），
+要求分析它与当前分支的差异、找出可借鉴的点，
 并推进"升级 v9 直接替换 v7"。用户选定路线："先 B 验证再转 A"——先把关键修复
 移植进现有 public-v9 验证错误码 80，再决定是否整体换底座。
 
-## OnlyofficePersonal 包的核心发现（对比分析结论）
+## 第三方离线包的核心发现（对比分析结论）
 
 1. **它的 9.3 构建原生支持无服务器离线模式**。`_downloadAsFromLocal`、
    `openDocumentFromBinary` 都是编译产物自带；整个 1.1GB vendor 里只有
@@ -51,7 +51,7 @@ SheetJS；跨格式转换按真实扩展名写入（`/working/doc.xlsx` 而不�
 
 ### 第二层：canvas 渲染流需要三个显式参数（从 x2t_helper.js 抄来的方案）
 
-OnlyofficePersonal 的 `x2t_helper.js` L836-847 注释明确写着：打印/导出 PDF
+离线包的 `x2t_helper.js` L836-847 注释明确写着：打印/导出 PDF
 时编辑器传给 x2t 的是**渲染指令流**，没有 DOCY/XLSY/PPTY/VSDY 签名，必须：
 
 - `<m_nFormatFrom>8196</m_nFormatFrom>`（AVS_OFFICESTUDIO_FILE_CANVAS_PDF）
@@ -93,7 +93,7 @@ docx/xlsx/pptx → PDF 直转**（连他们自己的环境都转不了）。他�
   键），转换失败不再是无 UI 反馈的 uncaught rejection（上一篇探索文档点名
   的遗留项）。现场验证：File picker 冲突错误正确弹出提示。
 - `executeConversion` 错误码提示表补了 80 的含义。
-- x2t 已换成 OnlyofficePersonal 的 9.4 构建（`public-v9/wasm/x2t/`，
+- x2t 已换成离线包的 9.4 构建（`public-v9/wasm/x2t/`，
   wasm 42MB / gz 9.9MB / br 7.8MB，仍在 CF Pages 25MB 单文件限制内），
   glue 接口兼容（同为全局 Module + `_main1` 导出，无 pthread）。注意：两边
   wasm 里的版本串都是写死的 `2.5.565.0`（core 陈年常量），不能用它判断版本。
@@ -105,7 +105,7 @@ docx/xlsx/pptx → PDF 直转**（连他们自己的环境都转不了）。他�
 "先 B 验证"已出结论：**B 修好了同格式保存（顺带消灭一类风险），但 PDF 导出
 在当前 sdkjs 底座上是死路**。下一步按用户已确认的路线转 A：
 
-1. 用 OnlyofficePersonal 的 vendor（web-apps + sdkjs + x2t_helper.js）整体
+1. 用离线包的 vendor（web-apps + sdkjs + x2t_helper.js）整体
    替换 `public-v9/` 的对应部分（x2t 本次已换完）。
 2. 换底座后现有 1207 行 iframe patch 与 10+ 混淆符号 hook 预期可大部分删除
    （对方只需要一个 x2t_helper.js）；`lib/onlyoffice-editor.ts` 的

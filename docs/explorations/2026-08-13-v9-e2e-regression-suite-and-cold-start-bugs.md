@@ -28,7 +28,7 @@
 
 ### 根因 1：fetchFonts 字体竞态（打开文档就崩，最核心）
 
-vendor 构建自带的 `window.AscCommon.fetchFonts`（fernfei 加的，x2t 转换前
+vendor 构建自带的 `window.AscCommon.fetchFonts`（该第三方构建加的，x2t 转换前
 收集引擎字体用）**无条件读 `AscFonts.g_font_infos.forEach`**。冷 profile 下
 打开文档的内部转换（xlsx→bin）会跑在字体系统初始化完成之前，此时
 `g_font_infos` 还是 undefined → `TypeError: Cannot read properties of

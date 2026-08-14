@@ -8,7 +8,7 @@
 拿到一份同类开源项目的源码（浏览器端 OnlyOffice 集成模板，基于官方
 `onlyoffice/documentserver-de:9.4.0` Docker 镜像导出的静态 SDK + Next.js
 demo 站，下称「参考实现」），做了一次完整拆解，目的是对照我们 v9 底座
-（fernfei OnlyofficePersonal 9.3.0.133 + x2t 9.4 wasm）找可借鉴点。
+（第三方编译的 OnlyOffice 9.3.0.133 离线包 + x2t 9.4 wasm）找可借鉴点。
 本文记录其关键机制、与我们方案的差异、以及由此落地的优化项。
 
 ## 参考实现的总体架构
@@ -22,7 +22,7 @@ demo 站，下称「参考实现」），做了一次完整拆解，目的是对
 
 | 维度        | 我们（v9 现行）                             | 参考实现                                                               |
 | ----------- | ------------------------------------------- | ---------------------------------------------------------------------- |
-| vendor 来源 | fernfei OnlyofficePersonal 编译产物（AGPL） | 官方 documentserver-de 9.4.0-develop 镜像导出（DE，商业版）            |
+| vendor 来源 | 第三方编译的离线包产物（AGPL） | 官方 documentserver-de 9.4.0-develop 镜像导出（DE，商业版）            |
 | 文档喂入    | blob URL + 公开 DocEditor 配置              | mock 协作握手 `documentOpen` 下发 urlsMap，XHR 代理回放                |
 | 保存通道    | `onlyoffice-file-stream` postMessage        | 劫持 `/downloadas/` 分片 POST，内存拼片                                |
 | x2t 位置    | 编辑器内部（保存路径）                      | 独立 module Web Worker，主线程零阻塞                                   |

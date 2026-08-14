@@ -72,7 +72,7 @@ iframe 注入一段样式（`#header-logo, .btn-current-user, #tlb-box-users
 
 ## 与上一篇的衔接
 
-本篇建立在 [2026-08-11-v9-vendor-swap-onlyoffice-personal.md](2026-08-11-v9-vendor-swap-onlyoffice-personal.md)
+本篇建立在 [2026-08-11-v9-vendor-swap-offline-vendor.md](2026-08-11-v9-vendor-swap-offline-vendor.md)
 之上；上一篇遗留项中 "embed 保存链路未验证" 本篇已闭环（含数据完整性），
 "PDF 打开未接入"、"运行时只读切换（processRightsChange）未验证"、
 "三端插图/粘贴深度回归" 仍待后续。

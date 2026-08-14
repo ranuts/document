@@ -203,6 +203,16 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 - **TypeScript**：`strict: true`，`noImplicitAny: true`，目标 ESNext，模块解析 bundler
 - `baseUrl` 已移除（TypeScript 6 废弃），路径别名使用 `paths` + `@/*` 前缀
 - CSS 副作用导入需在 `types/assets.d.ts` 中有 `declare module '*.css' {}`
+- **隐私红线（仓库是公开的，任何入库文件都受此约束）**：代码、文档、测试、
+  脚本、commit 信息中一律不得出现——
+  1. 本机绝对路径或家目录路径（`/Users/<用户名>/...`、`~/Desktop/...` 等），
+     写文档需要举例时用 `<本地路径>` 占位或仓库相对路径；
+  2. 机器用户名、个人邮箱、任何凭据；
+  3. 第三方个人的姓名、网名、社交账号、个人仓库名——引用第三方来源用中性
+     描述（如"第三方编译的离线包"），不点名到人；
+  例外：`chaxus` / `ranuts` 作为项目所有者的公开 GitHub handle、组织名及其
+  公开仓库（chaxus/ran 等）可以出现。发现存量泄露：清理正文并在
+  docs/explorations/ 记录；git 历史中的残留默认不重写（除非泄露凭据）。
 
 ---
 
@@ -346,7 +356,7 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
 v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v7 iframe patch）
 已删除；E2E 回归守护齐全。
 
-- **底座**：fernfei 的 OnlyofficePersonal（OnlyOffice 9.3.0.133 编译产物 +
+- **底座**：第三方编译的 OnlyOffice 9.3.0.133 离线静态包（含
   9.4 版 x2t.wasm，AGPL-3.0），vendor 整体位于 `public-v9/`
   （sdkjs / web-apps（help 已裁剪）/ 索引字体），位于 `public/`。
 - **集成方式**：纯公开 DocEditor 配置驱动（blob URL 打开、每次打开唯一
