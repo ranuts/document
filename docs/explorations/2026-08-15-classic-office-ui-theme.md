@@ -12,7 +12,7 @@ v9 转正后编辑器界面是纯白扁平风（工具栏头与页面同色）�
 v9 加载器 `web-apps/apps/*/main/index.html` 里：
 
 ```js
-window.uitheme.DEFAULT_LIGHT_THEME_ID = !window.isIEBrowser ? "theme-white" : "theme-classic-light";
+window.uitheme.DEFAULT_LIGHT_THEME_ID = !window.isIEBrowser ? 'theme-white' : 'theme-classic-light';
 ```
 
 非 IE 浏览器的浅色默认是 `theme-white`；vendor 里 `theme-classic-light` 完整
