@@ -652,6 +652,29 @@ function prepareEditorIframe(): boolean {
  * needed. `binData` undefined or empty means "new document": the SDK creates
  * a blank one when url is undefined.
  */
+/**
+ * Default interface theme for the editor. The v9 loader picks `theme-white`
+ * (flat white chrome) as the light default; we prefer the classic Office look
+ * (`theme-classic-light`, per-app coloured toolbar header). The value goes
+ * through `customization.uiTheme`, which api.js turns into the `uitheme=`
+ * frame parameter -- and that parameter wins over the editor's own stored
+ * choice at boot. So respect a theme the user has already picked in the
+ * editor (same-origin `ui-theme-id`) and only fall back to classic when
+ * there is none, otherwise every open would reset their preference.
+ */
+export const DEFAULT_UI_THEME = 'theme-classic-light';
+export const UI_THEME_STORAGE_KEY = 'ui-theme-id';
+
+export function resolveUiTheme(): string {
+  try {
+    const stored = window.localStorage.getItem(UI_THEME_STORAGE_KEY);
+    if (stored && stored.trim()) return stored.trim();
+  } catch {
+    // Storage can be unavailable (privacy mode / sandboxed frame): use the default.
+  }
+  return DEFAULT_UI_THEME;
+}
+
 function createPersonalEditorInstance(config: {
   fileName: string;
   fileType: string;
@@ -705,6 +728,7 @@ function createPersonalEditorInstance(config: {
         help: false,
         about: false,
         hideRightMenu: true,
+        uiTheme: resolveUiTheme(),
         features: {
           // Spellcheck is fully disabled (mode:false turns it off, not just
           // locks the toggle): its engine is imported inside a worker on

@@ -75,8 +75,12 @@ test.describe('standalone site (real editor)', () => {
     await page.goto('/');
     await page.locator('#hero-new-xlsx').click();
     await waitForEditorReady(page);
-    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    const frame = page.frameLocator('iframe[name="frameEditor"]');
+    const sdk = frame.locator('#editor_sdk');
     await sdk.waitFor({ state: 'visible', timeout: 30_000 });
+    // Interface theme: classic Office look by default (the v9 loader would
+    // otherwise pick the flat theme-white).
+    await expect(frame.locator('body')).toHaveClass(/theme-classic-light/);
     await sdk.click({ position: { x: 200, y: 150 } });
     await page.keyboard.type('hello', { delay: 60 });
     await page.keyboard.press('Enter');

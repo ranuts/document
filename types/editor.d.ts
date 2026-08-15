@@ -22,6 +22,8 @@ interface DocEditorConfig {
       help: boolean;
       about: boolean;
       hideRightMenu: boolean;
+      /** Interface theme id (e.g. theme-classic-light, theme-white, theme-dark, theme-system) or default-light/default-dark */
+      uiTheme?: string;
       /** Enable/disable plugins. Set to false to disable plugins */
       plugins?: boolean;
       features: {

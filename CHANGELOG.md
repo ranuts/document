@@ -16,6 +16,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- The editor interface now defaults to the classic Office theme
+  (`theme-classic-light`, coloured per-app toolbar header) instead of the flat
+  white theme; a theme you pick inside the editor is still remembered.
 - The editor engine was upgraded to an OnlyOffice 9.3-based build: new
   rendering engine and font pipeline, sharp toolbar icons on 2k/4k displays,
   fonts loaded on demand instead of up front.

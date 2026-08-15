@@ -326,6 +326,22 @@ describe('onlyoffice-editor', () => {
 
       expect(config.editorConfig.customization.features.spellcheck).toEqual({ mode: false, change: false });
     });
+
+    it('defaults the interface theme to classic Office light', async () => {
+      window.localStorage.removeItem('ui-theme-id');
+      const config = await createAndGetConfig({ fileName: 'a.docx', fileType: 'docx' });
+      expect(config.editorConfig.customization.uiTheme).toBe('theme-classic-light');
+    });
+
+    it('keeps a theme the user already picked inside the editor', async () => {
+      window.localStorage.setItem('ui-theme-id', 'theme-dark');
+      try {
+        const config = await createAndGetConfig({ fileName: 'a.docx', fileType: 'docx' });
+        expect(config.editorConfig.customization.uiTheme).toBe('theme-dark');
+      } finally {
+        window.localStorage.removeItem('ui-theme-id');
+      }
+    });
   });
 
   describe('getSavedFileMimeType', () => {
