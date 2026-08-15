@@ -79,6 +79,9 @@ type Row = {
   open: string;
   edit: string;
   save: string;
+  // L2 content check (spreadsheets only): sheet names + first-sheet cell count
+  // of the input vs the saved output, parsed in-page with SheetJS.
+  content: string;
   ascErrors: unknown[];
   fatalDialog: string | null;
   ms: number;
@@ -113,13 +116,14 @@ test.describe('real-document corpus matrix', () => {
         !r.open.startsWith('ok') ||
         r.edit === 'fatal' ||
         r.save.startsWith('fail') ||
+        r.content.startsWith('fail') ||
         r.ascErrors.length > 0 ||
         r.fatalDialog,
     );
     console.log(`\nCORPUS SUMMARY: ${rows.length} files, ${bad.length} with findings -> ${report}`);
     for (const r of bad) {
       console.log(
-        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
+        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} content=${r.content} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
       );
     }
   });
@@ -138,6 +142,7 @@ test.describe('real-document corpus matrix', () => {
         open: 'pending',
         edit: 'skipped',
         save: 'skipped',
+        content: 'n/a',
         ascErrors: [],
         fatalDialog: null,
         ms: 0,
@@ -297,7 +302,7 @@ test.describe('real-document corpus matrix', () => {
       if (!row.fatalDialog && load.loaded) {
         const targetCode = { DOCX: 65, XLSX: 257, PPTX: 129, CSV: 257 }[SAVE_TARGET[ext]] as number;
         const saved = await page.evaluate(
-          async ({ code }) => {
+          async ({ code, spreadsheet }) => {
             const started = Date.now();
             try {
               // x2t_helper posts the stream to both window.parent (the app)
@@ -308,13 +313,13 @@ test.describe('real-document corpus matrix', () => {
               // turned every successful save into a 180 s timeout in the
               // second corpus run.
               const isArrayBuffer = (v: unknown) => Object.prototype.toString.call(v) === '[object ArrayBuffer]';
-              const streamPromise = new Promise<{ size: number; isZip: boolean }>((resolve) => {
+              const streamPromise = new Promise<{ size: number; isZip: boolean; bytes: Uint8Array }>((resolve) => {
                 const onMsg = (e: MessageEvent) => {
                   const d = e.data;
                   if (d && d.type === 'onlyoffice-file-stream' && isArrayBuffer(d.buffer)) {
                     window.removeEventListener('message', onMsg);
                     const b = new Uint8Array(d.buffer);
-                    resolve({ size: b.byteLength, isZip: b[0] === 0x50 && b[1] === 0x4b });
+                    resolve({ size: b.byteLength, isZip: b[0] === 0x50 && b[1] === 0x4b, bytes: b });
                   }
                 };
                 window.addEventListener('message', onMsg);
@@ -343,17 +348,49 @@ test.describe('real-document corpus matrix', () => {
                 streamPromise,
                 new Promise<never>((_, rej) => setTimeout(() => rej(new Error('save timed out (180s)')), 180_000)),
               ]);
-              return { ok: true, ms: Date.now() - started, size: out.size, isZip: out.isZip };
+              // L2 for spreadsheets: parse input and output with SheetJS and
+              // compare sheet names + non-empty cell count of the first sheet.
+              let content = 'n/a';
+              if (spreadsheet) {
+                try {
+                  const XLSX = (window as any).XLSX;
+                  const input = (document.getElementById('fileInput') as HTMLInputElement).files![0];
+                  const inWb = XLSX.read(new Uint8Array(await input.arrayBuffer()), { type: 'array' });
+                  const outWb = XLSX.read(out.bytes, { type: 'array' });
+                  const cells = (wb: any) => {
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    return ws
+                      ? Object.keys(ws).filter((k) => k[0] !== '!' && ws[k].v !== '' && ws[k].v !== undefined).length
+                      : 0;
+                  };
+                  const inNames = inWb.SheetNames.join('|');
+                  const outNames = outWb.SheetNames.join('|');
+                  const inCells = cells(inWb);
+                  const outCells = cells(outWb);
+                  const sameNames = inNames === outNames;
+                  // The keyboard edit adds "QA" (1 cell) and the editor may
+                  // materialize formula results; only a loss is a finding.
+                  const lost = outCells < inCells;
+                  content =
+                    sameNames && !lost
+                      ? `ok (sheets ${outWb.SheetNames.length}, cells ${inCells}->${outCells})`
+                      : `fail: ${sameNames ? '' : `sheets ${inNames} -> ${outNames}; `}cells ${inCells}->${outCells}`;
+                } catch (e) {
+                  content = `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
+                }
+              }
+              return { ok: true, ms: Date.now() - started, size: out.size, isZip: out.isZip, content };
             } catch (e) {
               return { ok: false, ms: Date.now() - started, error: String((e as Error).message || e) };
             }
           },
-          { code: targetCode },
+          { code: targetCode, spreadsheet: ext === '.xlsx' || ext === '.xls' || ext === '.csv' },
         );
         if (saved.ok) {
           row.save = saved.isZip
             ? `ok (${saved.ms}ms, ${Math.round((saved.size || 0) / 1024)}KB)`
             : 'fail: output not a zip container';
+          row.content = saved.content || 'n/a';
         } else {
           row.save = `fail: ${saved.error}`;
         }

@@ -188,6 +188,9 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEditorIframe`）。
 本地调试时注意 **杀干净 4173 上的残留 preview 服务器**——Playwright 的
 `reuseExistingServer` 会复用旧构建，让你调试一个根本没包含新代码的产物。
+多个会话同机并行跑 E2E 时用 `E2E_PORT=4174 pnpm run test:e2e` 各占一个
+端口，否则互相杀服务会制造假的 `-24 LoadingScriptError` /
+`ERR_CONNECTION_REFUSED` 发现。
 
 **Docker 镜像回归**（`pnpm run test:e2e:docker`，配置
 `playwright.docker.config.ts`）：构建生产镜像后把同一套 test/e2e 全部 spec
