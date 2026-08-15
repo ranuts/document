@@ -241,9 +241,14 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
    `public/embed-demo.html`、404 等）必须使用 ranui 组件/设计 token
    （`--ran-*`）与 ranuts 工具，不允许手写游离于设计体系外的样式。
    demo 页也是产品门面，风格必须与主站一致。
-3. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
-4. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
-5. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
+3. **用例固化制度（2026-08-15 起）**：每个缺陷修复与新功能必须附带
+   对应的自动化用例（E2E 优先），否则不算完成；回归类用例优先使用
+   真实复杂度语料而非手拼最小文档——合成文档全绿曾两次掩盖真实文档
+   的致命问题（插图保存假死、真实 PPTX 编辑报错）。CHANGELOG.md 随
+   用户可感知的改动同步更新。
+4. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
+5. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
+6. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
 
 ---
 
@@ -404,7 +409,12 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   `getDocumentType`）与文件选择 accept；保存与其他格式共用 file-stream 通道。
 - **错误提示**：编辑器 `onError` 会用 ranui message 弹 toast（含错误码与
   描述；-85 附"内容与扩展名不一致"提示），别再只留 console.error。
-- **待办**：无（截至 2026-08-15）。
+- **待办（最高优先级，2026-08-15 用户实测判定）**：v9 全面回归战役。
+  真实文档实测稳定性不如 v7（P0 现场：真实 35 页 PPTX 编辑标题弹
+  "An error occurred during the work with the document" 致命错误框）。
+  现有 E2E 全是手拼最小文档，真实文档复杂度零覆盖——战役方案与用例
+  固化制度见 docs/superpowers/plans/2026-08-15-next-phase-roadmap.md
+  方向零。v9 release 公告冻结至战役通过。
 
 ---
 
