@@ -218,8 +218,16 @@ test.describe('real-document corpus matrix', () => {
         // silently dropped by the SDK (the app's triggerPersonalDownloadAs
         // gates on the same pair) -- the first corpus save run timed out
         // on every large deck for exactly that reason.
-        while (!(api.isDocumentLoadComplete && api.isLoadFullApi) && Date.now() - t < 180_000) {
+        const fatalAsc = () => w.__ascErrors.some((e: { level: string }) => e.level === '-1');
+        while (!(api.isDocumentLoadComplete && api.isLoadFullApi) && !fatalAsc() && Date.now() - t < 180_000) {
           await new Promise((r) => setTimeout(r, 1000));
+        }
+        if (fatalAsc()) {
+          return {
+            loaded: false,
+            loadMs: Date.now() - t,
+            reason: `critical asc_onError ${JSON.stringify(w.__ascErrors)}`,
+          };
         }
         if (!(api.isDocumentLoadComplete && api.isLoadFullApi))
           return {
