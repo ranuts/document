@@ -190,14 +190,18 @@ test.describe('real-document corpus matrix', () => {
         api.asc_registerCallback('asc_onError', (id: unknown, level: unknown) => {
           w.__ascErrors.push({ id: String(id), level: String(level) });
         });
-        while (!api.isDocumentLoadComplete && Date.now() - t < 180_000) {
+        // Both flags: an asc_DownloadAs fired before isLoadFullApi is
+        // silently dropped by the SDK (the app's triggerPersonalDownloadAs
+        // gates on the same pair) -- the first corpus save run timed out
+        // on every large deck for exactly that reason.
+        while (!(api.isDocumentLoadComplete && api.isLoadFullApi) && Date.now() - t < 180_000) {
           await new Promise((r) => setTimeout(r, 1000));
         }
-        if (!api.isDocumentLoadComplete)
+        if (!(api.isDocumentLoadComplete && api.isLoadFullApi))
           return {
             loaded: false,
             loadMs: Date.now() - t,
-            reason: `isDocumentLoadComplete still false after 180s (isLoadFullApi=${String(api.isLoadFullApi)}, docLoadStarted=${String(api.isDocumentLoadStarted ?? 'n/a')})`,
+            reason: `not ready after 180s (isDocumentLoadComplete=${String(api.isDocumentLoadComplete)}, isLoadFullApi=${String(api.isLoadFullApi)}, docLoadStarted=${String(api.isDocumentLoadStarted ?? 'n/a')})`,
           };
         await new Promise((r) => setTimeout(r, 4000));
         return { loaded: true, loadMs: Date.now() - t };
@@ -292,6 +296,9 @@ test.describe('real-document corpus matrix', () => {
               };
               const found = visit(window);
               if (!found) return { ok: false, ms: 0, error: 'no editor api for save' };
+              if (!(found.api.isDocumentLoadComplete && found.api.isLoadFullApi)) {
+                return { ok: false, ms: 0, error: 'editor lost readiness before save' };
+              }
               found.api.asc_DownloadAs(new found.win.Asc.asc_CDownloadOptions(code));
               const out = await Promise.race([
                 streamPromise,

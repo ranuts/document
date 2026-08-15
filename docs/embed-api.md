@@ -122,7 +122,7 @@ In read-only mode, editing is disabled and `document:save` returns `document:err
 
 ## Saving and uploading
 
-The save command exports the current document and returns a `File` via `document:saved`. Default format is `XLSX`; pass `targetExt` to change it.
+The save command exports the current document and returns a `File` via `document:saved`. Default format is the open document's own format (a `.docx` saves as DOCX, a `.csv` as CSV, ...); pass `targetExt` to change it.
 
 ```js
 sendEditorCommand('document:save', { targetExt: 'XLSX' }); // XLSX, DOCX, PPTX, CSV

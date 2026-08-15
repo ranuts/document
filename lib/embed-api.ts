@@ -1,4 +1,4 @@
-import { setDocmentObj } from '@ranuts/shared/store';
+import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { openDocumentFromUrl } from './document';
 import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from './onlyoffice-editor';
@@ -181,7 +181,12 @@ async function handleMessage(event: MessageEvent): Promise<void> {
         break;
 
       case 'document:save': {
-        const file = await requestSaveDocument(payload.targetExt || 'XLSX', {
+        // Default to the open document's own format: a bare document:save on
+        // a docx/pptx used to ask x2t for XLSX, which fails (code 88) and
+        // only surfaced as a save timeout.
+        const currentExt = (getDocmentObj()?.fileName || '').split('.').pop()?.toUpperCase() || '';
+        const defaultExt = currentExt === 'CSV' ? 'CSV' : currentExt || 'XLSX';
+        const file = await requestSaveDocument(payload.targetExt || defaultExt, {
           returnOriginalOnTimeout: Boolean(payload.returnOriginalOnTimeout),
         });
         postToParent(

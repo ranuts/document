@@ -122,7 +122,7 @@ sendEditorCommand('document:set-readonly', { readonly: true });
 
 ## 保存并上传
 
-保存命令触发编辑器导出当前文档，通过 `document:saved` 返回 `File` 对象。默认保存为 `XLSX`，通过 `targetExt` 指定其他格式。
+保存命令触发编辑器导出当前文档，通过 `document:saved` 返回 `File` 对象。默认保存为当前文档自身的格式（`.docx` 存为 DOCX、`.csv` 存为 CSV……），通过 `targetExt` 指定其他格式。
 
 ```js
 sendEditorCommand('document:save', { targetExt: 'XLSX' }); // XLSX、DOCX、PPTX、CSV

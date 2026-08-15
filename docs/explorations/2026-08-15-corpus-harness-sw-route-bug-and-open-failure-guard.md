@@ -95,4 +95,36 @@ SheetJS 解析 HTML 表格转 XLSX 再进编辑器（与 CSV 同一套路）。�
 | 5   | HTML 伪装的 .xls/.xlsx → x2t abort（缺 CHtmlFile2） | P1   | 新增，方向：converter 嗅探 + SheetJS      |
 | 6   | Save 按钮常灰（coauthoring autosave 假提交）        | P0   | **已修**（并行会话，守卫 5，ca20ac5）     |
 
-真实语料全量重跑结果见本文档追记或后续文档。
+## 五、跑道修好后的第一轮全量：打开全部通过，保存全部"超时"——又是跑道
+
+修好投递后重跑：**每个文件都能打开（6～10s）并编辑**，用户报告的那份
+35 页 EMP deck 打开、双击标题输入文字均无致命弹窗（P0 #4 未复现，与
+"用户浏览器 SW 缓存了图片管线修复前的旧构建"假设一致）。但 save 步骤
+全部 `save timed out (180s)`，无 `asc_onError`、无弹窗。
+
+单独调试 EMP deck 的保存：
+
+| 触发方式                                                            | 结果                                                      |
+| ------------------------------------------------------------------- | --------------------------------------------------------- |
+| `document:save`（无 targetExt，embed 默认 XLSX）                    | `convertFromBin` PPTY→xlsx，x2t 错误码 88，embed 45s 超时 |
+| `document:save({ targetExt: 'PPTX' })`                              | **792ms 成功，6.6MB 产物**，31 个媒体齐全                 |
+| corpus 直接 `asc_DownloadAs(PPTX)`（只等 `isDocumentLoadComplete`） | 静默丢弃 → 180s 超时                                      |
+
+三个结论：
+
+1. **corpus 保存超时是跑道 bug**：`asc_DownloadAs` 在 `isLoadFullApi`
+   为 false 时被 SDK 静默丢弃（主路径 `triggerPersonalDownloadAs` 早已
+   同时等两个标志），大 deck 的 full API 加载滞后于文档加载完成。跑道
+   改为两个标志都等。
+2. **embed `document:save` 默认 XLSX 是真缺陷**：对 docx/pptx 裸调
+   `document:save` 必然 88 + 超时。改为默认当前文档自身格式
+   （`lib/embed-api.ts`），文档同步；回归用例
+   `test/e2e/embed-save-default.spec.ts`（页外 `test/e2e/lib/ooxml.ts`
+   生成 docx——动作库/合成语料的第一块）。
+3. **`installOpenFailureGuard` 首版误判**：保存路径的 `convertFromBin`
+   拒绝也匹配同一 pattern，被当成打开失败多发了一次 -82。改为按
+   `documentContentReady` 区分——加载后的拒绝视为导出失败，只让挂起的
+   `requestSaveDocument` 立即以 `Save conversion failed: ...` 拒绝
+   （SDK 自己会发 `asc_onError -25`），不再伪造打开错误。
+
+真实语料全量第二轮结果见下方追记。

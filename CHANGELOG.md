@@ -35,6 +35,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Embed API: `document:save` without `targetExt` now exports in the open
+  document's own format instead of always XLSX (a bare save on a .docx or
+  .pptx used to fail with a timeout).
 - A file the editor cannot import (corrupted bytes, an unsupported format
   behind a familiar extension) now shows an error dialog and a notification
   and stops the loading spinner, instead of loading forever; a pending save

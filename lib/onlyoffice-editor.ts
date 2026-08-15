@@ -374,6 +374,18 @@ function installOpenFailureGuard(win: Window): void {
     const reason = (event as PromiseRejectionEvent).reason as { message?: unknown } | undefined;
     const message = String(reason && typeof reason === 'object' ? (reason.message ?? reason) : reason);
     if (!OPEN_FAILURE_PATTERN.test(message)) return;
+    if (documentContentReady) {
+      // The document is loaded, so this is a failed export (convertFromBin);
+      // the SDK already reports those through asc_onError itself. Just stop
+      // the pending save request from waiting out its timeout.
+      console.error('[OO] save conversion failed:', message);
+      const request = embeddedSaveRequest;
+      if (request && !request.settled) {
+        cleanupEmbeddedSaveRequest(request);
+        rejectEmbeddedSaveRequest(request, new Error(`Save conversion failed: ${message}`));
+      }
+      return;
+    }
     console.error('[OO] open conversion failed:', message);
     markDocumentOpenFailed(message);
     const api = w.Asc?.editor;
