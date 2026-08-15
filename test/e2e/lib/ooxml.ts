@@ -6,6 +6,8 @@
  * and no binary fixture lives in the repo.
  */
 
+import { inflateRawSync } from 'node:zlib';
+
 const CRC_TABLE = (() => {
   const table = new Uint32Array(256);
   for (let n = 0; n < 256; n++) {
@@ -223,8 +225,9 @@ export function buildPptx(title: string): Uint8Array {
   ]);
 }
 
-/** Read every stored/deflated entry name of a zip (central directory walk); enough for L1 checks. */
-export function zipEntryNames(bytes: Uint8Array): string[] {
+type ZipEntry = { name: string; method: number; compressedSize: number; localOffset: number };
+
+function zipEntries(bytes: Uint8Array): ZipEntry[] {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   let eocd = -1;
   for (let i = bytes.length - 22; i >= 0 && i >= bytes.length - 65557; i--) {
@@ -236,15 +239,48 @@ export function zipEntryNames(bytes: Uint8Array): string[] {
   if (eocd < 0) return [];
   const count = view.getUint16(eocd + 10, true);
   let off = view.getUint32(eocd + 16, true);
-  const names: string[] = [];
+  const entries: ZipEntry[] = [];
   const dec = new TextDecoder();
   for (let n = 0; n < count; n++) {
     if (view.getUint32(off, true) !== 0x02014b50) break;
+    const method = view.getUint16(off + 10, true);
+    const compressedSize = view.getUint32(off + 20, true);
     const nameLen = view.getUint16(off + 28, true);
     const extraLen = view.getUint16(off + 30, true);
     const commentLen = view.getUint16(off + 32, true);
-    names.push(dec.decode(bytes.subarray(off + 46, off + 46 + nameLen)));
+    const localOffset = view.getUint32(off + 42, true);
+    entries.push({
+      name: dec.decode(bytes.subarray(off + 46, off + 46 + nameLen)),
+      method,
+      compressedSize,
+      localOffset,
+    });
     off += 46 + nameLen + extraLen + commentLen;
   }
-  return names;
+  return entries;
+}
+
+/** Entry names of a zip (central directory walk); enough for L1 checks. */
+export function zipEntryNames(bytes: Uint8Array): string[] {
+  return zipEntries(bytes).map((e) => e.name);
+}
+
+/** Decoded text of one zip entry (stored or deflated) -- for L2 content checks on OOXML parts. */
+export function zipEntryText(bytes: Uint8Array, name: string): string | null {
+  const entry = zipEntries(bytes).find((e) => e.name === name);
+  if (!entry) return null;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const lo = entry.localOffset;
+  if (view.getUint32(lo, true) !== 0x04034b50) return null;
+  const nameLen = view.getUint16(lo + 26, true);
+  const extraLen = view.getUint16(lo + 28, true);
+  const start = lo + 30 + nameLen + extraLen;
+  const raw = bytes.subarray(start, start + entry.compressedSize);
+  const data = entry.method === 8 ? new Uint8Array(inflateRawSync(raw)) : raw;
+  return new TextDecoder().decode(data);
+}
+
+/** Concatenated text of all <w:t>/<a:t> runs in an OOXML part. */
+export function ooxmlText(xml: string): string {
+  return Array.from(xml.matchAll(/<(?:w|a):t(?:\s[^>]*)?>([^<]*)<\/(?:w|a):t>/g), (m) => m[1]).join('');
 }

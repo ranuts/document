@@ -1,4 +1,4 @@
-import { buildDocx, buildPptx, toBase64, zipEntryNames } from './lib/ooxml';
+import { buildDocx, buildPptx, ooxmlText, toBase64, zipEntryNames, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
@@ -83,12 +83,11 @@ test.describe('re-open / re-save idempotence (real editor)', () => {
       { docxB64: toBase64(buildDocx('idempotent paragraph 往返')) },
     );
     expect(result.name).toBe('idem.docx');
-    const bytes = Buffer.from(result.b64, 'base64');
-    // Stored or deflated, the document part must be present; the text is
-    // asserted through the editor's own reload (trip 2 opened trip 1's output).
-    const names = zipEntryNames(new Uint8Array(bytes));
+    const bytes = new Uint8Array(Buffer.from(result.b64, 'base64'));
+    const names = zipEntryNames(bytes);
     expect(names).toContain('word/document.xml');
     expect(names).toContain('[Content_Types].xml');
+    expect(ooxmlText(zipEntryText(bytes, 'word/document.xml') || '')).toContain('idempotent paragraph 往返');
   });
 
   test('pptx: two round trips keep the slide and its title', async ({ page }) => {
@@ -102,8 +101,11 @@ test.describe('re-open / re-save idempotence (real editor)', () => {
       { pptxB64: toBase64(buildPptx('Idempotent Title 标题')) },
     );
     expect(result.name).toBe('idem.pptx');
-    const names = zipEntryNames(new Uint8Array(Buffer.from(result.b64, 'base64')));
+    const bytes = new Uint8Array(Buffer.from(result.b64, 'base64'));
+    const names = zipEntryNames(bytes);
     expect(names).toContain('ppt/presentation.xml');
-    expect(names.filter((n) => /^ppt\/slides\/slide\d+\.xml$/.test(n))).toHaveLength(1);
+    const slides = names.filter((n) => /^ppt\/slides\/slide\d+\.xml$/.test(n));
+    expect(slides).toHaveLength(1);
+    expect(ooxmlText(zipEntryText(bytes, slides[0]) || '')).toContain('Idempotent Title 标题');
   });
 });
