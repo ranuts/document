@@ -158,3 +158,10 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 - 另一会话落地守卫 6（长操作计数器泄漏 → 保存被静默丢弃）与守卫 7（cell
   `asc_EditSelectAll` 后 `asc_GetSeriesSettings` 全表建序列 → OOM 崩渲染进程），
   三格式 API 枚举 45s 全绿（原 15 分钟崩死）；详见其在本文件的追记与台账 D/F。
+- **线上冒烟**（此前从未自动化验证过线上）：`E2E_BASE_URL` 可把任意 spec 打到
+  部署站；`playwright.prod.config.ts` + `prod-smoke.yml` 每日跑核心 8 个 spec。
+  首跑发现：线上功能正常、构建为当晚最新，但从大陆链路首次拉 x2t.wasm.gz
+  （9.86 MB）要 26～50 s，`requestSaveDocument` 的 45 s 就绪 / 60 s 硬超时会把
+  "慢但活着"的首存判为超时（产物稍后才到）→ 放宽为 150 s / 180 s
+  （`SAVE_READY_WAIT_MS` 等常量），打开失败仍由 `documentOpenError` 立即拒绝；
+  demo 页 `post()` 超时同步到 200 s。CHANGELOG 已记。

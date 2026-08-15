@@ -27,3 +27,5 @@ corpus-src/
 dist-e2e-*/
 test-results-*/
 playwright-report-browsers/
+test-results-prod/
+playwright-report-prod/

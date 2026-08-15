@@ -87,7 +87,7 @@ index.html            # HTML 入口
 
 - `createEditorInstance(config)` — 创建/重建编辑器，内部有操作队列防并发
 - `setReadonlyMode(bool)` / `getReadonlyMode()` — 只读模式
-- `requestSaveDocument(targetExt, options)` — 触发编辑器保存并返回 File，60s 超时
+- `requestSaveDocument(targetExt, options)` — 触发编辑器保存并返回 File，180s 超时（慢链路首存要先下 10 MB wasm；打开失败会立即拒绝）
 - `setConverterCallbacks(...)` — 注入转换器（解耦循环依赖）
 
 ### packages/shared/src/store.ts — 全局状态

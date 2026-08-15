@@ -185,8 +185,8 @@ describe('onlyoffice-editor', () => {
       (window as any).editor = makeEditor({ downloadAs: vi.fn() });
 
       const promise = requestSaveDocument('pdf').catch(() => {});
-      // The readiness gate caps at 45 s when onDocumentReady never fires.
-      await vi.advanceTimersByTimeAsync(45_000);
+      // The readiness gate caps at SAVE_READY_WAIT_MS when onDocumentReady never fires.
+      await vi.advanceTimersByTimeAsync(150_000);
 
       expect(requestedFileTypes).toEqual([513]); // oAscFileType.PDF
       iframe.remove();
@@ -199,7 +199,7 @@ describe('onlyoffice-editor', () => {
       (window as any).editor = makeEditor({ downloadAs: vi.fn() });
 
       const promise = requestSaveDocument('csv').catch(() => {});
-      await vi.advanceTimersByTimeAsync(45_000);
+      await vi.advanceTimersByTimeAsync(150_000);
 
       expect(requestedFileTypes).toEqual([257]); // oAscFileType.XLSX
       iframe.remove();
@@ -207,12 +207,12 @@ describe('onlyoffice-editor', () => {
       await promise;
     });
 
-    it('rejects after 60 s timeout if no save event arrives', async () => {
+    it('rejects after the 180 s timeout if no save event arrives', async () => {
       const downloadAs = vi.fn();
       (window as any).editor = makeEditor({ downloadAs });
 
       const promise = requestSaveDocument();
-      vi.advanceTimersByTime(60_001);
+      vi.advanceTimersByTime(180_001);
       await expect(promise).rejects.toThrow('timed out');
     });
   });

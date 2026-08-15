@@ -1,0 +1,54 @@
+# Smoke the DEPLOYED site (edit.chaxus.com): the same core E2E suites the PR
+# gate runs against a local build, pointed at production. Catches what only
+# the real deployment can break -- CDN headers, gzip wasm delivery, service
+# worker rollout, stale assets. Manual + daily; red is a page.
+name: Production smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Site to smoke"
+        default: "https://edit.chaxus.com"
+  schedule:
+    - cron: "47 20 * * *" # 04:47 Asia/Shanghai, after the nightly corpus
+
+jobs:
+  smoke:
+    name: Core E2E against production
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Smoke production
+        env:
+          PROD_URL: ${{ github.event.inputs.url || 'https://edit.chaxus.com' }}
+        run: pnpm exec playwright test -c playwright.prod.config.ts --reporter=list
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-prod
+          path: playwright-report-prod/
+          retention-days: 14

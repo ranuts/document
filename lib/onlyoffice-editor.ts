@@ -31,6 +31,15 @@ type EmbeddedSaveRequest = {
 
 let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 
+// requestSaveDocument budget. Readiness (onDocumentReady) may take long on a
+// cold, slow link: the editor first downloads and inflates x2t.wasm.gz
+// (~10 MB) before it can import the document. The hard timeout stays above
+// the readiness wait plus the export retry window so a slow-but-alive save
+// still gets through; dead saves fail fast through documentOpenError.
+export const SAVE_READY_WAIT_MS = 150_000;
+export const SAVE_RETRY_WINDOW_MS = 25_000;
+export const SAVE_REQUEST_TIMEOUT_MS = 180_000;
+
 // v9 only: an export fired before the document finished loading is silently
 // dropped by the SDK, and the embed API makes that easy to hit (a scripted
 // parent can call document:save right after document:opened, which resolves
@@ -1097,6 +1106,13 @@ export function requestSaveDocument(
       }
     }, 8000);
 
+    // Generous on purpose: on a slow link the very first save (or a save
+    // requested right after open) also pays for the ~10 MB x2t.wasm.gz fetch
+    // and the document import; measured 26-50 s from a mainland connection to
+    // the CDN edge, which used to trip the old 60 s cap while the stream was
+    // still on its way. Failures no longer need the timeout to surface: an
+    // open-conversion failure rejects the request immediately
+    // (installOpenFailureGuard).
     const timeoutId = window.setTimeout(() => {
       if (!embeddedSaveRequest) {
         return;
@@ -1104,7 +1120,7 @@ export function requestSaveDocument(
       const request = embeddedSaveRequest;
       cleanupEmbeddedSaveRequest(request);
       rejectEmbeddedSaveRequest(request, new Error('Save request timed out before receiving edited file data'));
-    }, 60000);
+    }, SAVE_REQUEST_TIMEOUT_MS);
 
     embeddedSaveRequest = {
       targetExt: normalizedTargetExt,
@@ -1136,13 +1152,13 @@ export function requestSaveDocument(
     const downloadAs = editor.downloadAs.bind(editor);
     const request = embeddedSaveRequest;
     void (async () => {
-      await waitForDocumentContentReady(45_000);
+      await waitForDocumentContentReady(SAVE_READY_WAIT_MS);
       if (documentOpenError && request && !request.settled) {
         cleanupEmbeddedSaveRequest(request);
         rejectEmbeddedSaveRequest(request, new Error(`The document failed to open: ${documentOpenError}`));
         return;
       }
-      const retryDeadline = Date.now() + 45_000;
+      const retryDeadline = Date.now() + SAVE_RETRY_WINDOW_MS;
       while (!request?.settled && !triggerPersonalDownloadAs(normalizedTargetExt)) {
         if (Date.now() > retryDeadline) {
           downloadAs(normalizedTargetExt);

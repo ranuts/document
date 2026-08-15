@@ -41,6 +41,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- On slow connections the first save no longer fails with "timed out" while
+  the file was still on its way: the editor must first download its ~10 MB
+  conversion engine, which could take longer than the old 60 s limit; the
+  save now waits up to 3 minutes and still fails fast when the document
+  genuinely could not be opened.
 - A new release deployed while you have a document open no longer swaps
   parts of the editor underneath it: the update now waits until nothing is
   open (or the next visit), then takes over and refreshes once. Previously

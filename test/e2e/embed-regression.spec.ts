@@ -12,7 +12,7 @@ import { waitForEditorReady, saveAndCapture, SAVE_FORMAT_CODE } from './actions/
  *
  * The demo page provides two globals the tests lean on:
  *   - post(type, payload): sends an embed-API message to the editor iframe
- *     and resolves with the reply payload (120 s internal timeout);
+ *     and resolves with the reply payload (200 s internal timeout);
  *   - XLSX (SheetJS): used to build and parse workbook fixtures in-page, so
  *     no binary fixture files need to live in the repo.
  */

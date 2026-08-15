@@ -309,7 +309,7 @@ test.describe('real-document corpus matrix', () => {
           : `fail: ${(load as { reason?: string }).reason}`;
 
       // ---- save (direct editor API + file-stream listener; the embed
-      //      post() helper caps at 120s which can still be too short for big decks
+      //      post() helper caps at 200s which can still be too short for big decks
       //      and hides slow-vs-hung). Done TWICE: first pristine (right after
       //      load: L1 + L2 content + bytes for L3), then again after the
       //      keyboard edit (L1 only -- the edit itself changes content, e.g. a
