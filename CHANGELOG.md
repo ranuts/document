@@ -9,10 +9,13 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Known issues
 
-- Editing complex real-world PPTX decks can raise "An error occurred during
-  the work with the document" (under investigation; a full regression
-  campaign against real-world documents is running and gates the next
-  release announcement).
+- A report of "An error occurred during the work with the document" while
+  editing a complex real-world PPTX could not be reproduced on the current
+  build (the same deck opens, edits and saves cleanly in the automated
+  real-document matrix); the likely cause is a browser still running a
+  cached older build. If you see it, hard-refresh (or unregister the site's
+  service worker) and try again; a full regression campaign against
+  real-world documents runs nightly and gates the next release announcement.
 
 ### Changed
 
