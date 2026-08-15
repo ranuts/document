@@ -18,7 +18,9 @@ import { test as base, expect, type Page, type TestInfo } from '@playwright/test
  * this fixture exists to catch.
  *
  * Tests that intentionally provoke an error call `l0.expectAscError(...)`
- * or `l0.allowConsole(...)` so the expectation is explicit.
+ * (required), `l0.allowAscError(...)` (allowed, not required),
+ * `l0.allowFrameError(...)` or `l0.allowConsole(...)` so the expectation is
+ * explicit.
  */
 
 export type AscError = { id: string; level: string; href: string };
@@ -103,6 +105,7 @@ export class L0Collector {
   private readonly consoleAllow: RegExp[] = [...CONSOLE_ALLOWLIST];
   private readonly frameAllow: RegExp[] = [];
   private expectedAsc: Array<(e: AscError) => boolean> = [];
+  private allowedAsc: Array<(e: AscError) => boolean> = [];
 
   constructor(private readonly page: Page) {}
 
@@ -125,6 +128,16 @@ export class L0Collector {
   /** Allow uncaught errors / rejections (frame-level and page-level) matching `re` for this test only. */
   allowFrameError(re: RegExp): void {
     this.frameAllow.push(re);
+  }
+
+  /**
+   * Allow (but do not require) asc_onError events matching `pred` -- for
+   * suites that legitimately provoke informational errors they cannot predict
+   * per test (e.g. the seeded monkey: `l0.allowAscError((e) => e.level === '0')`).
+   * Critical errors stay failures unless matched here explicitly.
+   */
+  allowAscError(pred: (e: AscError) => boolean): void {
+    this.allowedAsc.push(pred);
   }
 
   /** Declare that an asc_onError with this id is expected (and required). */
@@ -190,7 +203,9 @@ export class L0Collector {
     // Firefox also reports iframe rejections through Playwright's pageerror;
     // the same allowance covers both channels.
     const pageErrors = this.pageErrors.filter((m) => !this.frameAllow.some((re) => re.test(m)));
-    const unexpectedAsc = errors.filter((e) => !this.expectedAsc.some((m) => m(e)));
+    const unexpectedAsc = errors.filter(
+      (e) => !this.expectedAsc.some((m) => m(e)) && !this.allowedAsc.some((m) => m(e)),
+    );
     const missingAsc = this.expectedAsc.filter((m) => !errors.some(m)).length;
 
     const report = {
