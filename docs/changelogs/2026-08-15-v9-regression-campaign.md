@@ -125,3 +125,25 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 - 新增 `buildXlsx`（手拼 OOXML，含冻结窗格 / 自动筛选）与 `xlsx-panes.spec`：
   文件自带冻结+筛选往返保留；`asc_freezePane` API 切换干净且保存保留
   （8-09 记录的 UI 冻结报错在 API 路径未复现）。
+- **API 交互面枚举落地（`api-surface.spec.ts`，`API_SWEEP=1` 夜间档）**：
+  三编辑器全部零参 `asc_*`（word 218 / cell 218 / slide 161）逐个调用，
+  每次查 L0、保存开关与状态向量（`isLongAction` / `isOpenedFrameEditor` /
+  restriction…），异常路径也比对漂移；`SWEEP_ONLY` 二分、`SWEEP_PROBE_EVERY`
+  真保存探针、`SWEEP-ORDER` 流式输出供崩溃取证。首轮结果：三格式全绿 45s
+  （修复前 xlsx 15 分钟死于渲染进程崩溃）。抓出并修掉两个**UI 可达**缺陷：
+  - **守卫 6（长操作计数器泄漏）**：`asc_editChartInFrameEditor` /
+    `asc_editOleTableInFrameEditor` / `asc_runAutostartMacroses` 在
+    `sync_StartAction(BlockInteraction)` 后抛错或返回，`isLongAction()`
+    永真 → 之后每次 `asc_DownloadAs` 静默丢弃、**永远不能保存且无提示**。
+    图表右键/双击可达。二分至单方法（pptx）后包裹入口在失败路径
+    `sync_EndAction` 复位。
+  - **守卫 7（全表序列设置）**：cell 上 `asc_EditSelectAll` →
+    `asc_GetSeriesSettings`（插入图表对话框数据源）对 1048576×16384 建序列，
+    主线程卡死至 "Array buffer allocation failed"，渲染进程崩。Ctrl+A →
+    插入图表可达。调用期把选区钳到已用区域（10ms），事后恢复选区。
+  - 禁区表 F 补齐：`asc_stopSaving` 一次性开关（配对 `asc_continueSaving`）；
+    `asc_SetSilentMode` 洗清（空函数）。
+  - 动作库 `test/e2e/actions/{editor,fixtures}.ts`：ready 门控 / 聚焦 /
+    可信输入 / 保存捕获（同 realm 监听）/ 健康快照 / xlsx-pptx 最小构造。
+  - 跑道坑（新增）：`page.evaluate` 内 `new Function`/`eval` 重建的定位器
+    捕获的是 utility 世界的 `window`——页面侧逻辑必须**内联**在 evaluate 里。

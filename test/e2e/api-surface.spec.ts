@@ -36,7 +36,7 @@ const SKIP = new RegExp(
     // and asc_onCloseFrameEditor tears the frame bridge down. Both are
     // legitimate one-way switches, not defects, but the sweep must not pull
     // them or every method after them is judged in a broken editor.
-    '^asc_(stopSaving|onCloseFrameEditor|SetSilentMode)$',
+    '^asc_(stopSaving|onCloseFrameEditor)$',
     'Print',
     'Presentation|Demonstration|SlideShow',
     'startSaveDocument|forceSave|Force',

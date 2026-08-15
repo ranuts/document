@@ -58,14 +58,14 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 
 ## D. 交互入口（策略第 9 节）
 
-| 层                                          | 覆盖                                      |
-| ------------------------------------------- | ----------------------------------------- |
-| API 层 `asc_*` 枚举                         | 进行中（并行会话，`api-surface.spec.ts`） |
-| UI 工具栏 / 菜单爬取                        | ⬜                                        |
-| 高频旅程动作库 `test/e2e/actions/`          | 进行中（并行会话）                        |
-| seeded monkey                               | ⬜                                        |
-| 快捷键 / 右键                               | ⬜                                        |
-| vendor 契约哨兵（hook 函数存在、wasm 哈希） | ⬜                                        |
+| 层                                          | 覆盖                                                                                                                                                                                                                                                                     |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| API 层 `asc_*` 枚举                         | ✅ `api-surface.spec.ts`（`API_SWEEP=1`，夜间档）：三编辑器全部零参 `asc_*`（word 218 / cell 218 / slide 161）逐个调用，每次查 L0 + 保存开关 + 状态向量（longAction/frameEditor/…）；`SWEEP_ONLY` 二分、`SWEEP_PROBE_EVERY` 真保存探针。首轮抓出禁区表 F 三条 + 守卫 6/7 |
+| UI 工具栏 / 菜单爬取                        | ⬜                                                                                                                                                                                                                                                                       |
+| 高频旅程动作库 `test/e2e/actions/`          | 部分：`actions/editor.ts`（waitForEditorReady / focusEditor / typeIntoDocument / saveAndCapture / editorHealth）+ `actions/fixtures.ts`（buildXlsx / buildPptx）；旅程本体（插表/图/图表、查找替换、评论…）⬜                                                            |
+| seeded monkey                               | ⬜                                                                                                                                                                                                                                                                       |
+| 快捷键 / 右键                               | ⬜                                                                                                                                                                                                                                                                       |
+| vendor 契约哨兵（hook 函数存在、wasm 哈希） | ⬜                                                                                                                                                                                                                                                                       |
 
 ## E. escape 表（用户报出而矩阵未抓）
 
@@ -77,8 +77,10 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 
 ## F. 集成禁区（API 枚举发现，任何集成路径都不得调用）
 
-| API                                            | 后果                                       | 来源                                     |
-| ---------------------------------------------- | ------------------------------------------ | ---------------------------------------- |
-| `asc_stopSaving()`                             | 本会话内永久禁用保存（word / cell 均确认） | api-surface 枚举（并行会话，2026-08-15） |
-| slide 某方法（疑 `asc_SetSilentMode`，二分中） | 枚举后 `isDocumentCanSave=false`、保存超时 | 同上                                     |
-| cell 某方法（二分中）                          | 渲染进程崩溃 "Target crashed"              | 同上，P0 级稳定性发现                    |
+| API                                                                                                   | 后果                                                                                                                                                  | 来源                                                                                                                                    |
+| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `asc_stopSaving()`                                                                                    | 本会话内永久禁用保存（word / cell 均确认）；配对信号是 `asc_continueSaving`（decrementCounterLongAction）                                             | api-surface 枚举（2026-08-15）；SKIP-with-note                                                                                          |
+| `asc_editChartInFrameEditor()` / `asc_editOleTableInFrameEditor()`（无图表选区 / 无 frame editor 时） | `sync_StartAction(BlockInteraction)` 后抛错，`isLongAction()` 永真 → 之后所有 `asc_DownloadAs` 静默丢弃、永远不能保存。**UI 可达**（图表右键 / 双击） | 二分至单方法（pptx）；已修：`prepareEditorIframe` **守卫 6** 复位计数器 + ER 用例 "a failed chart-editor entry does not disable saving" |
+| `asc_runAutostartMacroses()`                                                                          | 同类计数器泄漏（三编辑器均见 longAction 卡 true，碰巧被后续 undoAllChanges/startEditCrop 复位）                                                       | 守卫 6 一并覆盖（returnOnRelease）                                                                                                      |
+| `asc_EditSelectAll()` → `asc_GetSeriesSettings()`（cell）                                             | 全表 1048576×16384 选区建图表序列 → 主线程卡死 → "Array buffer allocation failed" → 渲染进程崩 / 再不能保存。**UI 可达**（Ctrl+A → 插入图表）         | 二分至最小二元组合；已修：**守卫 7** 调用期把选区钳到已用区域（10ms 完成）+ ER 用例 "select-all then chart series settings…"            |
+| `asc_SetSilentMode`                                                                                   | 洗清：slide/cell 上是空函数，不是保存杀手                                                                                                             | 已从 SKIP 移除                                                                                                                          |
