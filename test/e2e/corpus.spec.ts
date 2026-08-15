@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
-import { expect, test } from '@playwright/test';
+import { expect, test } from './lib/l0';
 
 /**
  * Real-document regression matrix (roadmap direction zero).
@@ -120,18 +120,23 @@ test.describe('real-document corpus matrix', () => {
       };
       rows.push(row);
 
-      const bytes = readFileSync(filePath);
-      await page.route('**/__corpus__/doc', (route) =>
-        route.fulfill({ status: 200, contentType: 'application/octet-stream', body: bytes }),
-      );
+      // Hand the bytes over as base64 through evaluate() rather than via
+      // page.route(): Playwright request interception installs a network
+      // hook on the whole page which perturbs the editor's own fetches (SW,
+      // fonts) enough to reproduce a "stuck loading" that does not exist
+      // outside the harness.
+      const bytesB64 = readFileSync(filePath).toString('base64');
 
       await page.goto('/embed-demo.html');
       await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
 
       // ---- open ----
       const opened = await page.evaluate(
-        async ({ fileName }) => {
-          const buf = await (await fetch('/__corpus__/doc')).arrayBuffer();
+        async ({ fileName, bytesB64 }) => {
+          const bin = atob(bytesB64);
+          const arr = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          const buf = arr.buffer;
           try {
             await Promise.race([
               post('document:open-buffer', { fileName, buffer: buf, readonly: false }),
@@ -142,7 +147,7 @@ test.describe('real-document corpus matrix', () => {
             return { ok: false, error: String((e as Error).message || e) };
           }
         },
-        { fileName: name },
+        { fileName: name, bytesB64 },
       );
       if (!opened.ok) {
         row.open = `fail: ${opened.error}`;
@@ -158,11 +163,15 @@ test.describe('real-document corpus matrix', () => {
       const load = await page.evaluate(async () => {
         const w = window as any;
         w.__ascErrors = [];
+        // Only the innermost SDK instance (Asc.editor inside the editor
+        // frame) carries isDocumentLoadComplete; the app-level `window.editor`
+        // one frame up is the DocEditor wrapper and must not be mistaken for
+        // it.
         const visit = (win: Window): any => {
           try {
             const scope = win as any;
-            const api = scope.Asc?.editor || scope.editor;
-            if (api && typeof api.asc_registerCallback === 'function') return api;
+            const api = scope.Asc?.editor;
+            if (api && typeof api.asc_registerCallback === 'function' && 'isDocumentLoadComplete' in api) return api;
           } catch {
             /* cross-origin */
           }
@@ -187,7 +196,11 @@ test.describe('real-document corpus matrix', () => {
           await new Promise((r) => setTimeout(r, 1000));
         }
         if (!api.isDocumentLoadComplete)
-          return { loaded: false, loadMs: Date.now() - t, reason: 'isDocumentLoadComplete still false after 180s' };
+          return {
+            loaded: false,
+            loadMs: Date.now() - t,
+            reason: `isDocumentLoadComplete still false after 180s (isLoadFullApi=${String(api.isLoadFullApi)}, docLoadStarted=${String(api.isDocumentLoadStarted ?? 'n/a')})`,
+          };
         await new Promise((r) => setTimeout(r, 4000));
         return { loaded: true, loadMs: Date.now() - t };
       });

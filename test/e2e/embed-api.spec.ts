@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './lib/l0';
 
 // ---------------------------------------------------------------------------
 // Embed-mode E2E tests
