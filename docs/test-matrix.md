@@ -7,7 +7,8 @@
 
 图例：`ER` = embed-regression.spec、`OF` = open-failure.spec、`SD` =
 embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec、
-`EA` = embed-api.spec、`AS` = app-smoke.spec、`CO` = corpus.spec。
+`EA` = embed-api.spec、`AS` = app-smoke.spec、`CO` = corpus.spec、`SW` = sw-warm.spec、
+`RI` = resave-idempotence.spec、`FP` = format-parity.spec。
 
 ## A. 格式 × 操作（合成语料 = PR 档；真实语料 = 🌙）
 
