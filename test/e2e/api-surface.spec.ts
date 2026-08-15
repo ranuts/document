@@ -36,7 +36,7 @@ const SKIP = new RegExp(
     // and asc_onCloseFrameEditor tears the frame bridge down. Both are
     // legitimate one-way switches, not defects, but the sweep must not pull
     // them or every method after them is judged in a broken editor.
-    '^asc_(stopSaving|onCloseFrameEditor)$',
+    '^asc_(stopSaving|onCloseFrameEditor|SetSilentMode)$',
     'Print',
     'Presentation|Demonstration|SlideShow',
     'startSaveDocument|forceSave|Force',
@@ -70,7 +70,7 @@ const SKIP = new RegExp(
 
 type Verdict = {
   method: string;
-  status: 'ok' | 'threw' | 'asc_onError' | 'fatal-dialog' | 'skipped';
+  status: 'ok' | 'threw' | 'asc_onError' | 'fatal-dialog' | 'save-switch-off' | 'state-drift' | 'skipped';
   detail?: string;
   ms?: number;
 };
@@ -151,6 +151,10 @@ for (const [ext, kind, format] of [
 }
 
 test.describe('api surface sweep', () => {
+  // Nightly-class suite (strategy section 6): ~5-15 min per format and it
+  // deliberately pokes every method. Opt in with API_SWEEP=1; the PR gate
+  // must never wait on it.
+  test.skip(!process.env.API_SWEEP, 'API_SWEEP not set - api-surface sweep is a local/nightly suite');
   test.describe.configure({ timeout: 900_000 });
 
   for (const doc of docs) {
@@ -158,6 +162,14 @@ test.describe('api surface sweep', () => {
       // The sweep intentionally provokes vendor console errors from
       // methods called out of context; treat them as data, not failures.
       l0.allowConsole(/./);
+      const calls: string[] = [];
+      page.on('console', (m) => {
+        const t = m.text();
+        if (t.startsWith('SWEEP-CALL ')) calls.push(t.slice(11));
+      });
+      page.on('crash', () =>
+        console.log(`RENDERER CRASHED during ${doc.label}; last calls: ${calls.slice(-5).join(' <- ')}`),
+      );
 
       await page.goto('/embed-demo.html');
       await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
@@ -177,7 +189,7 @@ test.describe('api surface sweep', () => {
       await typeIntoDocument(page, doc.kind, 'sweep');
 
       const verdicts: Verdict[] = await page.evaluate(
-        async ({ skipSource }) => {
+        async ({ skipSource, probeEvery }) => {
           const visit = (win: Window): { api: any; win: any } | null => {
             try {
               const scope = win as any;
@@ -221,17 +233,102 @@ test.describe('api surface sweep', () => {
               (el as HTMLElement).click?.();
           };
           const out: Verdict[] = [];
-          for (const name of [...names].sort()) {
+          // `api.canSave` is the SDK's "save pipeline is open" switch
+          // (flipped off by stopSaving/prepareSave paths). Snapshot it after
+          // every call so a one-way save killer is attributed to the exact
+          // method that flipped it, instead of only showing up as a timeout
+          // at the end of the sweep.
+          let saveSwitchWas = api.canSave;
+          // Real save probe every N methods (SWEEP_PROBE_EVERY env; default
+          // off): asc_DownloadAs must still yield a stream. Attributes a
+          // save killer that leaves every cheap flag untouched to a batch of
+          // at most N methods -- the pptx sweep found exactly such a case.
+          const isArrayBuffer = (v: unknown) => Object.prototype.toString.call(v) === '[object ArrayBuffer]';
+          const saveProbe = () =>
+            new Promise<boolean>((resolve) => {
+              const onMsg = (e: MessageEvent) => {
+                const d = e.data;
+                if (d && d.type === 'onlyoffice-file-stream' && isArrayBuffer(d.buffer)) {
+                  window.removeEventListener('message', onMsg);
+                  resolve(true);
+                }
+              };
+              window.addEventListener('message', onMsg);
+              try {
+                api.asc_DownloadAs(new win.Asc.asc_CDownloadOptions(api.documentFormatSave));
+              } catch {
+                /* judged by the timeout */
+              }
+              setTimeout(() => {
+                window.removeEventListener('message', onMsg);
+                resolve(false);
+              }, 8000);
+            });
+          let sinceProbe = 0;
+          let batchStart = 0;
+          const sortedNames = [...names].sort();
+          const stateVec = () =>
+            JSON.stringify({
+              fmt: api.documentFormatSave,
+              view: !!api.isViewMode,
+              restr: api.restrictions,
+              ro: !!api.isRestrictionView,
+              loaded: !!api.isDocumentLoadComplete,
+              full: !!api.isLoadFullApi,
+              locked: typeof api.asc_isWorkbookLocked === 'function' ? !!api.asc_isWorkbookLocked() : undefined,
+            });
+          let stateWas = stateVec();
+          for (let idx = 0; idx < sortedNames.length; idx++) {
+            const name = sortedNames[idx];
             if (skip.test(name)) {
               out.push({ method: name, status: 'skipped' });
               continue;
             }
+            if (probeEvery > 0 && sinceProbe >= probeEvery) {
+              sinceProbe = 0;
+              const ok = await saveProbe();
+              if (!ok) {
+                const batch = sortedNames.slice(batchStart, idx).filter((n) => !skip.test(n));
+                console.log('SWEEP-SAVE-PROBE-FAILED after batch: ' + batch.join(','));
+                out.push({
+                  method: `<probe after ${batch[batch.length - 1]}>`,
+                  status: 'save-switch-off',
+                  detail: 'save probe failed; culprit in: ' + batch.join(','),
+                });
+                return out;
+              }
+              batchStart = idx;
+            }
+            sinceProbe++;
             const before = errors.length;
             const t0 = Date.now();
+            // Streamed to the runner via page.on('console'): if the renderer
+            // crashes mid-sweep, the last logged name is the culprit.
+            console.log('SWEEP-CALL ' + name);
             try {
               await Promise.race([Promise.resolve().then(() => api[name]()), new Promise((r) => setTimeout(r, 1500))]);
               // Yield so async fallout (events, timers) lands before we judge.
               await new Promise((r) => setTimeout(r, 30));
+              if (saveSwitchWas && !api.canSave) {
+                console.log('SWEEP-SAVE-SWITCH-OFF ' + name);
+                out.push({ method: name, status: 'save-switch-off', ms: Date.now() - t0 });
+                saveSwitchWas = false;
+                closeAnyDialog();
+                continue;
+              }
+              const stateNow = stateVec();
+              if (stateNow !== stateWas) {
+                console.log('SWEEP-STATE-DRIFT ' + name + ' ' + stateWas + ' -> ' + stateNow);
+                out.push({
+                  method: name,
+                  status: 'state-drift',
+                  detail: `${stateWas} -> ${stateNow}`,
+                  ms: Date.now() - t0,
+                });
+                stateWas = stateNow;
+                closeAnyDialog();
+                continue;
+              }
               const dlg = fatal();
               if (dlg) {
                 out.push({ method: name, status: 'fatal-dialog', detail: dlg, ms: Date.now() - t0 });
@@ -258,7 +355,7 @@ test.describe('api surface sweep', () => {
           }
           return out;
         },
-        { skipSource: SKIP.source },
+        { skipSource: SKIP.source, probeEvery: Number(process.env.SWEEP_PROBE_EVERY || 0) },
       );
 
       // Post-sweep liveness: the document must still be usable and savable.
@@ -278,9 +375,7 @@ test.describe('api surface sweep', () => {
         (acc, v) => ((acc[v.status] = (acc[v.status] || 0) + 1), acc),
         {},
       );
-      const bad = verdicts.filter(
-        (v) => v.status === 'threw' || v.status === 'asc_onError' || v.status === 'fatal-dialog',
-      );
+      const bad = verdicts.filter((v) => v.status !== 'ok' && v.status !== 'skipped');
       console.log(`API SWEEP ${doc.label}: ${JSON.stringify(counts)} -> ${report}`);
       for (const v of bad) console.log(`  ${v.status.padEnd(12)} ${v.method} ${v.detail ?? ''}`);
       console.log(
