@@ -24,7 +24,10 @@ test.describe('open failure surfacing (real editor)', () => {
   }) => {
     l0.expectAscError(-82);
     l0.allowFrameError(/Document conversion failed/);
-    l0.allowConsole(/Document conversion failed|Conversion failed with code|open conversion failed|changesError/);
+    // Firefox additionally prints the bare rejected Error object as "Error".
+    l0.allowConsole(
+      /Document conversion failed|Conversion failed with code|open conversion failed|changesError|^Error$/,
+    );
 
     await page.goto('/embed-demo.html');
     await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });

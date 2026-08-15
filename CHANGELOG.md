@@ -41,6 +41,8 @@ notes. Entries describe what users experience, not internal refactors.
 - "Excel" files that are really an HTML table (the usual export of web
   systems, saved as .xls/.xlsx) now open and save as a real workbook instead
   of failing to load.
+- Firefox: the page no longer raises an unhandled promise rejection from the
+  service-worker update check on load.
 - Presentations no longer log a script error on every open (the editor
   asked for a theme catalog file the offline package never shipped).
 - Embed API: `document:save` without `targetExt` now exports in the open

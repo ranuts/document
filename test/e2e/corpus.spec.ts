@@ -297,7 +297,7 @@ test.describe('real-document corpus matrix', () => {
       }
 
       // ---- save (direct editor API + file-stream listener; the embed
-      //      post() helper caps at 45s which is too short for big decks
+      //      post() helper caps at 120s which can still be too short for big decks
       //      and hides slow-vs-hung) ----
       if (!row.fatalDialog && load.loaded) {
         const targetCode = { DOCX: 65, XLSX: 257, PPTX: 129, CSV: 257 }[SAVE_TARGET[ext]] as number;

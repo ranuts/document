@@ -208,8 +208,11 @@ if ('serviceWorker' in navigator) {
       .register('./sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration);
-        // Check for updates on every page load
-        registration.update();
+        // Check for updates on every page load. Firefox rejects the update
+        // when the registration changed since it was scheduled (a benign race
+        // right after register()); swallow it so it never surfaces as an
+        // unhandled rejection.
+        registration.update().catch(() => {});
       })
       .catch((registrationError) => {
         console.log('SW registration failed: ', registrationError);

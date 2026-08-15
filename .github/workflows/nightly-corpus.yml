@@ -80,3 +80,42 @@ jobs:
             test-results/corpus-report.json
             playwright-report/
           retention-days: 14
+
+  browsers:
+    name: Cross-browser (WebKit + Firefox)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps webkit firefox
+
+      # The same PR-time suites (minus the opt-in sweeps) on the two engines
+      # the gate does not cover. Same-realm/L0 rules apply unchanged.
+      - name: Run E2E on WebKit and Firefox
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep-invert "api surface|corpus" --reporter=list
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-browsers
+          path: playwright-report-browsers/
+          retention-days: 14

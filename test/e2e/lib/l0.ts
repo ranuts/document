@@ -36,6 +36,10 @@ const CONSOLE_ALLOWLIST: RegExp[] = [
   // Our own onError toast path logs the event before surfacing it; the
   // asc_onError hook already reports the same fact with more detail.
   /^\[OO\] editor error:/,
+  // Firefox logs this whenever an <img>/CSS sprite load is aborted mid-way,
+  // e.g. when an editor iframe is torn down while its toolbar sprite is
+  // still streaming; the same file decodes fine (probed 2026-08-15).
+  /Image corrupt or truncated/,
 ];
 
 const FATAL_DIALOG_PATTERN = /error occurred during the work|与文档工作|критическ/i;
@@ -72,17 +76,25 @@ const INIT_SCRIPT = () => {
   });
   const tryHook = () => {
     const api = (window as unknown as { Asc?: { editor?: Record<string, unknown> } }).Asc?.editor;
-    if (!api || typeof api.asc_registerCallback !== 'function' || bucket.hooked.has(api)) return;
+    if (!api || typeof api.sendEvent !== 'function' || bucket.hooked.has(api)) return;
     bucket.hooked.add(api);
-    (api.asc_registerCallback as (name: string, cb: (...args: unknown[]) => void) => void)(
-      'asc_onError',
-      (id: unknown, level: unknown) => {
-        bucket.ascErrors.push({ id: String(id), level: String(level), href: location.pathname });
-      },
-    );
+    // Wrap sendEvent rather than asc_registerCallback: every asc_onError
+    // (the SDK's own and the ones our guards inject) goes through it, and
+    // a callback registered during early boot can be dropped by the SDK's
+    // handler reset (observed on Firefox).
+    const orig = api.sendEvent as (...args: unknown[]) => unknown;
+    api.sendEvent = function (this: unknown, name: unknown, ...args: unknown[]) {
+      if (name === 'asc_onError') {
+        bucket.ascErrors.push({ id: String(args[0]), level: String(args[1]), href: location.pathname });
+      }
+      return orig.call(this, name, ...args);
+    };
   };
-  const timer = setInterval(tryHook, 250);
-  window.addEventListener('pagehide', () => clearInterval(timer));
+  // Poll until the SDK instance exists. Deliberately NOT cleared on pagehide:
+  // Firefox reuses the Window when an iframe navigates from its initial
+  // about:blank, so the old document's pagehide would clear the interval the
+  // new document's init script just armed and the hook would never install.
+  setInterval(tryHook, 250);
 };
 
 export class L0Collector {
@@ -110,7 +122,7 @@ export class L0Collector {
     this.consoleAllow.push(re);
   }
 
-  /** Allow uncaught frame errors / rejections matching `re` for this test only. */
+  /** Allow uncaught errors / rejections (frame-level and page-level) matching `re` for this test only. */
   allowFrameError(re: RegExp): void {
     this.frameAllow.push(re);
   }
@@ -175,6 +187,9 @@ export class L0Collector {
     const errors = await this.ascErrors();
     const dialog = await this.fatalDialog();
     const frameErrors = (await this.frameErrors()).filter((e) => !this.frameAllow.some((re) => re.test(e.message)));
+    // Firefox also reports iframe rejections through Playwright's pageerror;
+    // the same allowance covers both channels.
+    const pageErrors = this.pageErrors.filter((m) => !this.frameAllow.some((re) => re.test(m)));
     const unexpectedAsc = errors.filter((e) => !this.expectedAsc.some((m) => m(e)));
     const missingAsc = this.expectedAsc.filter((m) => !errors.some(m)).length;
 
@@ -182,7 +197,7 @@ export class L0Collector {
       ascErrors: errors,
       fatalDialog: dialog,
       frameErrors,
-      pageErrors: this.pageErrors,
+      pageErrors,
       consoleErrors: this.consoleErrors,
     };
     const dirty =
@@ -190,7 +205,7 @@ export class L0Collector {
       missingAsc ||
       dialog ||
       frameErrors.length ||
-      this.pageErrors.length ||
+      pageErrors.length ||
       this.consoleErrors.length;
     if (dirty) {
       await testInfo.attach('l0-report', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });
@@ -201,7 +216,7 @@ export class L0Collector {
     expect(missingAsc, 'L0: an expected asc_onError never fired').toBe(0);
     expect(dialog, `L0: fatal editor dialog visible: ${dialog}`).toBeNull();
     expect(frameErrors, `L0: uncaught errors inside editor frames ${JSON.stringify(frameErrors)}`).toEqual([]);
-    expect(this.pageErrors, `L0: uncaught page errors ${JSON.stringify(this.pageErrors)}`).toEqual([]);
+    expect(pageErrors, `L0: uncaught page errors ${JSON.stringify(pageErrors)}`).toEqual([]);
     expect(this.consoleErrors, `L0: console.error output ${JSON.stringify(this.consoleErrors)}`).toEqual([]);
   }
 }
