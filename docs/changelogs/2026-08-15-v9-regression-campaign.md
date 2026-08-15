@@ -172,3 +172,20 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   `document.isForm:false` 让 api.js 直接选 pdfeditor（`lib/onlyoffice-editor.ts`），
   单测 + `pdf-route.spec.ts`（断言不经过 `/apps/common/`）。GitHub runner 上的
   prod-smoke 22/23，唯一失败正是它；部署后复跑应全绿。
+- **线上冒烟部署后复跑：23/23 全绿**（GitHub runner → edit.chaxus.com，含 PDF）。
+- **公开语料 150 文件（含 L2/L3）：142/150**；跨浏览器 job（WebKit + Firefox）CI 全绿。
+  8 条发现：4 个 Word 6/95 老 `.doc` 打开失败并正确浮出 -82（`47950_lower/upper.doc`、
+  `Bug51944.doc`、`Fuzzed.doc`，非缺陷）；4 个 docx L2 文本覆盖率不达标待查
+  （`61470.docx` 7→0 字、`Bug66263-paragraph.docx` 87→81、
+  `ExternalEntityInText.docx` 58→49（外部实体不展开是对的）、
+  `HeaderFooterUnicode.docx` 391→401）——**明日第一件事**：逐个判定是真丢文本
+  还是提取口径（sdt / 文本框 / 字段 / 页眉），并决定是否把老格式 .doc 加进
+  `CORPUS_EXCLUDE`。
+
+## 明日待办（2026-08-16）
+
+1. 上面 4 个 docx L2 发现的判定；定时夜间（03:17，300 文件）与线上冒烟（04:47）结果复盘。
+2. A 表剩余：评论、xlsx/pptx 插图、docx/pptx 运行时只读切换、PDF 编辑/保存。
+3. 入口路径：`?file=<url>` / `document:open-url` / 落地页 `?open=local`。
+4. 用户侧：硬刷新后复测 PPT 致命弹窗；若复现给文件 + 步骤。
+5. 另一会话：seeded monkey → UI 爬取。
