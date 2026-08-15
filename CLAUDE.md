@@ -168,10 +168,15 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 内的 `unhandledrejection`/`error`、pageerror、非白名单 console.error 判为
 失败；预期错误须显式 `l0.expectAscError(id)` / `l0.allowFrameError(re)` /
 `l0.allowConsole(re)`。`open-failure.spec.ts` 兼作 fixture 自检。
-**E2E 投递字节禁止用 `page.route`**：页面被 Service Worker 控制后 route
-不生效、请求真打到 preview 拿回 SPA index.html（语料战役第 1 天的
-"25/25 全灭"就是这样来的）——走真实输入通道（`setInputFiles` +
-`document:open-file`）或 `page.evaluate` 传入。
+**E2E 跑道三坑（语料战役第 1～2 天全踩过，每个都把"成功"伪装成"超时"）**：
+
+1. 投递字节禁止用 `page.route`——页面被 Service Worker 控制后 route 不
+   生效、请求真打到 preview 拿回 SPA index.html；走 `setInputFiles` +
+   `document:open-file` 或 `page.evaluate` 传入。2) 直接调 `asc_DownloadAs`
+   前必须同时等 `isDocumentLoadComplete && isLoadFullApi`，否则 SDK 静默丢弃。
+2. 在 `page.evaluate` 里给别的 frame 挂 `message` 监听时别用
+   `instanceof ArrayBuffer`（跨 realm 恒 false）——在本窗口监听、用
+   `Object.prototype.toString` 判型。任何"全灭"结果先怀疑跑道。
 
 **这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
 "全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、

@@ -127,4 +127,54 @@ SheetJS 解析 HTML 表格转 XLSX 再进编辑器（与 CSV 同一套路）。�
    `requestSaveDocument` 立即以 `Save conversion failed: ...` 拒绝
    （SDK 自己会发 `asc_onError -25`），不再伪造打开错误。
 
-真实语料全量第二轮结果见下方追记。
+## 六、第二轮：保存仍全部超时——跑道的第三个 bug（跨 realm instanceof）+ L0 抓到 themes.js 缺失
+
+等齐 `isLoadFullApi` 后重跑，保存依旧全部 180s 超时，而 `document:save`
+明明 792ms 成功。差异只剩流监听：corpus 从 demo 页 `page.evaluate` 里给
+**app 窗口**挂 `message` 监听并用 `d.buffer instanceof ArrayBuffer` 判型
+——监听函数属于 demo 页 realm，事件数据结构化克隆进 app realm，跨 realm
+`instanceof` 恒为 false，流被静默丢弃。x2t_helper 同时也把流 post 给
+`window.top`（demo 页），改为在本窗口监听 + `Object.prototype.toString`
+判型，EMP deck 立刻 `save=ok (592ms, 6494KB)`。
+
+同一轮 L0 fixture 抓到每个 PPTX 都有一条 frame 错误
+`Unexpected token '<'`：SDK `SetThemesPath` 加载 `sdkjs/slide/themes//themes.js`，
+vendor 包里根本没有这个文件（上游构建步骤会生成 themes.js + `theme<N>/theme.bin`
+
+- 缩略图，这份包只带了 `src/*.pptx`），SPA 兜底回 HTML → 脚本解析错误。
+  主题库因此本来就是空的。最小修法：`public/sdkjs/slide/themes/themes.js`
+  声明 `AscCommon.g_defaultThemes = []`，加载干净；真正的主题库要先离线
+  生成 theme.bin，列为缺陷 #7（P2）。
+
+## 跑道三连坑的共同教训
+
+三个 bug（SW 击穿 page.route、未等 isLoadFullApi、跨 realm instanceof）
+都把"成功"表现成"超时/永久转圈"，都被误读为编辑器缺陷，都在第 1 天
+造成了错误的 P0 结论。**跑道自身必须先过 L0**：任何"全灭"结果先怀疑跑道
+——用一份已知能开的文件做对照（本轮是 SheetJS 合成工作簿全绿 vs 真实
+文件全灭，这个反差就是线索）。这条写进策略文档第 3 节。
+
+## 战役缺陷清单（第 2 天收工版）
+
+| #   | 缺陷                                                  | 级别 | 状态                                                          |
+| --- | ----------------------------------------------------- | ---- | ------------------------------------------------------------- |
+| 1   | ~~非 ASCII 文件名 → -82 + 永久转圈~~                  | —    | **作废**：跑道 bug（SW 击穿 page.route）                      |
+| 2   | 特定 CSV 被 SheetJS 误判为 HTML                       | P1   | 本轮 addresses.csv 经 open-file 打开正常，需复核              |
+| 3   | 打开失败遮罩不终止、无可见错误、保存等满 60s          | P1   | **已修**（installOpenFailureGuard + E2E）                     |
+| 4   | 用户报告的 PPT 编辑致命弹窗                           | P0?  | **未复现**：EMP deck 打开/编辑/保存全通；仍等用户清 SW 后反馈 |
+| 5   | HTML 伪装的 .xls/.xlsx → x2t abort（缺 CHtmlFile2）   | P1   | 待做：converter 嗅探 + SheetJS                                |
+| 6   | Save 按钮常灰（coauthoring autosave 假提交）          | P0   | **已修**（并行会话，守卫 5，ca20ac5）                         |
+| 7   | embed `document:save` 默认 XLSX，docx/pptx 裸保存必败 | P1   | **已修**（默认当前文档格式 + E2E）                            |
+| 8   | PPTX 主题库为空（vendor 缺 themes.js/theme.bin）      | P2   | 加载错误已消除（空目录声明）；主题库待生成                    |
+
+## 追记：真实语料全量第三轮——31/31 通过
+
+跑道三坑修完 + themes.js 补齐后，`CORPUS_DIR=<本地语料>` 全量 31 个真实
+文件（docx/doc/xlsx/pptx/csv，含 35 页 EMP deck、多份中文名 / 空格 /
+括号 / 全角冒号文件名）：**31/31 打开（6～11s）+ 键盘编辑 + 保存往返
+（产物合法 zip）+ L0 零发现**，全程 2.4 分钟（3 worker）。
+
+这意味着截至今天，v9 在这份语料上没有一个"打不开 / 编辑崩 / 存不下"
+的实例；用户实测的负面印象来源应重新聚焦到 (a) SW 缓存旧构建、
+(b) Save 按钮常灰（已修）、(c) 尚未进语料的文档特性。下一步按策略文档
+第 2 节引入公开语料扩面，并把 corpus 接入夜间 CI。

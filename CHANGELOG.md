@@ -35,6 +35,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Presentations no longer log a script error on every open (the editor
+  asked for a theme catalog file the offline package never shipped).
 - Embed API: `document:save` without `targetExt` now exports in the open
   document's own format instead of always XLSX (a bare save on a .docx or
   .pptx used to fail with a timeout).

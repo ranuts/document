@@ -90,7 +90,11 @@ test.describe('real-document corpus matrix', () => {
     writeFileSync(report, JSON.stringify(rows, null, 2));
     const bad = rows.filter(
       (r) =>
-        r.open !== 'ok' || r.edit === 'fatal' || r.save.startsWith('fail') || r.ascErrors.length > 0 || r.fatalDialog,
+        !r.open.startsWith('ok') ||
+        r.edit === 'fatal' ||
+        r.save.startsWith('fail') ||
+        r.ascErrors.length > 0 ||
+        r.fatalDialog,
     );
     console.log(`\nCORPUS SUMMARY: ${rows.length} files, ${bad.length} with findings -> ${report}`);
     for (const r of bad) {
@@ -268,17 +272,24 @@ test.describe('real-document corpus matrix', () => {
           async ({ code }) => {
             const started = Date.now();
             try {
-              const appWin = window.frames[0] as Window;
+              // x2t_helper posts the stream to both window.parent (the app)
+              // and window.top (this demo page). Listen here, in our own
+              // realm: a listener attached to the app window from this
+              // evaluate() would compare the app-realm ArrayBuffer against
+              // this realm's constructor and never match -- which silently
+              // turned every successful save into a 180 s timeout in the
+              // second corpus run.
+              const isArrayBuffer = (v: unknown) => Object.prototype.toString.call(v) === '[object ArrayBuffer]';
               const streamPromise = new Promise<{ size: number; isZip: boolean }>((resolve) => {
                 const onMsg = (e: MessageEvent) => {
                   const d = e.data;
-                  if (d && d.type === 'onlyoffice-file-stream' && d.buffer instanceof ArrayBuffer) {
-                    appWin.removeEventListener('message', onMsg);
+                  if (d && d.type === 'onlyoffice-file-stream' && isArrayBuffer(d.buffer)) {
+                    window.removeEventListener('message', onMsg);
                     const b = new Uint8Array(d.buffer);
                     resolve({ size: b.byteLength, isZip: b[0] === 0x50 && b[1] === 0x4b });
                   }
                 };
-                appWin.addEventListener('message', onMsg);
+                window.addEventListener('message', onMsg);
               });
               const visit = (win: Window): any => {
                 try {
