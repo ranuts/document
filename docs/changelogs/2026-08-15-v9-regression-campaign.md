@@ -115,3 +115,10 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   与 `test-results-<port>/`——两会话共用 dist/test-results 会互相清空
   （这就是本晚"页面 60s 起不来 / 报告少行"的来源，非产品缺陷）。
 - 跨浏览器与视觉部分见上文"现状数字"。
+- **SW 升级策略（用户 P0 的最可能机制）**：原 sw.js `install` 即 `skipWaiting()`，
+  `activate` 立刻删旧缓存并 claim；页面开着文档时不重载（保护未保存编辑），
+  但此后懒加载的 sdk-all.js / x2t.wasm.gz / 字体 / 拼写引擎全来自**新构建**，
+  与已加载的旧构建混装——今天连续部署几十次，"编辑标题时弹致命框"与此吻合。
+  改为：新 SW 等待；页面无文档时发 `SKIP_WAITING` → controllerchange → 重载一次；
+  有文档时保持旧 SW 直到下次访问（`lib/sw-update.ts` + `test/unit/sw-update.test.ts`
+  含 sw.js 契约哨兵）。CHANGELOG 已记为用户可见修复。

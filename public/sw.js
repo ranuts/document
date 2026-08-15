@@ -48,7 +48,18 @@ self.addEventListener('install', (event) => {
       return cache.addAll(ASSETS_TO_CACHE);
     }),
   );
-  self.skipWaiting();
+  // No skipWaiting() here. Activating immediately deletes the previous
+  // build's runtime cache while pages of that build are still open; a page
+  // with a document open is deliberately not reloaded on controllerchange,
+  // so its later lazy loads (sdk-all.js, x2t.wasm.gz, fonts, spellcheck)
+  // would come from the NEW build and run mixed with the old one. The page
+  // asks for the switch (SKIP_WAITING below) only when no document is open.
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // Activate event: Clean up caches from every previous version

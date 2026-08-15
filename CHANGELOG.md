@@ -41,6 +41,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- A new release deployed while you have a document open no longer swaps
+  parts of the editor underneath it: the update now waits until nothing is
+  open (or the next visit), then takes over and refreshes once. Previously
+  the old page could lazy-load pieces of the new build into the running
+  session, a plausible cause of sporadic "An error occurred during the work
+  with the document" dialogs right after deploys.
 - "Excel" files that are really an HTML table (the usual export of web
   systems, saved as .xls/.xlsx) now open and save as a real workbook instead
   of failing to load.

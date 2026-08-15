@@ -1,3 +1,4 @@
+import { shouldReloadOnControllerChange, wireServiceWorkerUpdates } from './lib/sw-update';
 import { getAllQueryString } from 'ranuts/utils';
 import { View } from 'ranui/builder';
 import { initEmbedApi } from './lib/embed-api';
@@ -183,22 +184,22 @@ if (documentUrl) {
 
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
-  // Whether a SW was already controlling this page when it started. Each deploy
-  // rebuilds sw.js with a fresh CACHE_VERSION; the new SW skipWaiting()s and
-  // claims clients, firing `controllerchange`. If a SW was ALREADY in control at
-  // startup, that event means a *new build* took over — not the first install —
-  // so we can reload once to swap the stale assets for the fresh ones. Without
-  // this, the current page keeps rendering the previously-cached build until the
-  // user manually refreshes (the "refresh once more and it's fixed" symptom).
+  // Update policy lives in lib/sw-update.ts: a new build's worker waits until
+  // no document is open, then takes over and the page reloads once.
   const hadController = !!navigator.serviceWorker.controller;
   let reloadingForUpdate = false;
+  const hasOpenDocument = () => Boolean(getDocmentObj().fileName);
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    // Guard 1: only on a real update (not first install). Guard 2: reload once.
-    // Guard 3: never while a document is open — a reload would discard unsaved
-    // edits. On the landing page fileName is empty, so the reload is invisible.
-    if (!hadController || reloadingForUpdate) return;
-    if (getDocmentObj().fileName) return;
+    if (
+      !shouldReloadOnControllerChange({
+        hadController,
+        alreadyReloading: reloadingForUpdate,
+        hasOpenDocument: hasOpenDocument(),
+      })
+    ) {
+      return;
+    }
     reloadingForUpdate = true;
     window.location.reload();
   });
@@ -208,6 +209,7 @@ if ('serviceWorker' in navigator) {
       .register('./sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration);
+        wireServiceWorkerUpdates(registration, hasOpenDocument);
         // Check for updates on every page load. Firefox rejects the update
         // when the registration changed since it was scheduled (a benign race
         // right after register()); swallow it so it never surfaces as an
