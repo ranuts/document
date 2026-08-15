@@ -23,6 +23,7 @@ pnpm run test                    # 单元测试（Vitest）
 pnpm run test:coverage           # 带覆盖率的单元测试
 pnpm run test:e2e                # E2E 测试（Playwright，自动 build+preview）
 pnpm run test:e2e:docker         # 同套 E2E 跑在生产 Docker 镜像上（bin/test-e2e-docker.sh）
+CORPUS_DIR=<本地语料目录> pnpm run test:e2e:corpus   # 真实文档回归矩阵（本地/夜间，语料不入库）
 pnpm run lint                    # lint:ts + lint:docker
 ```
 
@@ -31,26 +32,31 @@ pnpm run lint                    # lint:ts + lint:docker
 ## 目录结构
 
 ```
-lib/                  # 核心业务逻辑（纯 TypeScript）
+lib/                  # 应用层（纯 TypeScript，只在本站点用）
   converter.ts          # 加载 OnlyOffice API / x2t 转换器
   document.ts           # 文件打开、新建、URL 加载
-  document-converter.ts # 格式转换（docx/xlsx/pptx/csv 互转）
-  document-types.ts     # 共享类型定义
-  document-utils.ts     # 纯工具函数（类型判断、MIME、路径）
   embed-api.ts          # iframe 嵌入 API（postMessage 协议）
   events.ts             # MessageCodec 事件处理（桌面端集成）
   file-types.ts         # OnlyOffice 文件类型常量映射
-  i18n.ts               # 国际化（中/英/日/韩/德/法/西/葡/俄）
   loading.ts            # 加载状态 UI
-  onlyoffice-editor.ts  # 编辑器实例生命周期、保存、只读模式
+  onlyoffice-editor.ts  # 编辑器实例生命周期、保存、只读模式、运行时守卫
   ui.ts                 # 控制面板、菜单、FAB 等 UI 组件
-store/
-  index.ts              # 全局状态（当前文档对象），基于 ranuts/utils createSignal
+  analytics.ts          # Cloudflare Web Analytics（刻意不用 GA）
+  pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
+  agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
+packages/             # pnpm workspace，供 ran 生态三处站点共享（包名 @ranuts/*）
+  shared/               # document-types / document-utils / i18n（9 语言）/ store（createSignal）
+  converter/            # 格式转换：CSV↔XLSX（SheetJS）、docx-zip 媒体处理、签名嗅探、PDF 字体清单
+  agent-core/           # LLM 运行时 + 多 Provider（anthropic/openai/gemini/ollama/webllm）+ key 存储
+  chat-ui/              # 聊天面板 UI
 types/
   editor.d.ts           # OnlyOffice DocEditor 类型声明
   assets.d.ts           # CSS 模块类型声明（declare module '*.css'）
 styles/
   base.css              # 全局样式（含 embed-mode 布局）
+public/               # v9 vendor（sdkjs / web-apps / x2t.wasm.gz / XOR 字体目录）+ 落地页、demo、SW
+bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js
+docs/                 # embed-api / fonts 文档、explorations/（每次改动的记录）、superpowers/plans/
 index.ts              # 应用入口（初始化事件、UI、PWA）
 index.html            # HTML 入口
 ```
@@ -84,7 +90,7 @@ index.html            # HTML 入口
 - `requestSaveDocument(targetExt, options)` — 触发编辑器保存并返回 File，60s 超时
 - `setConverterCallbacks(...)` — 注入转换器（解耦循环依赖）
 
-### store/index.ts — 全局状态
+### packages/shared/src/store.ts — 全局状态
 
 ```ts
 const [getDocmentObj, setDocmentObj] = createSignal<{
@@ -105,14 +111,15 @@ const [getDocmentObj, setDocmentObj] = createSignal<{
 ```
 test/unit/
   vitest-smoke.test.ts        # 基础冒烟
-  document-utils.test.ts      # 共享工具函数
+  document-utils.test.ts      # packages/shared 工具函数
   i18n.test.ts                # 国际化
   embed-api.test.ts           # embed postMessage API（initEmbedApi、消息路由、来源过滤）
   onlyoffice-editor.test.ts   # 编辑器生命周期（只读模式、requestSaveDocument、编辑器配置）
   document-converter.test.ts  # packages/converter（CSV、签名嗅探、zip 直通、错误码提示）
   docx-zip.test.ts            # OOXML zip 媒体提取/预处理
   sw-routing.test.ts          # sw.js 缓存策略路由
-  agent-*.test.ts             # agent-plugin 相关（LLM provider、工具、UI 状态）
+  agent-runtime / agent-tools / agent-editor-bridge / agent-ui-*   # agent 运行时、工具、编辑器桥、UI 状态
+  agent-llm-{anthropic,openai,openai-format,gemini,ollama,webllm,keys}   # 各 LLM provider 适配
 test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL、localStorage
 ```
 
@@ -129,7 +136,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 ### E2E 测试（Playwright）
 
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
-不需要手动先 build），`test/e2e/` 三个 spec：
+不需要手动先 build），`test/e2e/` 四个 spec：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -147,6 +154,14 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 - PDF 打开：真实挂载 pdfeditor（断言 iframe URL 路由），页内手拼合法最小 PDF
 - URL 插图后保存：产物 zip 含 media 条目且字节完整（守护 serverless image
   pipeline；此前该场景主线程永久卡死）
+
+- `corpus.spec.ts` — **真实文档回归矩阵**（roadmap 方向零）：
+  `CORPUS_DIR=<本地语料目录> pnpm run test:e2e:corpus`，可选
+  `CORPUS_FILTER=<正则>`；对目录下每个 docx/doc/xlsx/xls/pptx/ppt/csv 走
+  打开 → 监听致命弹窗/asc_onError → 编辑 → 保存 → 产物 sanity，输出汇总
+  报告。语料留在测试机上不入库；未设 `CORPUS_DIR` 整套 skip，CI 保持绿。
+  第一天就抓出 P0（非 ASCII 文件名导致 -82 打开失败 + 永久转圈），见
+  docs/explorations/2026-08-15-corpus-campaign-day1-chinese-filename-bug.md。
 
 **这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
 "全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、
@@ -358,12 +373,12 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
 
 #### 与现有架构的关系
 
-| 现有模块               | 复用方式                                            |
-| ---------------------- | --------------------------------------------------- |
-| `embed-api.ts`         | 外部页面仍可通过 postMessage 触发 Agent 操作        |
-| `onlyoffice-editor.ts` | `requestSaveDocument` 可在 Agent 完成编辑后直接调用 |
-| `lib/ui.ts`            | 复用现有控制面板的显示/隐藏模式添加 Agent 面板      |
-| `store/index.ts`       | Agent 执行状态可通过同一 signal 机制管理            |
+| 现有模块                | 复用方式                                            |
+| ----------------------- | --------------------------------------------------- |
+| `embed-api.ts`          | 外部页面仍可通过 postMessage 触发 Agent 操作        |
+| `onlyoffice-editor.ts`  | `requestSaveDocument` 可在 Agent 完成编辑后直接调用 |
+| `lib/ui.ts`             | 复用现有控制面板的显示/隐藏模式添加 Agent 面板      |
+| `packages/shared` store | Agent 执行状态可通过同一 signal 机制管理            |
 
 ### OnlyOffice v9（已转正：public/ 即 v9，v7 已移除）
 
@@ -434,8 +449,9 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
 | `loadEditorApi` (~20 行)         | 动态创建 `<script>` 标签加载外部 JS，jsdom 不执行                     |
 
 这些函数不适合单测 mock 覆盖（测试代码会比被测代码更复杂）。**真实编辑器路径由
-v9 E2E 回归套件覆盖**（`pnpm run test:e2e:v9`，打开/编辑/保存/转 PDF/CSV 往返/
-只读，全程真实编辑器 + 真实 x2t，单跑约 15 秒）。
+E2E 回归套件覆盖**（`pnpm run test:e2e` 的 embed-regression.spec：打开/编辑/保存/
+转 PDF/CSV 往返/只读/插图，全程真实编辑器 + 真实 x2t；真实文档复杂度由
+`test:e2e:corpus` 覆盖）。
 
 **已覆盖的可测部分**（纯函数 + 状态管理）：
 
