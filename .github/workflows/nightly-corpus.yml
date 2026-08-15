@@ -1,0 +1,82 @@
+# Nightly real-document regression matrix (docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md,
+# section 2 tier 2 / section 6). Pulls a public corpus of real Office files
+# (never committed here), drives the real editor through open -> edit -> save
+# for each, and publishes the findings table. Red is a signal, not a gate.
+name: Nightly corpus
+
+on:
+  schedule:
+    - cron: "17 19 * * *" # 03:17 Asia/Shanghai
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max files to run (CORPUS_LIMIT)"
+        default: "300"
+      filter:
+        description: "Include regex on file paths (CORPUS_FILTER)"
+        default: ""
+
+jobs:
+  corpus:
+    name: Real-document matrix (Apache POI test-data)
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Apache POI's test-data tree (Apache-2.0) is the largest curated pile of
+      # real-world .doc/.docx/.xls/.xlsx/.ppt/.pptx around, including many
+      # regression files from real bug reports. Sparse + blobless clone keeps
+      # it to the three directories we need.
+      - name: Fetch public corpus (Apache POI test-data)
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/apache/poi.git corpus-src
+          git -C corpus-src sparse-checkout set test-data/spreadsheet test-data/document test-data/slideshow
+          mkdir -p corpus
+          cp -r corpus-src/test-data/spreadsheet corpus/spreadsheet
+          cp -r corpus-src/test-data/document corpus/document
+          cp -r corpus-src/test-data/slideshow corpus/slideshow
+          echo "corpus files: $(find corpus -type f | wc -l)"
+
+      - name: Run corpus matrix
+        env:
+          CORPUS_DIR: ${{ github.workspace }}/corpus
+          CORPUS_LIMIT: ${{ github.event.inputs.limit || '300' }}
+          CORPUS_FILTER: ${{ github.event.inputs.filter || '' }}
+          # Expected-to-fail inputs: encrypted/password files, deliberately
+          # truncated/corrupt regression samples, macro-only containers.
+          CORPUS_EXCLUDE: "password|protect|encrypt|corrupt|truncat|broken|invalid|damaged|\\.xlsm$|\\.xlsb$|\\.docm$|\\.pptm$"
+        run: pnpm exec playwright test test/e2e/corpus.spec.ts --workers=2 --reporter=list
+
+      - name: Summarize
+        if: always()
+        run: node bin/corpus-report.mjs test-results
+
+      - name: Upload corpus report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corpus-report
+          path: |
+            test-results/corpus-report.json
+            playwright-report/
+          retention-days: 14

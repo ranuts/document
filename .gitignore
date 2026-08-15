@@ -20,3 +20,7 @@ playwright-report/
 playwright-report-docker/
 test-results/
 public/fonts/__fallback__/
+
+# Nightly public corpus checkout (never committed)
+corpus/
+corpus-src/

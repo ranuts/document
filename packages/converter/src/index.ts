@@ -8,6 +8,7 @@
 export {
   X2TConverter,
   hasEditorBinSignature,
+  isHtmlDocument,
   isZipContainer,
   saveFileToDisk,
   CANVAS_PDF_INPUT_FORMAT,

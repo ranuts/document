@@ -35,6 +35,22 @@ export function isZipContainer(bin: Uint8Array): boolean {
   return bin.length >= 4 && bin[0] === 0x50 && bin[1] === 0x4b && bin[2] === 0x03 && bin[3] === 0x04;
 }
 
+/**
+ * True when the bytes are an HTML document rather than a real Office file.
+ * Web systems commonly export an HTML <table> under a .xls/.xlsx name; Excel
+ * opens those, but the bundled x2t.wasm has its HTML importer stubbed out and
+ * aborts on them (missing CHtmlFile2), so they must be routed through SheetJS
+ * instead. Only the leading bytes are inspected (after BOM/whitespace).
+ */
+export function isHtmlDocument(bin: Uint8Array): boolean {
+  if (bin.length < 8 || isZipContainer(bin)) return false;
+  let start = 0;
+  if (bin[0] === 0xef && bin[1] === 0xbb && bin[2] === 0xbf) start = 3;
+  // UTF-16 BOM: treat as not-HTML here (rare for these exports).
+  const head = new TextDecoder('latin1').decode(bin.subarray(start, start + 2048)).replace(/^\s+/, '');
+  return /^<(!doctype\s+html|html|head|body|table|meta|\?xml[^>]*>\s*<html)/i.test(head);
+}
+
 const FILE_DESCRIPTION_MAP: Record<string, string> = {
   docx: 'Word Document',
   doc: 'Word 97-2003 Document',
@@ -601,6 +617,33 @@ export class X2TConverter {
       throw new Error(
         `Failed to convert CSV to XLSX: ${error instanceof Error ? error.message : 'Unknown error'}. ` +
           'Please convert your CSV file to XLSX format manually and try again.',
+      );
+    }
+  }
+
+  /**
+   * Convert an HTML-table document that masquerades as a spreadsheet
+   * (.xls/.xlsx exports from web systems) into a real XLSX via SheetJS,
+   * which parses <table> markup natively. Same encoding sniffing as CSV:
+   * these exports are frequently GBK.
+   */
+  async convertHtmlTableToXlsx(htmlData: Uint8Array, fileName: string): Promise<File> {
+    try {
+      const XLSX = await this.loadXlsxLibrary();
+      const html = this.decodeCsvBytes(htmlData);
+      const workbook = XLSX.read(html, { type: 'string', raw: false });
+      if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+        throw new Error('no table found');
+      }
+      const xlsxBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+      const xlsxFileName = fileName.replace(/\.[^.]+$/, '') + '.xlsx';
+      return new File([xlsxBuffer], xlsxFileName, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+    } catch (error) {
+      throw new Error(
+        `Failed to convert HTML table to XLSX: ${error instanceof Error ? error.message : 'Unknown error'}. ` +
+          'The file is an HTML page saved with a spreadsheet extension; open it in a spreadsheet application and save it as XLSX.',
       );
     }
   }

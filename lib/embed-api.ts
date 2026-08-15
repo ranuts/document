@@ -184,8 +184,11 @@ async function handleMessage(event: MessageEvent): Promise<void> {
         // Default to the open document's own format: a bare document:save on
         // a docx/pptx used to ask x2t for XLSX, which fails (code 88) and
         // only surfaced as a save timeout.
+        // Legacy binary formats (and HTML-as-xls, opened as XLSX) cannot be
+        // written back by x2t; their natural target is the OOXML sibling.
         const currentExt = (getDocmentObj()?.fileName || '').split('.').pop()?.toUpperCase() || '';
-        const defaultExt = currentExt === 'CSV' ? 'CSV' : currentExt || 'XLSX';
+        const LEGACY_TARGET: Record<string, string> = { XLS: 'XLSX', DOC: 'DOCX', PPT: 'PPTX' };
+        const defaultExt = LEGACY_TARGET[currentExt] || currentExt || 'XLSX';
         const file = await requestSaveDocument(payload.targetExt || defaultExt, {
           returnOriginalOnTimeout: Boolean(payload.returnOriginalOnTimeout),
         });

@@ -1,5 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { CANVAS_PDF_INPUT_FORMAT, X2TConverter, hasEditorBinSignature, isZipContainer } from '@ranuts/converter';
+import {
+  CANVAS_PDF_INPUT_FORMAT,
+  X2TConverter,
+  hasEditorBinSignature,
+  isHtmlDocument,
+  isZipContainer,
+} from '@ranuts/converter';
 
 /**
  * X2TConverter wraps the x2t WASM module (loaded onto window.Module by the host).
@@ -392,6 +398,73 @@ describe('X2TConverter', () => {
         expect(params).toContain('<m_bIsNoBase64>true</m_bIsNoBase64>');
         expect(params).not.toContain('<m_nFormatFrom>');
       });
+    });
+  });
+});
+
+describe('HTML disguised as a spreadsheet (corpus campaign defect #5)', () => {
+  afterEach(() => {
+    delete (window as any).XLSX;
+  });
+
+  const enc = (s: string) => new TextEncoder().encode(s);
+
+  describe('isHtmlDocument', () => {
+    it('recognizes an HTML table export saved as .xls', () => {
+      expect(isHtmlDocument(enc('<html><body><table><tr><td>1</td></tr></table></body></html>'))).toBe(true);
+      expect(isHtmlDocument(enc('  \n<!DOCTYPE html><html>'))).toBe(true);
+      expect(isHtmlDocument(enc('<table border=1><tr><td>x</td></tr></table>'))).toBe(true);
+      expect(isHtmlDocument(enc('<?xml version="1.0"?><html xmlns:o="urn:schemas-microsoft-com:office:office">'))).toBe(
+        true,
+      );
+    });
+
+    it('ignores a UTF-8 BOM before the markup', () => {
+      expect(isHtmlDocument(new Uint8Array([0xef, 0xbb, 0xbf, ...enc('<html><table></table></html>')]))).toBe(true);
+    });
+
+    it('does not flag real OOXML, plain CSV, or short buffers', () => {
+      expect(isHtmlDocument(new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x14, 0x00, 0x06, 0x00, 0x08, 0x00]))).toBe(false);
+      expect(isHtmlDocument(enc('name,age\n<b>,20\n'))).toBe(false);
+      expect(isHtmlDocument(enc('<td>'))).toBe(false);
+      expect(isHtmlDocument(new Uint8Array(0))).toBe(false);
+    });
+  });
+
+  describe('convertHtmlTableToXlsx', () => {
+    const convert = (data: Uint8Array, fileName: string) =>
+      new X2TConverter().convertHtmlTableToXlsx(data, fileName) as Promise<File>;
+
+    it('parses the HTML with SheetJS (string mode) and returns a .xlsx File', async () => {
+      const readSpy = vi.fn().mockReturnValue({ SheetNames: ['Sheet1'], Sheets: {} });
+      (window as any).XLSX = { read: readSpy, write: vi.fn().mockReturnValue(new Uint8Array([1, 2, 3])) };
+
+      const file = await convert(enc('<table><tr><td>a</td></tr></table>'), 'export.xls');
+
+      expect(readSpy).toHaveBeenCalledWith(
+        '<table><tr><td>a</td></tr></table>',
+        expect.objectContaining({ type: 'string' }),
+      );
+      expect(file.name).toBe('export.xlsx');
+      expect(file.type).toContain('spreadsheetml');
+    });
+
+    it('decodes GBK exports before parsing (zh-CN web systems export ANSI HTML)', async () => {
+      const readSpy = vi.fn().mockReturnValue({ SheetNames: ['Sheet1'], Sheets: {} });
+      (window as any).XLSX = { read: readSpy, write: vi.fn().mockReturnValue(new Uint8Array([1])) };
+      // "<table><tr><td>中文</td></tr></table>" in GBK: 中=D6D0 文=CEC4
+      const gbk = new Uint8Array([...enc('<table><tr><td>'), 0xd6, 0xd0, 0xce, 0xc4, ...enc('</td></tr></table>')]);
+
+      await convert(gbk, 'list.xls');
+
+      expect(readSpy.mock.calls[0][0]).toContain('中文');
+    });
+
+    it('fails with a clear message when no table is found', async () => {
+      (window as any).XLSX = { read: vi.fn().mockReturnValue({ SheetNames: [] }), write: vi.fn() };
+      await expect(convert(enc('<html><body>nothing</body></html>'), 'x.xls')).rejects.toThrow(
+        /Failed to convert HTML table to XLSX.*no table found/s,
+      );
     });
   });
 });

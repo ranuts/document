@@ -1,6 +1,6 @@
 import { getExtensions } from 'ranuts/utils';
 import { t } from '@ranuts/shared/i18n';
-import { X2TConverter } from '@ranuts/converter';
+import { X2TConverter, isHtmlDocument } from '@ranuts/converter';
 import { createEditorInstance, loadEditorApi } from './onlyoffice-editor';
 import { getDocumentType } from '@ranuts/shared/document-utils';
 
@@ -49,7 +49,21 @@ export async function handleDocumentOperation(options: {
       // The editor opens documents through its own internal converter (the
       // page hands it a blob URL, see createPersonalEditorInstance).
       if (!file) throw new Error(t('invalidFileObject'));
-      if (fileType.toLowerCase() === 'csv') {
+      const lowerType = fileType.toLowerCase();
+      if (lowerType === 'xls' || lowerType === 'xlsx') {
+        // Web-system "Excel" exports are often an HTML <table> under a
+        // spreadsheet extension. The vendor x2t.wasm aborts on those (its
+        // HTML importer is stubbed out), so parse the table with SheetJS
+        // and open the resulting real XLSX; saves come back as .xlsx.
+        const raw = new Uint8Array(await file.arrayBuffer());
+        if (isHtmlDocument(raw)) {
+          const xlsxFile = await x2tConverter.convertHtmlTableToXlsx(raw, fileName);
+          binData = await xlsxFile.arrayBuffer();
+          openFileType = 'xlsx';
+        } else {
+          binData = raw.buffer as ArrayBuffer;
+        }
+      } else if (lowerType === 'csv') {
         // The vendor editor's internal x2t cannot ingest raw CSV (its import
         // needs delimiter/encoding parameters the bundled helper never
         // passes; opening one fails with a generic error dialog). Convert to

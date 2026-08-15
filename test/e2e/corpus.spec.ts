@@ -11,7 +11,9 @@ import { expect, test } from './lib/l0';
  * stays on the tester's machine and is never committed:
  *
  *   CORPUS_DIR=~/Documents pnpm run test:e2e:corpus
- *   CORPUS_FILTER='EMP' ...   # optional regex on file paths
+ *   CORPUS_FILTER='EMP' ...   # optional include regex on file paths
+ *   CORPUS_EXCLUDE='password|encrypt' ...   # optional exclude regex
+ *   CORPUS_LIMIT=300 ...      # optional cap (logged, never silent)
  *
  * Without CORPUS_DIR the whole suite is skipped, which keeps CI green.
  *
@@ -25,6 +27,12 @@ declare function post(type: string, payload?: Record<string, unknown>): Promise<
 
 const CORPUS_DIR = process.env.CORPUS_DIR;
 const FILTER = process.env.CORPUS_FILTER ? new RegExp(process.env.CORPUS_FILTER, 'i') : null;
+// Public corpora carry files that are expected to fail (password-protected,
+// deliberately corrupt); exclude by path regex so findings stay meaningful.
+const EXCLUDE = process.env.CORPUS_EXCLUDE ? new RegExp(process.env.CORPUS_EXCLUDE, 'i') : null;
+// Optional cap for large public corpora (nightly CI). Never silent: the
+// truncation is logged and recorded in the report.
+const LIMIT = process.env.CORPUS_LIMIT ? Number(process.env.CORPUS_LIMIT) : Infinity;
 const SUPPORTED = new Set(['.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt', '.csv']);
 const MAX_BYTES = 60 * 1024 * 1024;
 
@@ -62,7 +70,7 @@ function collectCorpus(root: string): string[] {
     }
   };
   walk(root, 0);
-  return out.filter((p) => !FILTER || FILTER.test(p)).sort();
+  return out.filter((p) => (!FILTER || FILTER.test(p)) && !(EXCLUDE && EXCLUDE.test(p))).sort();
 }
 
 type Row = {
@@ -77,7 +85,13 @@ type Row = {
 };
 const rows: Row[] = [];
 
-const files = CORPUS_DIR ? collectCorpus(CORPUS_DIR) : [];
+const allFiles = CORPUS_DIR ? collectCorpus(CORPUS_DIR) : [];
+const files = allFiles.slice(0, LIMIT);
+if (allFiles.length > files.length) {
+  console.log(
+    `CORPUS: CORPUS_LIMIT=${LIMIT} keeps ${files.length} of ${allFiles.length} files (${allFiles.length - files.length} dropped)`,
+  );
+}
 
 test.describe('real-document corpus matrix', () => {
   test.skip(!CORPUS_DIR, 'CORPUS_DIR not set — corpus matrix is a local/nightly suite');
@@ -86,8 +100,14 @@ test.describe('real-document corpus matrix', () => {
   test.afterAll(() => {
     if (!rows.length) return;
     mkdirSync('test-results', { recursive: true });
-    const report = 'test-results/corpus-report.json';
-    writeFileSync(report, JSON.stringify(rows, null, 2));
+    // One file per worker: with fullyParallel each worker process holds its
+    // own `rows`, and a shared filename would leave only the last writer.
+    // bin/corpus-report.mjs merges them.
+    const report = `test-results/corpus-report-${test.info().workerIndex}.json`;
+    writeFileSync(
+      report,
+      JSON.stringify({ corpusDir: CORPUS_DIR, total: allFiles.length, kept: files.length, rows }, null, 2),
+    );
     const bad = rows.filter(
       (r) =>
         !r.open.startsWith('ok') ||

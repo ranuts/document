@@ -157,7 +157,12 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 
 - `corpus.spec.ts` — **真实文档回归矩阵**（roadmap 方向零）：
   `CORPUS_DIR=<本地语料目录> pnpm run test:e2e:corpus`，可选
-  `CORPUS_FILTER=<正则>`；对目录下每个 docx/doc/xlsx/xls/pptx/ppt/csv 走
+  `CORPUS_FILTER=<包含正则>` / `CORPUS_EXCLUDE=<排除正则>` /
+  `CORPUS_LIMIT=<上限，截断会打印>`；报告按 worker 落
+  `test-results/corpus-report-<n>.json`，`node bin/corpus-report.mjs` 合并
+  并输出 markdown 表；**夜间 CI** `.github/workflows/nightly-corpus.yml`
+  拉 Apache POI test-data 公开语料跑同一套（红=信号非门禁，可
+  workflow_dispatch 指定 limit/filter）；对目录下每个 docx/doc/xlsx/xls/pptx/ppt/csv 走
   打开 → 监听致命弹窗/asc_onError → 编辑 → 保存 → 产物 sanity，输出汇总
   报告。语料留在测试机上不入库；未设 `CORPUS_DIR` 整套 skip，CI 保持绿。
   第一天就抓出 P0（非 ASCII 文件名导致 -82 打开失败 + 永久转圈），见

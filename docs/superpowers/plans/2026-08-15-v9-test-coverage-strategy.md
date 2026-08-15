@@ -91,6 +91,12 @@
 
 ## 7. 执行顺序（按性价比）
 
+> 进度（2026-08-15 晚）：第 1 步 L0 fixture ✅；第 2 步的"文件名 P0"被证明是
+> 跑道 bug（见 explorations 2026-08-15-corpus-harness-sw-route-bug-*），实际
+> 修掉的是打开失败静默转圈 / embed 默认目标格式 / HTML 伪装 xls / 主题库
+> 404；第 4 步夜间 workflow ✅（`.github/workflows/nightly-corpus.yml`，POI
+> 语料）；第 3 步矩阵表与第 5 步视觉/性能待做。私有语料 31/31 全绿。
+
 1. **L0 全局 fixture**：所有 E2E 自动监听致命弹窗 / `asc_onError` /
    console.error / 超时并判失败——一天内可完成，收益最大。
 2. **修 P0 文件名 bug 时直接写成参数化类用例**（格式 × 文件名特征），
