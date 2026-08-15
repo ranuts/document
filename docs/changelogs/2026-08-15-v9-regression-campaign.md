@@ -122,3 +122,6 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   改为：新 SW 等待；页面无文档时发 `SKIP_WAITING` → controllerchange → 重载一次；
   有文档时保持旧 SW 直到下次访问（`lib/sw-update.ts` + `test/unit/sw-update.test.ts`
   含 sw.js 契约哨兵）。CHANGELOG 已记为用户可见修复。
+- 新增 `buildXlsx`（手拼 OOXML，含冻结窗格 / 自动筛选）与 `xlsx-panes.spec`：
+  文件自带冻结+筛选往返保留；`asc_freezePane` API 切换干净且保存保留
+  （8-09 记录的 UI 冻结报错在 API 路径未复现）。

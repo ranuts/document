@@ -284,3 +284,95 @@ export function zipEntryText(bytes: Uint8Array, name: string): string | null {
 export function ooxmlText(xml: string): string {
   return Array.from(xml.matchAll(/<(?:w|a):t(?:\s[^>]*)?>([^<]*)<\/(?:w|a):t>/g), (m) => m[1]).join('');
 }
+
+/**
+ * A hand-built .xlsx with inline strings, optional frozen panes and an
+ * optional autofilter (SheetJS CE writes neither).
+ */
+export function buildXlsx(opts: {
+  rows: Array<Array<string | number>>;
+  freeze?: { rows: number; cols: number };
+  autoFilterRef?: string;
+}): Uint8Array {
+  const colName = (i: number) => {
+    let n = i + 1;
+    let out = '';
+    while (n > 0) {
+      const r = (n - 1) % 26;
+      out = String.fromCharCode(65 + r) + out;
+      n = Math.floor((n - 1) / 26);
+    }
+    return out;
+  };
+  const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const sheetData = opts.rows
+    .map((row, r) => {
+      const cells = row
+        .map((v, c) => {
+          const ref = `${colName(c)}${r + 1}`;
+          return typeof v === 'number'
+            ? `<c r="${ref}"><v>${v}</v></c>`
+            : `<c r="${ref}" t="inlineStr"><is><t>${esc(v)}</t></is></c>`;
+        })
+        .join('');
+      return `<row r="${r + 1}">${cells}</row>`;
+    })
+    .join('');
+  const lastRef = `${colName(Math.max(...opts.rows.map((r) => r.length)) - 1)}${opts.rows.length}`;
+  let pane = '';
+  if (opts.freeze) {
+    const { rows, cols } = opts.freeze;
+    const topLeft = `${colName(cols)}${rows + 1}`;
+    pane =
+      `<pane${cols ? ` xSplit="${cols}"` : ''}${rows ? ` ySplit="${rows}"` : ''} topLeftCell="${topLeft}" activePane="bottomRight" state="frozen"/>` +
+      `<selection pane="bottomRight" activeCell="${topLeft}" sqref="${topLeft}"/>`;
+  }
+  const sheet =
+    XML_HEAD +
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+    `<dimension ref="A1:${lastRef}"/>` +
+    `<sheetViews><sheetView tabSelected="1" workbookViewId="0">${pane}</sheetView></sheetViews>` +
+    '<sheetFormatPr defaultRowHeight="15"/>' +
+    `<sheetData>${sheetData}</sheetData>` +
+    (opts.autoFilterRef ? `<autoFilter ref="${opts.autoFilterRef}"/>` : '') +
+    '<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>' +
+    '</worksheet>';
+  const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  return makeStoredZip([
+    {
+      name: '[Content_Types].xml',
+      data:
+        XML_HEAD +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+        '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+        '</Types>',
+    },
+    {
+      name: '_rels/.rels',
+      data:
+        XML_HEAD +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        `<Relationship Id="rId1" Type="${REL}/officeDocument" Target="xl/workbook.xml"/>` +
+        '</Relationships>',
+    },
+    {
+      name: 'xl/workbook.xml',
+      data:
+        XML_HEAD +
+        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+        '<sheets><sheet name="Frozen" sheetId="1" r:id="rId1"/></sheets></workbook>',
+    },
+    {
+      name: 'xl/_rels/workbook.xml.rels',
+      data:
+        XML_HEAD +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        `<Relationship Id="rId1" Type="${REL}/worksheet" Target="worksheets/sheet1.xml"/>` +
+        '</Relationships>',
+    },
+    { name: 'xl/worksheets/sheet1.xml', data: sheet },
+  ]);
+}
