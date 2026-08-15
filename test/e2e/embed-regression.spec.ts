@@ -1,4 +1,7 @@
 import { expect, test } from './lib/l0';
+import { toBase64 } from './lib/ooxml';
+import { buildPptx, buildXlsx } from './actions/fixtures';
+import { waitForEditorReady, saveAndCapture, SAVE_FORMAT_CODE } from './actions/editor';
 
 /**
  * Regression suite driving the real editor (OnlyOffice Personal vendor)
@@ -9,7 +12,7 @@ import { expect, test } from './lib/l0';
  *
  * The demo page provides two globals the tests lean on:
  *   - post(type, payload): sends an embed-API message to the editor iframe
- *     and resolves with the reply payload (45 s internal timeout);
+ *     and resolves with the reply payload (120 s internal timeout);
  *   - XLSX (SheetJS): used to build and parse workbook fixtures in-page, so
  *     no binary fixture files need to live in the repo.
  */
@@ -605,6 +608,112 @@ test.describe('embed regression (real editor)', () => {
     await expect.poll(() => page.evaluate(() => (window as any).__stream), { timeout: 60_000 }).toBeTruthy();
     const stream = await page.evaluate(() => (window as any).__stream);
     expect(stream.bytes).toBeGreaterThan(500);
+  });
+
+  test('a failed chart-editor entry does not disable saving for the session (long-action counter leak)', async ({
+    page,
+    l0,
+  }) => {
+    // Guards prepareEditorIframe patch 6. asc_editChartInFrameEditor with no
+    // chart under the selection increments the SDK long-action counter and
+    // then throws before releasing it; isLongAction() stays true and every
+    // later asc_DownloadAs is silently dropped -- the document can never be
+    // saved again. Found by the api-surface sweep, reachable from the UI
+    // (chart context menu / double-click) in real decks.
+    l0.allowConsole(/long-action counter restored|isExternal/);
+    await page.evaluate(
+      async ({ b64 }) => {
+        const bin = atob(b64);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        await post('document:open-buffer', { fileName: 'chart-entry.pptx', buffer: arr.buffer, readonly: false });
+      },
+      { b64: toBase64(buildPptx('long action')) },
+    );
+    const ready = await waitForEditorReady(page);
+    expect(ready.kind).toBe('slide');
+
+    const state = await page.evaluate(() => {
+      const visit = (win: Window): any => {
+        try {
+          const scope = win as any;
+          if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function') return scope.Asc.editor;
+        } catch {
+          /* cross-origin */
+        }
+        for (let i = 0; i < win.frames.length; i++) {
+          const f = visit(win.frames[i]);
+          if (f) return f;
+        }
+        return null;
+      };
+      const api = visit(window);
+      const before = api.isLongAction();
+      // Vendor throws here (no chart selected); the guard must swallow it
+      // AND restore the counter.
+      api.asc_editChartInFrameEditor();
+      return { before, after: api.isLongAction() };
+    });
+    expect(state.before).toBe(false);
+    expect(state.after, 'isLongAction must not stay true after a failed chart-editor entry').toBe(false);
+
+    const saved = await saveAndCapture(page, SAVE_FORMAT_CODE.pptx, 60_000);
+    expect(saved.isZip).toBe(true);
+    expect(saved.bytes).toBeGreaterThan(500);
+  });
+
+  test('select-all then chart series settings neither hangs the sheet nor breaks saving (whole-sheet series guard)', async ({
+    page,
+    l0,
+  }) => {
+    // Guards prepareEditorIframe patch 7. After Ctrl+A the selection is the
+    // full 1048576 x 16384 grid; asc_GetSeriesSettings (what the insert-
+    // chart dialog calls) built series over every cell, pinning the main
+    // thread until "Array buffer allocation failed" killed the renderer or
+    // at least every later save. Found by the api-surface sweep with the
+    // minimal repro asc_EditSelectAll -> asc_GetSeriesSettings.
+    l0.allowConsole(/series-settings guard/);
+    await page.evaluate(
+      async ({ b64 }) => {
+        const bin = atob(b64);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        await post('document:open-buffer', { fileName: 'series-guard.xlsx', buffer: arr.buffer, readonly: false });
+      },
+      { b64: toBase64(buildXlsx()) },
+    );
+    const ready = await waitForEditorReady(page);
+    expect(ready.kind).toBe('cell');
+
+    const probe = await page.evaluate(() => {
+      const visit = (win: Window): any => {
+        try {
+          const scope = win as any;
+          if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function') return scope.Asc.editor;
+        } catch {
+          /* cross-origin */
+        }
+        for (let i = 0; i < win.frames.length; i++) {
+          const f = visit(win.frames[i]);
+          if (f) return f;
+        }
+        return null;
+      };
+      const api = visit(window);
+      api.asc_EditSelectAll();
+      const t0 = Date.now();
+      const settings = api.asc_GetSeriesSettings();
+      const ms = Date.now() - t0;
+      const sel = api.wb.getWorksheet().model.selectionRange.getLast();
+      return { ms, gotSettings: !!settings, selectionStillWholeSheet: sel.r2 >= 1048575 && sel.c2 >= 16383 };
+    });
+    expect(probe.gotSettings).toBe(true);
+    // Unguarded this never returns; anything under a few seconds proves the clamp ran.
+    expect(probe.ms).toBeLessThan(5000);
+    expect(probe.selectionStillWholeSheet, 'the user selection must be restored after the call').toBe(true);
+
+    const saved = await saveAndCapture(page, SAVE_FORMAT_CODE.xlsx, 60_000);
+    expect(saved.isZip).toBe(true);
   });
 
   test('opens a PDF through the vendor pdf editor', async ({ page }) => {

@@ -628,11 +628,154 @@ function prepareEditorIframe(): boolean {
         console.log('[OO] serverless save semantics installed (autosave loop off, Save/Ctrl+S -> download stream)');
       }
 
+      // 6. Long-action counter leak guard. Frame-editor entry points
+      //    (edit chart / edit OLE table) do sync_StartAction(BlockInteraction)
+      //    -- which increments IsLongActionCurrent -- and then, when the
+      //    frame editor cannot open (no chart under the selection, no
+      //    Document Server frame editor in a serverless build), throw
+      //    before the matching sync_EndAction. isLongAction() is then stuck
+      //    true for the rest of the session and every asc_DownloadAs is
+      //    silently dropped: the document can never be saved again, with no
+      //    error shown. Found by the api-surface sweep, confirmed by
+      //    single-method bisection on pptx. Reachable from the UI (chart
+      //    context menu / double-click), so wrap those entry points and
+      //    release the counter on the exception path.
+      const laWin = win as unknown as {
+        Asc?: {
+          editor?: {
+            IsLongActionCurrent?: number;
+            isLongAction?: () => boolean;
+            sync_EndAction?: (type: number, id: number) => void;
+            asc_editChartInFrameEditor?: (...args: unknown[]) => unknown;
+            asc_editOleTableInFrameEditor?: (...args: unknown[]) => unknown;
+            asc_runAutostartMacroses?: (...args: unknown[]) => unknown;
+          };
+          c_oAscAsyncActionType?: { BlockInteraction?: number };
+        };
+        __ooLongActionLeakGuarded?: boolean;
+      };
+      const laApi = laWin.Asc?.editor;
+      if (laApi && !laWin.__ooLongActionLeakGuarded) {
+        // Restore the counter to what it was before the entry and let the
+        // app layer end its BlockInteraction overlay.
+        const releaseTo = (api: NonNullable<typeof laApi>, before: number) => {
+          if (typeof api.IsLongActionCurrent !== 'number' || api.IsLongActionCurrent <= before) return false;
+          const block = laWin.Asc?.c_oAscAsyncActionType?.BlockInteraction;
+          while (api.IsLongActionCurrent > before) {
+            if (typeof block === 'number' && typeof api.sync_EndAction === 'function') {
+              api.sync_EndAction(block, 0);
+            } else {
+              api.IsLongActionCurrent -= 1;
+            }
+          }
+          return true;
+        };
+        const wrapEntry = (
+          name: 'asc_editChartInFrameEditor' | 'asc_editOleTableInFrameEditor' | 'asc_runAutostartMacroses',
+          // Entries that legitimately stay "long" until an async callback
+          // must only be released on the exception path; synchronous ones
+          // (autostart macros: no macros / no builder in this build) are
+          // released whenever they return with the counter still raised.
+          releaseOnReturn: boolean,
+        ) => {
+          const orig = laApi[name];
+          if (typeof orig !== 'function') return;
+          laApi[name] = function (this: NonNullable<typeof laApi>, ...args: unknown[]) {
+            const before = typeof this.IsLongActionCurrent === 'number' ? this.IsLongActionCurrent : 0;
+            try {
+              const out = orig.apply(this, args);
+              if (releaseOnReturn && releaseTo(this, before)) {
+                console.warn(`[OO] ${name} returned with the long-action counter raised; restored`);
+              }
+              return out;
+            } catch (error) {
+              releaseTo(this, before);
+              console.warn(`[OO] ${name} failed; long-action counter restored`, error);
+              return undefined;
+            }
+          };
+        };
+        wrapEntry('asc_editChartInFrameEditor', false);
+        wrapEntry('asc_editOleTableInFrameEditor', false);
+        wrapEntry('asc_runAutostartMacroses', true);
+        laWin.__ooLongActionLeakGuarded = true;
+        console.log('[OO] long-action counter leak guard installed (frame-editor entry points)');
+      }
+
+      // 7. Whole-sheet series-settings guard (cell editor). After Ctrl+A the
+      //    selection is the full 1048576 x 16384 grid; asc_GetSeriesSettings
+      //    (the chart-insert dialog's data source) then builds series over
+      //    every cell of that selection, which pins the main thread and
+      //    exhausts memory until "Array buffer allocation failed" -- the
+      //    renderer dies or, at best, the document can no longer be saved.
+      //    Found by the api-surface sweep (minimal repro: asc_EditSelectAll
+      //    then asc_GetSeriesSettings), reachable from the UI as
+      //    select-all -> insert chart. Clamp oversized selections to the
+      //    used area for the duration of the call, restoring afterwards, so
+      //    the vendor logic sees at most the cells that actually hold data.
+      const seriesWin = win as unknown as {
+        Asc?: {
+          editor?: {
+            asc_GetSeriesSettings?: () => unknown;
+            wb?: {
+              getWorksheet?: () => {
+                setSelection?: (range: unknown) => void;
+                model?: {
+                  selectionRange?: { getLast?: () => { r1: number; c1: number; r2: number; c2: number } };
+                  getRowsCount?: () => number;
+                  getColsCount?: () => number;
+                };
+              };
+            };
+          };
+          Range?: new (c1: number, r1: number, c2: number, r2: number) => unknown;
+        };
+        __ooSeriesSelectionGuarded?: boolean;
+      };
+      const seriesApi = seriesWin.Asc?.editor;
+      const RangeCtor = seriesWin.Asc?.Range;
+      if (
+        seriesApi &&
+        typeof seriesApi.asc_GetSeriesSettings === 'function' &&
+        RangeCtor &&
+        !seriesWin.__ooSeriesSelectionGuarded
+      ) {
+        const origSeries = seriesApi.asc_GetSeriesSettings;
+        const MAX_SERIES_CELLS = 200_000;
+        seriesApi.asc_GetSeriesSettings = function (this: typeof seriesApi) {
+          try {
+            const ws = this.wb?.getWorksheet?.();
+            const model = ws?.model;
+            const last = model?.selectionRange?.getLast?.();
+            if (ws && model && last && typeof ws.setSelection === 'function') {
+              const area = (last.r2 - last.r1 + 1) * (last.c2 - last.c1 + 1);
+              if (area > MAX_SERIES_CELLS) {
+                const rows = Math.max(1, model.getRowsCount?.() ?? 1);
+                const cols = Math.max(1, model.getColsCount?.() ?? 1);
+                const saved = { r1: last.r1, c1: last.c1, r2: last.r2, c2: last.c2 };
+                ws.setSelection(new RangeCtor(last.c1, last.r1, Math.min(last.c2, cols), Math.min(last.r2, rows)));
+                try {
+                  return origSeries.call(this);
+                } finally {
+                  ws.setSelection(new RangeCtor(saved.c1, saved.r1, saved.c2, saved.r2));
+                }
+              }
+            }
+          } catch {
+            // any probing failure falls through to the vendor behavior
+          }
+          return origSeries.call(this);
+        };
+        seriesWin.__ooSeriesSelectionGuarded = true;
+        console.log('[OO] whole-sheet series-settings guard installed');
+      }
+
       if (
         win.__ooSharedWorkerShadowed &&
         ooWin.__ooFetchFontsGuarded &&
         imgWin.__ooImagePipelinePatched &&
-        saveWin.__ooServerlessSavePatched
+        saveWin.__ooServerlessSavePatched &&
+        laWin.__ooLongActionLeakGuarded
       ) {
         fullyApplied = true;
       }

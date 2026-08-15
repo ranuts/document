@@ -166,6 +166,7 @@ test.describe('api surface sweep', () => {
       page.on('console', (m) => {
         const t = m.text();
         if (t.startsWith('SWEEP-CALL ')) calls.push(t.slice(11));
+        if (t.startsWith('SWEEP-ORDER ')) console.log(t);
       });
       page.on('crash', () =>
         console.log(`RENDERER CRASHED during ${doc.label}; last calls: ${calls.slice(-5).join(' <- ')}`),
@@ -189,7 +190,7 @@ test.describe('api surface sweep', () => {
       await typeIntoDocument(page, doc.kind, 'sweep');
 
       const verdicts: Verdict[] = await page.evaluate(
-        async ({ skipSource, probeEvery }) => {
+        async ({ skipSource, probeEvery, onlySource }) => {
           const visit = (win: Window): { api: any; win: any } | null => {
             try {
               const scope = win as any;
@@ -266,9 +267,24 @@ test.describe('api surface sweep', () => {
             });
           let sinceProbe = 0;
           let batchStart = 0;
-          const sortedNames = [...names].sort();
+          // SWEEP_ONLY="a,b,c" restricts the sweep to those methods, for
+          // bisecting a batch that the probe attributed.
+          const only = onlySource
+            ? new Set(
+                onlySource
+                  .split(',')
+                  .map((x) => x.trim())
+                  .filter(Boolean),
+              )
+            : null;
+          const sortedNames = [...names].sort().filter((n) => !only || only.has(n));
+          console.log('SWEEP-ORDER ' + sortedNames.join(','));
           const stateVec = () =>
             JSON.stringify({
+              // isLongAction() true means asc_DownloadAs is silently dropped;
+              // a method that leaves it stuck true is a save killer.
+              longAction: typeof api.isLongAction === 'function' ? !!api.isLongAction() : undefined,
+              frameEditor: !!api.isOpenedFrameEditor,
               fmt: api.documentFormatSave,
               view: !!api.isViewMode,
               restr: api.restrictions,
@@ -344,10 +360,21 @@ test.describe('api surface sweep', () => {
                 out.push({ method: name, status: 'ok', ms: Date.now() - t0 });
               }
             } catch (e) {
+              // A method that throws can still have mutated state on the way
+              // out (asc_editChartInFrameEditor: opens the frame editor,
+              // increments the long-action counter, THEN throws on a null
+              // chart -- leaving isLongAction() stuck true and every later
+              // asc_DownloadAs silently dropped). Judge drift here too.
+              const stateNow = stateVec();
+              const drift = stateNow !== stateWas ? ` | state ${stateWas} -> ${stateNow}` : '';
+              if (drift) {
+                console.log('SWEEP-STATE-DRIFT(threw) ' + name + drift);
+                stateWas = stateNow;
+              }
               out.push({
                 method: name,
                 status: 'threw',
-                detail: String((e as Error)?.message || e).slice(0, 160),
+                detail: String((e as Error)?.message || e).slice(0, 160) + drift,
                 ms: Date.now() - t0,
               });
             }
@@ -355,7 +382,11 @@ test.describe('api surface sweep', () => {
           }
           return out;
         },
-        { skipSource: SKIP.source, probeEvery: Number(process.env.SWEEP_PROBE_EVERY || 0) },
+        {
+          skipSource: SKIP.source,
+          probeEvery: Number(process.env.SWEEP_PROBE_EVERY || 0),
+          onlySource: process.env.SWEEP_ONLY || '',
+        },
       );
 
       // Post-sweep liveness: the document must still be usable and savable.
