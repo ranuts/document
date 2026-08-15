@@ -453,7 +453,7 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   方向零；**测试全覆盖方法论**（格式×操作×输入×环境行为矩阵、三层语料、
   L0–L4 五层判据、缺陷→参数化类用例、矩阵空白格/escape 两项指标）见
   docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md，新用例
-  按它落位。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
+  按它落位，台账在 docs/test-matrix.md（空白格 = 待补）。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
   （跑道被 SW 击穿，见 docs/explorations/2026-08-15-corpus-harness-sw-route-bug-and-open-failure-guard.md），
   真正修掉的是"打开失败永久转圈"（`installOpenFailureGuard`）与
   "Save 按钮常灰"（守卫 5）。v9 release 公告冻结至战役通过。
