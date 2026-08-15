@@ -42,6 +42,8 @@ export function getDocumentType(fileType: string): string | null {
     return 'cell';
   } else if (type === 'pptx' || type === 'ppt') {
     return 'slide';
+  } else if (type === 'pdf') {
+    return 'pdf';
   }
   return null;
 }
@@ -101,4 +103,5 @@ export const DOCUMENT_TYPE_MAP: Record<string, DocumentType> = {
   pptx: 'slide',
   ppt: 'slide',
   odp: 'slide',
+  pdf: 'pdf',
 };

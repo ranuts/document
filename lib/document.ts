@@ -23,7 +23,7 @@ export function setUICallbacks(callbacks: {
 // Create a single hidden file input (ranui builder, ecosystem convention)
 const fileInput = View('input')
   .attr('type', 'file')
-  .attr('accept', '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv')
+  .attr('accept', '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv,.pdf')
   .attr('style', 'visibility: hidden')
   .build() as HTMLInputElement;
 document.body.appendChild(fileInput);

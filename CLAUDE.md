@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-基于 OnlyOffice 的本地 Web 文档编辑器，所有处理在浏览器端完成，无需服务器，保护用户隐私。支持 docx、xlsx、pptx、csv 等格式。
+基于 OnlyOffice 的本地 Web 文档编辑器，所有处理在浏览器端完成，无需服务器，保护用户隐私。支持 docx、xlsx、pptx、csv、pdf 等格式。
 
 - **线上地址**：https://edit.chaxus.com/ （旧址 https://ranuts.github.io/document/ 已跳转至此）
 - **GitHub**：https://github.com/ranuts/document
@@ -143,6 +143,8 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 - 只读打开：状态正确且保存被拒（#25、#87）
 - 运行时只读切换：restriction 真实生效（iframe 内 `restrictions` 属性）、
   锁定期保存被拒、解锁后保存往返完整
+- docx open-buffer 打开 + 存回 docx（页内零依赖手拼最小 OOXML zip，#113 直接钉死）
+- PDF 打开：真实挂载 pdfeditor（断言 iframe URL 路由），页内手拼合法最小 PDF
 
 **这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
 "全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、
@@ -386,7 +388,12 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   不会执行，无需额外过滤 patch（2026-08-14 排查结论）。
 - **详细历史**：docs/explorations/ 下 2026-08-11 ～ 08-14 的 v9 系列文档
   （根因链、迁移记录、issue 回归排查、E2E 固化、同类方案研究）。
-- **待办**：PDF 打开（新 vendor 有 pdfeditor，未接入）。
+- **PDF 打开**：已接入（2026-08-15）。api.js 按 `document.fileType === 'pdf'`
+  自动路由 pdfeditor，页面侧只需类型映射（`DOCUMENT_TYPE_MAP.pdf` +
+  `getDocumentType`）与文件选择 accept；保存与其他格式共用 file-stream 通道。
+- **错误提示**：编辑器 `onError` 会用 ranui message 弹 toast（含错误码与
+  描述；-85 附"内容与扩展名不一致"提示），别再只留 console.error。
+- **待办**：无（截至 2026-08-15）。
 
 ---
 

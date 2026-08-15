@@ -25,7 +25,7 @@ export interface BinConversionResult {
   data: BlobPart;
 }
 
-export type DocumentType = 'word' | 'cell' | 'slide';
+export type DocumentType = 'word' | 'cell' | 'slide' | 'pdf';
 
 export interface SaveEvent {
   data: {

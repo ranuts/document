@@ -203,4 +203,171 @@ test.describe('embed regression (real editor)', () => {
     expect(result.savedFileName).toBe('toggle.xlsx');
     expect(result.text).toBe('toggle,1');
   });
+
+  test('opens a docx from a buffer and saves it back as docx (#113)', async ({ page }) => {
+    const result = await page.evaluate(async () => {
+      // Hand-build a minimal OOXML docx (stored zip, no compression) so no
+      // binary fixture needs to live in the repo. Mirrors the shape that
+      // triggered #113: document:open-buffer with real docx bytes.
+      const crcTable = (() => {
+        const table = new Uint32Array(256);
+        for (let n = 0; n < 256; n++) {
+          let c = n;
+          for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+          table[n] = c >>> 0;
+        }
+        return table;
+      })();
+      const crc32 = (bytes: Uint8Array) => {
+        let c = 0xffffffff;
+        for (let i = 0; i < bytes.length; i++) c = crcTable[(c ^ bytes[i]) & 0xff] ^ (c >>> 8);
+        return (c ^ 0xffffffff) >>> 0;
+      };
+      const encoder = new TextEncoder();
+      const makeZip = (entries: Array<{ name: string; text: string }>) => {
+        const chunks: number[] = [];
+        const central: number[] = [];
+        const pushU16 = (arr: number[], v: number) => arr.push(v & 0xff, (v >> 8) & 0xff);
+        const pushU32 = (arr: number[], v: number) =>
+          arr.push(v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >> 24) & 0xff);
+        for (const { name, text } of entries) {
+          const nameBytes = encoder.encode(name);
+          const data = encoder.encode(text);
+          const crc = crc32(data);
+          const offset = chunks.length;
+          pushU32(chunks, 0x04034b50);
+          pushU16(chunks, 20); // version needed
+          pushU16(chunks, 0); // flags
+          pushU16(chunks, 0); // method: stored
+          pushU32(chunks, 0); // dos time+date
+          pushU32(chunks, crc);
+          pushU32(chunks, data.length);
+          pushU32(chunks, data.length);
+          pushU16(chunks, nameBytes.length);
+          pushU16(chunks, 0); // extra length
+          chunks.push(...nameBytes, ...data);
+
+          pushU32(central, 0x02014b50);
+          pushU16(central, 20); // version made by
+          pushU16(central, 20);
+          pushU16(central, 0);
+          pushU16(central, 0);
+          pushU32(central, 0);
+          pushU32(central, crc);
+          pushU32(central, data.length);
+          pushU32(central, data.length);
+          pushU16(central, nameBytes.length);
+          pushU16(central, 0);
+          pushU16(central, 0); // comment length
+          pushU16(central, 0); // disk number
+          pushU16(central, 0); // internal attrs
+          pushU32(central, 0); // external attrs
+          pushU32(central, offset);
+          central.push(...nameBytes);
+        }
+        const centralOffset = chunks.length;
+        chunks.push(...central);
+        pushU32(chunks, 0x06054b50);
+        pushU16(chunks, 0);
+        pushU16(chunks, 0);
+        pushU16(chunks, entries.length);
+        pushU16(chunks, entries.length);
+        pushU32(chunks, central.length);
+        pushU32(chunks, centralOffset);
+        pushU16(chunks, 0);
+        return new Uint8Array(chunks);
+      };
+
+      const docx = makeZip([
+        {
+          name: '[Content_Types].xml',
+          text:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+            '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+            '<Default Extension="xml" ContentType="application/xml"/>' +
+            '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+            '</Types>',
+        },
+        {
+          name: '_rels/.rels',
+          text:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+            '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+            '</Relationships>',
+        },
+        {
+          name: 'word/document.xml',
+          text:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+            '<w:body><w:p><w:r><w:t>hello from e2e</w:t></w:r></w:p></w:body></w:document>',
+        },
+      ]);
+
+      const opened = await post('document:open-buffer', {
+        fileName: 'buffer-open.docx',
+        buffer: docx.buffer,
+        readonly: false,
+      });
+      const state = await post('document:get-state', {});
+      const saved = await post('document:save', { targetExt: 'DOCX' });
+      const bytes = new Uint8Array(await saved.file.arrayBuffer());
+      return {
+        opened,
+        state,
+        savedFileName: saved.file.name as string,
+        magic: Array.from(bytes.slice(0, 4)),
+        size: bytes.byteLength,
+      };
+    });
+
+    expect(result.opened.readonly).toBe(false);
+    expect(result.state).toEqual({ readonly: false, hasDocument: true });
+    expect(result.savedFileName).toBe('buffer-open.docx');
+    expect(result.magic).toEqual([0x50, 0x4b, 0x03, 0x04]); // PK zip container
+    expect(result.size).toBeGreaterThan(500);
+  });
+
+  test('opens a PDF through the vendor pdf editor', async ({ page }) => {
+    await page.evaluate(async () => {
+      // Build a minimal but structurally valid single-page PDF, computing the
+      // xref offsets for real so strict parsers accept it.
+      const head = '%PDF-1.4\n';
+      const objects = [
+        '1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n',
+        '2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n',
+        '3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>endobj\n',
+      ];
+      let body = head;
+      const offsets: number[] = [];
+      for (const obj of objects) {
+        offsets.push(body.length);
+        body += obj;
+      }
+      const xrefOffset = body.length;
+      const pad = (n: number) => String(n).padStart(10, '0');
+      body +=
+        `xref\n0 4\n0000000000 65535 f \n` +
+        offsets.map((o) => `${pad(o)} 00000 n \n`).join('') +
+        `trailer<</Size 4/Root 1 0 R>>\nstartxref\n${xrefOffset}\n%%EOF`;
+      const pdf = new TextEncoder().encode(body);
+
+      await post('document:open-buffer', {
+        fileName: 'mini.pdf',
+        buffer: pdf.buffer,
+        readonly: false,
+      });
+    });
+
+    // The api layer routes fileType pdf to the pdfeditor app: assert the
+    // editor iframe actually mounted it (not a silent fallback to word).
+    await expect
+      .poll(() => page.frames().some((frame) => frame.url().includes('/pdfeditor/')), { timeout: 30_000 })
+      .toBe(true);
+
+    const state = await page.evaluate(async () => post('document:get-state', {}));
+    expect(state).toEqual({ readonly: false, hasDocument: true });
+  });
 });

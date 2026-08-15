@@ -47,6 +47,8 @@ export interface I18nMessages {
   unsupportedFileType: string;
   invalidFileObject: string;
   documentOperationFailed: string;
+  editorErrorToast: string;
+  editorErrorFormatMismatch: string;
 
   // AI agent panel
   agentTitle: string;
@@ -102,6 +104,8 @@ const messages: Record<Language, I18nMessages> = {
     unsupportedFileType: '不支持的文件类型：',
     invalidFileObject: '无效的文件对象',
     documentOperationFailed: '文档操作失败：',
+    editorErrorToast: '文档处理出错',
+    editorErrorFormatMismatch: '文件内容与扩展名不一致，请确认文件格式后重试',
     agentTitle: 'AI 助手',
     agentOpenTip: '打开 AI 助手',
     agentSettings: '设置',
@@ -152,6 +156,8 @@ const messages: Record<Language, I18nMessages> = {
     unsupportedFileType: 'Unsupported file type: ',
     invalidFileObject: 'Invalid file object',
     documentOperationFailed: 'Document operation failed: ',
+    editorErrorToast: 'Document error',
+    editorErrorFormatMismatch: 'The file content does not match its extension; check the file format and try again',
     agentTitle: 'AI Assistant',
     agentOpenTip: 'Open AI Assistant',
     agentSettings: 'Settings',

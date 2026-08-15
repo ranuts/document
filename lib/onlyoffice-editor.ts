@@ -500,6 +500,17 @@ function createPersonalEditorInstance(config: {
       onDownloadAs: () => {},
       onError: (event: unknown) => {
         console.error('[OO] editor error:', event);
+        // Surface a toast so users see more than a silent console line
+        // (issue reports like #113 arrived with nothing but a screenshot of
+        // the error dialog's numeric code).
+        const data = (event as { data?: { errorCode?: number; errorDescription?: string } } | null)?.data;
+        const code = data?.errorCode;
+        // -85: the engine sniffed a content/extension mismatch.
+        const hint = code === -85 ? ` ${t('editorErrorFormatMismatch')}` : '';
+        const detail = [code !== undefined ? `code ${code}` : '', data?.errorDescription].filter(Boolean).join(', ');
+        (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
+          `${t('editorErrorToast')}${detail ? ` (${detail})` : ''}${hint}`,
+        );
       },
     },
   } as unknown as ConstructorParameters<typeof window.DocsAPI.DocEditor>[1]);

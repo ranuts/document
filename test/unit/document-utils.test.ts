@@ -53,6 +53,7 @@ describe('document utils', () => {
         "odp": "slide",
         "ods": "cell",
         "odt": "word",
+        "pdf": "pdf",
         "ppt": "slide",
         "pptx": "slide",
         "rtf": "word",
