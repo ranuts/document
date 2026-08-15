@@ -21,7 +21,8 @@
     "format:check": "prettier --check .",
     "lint:ts": "oxlint && tsc --noEmit",
     "lint:docker": "docker compose -f docker-compose.yaml config --quiet",
-    "lint": "pnpm run lint:ts && pnpm run lint:docker"
+    "lint": "pnpm run lint:ts && pnpm run lint:docker",
+    "test:e2e:corpus": "playwright test test/e2e/corpus.spec.ts"
   },
   "engines": {
     "node": ">=20.19.0"
