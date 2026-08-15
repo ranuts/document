@@ -235,9 +235,13 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 ## 重要约定
 
 1. **不锁定工具版本**：CI 中 pnpm 用 `latest`，Node 用 `lts/*`，保持自动跟随最新
-2. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
-3. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
-4. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
+2. **站点页面统一 ran 设计体系**：所有用户可见页面（落地页、demo 页如
+   `public/embed-demo.html`、404 等）必须使用 ranui 组件/设计 token
+   （`--ran-*`）与 ranuts 工具，不允许手写游离于设计体系外的样式。
+   demo 页也是产品门面，风格必须与主站一致。
+3. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
+4. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
+5. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
 
 ---
 
