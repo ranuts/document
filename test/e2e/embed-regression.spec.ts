@@ -493,6 +493,116 @@ test.describe('embed regression (real editor)', () => {
     expect(result.mediaEntries[0].size).toBeGreaterThan(100);
   });
 
+  test('a keyboard edit lights the toolbar Save button and Ctrl+S produces the file stream', async ({ page }) => {
+    // Guards the serverless save semantics (prepareEditorIframe patch 5).
+    // Without them the SDK's coauthoring autosave loop "commits" every edit
+    // to a nonexistent server within 2s, isDocumentCanSave flips back to
+    // false, and the Save button + Ctrl+S stay permanently disabled -- the
+    // user simply cannot save (the "why is Save always grey" report).
+    const result = await page.evaluate(async () => {
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['save', 'button']]), 'Sheet1');
+      const data = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      await post('document:open-buffer', { fileName: 'savebtn.xlsx', buffer: new Uint8Array(data).buffer, readonly: false });
+
+      const findEditorWin = (): any => {
+        const visit = (win: Window): any => {
+          try {
+            const scope = win as any;
+            if (scope.Asc?.editor && 'isDocumentLoadComplete' in scope.Asc.editor) return win;
+          } catch {
+            /* cross-origin */
+          }
+          for (let i = 0; i < win.frames.length; i++) {
+            const found = visit(win.frames[i]);
+            if (found) return found;
+          }
+          return null;
+        };
+        return visit(window);
+      };
+      const start = Date.now();
+      let ed = findEditorWin();
+      while ((!ed || !ed.Asc.editor.isDocumentLoadComplete) && Date.now() - start < 60_000) {
+        await new Promise((r) => setTimeout(r, 500));
+        ed = ed || findEditorWin();
+      }
+      const api = ed.Asc.editor;
+      const btn = ed.document.querySelector('#id-toolbar-btn-save') as HTMLElement;
+      const initiallyDisabled = btn.classList.contains('disabled');
+
+      // Watch for the save stream on every window in the chain (the vendor
+      // posts it up the parent chain; where it lands depends on
+      // OO_FILE_STREAM_ONLY placement).
+      (window as any).__stream = null;
+      for (const w of [window, window.frames[0], ed]) {
+        w.addEventListener('message', (e: MessageEvent) => {
+          const d = e.data;
+          if (d && d.type === 'onlyoffice-file-stream' && d.buffer instanceof ArrayBuffer) {
+            (window as any).__stream = { bytes: d.buffer.byteLength };
+          }
+        });
+      }
+      (ed.document.getElementById('area_id') as HTMLElement | null)?.focus();
+      return { initiallyDisabled, focused: ed.document.activeElement?.id, gap: api.autoSaveGap };
+    });
+    expect(result.initiallyDisabled).toBe(true);
+    expect(result.gap).toBe(0);
+
+    // Real trusted keyboard input into a cell, then wait past the old
+    // autosave gap (2s) to prove the enabled state sticks.
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.type('QA');
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(3500);
+
+    const afterEdit = await page.evaluate(() => {
+      const visit = (win: Window): any => {
+        try {
+          const scope = win as any;
+          if (scope.Asc?.editor && 'isDocumentLoadComplete' in scope.Asc.editor) return win;
+        } catch {
+          /* skip */
+        }
+        for (let i = 0; i < win.frames.length; i++) {
+          const f = visit(win.frames[i]);
+          if (f) return f;
+        }
+        return null;
+      };
+      const ed = visit(window);
+      return {
+        canSave: ed.Asc.editor.isDocumentCanSave,
+        btnDisabled: (ed.document.querySelector('#id-toolbar-btn-save') as HTMLElement).classList.contains('disabled'),
+      };
+    });
+    expect(afterEdit.canSave, 'isDocumentCanSave should stay true after an edit').toBe(true);
+    expect(afterEdit.btnDisabled, 'toolbar Save button should be enabled after an edit').toBe(false);
+
+    // Trigger the save the way the toolbar/shortcut does (asc_Save with no
+    // autosave flag), inside the editor frame; the patched path routes it
+    // to asc_DownloadAs and the file stream must appear.
+    await page.evaluate(() => {
+      const visit = (win: Window): any => {
+        try {
+          const scope = win as any;
+          if (scope.Asc?.editor && 'isDocumentLoadComplete' in scope.Asc.editor) return win;
+        } catch {
+          /* skip */
+        }
+        for (let i = 0; i < win.frames.length; i++) {
+          const f = visit(win.frames[i]);
+          if (f) return f;
+        }
+        return null;
+      };
+      visit(window).Asc.editor.asc_Save();
+    });
+    await expect.poll(() => page.evaluate(() => (window as any).__stream), { timeout: 60_000 }).toBeTruthy();
+    const stream = await page.evaluate(() => (window as any).__stream);
+    expect(stream.bytes).toBeGreaterThan(500);
+  });
+
   test('opens a PDF through the vendor pdf editor', async ({ page }) => {
     await page.evaluate(async () => {
       // Build a minimal but structurally valid single-page PDF, computing the
