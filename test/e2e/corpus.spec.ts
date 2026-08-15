@@ -100,11 +100,13 @@ test.describe('real-document corpus matrix', () => {
     }
   });
 
-  for (const filePath of files) {
+  for (const [index, filePath] of files.entries()) {
     const name = basename(filePath);
     const ext = extname(filePath).toLowerCase();
 
-    test(`corpus: ${name}`, async ({ page }) => {
+    // Index prefix keeps titles unique when the same filename exists in
+    // several corpus folders.
+    test(`corpus #${index}: ${name}`, async ({ page }) => {
       const t0 = Date.now();
       const row: Row = {
         file: filePath,
