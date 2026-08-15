@@ -386,6 +386,10 @@ function installOpenFailureGuard(win: Window): void {
       }
       return;
     }
+    // The vendor's async loadDocument leaves both the inner conversion
+    // promise and its own promise unhandled, so this fires twice per
+    // failure; report once.
+    if (documentOpenError) return;
     console.error('[OO] open conversion failed:', message);
     markDocumentOpenFailed(message);
     const api = w.Asc?.editor;

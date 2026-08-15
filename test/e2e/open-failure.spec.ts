@@ -36,9 +36,9 @@ test.describe('open failure surfacing (real editor)', () => {
 
     // The SDK error path ran: the vendor's own open-error dialog is up ...
     const editorFrame = page.frameLocator('iframe').frameLocator('iframe[name="frameEditor"]');
-    await expect(editorFrame.locator('.asc-window.modal.alert')).toContainText(/error has occurred while opening/i, {
-      timeout: 60_000,
-    });
+    await expect(
+      editorFrame.locator('.asc-window.modal.alert', { hasText: /error has occurred while opening/i }).first(),
+    ).toBeVisible({ timeout: 60_000 });
     // ... and the "Loading spreadsheet" mask is gone instead of spinning forever.
     await expect(editorFrame.locator('.asc-loadmask')).toHaveCount(0, { timeout: 15_000 });
 
