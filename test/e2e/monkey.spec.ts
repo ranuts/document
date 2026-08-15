@@ -217,6 +217,10 @@ test.describe('seeded monkey', () => {
     test(`monkey seed=${SEED} steps=${STEPS} on ${doc.label}`, async ({ page, l0 }) => {
       l0.allowConsole(/./);
       l0.allowFrameError?.(/./);
+      // NoCritical asc_onError are the SDK's own user-facing refusals that a
+      // random sequence legitimately provokes; the monkey attributes them per
+      // step below and fails only on Critical (level -1).
+      l0.allowAscError((e) => e.level === '0');
       const rand = prng(SEED ^ doc.kind.length);
       const pick = <T>(arr: T[]): T => arr[Math.floor(rand() * arr.length)];
 
