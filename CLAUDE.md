@@ -145,6 +145,8 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
   锁定期保存被拒、解锁后保存往返完整
 - docx open-buffer 打开 + 存回 docx（页内零依赖手拼最小 OOXML zip，#113 直接钉死）
 - PDF 打开：真实挂载 pdfeditor（断言 iframe URL 路由），页内手拼合法最小 PDF
+- URL 插图后保存：产物 zip 含 media 条目且字节完整（守护 serverless image
+  pipeline；此前该场景主线程永久卡死）
 
 **这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
 "全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、
@@ -373,8 +375,13 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   iframe patch 与混淆符号 hook 已全部删除。
 - **关键代码**：`lib/onlyoffice-editor.ts` 的 `createPersonalEditorInstance` /
   `handleFileStreamMessage` / `triggerPersonalDownloadAs` / `prepareEditorIframe`
-  （最后一个含三个冷启动守卫：品牌元素隐藏、SharedWorker 遮蔽、fetchFonts
-  字体竞态守卫——都是首次访问才会踩中的生产 bug，别删）。
+  （最后一个含四个运行时守卫：品牌元素隐藏、SharedWorker 遮蔽、fetchFonts
+  字体竞态守卫、**serverless image pipeline**——第四个修的是"文档含图片
+  时保存令主线程永久卡死"：无服务器时 sendImgUrls 注册不了图片，DOCY
+  被写入裸外部 URL，x2t.wasm 对此死循环。自愈 getImageLocal + 本地
+  sendImgUrls + convertFromBin medias 兜底三件套，见
+  docs/explorations/2026-08-15-image-save-hang-root-cause-fix.md。全部
+  都是真实生产 bug，别删）。
 - **部署约束**：x2t.wasm 只发布 gzip（9.4 MB，x2t_helper 里浏览器端解压
   预置 `Module.wasmBinary`），裸 40 MB 文件超 CF Pages 25 MB 限制、不入库。
 - **CSV**：新 vendor 编辑器不能直接吃 CSV——打开前用 SheetJS 转 XLSX、保存
