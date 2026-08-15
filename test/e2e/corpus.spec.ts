@@ -88,10 +88,15 @@ test.describe('real-document corpus matrix', () => {
     mkdirSync('test-results', { recursive: true });
     const report = 'test-results/corpus-report.json';
     writeFileSync(report, JSON.stringify(rows, null, 2));
-    const bad = rows.filter((r) => r.open !== 'ok' || r.edit === 'fatal' || r.save.startsWith('fail') || r.ascErrors.length > 0 || r.fatalDialog);
+    const bad = rows.filter(
+      (r) =>
+        r.open !== 'ok' || r.edit === 'fatal' || r.save.startsWith('fail') || r.ascErrors.length > 0 || r.fatalDialog,
+    );
     console.log(`\nCORPUS SUMMARY: ${rows.length} files, ${bad.length} with findings -> ${report}`);
     for (const r of bad) {
-      console.log(`  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`);
+      console.log(
+        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
+      );
     }
   });
 
@@ -101,11 +106,22 @@ test.describe('real-document corpus matrix', () => {
 
     test(`corpus: ${name}`, async ({ page }) => {
       const t0 = Date.now();
-      const row: Row = { file: filePath, sizeKB: Math.round(statSync(filePath).size / 1024), open: 'pending', edit: 'skipped', save: 'skipped', ascErrors: [], fatalDialog: null, ms: 0 };
+      const row: Row = {
+        file: filePath,
+        sizeKB: Math.round(statSync(filePath).size / 1024),
+        open: 'pending',
+        edit: 'skipped',
+        save: 'skipped',
+        ascErrors: [],
+        fatalDialog: null,
+        ms: 0,
+      };
       rows.push(row);
 
       const bytes = readFileSync(filePath);
-      await page.route('**/__corpus__/doc', (route) => route.fulfill({ status: 200, contentType: 'application/octet-stream', body: bytes }));
+      await page.route('**/__corpus__/doc', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/octet-stream', body: bytes }),
+      );
 
       await page.goto('/embed-demo.html');
       await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
@@ -133,8 +149,11 @@ test.describe('real-document corpus matrix', () => {
         return;
       }
 
-      // Register error listeners inside the editor frame + let render settle.
-      await page.evaluate(async () => {
+      // Register error listeners, then gate on the REAL load-complete signal:
+      // document:opened only means the editor was constructed. The corpus's
+      // first finding was a deck stuck on "Loading presentation" forever
+      // while the embed promise had long resolved.
+      const load = await page.evaluate(async () => {
         const w = window as any;
         w.__ascErrors = [];
         const visit = (win: Window): any => {
@@ -157,13 +176,18 @@ test.describe('real-document corpus matrix', () => {
           await new Promise((r) => setTimeout(r, 500));
           api = visit(window);
         }
-        if (api) {
-          api.asc_registerCallback('asc_onError', (id: unknown, level: unknown) => {
-            w.__ascErrors.push({ id: String(id), level: String(level) });
-          });
+        if (!api) return { loaded: false, loadMs: Date.now() - t, reason: 'editor api never appeared' };
+        w.__corpusApi = true;
+        api.asc_registerCallback('asc_onError', (id: unknown, level: unknown) => {
+          w.__ascErrors.push({ id: String(id), level: String(level) });
+        });
+        while (!api.isDocumentLoadComplete && Date.now() - t < 180_000) {
+          await new Promise((r) => setTimeout(r, 1000));
         }
-        // Give the renderer time to lay out the real document.
-        await new Promise((r) => setTimeout(r, 8000));
+        if (!api.isDocumentLoadComplete)
+          return { loaded: false, loadMs: Date.now() - t, reason: 'isDocumentLoadComplete still false after 180s' };
+        await new Promise((r) => setTimeout(r, 4000));
+        return { loaded: true, loadMs: Date.now() - t };
       });
 
       const findFatalDialog = () =>
@@ -172,7 +196,10 @@ test.describe('real-document corpus matrix', () => {
             try {
               for (const el of Array.from(win.document.querySelectorAll('.asc-window, .modal, [role="dialog"]'))) {
                 const he = el as HTMLElement;
-                if (he.offsetParent !== null && /error occurred during the work|与文档工作|критическ/i.test(he.textContent || '')) {
+                if (
+                  he.offsetParent !== null &&
+                  /error occurred during the work|与文档工作|критическ/i.test(he.textContent || '')
+                ) {
                   return (he.textContent || '').trim().slice(0, 160);
                 }
               }
@@ -189,10 +216,14 @@ test.describe('real-document corpus matrix', () => {
         });
 
       row.fatalDialog = await findFatalDialog();
-      row.open = row.fatalDialog ? 'fatal-dialog-on-open' : 'ok';
+      row.open = row.fatalDialog
+        ? 'fatal-dialog-on-open'
+        : load.loaded
+          ? `ok (load ${Math.round(load.loadMs / 1000)}s)`
+          : `fail: ${(load as { reason?: string }).reason}`;
 
       // ---- edit (trusted input; the real-PPTX fatal error fired on edit) ----
-      if (!row.fatalDialog) {
+      if (!row.fatalDialog && load.loaded) {
         try {
           const editorFrame = page.frameLocator('iframe').frameLocator('iframe[name="frameEditor"]');
           const sdk = editorFrame.locator('#editor_sdk');
@@ -211,28 +242,59 @@ test.describe('real-document corpus matrix', () => {
         }
       }
 
-      // ---- save ----
-      if (!row.fatalDialog) {
-        const target = SAVE_TARGET[ext];
+      // ---- save (direct editor API + file-stream listener; the embed
+      //      post() helper caps at 45s which is too short for big decks
+      //      and hides slow-vs-hung) ----
+      if (!row.fatalDialog && load.loaded) {
+        const targetCode = { DOCX: 65, XLSX: 257, PPTX: 129, CSV: 257 }[SAVE_TARGET[ext]] as number;
         const saved = await page.evaluate(
-          async ({ targetExt }) => {
+          async ({ code }) => {
             const started = Date.now();
             try {
-              const s = await Promise.race([
-                post('document:save', { targetExt }),
-                new Promise<never>((_, rej) => setTimeout(() => rej(new Error('save timed out (120s)')), 120_000)),
+              const appWin = window.frames[0] as Window;
+              const streamPromise = new Promise<{ size: number; isZip: boolean }>((resolve) => {
+                const onMsg = (e: MessageEvent) => {
+                  const d = e.data;
+                  if (d && d.type === 'onlyoffice-file-stream' && d.buffer instanceof ArrayBuffer) {
+                    appWin.removeEventListener('message', onMsg);
+                    const b = new Uint8Array(d.buffer);
+                    resolve({ size: b.byteLength, isZip: b[0] === 0x50 && b[1] === 0x4b });
+                  }
+                };
+                appWin.addEventListener('message', onMsg);
+              });
+              const visit = (win: Window): any => {
+                try {
+                  const scope = win as any;
+                  const api = scope.Asc?.editor || scope.editor;
+                  if (api && typeof api.asc_DownloadAs === 'function') return { api, win: win as any };
+                } catch {
+                  /* skip */
+                }
+                for (let i = 0; i < win.frames.length; i++) {
+                  const f = visit(win.frames[i]);
+                  if (f) return f;
+                }
+                return null;
+              };
+              const found = visit(window);
+              if (!found) return { ok: false, ms: 0, error: 'no editor api for save' };
+              found.api.asc_DownloadAs(new found.win.Asc.asc_CDownloadOptions(code));
+              const out = await Promise.race([
+                streamPromise,
+                new Promise<never>((_, rej) => setTimeout(() => rej(new Error('save timed out (180s)')), 180_000)),
               ]);
-              const b = new Uint8Array(await (s as any).file.arrayBuffer());
-              return { ok: true, ms: Date.now() - started, size: b.byteLength, isZip: b[0] === 0x50 && b[1] === 0x4b };
+              return { ok: true, ms: Date.now() - started, size: out.size, isZip: out.isZip };
             } catch (e) {
               return { ok: false, ms: Date.now() - started, error: String((e as Error).message || e) };
             }
           },
-          { targetExt: target },
+          { code: targetCode },
         );
         if (saved.ok) {
-          const zipExpected = target !== 'CSV';
-          row.save = zipExpected && !saved.isZip ? 'fail: output not a zip container' : `ok (${saved.ms}ms, ${Math.round((saved.size || 0) / 1024)}KB)`;
+          row.save = saved.isZip
+            ? `ok (${saved.ms}ms, ${Math.round((saved.size || 0) / 1024)}KB)`
+            : 'fail: output not a zip container';
         } else {
           row.save = `fail: ${saved.error}`;
         }
@@ -244,8 +306,8 @@ test.describe('real-document corpus matrix', () => {
 
       expect(row.fatalDialog, `fatal document-error dialog appeared: ${row.fatalDialog}`).toBeNull();
       expect(row.ascErrors, `asc_onError fired: ${JSON.stringify(row.ascErrors)}`).toEqual([]);
-      expect(row.open).toBe('ok');
-      expect(row.save.startsWith('ok') || row.save === 'skipped', `save result: ${row.save}`).toBe(true);
+      expect(row.open.startsWith('ok'), `open result: ${row.open}`).toBe(true);
+      expect(row.save.startsWith('ok'), `save result: ${row.save}`).toBe(true);
     });
   }
 });
