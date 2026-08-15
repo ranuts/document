@@ -1,6 +1,7 @@
-import { readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
+import { appendFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 import { expect, test } from './lib/l0';
+import { pixelDiff, settleEditor } from './lib/visual';
 
 /**
  * Real-document regression matrix (roadmap direction zero).
@@ -14,6 +15,7 @@ import { expect, test } from './lib/l0';
  *   CORPUS_FILTER='EMP' ...   # optional include regex on file paths
  *   CORPUS_EXCLUDE='password|encrypt' ...   # optional exclude regex
  *   CORPUS_LIMIT=300 ...      # optional cap (logged, never silent)
+ *   CORPUS_VISUAL=1 ...       # opt-in L3: pixel-diff original vs re-opened save
  *
  * Without CORPUS_DIR the whole suite is skipped, which keeps CI green.
  *
@@ -33,6 +35,9 @@ const EXCLUDE = process.env.CORPUS_EXCLUDE ? new RegExp(process.env.CORPUS_EXCLU
 // Optional cap for large public corpora (nightly CI). Never silent: the
 // truncation is logged and recorded in the report.
 const LIMIT = process.env.CORPUS_LIMIT ? Number(process.env.CORPUS_LIMIT) : Infinity;
+// Opt-in L3: after the save, re-open the original and the saved bytes
+// readonly and pixel-diff the two renderings (roughly doubles the run time).
+const VISUAL = Boolean(process.env.CORPUS_VISUAL);
 const SUPPORTED = new Set(['.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt', '.csv']);
 const MAX_BYTES = 60 * 1024 * 1024;
 
@@ -82,6 +87,9 @@ type Row = {
   // L2 content check (spreadsheets only): sheet names + first-sheet cell count
   // of the input vs the saved output, parsed in-page with SheetJS.
   content: string;
+  // L3 (opt-in): pixel diff between the rendering of the original and of the
+  // saved output, both re-opened readonly.
+  visual: string;
   ascErrors: unknown[];
   fatalDialog: string | null;
   ms: number;
@@ -100,30 +108,39 @@ test.describe('real-document corpus matrix', () => {
   test.skip(!CORPUS_DIR, 'CORPUS_DIR not set — corpus matrix is a local/nightly suite');
   test.describe.configure({ timeout: 300_000 });
 
+  // Every row is appended as soon as its test finishes (JSON lines, one file
+  // per worker): an afterAll write was observed to go missing when Playwright
+  // restarted a worker after a failure. bin/corpus-report.mjs merges them.
+  test.afterEach(() => {
+    const row = rows[rows.length - 1];
+    if (!row || (row as Row & { __written?: boolean }).__written) return;
+    (row as Row & { __written?: boolean }).__written = true;
+    // Mirrors playwright.config.ts outputDir (isolated per E2E_PORT).
+    const dir = process.env.E2E_PORT ? `test-results-${process.env.E2E_PORT}` : 'test-results';
+    mkdirSync(dir, { recursive: true });
+    const { __written: _w, ...clean } = row as Row & { __written?: boolean };
+    appendFileSync(
+      `${dir}/corpus-rows-${test.info().workerIndex}.jsonl`,
+      JSON.stringify({ corpusDir: CORPUS_DIR, total: allFiles.length, kept: files.length, row: clean }) + '\n',
+    );
+  });
+
   test.afterAll(() => {
     if (!rows.length) return;
-    mkdirSync('test-results', { recursive: true });
-    // One file per worker: with fullyParallel each worker process holds its
-    // own `rows`, and a shared filename would leave only the last writer.
-    // bin/corpus-report.mjs merges them.
-    const report = `test-results/corpus-report-${test.info().workerIndex}.json`;
-    writeFileSync(
-      report,
-      JSON.stringify({ corpusDir: CORPUS_DIR, total: allFiles.length, kept: files.length, rows }, null, 2),
-    );
     const bad = rows.filter(
       (r) =>
         !r.open.startsWith('ok') ||
         r.edit === 'fatal' ||
         r.save.startsWith('fail') ||
         r.content.startsWith('fail') ||
+        r.visual.startsWith('fail') ||
         r.ascErrors.length > 0 ||
         r.fatalDialog,
     );
-    console.log(`\nCORPUS SUMMARY: ${rows.length} files, ${bad.length} with findings -> ${report}`);
+    console.log(`\nCORPUS SUMMARY (this worker): ${rows.length} files, ${bad.length} with findings`);
     for (const r of bad) {
       console.log(
-        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} content=${r.content} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
+        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} content=${r.content} visual=${r.visual} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
       );
     }
   });
@@ -143,6 +160,7 @@ test.describe('real-document corpus matrix', () => {
         edit: 'skipped',
         save: 'skipped',
         content: 'n/a',
+        visual: 'n/a',
         ascErrors: [],
         fatalDialog: null,
         ms: 0,
@@ -348,6 +366,7 @@ test.describe('real-document corpus matrix', () => {
                 streamPromise,
                 new Promise<never>((_, rej) => setTimeout(() => rej(new Error('save timed out (180s)')), 180_000)),
               ]);
+              (window as any).__corpusSaved = out.bytes;
               // L2 for spreadsheets: parse input and output with SheetJS and
               // compare sheet names + non-empty cell count of the first sheet.
               let content = 'n/a';
@@ -395,6 +414,40 @@ test.describe('real-document corpus matrix', () => {
           row.save = `fail: ${saved.error}`;
         }
         row.fatalDialog = row.fatalDialog || (await findFatalDialog());
+      }
+
+      // ---- visual (opt-in L3) ----
+      if (VISUAL && row.save.startsWith('ok') && !row.fatalDialog) {
+        try {
+          const sdk = page.frameLocator('iframe').frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+          await page.evaluate(async () => {
+            const input = document.getElementById('fileInput') as HTMLInputElement;
+            await post('document:open-file', { file: input.files![0], readonly: true });
+          });
+          await sdk.waitFor({ state: 'visible', timeout: 60_000 });
+          await settleEditor(page);
+          const shotA = await sdk.screenshot();
+          await page.evaluate(
+            async (fileName) => {
+              const bytes = (window as any).__corpusSaved as Uint8Array;
+              await post('document:open-buffer', { fileName, buffer: bytes.buffer, readonly: true });
+            },
+            name.replace(
+              /\.(doc|xls|ppt|csv)$/i,
+              (m) => ({ '.doc': '.docx', '.xls': '.xlsx', '.ppt': '.pptx', '.csv': '.xlsx' })[m.toLowerCase()] || m,
+            ),
+          );
+          await sdk.waitFor({ state: 'visible', timeout: 60_000 });
+          await settleEditor(page);
+          const shotB = await sdk.screenshot();
+          const d = await pixelDiff(page, shotA, shotB);
+          row.visual =
+            d.sizeSame && d.differingPct < 0.5
+              ? `ok (${d.differingPct.toFixed(3)}%, ink ${d.nonWhitePct.toFixed(1)}%)`
+              : `fail: ${d.differingPct.toFixed(3)}% differing (${d.w}x${d.h}, sizeSame=${d.sizeSame})`;
+        } catch (e) {
+          row.visual = `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
+        }
       }
 
       row.ascErrors = await page.evaluate(() => (window as any).__ascErrors || []);

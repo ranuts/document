@@ -102,3 +102,16 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   冻结窗格/图表生成器；POI 语料逐步抬到全量；Firefox -25 复现。
 - 另一会话：API 枚举二分（cell 崩溃、slide 保存杀手）→ 台账 D/F 表 + 禁区列表。
 - 用户侧：硬刷新 / 注销 SW 后复测 PPT 致命弹窗；仍复现则给文件 + 步骤。
+
+## 追记（当天晚间）
+
+- **L3 进语料矩阵**：`CORPUS_VISUAL=1` 在保存后把原始与产物各以只读重开、
+  `#editor_sdk` 截图逐像素比对（`test/e2e/lib/visual.ts` 共用给
+  `visual-roundtrip.spec`）；私有 4 文件（xlsx/pptx/docx/doc）差异 0.03～0.32%。
+  夜间 workflow 默认开启（可 dispatch 关闭）。
+- **corpus 报告改 JSONL 逐条追加**（`test-results/corpus-rows-<worker>.jsonl`）：
+  afterAll 落盘在 worker 重启时会丢行；`bin/corpus-report.mjs [dir]` 合并。
+- **多会话隔离**：`E2E_PORT` 非默认时 Playwright 同时使用 `dist-e2e-<port>/`
+  与 `test-results-<port>/`——两会话共用 dist/test-results 会互相清空
+  （这就是本晚"页面 60s 起不来 / 报告少行"的来源，非产品缺陷）。
+- 跨浏览器与视觉部分见上文"现状数字"。

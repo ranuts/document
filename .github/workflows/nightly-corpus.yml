@@ -15,6 +15,9 @@ on:
       filter:
         description: "Include regex on file paths (CORPUS_FILTER)"
         default: ""
+      visual:
+        description: "Pixel-diff original vs re-opened save (CORPUS_VISUAL, empty to skip)"
+        default: "1"
 
 jobs:
   corpus:
@@ -62,6 +65,7 @@ jobs:
           CORPUS_DIR: ${{ github.workspace }}/corpus
           CORPUS_LIMIT: ${{ github.event.inputs.limit || '300' }}
           CORPUS_FILTER: ${{ github.event.inputs.filter || '' }}
+          CORPUS_VISUAL: ${{ github.event.inputs.visual || '1' }}
           # Expected-to-fail inputs: encrypted/password files, deliberately
           # truncated/corrupt regression samples, macro-only containers.
           CORPUS_EXCLUDE: "password|protect|encrypt|corrupt|truncat|broken|invalid|damaged|\\.xlsm$|\\.xlsb$|\\.docm$|\\.pptm$"

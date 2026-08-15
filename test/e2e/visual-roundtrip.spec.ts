@@ -1,5 +1,6 @@
 import { buildDocx, buildPptx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
+import { pixelDiff, settleEditor } from './lib/visual';
 
 declare const XLSX: any;
 declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
@@ -34,25 +35,7 @@ test.describe('visual round trip (real editor)', () => {
       const sdk = page.frameLocator('iframe').frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
       const settle = async () => {
         await sdk.waitFor({ state: 'visible', timeout: 60_000 });
-        await page.waitForFunction(
-          () => {
-            const visit = (win: Window): boolean => {
-              try {
-                const api = (win as any).Asc?.editor;
-                if (api && api.isDocumentLoadComplete && api.isLoadFullApi) return true;
-              } catch {
-                /* cross-origin */
-              }
-              for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-              return false;
-            };
-            return visit(window);
-          },
-          undefined,
-          { timeout: 90_000 },
-        );
-        // Fonts/thumbnails keep painting for a moment after load-complete.
-        await page.waitForTimeout(2500);
+        await settleEditor(page);
       };
 
       // Pass 1: open the original (edit mode so save is allowed), save.
@@ -108,45 +91,7 @@ test.describe('visual round trip (real editor)', () => {
       await settle();
       const shotB = await sdk.screenshot();
 
-      const diff = await page.evaluate(
-        async ({ a, b }) => {
-          const load = (src: string) =>
-            new Promise<HTMLImageElement>((resolve, reject) => {
-              const img = new Image();
-              img.onload = () => resolve(img);
-              img.onerror = reject;
-              img.src = src;
-            });
-          const [ia, ib] = await Promise.all([load('data:image/png;base64,' + a), load('data:image/png;base64,' + b)]);
-          const w = Math.min(ia.width, ib.width);
-          const h = Math.min(ia.height, ib.height);
-          const canvas = document.createElement('canvas');
-          canvas.width = w;
-          canvas.height = h;
-          const ctx = canvas.getContext('2d')!;
-          ctx.drawImage(ia, 0, 0);
-          const da = ctx.getImageData(0, 0, w, h).data;
-          ctx.clearRect(0, 0, w, h);
-          ctx.drawImage(ib, 0, 0);
-          const db = ctx.getImageData(0, 0, w, h).data;
-          let differing = 0;
-          let nonWhite = 0;
-          for (let i = 0; i < da.length; i += 4) {
-            if (da[i] < 250 || da[i + 1] < 250 || da[i + 2] < 250) nonWhite++;
-            const d = Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]);
-            if (d > 48) differing++;
-          }
-          const total = w * h;
-          return {
-            w,
-            h,
-            sizeSame: ia.width === ib.width && ia.height === ib.height,
-            differingPct: (differing / total) * 100,
-            nonWhitePct: (nonWhite / total) * 100,
-          };
-        },
-        { a: shotA.toString('base64'), b: shotB.toString('base64') },
-      );
+      const diff = await pixelDiff(page, shotA, shotB);
 
       test.info().annotations.push({
         type: 'visual-diff',

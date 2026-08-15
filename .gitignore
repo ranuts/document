@@ -24,3 +24,6 @@ public/fonts/__fallback__/
 # Nightly public corpus checkout (never committed)
 corpus/
 corpus-src/
+dist-e2e-*/
+test-results-*/
+playwright-report-browsers/

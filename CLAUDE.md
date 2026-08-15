@@ -158,9 +158,10 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 - `corpus.spec.ts` — **真实文档回归矩阵**（roadmap 方向零）：
   `CORPUS_DIR=<本地语料目录> pnpm run test:e2e:corpus`，可选
   `CORPUS_FILTER=<包含正则>` / `CORPUS_EXCLUDE=<排除正则>` /
-  `CORPUS_LIMIT=<上限，截断会打印>`；报告按 worker 落
-  `test-results/corpus-report-<n>.json`，`node bin/corpus-report.mjs` 合并
-  并输出 markdown 表；**夜间 CI** `.github/workflows/nightly-corpus.yml`
+  `CORPUS_LIMIT=<上限，截断会打印>` / `CORPUS_VISUAL=1`（L3：原始 vs 存回再
+  打开的渲染逐像素比对）；每条用例结束即追加一行到
+  `test-results/corpus-rows-<worker>.jsonl`，`node bin/corpus-report.mjs [dir]`
+  合并出 JSON + markdown 表（含 L2 内容、L3 视觉、open/save p50/p95）；**夜间 CI** `.github/workflows/nightly-corpus.yml`
   拉 Apache POI test-data 公开语料跑同一套（红=信号非门禁，可
   workflow_dispatch 指定 limit/filter）；对目录下每个 docx/doc/xlsx/xls/pptx/ppt/csv 走
   打开 → 监听致命弹窗/asc_onError → 编辑 → 保存 → 产物 sanity，输出汇总
@@ -189,8 +190,10 @@ fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEdito
 本地调试时注意 **杀干净 4173 上的残留 preview 服务器**——Playwright 的
 `reuseExistingServer` 会复用旧构建，让你调试一个根本没包含新代码的产物。
 多个会话同机并行跑 E2E 时用 `E2E_PORT=4174 pnpm run test:e2e` 各占一个
-端口，否则互相杀服务会制造假的 `-24 LoadingScriptError` /
-`ERR_CONNECTION_REFUSED` 发现。
+端口——非默认端口会**同时隔离** `dist-e2e-<port>/` 与 `test-results-<port>/`
+（Playwright 起跑会清空 outputDir、vite build 会重写 dist，两会话共用时互相
+抹掉对方的产物与结果，表现为假的 `-24 LoadingScriptError` /
+`ERR_CONNECTION_REFUSED` / 页面 60s 起不来 / 报告少行）。
 
 **Docker 镜像回归**（`pnpm run test:e2e:docker`，配置
 `playwright.docker.config.ts`）：构建生产镜像后把同一套 test/e2e 全部 spec
