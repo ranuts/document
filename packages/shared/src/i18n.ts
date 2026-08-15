@@ -49,6 +49,7 @@ export interface I18nMessages {
   documentOperationFailed: string;
   editorErrorToast: string;
   editorErrorFormatMismatch: string;
+  editorErrorOpenFailed: string;
 
   // AI agent panel
   agentTitle: string;
@@ -106,6 +107,7 @@ const messages: Record<Language, I18nMessages> = {
     documentOperationFailed: '文档操作失败：',
     editorErrorToast: '文档处理出错',
     editorErrorFormatMismatch: '文件内容与扩展名不一致，请确认文件格式后重试',
+    editorErrorOpenFailed: '文件无法打开：可能已损坏、格式不受支持，或内容与扩展名不符',
     agentTitle: 'AI 助手',
     agentOpenTip: '打开 AI 助手',
     agentSettings: '设置',
@@ -158,6 +160,8 @@ const messages: Record<Language, I18nMessages> = {
     documentOperationFailed: 'Document operation failed: ',
     editorErrorToast: 'Document error',
     editorErrorFormatMismatch: 'The file content does not match its extension; check the file format and try again',
+    editorErrorOpenFailed:
+      'The file could not be opened: it may be corrupted, in an unsupported format, or not what its extension says',
     agentTitle: 'AI Assistant',
     agentOpenTip: 'Open AI Assistant',
     agentSettings: 'Settings',

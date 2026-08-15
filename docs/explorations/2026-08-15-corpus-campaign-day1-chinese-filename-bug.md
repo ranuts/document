@@ -1,5 +1,12 @@
 # 语料战役第 1 天：中文文件名打断 v9 打开转换（P0 根因锁定）
 
+> **2026-08-15 晚更正：本文根因结论已作废。** 25/25 全灭与"改 ASCII 名即
+> 成功"都是跑道自身的 bug——`page.route` 投递被页面 Service Worker 击穿，
+> x2t 收到的是 SPA 兜底 index.html。文件名与之无关。完整推翻过程与真正
+> 修掉的缺陷（打开失败永久转圈）见
+> [第 2 天记录](2026-08-15-corpus-harness-sw-route-bug-and-open-failure-guard.md)。
+> 下文按原样保留作为决策记录。
+
 日期：2026-08-15
 前情：用户实测判定 v9 稳定性不如 v7（[规划方向零](../superpowers/plans/2026-08-15-next-phase-roadmap.md)），
 提供 ~/Documents 作为真实语料（25 个 Office 文件，仅本地测试不入库）。

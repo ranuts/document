@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 import { expect, test } from './lib/l0';
 
@@ -120,35 +120,33 @@ test.describe('real-document corpus matrix', () => {
       };
       rows.push(row);
 
-      // Hand the bytes over as base64 through evaluate() rather than via
-      // page.route(): Playwright request interception installs a network
-      // hook on the whole page which perturbs the editor's own fetches (SW,
-      // fonts) enough to reproduce a "stuck loading" that does not exist
-      // outside the harness.
-      const bytesB64 = readFileSync(filePath).toString('base64');
-
       await page.goto('/embed-demo.html');
       await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
 
       // ---- open ----
-      const opened = await page.evaluate(
-        async ({ fileName, bytesB64 }) => {
-          const bin = atob(bytesB64);
-          const arr = new Uint8Array(bin.length);
-          for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-          const buf = arr.buffer;
-          try {
-            await Promise.race([
-              post('document:open-buffer', { fileName, buffer: buf, readonly: false }),
-              new Promise<never>((_, rej) => setTimeout(() => rej(new Error('open timed out (120s)')), 120_000)),
-            ]);
-            return { ok: true };
-          } catch (e) {
-            return { ok: false, error: String((e as Error).message || e) };
-          }
-        },
-        { fileName: name, bytesB64 },
-      );
+      // Hand the real File to the demo page's own <input type=file> and open
+      // it through document:open-file: no network hop, real filename, no
+      // 60 MB base64 round trip. The first harness served the bytes over
+      // page.route(), which the app's service worker silently bypassed once
+      // it controlled the page: the route never fired, vite preview answered
+      // with the SPA index.html and x2t was fed 20 KB of HTML (abort on the
+      // stubbed HTML importer). That, not the documents, produced the
+      // "25/25 fail" and the filename red herring of campaign day 1.
+      await page.setInputFiles('#fileInput', filePath);
+      const opened = await page.evaluate(async () => {
+        const input = document.getElementById('fileInput') as HTMLInputElement;
+        const file = input.files && input.files[0];
+        if (!file) return { ok: false, error: 'file input is empty' };
+        try {
+          await Promise.race([
+            post('document:open-file', { file, readonly: false }),
+            new Promise<never>((_, rej) => setTimeout(() => rej(new Error('open timed out (120s)')), 120_000)),
+          ]);
+          return { ok: true };
+        } catch (e) {
+          return { ok: false, error: String((e as Error).message || e) };
+        }
+      });
       if (!opened.ok) {
         row.open = `fail: ${opened.error}`;
         row.ms = Date.now() - t0;

@@ -503,7 +503,11 @@ test.describe('embed regression (real editor)', () => {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['save', 'button']]), 'Sheet1');
       const data = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-      await post('document:open-buffer', { fileName: 'savebtn.xlsx', buffer: new Uint8Array(data).buffer, readonly: false });
+      await post('document:open-buffer', {
+        fileName: 'savebtn.xlsx',
+        buffer: new Uint8Array(data).buffer,
+        readonly: false,
+      });
 
       const findEditorWin = (): any => {
         const visit = (win: Window): any => {

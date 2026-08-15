@@ -163,6 +163,16 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
   第一天就抓出 P0（非 ASCII 文件名导致 -82 打开失败 + 永久转圈），见
   docs/explorations/2026-08-15-corpus-campaign-day1-chinese-filename-bug.md。
 
+**L0 全局 fixture（`test/e2e/lib/l0.ts`，2026-08-15 起所有 spec 从它
+导入 `test`/`expect`）**：自动把 `asc_onError`、厂商致命弹窗、编辑器 iframe
+内的 `unhandledrejection`/`error`、pageerror、非白名单 console.error 判为
+失败；预期错误须显式 `l0.expectAscError(id)` / `l0.allowFrameError(re)` /
+`l0.allowConsole(re)`。`open-failure.spec.ts` 兼作 fixture 自检。
+**E2E 投递字节禁止用 `page.route`**：页面被 Service Worker 控制后 route
+不生效、请求真打到 preview 拿回 SPA index.html（语料战役第 1 天的
+"25/25 全灭"就是这样来的）——走真实输入通道（`setInputFiles` +
+`document:open-file`）或 `page.evaluate` 传入。
+
 **这套用例的调试教训（2026-08-13）**：它在首次落地时就抓出两个只在
 "全新浏览器 profile 首次访问" 下复现的生产级 bug（SharedWorker 拼写引擎挂起、
 fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEditorIframe`）。
@@ -395,8 +405,10 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   iframe patch 与混淆符号 hook 已全部删除。
 - **关键代码**：`lib/onlyoffice-editor.ts` 的 `createPersonalEditorInstance` /
   `handleFileStreamMessage` / `triggerPersonalDownloadAs` / `prepareEditorIframe`
-  （最后一个含四个运行时守卫：品牌元素隐藏、SharedWorker 遮蔽、fetchFonts
-  字体竞态守卫、**serverless image pipeline**——第四个修的是"文档含图片
+  （最后一个含多个运行时守卫：品牌元素隐藏、SharedWorker 遮蔽、fetchFonts
+  字体竞态守卫、**serverless image pipeline**、serverless 保存语义（守卫 5）、
+  `installOpenFailureGuard`（打开转换失败 → asc_onError -82 + toast + 遮罩终止 +
+  保存快速拒绝）——其中 image pipeline 修的是"文档含图片
   时保存令主线程永久卡死"：无服务器时 sendImgUrls 注册不了图片，DOCY
   被写入裸外部 URL，x2t.wasm 对此死循环。自愈 getImageLocal + 本地
   sendImgUrls + convertFromBin medias 兜底三件套，见
@@ -431,9 +443,10 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   方向零；**测试全覆盖方法论**（格式×操作×输入×环境行为矩阵、三层语料、
   L0–L4 五层判据、缺陷→参数化类用例、矩阵空白格/escape 两项指标）见
   docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md，新用例
-  按它落位。语料战役第 1 天已锁定 P0：非 ASCII 文件名 → 打开转换 -82 +
-  永久转圈（docs/explorations/2026-08-15-corpus-campaign-day1-chinese-filename-bug.md）。
-  v9 release 公告冻结至战役通过。
+  按它落位。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
+  （跑道被 SW 击穿，见 docs/explorations/2026-08-15-corpus-harness-sw-route-bug-and-open-failure-guard.md），
+  真正修掉的是"打开失败永久转圈"（`installOpenFailureGuard`）与
+  "Save 按钮常灰"（守卫 5）。v9 release 公告冻结至战役通过。
 
 ---
 

@@ -41,6 +41,10 @@ let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 // pointless wait.
 let documentContentReady = false;
 let contentReadyWaiters: Array<() => void> = [];
+// Set when the editor's own open conversion failed for the current document
+// (see installOpenFailureGuard); pending and future saves reject with it
+// instead of waiting out the readiness timeout.
+let documentOpenError: string | null = null;
 
 function markDocumentContentReady(): void {
   if (documentContentReady) return;
@@ -54,7 +58,17 @@ function markDocumentContentReady(): void {
 // a previously open document before the new one's own readiness is known.
 function resetDocumentContentReady(): void {
   documentContentReady = false;
+  documentOpenError = null;
   contentReadyWaiters = [];
+}
+
+function markDocumentOpenFailed(reason: string): void {
+  if (documentOpenError) return;
+  documentOpenError = reason;
+  // Release anyone waiting for readiness; they check documentOpenError.
+  const waiters = contentReadyWaiters;
+  contentReadyWaiters = [];
+  waiters.forEach((waiter) => waiter());
 }
 
 // Resolves immediately if already ready; otherwise waits for
@@ -334,6 +348,47 @@ let currentDocumentBlobUrl: string | null = null;
  * Returns true once every treatment is in place on some frame, so the caller
  * can stop re-applying.
  */
+// Open-conversion failure surfacing. The vendor's offline controller awaits
+// AscCommon.x2t.convertToBin inside loadDocument with no catch, so a failed
+// import (garbage or truncated bytes, HTML disguised as .xls/.xlsx, an x2t
+// abort on a format its wasm build stubs out) is nothing but an unhandled
+// rejection inside the editor frame: no asc_onError, the "Loading ..." mask
+// stays up forever and every save waits out its timeout. Route the rejection
+// into the SDK's own error path -- the vendor shows its open-error dialog,
+// Common.Gateway reports it to our onError toast, the load mask ends -- and
+// flag the document so requestSaveDocument rejects immediately.
+const OPEN_FAILURE_PATTERN = /Document conversion failed|Conversion failed with code|X2T module/i;
+function installOpenFailureGuard(win: Window): void {
+  const w = win as unknown as {
+    __ooOpenFailureGuarded?: boolean;
+    Asc?: {
+      editor?: { sendEvent?: (name: string, ...args: unknown[]) => void };
+      c_oAscError?: { ID?: { ConvertationOpenError?: number }; Level?: { Critical?: number } };
+      c_oAscAsyncActionType?: { BlockInteraction?: number };
+      c_oAscAsyncAction?: { Open?: number };
+    };
+  };
+  if (w.__ooOpenFailureGuarded) return;
+  w.__ooOpenFailureGuarded = true;
+  win.addEventListener('unhandledrejection', (event) => {
+    const reason = (event as PromiseRejectionEvent).reason as { message?: unknown } | undefined;
+    const message = String(reason && typeof reason === 'object' ? (reason.message ?? reason) : reason);
+    if (!OPEN_FAILURE_PATTERN.test(message)) return;
+    console.error('[OO] open conversion failed:', message);
+    markDocumentOpenFailed(message);
+    const api = w.Asc?.editor;
+    if (!api || typeof api.sendEvent !== 'function') return;
+    const errorId = w.Asc?.c_oAscError?.ID?.ConvertationOpenError ?? -82;
+    const critical = w.Asc?.c_oAscError?.Level?.Critical ?? -1;
+    api.sendEvent('asc_onError', errorId, critical);
+    const blockInteraction = w.Asc?.c_oAscAsyncActionType?.BlockInteraction;
+    const openAction = w.Asc?.c_oAscAsyncAction?.Open;
+    if (blockInteraction !== undefined && openAction !== undefined) {
+      api.sendEvent('asc_onEndAction', blockInteraction, openAction);
+    }
+  });
+}
+
 function prepareEditorIframe(): boolean {
   let fullyApplied = false;
   for (let i = 0; i < window.frames.length; i++) {
@@ -341,6 +396,7 @@ function prepareEditorIframe(): boolean {
       const win = window.frames[i] as Window & { __ooSharedWorkerShadowed?: boolean };
       const doc = win.document;
       if (!doc) continue;
+      installOpenFailureGuard(win);
 
       if (!doc.getElementById('oo-local-chrome-css')) {
         const style = doc.createElement('style');
@@ -526,7 +582,12 @@ function prepareEditorIframe(): boolean {
         __ooServerlessSavePatched?: boolean;
       };
       const saveApi = saveWin.Asc?.editor;
-      if (saveApi && typeof saveApi.asc_Save === 'function' && saveWin.Asc?.asc_CDownloadOptions && !saveWin.__ooServerlessSavePatched) {
+      if (
+        saveApi &&
+        typeof saveApi.asc_Save === 'function' &&
+        saveWin.Asc?.asc_CDownloadOptions &&
+        !saveWin.__ooServerlessSavePatched
+      ) {
         saveApi.autoSaveGap = 0;
         saveApi.autoSaveGapFast = 0;
         saveApi.autoSaveGapRealTime = 0;
@@ -681,7 +742,9 @@ function createPersonalEditorInstance(config: {
         const data = (event as { data?: { errorCode?: number; errorDescription?: string } } | null)?.data;
         const code = data?.errorCode;
         // -85: the engine sniffed a content/extension mismatch.
-        const hint = code === -85 ? ` ${t('editorErrorFormatMismatch')}` : '';
+        // -82: the open conversion failed (see installOpenFailureGuard).
+        const hint =
+          code === -85 ? ` ${t('editorErrorFormatMismatch')}` : code === -82 ? ` ${t('editorErrorOpenFailed')}` : '';
         const detail = [code !== undefined ? `code ${code}` : '', data?.errorDescription].filter(Boolean).join(', ');
         (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
           `${t('editorErrorToast')}${detail ? ` (${detail})` : ''}${hint}`,
@@ -825,6 +888,10 @@ export function requestSaveDocument(
     return Promise.reject(new Error('Current document is readonly'));
   }
 
+  if (documentOpenError) {
+    return Promise.reject(new Error(`The document failed to open: ${documentOpenError}`));
+  }
+
   if (embeddedSaveRequest) {
     return Promise.reject(new Error('A save request is already in progress'));
   }
@@ -887,6 +954,11 @@ export function requestSaveDocument(
     const request = embeddedSaveRequest;
     void (async () => {
       await waitForDocumentContentReady(45_000);
+      if (documentOpenError && request && !request.settled) {
+        cleanupEmbeddedSaveRequest(request);
+        rejectEmbeddedSaveRequest(request, new Error(`The document failed to open: ${documentOpenError}`));
+        return;
+      }
       const retryDeadline = Date.now() + 45_000;
       while (!request?.settled && !triggerPersonalDownloadAs(normalizedTargetExt)) {
         if (Date.now() > retryDeadline) {

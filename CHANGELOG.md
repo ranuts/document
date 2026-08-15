@@ -35,6 +35,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- A file the editor cannot import (corrupted bytes, an unsupported format
+  behind a familiar extension) now shows an error dialog and a notification
+  and stops the loading spinner, instead of loading forever; a pending save
+  fails immediately with the reason instead of after a 60 s timeout.
 - Saving a document that contains an inserted image no longer freezes the
   page; the image bytes are correctly included in the saved file.
 - Excel: right-aligned text no longer disappears after editing another cell.
