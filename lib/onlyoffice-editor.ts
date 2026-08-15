@@ -853,6 +853,14 @@ function createPersonalEditorInstance(config: {
       title: fileName,
       url,
       fileType: normalizedType,
+      // PDF: decide the app here instead of letting api.js mount the
+      // web-apps/apps/common loader that sniffs "is this a form?" first. On
+      // static hosts that normalize /index.html to the directory URL (CF
+      // Pages answers 308) that loader's `href.match(/common\/index.html/)`
+      // never matches and the PDF stays on a blank loader forever -- seen only
+      // in production. isForm:false routes straight to the pdf editor, which
+      // fills forms too.
+      ...(normalizedType === 'pdf' ? { isForm: false } : {}),
       // A fresh key per open bypasses the editor's own document cache
       // (same-name documents with different content would collide otherwise).
       key: `doc-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,

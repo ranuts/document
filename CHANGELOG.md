@@ -41,6 +41,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- PDF files open again on the live site: the hosted deployment redirects
+  `.../index.html` to the folder URL, which left the editor's "is this a
+  form?" pre-loader stuck on a blank page; PDFs now go straight to the PDF
+  editor (which also handles fillable forms).
 - On slow connections the first save no longer fails with "timed out" while
   the file was still on its way: the editor must first download its ~10 MB
   conversion engine, which could take longer than the old 60 s limit; the

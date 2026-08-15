@@ -255,6 +255,21 @@ describe('onlyoffice-editor', () => {
       expect(config.document.permissions.download).toBe(true);
     });
 
+    it('routes PDF straight to the pdf editor (isForm:false) so the /apps/common loader is skipped', async () => {
+      // The common loader re-navigates via href.match(/common\/index.html/),
+      // which never matches behind a static host that 308s index.html to the
+      // directory URL (Cloudflare Pages) -- production PDFs stayed on a blank
+      // loader while every local build passed.
+      const pdf = await createAndGetConfig({ fileName: 'a.pdf', fileType: 'pdf', binData: new ArrayBuffer(8) });
+      expect(pdf.document.isForm).toBe(false);
+      expect(pdf.documentType).toBe('pdf');
+    });
+
+    it('does not set isForm for non-PDF documents', async () => {
+      const docx = await createAndGetConfig({ fileName: 'a.docx', fileType: 'docx', binData: new ArrayBuffer(8) });
+      expect(docx.document.isForm).toBeUndefined();
+    });
+
     it('applies the view restriction on onDocumentReady when opened readonly', async () => {
       const config = await createAndGetConfig({
         fileName: 'preview.docx',

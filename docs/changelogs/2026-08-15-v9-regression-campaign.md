@@ -165,3 +165,10 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   "慢但活着"的首存判为超时（产物稍后才到）→ 放宽为 150 s / 180 s
   （`SAVE_READY_WAIT_MS` 等常量），打开失败仍由 `documentOpenError` 立即拒绝；
   demo 页 `post()` 超时同步到 200 s。CHANGELOG 已记。
+- **线上冒烟第一条真缺陷（P0，仅线上复现）：PDF 在 edit.chaxus.com 打不开**。
+  api.js 对 pdf 先挂 `web-apps/apps/common/index.html`（嗅探是否表单的加载器），
+  CF Pages 把 `index.html` 308 到目录 URL，加载器 `href.match(/common\/index.html/)`
+  失配、永远停在空白页；本地无重定向所以全绿。修法：pdf 配置传
+  `document.isForm:false` 让 api.js 直接选 pdfeditor（`lib/onlyoffice-editor.ts`），
+  单测 + `pdf-route.spec.ts`（断言不经过 `/apps/common/`）。GitHub runner 上的
+  prod-smoke 22/23，唯一失败正是它；部署后复跑应全绿。
