@@ -147,3 +147,14 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
     可信输入 / 保存捕获（同 realm 监听）/ 健康快照 / xlsx-pptx 最小构造。
   - 跑道坑（新增）：`page.evaluate` 内 `new Function`/`eval` 重建的定位器
     捕获的是 utility 世界的 `window`——页面侧逻辑必须**内联**在 evaluate 里。
+- **corpus L2 扩到 docx/pptx**：Node 侧解 zip 取 `<w:t>/<a:t>` 文本，输入 vs
+  产物 20 字分片覆盖率 ≥ 98% 判通过；忽略 `hidden="1"` 形状（模板站隐形指纹，
+  OnlyOffice 保存即丢，用户不可见）与字段块（页码字段占位 `‹#›` 保存后写成
+  缓存值 `11`，结构保留）。**corpus 改为两次保存**：打开后先存（L1/L2/L3 都
+  基于它），再键盘编辑后存第二次（仅 L1）——此前 L2 差额其实是跑道自己的双击
+  选词被 "QA" 替换造成的。
+- **私有语料全量：31/31，L1 + L2 + L3 全绿**，视觉差异全部 0.000%（pptx save
+  p95 1.8s，xlsx save p95 5.7s）。
+- 另一会话落地守卫 6（长操作计数器泄漏 → 保存被静默丢弃）与守卫 7（cell
+  `asc_EditSelectAll` 后 `asc_GetSeriesSettings` 全表建序列 → OOM 崩渲染进程），
+  三格式 API 枚举 45s 全绿（原 15 分钟崩死）；详见其在本文件的追记与台账 D/F。

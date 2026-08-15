@@ -28,6 +28,7 @@ const isBad = (r) =>
   !String(r.open).startsWith('ok') ||
   r.edit === 'fatal' ||
   String(r.save).startsWith('fail') ||
+  String(r.saveEdited || '').startsWith('fail') ||
   String(r.content || '').startsWith('fail') ||
   String(r.visual || '').startsWith('fail') ||
   (r.ascErrors && r.ascErrors.length > 0) ||
@@ -75,15 +76,15 @@ for (const [ext, v] of Object.entries(byExt).sort()) {
 }
 if (bad.length) {
   lines.push('');
-  lines.push('| file | open | edit | save | content (L2) | visual (L3) | asc errors | dialog |');
-  lines.push('| --- | --- | --- | --- | --- | --- | --- | --- |');
+  lines.push('| file | open | edit | save | save after edit | content (L2) | visual (L3) | asc errors | dialog |');
+  lines.push('| --- | --- | --- | --- | --- | --- | --- | --- | --- |');
   for (const r of bad) {
     const esc = (v) =>
       String(v ?? '')
         .replace(/\|/g, '\\|')
         .slice(0, 120);
     lines.push(
-      `| ${esc(basename(r.file))} | ${esc(r.open)} | ${esc(r.edit)} | ${esc(r.save)} | ${esc(r.content)} | ${esc(r.visual)} | ${esc(JSON.stringify(r.ascErrors))} | ${esc(r.fatalDialog)} |`,
+      `| ${esc(basename(r.file))} | ${esc(r.open)} | ${esc(r.edit)} | ${esc(r.save)} | ${esc(r.saveEdited)} | ${esc(r.content)} | ${esc(r.visual)} | ${esc(JSON.stringify(r.ascErrors))} | ${esc(r.fatalDialog)} |`,
     );
   }
 }

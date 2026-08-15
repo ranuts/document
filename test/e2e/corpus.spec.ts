@@ -2,6 +2,7 @@ import { appendFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 import { expect, test } from './lib/l0';
 import { pixelDiff, settleEditor } from './lib/visual';
+import { ooxmlDocumentText, textCoverage } from './lib/ooxml';
 
 /**
  * Real-document regression matrix (roadmap direction zero).
@@ -84,6 +85,8 @@ type Row = {
   open: string;
   edit: string;
   save: string;
+  // Second save after the keyboard edit (L1 only).
+  saveEdited: string;
   // L2 content check (spreadsheets only): sheet names + first-sheet cell count
   // of the input vs the saved output, parsed in-page with SheetJS.
   content: string;
@@ -132,6 +135,7 @@ test.describe('real-document corpus matrix', () => {
         !r.open.startsWith('ok') ||
         r.edit === 'fatal' ||
         r.save.startsWith('fail') ||
+        r.saveEdited.startsWith('fail') ||
         r.content.startsWith('fail') ||
         r.visual.startsWith('fail') ||
         r.ascErrors.length > 0 ||
@@ -140,7 +144,7 @@ test.describe('real-document corpus matrix', () => {
     console.log(`\nCORPUS SUMMARY (this worker): ${rows.length} files, ${bad.length} with findings`);
     for (const r of bad) {
       console.log(
-        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} content=${r.content} visual=${r.visual} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
+        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} saveEdited=${r.saveEdited} content=${r.content} visual=${r.visual} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
       );
     }
   });
@@ -159,6 +163,7 @@ test.describe('real-document corpus matrix', () => {
         open: 'pending',
         edit: 'skipped',
         save: 'skipped',
+        saveEdited: 'skipped',
         content: 'n/a',
         visual: 'n/a',
         ascErrors: [],
@@ -166,6 +171,15 @@ test.describe('real-document corpus matrix', () => {
         ms: 0,
       };
       rows.push(row);
+
+      // L2 for word/slide OOXML inputs: text of the input vs the saved output
+      // (Node side; the page hands over base64). Capped to keep the transfer
+      // sane; bigger files report "skipped".
+      await page.exposeFunction('__corpusTextCoverage', (inB64: string, outB64: string) => {
+        const before = ooxmlDocumentText(new Uint8Array(Buffer.from(inB64, 'base64')));
+        const after = ooxmlDocumentText(new Uint8Array(Buffer.from(outB64, 'base64')));
+        return { ...textCoverage(before, after), inLen: before.length, outLen: after.length };
+      });
 
       await page.goto('/embed-demo.html');
       await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
@@ -294,33 +308,17 @@ test.describe('real-document corpus matrix', () => {
           ? `ok (load ${Math.round(load.loadMs / 1000)}s)`
           : `fail: ${(load as { reason?: string }).reason}`;
 
-      // ---- edit (trusted input; the real-PPTX fatal error fired on edit) ----
-      if (!row.fatalDialog && load.loaded) {
-        try {
-          const editorFrame = page.frameLocator('iframe').frameLocator('iframe[name="frameEditor"]');
-          const sdk = editorFrame.locator('#editor_sdk');
-          await sdk.waitFor({ state: 'visible', timeout: 15_000 });
-          if (ext === '.pptx' || ext === '.ppt') {
-            await sdk.dblclick({ position: { x: 400, y: 300 }, timeout: 10_000 });
-          } else {
-            await sdk.click({ position: { x: 400, y: 300 }, timeout: 10_000 });
-          }
-          await page.keyboard.type('QA', { delay: 100 });
-          await page.waitForTimeout(3000);
-          row.fatalDialog = await findFatalDialog();
-          row.edit = row.fatalDialog ? 'fatal' : 'ok';
-        } catch (e) {
-          row.edit = `inconclusive: ${String((e as Error).message).slice(0, 80)}`;
-        }
-      }
-
       // ---- save (direct editor API + file-stream listener; the embed
       //      post() helper caps at 120s which can still be too short for big decks
-      //      and hides slow-vs-hung) ----
-      if (!row.fatalDialog && load.loaded) {
-        const targetCode = { DOCX: 65, XLSX: 257, PPTX: 129, CSV: 257 }[SAVE_TARGET[ext]] as number;
-        const saved = await page.evaluate(
-          async ({ code, spreadsheet }) => {
+      //      and hides slow-vs-hung). Done TWICE: first pristine (right after
+      //      load: L1 + L2 content + bytes for L3), then again after the
+      //      keyboard edit (L1 only -- the edit itself changes content, e.g. a
+      //      double-click in a slide selects a word that the typed "QA"
+      //      replaces, which is not a save defect).
+      const targetCode = { DOCX: 65, XLSX: 257, PPTX: 129, CSV: 257 }[SAVE_TARGET[ext]] as number;
+      const runSave = (withChecks: boolean) =>
+        page.evaluate(
+          async ({ code, spreadsheet, ooxmlText, withChecks }) => {
             const started = Date.now();
             try {
               // x2t_helper posts the stream to both window.parent (the app)
@@ -366,7 +364,7 @@ test.describe('real-document corpus matrix', () => {
                 streamPromise,
                 new Promise<never>((_, rej) => setTimeout(() => rej(new Error('save timed out (180s)')), 180_000)),
               ]);
-              (window as any).__corpusSaved = out.bytes;
+              if (withChecks) (window as any).__corpusSaved = out.bytes;
               // L2 for spreadsheets: parse input and output with SheetJS and
               // compare sheet names + non-empty cell count of the first sheet.
               let content = 'n/a';
@@ -398,13 +396,45 @@ test.describe('real-document corpus matrix', () => {
                   content = `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
                 }
               }
+              if (ooxmlText && out.isZip) {
+                try {
+                  const input = (document.getElementById('fileInput') as HTMLInputElement).files![0];
+                  if (input.size > 20 * 1024 * 1024) {
+                    content = 'skipped (input > 20MB)';
+                  } else {
+                    const toB64 = (u8: Uint8Array) => {
+                      let s = '';
+                      for (let i = 0; i < u8.length; i += 0x8000)
+                        s += String.fromCharCode.apply(null, Array.from(u8.subarray(i, i + 0x8000)));
+                      return btoa(s);
+                    };
+                    const inB64 = toB64(new Uint8Array(await input.arrayBuffer()));
+                    const cov = await (window as any).__corpusTextCoverage(inB64, toB64(out.bytes));
+                    content =
+                      cov.coverage >= 0.98
+                        ? `ok (text ${(cov.coverage * 100).toFixed(1)}% of ${cov.shingles} shingles, ${cov.inLen}->${cov.outLen} chars)`
+                        : `fail: text coverage ${(cov.coverage * 100).toFixed(1)}% (${cov.inLen}->${cov.outLen} chars)`;
+                  }
+                } catch (e) {
+                  content = `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
+                }
+              }
               return { ok: true, ms: Date.now() - started, size: out.size, isZip: out.isZip, content };
             } catch (e) {
               return { ok: false, ms: Date.now() - started, error: String((e as Error).message || e) };
             }
           },
-          { code: targetCode, spreadsheet: ext === '.xlsx' || ext === '.xls' || ext === '.csv' },
+          {
+            code: targetCode,
+            spreadsheet: withChecks && (ext === '.xlsx' || ext === '.xls' || ext === '.csv'),
+            // Only OOXML inputs can be text-compared (legacy .doc/.ppt bytes have no parts to read).
+            ooxmlText: withChecks && (ext === '.docx' || ext === '.pptx'),
+            withChecks,
+          },
         );
+
+      if (!row.fatalDialog && load.loaded) {
+        const saved = await runSave(true);
         if (saved.ok) {
           row.save = saved.isZip
             ? `ok (${saved.ms}ms, ${Math.round((saved.size || 0) / 1024)}KB)`
@@ -413,6 +443,37 @@ test.describe('real-document corpus matrix', () => {
         } else {
           row.save = `fail: ${saved.error}`;
         }
+        row.fatalDialog = row.fatalDialog || (await findFatalDialog());
+      }
+
+      // ---- edit (trusted input; the real-PPTX fatal error fired on edit) ----
+      if (!row.fatalDialog && load.loaded) {
+        try {
+          const editorFrame = page.frameLocator('iframe').frameLocator('iframe[name="frameEditor"]');
+          const sdk = editorFrame.locator('#editor_sdk');
+          await sdk.waitFor({ state: 'visible', timeout: 15_000 });
+          if (ext === '.pptx' || ext === '.ppt') {
+            await sdk.dblclick({ position: { x: 400, y: 300 }, timeout: 10_000 });
+          } else {
+            await sdk.click({ position: { x: 400, y: 300 }, timeout: 10_000 });
+          }
+          await page.keyboard.type('QA', { delay: 100 });
+          await page.waitForTimeout(3000);
+          row.fatalDialog = await findFatalDialog();
+          row.edit = row.fatalDialog ? 'fatal' : 'ok';
+        } catch (e) {
+          row.edit = `inconclusive: ${String((e as Error).message).slice(0, 80)}`;
+        }
+      }
+
+      // ---- save again after the edit (L1) ----
+      if (!row.fatalDialog && load.loaded && row.edit === 'ok') {
+        const saved = await runSave(false);
+        row.saveEdited = saved.ok
+          ? saved.isZip
+            ? `ok (${saved.ms}ms, ${Math.round((saved.size || 0) / 1024)}KB)`
+            : 'fail: output not a zip container'
+          : `fail: ${saved.error}`;
         row.fatalDialog = row.fatalDialog || (await findFatalDialog());
       }
 

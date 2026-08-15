@@ -376,3 +376,43 @@ export function buildXlsx(opts: {
     { name: 'xl/worksheets/sheet1.xml', data: sheet },
   ]);
 }
+
+/**
+ * All <w:t>/<a:t> text of the main story parts of a docx (document.xml) or
+ * pptx (every slide). Shapes flagged hidden="1" are skipped: template
+ * fingerprints and other invisible off-slide text boxes that OnlyOffice
+ * drops on save (vendor behavior, not user-visible content).
+ */
+export function ooxmlDocumentText(bytes: Uint8Array): string {
+  const names = zipEntryNames(bytes);
+  const parts = names.includes('word/document.xml')
+    ? ['word/document.xml']
+    : names.filter((n) => /^ppt\/slides\/slide\d+\.xml$/.test(n)).sort();
+  const withoutHidden = (xml: string) =>
+    xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, (block) => (/<p:cNvPr[^>]*\shidden="1"/.test(block) ? '' : block));
+  // Fields (slide number, date) carry a cached value that legitimately
+  // changes on save ("<#>" placeholder -> "11"); compare the static text only.
+  const withoutFields = (xml: string) =>
+    xml.replace(/<a:fld\b[\s\S]*?<\/a:fld>/g, '').replace(/<w:fldSimple\b[\s\S]*?<\/w:fldSimple>/g, '');
+  return parts.map((n) => ooxmlText(withoutFields(withoutHidden(zipEntryText(bytes, n) || '')))).join('\n');
+}
+
+/**
+ * How much of `before`'s text survives in `after`, as the fraction of
+ * 20-char shingles of `before` (whitespace-normalized) found in `after`.
+ * 1 = nothing lost. Robust to small insertions (a typed "QA") and to
+ * run/paragraph re-splitting on save.
+ */
+export function textCoverage(before: string, after: string, shingle = 20): { coverage: number; shingles: number } {
+  const norm = (t: string) => t.replace(/\s+/g, ' ').trim();
+  const a = norm(before);
+  const b = norm(after);
+  if (a.length <= shingle) return { coverage: b.includes(a) ? 1 : 0, shingles: 1 };
+  let hit = 0;
+  let total = 0;
+  for (let i = 0; i + shingle <= a.length; i += Math.max(1, Math.floor(shingle / 2))) {
+    total++;
+    if (b.includes(a.slice(i, i + shingle))) hit++;
+  }
+  return { coverage: total ? hit / total : 1, shingles: total };
+}
