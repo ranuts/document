@@ -447,6 +447,11 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
 - **PDF 打开**：已接入（2026-08-15）。api.js 按 `document.fileType === 'pdf'`
   自动路由 pdfeditor，页面侧只需类型映射（`DOCUMENT_TYPE_MAP.pdf` +
   `getDocumentType`）与文件选择 accept；保存与其他格式共用 file-stream 通道。
+- **界面主题**：默认经典 Office 主题 `theme-classic-light`（2026-08-15 起；v9
+  加载器原默认 `theme-white` 纯白），经 `customization.uiTheme` 传入。该参数
+  启动时压过编辑器自存的 `ui-theme-id`，所以 `resolveUiTheme()` 先读同源
+  localStorage 里用户手选的主题、没有才回退经典，别改成硬编码。见
+  docs/explorations/2026-08-15-classic-office-ui-theme.md。
 - **错误提示**：编辑器 `onError` 会用 ranui message 弹 toast（含错误码与
   描述；-85 附"内容与扩展名不一致"提示），别再只留 console.error。
 - **待办（最高优先级，2026-08-15 用户实测判定）**：v9 全面回归战役。
