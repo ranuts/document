@@ -40,14 +40,34 @@ writeFileSync(
   JSON.stringify({ total, kept, ran: rows.length, findings: bad.length, rows }, null, 2),
 );
 
+// L4 timing (strategy section 3): open seconds parsed from "ok (load Ns)",
+// save milliseconds from "ok (NNNms, ...)". Reported, not yet thresholded.
+const pct = (arr, p) => {
+  if (!arr.length) return null;
+  const sorted = [...arr].sort((a, b) => a - b);
+  return sorted[Math.min(sorted.length - 1, Math.floor((p / 100) * sorted.length))];
+};
+for (const r of rows) {
+  const ext = (r.file.split('.').pop() || '').toLowerCase();
+  const load = /load (\d+)s/.exec(String(r.open));
+  const save = /ok \((\d+)ms/.exec(String(r.save));
+  byExt[ext].loads ??= [];
+  byExt[ext].saves ??= [];
+  if (load) byExt[ext].loads.push(Number(load[1]));
+  if (save) byExt[ext].saves.push(Number(save[1]));
+}
+
 const lines = [];
 lines.push(
   `## Corpus matrix: ${rows.length} files ran (${kept} kept of ${total} discovered), ${bad.length} with findings`,
 );
 lines.push('');
-lines.push('| ext | files | findings |');
-lines.push('| --- | ---: | ---: |');
-for (const [ext, v] of Object.entries(byExt).sort()) lines.push(`| ${ext} | ${v.total} | ${v.bad} |`);
+lines.push('| ext | files | findings | open p50/p95 (s) | save p50/p95 (ms) |');
+lines.push('| --- | ---: | ---: | ---: | ---: |');
+for (const [ext, v] of Object.entries(byExt).sort()) {
+  const fmt = (arr) => (arr && arr.length ? `${pct(arr, 50)} / ${pct(arr, 95)}` : '-');
+  lines.push(`| ${ext} | ${v.total} | ${v.bad} | ${fmt(v.loads)} | ${fmt(v.saves)} |`);
+}
 if (bad.length) {
   lines.push('');
   lines.push('| file | open | edit | save | asc errors | dialog |');
