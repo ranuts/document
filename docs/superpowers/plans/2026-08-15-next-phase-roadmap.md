@@ -210,6 +210,25 @@ WebMCP 接入本质是把同一批能力换个注册方式暴露出来。
    预取（落地页 idle 时 prefetch sdk-all 等核心资产）与 SW 预缓存
    （离线秒开，与隐私定位天然契合）的投入。先测量后优化。
 
+   **基线（2026-08-16，chrome-devtools 打线上，无节流，冷 profile）**：
+   - 首页 `/`：LCP 774 ms（TTFB 205 + render delay 569），CLS 0。渲染阻塞
+     5 个请求里 4 个是 CSS，1 个是 `web-apps/apps/api/documents/api.js`
+     （同步 `<script>`，479 ms）——首页读者根本用不到它。**首刀**：删掉
+     该同步标签，`handleDocumentOperation` 入口统一 `await loadEditorApi()`
+     （幂等），首页只留 `<link rel="prefetch">`。
+   - `?new=docx` 冷打开到 `isDocumentLoadComplete && isLoadFullApi`：
+     **≈16 s**。瀑布：app 壳 0.5–0.9 s → `sdk-all-min.js` 424 KB 1.2–1.9 s
+     → **`sdk-all.js` 2.95 MB（br）2.0–8.6 s** → 字体 14 个文件 8.9–15.0 s
+     → 就绪。总计 61 请求 / 4.2 MB。两个瓶颈：sdk-all.js 纯带宽（边缘已
+     REVALIDATED/br，无法再压）；字体仍 `cf-cache-status: DYNAMIC`（CF
+     Cache Rule 待用户在面板加）+ 空白 docx 竟拉 14 个字体文件（值得查
+     fonts_loading 为何这么多——字体线归战役字体专项）。
+   - **预取决策（第 11 项）**：不做无差别 idle 预取——sdk-all.js 3 MB 对
+     只读落地页的访客是纯浪费；改为"意图触发"：hover/focus 到 Open/New
+     按钮、文件选择框弹出时 `<link rel=prefetch>` sdk-all-min.js + sdk-all.js
+     - app.js（同源、SWR 缓存会接住），零成本覆盖 80% 的真实打开。SW
+       离线预缓存等路由拆分后按新首页再测。
+
    **2026-08-16 已落地的第一批（由用户"线上 PPT 永久 Loading、本地正常"
    报障驱动，全部有线上冷/热 profile 实测数字）**：
    - `_headers`：`/fonts/*` 与 `x2t.wasm.gz` immutable（`a2a4010`）；
@@ -392,10 +411,10 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
 | 5   | embed-demo 对齐 ran 设计体系（方向六 1）         | 半天      | ✅ 2026-08-16 r-button/r-input/r-checkbox/r-card/r-theme-switch + token；E2E 契约不变，见 explorations/2026-08-16-embed-demo-ranui-restyle.md |
 | 6   | markdown→HTML 生成器（方向七 1，后两项的前置）   | 半天~1 天 | ✅ 2026-08-16 `bin/build-pages.mjs`（locale × page，marked，FAQ/TOC 自动，输出入库 + `--check` 单测）                                         |
 | 7   | /help 帮助中心 + /changelog 页（方向七 2/3）     | 1~2 天    | ✅ 2026-08-16 /help、/help/embed-api、/changelog（en + zh-CN）；CHANGELOG 中文版待补                                                          |
-| 8   | PPT E2E（方向四 1）                              | 小时级    |                                                                                                                                               |
-| 9   | 性能基线审计（方向四 2 前半）                    | 半天      |                                                                                                                                               |
+| 8   | PPT E2E（方向四 1）                              | 小时级    | ✅ 已由战役覆盖：format-parity / embed-save-default / resave-idempotence / visual-roundtrip / corpus 均含 pptx 打开-编辑-保存-导 PDF          |
+| 9   | 性能基线审计（方向四 2 前半）                    | 半天      | ✅ 2026-08-16 线上基线已测（见方向四 2 的"基线"小节）+ 首刀：api.js 改按需加载（PR）                                                          |
 | 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    |                                                                                                                                               |
-| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      |                                                                                                                                               |
+| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      | ↻ 决策已给：不做无差别 idle 预取，改"意图触发预取"（见方向四 2）；SW 预缓存待路由拆分后测                                                     |
 | 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      |                                                                                                                                               |
 | 13  | 外链发布稿（方向二 3，指向 /changelog 与新功能） | 用户主导  |                                                                                                                                               |
 | 14  | agent-collab（方向五）                           | 大周期    |                                                                                                                                               |

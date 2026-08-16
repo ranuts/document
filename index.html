@@ -148,7 +148,10 @@
       }
     </script>
 
-    <script src="web-apps/apps/api/documents/api.js"></script>
+    <!-- The OnlyOffice DocsAPI loader is fetched on demand (lib/onlyoffice-editor.ts
+         loadEditorApi) when a document is opened or created; a synchronous tag here
+         was render-blocking (~0.5 s of LCP) for visitors who only read the landing. -->
+    <link rel="prefetch" href="/web-apps/apps/api/documents/api.js" as="script" />
   </head>
 
   <body>

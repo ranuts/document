@@ -34,6 +34,11 @@ export async function handleDocumentOperation(options: {
   readonly?: boolean;
 }): Promise<void> {
   try {
+    // The DocsAPI loader is no longer a render-blocking <script> in
+    // index.html (it cost ~0.5 s of homepage LCP for visitors who never open
+    // a document); every open path funnels through here, so load it on
+    // demand. Idempotent once window.DocsAPI exists.
+    await loadEditorApi();
     const { isNew, fileName, file, readonly = false } = options;
     const fileType = fileName.split('.').pop() || getExtensions(file?.type || '')[0] || '';
     const _docType = getDocumentType(fileType);
