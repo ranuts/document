@@ -28,7 +28,7 @@
 - 🔒 **隐私优先** — 所有处理在本地完成，不上传任何数据
 - 📝 **多格式支持** — DOCX、XLSX、PPTX、CSV 等
 - 🚀 **无需服务器** — 纯前端实现，可部署到任意静态托管
-- 🌐 **URL 打开** — 通过 `?src=` 或 `?file=` 参数直接加载远程文档
+- 🌐 **URL 打开** — 通过 `/editor?src=` 或 `/editor?file=` 参数直接加载远程文档（旧的 `/?src=` 会跳转）
 - 📦 **PWA 支持** — 可安装，支持离线使用
 - 🌍 **多语言** — 中文、英文及更多语言
 - 🧩 **可嵌入** — 完整的 postMessage API 支持 iframe 集成
@@ -61,7 +61,7 @@ pnpm run dev
 ### 打开文档
 
 1. 点击上传按钮选择本地文件，或
-2. 通过 URL 参数传入：`?src=https://example.com/document.docx`
+2. 通过 URL 参数传入：`/editor?src=https://example.com/document.docx`
 
 > 远程 URL 需支持 CORS。
 
@@ -96,7 +96,7 @@ pnpm run dev
 ```html
 <iframe
   id="documentEditor"
-  src="https://your-deployment/?embed=1"
+  src="https://your-deployment/editor?embed=1"
   style="width: 100%; height: 720px; border: 0"
 ></iframe>
 ```

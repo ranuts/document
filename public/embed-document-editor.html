@@ -64,7 +64,7 @@
               {
                 "@type": "HowToStep",
                 "name": "Add the iframe",
-                "text": "Add an iframe pointing at the editor with ?embed=1, sized to your layout."
+                "text": "Add an iframe pointing at /editor?embed=1, sized to your layout."
               },
               {
                 "@type": "HowToStep",
@@ -86,7 +86,7 @@
                 "name": "How do I embed the document editor?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Add one iframe pointing at the editor with ?embed=1, then drive it with a postMessage API to open and save documents. A working demo is at /embed-demo.html."
+                  "text": "Add one iframe pointing at /editor?embed=1, then drive it with a postMessage API to open and save documents. A working demo is at /embed-demo.html."
                 }
               },
               {
@@ -223,7 +223,7 @@
       <h2>Add it with one iframe</h2>
       <pre><code>&lt;iframe
   id="documentEditor"
-  src="https://edit.chaxus.com/?embed=1&amp;embedOrigin=https://your-app.example.com"
+  src="https://edit.chaxus.com/editor?embed=1&amp;embedOrigin=https://your-app.example.com"
   style="width: 100%; height: 720px; border: 0"
 &gt;&lt;/iframe&gt;</code></pre>
       <p>
@@ -254,7 +254,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
       <h2>How it works</h2>
       <ol>
-        <li>Add the iframe pointing at the editor with <code>?embed=1</code>, sized to your layout.</li>
+        <li>Add the iframe pointing at <code>/editor?embed=1</code>, sized to your layout.</li>
         <li>
           Wait for the <code>document:ready</code> event, then send <code>document:open-url</code>,
           <code>open-file</code> or <code>open-buffer</code>.
@@ -290,8 +290,8 @@ send('document:set-readonly', { readonly: false });</code></pre>
       <div class="faq">
         <h3>How do I embed the document editor?</h3>
         <p>
-          Add one iframe pointing at the editor with <code>?embed=1</code>, then drive it with a postMessage API to open
-          and save documents. A working demo is at <a href="/embed-demo.html">/embed-demo.html</a>.
+          Add one iframe pointing at <code>/editor?embed=1</code>, then drive it with a postMessage API to open and save
+          documents. A working demo is at <a href="/embed-demo.html">/embed-demo.html</a>.
         </p>
         <h3>Does the editor see my users' auth tokens?</h3>
         <p>

@@ -4,7 +4,7 @@
 // app (loaded via `?open=local`) picks it up on boot — see lib/pending-open.ts,
 // which owns the same DB/store/key names. Everything stays on-device.
 //
-// Usage: <r-button data-open-local="/?locale=zh-CN&open=local">…</r-button>
+// Usage: <r-button data-open-local="/editor?locale=zh-CN&open=local">…</r-button>
 // The attribute value is the app URL to navigate to after stashing the file.
 (function () {
   var DB_NAME = 'document-handoff';
@@ -43,11 +43,11 @@
     var input = document.createElement('input');
     input.type = 'file';
     // Keep in sync with the app's picker (lib/document.ts).
-    input.accept = '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv';
+    input.accept = '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv,.pdf';
     input.style.display = 'none';
     document.body.appendChild(input);
 
-    var targetHref = '/?open=local';
+    var targetHref = '/editor?open=local';
 
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function () {

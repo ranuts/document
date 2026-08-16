@@ -28,7 +28,7 @@ A privacy-first, browser-based document editor powered by OnlyOffice. Edit DOCX,
 - 🔒 **Privacy-first** — all processing happens locally, nothing is uploaded
 - 📝 **Multi-format** — DOCX, XLSX, PPTX, CSV editing plus PDF opening, and more
 - 🚀 **No server required** — pure frontend, deploy anywhere
-- 🌐 **Open from URL** — load documents via `?src=` or `?file=` parameters
+- 🌐 **Open from URL** — load documents via `/editor?src=` or `/editor?file=` (legacy `/?src=` redirects)
 - 📦 **PWA support** — install and use offline
 - 🌍 **Multi-language** — English, Chinese, and more
 - 🧩 **Embeddable** — full postMessage API for iframe integration
@@ -61,7 +61,7 @@ pnpm run dev
 ### Open a document
 
 1. Click the upload button to open a local file, or
-2. Pass a URL via query parameter: `?src=https://example.com/document.docx`
+2. Pass a URL via query parameter: `/editor?src=https://example.com/document.docx`
 
 > Remote URLs must support CORS.
 
@@ -96,7 +96,7 @@ Embed the editor in your application and control it via postMessage. The recomme
 ```html
 <iframe
   id="documentEditor"
-  src="https://your-deployment/?embed=1"
+  src="https://your-deployment/editor?embed=1"
   style="width: 100%; height: 720px; border: 0"
 ></iframe>
 ```

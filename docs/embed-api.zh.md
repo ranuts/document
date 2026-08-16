@@ -11,15 +11,20 @@
 ```html
 <iframe
   id="documentEditor"
-  src="https://your-deployment/?embed=1"
+  src="https://your-deployment/editor?embed=1"
   style="width: 100%; height: 720px; border: 0"
 ></iframe>
 ```
 
+> 编辑器位于 `/editor`，首页 `/` 是纯静态落地页。旧链接 `/?embed=1`、`/?src=`、`/?file=`、`/?new=` 仍然有效——`/` 会带同样的参数跳转到 `/editor`。
+
 如需限制只接受指定来源的消息，增加 `embedOrigin`：
 
 ```html
-<iframe id="documentEditor" src="https://your-deployment/?embed=1&embedOrigin=https://your-system.example.com"></iframe>
+<iframe
+  id="documentEditor"
+  src="https://your-deployment/editor?embed=1&embedOrigin=https://your-system.example.com"
+></iframe>
 ```
 
 ---

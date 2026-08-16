@@ -64,7 +64,7 @@
               {
                 "@type": "HowToStep",
                 "name": "加入 iframe",
-                "text": "加入一个指向编辑器、带 ?embed=1 的 iframe，按你的布局设置尺寸。"
+                "text": "加入一个指向 /editor?embed=1 的 iframe，按你的布局设置尺寸。"
               },
               {
                 "@type": "HowToStep",
@@ -86,7 +86,7 @@
                 "name": "怎么嵌入这个文档编辑器？",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "加入一个指向编辑器、带 ?embed=1 的 iframe，再用 postMessage API 驱动它打开与保存文档。可运行 demo 在 /embed-demo.html。"
+                  "text": "加入一个指向 /editor?embed=1 的 iframe，再用 postMessage API 驱动它打开与保存文档。可运行 demo 在 /embed-demo.html。"
                 }
               },
               {
@@ -218,7 +218,7 @@
       <h2>一个 iframe 就能接入</h2>
       <pre><code>&lt;iframe
   id="documentEditor"
-  src="https://edit.chaxus.com/?embed=1&amp;embedOrigin=https://your-app.example.com"
+  src="https://edit.chaxus.com/editor?embed=1&amp;embedOrigin=https://your-app.example.com"
   style="width: 100%; height: 720px; border: 0"
 &gt;&lt;/iframe&gt;</code></pre>
       <p>
@@ -247,7 +247,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 
       <h2>工作原理</h2>
       <ol>
-        <li>加入指向编辑器、带 <code>?embed=1</code> 的 iframe，按布局设尺寸。</li>
+        <li>加入指向 <code>/editor?embed=1</code> 的 iframe，按布局设尺寸。</li>
         <li>
           等 <code>document:ready</code> 事件，再发送 <code>document:open-url</code>、<code>open-file</code> 或
           <code>open-buffer</code>。
@@ -283,8 +283,8 @@ send('document:set-readonly', { readonly: false });</code></pre>
       <div class="faq">
         <h3>怎么嵌入这个文档编辑器？</h3>
         <p>
-          加入一个指向编辑器、带 <code>?embed=1</code> 的 iframe，再用 postMessage API 驱动它打开与保存文档。可运行 demo
-          在 <a href="/embed-demo.html">/embed-demo.html</a>。
+          加入一个指向 <code>/editor?embed=1</code> 的 iframe，再用 postMessage API 驱动它打开与保存文档。可运行 demo 在
+          <a href="/embed-demo.html">/embed-demo.html</a>。
         </p>
         <h3>编辑器会看到我用户的鉴权 token 吗？</h3>
         <p>

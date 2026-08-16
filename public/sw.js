@@ -4,7 +4,7 @@ const CACHE_VERSION = 'SW_VERSION_PLACEHOLDER'.includes('PLACEHOLDER') ? 'dev-' 
 // old single 100-item cache was constantly evicting its own shell).
 const CORE_CACHE = `document-editor-core-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `document-editor-runtime-${CACHE_VERSION}`;
-const ASSETS_TO_CACHE = ['./', './index.html', './manifest.json', './img/64.png'];
+const ASSETS_TO_CACHE = ['./', './index.html', './editor', './editor.html', './manifest.json', './img/64.png'];
 
 // Unhashed but deploy-coupled: stable filenames whose *content* changes every deploy.
 // Mirrors the group public/_headers pins to `Cache-Control: no-cache` — keep the two in sync.
