@@ -79,10 +79,11 @@ Breadcrumb）、页脚互链全齐；robots.txt / sitemap.xml / llms.txt 三件�
    /open/docx；同时新增 `test/unit/landing-pages.test.ts` 钉住全部落地页的
    canonical/hreflang/JSON-LD/sitemap/双语互指契约，见
    docs/explorations/2026-08-16-pdf-landing-and-landing-contract.md。
-2. **CSV 中文乱码长尾强化**：zh-CN 侧价值最高的词是"CSV 乱码/GBK 乱码
-   修复"。在 convert/csv-to-xlsx 中文页增补一节"为什么别的工具打开中文
-   CSV 会乱码、本工具如何检测编码"，FAQ 加对应问答；评估独立页
-   `/fix/csv-garbled`（zh 优先，en 后补）。
+2. ✅ 2026-08-16（前半）**CSV 中文乱码长尾强化**：convert/csv-to-xlsx 中文页
+   加"为什么别的工具打开中文 CSV 会乱码"一节 + 两条 FAQ（含 JSON-LD）+
+   description 带词；英文页同步，并修正了两页里"导入步骤可选编码"的过期
+   说法（v9 走 SheetJS 自动嗅探，没有导入对话框）。独立页 `/fix/csv-garbled`
+   待 GSC 数据再定。
 3. ✅ 2026-08-16 **只读/预览模式说明**：embed 落地页（en + zh）增补
    "Read-only and preview mode" 一节 + FAQ + FAQPage JSON-LD；docs/embed-api.md
    本就有该节；页面里的 API 参考链接改指站内 /help/embed-api。
