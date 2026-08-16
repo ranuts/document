@@ -10,6 +10,23 @@
 
 ---
 
+## 提交流程（2026-08-16 起：PR 制，main 受保护）
+
+`main` 分支保护已开（含管理员）：**不能直推**，必须 PR，且必须通过 6 个必需检查——
+`Lint and Validate` / `E2E` / `E2E (Cloudflare Pages semantics)` / `E2E (Docker image)` /
+`Preview smoke against Cloudflare Pages`（`.github/workflows/preview-smoke.yml`：等 CF Pages
+为该 PR 提交构建好 preview，再对 preview URL 跑冒烟集）/ `Cloudflare Pages`；线性历史，
+自动合并与合并后删分支已开。常规操作：
+
+```bash
+git switch -c <topic>            # 多会话共用工作树时一律在分支上提交
+git push -u origin <topic>
+gh pr create --fill
+gh pr merge --auto --rebase      # 检查全绿后自动 rebase 合并（约 15 分钟）
+```
+
+若不小心提交到了本地 main：`git branch <topic> && git reset --hard origin/main` 再照上走。
+
 ## 开发命令
 
 ```bash

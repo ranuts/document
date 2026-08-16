@@ -254,3 +254,9 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   67 通过 / 10 跳过（opt-in 夜间档）/ 0 失败。台账 A 表基本填满，剩 doc/xls/ppt 合成
   用例（靠夜间 POI）与图表/修订生成器。**待用户决定**：是否改为 PR → CF preview →
   冒烟门禁 → 合并的工作流（现在是 push main 即上线 + 上线后冒烟）。
+- **流程切换为 PR 制**（用户决定）：main 分支保护（含管理员、线性历史、6 个必需检查）、
+  `preview-smoke.yml`（等 CF Pages preview → 冒烟）、auto-merge + 删分支。两个会话共用
+  工作树，之后一律在 topic 分支提交。
+- **ranui IIFE 对齐**列入 roadmap 方向九：审计结论=入库 IIFE 与 npm latest 一致，落后的是
+  源仓库未发版；L1 防漂移哨兵 `test/unit/ranui-vendor-sync.test.ts` 已落，L2 发版对齐等
+  用户在 ran 仓库发 0.5.0-alpha.3。
