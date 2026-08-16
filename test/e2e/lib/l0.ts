@@ -70,9 +70,14 @@ const INIT_SCRIPT = () => {
     bucket.frameErrors.push({ kind: 'unhandledrejection', message: describe(event.reason), href: location.pathname });
   });
   window.addEventListener('error', (event) => {
+    const err = event.error as { stack?: unknown } | undefined;
+    const stack =
+      typeof err?.stack === 'string'
+        ? ' @ ' + err.stack.split('\n').slice(1, 4).join(' <- ').replace(/\s+/g, ' ').slice(0, 300)
+        : '';
     bucket.frameErrors.push({
       kind: 'error',
-      message: describe(event.error ?? event.message),
+      message: describe(event.error ?? event.message) + stack,
       href: location.pathname,
     });
   });
