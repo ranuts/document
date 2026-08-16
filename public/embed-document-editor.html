@@ -120,6 +120,14 @@
                   "@type": "Answer",
                   "text": "Add embedOrigin to the iframe URL to lock messaging to a specific origin, and verify event.origin in your own message handler."
                 }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I show a document read-only, or lock it after a while?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Pass readonly: true when opening, or send document:set-readonly at any time. It switches the live editor without reloading, and saves are refused while locked."
+                }
               }
             ]
           },
@@ -258,13 +266,23 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
         </li>
       </ol>
 
+      <h2>Read-only and preview mode</h2>
+      <p>
+        Open a document read-only (a viewer, a review step, a locked record) by passing <code>readonly: true</code> with
+        the open command, and switch at any time with <code>document:set-readonly</code> — no reload, the document stays
+        where the user was. In read-only mode editing is disabled and <code>document:save</code> answers with
+        <code>document:error</code>; <code>document:get-state</code> reports the current <code>readonly</code> flag.
+      </p>
+      <pre><code>// open locked, unlock later
+send('document:open-url', { url, readonly: true });
+send('document:set-readonly', { readonly: false });</code></pre>
+
       <r-card class="oss"
         ><div class="card-body">
           <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — read the code, run your own copy, and see
           exactly how the boundary works:
           <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>. Full API
-          reference:
-          <a href="https://github.com/ranuts/document/blob/main/docs/embed-api.md" rel="noopener">docs/embed-api.md</a>.
+          reference: <a href="/help/embed-api">Embed API reference</a>.
         </div></r-card
       >
 
@@ -294,6 +312,11 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
         <p>
           Add <code>embedOrigin</code> to the iframe URL to lock messaging to a specific origin, and verify
           <code>event.origin</code> in your own message handler.
+        </p>
+        <h3>Can I show a document read-only, or lock it after a while?</h3>
+        <p>
+          Yes. Pass <code>readonly: true</code> when opening, or send <code>document:set-readonly</code> at any time —
+          it switches the live editor without reloading, and saves are refused while locked.
         </p>
       </div>
 

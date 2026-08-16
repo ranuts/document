@@ -83,8 +83,9 @@ Breadcrumb）、页脚互链全齐；robots.txt / sitemap.xml / llms.txt 三件�
    修复"。在 convert/csv-to-xlsx 中文页增补一节"为什么别的工具打开中文
    CSV 会乱码、本工具如何检测编码"，FAQ 加对应问答；评估独立页
    `/fix/csv-garbled`（zh 优先，en 后补）。
-3. **只读/预览模式说明**：embed 落地页增补 runtime read-only 一节
-   （含 `document:set-readonly` 示例）；docs/embed-api.md 同步。
+3. ✅ 2026-08-16 **只读/预览模式说明**：embed 落地页（en + zh）增补
+   "Read-only and preview mode" 一节 + FAQ + FAQPage JSON-LD；docs/embed-api.md
+   本就有该节；页面里的 API 参考链接改指站内 /help/embed-api。
 4. **收尾同步**：index.html 页脚补齐缺失的 6 条内链（private、
    edit-without-account、embed、csv-to-xlsx 等）；sitemap 加新页并刷
    lastmod；llms.txt Pages 段加 /open/pdf。
