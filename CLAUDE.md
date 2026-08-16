@@ -200,7 +200,9 @@ fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEdito
 的 `index.html`→目录 308、`_headers`、`_redirects`。"本地 vite preview 全绿、
 线上坏"的三条缺陷（PDF 被 308 卡在 vendor 加载器、字体目录无缓存头、慢链路
 超时）都属于这一层；`test/unit/hosting-contract.test.ts` 钉住 `_headers` 关键
-规则。**线上冒烟** `.github/workflows/prod-smoke.yml`：每次 push main 等部署
+规则；`test/unit/landing-pages.test.ts` 钉住全部 SEO 落地页（public/**/*.html +
+index.html）的 canonical/hreflang/JSON-LD/sitemap/双语互指契约——新增落地页必须
+同时补 en+zh、sitemap、llms.txt、首页卡片，否则该测试先红。**线上冒烟** `.github/workflows/prod-smoke.yml`：每次 push main 等部署
 上线后即跑 + 每日；`E2E_BASE_URL=<站点>` 可把任意 spec 打到部署站。CF 面板里
 的 Cache Rules 等不在仓库、CI 复现不了，只能靠冒烟兜底。
 

@@ -28,6 +28,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- New "Open PDF" pages (`/open/pdf`, `/zh-CN/open/pdf`) explaining what the
+  PDF viewer can and cannot do (read, comment and annotate, save back as PDF;
+  no free-text rewriting of an existing PDF), linked from both homepages.
 - PDF files now open in a dedicated PDF viewer/editor.
 - Legacy Word 97 binary `.doc` files now open correctly.
 - Read-only mode can be toggled at runtime (embed API `document:set-readonly`
@@ -41,6 +44,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- The Chinese landing pages' "open your XLSX / PPTX / CSV" buttons no longer
+  drop you into a blank new Word document; they go to the Chinese homepage
+  where you can pick the file.
 - Opening a document that uses many fonts (typical for Chinese decks) no
   longer sits on "Loading presentation" for minutes on the hosted site: the
   editor's font files and the conversion engine are now cached long-term by

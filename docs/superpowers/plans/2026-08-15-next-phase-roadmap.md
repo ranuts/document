@@ -73,6 +73,12 @@ Breadcrumb）、页脚互链全齐；robots.txt / sitemap.xml / llms.txt 三件�
    （TDK + FAQPage + HowTo + 页脚互链 + hreflang 互指），目标词
    "open pdf in browser without upload / 在线打开 PDF 不上传"。
    这是与代码能力直接对应的最大内容缺口。
+   ✅ 2026-08-16 完成：`public/open/pdf.html` + `public/zh-CN/open/pdf.html`；
+   文案只承诺已被 `pdf-roundtrip.spec.ts` 验证的能力（打开/阅读/评论与
+   文字批注/另存回 PDF），明确"不能像 Word 一样改写正文"，把改正文引流到
+   /open/docx；同时新增 `test/unit/landing-pages.test.ts` 钉住全部落地页的
+   canonical/hreflang/JSON-LD/sitemap/双语互指契约，见
+   docs/explorations/2026-08-16-pdf-landing-and-landing-contract.md。
 2. **CSV 中文乱码长尾强化**：zh-CN 侧价值最高的词是"CSV 乱码/GBK 乱码
    修复"。在 convert/csv-to-xlsx 中文页增补一节"为什么别的工具打开中文
    CSV 会乱码、本工具如何检测编码"，FAQ 加对应问答；评估独立页
@@ -82,6 +88,10 @@ Breadcrumb）、页脚互链全齐；robots.txt / sitemap.xml / llms.txt 三件�
 4. **收尾同步**：index.html 页脚补齐缺失的 6 条内链（private、
    edit-without-account、embed、csv-to-xlsx 等）；sitemap 加新页并刷
    lastmod；llms.txt Pages 段加 /open/pdf。
+   ✅ 2026-08-16：sitemap / llms.txt / 双首页 .PDF 卡片 / 全部落地页页脚
+   "Open PDF" 已同步；顺手修正 zh-CN 各"打开你的 XLSX/PPTX/CSV" CTA 原本
+   指向 `/?locale=zh-CN&new=docx`（落到一份空白 Word）的问题，改指
+   `/zh-CN/`。index.html 页脚 6 条内链仍待补。
 5. **README**：功能列表已加 PDF（本轮完成）；落地新页后同步 Pages 链接。
 
 ## 方向二：SEO / GEO 卫生与运营（playbook 遗留）
@@ -306,22 +316,22 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
 
 ## 原执行顺序（2026-08-15 更新：加入方向六、七，第 1 项已完成）
 
-| 序  | 事项                                             | 体量      | 状态               |
-| --- | ------------------------------------------------ | --------- | ------------------ |
-| 1   | 部署后 issue 验证清单（方向四 3）                | 半天      | ✅ 已完成，关 6 个 |
-| 2   | CHANGELOG.md + 发布 v9 release（方向七 3 前半）  | 1 小时    |                    |
-| 3   | /open/pdf 落地页 + 内容收尾同步（方向一）        | 半天~1 天 |                    |
-| 4   | vendor noindex + GSC 提交（方向二 1/2）          | 1 小时    |                    |
-| 5   | embed-demo 对齐 ran 设计体系（方向六 1）         | 半天      |                    |
-| 6   | markdown→HTML 生成器（方向七 1，后两项的前置）   | 半天~1 天 |                    |
-| 7   | /help 帮助中心 + /changelog 页（方向七 2/3）     | 1~2 天    |                    |
-| 8   | PPT E2E（方向四 1）                              | 小时级    |                    |
-| 9   | 性能基线审计（方向四 2 前半）                    | 半天      |                    |
-| 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    |                    |
-| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      |                    |
-| 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      |                    |
-| 13  | 外链发布稿（方向二 3，指向 /changelog 与新功能） | 用户主导  |                    |
-| 14  | agent-collab（方向五）                           | 大周期    |                    |
+| 序  | 事项                                             | 体量      | 状态                                                                                                                           |
+| --- | ------------------------------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | 部署后 issue 验证清单（方向四 3）                | 半天      | ✅ 已完成，关 6 个                                                                                                             |
+| 2   | CHANGELOG.md + 发布 v9 release（方向七 3 前半）  | 1 小时    |                                                                                                                                |
+| 3   | /open/pdf 落地页 + 内容收尾同步（方向一）        | 半天~1 天 | ✅ 2026-08-16 落地页 + sitemap/llms/首页卡片/页脚互链 + `landing-pages.test.ts` 契约；方向一 2/3（CSV 乱码长文、只读说明）待做 |
+| 4   | vendor noindex + GSC 提交（方向二 1/2）          | 1 小时    |                                                                                                                                |
+| 5   | embed-demo 对齐 ran 设计体系（方向六 1）         | 半天      |                                                                                                                                |
+| 6   | markdown→HTML 生成器（方向七 1，后两项的前置）   | 半天~1 天 |                                                                                                                                |
+| 7   | /help 帮助中心 + /changelog 页（方向七 2/3）     | 1~2 天    |                                                                                                                                |
+| 8   | PPT E2E（方向四 1）                              | 小时级    |                                                                                                                                |
+| 9   | 性能基线审计（方向四 2 前半）                    | 半天      |                                                                                                                                |
+| 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    |                                                                                                                                |
+| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      |                                                                                                                                |
+| 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      |                                                                                                                                |
+| 13  | 外链发布稿（方向二 3，指向 /changelog 与新功能） | 用户主导  |                                                                                                                                |
+| 14  | agent-collab（方向五）                           | 大周期    |                                                                                                                                |
 
 排序理由：
 
