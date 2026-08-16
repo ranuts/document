@@ -51,7 +51,7 @@ describe('public/_headers', () => {
   it('does not make patched vendor trees immutable (x2t_helper.js and editor HTML must revalidate)', () => {
     for (const p of Object.keys(rules)) {
       if (/^\/(sdkjs|web-apps)\/\*$/.test(p) || p === '/sdkjs/*' || p === '/web-apps/*') {
-        expect(cc(p)).not.toMatch(/immutable/);
+        expect(cc(p) ?? '').not.toMatch(/immutable/);
       }
     }
     expect(Object.keys(rules).some((p) => p.startsWith('/sdkjs/common/wasm/x2t/x2t_helper'))).toBe(false);
