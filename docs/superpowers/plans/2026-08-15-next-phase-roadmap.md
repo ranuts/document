@@ -390,8 +390,8 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
 | 3   | /open/pdf 落地页 + 内容收尾同步（方向一）        | 半天~1 天 | ✅ 2026-08-16 落地页 + sitemap/llms/首页卡片/页脚互链 + `landing-pages.test.ts` 契约；方向一 2/3（CSV 乱码长文、只读说明）待做                |
 | 4   | vendor noindex + GSC 提交（方向二 1/2）          | 1 小时    | ✅ 2026-08-16 noindex 已上（`_headers` + hosting-contract 钉住）；GSC/Bing 提交需站长权限，待用户                                             |
 | 5   | embed-demo 对齐 ran 设计体系（方向六 1）         | 半天      | ✅ 2026-08-16 r-button/r-input/r-checkbox/r-card/r-theme-switch + token；E2E 契约不变，见 explorations/2026-08-16-embed-demo-ranui-restyle.md |
-| 6   | markdown→HTML 生成器（方向七 1，后两项的前置）   | 半天~1 天 |                                                                                                                                               |
-| 7   | /help 帮助中心 + /changelog 页（方向七 2/3）     | 1~2 天    |                                                                                                                                               |
+| 6   | markdown→HTML 生成器（方向七 1，后两项的前置）   | 半天~1 天 | ✅ 2026-08-16 `bin/build-pages.mjs`（locale × page，marked，FAQ/TOC 自动，输出入库 + `--check` 单测）                                         |
+| 7   | /help 帮助中心 + /changelog 页（方向七 2/3）     | 1~2 天    | ✅ 2026-08-16 /help、/help/embed-api、/changelog（en + zh-CN）；CHANGELOG 中文版待补                                                          |
 | 8   | PPT E2E（方向四 1）                              | 小时级    |                                                                                                                                               |
 | 9   | 性能基线审计（方向四 2 前半）                    | 半天      |                                                                                                                                               |
 | 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    |                                                                                                                                               |

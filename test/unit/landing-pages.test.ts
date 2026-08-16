@@ -69,14 +69,14 @@ describe('landing pages', () => {
         expect(attr(html, /property="og:url" content="([^"]+)"/)).toBe(ORIGIN + route);
       });
 
-      it('ships parseable JSON-LD whose WebApplication.url is the page', () => {
+      it('ships parseable JSON-LD whose primary node url is the page', () => {
         const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
         expect(blocks.length).toBeGreaterThan(0);
         const graph = blocks.flatMap((m) => {
           const doc = JSON.parse(m[1]);
           return doc['@graph'] ?? [doc];
         });
-        const app = graph.find((n: any) => n['@type'] === 'WebApplication');
+        const app = graph.find((n: any) => ['WebApplication', 'WebPage', 'Article'].includes(n['@type']));
         expect(app?.url).toBe(ORIGIN + route);
         for (const faq of graph.filter((n: any) => n['@type'] === 'FAQPage')) {
           expect(faq.mainEntity.length).toBeGreaterThan(2);

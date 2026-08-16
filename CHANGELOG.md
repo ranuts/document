@@ -32,6 +32,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- A help center (`/help`, `/zh-CN/help`) answering the practical questions:
+  formats, saving and converting, CSV encodings, what the PDF viewer can do,
+  read-only and embedding, offline use, privacy boundaries, error codes,
+  self-hosting; the Embed API reference (`/help/embed-api`) and this changelog
+  (`/changelog`) are published on the site from the same markdown.
 - The editor now follows the site's light/dark theme: a dark site opens a
   dark editor and switches live with the theme toggle; a theme you pick inside
   the editor's own settings still wins.
