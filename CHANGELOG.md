@@ -41,6 +41,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Opening a document that uses many fonts (typical for Chinese decks) no
+  longer sits on "Loading presentation" for minutes on the hosted site: the
+  editor's font files and the conversion engine are now cached long-term by
+  the browser, so a second open of the same document takes seconds instead
+  of re-downloading tens of megabytes.
+
 - Words carrying a phonetic guide (Japanese furigana / Chinese pinyin
   "ruby" annotations) no longer disappear from a Word document on open and
   save; the base word is kept. The guide text itself is still dropped

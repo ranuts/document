@@ -208,3 +208,19 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 - 新增 image-insert.spec（xlsx/pptx URL 插图后保存含 media）、font-cache.spec（第二次打开
   字体全部走缓存，回归守护另一会话修的线上字体无缓存问题；进线上冒烟集）；
   pdf-route.spec 也进线上冒烟集。
+- **（08-16 晨）线上"PPT 永久 Loading、本地正常"根因**：索引字体
+  `/fonts/NNN`（无扩展名）没有任何 Cache-Control 规则 → Pages 给
+  `max-age=0` / `cf-cache-status: DYNAMIC`；sw.js 里字体跳过规则按
+  `.ttf/.woff` 扩展名匹配、索引字体漏网落进 SWR，其 `cache:'no-cache'`
+  重验证每次完整重下。SDK 字体加载是串行队列，EMP deck 拉 32 文件 /
+  37.6MB（其中 20 个是 Word/Slide `IsNeedDefaultFonts` 强制的
+  Arial/Times/Courier ×4 面，文档根本没用），逐文件耗时 3s→89s→165s→
+  214s+，`isDocumentLoadComplete` 一直 false。修法 `a2a4010`：`_headers`
+  把 `/fonts/*` 与 `x2t.wasm.gz` 设 immutable（sdkjs/web-apps 故意不设，
+  含我们的 patch 与 iframe HTML），sw.js 对这两种形状 cache-first。线上
+  实测：首开 4 分钟+未完成 → 61s 完成；**第二次打开 4s**（30 字体全缓存）。
+  **待用户在 CF 控制台做**：Pages 对无扩展名路径边缘不缓存
+  （`cf-cache-status` 仍 DYNAMIC），需加 Cache Rule `/fonts/*` → eligible
+  for cache，才能让**首次**打开也从边缘命中。更长期：SDK 默认字体全家桶
+  （20 文件）对纯浏览器版本是纯浪费，可评估在 `prepareEditorIframe`
+  里关闭 `IsNeedDefaultFonts` 或裁减为文档实际引用的字体。
