@@ -35,3 +35,21 @@
 # week of browser cache with revalidation after is a fine trade.
 /ran-fonts/*
   Cache-Control: public, max-age=604800, must-revalidate
+
+# The editor's indexed font catalog (public/fonts/000..266, XOR wire format,
+# 200 KB - 5 MB each). Named by catalog index and only ever replaced together
+# with the vendor build, so they are effectively immutable. Without an
+# explicit rule Pages served them max-age=0 / cf-cache-status DYNAMIC: every
+# open of a CJK deck re-downloaded 30+ MB of fonts through the SDK's serial
+# font queue and sat on "Loading presentation" for minutes on production
+# while localhost dev was instant. Long-lived at both the CF edge and the
+# browser.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The x2t WASM (9.9 MB gz): the single largest first-save download; also
+# swapped only with the vendor. Editor JS/HTML under sdkjs/ and web-apps/
+# is deliberately NOT pinned here -- some of it carries our runtime patches
+# (x2t_helper.js) and the editor iframe HTML, which must revalidate.
+/sdkjs/common/wasm/x2t/x2t.wasm.gz
+  Cache-Control: public, max-age=31536000, immutable

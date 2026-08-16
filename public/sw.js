@@ -97,6 +97,33 @@ self.addEventListener('fetch', (event) => {
   // causes a crash in OnlyOffice v7.5's fallback font code path.
   if (/\.(ttf|woff2?|otf|eot)(\?.*)?$/.test(url.pathname)) return;
 
+  // 4a. The editor's indexed font catalog (/fonts/000..266, no extension) and
+  // the x2t WASM are large, immutable, vendor-versioned binaries. They used to
+  // fall through to stale-while-revalidate below, whose `cache: 'no-cache'`
+  // revalidation re-downloaded every multi-MB font on every open; with the
+  // SDK loading fonts serially, a CJK deck sat on "Loading presentation" for
+  // minutes on production. Serve them cache-first: the network is consulted
+  // only when the entry is missing.
+  const isImmutableBinary = /^\/fonts\/\d{3}$/.test(url.pathname) || url.pathname.endsWith('/x2t.wasm.gz');
+  if (isImmutableBinary) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            const responseToCache = networkResponse.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => {
+              cache.put(event.request, responseToCache);
+              limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS);
+            });
+          }
+          return networkResponse;
+        });
+      }),
+    );
+    return;
+  }
+
   // 4b. Skip the spellchecker engine: it is importScripts'd from inside a
   // dedicated worker during the editor's first boot, and routing that request
   // through a just-activated service worker hangs forever on a cold profile
