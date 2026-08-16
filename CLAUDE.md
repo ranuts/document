@@ -27,6 +27,10 @@ gh pr merge --auto --rebase      # 检查全绿后自动 rebase 合并（约 15 
 
 若不小心提交到了本地 main：`git branch <topic> && git reset --hard origin/main` 再照上走。
 
+**多会话并行**：不要共用同一个 checkout（HEAD/index/dist/test-results 都会互相干扰）。
+第二个及以后的会话用独立 worktree：`git worktree add .claude/worktrees/<name> -b <topic>`
+（`.claude/` 已在 .gitignore），各自 `pnpm install`、各占一个 `E2E_PORT`；PR 流程不变。
+
 ## 开发命令
 
 ```bash
