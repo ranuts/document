@@ -1,23 +1,19 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { PAGES, check, generate } from '../../bin/build-pages.mjs';
+import { PAGES, generate } from '../../bin/build-pages.mjs';
 
 /**
  * The /help and /changelog pages are rendered from markdown by
- * bin/build-pages.mjs and the output is committed under public/. Two things
- * can go wrong silently: someone edits the markdown (or CHANGELOG.md) and
- * forgets to regenerate, or someone edits the generated HTML by hand. Both
- * turn red here. The shell contract (canonical/hreflang/JSON-LD/sitemap) is
- * covered by landing-pages.test.ts, which walks the same public/ tree.
+ * bin/build-pages.mjs at build / dev time (vite plugin `generated-pages`);
+ * the outputs are not committed, so nothing can go stale -- what is checked
+ * here is that the generator turns the real sources into pages of the right
+ * shape. The shell contract (canonical/hreflang/JSON-LD/sitemap) is covered
+ * by landing-pages.test.ts, which validates the same in-memory render.
  */
 const ROOT = resolve(__dirname, '../..');
 
 describe('generated markdown pages', () => {
-  it('committed public/ copies match a fresh render (run: node bin/build-pages.mjs)', () => {
-    expect(check()).toEqual([]);
-  });
-
   it('renders every page for every locale it has a source for', () => {
     const outputs = generate({ outDir: null });
     const expected = PAGES.reduce((n: number, p: { sources: object }) => n + Object.keys(p.sources).length, 0);
@@ -52,7 +48,7 @@ describe('generated markdown pages', () => {
       .split(/\s+/)
       .slice(0, 5)
       .join(' ');
-    const page = readFileSync(resolve(ROOT, 'public/changelog.html'), 'utf8');
+    const page = generate({ outDir: null }).find((o: { route: string }) => o.route === '/changelog')!.html;
     expect(page.replace(/<[^>]+>/g, '').replace(/&quot;|&#39;/g, '')).toContain(words);
   });
 });

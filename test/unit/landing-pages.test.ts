@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { generate } from '../../bin/build-pages.mjs';
 
 /**
  * SEO landing-page contract. The static pages under public/ (and their
@@ -14,6 +15,10 @@ const ROOT = resolve(__dirname, '../..');
 const PUBLIC = resolve(ROOT, 'public');
 const ORIGIN = 'https://edit.chaxus.com';
 const NOT_LANDING = new Set(['404.html', 'embed-demo.html']);
+// Pages rendered from markdown at build time (not committed under public/):
+// the same contract applies, so they are validated from a fresh in-memory render.
+const GENERATED = generate({ outDir: null }) as Array<{ rel: string; route: string; html: string }>;
+const isGeneratedFile = (file: string) => GENERATED.some((g) => resolve(PUBLIC, g.rel) === file);
 
 function walkHtml(dir: string): string[] {
   const out: string[] = [];
@@ -22,7 +27,7 @@ function walkHtml(dir: string): string[] {
     if (statSync(p).isDirectory()) {
       if (['sdkjs', 'web-apps', 'ranui-iife', 'ran-fonts', 'fonts', 'img', 'wasm'].includes(name)) continue;
       out.push(...walkHtml(p));
-    } else if (name.endsWith('.html') && !NOT_LANDING.has(name)) {
+    } else if (name.endsWith('.html') && !NOT_LANDING.has(name) && !isGeneratedFile(p)) {
       out.push(p);
     }
   }
@@ -35,7 +40,14 @@ const routeOf = (file: string) => {
   return rel.endsWith('/index.html') ? rel.slice(0, -'index.html'.length) : rel.replace(/\.html$/, '');
 };
 
-const pages = walkHtml(PUBLIC).sort();
+/** Every landing page: hand-written files under public/ plus the generated ones (in memory). */
+const pages: Array<{ route: string; html: string; label: string }> = [
+  ...walkHtml(PUBLIC)
+    .sort()
+    .map((file) => ({ route: routeOf(file), html: readFileSync(file, 'utf8'), label: relative(ROOT, file) })),
+  ...GENERATED.map((g) => ({ route: g.route, html: g.html, label: `${g.rel} (generated)` })),
+];
+const routes = new Set(pages.map((p) => p.route));
 // The English homepage lives at the repo root (Vite entry), not under public/.
 const homepage = resolve(ROOT, 'index.html');
 const attr = (html: string, re: RegExp) => html.match(re)?.[1] ?? null;
@@ -43,13 +55,13 @@ const attr = (html: string, re: RegExp) => html.match(re)?.[1] ?? null;
 describe('landing pages', () => {
   it('finds the landing set (sanity)', () => {
     expect(pages.length).toBeGreaterThan(10);
-    expect(pages.some((p) => p.endsWith('/open/pdf.html'))).toBe(true);
-    expect(pages.some((p) => p.endsWith('/zh-CN/open/pdf.html'))).toBe(true);
+    expect(routes.has('/open/pdf')).toBe(true);
+    expect(routes.has('/zh-CN/open/pdf')).toBe(true);
+    expect(routes.has('/help')).toBe(true);
+    expect(routes.has('/zh-CN/changelog')).toBe(true);
   });
 
-  for (const file of pages) {
-    const route = routeOf(file);
-    const html = readFileSync(file, 'utf8');
+  for (const { route, html } of pages) {
     const isZh = route.startsWith('/zh-CN/');
     const enRoute = isZh ? route.replace(/^\/zh-CN/, '') || '/' : route;
     const zhRoute = isZh ? route : `/zh-CN${route === '/' ? '/' : route}`;
@@ -85,9 +97,7 @@ describe('landing pages', () => {
 
       it('has an existing counterpart in the other language and links to it', () => {
         const other = isZh ? enRoute : zhRoute;
-        const otherFile =
-          other === '/' ? homepage : join(PUBLIC, other.endsWith('/') ? `${other}index.html` : `${other}.html`);
-        expect(existsSync(otherFile), `${other} for ${route}`).toBe(true);
+        expect(other === '/' ? existsSync(homepage) : routes.has(other), `${other} for ${route}`).toBe(true);
         expect(html).toContain(`data-href="${other}"`);
       });
 
@@ -101,7 +111,7 @@ describe('landing pages', () => {
     const locs = [...readFileSync(resolve(PUBLIC, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) =>
       m[1].slice(ORIGIN.length),
     );
-    const known = new Set([...pages.map(routeOf), '/']);
+    const known = new Set([...routes, '/']);
     for (const l of locs) expect(known.has(l), `sitemap entry ${l} has no page`).toBe(true);
     // No en page missing from the sitemap either (all pages checked above).
     expect(new Set(locs).size).toBe(locs.length);
@@ -120,13 +130,12 @@ describe('landing pages', () => {
 
   it('zh-CN CTAs stay in Chinese; "open your <format>" never lands on a blank new docx', () => {
     const allowed = new Set(['/zh-CN/', '/?locale=zh-CN&amp;new=docx', '/embed-demo.html']);
-    for (const file of pages.filter((p) => p.includes('/zh-CN/') && !p.endsWith('/zh-CN/index.html'))) {
-      const html = readFileSync(file, 'utf8');
+    for (const { route, html } of pages.filter((p) => p.route.startsWith('/zh-CN/') && p.route !== '/zh-CN/')) {
       const m = html.match(/<a class="cta" href="([^"]+)"><r-button[^>]*>([^<]+)</);
       if (!m) continue;
       const [, href, label] = m;
-      expect(allowed.has(href), `${routeOf(file)} cta ${href}`).toBe(true);
-      if (label.includes('打开你的')) expect(href, routeOf(file)).toBe('/zh-CN/');
+      expect(allowed.has(href), `${route} cta ${href}`).toBe(true);
+      if (label.includes('打开你的')) expect(href, route).toBe('/zh-CN/');
     }
   });
 });

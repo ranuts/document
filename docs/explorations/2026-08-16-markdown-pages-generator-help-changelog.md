@@ -20,10 +20,16 @@ stripFirstHeading? }`；`LOCALES` 表（en → `/`，zh-CN → `/zh-CN/`，含
   - FAQPage + BreadcrumbList）、no-flash 主题脚本、同一份 landing.css、
     ranui IIFE（button/card/select/theme-switch）、语言 `<r-select data-href>`
     互指、同一组页脚互链、`r-theme-switch`。
-- 输出确定性、**提交入库**（dev 直接读 public/），`bin/build.sh` 构建前
-  再跑一遍；`--check` 模式 + `test/unit/generated-pages.test.ts` 钉住"改了
-  markdown 没重新生成"和"手改了生成 HTML"两种漂移。生成文件加入
-  `.prettierignore`（字节精确比对）。
+- 输出确定性。**第一版曾把产物提交入库**并用 `--check` 钉漂移，但同日
+  就撞上问题：main 关掉 strict up-to-date 后，几个并发合并、各自带着
+  自己那份 `public/changelog.html` 的 PR 会让主干上的产物只反映最后合入
+  的那份 CHANGELOG。当天改为**构建期生成、产物不入库**（peer 建议）：
+  `vite.config.ts` 的 `generated-pages` 插件在 `buildStart`（含 E2E 用的裸
+  `vite build --outDir dist-e2e-<port>`）与 dev server 启动时调 `generate()`
+  写进 public/（已 gitignore），dev 下监听源 markdown 改动即重渲染 +
+  full-reload；`bin/build.sh` 不再单独跑。`generated-pages.test.ts` 改为
+  "真实 markdown 源 → 形状正确的页面"，`landing-pages.test.ts` 把生成页从
+  内存渲染并入同一契约（canonical/hreflang/JSON-LD/sitemap/双语互指）。
 - landing.css 追加 `.doc` 段：h3/h4、code/pre、table、blockquote、toc、
   notice、source，全部 token；`landing-pages.test.ts` 遍历 public/ 时自动
   覆盖新页（JSON-LD 主节点断言放宽为 WebApplication | WebPage | Article）。
