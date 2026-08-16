@@ -241,3 +241,6 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   冷 CF 路径 32s）；第二次打开 **3s**。ER 用例 "document fonts are
   requested in parallel…" 守护派发跨度 <1.5s 与默认预载关闭。CF 边缘
   Cache Rule 需用户在控制台加（见规划方向四 2）。
+- comments.spec：docx（`pluginMethod_AddComment`）与 xlsx（`asc_CCommentData` + `bDocument=false`）
+  评论保存进包；发现 cell 侧默认 `bDocument` 会把评论写进 OnlyOffice 私有的
+  `xl/workbookComments.bin`（Excel 不认），集成时须显式置 false——记入台账。
