@@ -12,13 +12,24 @@ import base from './playwright.config';
  */
 const PORT = Number(process.env.PAGES_PORT || 8788);
 
+// wrangler's workerd has been observed to die mid-run on CI when a browser
+// aborts a large download (sdk-all.js) while several workers hammer it
+// ("kj/async-io-unix.c++ ... Connection reset by peer"), after which every
+// test fails with ECONNREFUSED. Two mitigations: run the suites serially so
+// concurrent aborts don't pile up, and supervise the dev server in a restart
+// loop so a crash costs one retried test instead of the whole job.
+const SERVE = `until pnpm dlx wrangler@latest pages dev dist --port ${PORT} --ip 127.0.0.1; do echo "wrangler pages dev exited, restarting"; sleep 1; done`;
+
 export default defineConfig({
   ...base,
   outputDir: 'test-results-pages',
   reporter: [['list'], ['html', { outputFolder: 'playwright-report-pages', open: 'never' }]],
+  fullyParallel: false,
+  workers: 1,
+  retries: 1,
   use: { ...base.use, baseURL: `http://127.0.0.1:${PORT}` },
   webServer: {
-    command: `sh ./bin/build.sh && pnpm dlx wrangler@latest pages dev dist --port ${PORT} --ip 127.0.0.1`,
+    command: `sh ./bin/build.sh && (${SERVE})`,
     url: `http://127.0.0.1:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 300_000,
