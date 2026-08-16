@@ -104,6 +104,7 @@ r-select.lang-select {
   display: inline-block;
   min-width: 84px;
   font-size: 14px;
+  height: 44px;
 }
 /* hide the raw option list pre-upgrade; the reserved width avoids layout shift */
 r-select.lang-select:not(:defined) {

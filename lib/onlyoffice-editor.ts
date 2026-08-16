@@ -985,6 +985,11 @@ function createPersonalEditorInstance(config: {
     documentType: DOCUMENT_TYPE_MAP[normalizedType],
     editorConfig: {
       mode: 'edit',
+      // No Document Server, no co-editing: pin the mode and hide the Review
+      // tab's "Co-editing Mode" switch. Toggling it in this build throws an
+      // uncaught "Cannot read properties of null (reading 'ranges')" in the
+      // spreadsheet editor (found by the UI crawl).
+      coEditing: { mode: 'fast', change: false },
       lang: editorLang,
       user: {
         id: 'local-user',
