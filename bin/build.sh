@@ -57,6 +57,10 @@ else
     echo "Warning: $RAN_FONTS_SRC not found, using existing $PUBLIC_DIR/ran-fonts/."
 fi
 
+# Render the markdown-sourced pages (/help, /changelog, ...) into public/ so the
+# committed copies can never lag the markdown (see bin/build-pages.mjs).
+node bin/build-pages.mjs
+
 # Run Vite build
 pnpm vite build $VITE_MODE_ARGS
 
