@@ -56,6 +56,12 @@ describe('public/_headers', () => {
     }
     expect(Object.keys(rules).some((p) => p.startsWith('/sdkjs/common/wasm/x2t/x2t_helper'))).toBe(false);
   });
+
+  it('keeps vendor trees and the font catalog out of search indexes, and landing pages in', () => {
+    const robots = (path: string) => rules[path]?.['x-robots-tag'];
+    for (const p of ['/web-apps/*', '/sdkjs/*', '/fonts/*']) expect(robots(p), p).toMatch(/noindex/);
+    for (const p of ['/*', '/open/*', '/zh-CN/*', '/assets/*']) expect(robots(p), p).toBeUndefined();
+  });
 });
 
 describe('public/_redirects', () => {

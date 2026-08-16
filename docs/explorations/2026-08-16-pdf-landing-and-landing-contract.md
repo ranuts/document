@@ -60,6 +60,18 @@ XLSX"完全对不上（用户落进空白 Word，还得自己找 Open）。EN �
   `.html` 自动解析承担，`playwright.pages.config.ts` 层可复现）
 - prettier / oxlint 对触碰文件通过
 
+## 附：vendor 树 noindex（路线图方向二 1）
+
+`public/_headers` 给 `/web-apps/*`、`/sdkjs/*`、`/fonts/*` 加
+`X-Robots-Tag: noindex`（只加这一个头，不动缓存策略——sdkjs/web-apps
+仍需 revalidate）。选头而不是 robots.txt `Disallow`：Disallow 只是不抓，
+被外链到的 URL 仍可能"无摘要收录"，且爬虫永远看不到 noindex；允许抓一次
+
+- noindex 才会真正从索引中移除。Cloudflare Pages 会合并所有匹配规则的头，
+  所以 `x2t.wasm.gz` 同时得到 immutable 与 noindex。
+  `hosting-contract.test.ts` 新增一条：三个 vendor 前缀必须 noindex，
+  `/*`、`/open/*`、`/zh-CN/*`、`/assets/*` 不得带 X-Robots-Tag。
+
 ## 未做 / 后续
 
 - 方向一 2（CSV 中文乱码长文 + `/fix/csv-garbled` 评估）、3（embed 页

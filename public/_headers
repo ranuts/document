@@ -46,6 +46,7 @@
 # browser.
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+  X-Robots-Tag: noindex
 
 # The x2t WASM (9.9 MB gz): the single largest first-save download; also
 # swapped only with the vendor. Editor JS/HTML under sdkjs/ and web-apps/
@@ -53,3 +54,13 @@
 # (x2t_helper.js) and the editor iframe HTML, which must revalidate.
 /sdkjs/common/wasm/x2t/x2t.wasm.gz
   Cache-Control: public, max-age=31536000, immutable
+
+# Crawler hygiene: the vendored editor trees contain thousands of internal
+# HTML/JS files (help pages in every locale, iframe shells, plugin manifests)
+# that a crawler otherwise spends its budget on and may surface in place of
+# the real landing pages. Keep them out of the index; caching is untouched
+# (no Cache-Control here, see the note above).
+/web-apps/*
+  X-Robots-Tag: noindex
+/sdkjs/*
+  X-Robots-Tag: noindex
