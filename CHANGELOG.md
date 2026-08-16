@@ -32,6 +32,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- The editor's own interface (menus, ribbon, dialogs) now follows your
+  browser language for all 45 languages the engine ships (Japanese, Korean,
+  German, Spanish, Portuguese, French, Russian, ...), not just English and
+  Chinese; `?locale=<tag>` still overrides it.
 - The bottom-right Menu now has a light / dark / system switch, so the theme
   can be changed while a document is open (the editor follows it).
 - A help center (`/help`, `/zh-CN/help`) answering the practical questions:

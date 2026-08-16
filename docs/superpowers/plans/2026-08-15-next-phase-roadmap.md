@@ -346,7 +346,8 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
 
 ### 方案（分三层、可独立交付）
 
-1. **编辑器 UI 语言跟随（1 小时，零内容成本，收益最大）**：把
+1. ✅ 2026-08-16 已落地（PR，见 explorations/2026-08-16-editor-ui-locale-passthrough.md）。
+   **编辑器 UI 语言跟随（1 小时，零内容成本，收益最大）**：把
    `getOnlyOfficeLang()` 从"只认 en/zh-CN"扩成"任何 vendor 有语言包的
    BCP-47 都透传"（`navigator.languages` → 匹配 45 包，`?locale=` 优先），
    这样日/韩/德/西/葡用户打开文档时编辑器菜单已是母语，站点壳的 40 个词条

@@ -85,3 +85,79 @@ describe('i18n', () => {
     });
   });
 });
+
+// Editor UI locale passthrough (roadmap direction eight, layer 1): the shell has
+// strings for en / zh only, but the vendored editor ships 45 locales, so the
+// editor follows the visitor's language independently of the shell.
+describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh', () => {
+  afterEach(() => {
+    window.history.pushState({}, '', '/');
+    localStorage.clear();
+  });
+
+  it.each([
+    ['ja', 'ja'],
+    ['ja-JP', 'ja'],
+    ['ko-KR', 'ko'],
+    ['de-DE', 'de'],
+    ['es-419', 'es'],
+    ['pt-BR', 'pt'],
+    ['pt-PT', 'pt-PT'],
+    ['pt', 'pt'],
+    ['zh', 'zh-CN'],
+    ['zh_CN', 'zh-CN'],
+    ['zh-Hans-CN', 'zh-CN'],
+    ['zh-TW', 'zh-TW'],
+    ['zh-Hant-HK', 'zh-TW'],
+    ['sr-Cyrl-RS', 'sr-Cyrl'],
+    ['nb-NO', 'no'],
+    ['en-US', 'en'],
+    ['fa', null], // no Persian locale in the vendor build
+    ['xx', null],
+    ['', null],
+    [null, null],
+  ])('resolveEditorLocale(%j) -> %j', async (tag, expected) => {
+    const { resolveEditorLocale } = await import('@ranuts/shared/i18n');
+    expect(resolveEditorLocale(tag)).toBe(expected);
+  });
+
+  it('every resolvable locale is one the vendor ships (and vice versa)', async () => {
+    const { EDITOR_UI_LOCALES, resolveEditorLocale } = await import('@ranuts/shared/i18n');
+    for (const code of EDITOR_UI_LOCALES) expect(resolveEditorLocale(code)).toBe(code);
+  });
+
+  it('?locale=ja gives an English shell with a Japanese editor', async () => {
+    window.history.pushState({}, '', '/?locale=ja');
+    vi.resetModules();
+    const m = await import('@ranuts/shared/i18n');
+    expect(m.getLanguage()).toBe(LanguageCode.EN);
+    expect(m.getOnlyOfficeLang()).toBe('ja');
+  });
+
+  it('an unsupported ?locale (fa) falls back to the browser language for the editor', async () => {
+    window.history.pushState({}, '', '/?locale=fa');
+    const spy = vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fa-IR', 'de-DE', 'en']);
+    try {
+      vi.resetModules();
+      const m = await import('@ranuts/shared/i18n');
+      expect(m.getOnlyOfficeLang()).toBe('de');
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it('an explicit shell choice overrides the browser language for the editor too', async () => {
+    const spy = vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['ja-JP']);
+    try {
+      vi.resetModules();
+      const m = await import('@ranuts/shared/i18n');
+      expect(m.getOnlyOfficeLang()).toBe('ja');
+      m.setLanguage(LanguageCode.ZH);
+      expect(m.getOnlyOfficeLang()).toBe('zh-CN');
+      m.setLanguage(LanguageCode.EN);
+      expect(m.getOnlyOfficeLang()).toBe('en');
+    } finally {
+      spy.mockRestore();
+    }
+  });
+});

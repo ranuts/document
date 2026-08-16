@@ -28,6 +28,87 @@ export enum OnlyOfficeLanguageCode {
 
 export type Language = LanguageCode.ZH | LanguageCode.EN;
 
+/**
+ * Editor (OnlyOffice) UI locales shipped by the vendored web-apps build --
+ * `public/web-apps/apps/<app>/main/locale/<code>.json`. The site shell has
+ * strings for en / zh-CN only, but the editor can speak all of these, so the
+ * editor UI follows the visitor's preferred language independently of the
+ * shell (a Japanese visitor gets a Japanese editor on an English landing).
+ * The vendor loader lowercases the tag, keeps `pt-pt` / `zh-tw` / `sr-cyrl`
+ * as 4-letter codes and otherwise uses the primary subtag, falling back to
+ * English when the file is missing -- so anything returned here is safe.
+ */
+export const EDITOR_UI_LOCALES: readonly string[] = [
+  'ar',
+  'az',
+  'be',
+  'bg',
+  'ca',
+  'cs',
+  'da',
+  'de',
+  'el',
+  'en',
+  'es',
+  'eu',
+  'fi',
+  'fr',
+  'gl',
+  'he',
+  'hu',
+  'hy',
+  'id',
+  'it',
+  'ja',
+  'ko',
+  'lo',
+  'lv',
+  'ms',
+  'nl',
+  'no',
+  'pl',
+  'pt',
+  'pt-PT',
+  'ro',
+  'ru',
+  'si',
+  'sk',
+  'sl',
+  'sq',
+  'sr',
+  'sr-Cyrl',
+  'sv',
+  'tr',
+  'uk',
+  'ur',
+  'vi',
+  'zh-CN',
+  'zh-TW',
+];
+
+/**
+ * Map any BCP 47-ish tag (`ja`, `pt_BR`, `zh-Hant-HK`, `en-US`) to the editor
+ * locale the vendor can serve, or null when it has none (e.g. `fa`).
+ * Region-sensitive cases: Chinese splits into zh-CN (default) vs zh-TW
+ * (TW / HK / MO or the Hant script); Portuguese into pt (Brazil, default)
+ * vs pt-PT; Serbian into sr (Latin) vs sr-Cyrl.
+ */
+export function resolveEditorLocale(tag: string | null | undefined): string | null {
+  if (!tag) return null;
+  const parts = String(tag).trim().toLowerCase().split(/[-_]/).filter(Boolean);
+  if (!parts.length) return null;
+  const [primary, ...rest] = parts;
+  if (primary === 'zh') {
+    return rest.some((p) => p === 'tw' || p === 'hk' || p === 'mo' || p === 'hant') ? 'zh-TW' : 'zh-CN';
+  }
+  if (primary === 'pt') return rest.includes('pt') ? 'pt-PT' : 'pt';
+  if (primary === 'sr') return rest.includes('cyrl') ? 'sr-Cyrl' : 'sr';
+  if (primary === 'nb' || primary === 'nn') return 'no';
+  if (primary === 'in') return 'id'; // legacy Indonesian tag
+  if (primary === 'iw') return 'he'; // legacy Hebrew tag
+  return EDITOR_UI_LOCALES.includes(primary) ? primary : null;
+}
+
 export interface I18nMessages {
   // UI text
   webOffice: string;
@@ -216,6 +297,8 @@ const messages: Record<Language, I18nMessages> = {
 
 class I18n {
   private currentLanguage: Language = LanguageCode.EN;
+  /** Editor UI locale (see EDITOR_UI_LOCALES); detected alongside the shell language. */
+  private editorLocale: string = OnlyOfficeLanguageCode.EN;
 
   /**
    * Get cookie value by name (using ranuts utility)
@@ -245,39 +328,45 @@ class I18n {
 
   constructor() {
     // Priority: URL locale -> cookie -> localStorage -> navigator.language -> 'en'
+    // The same chain feeds two results: the shell language (en / zh only) and
+    // the editor UI locale (any vendor-supported tag). The first source that
+    // yields a value for a given result wins for that result, so `?locale=ja`
+    // gives an English shell with a Japanese editor.
     let detectedLang: Language | null = null;
+    let editorLocale: string | null = null;
 
     // 1. Try to get from URL parameter 'locale' (highest priority)
     const urlLocale = this.getUrlParameter('locale');
     detectedLang = this.normalizeLanguage(urlLocale);
+    editorLocale = resolveEditorLocale(urlLocale);
 
     // 2. If not found in URL, try cookies (locale field)
-    if (!detectedLang) {
-      const cookieLang = this.getCookie('locale');
-      detectedLang = this.normalizeLanguage(cookieLang);
+    const cookieLang = this.getCookie('locale');
+    if (!detectedLang) detectedLang = this.normalizeLanguage(cookieLang);
+    if (!editorLocale) editorLocale = resolveEditorLocale(cookieLang);
+
+    // 3. If not found in cookies, try localStorage (an explicit shell choice)
+    const savedLang = localStorageGetItem('document-lang') as Language;
+    if (savedLang && (savedLang === LanguageCode.ZH || savedLang === LanguageCode.EN)) {
+      if (!detectedLang) detectedLang = savedLang;
+      if (!editorLocale) editorLocale = savedLang === LanguageCode.ZH ? OnlyOfficeLanguageCode.ZH_CN : 'en';
     }
 
-    // 3. If not found in cookies, try localStorage
-    if (!detectedLang) {
-      const savedLang = localStorageGetItem('document-lang') as Language;
-      if (savedLang && (savedLang === LanguageCode.ZH || savedLang === LanguageCode.EN)) {
-        detectedLang = savedLang;
+    // 4. If not found in localStorage, try navigator.language(s)
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    const nav = typeof navigator !== 'undefined' ? navigator : undefined;
+    const browserLangs = nav ? [...(nav.languages || []), nav.language].filter(Boolean) : [];
+    if (!detectedLang) detectedLang = this.normalizeLanguage(browserLangs[0] || null);
+    if (!editorLocale) {
+      for (const candidate of browserLangs) {
+        editorLocale = resolveEditorLocale(candidate);
+        if (editorLocale) break;
       }
-    }
-
-    // 4. If not found in localStorage, try navigator.language
-    if (!detectedLang) {
-      const browserLang =
-        // eslint-disable-next-line n/no-unsupported-features/node-builtins
-        typeof navigator !== 'undefined' && navigator.language
-          ? // eslint-disable-next-line n/no-unsupported-features/node-builtins
-            navigator.language
-          : LanguageCode.EN;
-      detectedLang = this.normalizeLanguage(browserLang);
     }
 
     // 5. Default to 'en' if nothing found
     this.currentLanguage = detectedLang || LanguageCode.EN;
+    this.editorLocale = editorLocale || OnlyOfficeLanguageCode.EN;
   }
 
   /**
@@ -293,6 +382,8 @@ class I18n {
   setLanguage(lang: Language): void {
     if (lang === LanguageCode.ZH || lang === LanguageCode.EN) {
       this.currentLanguage = lang;
+      // An explicit shell choice also decides the editor language.
+      this.editorLocale = lang === LanguageCode.ZH ? OnlyOfficeLanguageCode.ZH_CN : OnlyOfficeLanguageCode.EN;
       localStorageSetItem('document-lang', lang);
       // Trigger language change event
       // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -315,18 +406,15 @@ class I18n {
   }
 
   /**
-   * Get OnlyOffice language code (BCP 47 standard)
+   * Get the editor UI locale (BCP 47, one of EDITOR_UI_LOCALES). Follows the
+   * visitor's preferred language even when the shell has no strings for it;
+   * an explicit shell choice (setLanguage / ?locale=zh) overrides it.
    * OnlyOffice uses BCP 47 standard language codes
    * - English: 'en'
    * - Simplified Chinese (Mainland China): 'zh-CN'
    */
   getOnlyOfficeLang(): string {
-    // Mapping from internal language code to OnlyOffice BCP 47 standard code
-    const langMap: Record<Language, OnlyOfficeLanguageCode> = {
-      [LanguageCode.ZH]: OnlyOfficeLanguageCode.ZH_CN,
-      [LanguageCode.EN]: OnlyOfficeLanguageCode.EN,
-    };
-    return langMap[this.currentLanguage] || OnlyOfficeLanguageCode.EN;
+    return this.editorLocale;
   }
 }
 
