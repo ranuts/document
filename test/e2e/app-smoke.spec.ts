@@ -22,7 +22,9 @@ test('/editor?new=docx mounts the editor shell; legacy /?new=docx redirects ther
   await page.goto('/?new=docx');
   await page.waitForURL(/\/editor\?new=docx/);
   await expect(page.locator('#app')).toBeVisible();
-  await expect(page.locator('#iframe')).toBeAttached();
+  // The #iframe placeholder is replaced by the DocsAPI iframe (name=frameEditor,
+  // no id) as soon as the editor mounts, so accept either state.
+  await expect(page.locator('#iframe, iframe[name="frameEditor"]').first()).toBeAttached();
   await expect(page.locator('#fab-container')).toBeAttached();
   await expect(page.locator('#control-panel-container')).toBeAttached();
   expect(pageErrors).toEqual([]);
