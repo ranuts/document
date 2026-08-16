@@ -250,3 +250,7 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   永挂。修好后 pdf-roundtrip.spec：编辑器导出的真 PDF 打开 → `AddFreeTextAnnot` →
   存回 `%PDF` 含 `/Annots`；只读拒绝保存。注意别在加载完成前调 `getPDFDoc()`（会
   提前生成空文档导致真实字节打开失败）。CHANGELOG 已改口径。
+- 线上冒烟部署后复跑（含 pdf-roundtrip、font-cache、pdf-route）全绿；本地全量 Chromium
+  67 通过 / 10 跳过（opt-in 夜间档）/ 0 失败。台账 A 表基本填满，剩 doc/xls/ppt 合成
+  用例（靠夜间 POI）与图表/修订生成器。**待用户决定**：是否改为 PR → CF preview →
+  冒烟门禁 → 合并的工作流（现在是 push main 即上线 + 上线后冒烟）。
