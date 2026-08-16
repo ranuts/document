@@ -31,3 +31,4 @@ test-results-prod/
 playwright-report-prod/
 test-results-pages/
 playwright-report-pages/
+.wrangler/
