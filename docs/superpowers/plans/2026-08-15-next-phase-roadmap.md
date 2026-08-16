@@ -225,6 +225,8 @@ WebMCP 接入本质是把同一批能力换个注册方式暴露出来。
      REVALIDATED/br，无法再压）；字体仍 `cf-cache-status: DYNAMIC`（CF
      Cache Rule 待用户在面板加）+ 空白 docx 竟拉 14 个字体文件（值得查
      fonts_loading 为何这么多——字体线归战役字体专项）。
+   - **拆分后复测（2026-08-16 晚，第 10/11 项上线后）**：首页 LCP 354 ms
+     （TTFB 146 / render delay 208），较基线 774 ms 降 54%。
    - **预取决策（第 11 项）**：不做无差别 idle 预取——sdk-all.js 3 MB 对
      只读落地页的访客是纯浪费；改为"意图触发"：hover/focus 到 Open/New
      按钮、文件选择框弹出时 `<link rel=prefetch>` sdk-all-min.js + sdk-all.js
