@@ -177,7 +177,7 @@ WebMCP 接入本质是把同一批能力换个注册方式暴露出来。
 进入 agent 生态的发现与训练数据，(c) 与方向三的 llms.txt / 结构化数据
 是同一个"对机器友好"的连续投资，不是赌一个孤立技术。
 
-**实施设计**（预计一天内）：
+**实施设计**（预计一天内）——✅ 第 1 步 2026-08-16 已落地（`lib/web-mcp.ts` + `test/unit/web-mcp.test.ts`，见 explorations/2026-08-16-webmcp-adapter.md）；第 2 步 origin trial 需用户注册 token：
 
 1. 新建 `lib/web-mcp.ts`：
    - 特性检测 `document.modelContext ?? navigator.modelContext`，
@@ -442,7 +442,7 @@ ranui 复制并**入库**。用户指出仍在用"历史有问题的版本"。
 | 9   | 性能基线审计（方向四 2 前半）                    | 半天      | ✅ 2026-08-16 线上基线已测（见方向四 2 的"基线"小节）+ 首刀：api.js 改按需加载（PR）                                                                    |
 | 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    | ✅ 2026-08-16 `/` 静态落地（无编辑器 bundle）+ `/editor` 编辑器入口（editor.html），旧深链/iframe 内联重定向，见 explorations/2026-08-16-route-split.md |
 | 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      | ✅ 2026-08-16 前半：意图触发预取已落地（`lib/prefetch.ts`，hero + FAB 的 Open/New 按钮 hover 即预取 loader/app.js/sdk-all）；SW 预缓存待路由拆分后测    |
-| 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      |                                                                                                                                                         |
+| 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      | ✅ 2026-08-16 薄适配已落地（`lib/web-mcp.ts`，5 个工具，双位置特性检测，无 API 静默降级，10 条单测）；origin trial token 注册 + `_headers` 下发待用户   |
 | 13  | 外链发布稿（方向二 3，指向 /changelog 与新功能） | 用户主导  |                                                                                                                                                         |
 | 14  | agent-collab（方向五）                           | 大周期    |                                                                                                                                                         |
 

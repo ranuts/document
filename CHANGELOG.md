@@ -39,6 +39,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- Browser AI agents can drive the editor through WebMCP (Chrome origin trial):
+  the page registers `open_document_url`, `open_document_buffer`,
+  `save_document`, `set_readonly` and `get_document_state` when the browser
+  exposes the API; everything still runs on your device.
 - The editor's own interface (menus, ribbon, dialogs) now follows your
   browser language for all 45 languages the engine ships (Japanese, Korean,
   German, Spanish, Portuguese, French, Russian, ...), not just English and
