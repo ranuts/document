@@ -32,3 +32,12 @@ playwright-report-prod/
 test-results-pages/
 playwright-report-pages/
 .wrangler/
+
+# Pages rendered from markdown at build/dev time by bin/build-pages.mjs (vite
+# plugin `generated-pages`); sources live in content/, docs/, CHANGELOG.md.
+public/help.html
+public/help/
+public/changelog.html
+public/zh-CN/help.html
+public/zh-CN/help/
+public/zh-CN/changelog.html

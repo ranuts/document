@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
+import { PAGES, generate as generatePages } from './bin/build-pages.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -43,6 +44,36 @@ const cleanUrls = (publicDirName: string): Plugin => {
   };
 };
 
+// Render the markdown-sourced pages (/help, /changelog, ... see
+// bin/build-pages.mjs) into publicDir before Vite copies it. The outputs are
+// gitignored: generating at build/dev time means a CHANGELOG or help edit
+// can never leave a stale committed copy behind (two concurrently merged
+// PRs used to be able to). Dev regenerates when a source markdown changes.
+const generatedPages = (): Plugin => {
+  const sources = new Set<string>();
+  for (const page of PAGES) for (const src of Object.values(page.sources)) sources.add(path.resolve(__dirname, src));
+  const run = () => {
+    const outputs = generatePages();
+    return outputs.length;
+  };
+  return {
+    name: 'generated-pages',
+    buildStart() {
+      run();
+    },
+    configureServer(server) {
+      run();
+      for (const src of sources) server.watcher.add(src);
+      server.watcher.on('change', (file) => {
+        if (sources.has(path.resolve(file))) {
+          run();
+          server.ws.send({ type: 'full-reload' });
+        }
+      });
+    },
+  };
+};
+
 export default defineConfig(() => {
   const publicDirName = 'public';
 
@@ -52,7 +83,7 @@ export default defineConfig(() => {
     build: {
       outDir: 'dist',
     },
-    plugins: [cleanUrls(publicDirName)],
+    plugins: [generatedPages(), cleanUrls(publicDirName)],
     resolve: {
       alias: {
         '@/lib': resolve(__dirname, 'lib'),
