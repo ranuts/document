@@ -67,4 +67,61 @@ test.describe('format parity: docx / pptx (real editor)', () => {
       expect(result.saveError).not.toBe('');
     });
   }
+
+  for (const doc of DOCS) {
+    test(`${doc.label}: runtime readonly toggle locks and unlocks the live editor`, async ({ page }) => {
+      const result = await page.evaluate(
+        async ({ name, b64 }) => {
+          const readRestriction = (): number | null => {
+            const visit = (win: Window): number | null => {
+              try {
+                const api = (win as any).Asc?.editor;
+                if (api && typeof api.asc_setRestriction === 'function' && typeof api.restrictions === 'number') {
+                  return api.restrictions;
+                }
+              } catch {
+                /* cross-origin */
+              }
+              for (let i = 0; i < win.frames.length; i++) {
+                const found = visit(win.frames[i]);
+                if (found !== null) return found;
+              }
+              return null;
+            };
+            return visit(window);
+          };
+          const waitFor = async (expected: number) => {
+            const start = Date.now();
+            while (readRestriction() !== expected) {
+              if (Date.now() - start > 30_000)
+                throw new Error(`restriction did not become ${expected}, got ${readRestriction()}`);
+              await new Promise((r) => setTimeout(r, 200));
+            }
+          };
+          const bin = atob(b64);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          await post('document:open-buffer', { fileName: name, buffer: bytes.buffer, readonly: false });
+          await waitFor(0);
+          await post('document:set-readonly', { readonly: true });
+          await waitFor(128);
+          let lockedSaveError = '';
+          try {
+            await post('document:save', {});
+          } catch (e) {
+            lockedSaveError = String((e as Error).message || e);
+          }
+          await post('document:set-readonly', { readonly: false });
+          await waitFor(0);
+          const saved = await post('document:save', {});
+          const out = new Uint8Array(await saved.file.arrayBuffer());
+          return { lockedSaveError, name: saved.file.name as string, magic: Array.from(out.slice(0, 2)) };
+        },
+        { name: doc.name, b64: doc.b64() },
+      );
+      expect(result.lockedSaveError).not.toBe('');
+      expect(result.name).toBe(doc.name);
+      expect(result.magic).toEqual([0x50, 0x4b]);
+    });
+  }
 });

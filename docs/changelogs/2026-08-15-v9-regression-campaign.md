@@ -202,3 +202,6 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   5 个 docx 覆盖率不达标全是提取口径（`'`→`&apos;` 未解实体、无 preserve 的空白
   run、外部实体不展开）→ 提取器解实体、忽略空白、去 `<w:rt>`；
   `ExternalEntityInText.docx` 保留为预期项。旧 `.ppt/.doc` 的 L3 视觉差异待看截图。
+- 新增：docx/pptx 运行时只读切换（format-parity）、入口路径 `?file=`/`open-url`/`?open=local`
+  （entry-paths.spec，跨域真实 fetch）；corpus 视觉失败时落盘两张截图，旧二进制输入
+  阈值 10% 标 `ok-legacy`（.ppt→pptx 行距略紧，目测内容一致，P3）。
