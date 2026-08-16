@@ -51,6 +51,9 @@ importers:
       jsdom:
         specifier: ^30.0.1
         version: 30.0.1
+      marked:
+        specifier: 16.4.2
+        version: 16.4.2
       oxlint:
         specifier: ^1.78.0
         version: 1.78.0
