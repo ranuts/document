@@ -958,7 +958,12 @@ function createPersonalEditorInstance(config: {
       // never matches and the PDF stays on a blank loader forever -- seen only
       // in production. isForm:false routes straight to the pdf editor, which
       // fills forms too.
-      ...(normalizedType === 'pdf' ? { isForm: false } : {}),
+      // localOpenFromBinary: the pdf app's offline protocol -- it initialises
+      // local permissions itself and waits for the bytes we hand over in
+      // onAppReady (DocEditor.openDocument). Without it a PDF sits on the
+      // skeleton loader forever (word/cell/slide fetch document.url on their
+      // own; the pdf app never does).
+      ...(normalizedType === 'pdf' ? { isForm: false, localOpenFromBinary: true } : {}),
       // A fresh key per open bypasses the editor's own document cache
       // (same-name documents with different content would collide otherwise).
       key: `doc-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
@@ -1006,6 +1011,20 @@ function createPersonalEditorInstance(config: {
     },
     events: {
       onAppReady: () => {
+        // The pdf editor's offline path differs from word/cell/slide: those
+        // apps' Offline controllers fetch document.url and convert it
+        // themselves, while the pdf app only listens for the host's
+        // openDocumentFromBinary command (DocEditor.openDocument({buffer})),
+        // queueing it until permissions are initialised. Without this call a
+        // PDF sits on the skeleton loader forever (found by pdf-roundtrip.spec:
+        // the earlier PDF check only asserted the iframe route).
+        if (normalizedType === 'pdf' && binData instanceof ArrayBuffer && binData.byteLength > 0) {
+          (
+            window.editor as unknown as { openDocument?: (doc: { buffer: ArrayBuffer }) => void } | undefined
+          )?.openDocument?.({
+            buffer: binData,
+          });
+        }
         // The SDK pieces the preparation patches can land after onAppReady;
         // keep re-applying (idempotent, cheap) until everything is in place
         // or the safety cap expires, whichever comes first.

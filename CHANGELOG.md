@@ -63,10 +63,11 @@ notes. Entries describe what users experience, not internal refactors.
   "ruby" annotations) no longer disappear from a Word document on open and
   save; the base word is kept. The guide text itself is still dropped
   (engine limitation).
-- PDF files open again on the live site: the hosted deployment redirects
-  `.../index.html` to the folder URL, which left the editor's "is this a
-  form?" pre-loader stuck on a blank page; PDFs now go straight to the PDF
-  editor (which also handles fillable forms).
+- PDF files now actually load in the PDF editor: previously the editor
+  mounted but the document stayed on its loading placeholder (the PDF app
+  expects the page to hand the file over, unlike the other editors), and on
+  the live site the "is this a form?" pre-loader additionally got stuck
+  behind a folder redirect. PDFs open, take annotations and save back.
 - On slow connections the first save no longer fails with "timed out" while
   the file was still on its way: the editor must first download its ~10 MB
   conversion engine, which could take longer than the old 60 s limit; the

@@ -244,3 +244,9 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 - comments.spec：docx（`pluginMethod_AddComment`）与 xlsx（`asc_CCommentData` + `bDocument=false`）
   评论保存进包；发现 cell 侧默认 `bDocument` 会把评论写进 OnlyOffice 私有的
   `xl/workbookComments.bin`（Excel 不认），集成时须显式置 false——记入台账。
+- **PDF 打开从未真正工作过（P1）**：pdf app 的离线协议与 word/cell/slide 不同——它不
+  fetch `document.url`，而是要求配置 `document.localOpenFromBinary:true` 并由宿主在
+  `onAppReady` 调 `editor.openDocument({buffer})` 交字节；此前只有路由断言掩盖了骨架屏
+  永挂。修好后 pdf-roundtrip.spec：编辑器导出的真 PDF 打开 → `AddFreeTextAnnot` →
+  存回 `%PDF` 含 `/Annots`；只读拒绝保存。注意别在加载完成前调 `getPDFDoc()`（会
+  提前生成空文档导致真实字节打开失败）。CHANGELOG 已改口径。

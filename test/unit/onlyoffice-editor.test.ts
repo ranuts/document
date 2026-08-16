@@ -262,12 +262,17 @@ describe('onlyoffice-editor', () => {
       // loader while every local build passed.
       const pdf = await createAndGetConfig({ fileName: 'a.pdf', fileType: 'pdf', binData: new ArrayBuffer(8) });
       expect(pdf.document.isForm).toBe(false);
+      // The pdf app's offline protocol: it waits for the bytes the host hands
+      // over (DocEditor.openDocument in onAppReady) instead of fetching
+      // document.url like the other editors do.
+      expect(pdf.document.localOpenFromBinary).toBe(true);
       expect(pdf.documentType).toBe('pdf');
     });
 
     it('does not set isForm for non-PDF documents', async () => {
       const docx = await createAndGetConfig({ fileName: 'a.docx', fileType: 'docx', binData: new ArrayBuffer(8) });
       expect(docx.document.isForm).toBeUndefined();
+      expect(docx.document.localOpenFromBinary).toBeUndefined();
     });
 
     it('applies the view restriction on onDocumentReady when opened readonly', async () => {
@@ -355,6 +360,18 @@ describe('onlyoffice-editor', () => {
         expect(config.editorConfig.customization.uiTheme).toBe('theme-dark');
       } finally {
         window.localStorage.removeItem('ui-theme-id');
+      }
+    });
+
+    it('follows a dark site theme when the user has not picked one in the editor', async () => {
+      window.localStorage.removeItem('ui-theme-id');
+      document.documentElement.setAttribute('data-ran-theme', 'dark');
+      try {
+        const config = await createAndGetConfig({ fileName: 'a.docx', fileType: 'docx' });
+        expect(config.editorConfig.customization.uiTheme).toBe('theme-dark');
+      } finally {
+        document.documentElement.removeAttribute('data-ran-theme');
+        window.localStorage.removeItem('ui-theme-site-driven');
       }
     });
   });

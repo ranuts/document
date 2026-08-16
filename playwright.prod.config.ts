@@ -21,6 +21,7 @@ export default defineConfig({
     'format-parity.spec.ts',
     'font-cache.spec.ts',
     'pdf-route.spec.ts',
+    'pdf-roundtrip.spec.ts',
   ],
   timeout: 300_000,
   expect: { timeout: 10_000 },
