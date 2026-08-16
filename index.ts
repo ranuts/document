@@ -19,6 +19,7 @@ import 'ranui/button';
 import 'ranui/card';
 import 'ranui/select';
 import 'ranui/theme-switch';
+import { initWebMcp } from './lib/web-mcp';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
 
@@ -37,6 +38,9 @@ declare global {
 // Initialize events
 initEvents();
 initEmbedApi();
+// WebMCP (browser-agent tools): no-op unless the browser exposes
+// document/navigator.modelContext and this is a top-level window.
+initWebMcp();
 
 // Privacy-friendly analytics (no-op unless VITE_CF_BEACON_TOKEN is set; never in embed mode)
 initAnalytics();
