@@ -1,4 +1,4 @@
-import { appendFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { appendFileSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 import { expect, test } from './lib/l0';
 import { pixelDiff, settleEditor } from './lib/visual';
@@ -502,10 +502,26 @@ test.describe('real-document corpus matrix', () => {
           await settleEditor(page);
           const shotB = await sdk.screenshot();
           const d = await pixelDiff(page, shotA, shotB);
-          row.visual =
-            d.sizeSame && d.differingPct < 0.5
-              ? `ok (${d.differingPct.toFixed(3)}%, ink ${d.nonWhitePct.toFixed(1)}%)`
-              : `fail: ${d.differingPct.toFixed(3)}% differing (${d.w}x${d.h}, sizeSame=${d.sizeSame})`;
+          // Legacy binary inputs (.doc/.ppt/.xls) come back as OOXML: the
+          // re-render legitimately differs a little (line spacing/autofit
+          // after conversion, verified by eye on POI .ppt samples), so their
+          // threshold is looser and the row says so.
+          const legacy = ext === '.doc' || ext === '.ppt' || ext === '.xls';
+          const threshold = legacy ? 10 : 0.5;
+          const visualOk = d.sizeSame && d.differingPct < threshold;
+          row.visual = visualOk
+            ? `ok${legacy ? '-legacy' : ''} (${d.differingPct.toFixed(3)}%, ink ${d.nonWhitePct.toFixed(1)}%)`
+            : `fail: ${d.differingPct.toFixed(3)}% differing (${d.w}x${d.h}, sizeSame=${d.sizeSame})`;
+          if (!visualOk) {
+            // Keep both renderings next to the report so a reviewer can judge
+            // the difference (conversion artifact vs real damage).
+            const dir = process.env.E2E_PORT ? `test-results-${process.env.E2E_PORT}` : 'test-results';
+            const stem = `${dir}/visual-${index}-${name.replace(/[^\w.-]+/g, '_')}`;
+            await test.info().attach('visual-original', { body: shotA, contentType: 'image/png' });
+            await test.info().attach('visual-resaved', { body: shotB, contentType: 'image/png' });
+            writeFileSync(`${stem}-original.png`, shotA);
+            writeFileSync(`${stem}-resaved.png`, shotB);
+          }
         } catch (e) {
           row.visual = `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
         }
