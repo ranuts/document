@@ -18,6 +18,10 @@ Dockerfile
 coverage
 playwright-report
 test-results
+# docs/ is excluded except the markdown that bin/build-pages.mjs renders into
+# /help/embed-api (bin/build.sh runs the generator inside the image build).
 docs
+!docs/embed-api.md
+!docs/embed-api.zh.md
 .scratch
 .claude
