@@ -120,6 +120,14 @@
                   "@type": "Answer",
                   "text": "在 iframe URL 上加 embedOrigin 把消息锁定到指定 origin，并在你自己的消息处理里校验 event.origin。"
                 }
+              },
+              {
+                "@type": "Question",
+                "name": "能只读展示文档，或者过一会儿再锁定吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "能。打开时传 readonly: true，或随时发送 document:set-readonly。它直接切换正在运行的编辑器、不重新加载，锁定期间保存会被拒绝。"
+                }
               }
             ]
           },
@@ -251,13 +259,23 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
         </li>
       </ol>
 
+      <h2>只读与预览模式</h2>
+      <p>
+        需要"只看不改"（预览器、审阅环节、已归档记录）时，在打开命令里传
+        <code>readonly: true</code>；随时可以用 <code>document:set-readonly</code>
+        切换——不重新加载，文档停在用户原来的位置。只读期间禁止编辑，
+        <code>document:save</code> 返回 <code>document:error</code>；<code>document:get-state</code> 会报告当前的
+        <code>readonly</code> 状态。
+      </p>
+      <pre><code>// 锁定打开，稍后解锁
+send('document:open-url', { url, readonly: true });
+send('document:set-readonly', { readonly: false });</code></pre>
+
       <r-card class="oss"
         ><div class="card-body">
           <strong>开源且可自托管。</strong> 基于 AGPL-3.0——读源码、自托管一份、看清边界是怎么设计的：
           <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。完整 API 参考：
-          <a href="https://github.com/ranuts/document/blob/main/docs/embed-api.zh.md" rel="noopener"
-            >docs/embed-api.zh.md</a
-          >。
+          <a href="/zh-CN/help/embed-api">Embed API 参考</a>。
         </div></r-card
       >
 
@@ -284,6 +302,11 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
         <p>
           在 iframe URL 上加 <code>embedOrigin</code> 把消息锁定到指定 origin，并在你自己的消息处理里校验
           <code>event.origin</code>。
+        </p>
+        <h3>能只读展示文档，或者过一会儿再锁定吗？</h3>
+        <p>
+          能。打开时传 <code>readonly: true</code>，或随时发送
+          <code>document:set-readonly</code>——它直接切换正在运行的编辑器、不重新加载，锁定期间保存会被拒绝。
         </p>
       </div>
 
