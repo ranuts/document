@@ -1,0 +1,85 @@
+# PR gate against the REAL deployment: Cloudflare Pages (Git integration)
+# builds a preview for every PR branch and reports it as the "Cloudflare
+# Pages" check with the preview URL in its summary. This workflow waits for
+# that deployment and runs the production-smoke suites against the preview,
+# so hosting-level breakage (redirects, headers, CDN, wasm delivery) is caught
+# before the merge instead of on the live site. Required check on main.
+name: Preview smoke
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: preview-smoke-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Preview smoke against Cloudflare Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Wait for the Cloudflare Pages preview of this commit
+        id: preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          for i in $(seq 1 75); do
+            RUN=$(gh api "repos/${{ github.repository }}/commits/$SHA/check-runs" \
+              --jq '.check_runs[] | select(.name=="Cloudflare Pages") | {status, conclusion, summary: .output.summary}' 2>/dev/null | head -c 20000)
+            STATUS=$(printf '%s' "$RUN" | jq -r '.status // empty' 2>/dev/null | head -1)
+            if [ "$STATUS" = "completed" ]; then
+              CONCLUSION=$(printf '%s' "$RUN" | jq -r '.conclusion' | head -1)
+              if [ "$CONCLUSION" != "success" ]; then
+                echo "::error::Cloudflare Pages preview deployment concluded: $CONCLUSION"; exit 1
+              fi
+              URL=$(printf '%s' "$RUN" | jq -r '.summary' | grep -oE 'https://[a-z0-9-]+\.document-[a-z0-9]+\.pages\.dev' | head -1)
+              if [ -z "$URL" ]; then echo "::error::preview URL not found in the check summary"; exit 1; fi
+              echo "preview: $URL"
+              echo "url=$URL" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "waiting for the Cloudflare Pages check ($i)..."; sleep 20
+          done
+          echo "::error::Cloudflare Pages preview did not finish within 25 minutes"; exit 1
+
+      - name: Smoke the preview
+        env:
+          PROD_URL: ${{ steps.preview.outputs.url }}
+        run: pnpm exec playwright test -c playwright.prod.config.ts --reporter=list
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-preview
+          path: playwright-report-prod/
+          retention-days: 7
