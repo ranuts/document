@@ -78,7 +78,7 @@ test.describe('image insert + save: xlsx / pptx (real editor)', () => {
     });
     expect(result.error).toBeUndefined();
     const names = zipEntryNames(new Uint8Array(Buffer.from(result.b64, 'base64')));
-    expect(names.some((n) => /^xl\/media\//.test(n))).toBe(true);
+    expect(names.some((n) => n.startsWith('xl/media/'))).toBe(true);
     expect(names.some((n) => /^xl\/drawings\/drawing\d+\.xml$/.test(n))).toBe(true);
   });
 
@@ -95,6 +95,6 @@ test.describe('image insert + save: xlsx / pptx (real editor)', () => {
     );
     expect(result.error).toBeUndefined();
     const names = zipEntryNames(new Uint8Array(Buffer.from(result.b64, 'base64')));
-    expect(names.some((n) => /^ppt\/media\//.test(n))).toBe(true);
+    expect(names.some((n) => n.startsWith('ppt/media/'))).toBe(true);
   });
 });
