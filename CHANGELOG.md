@@ -56,6 +56,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- The homepage no longer blocks its first paint on the editor's API loader
+  script (about half a second of LCP); the loader is fetched when you open or
+  create a document.
 - The Chinese landing pages' "open your XLSX / PPTX / CSV" buttons no longer
   drop you into a blank new Word document; they go to the Chinese homepage
   where you can pick the file.
