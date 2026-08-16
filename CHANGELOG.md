@@ -19,6 +19,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- Hovering (or focusing) an Open / New button starts downloading the editor
+  engine in the background, so the document opens noticeably faster after the
+  click; skipped on Save-Data and 2G connections.
 - The homepage is now a plain landing page and the editor lives at `/editor`
   (`/editor?new=docx`, `/editor?file=<url>`, `/editor?embed=1`). The homepage
   no longer downloads the editor at all, so it loads faster; old links to

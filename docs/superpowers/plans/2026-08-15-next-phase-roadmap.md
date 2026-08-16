@@ -441,7 +441,7 @@ ranui 复制并**入库**。用户指出仍在用"历史有问题的版本"。
 | 8   | PPT E2E（方向四 1）                              | 小时级    | ✅ 已由战役覆盖：format-parity / embed-save-default / resave-idempotence / visual-roundtrip / corpus 均含 pptx 打开-编辑-保存-导 PDF                    |
 | 9   | 性能基线审计（方向四 2 前半）                    | 半天      | ✅ 2026-08-16 线上基线已测（见方向四 2 的"基线"小节）+ 首刀：api.js 改按需加载（PR）                                                                    |
 | 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    | ✅ 2026-08-16 `/` 静态落地（无编辑器 bundle）+ `/editor` 编辑器入口（editor.html），旧深链/iframe 内联重定向，见 explorations/2026-08-16-route-split.md |
-| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      | ↻ 决策已给：不做无差别 idle 预取，改"意图触发预取"（见方向四 2）；SW 预缓存待路由拆分后测                                                               |
+| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      | ✅ 2026-08-16 前半：意图触发预取已落地（`lib/prefetch.ts`，hero + FAB 的 Open/New 按钮 hover 即预取 loader/app.js/sdk-all）；SW 预缓存待路由拆分后测    |
 | 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      |                                                                                                                                                         |
 | 13  | 外链发布稿（方向二 3，指向 /changelog 与新功能） | 用户主导  |                                                                                                                                                         |
 | 14  | agent-collab（方向五）                           | 大周期    |                                                                                                                                                         |
