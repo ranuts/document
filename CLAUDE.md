@@ -195,6 +195,15 @@ fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEdito
 抹掉对方的产物与结果，表现为假的 `-24 LoadingScriptError` /
 `ERR_CONNECTION_REFUSED` / 页面 60s 起不来 / 报告少行）。
 
+**托管语义回归**（CI job `e2e-pages`，配置 `playwright.pages.config.ts`）：
+`bin/build.sh` 真部署构建 + `wrangler pages dev` 服务 dist——复现 Cloudflare Pages
+的 `index.html`→目录 308、`_headers`、`_redirects`。"本地 vite preview 全绿、
+线上坏"的三条缺陷（PDF 被 308 卡在 vendor 加载器、字体目录无缓存头、慢链路
+超时）都属于这一层；`test/unit/hosting-contract.test.ts` 钉住 `_headers` 关键
+规则。**线上冒烟** `.github/workflows/prod-smoke.yml`：每次 push main 等部署
+上线后即跑 + 每日；`E2E_BASE_URL=<站点>` 可把任意 spec 打到部署站。CF 面板里
+的 Cache Rules 等不在仓库、CI 复现不了，只能靠冒烟兜底。
+
 **Docker 镜像回归**（`pnpm run test:e2e:docker`，配置
 `playwright.docker.config.ts`）：构建生产镜像后把同一套 test/e2e 全部 spec
 跑在容器（static-web-server）上，证明镜像端到端可用——正是这条链路抓出了

@@ -224,3 +224,9 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   for cache，才能让**首次**打开也从边缘命中。更长期：SDK 默认字体全家桶
   （20 文件）对纯浏览器版本是纯浪费，可评估在 `prepareEditorIframe`
   里关闭 `IsNeedDefaultFonts` 或裁减为文档实际引用的字体。
+- **"本地可以、部署后不行"的系统性堵法**（用户提问后落地）：① CI 新增 `e2e-pages`
+  job——`bin/build.sh` 真部署构建 + `wrangler pages dev`（复现 CF Pages 的 308 /
+  `_headers` / `_redirects`），全套 spec；② `hosting-contract.test.ts` 钉 `_headers`
+  关键规则；③ `prod-smoke.yml` 改为 push main 后等部署上线即冒烟（比对 index 资源
+  哈希）+ 每日；④ 已知边界：CF 面板配置（Cache Rules）不在仓库，只能冒烟兜底。
+  待做：节流网络（慢链路）预算 spec 进夜间；PR→preview→冒烟门禁需改工作流（用户决定）。

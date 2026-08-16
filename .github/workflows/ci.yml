@@ -85,6 +85,47 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  # Deploy artifact + host semantics: bin/build.sh output served by
+  # `wrangler pages dev`, which reproduces Cloudflare Pages' index.html -> 308
+  # redirects, _headers and _redirects. Catches "works on vite preview, broken
+  # on the live site" (PDF loader stuck behind the 308; font cache headers).
+  e2e-pages:
+    name: E2E (Cloudflare Pages semantics)
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E against wrangler pages dev
+        run: pnpm exec playwright test -c playwright.pages.config.ts
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-pages
+          path: playwright-report-pages/
+          retention-days: 7
+
   # The lint job only validates compose config and Dockerfile style; this job
   # actually builds the image and runs the full e2e suite against the running
   # container, proving the production image serves the editor correctly (this

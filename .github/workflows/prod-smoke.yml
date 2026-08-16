@@ -5,6 +5,11 @@
 name: Production smoke
 
 on:
+  # After every push to main: wait until the live site serves this commit's
+  # build (Cloudflare Pages deploys from the same push), then smoke it, so a
+  # deploy-only breakage is known within minutes instead of the next morning.
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       url:
@@ -12,6 +17,10 @@ on:
         default: "https://edit.chaxus.com"
   schedule:
     - cron: "47 20 * * *" # 04:47 Asia/Shanghai, after the nightly corpus
+
+concurrency:
+  group: prod-smoke
+  cancel-in-progress: true
 
 jobs:
   smoke:
@@ -39,6 +48,25 @@ jobs:
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
+
+      # On push: build the same commit and wait until production serves its
+      # hashed entry asset (Vite hashes are content-derived, so an identical
+      # build here yields the same asset name as the Pages build). Skipped for
+      # schedule/dispatch runs, which smoke whatever is live.
+      - name: Wait for the deploy of this commit
+        if: github.event_name == 'push'
+        env:
+          PROD_URL: ${{ github.event.inputs.url || 'https://edit.chaxus.com' }}
+        run: |
+          sh ./bin/build.sh >/dev/null 2>&1
+          ASSET=$(grep -o 'assets/index-[A-Za-z0-9_-]*\.js' dist/index.html | head -1)
+          echo "expecting $ASSET"
+          for i in $(seq 1 60); do
+            LIVE=$(curl -s "$PROD_URL/" | grep -o 'assets/index-[A-Za-z0-9_-]*\.js' | head -1)
+            if [ "$LIVE" = "$ASSET" ]; then echo "live after $((i*20))s"; exit 0; fi
+            sleep 20
+          done
+          echo "::warning::production still serves $LIVE after 20 min; smoking what is live"
 
       - name: Smoke production
         env:
