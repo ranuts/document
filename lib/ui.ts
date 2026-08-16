@@ -1,5 +1,6 @@
 import { localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 import { ButtonBuilder, Div, View } from 'ranui/builder';
+import { prefetchEditorAssets, type EditorKind } from './prefetch';
 import { t } from '@ranuts/shared/i18n';
 import { showLoading } from './loading';
 import { onCreateNew, onOpenDocument } from './document';
@@ -115,6 +116,7 @@ function buildFab(): { container: HTMLElement; button: HTMLElement } {
     text: string,
     onClick: () => void | Promise<void>,
     showLoadingImmediately = true,
+    prefetchKind?: EditorKind | 'loader',
   ): HTMLDivElement =>
     Div()
       .class('fab-menu-item')
@@ -122,6 +124,10 @@ function buildFab(): { container: HTMLElement; button: HTMLElement } {
         ButtonBuilder()
           .class('fab-menu-button')
           .text(text)
+          // Hovering a New/Open entry is intent: start pulling the engine now.
+          .on('pointerenter', () => {
+            if (prefetchKind) prefetchEditorAssets(prefetchKind === 'loader' ? undefined : prefetchKind);
+          })
           .on('click', async () => {
             hideMenu();
             // Only show loading immediately if specified (for operations that don't require user interaction)
@@ -162,16 +168,32 @@ function buildFab(): { container: HTMLElement; button: HTMLElement } {
           // If user selected file, document will be opened in handleChange
         },
         false, // Don't show loading immediately - wait for file selection
+        'loader',
       ),
-      createMenuButton(t('newWord'), async () => {
-        await onCreateNew('.docx');
-      }),
-      createMenuButton(t('newExcel'), async () => {
-        await onCreateNew('.xlsx');
-      }),
-      createMenuButton(t('newPowerPoint'), async () => {
-        await onCreateNew('.pptx');
-      }),
+      createMenuButton(
+        t('newWord'),
+        async () => {
+          await onCreateNew('.docx');
+        },
+        true,
+        'docx',
+      ),
+      createMenuButton(
+        t('newExcel'),
+        async () => {
+          await onCreateNew('.xlsx');
+        },
+        true,
+        'xlsx',
+      ),
+      createMenuButton(
+        t('newPowerPoint'),
+        async () => {
+          await onCreateNew('.pptx');
+        },
+        true,
+        'pptx',
+      ),
       // AI assistant entry — lazy-loads the agent panel on first click (no bundle
       // cost until used). Idempotent: if a panel already exists (e.g. opened via
       // ?agent=1 or a prior click), do nothing and let its own launcher reopen it.
