@@ -375,6 +375,31 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
   文档正文的"深色画布"（OnlyOffice `asc_setContentDarkMode`）刻意不
   跟随——那是编辑器内的用户偏好，且会改变文档观感。
 
+## 方向九：ranui / ranuts 版本对齐与 IIFE 防漂移（2026-08-16 追加，用户要求）
+
+**背景**：静态页（落地页、demo、404、changelog/help 生成页）没有 bundler，通过
+`public/ranui-iife/<comp>.iife.js` 使用 ranui；这些文件由 `bin/build.sh` 从已安装的
+ranui 复制并**入库**。用户指出仍在用"历史有问题的版本"。
+
+**审计（2026-08-16）**：`public/ranui-iife/*` 与安装的 ranui 0.5.0-alpha.2 逐字节一致，
+且 0.5.0-alpha.2 = npm `latest`；但源仓库 `chaxus/ran` 的 ranui 有 8-13 之后**未发布**
+的修复（colorpicker、player、math 字体等），dist 也是 8-13 构建。结论：落后的是
+**npm 上的发布**，不是本仓的复制。
+
+**分级实施**：
+
+1. **L1 防漂移哨兵（已做）**：`test/unit/ranui-vendor-sync.test.ts`——每个入库 IIFE 与
+   `node_modules/ranui/dist/iife` 逐字节一致、页面引用的每个 IIFE 都已 vendored、
+   workspace 各包 ranui/ranuts 版本与根一致（双份 ranui 会让自定义元素先到先得、图标静默丢）。
+2. **L2 发版对齐（需用户在 ran 仓库操作）**：从 `chaxus/ran` 发布 ranui `0.5.0-alpha.3`
+   （含 8-13 后的修复），本仓 `package.json` + 三个 workspace 包同步 bump，
+   `pnpm install` 后 `bin/build.sh` 自动重拷 IIFE；提交前用 L1 哨兵与 E2E
+   （embed-demo、主站落地页）验证。发版是外部动作，由用户执行或授权。
+3. **L3 上游可用性提醒（自动化）**：夜间任务加一步 `npm view ranui version` 与
+   `package.json` 比对，落后即在 step summary 提示（不失败）。
+4. **L4 反向修复**：ranui IIFE 若发现缺陷，按"ran 生态优先"改 `chaxus/ran` 再发版，
+   不在本仓打补丁。
+
 ## 建议执行顺序（2026-08-15 三修：方向零插入为最高优先级）
 
 **方向零（全面回归战役）压倒下表所有事项**；表内条目在战役期间仅在
