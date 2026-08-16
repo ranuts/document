@@ -80,8 +80,50 @@ export function makeStoredZip(entries: Array<{ name: string; data: Uint8Array | 
 
 const XML_HEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
 
-/** A one-paragraph .docx (or, with `bodyXml`, an arbitrary <w:body> content). */
-export function buildDocx(text: string, bodyXml?: string): Uint8Array {
+/**
+ * A one-paragraph .docx (or, with `bodyXml`, an arbitrary <w:body> content).
+ * `opts.headerText` / `opts.footerText` add a default header/footer part
+ * wired through sectPr.
+ */
+export function buildDocx(
+  text: string,
+  bodyXml?: string,
+  opts: { headerText?: string; footerText?: string } = {},
+): Uint8Array {
+  const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+  const hf = (tag: 'hdr' | 'ftr', t: string) =>
+    XML_HEAD + `<w:${tag} xmlns:w="${W}"><w:p><w:r><w:t>${t}</w:t></w:r></w:p></w:${tag}>`;
+  const extraOverrides =
+    (opts.headerText
+      ? '<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>'
+      : '') +
+    (opts.footerText
+      ? '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>'
+      : '');
+  const docRels =
+    (opts.headerText ? `<Relationship Id="rIdH1" Type="${REL}/header" Target="header1.xml"/>` : '') +
+    (opts.footerText ? `<Relationship Id="rIdF1" Type="${REL}/footer" Target="footer1.xml"/>` : '');
+  const sectPr =
+    opts.headerText || opts.footerText
+      ? '<w:sectPr>' +
+        (opts.headerText ? '<w:headerReference w:type="default" r:id="rIdH1"/>' : '') +
+        (opts.footerText ? '<w:footerReference w:type="default" r:id="rIdF1"/>' : '') +
+        '<w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/></w:sectPr>'
+      : '';
+  const extraParts: Array<{ name: string; data: string }> = [];
+  if (opts.headerText) extraParts.push({ name: 'word/header1.xml', data: hf('hdr', opts.headerText) });
+  if (opts.footerText) extraParts.push({ name: 'word/footer1.xml', data: hf('ftr', opts.footerText) });
+  if (docRels) {
+    extraParts.push({
+      name: 'word/_rels/document.xml.rels',
+      data:
+        XML_HEAD +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        docRels +
+        '</Relationships>',
+    });
+  }
   return makeStoredZip([
     {
       name: '[Content_Types].xml',
@@ -91,6 +133,7 @@ export function buildDocx(text: string, bodyXml?: string): Uint8Array {
         '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
         '<Default Extension="xml" ContentType="application/xml"/>' +
         '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+        extraOverrides +
         '</Types>',
     },
     {
@@ -105,9 +148,10 @@ export function buildDocx(text: string, bodyXml?: string): Uint8Array {
       name: 'word/document.xml',
       data:
         XML_HEAD +
-        '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
-        `<w:body>${bodyXml ?? `<w:p><w:r><w:t>${text}</w:t></w:r></w:p>`}</w:body></w:document>`,
+        '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+        `<w:body>${bodyXml ?? `<w:p><w:r><w:t>${text}</w:t></w:r></w:p>`}${sectPr}</w:body></w:document>`,
     },
+    ...extraParts,
   ]);
 }
 
