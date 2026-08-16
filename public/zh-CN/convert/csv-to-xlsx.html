@@ -12,7 +12,7 @@
     <title>在浏览器中把 CSV 转成 XLSX——免费、不传服务器</title>
     <meta
       name="description"
-      content="完全在浏览器中把 CSV 文件转成 XLSX（Excel）——打开后导出为 XLSX。免费、开源、文件留在本地、支持离线。无需 Excel，也无需账号。"
+      content="完全在浏览器中把 CSV 文件转成 XLSX（Excel）——自动识别 GBK/GB18030 编码，中文 CSV 不再乱码。免费、开源、文件留在本地、支持离线。无需 Excel，也无需账号。"
     />
     <link rel="canonical" href="https://edit.chaxus.com/zh-CN/convert/csv-to-xlsx" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/convert/csv-to-xlsx" />
@@ -99,7 +99,15 @@
                 "name": "它期望什么分隔符和编码？",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "它默认使用标准的逗号分隔值；如果你的文件需要，OnlyOffice 的导入步骤允许你选择不同的分隔符或文本编码。"
+                  "text": "逗号、分号、制表符自动识别；编码同样自动嗅探：UTF-8（有无 BOM 皆可）、GB18030 / GBK、最后 Latin-1。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "中文 CSV 在别的工具里乱码，这里会吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "通常不会。乱码是文件用 GBK / GB18030 保存却被当作 UTF-8 读的结果；这里先嗅探字节再解码，Excel 导出的中文 CSV 能正常打开，保存时写入带 BOM 的 UTF-8，Excel 直接打开不乱码。"
                 }
               },
               {
@@ -245,6 +253,15 @@
         XLSX 之前写入公式——而且全程不会把数据上传到任何地方。这是让机器生成的导出变得美观易读的快捷方式。
       </p>
 
+      <h2>为什么别的工具打开中文 CSV 会乱码</h2>
+      <p>
+        乱码几乎总是编码问题：Excel"另存为 CSV"默认用系统代码页（简体中文系统是 GBK / GB18030，也就是 Excel
+        里写的"ANSI"），而多数网页工具、macOS 数据编辑器和程序库一律按 UTF-8 读，于是"客户名称"变成一串"锟斤拷"。
+        反过来，带 UTF-8 BOM 的文件在旧版 Excel 里又会把 BOM 当成内容。这个转换器在打开前先嗅探字节：先按严格 UTF-8
+        解码，失败再按 GB18030，最后 Latin-1 兜底；分隔符（逗号、分号、制表符）同样自动识别。保存回 CSV 时写入带 BOM 的
+        UTF-8，Excel 双击打开不再乱码。整个过程在你的浏览器里完成，文件不上传。
+      </p>
+
       <r-card class="oss"
         ><div class="card-body">
           <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
@@ -265,7 +282,12 @@
         <h3>数字和日期列会被识别吗？</h3>
         <p>CSV 会变成一个真正的表格，因此你可以在保存为 XLSX 之前设置数字、日期和文本单元格格式。</p>
         <h3>它期望什么分隔符和编码？</h3>
-        <p>默认使用标准的逗号分隔值；导入步骤允许你选择不同的分隔符或文本编码。</p>
+        <p>逗号、分号、制表符自动识别；编码同样自动嗅探：UTF-8（有无 BOM 皆可）、GB18030 / GBK、最后 Latin-1。</p>
+        <h3>中文 CSV 在别的工具里乱码，这里会吗？</h3>
+        <p>
+          通常不会。乱码是文件用 GBK / GB18030 保存却被当作 UTF-8 读的结果；这里先嗅探字节再解码，Excel 导出的中文 CSV
+          能正常打开，保存时写入带 BOM 的 UTF-8，Excel 直接打开不乱码。
+        </p>
         <h3>这个转换器能离线使用吗？</h3>
         <p>可以。加载后它就是一个可安装的 PWA，因此在没有网络时依然可用。</p>
       </div>
