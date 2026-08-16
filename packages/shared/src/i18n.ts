@@ -37,6 +37,10 @@ export interface I18nMessages {
   newPowerPoint: string;
   menu: string;
   menuGuide: string;
+  themeLabel: string;
+  themeSystem: string;
+  themeLight: string;
+  themeDark: string;
 
   // Messages
   fileSavedSuccess: string;
@@ -99,6 +103,10 @@ const messages: Record<Language, I18nMessages> = {
     newPowerPoint: '新建 PowerPoint',
     menu: '菜单',
     menuGuide: '菜单在右下角，悬停即可查看（点击关闭后不再提示）',
+    themeLabel: '主题',
+    themeSystem: '跟随系统',
+    themeLight: '浅色',
+    themeDark: '深色',
     fileSavedSuccess: '文件保存成功：',
     documentLoaded: '文档加载完成：',
     failedToLoadEditor: '无法加载编辑器组件。请确保已正确安装 OnlyOffice API。',
@@ -152,6 +160,10 @@ const messages: Record<Language, I18nMessages> = {
     newPowerPoint: 'New PowerPoint',
     menu: 'Menu',
     menuGuide: "Menu is in the bottom right corner, hover to view (click to close, won't show again)",
+    themeLabel: 'Theme',
+    themeSystem: 'System',
+    themeLight: 'Light',
+    themeDark: 'Dark',
     fileSavedSuccess: 'File saved successfully: ',
     documentLoaded: 'Document loaded: ',
     failedToLoadEditor: 'Failed to load editor component. Please ensure OnlyOffice API is properly installed.',

@@ -32,6 +32,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- The bottom-right Menu now has a light / dark / system switch, so the theme
+  can be changed while a document is open (the editor follows it).
 - A help center (`/help`, `/zh-CN/help`) answering the practical questions:
   formats, saving and converting, CSV encodings, what the PDF viewer can do,
   read-only and embedding, offline use, privacy boundaries, error codes,

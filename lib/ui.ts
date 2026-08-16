@@ -184,6 +184,20 @@ function buildFab(): { container: HTMLElement; button: HTMLElement } {
         },
         false,
       ),
+      // Light / dark / system. The landing hero has the same <r-theme-switch>
+      // in its footer, but the hero is hidden once a document is open and the
+      // editor follows the site theme (lib/editor-theme.ts) -- without this
+      // row there is no way to flip it while editing.
+      Div()
+        .class('fab-menu-item fab-menu-theme')
+        .children(
+          View('r-theme-switch')
+            .class('theme-switch')
+            .attr('label', t('themeLabel'))
+            .attr('label-system', t('themeSystem'))
+            .attr('label-light', t('themeLight'))
+            .attr('label-dark', t('themeDark')),
+        ),
     )
     // Keep menu visible when hovering over it
     .on('mouseenter', () => {
