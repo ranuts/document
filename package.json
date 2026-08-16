@@ -8,6 +8,7 @@
     "dev": "vite --host --force",
     "build": "sh ./bin/build.sh",
     "build:pages": "node bin/build-pages.mjs",
+    "sitemap:lastmod": "node bin/sitemap-lastmod.mjs",
     "build:single": "node bin/bundle_single_html.js",
     "preview": "vite preview",
     "tsc": "tsc --noEmit",
