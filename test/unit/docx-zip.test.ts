@@ -1,7 +1,13 @@
 import { deflateRawSync } from 'node:zlib';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { readZipEntries, readZipEntry } from 'ranuts/utils';
-import { extractDocxMediaUrls, preprocessPptx, preprocessXlsxLineBreaks } from '@ranuts/converter';
+import {
+  extractDocxMediaUrls,
+  preprocessDocxRuby,
+  preprocessPptx,
+  preprocessXlsxLineBreaks,
+  unwrapRubyXml,
+} from '@ranuts/converter';
 
 /**
  * OOXML files are ZIP archives, so these functions operate on real binaries.
@@ -249,5 +255,45 @@ describe('preprocessPptx', () => {
     expect(await textOf(out, 'ppt/presentation.xml')).toBe('<p:presentation/>');
     const media = await readZipEntry(out, 'ppt/media/image1.png');
     expect(media && Array.from(media)).toEqual(Array.from(PNG));
+  });
+});
+
+describe('ruby (phonetic guide) unwrapping', () => {
+  const RUBY =
+    '<w:p><w:r><w:rPr><w:sz w:val="22"/></w:rPr>' +
+    '<w:ruby><w:rubyPr><w:lid w:val="ja-JP"/></w:rubyPr>' +
+    '<w:rt><w:r><w:rPr><w:sz w:val="11"/></w:rPr><w:t>とうきょう</w:t></w:r></w:rt>' +
+    '<w:rubyBase><w:r><w:rPr><w:sz w:val="22"/></w:rPr><w:t>東京</w:t></w:r></w:rubyBase>' +
+    '</w:ruby></w:r><w:r><w:t>へ行く</w:t></w:r></w:p>';
+
+  it('unwrapRubyXml keeps the base word, drops the guide, and leaves runs balanced', () => {
+    const out = unwrapRubyXml(RUBY)!;
+    expect(out).toContain('<w:t>東京</w:t>');
+    expect(out).not.toContain('とうきょう');
+    expect(out).not.toContain('<w:ruby');
+    expect(out).toContain('<w:t>へ行く</w:t>');
+    // Every <w:r> opened is closed and no run nests inside another.
+    expect((out.match(/<w:r>|<w:r\s/g) || []).length).toBe((out.match(/<\/w:r>/g) || []).length);
+    expect(out).not.toMatch(/<w:r>(?:(?!<\/w:r>)[\s\S])*<w:r>/);
+  });
+
+  it('unwrapRubyXml returns null when there is no ruby', () => {
+    expect(unwrapRubyXml('<w:p><w:r><w:t>plain</w:t></w:r></w:p>')).toBeNull();
+  });
+
+  it('preprocessDocxRuby rewrites word/*.xml parts that carry ruby and returns the input as-is otherwise', async () => {
+    const zip = buildZip([
+      { name: 'word/document.xml', content: `<w:document><w:body>${RUBY}</w:body></w:document>`, deflate: true },
+      { name: 'word/header1.xml', content: `<w:hdr>${RUBY}</w:hdr>` },
+      { name: '[Content_Types].xml', content: '<Types/>' },
+    ]);
+    const out = await preprocessDocxRuby(zip);
+    expect(await textOf(out, 'word/document.xml')).toContain('<w:t>東京</w:t>');
+    expect(await textOf(out, 'word/document.xml')).not.toContain('<w:ruby');
+    expect(await textOf(out, 'word/header1.xml')).not.toContain('<w:ruby');
+    expect(await textOf(out, '[Content_Types].xml')).toBe('<Types/>');
+
+    const plain = buildZip([{ name: 'word/document.xml', content: '<w:document><w:body/></w:document>' }]);
+    expect(await preprocessDocxRuby(plain)).toBe(plain);
   });
 });

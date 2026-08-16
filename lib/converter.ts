@@ -1,6 +1,6 @@
 import { getExtensions } from 'ranuts/utils';
 import { t } from '@ranuts/shared/i18n';
-import { X2TConverter, isHtmlDocument } from '@ranuts/converter';
+import { X2TConverter, isHtmlDocument, preprocessDocxRuby } from '@ranuts/converter';
 import { createEditorInstance, loadEditorApi } from './onlyoffice-editor';
 import { getDocumentType } from '@ranuts/shared/document-utils';
 
@@ -63,6 +63,11 @@ export async function handleDocumentOperation(options: {
         } else {
           binData = raw.buffer as ArrayBuffer;
         }
+      } else if (lowerType === 'docx') {
+        // Phonetic guides (<w:ruby>) are dropped whole by the vendor importer,
+        // base word included; unwrap them to their base text first (see
+        // packages/converter docx-zip.ts). No-op for documents without any.
+        binData = (await preprocessDocxRuby(new Uint8Array(await file.arrayBuffer()))).buffer as ArrayBuffer;
       } else if (lowerType === 'csv') {
         // The vendor editor's internal x2t cannot ingest raw CSV (its import
         // needs delimiter/encoding parameters the bundled helper never

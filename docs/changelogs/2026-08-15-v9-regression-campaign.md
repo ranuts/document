@@ -189,3 +189,16 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 3. 入口路径：`?file=<url>` / `document:open-url` / 落地页 `?open=local`。
 4. 用户侧：硬刷新后复测 PPT 致命弹窗；若复现给文件 + 步骤。
 5. 另一会话：seeded monkey → UI 爬取。
+
+## 2026-08-16
+
+- 定时夜间（POI 300 文件，含 L2/L3）：280/300；跨浏览器 105 通过 / 1 flaky；
+  线上冒烟 23/23。
+- 36 条发现复盘：**真缺陷 1 条**——`<w:ruby>`（注音/拼音标注）被 vendor 导入整体
+  丢弃、底文一起消失（`61470.docx` 7→0 字）。修：`preprocessDocxRuby`（打开前把
+  ruby 展开为底文 run；`packages/converter` docx-zip，走 ranuts `rewriteZip`），
+  单测 3 条 + `docx-ruby.spec.ts`；CHANGELOG 记为"注音本身仍丢失"的已知限制。
+  其余：fuzz/损坏样本正确 -82（8 个 `open=pending` 本地不复现，继续观察）；
+  5 个 docx 覆盖率不达标全是提取口径（`'`→`&apos;` 未解实体、无 preserve 的空白
+  run、外部实体不展开）→ 提取器解实体、忽略空白、去 `<w:rt>`；
+  `ExternalEntityInText.docx` 保留为预期项。旧 `.ppt/.doc` 的 L3 视觉差异待看截图。

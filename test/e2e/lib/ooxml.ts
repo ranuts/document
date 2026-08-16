@@ -80,8 +80,8 @@ export function makeStoredZip(entries: Array<{ name: string; data: Uint8Array | 
 
 const XML_HEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
 
-/** A one-paragraph .docx. */
-export function buildDocx(text: string): Uint8Array {
+/** A one-paragraph .docx (or, with `bodyXml`, an arbitrary <w:body> content). */
+export function buildDocx(text: string, bodyXml?: string): Uint8Array {
   return makeStoredZip([
     {
       name: '[Content_Types].xml',
@@ -106,7 +106,7 @@ export function buildDocx(text: string): Uint8Array {
       data:
         XML_HEAD +
         '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
-        `<w:body><w:p><w:r><w:t>${text}</w:t></w:r></w:p></w:body></w:document>`,
+        `<w:body>${bodyXml ?? `<w:p><w:r><w:t>${text}</w:t></w:r></w:p>`}</w:body></w:document>`,
     },
   ]);
 }
@@ -280,9 +280,20 @@ export function zipEntryText(bytes: Uint8Array, name: string): string | null {
   return new TextDecoder().decode(data);
 }
 
-/** Concatenated text of all <w:t>/<a:t> runs in an OOXML part. */
+const XML_ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
+export function decodeXmlEntities(text: string): string {
+  return text.replace(/&(#x[0-9a-fA-F]+|#\d+|[a-zA-Z]+);/g, (m, ent: string) => {
+    if (ent[0] === '#')
+      return String.fromCodePoint(ent[1] === 'x' ? parseInt(ent.slice(2), 16) : parseInt(ent.slice(1), 10));
+    return ent in XML_ENTITIES ? XML_ENTITIES[ent] : m;
+  });
+}
+
+/** Concatenated, entity-decoded text of all <w:t>/<a:t> runs in an OOXML part. */
 export function ooxmlText(xml: string): string {
-  return Array.from(xml.matchAll(/<(?:w|a):t(?:\s[^>]*)?>([^<]*)<\/(?:w|a):t>/g), (m) => m[1]).join('');
+  return Array.from(xml.matchAll(/<(?:w|a):t(?:\s[^>]*)?>([^<]*)<\/(?:w|a):t>/g), (m) => decodeXmlEntities(m[1])).join(
+    '',
+  );
 }
 
 /**
@@ -393,7 +404,12 @@ export function ooxmlDocumentText(bytes: Uint8Array): string {
   // Fields (slide number, date) carry a cached value that legitimately
   // changes on save ("<#>" placeholder -> "11"); compare the static text only.
   const withoutFields = (xml: string) =>
-    xml.replace(/<a:fld\b[\s\S]*?<\/a:fld>/g, '').replace(/<w:fldSimple\b[\s\S]*?<\/w:fldSimple>/g, '');
+    xml
+      .replace(/<a:fld\b[\s\S]*?<\/a:fld>/g, '')
+      .replace(/<w:fldSimple\b[\s\S]*?<\/w:fldSimple>/g, '')
+      // Ruby guide text (<w:rt>) is a known loss on save (the base word is
+      // preserved by preprocessDocxRuby); compare base text only.
+      .replace(/<w:rt\b[\s\S]*?<\/w:rt>/g, '');
   return parts.map((n) => ooxmlText(withoutFields(withoutHidden(zipEntryText(bytes, n) || '')))).join('\n');
 }
 
@@ -404,7 +420,10 @@ export function ooxmlDocumentText(bytes: Uint8Array): string {
  * run/paragraph re-splitting on save.
  */
 export function textCoverage(before: string, after: string, shingle = 20): { coverage: number; shingles: number } {
-  const norm = (t: string) => t.replace(/\s+/g, ' ').trim();
+  // Whitespace is dropped entirely: whitespace-only runs without
+  // xml:space="preserve" are legitimately not significant and the editor
+  // re-splits runs freely; text loss is what we are after, not spacing.
+  const norm = (t: string) => t.replace(/\s+/g, '');
   const a = norm(before);
   const b = norm(after);
   if (a.length <= shingle) return { coverage: b.includes(a) ? 1 : 0, shingles: 1 };

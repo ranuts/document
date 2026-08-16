@@ -41,6 +41,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Words carrying a phonetic guide (Japanese furigana / Chinese pinyin
+  "ruby" annotations) no longer disappear from a Word document on open and
+  save; the base word is kept. The guide text itself is still dropped
+  (engine limitation).
 - PDF files open again on the live site: the hosted deployment redirects
   `.../index.html` to the folder URL, which left the editor's "is this a
   form?" pre-loader stuck on a blank page; PDFs now go straight to the PDF

@@ -14,4 +14,4 @@ export {
   CANVAS_PDF_INPUT_FORMAT,
   PDF_OUTPUT_FORMAT,
 } from './document-converter';
-export { extractDocxMediaUrls, preprocessPptx, preprocessXlsxLineBreaks } from './docx-zip';
+export { extractDocxMediaUrls, preprocessDocxRuby, preprocessPptx, preprocessXlsxLineBreaks, unwrapRubyXml } from './docx-zip';

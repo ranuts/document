@@ -203,3 +203,34 @@ export async function extractDocxMediaUrls(docxBytes: Uint8Array): Promise<Recor
 
   return result;
 }
+
+/**
+ * Unwrap phonetic guides (<w:ruby>: Japanese furigana, Chinese pinyin) into
+ * their base text before the editor imports a DOCX. The vendor importer drops
+ * the whole ruby element -- guide AND base word -- so a document that reads
+ * "東京" with とうきょう above it comes back without "東京" at all. Keeping
+ * the base run loses only the annotation. A ruby sits inside a run
+ * (<w:r><w:rPr/><w:ruby>...<w:rubyBase><w:r>..</w:r></w:rubyBase></w:ruby></w:r>),
+ * so the element is replaced by "close run, base runs, reopen run" to keep the
+ * enclosing run balanced without nesting runs.
+ */
+export function unwrapRubyXml(xml: string): string | null {
+  if (!xml.includes('<w:ruby')) return null;
+  const next = xml.replace(/<w:ruby(?:\s[^>]*)?>[\s\S]*?<\/w:ruby>/g, (ruby) => {
+    const base = /<w:rubyBase(?:\s[^>]*)?>([\s\S]*?)<\/w:rubyBase>/.exec(ruby);
+    return `</w:r>${base ? base[1] : ''}<w:r>`;
+  });
+  return next !== xml ? next : null;
+}
+
+export async function preprocessDocxRuby(docxBytes: Uint8Array): Promise<Uint8Array> {
+  // Cheap gate: only rebuild the archive when the main story actually has one.
+  const main = await readZipEntry(docxBytes, 'word/document.xml');
+  const hasRubyMain = main ? new TextDecoder().decode(main).includes('<w:ruby') : false;
+  if (!hasRubyMain) return docxBytes;
+  return rewriteXmlEntries(
+    docxBytes,
+    (name) => name.startsWith('word/') && name.endsWith('.xml'),
+    (xml) => unwrapRubyXml(xml),
+  );
+}
