@@ -2,6 +2,7 @@ import 'ranui/message';
 import { getDocmentObj } from '@ranuts/shared/store';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
 import { oAscFileType } from './file-types';
+import { installEditorThemeFollow, resolveEditorUiTheme } from './editor-theme';
 import { DOCUMENT_TYPE_MAP, getDocumentMimeType } from '@ranuts/shared/document-utils';
 import { X2TConverter, saveFileToDisk } from '@ranuts/converter';
 
@@ -916,13 +917,15 @@ export const DEFAULT_UI_THEME = 'theme-classic-light';
 export const UI_THEME_STORAGE_KEY = 'ui-theme-id';
 
 export function resolveUiTheme(): string {
-  try {
-    const stored = window.localStorage.getItem(UI_THEME_STORAGE_KEY);
-    if (stored && stored.trim()) return stored.trim();
-  } catch {
-    // Storage can be unavailable (privacy mode / sandboxed frame): use the default.
-  }
-  return DEFAULT_UI_THEME;
+  // Follows the site's ranui theme (dark site -> theme-dark) unless the user
+  // picked a theme inside the editor; see lib/editor-theme.ts.
+  return resolveEditorUiTheme(DEFAULT_UI_THEME);
+}
+
+// Keep a mounted editor in step with the site theme (top-bar switch, OS
+// switch in system mode) for the page's lifetime; idempotent per module.
+if (typeof document !== 'undefined' && typeof MutationObserver !== 'undefined') {
+  installEditorThemeFollow(DEFAULT_UI_THEME);
 }
 
 function createPersonalEditorInstance(config: {

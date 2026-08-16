@@ -32,6 +32,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- The editor now follows the site's light/dark theme: a dark site opens a
+  dark editor and switches live with the theme toggle; a theme you pick inside
+  the editor's own settings still wins.
 - New "Open PDF" pages (`/open/pdf`, `/zh-CN/open/pdf`) explaining what the
   PDF viewer can and cannot do (read, comment and annotate, save back as PDF;
   no free-text rewriting of an existing PDF), linked from both homepages.

@@ -45,7 +45,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
 packages/             # pnpm workspace，供 ran 生态三处站点共享（包名 @ranuts/*）
-  shared/               # document-types / document-utils / i18n（9 语言）/ store（createSignal）
+  shared/               # document-types / document-utils / i18n（en + zh-CN 词条；编辑器 UI 语言另由 vendor 45 语言包提供）/ store（createSignal）
   converter/            # 格式转换：CSV↔XLSX（SheetJS）、docx-zip 媒体处理、签名嗅探、PDF 字体清单
   agent-core/           # LLM 运行时 + 多 Provider（anthropic/openai/gemini/ollama/webllm）+ key 存储
   chat-ui/              # 聊天面板 UI

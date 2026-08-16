@@ -103,8 +103,9 @@ Breadcrumb）、页脚互链全齐；robots.txt / sitemap.xml / llms.txt 三件�
    看 /open/* /convert/* 的收录与点击基线（需要站长权限，用户操作）。
 3. **外链启动**：v9 转正 + PDF 支持是一个像样的"发布事件"，掘金/V2EX/
    HN Show/Product Hunt 各发一稿（playbook 第 3 杠杆，从未启动）。
-4. **更多语言落地页**（/ja/ /de/ 等）：app i18n 已具备（9 语言），
-   playbook 的前提已满足；建议先看 GSC 中非中英流量占比再决定。
+4. **更多语言落地页**（/ja/ /de/ 等）：见方向八（2026-08-16 评估）。
+   注意此前"app i18n 已具备 9 语言"的说法不实：`packages/shared/src/i18n.ts`
+   只有 en / zh-CN 两套词条；vendor 编辑器 UI 倒是自带 45 个语言包。
 
 ## 方向三：agent / LLM 友好
 
@@ -308,6 +309,72 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
 版本号语义由用户定）。它同时是方向二 3「外链发布事件」的弹药——发稿
 时有一个正经的 release notes 页可以指向，比空口说"升级了"有力得多。
 
+## 方向八：多语言站点（2026-08-16 追加，用户提出）
+
+参照的产品语言菜单：English / 简体中文 / 日本語 / Español / Português /
+한국어 / Deutsch / فارسی（8 种）。
+
+### 现状盘点（2026-08-16 实测）
+
+| 层                        | 现状                                                                                                                                                                     | 备注                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| 落地页 / 首页（SEO 主体） | en + zh-CN 两套静态 HTML（各 12 页），hreflang 互指，`landing-pages.test.ts` 钉契约                                                                                      | 每种新语言 = 再复制 12 页，纯内容工作量最大                              |
+| 站点 App 壳 i18n          | `packages/shared/src/i18n.ts` **仅 en / zh-CN**（≈40 个 key：菜单、toast、agent 面板）；`?locale=` / cookie / navigator 检测链已具备                                     | 词条量小，加语言便宜                                                     |
+| 编辑器 UI（OnlyOffice）   | vendor 自带 45 个语言包（ar bg cs da de el es fi fr he hu id it ja ko nl pl pt pt-pt ro ru sv tr uk vi zh zh-tw …），`editorConfig.lang` 已由 `getOnlyOfficeLang()` 传入 | **无 fa（波斯语）**，fa 会回落 en；`lang` 目前只会产出 en / zh-CN 两个值 |
+| 编辑器帮助 / 拼写         | 帮助已裁剪；拼写关闭                                                                                                                                                     | 无需处理                                                                 |
+| RTL（fa / ar / he）       | 落地页样式未考虑 `dir="rtl"`；编辑器 UI 侧 OnlyOffice 9 支持 RTL 界面（`Common.UI.isRTL`），文档内容 RTL 本就支持                                                        | fa 要单独做 RTL 布局验收                                                 |
+
+### 方案（分三层、可独立交付）
+
+1. **编辑器 UI 语言跟随（1 小时，零内容成本，收益最大）**：把
+   `getOnlyOfficeLang()` 从"只认 en/zh-CN"扩成"任何 vendor 有语言包的
+   BCP-47 都透传"（`navigator.languages` → 匹配 45 包，`?locale=` 优先），
+   这样日/韩/德/西/葡用户打开文档时编辑器菜单已是母语，站点壳的 40 个词条
+   暂时回落 en 也可接受。同时把 `zh-TW`→`zh-tw`、`pt-BR`→`pt` 之类的映射
+   写成表 + 单测。
+2. **站点壳 i18n 补齐 6 种（半天）**：`i18n.ts` 词条 ≈40 个，一次性补
+   ja / es / pt / ko / de / fa；`Language` 类型从二选一改成联合；
+   `?locale=` 与 `<r-select>` 语言切换器改数据驱动（一份 locale 清单供
+   落地页语言菜单、lang-switch.js、sitemap 生成共用）。
+3. **多语言落地页（每语言 1～2 天，按流量决定顺序）**：不再手写 12 页
+   × N。前置是方向七 1 的"markdown→HTML 生成器"——把落地页也纳入生成：
+   `content/<locale>/open/pdf.md`（frontmatter：title/description/faq/
+   howto）→ 同一套 landing 壳渲染 → 自动生成 hreflang 全集、sitemap、
+   语言菜单、llms.txt。**这决定了生成器不能只考虑 help/changelog，
+   要按"任意 locale × 任意页"设计。** 首批语言按 GSC 非中英流量选
+   （建议 ja、es、pt 先行，fa 需额外 RTL 验收）；机器初译 + 人工校对，
+   `landing-pages.test.ts` 自动覆盖新 locale（遍历 public/ 时按目录
+   识别 locale，改动很小）。
+4. **RTL 验收（fa 前置，半天）**：landing.css 用逻辑属性
+   （margin-inline / padding-inline / text-align: start）替换左右属性；
+   `<html dir="rtl">`；编辑器 iframe 侧确认 OnlyOffice RTL 界面开关。
+
+### 与其它方向的耦合
+
+- 生成器（方向七 1）先做且按 locale × page 设计 → 方向八 3 才不返工。
+- 语言菜单：与截图一致的形态（当前语言在顶、其它带外链箭头）用 ranui
+  `<r-select>` 现有 lang-switch 扩展即可，不另写组件。
+- 首页/编辑器路由拆分（方向六 2）时把 `/<locale>/` 目录约定一并定死。
+
+## 深色 / 亮色模式现状（2026-08-16 评估 + 修补）
+
+- **站点层已支持**：首页、全部落地页、embed-demo 都挂 ranui
+  `<r-theme-switch>`（light / dark / system），token 层 `--ran-*` 随
+  `<html data-ran-theme>` 翻转，`index.html` 有 no-flash 恢复脚本。
+- **编辑器层此前不跟随**：编辑器主题固定 `theme-classic-light`
+  （或用户在编辑器内选过的 `ui-theme-id`），深色站点打开的是亮色编辑器。
+  2026-08-16 修补：新增 `lib/editor-theme.ts`——挂载时 dark 站点 →
+  `theme-dark`、light → classic；文档打开期间监听 `data-ran-theme` 与
+  OS 媒体查询实时 `Common.UI.Themes.setTheme`；用户在编辑器内手选的
+  主题优先（用 `ui-theme-site-driven` 标记区分"我们驱动的"与"用户选的"）。
+  单测 `test/unit/editor-theme.test.ts`；真浏览器验证 dark 挂载 +
+  双向实时切换。
+- **仍缺**：编辑器打开后站点顶栏隐藏，页面上没有主题切换入口（只能靠
+  编辑器自己的 File → Advanced settings → Theme）；建议把
+  `<r-theme-switch>` 放进右下角 FAB Menu（方向六 2 路由拆分时一并做）。
+  文档正文的"深色画布"（OnlyOffice `asc_setContentDarkMode`）刻意不
+  跟随——那是编辑器内的用户偏好，且会改变文档观感。
+
 ## 建议执行顺序（2026-08-15 三修：方向零插入为最高优先级）
 
 **方向零（全面回归战役）压倒下表所有事项**；表内条目在战役期间仅在
@@ -316,22 +383,22 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
 
 ## 原执行顺序（2026-08-15 更新：加入方向六、七，第 1 项已完成）
 
-| 序  | 事项                                             | 体量      | 状态                                                                                                                           |
-| --- | ------------------------------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | 部署后 issue 验证清单（方向四 3）                | 半天      | ✅ 已完成，关 6 个                                                                                                             |
-| 2   | CHANGELOG.md + 发布 v9 release（方向七 3 前半）  | 1 小时    |                                                                                                                                |
-| 3   | /open/pdf 落地页 + 内容收尾同步（方向一）        | 半天~1 天 | ✅ 2026-08-16 落地页 + sitemap/llms/首页卡片/页脚互链 + `landing-pages.test.ts` 契约；方向一 2/3（CSV 乱码长文、只读说明）待做 |
-| 4   | vendor noindex + GSC 提交（方向二 1/2）          | 1 小时    |                                                                                                                                |
-| 5   | embed-demo 对齐 ran 设计体系（方向六 1）         | 半天      |                                                                                                                                |
-| 6   | markdown→HTML 生成器（方向七 1，后两项的前置）   | 半天~1 天 |                                                                                                                                |
-| 7   | /help 帮助中心 + /changelog 页（方向七 2/3）     | 1~2 天    |                                                                                                                                |
-| 8   | PPT E2E（方向四 1）                              | 小时级    |                                                                                                                                |
-| 9   | 性能基线审计（方向四 2 前半）                    | 半天      |                                                                                                                                |
-| 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    |                                                                                                                                |
-| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      |                                                                                                                                |
-| 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      |                                                                                                                                |
-| 13  | 外链发布稿（方向二 3，指向 /changelog 与新功能） | 用户主导  |                                                                                                                                |
-| 14  | agent-collab（方向五）                           | 大周期    |                                                                                                                                |
+| 序  | 事项                                             | 体量      | 状态                                                                                                                                          |
+| --- | ------------------------------------------------ | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | 部署后 issue 验证清单（方向四 3）                | 半天      | ✅ 已完成，关 6 个                                                                                                                            |
+| 2   | CHANGELOG.md + 发布 v9 release（方向七 3 前半）  | 1 小时    |                                                                                                                                               |
+| 3   | /open/pdf 落地页 + 内容收尾同步（方向一）        | 半天~1 天 | ✅ 2026-08-16 落地页 + sitemap/llms/首页卡片/页脚互链 + `landing-pages.test.ts` 契约；方向一 2/3（CSV 乱码长文、只读说明）待做                |
+| 4   | vendor noindex + GSC 提交（方向二 1/2）          | 1 小时    | ✅ 2026-08-16 noindex 已上（`_headers` + hosting-contract 钉住）；GSC/Bing 提交需站长权限，待用户                                             |
+| 5   | embed-demo 对齐 ran 设计体系（方向六 1）         | 半天      | ✅ 2026-08-16 r-button/r-input/r-checkbox/r-card/r-theme-switch + token；E2E 契约不变，见 explorations/2026-08-16-embed-demo-ranui-restyle.md |
+| 6   | markdown→HTML 生成器（方向七 1，后两项的前置）   | 半天~1 天 |                                                                                                                                               |
+| 7   | /help 帮助中心 + /changelog 页（方向七 2/3）     | 1~2 天    |                                                                                                                                               |
+| 8   | PPT E2E（方向四 1）                              | 小时级    |                                                                                                                                               |
+| 9   | 性能基线审计（方向四 2 前半）                    | 半天      |                                                                                                                                               |
+| 10  | 首页/编辑器路由拆分（方向六 2，基线之后做）      | 1~2 天    |                                                                                                                                               |
+| 11  | 预取/SW 预缓存决策（方向四 2 后半，拆分后再测）  | 1 天      |                                                                                                                                               |
+| 12  | WebMCP 薄适配 + origin trial（专节）             | 1 天      |                                                                                                                                               |
+| 13  | 外链发布稿（方向二 3，指向 /changelog 与新功能） | 用户主导  |                                                                                                                                               |
+| 14  | agent-collab（方向五）                           | 大周期    |                                                                                                                                               |
 
 排序理由：
 
