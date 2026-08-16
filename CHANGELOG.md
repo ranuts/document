@@ -19,6 +19,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- The homepage is now a plain landing page and the editor lives at `/editor`
+  (`/editor?new=docx`, `/editor?file=<url>`, `/editor?embed=1`). The homepage
+  no longer downloads the editor at all, so it loads faster; old links to
+  `/?src=`, `/?file=`, `/?new=` and `/?embed=1` keep working (they redirect).
 - The iframe embedding demo (`/embed-demo.html`) now uses the same design
   system as the rest of the site (ranui components and tokens, dark mode,
   shared top bar) instead of its own ad-hoc styling; the demo's postMessage

@@ -6,6 +6,22 @@
     <link href="img/64.png" rel="shortcut icon" />
     <link rel="icon" type="image/png" href="img/64.png" />
     <link rel="manifest" href="manifest.json" />
+    <!-- Route split: / is a static landing page, /editor hosts the app. Deep links
+         that used to target / (?file= ?src= ?new= ?open=local ?embed= ?embedded=
+         ?readonly ?agent) and any embedding iframe keep working: hand them to
+         /editor with the same query before anything renders. -->
+    <script>
+      (function () {
+        try {
+          var q = location.search;
+          var deep = /[?&](file|src|new|open|embed|embedded|readonly|agent)(=|&|$)/.test(q);
+          var framed = window.parent !== window;
+          if (deep || framed) {
+            location.replace('/editor' + (q || (framed ? '?embed=1' : '')) + location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -148,10 +164,16 @@
       }
     </script>
 
-    <!-- The OnlyOffice DocsAPI loader is fetched on demand (lib/onlyoffice-editor.ts
-         loadEditorApi) when a document is opened or created; a synchronous tag here
-         was render-blocking (~0.5 s of LCP) for visitors who only read the landing. -->
-    <link rel="prefetch" href="/web-apps/apps/api/documents/api.js" as="script" />
+    <!-- Static page: ranui components come from the vendored per-component IIFEs
+         (same as every other landing page); the file picker hand-off to /editor is
+         public/open-local.js; the language select is public/lang-switch.js. -->
+    <script src="/ranui-iife/button.iife.js" defer></script>
+    <script src="/ranui-iife/card.iife.js" defer></script>
+    <script src="/ranui-iife/select.iife.js" defer></script>
+    <script src="/ranui-iife/theme-switch.iife.js" defer></script>
+    <script src="/lang-switch.js" defer></script>
+    <script src="/open-local.js" defer></script>
+    <script src="/landing-prefetch.js" defer></script>
   </head>
 
   <body>
@@ -164,293 +186,288 @@
         />
       </symbol>
     </svg>
-    <div id="app" class="w-full h-full">
-      <!-- Crawlable landing hero. Rendered in the served HTML for SEO/GEO; hidden
-           the moment a document opens (body.landing-active toggles it, see index.ts). -->
-      <section id="landing-hero">
-        <header class="bar">
-          <div class="wrap">
-            <a class="brand" href="/"><span class="logo">D</span>Document Editor</a>
-            <nav>
-              <a class="navlink" href="/offline-document-editor">Offline</a>
-              <a class="navlink" href="/no-signup-document-editor">No sign-up</a>
-              <a class="navlink gh" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
-                <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
-              </a>
-              <span class="lang-wrap">
-                <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
-                  <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
-                  <path
-                    d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.2"
-                  />
-                </svg>
-                <r-select class="lang-select" type="text" value="en" aria-label="Language">
-                  <r-option value="en">EN</r-option>
-                  <r-option value="zh-CN">中文</r-option>
-                </r-select>
-              </span>
-            </nav>
-          </div>
-        </header>
-
-        <div class="hero wrap">
-          <div class="hero-copy">
-            <span class="chip reveal d1"><span class="dot"></span>Local-first · <b>open source</b></span>
-            <h1 class="reveal d2">
-              Open Word, Excel &amp; PowerPoint files, <span class="accent">right in your browser.</span>
-            </h1>
-            <p class="sub reveal d3">
-              No Office installed? View any DOCX, XLSX or PPTX instantly — and edit it when you need to. Everything runs
-              on your device: no upload, no sign-up, works offline.
-            </p>
-            <div class="cta reveal d4">
-              <r-button type="primary" id="hero-open">Open a file</r-button>
-              <r-button id="hero-new-docx">New Word</r-button>
-              <r-button id="hero-new-xlsx">New Excel</r-button>
-              <r-button id="hero-new-pptx">New PowerPoint</r-button>
-            </div>
-            <div class="trust reveal d5">
-              <span>0 bytes uploaded</span><span>no account</span><span>works offline</span
-              ><span>.docx .xlsx .pptx .csv</span>
-            </div>
-          </div>
-
-          <!-- Decorative "document being edited locally" window — pure CSS, no JS,
-               so the static localized homepages can reuse it verbatim. -->
-          <div class="docwin reveal d3" aria-hidden="true">
-            <div class="dw-bar">
-              <span class="dw-dots"><i></i><i></i><i></i></span>
-              <span class="dw-file">report.docx</span>
-              <span class="dw-badge">saved locally ✓</span>
-            </div>
-            <div class="dw-tabs">
-              <span class="on">.docx</span><span>.xlsx</span><span>.pptx</span><span>.csv</span>
-            </div>
-            <div class="dw-body">
-              <div class="dw-sheet">
-                <span class="dl t"></span>
-                <span class="dl w92"></span>
-                <span class="dl w78"></span>
-                <p class="dw-text"><mark>Everything you type stays on this device.</mark><i class="caret"></i></p>
-                <span class="dl w85"></span>
-                <span class="dl w60"></span>
-              </div>
-              <aside class="dw-note">
-                <b>You · just now</b>
-                <span>0 bytes uploaded — check the network tab.</span>
-              </aside>
-            </div>
-            <div class="dw-net"><i class="ok"></i>network · 0 requests · 0 bytes out</div>
-          </div>
-        </div>
-
-        <!-- The highest-frequency job: someone got a file and has no Office.
-             Format entry points, each backed by a dedicated landing page. -->
-        <div class="section wrap">
-          <div class="section-head">
-            <span class="eyebrow">Open a file</span>
-            <h2>No Office installed? No problem.</h2>
-          </div>
-          <div class="formats">
-            <a class="fmt" href="/open/docx">
-              <r-card hoverable>
-                <div class="card-body">
-                  <div class="k">.DOCX</div>
-                  <h3>Open DOCX</h3>
-                  <p>View any Word document with full formatting — fonts, tables, images intact.</p>
-                  <span class="fmt-go">Open a DOCX →</span>
-                </div>
-              </r-card>
-            </a>
-            <a class="fmt" href="/open/xlsx">
-              <r-card hoverable>
-                <div class="card-body">
-                  <div class="k">.XLSX</div>
-                  <h3>Open XLSX</h3>
-                  <p>Formulas, charts and multiple sheets, fully rendered.</p>
-                  <span class="fmt-go">Open an XLSX →</span>
-                </div>
-              </r-card>
-            </a>
-            <a class="fmt" href="/open/pptx">
-              <r-card hoverable>
-                <div class="card-body">
-                  <div class="k">.PPTX</div>
-                  <h3>Open PPTX</h3>
-                  <p>Slides with layouts, themes and media preserved, straight in the browser.</p>
-                  <span class="fmt-go">Open a PPTX →</span>
-                </div>
-              </r-card>
-            </a>
-            <a class="fmt" href="/open/pdf">
-              <r-card hoverable>
-                <div class="card-body">
-                  <div class="k">.PDF</div>
-                  <h3>Open PDF</h3>
-                  <p>Read, comment and annotate a PDF, then save it back — nothing uploaded.</p>
-                  <span class="fmt-go">Open a PDF →</span>
-                </div>
-              </r-card>
-            </a>
-            <a class="fmt" href="/convert/xlsx-to-csv">
-              <r-card hoverable>
-                <div class="card-body">
-                  <div class="k">.XLSX → .CSV</div>
-                  <h3>Convert between formats</h3>
-                  <p>Turn spreadsheets into CSV and back — locally, without uploading a byte.</p>
-                  <span class="fmt-go">Convert a file →</span>
-                </div>
-              </r-card>
-            </a>
-          </div>
-        </div>
-
-        <div class="section wrap">
-          <div class="section-head">
-            <span class="eyebrow">Why it's different</span>
-            <h2>Private by design, not by promise</h2>
-          </div>
-          <div class="cards">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">100% CLIENT-SIDE</div>
-                <h3>Files never leave your device</h3>
-                <p>Every document is opened, edited and saved locally. There is no server to upload to.</p>
-              </div>
-            </r-card>
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">NO ACCOUNT</div>
-                <h3>Nothing to sign up for</h3>
-                <p>No email, no login wall. Open the page and start editing immediately.</p>
-              </div>
-            </r-card>
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">PWA · OFFLINE</div>
-                <h3>Install it, use it on a plane</h3>
-                <p>Add it to your home screen and it keeps working with no internet connection.</p>
-              </div>
-            </r-card>
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">AGPL-3.0</div>
-                <h3>Open source &amp; self-hostable</h3>
-                <p>Audit exactly what runs, or host your own copy. Powered by OnlyOffice.</p>
-              </div>
-            </r-card>
-          </div>
-        </div>
-
-        <div class="section wrap">
-          <div class="section-head">
-            <span class="eyebrow">Process</span>
-            <h2>How it works</h2>
-          </div>
-          <div class="steps">
-            <div class="step">
-              <div class="n">01</div>
-              <h3>Open a file</h3>
-              <p>Drop in a DOCX, XLSX, PPTX or CSV — or start a blank one.</p>
-              <span class="loc">stays on device</span>
-            </div>
-            <div class="step">
-              <div class="n">02</div>
-              <h3>Edit for real</h3>
-              <p>Full formatting, tables, charts and formulas via OnlyOffice.</p>
-              <span class="loc">stays on device</span>
-            </div>
-            <div class="step">
-              <div class="n">03</div>
-              <h3>Save it back</h3>
-              <p>Export to the same format. Nothing was ever uploaded.</p>
-              <span class="loc">stays on device</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section wrap faq-sec">
-          <div class="section-head">
-            <span class="eyebrow">FAQ</span>
-            <h2>Questions, answered</h2>
-          </div>
-          <div class="faq">
-            <div class="qa">
-              <details open>
-                <summary>Are my files uploaded anywhere?</summary>
-                <p class="a">
-                  No. There is no server. Files are opened and saved locally on your device and are never uploaded — you
-                  can verify it in the network tab, or read the source.
-                </p>
-              </details>
-              <details>
-                <summary>Which formats can I edit?</summary>
-                <p class="a">
-                  Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, powered by OnlyOffice running in WebAssembly.
-                </p>
-              </details>
-              <details>
-                <summary>Does it work offline?</summary>
-                <p class="a">
-                  Yes. It is an installable PWA — once loaded it keeps working with no internet, because all editing
-                  runs locally in your browser.
-                </p>
-              </details>
-              <details>
-                <summary>Do I need an account?</summary>
-                <p class="a">No account, no sign-up, no email. Open the page and edit.</p>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="eco">
-          <div class="wrap">
-            <span class="eco-label">
-              <svg class="gitmark" aria-hidden="true"><use href="#gh-mark"></use></svg>
-              Part of the ran ecosystem · all open source
-            </span>
-            <nav>
-              <span class="here"><b>edit.chaxus.com</b> <small>Office editor</small></span>
-              <a href="https://ran.chaxus.com" rel="noopener" target="_blank">
-                <b>ran.chaxus.com</b> <small>UI components</small>
-              </a>
-            </nav>
-          </div>
-        </div>
-
-        <footer class="foot wrap">
-          <span>© 2026 Document Editor · runs on your device</span>
+    <!-- Crawlable landing hero. This page is static: no editor bundle is loaded here;
+         every CTA navigates to /editor (see editor.html). -->
+    <section id="landing-hero">
+      <header class="bar">
+        <div class="wrap">
+          <a class="brand" href="/"><span class="logo">D</span>Document Editor</a>
           <nav>
-            <a href="/help">Help</a>
-            <a href="/changelog">Changelog</a>
-            <a href="/embed-document-editor">Embed API</a>
-            <a href="/private-document-editor">Privacy</a>
-            <a href="/offline-document-editor">Offline editor</a>
-            <a href="/no-signup-document-editor">No sign-up</a>
-            <a href="/open/docx">Open DOCX</a>
-            <a href="/convert/xlsx-to-csv">XLSX → CSV</a>
-            <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">GitHub</a>
+            <a class="navlink" href="/offline-document-editor">Offline</a>
+            <a class="navlink" href="/no-signup-document-editor">No sign-up</a>
+            <a class="navlink gh" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+              <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+            </a>
+            <span class="lang-wrap">
+              <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
+                <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <path
+                  d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+              </svg>
+              <r-select class="lang-select" type="text" value="en" aria-label="Language">
+                <r-option value="en" data-href="/">EN</r-option>
+                <r-option value="zh-CN" data-href="/zh-CN/">中文</r-option>
+              </r-select>
+            </span>
           </nav>
-          <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-          <span class="lic">AGPL-3.0</span>
-        </footer>
-      </section>
+        </div>
+      </header>
 
-      <div id="iframe"></div>
-    </div>
+      <div class="hero wrap">
+        <div class="hero-copy">
+          <span class="chip reveal d1"><span class="dot"></span>Local-first · <b>open source</b></span>
+          <h1 class="reveal d2">
+            Open Word, Excel &amp; PowerPoint files, <span class="accent">right in your browser.</span>
+          </h1>
+          <p class="sub reveal d3">
+            No Office installed? View any DOCX, XLSX or PPTX instantly — and edit it when you need to. Everything runs
+            on your device: no upload, no sign-up, works offline.
+          </p>
+          <div class="cta reveal d4">
+            <r-button type="primary" id="hero-open" data-open-local="/editor?open=local">Open a file</r-button>
+            <a href="/editor?new=docx" data-prefetch="docx"><r-button id="hero-new-docx">New Word</r-button></a>
+            <a href="/editor?new=xlsx" data-prefetch="xlsx"><r-button id="hero-new-xlsx">New Excel</r-button></a>
+            <a href="/editor?new=pptx" data-prefetch="pptx"><r-button id="hero-new-pptx">New PowerPoint</r-button></a>
+          </div>
+          <div class="trust reveal d5">
+            <span>0 bytes uploaded</span><span>no account</span><span>works offline</span
+            ><span>.docx .xlsx .pptx .csv</span>
+          </div>
+        </div>
 
-    <!-- The landing hero above is static HTML and already crawlable without JS.
-         This only tells no-JS visitors that the interactive editor needs JS. -->
-    <noscript>
-      <p style="max-width: 720px; margin: 0 auto; padding: 24px; font-family: system-ui, sans-serif">
-        This editor requires JavaScript to run — the landing content above describes what it does. Please enable
-        JavaScript to start editing.
-      </p>
-    </noscript>
+        <!-- Decorative "document being edited locally" window — pure CSS, no JS,
+               so the static localized homepages can reuse it verbatim. -->
+        <div class="docwin reveal d3" aria-hidden="true">
+          <div class="dw-bar">
+            <span class="dw-dots"><i></i><i></i><i></i></span>
+            <span class="dw-file">report.docx</span>
+            <span class="dw-badge">saved locally ✓</span>
+          </div>
+          <div class="dw-tabs"><span class="on">.docx</span><span>.xlsx</span><span>.pptx</span><span>.csv</span></div>
+          <div class="dw-body">
+            <div class="dw-sheet">
+              <span class="dl t"></span>
+              <span class="dl w92"></span>
+              <span class="dl w78"></span>
+              <p class="dw-text"><mark>Everything you type stays on this device.</mark><i class="caret"></i></p>
+              <span class="dl w85"></span>
+              <span class="dl w60"></span>
+            </div>
+            <aside class="dw-note">
+              <b>You · just now</b>
+              <span>0 bytes uploaded — check the network tab.</span>
+            </aside>
+          </div>
+          <div class="dw-net"><i class="ok"></i>network · 0 requests · 0 bytes out</div>
+        </div>
+      </div>
+
+      <!-- The highest-frequency job: someone got a file and has no Office.
+             Format entry points, each backed by a dedicated landing page. -->
+      <div class="section wrap">
+        <div class="section-head">
+          <span class="eyebrow">Open a file</span>
+          <h2>No Office installed? No problem.</h2>
+        </div>
+        <div class="formats">
+          <a class="fmt" href="/open/docx">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.DOCX</div>
+                <h3>Open DOCX</h3>
+                <p>View any Word document with full formatting — fonts, tables, images intact.</p>
+                <span class="fmt-go">Open a DOCX →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/open/xlsx">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.XLSX</div>
+                <h3>Open XLSX</h3>
+                <p>Formulas, charts and multiple sheets, fully rendered.</p>
+                <span class="fmt-go">Open an XLSX →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/open/pptx">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.PPTX</div>
+                <h3>Open PPTX</h3>
+                <p>Slides with layouts, themes and media preserved, straight in the browser.</p>
+                <span class="fmt-go">Open a PPTX →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/open/pdf">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.PDF</div>
+                <h3>Open PDF</h3>
+                <p>Read, comment and annotate a PDF, then save it back — nothing uploaded.</p>
+                <span class="fmt-go">Open a PDF →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/convert/xlsx-to-csv">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.XLSX → .CSV</div>
+                <h3>Convert between formats</h3>
+                <p>Turn spreadsheets into CSV and back — locally, without uploading a byte.</p>
+                <span class="fmt-go">Convert a file →</span>
+              </div>
+            </r-card>
+          </a>
+        </div>
+      </div>
+
+      <div class="section wrap">
+        <div class="section-head">
+          <span class="eyebrow">Why it's different</span>
+          <h2>Private by design, not by promise</h2>
+        </div>
+        <div class="cards">
+          <r-card hoverable>
+            <div class="card-body">
+              <div class="k">100% CLIENT-SIDE</div>
+              <h3>Files never leave your device</h3>
+              <p>Every document is opened, edited and saved locally. There is no server to upload to.</p>
+            </div>
+          </r-card>
+          <r-card hoverable>
+            <div class="card-body">
+              <div class="k">NO ACCOUNT</div>
+              <h3>Nothing to sign up for</h3>
+              <p>No email, no login wall. Open the page and start editing immediately.</p>
+            </div>
+          </r-card>
+          <r-card hoverable>
+            <div class="card-body">
+              <div class="k">PWA · OFFLINE</div>
+              <h3>Install it, use it on a plane</h3>
+              <p>Add it to your home screen and it keeps working with no internet connection.</p>
+            </div>
+          </r-card>
+          <r-card hoverable>
+            <div class="card-body">
+              <div class="k">AGPL-3.0</div>
+              <h3>Open source &amp; self-hostable</h3>
+              <p>Audit exactly what runs, or host your own copy. Powered by OnlyOffice.</p>
+            </div>
+          </r-card>
+        </div>
+      </div>
+
+      <div class="section wrap">
+        <div class="section-head">
+          <span class="eyebrow">Process</span>
+          <h2>How it works</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="n">01</div>
+            <h3>Open a file</h3>
+            <p>Drop in a DOCX, XLSX, PPTX or CSV — or start a blank one.</p>
+            <span class="loc">stays on device</span>
+          </div>
+          <div class="step">
+            <div class="n">02</div>
+            <h3>Edit for real</h3>
+            <p>Full formatting, tables, charts and formulas via OnlyOffice.</p>
+            <span class="loc">stays on device</span>
+          </div>
+          <div class="step">
+            <div class="n">03</div>
+            <h3>Save it back</h3>
+            <p>Export to the same format. Nothing was ever uploaded.</p>
+            <span class="loc">stays on device</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section wrap faq-sec">
+        <div class="section-head">
+          <span class="eyebrow">FAQ</span>
+          <h2>Questions, answered</h2>
+        </div>
+        <div class="faq">
+          <div class="qa">
+            <details open>
+              <summary>Are my files uploaded anywhere?</summary>
+              <p class="a">
+                No. There is no server. Files are opened and saved locally on your device and are never uploaded — you
+                can verify it in the network tab, or read the source.
+              </p>
+            </details>
+            <details>
+              <summary>Which formats can I edit?</summary>
+              <p class="a">
+                Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, powered by OnlyOffice running in WebAssembly.
+              </p>
+            </details>
+            <details>
+              <summary>Does it work offline?</summary>
+              <p class="a">
+                Yes. It is an installable PWA — once loaded it keeps working with no internet, because all editing runs
+                locally in your browser.
+              </p>
+            </details>
+            <details>
+              <summary>Do I need an account?</summary>
+              <p class="a">No account, no sign-up, no email. Open the page and edit.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="eco">
+        <div class="wrap">
+          <span class="eco-label">
+            <svg class="gitmark" aria-hidden="true"><use href="#gh-mark"></use></svg>
+            Part of the ran ecosystem · all open source
+          </span>
+          <nav>
+            <span class="here"><b>edit.chaxus.com</b> <small>Office editor</small></span>
+            <a href="https://ran.chaxus.com" rel="noopener" target="_blank">
+              <b>ran.chaxus.com</b> <small>UI components</small>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <footer class="foot wrap">
+        <span>© 2026 Document Editor · runs on your device</span>
+        <nav>
+          <a href="/help">Help</a>
+          <a href="/changelog">Changelog</a>
+          <a href="/embed-document-editor">Embed API</a>
+          <a href="/private-document-editor">Privacy</a>
+          <a href="/offline-document-editor">Offline editor</a>
+          <a href="/no-signup-document-editor">No sign-up</a>
+          <a href="/open/docx">Open DOCX</a>
+          <a href="/convert/xlsx-to-csv">XLSX → CSV</a>
+          <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">GitHub</a>
+        </nav>
+        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+        <span class="lic">AGPL-3.0</span>
+      </footer>
+    </section>
+
+    <!-- Register the service worker from the homepage too, so the landing works
+         offline / installs as an app; the update policy lives with the editor
+         (lib/sw-update.ts), where a document may be open. -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').catch(function () {});
+        });
+      }
+    </script>
   </body>
-  <script type="module" src="./index.ts"></script>
 </html>

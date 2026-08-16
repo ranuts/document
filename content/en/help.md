@@ -11,11 +11,11 @@ lead: Practical answers for using the editor. Everything runs inside your browse
 
 ### Which file formats can I open?
 
-Word (`.docx`, legacy `.doc`), Excel (`.xlsx`, legacy `.xls`), PowerPoint (`.pptx`, legacy `.ppt`), comma-separated values (`.csv`) and PDF (`.pdf`). Pick a file with **Open**, drag and drop it onto the page, or pass a URL with `?file=https://…` / `?src=https://…` (the server hosting the file must allow cross-origin requests).
+Word (`.docx`, legacy `.doc`), Excel (`.xlsx`, legacy `.xls`), PowerPoint (`.pptx`, legacy `.ppt`), comma-separated values (`.csv`) and PDF (`.pdf`). Pick a file with **Open**, drag and drop it onto the page, or pass a URL with `/editor?file=https://…` / `/editor?src=https://…` (the server hosting the file must allow cross-origin requests).
 
 ### How do I create a new document?
 
-Use **New Word / New Excel / New PowerPoint** on the homepage, or open `/?new=docx`, `/?new=xlsx`, `/?new=pptx` directly. Nothing is created on any server: the blank document exists only in your tab until you download it.
+Use **New Word / New Excel / New PowerPoint** on the homepage, or open `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx` directly. Nothing is created on any server: the blank document exists only in your tab until you download it.
 
 ### Is there a file size limit?
 
@@ -53,7 +53,7 @@ Not as free-flowing text — PDF is a fixed-layout format. To change wording, op
 
 ### Can I open a document read-only?
 
-Yes. Add `&readonly=1` to a `?file=` link, or send `document:set-readonly` through the embed API. Read-only can be switched on and off at runtime without reloading the document.
+Yes. Add `&readonly=1` to a `/editor?file=` link, or send `document:set-readonly` through the embed API. Read-only can be switched on and off at runtime without reloading the document.
 
 ### Can I put the editor inside my own web app?
 

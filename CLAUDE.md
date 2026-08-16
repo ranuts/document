@@ -79,8 +79,9 @@ public/               # v9 vendor（sdkjs / web-apps / x2t.wasm.gz / XOR 字体�
 bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js、build-pages.mjs（markdown→/help /changelog；由 vite 插件 `generated-pages` 在 build/dev 时渲染进 public/，产物不入库）
 content/              # 生成页面的 markdown 源（content/<locale>/*.md，frontmatter title/description）
 docs/                 # embed-api / fonts 文档、explorations/（每次改动的记录）、superpowers/plans/
-index.ts              # 应用入口（初始化事件、UI、PWA）
-index.html            # HTML 入口
+index.ts              # 编辑器入口（初始化事件、UI、PWA），挂在 editor.html
+index.html            # `/`：静态落地页（无编辑器 bundle；CTA 跳 /editor，旧深链内联脚本重定向）
+editor.html           # `/editor`：编辑器页面（?new= ?file= ?src= ?embed=1 ?open=local）
 ```
 
 ---
@@ -91,7 +92,7 @@ index.html            # HTML 入口
 
 允许父页面通过 `postMessage` 控制编辑器。触发条件：
 
-- URL 含 `?embed=`、`?embed=1`、`?embed=true`、`?embedded=1` 等参数
+- URL 含 `?embed=`、`?embed=1`、`?embed=true`、`?embedded=1` 等参数（编辑器路由是 `/editor`；`/` 是静态落地页，遇到这些参数或被 iframe 嵌入时带参跳到 `/editor`）
 - 或页面被嵌入 iframe（`window.parent !== window`）
 
 支持的消息类型：

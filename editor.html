@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="img/64.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- The editor route: /editor?new=docx|xlsx|pptx creates, /editor?file=<url> or
+         ?src=<url> opens, /editor?embed=1 is the iframe integration surface, and
+         /editor?open=local takes a file the landing page stashed in IndexedDB.
+         The homepage / is a static landing page (index.html) that never loads the
+         editor stack; it redirects legacy deep links (/?src=, /?embed=1, ...) here.
+         Not a page for search engines. -->
+    <title>Document Editor</title>
+    <meta name="robots" content="noindex" />
+    <!-- No-flash theme restore: apply a forced light/dark before first paint so a
+         dark-mode visitor never sees a white flash. 'system' leaves the attributes
+         off and the token layer's media query decides. Kept inline and tiny. -->
+    <script>
+      try {
+        var t = localStorage.getItem('ran-theme');
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.setAttribute('data-ran-theme', t);
+          document.documentElement.setAttribute('theme', t);
+        }
+      } catch (e) {}
+    </script>
+    <!-- ranui design-token layer (vendored from ranui/dist/ranui.css, re-synced by bin/build.sh).
+         Loaded before home.css so the landing hero's --ran-* tokens resolve on first paint. -->
+    <link rel="stylesheet" href="/ran-fonts/fonts.css" />
+    <link rel="stylesheet" href="/ran-tokens.css" />
+  </head>
+
+  <body>
+    <div id="app" class="w-full h-full">
+      <div id="iframe"></div>
+    </div>
+
+    <noscript>
+      <p style="max-width: 720px; margin: 0 auto; padding: 24px; font-family: system-ui, sans-serif">
+        This editor requires JavaScript to run. Please enable JavaScript to open or create a document.
+      </p>
+    </noscript>
+  </body>
+  <script type="module" src="./index.ts"></script>
+</html>

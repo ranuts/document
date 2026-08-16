@@ -13,7 +13,6 @@ import {
   hideControlPanel,
   hideLanding,
   showControlPanel,
-  showLanding,
   showMenuGuide,
 } from './lib/ui';
 import 'ranui/button';
@@ -72,33 +71,9 @@ window.showControlPanel = showControlPanel;
 createFixedActionButton();
 createControlPanel();
 
-// Wire the landing hero CTAs: primary opens the file picker, secondary starts a
-// blank DOCX. Both funnel into the same flows the legacy control panel uses.
-const heroOpen = document.getElementById('hero-open');
-if (heroOpen) heroOpen.addEventListener('click', () => onOpenDocument());
-// One secondary create button per format — mirrors the FAB menu, which only
-// exists once a document is open.
-for (const ext of ['docx', 'xlsx', 'pptx']) {
-  const btn = document.getElementById(`hero-new-${ext}`);
-  if (btn) btn.addEventListener('click', () => void window.onCreateNew(`.${ext}`));
-}
-
-// Wire the ranui <r-select> language switch: it emits a `change` CustomEvent with
-// { value } — map the locale to the localized homepage URL. (Static pages can't
-// run the web component and fall back to a native <select>.)
-const langSelect = document.querySelector('#landing-hero r-select.lang-select');
-if (langSelect) {
-  langSelect.addEventListener('change', (event) => {
-    const value = (event as CustomEvent<{ value?: string }>).detail?.value;
-    // Guard: r-select can emit `change` while initializing its value on load.
-    // Navigating on a same-as-current-locale event reloads the page and wipes
-    // deep-link params (?new=docx, ?locale=…), so only act on a real switch.
-    const onZhPage = location.pathname.startsWith('/zh-CN');
-    if (value === 'zh-CN' && !onZhPage) location.href = '/zh-CN/';
-    else if (value === 'en' && onZhPage) location.href = '/';
-  });
-}
-
+// This bundle runs on /editor (editor.html). The homepage / is a static landing
+// page whose CTAs navigate here (?new=, ?open=local); legacy deep links on /
+// are redirected here by an inline script in index.html.
 // Check for file or src parameter in URL
 // Both parameters support opening document from URL
 // Priority: file > src (for backward compatibility)
@@ -149,7 +124,8 @@ const isEmbedded = document.body.classList.contains('embed-mode');
 if (documentUrl || isEmbedded || createNewOnLoad || openLocalOnLoad) {
   hideLanding();
 } else {
-  showLanding();
+  // Bare /editor with nothing to open: the landing lives at / now.
+  window.location.replace('/');
 }
 
 if (documentUrl) {
@@ -176,8 +152,8 @@ if (documentUrl) {
     if (file) {
       await openLocalFile(file);
     } else {
-      // Stale deep link (reload, bookmarked URL): nothing pending — show the hero.
-      showLanding();
+      // Stale deep link (reload, bookmarked URL): nothing pending -- back to the landing.
+      window.location.replace('/');
     }
   });
 }

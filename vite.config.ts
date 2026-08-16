@@ -22,6 +22,12 @@ const cleanUrls = (publicDirName: string): Plugin => {
     ): void => {
       const [pathname, query] = (req.url ?? '/').split('?');
       if (pathname === '/' || pathname.includes('.')) return next();
+      // Vite HTML entries at the project root (/editor -> editor.html) resolve
+      // like the static pages under public/ do; Cloudflare Pages does the same.
+      if (fs.existsSync(path.join(__dirname, `${pathname}.html`))) {
+        req.url = `${pathname}.html${query ? `?${query}` : ''}`;
+        return next();
+      }
       if (!pathname.endsWith('/') && fs.existsSync(path.join(root, pathname, 'index.html'))) {
         // directory URL without slash: redirect like Cloudflare Pages does
         res.writeHead(308, { Location: `${pathname}/${query ? `?${query}` : ''}` });
@@ -82,6 +88,13 @@ export default defineConfig(() => {
     publicDir: publicDirName,
     build: {
       outDir: 'dist',
+      // Two HTML entries: / (static landing, no editor bundle) and /editor (the app).
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, 'index.html'),
+          editor: resolve(__dirname, 'editor.html'),
+        },
+      },
     },
     plugins: [generatedPages(), cleanUrls(publicDirName)],
     resolve: {

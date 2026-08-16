@@ -11,15 +11,20 @@ A working demo is available at `/embed-demo.html` (includes sha256 logging for d
 ```html
 <iframe
   id="documentEditor"
-  src="https://your-deployment/?embed=1"
+  src="https://your-deployment/editor?embed=1"
   style="width: 100%; height: 720px; border: 0"
 ></iframe>
 ```
 
+> The editor lives at `/editor`; the homepage `/` is a static landing page. Older links to `/?embed=1`, `/?src=`, `/?file=` and `/?new=` still work -- `/` redirects them to `/editor` with the same query.
+
 To restrict messages to a specific origin, add `embedOrigin`:
 
 ```html
-<iframe id="documentEditor" src="https://your-deployment/?embed=1&embedOrigin=https://your-system.example.com"></iframe>
+<iframe
+  id="documentEditor"
+  src="https://your-deployment/editor?embed=1&embedOrigin=https://your-system.example.com"
+></iframe>
 ```
 
 ---

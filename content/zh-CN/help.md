@@ -11,11 +11,11 @@ lead: 使用编辑器的实用解答。一切都在你的浏览器标签页内�
 
 ### 支持打开哪些格式？
 
-Word（`.docx`，以及旧版 `.doc`）、Excel（`.xlsx`，以及旧版 `.xls`）、PowerPoint（`.pptx`，以及旧版 `.ppt`）、CSV（`.csv`）和 PDF（`.pdf`）。点击**打开**选择文件、把文件拖到页面上，或用 `?file=https://…` / `?src=https://…` 传入网址（文件所在服务器需允许跨域请求）。
+Word（`.docx`，以及旧版 `.doc`）、Excel（`.xlsx`，以及旧版 `.xls`）、PowerPoint（`.pptx`，以及旧版 `.ppt`）、CSV（`.csv`）和 PDF（`.pdf`）。点击**打开**选择文件、把文件拖到页面上，或用 `/editor?file=https://…` / `/editor?src=https://…` 传入网址（文件所在服务器需允许跨域请求）。
 
 ### 怎么新建文档？
 
-首页的**新建 Word / 新建 Excel / 新建 PowerPoint**，或直接访问 `/?new=docx`、`/?new=xlsx`、`/?new=pptx`。服务器上不会创建任何东西：空白文档只存在于你的标签页里，直到你下载它。
+首页的**新建 Word / 新建 Excel / 新建 PowerPoint**，或直接访问 `/editor?new=docx`、`/editor?new=xlsx`、`/editor?new=pptx`。服务器上不会创建任何东西：空白文档只存在于你的标签页里，直到你下载它。
 
 ### 有文件大小限制吗？
 
@@ -53,7 +53,7 @@ Word（`.docx`，以及旧版 `.doc`）、Excel（`.xlsx`，以及旧版 `.xls`�
 
 ### 能以只读方式打开吗？
 
-能。在 `?file=` 链接后加 `&readonly=1`，或通过嵌入 API 发送 `document:set-readonly`。只读可以在运行时随时开关，不需要重新加载文档。
+能。在 `/editor?file=` 链接后加 `&readonly=1`，或通过嵌入 API 发送 `document:set-readonly`。只读可以在运行时随时开关，不需要重新加载文档。
 
 ### 能把编辑器放进我自己的网站吗？
 
