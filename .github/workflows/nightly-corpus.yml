@@ -123,3 +123,36 @@ jobs:
           name: playwright-report-browsers
           path: playwright-report-browsers/
           retention-days: 14
+
+  budgets:
+    name: Slow-network budgets
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Cold open + first save under CDP network throttling (L4): the whole
+      # path must stay inside the save request's allowance.
+      - name: Throttled-network budget
+        env:
+          SLOW_NET: "1"
+        run: pnpm exec playwright test test/e2e/slow-network.spec.ts --reporter=list

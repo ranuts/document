@@ -58,7 +58,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | Chromium                                                                                     | 全部                                                                                                                                                                                                                                              |
 | WebKit / Firefox                                                                             | ⬜                                                                                                                                                                                                                                                |
 | 视觉基线（L3）                                                                               | ⬜                                                                                                                                                                                                                                                |
-| 性能预算（L4）                                                                               | ⬜（corpus 报告已含 load/save 耗时，未设阈值）                                                                                                                                                                                                    |
+| 性能预算（L4）                                                                               | corpus 报告按格式输出 open/save p50/p95；`SN` = slow-network.spec（`SLOW_NET=1`，CDP 节流 4 Mbps/150 ms、禁 SW：冷启动+首存 < 150 s，实测首存约 44 s；夜间 job `budgets`）；xlsx-features 2 万行 60 s 预算                                        |
 
 ## D. 交互入口（策略第 9 节）
 

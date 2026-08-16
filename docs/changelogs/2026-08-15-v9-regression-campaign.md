@@ -230,3 +230,5 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   关键规则；③ `prod-smoke.yml` 改为 push main 后等部署上线即冒烟（比对 index 资源
   哈希）+ 每日；④ 已知边界：CF 面板配置（Cache Rules）不在仓库，只能冒烟兜底。
   待做：节流网络（慢链路）预算 spec 进夜间；PR→preview→冒烟门禁需改工作流（用户决定）。
+- slow-network.spec（SLOW_NET=1，夜间 job `budgets`）：CDP 节流 4 Mbps/150 ms、禁 SW，
+  冷启动 + 首存 44 s（本地）——正是旧 45/60 s 上限会误判的量级；预算 150 s。
