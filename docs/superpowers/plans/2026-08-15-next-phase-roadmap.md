@@ -369,9 +369,8 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
   主题优先（用 `ui-theme-site-driven` 标记区分"我们驱动的"与"用户选的"）。
   单测 `test/unit/editor-theme.test.ts`；真浏览器验证 dark 挂载 +
   双向实时切换。
-- **仍缺**：编辑器打开后站点顶栏隐藏，页面上没有主题切换入口（只能靠
-  编辑器自己的 File → Advanced settings → Theme）；建议把
-  `<r-theme-switch>` 放进右下角 FAB Menu（方向六 2 路由拆分时一并做）。
+- ✅ 2026-08-16 补齐：右下角 FAB Menu 末行加了 `<r-theme-switch>`
+  （i18n 四个词条），文档打开期间可切换，编辑器实时跟随。
   文档正文的"深色画布"（OnlyOffice `asc_setContentDarkMode`）刻意不
   跟随——那是编辑器内的用户偏好，且会改变文档观感。
 

@@ -171,6 +171,17 @@ r-button[type='text']::part(content) {
   width: 100%;
   border-radius: var(--ran-radius-sm);
 }
+/* Theme row: a control, not a command -- no hover fill, hairline above. */
+.fab-menu-theme {
+  display: flex;
+  justify-content: center;
+  padding: var(--ran-space-2) var(--ran-space-3);
+  margin-top: var(--ran-space-1);
+  border-top: 1px solid var(--ran-color-border);
+}
+.fab-menu-theme:hover {
+  background-color: transparent;
+}
 
 /* Menu Guide */
 .menu-guide {
