@@ -500,7 +500,7 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md，新用例
   按它落位，台账在 docs/test-matrix.md（空白格 = 待补）；**新开会话先读
   docs/changelogs/2026-08-15-v9-regression-campaign.md**（战役一页纸：结论、
-  数字、缺陷清单、文件位置、怎么跑、下一步）。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
+  数字、缺陷清单、文件位置、怎么跑、下一步）**与 docs/changelogs/2026-08-16-roadmap-sprint.md**（路线图冲刺一页纸：路由拆分 / 帮助中心 / 多语言 / WebMCP / PR 流程变化）。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
   （跑道被 SW 击穿，见 docs/explorations/2026-08-15-corpus-harness-sw-route-bug-and-open-failure-guard.md），
   真正修掉的是"打开失败永久转圈"（`installOpenFailureGuard`）与
   "Save 按钮常灰"（守卫 5）。v9 release 公告冻结至战役通过。
