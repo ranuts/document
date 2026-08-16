@@ -232,3 +232,12 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   待做：节流网络（慢链路）预算 spec 进夜间；PR→preview→冒烟门禁需改工作流（用户决定）。
 - slow-network.spec（SLOW_NET=1，夜间 job `budgets`）：CDP 节流 4 Mbps/150 ms、禁 SW，
   冷启动 + 首存 44 s（本地）——正是旧 45/60 s 上限会误判的量级；预算 150 s。
+- **（08-16 晨，续）守卫 8 字体并行预取 + 关闭默认字体预载（`0e063d4`）**：
+  vendor `CFontLoader` 逐族串行（请求 `fonts_loading[0]` 各面 → 50ms 轮询
+  → shift），30 族 = 30 轮串行 RTT。守卫包裹 `LoadDocumentFonts(2)`，vendor
+  入队后立刻对全部未加载面 `LoadFontAsync`（按文件幂等），30 字体请求
+  派发跨度从分钟级降到 **3ms**；`IsNeedDefaultFonts=false` 省 12 文件 /
+  3.2MB。线上冷 profile 实测：61s → **45s**（瓶颈转为单个 4.7MB 字体在
+  冷 CF 路径 32s）；第二次打开 **3s**。ER 用例 "document fonts are
+  requested in parallel…" 守护派发跨度 <1.5s 与默认预载关闭。CF 边缘
+  Cache Rule 需用户在控制台加（见规划方向四 2）。

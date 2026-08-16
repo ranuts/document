@@ -44,8 +44,10 @@ notes. Entries describe what users experience, not internal refactors.
 - Opening a document that uses many fonts (typical for Chinese decks) no
   longer sits on "Loading presentation" for minutes on the hosted site: the
   editor's font files and the conversion engine are now cached long-term by
-  the browser, so a second open of the same document takes seconds instead
-  of re-downloading tens of megabytes.
+  the browser, document fonts are downloaded in parallel instead of one
+  family at a time, and the unused "default font" preload is skipped. On a
+  real 35-slide deck the first open went from never finishing to about
+  45 s on a cold connection, and a repeat open takes about 3 s.
 
 - Words carrying a phonetic guide (Japanese furigana / Chinese pinyin
   "ruby" annotations) no longer disappear from a Word document on open and

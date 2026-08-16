@@ -198,6 +198,31 @@ WebMCP 接入本质是把同一批能力换个注册方式暴露出来。
 2. **性能基线审计**：chrome-devtools 对线上跑 LCP/TBT 基线，再决定
    预取（落地页 idle 时 prefetch sdk-all 等核心资产）与 SW 预缓存
    （离线秒开，与隐私定位天然契合）的投入。先测量后优化。
+
+   **2026-08-16 已落地的第一批（由用户"线上 PPT 永久 Loading、本地正常"
+   报障驱动，全部有线上冷/热 profile 实测数字）**：
+   - `_headers`：`/fonts/*` 与 `x2t.wasm.gz` immutable（`a2a4010`）；
+   - `sw.js`：索引字体与 wasm cache-first（同上）；
+   - 守卫 8（`0e063d4`）：文档字体**并行**预取（vendor 是逐族串行）+
+     关闭 `IsNeedDefaultFonts`（12 文件 / 3.2MB 无用预载）；
+   - 线上实测（EMP 35 页 deck，30 字体 / 40MB）：首开 **4 分钟+ 未完成 →
+     61s（缓存）→ 45s（+并行）**；第二次打开 **3s**。
+   - 剩余瓶颈：单个 4.7MB 字体在冷 CF 路径 32s + **CF 边缘对无扩展名
+     路径不缓存**（`cf-cache-status: DYNAMIC`）。
+
+   **待用户在 Cloudflare 控制台操作（代码做不到）**：Pages 项目 →
+   Caching → Cache Rules → 新建：`URI Path starts with /fonts/` OR
+   `URI Path ends with .wasm.gz` → Cache eligibility: Eligible for cache，
+   Edge TTL: 1 year（respect origin 亦可，origin 已给 immutable）。生效后
+   每个地区**首位**用户拉一次、后续用户走边缘，首开预计降到 10–20s
+   量级（受用户带宽）。
+
+   **下一步候选**：（a）按文档实际引用裁字体加载（把 `LoadDocumentFonts`
+   的 NeedStyles=15 全面加载收窄到文档 run 属性真用到的面）；（b）字体
+   子集化/拆分大 CJK 字体（4–5MB 的 Noto KR/宋体/Droid 是最大头）；
+   （c）落地页 idle 时预热 sdk-all + wasm（与 SW cache-first 配合，
+   编辑器首开可提前）。
+
 3. **部署后 issue 验证清单**：#92、#12、#64、#15、#94、#49、#21 逐个
    线上实测，预计可再关一半以上。
 
