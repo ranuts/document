@@ -150,6 +150,21 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
+      # Roadmap direction 9 (L3): flag when the ecosystem packages on npm have
+      # moved past what this repo pins. Informational -- the bump itself is a
+      # PR (and for ranui usually a release from chaxus/ran first).
+      - name: ranui / ranuts upstream check
+        run: |
+          for pkg in ranui ranuts; do
+            PINNED=$(node -p "require('./package.json').dependencies['$pkg']")
+            LATEST=$(npm view "$pkg" version 2>/dev/null || echo unknown)
+            if [ "$PINNED" = "$LATEST" ]; then
+              echo "✅ $pkg pinned $PINNED == npm latest" | tee -a "$GITHUB_STEP_SUMMARY"
+            else
+              echo "⚠️ $pkg pinned $PINNED, npm latest $LATEST -- consider a bump PR (vendored IIFEs re-sync on build; ranui-vendor-sync.test.ts guards drift)" | tee -a "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+
       # Cold open + first save under CDP network throttling (L4): the whole
       # path must stay inside the save request's allowance.
       - name: Throttled-network budget
