@@ -64,7 +64,12 @@ e2e-pages 串行 + wrangler 重启守护、ranui/ranuts 上游对齐夜检。
 
 首页 LCP 774 ms（TTFB 205 / render delay 569）；`?new=docx` 冷打开 ≈16 s
 （sdk-all.js 3 MB br 6.6 s + 14 个字体文件 6 s；字体仍 `cf-cache-status:
-DYNAMIC`）。拆分 + api.js 按需 + 意图预取上线后待复测。
+DYNAMIC`）。
+
+**拆分后复测（同日晚，全部合入并部署后，同一方法）**：首页 LCP
+**354 ms**（TTFB 146 / render delay 208），CLS 0——render delay 从 569 降到
+208，首页 HTML 里不再有任何编辑器 bundle（`/editor` 单独承载）。冷打开
+的字体 DYNAMIC 与 sdk-all.js 带宽项不变，等 CF Cache Rule 与预取生效后再测。
 
 ## 欠账 / 待用户
 
