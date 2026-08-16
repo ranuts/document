@@ -19,6 +19,8 @@ export default defineConfig({
     'html-as-xls.spec.ts',
     'sw-warm.spec.ts',
     'format-parity.spec.ts',
+    'font-cache.spec.ts',
+    'pdf-route.spec.ts',
   ],
   timeout: 300_000,
   expect: { timeout: 10_000 },

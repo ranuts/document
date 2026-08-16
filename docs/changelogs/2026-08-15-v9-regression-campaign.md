@@ -205,3 +205,6 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 - 新增：docx/pptx 运行时只读切换（format-parity）、入口路径 `?file=`/`open-url`/`?open=local`
   （entry-paths.spec，跨域真实 fetch）；corpus 视觉失败时落盘两张截图，旧二进制输入
   阈值 10% 标 `ok-legacy`（.ppt→pptx 行距略紧，目测内容一致，P3）。
+- 新增 image-insert.spec（xlsx/pptx URL 插图后保存含 media）、font-cache.spec（第二次打开
+  字体全部走缓存，回归守护另一会话修的线上字体无缓存问题；进线上冒烟集）；
+  pdf-route.spec 也进线上冒烟集。
