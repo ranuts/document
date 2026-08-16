@@ -716,6 +716,70 @@ test.describe('embed regression (real editor)', () => {
     expect(saved.isZip).toBe(true);
   });
 
+  test('document fonts are requested in parallel and the default-font preload is off (font-load acceleration)', async ({
+    page,
+    l0,
+  }) => {
+    // Guards prepareEditorIframe patch 8. The vendor loads document fonts
+    // one family at a time; on a cold CDN path a CJK deck's 30 families
+    // took minutes and the user saw "Loading presentation" forever. With
+    // the guard, every queued face is requested at once and the 3.2 MB
+    // Arial/Symbol/Wingdings/Courier/Times "just in case" preload is
+    // skipped (the runtime path still fetches any of them on first use).
+    l0.allowConsole(/font prefetch|font-load acceleration/);
+    await page.evaluate(
+      async ({ b64 }) => {
+        const bin = atob(b64);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        await post('document:open-buffer', { fileName: 'font-accel.pptx', buffer: arr.buffer, readonly: false });
+      },
+      { b64: toBase64(buildPptx('font acceleration')) },
+    );
+    const ready = await waitForEditorReady(page);
+    expect(ready.kind).toBe('slide');
+
+    const stats = await page.evaluate(() => {
+      const visit = (win: Window): any => {
+        try {
+          const scope = win as any;
+          if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function')
+            return { api: scope.Asc.editor, win };
+        } catch {
+          /* cross-origin */
+        }
+        for (let i = 0; i < win.frames.length; i++) {
+          const f = visit(win.frames[i]);
+          if (f) return f;
+        }
+        return null;
+      };
+      const { api, win } = visit(window);
+      const fonts = (win.performance.getEntriesByType('resource') as PerformanceResourceTiming[]).filter((e) =>
+        /\/fonts\/\d{3}$/.test(e.name),
+      );
+      const starts = fonts.map((e) => e.startTime).sort((a, b) => a - b);
+      // Family names of what was loaded (via the fontFiles -> AllFonts map is
+      // indirect; assert on the loader flags instead).
+      return {
+        accelerated: !!win.__ooFontLoadAccelerated,
+        defaultPreload: api.IsNeedDefaultFonts(),
+        fontCount: fonts.length,
+        // Time between the first and last font request being *started*: with
+        // the serial vendor path this grows with the number of families; with
+        // the guard everything is dispatched within a few frames.
+        dispatchSpreadMs: starts.length ? Math.round(starts[starts.length - 1] - starts[0]) : 0,
+      };
+    });
+    expect(stats.accelerated).toBe(true);
+    expect(stats.defaultPreload).toBe(false);
+    expect(stats.fontCount).toBeGreaterThan(0);
+    // The synthetic deck references only the theme font(s); the vendor path
+    // alone would still serialize them. Generous bound: everything requested
+    // inside 1.5s regardless of family count.
+    expect(stats.dispatchSpreadMs).toBeLessThan(1500);
+  });
+
   test('opens a PDF through the vendor pdf editor', async ({ page }) => {
     await page.evaluate(async () => {
       // Build a minimal but structurally valid single-page PDF, computing the
