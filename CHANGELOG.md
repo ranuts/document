@@ -19,6 +19,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- The iframe embedding demo (`/embed-demo.html`) now uses the same design
+  system as the rest of the site (ranui components and tokens, dark mode,
+  shared top bar) instead of its own ad-hoc styling; the demo's postMessage
+  behaviour is unchanged.
 - The editor interface now defaults to the classic Office theme
   (`theme-classic-light`, coloured per-app toolbar header) instead of the flat
   white theme; a theme you pick inside the editor is still remembered.
