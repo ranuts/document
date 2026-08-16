@@ -260,3 +260,7 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 - **ranui IIFE 对齐**列入 roadmap 方向九：审计结论=入库 IIFE 与 npm latest 一致，落后的是
   源仓库未发版；L1 防漂移哨兵 `test/unit/ranui-vendor-sync.test.ts` 已落，L2 发版对齐等
   用户在 ran 仓库发 0.5.0-alpha.3。
+- PR 制上线后的合并列车：`e2e-pages` 因 wrangler workerd 并行下载中止崩溃连红 12 次堵住
+  所有 PR → PR #121（串行 + 重试 + 监督重启）；`required_status_checks.strict` 改 false
+  避免 PR 互相打成 BEHIND。对方会话迁到独立 worktree（CLAUDE.md 已记）。
+- docx-features.spec：修订（w:ins/w:del）与页眉页脚往返；`buildDocx` 支持 header/footer 部件。
