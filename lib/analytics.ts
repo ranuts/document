@@ -16,12 +16,15 @@
  *      into every HTML response; adding a token on top of that would count every
  *      view twice. Whichever mechanism is active, exactly one beacon runs.
  *
- * Note on (2) vs (3): the edge injection happens before our code runs and knows
- * nothing about embed mode, so when the dashboard toggle is on, embedded views
- * ARE counted (verified on production 2026-08-17: /editor?embed=1 loads the
- * beacon, and one /embed-demo visit fires it twice — page + iframe). To keep the
- * embed exclusion above meaningful, prefer the token route with the dashboard
- * auto-injection off. See docs/2026-08-16-enable-traffic-measurement-checklist.md.
+ * IMPORTANT — what actually runs in production today: the dashboard's edge
+ * injection, with no token configured, which means rule (2) is DORMANT there.
+ * Edge injection happens before our code and knows nothing about embed mode, so
+ * embedded views ARE counted (verified 2026-08-17: /editor?embed=1 loads the
+ * beacon; one /embed-demo visit fires it twice — page + iframe). That trade was
+ * accepted deliberately in exchange for zero configuration; see
+ * docs/explorations/2026-08-17-analytics-edge-injection-double-count.md for the
+ * decision and for how to read the numbers. Rule (2) still matters for forks and
+ * self-hosters who set a token, and if the dashboard toggle is ever turned off.
  *
  * The token is a public client-side value (it ships in the page HTML by design),
  * so injecting it at build time from an env var is safe.
