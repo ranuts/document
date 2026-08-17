@@ -14,6 +14,18 @@ export enum LanguageCode {
   ZH = 'zh',
   /** English (internal) */
   EN = 'en',
+  /** Japanese */
+  JA = 'ja',
+  /** Korean */
+  KO = 'ko',
+  /** German */
+  DE = 'de',
+  /** Spanish */
+  ES = 'es',
+  /** Portuguese */
+  PT = 'pt',
+  /** Persian (right-to-left) */
+  FA = 'fa',
 }
 
 /**
@@ -26,7 +38,29 @@ export enum OnlyOfficeLanguageCode {
   EN = 'en',
 }
 
-export type Language = LanguageCode.ZH | LanguageCode.EN;
+/** Any shell language (the enum's member union). */
+export type Language = LanguageCode;
+
+/**
+ * Shell languages, in the order the language menu shows them. English and
+ * Chinese are complete; the others translate the core UI and fall back to
+ * English per missing key (see `messages` below and `t()`).
+ */
+export const SHELL_LOCALES: readonly Language[] = [
+  LanguageCode.EN,
+  LanguageCode.ZH,
+  LanguageCode.JA,
+  LanguageCode.KO,
+  LanguageCode.DE,
+  LanguageCode.ES,
+  LanguageCode.PT,
+  LanguageCode.FA,
+];
+
+/** Right-to-left shell languages (drives `<html dir>`, see applyDocumentLanguage). */
+export const RTL_LANGUAGES: readonly Language[] = [LanguageCode.FA];
+
+export const isRtlLanguage = (lang: Language): boolean => RTL_LANGUAGES.includes(lang);
 
 /**
  * Editor (OnlyOffice) UI locales shipped by the vendored web-apps build --
@@ -175,7 +209,15 @@ export interface I18nMessages {
   agentToolErrorPrefix: string;
 }
 
-const messages: Record<Language, I18nMessages> = {
+/**
+ * en and zh are complete (`I18nMessages`); every other locale is a partial
+ * table -- a missing key falls back to English in `t()`. That keeps adding a
+ * new UI string a two-language change instead of an eight-language one, and
+ * an untranslated string shows in English rather than as a raw key. The
+ * experimental agent panel (`agent*`, opt-in via ?agent=1) is deliberately
+ * English-only outside en/zh until someone reviews those translations.
+ */
+const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> = {
   [LanguageCode.ZH]: {
     webOffice: 'Web Office',
     uploadDocument: '查看/编辑文档',
@@ -295,6 +337,157 @@ const messages: Record<Language, I18nMessages> = {
   },
 };
 
+/** Core shell strings for the remaining locales (machine-drafted, reviewed for tone). */
+const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.EN>, Partial<I18nMessages>> = {
+  [LanguageCode.JA]: {
+    webOffice: 'Web Office',
+    uploadDocument: 'ドキュメントを開く / 編集',
+    newWord: 'Word を新規作成',
+    newExcel: 'Excel を新規作成',
+    newPowerPoint: 'PowerPoint を新規作成',
+    menu: 'メニュー',
+    menuGuide: 'メニューは右下にあります。カーソルを合わせると開きます（閉じると次回から表示されません）',
+    themeLabel: 'テーマ',
+    themeSystem: 'システム',
+    themeLight: 'ライト',
+    themeDark: 'ダーク',
+    fileSavedSuccess: 'ファイルを保存しました: ',
+    documentLoaded: 'ドキュメントを読み込みました: ',
+    failedToLoadEditor: 'エディターを読み込めませんでした。OnlyOffice API が正しく配置されているか確認してください。',
+    unsupportedFileType: 'サポートされていないファイル形式: ',
+    invalidFileObject: '無効なファイルです',
+    documentOperationFailed: 'ドキュメントの操作に失敗しました: ',
+    editorErrorToast: 'ドキュメントエラー',
+    editorErrorFormatMismatch: 'ファイルの内容が拡張子と一致しません。形式を確認してからもう一度お試しください',
+    editorErrorOpenFailed:
+      'ファイルを開けませんでした。破損しているか、サポートされていない形式か、拡張子と内容が異なる可能性があります',
+  },
+  [LanguageCode.KO]: {
+    webOffice: 'Web Office',
+    uploadDocument: '문서 열기 / 편집',
+    newWord: '새 Word 문서',
+    newExcel: '새 Excel 문서',
+    newPowerPoint: '새 PowerPoint 문서',
+    menu: '메뉴',
+    menuGuide: '메뉴는 오른쪽 아래에 있습니다. 마우스를 올리면 열립니다(닫으면 다시 표시되지 않습니다)',
+    themeLabel: '테마',
+    themeSystem: '시스템',
+    themeLight: '라이트',
+    themeDark: '다크',
+    fileSavedSuccess: '파일을 저장했습니다: ',
+    documentLoaded: '문서를 불러왔습니다: ',
+    failedToLoadEditor: '편집기를 불러오지 못했습니다. OnlyOffice API가 올바르게 설치되어 있는지 확인하세요.',
+    unsupportedFileType: '지원하지 않는 파일 형식: ',
+    invalidFileObject: '잘못된 파일입니다',
+    documentOperationFailed: '문서 작업에 실패했습니다: ',
+    editorErrorToast: '문서 오류',
+    editorErrorFormatMismatch: '파일 내용이 확장자와 일치하지 않습니다. 형식을 확인한 뒤 다시 시도하세요',
+    editorErrorOpenFailed:
+      '파일을 열 수 없습니다. 손상되었거나, 지원하지 않는 형식이거나, 확장자와 내용이 다를 수 있습니다',
+  },
+  [LanguageCode.DE]: {
+    webOffice: 'Web Office',
+    uploadDocument: 'Dokument öffnen / bearbeiten',
+    newWord: 'Neues Word-Dokument',
+    newExcel: 'Neue Excel-Tabelle',
+    newPowerPoint: 'Neue PowerPoint-Präsentation',
+    menu: 'Menü',
+    menuGuide:
+      'Das Menü ist unten rechts – zum Öffnen mit der Maus darauf zeigen (nach dem Schließen wird dieser Hinweis nicht mehr angezeigt)',
+    themeLabel: 'Design',
+    themeSystem: 'System',
+    themeLight: 'Hell',
+    themeDark: 'Dunkel',
+    fileSavedSuccess: 'Datei gespeichert: ',
+    documentLoaded: 'Dokument geladen: ',
+    failedToLoadEditor:
+      'Der Editor konnte nicht geladen werden. Bitte prüfen, ob die OnlyOffice-API korrekt eingebunden ist.',
+    unsupportedFileType: 'Nicht unterstützter Dateityp: ',
+    invalidFileObject: 'Ungültige Datei',
+    documentOperationFailed: 'Dokumentvorgang fehlgeschlagen: ',
+    editorErrorToast: 'Dokumentfehler',
+    editorErrorFormatMismatch:
+      'Der Inhalt der Datei passt nicht zur Dateiendung – bitte das Format prüfen und erneut versuchen',
+    editorErrorOpenFailed:
+      'Die Datei konnte nicht geöffnet werden: möglicherweise beschädigt, in einem nicht unterstützten Format, oder der Inhalt passt nicht zur Endung',
+  },
+  [LanguageCode.ES]: {
+    webOffice: 'Web Office',
+    uploadDocument: 'Abrir / editar documento',
+    newWord: 'Nuevo documento de Word',
+    newExcel: 'Nueva hoja de Excel',
+    newPowerPoint: 'Nueva presentación de PowerPoint',
+    menu: 'Menú',
+    menuGuide:
+      'El menú está abajo a la derecha: pasa el cursor para abrirlo (si lo cierras, no volverá a mostrarse este aviso)',
+    themeLabel: 'Tema',
+    themeSystem: 'Sistema',
+    themeLight: 'Claro',
+    themeDark: 'Oscuro',
+    fileSavedSuccess: 'Archivo guardado: ',
+    documentLoaded: 'Documento cargado: ',
+    failedToLoadEditor: 'No se pudo cargar el editor. Comprueba que la API de OnlyOffice esté instalada correctamente.',
+    unsupportedFileType: 'Tipo de archivo no admitido: ',
+    invalidFileObject: 'Archivo no válido',
+    documentOperationFailed: 'Error al procesar el documento: ',
+    editorErrorToast: 'Error del documento',
+    editorErrorFormatMismatch:
+      'El contenido del archivo no coincide con su extensión; comprueba el formato e inténtalo de nuevo',
+    editorErrorOpenFailed:
+      'No se pudo abrir el archivo: puede estar dañado, tener un formato no admitido o no corresponder a su extensión',
+  },
+  [LanguageCode.PT]: {
+    webOffice: 'Web Office',
+    uploadDocument: 'Abrir / editar documento',
+    newWord: 'Novo documento do Word',
+    newExcel: 'Nova planilha do Excel',
+    newPowerPoint: 'Nova apresentação do PowerPoint',
+    menu: 'Menu',
+    menuGuide:
+      'O menu fica no canto inferior direito: passe o cursor para abrir (ao fechar, este aviso não aparece novamente)',
+    themeLabel: 'Tema',
+    themeSystem: 'Sistema',
+    themeLight: 'Claro',
+    themeDark: 'Escuro',
+    fileSavedSuccess: 'Arquivo salvo: ',
+    documentLoaded: 'Documento carregado: ',
+    failedToLoadEditor: 'Não foi possível carregar o editor. Verifique se a API do OnlyOffice está instalada.',
+    unsupportedFileType: 'Tipo de arquivo não suportado: ',
+    invalidFileObject: 'Arquivo inválido',
+    documentOperationFailed: 'Falha na operação do documento: ',
+    editorErrorToast: 'Erro no documento',
+    editorErrorFormatMismatch:
+      'O conteúdo do arquivo não corresponde à extensão; verifique o formato e tente novamente',
+    editorErrorOpenFailed:
+      'Não foi possível abrir o arquivo: ele pode estar corrompido, em formato não suportado ou não corresponder à extensão',
+  },
+  [LanguageCode.FA]: {
+    webOffice: 'Web Office',
+    uploadDocument: 'باز کردن / ویرایش سند',
+    newWord: 'سند Word جدید',
+    newExcel: 'کاربرگ Excel جدید',
+    newPowerPoint: 'ارائهٔ PowerPoint جدید',
+    menu: 'منو',
+    menuGuide:
+      'منو در گوشهٔ پایین سمت راست است؛ نشانگر را روی آن ببرید تا باز شود (پس از بستن دیگر نمایش داده نمی‌شود)',
+    themeLabel: 'پوسته',
+    themeSystem: 'سیستم',
+    themeLight: 'روشن',
+    themeDark: 'تیره',
+    fileSavedSuccess: 'فایل ذخیره شد: ',
+    documentLoaded: 'سند بارگذاری شد: ',
+    failedToLoadEditor: 'ویرایشگر بارگذاری نشد. مطمئن شوید OnlyOffice API درست نصب شده است.',
+    unsupportedFileType: 'نوع فایل پشتیبانی نمی‌شود: ',
+    invalidFileObject: 'فایل نامعتبر است',
+    documentOperationFailed: 'عملیات روی سند ناموفق بود: ',
+    editorErrorToast: 'خطای سند',
+    editorErrorFormatMismatch: 'محتوای فایل با پسوند آن هم‌خوانی ندارد؛ قالب را بررسی و دوباره تلاش کنید',
+    editorErrorOpenFailed: 'فایل باز نشد: ممکن است خراب باشد، قالب آن پشتیبانی نشود، یا با پسوندش هم‌خوانی نداشته باشد',
+  },
+};
+
+const messages: Record<Language, Partial<I18nMessages>> = { ...completeMessages, ...partialMessages };
+
 class I18n {
   private currentLanguage: Language = LanguageCode.EN;
   /** Editor UI locale (see EDITOR_UI_LOCALES); detected alongside the shell language. */
@@ -321,9 +514,7 @@ class I18n {
   private normalizeLanguage(lang: string | null): Language | null {
     if (!lang) return null;
     const normalized = lang.toLowerCase().split(/[-_]/)[0];
-    if (normalized === 'zh') return LanguageCode.ZH;
-    if (normalized === 'en') return LanguageCode.EN;
-    return null;
+    return (SHELL_LOCALES as readonly string[]).includes(normalized) ? (normalized as Language) : null;
   }
 
   constructor() {
@@ -346,10 +537,10 @@ class I18n {
     if (!editorLocale) editorLocale = resolveEditorLocale(cookieLang);
 
     // 3. If not found in cookies, try localStorage (an explicit shell choice)
-    const savedLang = localStorageGetItem('document-lang') as Language;
-    if (savedLang && (savedLang === LanguageCode.ZH || savedLang === LanguageCode.EN)) {
+    const savedLang = this.normalizeLanguage(localStorageGetItem('document-lang'));
+    if (savedLang) {
       if (!detectedLang) detectedLang = savedLang;
-      if (!editorLocale) editorLocale = savedLang === LanguageCode.ZH ? OnlyOfficeLanguageCode.ZH_CN : 'en';
+      if (!editorLocale) editorLocale = resolveEditorLocale(savedLang);
     }
 
     // 4. If not found in localStorage, try navigator.language(s)
@@ -380,10 +571,11 @@ class I18n {
    * Set language
    */
   setLanguage(lang: Language): void {
-    if (lang === LanguageCode.ZH || lang === LanguageCode.EN) {
+    if ((SHELL_LOCALES as readonly string[]).includes(lang)) {
       this.currentLanguage = lang;
-      // An explicit shell choice also decides the editor language.
-      this.editorLocale = lang === LanguageCode.ZH ? OnlyOfficeLanguageCode.ZH_CN : OnlyOfficeLanguageCode.EN;
+      // An explicit shell choice also decides the editor language (falling back
+      // to English when the vendor ships no locale for it, e.g. fa).
+      this.editorLocale = resolveEditorLocale(lang) || OnlyOfficeLanguageCode.EN;
       localStorageSetItem('document-lang', lang);
       // Trigger language change event
       // eslint-disable-next-line n/no-unsupported-features/node-builtins
@@ -395,14 +587,15 @@ class I18n {
    * Get translated text
    */
   t(key: keyof I18nMessages): string {
-    return messages[this.currentLanguage][key] || messages[LanguageCode.EN][key] || key;
+    // Partial locales fall back to English key by key (see `messages`).
+    return messages[this.currentLanguage]?.[key] || completeMessages[LanguageCode.EN][key] || key;
   }
 
   /**
    * Get all messages
    */
   getMessages(): I18nMessages {
-    return messages[this.currentLanguage];
+    return { ...completeMessages[LanguageCode.EN], ...messages[this.currentLanguage] };
   }
 
   /**
@@ -426,3 +619,14 @@ export const t = (key: keyof I18nMessages): string => i18n.t(key);
 export const getLanguage = (): Language => i18n.getLanguage();
 export const setLanguage = (lang: Language): void => i18n.setLanguage(lang);
 export const getOnlyOfficeLang = (): string => i18n.getOnlyOfficeLang();
+
+/**
+ * Reflect the active shell language on <html> (`lang`, and `dir` for RTL
+ * locales). Called by the app entry; the static landing pages carry their own
+ * lang/dir in the served HTML.
+ */
+export const applyDocumentLanguage = (lang: Language = i18n.getLanguage()): void => {
+  if (typeof document === 'undefined') return;
+  document.documentElement.setAttribute('lang', lang === LanguageCode.ZH ? 'zh-CN' : lang);
+  document.documentElement.setAttribute('dir', isRtlLanguage(lang) ? 'rtl' : 'ltr');
+};

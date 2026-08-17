@@ -32,15 +32,19 @@ import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
   extension, the deployment `BASE_PATH` (handles `/document/` on GitHub Pages vs `/`),
   and `parseReadonly` for the `?readonly` query flag.
 - **document-types** — shared interfaces, incl. x2t/Emscripten module shapes.
-- **i18n** — `t(key)` translation over 9 languages; `getLanguage/setLanguage`;
-  `getOnlyOfficeLang()` maps to OnlyOffice's locale codes. Keys are typed via `I18nMessages`.
+- **i18n** — `t(key)` over the 8 shell locales in `SHELL_LOCALES`
+  (en/zh complete, the rest core-only with per-key English fallback);
+  `getLanguage/setLanguage`; `getOnlyOfficeLang()` resolves the _editor_ locale
+  (any of the 45 the vendor ships, `resolveEditorLocale`); `applyDocumentLanguage()`
+  sets `<html lang/dir>` (fa is RTL). Keys are typed via `I18nMessages`.
 - **store** — `[getDocmentObj, setDocmentObj]`, a ranuts signal over
   `{ fileName: string; file?: File; url?: string | URL }` (the current document).
 
 ## Gotchas
 
-- `t(key)` is typed against `I18nMessages` — adding a UI string means adding the key
-  to **every** language map in `i18n.ts`, or `t` won't type-check.
+- `t(key)` is typed against `I18nMessages` — a new UI string must be added to the two
+  **complete** tables (en + zh) or `t` won't type-check; the other locales are
+  `Partial` and fall back to English per key, so translating them can come later.
 - `store` holds a `File`/`Blob` — don't serialize it to localStorage.
 - This package depends on `ranuts`; keep it that way (it's the app's shared layer,
   not a zero-dep generic lib).

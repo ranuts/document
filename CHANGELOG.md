@@ -39,6 +39,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- The interface is now available in eight languages — English, 简体中文,
+  日本語, 한국어, Deutsch, Español, Português and فارسی (right-to-left) —
+  following your browser language, or `?locale=<code>`.
 - Browser AI agents can drive the editor through WebMCP (Chrome origin trial):
   the page registers `open_document_url`, `open_document_buffer`,
   `save_document`, `set_readonly` and `get_document_state` when the browser

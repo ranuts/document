@@ -5,6 +5,7 @@ import { initEmbedApi } from './lib/embed-api';
 import { initEvents, setEventUICallbacks } from './lib/events';
 import { onCreateNew, onOpenDocument, openDocumentFromUrl, openLocalFile, setUICallbacks } from './lib/document';
 import { parseReadonly } from '@ranuts/shared/document-utils';
+import { applyDocumentLanguage } from '@ranuts/shared/i18n';
 import { getDocmentObj } from '@ranuts/shared/store';
 import { initAnalytics } from './lib/analytics';
 import {
@@ -34,6 +35,10 @@ declare global {
     };
   }
 }
+
+// Reflect the detected shell language on <html> (lang, and dir for RTL locales
+// like fa). The static landing pages carry their own lang/dir in the HTML.
+applyDocumentLanguage();
 
 // Initialize events
 initEvents();

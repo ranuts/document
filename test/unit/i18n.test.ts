@@ -126,12 +126,21 @@ describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh'
     for (const code of EDITOR_UI_LOCALES) expect(resolveEditorLocale(code)).toBe(code);
   });
 
-  it('?locale=ja gives an English shell with a Japanese editor', async () => {
+  it('?locale=ja gives a Japanese shell and a Japanese editor', async () => {
     window.history.pushState({}, '', '/?locale=ja');
     vi.resetModules();
     const m = await import('@ranuts/shared/i18n');
-    expect(m.getLanguage()).toBe(LanguageCode.EN);
+    expect(m.getLanguage()).toBe(LanguageCode.JA);
     expect(m.getOnlyOfficeLang()).toBe('ja');
+  });
+
+  it('?locale=fa gives a Persian shell but an English editor (no vendor locale)', async () => {
+    window.history.pushState({}, '', '/?locale=fa');
+    vi.resetModules();
+    const m = await import('@ranuts/shared/i18n');
+    expect(m.getLanguage()).toBe(LanguageCode.FA);
+    expect(m.getOnlyOfficeLang()).toBe('en');
+    expect(m.t('menu')).toBe('منو');
   });
 
   it('an unsupported ?locale (fa) falls back to the browser language for the editor', async () => {
