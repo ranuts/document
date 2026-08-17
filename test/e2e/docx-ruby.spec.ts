@@ -37,7 +37,7 @@ test('the base word of a ruby annotation survives open + save', async ({ page })
     toBase64(buildDocx('', body)),
   );
 
-  const text = ooxmlText(zipEntryText(new Uint8Array(Buffer.from(b64, 'base64')), 'word/document.xml') || '');
+  const text = ooxmlText((await zipEntryText(new Uint8Array(Buffer.from(b64, 'base64')), 'word/document.xml')) || '');
   expect(text).toContain('東京');
   expect(text).toContain('Go to');
   expect(text).toContain('tomorrow');

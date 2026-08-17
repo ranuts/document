@@ -6,77 +6,16 @@
  * and no binary fixture lives in the repo.
  */
 
-import { inflateRawSync } from 'node:zlib';
+import { createZip, readZipEntries, readZipEntry } from 'ranuts/utils';
 
-const CRC_TABLE = (() => {
-  const table = new Uint32Array(256);
-  for (let n = 0; n < 256; n++) {
-    let c = n;
-    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-    table[n] = c >>> 0;
-  }
-  return table;
-})();
-
-function crc32(bytes: Uint8Array): number {
-  let c = 0xffffffff;
-  for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xff] ^ (c >>> 8);
-  return (c ^ 0xffffffff) >>> 0;
-}
-
-export function makeStoredZip(entries: Array<{ name: string; data: Uint8Array | string }>): Uint8Array {
-  const enc = new TextEncoder();
-  const chunks: number[] = [];
-  const central: number[] = [];
-  const u16 = (arr: number[], v: number) => arr.push(v & 0xff, (v >> 8) & 0xff);
-  const u32 = (arr: number[], v: number) => arr.push(v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >> 24) & 0xff);
-  for (const { name, data } of entries) {
-    const nameBytes = enc.encode(name);
-    const bytes = typeof data === 'string' ? enc.encode(data) : data;
-    const crc = crc32(bytes);
-    const offset = chunks.length;
-    u32(chunks, 0x04034b50);
-    u16(chunks, 20);
-    u16(chunks, 0);
-    u16(chunks, 0);
-    u32(chunks, 0);
-    u32(chunks, crc);
-    u32(chunks, bytes.length);
-    u32(chunks, bytes.length);
-    u16(chunks, nameBytes.length);
-    u16(chunks, 0);
-    chunks.push(...nameBytes, ...bytes);
-
-    u32(central, 0x02014b50);
-    u16(central, 20);
-    u16(central, 20);
-    u16(central, 0);
-    u16(central, 0);
-    u32(central, 0);
-    u32(central, crc);
-    u32(central, bytes.length);
-    u32(central, bytes.length);
-    u16(central, nameBytes.length);
-    u16(central, 0);
-    u16(central, 0);
-    u16(central, 0);
-    u16(central, 0);
-    u32(central, 0);
-    u32(central, offset);
-    central.push(...nameBytes);
-  }
-  const centralOffset = chunks.length;
-  chunks.push(...central);
-  u32(chunks, 0x06054b50);
-  u16(chunks, 0);
-  u16(chunks, 0);
-  u16(chunks, entries.length);
-  u16(chunks, entries.length);
-  u32(chunks, central.length);
-  u32(chunks, centralOffset);
-  u16(chunks, 0);
-  return new Uint8Array(chunks);
-}
+/**
+ * Archive plumbing comes from ranuts (`createZip` / `readZipEntries` /
+ * `readZipEntry`): ecosystem first, and its reader takes sizes from the
+ * central directory, which is what makes it survive streaming-written
+ * archives. Only the OOXML-shaped helpers live here.
+ */
+export const makeStoredZip = (entries: ReadonlyArray<{ name: string; data: Uint8Array | string }>): Uint8Array =>
+  createZip(entries);
 
 const XML_HEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
 
@@ -269,59 +208,15 @@ export function buildPptx(title: string): Uint8Array {
   ]);
 }
 
-type ZipEntry = { name: string; method: number; compressedSize: number; localOffset: number };
-
-function zipEntries(bytes: Uint8Array): ZipEntry[] {
-  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  let eocd = -1;
-  for (let i = bytes.length - 22; i >= 0 && i >= bytes.length - 65557; i--) {
-    if (view.getUint32(i, true) === 0x06054b50) {
-      eocd = i;
-      break;
-    }
-  }
-  if (eocd < 0) return [];
-  const count = view.getUint16(eocd + 10, true);
-  let off = view.getUint32(eocd + 16, true);
-  const entries: ZipEntry[] = [];
-  const dec = new TextDecoder();
-  for (let n = 0; n < count; n++) {
-    if (view.getUint32(off, true) !== 0x02014b50) break;
-    const method = view.getUint16(off + 10, true);
-    const compressedSize = view.getUint32(off + 20, true);
-    const nameLen = view.getUint16(off + 28, true);
-    const extraLen = view.getUint16(off + 30, true);
-    const commentLen = view.getUint16(off + 32, true);
-    const localOffset = view.getUint32(off + 42, true);
-    entries.push({
-      name: dec.decode(bytes.subarray(off + 46, off + 46 + nameLen)),
-      method,
-      compressedSize,
-      localOffset,
-    });
-    off += 46 + nameLen + extraLen + commentLen;
-  }
-  return entries;
-}
-
 /** Entry names of a zip (central directory walk); enough for L1 checks. */
 export function zipEntryNames(bytes: Uint8Array): string[] {
-  return zipEntries(bytes).map((e) => e.name);
+  return readZipEntries(bytes).map((e) => e.name);
 }
 
 /** Decoded text of one zip entry (stored or deflated) -- for L2 content checks on OOXML parts. */
-export function zipEntryText(bytes: Uint8Array, name: string): string | null {
-  const entry = zipEntries(bytes).find((e) => e.name === name);
-  if (!entry) return null;
-  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  const lo = entry.localOffset;
-  if (view.getUint32(lo, true) !== 0x04034b50) return null;
-  const nameLen = view.getUint16(lo + 26, true);
-  const extraLen = view.getUint16(lo + 28, true);
-  const start = lo + 30 + nameLen + extraLen;
-  const raw = bytes.subarray(start, start + entry.compressedSize);
-  const data = entry.method === 8 ? new Uint8Array(inflateRawSync(raw)) : raw;
-  return new TextDecoder().decode(data);
+export async function zipEntryText(bytes: Uint8Array, name: string): Promise<string | null> {
+  const data = await readZipEntry(bytes, name);
+  return data ? new TextDecoder().decode(data) : null;
 }
 
 const XML_ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
@@ -438,7 +333,7 @@ export function buildXlsx(opts: {
  * fingerprints and other invisible off-slide text boxes that OnlyOffice
  * drops on save (vendor behavior, not user-visible content).
  */
-export function ooxmlDocumentText(bytes: Uint8Array): string {
+export async function ooxmlDocumentText(bytes: Uint8Array): Promise<string> {
   const names = zipEntryNames(bytes);
   const parts = names.includes('word/document.xml')
     ? ['word/document.xml']
@@ -454,7 +349,10 @@ export function ooxmlDocumentText(bytes: Uint8Array): string {
       // Ruby guide text (<w:rt>) is a known loss on save (the base word is
       // preserved by preprocessDocxRuby); compare base text only.
       .replace(/<w:rt\b[\s\S]*?<\/w:rt>/g, '');
-  return parts.map((n) => ooxmlText(withoutFields(withoutHidden(zipEntryText(bytes, n) || '')))).join('\n');
+  const texts = await Promise.all(
+    parts.map(async (n) => ooxmlText(withoutFields(withoutHidden((await zipEntryText(bytes, n)) || '')))),
+  );
+  return texts.join('\n');
 }
 
 /**

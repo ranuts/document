@@ -60,7 +60,7 @@ test.describe('entry paths (real editor)', () => {
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toBe('url-open.docx');
     const bytes = new Uint8Array(readFileSync(await download.path()));
-    expect(ooxmlText(zipEntryText(bytes, 'word/document.xml') || '')).toContain('opened from a URL');
+    expect(ooxmlText((await zipEntryText(bytes, 'word/document.xml')) || '')).toContain('opened from a URL');
   });
 
   test('embed document:open-url fetches, opens and round-trips the document', async ({ page }) => {

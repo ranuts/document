@@ -47,7 +47,7 @@ test.describe('xlsx frozen panes / autofilter (real editor)', () => {
       return btoa(s);
     }, workbook());
     const bytes = new Uint8Array(Buffer.from(b64, 'base64'));
-    const sheet = zipEntryText(bytes, 'xl/worksheets/sheet1.xml') || '';
+    const sheet = (await zipEntryText(bytes, 'xl/worksheets/sheet1.xml')) || '';
     expect(sheet).toMatch(/<pane[^>]*state="frozen"/);
     expect(sheet).toMatch(/xSplit="1"/);
     expect(sheet).toMatch(/ySplit="1"/);
@@ -105,7 +105,8 @@ test.describe('xlsx frozen panes / autofilter (real editor)', () => {
       ),
     );
     expect(result.error).toBeUndefined();
-    const sheet = zipEntryText(new Uint8Array(Buffer.from(result.b64!, 'base64')), 'xl/worksheets/sheet1.xml') || '';
+    const sheet =
+      (await zipEntryText(new Uint8Array(Buffer.from(result.b64!, 'base64')), 'xl/worksheets/sheet1.xml')) || '';
     expect(sheet).toMatch(/<pane[^>]*state="frozen"/);
   });
 });

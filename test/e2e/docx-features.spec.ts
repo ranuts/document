@@ -42,7 +42,7 @@ test.describe('docx feature round trips (real editor)', () => {
     const out = new Uint8Array(
       Buffer.from(await roundTrip(page, 'revisions.docx', toBase64(buildDocx('', body))), 'base64'),
     );
-    const xml = zipEntryText(out, 'word/document.xml') || '';
+    const xml = (await zipEntryText(out, 'word/document.xml')) || '';
     expect(xml).toMatch(/<w:ins\b[^>]*w:author="Reviewer"/);
     expect(xml).toMatch(/<w:del\b[^>]*w:author="Reviewer"/);
     expect(xml).toContain('<w:delText');
@@ -66,8 +66,8 @@ test.describe('docx feature round trips (real editor)', () => {
     const footer = names.find((n) => /^word\/footer\d+\.xml$/.test(n));
     expect(header, `no header part in ${names.join(',')}`).toBeTruthy();
     expect(footer, `no footer part in ${names.join(',')}`).toBeTruthy();
-    expect(ooxmlText(zipEntryText(out, header!) || '')).toContain('Header 页眉');
-    expect(ooxmlText(zipEntryText(out, footer!) || '')).toContain('Footer 页脚');
-    expect(ooxmlText(zipEntryText(out, 'word/document.xml') || '')).toContain('body text');
+    expect(ooxmlText((await zipEntryText(out, header!)) || '')).toContain('Header 页眉');
+    expect(ooxmlText((await zipEntryText(out, footer!)) || '')).toContain('Footer 页脚');
+    expect(ooxmlText((await zipEntryText(out, 'word/document.xml')) || '')).toContain('body text');
   });
 });

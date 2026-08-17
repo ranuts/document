@@ -283,3 +283,14 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   `bin/build.sh` 重新同步 vendored 资产。核查发现入库的六个 IIFE 与 alpha.2 **逐字节相同**
   （alpha.3 的修复在 colorpicker/player/math 等未 vendored 的组件），变化的是 ES 主入口
   `dist/index.js`；ran-tokens 指纹不变。537 单测 + 71 条 E2E 全绿。
+- **ranuts 沉淀（用户要求）**：先"反向采用"——测试库 `test/e2e/lib/ooxml.ts` 里手写的
+  crc32 / stored-zip 写入 / 中央目录读取 / inflate 全部删掉，改用 ranuts 既有的
+  `createZip` / `readZipEntries` / `readZipEntry`（读取按中央目录取长度，比手写更稳）。
+  再"正向沉淀"——`chaxus/ran` PR #374 给 ranuts 新增 `utils/binary`：
+  `bytesToBase64`/`base64ToBytes`（分块，避免 `String.fromCharCode.apply` 在 ~100 KB
+  以上 RangeError——ranuts 自身 str.ts 也有这个隐患）、`isGzip`/`gunzipMaybe`/
+  `fetchMaybeGzip`（同一份 .gz 资源在不同托管下可能已被浏览器解码，只能按魔数判断）、
+  `isZipContainer`/`isHtmlDocument`（HTML 伪装成 .xls 的嗅探）、`decodeTextBytes`
+  （BOM→utf-8→gb18030→latin1 严格链）、`saveFileToDisk`（File System Access + 锚点兜底，
+  取消对话框 resolve false）。17 条新单测，ranuts 全量 765 通过。
+  发布后本仓再把 converter/E2E 里的对应实现换成 ranuts 版本。
