@@ -159,7 +159,9 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 ### E2E 测试（Playwright）
 
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
-不需要手动先 build），`test/e2e/` 四个 spec：
+不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
+`test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
+`test/e2e/` 现有 29 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -191,6 +193,23 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
   报告。语料留在测试机上不入库；未设 `CORPUS_DIR` 整套 skip，CI 保持绿。
   第一天就抓出 P0（非 ASCII 文件名导致 -82 打开失败 + 永久转圈），见
   docs/explorations/2026-08-15-corpus-campaign-day1-chinese-filename-bug.md。
+
+**全量 spec 清单**（PR 档默认全跑；标 _opt-in_ 的靠环境变量开、进夜间）：
+
+| 面向              | spec                                                                                                                                                                                                                                                                                                                                                     |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                 |
+| embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                      |
+| 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读） |
+| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）                                                                                                                                                                                                                                                                |
+| 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
+| 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
+| 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                 |
+
+另有三套独立配置：`playwright.pages.config.ts`（`bin/build.sh` + `wrangler pages dev`，
+复现 CF Pages 托管语义，CI job `e2e-pages`）、`playwright.browsers.config.ts`
+（WebKit + Firefox，夜间）、`playwright.prod.config.ts`（打线上/preview，
+`prod-smoke.yml` 与 PR 门禁 `preview-smoke.yml` 用）。
 
 **L0 全局 fixture（`test/e2e/lib/l0.ts`，2026-08-15 起所有 spec 从它
 导入 `test`/`expect`）**：自动把 `asc_onError`、厂商致命弹窗、编辑器 iframe
@@ -457,6 +476,11 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   `handleFileStreamMessage` / `triggerPersonalDownloadAs` / `prepareEditorIframe`
   （最后一个含多个运行时守卫：品牌元素隐藏、SharedWorker 遮蔽、fetchFonts
   字体竞态守卫、**serverless image pipeline**、serverless 保存语义（守卫 5）、
+  长操作计数器泄漏（守卫 6：图表/OLE 帧编辑器入口失败后不 EndAction，
+  之后每次 asc_DownloadAs 被静默丢弃）、整表序列设置（守卫 7：全选后
+  asc_GetSeriesSettings 按 1048576×16384 建序列直接 OOM 崩渲染进程）、
+  评论批量操作（守卫 8：无选区时 removeAllComments/resolveAllComments 读
+  `_getSelection().ranges` 抛错且漏开历史事务）、字体加载加速、
   `installOpenFailureGuard`（打开转换失败 → asc_onError -82 + toast + 遮罩终止 +
   保存快速拒绝）——其中 image pipeline 修的是"文档含图片
   时保存令主线程永久卡死"：无服务器时 sendImgUrls 注册不了图片，DOCY
