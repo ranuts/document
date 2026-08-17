@@ -279,3 +279,7 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
 - 顺带：编辑器配置固定 `coEditing: { mode: 'fast', change: false }`（无 Document Server，
   协同开关本就无意义，且切换它会抛同类未捕获错误）；L0 的 frame 错误记录带上堆栈前 3 帧，
   归因更快。
+- **ranui 0.5.0-alpha.3 已发布并升级**（roadmap 方向九 L2 完成）：四处 package.json 同步，
+  `bin/build.sh` 重新同步 vendored 资产。核查发现入库的六个 IIFE 与 alpha.2 **逐字节相同**
+  （alpha.3 的修复在 colorpicker/player/math 等未 vendored 的组件），变化的是 ES 主入口
+  `dist/index.js`；ran-tokens 指纹不变。537 单测 + 71 条 E2E 全绿。
