@@ -165,6 +165,22 @@ jobs:
             fi
           done
 
+      # Strategy section 9.1 layer 2: click every visible toolbar button of
+      # each editor once; L0 + "still saves" is the oracle. Found guard 8's
+      # comment/selection crash.
+      - name: UI crawl
+        env:
+          UI_CRAWL: "1"
+        run: pnpm exec playwright test test/e2e/ui-crawl.spec.ts --reporter=list
+
+      - name: Upload UI crawl reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-crawl-reports
+          path: test-results/ui-crawl-*.json
+          retention-days: 14
+
       # Cold open + first save under CDP network throttling (L4): the whole
       # path must stay inside the save request's allowance.
       - name: Throttled-network budget
