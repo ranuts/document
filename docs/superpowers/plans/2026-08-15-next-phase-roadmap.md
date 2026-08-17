@@ -417,10 +417,19 @@ ranui 复制并**入库**。用户指出仍在用"历史有问题的版本"。
 1. **L1 防漂移哨兵（已做）**：`test/unit/ranui-vendor-sync.test.ts`——每个入库 IIFE 与
    `node_modules/ranui/dist/iife` 逐字节一致、页面引用的每个 IIFE 都已 vendored、
    workspace 各包 ranui/ranuts 版本与根一致（双份 ranui 会让自定义元素先到先得、图标静默丢）。
-2. **L2 发版对齐（需用户在 ran 仓库操作）**：从 `chaxus/ran` 发布 ranui `0.5.0-alpha.3`
+2. **L2 发版对齐（✅ 2026-08-17 完成）**：用户已发布 ranui `0.5.0-alpha.3` 与
+   ranuts `0.4.0-alpha.5`；本仓四处 `package.json` 同步 bump，`bin/build.sh`
+   重新同步 vendored 资产。**核查结论**：入库的六个 IIFE
+   （button/card/checkbox/input/select/theme-switch）在 alpha.2 与 alpha.3 之间
+   **逐字节相同**——alpha.3 的修复集中在未 vendored 的组件（colorpicker/player/math），
+   变化的是 ES 主入口 `dist/index.js`（依赖外置 + 组件修复），即 app bundle 受益。
+   ran-tokens 指纹未变。门禁：537 单测 + 71 条 E2E 全绿。原计划文字如下：
+
+   ~~**L2 发版对齐（需用户在 ran 仓库操作）**：~~从 `chaxus/ran` 发布 ranui `0.5.0-alpha.3`
    （含 8-13 后的修复），本仓 `package.json` + 三个 workspace 包同步 bump，
    `pnpm install` 后 `bin/build.sh` 自动重拷 IIFE；提交前用 L1 哨兵与 E2E
    （embed-demo、主站落地页）验证。发版是外部动作，由用户执行或授权。
+
 3. **L3 上游可用性提醒（自动化）**：夜间任务加一步 `npm view ranui version` 与
    `package.json` 比对，落后即在 step summary 提示（不失败）。
 4. **L4 反向修复**：ranui IIFE 若发现缺陷，按"ran 生态优先"改 `chaxus/ran` 再发版，
