@@ -87,7 +87,7 @@ test.describe('re-open / re-save idempotence (real editor)', () => {
     const names = zipEntryNames(bytes);
     expect(names).toContain('word/document.xml');
     expect(names).toContain('[Content_Types].xml');
-    expect(ooxmlText(zipEntryText(bytes, 'word/document.xml') || '')).toContain('idempotent paragraph 往返');
+    expect(ooxmlText((await zipEntryText(bytes, 'word/document.xml')) || '')).toContain('idempotent paragraph 往返');
   });
 
   test('pptx: two round trips keep the slide and its title', async ({ page }) => {
@@ -106,6 +106,6 @@ test.describe('re-open / re-save idempotence (real editor)', () => {
     expect(names).toContain('ppt/presentation.xml');
     const slides = names.filter((n) => /^ppt\/slides\/slide\d+\.xml$/.test(n));
     expect(slides).toHaveLength(1);
-    expect(ooxmlText(zipEntryText(bytes, slides[0]) || '')).toContain('Idempotent Title 标题');
+    expect(ooxmlText((await zipEntryText(bytes, slides[0])) || '')).toContain('Idempotent Title 标题');
   });
 });

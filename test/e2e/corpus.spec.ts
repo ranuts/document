@@ -175,9 +175,9 @@ test.describe('real-document corpus matrix', () => {
       // L2 for word/slide OOXML inputs: text of the input vs the saved output
       // (Node side; the page hands over base64). Capped to keep the transfer
       // sane; bigger files report "skipped".
-      await page.exposeFunction('__corpusTextCoverage', (inB64: string, outB64: string) => {
-        const before = ooxmlDocumentText(new Uint8Array(Buffer.from(inB64, 'base64')));
-        const after = ooxmlDocumentText(new Uint8Array(Buffer.from(outB64, 'base64')));
+      await page.exposeFunction('__corpusTextCoverage', async (inB64: string, outB64: string) => {
+        const before = await ooxmlDocumentText(new Uint8Array(Buffer.from(inB64, 'base64')));
+        const after = await ooxmlDocumentText(new Uint8Array(Buffer.from(outB64, 'base64')));
         return { ...textCoverage(before, after), inLen: before.length, outLen: after.length };
       });
 

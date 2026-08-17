@@ -68,7 +68,7 @@ test.describe('standalone site (real editor)', () => {
     const saved = await download.path();
     const bytes = new Uint8Array(readFileSync(saved));
     expect(bytes[0]).toBe(0x50);
-    expect(ooxmlText(zipEntryText(bytes, 'word/document.xml') || '')).toContain('main site paragraph typed');
+    expect(ooxmlText((await zipEntryText(bytes, 'word/document.xml')) || '')).toContain('main site paragraph typed');
   });
 
   test('New Excel from the hero creates a blank workbook that saves via Ctrl+S', async ({ page }) => {
@@ -91,6 +91,6 @@ test.describe('standalone site (real editor)', () => {
     expect(download.suggestedFilename()).toBe('New_Document.xlsx');
     const bytes = new Uint8Array(readFileSync(await download.path()));
     expect(bytes[0]).toBe(0x50);
-    expect(zipEntryText(bytes, 'xl/sharedStrings.xml') || '').toContain('hello');
+    expect((await zipEntryText(bytes, 'xl/sharedStrings.xml')) || '').toContain('hello');
   });
 });
