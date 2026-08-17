@@ -354,7 +354,10 @@ llms.txt 形成互补）。结构化数据用 FAQPage / HowTo，并入 sitemap�
    这样日/韩/德/西/葡用户打开文档时编辑器菜单已是母语，站点壳的 40 个词条
    暂时回落 en 也可接受。同时把 `zh-TW`→`zh-tw`、`pt-BR`→`pt` 之类的映射
    写成表 + 单测。
-2. **站点壳 i18n 补齐 6 种（半天）**：`i18n.ts` 词条 ≈40 个，一次性补
+2. ✅ 2026-08-16 已落地（见 explorations/2026-08-16-shell-locales.md）：8 种
+   语言（en/zh/ja/ko/de/es/pt/fa），核心 19 键全译、其余逐键回落英文，
+   agent 面板暂留英文；fa 走 `applyDocumentLanguage()` 设 `<html dir=rtl>`，
+   真浏览器核对无破版。**原计划描述**：`i18n.ts` 词条 ≈40 个，一次性补
    ja / es / pt / ko / de / fa；`Language` 类型从二选一改成联合；
    `?locale=` 与 `<r-select>` 语言切换器改数据驱动（一份 locale 清单供
    落地页语言菜单、lang-switch.js、sitemap 生成共用）。
