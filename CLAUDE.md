@@ -62,7 +62,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   loading.ts            # 加载状态 UI
   onlyoffice-editor.ts  # 编辑器实例生命周期、保存、只读模式、运行时守卫
   ui.ts                 # 控制面板、菜单、FAB 等 UI 组件
-  analytics.ts          # Cloudflare Web Analytics（刻意不用 GA）
+  analytics.ts          # Cloudflare Web Analytics（刻意不用 GA；线上实际走 CF 面板边缘注入，因此 embed 视图会被计入、/embed-demo 双计，读数规则见 docs/explorations/2026-08-17-analytics-edge-injection-double-count.md）
   pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
 packages/             # pnpm workspace，供 ran 生态三处站点共享（包名 @ranuts/*）
