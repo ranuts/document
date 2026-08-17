@@ -264,3 +264,18 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   所有 PR → PR #121（串行 + 重试 + 监督重启）；`required_status_checks.strict` 改 false
   避免 PR 互相打成 BEHIND。对方会话迁到独立 worktree（CLAUDE.md 已记）。
 - docx-features.spec：修订（w:ins/w:del）与页眉页脚往返；`buildDocx` 支持 header/footer 部件。
+
+## 2026-08-17
+
+- **UI 爬取落地**（策略 §9.1 第 2 层，`ui-crawl.spec.ts`，`UI_CRAWL=1`，进夜间）：三个编辑器
+  按 ribbon 页签点遍所有可见可用按钮（docx 142 / xlsx 91 / pptx 74），点击后自动关弹窗/菜单，
+  每次检查 L0（致命弹窗、Critical asc_onError、frame 未捕获错误）并**归因到具体按钮**，
+  末尾必须仍能保存。
+- **首个爬取发现（已修）**：Review → 删除/解决评论（当前选区）在网格从未聚焦时，vendor 读
+  `getWorksheet()._getSelection().ranges` 不判空 → 未捕获 TypeError，且抛在
+  `History.StartTransaction()` 之后、`EndTransaction()` 之前 → **漏一个未关闭的历史事务**。
+  修：`prepareEditorIframe` 守卫 8（无选区时该变体 no-op）；回归用例
+  `comment-bulk-actions.spec.ts` 显式构造 null 选区（无守卫红、有守卫绿）。
+- 顺带：编辑器配置固定 `coEditing: { mode: 'fast', change: false }`（无 Document Server，
+  协同开关本就无意义，且切换它会抛同类未捕获错误）；L0 的 frame 错误记录带上堆栈前 3 帧，
+  归因更快。
