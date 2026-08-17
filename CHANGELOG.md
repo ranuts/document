@@ -76,6 +76,9 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Spreadsheets: using Review -> Remove/Resolve comments before clicking into
+  the grid no longer fails silently and leaves undo in a broken state.
+
 - The homepage no longer blocks its first paint on the editor's API loader
   script (about half a second of LCP); the loader is fetched when you open or
   create a document.
