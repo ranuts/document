@@ -8,7 +8,7 @@
 图例：`ER` = embed-regression.spec、`OF` = open-failure.spec、`SD` =
 embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec、
 `EA` = embed-api.spec、`AS` = app-smoke.spec、`CO` = corpus.spec、`SW` = sw-warm.spec、
-`RI` = resave-idempotence.spec、`FP` = format-parity.spec、`OR` = open-retry.spec。
+`RI` = resave-idempotence.spec、`FP` = format-parity.spec、`OR` = open-retry.spec、`MS` = mobile-slide.spec。
 
 ## A. 格式 × 操作（合成语料 = PR 档；真实语料 = 🌙）
 
@@ -47,6 +47,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 
 | 环境                                                                                         | 覆盖                                                                                                                                                                                                                                              |
 | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 手机视口（Pixel 5 模拟，桌面 vendor bundle）                                                 | `MS` = mobile-slide.spec（紧凑版式后的画布宽度与初始缩放、缩放连打无错误、画布上下文丢失后重绘）；真实安卓设备 ⬜                                                                                                                                 |
 | 全新 profile 冷启动                                                                          | 每个 Playwright 用例即冷 profile                                                                                                                                                                                                                  |
 | SW 已控制页面（老用户）                                                                      | `SW` = sw-warm.spec（第二次加载由 SW 控制页面与编辑器 frame，打开+保存往返）；"SW 缓存旧构建"升级路径：策略改为新 SW 等待、无文档时才 SKIP_WAITING + 重载（`lib/sw-update.ts`，单测 `test/unit/sw-update.test.ts` + sw.js 契约）；双构建端到端 ⬜ |
 | standalone 主站                                                                              | AS（加载 / manifest）；编辑器路径 ⬜                                                                                                                                                                                                              |

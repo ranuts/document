@@ -1036,6 +1036,58 @@ function prepareEditorIframe(): boolean {
         console.log('[OO] comment bulk-action guard installed (no-op without a cell selection)');
       }
 
+      // 9. Canvas context loss. Mobile Chrome discards 2D canvas backing stores
+      //    under memory pressure, and this vendor build listens for neither
+      //    `contextlost` nor `contextrestored` (grep: zero hits in sdkjs), so
+      //    the editor is left showing a blank white page with live scrollbars
+      //    -- what GitHub #145 reports after repeatedly changing the zoom of a
+      //    presentation on Android, where every zoom step reallocates canvases
+      //    at the device pixel ratio. The lever that actually repaints is
+      //    WordControl.OnResize (verified: a wiped canvas comes back to a full
+      //    render; a plain window resize event does not, the SDK skips it when
+      //    the size is unchanged).
+      //
+      //    Note: the `contextlost` event must NOT be canceled. Per the HTML
+      //    spec the UA restores the context only when the event goes
+      //    uncanceled, and it then fires `contextrestored`.
+      const lossWin = win as unknown as {
+        __ooCanvasLossGuarded?: boolean;
+        Asc?: { editor?: { WordControl?: { OnResize?: () => void; OnScroll?: () => void } } };
+      };
+      if (!lossWin.__ooCanvasLossGuarded) {
+        const repaintEditor = (): void => {
+          const control = lossWin.Asc?.editor?.WordControl;
+          try {
+            if (typeof control?.OnResize === 'function') control.OnResize();
+            else if (typeof control?.OnScroll === 'function') control.OnScroll();
+          } catch (error) {
+            console.warn('[OO] repaint after canvas context loss failed:', error);
+          }
+        };
+        // Capture phase: these events do not bubble, but capture still reaches
+        // the document on the way down.
+        doc.addEventListener(
+          'contextlost',
+          () => {
+            console.warn('[OO] editor canvas context lost (memory pressure); waiting for restore');
+            // Some restores arrive without a paint; nudge either way.
+            win.setTimeout(repaintEditor, 500);
+          },
+          true,
+        );
+        for (const restored of ['contextrestored', 'webglcontextrestored']) {
+          doc.addEventListener(
+            restored,
+            () => {
+              console.log('[OO] editor canvas context restored; repainting');
+              repaintEditor();
+            },
+            true,
+          );
+        }
+        lossWin.__ooCanvasLossGuarded = true;
+      }
+
       if (
         win.__ooSharedWorkerShadowed &&
         ooWin.__ooFetchFontsGuarded &&
@@ -1073,6 +1125,49 @@ function prepareEditorIframe(): boolean {
  */
 export const DEFAULT_UI_THEME = 'theme-classic-light';
 export const UI_THEME_STORAGE_KEY = 'ui-theme-id';
+
+/**
+ * Phone-sized viewports (GitHub #145). The vendor ships a separate mobile app
+ * bundle, but only its desktop ("main") build carries this package's offline
+ * x2t patch, so a phone gets the desktop UI -- whose fixed chrome (left rail
+ * plus slide thumbnails, right rail, notes pane) eats about three quarters of
+ * a 393 px viewport. What is left is a ~190 px strip, and "fit slide" then
+ * computes a zoom in the low tens of percent: the reporter saw 31 %, a Pixel 5
+ * viewport measures 12 %.
+ */
+export const COMPACT_VIEWPORT_MAX_WIDTH = 600;
+
+export function isCompactViewport(width: number = typeof window === 'undefined' ? 0 : window.innerWidth): boolean {
+  return width > 0 && width <= COMPACT_VIEWPORT_MAX_WIDTH;
+}
+
+/**
+ * Customization overrides for a phone: give the document the width the side
+ * panels were spending, and start at fit-to-width instead of fit-to-slide.
+ * The status bar stays -- it carries the zoom control and the slide counter,
+ * and the main view scrolls through the slides, so nothing becomes
+ * unreachable. Desktop viewports get none of this.
+ */
+export function compactViewportCustomization(): Record<string, unknown> {
+  return {
+    compactHeader: true,
+    hideRulers: true,
+    // Presentations only; ignored by the other editors.
+    hideNotes: true,
+    layout: {
+      // The left rail stays: it is how the slide thumbnails, comments and
+      // search are reached, and applyCompactSlideLayout collapses the
+      // thumbnails panel itself (which is the real space hog) in a way the
+      // user can undo from that rail. The right panel's object settings need
+      // more width than a phone has.
+      rightMenu: false,
+    },
+    // -2 = fit to width (-1 = fit to page). On a phone the slide should use
+    // the full width; the vendor's fit-to-page also budgets for the notes
+    // pane and toolbars and lands far smaller.
+    zoom: -2,
+  };
+}
 
 export function resolveUiTheme(): string {
   // Follows the site's ranui theme (dark site -> theme-dark) unless the user
@@ -1158,6 +1253,7 @@ function createPersonalEditorInstance(config: {
         about: false,
         hideRightMenu: true,
         uiTheme: resolveUiTheme(),
+        ...(isCompactViewport() ? compactViewportCustomization() : {}),
         features: {
           // Spellcheck is fully disabled (mode:false turns it off, not just
           // locks the toggle): its engine is imported inside a worker on
@@ -1204,6 +1300,7 @@ function createPersonalEditorInstance(config: {
         markDocumentContentReady();
         // Re-apply in case the header rendered after onAppReady.
         prepareEditorIframe();
+        applyCompactSlideLayout(normalizedType);
         // Readonly opens mount with full edit permissions and get locked
         // here instead (asc_setRestriction only works once the document is
         // loaded). Read the live flag rather than the captured config value:
@@ -1313,6 +1410,29 @@ export function createEditorInstance(config: {
   });
 }
 
+/**
+ * Presentations on a phone: the thumbnails panel is a third of the viewport
+ * (245 px of canvas out of 393 on a Pixel 5) and the slide is drawn in what is
+ * left, so "fit" lands at 17 %. Collapsing it and refitting to width gives the
+ * canvas 377 px and the slide 27 % -- the user can bring the panel back from
+ * the left rail. Navigation does not depend on it: the main view scrolls
+ * through the slides and the status bar keeps the slide counter.
+ */
+function applyCompactSlideLayout(documentType: string): void {
+  if (!isCompactViewport()) return;
+  if (DOCUMENT_TYPE_MAP[documentType] !== 'slide') return;
+  const api = getSdkEditorApi();
+  if (!api) return;
+  try {
+    api.ShowThumbnails?.(false);
+    // The canvas just got wider; the zoom the editor computed for the narrow
+    // one would leave the slide floating in the middle of the screen.
+    setTimeout(() => getSdkEditorApi()?.zoomFitToWidth?.(), 100);
+  } catch (error) {
+    console.warn('[OO] compact slide layout could not be applied:', error);
+  }
+}
+
 // Asc.c_oAscRestrictionType values (public SDK enum).
 const ASC_RESTRICTION_NONE = 0;
 const ASC_RESTRICTION_VIEW = 128;
@@ -1320,6 +1440,9 @@ const ASC_RESTRICTION_VIEW = 128;
 type SdkEditorApi = {
   asc_setRestriction?: (value: number) => void;
   asc_removeRestriction?: (value: number) => void;
+  /** Presentation editor: show/hide the slide thumbnails panel. */
+  ShowThumbnails?: (visible: boolean) => void;
+  zoomFitToWidth?: () => void;
 };
 
 // Locate the SDK API instance inside the (same-origin) editor iframe. The

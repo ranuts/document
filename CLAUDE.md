@@ -485,7 +485,10 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   之后每次 asc_DownloadAs 被静默丢弃）、整表序列设置（守卫 7：全选后
   asc_GetSeriesSettings 按 1048576×16384 建序列直接 OOM 崩渲染进程）、
   评论批量操作（守卫 8：无选区时 removeAllComments/resolveAllComments 读
-  `_getSelection().ranges` 抛错且漏开历史事务）、字体加载加速、
+  `_getSelection().ranges` 抛错且漏开历史事务）、画布上下文丢失（守卫 9：
+  移动端内存紧张时浏览器丢弃 canvas backing store，vendor 完全不监听
+  contextlost/contextrestored，编辑器停在白屏；捕获阶段监听后用
+  `WordControl.OnResize()` 重绘）、字体加载加速、
   `installOpenFailureGuard`（打开转换失败 → asc_onError -82 + toast + 遮罩终止 +
   保存快速拒绝）——其中 image pipeline 修的是"文档含图片
   时保存令主线程永久卡死"：无服务器时 sendImgUrls 注册不了图片，DOCY

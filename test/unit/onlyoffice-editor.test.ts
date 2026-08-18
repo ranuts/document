@@ -18,7 +18,9 @@ vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
 
 import {
   classifyOpenFailure,
+  compactViewportCustomization,
   createEditorInstance,
+  isCompactViewport,
   getNormalizedFile,
   isFontSystemReady,
   getReadonlyMode,
@@ -491,5 +493,37 @@ describe('open-conversion readiness and failure classification', () => {
     ).toBe('environment');
     expect(classifyOpenFailure('X2T module not found after script loading')).toBe('environment');
     expect(classifyOpenFailure('Document conversion failed: TypeError: Failed to fetch')).toBe('environment');
+  });
+});
+
+// Phone-sized viewports (GitHub #145). Only the vendor's desktop bundle can
+// open documents offline in this package, so a phone runs the desktop UI and
+// its side panels have to be trimmed for the slide to be readable.
+describe('compact viewport customization', () => {
+  it('treats phone widths as compact and desktop widths as not', () => {
+    expect(isCompactViewport(393)).toBe(true);
+    expect(isCompactViewport(600)).toBe(true);
+    expect(isCompactViewport(601)).toBe(false);
+    expect(isCompactViewport(1280)).toBe(false);
+    // A zero width means "no window" (SSR, tests): never guess compact.
+    expect(isCompactViewport(0)).toBe(false);
+  });
+
+  it('drops the panels that cost width and starts at fit-to-width', () => {
+    const customization = compactViewportCustomization() as {
+      compactHeader: boolean;
+      hideNotes: boolean;
+      hideRulers: boolean;
+      zoom: number;
+      layout: { rightMenu: boolean; leftMenu?: boolean };
+    };
+    expect(customization.compactHeader).toBe(true);
+    expect(customization.hideNotes).toBe(true);
+    expect(customization.hideRulers).toBe(true);
+    expect(customization.zoom).toBe(-2);
+    expect(customization.layout.rightMenu).toBe(false);
+    // The left rail stays: it is the way back to the thumbnails panel that
+    // applyCompactSlideLayout collapses.
+    expect(customization.layout.leftMenu).toBeUndefined();
   });
 });
