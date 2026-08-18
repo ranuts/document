@@ -110,12 +110,36 @@ window.AscFonts.g_font_infos.forEach(function (w) {
 ——等于宿主页面的未捕获错误。已加 try/catch 并补单测（原函数与回调都抛"dead realm"，
 断言不外抛且定时器已清）。
 
+**自查 review 补的第二处（更要命）**：上面那个 try/catch 一并把
+`original.call(...)`（厂商 `fetchFonts`）也包了进去，而厂商这个函数**会同步抛**
+——它在 `AscFonts.g_font_infos.forEach` 里直接取 `g_font_loader.fontFiles[index].Id`，
+只要索引落空就是 TypeError。调用方 `x2t_helper.js` 的
+`fetchFonts` 是 `new Promise((resolve, reject) => AscCommon.fetchFonts(cb))`，
+**只有回调被调用才 resolve**。于是：
+
+- 同步路径（字体已就绪那一支）抛出是好事：它发生在调用方的 executor 里，
+  会 reject 整个打开 → -82 → `installOpenFailureGuard` 重试。故意不包。
+- 定时器路径抛出被吞掉后，没有任何人 settle 那个 Promise，转换永远 await
+  一个不会来的回调 —— 正是 `installOpenFailureGuard` 当初要消灭的**永久转圈**，
+  而且连 -82 都不会报。
+
+改法：catch 里在 `ready` 分支补一次 `cb([])`（自身再包一层 try），把它降级成
+和"等超时"完全一样的无字体导入；同时把 `isFontSystemReady(win)` 与 `record()`
+也移进 try——前者裸抛还会漏掉 `clearInterval`，留下永不停止的 interval。
+
+反向验证：去掉这次的 `cb([])` 兜底，新用例 `answers a throwing vendor
+fetchFonts with a fontless import, never with silence` 立刻变红
+（`expected "vi.fn()" to be called 1 times, but got 0 times`——回调零次，即挂起）；
+去掉 `isFontSystemReady` 外的 try，`stops polling when reading the frame itself
+starts throwing` 变红（`Cannot access a dead realm` 从定时器里裸抛出来）。
+
 ## 五、用例（用例固化制度）
 
 - `test/unit/onlyoffice-editor.test.ts`：`isFontSystemReady` 三态、
-  `classifyOpenFailure` 两类，外加 `awaitFontSystem` 四条（就绪即放行且不排
+  `classifyOpenFailure` 两类，外加 `awaitFontSystem` 八条（就绪即放行且不排
   定时器、迟到就绪后放行并记录等待毫秒、超时退回 `cb([])` 且不留定时器、
-  默认预算上限）。
+  frame 消失时不外抛、**厂商同步抛错时仍把 `cb([])` 交出去且只交一次**、
+  正常交接时兜底不插手、读 frame 抛错时停止轮询、默认预算上限）。
 - `test/e2e/open-retry.spec.ts`（新）：在真实编辑器里把**本次会话的第一次**
   `AscCommon.x2t.convertToBin` 换成抛
   `Document conversion failed: TypeError: Cannot read properties of undefined (reading 'Id')`

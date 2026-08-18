@@ -487,15 +487,25 @@ export function awaitFontSystem(
   let waited = 0;
   const timer = setInterval(() => {
     waited += intervalMs;
-    const ready = isFontSystemReady(win);
+    // Reading the frame is itself a realm access: if it throws, keep the
+    // failure out of the timer and stop polling rather than leaving an
+    // interval running forever.
+    let ready: boolean;
+    try {
+      ready = isFontSystemReady(win);
+    } catch (error) {
+      clearInterval(timer);
+      console.warn('[OO] font wait could not read the editor frame:', error);
+      return;
+    }
     if (!ready && waited < timeoutMs) return;
     clearInterval(timer);
-    record(waited);
     // The frame this callback belongs to may have been torn down while we
     // waited (the user opened another document, or the open failed and was
     // retried). Handing over to a dead realm throws, and it would throw inside
     // a timer, i.e. as an uncaught error in the host page.
     try {
+      record(waited);
       if (ready) {
         console.log(`[OO] open conversion waited ${waited} ms for the font system`);
         original.call(win.AscCommon, cb);
@@ -504,7 +514,23 @@ export function awaitFontSystem(
         cb([]);
       }
     } catch (error) {
-      console.warn('[OO] font wait resolved into a frame that is gone:', error);
+      console.warn('[OO] font wait could not hand the conversion over:', error);
+      // The vendor's fetchFonts throws synchronously when it walks a font
+      // system that is up but incomplete (an index into a half-filled
+      // g_font_loader.fontFiles is undefined, and it dereferences .Id). On the
+      // ready path above that throw is useful: it happens inside the caller's
+      // promise executor, which rejects the open -- a -82 the failure guard
+      // then retries. In here there is no executor to catch it, and the
+      // conversion is awaiting a callback that would now never come, i.e. the
+      // permanent spinner installOpenFailureGuard exists to prevent. So answer
+      // it the way a timed-out wait is answered: a fontless import.
+      if (ready) {
+        try {
+          cb([]);
+        } catch {
+          // The frame really is gone; nothing is waiting on the callback.
+        }
+      }
     }
   }, intervalMs);
 }

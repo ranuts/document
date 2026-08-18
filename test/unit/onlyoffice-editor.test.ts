@@ -599,6 +599,64 @@ describe('awaitFontSystem', () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  // The vendor's fetchFonts throws synchronously when it walks a font system
+  // that is up but incomplete, and x2t_helper only settles the conversion from
+  // inside the callback (`new Promise(resolve => AscCommon.fetchFonts(...))`).
+  // Swallowing that throw without answering the callback is therefore not a
+  // degradation but a permanent spinner -- exactly what installOpenFailureGuard
+  // exists to prevent -- so the wait falls back to the fontless import.
+  it('answers a throwing vendor fetchFonts with a fontless import, never with silence', () => {
+    const win: any = notReady();
+    const original = vi.fn(() => {
+      throw new TypeError("Cannot read properties of undefined (reading 'Id')");
+    });
+    const cb = vi.fn();
+    awaitFontSystem(win, original, cb, { timeoutMs: 500, intervalMs: 50 });
+    win.AscFonts.g_font_infos = [{ Name: 'Arial' }];
+    win.AscCommon.g_font_loader.fontFiles = [{ Id: '000' }];
+    expect(() => vi.advanceTimersByTime(50)).not.toThrow();
+    expect(original).toHaveBeenCalledTimes(1);
+    // The conversion gets its answer, and only one of them.
+    expect(cb).toHaveBeenCalledTimes(1);
+    expect(cb).toHaveBeenCalledWith([]);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('does not answer twice when the vendor takes the callback', () => {
+    const win: any = notReady();
+    const original = vi.fn();
+    const cb = vi.fn();
+    awaitFontSystem(win, original, cb, { timeoutMs: 500, intervalMs: 50 });
+    win.AscFonts.g_font_infos = [{ Name: 'Arial' }];
+    win.AscCommon.g_font_loader.fontFiles = [{ Id: '000' }];
+    vi.advanceTimersByTime(50);
+    expect(original).toHaveBeenCalledWith(cb);
+    // The vendor owns the callback from here; the fallback must stay out.
+    expect(cb).not.toHaveBeenCalled();
+  });
+
+  it('stops polling when reading the frame itself starts throwing', () => {
+    // The synchronous entry is deliberately unguarded (it runs inside the
+    // caller's promise executor, which turns a throw into a rejected open), so
+    // the frame only dies once the wait is already on the timer.
+    let alive = true;
+    const win: any = {
+      AscCommon: { g_font_loader: {} },
+      get AscFonts(): Record<string, unknown> {
+        if (!alive) throw new Error('Cannot access a dead realm');
+        return {};
+      },
+    };
+    const original = vi.fn();
+    const cb = vi.fn();
+    awaitFontSystem(win, original, cb, { timeoutMs: 500, intervalMs: 50 });
+    alive = false;
+    // An uncaught throw here would also leave the interval running forever.
+    expect(() => vi.advanceTimersByTime(50)).not.toThrow();
+    expect(vi.getTimerCount()).toBe(0);
+    expect(original).not.toHaveBeenCalled();
+  });
+
   it('keeps the default wait short enough to stay under the save readiness budget', () => {
     expect(FONT_SYSTEM_WAIT_MS).toBeLessThanOrEqual(10_000);
   });
