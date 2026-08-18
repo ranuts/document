@@ -76,6 +76,14 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Presentations on a phone now use the screen: the slide thumbnails, the right
+  panel, the rulers and the notes pane are folded away on narrow viewports and
+  the slide starts fitted to the width, so it opens at a readable size instead
+  of a stamp in the middle of the screen (GitHub #145). The thumbnails come
+  back from the left rail.
+- The editor no longer stays blank when the browser discards its canvas under
+  memory pressure (seen on Android after repeatedly changing the zoom): it
+  repaints as soon as the canvas is restored.
 - Opening a local document no longer fails with "code -82 / the file could not
   be opened" when the editor's font system is not up yet: that case is now
   detected (imports run without fonts) and, if the open still fails for a
