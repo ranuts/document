@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # No build: just ship the static redirector (redirect/index.html + 404.html).
       - name: Upload redirector artifact
