@@ -380,6 +380,22 @@ let openGeneration = 0;
 let handledFailureGeneration = -1;
 
 /**
+ * Drop the bytes held for a possible retry, keeping the attempt itself so the
+ * one-retry budget is still tracked. Called once the open has succeeded: from
+ * that point installOpenFailureGuard takes its `documentContentReady` branch
+ * and treats every further conversion failure as a failed export, so no retry
+ * can ask for these bytes again.
+ */
+function releaseOpenAttemptBytes(): void {
+  if (currentOpenAttempt) currentOpenAttempt.binData = undefined;
+}
+
+/** Whether a retry could still be served from bytes we are holding. */
+export function openAttemptHoldsBytes(): boolean {
+  return Boolean(currentOpenAttempt?.binData);
+}
+
+/**
  * Rebuild the editor once for the document that just failed to open.
  * Returns whether a retry was started; `false` means the caller should report
  * the failure to the user.
@@ -1202,6 +1218,12 @@ function createPersonalEditorInstance(config: {
       },
       onDocumentReady: () => {
         markDocumentContentReady();
+        // The open succeeded, so the retry budget is spent and the bytes kept
+        // for it are dead weight -- the editor holds the document itself, and
+        // the blob it was mounted from is a second copy already. Keeping a
+        // third for the rest of the session is exactly the kind of ballast
+        // that gets a phone's canvas discarded under memory pressure (#145).
+        releaseOpenAttemptBytes();
         // Re-apply in case the header rendered after onAppReady.
         prepareEditorIframe();
         // Readonly opens mount with full edit permissions and get locked

@@ -21,6 +21,7 @@ import {
   createEditorInstance,
   getNormalizedFile,
   isFontSystemReady,
+  openAttemptHoldsBytes,
   getReadonlyMode,
   getSavedFileMimeType,
   requestSaveDocument,
@@ -239,6 +240,23 @@ describe('onlyoffice-editor', () => {
       expect(DocEditor).toHaveBeenCalledTimes(1);
       return DocEditor.mock.calls[0][1] as any;
     }
+
+    // The bytes are kept only so an environment-class open failure can be
+    // retried with them (#144). Once the document is open that retry is
+    // unreachable, and a third copy of a large document (the editor holds one,
+    // the blob it mounted from another) is exactly the ballast that gets a
+    // phone's canvas discarded under memory pressure (#145).
+    it('releases the retry bytes once the document is open', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'held.xlsx',
+        fileType: 'xlsx',
+        binData: new ArrayBuffer(1024),
+      });
+
+      expect(openAttemptHoldsBytes()).toBe(true);
+      config.events.onDocumentReady();
+      expect(openAttemptHoldsBytes()).toBe(false);
+    });
 
     it('always passes a non-empty Guest user to avoid the getInitials crash (#25)', async () => {
       const config = await createAndGetConfig({
