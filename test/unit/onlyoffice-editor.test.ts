@@ -581,6 +581,24 @@ describe('awaitFontSystem', () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it('survives the editor frame disappearing while it waits', () => {
+    const win: any = notReady();
+    // What a torn-down frame looks like from here: touching it throws.
+    const original = vi.fn(() => {
+      throw new Error('Cannot access a dead realm');
+    });
+    const cb = vi.fn(() => {
+      throw new Error('Cannot access a dead realm');
+    });
+    awaitFontSystem(win, original, cb, { timeoutMs: 200, intervalMs: 50 });
+    win.AscFonts.g_font_infos = [{ Name: 'Arial' }];
+    win.AscCommon.g_font_loader.fontFiles = [{ Id: '000' }];
+    // Would otherwise throw out of a timer, i.e. uncaught in the host page.
+    expect(() => vi.advanceTimersByTime(50)).not.toThrow();
+    expect(original).toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it('keeps the default wait short enough to stay under the save readiness budget', () => {
     expect(FONT_SYSTEM_WAIT_MS).toBeLessThanOrEqual(10_000);
   });
