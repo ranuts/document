@@ -8,7 +8,7 @@
 图例：`ER` = embed-regression.spec、`OF` = open-failure.spec、`SD` =
 embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec、
 `EA` = embed-api.spec、`AS` = app-smoke.spec、`CO` = corpus.spec、`SW` = sw-warm.spec、
-`RI` = resave-idempotence.spec、`FP` = format-parity.spec。
+`RI` = resave-idempotence.spec、`FP` = format-parity.spec、`OR` = open-retry.spec。
 
 ## A. 格式 × 操作（合成语料 = PR 档；真实语料 = 🌙）
 
@@ -25,6 +25,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | 评论                        | ⬜         | ⬜  | ⬜                    | ⬜              | ⬜   | ⬜        | —   | ⬜                                                                  |
 | 再打开→再保存（幂等）       | ⬜         | ⬜  | ⬜                    | ⬜              | ⬜   | ⬜        | ⬜  | ⬜                                                                  |
 | 打开失败可见 + 保存快速拒绝 | —          | —   | OF                    | —               | —    | —         | —   | ⬜                                                                  |
+| 环境类打开失败自动重试      | —          | —   | OR（故障注入）        | —               | —    | —         | —   | ⬜                                                                  |
 | 裸 `document:save` 默认格式 | SD         | ⬜  | FN                    | HX（→xlsx）     | ⬜   | ⬜        | ER  | ⬜                                                                  |
 
 ## B. 输入特征
