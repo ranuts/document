@@ -83,8 +83,8 @@ test.describe('comments survive a save (real editor)', () => {
     expect(result.error).toBeUndefined();
     const bytes = new Uint8Array(Buffer.from(result.b64, 'base64'));
     expect(zipEntryNames(bytes)).toContain('word/comments.xml');
-    expect(zipEntryText(bytes, 'word/comments.xml') || '').toContain('review note');
-    expect(zipEntryText(bytes, 'word/comments.xml') || '').toContain('审阅意见');
+    expect((await zipEntryText(bytes, 'word/comments.xml')) || '').toContain('review note');
+    expect((await zipEntryText(bytes, 'word/comments.xml')) || '').toContain('审阅意见');
   });
 
   test('xlsx: a cell comment added via the API is written to xl/comments1.xml', async ({ page }) => {
@@ -104,6 +104,6 @@ test.describe('comments survive a save (real editor)', () => {
     const names = zipEntryNames(bytes);
     const part = names.find((n) => /^xl\/comments\d*\.xml$/.test(n));
     expect(part, `comments part missing in ${names.join(',')}`).toBeTruthy();
-    expect(zipEntryText(bytes, part!) || '').toContain('cell note');
+    expect((await zipEntryText(bytes, part!)) || '').toContain('cell note');
   });
 });
