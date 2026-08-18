@@ -1340,10 +1340,9 @@ function createPersonalEditorInstance(config: {
         markDocumentContentReady();
         // Re-apply in case the header rendered after onAppReady.
         prepareEditorIframe();
-        // Reset the tracked state: this is a freshly mounted editor whose
-        // panels are whatever the mount-time customization made them.
-        compactLayoutApplied = null;
-        foldedByUs = { thumbnails: false, notes: false, rulers: false };
+        // This is a freshly mounted editor whose panels are whatever the
+        // mount-time customization made them.
+        resetCompactLayoutState();
         syncCompactLayout(normalizedType, { force: true });
         installViewportFollow(normalizedType);
         // Readonly opens mount with full edit permissions and get locked
@@ -1464,6 +1463,12 @@ export function createEditorInstance(config: {
 let compactLayoutApplied: boolean | null = null;
 let foldedByUs = { thumbnails: false, notes: false, rulers: false };
 
+/** Forget the tracked layout state; a newly mounted editor starts over. */
+export function resetCompactLayoutState(): void {
+  compactLayoutApplied = null;
+  foldedByUs = { thumbnails: false, notes: false, rulers: false };
+}
+
 /**
  * Bring the editor's layout in line with the viewport it is currently in, and
  * keep it there.
@@ -1481,14 +1486,19 @@ let foldedByUs = { thumbnails: false, notes: false, rulers: false };
  * they fire constantly as the URL bar slides in and out; re-collapsing panels
  * or refitting the zoom on each of those would fight the user.
  */
-function syncCompactLayout(documentType: string, options: { force?: boolean } = {}): void {
+export function syncCompactLayout(documentType: string, options: { force?: boolean } = {}): void {
   const compact = isCompactViewport();
   if (!options.force && compact === compactLayoutApplied) return;
   const crossed = compact !== compactLayoutApplied;
-  compactLayoutApplied = compact;
 
+  // Only a sync that actually reached the editor may be recorded as done. A
+  // resize can land while the editor is being rebuilt (between destroyEditor
+  // and the next onDocumentReady), and marking that no-op as applied would
+  // make every later resize in the same direction return at the guard above,
+  // leaving the layout stuck until the next document is opened.
   const api = getSdkEditorApi();
   if (!api) return;
+  compactLayoutApplied = compact;
   const isSlide = DOCUMENT_TYPE_MAP[documentType] === 'slide';
 
   try {

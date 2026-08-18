@@ -155,3 +155,19 @@ Pixel 5 实测：画布 191 → **337 px**，初始缩放 12% → **24%**（一�
 
 仍存在的已知边界：`compactHeader` 没有运行时开关，窄屏挂载后放大窗口，标题栏
 会保持紧凑形态直到下次打开文档（纯外观，不影响功能）。
+
+## 八、二次 review 又抓到一处状态机缺陷
+
+`syncCompactLayout` 先把 `compactLayoutApplied = compact` 记下来，再去
+`getSdkEditorApi()`——拿不到 api 时直接 return。于是**编辑器重建期间
+（destroyEditor 与下一次 onDocumentReady 之间）来一次 resize，就会把
+"什么都没做" 记成 "已应用"**，之后同方向的 resize 全被函数开头的
+`compact === compactLayoutApplied` 挡掉，版式卡到下次打开文档才恢复。
+
+改法：赋值挪到 `if (!api) return;` 之后——只有真正够到编辑器的那次同步才算数。
+顺手把两行 reset 抽成 `resetCompactLayoutState()`，`syncCompactLayout` 一并导出，
+好让单测直接驱动这个状态机（jsdom 里量不出宽度，用例走没有宽度门的标尺分支）。
+
+反向验证：把赋值挪回 `getSdkEditorApi()` 之前，用例
+`still applies once the editor arrives after a sync that found none` 立刻变红
+（`asc_SetViewRulers` 从未被调用）。

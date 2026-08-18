@@ -21,6 +21,8 @@ import {
   compactViewportCustomization,
   createEditorInstance,
   isCompactViewport,
+  resetCompactLayoutState,
+  syncCompactLayout,
   getNormalizedFile,
   isFontSystemReady,
   getReadonlyMode,
@@ -533,5 +535,57 @@ describe('compact viewport customization', () => {
     expect(customization.layout).toBeUndefined();
     expect(customization.hideNotes).toBeUndefined();
     expect(customization.hideRulers).toBeUndefined();
+  });
+});
+
+// syncCompactLayout tracks which side of the compact threshold the layout is
+// on, and returns early when nothing changed. Recording a sync that never
+// reached the editor would therefore silence every later one.
+describe('syncCompactLayout state tracking', () => {
+  const originalWidth = window.innerWidth;
+
+  function installEditorFrameWithRulers() {
+    const iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+    const asc_SetViewRulers = vi.fn();
+    (iframe.contentWindow as any).Asc = {
+      editor: {
+        asc_setRestriction: vi.fn(),
+        asc_SetViewRulers,
+        asc_GetViewRulers: () => true,
+      },
+    };
+    return { iframe, asc_SetViewRulers };
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    Object.defineProperty(window, 'innerWidth', { value: 400, configurable: true });
+    resetCompactLayoutState();
+  });
+
+  afterEach(() => {
+    vi.runAllTimers();
+    vi.useRealTimers();
+    Object.defineProperty(window, 'innerWidth', { value: originalWidth, configurable: true });
+    document.querySelectorAll('iframe').forEach((frame) => frame.remove());
+  });
+
+  it('still applies once the editor arrives after a sync that found none', () => {
+    // A resize that lands between destroyEditor and the next onDocumentReady.
+    syncCompactLayout('docx');
+
+    const { asc_SetViewRulers } = installEditorFrameWithRulers();
+    syncCompactLayout('docx');
+
+    expect(asc_SetViewRulers).toHaveBeenCalledWith(false);
+  });
+
+  it('does not re-apply once the layout is already on that side', () => {
+    const { asc_SetViewRulers } = installEditorFrameWithRulers();
+    syncCompactLayout('docx');
+    syncCompactLayout('docx');
+
+    expect(asc_SetViewRulers).toHaveBeenCalledTimes(1);
   });
 });
