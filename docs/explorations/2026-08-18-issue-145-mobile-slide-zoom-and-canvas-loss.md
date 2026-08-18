@@ -45,6 +45,37 @@ Pixel 5 实测：画布 191 → **337 px**，初始缩放 12% → **24%**（一�
 顺带的收益：缩略图面板每张幻灯片一个 canvas，收起后 frame 里的 canvas 数量
 大幅下降 —— 这直接关系到下面第二个问题。
 
+## 三·补：其它格式与动态适配（同日追加）
+
+第一版把紧凑版式做成"挂载时算一次"，并且只有幻灯片走收起缩略图那一步。
+按视口逐格式实测（Pixel 5 模拟）后补了两块：
+
+**1）其它格式本来就吃到了紧凑版式**（`customization` 对所有格式生效）：
+
+| 格式 | 竖屏画布 / 视口              | 缩放 | 备注                                       |
+| ---- | ---------------------------- | ---- | ------------------------------------------ |
+| docx | 339 / 393 px                 | 37%  | 旋转能自动重算（fit-width 是模式不是定值） |
+| xlsx | 339 / 393 px（`#ws-canvas`） | —    | 表格没有缩略图面板，右面板已隐藏           |
+| pptx | 337 / 393 px                 | 24%  | 需要额外收起缩略图                         |
+
+所以"只有 PPT 做了适配"的担心不成立，但**用例只覆盖了 pptx** —— 已补 docx / xlsx 两条。
+
+**2）挂载时算一次是真的不够**。手机**横屏**是 851 px 宽，按纯宽度阈值属于"宽屏"，
+于是挂载完整桌面版式（实测：幻灯片画布 498 px、缩放 23%），转到竖屏后
+**画布 191 px、缩放 12%、右栏 40 px、缩略图 92 px —— 完整退回 #145 原状**。两处修正：
+
+- **判定改成朝向无关**：`isCompactViewport({width,height,coarsePointer})` —— 触摸设备看
+  **短边**（横屏手机 851×393 → 短边 393 → 紧凑），鼠标设备只看宽度（又短又宽的桌面
+  窗口保留面板，平板两个朝向都不算紧凑）；
+- **纯 CSS 的部分改成媒体查询**：注入编辑器 frame 的样式表里加
+  `@media (max-width: 600px), (pointer: coarse) and (max-height: 600px)` 隐藏右面板 ——
+  旋转/改窗口自动生效，不需要任何监听；
+- **CSS 做不到的部分交给 `syncCompactLayout()` + `installViewportFollow()`**：
+  防抖 200 ms 的 resize/orientationchange 监听，**只在跨越阈值时**动作 —— 收起/恢复
+  缩略图（只恢复我们自己收起的）、`WordControl.OnResize()`（表格用 `asc_Resize()`）
+  重算画布几何、进入紧凑时 `zoomFitToWidth()` 重新适配。之所以只认"跨越"：
+  移动端 URL 栏一伸缩就派发 resize，每次都收面板、重置缩放会跟用户对着干。
+
 ## 四、修复二：画布上下文丢失守卫（守卫 9）
 
 用户截图里"全白 + 滚动条还在"是 **2D canvas backing store 被丢弃**的典型形态：
@@ -76,11 +107,15 @@ Pixel 5 实测：画布 191 → **337 px**，初始缩放 12% → **24%**（一�
 
 `test/e2e/mobile-slide.spec.ts`（新，Pixel 5 模拟，仅 chromium）：
 
-1. 版式：画布宽 > 视口的 75%、初始缩放 ≥ 20%、右侧面板宽度为 0；
+1. 版式：画布宽 > 视口的 75%、初始缩放 ≥ 20%、右侧面板宽度为 0；docx / xlsx
+   各一条同类断言；横屏挂载（851×393）后转竖屏仍为紧凑版式；
 2. 缩放连打（in/out/fit/100 共 8 次）：无 `asc_onError`、无厂商弹框、
    画布仍有内容（逐像素统计非白像素）；
 3. 上下文丢失恢复：涂白画布 → 派发 `contextlost` + `contextrestored` →
-   断言画面被重绘回来。**去掉守卫 9 后该用例确实变红**（已实测验证）。
+   断言画面被重绘回来。**去掉守卫 9 后该用例确实变红**（已实测验证）；
+4. 动态跟随：桌面 1280×900 挂载（缩略图在）→ 缩到 393 宽 → 缩略图收起、
+   画布 > 75% 视口 → 再放大回 1280 → 缩略图回来。**去掉 `installViewportFollow`
+   后该用例变红**（缩略图停在 107 px，已实测验证）。
 
 单测补 `isCompactViewport` / `compactViewportCustomization` 两组断言。
 
@@ -93,3 +128,46 @@ Pixel 5 实测：画布 191 → **337 px**，初始缩放 12% → **24%**（一�
   真是那样的话，紧凑版式带来的 canvas 数量下降与内存占用下降仍然有帮助。
 - 真正的解法是把离线补丁移植到 vendor 的移动版 bundle，让手机跑触摸 UI；
   已记在待办里，需要单独一轮。
+
+## 七、自查 review 发现的问题（同日，均已修）
+
+对三个 PR 逐行复查 + 实测，抓到三处：
+
+1. **`layout: { rightMenu: false }` 是单向门（真 bug）**。LayoutManager 在启动时
+   给元素写行内 `display:none`，媒体查询撤不掉：**窄窗口打开文档 → 放大窗口 →
+   右侧对象设置面板永久消失**（实测 `rightMenuInlineDisplay: "none"` 在 1280 宽下
+   依旧）。修法：customization 里**只保留没有运行时开关的项**（`compactHeader`、
+   初始 `zoom`），其余可逆的一律走运行时 —— 右面板交给媒体查询，备注栏
+   （`asc_ShowNotes` / `getIsNotesShow`）、标尺（`asc_SetViewRulers` /
+   `asc_GetViewRulers`）、缩略图（`ShowThumbnails` + 量宽度判断是否已关）
+   交给 `syncCompactLayout`，且**只恢复我们自己折叠过的**。
+2. **守卫 9 修不了表格**：重绘只走 `WordControl`，而表格编辑器根本没有
+   `WordControl` —— 补 `asc_Resize()` 兜底。
+3. **`installViewportFollow` 在编辑器销毁时不解绑**：`createEditorInstance` 的
+   清理分支补上 `viewportFollowCleanup?.()`。
+
+**反向验证的教训**（已写进 CLAUDE.md 约定 3）：第 1 条的第一版用例是"宽屏挂载
+→ 缩小 → 放大"，把 `layout.rightMenu` 加回去它照样绿 —— 因为宽屏挂载压根不会
+应用紧凑 customization。改成"**窄屏挂载**（400×900）→ 放大到 1280"后，加回
+`layout.rightMenu` 立刻变红（`rightMenu` 宽度 0）。同理，`installViewportFollow`
+的首版用例（横屏挂载后旋转）在去掉该函数后也是绿的——真正生效的是新的朝向判定，
+于是另写了"桌面窗口从 1280 缩到 393"那条，去掉跟随后确实变红（缩略图停在 107 px）。
+
+仍存在的已知边界：`compactHeader` 没有运行时开关，窄屏挂载后放大窗口，标题栏
+会保持紧凑形态直到下次打开文档（纯外观，不影响功能）。
+
+## 八、二次 review 又抓到一处状态机缺陷
+
+`syncCompactLayout` 先把 `compactLayoutApplied = compact` 记下来，再去
+`getSdkEditorApi()`——拿不到 api 时直接 return。于是**编辑器重建期间
+（destroyEditor 与下一次 onDocumentReady 之间）来一次 resize，就会把
+"什么都没做" 记成 "已应用"**，之后同方向的 resize 全被函数开头的
+`compact === compactLayoutApplied` 挡掉，版式卡到下次打开文档才恢复。
+
+改法：赋值挪到 `if (!api) return;` 之后——只有真正够到编辑器的那次同步才算数。
+顺手把两行 reset 抽成 `resetCompactLayoutState()`，`syncCompactLayout` 一并导出，
+好让单测直接驱动这个状态机（jsdom 里量不出宽度，用例走没有宽度门的标尺分支）。
+
+反向验证：把赋值挪回 `getSdkEditorApi()` 之前，用例
+`still applies once the editor arrives after a sync that found none` 立刻变红
+（`asc_SetViewRulers` 从未被调用）。

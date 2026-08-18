@@ -380,6 +380,22 @@ let openGeneration = 0;
 let handledFailureGeneration = -1;
 
 /**
+ * Drop the bytes held for a possible retry, keeping the attempt itself so the
+ * one-retry budget is still tracked. Called once the open has succeeded: from
+ * that point installOpenFailureGuard takes its `documentContentReady` branch
+ * and treats every further conversion failure as a failed export, so no retry
+ * can ask for these bytes again.
+ */
+function releaseOpenAttemptBytes(): void {
+  if (currentOpenAttempt) currentOpenAttempt.binData = undefined;
+}
+
+/** Whether a retry could still be served from bytes we are holding. */
+export function openAttemptHoldsBytes(): boolean {
+  return Boolean(currentOpenAttempt?.binData);
+}
+
+/**
  * Rebuild the editor once for the document that just failed to open.
  * Returns whether a retry was started; `false` means the caller should report
  * the failure to the user.
@@ -640,7 +656,17 @@ function prepareEditorIframe(): boolean {
       if (!doc.getElementById('oo-local-chrome-css')) {
         const style = doc.createElement('style');
         style.id = 'oo-local-chrome-css';
-        style.textContent = '#header-logo, .btn-current-user, #tlb-box-users { display: none !important; }';
+        // The compact rule is a media query on purpose: it re-evaluates itself
+        // on rotation and on every window resize, so the panel a phone cannot
+        // afford stays gone no matter which orientation the document was
+        // opened in. The JS side (syncCompactLayout) only handles what CSS
+        // cannot: the thumbnails panel and the SDK's own canvas geometry.
+        style.textContent = [
+          '#header-logo, .btn-current-user, #tlb-box-users { display: none !important; }',
+          `@media (max-width: ${COMPACT_VIEWPORT_MAX_WIDTH}px), (pointer: coarse) and (max-height: ${COMPACT_VIEWPORT_MAX_WIDTH}px) {`,
+          '  [data-layout-name="rightMenu"] { display: none !important; }',
+          '}',
+        ].join('\n');
         (doc.head || doc.documentElement).appendChild(style);
       }
 
@@ -1145,14 +1171,20 @@ function prepareEditorIframe(): boolean {
       //    uncanceled, and it then fires `contextrestored`.
       const lossWin = win as unknown as {
         __ooCanvasLossGuarded?: boolean;
-        Asc?: { editor?: { WordControl?: { OnResize?: () => void; OnScroll?: () => void } } };
+        Asc?: {
+          editor?: { WordControl?: { OnResize?: () => void; OnScroll?: () => void }; asc_Resize?: () => void };
+        };
       };
       if (!lossWin.__ooCanvasLossGuarded) {
         const repaintEditor = (): void => {
-          const control = lossWin.Asc?.editor?.WordControl;
+          const editorApi = lossWin.Asc?.editor;
+          const control = editorApi?.WordControl;
           try {
             if (typeof control?.OnResize === 'function') control.OnResize();
             else if (typeof control?.OnScroll === 'function') control.OnScroll();
+            // The spreadsheet editor has no WordControl at all, so without
+            // this branch a discarded canvas stayed blank there.
+            else if (typeof editorApi?.asc_Resize === 'function') editorApi.asc_Resize();
           } catch (error) {
             console.warn('[OO] repaint after canvas context loss failed:', error);
           }
@@ -1230,8 +1262,30 @@ export const UI_THEME_STORAGE_KEY = 'ui-theme-id';
  */
 export const COMPACT_VIEWPORT_MAX_WIDTH = 600;
 
-export function isCompactViewport(width: number = typeof window === 'undefined' ? 0 : window.innerWidth): boolean {
-  return width > 0 && width <= COMPACT_VIEWPORT_MAX_WIDTH;
+export type ViewportMetrics = { width: number; height: number; coarsePointer: boolean };
+
+export function readViewportMetrics(): ViewportMetrics {
+  if (typeof window === 'undefined') return { width: 0, height: 0, coarsePointer: false };
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    coarsePointer: typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches,
+  };
+}
+
+/**
+ * Width alone is not enough: a phone in landscape is ~850 px wide, which is
+ * well over any phone breakpoint, yet its 393 px of height leaves the desktop
+ * chrome just as little room (measured: 498 px of canvas, 23 % zoom for a
+ * slide). So a touch device counts as compact whenever its *shorter* side is
+ * phone-sized, while a mouse-driven window only counts when it is genuinely
+ * narrow -- a short but wide desktop window keeps its panels.
+ */
+export function isCompactViewport(metrics: ViewportMetrics = readViewportMetrics()): boolean {
+  const { width, height, coarsePointer } = metrics;
+  if (width <= 0) return false;
+  if (width <= COMPACT_VIEWPORT_MAX_WIDTH) return true;
+  return coarsePointer && Math.min(width, height) <= COMPACT_VIEWPORT_MAX_WIDTH;
 }
 
 /**
@@ -1243,21 +1297,23 @@ export function isCompactViewport(width: number = typeof window === 'undefined' 
  */
 export function compactViewportCustomization(): Record<string, unknown> {
   return {
+    // Everything here is one-way: the vendor applies customization once, at
+    // boot. So this may only carry settings with no runtime switch --
+    // compactHeader has none, and the initial zoom is by definition a
+    // start value.
+    //
+    // Everything reversible is deliberately NOT here and goes through
+    // syncCompactLayout instead (the rulers, the notes pane, the slide
+    // thumbnails) or through the media query in the injected frame stylesheet
+    // (the right panel). Passing `layout: { rightMenu: false }` here looked
+    // equivalent and was not: LayoutManager writes an inline `display: none`
+    // that no media query can undo, so a document opened in a narrow window
+    // lost its object-settings panel permanently, even after the window was
+    // widened again (measured before this was moved out).
     compactHeader: true,
-    hideRulers: true,
-    // Presentations only; ignored by the other editors.
-    hideNotes: true,
-    layout: {
-      // The left rail stays: it is how the slide thumbnails, comments and
-      // search are reached, and applyCompactSlideLayout collapses the
-      // thumbnails panel itself (which is the real space hog) in a way the
-      // user can undo from that rail. The right panel's object settings need
-      // more width than a phone has.
-      rightMenu: false,
-    },
-    // -2 = fit to width (-1 = fit to page). On a phone the slide should use
-    // the full width; the vendor's fit-to-page also budgets for the notes
-    // pane and toolbars and lands far smaller.
+    // -2 = fit to width (-1 = fit to page). On a phone the document should use
+    // the full width; the vendor's fit-to-page also budgets for the notes pane
+    // and toolbars and lands far smaller.
     zoom: -2,
   };
 }
@@ -1391,9 +1447,19 @@ function createPersonalEditorInstance(config: {
       },
       onDocumentReady: () => {
         markDocumentContentReady();
+        // The open succeeded, so the retry budget is spent and the bytes kept
+        // for it are dead weight -- the editor holds the document itself, and
+        // the blob it was mounted from is a second copy already. Keeping a
+        // third for the rest of the session is exactly the kind of ballast
+        // that gets a phone's canvas discarded under memory pressure (#145).
+        releaseOpenAttemptBytes();
         // Re-apply in case the header rendered after onAppReady.
         prepareEditorIframe();
-        applyCompactSlideLayout(normalizedType);
+        // This is a freshly mounted editor whose panels are whatever the
+        // mount-time customization made them.
+        resetCompactLayoutState();
+        syncCompactLayout(normalizedType, { force: true });
+        installViewportFollow(normalizedType);
         // Readonly opens mount with full edit permissions and get locked
         // here instead (asc_setRestriction only works once the document is
         // loaded). Read the live flag rather than the captured config value:
@@ -1462,6 +1528,9 @@ export function createEditorInstance(config: {
 
     // Clean up old editor instance properly
     if (window.editor) {
+      // The viewport follow belongs to the document that is going away; the
+      // next onDocumentReady installs a fresh one for the new document.
+      viewportFollowCleanup?.();
       try {
         console.log('Destroying previous editor instance...');
         window.editor.destroyEditor();
@@ -1503,28 +1572,131 @@ export function createEditorInstance(config: {
   });
 }
 
+// Compact state the layout is currently in, plus which pieces of chrome this
+// module folded away. Only what we folded is ever unfolded again: restoring a
+// panel the user closed by hand would be worse than leaving it alone.
+let compactLayoutApplied: boolean | null = null;
+let foldedByUs = { thumbnails: false, notes: false, rulers: false };
+
+/** Forget the tracked layout state; a newly mounted editor starts over. */
+export function resetCompactLayoutState(): void {
+  compactLayoutApplied = null;
+  foldedByUs = { thumbnails: false, notes: false, rulers: false };
+}
+
 /**
- * Presentations on a phone: the thumbnails panel is a third of the viewport
- * (245 px of canvas out of 393 on a Pixel 5) and the slide is drawn in what is
- * left, so "fit" lands at 17 %. Collapsing it and refitting to width gives the
- * canvas 377 px and the slide 27 % -- the user can bring the panel back from
- * the left rail. Navigation does not depend on it: the main view scrolls
- * through the slides and the status bar keeps the slide counter.
+ * Bring the editor's layout in line with the viewport it is currently in, and
+ * keep it there.
+ *
+ * The mount-time customization can only describe the viewport the document was
+ * opened in, and on a phone that is the wrong one half the time: a device held
+ * in landscape is ~850 px wide, so it mounts with the full desktop chrome, and
+ * rotating to portrait lands right back in the layout GitHub #145 reports
+ * (measured after rotation: 191 px of canvas, 12 % zoom). Chrome that is pure
+ * CSS -- the right panel -- follows a media query in the injected stylesheet
+ * and needs nothing here; what needs code is the thumbnails panel, the SDK's
+ * canvas geometry and the zoom.
+ *
+ * Only *crossings* act. Plain resizes are the vendor's business, and on mobile
+ * they fire constantly as the URL bar slides in and out; re-collapsing panels
+ * or refitting the zoom on each of those would fight the user.
  */
-function applyCompactSlideLayout(documentType: string): void {
-  if (!isCompactViewport()) return;
-  if (DOCUMENT_TYPE_MAP[documentType] !== 'slide') return;
+export function syncCompactLayout(documentType: string, options: { force?: boolean } = {}): void {
+  const compact = isCompactViewport();
+  if (!options.force && compact === compactLayoutApplied) return;
+  const crossed = compact !== compactLayoutApplied;
+
+  // Only a sync that actually reached the editor may be recorded as done. A
+  // resize can land while the editor is being rebuilt (between destroyEditor
+  // and the next onDocumentReady), and marking that no-op as applied would
+  // make every later resize in the same direction return at the guard above,
+  // leaving the layout stuck until the next document is opened.
   const api = getSdkEditorApi();
   if (!api) return;
+  compactLayoutApplied = compact;
+  const isSlide = DOCUMENT_TYPE_MAP[documentType] === 'slide';
+
   try {
-    api.ShowThumbnails?.(false);
-    // The canvas just got wider; the zoom the editor computed for the narrow
-    // one would leave the slide floating in the middle of the screen.
-    setTimeout(() => getSdkEditorApi()?.zoomFitToWidth?.(), 100);
+    if (isSlide && typeof api.ShowThumbnails === 'function') {
+      if (compact && !foldedByUs.thumbnails) {
+        // A third of a phone viewport goes to slide thumbnails, and each of
+        // them is its own canvas. Collapsing the panel is both the width and
+        // the memory win; the left rail brings it back in one tap. Skip a
+        // panel that is already closed -- it is then the user's to reopen.
+        if (measureEditorElementWidth('#id_thumbnails') > 0) {
+          api.ShowThumbnails(false);
+          foldedByUs.thumbnails = true;
+        }
+      } else if (!compact && foldedByUs.thumbnails) {
+        api.ShowThumbnails(true);
+        foldedByUs.thumbnails = false;
+      }
+    }
+
+    // The notes pane and the rulers cost rows a phone does not have. Both have
+    // a getter, so we only fold what is actually open and only unfold what we
+    // folded.
+    if (isSlide && typeof api.asc_ShowNotes === 'function') {
+      if (compact && !foldedByUs.notes && api.getIsNotesShow?.() !== false) {
+        api.asc_ShowNotes(false);
+        foldedByUs.notes = true;
+      } else if (!compact && foldedByUs.notes) {
+        api.asc_ShowNotes(true);
+        foldedByUs.notes = false;
+      }
+    }
+    if (typeof api.asc_SetViewRulers === 'function') {
+      if (compact && !foldedByUs.rulers && api.asc_GetViewRulers?.() !== false) {
+        api.asc_SetViewRulers(false);
+        foldedByUs.rulers = true;
+      } else if (!compact && foldedByUs.rulers) {
+        api.asc_SetViewRulers(true);
+        foldedByUs.rulers = false;
+      }
+    }
+
+    if (!crossed) return;
+    // The panels around the canvas just changed size, and the SDK sizes its
+    // canvas in JS: without a nudge it keeps drawing at the old geometry.
+    // WordControl covers word and slide, asc_Resize the spreadsheet.
+    setTimeout(() => {
+      const current = getSdkEditorApi();
+      if (!current) return;
+      if (typeof current.WordControl?.OnResize === 'function') current.WordControl.OnResize();
+      else if (typeof current.asc_Resize === 'function') current.asc_Resize();
+      // Refit only when the available width actually changed underneath the
+      // document, i.e. on a crossing -- never on an ordinary resize.
+      if (compact && typeof current.zoomFitToWidth === 'function') current.zoomFitToWidth();
+    }, 100);
   } catch (error) {
-    console.warn('[OO] compact slide layout could not be applied:', error);
+    console.warn('[OO] compact layout sync failed:', error);
   }
 }
+
+/**
+ * Follow the viewport for the lifetime of the open document: rotation and
+ * window resizes re-run the sync above. Debounced, because mobile browsers
+ * fire resize on every URL-bar animation frame.
+ */
+function installViewportFollow(documentType: string): void {
+  if (typeof window === 'undefined') return;
+  if (viewportFollowCleanup) viewportFollowCleanup();
+  let debounce = 0;
+  const onViewportChange = () => {
+    window.clearTimeout(debounce);
+    debounce = window.setTimeout(() => syncCompactLayout(documentType), 200);
+  };
+  window.addEventListener('resize', onViewportChange);
+  window.addEventListener('orientationchange', onViewportChange);
+  viewportFollowCleanup = () => {
+    window.clearTimeout(debounce);
+    window.removeEventListener('resize', onViewportChange);
+    window.removeEventListener('orientationchange', onViewportChange);
+    viewportFollowCleanup = null;
+  };
+}
+
+let viewportFollowCleanup: (() => void) | null = null;
 
 // Asc.c_oAscRestrictionType values (public SDK enum).
 const ASC_RESTRICTION_NONE = 0;
@@ -1536,7 +1708,35 @@ type SdkEditorApi = {
   /** Presentation editor: show/hide the slide thumbnails panel. */
   ShowThumbnails?: (visible: boolean) => void;
   zoomFitToWidth?: () => void;
+  /** word and slide: recompute the canvas geometry after the chrome changed. */
+  WordControl?: { OnResize?: () => void };
+  /** The spreadsheet editor's equivalent (it has no WordControl). */
+  asc_Resize?: () => void;
+  /** Presentation editor: the notes pane, with its getter. */
+  asc_ShowNotes?: (visible: boolean) => void;
+  getIsNotesShow?: () => boolean;
+  /** Word and presentation editors: the rulers, with their getter. */
+  asc_SetViewRulers?: (visible: boolean) => void;
+  asc_GetViewRulers?: () => boolean;
 };
+
+/**
+ * Width of an element inside the (same-origin) editor frame, 0 when it is
+ * absent or hidden. Used to tell "the panel is open" from "the user already
+ * closed it" before folding anything away.
+ */
+function measureEditorElementWidth(selector: string): number {
+  for (let i = 0; i < window.frames.length; i++) {
+    try {
+      const doc = window.frames[i].document;
+      const element = doc?.querySelector(selector);
+      if (element) return Math.round(element.getBoundingClientRect().width);
+    } catch {
+      // cross-origin frame -- not the editor
+    }
+  }
+  return 0;
+}
 
 // Locate the SDK API instance inside the (same-origin) editor iframe. The
 // vendor build exposes it as Asc.editor and aliases it to the frame's own

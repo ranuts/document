@@ -345,6 +345,12 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
    真实复杂度语料而非手拼最小文档——合成文档全绿曾两次掩盖真实文档
    的致命问题（插图保存假死、真实 PPTX 编辑报错）。CHANGELOG.md 随
    用户可感知的改动同步更新。
+   **新用例必须做反向验证（2026-08-18 起）**：临时去掉/禁用本次修复，
+   跑一遍新用例，**确认它变红**，再恢复修复。绿着的用例不等于测到了
+   修复——2026-08-18 一天内两次踩到：`installViewportFollow` 的首版用例
+   在没有该修复时同样全绿（它其实被另一处改动覆盖了），`layout.rightMenu`
+   单向失效的用例也是宽屏挂载、根本走不到出问题的分支。反向验证的结论
+   （"去掉 X 后用例 Y 变红"）写进 PR 说明与 docs/explorations 记录。
 4. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
 5. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
 6. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
