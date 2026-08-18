@@ -1,4 +1,13 @@
-import { createObjectURL, getExtensions, scriptOnLoad } from 'ranuts/utils';
+import {
+  createObjectURL,
+  decodeTextBytes,
+  fetchMaybeGzip,
+  getExtensions,
+  isHtmlDocument,
+  isZipContainer,
+  saveFileToDisk as ranutsSaveFileToDisk,
+  scriptOnLoad,
+} from 'ranuts/utils';
 import 'ranui/message';
 import { t } from '@ranuts/shared/i18n';
 import type {
@@ -29,27 +38,11 @@ export function hasEditorBinSignature(bin: Uint8Array): boolean {
   return EDITOR_BIN_SIGNATURES.has(String.fromCharCode(bin[0]!, bin[1]!, bin[2]!, bin[3]!));
 }
 
-// The v9 engine's offline save trigger emits a finished OOXML document (a ZIP
-// container starting with "PK\x03\x04"), not an editor bin at all.
-export function isZipContainer(bin: Uint8Array): boolean {
-  return bin.length >= 4 && bin[0] === 0x50 && bin[1] === 0x4b && bin[2] === 0x03 && bin[3] === 0x04;
-}
-
-/**
- * True when the bytes are an HTML document rather than a real Office file.
- * Web systems commonly export an HTML <table> under a .xls/.xlsx name; Excel
- * opens those, but the bundled x2t.wasm has its HTML importer stubbed out and
- * aborts on them (missing CHtmlFile2), so they must be routed through SheetJS
- * instead. Only the leading bytes are inspected (after BOM/whitespace).
- */
-export function isHtmlDocument(bin: Uint8Array): boolean {
-  if (bin.length < 8 || isZipContainer(bin)) return false;
-  let start = 0;
-  if (bin[0] === 0xef && bin[1] === 0xbb && bin[2] === 0xbf) start = 3;
-  // UTF-16 BOM: treat as not-HTML here (rare for these exports).
-  const head = new TextDecoder('latin1').decode(bin.subarray(start, start + 2048)).replace(/^\s+/, '');
-  return /^<(!doctype\s+html|html|head|body|table|meta|\?xml[^>]*>\s*<html)/i.test(head);
-}
+// Byte sniffing lives in ranuts (ecosystem first): a ZIP container is what the
+// v9 engine's offline save trigger emits instead of an editor bin, and the HTML
+// sniff catches "this .xls is really an HTML <table>", which the bundled
+// x2t.wasm cannot import at all (its HTML importer is stubbed out).
+export { isHtmlDocument, isZipContainer };
 
 const FILE_DESCRIPTION_MAP: Record<string, string> = {
   docx: 'Word Document',
@@ -68,63 +61,24 @@ const FILE_DESCRIPTION_MAP: Record<string, string> = {
 };
 
 /**
- * Save a finished file to the user's disk: File System Access API when
- * available (native save dialog, success toast), plain anchor download
- * otherwise. A user-cancelled dialog resolves silently; any other failure
- * rejects so the caller can surface it. Shared by the v7 convert-and-download
- * path and the v9 file-stream save path (lib/onlyoffice-editor.ts).
+ * Save a finished file to the user's disk. Adapter over ranuts'
+ * `saveFileToDisk` (File System Access API with an anchor fallback): this
+ * build adds the document-flavoured type description the picker shows and the
+ * ranui success toast. A dismissed dialog resolves without a toast; any other
+ * failure rejects so the caller can surface it. Shared by the convert-and-
+ * download path and the v9 file-stream save path (lib/onlyoffice-editor.ts).
  */
 export async function saveFileToDisk(data: Blob | Uint8Array, fileName: string, mimeType?: string): Promise<void> {
-  const picker = (
-    window as unknown as {
-      showSaveFilePicker?: (opts: {
-        suggestedName: string;
-        types: Array<{ description: string; accept: Record<string, string[]> }>;
-      }) => Promise<{
-        createWritable: () => Promise<{ write: (d: Blob | Uint8Array) => Promise<void>; close: () => Promise<void> }>;
-      }>;
-    }
-  ).showSaveFilePicker;
-
-  if (typeof picker !== 'function') {
-    const blob = data instanceof Blob ? data : new Blob([data as BlobPart]);
-    const url = await createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(() => {
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    }, 100);
-    return;
-  }
-
-  try {
-    const extension = fileName.split('.').pop()?.toLowerCase() || '';
-    const detectedMimeType = mimeType || getDocumentMimeType(fileName);
-    const fileHandle = await picker.call(window, {
-      suggestedName: fileName,
-      types: [
-        {
-          description: FILE_DESCRIPTION_MAP[extension] || 'Document',
-          accept: { [detectedMimeType]: [`.${extension}`] },
-        },
-      ],
-    });
-    const writable = await fileHandle.createWritable();
-    await writable.write(data);
-    await writable.close();
-    // ranui/message registers a global `window.message` toast API (untyped).
-    (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
-      `${t('fileSavedSuccess')}${fileName}`,
-    );
-  } catch (error) {
-    if ((error as Error).name === 'AbortError') return;
-    throw error;
-  }
+  const extension = fileName.split('.').pop()?.toLowerCase() || '';
+  const written = await ranutsSaveFileToDisk(data, fileName, {
+    mimeType: mimeType || getDocumentMimeType(fileName),
+    description: FILE_DESCRIPTION_MAP[extension] || 'Document',
+  });
+  if (!written) return;
+  // ranui/message registers a global `window.message` toast API (untyped).
+  (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
+    `${t('fileSavedSuccess')}${fileName}`,
+  );
 }
 
 const MIME_MAP: Record<string, string> = {
@@ -202,22 +156,11 @@ export class X2TConverter {
     };
     if (globalScope.Module?.wasmBinary) return; // already prepared
 
-    const response = await fetch(this.WASM_GZ_PATH);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch x2t WASM at '${this.WASM_GZ_PATH}' (${response.status})`);
-    }
-    const raw = await response.arrayBuffer();
-    const head = new Uint8Array(raw, 0, Math.min(2, raw.byteLength));
-    const isGzip = head[0] === 0x1f && head[1] === 0x8b;
-
-    let wasmBinary: ArrayBuffer;
-    if (isGzip) {
-      const stream = new Response(raw).body!.pipeThrough(new DecompressionStream('gzip'));
-      wasmBinary = await new Response(stream).arrayBuffer();
-    } else {
-      // Already decompressed by the browser via Content-Encoding.
-      wasmBinary = raw;
-    }
+    // The asset is published gzipped, but whether the browser already decoded
+    // it depends on the host's Content-Encoding — the magic number decides,
+    // not the URL (ranuts fetchMaybeGzip).
+    const bytes = await fetchMaybeGzip(this.WASM_GZ_PATH);
+    const wasmBinary = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
 
     // Pre-seed the global Module so x2t.js (which reuses an existing global
     // Module) picks up the binary. Preserve any properties already set.
@@ -576,19 +519,7 @@ export class X2TConverter {
    * superset) is tried before the latin1 last resort.
    */
   private decodeCsvBytes(csvData: Uint8Array): string {
-    if (csvData.length >= 3 && csvData[0] === 0xef && csvData[1] === 0xbb && csvData[2] === 0xbf) {
-      return new TextDecoder('utf-8').decode(csvData.slice(3));
-    }
-    try {
-      return new TextDecoder('utf-8', { fatal: true }).decode(csvData);
-    } catch {
-      try {
-        return new TextDecoder('gb18030', { fatal: true }).decode(csvData);
-      } catch {
-        // gb18030 decoder unavailable, or bytes invalid in it too
-        return new TextDecoder('latin1').decode(csvData);
-      }
-    }
+    return decodeTextBytes(csvData);
   }
 
   /**

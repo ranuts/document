@@ -33,8 +33,8 @@ importers:
         specifier: 0.5.0-alpha.3
         version: 0.5.0-alpha.3(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
       ranuts:
-        specifier: 0.4.0-alpha.4
-        version: 0.4.0-alpha.4
+        specifier: 0.4.0-alpha.5
+        version: 0.4.0-alpha.5
     devDependencies:
       '@playwright/test':
         specifier: ^1.62.1
@@ -95,8 +95,8 @@ importers:
         specifier: 0.5.0-alpha.3
         version: 0.5.0-alpha.3(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
       ranuts:
-        specifier: 0.4.0-alpha.4
-        version: 0.4.0-alpha.4
+        specifier: 0.4.0-alpha.5
+        version: 0.4.0-alpha.5
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -111,8 +111,8 @@ importers:
         specifier: 0.5.0-alpha.3
         version: 0.5.0-alpha.3(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
       ranuts:
-        specifier: 0.4.0-alpha.4
-        version: 0.4.0-alpha.4
+        specifier: 0.4.0-alpha.5
+        version: 0.4.0-alpha.5
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -121,8 +121,8 @@ importers:
   packages/shared:
     dependencies:
       ranuts:
-        specifier: 0.4.0-alpha.4
-        version: 0.4.0-alpha.4
+        specifier: 0.4.0-alpha.5
+        version: 0.4.0-alpha.5
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -1704,10 +1704,6 @@ packages:
   ranui@0.5.0-alpha.3:
     resolution: {integrity: sha512-y5JXhIuHiEHUvufyXugQTvjIh9hs6jFc+8cBP83ZmgO1eZ7qrQSyUp6uN9EPD//Pxe4KUGgOdcLNqzRfcaKvgA==}
     engines: {node: '>=20.19.0'}
-
-  ranuts@0.4.0-alpha.4:
-    resolution: {integrity: sha512-xSBb8moo54hgdh8Xuj3qMIzICWW+qIkrYkj+vWSN+e4EZqrA30l+agRXN8GTgNNa41ve+Tu967pyr4B7KQFcpw==}
-    engines: {node: '>=23.10.0'}
 
   ranuts@0.4.0-alpha.5:
     resolution: {integrity: sha512-sAcM+DJ28gwRNAf3hm/CdQxsgdIfr0s9AQmWhgebEtOgli35xgJ35Q1m2aCK8SpnfAl7eH68px06p95WDbRaNQ==}
@@ -3408,10 +3404,6 @@ snapshots:
       - '@svta/cml-cta'
       - '@svta/cml-structured-field-values'
       - '@svta/cml-utils'
-
-  ranuts@0.4.0-alpha.4:
-    dependencies:
-      jschardet: 3.1.4
 
   ranuts@0.4.0-alpha.5:
     dependencies:
