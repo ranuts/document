@@ -17,8 +17,10 @@ vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
 });
 
 import {
+  classifyOpenFailure,
   createEditorInstance,
   getNormalizedFile,
+  isFontSystemReady,
   getReadonlyMode,
   getSavedFileMimeType,
   requestSaveDocument,
@@ -450,5 +452,44 @@ describe('onlyoffice-editor', () => {
     it('throws for unsupported types', () => {
       expect(() => toUint8Array('string data' as unknown as BlobPart)).toThrow('Unsupported saved data type');
     });
+  });
+});
+
+// The open path's two readiness/classification predicates (GitHub #144). Both
+// decide whether a perfectly good document is reported as unopenable, so they
+// are pinned here; the surrounding wiring is covered by test/e2e/open-retry.
+describe('open-conversion readiness and failure classification', () => {
+  const fontSystem = (infos: unknown, fontFiles: unknown) => ({
+    AscFonts: { g_font_infos: infos },
+    AscCommon: { g_font_loader: { fontFiles } },
+  });
+
+  it('reports the font system as unready until the catalog is an array', () => {
+    expect(isFontSystemReady({})).toBe(false);
+    expect(isFontSystemReady(fontSystem(undefined, [{ Id: '000' }]))).toBe(false);
+  });
+
+  it('reports an empty catalog as ready (the vendor loop never dereferences)', () => {
+    expect(isFontSystemReady(fontSystem([], undefined))).toBe(true);
+  });
+
+  it('requires the font files of a non-empty catalog (fontFiles[i].Id would throw)', () => {
+    expect(isFontSystemReady(fontSystem([{ Name: 'Arial' }], undefined))).toBe(false);
+    expect(isFontSystemReady(fontSystem([{ Name: 'Arial' }], []))).toBe(false);
+    expect(isFontSystemReady(fontSystem([{ Name: 'Arial' }], [{ Id: '000' }]))).toBe(true);
+  });
+
+  it('classifies x2t verdicts on the bytes as document failures (no retry)', () => {
+    expect(classifyOpenFailure('Document conversion failed: Error: Conversion failed with code: 88')).toBe('document');
+    expect(classifyOpenFailure('Aborted(missing function: _ZN10CHtmlFile2C1Ev)')).toBe('document');
+    expect(classifyOpenFailure('RuntimeError: memory access out of bounds')).toBe('document');
+  });
+
+  it('classifies editor boot-state and resource failures as environment failures', () => {
+    expect(
+      classifyOpenFailure("Document conversion failed: TypeError: Cannot read properties of undefined (reading 'Id')"),
+    ).toBe('environment');
+    expect(classifyOpenFailure('X2T module not found after script loading')).toBe('environment');
+    expect(classifyOpenFailure('Document conversion failed: TypeError: Failed to fetch')).toBe('environment');
   });
 });

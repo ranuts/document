@@ -358,6 +358,109 @@ let currentDocumentBlobUrl: string | null = null;
  * Returns true once every treatment is in place on some frame, so the caller
  * can stop re-applying.
  */
+// The document currently being opened, kept so an open that fails for an
+// environment reason can be retried with the same bytes (see
+// retryCurrentOpen). Cleared on the next user-initiated open.
+type OpenAttempt = {
+  fileName: string;
+  fileType: string;
+  binData?: ArrayBuffer;
+  readonly: boolean;
+  retried: boolean;
+};
+let currentOpenAttempt: OpenAttempt | null = null;
+// Bumped for every editor build (a user-initiated open and its retry alike).
+// Each frame's failure guard captures the generation it was installed for, so
+// the duplicate rejections a torn-down frame keeps emitting cannot report an
+// error against the document that replaced it.
+let openGeneration = 0;
+// Generation whose open failure has already been acted on (reported, or
+// answered with a retry). The vendor leaves both the inner conversion promise
+// and loadDocument's own promise unhandled, so every failure arrives twice.
+let handledFailureGeneration = -1;
+
+/**
+ * Rebuild the editor once for the document that just failed to open.
+ * Returns whether a retry was started; `false` means the caller should report
+ * the failure to the user.
+ */
+function retryCurrentOpen(reason: string): boolean {
+  const attempt = currentOpenAttempt;
+  if (!attempt || attempt.retried) return false;
+  if (classifyOpenFailure(reason) !== 'environment') return false;
+  attempt.retried = true;
+  console.warn('[OO] retrying the open once after an environment failure:', reason);
+  (window as unknown as { message?: { info?: (msg: string) => void } }).message?.info?.(t('editorOpenRetrying'));
+  // Deferred: this runs from the failing frame's rejection handler, and the
+  // rebuild tears that frame down.
+  setTimeout(() => {
+    createEditorInstance({
+      fileName: attempt.fileName,
+      fileType: attempt.fileType,
+      binData: attempt.binData,
+      readonly: attempt.readonly,
+      isRetry: true,
+    }).catch((error) => {
+      console.error('[OO] open retry failed to start:', error);
+      markDocumentOpenFailed(String(error));
+    });
+  }, 0);
+  return true;
+}
+
+/**
+ * The parts of an editor frame the vendor's `AscCommon.fetchFonts` walks
+ * before the open conversion can proceed.
+ */
+export type FontSystemWindow = {
+  AscCommon?: {
+    fetchFonts?: (cb: (fonts: unknown[]) => void) => unknown;
+    g_font_loader?: { fontFiles?: unknown };
+  };
+  AscFonts?: { g_font_infos?: unknown };
+};
+
+/**
+ * Both halves of the font system have to be up before the vendor's
+ * `fetchFonts` is safe to run: it iterates `AscFonts.g_font_infos` and, for
+ * every face that needs styles, dereferences
+ * `AscCommon.g_font_loader.fontFiles[index].Id`. They are populated by
+ * different steps of the editor boot, so "g_font_infos exists" is not enough
+ * -- an entry read out of an empty `fontFiles` is `undefined` and `.Id`
+ * throws, which surfaces to the user as a -82 open error.
+ */
+export function isFontSystemReady(win: FontSystemWindow): boolean {
+  const infos = win.AscFonts?.g_font_infos;
+  if (!Array.isArray(infos)) return false;
+  // Nothing to look up: the loop body never runs, so an empty catalog is safe.
+  if (infos.length === 0) return true;
+  const files = win.AscCommon?.g_font_loader?.fontFiles;
+  return Array.isArray(files) && files.length > 0;
+}
+
+/**
+ * Open-conversion failures split into two very different kinds:
+ *
+ * - `document`: x2t ran and rejected these bytes ("Conversion failed with
+ *   code: 88", an emscripten `Aborted(...)` on an importer this wasm build
+ *   stubs out). Retrying is pointless -- the same bytes fail the same way --
+ *   so the user gets the error immediately.
+ * - `environment`: the editor tripped over its own boot state or over a
+ *   resource that did not arrive (a TypeError from a half-initialised SDK,
+ *   the x2t module missing or timing out, a failed fetch). Nothing is wrong
+ *   with the document, and a rebuilt editor usually opens it -- which is why
+ *   the same file opens in a freshly-started browser and fails in the one
+ *   that has been running all day (GitHub #144).
+ */
+export function classifyOpenFailure(message: string): 'document' | 'environment' {
+  if (/Conversion failed with code|Aborted\(|missing function|RuntimeError/i.test(message)) return 'document';
+  // The TypeError wordings of a half-initialised SDK, across engines.
+  if (/Cannot read propert|undefined is not an object|null is not an object/i.test(message)) return 'environment';
+  if (/is not a function|has no properties|can't access property/i.test(message)) return 'environment';
+  if (/X2T module|initialization timeout|Failed to fetch|NetworkError|load failed/i.test(message)) return 'environment';
+  return 'document';
+}
+
 // Open-conversion failure surfacing. The vendor's offline controller awaits
 // AscCommon.x2t.convertToBin inside loadDocument with no catch, so a failed
 // import (garbage or truncated bytes, HTML disguised as .xls/.xlsx, an x2t
@@ -380,6 +483,10 @@ function installOpenFailureGuard(win: Window): void {
   };
   if (w.__ooOpenFailureGuarded) return;
   w.__ooOpenFailureGuarded = true;
+  // The editor build this frame belongs to. A frame the retry replaced keeps
+  // emitting the rejections of its own failed open for a while; those must not
+  // be charged to the document that took its place.
+  const generation = openGeneration;
   win.addEventListener('unhandledrejection', (event) => {
     const reason = (event as PromiseRejectionEvent).reason as { message?: unknown } | undefined;
     const message = String(reason && typeof reason === 'object' ? (reason.message ?? reason) : reason);
@@ -397,10 +504,19 @@ function installOpenFailureGuard(win: Window): void {
       return;
     }
     // The vendor's async loadDocument leaves both the inner conversion
-    // promise and its own promise unhandled, so this fires twice per
-    // failure; report once.
-    if (documentOpenError) return;
+    // promise and its own promise unhandled, so this fires twice per failure;
+    // act once per editor build, and never for a superseded one.
+    if (generation !== openGeneration || documentOpenError) return;
+    if (handledFailureGeneration === generation) return;
+    handledFailureGeneration = generation;
     console.error('[OO] open conversion failed:', message);
+    // An environment-class failure (see classifyOpenFailure) says nothing
+    // about the document, so rebuild the editor once with the same bytes
+    // before telling the user the file cannot be opened. The rebuild starts
+    // the editor -- and its font system, x2t module and image pipeline --
+    // from scratch, which is what turned the failure into a success on a
+    // second, colder browser in GitHub #144.
+    if (retryCurrentOpen(message)) return;
     markDocumentOpenFailed(message);
     const api = w.Asc?.editor;
     if (!api || typeof api.sendEvent !== 'function') return;
@@ -437,23 +553,22 @@ function prepareEditorIframe(): boolean {
         console.log('[OO] SharedWorker shadowed in editor iframe (spellchecker uses a dedicated worker)');
       }
 
-      // 3. Guard the vendor build's AscCommon.fetchFonts: it reads
-      //    AscFonts.g_font_infos.forEach unconditionally, but on a cold
-      //    profile the open-document conversion can run before the font
-      //    system has populated that array, crashing the conversion
-      //    ("Cannot read properties of undefined (reading 'forEach')") and
-      //    leaving the document permanently half-open. Import conversions
-      //    don't need fonts, so report "no fonts" until the font system is
-      //    up; exports (PDF) happen much later, when it always is.
-      const ooWin = win as unknown as {
-        AscCommon?: { fetchFonts?: (cb: (fonts: unknown[]) => void) => unknown };
-        AscFonts?: { g_font_infos?: unknown };
-        __ooFetchFontsGuarded?: boolean;
-      };
+      // 3. Guard the vendor build's AscCommon.fetchFonts: the open-document
+      //    conversion awaits it (x2t_helper _convertDocument), and it walks
+      //    the font system with no readiness check of its own --
+      //    `AscFonts.g_font_infos.forEach(...)` and, per entry,
+      //    `AscCommon.g_font_loader.fontFiles[index].Id`. Whichever of the
+      //    two is not populated yet throws a TypeError that x2t_helper
+      //    rewraps as "Document conversion failed: ...", i.e. a -82 open
+      //    error on a perfectly good file. Import conversions don't need
+      //    fonts, so report "no fonts" until the whole font system is up;
+      //    exports (PDF) happen much later, when it always is.
+      const ooWin = win as unknown as FontSystemWindow & { __ooFetchFontsGuarded?: boolean };
       if (ooWin.AscCommon && typeof ooWin.AscCommon.fetchFonts === 'function' && !ooWin.__ooFetchFontsGuarded) {
         const origFetchFonts = ooWin.AscCommon.fetchFonts;
         ooWin.AscCommon.fetchFonts = function (cb: (fonts: unknown[]) => void) {
-          if (!ooWin.AscFonts || !Array.isArray(ooWin.AscFonts.g_font_infos)) {
+          if (!isFontSystemReady(ooWin)) {
+            console.warn('[OO] fetchFonts called before the font system was ready; importing without fonts');
             cb([]);
             return;
           }
@@ -1113,9 +1228,14 @@ function createPersonalEditorInstance(config: {
         // -82: the open conversion failed (see installOpenFailureGuard).
         const hint =
           code === -85 ? ` ${t('editorErrorFormatMismatch')}` : code === -82 ? ` ${t('editorErrorOpenFailed')}` : '';
+        // The numeric code alone is not diagnosable: every issue report so far
+        // arrived as a screenshot of this toast (#113, #144). When the open
+        // conversion is what failed we know exactly why, so put that reason in
+        // the toast too -- truncated, since it is vendor text.
+        const cause = code === -82 && documentOpenError ? ` [${documentOpenError.slice(0, 160)}]` : '';
         const detail = [code !== undefined ? `code ${code}` : '', data?.errorDescription].filter(Boolean).join(', ');
         (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
-          `${t('editorErrorToast')}${detail ? ` (${detail})` : ''}${hint}`,
+          `${t('editorErrorToast')}${detail ? ` (${detail})` : ''}${hint}${cause}`,
         );
       },
     },
@@ -1129,7 +1249,20 @@ export function createEditorInstance(config: {
   fileType: string;
   binData?: ArrayBuffer;
   readonly?: boolean;
+  /** Set only by retryCurrentOpen: keeps the attempt's one retry budget. */
+  isRetry?: boolean;
 }): Promise<void> {
+  openGeneration += 1;
+  if (!config.isRetry) {
+    // A user-initiated open resets the retry budget for the new document.
+    currentOpenAttempt = {
+      fileName: config.fileName,
+      fileType: config.fileType,
+      binData: config.binData,
+      readonly: config.readonly ?? false,
+      retried: false,
+    };
+  }
   return queueEditorOperation(async () => {
     const { fileName, fileType, binData, readonly = false } = config;
     isReadonlyMode = readonly;

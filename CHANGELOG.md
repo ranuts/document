@@ -76,6 +76,14 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Opening a local document no longer fails with "code -82 / the file could not
+  be opened" when the editor's font system is not up yet: that case is now
+  detected (imports run without fonts) and, if the open still fails for a
+  reason that is about the editor rather than the file, the document is
+  reopened once automatically. This is what made the same file open in a
+  freshly started browser and fail in one that had been running all day
+  (GitHub #144). When an open really does fail, the error toast now names the
+  underlying reason instead of only the numeric code.
 - Spreadsheets: using Review -> Remove/Resolve comments before clicking into
   the grid no longer fails silently and leaves undo in a broken state.
 
