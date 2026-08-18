@@ -141,4 +141,55 @@ test.describe('open retry after an environment failure (real editor)', () => {
     expect(saved.name).toBe('retry-after-fault.xlsx');
     expect(saved.size).toBeGreaterThan(0);
   });
+
+  test('waiting for the font system costs a fraction of a second, not seconds', async ({ page }) => {
+    // awaitFontSystem orders the conversion behind the font system instead of
+    // letting it walk a half-built one. What that ordering costs is measured
+    // here rather than assumed: a warm local run waits ~200 ms (four poll
+    // intervals), a cold one waits zero because the fonts are ready about a
+    // second before the x2t module even loads. The bound is what matters --
+    // an environment where fonts systematically lose the race would add
+    // seconds to every open, and this test is how that shows up.
+    await page.goto('/embed-demo.html');
+    await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
+
+    const waited = await page.evaluate(async () => {
+      const XLSX = (window as unknown as { XLSX: any }).XLSX;
+      const sheet = XLSX.utils.aoa_to_sheet([
+        ['font', 'wait'],
+        [1, 2],
+      ]);
+      const book = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(book, sheet, 'Sheet1');
+      const written = XLSX.write(book, { bookType: 'xlsx', type: 'array' });
+      const buffer: ArrayBuffer = written instanceof ArrayBuffer ? written : written.buffer;
+      await post('document:open-buffer', { fileName: 'font-wait.xlsx', buffer, readonly: false });
+
+      const findFrame = (win: Window): Window | null => {
+        try {
+          const api = (win as any).Asc?.editor;
+          if (api && 'isDocumentLoadComplete' in api) return win;
+        } catch {
+          /* cross-origin */
+        }
+        for (let i = 0; i < win.frames.length; i++) {
+          const found = findFrame(win.frames[i]);
+          if (found) return found;
+        }
+        return null;
+      };
+      const deadline = Date.now() + 120_000;
+      while (Date.now() < deadline) {
+        const frame = findFrame(window) as (Window & { __ooFontWaitMs?: number; Asc?: any }) | null;
+        if (frame?.Asc?.editor?.isDocumentLoadComplete) return frame.__ooFontWaitMs ?? null;
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+      return null;
+    });
+
+    // null would mean fetchFonts never ran at all, which is itself a change
+    // worth failing on: the conversion is supposed to go through the guard.
+    expect(waited).not.toBeNull();
+    expect(waited).toBeLessThan(2_000);
+  });
 });

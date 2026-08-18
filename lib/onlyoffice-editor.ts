@@ -438,6 +438,71 @@ export function isFontSystemReady(win: FontSystemWindow): boolean {
   return Array.isArray(files) && files.length > 0;
 }
 
+// How long the open conversion waits for the font system before giving up on
+// it. Measured on production, the font system is ready about a second BEFORE
+// the x2t module is (fonts at ~3.2 s, x2t at ~4.2 s), so the normal path waits
+// zero; the cap only bounds the case where a font system never comes up, which
+// then degrades to the fontless import that shipped in #146 instead of hanging
+// the open.
+export const FONT_SYSTEM_WAIT_MS = 5_000;
+const FONT_SYSTEM_POLL_MS = 50;
+// Milliseconds the last conversion spent waiting for fonts. Zero on the normal
+// path; asserted by the E2E suite so a systematic wait (an environment where
+// fonts always lose the race) shows up as a failing test rather than as a
+// silent few seconds added to every open.
+export const FONT_WAIT_PROBE = '__ooFontWaitMs';
+
+/**
+ * The dependency the vendor never declared. `fetchFonts` is awaited by the
+ * open conversion (x2t_helper `_convertDocument`, shared with the export
+ * path), but the font system it walks is initialised in parallel with the
+ * document load -- so whether it is ready when the conversion asks is a race
+ * decided by cache warmth, network and CPU, and losing it is a TypeError that
+ * fails the whole open with -82 (GitHub #144).
+ *
+ * Ordering the two is what removes the race rather than papering over it: hold
+ * the callback until the font system is up, then hand over to the vendor's own
+ * implementation. A browser cannot make the catalog load synchronous, but the
+ * conversion can wait for it, which buys the same guarantee. Two things keep
+ * the wait from becoming a new failure mode: it is capped, and the fallback is
+ * exactly what the code did before (report no fonts -- imports survive
+ * without them). Individual font files that fail to download are the vendor's
+ * business; its own fetchFonts already swallows those.
+ */
+export function awaitFontSystem(
+  win: FontSystemWindow,
+  original: (cb: (fonts: unknown[]) => void) => unknown,
+  cb: (fonts: unknown[]) => void,
+  options: { timeoutMs?: number; intervalMs?: number } = {},
+): void {
+  const { timeoutMs = FONT_SYSTEM_WAIT_MS, intervalMs = FONT_SYSTEM_POLL_MS } = options;
+  const record = (waited: number): void => {
+    (win as Record<string, unknown>)[FONT_WAIT_PROBE] = waited;
+  };
+  if (isFontSystemReady(win)) {
+    record(0);
+    original.call(win.AscCommon, cb);
+    return;
+  }
+  let waited = 0;
+  const timer = setInterval(() => {
+    waited += intervalMs;
+    if (isFontSystemReady(win)) {
+      clearInterval(timer);
+      record(waited);
+      console.log(`[OO] open conversion waited ${waited} ms for the font system`);
+      original.call(win.AscCommon, cb);
+      return;
+    }
+    if (waited >= timeoutMs) {
+      clearInterval(timer);
+      record(waited);
+      console.warn(`[OO] font system still not ready after ${timeoutMs} ms; importing without fonts`);
+      cb([]);
+    }
+  }, intervalMs);
+}
+
 /**
  * Open-conversion failures split into two very different kinds:
  *
@@ -560,22 +625,18 @@ function prepareEditorIframe(): boolean {
       //    `AscCommon.g_font_loader.fontFiles[index].Id`. Whichever of the
       //    two is not populated yet throws a TypeError that x2t_helper
       //    rewraps as "Document conversion failed: ...", i.e. a -82 open
-      //    error on a perfectly good file. Import conversions don't need
-      //    fonts, so report "no fonts" until the whole font system is up;
-      //    exports (PDF) happen much later, when it always is.
+      //    error on a perfectly good file. awaitFontSystem turns that race
+      //    into an ordered dependency: the conversion waits for the font
+      //    system instead of walking a half-built one, and only a wait that
+      //    runs out of budget degrades to a fontless import.
       const ooWin = win as unknown as FontSystemWindow & { __ooFetchFontsGuarded?: boolean };
       if (ooWin.AscCommon && typeof ooWin.AscCommon.fetchFonts === 'function' && !ooWin.__ooFetchFontsGuarded) {
         const origFetchFonts = ooWin.AscCommon.fetchFonts;
         ooWin.AscCommon.fetchFonts = function (cb: (fonts: unknown[]) => void) {
-          if (!isFontSystemReady(ooWin)) {
-            console.warn('[OO] fetchFonts called before the font system was ready; importing without fonts');
-            cb([]);
-            return;
-          }
-          return origFetchFonts.call(this, cb);
+          awaitFontSystem(ooWin, origFetchFonts, cb);
         };
         ooWin.__ooFetchFontsGuarded = true;
-        console.log('[OO] AscCommon.fetchFonts guarded against uninitialized font system');
+        console.log('[OO] AscCommon.fetchFonts now waits for the font system before converting');
       }
 
       // 4. Serverless image pipeline. The SDK expects a Document Server to

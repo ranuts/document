@@ -87,10 +87,30 @@ window.AscFonts.g_font_infos.forEach(function (w) {
    `[Document conversion failed: ...]`（截断 160 字），下一份 issue 就能直接看出
    是文档问题还是环境问题。
 
+## 四·补：从"跳过字体"改成"等字体"（同日追加）
+
+第一版守卫在字体系统没就绪时直接 `cb([])`（无字体导入）——那只是让崩溃变成
+降级，竞态本身还在。追加版把它改成**有序依赖**：`awaitFontSystem()` 把回调
+压住，等字体系统就绪再交给厂商实现，只有等待超预算（5 s）才退回无字体导入。
+浏览器里没法把字体目录变成同步加载，但让转换 await 它，等价于消除竞态。
+
+两个必须算清楚的账：
+
+- **代价**：就绪时立即放行，一分不花（单测断言此路径不排任何定时器）。
+  实测本地热缓存的一次正常打开等了 **200 ms**（4 个 50 ms 轮询）——这恰好
+  反向印证了根因：热缓存下转换确实跑在字体前面。冷 profile 则等 0（字体
+  ~3.2 s 就绪，x2t ~4.2 s 才就绪）。E2E 把这个值钉在 2 s 以内，一旦某个环境
+  下字体系统性地输掉竞速、每次打开凭空多等几秒，用例先红。
+- **字体加载失败**：单个字体文件失败由厂商自己 `.catch` 吞掉，与我们无关；
+  整个字体目录都没到，则等满 5 s 后退回无字体导入——也就是第一版的行为，
+  不新增任何挂起路径。
+
 ## 五、用例（用例固化制度）
 
 - `test/unit/onlyoffice-editor.test.ts`：`isFontSystemReady` 三态、
-  `classifyOpenFailure` 两类共 5 条断言。
+  `classifyOpenFailure` 两类，外加 `awaitFontSystem` 四条（就绪即放行且不排
+  定时器、迟到就绪后放行并记录等待毫秒、超时退回 `cb([])` 且不留定时器、
+  默认预算上限）。
 - `test/e2e/open-retry.spec.ts`（新）：在真实编辑器里把**本次会话的第一次**
   `AscCommon.x2t.convertToBin` 换成抛
   `Document conversion failed: TypeError: Cannot read properties of undefined (reading 'Id')`
@@ -98,6 +118,7 @@ window.AscFonts.g_font_infos.forEach(function (w) {
   没有 -82、重建后的编辑器还能正常保存。
 - `test/e2e/open-failure.spec.ts`（原有）反向钉住：垃圾字节 `.xlsx` 是
   `document` 类失败，**不重试**、立刻报错、保存快速拒绝。
+- `open-retry.spec.ts` 第二条：正常打开时真实记录的字体等待必须 < 2 s。
 
 ## 六、遗留
 
