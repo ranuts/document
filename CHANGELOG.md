@@ -83,7 +83,8 @@ notes. Entries describe what users experience, not internal refactors.
   (GitHub #145). The thumbnails come back from the left rail.
 - That layout now follows the viewport instead of being decided when the
   document opens: a phone held in landscape counts as small too, and rotating
-  the device or resizing the window re-adapts the open document.
+  the device or resizing the window re-adapts the open document -- including
+  giving the panels back when the window is widened again.
 - The editor no longer stays blank when the browser discards its canvas under
   memory pressure (seen on Android after repeatedly changing the zoom): it
   repaints as soon as the canvas is restored.

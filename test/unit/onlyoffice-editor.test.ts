@@ -522,21 +522,16 @@ describe('compact viewport customization', () => {
     expect(isCompactViewport(metrics(1024, 768, true))).toBe(false);
   });
 
-  it('drops the panels that cost width and starts at fit-to-width', () => {
-    const customization = compactViewportCustomization() as {
-      compactHeader: boolean;
-      hideNotes: boolean;
-      hideRulers: boolean;
-      zoom: number;
-      layout: { rightMenu: boolean; leftMenu?: boolean };
-    };
+  it('carries only settings with no runtime switch', () => {
+    const customization = compactViewportCustomization() as Record<string, unknown>;
     expect(customization.compactHeader).toBe(true);
-    expect(customization.hideNotes).toBe(true);
-    expect(customization.hideRulers).toBe(true);
     expect(customization.zoom).toBe(-2);
-    expect(customization.layout.rightMenu).toBe(false);
-    // The left rail stays: it is the way back to the thumbnails panel that
-    // applyCompactSlideLayout collapses.
-    expect(customization.layout.leftMenu).toBeUndefined();
+    // Everything the editor can toggle at runtime must NOT be here: the vendor
+    // applies customization once, at boot, and `layout: { rightMenu: false }`
+    // in particular writes an inline display:none that no later widening can
+    // undo. Those pieces go through syncCompactLayout instead.
+    expect(customization.layout).toBeUndefined();
+    expect(customization.hideNotes).toBeUndefined();
+    expect(customization.hideRulers).toBeUndefined();
   });
 });

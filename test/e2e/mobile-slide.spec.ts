@@ -289,14 +289,22 @@ test.describe('viewport follow on a live editor (real editor)', () => {
       page.evaluate(() => {
         const win = (window as any).__findEditorFrame() as Window | null;
         if (!win) throw new Error('editor frame not found');
+        const api = (win as any).Asc.editor;
         const width = (selector: string) =>
           Math.round(win.document.querySelector(selector)?.getBoundingClientRect().width ?? 0);
-        return { viewport: win.innerWidth, canvas: width('#id_viewer'), thumbnails: width('#id_thumbnails') };
+        return {
+          viewport: win.innerWidth,
+          canvas: width('#id_viewer'),
+          thumbnails: width('#id_thumbnails'),
+          rightMenu: width('[data-layout-name="rightMenu"]'),
+          notesShown: api.getIsNotesShow?.() ?? null,
+        };
       });
 
-    // Mounted wide: the desktop layout, thumbnails and all.
+    // Mounted wide: the desktop layout, every panel in place.
     const wide = await read();
     expect(wide.thumbnails).toBeGreaterThan(0);
+    expect(wide.rightMenu).toBeGreaterThan(0);
 
     await page.setViewportSize({ width: 393, height: 900 });
     // The follow is debounced -- mobile browsers fire resize on every URL-bar frame.
@@ -305,11 +313,72 @@ test.describe('viewport follow on a live editor (real editor)', () => {
     const narrow = await read();
     expect(narrow.viewport).toBe(393);
     expect(narrow.thumbnails).toBe(0);
+    expect(narrow.rightMenu).toBe(0);
+    expect(narrow.notesShown).toBe(false);
     expect(narrow.canvas).toBeGreaterThan(narrow.viewport * 0.75);
 
-    // Widening again gives the panel back: the collapse was ours to undo.
+    // Widening again gives the panels back: everything folded here was ours
+    // to unfold. The right panel is the one that used to be a one-way door --
+    // hiding it through customization.layout wrote an inline display:none that
+    // no media query could undo, so a document opened in a narrow window lost
+    // its object settings for good.
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.waitForTimeout(1_500);
-    expect((await read()).thumbnails).toBeGreaterThan(0);
+    const wideAgain = await read();
+    expect(wideAgain.thumbnails).toBeGreaterThan(0);
+    expect(wideAgain.rightMenu).toBeGreaterThan(0);
+    expect(wideAgain.notesShown).toBe(true);
+  });
+
+  test('a document opened in a narrow window gets its panels back when it is widened', async ({ page }) => {
+    // The mirror of the test above, and the one that catches a one-way fold:
+    // here the editor MOUNTS compact, so anything applied through the vendor's
+    // mount-time customization is applied for good. `layout: { rightMenu:
+    // false }` used to be applied that way and left the object-settings panel
+    // hidden by an inline style that widening could never undo.
+    await page.setViewportSize({ width: 400, height: 900 });
+    await page.addInitScript(INSTALL_FRAME_FINDER);
+    await page.goto('/editor?new=pptx');
+    await page.waitForFunction(
+      () => {
+        const visit = (win: Window): boolean => {
+          try {
+            if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
+          } catch {
+            /* cross-origin */
+          }
+          for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
+          return false;
+        };
+        return visit(window);
+      },
+      null,
+      { timeout: 150_000 },
+    );
+
+    const read = () =>
+      page.evaluate(() => {
+        const win = (window as any).__findEditorFrame() as Window | null;
+        if (!win) throw new Error('editor frame not found');
+        const width = (selector: string) =>
+          Math.round(win.document.querySelector(selector)?.getBoundingClientRect().width ?? 0);
+        return {
+          viewport: win.innerWidth,
+          rightMenu: width('[data-layout-name="rightMenu"]'),
+          thumbnails: width('#id_thumbnails'),
+        };
+      });
+
+    const narrow = await read();
+    expect(narrow.rightMenu).toBe(0);
+    expect(narrow.thumbnails).toBe(0);
+
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.waitForTimeout(1_500);
+
+    const wide = await read();
+    expect(wide.viewport).toBe(1280);
+    expect(wide.rightMenu).toBeGreaterThan(0);
+    expect(wide.thumbnails).toBeGreaterThan(0);
   });
 });
