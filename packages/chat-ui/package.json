@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "ranui": "0.5.0-alpha.3",
-    "ranuts": "0.4.0-alpha.4"
+    "ranuts": "0.4.0-alpha.5"
   },
   "devDependencies": {
     "typescript": "^6.0.3"

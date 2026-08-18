@@ -324,6 +324,11 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 - **DOM 构造优先用 ranui builder**：`import { Div, View, ButtonBuilder } from 'ranui/builder'`（`lib/ui.ts` 已在用），不要用成堆 `document.createElement` 拼装。
 - **设计 token 用 ranui**：颜色/字体/圆角/阴影/暗色统一走 `--ran-*`（`public/ran-tokens.css`，由 `bin/build.sh` 从 `ranui/dist/ranui.css` 同步），不要另造调色板；落地页样式即基于此。
 - **工具函数优先用 ranuts**：`import { ... } from 'ranuts/utils'`（如 `getAllQueryString`、`createObjectURL`、`createSignal`），不要重复造轮子。
+  二进制/文件相关的通用能力 0.4.0-alpha.5 起也在 ranuts：`createZip` / `readZipEntries` /
+  `readZipEntry`（zip 读写）、`bytesToBase64` / `base64ToBytes`（分块，避免大文件
+  RangeError）、`fetchMaybeGzip` / `gunzipMaybe`、`isZipContainer` / `isHtmlDocument`
+  （字节嗅探）、`decodeTextBytes`（BOM→utf-8→gb18030→latin1）、`saveFileToDisk`
+  （File System Access + 锚点兜底）——本仓 converter 与 E2E fixture 已全部改用它们。
 - **反向改生态**：发现 ranui / ranuts 能力不够用时，去改它们的源仓库 `chaxus/ran`，把能力沉淀回生态供三处共享，而不是在本项目里堆 workaround。
 
 ---

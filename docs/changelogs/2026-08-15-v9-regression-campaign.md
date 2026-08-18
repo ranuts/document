@@ -294,3 +294,8 @@ gh workflow run nightly-corpus.yml -f limit=300     # 手动触发夜间
   （BOM→utf-8→gb18030→latin1 严格链）、`saveFileToDisk`（File System Access + 锚点兜底，
   取消对话框 resolve false）。17 条新单测，ranuts 全量 765 通过。
   发布后本仓再把 converter/E2E 里的对应实现换成 ranuts 版本。
+- **ranuts 0.4.0-alpha.5 已发布并采用**：`packages/converter` 里四处实现换成 ranuts——
+  `isZipContainer`/`isHtmlDocument`（改为再导出）、`saveFileToDisk`（本仓只保留
+  "文档类型描述 + ranui 成功 toast"的适配层）、`decodeCsvBytes`→`decodeTextBytes`、
+  `prepareWasmBinary` 的 gzip 嗅探+解压→`fetchMaybeGzip`。净删 46 行；单测 52、
+  真实编辑器保存/CSV/HTML/入口 19 条全绿。
