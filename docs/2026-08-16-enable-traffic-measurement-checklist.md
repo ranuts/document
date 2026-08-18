@@ -48,6 +48,7 @@
    ```
 
    保存后触发一次重新部署。
+
 4. 验证：
    - `curl -s https://edit.chaxus.com/ | grep -c cloudflareinsights` → ≥ 1；
    - `curl -s "https://edit.chaxus.com/editor?embed=1" | grep -c cloudflareinsights` → 0
