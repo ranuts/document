@@ -23,8 +23,11 @@ import {
   createEditorInstance,
   isCompactViewport,
   FONT_SYSTEM_WAIT_MS,
+  resetCompactLayoutState,
+  syncCompactLayout,
   getNormalizedFile,
   isFontSystemReady,
+  openAttemptHoldsBytes,
   getReadonlyMode,
   getSavedFileMimeType,
   requestSaveDocument,
@@ -243,6 +246,23 @@ describe('onlyoffice-editor', () => {
       expect(DocEditor).toHaveBeenCalledTimes(1);
       return DocEditor.mock.calls[0][1] as any;
     }
+
+    // The bytes are kept only so an environment-class open failure can be
+    // retried with them (#144). Once the document is open that retry is
+    // unreachable, and a third copy of a large document (the editor holds one,
+    // the blob it mounted from another) is exactly the ballast that gets a
+    // phone's canvas discarded under memory pressure (#145).
+    it('releases the retry bytes once the document is open', async () => {
+      const config = await createAndGetConfig({
+        fileName: 'held.xlsx',
+        fileType: 'xlsx',
+        binData: new ArrayBuffer(1024),
+      });
+
+      expect(openAttemptHoldsBytes()).toBe(true);
+      config.events.onDocumentReady();
+      expect(openAttemptHoldsBytes()).toBe(false);
+    });
 
     it('always passes a non-empty Guest user to avoid the getInitials crash (#25)', async () => {
       const config = await createAndGetConfig({
@@ -502,31 +522,39 @@ describe('open-conversion readiness and failure classification', () => {
 // open documents offline in this package, so a phone runs the desktop UI and
 // its side panels have to be trimmed for the slide to be readable.
 describe('compact viewport customization', () => {
+  const metrics = (width: number, height: number, coarsePointer = false) => ({ width, height, coarsePointer });
+
   it('treats phone widths as compact and desktop widths as not', () => {
-    expect(isCompactViewport(393)).toBe(true);
-    expect(isCompactViewport(600)).toBe(true);
-    expect(isCompactViewport(601)).toBe(false);
-    expect(isCompactViewport(1280)).toBe(false);
+    expect(isCompactViewport(metrics(393, 851))).toBe(true);
+    expect(isCompactViewport(metrics(600, 900))).toBe(true);
+    expect(isCompactViewport(metrics(601, 900))).toBe(false);
+    expect(isCompactViewport(metrics(1280, 900))).toBe(false);
     // A zero width means "no window" (SSR, tests): never guess compact.
-    expect(isCompactViewport(0)).toBe(false);
+    expect(isCompactViewport(metrics(0, 0))).toBe(false);
   });
 
-  it('drops the panels that cost width and starts at fit-to-width', () => {
-    const customization = compactViewportCustomization() as {
-      compactHeader: boolean;
-      hideNotes: boolean;
-      hideRulers: boolean;
-      zoom: number;
-      layout: { rightMenu: boolean; leftMenu?: boolean };
-    };
+  it('counts a phone held in landscape, whose width alone looks roomy', () => {
+    // 851x393 on a touch device: wide, but the desktop chrome leaves a slide
+    // 498 px and 23 % zoom, which is the layout #145 is about.
+    expect(isCompactViewport(metrics(851, 393, true))).toBe(true);
+    expect(isCompactViewport(metrics(851, 393, false))).toBe(false);
+    // A short but wide desktop window keeps its panels.
+    expect(isCompactViewport(metrics(1400, 500, false))).toBe(false);
+    // Tablets have room in both orientations.
+    expect(isCompactViewport(metrics(1024, 768, true))).toBe(false);
+  });
+
+  it('carries only settings with no runtime switch', () => {
+    const customization = compactViewportCustomization() as Record<string, unknown>;
     expect(customization.compactHeader).toBe(true);
-    expect(customization.hideNotes).toBe(true);
-    expect(customization.hideRulers).toBe(true);
     expect(customization.zoom).toBe(-2);
-    expect(customization.layout.rightMenu).toBe(false);
-    // The left rail stays: it is the way back to the thumbnails panel that
-    // applyCompactSlideLayout collapses.
-    expect(customization.layout.leftMenu).toBeUndefined();
+    // Everything the editor can toggle at runtime must NOT be here: the vendor
+    // applies customization once, at boot, and `layout: { rightMenu: false }`
+    // in particular writes an inline display:none that no later widening can
+    // undo. Those pieces go through syncCompactLayout instead.
+    expect(customization.layout).toBeUndefined();
+    expect(customization.hideNotes).toBeUndefined();
+    expect(customization.hideRulers).toBeUndefined();
   });
 });
 
@@ -659,5 +687,57 @@ describe('awaitFontSystem', () => {
 
   it('keeps the default wait short enough to stay under the save readiness budget', () => {
     expect(FONT_SYSTEM_WAIT_MS).toBeLessThanOrEqual(10_000);
+  });
+});
+
+// syncCompactLayout tracks which side of the compact threshold the layout is
+// on, and returns early when nothing changed. Recording a sync that never
+// reached the editor would therefore silence every later one.
+describe('syncCompactLayout state tracking', () => {
+  const originalWidth = window.innerWidth;
+
+  function installEditorFrameWithRulers() {
+    const iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+    const asc_SetViewRulers = vi.fn();
+    (iframe.contentWindow as any).Asc = {
+      editor: {
+        asc_setRestriction: vi.fn(),
+        asc_SetViewRulers,
+        asc_GetViewRulers: () => true,
+      },
+    };
+    return { iframe, asc_SetViewRulers };
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    Object.defineProperty(window, 'innerWidth', { value: 400, configurable: true });
+    resetCompactLayoutState();
+  });
+
+  afterEach(() => {
+    vi.runAllTimers();
+    vi.useRealTimers();
+    Object.defineProperty(window, 'innerWidth', { value: originalWidth, configurable: true });
+    document.querySelectorAll('iframe').forEach((frame) => frame.remove());
+  });
+
+  it('still applies once the editor arrives after a sync that found none', () => {
+    // A resize that lands between destroyEditor and the next onDocumentReady.
+    syncCompactLayout('docx');
+
+    const { asc_SetViewRulers } = installEditorFrameWithRulers();
+    syncCompactLayout('docx');
+
+    expect(asc_SetViewRulers).toHaveBeenCalledWith(false);
+  });
+
+  it('does not re-apply once the layout is already on that side', () => {
+    const { asc_SetViewRulers } = installEditorFrameWithRulers();
+    syncCompactLayout('docx');
+    syncCompactLayout('docx');
+
+    expect(asc_SetViewRulers).toHaveBeenCalledTimes(1);
   });
 });

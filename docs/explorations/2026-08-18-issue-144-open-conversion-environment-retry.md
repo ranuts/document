@@ -156,3 +156,18 @@ starts throwing` 变红（`Cannot access a dead realm` 从定时器里裸抛出�
 - 同批新 issue [#145](https://github.com/ranuts/document/issues/145)（安卓 Chrome
   幻灯片初始缩放 31%、反复改缩放后报错）另案：现有 E2E 只跑桌面 Chromium，
   缺移动端（触摸 + devicePixelRatio + 缩放）覆盖，需要先补一条移动模拟用例。
+
+## 七、打开成功后释放重试用的字节（二次 review）
+
+`currentOpenAttempt` 为了"环境类失败重开一次"保留了整份 `binData`，但它**只在
+下次打开时被覆盖，打开成功后从不释放**——编辑器自己持有一份文档、挂载用的 blob
+是第二份，这里就成了第三份，整个会话常驻。#145 的现场恰恰是移动端内存压力导致
+canvas 被丢弃，留这份压舱物是反着来的。
+
+`onDocumentReady` 里加 `releaseOpenAttemptBytes()`。安全性来自
+`installOpenFailureGuard` 自己的 `documentContentReady` 分支：文档一旦加载完成，
+之后任何转换失败都被当作"导出失败"处理，不会再走到 `retryCurrentOpen`，所以释放
+之后没有人还会来要这份字节。重试预算（`retried`）仍然保留。
+
+反向验证：去掉 `releaseOpenAttemptBytes()` 调用，用例
+`releases the retry bytes once the document is open` 变红（`expected true to be false`）。
