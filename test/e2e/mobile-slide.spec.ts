@@ -151,4 +151,165 @@ test.describe('presentation on a phone-sized viewport (real editor)', () => {
     expect(recovery.wiped).toBe(0);
     expect(recovery.after).toBeGreaterThan(0);
   });
+
+  test('a phone held in landscape counts as compact, and still does after rotating', async ({ page }) => {
+    // A phone in landscape is ~850 px wide, so a width-only breakpoint would
+    // mount the full desktop chrome and rotating would land straight back in
+    // #145's layout (measured then: 191 px of canvas, 12 % zoom). The compact
+    // rule looks at the shorter side on touch devices, so both orientations
+    // are covered.
+    await page.setViewportSize({ width: 851, height: 393 });
+    await page.reload();
+    await page.waitForFunction(
+      () => {
+        const visit = (win: Window): boolean => {
+          try {
+            if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
+          } catch {
+            /* cross-origin */
+          }
+          for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
+          return false;
+        };
+        return visit(window);
+      },
+      null,
+      { timeout: 150_000 },
+    );
+
+    await page.setViewportSize({ width: 393, height: 851 });
+    // The follow is debounced (mobile fires resize on every URL-bar frame).
+    await page.waitForTimeout(1_500);
+
+    const layout = await page.evaluate(() => {
+      const win = (window as any).__findEditorFrame() as Window | null;
+      if (!win) throw new Error('editor frame not found');
+      const api = (win as any).Asc.editor;
+      const width = (selector: string) =>
+        Math.round(win.document.querySelector(selector)?.getBoundingClientRect().width ?? 0);
+      return {
+        viewport: win.innerWidth,
+        canvas: width('#id_viewer'),
+        thumbnails: width('#id_thumbnails'),
+        rightMenu: width('[data-layout-name="rightMenu"]'),
+        zoom: api.WordControl?.m_nZoomValue ?? 0,
+      };
+    });
+
+    expect(layout.viewport).toBe(393);
+    expect(layout.canvas).toBeGreaterThan(layout.viewport * 0.75);
+    expect(layout.thumbnails).toBe(0);
+    expect(layout.rightMenu).toBe(0);
+    expect(layout.zoom).toBeGreaterThanOrEqual(20);
+  });
+});
+
+/**
+ * The same document types on the same phone: the compact chrome is not a
+ * presentation-only concern (the reporter's case was a deck, but a spreadsheet
+ * or a document on a phone loses the same panels to the same chrome).
+ */
+test.describe('other formats on a phone-sized viewport (real editor)', () => {
+  test.describe.configure({ timeout: 180_000 });
+  test.skip(({ browserName }) => browserName !== 'chromium', 'device emulation needs chromium');
+
+  for (const { type, canvas } of [
+    { type: 'docx', canvas: '#id_viewer' },
+    { type: 'xlsx', canvas: '#ws-canvas' },
+  ]) {
+    test(`${type} uses the width instead of the side panels`, async ({ page }) => {
+      await page.addInitScript(INSTALL_FRAME_FINDER);
+      await page.goto(`/editor?new=${type}`);
+      await page.waitForFunction(
+        () => {
+          const visit = (win: Window): boolean => {
+            try {
+              if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
+            } catch {
+              /* cross-origin */
+            }
+            for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
+            return false;
+          };
+          return visit(window);
+        },
+        null,
+        { timeout: 150_000 },
+      );
+
+      const layout = await page.evaluate((canvasSelector) => {
+        const win = (window as any).__findEditorFrame() as Window | null;
+        if (!win) throw new Error('editor frame not found');
+        const width = (selector: string) =>
+          Math.round(win.document.querySelector(selector)?.getBoundingClientRect().width ?? 0);
+        return {
+          viewport: win.innerWidth,
+          canvas: width(canvasSelector),
+          rightMenu: width('[data-layout-name="rightMenu"]'),
+        };
+      }, canvas);
+
+      expect(layout.canvas).toBeGreaterThan(layout.viewport * 0.75);
+      expect(layout.rightMenu).toBe(0);
+    });
+  }
+});
+
+/**
+ * The crossing the mount-time decision cannot make: an editor that is already
+ * open when the viewport becomes phone-sized (a narrowed desktop window, a
+ * split screen). installViewportFollow is what adapts it live.
+ */
+test.describe('viewport follow on a live editor (real editor)', () => {
+  test.describe.configure({ timeout: 180_000 });
+  test.skip(({ browserName }) => browserName !== 'chromium', 'device emulation needs chromium');
+  test.use({ viewport: { width: 1280, height: 900 }, isMobile: false, hasTouch: false, deviceScaleFactor: 1 });
+
+  test('narrowing a desktop window into a phone-sized one adapts the open document', async ({ page }) => {
+    await page.addInitScript(INSTALL_FRAME_FINDER);
+    await page.goto('/editor?new=pptx');
+    await page.waitForFunction(
+      () => {
+        const visit = (win: Window): boolean => {
+          try {
+            if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
+          } catch {
+            /* cross-origin */
+          }
+          for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
+          return false;
+        };
+        return visit(window);
+      },
+      null,
+      { timeout: 150_000 },
+    );
+
+    const read = () =>
+      page.evaluate(() => {
+        const win = (window as any).__findEditorFrame() as Window | null;
+        if (!win) throw new Error('editor frame not found');
+        const width = (selector: string) =>
+          Math.round(win.document.querySelector(selector)?.getBoundingClientRect().width ?? 0);
+        return { viewport: win.innerWidth, canvas: width('#id_viewer'), thumbnails: width('#id_thumbnails') };
+      });
+
+    // Mounted wide: the desktop layout, thumbnails and all.
+    const wide = await read();
+    expect(wide.thumbnails).toBeGreaterThan(0);
+
+    await page.setViewportSize({ width: 393, height: 900 });
+    // The follow is debounced -- mobile browsers fire resize on every URL-bar frame.
+    await page.waitForTimeout(1_500);
+
+    const narrow = await read();
+    expect(narrow.viewport).toBe(393);
+    expect(narrow.thumbnails).toBe(0);
+    expect(narrow.canvas).toBeGreaterThan(narrow.viewport * 0.75);
+
+    // Widening again gives the panel back: the collapse was ours to undo.
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.waitForTimeout(1_500);
+    expect((await read()).thumbnails).toBeGreaterThan(0);
+  });
 });

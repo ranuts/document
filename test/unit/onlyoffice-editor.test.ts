@@ -500,13 +500,26 @@ describe('open-conversion readiness and failure classification', () => {
 // open documents offline in this package, so a phone runs the desktop UI and
 // its side panels have to be trimmed for the slide to be readable.
 describe('compact viewport customization', () => {
+  const metrics = (width: number, height: number, coarsePointer = false) => ({ width, height, coarsePointer });
+
   it('treats phone widths as compact and desktop widths as not', () => {
-    expect(isCompactViewport(393)).toBe(true);
-    expect(isCompactViewport(600)).toBe(true);
-    expect(isCompactViewport(601)).toBe(false);
-    expect(isCompactViewport(1280)).toBe(false);
+    expect(isCompactViewport(metrics(393, 851))).toBe(true);
+    expect(isCompactViewport(metrics(600, 900))).toBe(true);
+    expect(isCompactViewport(metrics(601, 900))).toBe(false);
+    expect(isCompactViewport(metrics(1280, 900))).toBe(false);
     // A zero width means "no window" (SSR, tests): never guess compact.
-    expect(isCompactViewport(0)).toBe(false);
+    expect(isCompactViewport(metrics(0, 0))).toBe(false);
+  });
+
+  it('counts a phone held in landscape, whose width alone looks roomy', () => {
+    // 851x393 on a touch device: wide, but the desktop chrome leaves a slide
+    // 498 px and 23 % zoom, which is the layout #145 is about.
+    expect(isCompactViewport(metrics(851, 393, true))).toBe(true);
+    expect(isCompactViewport(metrics(851, 393, false))).toBe(false);
+    // A short but wide desktop window keeps its panels.
+    expect(isCompactViewport(metrics(1400, 500, false))).toBe(false);
+    // Tablets have room in both orientations.
+    expect(isCompactViewport(metrics(1024, 768, true))).toBe(false);
   });
 
   it('drops the panels that cost width and starts at fit-to-width', () => {

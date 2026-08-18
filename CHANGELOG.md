@@ -76,11 +76,14 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
-- Presentations on a phone now use the screen: the slide thumbnails, the right
-  panel, the rulers and the notes pane are folded away on narrow viewports and
-  the slide starts fitted to the width, so it opens at a readable size instead
-  of a stamp in the middle of the screen (GitHub #145). The thumbnails come
-  back from the left rail.
+- Documents on a phone now use the screen: the right panel, the rulers and the
+  notes pane are folded away on narrow viewports, presentations also fold away
+  the slide thumbnails, and the document starts fitted to the width -- so it
+  opens at a readable size instead of a stamp in the middle of the screen
+  (GitHub #145). The thumbnails come back from the left rail.
+- That layout now follows the viewport instead of being decided when the
+  document opens: a phone held in landscape counts as small too, and rotating
+  the device or resizing the window re-adapts the open document.
 - The editor no longer stays blank when the browser discards its canvas under
   memory pressure (seen on Android after repeatedly changing the zoom): it
   repaints as soon as the canvas is restored.
