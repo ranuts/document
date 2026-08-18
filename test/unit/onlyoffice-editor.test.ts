@@ -17,10 +17,12 @@ vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
 });
 
 import {
+  awaitFontSystem,
   classifyOpenFailure,
   compactViewportCustomization,
   createEditorInstance,
   isCompactViewport,
+  FONT_SYSTEM_WAIT_MS,
   getNormalizedFile,
   isFontSystemReady,
   getReadonlyMode,
@@ -525,5 +527,61 @@ describe('compact viewport customization', () => {
     // The left rail stays: it is the way back to the thumbnails panel that
     // applyCompactSlideLayout collapses.
     expect(customization.layout.leftMenu).toBeUndefined();
+  });
+});
+
+// The open conversion must wait for the font system rather than walk a
+// half-built one (GitHub #144). The wait has to stay bounded: a font system
+// that never comes up degrades to a fontless import, it must not hang the open.
+describe('awaitFontSystem', () => {
+  const ready = () => ({
+    AscFonts: { g_font_infos: [{ Name: 'Arial' }] },
+    AscCommon: { g_font_loader: { fontFiles: [{ Id: '000' }] } },
+  });
+  const notReady = () => ({ AscFonts: {}, AscCommon: { g_font_loader: {} } });
+
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it('delegates immediately when the font system is already up (the normal path)', () => {
+    const original = vi.fn();
+    const cb = vi.fn();
+    awaitFontSystem(ready(), original, cb);
+    expect(original).toHaveBeenCalledWith(cb);
+    expect(cb).not.toHaveBeenCalled();
+    // Nothing is scheduled, so a ready font system costs no time at all.
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('delegates as soon as a late font system comes up', () => {
+    const win: any = notReady();
+    const original = vi.fn();
+    const cb = vi.fn();
+    awaitFontSystem(win, original, cb, { timeoutMs: 1000, intervalMs: 50 });
+    vi.advanceTimersByTime(200);
+    expect(original).not.toHaveBeenCalled();
+    win.AscFonts.g_font_infos = [{ Name: 'Arial' }];
+    win.AscCommon.g_font_loader.fontFiles = [{ Id: '000' }];
+    vi.advanceTimersByTime(50);
+    expect(original).toHaveBeenCalledWith(cb);
+    expect(cb).not.toHaveBeenCalled();
+    expect(win.__ooFontWaitMs).toBe(250);
+  });
+
+  it('falls back to a fontless import when the font system never comes up', () => {
+    const win: any = notReady();
+    const original = vi.fn();
+    const cb = vi.fn();
+    awaitFontSystem(win, original, cb, { timeoutMs: 500, intervalMs: 50 });
+    vi.advanceTimersByTime(500);
+    expect(original).not.toHaveBeenCalled();
+    expect(cb).toHaveBeenCalledWith([]);
+    expect(win.__ooFontWaitMs).toBe(500);
+    // Bounded: no timer is left running to fire again.
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('keeps the default wait short enough to stay under the save readiness budget', () => {
+    expect(FONT_SYSTEM_WAIT_MS).toBeLessThanOrEqual(10_000);
   });
 });

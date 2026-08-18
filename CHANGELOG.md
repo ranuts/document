@@ -85,8 +85,9 @@ notes. Entries describe what users experience, not internal refactors.
   memory pressure (seen on Android after repeatedly changing the zoom): it
   repaints as soon as the canvas is restored.
 - Opening a local document no longer fails with "code -82 / the file could not
-  be opened" when the editor's font system is not up yet: that case is now
-  detected (imports run without fonts) and, if the open still fails for a
+  be opened" when the editor's font system is not up yet: the conversion now
+  waits for it (a fraction of a second, and only when it is actually behind)
+  instead of tripping over it, and, if the open still fails for a
   reason that is about the editor rather than the file, the document is
   reopened once automatically. This is what made the same file open in a
   freshly started browser and fail in one that had been running all day
