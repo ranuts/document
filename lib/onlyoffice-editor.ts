@@ -487,18 +487,24 @@ export function awaitFontSystem(
   let waited = 0;
   const timer = setInterval(() => {
     waited += intervalMs;
-    if (isFontSystemReady(win)) {
-      clearInterval(timer);
-      record(waited);
-      console.log(`[OO] open conversion waited ${waited} ms for the font system`);
-      original.call(win.AscCommon, cb);
-      return;
-    }
-    if (waited >= timeoutMs) {
-      clearInterval(timer);
-      record(waited);
-      console.warn(`[OO] font system still not ready after ${timeoutMs} ms; importing without fonts`);
-      cb([]);
+    const ready = isFontSystemReady(win);
+    if (!ready && waited < timeoutMs) return;
+    clearInterval(timer);
+    record(waited);
+    // The frame this callback belongs to may have been torn down while we
+    // waited (the user opened another document, or the open failed and was
+    // retried). Handing over to a dead realm throws, and it would throw inside
+    // a timer, i.e. as an uncaught error in the host page.
+    try {
+      if (ready) {
+        console.log(`[OO] open conversion waited ${waited} ms for the font system`);
+        original.call(win.AscCommon, cb);
+      } else {
+        console.warn(`[OO] font system still not ready after ${timeoutMs} ms; importing without fonts`);
+        cb([]);
+      }
+    } catch (error) {
+      console.warn('[OO] font wait resolved into a frame that is gone:', error);
     }
   }, intervalMs);
 }

@@ -105,6 +105,11 @@ window.AscFonts.g_font_infos.forEach(function (w) {
   整个字体目录都没到，则等满 5 s 后退回无字体导入——也就是第一版的行为，
   不新增任何挂起路径。
 
+**自查 review 补的一处**：等待期间编辑器 frame 可能已被销毁（用户开了别的文档、
+或打开失败触发了重开），此时把回调交回死掉的 realm 会抛错，而且是**在定时器里抛**
+——等于宿主页面的未捕获错误。已加 try/catch 并补单测（原函数与回调都抛"dead realm"，
+断言不外抛且定时器已清）。
+
 ## 五、用例（用例固化制度）
 
 - `test/unit/onlyoffice-editor.test.ts`：`isFontSystemReady` 三态、
