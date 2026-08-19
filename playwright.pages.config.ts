@@ -17,8 +17,9 @@ const PORT = Number(process.env.PAGES_PORT || 8788);
 // ("kj/async-io-unix.c++ ... Connection reset by peer"), after which every
 // test fails with ECONNREFUSED. Two mitigations: run the suites serially so
 // concurrent aborts don't pile up, and supervise the dev server in a restart
-// loop so a crash costs one retried test instead of the whole job.
-const SERVE = `until pnpm dlx wrangler@latest pages dev dist --port ${PORT} --ip 127.0.0.1; do echo "wrangler pages dev exited, restarting"; sleep 1; done`;
+// loop (bin/serve-pages-dev.sh, which also pins the compatibility date) so a
+// crash costs one retried test instead of the whole job.
+const SERVE = `sh ./bin/serve-pages-dev.sh ${PORT}`;
 
 export default defineConfig({
   ...base,
