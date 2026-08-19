@@ -1,0 +1,56 @@
+name: Set up the toolchain
+description: pnpm, Node and the workspace install, plus Playwright browsers when asked for.
+
+inputs:
+  browsers:
+    description: >-
+      Space-separated Playwright browsers to install (for example "chromium" or
+      "webkit firefox"). Leave empty to skip the browser install entirely.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: "lts/*"
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: Resolve the Playwright version
+      if: inputs.browsers != ''
+      id: playwright
+      shell: bash
+      env:
+        BROWSERS: ${{ inputs.browsers }}
+      run: |
+        echo "version=$(pnpm exec playwright --version | awk '{ print $NF }')" >>"$GITHUB_OUTPUT"
+        echo "slug=${BROWSERS// /-}" >>"$GITHUB_OUTPUT"
+
+    # The browser binaries are the slow half of the install and they only ever
+    # change with the Playwright version, so a hit leaves just the apt step.
+    - name: Restore the Playwright browser cache
+      if: inputs.browsers != ''
+      id: browser-cache
+      uses: actions/cache@v6
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-${{ steps.playwright.outputs.slug }}
+
+    - name: Install Playwright browsers
+      if: inputs.browsers != ''
+      shell: bash
+      env:
+        BROWSERS: ${{ inputs.browsers }}
+        BROWSERS_CACHED: ${{ steps.browser-cache.outputs.cache-hit }}
+      run: .github/scripts/install-playwright.sh $BROWSERS

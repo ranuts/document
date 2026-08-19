@@ -1,0 +1,106 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { describe, expect, it } from 'vitest';
+
+/**
+ * CI workflow contract. GitHub applies no default job timeout, and the apt-get
+ * that `playwright install --with-deps` shells out to has stalled outright on
+ * the hosted runners: four runs in a single day were killed at the six-hour
+ * limit, each one blocking a pull request until it was re-run by hand the next
+ * morning. Both guards -- a timeout on every job, and routing every browser
+ * install through the bounded retrying script -- are one line each and exactly
+ * the kind of thing a newly added workflow forgets, so pin them here.
+ */
+const ROOT = resolve(__dirname, '../..');
+const WORKFLOW_DIR = resolve(ROOT, '.github/workflows');
+
+const workflows = readdirSync(WORKFLOW_DIR)
+  .filter((file) => file.endsWith('.yml') || file.endsWith('.yaml'))
+  .map((file) => ({ file, src: readFileSync(resolve(WORKFLOW_DIR, file), 'utf8') }));
+
+/**
+ * Pull the top-level jobs out of a workflow. The repository has no YAML parser
+ * in its dependencies (see hosting-contract.test.ts for the same trade-off),
+ * and the shape needed here is narrow: job names sit at two spaces of indent
+ * under `jobs:`, and their own keys at four.
+ */
+function parseJobs(src: string): Array<{ name: string; body: string }> {
+  const lines = src.split('\n');
+  const start = lines.indexOf('jobs:');
+  if (start === -1) return [];
+
+  const jobs: Array<{ name: string; body: string }> = [];
+  for (const line of lines.slice(start + 1)) {
+    if (/^[A-Za-z0-9_-]+:/.test(line)) break; // back out to the next top-level key
+    const header = line.match(/^ {2}([A-Za-z0-9_-]+):\s*$/);
+    if (header) {
+      jobs.push({ name: header[1], body: '' });
+    } else if (jobs.length > 0) {
+      jobs[jobs.length - 1].body += `${line}\n`;
+    }
+  }
+  return jobs;
+}
+
+it('finds every workflow (a bad glob would make the checks below vacuous)', () => {
+  expect(workflows.length).toBeGreaterThanOrEqual(8);
+  expect(workflows.every(({ src }) => parseJobs(src).length > 0)).toBe(true);
+});
+
+describe.each(workflows)('$file', ({ src }) => {
+  const jobs = parseJobs(src);
+
+  it.each(jobs)('job $name is bounded by a timeout', ({ body }) => {
+    const timeout = body.match(/^ {4}timeout-minutes: (\d+)$/m);
+    expect(timeout).not.toBeNull();
+    // A job that wants longer than an hour is either the nightly corpus run or
+    // a hang; both should be a deliberate edit here rather than a default.
+    expect(Number(timeout?.[1])).toBeLessThanOrEqual(300);
+  });
+
+  it('installs Playwright browsers only through the shared setup action', () => {
+    expect(src).not.toMatch(/playwright install/);
+    if (/playwright test|test:e2e|browsers:/.test(src)) {
+      expect(src).toMatch(/uses: \.\/\.github\/actions\/setup/);
+    }
+  });
+});
+
+describe('the shared setup action', () => {
+  const action = readFileSync(resolve(ROOT, '.github/actions/setup/action.yml'), 'utf8');
+
+  it('routes the browser install through the retrying script', () => {
+    expect(action).toMatch(/\.github\/scripts\/install-playwright\.sh/);
+    expect(action).not.toMatch(/run: pnpm exec playwright install/);
+  });
+
+  it('caches the browsers against the Playwright version, not the lockfile', () => {
+    // Keying on the lockfile would evict the cache on every dependency bump
+    // and re-download the browsers for no reason.
+    expect(action).toMatch(/key: playwright-\$\{\{ runner\.os \}\}-\$\{\{ steps\.playwright\.outputs\.version \}\}/);
+  });
+});
+
+describe('the Playwright install script', () => {
+  const script = readFileSync(resolve(ROOT, '.github/scripts/install-playwright.sh'), 'utf8');
+
+  it('bounds each attempt and retries', () => {
+    expect(script).toMatch(/timeout --kill-after=\d+s "\$\{attempt_timeout\}s"/);
+    expect(script).toMatch(/for attempt in \$\(seq 1 "\$attempts"\)/);
+  });
+
+  it('clears the apt locks a killed attempt leaves behind', () => {
+    // Without this the retry fails instantly on "Could not get lock", which
+    // would make the retry loop pure decoration.
+    expect(script).toMatch(/\/var\/lib\/dpkg\/lock-frontend/);
+  });
+});
+
+describe('.github/workflows/ci.yml', () => {
+  const ci = workflows.find(({ file }) => file === 'ci.yml')!.src;
+
+  it('drops the run for a superseded pull request commit, but never for main', () => {
+    expect(ci).toMatch(/^concurrency:$/m);
+    expect(ci).toMatch(/cancel-in-progress: \$\{\{ github\.event_name == 'pull_request' \}\}/);
+  });
+});
