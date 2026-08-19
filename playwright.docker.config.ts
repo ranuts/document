@@ -8,6 +8,11 @@ import { defineConfig, devices } from '@playwright/test';
 // The image must exist as `document:e2e` before the run -- use
 // `pnpm run test:e2e:docker`, which builds it first, or build manually with
 // `pnpm run docker:build`.
+// Marks the run as the containerised one: docker-cache-headers.spec.ts checks
+// the image's own cache-control contract (sws.toml) and must not run against
+// the vite preview server, which serves different headers.
+process.env.E2E_DOCKER = '1';
+
 export default defineConfig({
   testDir: 'test/e2e',
   timeout: 120_000,

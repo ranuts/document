@@ -1,0 +1,70 @@
+# Caching contract for the self-hosted Docker image (static-web-server).
+#
+# This file is the Docker twin of public/_headers: the Cloudflare Pages
+# deployment gets its cache rules from _headers, which static-web-server does
+# not read. Without it the server falls back to its extension-based defaults --
+# `max-age=86400` for HTML and `max-age=31536000` for every .js/.css -- and the
+# stable-named files then outlive the image they came from. A self-hoster who
+# pulls a new image keeps serving the previous editor.html (and with it the
+# previous hashed bundle) out of the browser cache for a day, and the previous
+# vendor JS for a year, which is how a fix that shipped weeks ago can still be
+# missing from a freshly pulled container (GitHub #144).
+#
+# Rules are applied in order and merged per header, so the catch-all below sets
+# the safe default and the specific rules that follow relax it.
+
+[advanced]
+
+# Default: revalidate. Same semantics as the Pages default, and what every
+# stable-named file needs -- HTML, sw.js, the deploy-coupled shell files
+# (home.css, landing.css, lang-switch.js, ranui-iife/) and the vendor trees,
+# whose JS carries our own runtime patch (x2t_helper.js). Revalidation is a
+# conditional request answered with 304, not a re-download.
+[[advanced.headers]]
+source = "**"
+[advanced.headers.headers]
+Cache-Control = "no-cache"
+
+# Keep the vendored editor trees out of search indexes (mirrors _headers).
+[[advanced.headers]]
+source = "/sdkjs/**"
+[advanced.headers.headers]
+X-Robots-Tag = "noindex"
+
+[[advanced.headers]]
+source = "/web-apps/**"
+[advanced.headers.headers]
+X-Robots-Tag = "noindex"
+
+# Hashed build outputs: the filename changes with the content.
+[[advanced.headers]]
+source = "/assets/**"
+[advanced.headers.headers]
+Cache-Control = "public, max-age=31536000, immutable"
+
+# Fingerprinted by bin/build.sh, same reasoning.
+[[advanced.headers]]
+source = "/ran-tokens.*.css"
+[advanced.headers.headers]
+Cache-Control = "public, max-age=31536000, immutable"
+
+# Self-hosted webfonts: unhashed, but they only change with a ranui release.
+[[advanced.headers]]
+source = "/ran-fonts/**"
+[advanced.headers.headers]
+Cache-Control = "public, max-age=604800, must-revalidate"
+
+# The editor's indexed font catalog (000..266, 200 KB - 5 MB each): replaced
+# only together with the vendor build, and revalidating them per open is what
+# put a CJK deck on "Loading presentation" for minutes on production.
+[[advanced.headers]]
+source = "/fonts/*"
+[advanced.headers.headers]
+Cache-Control = "public, max-age=31536000, immutable"
+X-Robots-Tag = "noindex"
+
+# The x2t WASM (9.9 MB gz): the single largest download, vendor-versioned.
+[[advanced.headers]]
+source = "/sdkjs/common/wasm/x2t/x2t.wasm.gz"
+[advanced.headers.headers]
+Cache-Control = "public, max-age=31536000, immutable"

@@ -76,6 +76,17 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Self-hosted (Docker) installs now pick up a new image immediately. The
+  bundled server was caching pages for a day and its JavaScript for a year
+  without ever asking the server again, so pulling a new image could change
+  nothing in the browser -- a fix released weeks earlier was simply not
+  running, while a freshly installed browser on the same machine got it
+  (GitHub #144). Pages and unhashed files now revalidate; only
+  content-addressed files stay cached long-term.
+- When the editor reports "code -82" for a document that failed to open, the
+  message now names the underlying cause instead of the number alone, and a
+  save attempted after such a failure is refused immediately instead of
+  waiting out its timeout.
 - Documents on a phone now use the screen: the right panel, the rulers and the
   notes pane are folded away on narrow viewports, presentations also fold away
   the slide thumbnails, and the document starts fitted to the width -- so it
