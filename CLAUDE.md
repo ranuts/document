@@ -60,7 +60,21 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   events.ts             # MessageCodec 事件处理（桌面端集成）
   file-types.ts         # OnlyOffice 文件类型常量映射
   loading.ts            # 加载状态 UI
-  onlyoffice-editor.ts  # 编辑器实例生命周期、保存、只读模式、运行时守卫
+  onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
+  onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
+    iframe-guards.ts      # 9 条运行时守卫的编排；每条守卫一个文件在 guards/
+    guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
+                          # serverless-save / long-action / series-settings /
+                          # font-loading / comment-selection / canvas-loss
+    open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
+    open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
+    font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
+    save-stream.ts        # 保存通道：请求生命周期、asc_DownloadAs 触发、file-stream 回收、CSV 往返
+    viewport.ts           # 紧凑视口判定与布局同步（#145）
+    sdk-api.ts            # 同源 iframe 里的 Asc.editor 访问、restriction 常量
+    readonly.ts           # 运行时只读（挂载永远可编辑，加载后加 restriction）
+    ui-theme.ts           # 默认经典主题与站点主题跟随
+    file-helpers.ts       # 文件名/MIME/字节形状小工具
   ui.ts                 # 控制面板、菜单、FAB 等 UI 组件
   analytics.ts          # Cloudflare Web Analytics（刻意不用 GA；线上实际走 CF 面板边缘注入，因此 embed 视图会被计入、/embed-demo 双计，读数规则见 docs/explorations/2026-08-17-analytics-edge-injection-double-count.md）
   pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
@@ -106,12 +120,18 @@ editor.html           # `/editor`：编辑器页面（?new= ?file= ?src= ?embed=
 
 使用 `?embedOrigin=https://example.com` 可限制消息来源。
 
-### onlyoffice-editor.ts — 编辑器生命周期
+### onlyoffice-editor.ts — 编辑器生命周期（门面）
 
 - `createEditorInstance(config)` — 创建/重建编辑器，内部有操作队列防并发
-- `setReadonlyMode(bool)` / `getReadonlyMode()` — 只读模式
-- `requestSaveDocument(targetExt, options)` — 触发编辑器保存并返回 File，180s 超时（慢链路首存要先下 10 MB wasm；打开失败会立即拒绝）
+- `setReadonlyMode(bool)` / `getReadonlyMode()` — 只读模式（实现在 `onlyoffice/readonly.ts`）
+- `requestSaveDocument(targetExt, options)` — 触发编辑器保存并返回 File，180s 超时（慢链路首存要先下 10 MB wasm；打开失败会立即拒绝；实现在 `onlyoffice/save-stream.ts`）
 - `setConverterCallbacks(...)` — 注入转换器（解耦循环依赖）
+
+**改这一块前先看清归属**：本文件只剩挂载/重建/加载 API 三件事，其余按上面的目录
+各有其主；跨模块状态一律只有一个持有者（就绪与打开失败在 `open-state.ts`，只读在
+`readonly.ts`，保存请求在 `save-stream.ts`），要读就调它导出的访问器，别再复制一份。
+新增厂商运行时补丁 = 在 `onlyoffice/guards/` 新建一个文件并在 `iframe-guards.ts`
+里挂上，别往门面里塞。
 
 ### packages/shared/src/store.ts — 全局状态
 
@@ -570,9 +590,11 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
 
 ## 测试覆盖说明
 
-### 为什么 onlyoffice-editor.ts 覆盖率低
+### 为什么 onlyoffice-editor.ts / onlyoffice/ 覆盖率低
 
-这是预期行为，**不需要强行提升**。该文件大量代码是 OnlyOffice 编辑器的事件回调，必须有真实编辑器运行才能触发：
+这是预期行为，**不需要强行提升**。这些代码大量是 OnlyOffice 编辑器的事件回调与
+厂商运行时补丁（`onlyoffice/guards/**` 整目录只有真实编辑器跑起来才会执行），
+必须有真实编辑器运行才能触发：
 
 | 函数                             | 无法单测的原因                                                        |
 | -------------------------------- | --------------------------------------------------------------------- |
