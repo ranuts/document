@@ -31,3 +31,10 @@ RUN pnpm -r run prepare && pnpm run build
 
 FROM joseluisq/static-web-server:2.42.0
 COPY --from=builder /app/dist /public
+# static-web-server does not read dist/_headers (that is Cloudflare Pages'
+# format), and its extension-based defaults cache HTML for a day and every
+# stable-named .js/.css for a year -- so a pulled image can keep serving the
+# previous front end out of the browser cache. sws.toml is the Docker twin of
+# public/_headers; test/unit/hosting-contract.test.ts keeps the two in sync.
+COPY sws.toml /sws.toml
+ENV SERVER_CONFIG_FILE=/sws.toml

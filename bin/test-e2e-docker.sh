@@ -11,7 +11,7 @@ docker build -t document:e2e .
 docker rm -f document-e2e-docker >/dev/null 2>&1 || true
 
 set +e
-./node_modules/.bin/playwright test --config playwright.docker.config.ts
+E2E_DOCKER=1 ./node_modules/.bin/playwright test --config playwright.docker.config.ts
 status=$?
 set -e
 

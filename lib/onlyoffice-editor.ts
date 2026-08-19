@@ -55,6 +55,48 @@ let contentReadyWaiters: Array<() => void> = [];
 // (see installOpenFailureGuard); pending and future saves reject with it
 // instead of waiting out the readiness timeout.
 let documentOpenError: string | null = null;
+// First error seen inside the editor frame before the document finished
+// loading. The vendor installs its own window.onerror/onunhandledrejection
+// (sdk-all-min, asc_docs_api._init) and turns ANY error that lands before
+// isDocumentLoadComplete into asc_onError(ConvertationOpenError = -82,
+// Critical) -- the same code our own conversion guard raises, and the same
+// dialog, with nothing about what actually threw. That is why every #144
+// report so far is a screenshot of an identical toast: the failures that do
+// not go through installOpenFailureGuard carry no cause at all. Keeping the
+// raw message here lets the toast name it.
+let lastFrameError: string | null = null;
+
+// Errors thrown by browser extensions and by cross-origin scripts are not
+// ours to report (the vendor's own handler skips them for the same reason).
+const FOREIGN_SCRIPT = /^(?:chrome|moz|safari|ms-browser)-extension:\/\//;
+
+/**
+ * Record an error seen inside the editor frame while a document is opening.
+ * First one wins: later errors are usually fallout from the first. Returns
+ * whether this call is the one that stuck.
+ */
+export function noteFrameError(message: string, source?: string): boolean {
+  if (documentContentReady || documentOpenError || lastFrameError) return false;
+  if (!message || message === 'Script error.') return false;
+  if (source && FOREIGN_SCRIPT.test(source)) return false;
+  lastFrameError = message;
+  return true;
+}
+
+/**
+ * The bracketed cause appended to the -82 toast. `documentOpenError` is the
+ * conversion rejection our own guard caught; `lastFrameError` covers the
+ * failures the vendor reported itself, which otherwise arrive as a bare code.
+ */
+export function describeOpenFailure(
+  code: number | undefined,
+  openError: string | null,
+  frameError: string | null,
+): string {
+  if (code !== -82) return '';
+  const reason = openError ?? frameError;
+  return reason ? ` [${reason.slice(0, 160)}]` : '';
+}
 
 function markDocumentContentReady(): void {
   if (documentContentReady) return;
@@ -69,6 +111,7 @@ function markDocumentContentReady(): void {
 function resetDocumentContentReady(): void {
   documentContentReady = false;
   documentOpenError = null;
+  lastFrameError = null;
   contentReadyWaiters = [];
 }
 
@@ -600,9 +643,18 @@ function installOpenFailureGuard(win: Window): void {
   // emitting the rejections of its own failed open for a while; those must not
   // be charged to the document that took its place.
   const generation = openGeneration;
+  // Everything that throws in this frame before the document is ready ends up
+  // as the vendor's own -82, so keep the first message whether or not it looks
+  // like a conversion failure (see noteFrameError).
+  win.addEventListener('error', (event) => {
+    const error = event as ErrorEvent;
+    if (generation !== openGeneration) return;
+    noteFrameError(String(error.message ?? ''), error.filename);
+  });
   win.addEventListener('unhandledrejection', (event) => {
     const reason = (event as PromiseRejectionEvent).reason as { message?: unknown } | undefined;
     const message = String(reason && typeof reason === 'object' ? (reason.message ?? reason) : reason);
+    if (generation === openGeneration) noteFrameError(message);
     if (!OPEN_FAILURE_PATTERN.test(message)) return;
     if (documentContentReady) {
       // The document is loaded, so this is a failed export (convertFromBin);
@@ -1488,7 +1540,13 @@ function createPersonalEditorInstance(config: {
         // arrived as a screenshot of this toast (#113, #144). When the open
         // conversion is what failed we know exactly why, so put that reason in
         // the toast too -- truncated, since it is vendor text.
-        const cause = code === -82 && documentOpenError ? ` [${documentOpenError.slice(0, 160)}]` : '';
+        const cause = describeOpenFailure(code, documentOpenError, lastFrameError);
+        // A -82 the vendor raised itself (its window.onerror path) never went
+        // through installOpenFailureGuard, so nothing has marked the document
+        // as failed yet and every save would wait out its full timeout.
+        if (code === -82 && !documentContentReady) {
+          markDocumentOpenFailed(documentOpenError ?? lastFrameError ?? `editor reported error ${code}`);
+        }
         const detail = [code !== undefined ? `code ${code}` : '', data?.errorDescription].filter(Boolean).join(', ');
         (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(
           `${t('editorErrorToast')}${detail ? ` (${detail})` : ''}${hint}${cause}`,

@@ -19,6 +19,8 @@ vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
 import {
   awaitFontSystem,
   classifyOpenFailure,
+  describeOpenFailure,
+  noteFrameError,
   compactViewportCustomization,
   createEditorInstance,
   isCompactViewport,
@@ -515,6 +517,40 @@ describe('open-conversion readiness and failure classification', () => {
     ).toBe('environment');
     expect(classifyOpenFailure('X2T module not found after script loading')).toBe('environment');
     expect(classifyOpenFailure('Document conversion failed: TypeError: Failed to fetch')).toBe('environment');
+  });
+
+  // The vendor's own window.onerror turns any pre-load error into the same
+  // -82 our conversion guard raises, so a report of "code -82" alone says
+  // nothing about the cause (GitHub #144 arrived twice as the same
+  // screenshot). The toast has to carry whatever the frame actually threw.
+  it('names the conversion rejection in the -82 toast when the guard caught it', () => {
+    expect(describeOpenFailure(-82, 'Document conversion failed: Conversion failed with code: 88', null)).toBe(
+      ' [Document conversion failed: Conversion failed with code: 88]',
+    );
+  });
+
+  it('falls back to the frame error for a -82 the vendor raised itself', () => {
+    expect(describeOpenFailure(-82, null, "TypeError: Cannot read properties of undefined (reading 'Id')")).toBe(
+      " [TypeError: Cannot read properties of undefined (reading 'Id')]",
+    );
+  });
+
+  it('adds nothing when there is no cause, and never to another error code', () => {
+    expect(describeOpenFailure(-82, null, null)).toBe('');
+    expect(describeOpenFailure(-85, null, 'some frame error')).toBe('');
+    expect(describeOpenFailure(undefined, null, 'some frame error')).toBe('');
+  });
+
+  it('truncates the vendor text so the toast stays readable', () => {
+    expect(describeOpenFailure(-82, 'x'.repeat(300), null)).toBe(` [${'x'.repeat(160)}]`);
+  });
+
+  it('keeps the first frame error and ignores noise and foreign scripts', () => {
+    expect(noteFrameError('', undefined)).toBe(false);
+    expect(noteFrameError('Script error.')).toBe(false);
+    expect(noteFrameError('boom in an add-on', 'chrome-extension://abc/inject.js')).toBe(false);
+    expect(noteFrameError('the real first failure')).toBe(true);
+    expect(noteFrameError('later fallout')).toBe(false);
   });
 });
 

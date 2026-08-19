@@ -253,7 +253,12 @@ index.html）的 canonical/hreflang/JSON-LD/sitemap/双语互指契约——新�
 跑在容器（static-web-server）上，证明镜像端到端可用——正是这条链路抓出了
 "Dockerfile 缺 workspace manifest、安装必挂"的问题（CI 原本只查 compose
 config 和 hadolint，从不真正 build）。容器由 `bin/test-e2e-docker.sh` 前后
-强制清理，绝不复用（残留容器会静默服务陈旧镜像）。
+强制清理，绝不复用（残留容器会静默服务陈旧镜像）。镜像的缓存契约在根目录
+`sws.toml`（static-web-server 不读 `_headers`，默认按扩展名给 HTML 1 天、
+`.js/.css` 1 年且都不校验——自托管用户重拉镜像后浏览器仍跑旧 bundle，
+issue #144 第二轮就栽在这里）；改 `_headers` 时必须同步改它，
+`test/unit/hosting-contract.test.ts` + `test/e2e/docker-cache-headers.spec.ts`
+（`E2E_DOCKER=1`）钉死两边。
 
 E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 
