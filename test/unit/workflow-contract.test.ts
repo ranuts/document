@@ -96,6 +96,33 @@ describe('the Playwright install script', () => {
   });
 });
 
+describe('bin/serve-pages-dev.sh', () => {
+  const script = readFileSync(resolve(ROOT, 'bin/serve-pages-dev.sh'), 'utf8');
+  const config = readFileSync(resolve(ROOT, 'playwright.pages.config.ts'), 'utf8');
+
+  it('pins the compatibility date instead of letting wrangler default to today', () => {
+    // wrangler defaults to the current date, and its workerd only supports
+    // dates up to its own release: on 2026-08-19 that default broke the
+    // e2e-pages job on every branch at once, main included. A date that
+    // arrives on a calendar rather than in a commit is a time bomb.
+    expect(script).toMatch(/--compatibility-date/);
+    expect(script).toMatch(/^COMPATIBILITY_DATE=\d{4}-\d{2}-\d{2}$/m);
+  });
+
+  it('gives up on a server that never starts', () => {
+    // The restart loop is there for a mid-run workerd crash, but retrying a
+    // startup error forever is what buried the real message under Playwright's
+    // "Timed out waiting 300000ms from config.webServer".
+    expect(script).toMatch(/MAX_STARTUP_FAILURES=\d+/);
+    expect(script).toMatch(/failed to start/);
+  });
+
+  it('is the only way the suite starts wrangler', () => {
+    expect(config).toMatch(/bin\/serve-pages-dev\.sh/);
+    expect(config).not.toMatch(/wrangler@latest pages dev/);
+  });
+});
+
 describe('.github/workflows/ci.yml', () => {
   const ci = workflows.find(({ file }) => file === 'ci.yml')!.src;
 

@@ -293,8 +293,16 @@ apt-get，而 hosted runner 上的 apt 有过**拉完 release 索引后彻底停
 `pull_request` 生效）；push 到 main 的 run 永不取消——那是部署和线上冒烟要判定
 的提交。
 
+**`e2e-pages` 的 wrangler 由 `bin/serve-pages-dev.sh` 起**：它固定
+`--compatibility-date`（不传的话 wrangler 取**今天**，而随附的 workerd 只支持到
+它自己的发布日——2026-08-19 当天所有分支连同 main 全线变红），并且重启循环会
+放弃（活不过 10s 视为没起来，连续 3 次带真实错误退出，否则启动错误会被无限
+重试成一句无用的 `Timed out waiting 300000ms from config.webServer`）。见
+docs/explorations/2026-08-19-wrangler-compat-date-timebomb.md。
+
 **约定**：新增 workflow / job 必须带 `timeout-minutes`，浏览器安装必须走共用
-action。两条都由 `test/unit/workflow-contract.test.ts` 钉死。
+action，wrangler 必须经 `bin/serve-pages-dev.sh` 起。三条都由
+`test/unit/workflow-contract.test.ts` 钉死。
 详见 docs/explorations/2026-08-19-ci-workflow-hardening.md。
 
 ---
