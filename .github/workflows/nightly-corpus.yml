@@ -29,22 +29,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v6
-        name: Install pnpm
+      - name: Set up the toolchain
+        uses: ./.github/actions/setup
         with:
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: "lts/*"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+          browsers: chromium
 
       # Apache POI's test-data tree (Apache-2.0) is the largest curated pile of
       # real-world .doc/.docx/.xls/.xlsx/.ppt/.pptx around, including many
@@ -94,22 +82,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v6
-        name: Install pnpm
+      - name: Set up the toolchain
+        uses: ./.github/actions/setup
         with:
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: "lts/*"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps webkit firefox
+          browsers: webkit firefox
 
       # The same PR-time suites (minus the opt-in sweeps) on the two engines
       # the gate does not cover. Same-realm/L0 rules apply unchanged.
@@ -133,22 +109,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v6
-        name: Install pnpm
+      - name: Set up the toolchain
+        uses: ./.github/actions/setup
         with:
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: "lts/*"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+          browsers: chromium
 
       # Roadmap direction 9 (L3): flag when the ecosystem packages on npm have
       # moved past what this repo pins. Informational -- the bump itself is a

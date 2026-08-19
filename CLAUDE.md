@@ -261,31 +261,41 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 
 ## CI 流程（.github/workflows/ci.yml）
 
-三个 job，触发条件：push/PR 到 main/master。
+**四个 job**，触发条件：push/PR 到 main/master。`lint` 先跑，三个 e2e job
+在它之后并行。
 
-**lint job（串行步骤）：**
+| job          | 名称（分支保护里的必需检查名）   | 正常耗时                   | timeout |
+| ------------ | -------------------------------- | -------------------------- | ------- |
+| `lint`       | Lint and Validate                | ~1.5 min                   | 15 min  |
+| `e2e`        | E2E                              | ~9 min                     | 30 min  |
+| `e2e-docker` | E2E (Docker image)               | ~8 min（镜像构建仅占 46s） | 30 min  |
+| `e2e-pages`  | E2E (Cloudflare Pages semantics) | ~18 min                    | 45 min  |
 
-1. `pnpm/action-setup@v6 version: latest` — 不锁定 pnpm 版本
-2. `actions/setup-node@v6 node-version: lts/*` — 不锁定 Node 版本
-3. `pnpm install --frozen-lockfile`
-4. `pnpm run format:check`
-5. `pnpm run lint:ts`
-6. `pnpm run test:coverage`
-7. `docker compose config --quiet`（验证 Docker Compose 文件）
-8. `hadolint/hadolint-action@v3.3.0`（Dockerfile 检查）
+**lint job（串行步骤）：** setup（见下）→ `format:check` → `lint:ts` →
+`test:coverage` → `docker compose config --quiet` → hadolint。
+**三个 e2e job：** setup（含 chromium）→ 各自的测试命令 → 失败时上传
+`playwright-report*/` artifact。
 
-**e2e job（需 lint 通过）：**
+**共用 setup（`.github/actions/setup`）**：pnpm + Node `lts/*` + pnpm 缓存 +
+`pnpm install --frozen-lockfile`，`browsers:` 入参非空时再装 Playwright 浏览器。
+全部 8 个 workflow 共用它，别在 workflow 里重新内联这几步——
+`test/unit/workflow-contract.test.ts` 会拦下来。
 
-1. 同上安装步骤
-2. `playwright install --with-deps chromium`
-3. `pnpm run test:e2e`
-4. 失败时上传 `playwright-report/` artifact
+**为什么浏览器安装要包一层脚本**：`playwright install --with-deps` 会调
+apt-get，而 hosted runner 上的 apt 有过**拉完 release 索引后彻底停住、一个字节
+不动**的表现——2026-08-18 一天之内四次 CI 被 GitHub 的 6 小时 job 上限杀掉，
+每次挂在不同的 job（三个 e2e job 跑的是同一步，谁中枪是随机的），每次都要人工
+重跑。apt 自身没有总时长上限，所以 `.github/scripts/install-playwright.sh` 给
+每次尝试套 `timeout` 并重试 3 次，重试前清掉被杀的 apt 留下的锁；浏览器二进制
+按 Playwright 版本号进 `actions/cache`，命中时只跑 `install-deps`。
 
-**e2e-docker job（需 lint 通过，与 e2e 并行）：**
+**并发**：PR 收到新 push 时旧 run 直接取消（`cancel-in-progress` 只对
+`pull_request` 生效）；push 到 main 的 run 永不取消——那是部署和线上冒烟要判定
+的提交。
 
-1. 同上安装步骤 + `playwright install --with-deps chromium`
-2. `pnpm run test:e2e:docker`（构建生产镜像 + 同套 E2E 打容器）
-3. 失败时上传 `playwright-report-docker/` artifact
+**约定**：新增 workflow / job 必须带 `timeout-minutes`，浏览器安装必须走共用
+action。两条都由 `test/unit/workflow-contract.test.ts` 钉死。
+详见 docs/explorations/2026-08-19-ci-workflow-hardening.md。
 
 ---
 
