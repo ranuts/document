@@ -125,9 +125,61 @@ describe('bin/serve-pages-dev.sh', () => {
 
 describe('.github/workflows/ci.yml', () => {
   const ci = workflows.find(({ file }) => file === 'ci.yml')!.src;
+  const ciJobs = parseJobs(ci);
 
   it('drops the run for a superseded pull request commit, but never for main', () => {
     expect(ci).toMatch(/^concurrency:$/m);
     expect(ci).toMatch(/cancel-in-progress: \$\{\{ github\.event_name == 'pull_request' \}\}/);
+  });
+
+  const sharded = ciJobs.filter(({ body }) => body.includes('--shard='));
+
+  it('shards every E2E suite (the three of them are the whole cost of the run)', () => {
+    expect(sharded.map(({ name }) => name)).toEqual(['e2e-shard', 'e2e-pages-shard', 'e2e-docker-shard']);
+  });
+
+  it.each(sharded)('job $name splits into exactly as many shards as it declares', ({ body }) => {
+    // A matrix of three against `--shard=N/4` silently drops a quarter of the
+    // suite and still reports green -- the failure mode is invisible, so the
+    // two numbers are pinned to each other here.
+    const matrix = body.match(/shard: \[([^\]]+)\]/);
+    const denominator = body.match(/--shard=\$\{\{ matrix\.shard \}\}\/(\d+)/);
+    expect(matrix).not.toBeNull();
+    expect(denominator).not.toBeNull();
+    expect(matrix![1].split(',').length).toBe(Number(denominator![1]));
+  });
+
+  it.each([
+    ['e2e', 'E2E', 'e2e-shard'],
+    ['e2e-pages', 'E2E (Cloudflare Pages semantics)', 'e2e-pages-shard'],
+    ['e2e-docker', 'E2E (Docker image)', 'e2e-docker-shard'],
+  ])('%s reports the shard verdict under the name branch protection requires', (id, checkName, shardJob) => {
+    // main requires these three checks by name. Renaming a summary job, or
+    // letting one pass while its shards failed, leaves every pull request
+    // either permanently pending or merged on a green that means nothing.
+    const job = ciJobs.find(({ name }) => name === id);
+    expect(job).toBeDefined();
+    expect(job!.body).toMatch(new RegExp(`^ {4}name: ${checkName.replace(/[()]/g, '\\$&')}$`, 'm'));
+    expect(job!.body).toMatch(new RegExp(`^ {4}needs: ${shardJob}$`, 'm'));
+    expect(job!.body).toMatch(/^ {4}if: always\(\)$/m);
+    expect(job!.body).toMatch(new RegExp(`RESULT: \\$\\{\\{ needs\\.${shardJob}\\.result \\}\\}`));
+    expect(job!.body).toMatch(/\[ "\$RESULT" = "success" \] \|\| exit 1/);
+  });
+
+  it('passes the shard to the Docker suite without going through pnpm', () => {
+    // `pnpm run test:e2e:docker -- --shard=1/3` drops the arguments on the
+    // floor: every shard then runs the whole suite, three times over, and the
+    // run stays green while the sharding does nothing at all. Measured, not
+    // assumed -- see docs/explorations/2026-08-19-ci-e2e-sharding.md.
+    expect(ci).toMatch(/run: sh \.\/bin\/test-e2e-docker\.sh --shard=/);
+    expect(ci).not.toMatch(/pnpm run test:e2e:docker.*--shard/);
+  });
+});
+
+describe('bin/test-e2e-docker.sh', () => {
+  const script = readFileSync(resolve(ROOT, 'bin/test-e2e-docker.sh'), 'utf8');
+
+  it('forwards its arguments to Playwright', () => {
+    expect(script).toMatch(/playwright test --config playwright\.docker\.config\.ts "\$@"/);
   });
 });
