@@ -266,20 +266,39 @@ E2E 在 CI 中依赖 `lint` job 成功后才运行（`needs: lint`）。
 
 ## CI 流程（.github/workflows/ci.yml）
 
-**四个 job**，触发条件：push/PR 到 main/master。`lint` 先跑，三个 e2e job
-在它之后并行。
+触发条件：push/PR 到 main/master。**所有 job 一起起跑，e2e 不等 lint**——lint
+只有 1 min，但等它整个 job 结束会在每个 PR 的关键路径上白加 ~90s；仓库是公开
+的，runner 免费，lint 红的那次多跑一轮 e2e 比多推一次 commit 划算。
 
-| job          | 名称（分支保护里的必需检查名）   | 正常耗时                   | timeout |
-| ------------ | -------------------------------- | -------------------------- | ------- |
-| `lint`       | Lint and Validate                | ~1.5 min                   | 15 min  |
-| `e2e`        | E2E                              | ~9 min                     | 30 min  |
-| `e2e-docker` | E2E (Docker image)               | ~8 min（镜像构建仅占 46s） | 30 min  |
-| `e2e-pages`  | E2E (Cloudflare Pages semantics) | ~18 min                    | 45 min  |
+三套 E2E 跑的是**同一批 ~95 个用例**，只是服务器不同（vite preview / 生产镜像 /
+wrangler pages dev），这是整个 workflow 的全部成本（install + vite build +
+docker build 加起来不到 2 min）。所以每套都用 matrix 切成 **3 个分片**，再由一个
+汇总 job 顶着分支保护要求的检查名：
+
+| 分片 job（matrix ×3） | 汇总 job（= 必需检查名）                       | 分片耗时 | timeout |
+| --------------------- | ---------------------------------------------- | -------- | ------- |
+| `lint`（不分片）      | `lint` → Lint and Validate                     | ~1.5 min | 15 min  |
+| `e2e-shard`           | `e2e` → E2E                                    | ~3 min   | 20 min  |
+| `e2e-docker-shard`    | `e2e-docker` → E2E (Docker image)              | ~4 min   | 25 min  |
+| `e2e-pages-shard`     | `e2e-pages` → E2E (Cloudflare Pages semantics) | ~5 min   | 30 min  |
+
+**分片而不是加 workers**：runner 只有 4 核、每个 worker 拖一个 WASM 编辑器进程，
+而 pages 那套是**故意**单 worker 的（并发下 workerd 会被大文件 abort 打崩，见
+`playwright.pages.config.ts`）。分片不动任何一套自己的并发语义。
+
+**改分片数要同时改两处**：matrix 的 `shard: [...]` 与命令里 `--shard=N/M` 的 M。
+对不上会静默少跑一批用例还报绿——`test/unit/workflow-contract.test.ts` 把两个
+数字钉在一起了。
+
+**docker 分片必须直接 `sh ./bin/test-e2e-docker.sh --shard=…`**，不能走
+`pnpm run test:e2e:docker -- --shard=…`：pnpm 会把参数吃掉，三个分片各自跑完整
+套件、全绿、分片等于没做（实测，见探索文档）。
 
 **lint job（串行步骤）：** setup（见下）→ `format:check` → `lint:ts` →
 `test:coverage` → `docker compose config --quiet` → hadolint。
-**三个 e2e job：** setup（含 chromium）→ 各自的测试命令 → 失败时上传
-`playwright-report*/` artifact。
+**e2e 分片 job：** setup（含 chromium）→ 各自带 `--shard` 的测试命令 → 失败时
+上传 `playwright-report*-<分片号>/` artifact。
+**汇总 job：** `if: always()`，`needs.<分片 job>.result != success` 就退 1。
 
 **共用 setup（`.github/actions/setup`）**：pnpm + Node `lts/*` + pnpm 缓存 +
 `pnpm install --frozen-lockfile`，`browsers:` 入参非空时再装 Playwright 浏览器。
@@ -306,9 +325,10 @@ apt-get，而 hosted runner 上的 apt 有过**拉完 release 索引后彻底停
 docs/explorations/2026-08-19-wrangler-compat-date-timebomb.md。
 
 **约定**：新增 workflow / job 必须带 `timeout-minutes`，浏览器安装必须走共用
-action，wrangler 必须经 `bin/serve-pages-dev.sh` 起。三条都由
-`test/unit/workflow-contract.test.ts` 钉死。
-详见 docs/explorations/2026-08-19-ci-workflow-hardening.md。
+action，wrangler 必须经 `bin/serve-pages-dev.sh` 起，分片数与 `--shard` 分母必须
+一致，三个汇总 job 的名字不能改。全部由 `test/unit/workflow-contract.test.ts`
+钉死。详见 docs/explorations/2026-08-19-ci-workflow-hardening.md 与
+docs/explorations/2026-08-19-ci-e2e-sharding.md。
 
 ---
 
