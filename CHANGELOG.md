@@ -17,6 +17,12 @@ notes. Entries describe what users experience, not internal refactors.
   service worker) and try again; a full regression campaign against
   real-world documents runs nightly and gates the next release announcement.
 
+### Fixed
+
+- The pill-shaped buttons on the homepage and the landing pages no longer draw
+  a straight line under themselves that pokes out past their rounded ends: the
+  raised shadow was being painted on a square box behind the round button.
+
 ### Removed
 
 - The floating "Menu" button in the bottom-right corner of the editor, and the

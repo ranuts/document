@@ -157,6 +157,13 @@ p {
 /* r-button exports parts "button" (container) and "content" (padding/border/
    typography). The :not(:defined) fallback below must stay pixel-identical to
    these values or the custom-element upgrade flashes on load. */
+/* The raised shadow ranui paints sits on the HOST element, while the radius
+   below only reaches the exported parts inside the shadow DOM. The host keeps
+   its own radius (ranui does not set one), so a pill ends up wrapped in a
+   rectangular shadow: a straight line under the button, poking out past both
+   rounded ends. Barely visible at ranui's 6px default, obvious at --ran-radius-full.
+   Give the host the same radius as the thing it wraps. */
+.cta r-button,
 .cta r-button::part(button) {
   border-radius: var(--ran-radius-full);
 }
