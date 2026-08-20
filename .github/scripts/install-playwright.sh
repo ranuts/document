@@ -17,22 +17,39 @@ if [ ${#browsers[@]} -eq 0 ]; then
   browsers=(chromium)
 fi
 
-# Stop apt from trickling along on a half-dead mirror indefinitely. This alone
-# would not have saved the six-hour runs (the stall happens with no bytes
-# moving at all), but it turns a slow mirror into a fast failure too.
-sudo tee /etc/apt/apt.conf.d/99-ci-timeouts >/dev/null <<'CONF'
-Acquire::Retries "3";
-Acquire::http::Timeout "30";
-Acquire::https::Timeout "30";
-CONF
-
-# A cache hit restores the browser binaries but never the system libraries, so
-# the apt half still has to run -- but it is allowed to lose, and it is not
-# allowed to take long about it (see the note on the exit below). A healthy
-# install-deps finishes well inside a minute; a stalled one costs two and the
-# suite carries on. A cold cache has no browsers to run without, so it keeps
-# the patient settings.
+# On a cache hit, skip apt entirely.
+#
+# What `install-deps` actually does on a hosted runner, read off a healthy run:
+# every library Chromium needs -- libnss3, libgbm1, libasound2t64, libcairo2,
+# the lot -- reports "is already the newest version". The runner image ships
+# them. The only thing apt installs is 21.1 MB of fonts (fonts-wqy-zenhei,
+# fonts-ipafont-gothic, fonts-unifont, fonts-freefont-ttf, fonts-tlwg-loma-otf,
+# xfonts-encodings), for rendering scripts a screenshot might contain.
+#
+# This suite does not render through them. The editor draws with its own
+# vendored XOR font catalog (public/fonts/), PDF export injects
+# PDF_FONT_MANIFEST, and the landing pages load vendored Geist woff2 -- system
+# fonts reach nothing but DOM fallback text. The visual specs compare two
+# renders from the same browser (original against saved-and-reopened), so a
+# missing glyph would be missing identically on both sides.
+#
+# So each job was making a network call to Ubuntu's mirrors, on a fresh VM,
+# for fonts nothing reads. Eleven jobs, eleven rolls of the dice per run -- and
+# the dice are loaded: the runner's preferred azure.archive.ubuntu.com comes
+# back `Ign:`, apt falls through to the public archive, and that stalls dead
+# with no bytes moving. Four jobs were killed at GitHub's six-hour limit this
+# week before the attempts were bounded; two more burned 17 minutes each on a
+# single pull request after that.
+#
+# A cold cache still installs, deps and all: there are no browsers to run
+# without it, and that path downloads from Playwright's CDN anyway.
 if [ "${BROWSERS_CACHED:-}" = "true" ]; then
+  if [ "${PLAYWRIGHT_INSTALL_DEPS:-}" != "true" ]; then
+    echo "Browsers restored from the cache; skipping the apt font install."
+    exit 0
+  fi
+  # Escape hatch: PLAYWRIGHT_INSTALL_DEPS=true puts apt back, bounded and
+  # advisory, for the day a runner image stops shipping one of the libraries.
   command=(install-deps "${browsers[@]}")
   deps_are_advisory=true
   default_attempts=1
@@ -43,6 +60,15 @@ else
   default_attempts=3
   default_timeout=300
 fi
+
+# Stop apt from trickling along on a half-dead mirror indefinitely. This alone
+# would not have saved the six-hour runs (the stall happens with no bytes
+# moving at all), but it turns a slow mirror into a fast failure too.
+sudo tee /etc/apt/apt.conf.d/99-ci-timeouts >/dev/null <<'CONF'
+Acquire::Retries "3";
+Acquire::http::Timeout "30";
+Acquire::https::Timeout "30";
+CONF
 
 attempts=${PLAYWRIGHT_INSTALL_ATTEMPTS:-$default_attempts}
 attempt_timeout=${PLAYWRIGHT_INSTALL_TIMEOUT:-$default_timeout}
