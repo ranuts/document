@@ -126,14 +126,20 @@ if [ -f "$SW_PATH" ]; then
         HASH_CMD="sha256sum"
     fi
     VENDOR_DIRS=""
-    for dir in "$DIST_DIR/sdkjs" "$DIST_DIR/web-apps" "$DIST_DIR/fonts"; do
-        if [ -d "$dir" ]; then
+    for dir in sdkjs web-apps fonts; do
+        if [ -d "$DIST_DIR/$dir" ]; then
             VENDOR_DIRS="$VENDOR_DIRS $dir"
         fi
     done
     if [ -n "$VENDOR_DIRS" ]; then
+        # Hashed from inside $DIST_DIR, with RELATIVE paths: `shasum` prints the
+        # path next to each digest, so hashing "$DIST_DIR/sdkjs/..." would fold
+        # the output directory's own name into the stamp -- the same vendor tree
+        # built into `dist-e2e-4174/` would name a different runtime cache than
+        # the one built into `dist/`. What this stamp claims to be, and what
+        # sw.js relies on, is the content of the tree.
         # shellcheck disable=SC2086 # deliberate word splitting: a list of dirs
-        VENDOR_VERSION=$(find $VENDOR_DIRS -type f -exec $HASH_CMD {} + | LC_ALL=C sort | $HASH_CMD | cut -c1-12)
+        VENDOR_VERSION=$(cd "$DIST_DIR" && find $VENDOR_DIRS -type f -exec $HASH_CMD {} + | LC_ALL=C sort | $HASH_CMD | cut -c1-12)
     else
         echo "[build] Warning: no vendor tree found; sw.js keeps its dev vendor stamp." >&2
         VENDOR_VERSION="novendor"

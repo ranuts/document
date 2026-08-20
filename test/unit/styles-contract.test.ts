@@ -62,3 +62,29 @@ describe('styles/base.css stands in for the preflight it replaced', () => {
     }
   });
 });
+
+/**
+ * The same reset, where the components that need it actually live.
+ *
+ * `.cui-send` / `.cui-scroll-bottom` are fixed-size circles in
+ * @ranuts/chat-ui, and the site's global `button { padding: 0 }` above is what
+ * kept them round -- a coupling nothing states and nothing else in the
+ * ecosystem provides, so the same package in another host renders the 60x50
+ * ellipse this repo already shipped once.
+ */
+describe('the packaged chat UI does not rely on the host for its own geometry', () => {
+  const packaged = readFileSync(resolve(ROOT, 'packages/chat-ui/src/styles.ts'), 'utf8');
+
+  const rule = (selector: string): string => {
+    const at = packaged.indexOf(`\n${selector} {`);
+    expect(at, `chat-ui styles must still declare \`${selector}\``).toBeGreaterThan(-1);
+    return packaged.slice(at, packaged.indexOf('}', at));
+  };
+
+  for (const selector of ['.cui-send', '.cui-scroll-bottom']) {
+    it(`${selector} owns its box`, () => {
+      expect(rule(selector)).toMatch(/box-sizing:\s*border-box/);
+      expect(rule(selector)).toMatch(/padding:\s*0/);
+    });
+  }
+});

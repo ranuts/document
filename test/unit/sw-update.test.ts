@@ -332,6 +332,41 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     expect(runtime.urls()).toContain('/assets/index-deadbeef.js');
   });
 
+  it('keeps a stale runtime cache that acquired vendor assets after the install check', async () => {
+    // wouldDiscardVendorAssets runs during install; activate runs after it, and
+    // on a take-over-at-once deploy that is under live pages. In between, a
+    // page of the outgoing build can write its first vendor entries into its
+    // own runtime cache -- the install check saw it empty and let us through,
+    // and deleting it here is the mixed-version state that check exists to
+    // prevent. Asked again at delete time, with a window open, it survives.
+    const stale = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.gz']);
+    const stores = { 'document-editor-runtime-oldvendor': stale, [OWN_RUNTIME]: fakeCache([]) };
+    const worker = loadWorker(stores, [{ id: 'window-1' }]);
+
+    await dispatch(worker, 'activate');
+
+    expect(Object.keys(stores)).toContain('document-editor-runtime-oldvendor');
+  });
+
+  it('still sweeps a stale runtime cache when no window can be hurt by it', async () => {
+    const stale = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.gz']);
+    const stores = { 'document-editor-runtime-oldvendor': stale, [OWN_RUNTIME]: fakeCache([]) };
+    const worker = loadWorker(stores, []);
+
+    await dispatch(worker, 'activate');
+
+    expect(Object.keys(stores)).not.toContain('document-editor-runtime-oldvendor');
+  });
+
+  it('sweeps a stale CORE cache even under an open window (it holds no vendor assets)', async () => {
+    const stores = { 'document-editor-core-1787000000': fakeCache(['/index.html']), [OWN_RUNTIME]: fakeCache([]) };
+    const worker = loadWorker(stores, [{ id: 'window-1' }]);
+
+    await dispatch(worker, 'activate');
+
+    expect(Object.keys(stores)).not.toContain('document-editor-core-1787000000');
+  });
+
   it('trims an app asset rather than the vendor binary the trim was protecting', async () => {
     // keys() is insertion-ordered, so a plain keys[0] takes the OLDEST entry --
     // exactly the vendor tree, fetched during the first open. Re-downloading
@@ -372,7 +407,9 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     const build = readFileSync(resolve(__dirname, '../../bin/build.sh'), 'utf8');
     for (const tree of ['sdkjs', 'web-apps', 'fonts']) {
       expect(src).toContain(tree);
-      expect(build).toContain(`$DIST_DIR/${tree}`);
+      // Listed relative to $DIST_DIR: the hash is taken from inside it (see
+      // the next case), so the tree names appear as the loop's own words.
+      expect(build).toMatch(new RegExp(`for dir in [^\n]*\\b${tree}\\b`));
     }
     expect(src).toMatch(/const VENDOR_ASSET = \/\^\\\/\(\?:sdkjs\|web-apps\|fonts\)\\\/\//);
   });
@@ -395,8 +432,13 @@ describe('bin/build.sh stamps both versions into sw.js', () => {
     // pipe through xargs because some vendor files have spaces in their names.
     expect(script).toMatch(/find \$VENDOR_DIRS -type f -exec \$HASH_CMD \{\} \+/);
     expect(script).toContain('LC_ALL=C sort');
+    // From INSIDE $DIST_DIR, so the digests carry relative paths. Hashing
+    // `$DIST_DIR/sdkjs/...` would fold the output directory's name into the
+    // stamp, and the same vendor tree built into `dist-e2e-4174/` would name a
+    // different runtime cache than the one built into `dist/`.
+    expect(script).toMatch(/VENDOR_VERSION=\$\(cd "\$DIST_DIR" && find \$VENDOR_DIRS/);
     for (const dir of ['sdkjs', 'web-apps', 'fonts']) {
-      expect(script, dir).toContain(`"$DIST_DIR/${dir}"`);
+      expect(script, dir).toMatch(new RegExp(`for dir in [^\n]*\\b${dir}\\b`));
     }
   });
 });

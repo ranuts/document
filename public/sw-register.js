@@ -20,8 +20,11 @@
  * This is the missing half, and the landing page is the right place for it:
  * it has no document, so promoting here cannot corrupt a session of its own.
  * The one case it must still refuse is another tab that does have a document
- * open, which the page cannot see -- so it asks the active worker how many
- * window clients it controls and only promotes when it is alone.
+ * open, which the page cannot see -- so it asks the active worker what it
+ * controls and only promotes when no window is on the editor route. Another
+ * landing tab is not a reason to refuse: it has nothing to lose, and treating
+ * every second window as a possible editor left a reader who keeps two tabs of
+ * the site open on an old build for good.
  *
  * Plain JS on purpose: the landing pages ship no bundle. `__createSwUpdater`
  * is exposed so test/unit/sw-register.test.ts drives this file rather than a
@@ -39,7 +42,7 @@
     var timeoutMs = (options && options.timeoutMs) || CLIENT_COUNT_TIMEOUT_MS;
 
     /**
-     * How many window clients the active worker controls. Resolves to null
+     * What the active worker controls: `{ count, editors }`. Resolves to null
      * when there is nobody to ask or the answer does not arrive -- callers
      * treat that as "unknown" and leave the worker waiting.
      */
@@ -59,7 +62,7 @@
         };
         channel.port1.onmessage = function (event) {
           var data = event.data;
-          done(data && typeof data.count === 'number' ? data.count : null);
+          done(data && typeof data.count === 'number' ? data : null);
         };
         global.setTimeout(function () {
           done(null);
@@ -73,15 +76,22 @@
     }
 
     /**
-     * Promote the waiting worker, but only while this tab is the only one:
-     * activation wipes the outgoing build's caches, and another tab could be
-     * an editor with a document open.
+     * Promote the waiting worker, but not while another tab is on the editor
+     * route: activation wipes the outgoing build's caches, and such a tab may
+     * have a document open and is deliberately not reloaded when the new
+     * worker takes control.
+     *
+     * `editors` is missing from the reply of a worker deployed before it
+     * existed; there the old, blunter reading applies -- promote only when
+     * this tab is the only window at all.
      */
     function maybePromote(registration) {
       var waiting = registration.waiting;
       if (!waiting) return Promise.resolve(false);
-      return countClients().then(function (count) {
-        if (count === null || count > 1) return false;
+      return countClients().then(function (answer) {
+        if (!answer) return false;
+        var blocked = typeof answer.editors === 'number' ? answer.editors > 0 : answer.count > 1;
+        if (blocked) return false;
         waiting.postMessage({ type: 'SKIP_WAITING' });
         return true;
       });

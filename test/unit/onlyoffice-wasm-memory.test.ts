@@ -1,9 +1,10 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import {
   describeMemoryVerdict,
   isWasmAllocationFailure,
   probeX2tMemory,
+  resetMemoryProbe,
   WasmMemoryVerdict,
   X2T_INITIAL_MB,
   X2T_INITIAL_PAGES,
@@ -64,6 +65,12 @@ describe('isWasmAllocationFailure', () => {
 
 describe('probeX2tMemory', () => {
   const original = globalThis.WebAssembly;
+
+  // The refusal is remembered across probes on purpose (see below), and the
+  // module outlives a single case here.
+  beforeEach(() => {
+    resetMemoryProbe();
+  });
 
   afterEach(() => {
     globalThis.WebAssembly = original;
@@ -148,6 +155,39 @@ describe('probeX2tMemory', () => {
       if (descriptor.maximum !== undefined) throw new RangeError('cannot reserve');
     });
     expect(probeX2tMemory({ skipCommit: true })).toBe(WasmMemoryVerdict.Reservation);
+  });
+  it('does not ask again for 283 MB the browser has already refused', () => {
+    // One failed open reaches the toast more than once (the guard's
+    // asc_onError and the vendor's own -82 for the same failure), and the
+    // probe would otherwise commit x2t's whole heap on each pass -- on the
+    // browser that has just said it has no such memory.
+    const asked: Array<{ initial: number }> = [];
+    stubMemory((descriptor) => {
+      asked.push(descriptor);
+      if (descriptor.initial > 1) throw new RangeError('cannot commit');
+    });
+
+    expect(probeX2tMemory()).toBe(WasmMemoryVerdict.Commit);
+    expect(probeX2tMemory()).toBe(WasmMemoryVerdict.Commit);
+
+    expect(asked.filter((descriptor) => descriptor.initial > 1)).toHaveLength(1);
+  });
+
+  it('asks again after a new user-initiated open (the reader may have freed memory)', () => {
+    let refuse = true;
+    const asked: Array<{ initial: number }> = [];
+    stubMemory((descriptor) => {
+      asked.push(descriptor);
+      if (descriptor.initial > 1 && refuse) throw new RangeError('cannot commit');
+    });
+
+    expect(probeX2tMemory()).toBe(WasmMemoryVerdict.Commit);
+    // What registerOpenAttempt calls for an open the reader started.
+    resetMemoryProbe();
+    refuse = false;
+
+    expect(probeX2tMemory()).toBe(WasmMemoryVerdict.Ok);
+    expect(asked.filter((descriptor) => descriptor.initial > 1)).toHaveLength(2);
   });
 });
 

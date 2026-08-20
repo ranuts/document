@@ -125,7 +125,7 @@ test.describe('warm service worker (real editor)', () => {
    * build's caches under it. sw.js answers that over a transferred port, and
    * this is that protocol against the real worker.
    */
-  test('the landing page can ask the worker how many windows it controls', async ({ page, context }) => {
+  test('the landing page can ask the worker what it controls', async ({ page, context }) => {
     await page.goto('/');
     await page.evaluate(async () => {
       const reg = await navigator.serviceWorker.ready;
@@ -135,34 +135,49 @@ test.describe('warm service worker (real editor)', () => {
     await page.reload();
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
 
-    const ask = (target: typeof page) =>
+    type Answer = { count: number; editors: number } | null;
+    const ask = (target: typeof page): Promise<Answer> =>
       target.evaluate(
         () =>
-          new Promise<number | null>((resolve) => {
+          new Promise<Answer>((resolve) => {
             const controller = navigator.serviceWorker.controller;
             if (!controller) return resolve(null);
             const channel = new MessageChannel();
             const timer = setTimeout(() => resolve(null), 5_000);
             channel.port1.onmessage = (event) => {
               clearTimeout(timer);
-              resolve(typeof event.data?.count === 'number' ? event.data.count : null);
+              const data = event.data as { count?: unknown; editors?: unknown } | undefined;
+              resolve(
+                typeof data?.count === 'number' && typeof data.editors === 'number'
+                  ? { count: data.count, editors: data.editors }
+                  : null,
+              );
             };
             controller.postMessage({ type: 'CLIENT_COUNT' }, [channel.port2]);
           }),
       );
 
-    // Alone: promotion is safe, so the count must say so.
-    expect(await ask(page)).toBe(1);
+    // Alone on a landing page: promotion is safe, and the answer must say so.
+    expect(await ask(page)).toEqual({ count: 1, editors: 0 });
 
-    // A second window: the count has to rise, otherwise the policy would
-    // promote a worker out from under an editor that has a document open.
-    const second = await context.newPage();
-    await second.goto('/');
-    await expect.poll(() => second.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
-    await expect.poll(async () => await ask(page)).toBeGreaterThan(1);
-    await second.close();
+    // A second LANDING tab raises the count but not the editor count: it has
+    // no session an activation could spoil, so promotion stays allowed.
+    const secondLanding = await context.newPage();
+    await secondLanding.goto('/');
+    await expect.poll(() => secondLanding.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+    await expect.poll(async () => (await ask(page))?.count).toBeGreaterThan(1);
+    expect((await ask(page))?.editors).toBe(0);
+    await secondLanding.close();
+
+    // An editor window is the one that must block it -- it may have a document
+    // open, and it is deliberately not reloaded when a new worker takes over.
+    const editor = await context.newPage();
+    await editor.goto('/editor?new=docx');
+    await expect.poll(() => editor.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+    await expect.poll(async () => (await ask(page))?.editors).toBe(1);
+    await editor.close();
 
     // And falls back once it closes, so a later visit can update again.
-    await expect.poll(async () => await ask(page)).toBe(1);
+    await expect.poll(async () => await ask(page)).toEqual({ count: 1, editors: 0 });
   });
 });

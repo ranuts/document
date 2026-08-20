@@ -154,6 +154,13 @@ export const CHAT_UI_CSS = `
   transform: translateX(-50%);
   width: 32px;
   height: 32px;
+  /* A round button is round only if its 32px includes the UA's own 1px 6px
+     button padding and this 1px border. Declared here rather than left to a
+     host reset: this file ships in @ranuts/chat-ui, and a host without one
+     renders these as ellipses (which is exactly what happened to the site's
+     own launcher when its CSS framework went away). */
+  box-sizing: border-box;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,6 +225,9 @@ export const CHAT_UI_CSS = `
   flex: 0 0 auto;
   width: 32px;
   height: 32px;
+  /* Same reason as .cui-scroll-bottom: the 32px circle owns its own box. */
+  box-sizing: border-box;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
