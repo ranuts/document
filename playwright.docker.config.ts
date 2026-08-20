@@ -15,6 +15,12 @@ process.env.E2E_DOCKER = '1';
 
 export default defineConfig({
   testDir: 'test/e2e',
+  // No `@serial`: this suite proves the image serves the app, not what the
+  // font system costs. Re-measuring a wall-clock budget inside a container
+  // adds noise, not signal -- and the cases run in parallel here anyway.
+  // Declared in the config rather than passed on the CI command line, so a
+  // local `pnpm run test:e2e:docker` means the same thing CI does.
+  grepInvert: /@serial/,
   timeout: 120_000,
   expect: {
     timeout: 10_000,

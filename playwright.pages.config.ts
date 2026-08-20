@@ -23,6 +23,11 @@ const SERVE = `sh ./bin/serve-pages-dev.sh ${PORT}`;
 
 export default defineConfig({
   ...base,
+  // No `@serial`: this suite proves Cloudflare Pages hosting semantics.
+  // Re-measuring a wall-clock budget behind wrangler adds noise, not signal.
+  // Declared here rather than on the CI command line so a local run of this
+  // config means the same thing CI's does.
+  grepInvert: /@serial/,
   outputDir: 'test-results-pages',
   reporter: [['list'], ['html', { outputFolder: 'playwright-report-pages', open: 'never' }]],
   fullyParallel: false,
