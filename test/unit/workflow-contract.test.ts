@@ -211,6 +211,32 @@ describe('.github/workflows/ci.yml', () => {
     expect(job!.body).toMatch(/\[ "\$RESULT" = "success" \] \|\| exit 1/);
   });
 
+  it('keeps the timing-budget cases out of the parallel pass and measures them alone', () => {
+    // Two halves that only work as a pair. Drop the `--grep-invert` and the
+    // budgets go back to competing with three other WASM editors for four
+    // cores (measured: a 2 s font-system budget took 3.4 s). Drop the serial
+    // pass and nothing measures them at all, silently -- the suite stays green
+    // while a whole class of assertion stops running.
+    const e2e = ciJobs.find(({ name }) => name === 'e2e-shard');
+    expect(e2e).toBeDefined();
+    expect(e2e!.body).toMatch(/--shard=\$\{\{ matrix\.shard \}\}\/3 --grep-invert @serial/);
+    expect(e2e!.body).toMatch(/playwright test --grep @serial --workers=1/);
+  });
+
+  it('leaves the timing budgets to the primary suite only', () => {
+    // The Pages and Docker suites prove hosting semantics; re-measuring a
+    // wall-clock budget behind wrangler or inside a container adds noise, not
+    // signal, and both run their cases in parallel.
+    //
+    // Pinned on the configs, not on the CI command line: as a flag it held
+    // only for CI, so `pnpm run test:e2e:docker` locally still measured a
+    // budget the job it is meant to reproduce never measures.
+    for (const config of ['playwright.pages.config.ts', 'playwright.docker.config.ts']) {
+      const src = readFileSync(resolve(__dirname, '../..', config), 'utf8');
+      expect(src, config).toMatch(/grepInvert:\s*\/@serial\//);
+    }
+  });
+
   it('passes the shard to the Docker suite without going through pnpm', () => {
     // `pnpm run test:e2e:docker -- --shard=1/3` drops the arguments on the
     // floor: every shard then runs the whole suite, three times over, and the

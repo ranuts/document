@@ -88,7 +88,25 @@ jobs:
           browsers: chromium
 
       - name: Run E2E tests
-        run: pnpm exec playwright test --shard=${{ matrix.shard }}/3
+        # `@serial` is excluded here and measured in the next step: those cases
+        # assert wall-clock budgets, and four WASM editors sharing four cores
+        # push them past their bound (the font-system wait measured 3.4 s
+        # against a 2 s budget). See the next step and CLAUDE.md.
+        run: pnpm exec playwright test --shard=${{ matrix.shard }}/3 --grep-invert @serial
+
+      - name: Run the timing-budget E2E cases with the runner to themselves
+        # Run in every shard rather than one: each shard is its own VM, so this
+        # pass really is alone, and every shard stays a copy of the others (an
+        # asymmetric shard is how a step gets dropped unnoticed). Deliberately
+        # not sharded -- it is a single case.
+        #
+        # The case itself takes seconds, but the step does not: this is a second
+        # `playwright test` process, and `reuseExistingServer` is false in CI, so
+        # each shard pays another full `vite build` + preview startup (~1 min)
+        # for it. That is the price of testing the budget at all -- measured
+        # against three WASM editors it is the machine that fails, not the code
+        # -- but it is a minute per shard, not seconds.
+        run: pnpm exec playwright test --grep @serial --workers=1
 
       - name: Upload Playwright report
         if: failure()
@@ -143,6 +161,8 @@ jobs:
           browsers: chromium
 
       - name: Run E2E against wrangler pages dev
+        # `@serial` is excluded by playwright.pages.config.ts itself, so a local
+        # run of that config measures exactly what this job does.
         run: pnpm exec playwright test -c playwright.pages.config.ts --shard=${{ matrix.shard }}/5
 
       - name: Upload Playwright report
@@ -194,6 +214,8 @@ jobs:
       - name: Run E2E tests against the Docker image
         # Called directly, not through `pnpm run`: pnpm swallows the extra
         # arguments, which would silently run the whole suite in every shard.
+        # `@serial` is excluded by playwright.docker.config.ts itself, so a
+        # local `pnpm run test:e2e:docker` measures the same set.
         run: sh ./bin/test-e2e-docker.sh --shard=${{ matrix.shard }}/3
 
       - name: Upload Playwright report
