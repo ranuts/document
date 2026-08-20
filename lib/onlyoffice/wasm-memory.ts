@@ -94,6 +94,27 @@ export enum WasmMemoryVerdict {
 }
 
 /**
+ * Whether this browser has already refused to commit x2t's heap.
+ *
+ * A single failed open reaches the toast more than once -- the guard routes
+ * the rejection into `asc_onError` and the vendor raises its own -82 for the
+ * same failure -- and each pass would otherwise ask the browser for another
+ * 283 MB it has just said it does not have. Once refused, the answer is
+ * reused: it is the same answer, and asking again costs exactly the memory
+ * that is missing.
+ *
+ * Reset by `registerOpenAttempt` for a user-initiated open (open-failure.ts),
+ * which is a new situation and worth asking about again -- the reader may have
+ * closed the tabs the last toast told them to close.
+ */
+let commitRefused = false;
+
+/** See `commitRefused`: a user-initiated open asks the browser afresh. */
+export function resetMemoryProbe(): void {
+  commitRefused = false;
+}
+
+/**
  * `skipCommit` leaves the commit half unasked and answers `Deferred`.
  *
  * The commit probe really does commit x2t's full 283 MB, synchronously, and
@@ -119,6 +140,7 @@ export function probeX2tMemory(options?: { skipCommit?: boolean }): WasmMemoryVe
   // it is the half GitHub #144 points at; the commit half is worth 283 MB only
   // when nothing else needs them.
   if (options?.skipCommit) return WasmMemoryVerdict.Deferred;
+  if (commitRefused) return WasmMemoryVerdict.Commit;
   try {
     // x2t's descriptor verbatim, `maximum` included. Dropping it would make
     // this a question the engine is never actually asked: the two halves can
@@ -128,6 +150,7 @@ export function probeX2tMemory(options?: { skipCommit?: boolean }): WasmMemoryVe
     // failure that repeats every time. Costs the same 283 MB either way.
     void new Memory({ initial: X2T_INITIAL_PAGES, maximum: X2T_MAXIMUM_PAGES });
   } catch {
+    commitRefused = true;
     return WasmMemoryVerdict.Commit;
   }
   return WasmMemoryVerdict.Ok;

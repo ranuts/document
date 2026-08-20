@@ -52,6 +52,18 @@ const MAX_RUNTIME_ITEMS = 2000;
 const VENDOR_ASSET = /^\/(?:sdkjs|web-apps|fonts)\//;
 const isVendorAsset = (request) => VENDOR_ASSET.test(new URL(request.url).pathname);
 
+// The editor route (`/editor`, `/editor.html`, either with a query string).
+// Everything else this scope serves is a landing or content page, which holds
+// no session an activation could spoil.
+const EDITOR_ROUTE = /^\/editor(?:\.html)?\/?$/;
+const isEditorWindow = (url) => {
+  try {
+    return EDITOR_ROUTE.test(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+};
+
 /**
  * Whether activating now would throw away vendor assets some still-open page
  * of the outgoing build might need.
@@ -176,20 +188,55 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  // How many windows this worker controls. The landing page asks before it
-  // promotes a waiting worker: activation deletes this build's caches, and it
-  // cannot see whether another tab is an editor with a document open, so it
-  // only promotes when the answer is "just you" (public/sw-register.js).
+  // What this worker controls, for the landing page's promotion decision:
+  // activation deletes this build's caches, and the window that cannot survive
+  // that is an editor -- it may have a document open, and it is deliberately
+  // not reloaded on controllerchange. `editors` is what the decision actually
+  // needs; `count` stays in the reply for a worker-side change that has to be
+  // readable by the page shipped before it (see public/sw-register.js).
+  //
+  // Which tabs are editors is knowable from the URL; whether they hold a
+  // document is not, so any editor window counts against promotion. Another
+  // LANDING tab does not -- it has nothing to lose, and blocking on it was
+  // enough to leave a two-tab reader on an old build indefinitely.
   if (event.data && event.data.type === 'CLIENT_COUNT') {
     const port = event.ports && event.ports[0];
     if (!port) return;
     event.waitUntil(
       self.clients.matchAll({ type: 'window' }).then((clients) => {
-        port.postMessage({ type: 'CLIENT_COUNT', count: clients.length });
+        const editors = clients.filter((client) => isEditorWindow(client.url)).length;
+        port.postMessage({ type: 'CLIENT_COUNT', count: clients.length, editors });
       }),
     );
   }
 });
+
+/**
+ * Whether a cache about to be deleted is a runtime cache that has since
+ * acquired vendor assets, with a window still open to use them.
+ *
+ * `wouldDiscardVendorAssets` is evaluated during install; activate runs after
+ * it, and on a take-over-at-once deploy that is under live pages. In between,
+ * a page of the outgoing build can write the first vendor entries into its own
+ * runtime cache -- the install check saw an empty one and let us through, and
+ * deleting it now is exactly the mixed-version state the check exists to
+ * prevent. Asking again here costs one `keys()` per stale cache and closes all
+ * but the microseconds between this read and the delete.
+ *
+ * Only deferred while a window is open: with none, nobody can be hurt and the
+ * sweep should happen.
+ */
+const holdsVendorAssetsForOpenWindow = (cacheName) =>
+  cacheName.startsWith(RUNTIME_PREFIX)
+    ? self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windows) => {
+        if (!windows.length) return false;
+        return caches
+          .open(cacheName)
+          .then((cache) => cache.keys())
+          .then((keys) => keys.some(isVendorAsset))
+          .catch(() => true);
+      })
+    : Promise.resolve(false);
 
 // Activate event: Clean up caches from every previous version
 self.addEventListener('activate', (event) => {
@@ -200,7 +247,9 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== CORE_CACHE && cacheName !== RUNTIME_CACHE) {
-              return caches.delete(cacheName);
+              return holdsVendorAssetsForOpenWindow(cacheName).then((keep) =>
+                keep ? undefined : caches.delete(cacheName),
+              );
             }
           }),
         );

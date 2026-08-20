@@ -1,7 +1,7 @@
 import { t } from '@ranuts/shared/i18n';
 import { getDocumentOpenError, isDocumentContentReady, markDocumentOpenFailed, noteFrameError } from './open-state';
 import { failPendingSaveConversion } from './save-stream';
-import { isWasmAllocationFailure } from './wasm-memory';
+import { isWasmAllocationFailure, resetMemoryProbe } from './wasm-memory';
 
 /**
  * Everything about an open that did not survive: which document was being
@@ -257,6 +257,9 @@ export function registerOpenAttempt(config: {
   if (config.isRetry) return;
   // A user-initiated open supersedes whatever the last attempt was doing.
   openRetryInFlight = false;
+  // And it is worth asking the browser about memory again: the reader may have
+  // closed the tabs the last failure told them to close (see resetMemoryProbe).
+  resetMemoryProbe();
   currentOpenAttempt = {
     fileName: config.fileName,
     fileType: config.fileType,

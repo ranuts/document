@@ -41,13 +41,21 @@ const fakeWorker = () => {
 
 /**
  * A controller that answers CLIENT_COUNT over the transferred port, like
- * public/sw.js does. `count: null` models a worker that never answers.
+ * public/sw.js does. `count: null` models a worker that never answers;
+ * `editors` defaults to none, i.e. only landing tabs are open.
  */
-const fakeController = (count: number | null) => ({
+const fakeController = (count: number | null, editors = 0) => ({
   postMessage: (_msg: unknown, transfer?: MessagePort[]) => {
     const port = transfer?.[0];
     if (!port || count === null) return;
-    port.postMessage({ type: 'CLIENT_COUNT', count });
+    port.postMessage({ type: 'CLIENT_COUNT', count, editors });
+  },
+});
+
+/** A worker from before the reply carried `editors` (the previous deploy). */
+const legacyController = (count: number) => ({
+  postMessage: (_msg: unknown, transfer?: MessagePort[]) => {
+    transfer?.[0]?.postMessage({ type: 'CLIENT_COUNT', count });
   },
 });
 
@@ -73,7 +81,7 @@ const navWith = (controller: unknown, register?: () => Promise<unknown>) => ({
 describe('countClients', () => {
   it('asks the active worker and reports its answer', async () => {
     const updater = createSwUpdater(navWith(fakeController(1)));
-    await expect(updater.countClients()).resolves.toBe(1);
+    await expect(updater.countClients()).resolves.toMatchObject({ count: 1, editors: 0 });
   });
 
   it('answers null when there is no controller (nothing has ever activated)', async () => {
@@ -102,13 +110,31 @@ describe('maybePromote', () => {
     expect(waiting.posted).toEqual([{ type: 'SKIP_WAITING' }]);
   });
 
-  it('refuses while another window is open (it could be an editor with a document)', async () => {
+  it('refuses while a window is on the editor route (it could have a document open)', async () => {
     // Activation deletes the outgoing build's caches; that tab would then
     // lazy-load the new build's vendor pieces into an old session.
     const waiting = fakeWorker();
-    const updater = createSwUpdater(navWith(fakeController(2)));
+    const updater = createSwUpdater(navWith(fakeController(2, 1)));
     await expect(updater.maybePromote(fakeRegistration(waiting))).resolves.toBe(false);
     expect(waiting.posted).toEqual([]);
+  });
+
+  it('promotes with a second LANDING tab open -- it has no session to lose', async () => {
+    // Refusing on any second window is what left a reader who keeps two tabs
+    // of the site open on an old build indefinitely.
+    const waiting = fakeWorker();
+    const updater = createSwUpdater(navWith(fakeController(2, 0)));
+    await expect(updater.maybePromote(fakeRegistration(waiting))).resolves.toBe(true);
+    expect(waiting.posted).toEqual([{ type: 'SKIP_WAITING' }]);
+  });
+
+  it('falls back to "am I alone" against a worker whose reply predates editors', async () => {
+    const waiting = fakeWorker();
+    const alone = createSwUpdater(navWith(legacyController(1)));
+    await expect(alone.maybePromote(fakeRegistration(waiting))).resolves.toBe(true);
+
+    const crowded = createSwUpdater(navWith(legacyController(2)));
+    await expect(crowded.maybePromote(fakeRegistration(fakeWorker()))).resolves.toBe(false);
   });
 
   it('refuses when the client count is unknown', async () => {
@@ -242,5 +268,9 @@ describe('the landing pages carry the policy', () => {
     const sw = read('public/sw.js');
     expect(sw).toContain("type === 'CLIENT_COUNT'");
     expect(sw).toContain("self.clients.matchAll({ type: 'window' })");
+    // The half the decision is actually made on: an editor window blocks
+    // promotion, a second landing tab does not.
+    expect(sw).toContain('isEditorWindow(client.url)');
+    expect(sw).toMatch(/const EDITOR_ROUTE = /);
   });
 });

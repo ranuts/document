@@ -290,3 +290,25 @@ describe('fetchWasmResponse', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('a failure on the buffered path keeps its cause', () => {
+  afterEach(() => {
+    delete (window as any).Module;
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it('reports what actually failed, not just "Failed to load X2T WASM script"', async () => {
+    // A host classifies open failures on the message text
+    // (lib/onlyoffice/open-failure.ts): "Failed to fetch" is an environment
+    // failure, worth a retry, while the bare wrapper matched none of its
+    // wordings and fell through to `document` -- telling the reader their file
+    // may be corrupted over a CDN answer that had nothing to do with it.
+    vi.stubGlobal('DecompressionStream', undefined);
+    expect(canStreamWasm()).toBe(false);
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 404 } as unknown as Response));
+
+    const converter = new X2TConverter() as any;
+    await expect(converter.loadScript()).rejects.toThrow(/Failed to fetch x2t WASM at .*404/);
+  });
+});

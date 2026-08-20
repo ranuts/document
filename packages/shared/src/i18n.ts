@@ -351,12 +351,12 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     themeSystem: 'システム',
     themeLight: 'ライト',
     themeDark: 'ダーク',
-    fileSavedSuccess: 'ファイルを保存しました：',
-    documentLoaded: 'ドキュメントを読み込みました：',
+    fileSavedSuccess: 'ファイルを保存しました: ',
+    documentLoaded: 'ドキュメントを読み込みました: ',
     failedToLoadEditor: 'エディターを読み込めませんでした。OnlyOffice API が正しく配置されているか確認してください。',
-    unsupportedFileType: 'サポートされていないファイル形式：',
+    unsupportedFileType: 'サポートされていないファイル形式: ',
     invalidFileObject: '無効なファイルです',
-    documentOperationFailed: 'ドキュメントの操作に失敗しました：',
+    documentOperationFailed: 'ドキュメントの操作に失敗しました: ',
     editorErrorToast: 'ドキュメントエラー',
     editorErrorFormatMismatch: 'ファイルの内容が拡張子と一致しません。形式を確認してからもう一度お試しください',
     editorErrorOpenFailed:
@@ -376,7 +376,7 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     themeDark: '다크',
     fileSavedSuccess: '파일을 저장했습니다: ',
     documentLoaded: '문서를 불러왔습니다: ',
-    failedToLoadEditor: '편집기를 불러오지 못했습니다. OnlyOffice API 가 올바르게 설치되어 있는지 확인하세요.',
+    failedToLoadEditor: '편집기를 불러오지 못했습니다. OnlyOffice API가 올바르게 설치되어 있는지 확인하세요.',
     unsupportedFileType: '지원하지 않는 파일 형식: ',
     invalidFileObject: '잘못된 파일입니다',
     documentOperationFailed: '문서 작업에 실패했습니다: ',
@@ -385,7 +385,7 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     editorErrorOpenFailed:
       '파일을 열 수 없습니다. 손상되었거나, 지원하지 않는 형식이거나, 확장자와 내용이 다를 수 있습니다',
     editorErrorOutOfMemory:
-      '이 브라우저에서 문서 변환 엔진에 필요한 메모리 (약 {mb} MB) 를 할당할 수 없습니다. 다른 탭이나 창을 닫고 다시 시도하세요. 계속 실패하면 64 비트 브라우저 (Edge 또는 64 비트 Chrome) 를 사용하세요.',
+      '이 브라우저에서 문서 변환 엔진에 필요한 메모리(약 {mb} MB)를 할당할 수 없습니다. 다른 탭이나 창을 닫고 다시 시도하세요. 계속 실패하면 64비트 브라우저(Edge 또는 64비트 Chrome)를 사용하세요.',
   },
   [LanguageCode.DE]: {
     webOffice: 'Web Office',

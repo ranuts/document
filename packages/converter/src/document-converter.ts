@@ -291,9 +291,18 @@ export class X2TConverter {
       this.hasScriptLoaded = true;
       console.log('X2T WASM script loaded successfully');
     } catch (error) {
-      const errorMsg = 'Failed to load X2T WASM script';
-      console.error(errorMsg, error);
-      throw new Error(errorMsg);
+      // Keep the cause in the message, not just in `cause`. What reads this is
+      // a host's open-failure handling (lib/onlyoffice/open-failure.ts
+      // classifies on the message text), and a bare "Failed to load X2T WASM
+      // script" matches none of its environment wordings -- so a CDN 500 or a
+      // refused wasm heap on the buffered path, neither of which is a verdict
+      // on the document, was reported to the user as "the file may be
+      // corrupted" and never retried. The vendor-side loader
+      // (public/sdkjs/common/wasm/x2t/x2t_helper.js) rethrows its cause
+      // untouched; this is the same contract.
+      const cause = error instanceof Error ? error.message : String(error);
+      console.error('Failed to load X2T WASM script', error);
+      throw new Error(`Failed to load X2T WASM script: ${cause}`, { cause: error });
     }
   }
 
