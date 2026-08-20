@@ -459,15 +459,11 @@
       </footer>
     </section>
 
-    <!-- Register the service worker from the homepage too, so the landing works
-         offline / installs as an app; the update policy lives with the editor
-         (lib/sw-update.ts), where a document may be open. -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('./sw.js').catch(function () {});
-        });
-      }
-    </script>
+    <!-- Registers the service worker (so the landing works offline / installs
+         as an app) and promotes a waiting one, which is what makes a deploy
+         reach a returning visitor. /editor cannot do it: its open starts
+         before the registration resolves, so lib/sw-update.ts always sees a
+         document open. See public/sw-register.js. -->
+    <script src="/sw-register.js" defer></script>
   </body>
 </html>

@@ -70,5 +70,99 @@ test.describe('warm service worker (real editor)', () => {
     expect(result.frameControlled, 'the editor frame itself must be SW-controlled').toBe(true);
     expect(result.name).toBe('warm.xlsx');
     expect(result.csv).toBe('warm,sw\na,1');
+
+    // The runtime cache -- now populated with vendor assets by the open above --
+    // must be named after the vendor stamp, not the build stamp. Keyed by the
+    // build, every deploy would look like a vendor change, no deploy could
+    // activate on its own, and a shipped fix would wait for the user to close
+    // every tab of the site (GitHub #144). Read the stamp out of the served
+    // worker rather than hardcoding it, so this holds for a `vite build`
+    // (stamp `dev`) and for a real bin/build.sh build (a content hash) alike.
+    const stamp = await page.evaluate(async () => {
+      const source = await (await fetch('/sw.js', { cache: 'no-store' })).text();
+      const declared = /VENDOR_VERSION = '([^']*)'/.exec(source)?.[1] ?? null;
+      // Same fallback the worker itself applies to an un-substituted stamp.
+      const vendor = declared === null ? null : declared.includes('PLACEHOLDER') ? 'dev' : declared;
+      const maxItems = Number(/MAX_RUNTIME_ITEMS = (\d+)/.exec(source)?.[1] ?? 0);
+      const runtime = (await caches.keys()).filter((name) => name.startsWith('document-editor-runtime-'));
+      const entries = runtime.length ? (await (await caches.open(runtime[0])).keys()).length : 0;
+      const vendorEntries = runtime.length
+        ? (await (await caches.open(runtime[0])).keys()).filter((request) =>
+            /^\/(?:sdkjs|web-apps|fonts)\//.test(new URL(request.url).pathname),
+          ).length
+        : 0;
+      return { vendor, runtime, maxItems, entries, vendorEntries };
+    });
+    expect(stamp.vendor, 'sw.js must declare a vendor stamp').not.toBeNull();
+    expect(stamp.runtime, 'the open must have populated exactly one runtime cache').toHaveLength(1);
+    expect(stamp.runtime[0]).toBe(`document-editor-runtime-${stamp.vendor}`);
+
+    // Headroom under MAX_RUNTIME_ITEMS, measured rather than assumed.
+    //
+    // Naming the runtime cache after the vendor content means nothing empties
+    // it on a normal deploy any more: `pruneAppAssets` skips itself while a
+    // window is open, and a vendor-unchanged deploy now activates during
+    // install, i.e. always under a live window. So the retired builds'
+    // `/assets/<hash>` entries accumulate until the next activation that
+    // happens with every tab closed. What keeps that safe is `limitCacheSize`
+    // evicting app entries before vendor ones -- but only while the vendor
+    // half alone stays well under the cap. Measured here after a full open
+    // (~340 entries of which ~300 are vendor); the bound is deliberately loose
+    // and exists to fail loudly if a vendor bump doubles the working set.
+    expect(stamp.maxItems, 'sw.js must declare MAX_RUNTIME_ITEMS').toBeGreaterThan(0);
+    expect(stamp.entries, 'the open must have populated the runtime cache').toBeGreaterThan(0);
+    expect(
+      stamp.vendorEntries,
+      `vendor entries (${stamp.vendorEntries}) must stay far below MAX_RUNTIME_ITEMS (${stamp.maxItems}), ` +
+        'or the trim starts evicting the binaries it was added to protect',
+    ).toBeLessThan(stamp.maxItems / 2);
+  });
+
+  /**
+   * The update policy the landing page now carries (public/sw-register.js)
+   * rests on one thing the page cannot answer by itself: whether any other
+   * window is open, because activating a new worker deletes the outgoing
+   * build's caches under it. sw.js answers that over a transferred port, and
+   * this is that protocol against the real worker.
+   */
+  test('the landing page can ask the worker how many windows it controls', async ({ page, context }) => {
+    await page.goto('/');
+    await page.evaluate(async () => {
+      const reg = await navigator.serviceWorker.ready;
+      if (!reg.active) throw new Error('service worker never activated');
+    });
+    // Second load: the page is controlled, so it has a controller to ask.
+    await page.reload();
+    await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+
+    const ask = (target: typeof page) =>
+      target.evaluate(
+        () =>
+          new Promise<number | null>((resolve) => {
+            const controller = navigator.serviceWorker.controller;
+            if (!controller) return resolve(null);
+            const channel = new MessageChannel();
+            const timer = setTimeout(() => resolve(null), 5_000);
+            channel.port1.onmessage = (event) => {
+              clearTimeout(timer);
+              resolve(typeof event.data?.count === 'number' ? event.data.count : null);
+            };
+            controller.postMessage({ type: 'CLIENT_COUNT' }, [channel.port2]);
+          }),
+      );
+
+    // Alone: promotion is safe, so the count must say so.
+    expect(await ask(page)).toBe(1);
+
+    // A second window: the count has to rise, otherwise the policy would
+    // promote a worker out from under an editor that has a document open.
+    const second = await context.newPage();
+    await second.goto('/');
+    await expect.poll(() => second.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+    await expect.poll(async () => await ask(page)).toBeGreaterThan(1);
+    await second.close();
+
+    // And falls back once it closes, so a later visit can update again.
+    await expect.poll(async () => await ask(page)).toBe(1);
   });
 });

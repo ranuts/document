@@ -28,6 +28,12 @@
   Cache-Control: no-cache
 /lang-switch.js
   Cache-Control: no-cache
+/sw-register.js
+  Cache-Control: no-cache
+/open-local.js
+  Cache-Control: no-cache
+/landing-prefetch.js
+  Cache-Control: no-cache
 /ranui-iife/*
   Cache-Control: no-cache
 

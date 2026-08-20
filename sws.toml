@@ -17,7 +17,8 @@
 
 # Default: revalidate. Same semantics as the Pages default, and what every
 # stable-named file needs -- HTML, sw.js, the deploy-coupled shell files
-# (home.css, landing.css, lang-switch.js, ranui-iife/) and the vendor trees,
+# (home.css, landing.css, lang-switch.js, sw-register.js, open-local.js,
+# landing-prefetch.js, ranui-iife/) and the vendor trees,
 # whose JS carries our own runtime patch (x2t_helper.js). Revalidation is a
 # conditional request answered with 304, not a re-download.
 [[advanced.headers]]
