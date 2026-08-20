@@ -6,7 +6,7 @@
 
 - **线上地址**：https://edit.chaxus.com/ （旧址 https://ranuts.github.io/document/ 已跳转至此）
 - **GitHub**：https://github.com/ranuts/document
-- **技术栈**：TypeScript + Vite + Tailwind CSS + OnlyOffice Web Apps
+- **技术栈**：TypeScript + Vite + ranui 设计体系（`--ran-*` token + `r-*` 组件，无 CSS 框架）+ OnlyOffice Web Apps
 
 ---
 
@@ -42,7 +42,8 @@ pnpm run lint:ts                 # oxlint + tsc --noEmit（CI 必跑）
 pnpm run format:check            # prettier 格式检查（CI 必跑）
 pnpm run test                    # 单元测试（Vitest）
 pnpm run test:coverage           # 带覆盖率的单元测试
-pnpm run test:e2e                # E2E 测试（Playwright，自动 build+preview）
+pnpm run test:e2e                # E2E 测试（Playwright，自动 build+preview）——不含 @serial
+pnpm run test:e2e:serial         # 时序预算用例（@serial），单 worker 独占跑；本地要跑全须两条都跑
 pnpm run test:e2e:docker         # 同套 E2E 跑在生产 Docker 镜像上（bin/test-e2e-docker.sh）
 CORPUS_DIR=<本地语料目录> pnpm run test:e2e:corpus   # 真实文档回归矩阵（本地/夜间，语料不入库）
 pnpm run lint                    # lint:ts + lint:docker
@@ -62,13 +63,15 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   loading.ts            # 加载状态 UI
   onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
   onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
-    iframe-guards.ts      # 9 条运行时守卫的编排；每条守卫一个文件在 guards/
+    iframe-guards.ts      # 10 条运行时守卫的编排；每条守卫一个文件在 guards/
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
-                          # font-loading / comment-selection / canvas-loss
+                          # font-loading / comment-selection / canvas-loss /
+                          # wasm-binary-release
     open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
     open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
     font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
+    wasm-memory.ts        # x2t 声明的内存（283 MB initial / 2048 MB maximum，由 vendor-contract 解析二进制钉住）+ 分配失败识别 + 两段探测（#144）
     save-stream.ts        # 保存通道：请求生命周期、asc_DownloadAs 触发、file-stream 回收、CSV 往返
     viewport.ts           # 紧凑视口判定与布局同步（#145）
     sdk-api.ts            # 同源 iframe 里的 Asc.editor 访问、restriction 常量
@@ -78,6 +81,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   ui.ts                 # 落地 hero 显隐 + 控制面板（右下角 Menu FAB 已于 2026-08-20 移除）
   analytics.ts          # Cloudflare Web Analytics（刻意不用 GA；线上实际走 CF 面板边缘注入，因此 embed 视图会被计入、/embed-demo 双计，读数规则见 docs/explorations/2026-08-17-analytics-edge-injection-double-count.md）
   pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
+  sw-update.ts          # SW 更新策略的编辑器一侧（有文档打开时不提升 worker）；落地页一侧在 public/sw-register.js
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
 packages/             # pnpm workspace，供 ran 生态三处站点共享（包名 @ranuts/*）
   shared/               # document-types / document-utils / i18n（en + zh-CN 词条；编辑器 UI 语言另由 vendor 45 语言包提供）/ store（createSignal）
@@ -90,7 +94,7 @@ types/
 styles/
   base.css              # 全局样式（含 embed-mode 布局）
 public/               # v9 vendor（sdkjs / web-apps / x2t.wasm.gz / XOR 字体目录）+ 落地页、demo、SW
-bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js、build-pages.mjs（markdown→/help /changelog；由 vite 插件 `generated-pages` 在 build/dev 时渲染进 public/，产物不入库）、sitemap-lastmod.mjs（改完落地页/内容后跑一次，按 git 提交日期刷新 sitemap 的 lastmod，`--check` 可校验）
+bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js、build-pages.mjs（markdown→/help /changelog；由 vite 插件 `generated-pages` 在 build/dev 时渲染进 public/，产物不入库）、sitemap-lastmod.mjs（改完落地页/内容后跑一次，按 git 提交日期刷新 sitemap 的 lastmod，`--check` 可校验）、x2t-memory-report.mjs（只读：打印 x2t 向浏览器要多少内存，以及静态/BSS 下界——vendor 升级后跑一次，判断 `initial` 是否仍然动不了）
 content/              # 生成页面的 markdown 源（content/<locale>/*.md，frontmatter title/description）
 docs/                 # embed-api / fonts 文档、explorations/（每次改动的记录）、superpowers/plans/
 index.ts              # 编辑器入口（初始化事件、UI、PWA），挂在 editor.html
@@ -160,7 +164,8 @@ test/unit/
   onlyoffice-editor.test.ts   # 编辑器生命周期（只读模式、requestSaveDocument、编辑器配置）
   document-converter.test.ts  # packages/converter（CSV、签名嗅探、zip 直通、错误码提示）
   docx-zip.test.ts            # OOXML zip 媒体提取/预处理
-  sw-routing.test.ts          # sw.js 缓存策略路由
+  sw-routing.test.ts          # sw.js 缓存策略路由（内含 DEPLOY_COUPLED 手抄副本；已有一条用例把副本与 sw.js 里的字面量钉在一起，漏改会红）
+  sw-register.test.ts         # 落地页 SW 更新策略（直接 eval public/sw-register.js，不抄副本）
   agent-runtime / agent-tools / agent-editor-bridge / agent-ui-*   # agent 运行时、工具、编辑器桥、UI 状态
   agent-llm-{anthropic,openai,openai-format,gemini,ollama,webllm,keys}   # 各 LLM provider 适配
 test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL、localStorage
@@ -181,7 +186,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
 不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
 `test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
-`test/e2e/` 现有 29 个 spec，下面先说三条主线，再给全量清单：
+`test/e2e/` 现有 34 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -221,7 +226,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                 |
 | embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                      |
 | 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读） |
-| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）                                                                                                                                                                                                                                                                |
+| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）                                                                                                                                                                                                            |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
 | 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
 | 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                 |
@@ -308,6 +313,17 @@ pages 切 5 片而不是 3 片：它单 worker、最慢，是关键路径；但�
 **分片而不是加 workers**：runner 只有 4 核、每个 worker 拖一个 WASM 编辑器进程，
 而 pages 那套是**故意**单 worker 的（并发下 workerd 会被大文件 abort 打崩，见
 `playwright.pages.config.ts`）。分片不动任何一套自己的并发语义。
+
+**时序预算用例走第二趟**：打了 `@serial` 标签的用例（目前只有 open-retry 的
+"font system costs a fraction of a second"）从分片的并行那趟里 `--grep-invert`
+掉，再由同一个 job 用 `--workers=1` 独占跑一趟。原因是实测：四个 WASM 编辑器
+抢四个核时，字体系统就绪要 3400 ms，而断言的边界是 2 s——挂的是机器负载，不是
+被测代码。三个分片各跑一遍这趟（每个分片是独立 VM，所以确实独占；一条用例几秒，
+且刻意不分片），保持分片彼此对称。Pages 与 Docker 两套是**托管语义**回归，
+`--grep-invert @serial` 直接不测时序（在 wrangler / 容器里重测只增噪声）。
+两半必须成对存在：少了 `--grep-invert` 预算就又去和三个编辑器抢核，少了第二趟
+则**没有任何东西再测它、而且套件照样全绿**——`test/unit/workflow-contract.test.ts`
+把这对钉在一起了。
 
 **改分片数要同时改两处**：matrix 的 `shard: [...]` 与命令里 `--shard=N/M` 的 M。
 对不上会静默少跑一批用例还报绿——`test/unit/workflow-contract.test.ts` 把两个
@@ -419,11 +435,73 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
 ## 重要约定
 
 1. **不锁定工具版本**：CI 中 pnpm 用 `latest`，Node 用 `lts/*`，保持自动跟随最新
-2. **站点页面统一 ran 设计体系**：所有用户可见页面（落地页、demo 页如
+2. **SW 两个版本戳，别混用**（这是"部署能不能自己生效"的开关）：`CACHE_VERSION`
+   是构建时间戳，只用来命名 **core cache**（HTML/壳，走 network-first，删了无害）；
+   `VENDOR_VERSION` 是 **vendor 树内容哈希**（`bin/build.sh` 在 `$DIST_DIR` **里面**对
+   `{sdkjs,web-apps,fonts}` 排序后逐文件内容哈希再总哈希，约 1.8s／2610 文件／
+   616 MB，含我们塞在 vendor 里的补丁如 `x2t_helper.js`），用来命名 **runtime cache**。
+   `cd "$DIST_DIR"` 那步不是讲究：`shasum` 把路径打印在摘要旁边，从外面哈希会把
+   输出目录名折进戳里，同一棵树构建到 `dist-e2e-4174/` 与 `dist/` 就成了两个名字。
+   因为 `activate()` 会删掉名字不匹配的所有 cache，**runtime cache 一旦按构建戳命名，
+   每次部署都等于要抽走上一版的引擎资源**，于是每次部署都必须走协调、谁都没协调成，
+   用户就一直跑旧代码（#144）。按内容命名之后：改了 app 代码但没动 vendor 的部署
+   共用同一个 runtime cache、删不掉任何东西，install 里直接 `skipWaiting()` 立即接管
+   （判据 `wouldDiscardVendorAssets`）。
+   **这个判据看的是别的 runtime cache 里有没有真的 vendor 条目，不是看名字**，
+   两个方向都会错：落地页自己也会往 runtime cache 里写东西（指纹化的 token CSS、
+   Geist 字体表、`open-local.js`、`landing-prefetch.js`），而 `pruneAppAssets`
+   只清条目不删 cache，于是"只看过落地页"的访客留下一个空壳，按名字判就是永久
+   "有 vendor 资产要丢"；反过来，**引入这套命名的那次部署**，旧 cache 还叫构建戳，
+   名字必然不同——而那正是 `sw-register.js` 的 `CLIENT_COUNT` 握手也必然失效的
+   同一次部署（要问的旧 worker 从没带过 handler）。两条路一起哑掉，#144 的修复就
+   发不出去。改这两个戳的命名前先读
+   docs/explorations/2026-08-20-service-worker-update-never-promoted.md。
+   **代价是 runtime cache 不再有人清空**，所以两处补偿，缺一处就会把它保护的
+   东西反过来淘汰掉：`activate()` 结束时 `pruneAppAssets()` 删掉 cache 里所有
+   非 vendor 条目（`/assets/<hash>` 属于刚退场的那个构建，永远不会再被请求，
+   否则一次次部署堆到 `MAX_RUNTIME_ITEMS`）；`limitCacheSize` 淘汰时优先挑非
+   vendor 条目，而不是 `keys[0]`——`keys()` 按写入顺序，`keys[0]` 恰好是首次
+   打开时取的 vendor 树（x2t.wasm.gz、字体 catalog），正是 cache-first 分支要
+   保的那几 MB。`VENDOR_ASSET` 的目录列表必须与 `bin/build.sh` 参与
+   `VENDOR_VERSION` 的目录一致（`sw-update.test.ts` 钉住）。
+   **`pruneAppAssets` 只在本 scope 没有打开的窗口时才扫**（`clients.matchAll`
+   带 `includeUncontrolled`）：vendor 未变的部署现在 install 就接管，`activate()`
+   是在活页面底下跑的，而开着文档的编辑器页刻意不 reload——把它的
+   `/assets/<hash>` 删掉就是删掉世上最后一份（新部署不再提供退场构建的文件名），
+   它之后的惰性 `import()`（agent 面板、pending-open 交接）只会走到 404 分支。
+   等待没有代价：期间由 `limitCacheSize` 按"vendor 最后淘汰"顶着，下一次没有窗口
+   的激活再清。**`activate()` 删陈旧 runtime cache 前会再问一次**
+   （`holdsVendorAssetsForOpenWindow`）：`wouldDiscardVendorAssets` 是 install 时
+   求值的，而 vendor 未变的部署 activate 跑在活页面底下——这中间旧构建的页面
+   可能刚写进第一批 vendor 条目，删掉就是那条判据要防的混版；没有窗口时照删。
+3. **SW 更新策略分两侧，缺一侧就发不出去**（vendor 真变了时的慢路）：`sw.js` 在
+   vendor 变更时不会自行 `skipWaiting()`（激活会删掉上一版 vendor 缓存，而仍在跑旧版的
+   页面之后惰性加载的 sdk-all.js / x2t.wasm.gz / 字体就会与旧会话混版）。此时必须有人
+   主动请求切换：
+   **落地页**（`/` 与 `/zh-CN/`，见 `public/sw-register.js`）负责提升等待中的
+   worker，**编辑器页**（`lib/sw-update.ts`）只在没有文档打开时提升。
+   2026-08-16 路由拆分把 `/` 变成不带 bundle 的静态页之后，提升逻辑只剩编辑器页，
+   而那里打开流程排在 SW 注册**之前**，`hasOpenDocument()` 永远为真——于是正常
+   使用下等待中的 worker **从不被提升**，用户要关掉本站所有标签页才会拿到新版
+   （`/zh-CN/` 当时连 worker 都没注册）。落地页提升前会经 `CLIENT_COUNT` 问
+   active worker "有没有编辑器窗口开着"（回答带 `count` 与 `editors`，后者按
+   `/editor` 路径数），只有 `editors === 0` 才提升，以免把另一个开着文档的
+   标签页的缓存删掉。**判据是编辑器窗口、不是窗口总数**：另一个落地页标签没有
+   任何会被激活毁掉的会话，按"是不是唯一窗口"判会让习惯常开两个标签页的人永远
+   拿不到新版本。旧 worker 的回答里没有 `editors`，那种情况回落到旧判据。**新增落地页要带上 `sw-register.js`**；它属于"固定名、随
+   部署变化"的文件，必须同时进 `_headers` 的 no-cache 组与 `sw.js` 的
+   `DEPLOY_COUPLED`（由 `hosting-contract.test.ts` / `sw-routing.test.ts` 钉住）。
+   `open-local.js` / `landing-prefetch.js` 同理，2026-08-20 起补齐——它们从路由
+   拆分起一直漏在 SWR 上，改这两个文件的部署，落地页会一直跑旧的那份。
+   落地页那侧的提升要覆盖三种到达方式：已经 `waiting`、`installing` 中途、
+   以及 `updatefound` 时已经 `installed`（`statechange` 只报此后的迁移，
+   漏掉这一支等于整页生命周期内再没人提升它）。
+   见 docs/explorations/2026-08-20-service-worker-update-never-promoted.md。
+4. **站点页面统一 ran 设计体系**：所有用户可见页面（落地页、demo 页如
    `public/embed-demo.html`、404 等）必须使用 ranui 组件/设计 token
    （`--ran-*`）与 ranuts 工具，不允许手写游离于设计体系外的样式。
    demo 页也是产品门面，风格必须与主站一致。
-3. **用例固化制度（2026-08-15 起）**：每个缺陷修复与新功能必须附带
+5. **用例固化制度（2026-08-15 起）**：每个缺陷修复与新功能必须附带
    对应的自动化用例（E2E 优先），否则不算完成；回归类用例优先使用
    真实复杂度语料而非手拼最小文档——合成文档全绿曾两次掩盖真实文档
    的致命问题（插图保存假死、真实 PPTX 编辑报错）。CHANGELOG.md 随
@@ -434,9 +512,9 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    在没有该修复时同样全绿（它其实被另一处改动覆盖了），`layout.rightMenu`
    单向失效的用例也是宽屏挂载、根本走不到出问题的分支。反向验证的结论
    （"去掉 X 后用例 Y 变红"）写进 PR 说明与 docs/explorations 记录。
-4. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
-5. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
-6. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
+6. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
+7. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
+8. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
 
 ---
 
@@ -577,7 +655,14 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   `_getSelection().ranges` 抛错且漏开历史事务）、画布上下文丢失（守卫 9：
   移动端内存紧张时浏览器丢弃 canvas backing store，vendor 完全不监听
   contextlost/contextrestored，编辑器停在白屏；捕获阶段监听后用
-  `WordControl.OnResize()` 重绘）、字体加载加速、
+  `WordControl.OnResize()` 重绘）、x2t 二进制回收（守卫 10：解压出的 40.2 MB
+  `Module.wasmBinary` 被 emscripten 读过一次后再无用处却常驻整个 frame 生命周期，
+  `calledRun` 之后置空。**两份引用都要清**：x2t.js 是未包裹的 classic script，它自己
+  `var wasmBinary = Module['wasmBinary']` 在 frame 的 window 上又留了一份且从不清，
+  只清 Module 那个属性等于什么都没释放。这条**不靠 `prepareEditorIframe` 的轮询驱动**：空文档
+  （`?new=docx`）要到几分钟后的首次保存才加载 x2t，那时定时器早停、
+  onDocumentReady 也早过了——所以它给 frame 的 `Module` 与 `calledRun` 装
+  accessor 订阅，装上即算就位）、字体加载加速、
   `installOpenFailureGuard`（打开转换失败 → asc_onError -82 + toast + 遮罩终止 +
   保存快速拒绝）——其中 image pipeline 修的是"文档含图片
   时保存令主线程永久卡死"：无服务器时 sendImgUrls 注册不了图片，DOCY
@@ -585,8 +670,61 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   sendImgUrls + convertFromBin medias 兜底三件套，见
   docs/explorations/2026-08-15-image-save-hang-root-cause-fix.md。全部
   都是真实生产 bug，别删）。
-- **部署约束**：x2t.wasm 只发布 gzip（9.4 MB，x2t_helper 里浏览器端解压
-  预置 `Module.wasmBinary`），裸 40 MB 文件超 CF Pages 25 MB 限制、不入库。
+- **部署约束**：x2t.wasm 只发布 gzip（9,483,006 字节，**zopfli `--i15` 压的**——比
+  vendor 原始压缩小 377 KB，比 Node zlib 小 575 KB，解压后逐字节一致；zopfli 不是仓库
+  依赖，vendor 升级后手动重跑 `zopfli --gzip --i15 -c x2t.wasm > x2t.wasm.gz`，
+  `vendor-contract` 的尺寸门会提醒），裸 40 MB 文件超 CF Pages 25 MB 限制、不入库。
+  **契约钉的是解压后内容的 sha256**，不是 `.gz` 容器的——否则 provenance 会被压缩器
+  的选择绑住。加载走 `x2t_helper` 的 `Module.instantiateWasm` 钩子 +
+  `instantiateStreaming` 直接吃 `DecompressionStream`——**解压后的 40.2 MB 副本
+  不存在**，否则它会压在"向浏览器要 283 MB 堆 + 编译 40 MB 代码"的同一刻（#144）。
+  钩子里**绝不能同步抛**（`createWasm()` 会变成致命 `false`），分配失败**绝不回落
+  到缓冲路径**（在已耗尽的 renderer 上再要 40 MB 只会更糟）。无流式能力的引擎才走
+  `prepareWasmBinary` 缓冲兜底 + 守卫 10 回收。三个符号由 `vendor-contract` 钉住。
+  **钩子的失败要报两次，缺一次就有人干等**：rethrow 带 `X2T module` 前缀（给
+  `installOpenFailureGuard` 认，它据此分类并重开），同时把失败记在实例上并通知在等的
+  `doInitialize`（钩子跑的时候 `loadScript()` 早就 resolve 了，`successCallback` 与
+  `onRuntimeInitialized` 都不会再来，没人 settle 就一直等到 `INIT_TIMEOUT`——vendor 侧
+  60s、`packages/converter` 侧 300s）。`loadScript()` 在 `hasScriptLoaded` 时必须返回
+  `Promise.resolve()` 而不是裸 `return`：流式路径下这个分支是常走的（script 加载成功、
+  wasm 才失败），返回 `undefined` 会让下一次尝试同步抛 `undefined.then`。这两份实现
+  （`x2t_helper.js` 与 `packages/converter/src/document-converter.ts`）语义必须一致，
+  由 `x2t-helper-loading.test.ts` / `converter-wasm-loading.test.ts` 分别驱动真文件钉住。
+  **失败消息必须带得动原因**：宿主的 `classifyOpenFailure` 按文本分类，converter 的
+  `loadScript` 曾经把一切包成 `Failed to load X2T WASM script`，于是 buffered 路径上
+  的 CDN 500 / 内存拒绝都落到默认分支 `document`，报"文件可能已损坏"且不重试。
+  **这个 fetch 会重试**（`fetchWasmResponse`，两份实现同策略）：5xx / 408 / 429 与
+  fetch 本身 reject 重试，共 3 次、线性退避 0.5s+1s；404 / 403 立即失败（部署事实，
+  重试只是拖延错误）。9.4 MB 的 CDN 资源答坏一次就等于整篇文档打不开——2026-08-20
+  CF Pages 给这个文件回了个 500，PR #159 的 preview smoke 因此变红，而这条路上唯一
+  的补救原本是整个编辑器重开（贵得多，那次也没救回来）。重试的是 fetch 不是
+  instantiate，所以"分配失败绝不回落到缓冲路径"照旧；不留跨次引用，不加重内存峰值。
+  见 docs/explorations/2026-08-20-x2t-wasm-fetch-transient-retry.md。
+  改 `packages/converter/src/**` 后本地要先 `pnpm --filter @ranuts/converter run build`
+  ——用例从 `dist` 导入，不重建就还在测旧代码（CI 由包的 `prepare` 覆盖）。
+- **内存**：**283 MB initial 不是可调参数，别去调**（试过并回滚）。模块静态/BSS 布局
+  铺到 ~267 MB（2501 个不可变 i32 global，最高地址 267.3 MB），声明的 4533 页与下界
+  4277 页之间只有 16 MB 余量；降到 64 MB 会在实例化时
+  `RuntimeError: memory access out of bounds`，读文件之前就死。数字用
+  `node bin/x2t-memory-report.mjs` 现场量，别抄本文。`maximum` 也别调小：它是
+  硬上限（`_emscripten_resize_heap` 直接 `return false`），砍它等于砍大文档的能力，而
+  glue 的 `getHeapMax()` 又硬编码 2 GB。要降低这个要求只能换一个 `INITIAL_MEMORY` 更小
+  的 x2t 构建。详见 docs/explorations/2026-08-20-x2t-wasm-oom-misclassified.md。
+- **内存（现状）**：x2t 每个 frame 要 283 MB initial（声明的 maximum 2048 MB 还要被
+  预留），分配失败会以 `Aborted(RangeError: ... Out of memory ...)` 出现。这
+  **不是**对文档的判决——`classifyOpenFailure` 必须在 `Aborted(` 规则**之前**
+  识别它并返回 `environment`，提示语走 `editorErrorOutOfMemory` 而不是"可能已
+  损坏"；但要排在 `Conversion failed with code` **之后**——有退出码就说明 x2t
+  已经实例化并读过字节，那是它对文档的判决，哪怕消息里带"memory"。
+  提示语里的 283 由 `X2T_INITIAL_MB` 经 `t(key, { mb })` 插值，8 条译文只写
+  `{mb}`，别手抄数字。**诊断探测不许和重开抢内存**：commit 那半真的会同步
+  提交 283 MB，而环境类失败正在重建编辑器要它自己的 283 MB——所以
+  `probeX2tMemory({ skipCommit: isOpenRetryInFlight() })`，重开在飞时只问
+  reservation（1 页）并回 `deferred`；**浏览器拒绝过一次 commit 之后本 session 不再问**
+  （一次失败的打开会两次走到 toast——守卫送进 asc_onError 一次、vendor 自己再报一次
+  -82），`registerOpenAttempt` 在用户发起新的打开时 `resetMemoryProbe()` 清掉。别把重建时导航旧 frame 到 `about:blank` 当优化加回来：它会掐断 vendor
+  在 ready 之后仍在取的 SVG 图标请求，每次文档切换都报 `Failed to fetch`（试过
+  并撤掉，见 docs/explorations/2026-08-20-x2t-wasm-oom-misclassified.md）。
 - **CSV**：新 vendor 编辑器不能直接吃 CSV——打开前用 SheetJS 转 XLSX、保存
   流转回 CSV（`packages/converter` 的 `convertCsvToXlsx` / `xlsxToCsvBytes`）。
   解码带严格编码嗅探（fatal UTF-8 → GB18030 → latin1），GBK CSV 不再乱码。
@@ -621,7 +759,7 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md，新用例
   按它落位，台账在 docs/test-matrix.md（空白格 = 待补）；**新开会话先读
   docs/changelogs/2026-08-15-v9-regression-campaign.md**（战役一页纸：结论、
-  数字、缺陷清单、文件位置、怎么跑、下一步）**与 docs/changelogs/2026-08-16-roadmap-sprint.md**（路线图冲刺一页纸：路由拆分 / 帮助中心 / 多语言 / WebMCP / PR 流程变化）。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
+  数字、缺陷清单、文件位置、怎么跑、下一步）**与 docs/changelogs/2026-08-16-roadmap-sprint.md**（路线图冲刺一页纸：路由拆分 / 帮助中心 / 多语言 / WebMCP / PR 流程变化）**与 docs/changelogs/2026-08-20-issue-144-memory-and-delivery.md**（issue #144 一页纸：x2t 的 283 MB 内存要求为什么动不了、"别再试这些"负面清单、SW 更新投递为什么曾经完全失效、等报告人截图里的哪串字）。战役进展：第 1 天的"非 ASCII 文件名 P0"已被第 2 天推翻
   （跑道被 SW 击穿，见 docs/explorations/2026-08-15-corpus-harness-sw-route-bug-and-open-failure-guard.md），
   真正修掉的是"打开失败永久转圈"（`installOpenFailureGuard`）与
   "Save 按钮常灰"（守卫 5）。v9 release 公告冻结至战役通过。
