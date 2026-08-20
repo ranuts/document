@@ -139,3 +139,46 @@ describe('landing pages', () => {
     }
   });
 });
+
+/**
+ * ranui paints the button's raised shadow on the HOST element, but exports the
+ * radius on the parts inside its shadow DOM and sets none on the host itself.
+ * A stylesheet that rounds the parts and forgets the host therefore ships a
+ * pill wrapped in a rectangular shadow -- a straight line under the button,
+ * poking out past both rounded ends. It went unnoticed at ranui's 6px default
+ * and was plainly visible once the hero CTAs went to --ran-radius-full.
+ */
+describe('r-button radius overrides', () => {
+  const sheets = ['public/home.css', 'public/landing.css'].map((rel) => ({
+    rel,
+    css: readFileSync(resolve(ROOT, rel), 'utf8'),
+  }));
+
+  /** Every rule as (selectors, body), comments stripped, selectors split. */
+  const rulesOf = (css: string): Array<{ selectors: string[]; body: string }> =>
+    [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^}]*)\}/g)].map((m) => ({
+      selectors: m[1].split(',').map((s) => s.trim()),
+      body: m[2],
+    }));
+
+  const radiusOf = (body: string): string | undefined => body.match(/border-radius:\s*([^;]+)/)?.[1].trim();
+
+  it.each(sheets)('$rel rounds the host wherever it rounds ::part(button)', ({ css }) => {
+    const rules = rulesOf(css);
+    const rounded = rules.filter(
+      (r) => r.selectors.some((s) => s.endsWith('::part(button)')) && radiusOf(r.body) !== undefined,
+    );
+    expect(rounded.length).toBeGreaterThan(0);
+
+    for (const rule of rounded) {
+      const radius = radiusOf(rule.body)!;
+      for (const partSelector of rule.selectors.filter((s) => s.endsWith('::part(button)'))) {
+        const host = partSelector.slice(0, -'::part(button)'.length);
+        // Some rule -- this one or another -- must give the bare host the same
+        // radius, or its shadow keeps the old shape.
+        const hostRounded = rules.some((r) => r.selectors.includes(host) && radiusOf(r.body) === radius);
+        expect(hostRounded, `${host} needs border-radius: ${radius}`).toBe(true);
+      }
+    }
+  });
+});
