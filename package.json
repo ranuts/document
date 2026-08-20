@@ -57,15 +57,12 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
-    "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.2.0",
     "@vitest/coverage-v8": "^4.1.10",
     "jsdom": "^30.0.1",
     "marked": "16.4.2",
     "oxlint": "^1.78.0",
-    "postcss": "^8.5.26",
     "prettier": "^3.9.6",
-    "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.2.1",
     "vitest": "^4.1.10"

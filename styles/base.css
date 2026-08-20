@@ -1,8 +1,62 @@
-@import 'tailwindcss';
+/* No CSS framework here: every design VALUE comes from the ranui token layer
+   (public/ran-tokens.css) and every piece of UI chrome is a real ranui component.
+   Tailwind used to be imported for its preflight plus exactly two utilities
+   (#app's w-full/h-full in editor.html); the preflight rules the editor page
+   actually depended on are spelled out below instead.
+
+   Preflight's `iframe { display: block }` is deliberately NOT one of them: the
+   editor frame is the only iframe here and the vendor already sets
+   `vertical-align: top` on it, so it contributes no baseline descender.
+   Measured, not assumed -- and the E2E case in app-smoke.spec.ts asserts the
+   page fits the viewport, so if that ever stops holding it fails there rather
+   than shipping a scrollbar. */
 
 html,
 body {
   height: 100%;
+  margin: 0;
+}
+
+/* Preflight set a sans stack and a line-height on `html`, and nothing else does
+   it for this page: `ran-tokens.css` only DECLARES --ran-font-family, and the
+   rule that applies it lives in public/home.css, which /editor never loads.
+   Without this the whole editor page falls back to the UA default -- Times --
+   which the `font: inherit` below then propagates into the agent panel's
+   composer and native controls, while the ranui components beside them keep
+   rendering Geist (they resolve --ran-skin-font-family inside their shadow
+   DOM). Two typefaces in one panel. Tokens, not preflight's own values, so
+   the page agrees with the components. */
+html {
+  font-family: var(--ran-font-family);
+  line-height: var(--ran-line-height);
+}
+
+/* #app hosts the editor iframe and must fill the viewport (was w-full h-full). */
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+/* Native controls default to the platform's own font; the panels below assume
+   they inherit the page's (ranui) typography.
+
+   They also default to content-box sizing plus a UA padding, and the rules
+   below were written under preflight, which zeroed both: `.agent-launcher`
+   sets width/height 48px and border-radius 50%, so with the UA's 1px 6px
+   padding added outside them it renders as a 60x50 ellipse rather than a
+   circle. Border-box (and a zeroed button padding, since the buttons here
+   size themselves) is what those rules assume. Scoped to the four elements
+   the editor page actually uses rather than made global -- ranui's own
+   controls are custom elements with their own shadow DOM. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  box-sizing: border-box;
+}
+button {
+  padding: 0;
 }
 
 a {
@@ -130,6 +184,9 @@ r-button[type='text']::part(content) {
   width: 360px;
   max-width: 90vw;
   height: 100vh;
+  /* The 360px has to include the border, or the panel is 361px wide while the
+     editor below only gives up 360px and a hairline of document shows through. */
+  box-sizing: border-box;
   background: var(--ran-color-bg-elevated);
   border-left: 1px solid var(--ran-color-border);
   box-shadow: var(--ran-shadow-menu);
