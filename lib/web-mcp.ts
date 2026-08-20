@@ -19,8 +19,14 @@
  *   (+ optional data URL for small files) instead of a File.
  */
 import { getDocmentObj } from '@ranuts/shared/store';
+import { DOCUMENT_TYPE_MAP, getDocumentType } from '@ranuts/shared/document-utils';
 import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from './onlyoffice-editor';
-import { openDocumentFromUrl, openLocalFile } from './document';
+import { onCreateNew, openDocumentFromUrl, openLocalFile } from './document';
+// The tool layer is transport-agnostic by design (see @ranuts/agent-core types):
+// the same definitions back the in-page agent panel. Reused rather than
+// reimplemented -- editor-bridge has no imports of its own, so this costs
+// nothing in the bundle and cannot drift from the panel's behaviour.
+import { getDocumentTextTool } from './agent-plugin/tools';
 
 /** Minimal shape of the WebMCP surface this adapter uses. */
 export interface ModelContextLike {
@@ -44,6 +50,26 @@ export interface WebMcpResult {
 
 /** Below this size save_document also inlines a data URL (agents cannot always read blob: URLs). */
 export const INLINE_DATA_URL_MAX_BYTES = 2 * 1024 * 1024;
+
+/**
+ * The formats the engine can open, derived from DOCUMENT_TYPE_MAP rather than
+ * spelled out again. The hand-written list here said "docx, doc, xlsx, xls,
+ * pptx, ppt, csv, pdf" and had already fallen behind the map, which has carried
+ * odt/ods/odp/rtf/txt all along -- so an agent was told a file it could open was
+ * unsupported. Deriving it means the next format the engine gains is advertised
+ * the day it is mapped.
+ */
+export const OPENABLE_EXTENSIONS: string[] = Object.keys(DOCUMENT_TYPE_MAP).sort();
+
+/** Formats save_document can convert to. */
+export const SAVE_EXTENSIONS = ['DOCX', 'XLSX', 'PPTX', 'PDF', 'CSV', 'TXT', 'ODT', 'ODS', 'ODP', 'RTF'] as const;
+
+/** New-document kinds `create_document` accepts, and the extension each maps to. */
+export const NEW_DOCUMENT_KINDS: Record<string, string> = {
+  document: '.docx',
+  spreadsheet: '.xlsx',
+  presentation: '.pptx',
+};
 
 const ok = (data: unknown): WebMcpResult => ({ content: [{ type: 'text', text: JSON.stringify(data) }] });
 const fail = (message: string): WebMcpResult => ({
@@ -90,7 +116,8 @@ export function buildTools(): WebMcpTool[] {
     {
       name: 'open_document_url',
       description:
-        'Open a document (docx, doc, xlsx, xls, pptx, ppt, csv, pdf) from a URL in the on-device editor. Nothing is uploaded: the file is fetched by the browser and rendered locally.',
+        `Open a document (${OPENABLE_EXTENSIONS.join(', ')}) from a URL in the on-device editor. ` +
+        'Nothing is uploaded: the file is fetched by the browser and rendered locally.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -112,7 +139,7 @@ export function buildTools(): WebMcpTool[] {
     },
     {
       name: 'open_document_buffer',
-      description: 'Open a document from base64-encoded bytes in the on-device editor.',
+      description: `Open a document from base64-encoded bytes in the on-device editor (${OPENABLE_EXTENSIONS.join(', ')}).`,
       inputSchema: {
         type: 'object',
         properties: {
@@ -134,9 +161,35 @@ export function buildTools(): WebMcpTool[] {
       },
     },
     {
+      name: 'create_document',
+      description:
+        'Create a new empty document, spreadsheet or presentation in the on-device editor. ' +
+        'Replaces whatever is currently open.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          kind: {
+            type: 'string',
+            enum: Object.keys(NEW_DOCUMENT_KINDS),
+            description: 'What to create: document (Word), spreadsheet (Excel) or presentation (PowerPoint).',
+          },
+        },
+        required: ['kind'],
+        additionalProperties: false,
+      },
+      async execute(input) {
+        const kind = String(input.kind || '');
+        const ext = NEW_DOCUMENT_KINDS[kind];
+        if (!ext) return fail(`kind must be one of: ${Object.keys(NEW_DOCUMENT_KINDS).join(', ')}`);
+        await onCreateNew(ext);
+        return ok({ ok: true, kind, fileName: getDocmentObj()?.fileName || null });
+      },
+    },
+    {
       name: 'save_document',
       description:
-        'Export the open document, optionally converting it (targetExt: DOCX, XLSX, PPTX, PDF, CSV, TXT). Returns a blob URL and, for small files, a data URL; the conversion runs on the device.',
+        `Export the open document, optionally converting it (targetExt: ${SAVE_EXTENSIONS.join(', ')}). ` +
+        'Returns a blob URL and, for small files, a data URL; the conversion runs on the device.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -156,6 +209,40 @@ export function buildTools(): WebMcpTool[] {
         };
         if (file.size <= INLINE_DATA_URL_MAX_BYTES) result.dataUrl = await fileToDataUrl(file);
         return ok(result);
+      },
+    },
+    {
+      name: 'get_document_text',
+      description:
+        'Read the plain text of the open document, so the content can be answered about without exporting it. ' +
+        'Word-processing documents return their full text; spreadsheets and presentations do not expose one on ' +
+        'this engine -- use save_document for those. Side effect: clears the current selection.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          maxChars: { type: 'number', description: 'Maximum characters to return (default 8000).' },
+        },
+        additionalProperties: false,
+      },
+      async execute(input) {
+        const maxChars = typeof input.maxChars === 'number' && input.maxChars > 0 ? input.maxChars : undefined;
+        const { text, truncated } = await getDocumentTextTool.execute(maxChars ? { maxChars } : {});
+        const fileName = getDocmentObj()?.fileName || '';
+        const kind = getDocumentType(fileName.split('.').pop() || '');
+        // An empty answer is ambiguous -- an empty document and an editor that
+        // has no full-text read look identical from here. Only the word editor
+        // implements one (verified against v9 for docx/xlsx/pptx), so say which
+        // case this is instead of letting an agent conclude "the file is empty".
+        if (!text && kind !== 'word') {
+          return ok({
+            ok: true,
+            text: '',
+            truncated: false,
+            supported: false,
+            note: `Full text is only available for word-processing documents; this is a ${kind || 'non-word'} document. Use save_document (targetExt TXT, CSV or PDF) and read the exported file instead.`,
+          });
+        }
+        return ok({ ok: true, text, truncated, supported: true });
       },
     },
     {

@@ -59,6 +59,26 @@ Word（`.docx`，以及旧版 `.doc`）、Excel（`.xlsx`，以及旧版 `.xls`�
 
 能——编辑器就是为 iframe 嵌入设计的，用 `postMessage` 驱动：你的页面自己（带鉴权）取文件，发进 iframe，再收回编辑后的 `File` 上传到你想要的地方。见 [Embed API 参考](/zh-CN/help/embed-api) 与[在线 demo](/embed-demo.html)。
 
+## 浏览器 AI 助手（WebMCP）
+
+### 浏览器里的 AI 助手能操作编辑器吗？
+
+在支持的浏览器上可以。编辑器会注册一组 WebMCP 工具，浏览器内的 AI 助手可以直接调用它们来打开、转换、读取和导出文档，而不必去点击界面。一切仍在你的设备上运行——助手触发的就是按钮触发的那套本地代码，文件不会被上传。
+
+这些工具是 `open_document_url`、`open_document_buffer`、`create_document`、`save_document`、`get_document_text`、`set_readonly` 和 `get_document_state`。
+
+### 哪些浏览器支持？
+
+WebMCP 是 W3C Web Machine Learning 社区组的提案，目前在 Chrome 的 origin trial 中可用，Firefox 和 Safari 尚未表态。浏览器没有提供该 API 时，什么也不会注册、什么也不会变——它是纯增量能力。
+
+### 嵌入的编辑器里也能用吗？
+
+按设计不能。工具只在编辑器作为顶层页面时注册。跨域 iframe 需要嵌入方页面授予 `allow="tools"`，这与嵌入的使用方式冲突——所以如果你嵌入了编辑器，请改用 [Embed API](/zh-CN/help/embed-api) 驱动它。
+
+### 助手能读取文档正文吗？
+
+文字文档可以：`get_document_text` 会返回正文，助手不必导出就能回答关于内容的问题。表格和演示文稿在当前引擎上没有全文读取接口；工具会明确说明这一点（而不是返回一个看起来像"文件是空的"的空结果），并提示改用导出。
+
 ## 离线与安装
 
 ### 离线能用吗？

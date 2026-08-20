@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="/img/64.png" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+
+    <title>WebMCP 文档编辑器 — 浏览器 AI 助手可直接调用</title>
+    <meta
+      name="description"
+      content="一个注册了 WebMCP 工具的文档编辑器，浏览器里的 AI 助手可以直接调用它们来打开、读取、转换和导出 DOCX、XLSX、PPTX 和 PDF。全部在你的设备上运行。"
+    />
+    <link rel="canonical" href="https://edit.chaxus.com/zh-CN/webmcp-document-editor" />
+    <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/webmcp-document-editor" />
+    <link rel="alternate" hreflang="zh-CN" href="https://edit.chaxus.com/zh-CN/webmcp-document-editor" />
+    <link rel="alternate" hreflang="x-default" href="https://edit.chaxus.com/webmcp-document-editor" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:title" content="WebMCP 文档编辑器 — 浏览器 AI 助手可直接调用" />
+    <meta
+      property="og:description"
+      content="浏览器 AI 助手可以通过 WebMCP 工具在这里打开、读取、转换和导出文档。本地运行，不上传。"
+    />
+    <meta property="og:url" content="https://edit.chaxus.com/zh-CN/webmcp-document-editor" />
+    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WebMCP 文档编辑器 — 浏览器 AI 助手可直接调用" />
+    <meta
+      name="twitter:description"
+      content="浏览器 AI 助手可以通过 WebMCP 工具在这里打开、读取、转换和导出文档。本地运行，不上传。"
+    />
+    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "Online Document Editor",
+            "url": "https://edit.chaxus.com/zh-CN/webmcp-document-editor",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any (web browser)",
+            "isAccessibleForFree": true,
+            "inLanguage": "zh-CN",
+            "description": "一个向浏览器内 AI 助手暴露 WebMCP 工具的浏览器文档编辑器，全部处理在本地设备完成。",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "Online Document Editor",
+            "codeRepository": "https://github.com/ranuts/document",
+            "programmingLanguage": "TypeScript",
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://edit.chaxus.com/zh-CN/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "webmcp-document-editor",
+                "item": "https://edit.chaxus.com/zh-CN/webmcp-document-editor"
+              }
+            ]
+          },
+          {
+            "@type": "HowTo",
+            "name": "如何让浏览器 AI 助手处理你的文档",
+            "inLanguage": "zh-CN",
+            "step": [
+              {
+                "@type": "HowToStep",
+                "position": 1,
+                "name": "步骤 1",
+                "text": "使用提供 WebMCP API 的浏览器（Chrome，处于 origin trial 阶段）。"
+              },
+              {
+                "@type": "HowToStep",
+                "position": 2,
+                "name": "步骤 2",
+                "text": "把编辑器作为普通标签页打开——工具只在顶层页面注册。"
+              },
+              {
+                "@type": "HowToStep",
+                "position": 3,
+                "name": "步骤 3",
+                "text": "让浏览器的 AI 助手打开、读取、转换或导出文档。"
+              },
+              {
+                "@type": "HowToStep",
+                "position": 4,
+                "name": "步骤 4",
+                "text": "助手直接调用工具；处理在你的设备上完成，文件不会被上传。"
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "WebMCP 是什么？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "W3C Web Machine Learning 社区组的一项提案，让网页注册结构化工具供浏览器内的 AI 助手直接调用，而不必让助手去理解和点击用户界面。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "这个编辑器注册了哪些工具？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "七个：open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly, get_document_state。覆盖从 URL 或字节打开、新建文档、导出或转换、读取正文、切换只读，以及报告当前状态。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "哪些浏览器支持？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "WebMCP 目前在 Chrome 的 origin trial 中可用。Firefox 和 Safari 尚未表态。浏览器没有该 API 时，什么也不会注册、什么也不会变。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "助手处理时我的文档会被上传吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "不会。这些工具调用的就是界面调用的那套本地代码——转换引擎是跑在你浏览器标签页里的 WebAssembly，文件不会离开你的设备。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "助手能读取我文档的内容吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "文字文档可以，get_document_text 会返回正文，助手不必导出就能回答问题。表格和演示文稿在当前引擎上没有全文读取，工具会如实说明，而不是返回一个空结果。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "编辑器被嵌入到别的网站时也能用吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "按设计不能。工具只在顶层页面注册。嵌入场景请改用 postMessage 的 Embed API 驱动。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "助手能把文件转成 PDF 吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "能。save_document 接受目标格式，所以助手可以打开 DOCX、XLSX 或 PPTX 并导出 PDF，全程在设备上完成。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "需要账号或 API Key 吗？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "都不需要。编辑器本身不需要账号，它也不会自己调用任何 AI 服务——推理由你浏览器的助手完成，这个页面只负责暴露工具。"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <!-- No-flash theme restore: apply a forced light/dark before first paint so a
+         dark-mode visitor never sees a white flash. 'system' leaves the attributes
+         off and the token layer's media query decides. Kept inline and tiny. -->
+    <script>
+      try {
+        var t = localStorage.getItem('ran-theme');
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.setAttribute('data-ran-theme', t);
+          document.documentElement.setAttribute('theme', t);
+        }
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/ran-fonts/fonts.css" />
+    <link rel="stylesheet" href="/ran-tokens.css" />
+    <link rel="stylesheet" href="/landing.css" />
+    <script src="/ranui-iife/button.iife.js" defer></script>
+    <script src="/ranui-iife/card.iife.js" defer></script>
+    <script src="/ranui-iife/select.iife.js" defer></script>
+    <script src="/ranui-iife/theme-switch.iife.js" defer></script>
+    <script src="/lang-switch.js" defer></script>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="gh-mark" viewBox="0 0 16 16">
+        <path
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+        />
+      </symbol>
+    </svg>
+
+    <header class="bar">
+      <a class="brand" href="/zh-CN/"><span class="logo">D</span>Document Editor</a>
+      <nav>
+        <span class="lang-wrap">
+          <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+          </svg>
+          <r-select class="lang-select" type="text" value="zh-CN" aria-label="语言">
+            <r-option value="en" data-href="/webmcp-document-editor">EN</r-option>
+            <r-option value="zh-CN" data-href="/zh-CN/webmcp-document-editor">中文</r-option>
+          </r-select>
+        </span>
+        <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+          <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+        </a>
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <p class="eyebrow">面向浏览器助手 · WebMCP</p>
+      <h1>一个浏览器助手真正用得了的文档编辑器</h1>
+      <p class="lead">
+        这个编辑器注册了 <strong>WebMCP</strong> 工具，浏览器里的 AI
+        助手可以直接调用它们来打开、读取、转换和导出文档——而不必去猜和点一个为人设计的界面。
+      </p>
+
+      <a class="cta" href="/zh-CN/"><r-button type="primary">打开编辑器 →</r-button></a>
+
+      <h2>如何操作</h2>
+      <ol>
+        <li>使用提供 WebMCP API 的浏览器（Chrome，处于 origin trial 阶段）。</li>
+        <li>把<strong>编辑器</strong>作为普通标签页打开——工具只在顶层页面注册。</li>
+        <li>让浏览器的 AI 助手打开、读取、转换或导出文档。</li>
+        <li>助手直接调用工具；处理在你的设备上完成，文件不会被上传。</li>
+      </ol>
+
+      <p>
+        大多数网页应用对 AI 助手来说是不透明的。它看到的是一堆按钮，只能猜哪个是转换，然后祈祷点对了。WebMCP——W3C Web
+        Machine Learning
+        社区组的提案——让网页把自己能做的事直接声明成带类型输入的、可调用的结构化工具，从而绕开这一整套猜测。这个编辑器声明了七个。
+      </p>
+
+      <p>
+        这些工具是
+        <code
+          >open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly,
+          get_document_state</code
+        >。它们不是另一套实现：调用的就是按钮调用的那套本地代码，也是 iframe 嵌入 API
+        驱动的那套。所以助手拿到的能力和人完全一致，保证也一致——转换引擎是跑在你标签页里的
+        WebAssembly，文件不会离开设备。
+      </p>
+
+      <p>
+        正是这个性质，才让「把文档交给助手」在这里是合理的。通常把文档交给助手，就等于交给了助手背后的那台服务器。而在这里，助手只负责编排，文档留在原地：从磁盘读进标签页，在标签页里转换，再写回本地。一个为了回答问题而读取合同正文的助手，从头到尾没有把这份合同上传到任何地方。
+      </p>
+
+      <p>
+        有两条限制是刻意的。工具只在编辑器作为顶层页面时注册——跨域 iframe 需要嵌入方页面授予
+        <code>allow="tools"</code>，这与嵌入的使用方式冲突，所以嵌入场景请改用 postMessage API
+        驱动。另外全文读取仅对文字文档可用；表格和演示文稿在当前引擎上没有这个接口，因此工具会明确说明，而不是返回一个可能被助手当成「文件是空的」的空结果。
+      </p>
+
+      <r-card class="oss"
+        ><div class="card-body">
+          <strong>开源且可自托管。</strong>基于 AGPL-3.0——你可以自行验证没有任何上传，或运行你自己的副本：<a
+            href="https://github.com/ranuts/document"
+            rel="noopener"
+            >github.com/ranuts/document</a
+          >。
+        </div></r-card
+      >
+
+      <h2 class="faq">常见问题</h2>
+      <div class="faq">
+        <h3>WebMCP 是什么？</h3>
+        <p>
+          W3C Web Machine Learning 社区组的一项提案，让网页注册结构化工具供浏览器内的 AI
+          助手直接调用，而不必让助手去理解和点击用户界面。
+        </p>
+        <h3>这个编辑器注册了哪些工具？</h3>
+        <p>
+          七个：open_document_url, open_document_buffer, create_document, save_document, get_document_text,
+          set_readonly, get_document_state。覆盖从 URL
+          或字节打开、新建文档、导出或转换、读取正文、切换只读，以及报告当前状态。
+        </p>
+        <h3>哪些浏览器支持？</h3>
+        <p>
+          WebMCP 目前在 Chrome 的 origin trial 中可用。Firefox 和 Safari 尚未表态。浏览器没有该 API
+          时，什么也不会注册、什么也不会变。
+        </p>
+        <h3>助手处理时我的文档会被上传吗？</h3>
+        <p>
+          不会。这些工具调用的就是界面调用的那套本地代码——转换引擎是跑在你浏览器标签页里的
+          WebAssembly，文件不会离开你的设备。
+        </p>
+        <h3>助手能读取我文档的内容吗？</h3>
+        <p>
+          文字文档可以，get_document_text
+          会返回正文，助手不必导出就能回答问题。表格和演示文稿在当前引擎上没有全文读取，工具会如实说明，而不是返回一个空结果。
+        </p>
+        <h3>编辑器被嵌入到别的网站时也能用吗？</h3>
+        <p>按设计不能。工具只在顶层页面注册。嵌入场景请改用 postMessage 的 Embed API 驱动。</p>
+        <h3>助手能把文件转成 PDF 吗？</h3>
+        <p>能。save_document 接受目标格式，所以助手可以打开 DOCX、XLSX 或 PPTX 并导出 PDF，全程在设备上完成。</p>
+        <h3>需要账号或 API Key 吗？</h3>
+        <p>
+          都不需要。编辑器本身不需要账号，它也不会自己调用任何 AI
+          服务——推理由你浏览器的助手完成，这个页面只负责暴露工具。
+        </p>
+      </div>
+
+      <footer>
+        <a href="/zh-CN/help">帮助中心</a>
+        <a href="/zh-CN/help/embed-api">Embed API</a>
+        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+        <a href="/zh-CN/">打开编辑器</a>
+        <a href="/zh-CN/changelog">更新日志</a>
+        <a href="/zh-CN/open/docx">打开 DOCX</a>
+        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+        <a href="/zh-CN/open/pptx">打开 PPTX</a>
+        <a href="/zh-CN/open/pdf">打开 PDF</a>
+        <a href="/zh-CN/open/odt">打开 ODT</a>
+        <a href="/zh-CN/open/ods">打开 ODS</a>
+        <a href="/zh-CN/open/odp">打开 ODP</a>
+        <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
+        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+        <a href="/zh-CN/no-signup-document-editor">无需注册</a>
+        <a href="/zh-CN/offline-document-editor">离线使用</a>
+        <a href="/zh-CN/embed-document-editor">嵌入 API</a>
+        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+      </footer>
+    </main>
+  </body>
+</html>

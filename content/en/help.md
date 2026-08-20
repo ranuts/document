@@ -59,6 +59,26 @@ Yes. Add `&readonly=1` to a `/editor?file=` link, or send `document:set-readonly
 
 Yes — the editor is designed to be embedded in an iframe and driven with `postMessage`: your page fetches the file (with its own authentication), sends it into the iframe, and receives the edited `File` back to upload wherever you want. See the [Embed API reference](/help/embed-api) and the [live demo](/embed-demo.html).
 
+## Browser AI agents (WebMCP)
+
+### Can an AI assistant in my browser drive the editor?
+
+Yes, where the browser supports it. The editor registers a set of WebMCP tools, so a browser-based AI agent can open, convert, read and export documents by calling them directly instead of clicking through the interface. Everything still runs on your device — the agent triggers the same on-device code the buttons do, and nothing is uploaded.
+
+The tools are `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` and `get_document_state`.
+
+### Which browsers support it?
+
+WebMCP is a proposal from the W3C Web Machine Learning Community Group, currently available in Chrome behind an origin trial. Firefox and Safari have not announced support. Where the browser does not provide the API, nothing is registered and nothing changes — it is a pure addition.
+
+### Does it work in an embedded editor?
+
+No, by design. Tools are only registered when the editor is the top-level page. A cross-origin iframe would need the embedding page to grant `allow="tools"`, which conflicts with how embedding is meant to work — so if you embed the editor, drive it with the [Embed API](/help/embed-api) instead.
+
+### Can the agent read the document's text?
+
+For word-processing documents, yes: `get_document_text` returns the text so the agent can answer questions about the content without exporting anything. Spreadsheets and presentations do not expose a full-text read on this engine; the tool says so explicitly (rather than returning an empty answer that would look like an empty file) and points to exporting instead.
+
 ## Offline and installation
 
 ### Does it work offline?
