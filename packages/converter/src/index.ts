@@ -8,6 +8,7 @@
 export {
   X2TConverter,
   canStreamWasm,
+  fetchWasmResponse,
   hasEditorBinSignature,
   isHtmlDocument,
   isZipContainer,
