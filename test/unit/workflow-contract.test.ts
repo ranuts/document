@@ -166,6 +166,18 @@ describe('bin/serve-pages-dev.sh', () => {
     expect(config).toMatch(/bin\/serve-pages-dev\.sh/);
     expect(config).not.toMatch(/wrangler@latest pages dev/);
   });
+
+  it('makes the tests wait for the restart the loop performs', () => {
+    // The restart loop only helps if something waits for it. Playwright checks
+    // the server once, at startup, and fires a retry immediately -- so a
+    // mid-run crash took the case that hit it AND its retry, for a server that
+    // was back ~20 s later. Both halves have to exist: the loop that restarts,
+    // and the fixture that waits.
+    expect(config).toMatch(/process\.env\.E2E_WAIT_FOR_SERVER = '1'/);
+    const l0 = readFileSync(resolve(ROOT, 'test/e2e/lib/l0.ts'), 'utf8');
+    expect(l0).toMatch(/E2E_WAIT_FOR_SERVER/);
+    expect(l0).toMatch(/async function waitForServer/);
+  });
 });
 
 describe('.github/workflows/ci.yml', () => {
@@ -244,6 +256,39 @@ describe('.github/workflows/ci.yml', () => {
     // assumed -- see docs/explorations/2026-08-19-ci-e2e-sharding.md.
     expect(ci).toMatch(/run: sh \.\/bin\/test-e2e-docker\.sh --shard=/);
     expect(ci).not.toMatch(/pnpm run test:e2e:docker.*--shard/);
+  });
+});
+
+describe('.github/workflows/prod-smoke.yml', () => {
+  const src = readFileSync(resolve(WORKFLOW_DIR, 'prod-smoke.yml'), 'utf8');
+  const editorHtml = readFileSync(resolve(ROOT, 'editor.html'), 'utf8');
+  const landingHtml = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
+
+  /**
+   * The deploy gate has to watch a file that CARRIES the build.
+   *
+   * It used to grep `assets/index-*.js` out of `dist/index.html` and poll `/`
+   * for the same name. `/` has shipped no bundle since the route split
+   * (2026-08-16), so the expectation was the empty string -- which matched the
+   * equally empty answer on the first poll. The step printed "live after 20s"
+   * and every production smoke since ran against whatever was already
+   * deployed. Nothing noticed until a case could tell two builds apart, and
+   * then it read as "the new code is broken in production".
+   */
+  it('waits on the entry asset of the page that actually has one', () => {
+    expect(src).toContain("grep -o 'assets/editor-[A-Za-z0-9_-]*\\.js' dist/editor.html");
+    expect(src).toContain('curl -s "$PROD_URL/editor"');
+    // The premise of the two lines above: the editor page is the one that
+    // loads a bundle, and the landing page is the one that does not.
+    expect(editorHtml).toMatch(/<script[^>]+type="module"/);
+    expect(landingHtml).not.toMatch(/<script[^>]+type="module"/);
+  });
+
+  it('fails loudly when it cannot name what it is waiting for', () => {
+    // An empty expectation is what made the gate vacuous; it must never again
+    // be allowed to pass for free.
+    expect(src).toMatch(/if \[ -z "\$ASSET" \]; then/);
+    expect(src).toMatch(/::error::[^\n]*deploy gate/);
   });
 });
 

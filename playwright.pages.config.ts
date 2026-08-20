@@ -21,6 +21,13 @@ const PORT = Number(process.env.PAGES_PORT || 8788);
 // crash costs one retried test instead of the whole job.
 const SERVE = `sh ./bin/serve-pages-dev.sh ${PORT}`;
 
+// The suite's own server can die mid-run: workerd aborts on a large response
+// and bin/serve-pages-dev.sh restarts it (~20 s), while Playwright keeps
+// sending tests -- including the immediate retry of the case that hit the
+// outage. With this set, each test waits for the port to answer first (see
+// waitForServer in test/e2e/lib/l0.ts).
+process.env.E2E_WAIT_FOR_SERVER = '1';
+
 export default defineConfig({
   ...base,
   // No `@serial`: this suite proves Cloudflare Pages hosting semantics.
