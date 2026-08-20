@@ -336,13 +336,22 @@ apt-get，而 hosted runner 上的 apt 有过**拉完 release 索引后彻底停
 每次尝试套 `timeout` 并重试，重试前清掉被杀的 apt 留下的锁；浏览器二进制
 按 Playwright 版本号进 `actions/cache`，命中时只跑 `install-deps`。
 
-**缓存命中时 `install-deps` 失败只警告、不判死**（2026-08-19 起）：缓存命中意味着
-浏览器二进制已就位，apt 只可能再补系统库，而 runner 镜像本来就带 chromium 的那套。
-把它当致命错误的结果是"Ubuntu 镜像源抽风 = PR 变红"——分片把跑 apt 的 job 从 3 个
-变成 11 个，撞上的概率同步放大，实测一轮里同一个分片连挂两次（每次
-`noble-security InRelease` 之后静默 4 分半 ×3）。所以命中缓存时只试 **1 次 120s**，
-失败就带 warning 继续跑用例：库真缺，Playwright 启动浏览器时会明说，红在测试步骤，
-信息一点不少。**冷缓存仍然必须成功**——那时候根本没有浏览器可跑。
+**缓存命中时直接不跑 apt**（2026-08-19 起）。读健康 run 的日志才看清 `install-deps`
+到底在干什么：Chromium 要的库（libnss3 / libgbm1 / libasound2t64 / libcairo2 …）
+**全部 already the newest version**，runner 镜像本来就带；它真正装的只有 **21.1 MB
+字体**（fonts-wqy-zenhei / fonts-ipafont-gothic / fonts-unifont / fonts-freefont-ttf /
+fonts-tlwg-loma-otf / xfonts-encodings）。而本项目的渲染不经过系统字体——编辑器用自带的
+XOR 字体 catalog（`public/fonts/`）、PDF 走 `PDF_FONT_MANIFEST`、落地页用 vendored
+Geist woff2；视觉用例比的是"同一浏览器里的原始 vs 存回"，缺字形也是两侧同样缺。
+
+所以那是**每个 job 在全新 VM 上，为没人读的字体，向 Ubuntu 源发一次网络请求**。11 个
+job 就是一轮 run 掷 11 次骰子，而骰子是歪的：runner 首选的 `azure.archive.ubuntu.com`
+返回 `Ign:`，退回公网 archive 后整个停摆（`noble-security InRelease` 之后零字节）。
+本周四个 job 因此被 6 小时上限杀掉，加固之后又有两次各烧 17 分钟。
+
+现在缓存命中直接 `exit 0`（连 apt 配置都不写）；`PLAYWRIGHT_INSTALL_DEPS=true` 是逃生
+出口，会把 apt 放回来但只试 1 次 120s、失败仅告警。**冷缓存路径不变**（3 × 300s、失败
+判死）——那时候没有浏览器可跑，且它本来就要从 Playwright CDN 下载。
 
 **并发**：PR 收到新 push 时旧 run 直接取消（`cancel-in-progress` 只对
 `pull_request` 生效）；push 到 main 的 run 永不取消——那是部署和线上冒烟要判定

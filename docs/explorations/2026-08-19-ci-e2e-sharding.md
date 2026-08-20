@@ -131,7 +131,7 @@ run: sh ./bin/test-e2e-docker.sh --shard=${{ matrix.shard }}/3
 **它不是分片造成的，但分片把它放大了**：跑 apt 的 job 从 3 个变成 11 个，一轮
 run 撞上的概率同步翻倍。这条必须在同一个 PR 里处理，否则等于拿可靠性换速度。
 
-### 处理：缓存命中时，apt 的成败不再决定 job
+### 第一步（止血）：缓存命中时，apt 的成败不再决定 job
 
 `.github/scripts/install-playwright.sh` 分两条路：
 
@@ -146,6 +146,40 @@ runner 镜像本来就带 chromium 那套。库真的缺，Playwright 启动浏�
 浏览器，这步失败就是真的没法跑。
 
 顺带把 3×300s 压成 1×120s——一个"输了也无所谓"的尝试不该占用 15 分钟预算。
+
+### 第二步（根治）：缓存命中时根本不调 apt
+
+止血之后回头问"为什么老是它"，去读一次**健康** run 的日志，才看清 `install-deps`
+到底装了什么：
+
+```
+libasound2t64 is already the newest version ...
+libatk-bridge2.0-0t64 / libnss3 / libgbm1 / libcairo2 / libx11-6 ... 全部 already
+The following NEW packages will be installed:
+0 upgraded, 9 newly installed, 0 to remove
+Need to get 21.1 MB of archives.
+Setting up fonts-wqy-zenhei / fonts-ipafont-gothic / fonts-unifont /
+         fonts-freefont-ttf / fonts-tlwg-loma-otf / xfonts-encodings ...
+```
+
+**Chromium 需要的库一个都不用装——runner 镜像全带。apt 唯一真正在做的事是下载
+21.1 MB 字体。** 而这套用例不经过系统字体：编辑器用自带的 XOR 字体 catalog
+（`public/fonts/`），PDF 导出走 `PDF_FONT_MANIFEST`，落地页用 vendored Geist woff2；
+`visual-roundtrip` 和 corpus 视觉比对是"同一浏览器里的原始 vs 存回再打开"两侧对比，
+缺字形也是两侧同样缺。系统字体只够到 DOM 里的回退文本。
+
+于是问题的真身是：**每个 job 在全新 VM 上，为没人读的字体，向 Ubuntu 源发一次网络
+请求**。11 个 job = 一轮 run 掷 11 次骰子；而骰子是歪的（azure 镜像 `Ign:` → 退回公网
+archive → 停摆）。这不是偶发 flake，是结构。
+
+所以缓存命中直接 `exit 0`，连 apt 配置文件都不写（顺序也钉进用例了：一个还会
+`sudo` 写 apt 配置的"跳过"，仍然能因为 apt 的理由失败）。`PLAYWRIGHT_INSTALL_DEPS=true`
+留作逃生出口。冷缓存路径一个字没动。
+
+**顺带记一笔打脸**：这两条断言的第一版是**假保护**——反向验证时把跳过块整个删掉，
+用例照绿（正则里的 `PLAYWRIGHT_INSTALL_DEPS` 命中了逃生出口的注释，`exit 0` 命中了
+后面 advisory 分支的那句）。改成"取出 `BROWSERS_CACHED` 分支体、断言 `exit 0` 出现在
+第一个 `command=(` 之前"才真的红。反向验证不是走过场。
 
 ## 结果
 

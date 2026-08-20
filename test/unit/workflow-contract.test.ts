@@ -89,6 +89,27 @@ describe('the Playwright install script', () => {
     expect(script).toMatch(/for attempt in \$\(seq 1 "\$attempts"\)/);
   });
 
+  it('does not call apt at all once the browsers came from the cache', () => {
+    // Read off a healthy run: every library Chromium needs already reports
+    // "is already the newest version" on the hosted image, and the only thing
+    // install-deps installs is 21 MB of fonts that nothing here renders
+    // through (the editor draws with its own vendored catalog). That call was
+    // a network dependency on Ubuntu's mirrors in the hot path of every job,
+    // buying nothing and stalling regularly.
+    const cachedBranch = script.match(/BROWSERS_CACHED:-\}" = "true" \]; then\n([\s\S]*?)\nelse\n/);
+    expect(cachedBranch).not.toBeNull();
+    const body = cachedBranch![1];
+    // The branch has to leave before it can reach a playwright invocation.
+    expect(body).toMatch(/^\s*exit 0$/m);
+    expect(body.search(/^\s*exit 0$/m)).toBeLessThan(body.search(/command=\(/));
+  });
+
+  it('keeps the apt config write off the path that never reaches apt', () => {
+    // Ordering, not decoration: a skip that still sudo-writes an apt config is
+    // a skip that can still fail for apt's reasons.
+    expect(script.indexOf('skipping the apt font install')).toBeLessThan(script.indexOf('99-ci-timeouts'));
+  });
+
   it('lets a stalled apt through once the browsers came from the cache', () => {
     // A cache hit means the binaries are already there and apt could only be
     // adding system libraries the runner image already ships. Treating its
