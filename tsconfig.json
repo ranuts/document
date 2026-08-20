@@ -1,6 +1,6 @@
 {
   "exclude": ["node_modules/**", "dist/**", "public"],
-  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "tailwind.config.ts"],
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx"],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",

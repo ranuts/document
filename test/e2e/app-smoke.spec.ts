@@ -34,6 +34,38 @@ test('/editor?new=docx mounts the editor shell; legacy /?new=docx redirects ther
   expect(pageErrors).toEqual([]);
 });
 
+test('the editor page fits the viewport and renders in the ranui typeface', async ({ page }) => {
+  // Two properties nothing else here asserted on, and both were broken.
+  //
+  // The typeface came from Tailwind's preflight (`html { font-family }`) and
+  // went with it when the framework was dropped (2026-08-20): ran-tokens.css
+  // only DECLARES --ran-font-family, and the rule that applies it lives in
+  // home.css, which /editor never loads. The page fell back to Times.
+  //
+  // The fit was broken long before that, by a body-level `visibility: hidden`
+  // file input that still takes up 25px after a 100%-height #app. Asserted on
+  // the document rather than on the input so it also catches the next thing
+  // that overflows -- an inline editor iframe would, if the vendor ever stopped
+  // setting `vertical-align: top` on its own frame (preflight's
+  // `iframe { display: block }` used to make that irrelevant).
+  await page.setViewportSize({ width: 1280, height: 700 });
+  await page.goto('/editor?new=docx');
+  await expect(page.locator('#app')).toBeVisible();
+  await expect(page.locator('iframe[name="frameEditor"]')).toBeAttached();
+
+  const layout = await page.evaluate(() => ({
+    scrollHeight: document.documentElement.scrollHeight,
+    clientHeight: document.documentElement.clientHeight,
+    // Which family the page ASKS for, not whether the face loaded: a page with
+    // none of its own falls back to the UA serif, and the agent panel then
+    // mixes it with the Geist its ranui components resolve internally.
+    fontFamily: getComputedStyle(document.body).fontFamily,
+  }));
+
+  expect(layout.scrollHeight).toBe(layout.clientHeight);
+  expect(layout.fontFamily).toMatch(/Geist/);
+});
+
 test('bare /editor with nothing to open goes back to the landing', async ({ page }) => {
   await page.goto('/editor');
   await page.waitForURL((u) => u.pathname === '/');

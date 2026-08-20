@@ -14,11 +14,17 @@ export function setUICallbacks(callbacks: { hideControlPanel: () => void; showCo
   showControlPanelFn = callbacks.showControlPanel;
 }
 
-// Create a single hidden file input (ranui builder, ecosystem convention)
+// Create a single hidden file input (ranui builder, ecosystem convention).
+//
+// `display: none`, not `visibility: hidden`: the latter hides the control but
+// keeps it in flow, and it is a body child sitting after a 100%-height #app --
+// so it added its own 25px below the viewport and gave /editor a page
+// scrollbar. A file input is only ever opened programmatically here
+// (fileInput.click() below), which display: none does not prevent.
 const fileInput = View('input')
   .attr('type', 'file')
   .attr('accept', '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv,.pdf')
-  .attr('style', 'visibility: hidden')
+  .attr('style', 'display: none')
   .build() as HTMLInputElement;
 document.body.appendChild(fileInput);
 
