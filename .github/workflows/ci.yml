@@ -122,14 +122,16 @@ jobs:
   e2e-pages-shard:
     name: E2E (Cloudflare Pages semantics) shard ${{ matrix.shard }}
     runs-on: ubuntu-latest
-    # Each shard still serves wrangler with a single worker on purpose (see
-    # playwright.pages.config.ts), so a shard is roughly a third of the old
-    # ~20 minute job plus its own build.
+    # Five shards rather than three: this suite still serves wrangler with a
+    # single worker on purpose (see playwright.pages.config.ts), so it is the
+    # slowest of the three and sets the critical path. Every shard also pays a
+    # fixed ~2 minutes for its own bin/build.sh and wrangler start, which is
+    # what stops the split from paying off much beyond this.
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4, 5]
 
     steps:
       - name: Checkout code
@@ -141,7 +143,7 @@ jobs:
           browsers: chromium
 
       - name: Run E2E against wrangler pages dev
-        run: pnpm exec playwright test -c playwright.pages.config.ts --shard=${{ matrix.shard }}/3
+        run: pnpm exec playwright test -c playwright.pages.config.ts --shard=${{ matrix.shard }}/5
 
       - name: Upload Playwright report
         if: failure()

@@ -89,6 +89,30 @@ describe('the Playwright install script', () => {
     expect(script).toMatch(/for attempt in \$\(seq 1 "\$attempts"\)/);
   });
 
+  it('lets a stalled apt through once the browsers came from the cache', () => {
+    // A cache hit means the binaries are already there and apt could only be
+    // adding system libraries the runner image already ships. Treating its
+    // stall as fatal turned a bad Ubuntu mirror into a red pull request --
+    // twice on one run, and sharding tripled the number of jobs exposed.
+    expect(script).toMatch(/deps_are_advisory=true/);
+    expect(script).toMatch(/if \[ "\$deps_are_advisory" = "true" \]; then[\s\S]*?exit 0/);
+  });
+
+  it('still fails hard when there is no cached browser to fall back on', () => {
+    // Without the cache this step is what puts the browsers on disk; letting
+    // it fail would hand the test step an error about nothing being installed.
+    expect(script).toMatch(/deps_are_advisory=false/);
+    expect(script).toMatch(/::error::playwright[\s\S]*?\nexit 1/);
+  });
+
+  it('does not spend the patient budget on an attempt it is willing to lose', () => {
+    // The advisory path gave up only after 3 x 300s: a quarter of an hour per
+    // job, spent to reach a verdict that no longer changes anything.
+    const advisory = script.match(/deps_are_advisory=true\n\s*default_attempts=(\d+)\n\s*default_timeout=(\d+)/);
+    expect(advisory).not.toBeNull();
+    expect(Number(advisory![1]) * Number(advisory![2])).toBeLessThanOrEqual(180);
+  });
+
   it('clears the apt locks a killed attempt leaves behind', () => {
     // Without this the retry fails instantly on "Could not get lock", which
     // would make the retry loop pure decoration.

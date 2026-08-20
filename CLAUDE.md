@@ -275,12 +275,15 @@ wrangler pages dev），这是整个 workflow 的全部成本（install + vite b
 docker build 加起来不到 2 min）。所以每套都用 matrix 切成 **3 个分片**，再由一个
 汇总 job 顶着分支保护要求的检查名：
 
-| 分片 job（matrix ×3） | 汇总 job（= 必需检查名）                       | 分片耗时 | timeout |
-| --------------------- | ---------------------------------------------- | -------- | ------- |
-| `lint`（不分片）      | `lint` → Lint and Validate                     | ~1.5 min | 15 min  |
-| `e2e-shard`           | `e2e` → E2E                                    | ~3 min   | 20 min  |
-| `e2e-docker-shard`    | `e2e-docker` → E2E (Docker image)              | ~4 min   | 25 min  |
-| `e2e-pages-shard`     | `e2e-pages` → E2E (Cloudflare Pages semantics) | ~5 min   | 30 min  |
+| 分片 job              | 汇总 job（= 必需检查名）                       | 分片耗时    | timeout |
+| --------------------- | ---------------------------------------------- | ----------- | ------- |
+| `lint`（不分片）      | `lint` → Lint and Validate                     | ~1 min      | 15 min  |
+| `e2e-shard` ×3        | `e2e` → E2E                                    | 2.4~4 min   | 20 min  |
+| `e2e-docker-shard` ×3 | `e2e-docker` → E2E (Docker image)              | 3.3~4.6 min | 25 min  |
+| `e2e-pages-shard` ×5  | `e2e-pages` → E2E (Cloudflare Pages semantics) | ~4.5 min    | 30 min  |
+
+pages 切 5 片而不是 3 片：它单 worker、最慢，是关键路径；但每片还要付 ~2 min
+的 `build.sh` + wrangler 启动固定成本，再往上切收益就被这块吃掉了。
 
 **分片而不是加 workers**：runner 只有 4 核、每个 worker 拖一个 WASM 编辑器进程，
 而 pages 那套是**故意**单 worker 的（并发下 workerd 会被大文件 abort 打崩，见
@@ -310,8 +313,16 @@ apt-get，而 hosted runner 上的 apt 有过**拉完 release 索引后彻底停
 不动**的表现——2026-08-18 一天之内四次 CI 被 GitHub 的 6 小时 job 上限杀掉，
 每次挂在不同的 job（三个 e2e job 跑的是同一步，谁中枪是随机的），每次都要人工
 重跑。apt 自身没有总时长上限，所以 `.github/scripts/install-playwright.sh` 给
-每次尝试套 `timeout` 并重试 3 次，重试前清掉被杀的 apt 留下的锁；浏览器二进制
+每次尝试套 `timeout` 并重试，重试前清掉被杀的 apt 留下的锁；浏览器二进制
 按 Playwright 版本号进 `actions/cache`，命中时只跑 `install-deps`。
+
+**缓存命中时 `install-deps` 失败只警告、不判死**（2026-08-19 起）：缓存命中意味着
+浏览器二进制已就位，apt 只可能再补系统库，而 runner 镜像本来就带 chromium 的那套。
+把它当致命错误的结果是"Ubuntu 镜像源抽风 = PR 变红"——分片把跑 apt 的 job 从 3 个
+变成 11 个，撞上的概率同步放大，实测一轮里同一个分片连挂两次（每次
+`noble-security InRelease` 之后静默 4 分半 ×3）。所以命中缓存时只试 **1 次 120s**，
+失败就带 warning 继续跑用例：库真缺，Playwright 启动浏览器时会明说，红在测试步骤，
+信息一点不少。**冷缓存仍然必须成功**——那时候根本没有浏览器可跑。
 
 **并发**：PR 收到新 push 时旧 run 直接取消（`cancel-in-progress` 只对
 `pull_request` 生效）；push 到 main 的 run 永不取消——那是部署和线上冒烟要判定

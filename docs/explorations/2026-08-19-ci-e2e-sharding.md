@@ -98,13 +98,65 @@ run: sh ./bin/test-e2e-docker.sh --shard=${{ matrix.shard }}/3
 | 三个汇总 job 的名字 == 必需检查名      | 改名 → PR 永远 pending                   |
 | 汇总 job 在分片红时必须退 1            | 换成 `echo ok` → 绿得毫无意义            |
 | docker 分片直接调脚本，不经 `pnpm run` | 换回 `pnpm run … -- --shard` → 分片失效  |
+| 缓存命中时 apt 失败不判死              | 去掉 advisory 分支 → 镜像源抽风就红      |
+| 冷缓存时 apt 失败必须判死              | 改成 `exit 0` → 没浏览器还报绿           |
+| advisory 路径的预算 ≤ 180s             | 改回 3×300s → 一个不重要的尝试占 15 min  |
+
+## 首轮实测（run 32268096879）
+
+分片本身一次到位：
+
+| job                                | 分片耗时                 | 原耗时 |
+| ---------------------------------- | ------------------------ | ------ |
+| Lint and Validate                  | 1 min（与 e2e 同时起跑） | 1 min  |
+| E2E shard 1/2/3                    | 2.4 / 3.5 / 4 min        | 7 min  |
+| E2E (Docker image) shard 1/2/3     | 3.3 / 失败 / 4.6 min     | 8 min  |
+| E2E (Cloudflare Pages) shard 1/2/3 | 3.7 / 7.4 / 7 min        | 12 min |
+| 三个汇总 job                       | 各 0 min，红绿传递正确   | —      |
+
+## 然后撞上 apt，两次
+
+`E2E (Docker image) shard 2` 连挂两轮，形态完全一样：
+
+```
+15:32:12  Get:5 https://archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+          （此后 4 分半，零输出）
+15:36:31  ##[warning] ... exceeded 300s (attempt 2/3)
+```
+
+三次尝试全卡在同一处，每次烧掉 ~17 min。日志里 `azure.archive.ubuntu.com` 的条目
+全是 `Ign:`——runner 自带的 Azure 镜像没生效，退回公网 archive 然后停摆。就是
+2026-08-19-ci-workflow-hardening.md 记的那个老问题。
+
+**它不是分片造成的，但分片把它放大了**：跑 apt 的 job 从 3 个变成 11 个，一轮
+run 撞上的概率同步翻倍。这条必须在同一个 PR 里处理，否则等于拿可靠性换速度。
+
+### 处理：缓存命中时，apt 的成败不再决定 job
+
+`.github/scripts/install-playwright.sh` 分两条路：
+
+| 路径     | 命令                  | 尝试     | 失败时          |
+| -------- | --------------------- | -------- | --------------- |
+| 缓存命中 | `install-deps`        | 1 × 120s | warning，继续跑 |
+| 冷缓存   | `install --with-deps` | 3 × 300s | error，job 红   |
+
+依据：缓存命中意味着浏览器二进制已经在盘上，apt 唯一还能补的是系统库，而 hosted
+runner 镜像本来就带 chromium 那套。库真的缺，Playwright 启动浏览器时会原话说出来，
+红在测试步骤——信息一点没少，只是不再需要一整轮 run 去换。冷缓存不动：那时候没有
+浏览器，这步失败就是真的没法跑。
+
+顺带把 3×300s 压成 1×120s——一个"输了也无所谓"的尝试不该占用 15 分钟预算。
 
 ## 结果
 
-| 阶段 | 关键路径                        |
-| ---- | ------------------------------- |
-| 改前 | ~14 min                         |
-| 改后 | ~5 min（预期，以首次 run 为准） |
+| 阶段                          | 关键路径                            |
+| ----------------------------- | ----------------------------------- |
+| 改前                          | ~14 min                             |
+| 分片后（实测，去掉 apt 那次） | ~7.5 min（瓶颈是 pages 的 7.4 min） |
+| pages 3 → 5 片                | ~5 min（预期）                      |
+
+pages 每片还要付 ~2 min 的 `build.sh` + wrangler 启动固定成本，所以再往上切收益
+会被这块吃掉。
 
 ## 没做的（留着，需要拍板）
 
