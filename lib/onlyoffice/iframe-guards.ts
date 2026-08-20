@@ -9,6 +9,7 @@ import { installSeriesSettingsGuard } from './guards/series-settings';
 import { installFontLoadAcceleration } from './guards/font-loading';
 import { installCommentSelectionGuard } from './guards/comment-selection';
 import { installCanvasLossGuard } from './guards/canvas-loss';
+import { releaseWasmBinary } from './guards/wasm-binary-release';
 
 /**
  * Same-origin preparation of the editor iframe, applied from onAppReady and
@@ -21,9 +22,12 @@ import { installCanvasLossGuard } from './guards/canvas-loss';
  * for written down next to it. None of them is optional -- every one is a
  * production bug that reached users.
  *
- * Returns true once the five guards that must be in place before a document
- * can be opened and saved have landed on some frame, so the caller can stop
- * re-applying.
+ * Returns true once every guard whose absence would still be felt later has
+ * landed on some frame, so the caller can stop re-applying: the five that must
+ * be in place before a document can be opened and saved, plus the wasm binary
+ * release, which reports "in place" once it is watching for x2t rather than
+ * once it has released -- x2t can load long after this timer is gone (see
+ * ./guards/wasm-binary-release).
  */
 export function prepareEditorIframe(): boolean {
   let fullyApplied = false;
@@ -46,13 +50,15 @@ export function prepareEditorIframe(): boolean {
       installFontLoadAcceleration(win);
       installCommentSelectionGuard(win);
       installCanvasLossGuard(win, doc);
+      const wasmBinaryHandled = releaseWasmBinary(win);
 
       if (
         sharedWorkerShadowed &&
         fetchFontsGuarded &&
         imagePipelineInstalled &&
         saveSemanticsInstalled &&
-        longActionGuarded
+        longActionGuarded &&
+        wasmBinaryHandled
       ) {
         fullyApplied = true;
       }

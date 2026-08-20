@@ -9,7 +9,9 @@ vi.mock('@ranuts/shared/store', () => ({
 }));
 vi.mock('@ranuts/shared/i18n', () => ({
   getOnlyOfficeLang: vi.fn().mockReturnValue('en'),
-  t: vi.fn((key: string) => key),
+  // Placeholders are rendered as `key{"mb":283}` so a test can see what the
+  // caller passed; that the real locale strings fill them is i18n.test.ts.
+  t: vi.fn((key: string, vars?: Record<string, unknown>) => (vars ? `${key}${JSON.stringify(vars)}` : key)),
 }));
 vi.mock(import('@ranuts/shared/document-utils'), async (importOriginal) => {
   const actual = await importOriginal();
@@ -30,12 +32,16 @@ import {
   getNormalizedFile,
   isFontSystemReady,
   openAttemptHoldsBytes,
+  X2T_INITIAL_MB,
+  X2T_INITIAL_PAGES,
+  X2T_MAXIMUM_PAGES,
   getReadonlyMode,
   getSavedFileMimeType,
   requestSaveDocument,
   setReadonlyMode,
   toUint8Array,
 } from '../../lib/onlyoffice-editor';
+import { installOpenFailureGuard } from '../../lib/onlyoffice/open-failure';
 
 function makeEditor(extra: Record<string, unknown> = {}) {
   return { sendCommand: vi.fn(), ...extra };
@@ -264,6 +270,100 @@ describe('onlyoffice-editor', () => {
       expect(openAttemptHoldsBytes()).toBe(true);
       config.events.onDocumentReady();
       expect(openAttemptHoldsBytes()).toBe(false);
+    });
+
+    describe('the out-of-memory toast (#144)', () => {
+      const OOM =
+        'Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot allocate Wasm memory for new instance.)';
+      const realWasm = globalThis.WebAssembly;
+      let asked: Array<{ initial: number; maximum?: number }>;
+      let toasts: string[];
+
+      beforeEach(() => {
+        asked = [];
+        toasts = [];
+        globalThis.WebAssembly = {
+          Memory: class {
+            constructor(descriptor: { initial: number; maximum?: number }) {
+              asked.push(descriptor);
+            }
+          },
+        } as unknown as typeof WebAssembly;
+        (window as any).message = { error: (msg: string) => toasts.push(msg) };
+      });
+
+      afterEach(() => {
+        globalThis.WebAssembly = realWasm;
+        delete (window as any).message;
+      });
+
+      /** The frame rejection the vendor leaves unhandled when x2t cannot get its heap. */
+      const failFrameWith = (message: string) => {
+        const handlers: Array<(event: unknown) => void> = [];
+        installOpenFailureGuard({
+          addEventListener: (type: string, cb: (event: unknown) => void) => {
+            if (type === 'unhandledrejection') handlers.push(cb);
+          },
+        } as unknown as Window);
+        handlers.forEach((cb) => cb({ reason: { message } }));
+      };
+
+      it('quotes the heap size the wasm binary declares, not a hardcoded number', async () => {
+        const config = await createAndGetConfig({ fileName: 'big.xlsx', fileType: 'xlsx' });
+        noteFrameError(OOM);
+
+        config.events.onError({ data: { errorCode: -82 } });
+
+        expect(toasts.join('')).toContain(`editorErrorOutOfMemory{"mb":${X2T_INITIAL_MB}}`);
+      });
+
+      it('runs the full probe once the failure is final', async () => {
+        const config = await createAndGetConfig({ fileName: 'big.xlsx', fileType: 'xlsx' });
+        noteFrameError(OOM);
+
+        config.events.onError({ data: { errorCode: -82 } });
+
+        // Both halves asked: nothing else is allocating at this point.
+        expect(asked).toEqual([
+          { initial: 1, maximum: X2T_MAXIMUM_PAGES },
+          { initial: X2T_INITIAL_PAGES, maximum: X2T_MAXIMUM_PAGES },
+        ]);
+      });
+
+      it('does not commit 283 MB while the rebuild it reports on is asking for its own', async () => {
+        // The vendor raises its own -82 for the failure the guard is already
+        // answering with a rebuild, so this toast fires DURING the retry. A
+        // probe that commits x2t's full heap here can make that retry fail.
+        const config = await createAndGetConfig({
+          fileName: 'big.xlsx',
+          fileType: 'xlsx',
+          binData: new ArrayBuffer(8),
+        });
+        failFrameWith(OOM);
+
+        config.events.onError({ data: { errorCode: -82 } });
+
+        expect(asked).toEqual([{ initial: 1, maximum: X2T_MAXIMUM_PAGES }]);
+        expect(toasts.join('')).toContain('[memory: deferred]');
+      });
+
+      it('does not blame the browser for an x2t exit code that mentions memory', async () => {
+        // classifyOpenFailure puts `Conversion failed with code` FIRST on
+        // purpose: an exit code means x2t was instantiated and read the bytes,
+        // so this is its verdict on the document however the message is
+        // worded. Answering it with "close tabs / use a 64-bit browser" sends
+        // the user off to fix a browser that is fine, over a file it will never
+        // convert. The toast has to read the message the same way.
+        const config = await createAndGetConfig({ fileName: 'huge.xlsx', fileType: 'xlsx' });
+        noteFrameError('Conversion failed with code: 88 (Out of memory)');
+
+        config.events.onError({ data: { errorCode: -82 } });
+
+        expect(toasts.join('')).not.toContain('editorErrorOutOfMemory');
+        expect(toasts.join('')).toContain('editorErrorOpenFailed');
+        // And no probe: nothing about the environment is in question.
+        expect(asked).toEqual([]);
+      });
     });
 
     it('always passes a non-empty Guest user to avoid the getInitials crash (#25)', async () => {
@@ -509,6 +609,21 @@ describe('open-conversion readiness and failure classification', () => {
     expect(classifyOpenFailure('Document conversion failed: Error: Conversion failed with code: 88')).toBe('document');
     expect(classifyOpenFailure('Aborted(missing function: _ZN10CHtmlFile2C1Ev)')).toBe('document');
     expect(classifyOpenFailure('RuntimeError: memory access out of bounds')).toBe('document');
+  });
+
+  // GitHub #144: the reporter's browser cannot allocate x2t's 283 MB heap, so
+  // x2t aborts before it is instantiated and never sees the bytes. The
+  // `Aborted(` rule used to claim this one as a document verdict, which both
+  // skipped the retry and told the user their file was corrupt.
+  it('classifies a refused wasm allocation as an environment failure, not a verdict on the file', () => {
+    expect(
+      classifyOpenFailure(
+        'Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot allocate Wasm memory for new instance. Build with -sASSERTIONS for more info.)',
+      ),
+    ).toBe('environment');
+    expect(classifyOpenFailure('Aborted(RangeError: WebAssembly.Memory(): could not allocate memory)')).toBe(
+      'environment',
+    );
   });
 
   it('classifies editor boot-state and resource failures as environment failures', () => {

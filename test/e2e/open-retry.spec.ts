@@ -142,7 +142,129 @@ test.describe('open retry after an environment failure (real editor)', () => {
     expect(saved.size).toBeGreaterThan(0);
   });
 
-  test('waiting for the font system costs a fraction of a second, not seconds', async ({ page }) => {
+  /**
+   * The same route, with the failure the reporter of GitHub #144 actually hit:
+   * `Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot
+   * allocate Wasm memory for new instance.)`. x2t never got instantiated, so
+   * it never saw the bytes -- but the `Aborted(` rule classified it as a
+   * verdict on the document, which skipped the retry, and the toast told the
+   * user their file might be corrupt.
+   *
+   * Here the fault stays armed, so the retry fails too and the user reaches
+   * the final report. What is asserted is the report: the retry was attempted,
+   * and the message names memory (with the probe's verdict) instead of
+   * blaming the file.
+   */
+  test('an out-of-memory abort is retried and reported as memory, not as a corrupt file', async ({ page, l0 }) => {
+    // Allowed rather than expected: the injected rejection fires the instant
+    // Asc.editor exists in the *retried* frame, which can beat L0's 250 ms
+    // hook poll, so observing the -82 is racy here. That it fired is still
+    // required -- by the `code -82` the toast assertion below matches, which
+    // only reaches the page through the SDK's own asc_onError path.
+    l0.allowAscError((error) => error.id === '-82');
+    l0.allowFrameError(/Cannot allocate Wasm memory|Out of memory/);
+    l0.allowConsole(
+      /Cannot allocate Wasm memory|Out of memory|open conversion failed|retrying the open|changesError|^Error$/,
+    );
+
+    await page.addInitScript(() => {
+      // Capture what the app decides to tell the user. ranui assigns
+      // window.message once; wrap it as it lands.
+      const toasts: string[] = [];
+      Object.defineProperty(window, '__ooToasts', { value: toasts, configurable: true });
+      let stored: unknown;
+      Object.defineProperty(window, 'message', {
+        configurable: true,
+        get: () => stored,
+        set(value: Record<string, unknown> | undefined) {
+          if (value && typeof value === 'object') {
+            for (const key of ['error', 'info', 'success', 'warning']) {
+              const fn = value[key];
+              if (typeof fn === 'function') {
+                value[key] = (...args: unknown[]) => {
+                  toasts.push(String(args[0]));
+                  return (fn as (...a: unknown[]) => unknown).apply(value, args);
+                };
+              }
+            }
+          }
+          stored = value;
+        },
+      });
+
+      type X2T = { convertToBin?: (...args: unknown[]) => unknown; __oomPatched?: boolean };
+      const patch = (): boolean => {
+        const x2t = (window as unknown as { AscCommon?: { x2t?: X2T } }).AscCommon?.x2t;
+        if (!x2t || typeof x2t.convertToBin !== 'function' || x2t.__oomPatched) return false;
+        x2t.__oomPatched = true;
+        // Stays armed: the retry must fail too, so the final report is what
+        // the user sees. Verbatim wording of the reporter's screenshot.
+        x2t.convertToBin = () =>
+          Promise.reject(
+            new Error(
+              'Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot allocate Wasm memory for new instance. Build with -sASSERTIONS for more info.)',
+            ),
+          );
+        return true;
+      };
+      if (!patch()) {
+        const timer = setInterval(() => {
+          if (patch()) clearInterval(timer);
+        }, 10);
+        setTimeout(() => clearInterval(timer), 120_000);
+      }
+    });
+
+    const appLog: string[] = [];
+    page.on('console', (msg) => appLog.push(msg.text()));
+
+    await page.goto('/embed-demo.html');
+    await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
+
+    await page.evaluate(async () => {
+      const XLSX = (window as unknown as { XLSX: any }).XLSX;
+      const sheet = XLSX.utils.aoa_to_sheet([['out', 'of', 'memory']]);
+      const book = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(book, sheet, 'Sheet1');
+      const written = XLSX.write(book, { bookType: 'xlsx', type: 'array' });
+      const buffer: ArrayBuffer = written instanceof ArrayBuffer ? written : written.buffer;
+      await post('document:open-buffer', { fileName: 'oom.xlsx', buffer, readonly: false });
+    });
+
+    // The guard routed it (it used to bail out on the unrecognised wording and
+    // leave the whole failure to the vendor's own -82) and the retry ran.
+    await expect
+      .poll(() => appLog.some((line) => /retrying the open once after an environment failure/.test(line)), {
+        timeout: 120_000,
+      })
+      .toBe(true);
+    expect(appLog.some((line) => /open conversion failed/.test(line))).toBe(true);
+
+    // The toast is raised by the editor host page, which is embed-demo's inner
+    // iframe, not the top document.
+    const host = page.frames().find((frame) => /\/editor/.test(frame.url()));
+    expect(host).toBeTruthy();
+    const readToasts = async (): Promise<string[]> =>
+      (await host!.evaluate(() => ((window as any).__ooToasts as string[]) ?? [])) ?? [];
+    await expect
+      .poll(async () => (await readToasts()).some((text) => /code -82/.test(text)), { timeout: 60_000 })
+      .toBe(true);
+
+    const reported = (await readToasts()).filter((text) => /code -82/.test(text)).join('\n');
+    // Says memory, carries the probe verdict for the next screenshot ...
+    expect(reported).toMatch(/could not allocate memory/i);
+    expect(reported).toMatch(/\[memory: (ok|reservation|commit|unavailable)/);
+    // ... and never blames the document, which is intact.
+    expect(reported).not.toMatch(/may be corrupted/i);
+  });
+
+  // `@serial` keeps this case out of the parallel pass: it measures wall-clock
+  // time, and four WASM editors sharing four cores make the font system take
+  // seconds (measured 3400 ms against the 2 s bound) for reasons that have
+  // nothing to do with the code under test. CI runs the tagged cases in a
+  // second pass with the runner to itself -- `pnpm run test:e2e:serial`
+  // locally, and the pairing is pinned by test/unit/workflow-contract.test.ts.
+  test('waiting for the font system costs a fraction of a second, not seconds @serial', async ({ page }) => {
     // awaitFontSystem orders the conversion behind the font system instead of
     // letting it walk a half-built one. What that ordering costs is measured
     // here rather than assumed: a warm local run waits ~200 ms (four poll

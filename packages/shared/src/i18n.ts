@@ -167,6 +167,7 @@ export interface I18nMessages {
   editorErrorToast: string;
   editorErrorFormatMismatch: string;
   editorErrorOpenFailed: string;
+  editorErrorOutOfMemory: string;
   editorOpenRetrying: string;
 
   // AI agent panel
@@ -236,6 +237,8 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     editorErrorToast: '文档处理出错',
     editorErrorFormatMismatch: '文件内容与扩展名不一致，请确认文件格式后重试',
     editorErrorOpenFailed: '文件无法打开：可能已损坏、格式不受支持，或内容与扩展名不符',
+    editorErrorOutOfMemory:
+      '浏览器无法为文档转换引擎分配内存（需要约 {mb} MB）。请关闭其他标签页或窗口后重试；若仍失败，请改用 64 位浏览器（Edge 或 64 位 Chrome）。',
     editorOpenRetrying: '打开文档时编辑器未就绪，正在自动重试…',
     agentTitle: 'AI 助手',
     agentOpenTip: '打开 AI 助手',
@@ -293,6 +296,8 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     editorErrorFormatMismatch: 'The file content does not match its extension; check the file format and try again',
     editorErrorOpenFailed:
       'The file could not be opened: it may be corrupted, in an unsupported format, or not what its extension says',
+    editorErrorOutOfMemory:
+      'This browser could not allocate memory for the document conversion engine (about {mb} MB). Close other tabs or windows and try again; if it keeps failing, use a 64-bit browser (Edge, or 64-bit Chrome).',
     editorOpenRetrying: 'The editor was not ready when the document opened; retrying automatically...',
     agentTitle: 'AI Assistant',
     agentOpenTip: 'Open AI Assistant',
@@ -346,16 +351,18 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     themeSystem: 'システム',
     themeLight: 'ライト',
     themeDark: 'ダーク',
-    fileSavedSuccess: 'ファイルを保存しました: ',
-    documentLoaded: 'ドキュメントを読み込みました: ',
+    fileSavedSuccess: 'ファイルを保存しました：',
+    documentLoaded: 'ドキュメントを読み込みました：',
     failedToLoadEditor: 'エディターを読み込めませんでした。OnlyOffice API が正しく配置されているか確認してください。',
-    unsupportedFileType: 'サポートされていないファイル形式: ',
+    unsupportedFileType: 'サポートされていないファイル形式：',
     invalidFileObject: '無効なファイルです',
-    documentOperationFailed: 'ドキュメントの操作に失敗しました: ',
+    documentOperationFailed: 'ドキュメントの操作に失敗しました：',
     editorErrorToast: 'ドキュメントエラー',
     editorErrorFormatMismatch: 'ファイルの内容が拡張子と一致しません。形式を確認してからもう一度お試しください',
     editorErrorOpenFailed:
       'ファイルを開けませんでした。破損しているか、サポートされていない形式か、拡張子と内容が異なる可能性があります',
+    editorErrorOutOfMemory:
+      'このブラウザーは文書変換エンジン用のメモリ (約 {mb} MB) を確保できませんでした。他のタブやウィンドウを閉じてから再試行してください。解決しない場合は 64 ビットのブラウザー (Edge または 64 ビット版 Chrome) をご利用ください。',
   },
   [LanguageCode.KO]: {
     webOffice: 'Web Office',
@@ -369,7 +376,7 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     themeDark: '다크',
     fileSavedSuccess: '파일을 저장했습니다: ',
     documentLoaded: '문서를 불러왔습니다: ',
-    failedToLoadEditor: '편집기를 불러오지 못했습니다. OnlyOffice API가 올바르게 설치되어 있는지 확인하세요.',
+    failedToLoadEditor: '편집기를 불러오지 못했습니다. OnlyOffice API 가 올바르게 설치되어 있는지 확인하세요.',
     unsupportedFileType: '지원하지 않는 파일 형식: ',
     invalidFileObject: '잘못된 파일입니다',
     documentOperationFailed: '문서 작업에 실패했습니다: ',
@@ -377,6 +384,8 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     editorErrorFormatMismatch: '파일 내용이 확장자와 일치하지 않습니다. 형식을 확인한 뒤 다시 시도하세요',
     editorErrorOpenFailed:
       '파일을 열 수 없습니다. 손상되었거나, 지원하지 않는 형식이거나, 확장자와 내용이 다를 수 있습니다',
+    editorErrorOutOfMemory:
+      '이 브라우저에서 문서 변환 엔진에 필요한 메모리 (약 {mb} MB) 를 할당할 수 없습니다. 다른 탭이나 창을 닫고 다시 시도하세요. 계속 실패하면 64 비트 브라우저 (Edge 또는 64 비트 Chrome) 를 사용하세요.',
   },
   [LanguageCode.DE]: {
     webOffice: 'Web Office',
@@ -400,6 +409,8 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
       'Der Inhalt der Datei passt nicht zur Dateiendung – bitte das Format prüfen und erneut versuchen',
     editorErrorOpenFailed:
       'Die Datei konnte nicht geöffnet werden: möglicherweise beschädigt, in einem nicht unterstützten Format, oder der Inhalt passt nicht zur Endung',
+    editorErrorOutOfMemory:
+      'Dieser Browser konnte keinen Speicher für die Konvertierungs-Engine belegen (etwa {mb} MB). Schließen Sie andere Tabs oder Fenster und versuchen Sie es erneut; falls es weiterhin fehlschlägt, verwenden Sie einen 64-Bit-Browser (Edge oder 64-Bit-Chrome).',
   },
   [LanguageCode.ES]: {
     webOffice: 'Web Office',
@@ -422,6 +433,8 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
       'El contenido del archivo no coincide con su extensión; comprueba el formato e inténtalo de nuevo',
     editorErrorOpenFailed:
       'No se pudo abrir el archivo: puede estar dañado, tener un formato no admitido o no corresponder a su extensión',
+    editorErrorOutOfMemory:
+      'Este navegador no pudo reservar memoria para el motor de conversión de documentos (unos {mb} MB). Cierra otras pestañas o ventanas e inténtalo de nuevo; si sigue fallando, usa un navegador de 64 bits (Edge o Chrome de 64 bits).',
   },
   [LanguageCode.PT]: {
     webOffice: 'Web Office',
@@ -444,6 +457,8 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
       'O conteúdo do arquivo não corresponde à extensão; verifique o formato e tente novamente',
     editorErrorOpenFailed:
       'Não foi possível abrir o arquivo: ele pode estar corrompido, em formato não suportado ou não corresponder à extensão',
+    editorErrorOutOfMemory:
+      'Este navegador não conseguiu reservar memória para o motor de conversão de documentos (cerca de {mb} MB). Feche outras abas ou janelas e tente novamente; se continuar falhando, use um navegador de 64 bits (Edge ou Chrome de 64 bits).',
   },
   [LanguageCode.FA]: {
     webOffice: 'Web Office',
@@ -464,10 +479,27 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     editorErrorToast: 'خطای سند',
     editorErrorFormatMismatch: 'محتوای فایل با پسوند آن هم‌خوانی ندارد؛ قالب را بررسی و دوباره تلاش کنید',
     editorErrorOpenFailed: 'فایل باز نشد: ممکن است خراب باشد، قالب آن پشتیبانی نشود، یا با پسوندش هم‌خوانی نداشته باشد',
+    editorErrorOutOfMemory:
+      'این مرورگر نتوانست حافظه لازم برای موتور تبدیل سند (حدود {mb} مگابایت) را تخصیص دهد. زبانه‌ها یا پنجره‌های دیگر را ببندید و دوباره تلاش کنید؛ اگر همچنان ناموفق بود از یک مرورگر ۶۴ بیتی (Edge یا Chrome ۶۴ بیتی) استفاده کنید.',
   },
 };
 
 const messages: Record<Language, Partial<I18nMessages>> = { ...completeMessages, ...partialMessages };
+
+/**
+ * Values for a message's `{name}` placeholders.
+ *
+ * Numbers a message quotes must not be retyped into every locale: the
+ * out-of-memory string quotes x2t's declared heap, which comes from the wasm
+ * binary (lib/onlyoffice/wasm-memory.ts, pinned by vendor-contract.test.ts).
+ * Eight hand-written copies of "283" would silently go stale on the next
+ * vendor bump.
+ */
+export type TemplateVars = Record<string, string | number>;
+
+/** Replaces `{name}`; an unknown name is left as written rather than blanked. */
+const interpolate = (text: string, vars: TemplateVars): string =>
+  text.replace(/\{(\w+)\}/g, (match, name: string) => (name in vars ? String(vars[name]) : match));
 
 class I18n {
   private currentLanguage: Language = LanguageCode.EN;
@@ -567,9 +599,10 @@ class I18n {
   /**
    * Get translated text
    */
-  t(key: keyof I18nMessages): string {
+  t(key: keyof I18nMessages, vars?: TemplateVars): string {
     // Partial locales fall back to English key by key (see `messages`).
-    return messages[this.currentLanguage]?.[key] || completeMessages[LanguageCode.EN][key] || key;
+    const text = messages[this.currentLanguage]?.[key] || completeMessages[LanguageCode.EN][key] || key;
+    return vars ? interpolate(text, vars) : text;
   }
 
   /**
@@ -596,7 +629,7 @@ class I18n {
 export const i18n = new I18n();
 
 // Export convenience functions
-export const t = (key: keyof I18nMessages): string => i18n.t(key);
+export const t = (key: keyof I18nMessages, vars?: TemplateVars): string => i18n.t(key, vars);
 export const getLanguage = (): Language => i18n.getLanguage();
 export const setLanguage = (lang: Language): void => i18n.setLanguage(lang);
 export const getOnlyOfficeLang = (): string => i18n.getOnlyOfficeLang();
