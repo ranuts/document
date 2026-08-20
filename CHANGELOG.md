@@ -19,6 +19,50 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- A document that fails to open because the browser cannot allocate memory for
+  the conversion engine no longer claims the file "may be corrupted, in an
+  unsupported format, or not what its extension says". The file is fine: the
+  engine never started, so it never read it. The message now says so, suggests
+  what actually helps (close other tabs, or use a 64-bit browser), and carries
+  what the browser refused -- the 2 GB address-space reservation or the 283 MB
+  of real memory -- plus the browser's build architecture. Such a failure is
+  also retried once now, like the other "the editor was not ready" failures;
+  it used to be treated as a verdict on the file and reported immediately. A
+  document the engine did read and reject still fails straight away, even when
+  it ran out of memory doing so -- retrying that one, or blaming the browser
+  for it, would only waste the reader's time.
+- A hiccup from the CDN no longer costs you the document. The conversion
+  engine is a 9.4 MB download, and a single failed answer for it (a 500, a
+  dropped connection) used to end the open with "the document failed to open".
+  It is now asked for again, twice, before anything is reported -- a file that
+  is genuinely missing still fails immediately.
+- The conversion engine is now compiled as it downloads, so the 40 MB
+  decompressed copy of it never exists at all. It used to be held in memory at
+  the exact moment the engine asked for its own (much larger) working memory,
+  which is when opening a document fails on a machine that is short of it.
+  Where a browser cannot compile while downloading, the engine still loads the
+  old way and that copy is released as soon as it has started.
+- A new version now applies on your next visit instead of waiting for you to
+  close every tab of the site first. Updates were being downloaded and then
+  left waiting indefinitely, which is why a fixed bug could look unchanged
+  after an upgrade. Two things caused it: nothing was asking the update to take
+  over (and the Chinese homepage did not register the offline worker at all),
+  and every release looked to the browser as if it were replacing the editor
+  engine even when only the app had changed. Keeping a second homepage tab open
+  no longer holds an update back either -- only a tab with the editor actually
+  open does, since that is the one an update could disturb. Releases that leave the engine
+  untouched -- almost all of them -- now take over immediately; one that does
+  replace it still waits until you have no document open, so a running editor
+  cannot end up half-updated. Self-hosters: this is also why a freshly pulled
+  image could keep serving the old app; the other half of that was fixed
+  earlier in the image's cache contract. The offline cache no longer carries
+  retired releases around either: each release's own files are cleared out when
+  the next one takes over -- and never while a tab of the outgoing release is
+  still open, so an editor left open across an update keeps working instead of
+  losing pieces of itself. Two homepage scripts (the local-file picker and the
+  editor prefetch) were also being served from the offline cache without
+  checking for a newer copy, so a change to either could stay invisible on the
+  homepage indefinitely; they now revalidate like the rest of the shell.
 - The pill-shaped buttons on the homepage and the landing pages no longer draw
   a straight line under themselves that pokes out past their rounded ends: the
   raised shadow was being painted on a square box behind the round button.
@@ -33,6 +77,10 @@ notes. Entries describe what users experience, not internal refactors.
   no in-editor theme toggle any more.
 
 ### Changed
+
+- The conversion engine downloads 377 KB smaller (about 4%), the largest single
+  download in the app. Same engine, byte for byte -- only the compression of
+  the file it ships in changed.
 
 - Hovering (or focusing) an Open / New button starts downloading the editor
   engine in the background, so the document opens noticeably faster after the
@@ -54,8 +102,8 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
-- The interface is now available in eight languages — English, 简体中文,
-  日本語, 한국어, Deutsch, Español, Português and فارسی (right-to-left) —
+- The interface is now available in eight languages — English, 简体中文，
+  日本語，한국어, Deutsch, Español, Português and فارسی (right-to-left) —
   following your browser language, or `?locale=<code>`.
 - Browser AI agents can drive the editor through WebMCP (Chrome origin trial):
   the page registers `open_document_url`, `open_document_buffer`,
