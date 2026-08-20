@@ -23,7 +23,11 @@ export function setUICallbacks(callbacks: { hideControlPanel: () => void; showCo
 // (fileInput.click() below), which display: none does not prevent.
 const fileInput = View('input')
   .attr('type', 'file')
-  .attr('accept', '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv,.pdf')
+  // Must stay in step with DOCUMENT_TYPE_MAP (@ranuts/shared/document-utils): the
+  // engine reads OpenDocument and the legacy text formats too, and leaving them
+  // out here greys them out in the picker for no reason -- the file the user was
+  // sent is right there and cannot be selected.
+  .attr('accept', '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv,.pdf,.odt,.ods,.odp,.rtf,.txt')
   .attr('style', 'display: none')
   .build() as HTMLInputElement;
 document.body.appendChild(fileInput);

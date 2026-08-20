@@ -121,10 +121,39 @@ describe('landing pages', () => {
     const en = readFileSync(homepage, 'utf8');
     const zh = readFileSync(resolve(PUBLIC, 'zh-CN/index.html'), 'utf8');
     const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
-    for (const fmt of ['docx', 'xlsx', 'pptx', 'pdf']) {
+    for (const fmt of ['docx', 'xlsx', 'pptx', 'pdf', 'odt', 'ods', 'odp']) {
       expect(en).toContain(`href="/open/${fmt}"`);
       expect(zh).toContain(`href="/zh-CN/open/${fmt}"`);
       expect(llms).toContain(`${ORIGIN}/open/${fmt}`);
+    }
+  });
+
+  it('every /convert/* page is cross-linked from both homepages and llms.txt', () => {
+    const en = readFileSync(homepage, 'utf8');
+    const zh = readFileSync(resolve(PUBLIC, 'zh-CN/index.html'), 'utf8');
+    const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
+    // The homepages link one page per family (the cards would not fit seven of
+    // them); the rest are reachable from those pages and from llms.txt.
+    for (const conv of ['docx-to-pdf', 'xlsx-to-csv']) {
+      expect(en).toContain(`href="/convert/${conv}"`);
+      expect(zh).toContain(`href="/zh-CN/convert/${conv}"`);
+    }
+    for (const conv of ['docx-to-pdf', 'xlsx-to-pdf', 'pptx-to-pdf', 'xlsx-to-csv', 'csv-to-xlsx']) {
+      expect(llms).toContain(`${ORIGIN}/convert/${conv}`);
+    }
+  });
+
+  /**
+   * llms.txt exists so an assistant can answer questions about this tool without
+   * crawling it. Answering well means knowing where it does NOT fit -- a file it
+   * cannot handle, a workflow it does not support -- so the boundaries are part
+   * of the contract, not an afterthought.
+   */
+  it('llms.txt states the limitations, not just the features', () => {
+    const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
+    expect(llms).toMatch(/^## Limitations/m);
+    for (const boundary of [/memory/i, /collaborat/i, /does not\s+rewrite|NOT rewrite/i]) {
+      expect(llms, `llms.txt limitations must mention ${boundary}`).toMatch(boundary);
     }
   });
 

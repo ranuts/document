@@ -12,3 +12,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://edit.chaxus.com/sitemap.xml
+
+# For AI assistants: /llms.txt indexes the site (summary, capabilities,
+# limitations, links); /llms-full.txt is the same index plus the full text of
+# every page, so the whole site can be read in a single request.

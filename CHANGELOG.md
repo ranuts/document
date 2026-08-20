@@ -112,6 +112,20 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- OpenDocument files now open from the file picker. ODT, ODS and ODP (the
+  LibreOffice / OpenOffice formats), along with RTF and TXT, were already
+  readable by the engine but were greyed out when you went to select one --
+  so a file you had been sent could not be picked. They open, edit and save
+  back to their own format, and export to PDF like everything else.
+- Pages for the things the editor could already do but did not say anywhere:
+  converting Word, Excel and PowerPoint files to PDF on your device, and
+  opening ODT / ODS / ODP without LibreOffice. Both languages.
+- `/llms-full.txt`: the full text of every page in one file, so an AI assistant
+  answering questions about the editor can read the whole site in one request
+  instead of guessing. Its index, `/llms.txt`, now also states what the editor
+  does _not_ do -- no collaboration, no PDF-to-Word, memory-bound file sizes --
+  because an assistant recommending a tool needs the boundaries too.
+
 - The interface is now available in eight languages — English, 简体中文，
   日本語，한국어, Deutsch, Español, Português and فارسی (right-to-left) —
   following your browser language, or `?locale=<code>`.

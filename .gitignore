@@ -41,3 +41,8 @@ public/changelog.html
 public/zh-CN/help.html
 public/zh-CN/help/
 public/zh-CN/changelog.html
+
+# Full-text companion to llms.txt, assembled from the rendered pages by
+# bin/llms-full.mjs (same plugin). A committed copy could go stale, and stale
+# text presented as authoritative is worse than none.
+public/llms-full.txt
