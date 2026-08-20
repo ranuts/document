@@ -115,6 +115,18 @@
         ]
       }
     </script>
+
+    <!-- Open source: signals a trustworthy, self-hostable tool to search engines and AI assistants. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "Online Document Editor",
+        "codeRepository": "https://github.com/ranuts/document",
+        "programmingLanguage": "TypeScript",
+        "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+      }
+    </script>
   </head>
 
   <body>
@@ -244,6 +256,26 @@
                 <h3>打开 PDF</h3>
                 <p>阅读、评论、批注 PDF 再另存回去——不上传任何内容。</p>
                 <span class="fmt-go">打开 PDF →</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/zh-CN/open/odt">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.ODT / .ODS / .ODP</div>
+                <h3>打开 OpenDocument 文件</h3>
+                <p>LibreOffice 的格式同样可以打开——阅读或编辑后，存回 ODT、DOCX 或 PDF。</p>
+                <span class="fmt-go">打开 ODT &rarr;</span>
+              </div>
+            </r-card>
+          </a>
+          <a class="fmt" href="/zh-CN/convert/docx-to-pdf">
+            <r-card hoverable>
+              <div class="card-body">
+                <div class="k">.DOCX &rarr; .PDF</div>
+                <h3>转换为 PDF</h3>
+                <p>Word、Excel 和 PowerPoint 文件在你的设备上变成 PDF——没有上传队列。</p>
+                <span class="fmt-go">转换为 PDF &rarr;</span>
               </div>
             </r-card>
           </a>
@@ -380,6 +412,10 @@
           <a href="/zh-CN/offline-document-editor">离线编辑器</a>
           <a href="/zh-CN/no-signup-document-editor">免注册</a>
           <a href="/zh-CN/open/docx">打开 DOCX</a>
+          <a href="/zh-CN/open/odt">ODT</a>
+          <a href="/zh-CN/open/ods">ODS</a>
+          <a href="/zh-CN/open/odp">ODP</a>
+          <a href="/zh-CN/convert/docx-to-pdf">DOCX → PDF</a>
           <a href="/zh-CN/convert/xlsx-to-csv">XLSX → CSV</a>
           <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">GitHub</a>
         </nav>

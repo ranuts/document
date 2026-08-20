@@ -3,6 +3,7 @@ import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
 import { PAGES, generate as generatePages } from './bin/build-pages.mjs';
+import { generate as generateLlmsFull } from './bin/llms-full.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -60,6 +61,9 @@ const generatedPages = (): Plugin => {
   for (const page of PAGES) for (const src of Object.values(page.sources)) sources.add(path.resolve(__dirname, src));
   const run = () => {
     const outputs = generatePages();
+    // After the markdown pages: llms-full.txt is assembled from the rendered
+    // pages, so /help and /changelog have to exist before it is written.
+    generateLlmsFull();
     return outputs.length;
   };
   return {
