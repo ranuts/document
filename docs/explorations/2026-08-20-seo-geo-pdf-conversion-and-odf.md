@@ -43,11 +43,11 @@ Smallpdf / ILovePDF / Adobe 的在线转换**全部要上传文件**，这个不
 动手前先实测能力是否真的存在，而不是信任那张映射表。手拼最小 ODF 容器
 （mimetype + META-INF/manifest.xml + content.xml）走真实编辑器：
 
-| 格式 | 打开 | 存回原格式 | 导出 PDF |
-| --- | --- | --- | --- |
-| odt | ✓ `isDocumentLoadComplete` | ✓ `PK\x03\x04` | ✓ `%PDF` |
-| ods | ✓ | ✓ | ✓ |
-| odp | ✓ | ✓ | ✓ |
+| 格式 | 打开                       | 存回原格式     | 导出 PDF |
+| ---- | -------------------------- | -------------- | -------- |
+| odt  | ✓ `isDocumentLoadComplete` | ✓ `PK\x03\x04` | ✓ `%PDF` |
+| ods  | ✓                          | ✓              | ✓        |
+| odp  | ✓                          | ✓              | ✓        |
 
 三项全通，所以落地页可以诚实地写"打开、编辑、存回 ODF，也能导出 PDF"。
 `accept` 补上 `.odt,.ods,.odp,.rtf,.txt`，新增 `open/odt`、`open/ods`、`open/odp`（en + zh）。
@@ -110,11 +110,11 @@ llms.txt、首页卡片，否则先红。因此：
 
 ## 反向验证（约定 3）
 
-| 拆掉什么 | 哪个用例变红 |
-| --- | --- |
-| `accept` 恢复成不含 ODF 的旧值 | `odf-formats.spec.ts` → `the picker must offer .odt` |
+| 拆掉什么                          | 哪个用例变红                                                                       |
+| --------------------------------- | ---------------------------------------------------------------------------------- |
+| `accept` 恢复成不含 ODF 的旧值    | `odf-formats.spec.ts` → `the picker must offer .odt`                               |
 | 删掉 llms.txt 的 Limitations 一节 | `landing-pages.test.ts` → `llms.txt states the limitations, not just the features` |
-| 首页去掉 `/open/ods` 链接 | `landing-pages.test.ts` → `every /open/* format page is cross-linked...` |
+| 首页去掉 `/open/ods` 链接         | `landing-pages.test.ts` → `every /open/* format page is cross-linked...`           |
 
 ODF 的打开/存回/转 PDF 由 `odf-formats.spec.ts` 走真实编辑器覆盖——这条不是靠拆修复
 验证的，而是它一开始就是先跑实测、确认能力存在，才动手写页面。
