@@ -17,6 +17,15 @@ notes. Entries describe what users experience, not internal refactors.
   service worker) and try again; a full regression campaign against
   real-world documents runs nightly and gates the next release announcement.
 
+### Removed
+
+- The floating "Menu" button in the bottom-right corner of the editor, and the
+  first-run bubble that pointed at it. It sat over the vertical scrollbar just
+  above the zoom bar. Opening and creating documents start from the homepage
+  (or `/editor?new=docx`, `/editor?file=<url>`); the AI assistant opens with
+  `?agent=1`. Theme now follows the switch in the homepage footer -- there is
+  no in-editor theme toggle any more.
+
 ### Changed
 
 - Hovering (or focusing) an Open / New button starts downloading the editor

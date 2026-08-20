@@ -150,8 +150,6 @@ export interface I18nMessages {
   newWord: string;
   newExcel: string;
   newPowerPoint: string;
-  menu: string;
-  menuGuide: string;
   themeLabel: string;
   themeSystem: string;
   themeLight: string;
@@ -225,8 +223,6 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     newWord: '新建 Word',
     newExcel: '新建 Excel',
     newPowerPoint: '新建 PowerPoint',
-    menu: '菜单',
-    menuGuide: '菜单在右下角，悬停即可查看（点击关闭后不再提示）',
     themeLabel: '主题',
     themeSystem: '跟随系统',
     themeLight: '浅色',
@@ -283,8 +279,6 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     newWord: 'New Word',
     newExcel: 'New Excel',
     newPowerPoint: 'New PowerPoint',
-    menu: 'Menu',
-    menuGuide: "Menu is in the bottom right corner, hover to view (click to close, won't show again)",
     themeLabel: 'Theme',
     themeSystem: 'System',
     themeLight: 'Light',
@@ -348,8 +342,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     newWord: 'Word を新規作成',
     newExcel: 'Excel を新規作成',
     newPowerPoint: 'PowerPoint を新規作成',
-    menu: 'メニュー',
-    menuGuide: 'メニューは右下にあります。カーソルを合わせると開きます（閉じると次回から表示されません）',
     themeLabel: 'テーマ',
     themeSystem: 'システム',
     themeLight: 'ライト',
@@ -371,8 +363,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     newWord: '새 Word 문서',
     newExcel: '새 Excel 문서',
     newPowerPoint: '새 PowerPoint 문서',
-    menu: '메뉴',
-    menuGuide: '메뉴는 오른쪽 아래에 있습니다. 마우스를 올리면 열립니다(닫으면 다시 표시되지 않습니다)',
     themeLabel: '테마',
     themeSystem: '시스템',
     themeLight: '라이트',
@@ -394,9 +384,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     newWord: 'Neues Word-Dokument',
     newExcel: 'Neue Excel-Tabelle',
     newPowerPoint: 'Neue PowerPoint-Präsentation',
-    menu: 'Menü',
-    menuGuide:
-      'Das Menü ist unten rechts – zum Öffnen mit der Maus darauf zeigen (nach dem Schließen wird dieser Hinweis nicht mehr angezeigt)',
     themeLabel: 'Design',
     themeSystem: 'System',
     themeLight: 'Hell',
@@ -420,9 +407,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     newWord: 'Nuevo documento de Word',
     newExcel: 'Nueva hoja de Excel',
     newPowerPoint: 'Nueva presentación de PowerPoint',
-    menu: 'Menú',
-    menuGuide:
-      'El menú está abajo a la derecha: pasa el cursor para abrirlo (si lo cierras, no volverá a mostrarse este aviso)',
     themeLabel: 'Tema',
     themeSystem: 'Sistema',
     themeLight: 'Claro',
@@ -445,9 +429,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     newWord: 'Novo documento do Word',
     newExcel: 'Nova planilha do Excel',
     newPowerPoint: 'Nova apresentação do PowerPoint',
-    menu: 'Menu',
-    menuGuide:
-      'O menu fica no canto inferior direito: passe o cursor para abrir (ao fechar, este aviso não aparece novamente)',
     themeLabel: 'Tema',
     themeSystem: 'Sistema',
     themeLight: 'Claro',
@@ -470,9 +451,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     newWord: 'سند Word جدید',
     newExcel: 'کاربرگ Excel جدید',
     newPowerPoint: 'ارائهٔ PowerPoint جدید',
-    menu: 'منو',
-    menuGuide:
-      'منو در گوشهٔ پایین سمت راست است؛ نشانگر را روی آن ببرید تا باز شود (پس از بستن دیگر نمایش داده نمی‌شود)',
     themeLabel: 'پوسته',
     themeSystem: 'سیستم',
     themeLight: 'روشن',

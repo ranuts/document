@@ -8,16 +8,10 @@ import { showLoading } from './loading';
 // These will be passed as callbacks or called after document operations
 let hideControlPanelFn: (() => void) | null = null;
 let showControlPanelFn: (() => void) | null = null;
-let showMenuGuideFn: (() => void) | null = null;
 
-export function setUICallbacks(callbacks: {
-  hideControlPanel: () => void;
-  showControlPanel: () => void;
-  showMenuGuide: () => void;
-}): void {
+export function setUICallbacks(callbacks: { hideControlPanel: () => void; showControlPanel: () => void }): void {
   hideControlPanelFn = callbacks.hideControlPanel;
   showControlPanelFn = callbacks.showControlPanel;
-  showMenuGuideFn = callbacks.showMenuGuide;
 }
 
 // Create a single hidden file input (ranui builder, ecosystem convention)
@@ -29,10 +23,9 @@ const fileInput = View('input')
 document.body.appendChild(fileInput);
 
 export const onCreateNew = async (ext: string): Promise<void> => {
-  // Note: Loading is now shown in the menu button click handler
-  // This function should not show loading again to avoid double loading indicators
+  // Callers own the loading indicator (the control panel shows it around this
+  // call), so showing one here too would stack two of them.
   try {
-    // Always hide control panel and ensure FAB is visible when creating new document
     if (hideControlPanelFn) {
       hideControlPanelFn();
     }
@@ -43,19 +36,13 @@ export const onCreateNew = async (ext: string): Promise<void> => {
     await loadEditorApi();
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
-    // Show menu guide after document is loaded
-    if (showMenuGuideFn) {
-      setTimeout(() => {
-        showMenuGuideFn!();
-      }, 1000);
-    }
   } catch (error) {
     console.error('Error creating new document:', error);
     // Ensure control panel is shown on error
     if (showControlPanelFn) {
       showControlPanelFn();
     }
-    throw error; // Re-throw to let the menu button handler catch it
+    throw error; // Re-throw so the caller can restore its own UI
   }
 };
 
@@ -74,12 +61,6 @@ export const openLocalFile = async (file: File): Promise<void> => {
     });
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
-    // Show menu guide after document is loaded
-    if (showMenuGuideFn) {
-      setTimeout(() => {
-        showMenuGuideFn!();
-      }, 1000);
-    }
   } catch (error) {
     console.error('Error opening document:', error);
     // Ensure control panel is shown on error
@@ -192,13 +173,6 @@ export const openDocumentFromUrl = async (
       isNew: !fileBlob,
       readonly: options?.readonly,
     });
-
-    // Show menu guide after document is loaded
-    if (showMenuGuideFn) {
-      setTimeout(() => {
-        showMenuGuideFn!();
-      }, 1000);
-    }
   } catch (error) {
     console.error('Error opening document from URL:', error);
     alert(`Failed to open document: ${error instanceof Error ? error.message : 'Unknown error'}`);

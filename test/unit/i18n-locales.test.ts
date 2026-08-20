@@ -22,8 +22,6 @@ const CORE_KEYS: Array<keyof I18nMessages> = [
   'newWord',
   'newExcel',
   'newPowerPoint',
-  'menu',
-  'menuGuide',
   'themeLabel',
   'themeSystem',
   'themeLight',
@@ -46,7 +44,7 @@ const CORE_KEYS: Array<keyof I18nMessages> = [
 const SAME_AS_ENGLISH: Partial<Record<string, Array<keyof I18nMessages>>> = {
   de: ['themeSystem'],
   es: ['themeSystem'],
-  pt: ['menu', 'themeSystem'],
+  pt: ['themeSystem'],
 };
 
 const restore = () => {
@@ -88,7 +86,7 @@ describe('shell locales', () => {
     try {
       // The agent panel is deliberately English outside en/zh.
       expect(t('agentSend')).toBe('Send');
-      expect(t('menu')).toBe('Menü');
+      expect(t('uploadDocument')).toBe('Dokument öffnen / bearbeiten');
     } finally {
       restore();
     }
