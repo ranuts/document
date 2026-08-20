@@ -241,7 +241,59 @@ export class L0Collector {
   }
 }
 
-export const test = base.extend<{ l0: L0Collector }>({
+/**
+ * Wait until the server under test answers again.
+ *
+ * Only used where the server can go away mid-run: `wrangler pages dev` is
+ * killed by workerd aborting on a large response (which is why that suite is
+ * single-worker in the first place), and bin/serve-pages-dev.sh restarts it --
+ * about 20 s. Playwright does not notice: its webServer readiness check ran
+ * once at startup, and a retry fires immediately, so the retry lands on the
+ * same dead port and the whole shard goes red for a server that was back
+ * seconds later.
+ *
+ * Bounded: if the server never comes back the test fails on its own timeout,
+ * with the same evidence it would have had anyway.
+ */
+const SERVER_WAIT_MS = 60_000;
+
+/** One request, swallowing the connection error a dead port raises. */
+async function serverAnswers(baseURL: string): Promise<boolean> {
+  try {
+    await fetch(baseURL, { method: 'GET' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function waitForServer(baseURL: string): Promise<void> {
+  const deadline = Date.now() + SERVER_WAIT_MS;
+  for (;;) {
+    if (await serverAnswers(baseURL)) return;
+    if (Date.now() > deadline) throw new Error(`server at ${baseURL} did not come back within ${SERVER_WAIT_MS}ms`);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+}
+
+export const test = base.extend<{ l0: L0Collector; serverUp: void }>({
+  // Opt-in per config (playwright.pages.config.ts sets the variable): every
+  // other suite is served by something that does not fall over mid-run, and
+  // waiting there would only hide a server that failed to start.
+  serverUp: [
+    async ({ baseURL }, use, testInfo) => {
+      if (process.env.E2E_WAIT_FOR_SERVER && baseURL && !(await serverAnswers(baseURL))) {
+        // Pay for the wait out of extra time rather than out of the test's own
+        // budget: the default is 30 s, so a 20 s restart would otherwise leave
+        // 10 s to open a document in and the case would fail anyway -- just
+        // with a less honest message.
+        testInfo.setTimeout(testInfo.timeout + SERVER_WAIT_MS);
+        await waitForServer(baseURL);
+      }
+      await use();
+    },
+    { auto: true },
+  ],
   l0: [
     async ({ page }, use, testInfo) => {
       const collector = new L0Collector(page);
