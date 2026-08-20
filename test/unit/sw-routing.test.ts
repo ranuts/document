@@ -11,12 +11,15 @@
  *   - Document URLs cached by SW → stale content served to editor
  */
 
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const FONT_REGEX = /\.(ttf|woff2?|otf|eot)(\?.*)?$/;
 
 /** Keep in sync with DEPLOY_COUPLED in public/sw.js and the no-cache group in public/_headers. */
-const DEPLOY_COUPLED = /^\/(?:home|landing)\.css$|^\/lang-switch\.js$|^\/ranui-iife\//;
+const DEPLOY_COUPLED =
+  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch)\.js$|^\/ranui-iife\//;
 
 const isHtmlRequest = (mode: string, pathname: string): boolean =>
   mode === 'navigate' || pathname.endsWith('.html') || pathname === '/' || pathname.endsWith('/');
@@ -140,12 +143,32 @@ describe('SW fetch routing', () => {
  * disk cache and write the stale bytes straight back into the SW cache — the old copy then
  * survived deploy after deploy (`200 OK (from disk cache)` long after the tokens changed).
  */
+describe('the hand-copied DEPLOY_COUPLED', () => {
+  it('is the regex the shipped worker actually uses', () => {
+    // The copy above is a living specification, and a specification nothing
+    // compares to the implementation drifts silently: sw.js could lose a path
+    // from the group and every routing test here would stay green, because
+    // they only ever asked the copy. (Observed while reverse-verifying the
+    // 2026-08-20 additions -- reverting sw.js changed nothing.)
+    const src = readFileSync(resolve(__dirname, '../../public/sw.js'), 'utf8');
+    const shipped = /const DEPLOY_COUPLED =\s*(\/.*\/);/.exec(src)?.[1];
+    expect(shipped).toBe(String(DEPLOY_COUPLED));
+  });
+});
+
 describe('deploy-coupled assets use network-first', () => {
   it('covers the other unhashed, deploy-coupled files', () => {
     for (const path of [
       '/home.css',
       '/landing.css',
       '/lang-switch.js',
+      '/sw-register.js',
+      // The landing pages' two other stable-named scripts. They were on SWR
+      // for the whole route-split era: editing either shipped a deploy whose
+      // landing pages kept running the previous copy, refilling itself from
+      // the browser's disk cache indefinitely.
+      '/open-local.js',
+      '/landing-prefetch.js',
       '/ranui-iife/button.iife.js',
       '/ranui-iife/card.iife.js',
     ]) {

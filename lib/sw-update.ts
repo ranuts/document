@@ -2,12 +2,16 @@
  * Service-worker update policy.
  *
  * Each deploy ships a sw.js with a fresh CACHE_VERSION. The new worker
- * installs and then WAITS (sw.js no longer calls skipWaiting() on install):
- * activating it deletes the previous build's caches, and a page that keeps
- * running the old build with a document open would from then on lazy-load
- * pieces of the new build (sdk-all.js, x2t.wasm.gz, fonts) into an old
- * session -- a mixed-version editor. So the page promotes a waiting worker
- * only when no document is open, and reloads once it takes control.
+ * installs and then either takes over at once or WAITS, and sw.js decides
+ * which: it calls skipWaiting() on install unless activating would discard
+ * vendor assets an open page of the outgoing build still needs (a runtime
+ * cache from a different vendor version -- see wouldDiscardVendorAssets in
+ * public/sw.js). When it waits, activating it later deletes the previous
+ * build's caches, and a page that keeps running the old build with a document
+ * open would from then on lazy-load pieces of the new build (sdk-all.js,
+ * x2t.wasm.gz, fonts) into an old session -- a mixed-version editor. So the
+ * page promotes a waiting worker only when no document is open, and reloads
+ * once it takes control.
  */
 
 export type SwLike = {

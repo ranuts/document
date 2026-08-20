@@ -100,19 +100,53 @@ else
     echo "Warning: $TOKENS_DIST not found, skipping token fingerprint."
 fi
 
-# Inject timestamp into sw.js for versioning
+# Inject the version stamps into sw.js.
+#
+# Two of them, and the difference is the point. The build stamp names the core
+# cache (a new one per deploy). The *vendor* stamp names the runtime cache,
+# which holds sdkjs / web-apps / fonts -- so a deploy that did not touch the
+# vendor tree keeps the same runtime cache, discards nothing on activate, and
+# can take over immediately (see the comment on RUNTIME_CACHE in public/sw.js).
+# While both names carried the build stamp, every deploy looked like it was
+# about to yank an open editor's engine out from under it, so no deploy could
+# activate on its own and users kept running old code until they closed every
+# tab of the site (GitHub #144).
+#
+# Hashed from $DIST_DIR (what is actually served), file contents included, so
+# our own patches inside the vendor tree (x2t_helper.js) count too. `find
+# -exec ... +` rather than a pipe through xargs: some vendor files have spaces
+# in their names ("05_green leaf.pptx"). Sorted, so the value is reproducible:
+# ~1.8s for 2610 files / 616 MB.
 SW_PATH="$DIST_DIR/sw.js"
 if [ -f "$SW_PATH" ]; then
     TIMESTAMP=$(date +%s)
+    if command -v shasum >/dev/null 2>&1; then
+        HASH_CMD="shasum -a 256"
+    else
+        HASH_CMD="sha256sum"
+    fi
+    VENDOR_DIRS=""
+    for dir in "$DIST_DIR/sdkjs" "$DIST_DIR/web-apps" "$DIST_DIR/fonts"; do
+        if [ -d "$dir" ]; then
+            VENDOR_DIRS="$VENDOR_DIRS $dir"
+        fi
+    done
+    if [ -n "$VENDOR_DIRS" ]; then
+        # shellcheck disable=SC2086 # deliberate word splitting: a list of dirs
+        VENDOR_VERSION=$(find $VENDOR_DIRS -type f -exec $HASH_CMD {} + | LC_ALL=C sort | $HASH_CMD | cut -c1-12)
+    else
+        echo "[build] Warning: no vendor tree found; sw.js keeps its dev vendor stamp." >&2
+        VENDOR_VERSION="novendor"
+    fi
     # `sed -i` differs between BSD and GNU, so write to a temp file and move it back —
     # that works identically everywhere. The previous `[[ "$OSTYPE" == darwin* ]]` branch
     # was a bashism, and package.json runs this through `sh`, which ignores the shebang:
     # on Cloudflare's image /bin/sh is dash, where `[[` prints "not found". It survived only
     # because a failing *condition* is exempt from `set -e`, so it silently took the else
     # branch — which happens to be the right one on Linux. Luck, not design.
-    sed "s/SW_VERSION_PLACEHOLDER/$TIMESTAMP/g" "$SW_PATH" > "$SW_PATH.tmp"
+    sed -e "s/SW_VERSION_PLACEHOLDER/$TIMESTAMP/g" -e "s/VENDOR_VERSION_PLACEHOLDER/$VENDOR_VERSION/g" "$SW_PATH" > "$SW_PATH.tmp"
     mv "$SW_PATH.tmp" "$SW_PATH"
-    echo "Service Worker version updated with timestamp: $TIMESTAMP"
+    echo "Service Worker version updated with timestamp: $TIMESTAMP, vendor: $VENDOR_VERSION"
 else
     echo "Warning: $DIST_DIR/sw.js not found, skipping version injection."
 fi

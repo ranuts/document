@@ -37,7 +37,19 @@ describe('public/_headers', () => {
   const cc = (path: string) => rules[path]?.['cache-control'];
 
   it('keeps deploy-coupled files uncacheable (a stale one breaks the shell)', () => {
-    for (const p of ['/sw.js', '/home.css', '/landing.css', '/lang-switch.js', '/ranui-iife/*']) {
+    const deployCoupled = [
+      '/sw.js',
+      '/sw-register.js',
+      '/home.css',
+      '/landing.css',
+      '/lang-switch.js',
+      // Stable-named landing scripts: content changes with the deploy, so the
+      // one combination caching cannot get right (see /ran-tokens above).
+      '/open-local.js',
+      '/landing-prefetch.js',
+      '/ranui-iife/*',
+    ];
+    for (const p of deployCoupled) {
       expect(cc(p), p).toBe('no-cache');
     }
   });
