@@ -1,5 +1,11 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { X2TConverter, canStreamWasm, sniffAndRebuild, x2tInstantiateError } from '@ranuts/converter';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  X2TConverter,
+  canStreamWasm,
+  fetchWasmResponse,
+  sniffAndRebuild,
+  x2tInstantiateError,
+} from '@ranuts/converter';
 
 // jsdom never runs an injected <script>, so the real scriptOnLoad would hang
 // waiting for a load event. What is under test here is the preparation that
@@ -178,7 +184,10 @@ describe('a failed streaming instantiation settles initialize() instead of hangi
     vi.useFakeTimers();
     try {
       const converter = new X2TConverter() as any;
-      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 503, body: null } as unknown as Response));
+      // 403, not a 5xx: a status the server is going to keep giving, so the
+      // failure is final and immediate. The retried ones are in their own
+      // describe below.
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 403, body: null } as unknown as Response));
       await converter.loadScript();
       (window as any).Module.onRuntimeInitialized = undefined;
 
@@ -192,7 +201,7 @@ describe('a failed streaming instantiation settles initialize() instead of hangi
       await vi.advanceTimersByTimeAsync(0);
       process.off('unhandledRejection', onRejection);
 
-      await expect(pending).rejects.toThrow(/^X2T module failed to instantiate: .*503/);
+      await expect(pending).rejects.toThrow(/^X2T module failed to instantiate: .*403/);
     } finally {
       vi.useRealTimers();
     }
@@ -213,5 +222,71 @@ describe('x2tInstantiateError', () => {
 
   it('survives a thrown non-Error', () => {
     expect(x2tInstantiateError('offline').message).toBe('X2T module failed to instantiate: offline');
+  });
+});
+/**
+ * The wasm fetch survives a transient answer.
+ *
+ * Cloudflare Pages served a 500 for x2t.wasm.gz mid-run on 2026-08-20
+ * (PR #159) and the editor told the user the document could not be opened. The
+ * only recovery a host has above this is rebuilding the whole editor and
+ * re-fetching everything -- and in that run it landed in the same bad window.
+ * Fake timers throughout: what is under test is WHICH answers are asked again,
+ * not how long the backoff waits.
+ */
+describe('fetchWasmResponse', () => {
+  const serving = (...answers: Array<{ ok: boolean; status: number } | Error>) => {
+    const fetchSpy = vi.fn(() => {
+      const answer = answers.shift();
+      if (answer === undefined) throw new Error('fetch called more times than the test served answers');
+      return answer instanceof Error ? Promise.reject(answer) : Promise.resolve(answer as unknown as Response);
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+    return fetchSpy;
+  };
+
+  /** Run the whole backoff without spending it. */
+  const drive = async <T>(promise: Promise<T>): Promise<T> => {
+    const settled = promise.catch((error: unknown) => ({ __thrown: error }) as never);
+    await vi.advanceTimersByTimeAsync(10_000);
+    const result = (await settled) as { __thrown?: unknown };
+    if (result && typeof result === 'object' && '__thrown' in result) throw result.__thrown;
+    return result as T;
+  };
+
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it('asks again after a 5xx and returns the good answer', async () => {
+    const good = { ok: true, status: 200 };
+    const fetchSpy = serving({ ok: false, status: 500 }, good);
+
+    await expect(drive(fetchWasmResponse('x2t.wasm.gz'))).resolves.toBe(good);
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('asks again after a rejected fetch -- a dropped connection, an offline moment', async () => {
+    const good = { ok: true, status: 200 };
+    const fetchSpy = serving(new TypeError('Failed to fetch'), good);
+
+    await expect(drive(fetchWasmResponse('x2t.wasm.gz'))).resolves.toBe(good);
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('gives up after three tries and reports the status', async () => {
+    const fetchSpy = serving({ ok: false, status: 500 }, { ok: false, status: 502 }, { ok: false, status: 503 });
+
+    await expect(drive(fetchWasmResponse('x2t.wasm.gz'))).rejects.toThrow(/Failed to fetch x2t WASM at .*503/);
+    expect(fetchSpy).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not ask again for a 404 -- a deployment fact, and retrying only delays the error', async () => {
+    const fetchSpy = serving({ ok: false, status: 404 });
+
+    await expect(drive(fetchWasmResponse('x2t.wasm.gz'))).rejects.toThrow(/Failed to fetch x2t WASM at .*404/);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });

@@ -348,6 +348,14 @@
     const PDF_CHANGES_PATH = PDF_CHANGES_DIR + '/changes0.json';
     const PDF_PARAMS_PATH = '/working/pdf-params.xml';
 
+    /**
+     * Whether a status means "the server failed", as opposed to "the file is
+     * not there". Only the first is worth asking again (see fetchWasmResponse).
+     */
+    function isTransientStatus(status) {
+        return status >= 500 || status === 408 || status === 429;
+    }
+
     function X2TConverter() {
         this.x2tModule = null;
         this.initPromise = null;
@@ -367,6 +375,12 @@
         // deploy limit, so only the gzipped copy is shipped and decompressed
         // in the browser (see prepareWasmBinary).
         this.WASM_GZ_PATH = '../../../../sdkjs/common/wasm/x2t/x2t.wasm.gz'
+        // Total tries for that fetch, and the step of the linear backoff
+        // between them (0.5 s, then 1 s). Small on purpose: a CDN blip is over
+        // in a moment, and anything longer is time the user spends watching a
+        // spinner for a failure that is not going away.
+        this.WASM_FETCH_ATTEMPTS = 3;
+        this.WASM_FETCH_BACKOFF_MS = 500;
         this.binFileName = 'Editor.bin';
 
         this.DOCUMENT_TYPE_MAP = {
@@ -418,14 +432,57 @@
     // by the time we read it), others serve the raw gzip bytes. Detect which
     // by the leading magic bytes and only decompress a real gzip payload
     // (`1f 8b`), passing through an already-raw wasm module (`00 61 73 6d`).
+    //
+    // Transient failures are asked again before anyone above hears about them:
+    // this is a 9.4 MB asset off a CDN, and one bad answer to it currently
+    // costs the whole open. Cloudflare Pages served a 500 for exactly this
+    // file mid-run on 2026-08-20 (PR #159) and the editor reported the
+    // document as unopenable; the recovery that exists above -- rebuilding the
+    // entire editor frame, re-fetching everything -- is far more expensive
+    // than asking twice more, and it happened to land in the same bad window.
+    // Retried only when the server says it failed (5xx / 408 / 429) or the
+    // fetch itself rejected: a 404 or a 403 is a deployment fact, and retrying
+    // only delays the error the user has to see. Nothing is retained between
+    // attempts, so this does not add to the peak the streaming path exists to
+    // keep down.
     X2TConverter.prototype.fetchWasmResponse = function () {
         var gzPath = this.WASM_GZ_PATH;
-        return fetch(gzPath).then(function (response) {
-            if (!response.ok) {
-                throw new Error("Failed to fetch x2t WASM at '" + gzPath + "' (" + response.status + ')');
-            }
-            return response;
-        });
+        var attempts = this.WASM_FETCH_ATTEMPTS;
+        var backoffMs = this.WASM_FETCH_BACKOFF_MS;
+
+        var wait = function (ms) {
+            return new Promise(function (resolve) {
+                setTimeout(resolve, ms);
+            });
+        };
+
+        var attempt = function (n) {
+            var again = function (error) {
+                if (n >= attempts) throw error;
+                console.warn('[x2t] retrying the WASM fetch after', error && error.message ? error.message : error);
+                return wait(backoffMs * n).then(function () {
+                    return attempt(n + 1);
+                });
+            };
+            return fetch(gzPath).then(
+                function (response) {
+                    if (response.ok) return response;
+                    var failure = new Error(
+                        "Failed to fetch x2t WASM at '" + gzPath + "' (" + response.status + ')',
+                    );
+                    if (isTransientStatus(response.status)) return again(failure);
+                    throw failure;
+                },
+                // A rejected fetch is a network fault (dropped connection,
+                // DNS, an offline moment), which is the other half of what a
+                // second ask fixes.
+                function (error) {
+                    return again(error);
+                },
+            );
+        };
+
+        return attempt(1);
     };
 
     // Whether the module can be compiled straight off the network, without the

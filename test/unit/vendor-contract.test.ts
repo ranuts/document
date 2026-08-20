@@ -79,6 +79,10 @@ describe('vendor contract sentinel', () => {
       // instead of stalling until the 60 s init timeout. Losing it costs no
       // test but a minute of spinner per failed x2t load.
       'X2T module failed to instantiate',
+      // One bad answer from the CDN for a 9.4 MB file used to cost the whole
+      // open (a Cloudflare 500 mid-run, PR #159). A re-vendored helper would
+      // drop the retry as silently as it would drop the streaming path.
+      'WASM_FETCH_ATTEMPTS',
     ]) {
       expect(src.includes(symbol), `x2t_helper: missing '${symbol}'`).toBe(true);
     }

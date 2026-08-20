@@ -1,7 +1,7 @@
 import {
   createObjectURL,
   decodeTextBytes,
-  fetchMaybeGzip,
+  gunzipMaybe,
   getExtensions,
   isHtmlDocument,
   isZipContainer,
@@ -167,6 +167,56 @@ export async function sniffAndRebuild(body: ReadableStream<Uint8Array>): Promise
   return isGzip ? rebuilt.pipeThrough(inflate) : rebuilt;
 }
 
+/** Total tries for the x2t WASM fetch, and the step of the linear backoff. */
+const WASM_FETCH_ATTEMPTS = 3;
+const WASM_FETCH_BACKOFF_MS = 500;
+
+/**
+ * Whether a status means "the server failed", as opposed to "the file is not
+ * there". Only the first is worth asking again.
+ */
+const isTransientStatus = (status: number): boolean => status >= 500 || status === 408 || status === 429;
+
+const wait = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Fetch the x2t WASM, asking again when the answer was transient.
+ *
+ * This is a 9.4 MB asset off a CDN and one bad answer to it costs the whole
+ * open: Cloudflare Pages served a 500 for exactly this file mid-run on
+ * 2026-08-20 (PR #159) and the editor reported the document as unopenable. The
+ * recovery a host has above this -- rebuilding the whole editor and re-fetching
+ * everything -- is far more expensive than asking twice more, and in that run
+ * it landed in the same bad window.
+ *
+ * Retried only when the server says it failed (5xx / 408 / 429) or the fetch
+ * itself rejected (a dropped connection, an offline moment); a 404 or a 403 is
+ * a deployment fact, and retrying only delays the error the user has to see.
+ * Nothing is retained between attempts, so this adds nothing to the peak the
+ * streaming path exists to keep down.
+ *
+ * Kept in step with `fetchWasmResponse` in the vendor-side loader
+ * (public/sdkjs/common/wasm/x2t/x2t_helper.js).
+ */
+export async function fetchWasmResponse(gzPath: string): Promise<Response> {
+  for (let attempt = 1; ; attempt += 1) {
+    let response: Response;
+    try {
+      response = await fetch(gzPath);
+    } catch (error) {
+      if (attempt >= WASM_FETCH_ATTEMPTS) throw error;
+      console.warn('[x2t] retrying the WASM fetch after', error);
+      await wait(WASM_FETCH_BACKOFF_MS * attempt);
+      continue;
+    }
+    if (response.ok) return response;
+    const failure = new Error(`Failed to fetch x2t WASM at '${gzPath}' (${response.status})`);
+    if (attempt >= WASM_FETCH_ATTEMPTS || !isTransientStatus(response.status)) throw failure;
+    console.warn('[x2t] retrying the WASM fetch after', failure.message);
+    await wait(WASM_FETCH_BACKOFF_MS * attempt);
+  }
+}
+
 /**
  * The error a failed streaming instantiation reports.
  *
@@ -271,8 +321,7 @@ export class X2TConverter {
     ): Record<string, never> => {
       void (async () => {
         try {
-          const response = await fetch(gzPath);
-          if (!response.ok) throw new Error(`Failed to fetch x2t WASM at '${gzPath}' (${response.status})`);
+          const response = await fetchWasmResponse(gzPath);
           if (!response.body) throw new Error('x2t WASM response has no body to stream');
           const stream = await sniffAndRebuild(response.body);
           // Our own Content-Type: a host's type for a .gz file is whatever it
@@ -328,8 +377,12 @@ export class X2TConverter {
 
     // The asset is published gzipped, but whether the browser already decoded
     // it depends on the host's Content-Encoding — the magic number decides,
-    // not the URL (ranuts fetchMaybeGzip).
-    const bytes = await fetchMaybeGzip(this.WASM_GZ_PATH);
+    // not the URL (ranuts gunzipMaybe). Fetched through fetchWasmResponse
+    // rather than ranuts' fetchMaybeGzip so this path survives the same
+    // transient CDN answers the streaming one does; the sniff-and-inflate half
+    // is still the ecosystem's.
+    const response = await fetchWasmResponse(this.WASM_GZ_PATH);
+    const bytes = await gunzipMaybe(new Uint8Array(await response.arrayBuffer()));
     const wasmBinary = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
 
     // Pre-seed the global Module so x2t.js (which reuses an existing global
