@@ -157,6 +157,25 @@ describe('landing pages', () => {
     }
   });
 
+  /**
+   * The WebMCP page names the tools it advertises. A tool renamed in
+   * lib/web-mcp.ts and not here leaves the page telling agents to call
+   * something that no longer exists, which is worse than not listing them.
+   */
+  it('the WebMCP page lists exactly the tools the adapter registers', async () => {
+    const { buildTools } = await import('../../lib/web-mcp');
+    const names = buildTools().map((t) => t.name);
+    for (const locale of ['', '/zh-CN']) {
+      const file = resolve(PUBLIC, `${locale}/webmcp-document-editor.html`.replace(/^\//, ''));
+      const html = readFileSync(file, 'utf8');
+      for (const name of names) {
+        expect(html, `${locale || '/'}webmcp page must mention ${name}`).toContain(name);
+      }
+    }
+    const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
+    for (const name of names) expect(llms, `llms.txt must mention ${name}`).toContain(name);
+  });
+
   it('zh-CN CTAs stay in Chinese; "open your <format>" never lands on a blank new docx', () => {
     const allowed = new Set(['/zh-CN/', '/editor?locale=zh-CN&amp;new=docx', '/embed-demo.html']);
     for (const { route, html } of pages.filter((p) => p.route.startsWith('/zh-CN/') && p.route !== '/zh-CN/')) {

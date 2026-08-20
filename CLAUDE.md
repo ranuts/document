@@ -520,40 +520,57 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
 
 ## 技术方向评估
 
-### WebMCP (navigator.modelContext.registerTool)
+### WebMCP（浏览器 Agent 工具）— 已实现，见 `lib/web-mcp.ts`
 
-**结论：技术可行，时机过早，暂缓实现。**
+**状态：已上线**（2026-08-16 接入，2026-08-21 补齐）。本节曾长期写着"暂缓实现"，
+与代码不符，已更正。
 
-WebMCP 是 W3C Web Machine Learning Community Group 的提案，允许网页向浏览器 AI Agent 注册可调用的工具：
+WebMCP 让页面向浏览器内的 AI Agent 注册结构化工具，Agent 直接调用而不必去
+"看"和"点"界面。本站是典型的动词站点（打开 / 转换 / 导出 / 预览），而
+`embed-api.ts` 早就把这些动词定义成了消息协议，所以适配层很薄——同一批内部函数
+换一个出口。
 
-```javascript
-navigator.modelContext.registerTool({
-  name: 'open_document',
-  description: '打开一个文档文件',
-  inputSchema: { type: 'object', properties: { url: { type: 'string' } } },
-  execute: async ({ url }) => {
-    /* ... */
-  },
-});
-```
+**7 个工具**（顺序即分组：打开 → 新建 → 导出 → 读取 → 模式 → 状态）：
 
-**与本项目的契合度**：现有 `embed-api.ts` 已通过 `postMessage` 实现了几乎相同的概念，两者可以直接映射：
+| 工具                   | 说明                                               |
+| ---------------------- | -------------------------------------------------- |
+| `open_document_url`    | 从 URL 打开（浏览器自己 fetch，不上传）            |
+| `open_document_buffer` | 从 base64 字节打开                                 |
+| `create_document`      | 新建空白 document / spreadsheet / presentation     |
+| `save_document`        | 导出，可转格式；返回 blob URL（小文件附 data URL） |
+| `get_document_text`    | 读取正文，让 Agent 不必导出就能回答内容问题        |
+| `set_readonly`         | 运行时切只读                                       |
+| `get_document_state`   | 是否有文档、文件名、只读状态                       |
 
-| embed-api 消息          | 对应 WebMCP 工具         |
-| ----------------------- | ------------------------ |
-| `document:open-url`     | `open_document_from_url` |
-| `document:open-buffer`  | `open_document_file`     |
-| `document:save`         | `save_document`          |
-| `document:set-readonly` | `set_readonly`           |
-| `document:get-state`    | `get_document_state`     |
+**几条约束，改这块前必须知道**：
 
-**暂缓原因**：
+1. **只在顶层窗口注册**。跨域 iframe 需要父页面加 `allow="tools"`，与 embed
+   场景冲突，所以 `initWebMcp` 检测到自己在 frame 里就直接返回空。
+   `webmcp.spec.ts` 有用例钉死。
+2. **结果必须可 JSON 序列化**。`save_document` 因此返回 blob URL 而不是 File；
+   小于 `INLINE_DATA_URL_MAX_BYTES`（2 MB）时附带 data URL，因为 Agent 不一定
+   读得了 blob:。
+3. **API 位置在迁移中**：2026-07 从 `navigator.modelContext` 移到
+   `document.modelContext`，`findModelContext` 两处都探。所有 WebMCP 特有的形状
+   都关在这一个文件里，将来规范再变只改这里。
+4. **格式清单必须派生，不能手写**。`OPENABLE_EXTENSIONS` 从
+   `DOCUMENT_TYPE_MAP` 算出来——手写的那版曾经落后于引擎，Agent 被告知
+   odt/ods/odp/rtf/txt 不支持，而引擎一直读得了。单测钉死两者相等。
+5. **工具层是共用的**。`get_document_text` 直接复用
+   `lib/agent-plugin/tools.ts` 的实现（`@ranuts/agent-core` 的类型注释里写明
+   工具是 transport-agnostic 的），不要在 web-mcp 里另写一份。
+   `editor-bridge.ts` 零 import，所以复用不带来 bundle 成本。
 
-1. 仅 Chrome 146+（2026 年 2 月）支持且需手动开启 flag，普通用户覆盖率接近零
-2. 跨域 iframe 默认禁用，需父页面加 `allow="tools"`，与 embed 场景冲突
-3. Firefox / Safari 无明确支持时间表
+**已知缺口（实测 v9，见 docs/explorations/2026-08-21-webmcp-completion.md）**：
+引擎只对文字文档提供全文读取，表格和演示文稿返回空字符串。空字符串是有歧义的
+（"文档是空的"和"读不出来"长得一样），所以 `get_document_text` 对非 word 文档
+显式返回 `supported: false` 加一句改用 `save_document` 的提示，而不是让 Agent
+以为文件是空的。同一轮实测还发现 `agent-plugin` 的 `set_cell`
+（`asc_setCellValue` 在 v9 已不存在）和 `set_review_mode`（`asc_SetTrackRevisions`
+仅 word 有）在 v9 下失效——那是 agent 面板的问题，未在此处修。
 
-**后续时机**：待 Chrome 稳定版默认开启、Firefox 表态后再实现。届时新建 `lib/web-mcp.ts`，复用 `embed-api.ts` 现有的处理逻辑即可，改动量很小。
+**浏览器支持**：Chrome origin trial 阶段，Firefox / Safari 无时间表。所以这是
+纯增量能力：`findModelContext` 找不到就整个 no-op，对普通用户零影响。
 
 ### OnlyOffice Agent 协同编辑（WebLLM 离线 + pi agent 云端）
 

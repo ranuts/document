@@ -19,6 +19,15 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Browser AI agents were told this editor could not open OpenDocument, RTF or
+  plain-text files. It always could -- the list the tools advertised had been
+  written out by hand and fallen behind the engine. It is now derived from the
+  engine's own format table, so it cannot drift again.
+- An agent asking for the text of a spreadsheet or presentation used to get an
+  empty answer, which reads as "this file is empty". The engine only exposes
+  full text for word-processing documents, and the tool now says exactly that
+  and points at exporting instead.
+
 - A document that fails to open because the browser cannot allocate memory for
   the conversion engine no longer claims the file "may be corrupted, in an
   unsupported format, or not what its extension says". The file is fine: the
@@ -111,6 +120,14 @@ notes. Entries describe what users experience, not internal refactors.
   fonts loaded on demand instead of up front.
 
 ### Added
+
+- Browser AI agents can now create a document and read one. The WebMCP tool set
+  gains `create_document` (a new Word / Excel / PowerPoint file) and
+  `get_document_text`, which lets an agent answer questions about what a
+  document says without exporting it first. As before, everything runs on your
+  device -- the tools call the same code the buttons do, and nothing is
+  uploaded. A page explaining the whole thing is at `/webmcp-document-editor`,
+  and the help center has a section on it.
 
 - OpenDocument files now open from the file picker. ODT, ODS and ODP (the
   LibreOffice / OpenOffice formats), along with RTF and TXT, were already
