@@ -1,3 +1,4 @@
+import { FONT_SYSTEM_WAIT_MS } from '../../lib/onlyoffice/font-system';
 import { expect, test } from './lib/l0';
 
 declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
@@ -264,14 +265,25 @@ test.describe('open retry after an environment failure (real editor)', () => {
   // nothing to do with the code under test. CI runs the tagged cases in a
   // second pass with the runner to itself -- `pnpm run test:e2e:serial`
   // locally, and the pairing is pinned by test/unit/workflow-contract.test.ts.
-  test('waiting for the font system costs a fraction of a second, not seconds @serial', async ({ page }) => {
+  test('waiting for the font system never degrades to a fontless import @serial', async ({ page }) => {
     // awaitFontSystem orders the conversion behind the font system instead of
-    // letting it walk a half-built one. What that ordering costs is measured
-    // here rather than assumed: a warm local run waits ~200 ms (four poll
-    // intervals), a cold one waits zero because the fonts are ready about a
-    // second before the x2t module even loads. The bound is what matters --
-    // an environment where fonts systematically lose the race would add
-    // seconds to every open, and this test is how that shows up.
+    // letting it walk a half-built one. This used to bound the wait itself at
+    // 2 s, on the measurement that fonts were ready ~1 s BEFORE x2t so the wait
+    // was near zero. Serving the vendored tree cache-first (public/sw.js)
+    // reversed that pair -- x2t arrives first now and the wait is the normal
+    // path -- which left the old bound standing for nothing: total open time is
+    // unchanged, the conversion simply waits where it used to be waited for.
+    //
+    // What still matters is the outcome, so that is what is asserted now:
+    //   - the wait must not reach FONT_SYSTEM_WAIT_MS, because that is the
+    //     branch that silently imports the document with no fonts at all (#146)
+    //   - the open as a whole must stay quick, which is the "adds seconds to
+    //     every open" regression the old bound was really there to catch
+    const fontlessWarnings: string[] = [];
+    page.on('console', (message) => {
+      if (message.text().includes('without fonts')) fontlessWarnings.push(message.text());
+    });
+    const startedAt = Date.now();
     await page.goto('/embed-demo.html');
     await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
 
@@ -309,9 +321,17 @@ test.describe('open retry after an environment failure (real editor)', () => {
       return null;
     });
 
+    const openedInMs = Date.now() - startedAt;
+
     // null would mean fetchFonts never ran at all, which is itself a change
     // worth failing on: the conversion is supposed to go through the guard.
     expect(waited).not.toBeNull();
-    expect(waited).toBeLessThan(2_000);
+    // Reaching the cap IS the fontless-import branch: `waited` only gets there
+    // when the font system was still not ready.
+    expect(waited, 'the wait hit the cap, so the document was imported with no fonts').toBeLessThan(
+      FONT_SYSTEM_WAIT_MS,
+    );
+    expect(fontlessWarnings, 'the conversion fell back to a fontless import').toEqual([]);
+    expect(openedInMs, 'opening got slower, not just differently ordered').toBeLessThan(60_000);
   });
 });
