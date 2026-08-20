@@ -75,7 +75,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
     readonly.ts           # 运行时只读（挂载永远可编辑，加载后加 restriction）
     ui-theme.ts           # 默认经典主题与站点主题跟随
     file-helpers.ts       # 文件名/MIME/字节形状小工具
-  ui.ts                 # 控制面板、菜单、FAB 等 UI 组件
+  ui.ts                 # 落地 hero 显隐 + 控制面板（右下角 Menu FAB 已于 2026-08-20 移除）
   analytics.ts          # Cloudflare Web Analytics（刻意不用 GA；线上实际走 CF 面板边缘注入，因此 embed 视图会被计入、/embed-demo 双计，读数规则见 docs/explorations/2026-08-17-analytics-edge-injection-double-count.md）
   pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/

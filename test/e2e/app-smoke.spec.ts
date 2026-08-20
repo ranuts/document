@@ -8,9 +8,10 @@ test('homepage is the static landing: hero present, no editor bundle', async ({ 
 
   await expect(page.locator('#landing-hero')).toBeVisible();
   await expect(page.locator('#hero-open')).toBeVisible();
-  // Route split: / never mounts the editor shell.
+  // Route split: / never mounts the editor shell, so nothing the editor
+  // bundle builds is on the page.
   await expect(page.locator('#iframe')).toHaveCount(0);
-  await expect(page.locator('#fab-container')).toHaveCount(0);
+  await expect(page.locator('#control-panel-container')).toHaveCount(0);
   expect(page.url()).not.toContain('/editor');
   expect(pageErrors).toEqual([]);
 });
@@ -25,8 +26,11 @@ test('/editor?new=docx mounts the editor shell; legacy /?new=docx redirects ther
   // The #iframe placeholder is replaced by the DocsAPI iframe (name=frameEditor,
   // no id) as soon as the editor mounts, so accept either state.
   await expect(page.locator('#iframe, iframe[name="frameEditor"]').first()).toBeAttached();
-  await expect(page.locator('#fab-container')).toBeAttached();
   await expect(page.locator('#control-panel-container')).toBeAttached();
+  // The bottom-right "Menu" FAB and its first-run guide bubble were removed on
+  // 2026-08-20; nothing should bring them back.
+  await expect(page.locator('#fab-container')).toHaveCount(0);
+  await expect(page.locator('#menu-guide')).toHaveCount(0);
   expect(pageErrors).toEqual([]);
 });
 

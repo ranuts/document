@@ -8,18 +8,10 @@ import { parseReadonly } from '@ranuts/shared/document-utils';
 import { applyDocumentLanguage } from '@ranuts/shared/i18n';
 import { getDocmentObj } from '@ranuts/shared/store';
 import { initAnalytics } from './lib/analytics';
-import {
-  createControlPanel,
-  createFixedActionButton,
-  hideControlPanel,
-  hideLanding,
-  showControlPanel,
-  showMenuGuide,
-} from './lib/ui';
+import { createControlPanel, hideControlPanel, hideLanding, showControlPanel } from './lib/ui';
 import 'ranui/button';
 import 'ranui/card';
 import 'ranui/select';
-import 'ranui/theme-switch';
 import { initWebMcp } from './lib/web-mcp';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
@@ -56,7 +48,6 @@ initAnalytics();
 setUICallbacks({
   hideControlPanel,
   showControlPanel,
-  showMenuGuide,
 });
 
 // Set up UI callbacks for events module. Opening a document over the desktop
@@ -64,7 +55,6 @@ setUICallbacks({
 // hideControlPanel's built-in hideLanding() call.
 setEventUICallbacks({
   hideControlPanel,
-  showMenuGuide,
 });
 
 // Export onCreateNew to window
@@ -77,7 +67,6 @@ window.hideControlPanel = hideControlPanel;
 window.showControlPanel = showControlPanel;
 
 // Initialize UI components
-createFixedActionButton();
 createControlPanel();
 
 // This bundle runs on /editor (editor.html). The homepage / is a static landing

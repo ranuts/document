@@ -140,7 +140,7 @@ describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh'
     const m = await import('@ranuts/shared/i18n');
     expect(m.getLanguage()).toBe(LanguageCode.FA);
     expect(m.getOnlyOfficeLang()).toBe('en');
-    expect(m.t('menu')).toBe('منو');
+    expect(m.t('uploadDocument')).toBe('باز کردن / ویرایش سند');
   });
 
   it('an unsupported ?locale (fa) falls back to the browser language for the editor', async () => {

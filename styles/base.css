@@ -22,9 +22,7 @@ h2 {
   font-size: 1.5rem;
 }
 
-body.embed-mode #control-panel-container,
-body.embed-mode #fab-container,
-body.embed-mode #menu-guide {
+body.embed-mode #control-panel-container {
   display: none !important;
 }
 
@@ -61,190 +59,6 @@ r-button[type='text']::part(content) {
     font-size: 16px;
     padding: 8px 16px;
   }
-}
-
-/* Style for FAB menu buttons — editor chrome consumes the ranui token layer
-   (/ran-tokens.css is linked globally), so dark mode comes for free. */
-.fab-menu-button {
-  font-size: 16px;
-  padding: var(--ran-space-3) var(--ran-space-4);
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  outline: none;
-  cursor: pointer;
-  color: var(--ran-color-text);
-  width: 100%;
-  text-align: left;
-  line-height: 1.5;
-  white-space: nowrap;
-}
-
-/* Menu item hover - entire row background (monochrome, Geist state ladder) */
-.fab-menu-item:hover {
-  background-color: var(--ran-color-bg-hover);
-}
-
-/* Menu guide animations */
-@keyframes guideFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes guideFadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-}
-
-/* FAB Container */
-.fab-container {
-  position: fixed;
-  bottom: var(--ran-space-6);
-  right: var(--ran-space-6);
-  z-index: 1000;
-  display: none;
-}
-
-/* FAB Button */
-.fab-button {
-  min-width: 52px;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: var(--ran-radius-sm);
-  background: var(--ran-gray-alpha-100);
-  border: 1px solid var(--ran-color-border);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ran-color-text);
-  font-size: 14px;
-  font-weight: 500;
-  user-select: none;
-  white-space: nowrap;
-}
-.fab-button:hover {
-  background: var(--ran-gray-alpha-200);
-}
-
-/* FAB Menu */
-.fab-menu {
-  position: absolute;
-  /* Anchoring geometry, not rhythm: derived from the trigger it sits above, so it stays
-     attached if the button's height changes. ranui's spacing scale governs the gaps
-     *between* things — the 100% here is the container's own height. */
-  bottom: calc(100% + var(--ran-space-2));
-  right: 0;
-  background: var(--ran-color-bg-elevated);
-  /* md, not sm: this is a floating surface (a menu panel), and ranui maps sm to controls,
-     md to cards and dialogs. The items inside it are the controls, and they take sm. */
-  border-radius: var(--ran-radius-md);
-  box-shadow: var(--ran-shadow-menu);
-  padding: var(--ran-space-2);
-  display: none;
-  flex-direction: column;
-  gap: var(--ran-space-1);
-  min-width: 220px;
-  opacity: 0;
-  transform: translateY(10px) scale(0.95);
-  transition:
-    opacity var(--ran-motion-duration-base) ease,
-    transform var(--ran-motion-duration-base) ease;
-  pointer-events: none;
-  z-index: 1001;
-  border: 1px solid var(--ran-color-border);
-}
-
-.fab-menu-item {
-  width: 100%;
-  border-radius: var(--ran-radius-sm);
-}
-/* Theme row: a control, not a command -- no hover fill, hairline above. */
-.fab-menu-theme {
-  display: flex;
-  justify-content: center;
-  padding: var(--ran-space-2) var(--ran-space-3);
-  margin-top: var(--ran-space-1);
-  border-top: 1px solid var(--ran-color-border);
-}
-.fab-menu-theme:hover {
-  background-color: transparent;
-}
-
-/* Menu Guide */
-.menu-guide {
-  position: fixed;
-  /* Clears the FAB (24 bottom + 40 tall) plus a gap plus the 10px arrow below this bubble.
-     A sum of derived values, so it is deliberately not a single scale step. */
-  bottom: 90px;
-  right: var(--ran-space-6);
-  background: var(--ran-color-bg-elevated);
-  border-radius: var(--ran-radius-md);
-  /* Overlay tier, not modal: this is a pointer bubble that guides, it does not block.
-     ranui reserves --ran-shadow-modal for r-modal-class dialogs. */
-  box-shadow: var(--ran-shadow-menu);
-  padding: var(--ran-space-6) var(--ran-space-10) var(--ran-space-6) var(--ran-space-6);
-  z-index: 1002;
-  max-width: 300px;
-  animation: guideFadeIn 0.3s ease;
-  pointer-events: auto;
-  border: 1px solid var(--ran-color-border);
-}
-
-/* Pure CSS triangle: the three border widths *are* the arrow's shape, not spacing.
-   Snapping them to the 4px scale would just change how the arrow looks. */
-.menu-guide-arrow {
-  position: absolute;
-  bottom: -10px;
-  right: 40px;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid var(--ran-color-bg-elevated);
-}
-
-.menu-guide-text {
-  font-size: 16px;
-  color: var(--ran-color-text);
-  line-height: 1.6;
-  margin: 0;
-  font-weight: 500;
-  padding-right: 0;
-}
-
-.menu-guide-close {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: var(--ran-color-text-disabled);
-  cursor: pointer;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* No transition on `color`. CSS cannot tell *why* a property changed, so a palette prop
-     listed here also fades when the theme flips its token — this button would cross-fade at
-     its own pace while the rest of the page has already switched. Hover feedback snapping is
-     the intended trade (ranui DESIGN.md §5). */
 }
 
 /* Full-screen loading overlay (lib/loading.ts). gray-alpha rides the token
@@ -488,8 +302,6 @@ r-dropdown[role='listbox'] {
    setting costs nothing and removes the vestibular trigger. Kept to this file's own
    selectors — ranui's components carry their own reduced-motion rules. */
 @media (prefers-reduced-motion: reduce) {
-  .fab-menu,
-  .menu-guide,
   .loading-mask,
   .agent-launcher {
     transition-duration: 0.01ms !important;
