@@ -1,7 +1,10 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { gunzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
+
+import { X2T_INITIAL_PAGES, X2T_MAXIMUM_PAGES } from '../../lib/onlyoffice/wasm-memory';
 
 /**
  * Vendor contract sentinel (docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md
@@ -66,15 +69,88 @@ describe('vendor contract sentinel', () => {
       'sanitizeFileName',
       'Document conversion failed',
       'Conversion failed with code',
+      // Our streaming-instantiation patch: without it the 40.2 MB inflated
+      // module is back in the peak at the exact moment x2t asks for its 283 MB
+      // heap (GitHub #144). A re-vendored helper would drop it silently.
+      'instantiateWasm',
+      'canStreamWasm',
+      'instantiateStreaming',
+      // The prefix that makes a streaming failure reach installOpenFailureGuard
+      // instead of stalling until the 60 s init timeout. Losing it costs no
+      // test but a minute of spinner per failed x2t load.
+      'X2T module failed to instantiate',
     ]) {
       expect(src.includes(symbol), `x2t_helper: missing '${symbol}'`).toBe(true);
     }
   });
 
-  it('x2t.wasm.gz is the verified 9.4 build (hash pinned; re-verify every guard on change)', () => {
-    const bytes = readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz'));
-    const sha256 = createHash('sha256').update(bytes).digest('hex');
-    expect(sha256).toBe('767c5d2cb6808fbdaaece1ea48e29a709399bb594eeb0ccd42633e7c0d5d8e7c');
+  it('x2t.wasm is the verified 9.4 build (content hash pinned; re-verify every guard on change)', () => {
+    // Hash the *decompressed* module, not the .gz around it. That is the
+    // invariant worth pinning -- "these are the vendor's bytes" -- and it
+    // survives recompressing the container, which we do to claw back ~350 KB
+    // off the largest download in the app (zopfli; see the size guard below).
+    // Pinning the container instead would have tied provenance to the choice
+    // of compressor.
+    const gz = readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz'));
+    const wasm = gunzipSync(gz);
+    expect(createHash('sha256').update(wasm).digest('hex')).toBe(
+      '7db02f5c74976a82c3fe630c371a163d5df669a6c84fddc553f03e76f67d3dd2',
+    );
+  });
+
+  it('x2t.wasm.gz stays zopfli-compressed (the largest download in the app)', () => {
+    // 9,483,006 bytes with `zopfli --gzip --i15`, against 9,860,417 as the
+    // vendor shipped it and 10,058,136 from node's zlib at level 9: 377 KB of
+    // the single biggest download, for a container the browser decompresses
+    // identically either way. zopfli is not a repo dependency (one-off, ~15
+    // min of CPU), so this bound is the reminder: after a vendor bump, run
+    //   zopfli --gzip --i15 -c x2t.wasm > x2t.wasm.gz
+    // The content hash above is what proves the bytes inside are unchanged.
+    const size = readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz')).length;
+    expect(size).toBeLessThan(9_600_000);
+  });
+
+  it('x2t.wasm still declares the memory lib/onlyoffice/wasm-memory.ts quotes to the user', () => {
+    // The out-of-memory message says "about 283 MB" and the probe asks for the
+    // declared maximum by number (GitHub #144). Both come from the wasm memory
+    // section, so read it out of the binary rather than trusting a comment: a
+    // vendor build with different limits would leave the user-facing number
+    // wrong and the probe measuring the wrong thing.
+    //
+    // Neither number is a tunable -- `initial` cannot go below the module's
+    // ~267 MB static/BSS floor and `maximum` is a hard ceiling. If a bump
+    // lands here, run `node bin/x2t-memory-report.mjs` before changing the
+    // constants: it prints the floor and the slack above it.
+    const wasm = gunzipSync(readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz')));
+    let offset = 8; // magic + version
+    const uleb = () => {
+      let result = 0;
+      let shift = 0;
+      let byte: number;
+      do {
+        byte = wasm[offset++];
+        result |= (byte & 0x7f) << shift;
+        shift += 7;
+      } while (byte & 0x80);
+      return result;
+    };
+
+    let declared: { initial: number; maximum: number | null } | null = null;
+    while (offset < wasm.length && declared === null) {
+      const id = wasm[offset++];
+      const size = uleb();
+      const end = offset + size;
+      if (id === 5) {
+        // Memory section: one entry, `flags & 1` meaning "has a maximum".
+        uleb();
+        const flags = uleb();
+        const initial = uleb();
+        declared = { initial, maximum: flags & 1 ? uleb() : null };
+      }
+      offset = end;
+    }
+
+    expect(declared).toEqual({ initial: X2T_INITIAL_PAGES, maximum: X2T_MAXIMUM_PAGES });
   });
 
   it('x2t.js glue still stubs the HTML importer (isHtmlDocument routing exists because of this)', () => {

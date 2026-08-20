@@ -11,10 +11,23 @@ import {
   markDocumentOpenFailed,
   resetOpenState,
 } from './onlyoffice/open-state';
-import { registerOpenAttempt, releaseOpenAttemptBytes, setOpenRunner } from './onlyoffice/open-failure';
+import {
+  classifyOpenFailure,
+  isOpenRetryInFlight,
+  registerOpenAttempt,
+  releaseOpenAttemptBytes,
+  setOpenRunner,
+} from './onlyoffice/open-failure';
 import { getSdkEditorApi, ASC_RESTRICTION_VIEW } from './onlyoffice/sdk-api';
 import { getReadonlyMode, setReadonlyState } from './onlyoffice/readonly';
 import { resolveUiTheme } from './onlyoffice/ui-theme';
+import {
+  describeMemoryVerdict,
+  isWasmAllocationFailure,
+  probeX2tMemory,
+  resolveBuildBitness,
+  X2T_INITIAL_MB,
+} from './onlyoffice/wasm-memory';
 import {
   cleanupViewportFollow,
   compactViewportCustomization,
@@ -42,7 +55,17 @@ export {
 } from './onlyoffice/save-stream';
 export { getNormalizedFile, getSavedFileMimeType, toUint8Array } from './onlyoffice/file-helpers';
 export { describeOpenFailure, noteFrameError } from './onlyoffice/open-state';
-export { classifyOpenFailure, openAttemptHoldsBytes } from './onlyoffice/open-failure';
+export { classifyOpenFailure, isOpenRetryInFlight, openAttemptHoldsBytes } from './onlyoffice/open-failure';
+export {
+  describeMemoryVerdict,
+  isWasmAllocationFailure,
+  probeX2tMemory,
+  resolveBuildBitness,
+  X2T_INITIAL_MB,
+  X2T_INITIAL_PAGES,
+  X2T_MAXIMUM_PAGES,
+} from './onlyoffice/wasm-memory';
+export { releaseWasmBinary } from './onlyoffice/guards/wasm-binary-release';
 export {
   awaitFontSystem,
   isFontSystemReady,
@@ -272,8 +295,33 @@ function createPersonalEditorInstance(config: {
         const code = data?.errorCode;
         // -85: the engine sniffed a content/extension mismatch.
         // -82: the open conversion failed (see installOpenFailureGuard).
+        // A -82 whose recorded cause is a refused wasm allocation is not a
+        // verdict on the file at all -- x2t never got instantiated -- so it
+        // must not carry the "may be corrupted" wording, which sends the user
+        // looking at a file that is fine (GitHub #144).
+        const failure = getDocumentOpenError() ?? getLastFrameError() ?? '';
+        // Through classifyOpenFailure, not isWasmAllocationFailure alone: the
+        // classifier puts `Conversion failed with code` FIRST on purpose, and
+        // a document big enough to exhaust the heap mid conversion fails with
+        // an exit code AND the word "memory". That one is x2t's verdict on the
+        // bytes, and answering it with "close tabs / use a 64-bit browser"
+        // sends the user off to fix their browser over a file it will never
+        // convert. Keep the two readings of the same message in one place.
+        const outOfMemory =
+          code === -82 && classifyOpenFailure(failure) === 'environment' && isWasmAllocationFailure(failure);
         const hint =
-          code === -85 ? ` ${t('editorErrorFormatMismatch')}` : code === -82 ? ` ${t('editorErrorOpenFailed')}` : '';
+          code === -85
+            ? ` ${t('editorErrorFormatMismatch')}`
+            : outOfMemory
+              ? // The heap size the message quotes comes from the wasm binary, not
+                // from eight hand-written copies of "283"; the probe skips its
+                // own 283 MB commit while a rebuilt editor is asking for one.
+                ` ${t('editorErrorOutOfMemory', { mb: X2T_INITIAL_MB })}${describeMemoryVerdict(
+                  probeX2tMemory({ skipCommit: isOpenRetryInFlight() }),
+                )}`
+              : code === -82
+                ? ` ${t('editorErrorOpenFailed')}`
+                : '';
         // The numeric code alone is not diagnosable: every issue report so far
         // arrived as a screenshot of this toast (#113, #144). When the open
         // conversion is what failed we know exactly why, so put that reason in
@@ -305,6 +353,9 @@ export function createEditorInstance(config: {
   isRetry?: boolean;
 }): Promise<void> {
   registerOpenAttempt(config);
+  // Asked once per session, well before any failure needs to report it: the
+  // answer is only read from the out-of-memory branch of the error toast.
+  resolveBuildBitness();
   return queueEditorOperation(async () => {
     const { fileName, fileType, binData, readonly = false } = config;
     setReadonlyState(readonly);

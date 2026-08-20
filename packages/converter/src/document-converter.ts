@@ -95,12 +95,111 @@ const MIME_MAP: Record<string, string> = {
   wmf: 'image/x-wmf',
 };
 
+/**
+ * Whether the module can be compiled straight off the network, without the
+ * decompressed 40 MB ever existing as one buffer. Checked up front so a
+ * failure of the streaming path itself is never retried through the buffered
+ * one (see installStreamingInstantiate).
+ */
+export const canStreamWasm = (): boolean =>
+  typeof DecompressionStream === 'function' &&
+  typeof ReadableStream === 'function' &&
+  typeof WebAssembly !== 'undefined' &&
+  typeof WebAssembly.instantiateStreaming === 'function';
+
+/**
+ * Re-emit a body stream, having read just enough of it to tell gzip (`1f 8b`)
+ * from a raw wasm module (`00 61 73 6d`) -- hosts disagree on how they serve a
+ * `.gz` file (some send `Content-Encoding: gzip` and the browser has already
+ * decoded it), and the sniff has to cost two bytes rather than the whole
+ * download.
+ */
+export async function sniffAndRebuild(body: ReadableStream<Uint8Array>): Promise<ReadableStream<Uint8Array>> {
+  const reader = body.getReader();
+  const prefix: Uint8Array[] = [];
+  let have = 0;
+  let finished = false;
+
+  while (have < 2 && !finished) {
+    const result = await reader.read();
+    if (result.done) {
+      finished = true;
+      break;
+    }
+    prefix.push(result.value);
+    have += result.value.length;
+  }
+
+  const head = new Uint8Array(have);
+  let at = 0;
+  for (const chunk of prefix) {
+    head.set(chunk, at);
+    at += chunk.length;
+  }
+  const isGzip = head.length > 1 && head[0] === 0x1f && head[1] === 0x8b;
+
+  const rebuilt = new ReadableStream<Uint8Array>({
+    start(controller) {
+      for (const chunk of prefix) controller.enqueue(chunk);
+      if (finished) controller.close();
+    },
+    async pull(controller) {
+      if (finished) {
+        controller.close();
+        return;
+      }
+      const result = await reader.read();
+      if (result.done) {
+        finished = true;
+        controller.close();
+      } else {
+        controller.enqueue(result.value);
+      }
+    },
+    cancel(reason) {
+      return reader.cancel(reason);
+    },
+  });
+
+  // The cast is variance, not a lie: DecompressionStream accepts BufferSource,
+  // which is wider than the Uint8Array chunks this stream emits.
+  const inflate = new DecompressionStream('gzip') as unknown as ReadableWritablePair<Uint8Array, Uint8Array>;
+  return isGzip ? rebuilt.pipeThrough(inflate) : rebuilt;
+}
+
+/**
+ * The error a failed streaming instantiation reports.
+ *
+ * The `X2T module` prefix is the entry condition a host's open-failure
+ * handling matches on (the site's own guard is
+ * lib/onlyoffice/open-failure.ts); the original wording is kept after it
+ * because that is what the same host reads to tell a refused wasm heap from a
+ * dropped download. Without the prefix nothing claims the failure at all:
+ * `loadScript()` has already resolved by the time the hook runs, emscripten's
+ * success callback is simply never called, and the user watches a spinner
+ * until the init timeout fires.
+ */
+export const x2tInstantiateError = (error: unknown): Error =>
+  new Error(`X2T module failed to instantiate: ${error instanceof Error ? error.message : String(error)}`);
+
 export class X2TConverter {
   private x2tModule: EmscriptenModule | null = null;
   private isReady = false;
   private initPromise: Promise<EmscriptenModule> | null = null;
   private hasScriptLoaded = false;
   private fontsLoaded = false;
+  /**
+   * A streaming instantiation that failed.
+   *
+   * The hook cannot reject `loadScript()` -- that promise resolved when the
+   * `<script>` loaded, long before the hook runs -- so the failure is parked
+   * here and whoever is waiting on `doInitialize` hears about it at once
+   * instead of sitting out the full `INIT_TIMEOUT`. Sticky on purpose: x2t.js
+   * has already run its `createWasm` on this page and cannot be made to run
+   * another, so the recovery is a fresh page or worker, not a retry.
+   */
+  private wasmInstantiateFailure: Error | null = null;
+  private onWasmInstantiateFailure: ((error: Error) => void) | null = null;
 
   // Supported file type mapping
   private readonly DOCUMENT_TYPE_MAP: Record<string, DocumentType> = DOCUMENT_TYPE_MAP;
@@ -113,16 +212,30 @@ export class X2TConverter {
   /**
    * Load X2T script file (using ranuts scriptOnLoad utility).
    *
-   * We first decompress the gzipped WASM and hand the bytes to Emscripten via
-   * `Module.wasmBinary` (see prepareWasmBinary), so x2t.js never fetches the raw
-   * 55 MB `x2t.wasm` itself. This lets us ship only the ~11 MB `x2t.wasm.gz`,
+   * Where the engine can compile while it downloads, it does: the inflated
+   * 40 MB module then never exists as a buffer at all, which matters because
+   * the alternative holds it at the exact moment WebAssembly is asking the
+   * browser for x2t's own 283 MB heap -- the moment that fails on a machine
+   * short of memory (GitHub #144). Otherwise we fall back to decompressing the
+   * gzipped WASM and handing Emscripten the bytes via `Module.wasmBinary` (see
+   * prepareWasmBinary), so x2t.js never fetches the raw 55 MB `x2t.wasm`
+   * itself either way. Both paths let us ship only the ~11 MB `x2t.wasm.gz`,
    * staying under Cloudflare Pages' 25 MiB-per-file deploy limit.
+   *
+   * Kept in step with the same two paths in the vendor-side loader
+   * (public/sdkjs/common/wasm/x2t/x2t_helper.js), which is what the editor
+   * iframe runs; this copy serves consumers of the package that load x2t on
+   * the page itself.
    */
   async loadScript(): Promise<void> {
     if (this.hasScriptLoaded) return;
 
     try {
-      await this.prepareWasmBinary();
+      if (canStreamWasm()) {
+        this.installStreamingInstantiate();
+      } else {
+        await this.prepareWasmBinary();
+      }
       // scriptOnLoad accepts an array of URLs
       await scriptOnLoad([this.SCRIPT_PATH]);
       this.hasScriptLoaded = true;
@@ -135,6 +248,63 @@ export class X2TConverter {
   }
 
   /**
+   * Install emscripten's own `Module.instantiateWasm` hook so the module is
+   * compiled straight off the network.
+   *
+   * The hook must not throw synchronously -- `createWasm()` turns that into
+   * `false`, which is fatal -- so every failure is reported by rejecting, with
+   * the `X2T module` prefix a host's open-failure handling can recognise and
+   * the original wording kept after it. Not retried through the buffered path:
+   * the failure most expected here is the browser refusing x2t's heap, and
+   * asking for another 40 MB on an exhausted renderer only makes it worse.
+   */
+  private installStreamingInstantiate(): void {
+    const globalScope = window as unknown as {
+      Module?: Record<string, unknown> & { instantiateWasm?: unknown };
+    };
+    if (globalScope.Module?.instantiateWasm) return;
+
+    const gzPath = this.WASM_GZ_PATH;
+    const instantiateWasm = (
+      imports: WebAssembly.Imports,
+      successCallback: (instance: WebAssembly.Instance, module: WebAssembly.Module) => void,
+    ): Record<string, never> => {
+      void (async () => {
+        try {
+          const response = await fetch(gzPath);
+          if (!response.ok) throw new Error(`Failed to fetch x2t WASM at '${gzPath}' (${response.status})`);
+          if (!response.body) throw new Error('x2t WASM response has no body to stream');
+          const stream = await sniffAndRebuild(response.body);
+          // Our own Content-Type: a host's type for a .gz file is whatever it
+          // happens to be, and instantiateStreaming rejects anything that is
+          // not application/wasm.
+          const { instance, module } = await WebAssembly.instantiateStreaming(
+            new Response(stream, { headers: { 'Content-Type': 'application/wasm' } }),
+            imports,
+          );
+          successCallback(instance, module);
+        } catch (error) {
+          console.error('x2t WASM instantiation failed:', error);
+          const failure = x2tInstantiateError(error);
+          // Settle the pending initialize() before the rethrow: nothing else
+          // ever will (onRuntimeInitialized is never going to fire), so without
+          // this the caller waits out INIT_TIMEOUT for a failure already known.
+          this.wasmInstantiateFailure = failure;
+          this.onWasmInstantiateFailure?.(failure);
+          // Still rethrown: an unhandled rejection carrying the `X2T module`
+          // prefix is what a host's open-failure handling reads.
+          throw failure;
+        }
+      })();
+      return {};
+    };
+
+    globalScope.Module = { ...globalScope.Module, instantiateWasm };
+  }
+
+  /**
+   * Fallback for engines without streaming instantiation (see loadScript).
+   *
    * Fetch the gzipped x2t WASM, decompress it in the browser, and stash the raw
    * bytes on `window.Module.wasmBinary` *before* x2t.js runs. Emscripten checks
    * `if (Module['wasmBinary']) wasmBinary = Module['wasmBinary']` and then skips
@@ -194,6 +364,12 @@ export class X2TConverter {
           return;
         }
 
+        // The hook may have failed already, while the script was loading.
+        if (this.wasmInstantiateFailure) {
+          reject(this.wasmInstantiateFailure);
+          return;
+        }
+
         // Set timeout handling
         const timeoutId = setTimeout(() => {
           if (!this.isReady) {
@@ -201,9 +377,16 @@ export class X2TConverter {
           }
         }, this.INIT_TIMEOUT);
 
+        // ...or while this promise is pending.
+        this.onWasmInstantiateFailure = (error) => {
+          clearTimeout(timeoutId);
+          reject(error);
+        };
+
         x2t.onRuntimeInitialized = () => {
           try {
             clearTimeout(timeoutId);
+            this.onWasmInstantiateFailure = null;
             this.createWorkingDirectories(x2t);
             this.x2tModule = x2t;
             this.isReady = true;
@@ -216,6 +399,7 @@ export class X2TConverter {
       });
     } catch (error) {
       this.initPromise = null; // Reset to allow retry
+      this.onWasmInstantiateFailure = null;
       throw error;
     }
   }

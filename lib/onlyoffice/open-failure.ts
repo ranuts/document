@@ -1,6 +1,7 @@
 import { t } from '@ranuts/shared/i18n';
 import { getDocumentOpenError, isDocumentContentReady, markDocumentOpenFailed, noteFrameError } from './open-state';
 import { failPendingSaveConversion } from './save-stream';
+import { isWasmAllocationFailure } from './wasm-memory';
 
 /**
  * Everything about an open that did not survive: which document was being
@@ -35,6 +36,13 @@ type OpenAttempt = {
   retried: boolean;
 };
 let currentOpenAttempt: OpenAttempt | null = null;
+// Whether a rebuilt editor is on its way for the attempt that just failed.
+// Read by the error toast, which must not run a diagnostic that competes with
+// the rebuild for the same 283 MB (see probeX2tMemory's `skipCommit`). True
+// from the moment the rebuild is scheduled until that attempt settles: the
+// vendor raises its own -82 for the failure we are already answering, so the
+// toast can fire while the retry is still loading.
+let openRetryInFlight = false;
 // Bumped for every editor build (a user-initiated open and its retry alike).
 // Each frame's failure guard captures the generation it was installed for, so
 // the duplicate rejections a torn-down frame keeps emitting cannot report an
@@ -54,6 +62,13 @@ let handledFailureGeneration = -1;
  */
 export function releaseOpenAttemptBytes(): void {
   if (currentOpenAttempt) currentOpenAttempt.binData = undefined;
+  // The attempt settled, so nothing is competing for the heap any more.
+  openRetryInFlight = false;
+}
+
+/** Whether a rebuilt editor is currently loading the document that failed. */
+export function isOpenRetryInFlight(): boolean {
+  return openRetryInFlight;
 }
 
 /** Whether a retry could still be served from bytes we are holding. */
@@ -71,6 +86,7 @@ function retryCurrentOpen(reason: string): boolean {
   if (!attempt || attempt.retried) return false;
   if (classifyOpenFailure(reason) !== 'environment') return false;
   attempt.retried = true;
+  openRetryInFlight = true;
   console.warn('[OO] retrying the open once after an environment failure:', reason);
   (window as unknown as { message?: { info?: (msg: string) => void } }).message?.info?.(t('editorOpenRetrying'));
   // Deferred: this runs from the failing frame's rejection handler, and the
@@ -85,6 +101,7 @@ function retryCurrentOpen(reason: string): boolean {
       isRetry: true,
     }).catch((error) => {
       console.error('[OO] open retry failed to start:', error);
+      openRetryInFlight = false;
       markDocumentOpenFailed(String(error));
     });
   }, 0);
@@ -98,15 +115,29 @@ function retryCurrentOpen(reason: string): boolean {
  *   code: 88", an emscripten `Aborted(...)` on an importer this wasm build
  *   stubs out). Retrying is pointless -- the same bytes fail the same way --
  *   so the user gets the error immediately.
- * - `environment`: the editor tripped over its own boot state or over a
- *   resource that did not arrive (a TypeError from a half-initialised SDK,
- *   the x2t module missing or timing out, a failed fetch). Nothing is wrong
- *   with the document, and a rebuilt editor usually opens it -- which is why
- *   the same file opens in a freshly-started browser and fails in the one
- *   that has been running all day (GitHub #144).
+ * - `environment`: the editor tripped over its own boot state, over a
+ *   resource that did not arrive, or over a memory allocation the browser
+ *   refused (a TypeError from a half-initialised SDK, the x2t module missing
+ *   or timing out, a failed fetch, a wasm heap the browser would not
+ *   allocate). Nothing is wrong with the document, and a rebuilt editor
+ *   usually opens it -- which is why the same file opens in a freshly-started
+ *   browser and fails in the one that has been running all day (GitHub #144).
  */
 export function classifyOpenFailure(message: string): 'document' | 'environment' {
-  if (/Conversion failed with code|Aborted\(|missing function|RuntimeError/i.test(message)) return 'document';
+  // x2t's own exit code: it was instantiated, it read the bytes, and this is
+  // its verdict on them -- whatever else the message happens to say. Checked
+  // first for that reason: a document big enough to exhaust the heap mid
+  // conversion fails with a code AND the word "memory", and answering that
+  // with a rebuild plus "use a 64-bit browser" helps nobody.
+  if (/Conversion failed with code/i.test(message)) return 'document';
+  // Checked before the `Aborted(` rule below, which would otherwise swallow
+  // it: a refused wasm memory allocation aborts x2t *before it is
+  // instantiated*, so it never saw the bytes. Telling that user their file is
+  // corrupt is wrong twice over -- the file is fine, and the one thing that
+  // might help (a rebuilt editor, or simply a second try once another tab has
+  // let go of its heap) is exactly what the retry does. See ./wasm-memory.
+  if (isWasmAllocationFailure(message)) return 'environment';
+  if (/Aborted\(|missing function|RuntimeError/i.test(message)) return 'document';
   // The TypeError wordings of a half-initialised SDK, across engines.
   if (/Cannot read propert|undefined is not an object|null is not an object/i.test(message)) return 'environment';
   if (/is not a function|has no properties|can't access property/i.test(message)) return 'environment';
@@ -124,6 +155,25 @@ export function classifyOpenFailure(message: string): 'document' | 'environment'
 // Common.Gateway reports it to our onError toast, the load mask ends -- and
 // flag the document so requestSaveDocument rejects immediately.
 const OPEN_FAILURE_PATTERN = /Document conversion failed|Conversion failed with code|X2T module/i;
+/**
+ * A wasm allocation refusal reaches us as a bare emscripten `Aborted(...)`
+ * with none of the wordings above, so the guard used to bail out and leave the
+ * whole failure to the vendor's own window.onerror -82: no retry, no
+ * fail-fast save, and a toast blaming the document (GitHub #144).
+ *
+ * `isWasmAllocationFailure` alone is too wide to be an entry condition: its
+ * `Out of memory` arm matches any rejection that merely mentions the words,
+ * and taking this branch costs a `-82` toast plus a full editor rebuild on a
+ * document that was loading fine. Require the wasm/emscripten context that
+ * the refusal we are actually catching always carries.
+ */
+const WASM_ALLOCATION_CONTEXT = /Aborted\(|WebAssembly|Wasm memory/i;
+function isOpenConversionFailure(message: string): boolean {
+  return (
+    OPEN_FAILURE_PATTERN.test(message) || (isWasmAllocationFailure(message) && WASM_ALLOCATION_CONTEXT.test(message))
+  );
+}
+
 export function installOpenFailureGuard(win: Window): void {
   const w = win as unknown as {
     __ooOpenFailureGuarded?: boolean;
@@ -152,7 +202,7 @@ export function installOpenFailureGuard(win: Window): void {
     const reason = (event as PromiseRejectionEvent).reason as { message?: unknown } | undefined;
     const message = String(reason && typeof reason === 'object' ? (reason.message ?? reason) : reason);
     if (generation === openGeneration) noteFrameError(message);
-    if (!OPEN_FAILURE_PATTERN.test(message)) return;
+    if (!isOpenConversionFailure(message)) return;
     if (isDocumentContentReady()) {
       // The document is loaded, so this is a failed export (convertFromBin);
       // the SDK already reports those through asc_onError itself. Just stop
@@ -175,6 +225,9 @@ export function installOpenFailureGuard(win: Window): void {
     // from scratch, which is what turned the failure into a success on a
     // second, colder browser in GitHub #144.
     if (retryCurrentOpen(message)) return;
+    // Final: this failure is going to the user, and the full memory probe the
+    // toast wants is safe again now that no rebuild is asking for a heap.
+    openRetryInFlight = false;
     markDocumentOpenFailed(message);
     const api = w.Asc?.editor;
     if (!api || typeof api.sendEvent !== 'function') return;
@@ -202,6 +255,8 @@ export function registerOpenAttempt(config: {
 }): void {
   openGeneration += 1;
   if (config.isRetry) return;
+  // A user-initiated open supersedes whatever the last attempt was doing.
+  openRetryInFlight = false;
   currentOpenAttempt = {
     fileName: config.fileName,
     fileType: config.fileType,

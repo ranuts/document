@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, t } from '@ranuts/shared/i18n';
+import { getLanguage, getOnlyOfficeLang, LanguageCode, setLanguage, SHELL_LOCALES, t } from '@ranuts/shared/i18n';
 
 describe('i18n', () => {
   afterEach(() => {
@@ -89,6 +89,41 @@ describe('i18n', () => {
 // Editor UI locale passthrough (roadmap direction eight, layer 1): the shell has
 // strings for en / zh only, but the vendored editor ships 45 locales, so the
 // editor follows the visitor's language independently of the shell.
+describe('message placeholders', () => {
+  afterEach(() => {
+    setLanguage(LanguageCode.EN);
+  });
+
+  it('fills {name} from the caller in every locale that has the string', () => {
+    // The out-of-memory message quotes x2t's declared heap, which is read out
+    // of the wasm binary (lib/onlyoffice/wasm-memory.ts). Eight hand-typed
+    // copies of "283" would go stale on the next vendor bump without a single
+    // test noticing.
+    for (const locale of SHELL_LOCALES) {
+      setLanguage(locale);
+      const filled = t('editorErrorOutOfMemory', { mb: 283 });
+      expect(filled, locale).toContain('283');
+      expect(filled, locale).not.toContain('{mb}');
+    }
+  });
+
+  it('leaves the placeholder written out when the caller passes nothing', () => {
+    // Better a visible `{mb}` in one toast than a silently blank number.
+    expect(t('editorErrorOutOfMemory')).toContain('{mb}');
+  });
+
+  it('leaves an unknown name alone rather than blanking it', () => {
+    expect(t('editorErrorOutOfMemory', { other: 1 })).toContain('{mb}');
+  });
+
+  it('no locale hardcodes the heap size any more', () => {
+    for (const locale of SHELL_LOCALES) {
+      setLanguage(locale);
+      expect(t('editorErrorOutOfMemory'), locale).not.toContain('283');
+    }
+  });
+});
+
 describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh', () => {
   afterEach(() => {
     window.history.pushState({}, '', '/');

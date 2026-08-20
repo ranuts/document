@@ -352,6 +352,16 @@
         this.x2tModule = null;
         this.initPromise = null;
         this.hasScriptLoaded = false;
+        // A streaming instantiation that failed. The hook cannot reject
+        // loadScript() (that promise resolved when the <script> loaded, long
+        // before the hook runs), so the failure is parked here and whoever is
+        // waiting on doInitialize is told at once instead of sitting out
+        // INIT_TIMEOUT. Sticky on purpose: x2t.js has already run its
+        // createWasm in this frame and cannot be made to run another, so the
+        // recovery is a new frame -- which is exactly what the editor's
+        // open-failure retry builds.
+        this.wasmInstantiateError = null;
+        this.onWasmInstantiateError = null;
         this.SCRIPT_PATH = '../../../../sdkjs/common/wasm/x2t/x2t.js'
         // The raw x2t.wasm is ~40 MB, over Cloudflare Pages' 25 MiB per-file
         // deploy limit, so only the gzipped copy is shipped and decompressed
@@ -408,14 +418,174 @@
     // by the time we read it), others serve the raw gzip bytes. Detect which
     // by the leading magic bytes and only decompress a real gzip payload
     // (`1f 8b`), passing through an already-raw wasm module (`00 61 73 6d`).
-    X2TConverter.prototype.prepareWasmBinary = function () {
-        if (window.Module && window.Module.wasmBinary) return Promise.resolve();
-
+    X2TConverter.prototype.fetchWasmResponse = function () {
         var gzPath = this.WASM_GZ_PATH;
         return fetch(gzPath).then(function (response) {
             if (!response.ok) {
                 throw new Error("Failed to fetch x2t WASM at '" + gzPath + "' (" + response.status + ')');
             }
+            return response;
+        });
+    };
+
+    // Whether the module can be compiled straight off the network, without the
+    // decompressed 40.2 MB ever existing as one buffer. Checked up front so a
+    // failure of the streaming path itself is never retried -- see
+    // installStreamingInstantiate.
+    X2TConverter.prototype.canStreamWasm = function () {
+        return (
+            typeof DecompressionStream === 'function' &&
+            typeof ReadableStream === 'function' &&
+            typeof WebAssembly !== 'undefined' &&
+            typeof WebAssembly.instantiateStreaming === 'function'
+        );
+    };
+
+    /**
+     * Re-emit a body stream, having read just enough of it to tell gzip
+     * (`1f 8b`) from a raw wasm module (`00 61 73 6d`) -- servers disagree on
+     * how they serve a `.gz` file, and the sniff has to cost two bytes rather
+     * than the whole download.
+     */
+    function sniffAndRebuild(body) {
+        var reader = body.getReader();
+        var prefix = [];
+        var have = 0;
+        var finished = false;
+
+        var readPrefix = function () {
+            if (have >= 2 || finished) return Promise.resolve();
+            return reader.read().then(function (result) {
+                if (result.done) {
+                    finished = true;
+                    return;
+                }
+                prefix.push(result.value);
+                have += result.value.length;
+                return readPrefix();
+            });
+        };
+
+        return readPrefix().then(function () {
+            // Concatenate rather than index into the chunks: a reader may split
+            // the first two bytes across chunks, or hand back an empty one.
+            var head = new Uint8Array(have);
+            var at = 0;
+            for (var h = 0; h < prefix.length; h++) {
+                head.set(prefix[h], at);
+                at += prefix[h].length;
+            }
+            var isGzip = head.length > 1 && head[0] === 0x1f && head[1] === 0x8b;
+            var rebuilt = new ReadableStream({
+                start: function (controller) {
+                    for (var i = 0; i < prefix.length; i++) controller.enqueue(prefix[i]);
+                    if (finished) controller.close();
+                },
+                pull: function (controller) {
+                    if (finished) {
+                        controller.close();
+                        return;
+                    }
+                    return reader.read().then(function (result) {
+                        if (result.done) {
+                            finished = true;
+                            controller.close();
+                        } else {
+                            controller.enqueue(result.value);
+                        }
+                    });
+                },
+                cancel: function (reason) {
+                    return reader.cancel(reason);
+                },
+            });
+            return isGzip ? rebuilt.pipeThrough(new DecompressionStream('gzip')) : rebuilt;
+        });
+    }
+
+    /**
+     * Compile and instantiate the module as it arrives.
+     *
+     * The buffered path below has to hold the inflated 40.2 MB while
+     * WebAssembly.instantiate asks the browser for x2t's 283 MB heap and
+     * compiles 40 MB of code -- all at the same moment, which is exactly the
+     * moment that fails on a browser short of memory (GitHub #144). Streaming
+     * removes that 40.2 MB from the peak entirely and lets compilation start
+     * on the first chunk.
+     *
+     * `Module.instantiateWasm` is emscripten's own hook (x2t.js line ~627):
+     * return `{}` to say "asynchronous", then call the success callback. It
+     * MUST NOT throw synchronously -- createWasm() turns that into `false`,
+     * which is fatal.
+     */
+    X2TConverter.prototype.installStreamingInstantiate = function () {
+        var self = this;
+        if (window.Module && window.Module.instantiateWasm) return;
+        var instantiateWasm = function (imports, successCallback) {
+            self.fetchWasmResponse()
+                .then(function (response) {
+                    if (!response.body) throw new Error('x2t WASM response has no body to stream');
+                    return sniffAndRebuild(response.body);
+                })
+                .then(function (stream) {
+                    // Our own Content-Type: the server's type for a .gz file is
+                    // whatever it happens to be, and instantiateStreaming
+                    // rejects anything that is not application/wasm.
+                    return WebAssembly.instantiateStreaming(
+                        new Response(stream, { headers: { 'Content-Type': 'application/wasm' } }),
+                        imports,
+                    );
+                })
+                .then(function (result) {
+                    successCallback(result.instance, result.module);
+                })
+                .catch(function (error) {
+                    // Deliberately not retried through the buffered path: the
+                    // failure we most expect here is the browser refusing x2t's
+                    // heap, and a retry would ask for another 40 MB on top of an
+                    // already exhausted renderer. Surfacing it is what the open
+                    // failure guard (lib/onlyoffice/open-failure.ts) needs --
+                    // it classifies an allocation refusal as an environment
+                    // failure and retries the whole editor instead.
+                    //
+                    // Rethrown with the `X2T module` prefix the guard's entry
+                    // condition recognises, and the original wording kept after
+                    // it so classifyOpenFailure still reads the cause. Without
+                    // the prefix only the allocation refusals reach the guard:
+                    // everything else (a 404 on x2t.wasm.gz, a dropped
+                    // connection mid-stream) leaves successCallback uncalled
+                    // and the user watching the spinner until doInitialize's
+                    // INIT_TIMEOUT fires a minute later. On the buffered path
+                    // the same failure rejected loadScript() straight away.
+                    console.error('x2t WASM instantiation failed:', error);
+                    var failure = new Error(
+                        'X2T module failed to instantiate: ' + ((error && error.message) || String(error)),
+                    );
+                    // Tell the pending initialize() before the rethrow: without
+                    // this nothing here ever settles it, and the module's own
+                    // onRuntimeInitialized is never going to fire, so the caller
+                    // waits out the full INIT_TIMEOUT for a failure that is
+                    // already known.
+                    self.wasmInstantiateError = failure;
+                    if (self.onWasmInstantiateError) self.onWasmInstantiateError(failure);
+                    // Still rethrown: the unhandled rejection is what
+                    // installOpenFailureGuard reads to classify and retry.
+                    throw failure;
+                });
+            return {};
+        };
+        window.Module = Object.assign({}, window.Module, { instantiateWasm: instantiateWasm });
+    };
+
+    // Fallback for engines without streaming instantiation: fetch the gzip,
+    // inflate it whole, and hand emscripten the bytes. Emscripten checks
+    // `Module['wasmBinary']` first and then skips its own fetch of the raw
+    // `x2t.wasm` entirely, so only the ~10 MB .gz needs to be deployed (the
+    // raw 40 MB file exceeds Cloudflare Pages' 25 MiB per-file limit).
+    X2TConverter.prototype.prepareWasmBinary = function () {
+        if (window.Module && window.Module.wasmBinary) return Promise.resolve();
+
+        return this.fetchWasmResponse().then(function (response) {
             return response.arrayBuffer();
         }).then(function (raw) {
             var head = new Uint8Array(raw, 0, Math.min(2, raw.byteLength));
@@ -431,9 +601,23 @@
     };
 
     X2TConverter.prototype.loadScript = function () {
-        if (this.hasScriptLoaded) return
+        // A promise, not `undefined`: doInitialize does `loadScript().then(...)`,
+        // and the streaming path reaches this branch routinely -- the <script>
+        // loads fine, so hasScriptLoaded is set, and only the wasm behind it
+        // fails. A bare `return` then threw `undefined.then is not a function`
+        // out of every subsequent attempt.
+        if (this.hasScriptLoaded) return Promise.resolve()
 
-        return this.prepareWasmBinary().then(() => new Promise((resolve, reject) => {
+        // Streaming keeps the inflated module out of the peak; the buffered
+        // path stays for engines that cannot stream.
+        var prepared;
+        if (this.canStreamWasm()) {
+            this.installStreamingInstantiate();
+            prepared = Promise.resolve();
+        } else {
+            prepared = this.prepareWasmBinary();
+        }
+        return prepared.then(() => new Promise((resolve, reject) => {
             const script = document.createElement('script')
             script.src = this.SCRIPT_PATH
             script.onload = () => {
@@ -463,15 +647,28 @@
                     return;
                 }
 
+                // The hook may have already failed while the script was
+                // loading, or may fail while this promise is pending.
+                if (self.wasmInstantiateError) {
+                    reject(self.wasmInstantiateError);
+                    return;
+                }
+
                 var timeoutId = setTimeout(function () {
                     if (!self.isReady) {
                         reject(new Error('X2T initialization timeout after ' + self.INIT_TIMEOUT + 'ms'));
                     }
                 }, self.INIT_TIMEOUT);
 
+                self.onWasmInstantiateError = function (error) {
+                    clearTimeout(timeoutId);
+                    reject(error);
+                };
+
                 x2t.onRuntimeInitialized = function () {
                     try {
                         clearTimeout(timeoutId);
+                        self.onWasmInstantiateError = null;
                         self.createWorkingDirectories(x2t);
                         self.x2tModule = x2t;
                         self.isReady = true;
@@ -484,6 +681,7 @@
             });
         }).catch(function (error) {
             self.initPromise = null;
+            self.onWasmInstantiateError = null;
             throw error;
         });
     };
