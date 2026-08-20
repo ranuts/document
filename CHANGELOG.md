@@ -66,6 +66,9 @@ notes. Entries describe what users experience, not internal refactors.
 - The pill-shaped buttons on the homepage and the landing pages no longer draw
   a straight line under themselves that pokes out past their rounded ends: the
   raised shadow was being painted on a square box behind the round button.
+- Documents are no longer at risk of opening with every font dropped when the
+  font system is slow to start: the editor now waits longer for it before
+  falling back to a font-free import.
 
 ### Removed
 
@@ -77,6 +80,13 @@ notes. Entries describe what users experience, not internal refactors.
   no in-editor theme toggle any more.
 
 ### Changed
+
+- Returning to the editor is much lighter on the network. Its own files are now
+  served straight from the offline cache instead of being checked with the
+  server one by one on every visit -- a second open used to make 46 such checks
+  for files it already had, and now makes none. Most noticeable on a slow or
+  metered connection, where those checks competed with the requests that
+  actually mattered.
 
 - The conversion engine downloads 377 KB smaller (about 4%), the largest single
   download in the app. Same engine, byte for byte -- only the compression of

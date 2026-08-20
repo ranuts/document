@@ -35,13 +35,22 @@ export function isFontSystemReady(win: FontSystemWindow): boolean {
   return Array.isArray(files) && files.length > 0;
 }
 
-// How long the open conversion waits for the font system before giving up on
-// it. Measured on production, the font system is ready about a second BEFORE
-// the x2t module is (fonts at ~3.2 s, x2t at ~4.2 s), so the normal path waits
-// zero; the cap only bounds the case where a font system never comes up, which
-// then degrades to the fontless import that shipped in #146 instead of hanging
-// the open.
-export const FONT_SYSTEM_WAIT_MS = 5_000;
+// How long the open conversion waits for the font system before giving up on it.
+//
+// The original 5 s rested on a measurement that no longer holds: the font system used
+// to be ready about a second BEFORE the x2t module (fonts at ~3.2 s, x2t at ~4.2 s), so
+// the normal path waited zero and the cap only bounded a font system that never came up.
+// Serving the vendored tree cache-first (public/sw.js) moved x2t to the front of that
+// pair on a warm profile -- it now arrives first, and the wait is the NORMAL path,
+// ~2.6 s locally. Waiting is harmless: measured, total open time is unchanged, the
+// conversion simply waits where it used to be waited for. Hitting the cap is not -- that
+// is the branch that degrades to the fontless import from #146, silently dropping every
+// face in the document.
+//
+// So the cap is raised to keep its original meaning: a bound on a font system that is
+// genuinely broken, not on one that is merely slower than x2t. The larger value is only
+// ever paid in that broken case, where waiting still beats a fontless import.
+export const FONT_SYSTEM_WAIT_MS = 15_000;
 const FONT_SYSTEM_POLL_MS = 50;
 // Milliseconds the last conversion spent waiting for fonts. Zero on the normal
 // path; asserted by the E2E suite so a systematic wait (an environment where

@@ -142,6 +142,18 @@ const pruneAppAssets = (name) =>
     });
   });
 
+// Helper: store a response in the runtime cache, tolerating a full storage bucket.
+// A rejected put must not take the response down with it -- the page already has its
+// bytes and the next visit simply re-fetches, whereas an unhandled rejection here
+// propagates into the respondWith chain and fails the request outright.
+const putInRuntimeCache = (request, response) =>
+  caches.open(RUNTIME_CACHE).then((cache) =>
+    cache.put(request, response).then(
+      () => limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS),
+      () => {},
+    ),
+  );
+
 // Helper: Trim cache to a certain size
 const limitCacheSize = (name, maxItems) => {
   caches.open(name).then((cache) => {
@@ -280,40 +292,53 @@ self.addEventListener('fetch', (event) => {
   // causes a crash in OnlyOffice v7.5's fallback font code path.
   if (/\.(ttf|woff2?|otf|eot)(\?.*)?$/.test(url.pathname)) return;
 
-  // 4a. The editor's indexed font catalog (/fonts/000..266, no extension) and
-  // the x2t WASM are large, immutable, vendor-versioned binaries. They used to
-  // fall through to stale-while-revalidate below, whose `cache: 'no-cache'`
-  // revalidation re-downloaded every multi-MB font on every open; with the
-  // SDK loading fonts serially, a CJK deck sat on "Loading presentation" for
-  // minutes on production. Serve them cache-first: the network is consulted
-  // only when the entry is missing.
-  const isImmutableBinary = /^\/fonts\/\d{3}$/.test(url.pathname) || url.pathname.endsWith('/x2t.wasm.gz');
-  if (isImmutableBinary) {
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        if (cached) return cached;
-        return fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-            const responseToCache = networkResponse.clone();
-            caches.open(RUNTIME_CACHE).then((cache) => {
-              cache.put(event.request, responseToCache);
-              limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS);
-            });
-          }
-          return networkResponse;
-        });
-      }),
-    );
-    return;
-  }
-
-  // 4b. Skip the spellchecker engine: it is importScripts'd from inside a
+  // 4a. Skip the spellchecker engine: it is importScripts'd from inside a
   // dedicated worker during the editor's first boot, and routing that request
   // through a just-activated service worker hangs forever on a cold profile
   // (observed on every first visit: the request stays pending, the editor's
   // full API never finishes loading -- isLoadFullApi:false -- and every
   // save/export silently breaks). The browser's HTTP cache handles these.
+  //
+  // Must stay AHEAD of the vendor branch below, which would otherwise claim
+  // /sdkjs/common/spell/ along with the rest of the tree.
   if (url.pathname.includes('/sdkjs/common/spell/')) return;
+
+  // 4b. The vendored editor, served cache-first: the network is consulted only
+  // when the entry is missing, so a warm cache puts nothing on the wire.
+  //
+  // Cache-first is correct here precisely BECAUSE the runtime cache is named
+  // after the vendor content (see RUNTIME_CACHE): the cache name changes if
+  // and only if any byte under sdkjs/ web-apps/ fonts/ changes -- our own
+  // patches inside the tree included, since bin/build.sh hashes what it
+  // serves. A stale entry is therefore not reachable: matching name implies
+  // matching bytes, and a vendor change starts from an empty cache.
+  //
+  // The catalog and the x2t WASM were carved out into this branch first, after
+  // stale-while-revalidate's `cache: 'no-cache'` revalidation re-downloaded
+  // every multi-MB font on every open and a CJK deck sat on "Loading
+  // presentation" for minutes on production. The rest of the tree had the same
+  // disease in a milder form: measured on a warm profile, a second open of a
+  // .docx still sent 46 requests for files it already held. SWR hid it well --
+  // the revalidation happens after the cached copy is handed back, and it is
+  // invisible to page-level request events -- but on a slow link it is 46
+  // conditional requests competing with the ones that matter.
+  if (isVendorAsset(event.request)) {
+    event.respondWith(
+      caches
+        .open(RUNTIME_CACHE)
+        .then((cache) => cache.match(event.request))
+        .then((cached) => {
+          if (cached) return cached;
+          return fetch(event.request).then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+              putInRuntimeCache(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          });
+        }),
+    );
+    return;
+  }
 
   // 5. Determine Strategy
   const isHtml =
@@ -367,11 +392,7 @@ self.addEventListener('fetch', (event) => {
           .then((networkResponse) => {
             // Only cache valid 200 responses
             if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-              const responseToCache = networkResponse.clone();
-              caches.open(RUNTIME_CACHE).then((cache) => {
-                cache.put(event.request, responseToCache);
-                limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS);
-              });
+              putInRuntimeCache(event.request, networkResponse.clone());
             } else if (isHashedAsset && networkResponse && networkResponse.status === 404) {
               // A hashed asset that 404s means the page HTML is from another
               // deploy. Surface a network error (never an HTML body) so the

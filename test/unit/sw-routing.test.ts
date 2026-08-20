@@ -24,8 +24,21 @@ const DEPLOY_COUPLED =
 const isHtmlRequest = (mode: string, pathname: string): boolean =>
   mode === 'navigate' || pathname.endsWith('.html') || pathname === '/' || pathname.endsWith('/');
 
-/** Which of the two strategies sw.js picks. */
-function strategyFor(pathname: string, mode = 'no-cors'): 'network-first' | 'stale-while-revalidate' {
+/**
+ * The vendored editor tree, which sw.js serves cache-first. Keep in sync with
+ * VENDOR_ASSET / isVendorAsset there.
+ *
+ * Cache-first is sound only because the runtime cache is named after the vendor
+ * CONTENT: the name changes if and only if a byte under these trees changes, so a
+ * matching cache name implies matching bytes.
+ */
+const VENDOR_ASSET = /^\/(?:sdkjs|web-apps|fonts)\//;
+
+type Strategy = 'cache-first' | 'network-first' | 'stale-while-revalidate';
+
+/** Which strategy sw.js picks, in the same order the fetch handler tests them. */
+function strategyFor(pathname: string, mode = 'no-cors'): Strategy {
+  if (VENDOR_ASSET.test(pathname)) return 'cache-first';
   return isHtmlRequest(mode, pathname) || DEPLOY_COUPLED.test(pathname) ? 'network-first' : 'stale-while-revalidate';
 }
 
@@ -193,10 +206,31 @@ describe('deploy-coupled assets use network-first', () => {
     expect(strategyFor('/ran-tokens.css')).toBe('stale-while-revalidate');
   });
 
-  it('leaves the OnlyOffice long tail on stale-while-revalidate', () => {
-    // Hundreds of files; revalidating each on every load is exactly what SWR exists to avoid.
-    expect(strategyFor('/web-apps/apps/documenteditor/main/index.html')).toBe('network-first'); // .html
-    expect(strategyFor('/sdkjs/word/sdk-all.js')).toBe('stale-while-revalidate');
+  it('serves the whole OnlyOffice tree cache-first, including its HTML', () => {
+    // SWR revalidated each of these with `cache: 'no-cache'`: measured on a warm
+    // profile, a second open still sent 46 requests for files already cached. The
+    // vendor branch sits ahead of the HTML branch, so the editor's own iframe
+    // document is cache-first too -- sound because the cache name tracks the
+    // vendor content, so a matching name implies matching bytes.
+    expect(strategyFor('/web-apps/apps/documenteditor/main/index.html')).toBe('cache-first');
+    expect(strategyFor('/web-apps/apps/documenteditor/main/index.html', 'navigate')).toBe('cache-first');
+    expect(strategyFor('/sdkjs/word/sdk-all.js')).toBe('cache-first');
+    expect(strategyFor('/web-apps/apps/api/documents/api.js')).toBe('cache-first');
+    // The catalog and the x2t WASM were the first entries on this path, and stay on it.
+    expect(strategyFor('/fonts/103')).toBe('cache-first');
+    expect(strategyFor('/sdkjs/common/wasm/x2t/x2t.wasm.gz')).toBe('cache-first');
+    // Patched vendor files are covered too: bin/build.sh hashes what it serves,
+    // so shipping a new x2t_helper.js renames the cache and empties it.
+    expect(strategyFor('/sdkjs/common/wasm/x2t/x2t_helper.js')).toBe('cache-first');
+  });
+
+  it('does not let the vendor branch reach our own app shell', () => {
+    expect(strategyFor('/assets/editor-BX1VO-Oz.js')).toBe('stale-while-revalidate');
+    expect(strategyFor('/ran-fonts/fonts.css')).toBe('stale-while-revalidate');
+    expect(strategyFor('/', 'navigate')).toBe('network-first');
+    expect(strategyFor('/editor.html')).toBe('network-first');
+    // A lookalike outside the vendor trees is a normal asset.
+    expect(strategyFor('/other/fonts/103')).toBe('stale-while-revalidate');
   });
 
   it('does not match a lookalike path outside the group', () => {

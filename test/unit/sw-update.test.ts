@@ -245,8 +245,16 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     return {
       urls: () => entries.map((entry) => entry.url.slice(ORIGIN.length)),
       addAll: vi.fn().mockResolvedValue(undefined),
-      put: vi.fn(),
+      // Resolves, like the real Cache API: the fetch handler chains off put()
+      // so that a rejected write (a full storage bucket) cannot take the
+      // response down with it.
+      put: vi.fn().mockResolvedValue(undefined),
       keys: () => Promise.resolve(entries.slice()),
+      // The vendor branch of the fetch handler reads through the cache handle
+      // rather than the global `caches`, so a store that cannot answer match()
+      // makes it reject instead of falling through to the network.
+      match: (request: { url: string }) =>
+        Promise.resolve(entries.find((entry) => entry.url === request.url) ? { body: 'cached' } : undefined),
       delete: (request: { url: string }) => {
         const at = entries.findIndex((entry) => entry.url === request.url);
         if (at >= 0) entries.splice(at, 1);
