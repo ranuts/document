@@ -1,0 +1,138 @@
+import { expect, test } from './lib/l0';
+
+/**
+ * The landing page warms the editor while the visitor reads it.
+ *
+ * The problem it solves, measured: the landing page is 0.5 MB, and the first
+ * open that follows pulls ~34 MB. The page sits idle for the whole of that
+ * download, and it is the one page every visitor passes through.
+ *
+ * Two properties matter and neither is visible from the page itself:
+ *
+ *  1. The warmed bytes must land in the SERVICE WORKER's cache, not just the
+ *     HTTP cache. The worker serves the vendored tree cache-first, so an entry
+ *     it does not hold is re-requested even when the browser still has a copy.
+ *     This is what makes the *second* visit free, which is the whole promise.
+ *
+ *  2. The core list must stay true. It is the set of files every format loads
+ *     regardless of what gets opened; if a vendor bump renumbers the font
+ *     catalog, warming the old indices is wasted bandwidth AND the real ones
+ *     stay cold. So the list is checked against what an actual open requests.
+ */
+
+const CORE_FONTS = ['/fonts/072', '/fonts/074', '/fonts/075', '/fonts/076'];
+
+/** Read the SW cache: which of these paths does it hold? */
+const cachedPaths = (page: import('@playwright/test').Page, paths: string[]) =>
+  page.evaluate(async (wanted) => {
+    const held: string[] = [];
+    for (const name of await caches.keys()) {
+      const cache = await caches.open(name);
+      for (const request of await cache.keys()) {
+        const path = new URL(request.url).pathname;
+        if (wanted.includes(path) && !held.includes(path)) held.push(path);
+      }
+    }
+    return held.sort();
+  }, paths);
+
+test.describe('landing page warm-up', () => {
+  test.describe.configure({ timeout: 240_000 });
+
+  test('the core assets end up in the service worker cache without any interaction', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#landing-hero')).toBeVisible();
+
+    // The warm-up deliberately waits for the worker: bytes fetched before it
+    // controls the page would only reach the HTTP cache.
+    await page.evaluate(() => navigator.serviceWorker.ready);
+
+    const core = await page.evaluate(() => (window as any).__landingPrefetch.CORE as string[]);
+    expect(core, 'the landing page must expose its core warm-up list').toContain(
+      '/sdkjs/common/libfont/engine/fonts.wasm',
+    );
+    for (const font of ['/fonts/072', '/fonts/074', '/fonts/075', '/fonts/076']) {
+      expect(core, 'the shared font catalog entries belong in the core list').toContain(font);
+    }
+
+    // No hover, no click: this is the background layer doing its job.
+    await expect.poll(async () => (await cachedPaths(page, core)).length, { timeout: 180_000 }).toBe(core.length);
+  });
+
+  /**
+   * The list is only worth warming if it is what an open actually asks for.
+   * A vendor bump that renumbers the catalog would leave this warming four
+   * files nobody wants while the real ones stay cold -- silently, since a
+   * prefetch has no visible failure mode.
+   */
+  test('every core font entry is one a real open requests, in all three editors', async ({ page }) => {
+    const seen = new Set<string>();
+    page.on('response', (res) => {
+      const path = new URL(res.url()).pathname;
+      if (/^\/fonts\/\d{3}$/.test(path)) seen.add(path);
+    });
+
+    for (const kind of ['docx', 'xlsx', 'pptx']) {
+      await page.goto(`/editor?new=${kind}`);
+      await page
+        .waitForFunction(
+          () => {
+            const frame = document.querySelector('iframe');
+            try {
+              return (frame?.contentWindow as any)?.Asc?.editor?.isDocumentLoadComplete === true;
+            } catch {
+              return false;
+            }
+          },
+          null,
+          { timeout: 120_000 },
+        )
+        .catch(() => {});
+      await page.waitForTimeout(1500);
+    }
+
+    for (const font of CORE_FONTS) {
+      expect(
+        seen.has(font),
+        `${font} is warmed as a shared catalog entry but no editor requested it -- the catalog was probably renumbered by a vendor bump`,
+      ).toBe(true);
+    }
+  });
+
+  /**
+   * The point of all of it: after the landing page has been warmed, opening a
+   * document does not go back to the network for the core files.
+   */
+  test('after warming, opening a document does not re-request the core files', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#landing-hero')).toBeVisible();
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    const core = await page.evaluate(() => (window as any).__landingPrefetch.CORE as string[]);
+    await expect.poll(async () => (await cachedPaths(page, core)).length, { timeout: 180_000 }).toBe(core.length);
+
+    // Now go and open something, watching what leaves the page.
+    const fromNetwork: string[] = [];
+    page.on('response', (res) => {
+      const path = new URL(res.url()).pathname;
+      if (core.includes(path) && !res.fromServiceWorker()) fromNetwork.push(path);
+    });
+
+    await page.goto('/editor?new=docx');
+    await page
+      .waitForFunction(
+        () => {
+          const frame = document.querySelector('iframe');
+          try {
+            return (frame?.contentWindow as any)?.Asc?.editor?.isDocumentLoadComplete === true;
+          } catch {
+            return false;
+          }
+        },
+        null,
+        { timeout: 120_000 },
+      )
+      .catch(() => {});
+
+    expect(fromNetwork, `core files fetched from the network after warming: ${fromNetwork.join(', ')}`).toEqual([]);
+  });
+});
