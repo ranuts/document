@@ -90,6 +90,16 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- The first document you open is quicker. The homepage now quietly warms the
+  editor while you are still on it: the font engine, the font entries every
+  document needs, and the conversion engine are fetched in the background and
+  kept by the offline cache, so opening no longer starts from nothing. Hovering
+  an Open or New button still pulls that format's editor as before -- now
+  including one 1.2 MB file that had been missing from the list. Skipped
+  entirely on a metered or slow connection, and it never competes with the
+  homepage itself: one file at a time, at low priority, only once the page is
+  idle.
+
 - Returning to the editor is much lighter on the network. Its own files are now
   served straight from the offline cache instead of being checked with the
   server one by one on every visit -- a second open used to make 46 such checks

@@ -35,12 +35,20 @@ function connectionAllowsPrefetch(): boolean {
   return !(conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g');
 }
 
-/** URLs (relative to the app root) that a given kind of open will need first. */
+/**
+ * URLs (relative to the app root) that a given kind of open will need first.
+ * Kept in step with the intent layer of public/landing-prefetch.js, which does
+ * the same job for the landing page; test/unit/prefetch.test.ts pins them
+ * together so the two cannot drift.
+ */
 export function editorAssetUrls(kind?: EditorKind): string[] {
   const urls = [API_LOADER];
   if (kind) {
     urls.push(
       `web-apps/apps/${APP_DIR[kind]}/main/app.js`,
+      // code.js is 1.15 MB and loads on every open of this app; it was missing
+      // here while app.js next to it was listed.
+      `web-apps/apps/${APP_DIR[kind]}/main/code.js`,
       `sdkjs/${SDK_DIR[kind]}/sdk-all-min.js`,
       `sdkjs/${SDK_DIR[kind]}/sdk-all.js`,
     );
