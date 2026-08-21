@@ -34,20 +34,40 @@ jobs:
         with:
           browsers: chromium
 
+      # How long to wait for Cloudflare. The old window was 25 minutes (75 x 20s)
+      # and that is not enough: a preview of this repository was measured taking
+      # 36 minutes from PR push to a concluded check. The job itself gets 60
+      # minutes and the smoke run needs a few, so wait up to 45 and leave the
+      # rest -- a window that expires while Cloudflare is still building reports
+      # a red gate for a deployment that then goes on to succeed, which is the
+      # worst of both outcomes.
+      #
+      # Why it is that slow: the vendored editor is in the repository, so every
+      # preview clones ~616 MiB, checks out ~625 MB and uploads ~697 MB of
+      # output. The build script itself runs in about seven seconds.
       - name: Wait for the Cloudflare Pages preview of this commit
         id: preview
         env:
           GH_TOKEN: ${{ github.token }}
           SHA: ${{ github.event.pull_request.head.sha }}
+          WAIT_MINUTES: "45"
         run: |
-          for i in $(seq 1 75); do
+          ATTEMPTS=$(( WAIT_MINUTES * 3 ))
+          for i in $(seq 1 "$ATTEMPTS"); do
             RUN=$(gh api "repos/${{ github.repository }}/commits/$SHA/check-runs" \
               --jq '.check_runs[] | select(.name=="Cloudflare Pages") | {status, conclusion, summary: .output.summary}' 2>/dev/null | head -c 20000)
             STATUS=$(printf '%s' "$RUN" | jq -r '.status // empty' 2>/dev/null | head -1)
             if [ "$STATUS" = "completed" ]; then
               CONCLUSION=$(printf '%s' "$RUN" | jq -r '.conclusion' | head -1)
               if [ "$CONCLUSION" != "success" ]; then
-                echo "::error::Cloudflare Pages preview deployment concluded: $CONCLUSION"; exit 1
+                # Cloudflare builds this repository close to its limits, so a
+                # failure here is not automatically a defect in the commit. Check
+                # whether `E2E (Cloudflare Pages semantics)` passed: it runs the
+                # same bin/build.sh, so green there and red here means the build
+                # is fine and Cloudflare fell over. There is no API to retry a
+                # Git-integration deployment -- pushing again is the way.
+                echo "::error::Cloudflare Pages preview deployment concluded: $CONCLUSION. If the 'E2E (Cloudflare Pages semantics)' checks are green, the build itself is fine (they run the same bin/build.sh) and this was Cloudflare-side; push again to trigger a new deployment. See docs/explorations/2026-08-21-cloudflare-preview-flake.md"
+                exit 1
               fi
               URL=$(printf '%s' "$RUN" | jq -r '.summary' | grep -oE 'https://[a-z0-9-]+\.document-[a-z0-9]+\.pages\.dev' | head -1)
               if [ -z "$URL" ]; then echo "::error::preview URL not found in the check summary"; exit 1; fi
@@ -55,9 +75,9 @@ jobs:
               echo "url=$URL" >> "$GITHUB_OUTPUT"
               exit 0
             fi
-            echo "waiting for the Cloudflare Pages check ($i)..."; sleep 20
+            echo "waiting for the Cloudflare Pages check ($i/$ATTEMPTS, status=${STATUS:-absent})..."; sleep 20
           done
-          echo "::error::Cloudflare Pages preview did not finish within 25 minutes"; exit 1
+          echo "::error::Cloudflare Pages preview did not finish within $WAIT_MINUTES minutes"; exit 1
 
       - name: Smoke the preview
         env:

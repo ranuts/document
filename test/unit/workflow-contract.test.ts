@@ -292,6 +292,51 @@ describe('.github/workflows/prod-smoke.yml', () => {
   });
 });
 
+/**
+ * The preview gate waits on Cloudflare, which builds this repository close to
+ * its limits: the vendored editor lives in git, so every preview clones ~616
+ * MiB, checks out ~625 MB and uploads ~697 MB, while bin/build.sh itself runs
+ * in about seven seconds. A preview was measured taking 36 minutes to conclude,
+ * against a 25-minute wait -- so the gate reported red for a deployment that
+ * was still building and went on to succeed.
+ */
+describe('.github/workflows/preview-smoke.yml', () => {
+  const src = readFileSync(resolve(ROOT, '.github/workflows/preview-smoke.yml'), 'utf8');
+
+  // Prettier normalises the YAML scalar's quotes, so accept either.
+  const waitMinutes = Number(/WAIT_MINUTES: ['"](\d+)['"]/.exec(src)?.[1] ?? 0);
+  const jobTimeout = Number(/timeout-minutes: (\d+)/.exec(src)?.[1] ?? 0);
+
+  it('waits long enough to cover a slow preview', () => {
+    // 36 minutes is the measured worst case; anything at or under it makes the
+    // gate a coin flip on a deployment that is merely slow.
+    expect(waitMinutes).toBeGreaterThan(36);
+  });
+
+  it('leaves the job enough time to actually run the smoke after waiting', () => {
+    // The wait cannot consume the whole job: the Playwright run needs room, and
+    // a wait that outlives its job turns a slow preview into a job timeout with
+    // no error message of its own.
+    expect(jobTimeout).toBeGreaterThan(waitMinutes + 10);
+  });
+
+  it('polls on a derived attempt count, so the window cannot drift from the message', () => {
+    // The old loop hard-coded `seq 1 75` and printed "within 25 minutes"; two
+    // numbers that must agree and nothing making them.
+    expect(src).toContain('ATTEMPTS=$(( WAIT_MINUTES * 3 ))');
+    expect(src).toContain('seq 1 "$ATTEMPTS"');
+    expect(src).toMatch(/did not finish within \$WAIT_MINUTES minutes/);
+  });
+
+  it('tells the reader how to tell a Cloudflare wobble from a broken build', () => {
+    // Failing here is not automatically a defect in the commit, and the person
+    // reading the red check needs to know what distinguishes the two cases --
+    // and that pushing again is the only way to retry a Git-integration deploy.
+    expect(src).toMatch(/E2E \(Cloudflare Pages semantics\)/);
+    expect(src).toMatch(/push again/i);
+  });
+});
+
 describe('bin/test-e2e-docker.sh', () => {
   const script = readFileSync(resolve(ROOT, 'bin/test-e2e-docker.sh'), 'utf8');
 
