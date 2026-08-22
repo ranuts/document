@@ -347,7 +347,6 @@ ${jsonLd}
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
-    <script src="/ranui-iife/card.iife.js" defer></script>
     <script src="/ranui-iife/select.iife.js" defer></script>
     <script src="/ranui-iife/theme-switch.iife.js" defer></script>
     <script src="/lang-switch.js" defer></script>

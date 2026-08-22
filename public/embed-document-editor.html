@@ -163,7 +163,6 @@
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
-    <script src="/ranui-iife/card.iife.js" defer></script>
     <script src="/ranui-iife/select.iife.js" defer></script>
     <script src="/ranui-iife/theme-switch.iife.js" defer></script>
     <script src="/lang-switch.js" defer></script>
@@ -277,14 +276,12 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 send('document:open-url', { url, readonly: true });
 send('document:set-readonly', { readonly: false });</code></pre>
 
-      <r-card class="oss"
-        ><div class="card-body">
-          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — read the code, run your own copy, and see
-          exactly how the boundary works:
-          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>. Full API
-          reference: <a href="/help/embed-api">Embed API reference</a>.
-        </div></r-card
-      >
+      <aside class="oss">
+        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — read the code, run your own copy, and see
+        exactly how the boundary works:
+        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>. Full API reference:
+        <a href="/help/embed-api">Embed API reference</a>.
+      </aside>
 
       <h2 class="faq">Frequently asked questions</h2>
       <div class="faq">

@@ -34,7 +34,6 @@
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/home.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
-    <script src="/ranui-iife/card.iife.js" defer></script>
     <script src="/ranui-iife/select.iife.js" defer></script>
     <script src="/ranui-iife/theme-switch.iife.js" defer></script>
     <script src="/lang-switch.js" defer></script>
@@ -230,6 +229,10 @@
               <p class="dw-text"><mark>你输入的每一个字，都留在这台设备上。</mark><i class="caret"></i></p>
               <span class="dl w85"></span>
               <span class="dl w60"></span>
+              <span class="dl t2"></span>
+              <span class="dl w88"></span>
+              <span class="dl w92"></span>
+              <span class="dl w70"></span>
             </div>
             <aside class="dw-note">
               <b>你 · 刚刚</b>
@@ -246,76 +249,48 @@
           <span class="eyebrow">打开文件</span>
           <h2>没装 Office？没关系。</h2>
         </div>
-        <div class="formats">
-          <a class="fmt" href="/zh-CN/open/docx">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.DOCX</div>
-                <h3>打开 DOCX</h3>
-                <p>完整排版查看任何 Word 文档——字体、表格、图片都在。</p>
-                <span class="fmt-go">打开 DOCX →</span>
-              </div>
-            </r-card>
+        <div class="index">
+          <a class="row" href="/zh-CN/open/docx">
+            <span class="ext">.docx</span>
+            <span class="name">打开 DOCX</span>
+            <span class="desc">完整排版查看任何 Word 文档——字体、表格、图片都在。</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/zh-CN/open/xlsx">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.XLSX</div>
-                <h3>打开 XLSX</h3>
-                <p>公式、图表、多工作表完整呈现。</p>
-                <span class="fmt-go">打开 XLSX →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/zh-CN/open/xlsx">
+            <span class="ext">.xlsx</span>
+            <span class="name">打开 XLSX</span>
+            <span class="desc">公式、图表、多工作表完整呈现。</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/zh-CN/open/pptx">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.PPTX</div>
-                <h3>打开 PPTX</h3>
-                <p>版式、主题、媒体都保留，直接在浏览器里看。</p>
-                <span class="fmt-go">打开 PPTX →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/zh-CN/open/pptx">
+            <span class="ext">.pptx</span>
+            <span class="name">打开 PPTX</span>
+            <span class="desc">版式、主题、媒体都保留。</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/zh-CN/open/pdf">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.PDF</div>
-                <h3>打开 PDF</h3>
-                <p>阅读、评论、批注 PDF 再另存回去——不上传任何内容。</p>
-                <span class="fmt-go">打开 PDF →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/zh-CN/open/pdf">
+            <span class="ext">.pdf</span>
+            <span class="name">打开 PDF</span>
+            <span class="desc">阅读、评论、批注后再存回去。</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/zh-CN/open/odt">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.ODT / .ODS / .ODP</div>
-                <h3>打开 OpenDocument 文件</h3>
-                <p>LibreOffice 的格式同样可以打开——阅读或编辑后，存回 ODT、DOCX 或 PDF。</p>
-                <span class="fmt-go">打开 ODT &rarr;</span>
-              </div>
-            </r-card>
+          <a class="row" href="/zh-CN/open/odt">
+            <span class="ext">.odt .ods .odp</span>
+            <span class="name">打开 OpenDocument</span>
+            <span class="desc">LibreOffice 格式——可存回 ODT、DOCX 或 PDF。</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/zh-CN/convert/docx-to-pdf">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.DOCX &rarr; .PDF</div>
-                <h3>转换为 PDF</h3>
-                <p>Word、Excel 和 PowerPoint 文件在你的设备上变成 PDF——没有上传队列。</p>
-                <span class="fmt-go">转换为 PDF &rarr;</span>
-              </div>
-            </r-card>
+          <a class="row" href="/zh-CN/convert/docx-to-pdf">
+            <span class="ext">.docx &rarr; .pdf</span>
+            <span class="name">转换为 PDF</span>
+            <span class="desc">Word、Excel、PowerPoint 在你的设备上变成 PDF。</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/zh-CN/convert/xlsx-to-csv">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.XLSX → .CSV</div>
-                <h3>格式互转</h3>
-                <p>表格与 CSV 互转，全程本地，一个字节都不上传。</p>
-                <span class="fmt-go">转换文件 →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/zh-CN/convert/xlsx-to-csv">
+            <span class="ext">.xlsx &rarr; .csv</span>
+            <span class="name">格式互转</span>
+            <span class="desc">表格与 CSV 互转，一个字节都不上传。</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </div>
@@ -325,35 +300,27 @@
           <span class="eyebrow">为什么不一样</span>
           <h2>隐私是设计出来的，不是承诺出来的</h2>
         </div>
-        <div class="cards">
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">100% 客户端</div>
-              <h3>文件永不离开你的设备</h3>
-              <p>每个文档都在本地打开、编辑和保存，没有服务器可供上传。</p>
-            </div>
-          </r-card>
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">免注册</div>
-              <h3>没有任何注册环节</h3>
-              <p>没有邮箱、没有登录墙，打开页面立即开始编辑。</p>
-            </div>
-          </r-card>
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">PWA · 离线</div>
-              <h3>装上它，飞机上也能用</h3>
-              <p>添加到主屏，断网也能继续工作。</p>
-            </div>
-          </r-card>
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">AGPL-3.0</div>
-              <h3>开源 · 可自托管</h3>
-              <p>审计运行的每一行，或自建一份。基于 OnlyOffice。</p>
-            </div>
-          </r-card>
+        <div class="pillars">
+          <div class="pillar">
+            <span class="k">100% 客户端</span>
+            <h3>文件永不离开你的设备</h3>
+            <p>每个文档都在本地打开、编辑和保存，没有服务器可供上传。</p>
+          </div>
+          <div class="pillar">
+            <span class="k">免注册</span>
+            <h3>没有任何注册环节</h3>
+            <p>没有邮箱、没有登录墙，打开页面立即开始编辑。</p>
+          </div>
+          <div class="pillar">
+            <span class="k">PWA &middot; 离线</span>
+            <h3>装上它，飞机上也能用</h3>
+            <p>添加到主屏，断网也能继续工作。</p>
+          </div>
+          <div class="pillar">
+            <span class="k">AGPL-3.0</span>
+            <h3>开源 &middot; 可自托管</h3>
+            <p>审计运行的每一行，或自建一份。基于 OnlyOffice。</p>
+          </div>
         </div>
       </div>
 
@@ -388,6 +355,7 @@
         <div class="section-head">
           <span class="eyebrow">FAQ</span>
           <h2>常见问题</h2>
+          <p class="head-note">更详细的说明——文件大小限制、错误码、自托管——在<a href="/zh-CN/help">帮助文档</a>里。</p>
         </div>
         <div class="faq">
           <div class="qa">
