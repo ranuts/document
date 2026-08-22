@@ -86,15 +86,15 @@ Any of them can be exported to PDF. CSV keeps its encoding on the way back out
 
 Parameters on `/editor`:
 
-| Parameter      | Description                                                                                                               |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `src=<url>`    | Open a document from a URL (the URL must allow CORS)                                                                      |
-| `file=<url>`   | Same, legacy spelling; wins if both are present                                                                           |
-| `new=docx`     | Start a blank document (`docx`, `xlsx`, `pptx`)                                                                           |
-| `doc=<id>`     | Reopen a document from this browser's history — the editor puts its own id here, so a reload returns to the same document |
-| `readonly=1`   | Open for viewing: editing and export are disabled                                                                         |
-| `embed=1`      | Embed mode; the host page drives the editor over postMessage                                                              |
-| `locale=zh-CN` | Interface language                                                                                                        |
+| Parameter      | Description                                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `src=<url>`    | Open a document from a URL (the URL must allow CORS)                                                                     |
+| `file=<url>`   | Same, legacy spelling; wins if both are present                                                                          |
+| `new=docx`     | Start a blank document (`docx`, `xlsx`, `pptx`)                                                                          |
+| `saved=<id>`   | Reopen one of this browser's saved documents — the editor puts its own id here, so a reload returns to the same document |
+| `readonly=1`   | Open for viewing: editing and export are disabled                                                                        |
+| `embed=1`      | Embed mode; the host page drives the editor over postMessage                                                             |
+| `locale=zh-CN` | Interface language                                                                                                       |
 
 ---
 

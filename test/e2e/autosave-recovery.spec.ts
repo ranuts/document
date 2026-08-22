@@ -44,7 +44,7 @@ const readHistory = (page: Page) =>
   page.evaluate(
     () =>
       new Promise<Array<{ id: string; title: string; size: number; savedToDiskAt?: number }>>((resolve) => {
-        const request = indexedDB.open('document-history', 1);
+        const request = indexedDB.open('document-history');
         request.onsuccess = () => {
           const db = request.result;
           if (!db.objectStoreNames.contains('docs')) {
@@ -157,7 +157,7 @@ test.describe('autosave and recovery (real editor)', () => {
     await page.keyboard.type('typed before the reload', { delay: 60 });
 
     // The editor stamped its identity into the address bar on open.
-    const docId = new URL(page.url()).searchParams.get('doc');
+    const docId = new URL(page.url()).searchParams.get('saved');
     expect(docId).toBeTruthy();
 
     await hidePage(page);
@@ -170,7 +170,7 @@ test.describe('autosave and recovery (real editor)', () => {
     const reloadedSdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
     await reloadedSdk.waitFor({ state: 'visible', timeout: 30_000 });
     // Same document, same row: no second id, no duplicate history entry.
-    expect(new URL(page.url()).searchParams.get('doc')).toBe(docId);
+    expect(new URL(page.url()).searchParams.get('saved')).toBe(docId);
     expect(await readHistory(page)).toHaveLength(1);
 
     await reloadedSdk.click({ position: { x: 300, y: 200 } });

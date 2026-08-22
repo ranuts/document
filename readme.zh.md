@@ -89,7 +89,7 @@ pnpm run dev
 | `src=<url>`    | 从 URL 打开文档（该 URL 需允许 CORS）                                    |
 | `file=<url>`   | 同上，旧写法；两者同时存在时以它为准                                     |
 | `new=docx`     | 新建空白文档（`docx`、`xlsx`、`pptx`）                                   |
-| `doc=<id>`     | 从本机历史打开某一篇——编辑器会把自己的 id 写在这里，因此刷新会回到同一篇 |
+| `saved=<id>`   | 打开本机保存的某一篇——编辑器会把自己的 id 写在这里，因此刷新会回到同一篇 |
 | `readonly=1`   | 只读打开：禁用编辑与导出                                                 |
 | `embed=1`      | 嵌入模式，由宿主页面通过 postMessage 驱动                                |
 | `locale=zh-CN` | 界面语言                                                                 |

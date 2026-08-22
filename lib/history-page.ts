@@ -88,7 +88,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
     .children(
       View('a')
         .class('history-row-title history-open')
-        .attr('href', `/editor?doc=${encodeURIComponent(doc.id)}`)
+        .attr('href', `/editor?saved=${encodeURIComponent(doc.id)}`)
         .text(doc.title)
         .build(),
       ...(hasUnsavedWork(doc)

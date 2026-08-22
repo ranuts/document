@@ -14,10 +14,17 @@
  * takes for the landing-page handoff.
  */
 export const DB_NAME = 'document-history';
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 export const DOCS_STORE = 'docs';
 export const BLOBS_STORE = 'blobs';
+/**
+ * File System Access handles, keyed by document id: where on the user's disk
+ * this document lives. Handles are structured-cloneable, so IndexedDB is the
+ * only place they can survive a reload -- which is the whole point of keeping
+ * one (see lib/save-target.ts).
+ */
+export const HANDLES_STORE = 'handles';
 
 /** `docs` ordered by snapshot time -- the list view's default order. */
 export const DOCS_BY_UPDATED = 'by_updatedAt';
@@ -53,6 +60,11 @@ export function openHistoryDb(): Promise<IDBDatabase | null> {
       if (!db.objectStoreNames.contains(BLOBS_STORE)) {
         const blobs = db.createObjectStore(BLOBS_STORE, { keyPath: ['docId', 'rev'] });
         blobs.createIndex(BLOBS_BY_DOC, 'docId');
+      }
+      // Added in v2. The guard is what makes the upgrade incremental: a
+      // database created at v1 gains this store and keeps its documents.
+      if (!db.objectStoreNames.contains(HANDLES_STORE)) {
+        db.createObjectStore(HANDLES_STORE, { keyPath: 'docId' });
       }
     };
     request.onsuccess = () => {
