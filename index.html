@@ -184,7 +184,6 @@
          (same as every other landing page); the file picker hand-off to /editor is
          public/open-local.js; the language select is public/lang-switch.js. -->
     <script src="/ranui-iife/button.iife.js" defer></script>
-    <script src="/ranui-iife/card.iife.js" defer></script>
     <script src="/ranui-iife/select.iife.js" defer></script>
     <script src="/ranui-iife/theme-switch.iife.js" defer></script>
     <script src="/lang-switch.js" defer></script>
@@ -287,6 +286,10 @@
               <p class="dw-text"><mark>Everything you type stays on this device.</mark><i class="caret"></i></p>
               <span class="dl w85"></span>
               <span class="dl w60"></span>
+              <span class="dl t2"></span>
+              <span class="dl w88"></span>
+              <span class="dl w92"></span>
+              <span class="dl w70"></span>
             </div>
             <aside class="dw-note">
               <b>You · just now</b>
@@ -304,76 +307,48 @@
           <span class="eyebrow">Open a file</span>
           <h2>No Office installed? No problem.</h2>
         </div>
-        <div class="formats">
-          <a class="fmt" href="/open/docx">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.DOCX</div>
-                <h3>Open DOCX</h3>
-                <p>View any Word document with full formatting — fonts, tables, images intact.</p>
-                <span class="fmt-go">Open a DOCX →</span>
-              </div>
-            </r-card>
+        <div class="index">
+          <a class="row" href="/open/docx">
+            <span class="ext">.docx</span>
+            <span class="name">Open DOCX</span>
+            <span class="desc">Word documents with fonts, tables and images intact.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/open/xlsx">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.XLSX</div>
-                <h3>Open XLSX</h3>
-                <p>Formulas, charts and multiple sheets, fully rendered.</p>
-                <span class="fmt-go">Open an XLSX →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/open/xlsx">
+            <span class="ext">.xlsx</span>
+            <span class="name">Open XLSX</span>
+            <span class="desc">Formulas, charts and multiple sheets, fully rendered.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/open/pptx">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.PPTX</div>
-                <h3>Open PPTX</h3>
-                <p>Slides with layouts, themes and media preserved, straight in the browser.</p>
-                <span class="fmt-go">Open a PPTX →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/open/pptx">
+            <span class="ext">.pptx</span>
+            <span class="name">Open PPTX</span>
+            <span class="desc">Slides with layouts, themes and media preserved.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/open/pdf">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.PDF</div>
-                <h3>Open PDF</h3>
-                <p>Read, comment and annotate a PDF, then save it back — nothing uploaded.</p>
-                <span class="fmt-go">Open a PDF →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/open/pdf">
+            <span class="ext">.pdf</span>
+            <span class="name">Open PDF</span>
+            <span class="desc">Read, comment and annotate, then save it back.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/open/odt">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.ODT / .ODS / .ODP</div>
-                <h3>Open OpenDocument files</h3>
-                <p>LibreOffice formats open too — read or edit them, then save back as ODT, DOCX or PDF.</p>
-                <span class="fmt-go">Open an ODT &rarr;</span>
-              </div>
-            </r-card>
+          <a class="row" href="/open/odt">
+            <span class="ext">.odt .ods .odp</span>
+            <span class="name">Open OpenDocument</span>
+            <span class="desc">LibreOffice formats — save back as ODT, DOCX or PDF.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/convert/docx-to-pdf">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.DOCX &rarr; .PDF</div>
-                <h3>Convert to PDF</h3>
-                <p>Word, Excel and PowerPoint files become PDFs on your device — no upload queue.</p>
-                <span class="fmt-go">Convert to PDF &rarr;</span>
-              </div>
-            </r-card>
+          <a class="row" href="/convert/docx-to-pdf">
+            <span class="ext">.docx &rarr; .pdf</span>
+            <span class="name">Convert to PDF</span>
+            <span class="desc">Word, Excel and PowerPoint become PDFs on your device.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
-          <a class="fmt" href="/convert/xlsx-to-csv">
-            <r-card hoverable>
-              <div class="card-body">
-                <div class="k">.XLSX → .CSV</div>
-                <h3>Convert between formats</h3>
-                <p>Turn spreadsheets into CSV and back — locally, without uploading a byte.</p>
-                <span class="fmt-go">Convert a file →</span>
-              </div>
-            </r-card>
+          <a class="row" href="/convert/xlsx-to-csv">
+            <span class="ext">.xlsx &rarr; .csv</span>
+            <span class="name">Convert between formats</span>
+            <span class="desc">Spreadsheets to CSV and back, without uploading a byte.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </div>
@@ -383,35 +358,27 @@
           <span class="eyebrow">Why it's different</span>
           <h2>Private by design, not by promise</h2>
         </div>
-        <div class="cards">
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">100% CLIENT-SIDE</div>
-              <h3>Files never leave your device</h3>
-              <p>Every document is opened, edited and saved locally. There is no server to upload to.</p>
-            </div>
-          </r-card>
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">NO ACCOUNT</div>
-              <h3>Nothing to sign up for</h3>
-              <p>No email, no login wall. Open the page and start editing immediately.</p>
-            </div>
-          </r-card>
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">PWA · OFFLINE</div>
-              <h3>Install it, use it on a plane</h3>
-              <p>Add it to your home screen and it keeps working with no internet connection.</p>
-            </div>
-          </r-card>
-          <r-card hoverable>
-            <div class="card-body">
-              <div class="k">AGPL-3.0</div>
-              <h3>Open source &amp; self-hostable</h3>
-              <p>Audit exactly what runs, or host your own copy. Powered by OnlyOffice.</p>
-            </div>
-          </r-card>
+        <div class="pillars">
+          <div class="pillar">
+            <span class="k">100% client-side</span>
+            <h3>Files never leave your device</h3>
+            <p>Every document is opened, edited and saved locally. There is no server to upload to.</p>
+          </div>
+          <div class="pillar">
+            <span class="k">No account</span>
+            <h3>Nothing to sign up for</h3>
+            <p>No email, no login wall. Open the page and start editing immediately.</p>
+          </div>
+          <div class="pillar">
+            <span class="k">PWA &middot; offline</span>
+            <h3>Install it, use it on a plane</h3>
+            <p>Add it to your home screen and it keeps working with no internet connection.</p>
+          </div>
+          <div class="pillar">
+            <span class="k">AGPL-3.0</span>
+            <h3>Open source &amp; self-hostable</h3>
+            <p>Audit exactly what runs, or host your own copy. Powered by OnlyOffice.</p>
+          </div>
         </div>
       </div>
 
@@ -446,6 +413,10 @@
         <div class="section-head">
           <span class="eyebrow">FAQ</span>
           <h2>Questions, answered</h2>
+          <p class="head-note">
+            Longer answers — file size limits, error codes, self-hosting — are in the
+            <a href="/help">help pages</a>.
+          </p>
         </div>
         <div class="faq">
           <div class="qa">

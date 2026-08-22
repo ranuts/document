@@ -3,7 +3,7 @@
    responsive) — the things tokens and components can't provide. Every design VALUE
    comes from the ranui token layer (public/ran-tokens.css): colours --ran-color-*,
    spacing --ran-space-*, radius --ran-radius-*, fonts --ran-font-*. The UI chrome
-   (buttons, cards) is real ranui components (<r-button>, <r-card>). EVERY selector
+   (buttons) is real ranui components (<r-button>). EVERY selector
    is scoped under #landing-hero; dark mode comes from ranui for free.
 
    Design concept: the page IS a document being edited locally. The hero is an
@@ -203,7 +203,10 @@
   gap: clamp(32px, 5vw, 72px);
   align-items: center;
   padding-top: clamp(48px, 7vw, 96px);
-  padding-bottom: clamp(48px, 7vw, 96px);
+  /* Less than the top: the section below opens with its own clamp(56..104px)
+     of air, and stacking two full-size paddings left a band of nothing between
+     the trust row and the first heading. */
+  padding-bottom: clamp(32px, 4vw, 56px);
 }
 #landing-hero .chip {
   display: inline-flex;
@@ -413,6 +416,23 @@
 #landing-hero .dw-sheet .w60 {
   width: 60%;
 }
+#landing-hero .dw-sheet .w70 {
+  width: 70%;
+}
+#landing-hero .dw-sheet .w88 {
+  width: 88%;
+}
+/* second-level heading further down the page: the sheet reads as a document
+   with more than one paragraph, which is what fills the hero's right column --
+   at four skeleton lines the window sat as a small chip against a 700px column
+   of copy. */
+#landing-hero .dw-sheet .dl.t2 {
+  height: 12px;
+  width: 38%;
+  border-radius: 4px;
+  background: var(--ran-color-border-hover);
+  margin: var(--ran-space-3) 0 var(--ran-space-1);
+}
 /* the one real line: selected text + live caret */
 #landing-hero .dw-text {
   margin: 2px 0;
@@ -493,6 +513,20 @@
   /* gray mono label — blue is reserved for links and the hero selection */
   color: var(--ran-color-text-secondary);
 }
+/* Only the FAQ head uses this today: its column is short and the answers next
+   to it are long, so the space under the heading is where the pointer to the
+   longer-form help belongs. */
+#landing-hero .section-head .head-note {
+  margin: var(--ran-space-4) 0 0;
+  max-width: 34ch;
+  font-size: 14.5px;
+  color: var(--ran-color-text-secondary);
+}
+#landing-hero .section-head .head-note a {
+  color: var(--ran-color-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 #landing-hero .section-head h2 {
   margin: 0;
   font-size: clamp(24px, 2.8vw, 34px);
@@ -501,114 +535,172 @@
   text-wrap: balance;
 }
 
-/* ---------- feature cards (r-card, diagonal bento) ---------- */
-#landing-hero .cards {
+/* ---------- pillars: newspaper columns, not boxes ----------
+   Four claims that are read once and not compared cell-by-cell, so they get
+   column rules instead of card chrome: a box per claim asks the eye to parse a
+   container before it reads a sentence, and four of them next to seven format
+   rows and three process steps turned the page into a wall of rounded
+   rectangles. The rule between columns does the same grouping job with one
+   pixel and no interior padding to pay for. */
+#landing-hero .pillars {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas:
-    'a a b'
-    'c d d';
-  gap: var(--ran-space-4);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* label / claim / prose share rows across all four columns (subgrid), so a
+     two-line claim in one column does not push its paragraph out of line with
+     the others -- the ragged baselines were what made the un-boxed version
+     look unfinished. */
+  grid-template-rows: auto auto auto;
+  gap: clamp(24px, 3vw, 44px);
 }
-#landing-hero .cards > :nth-child(1) {
-  grid-area: a;
+#landing-hero .pillar {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  align-content: start;
 }
-#landing-hero .cards > :nth-child(2) {
-  grid-area: b;
+/* The rule belongs *between* columns, so the first one goes without. */
+#landing-hero .pillar + .pillar {
+  border-left: 1px solid var(--ran-color-border);
+  padding-left: clamp(24px, 3vw, 44px);
+  /* the gap already spaces them; the padding above is what the rule needs */
+  margin-left: calc(-1 * clamp(24px, 3vw, 44px) / 2);
 }
-#landing-hero .cards > :nth-child(3) {
-  grid-area: c;
-}
-#landing-hero .cards > :nth-child(4) {
-  grid-area: d;
-}
-#landing-hero .cards r-card {
+#landing-hero .pillar .k {
   display: block;
-  height: 100%;
-}
-/* Card hover (border darken + elevated shadow) is the component's own
-   `hoverable` behavior now — see <r-card hoverable> in the markup. */
-/* pre-upgrade fallback: mirrors the upgraded .ran-card chrome exactly
-   (border, radius-md, page background, its built-in 16px padding) so the
-   custom-element upgrade doesn't flash */
-#landing-hero .cards r-card:not(:defined),
-#landing-hero .formats r-card:not(:defined) {
-  display: block;
-  border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-md);
-  background: var(--ran-color-bg);
-  padding: var(--ran-space-4);
-}
-/* r-card renders its own container chrome; card-body only adds inner padding. */
-#landing-hero .card-body {
-  padding: var(--ran-space-6);
-}
-#landing-hero .card-body .k {
   font: 600 11px/1 var(--ran-font-mono);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--ran-color-text-secondary);
 }
-#landing-hero .card-body h3 {
+#landing-hero .pillar h3 {
   margin: var(--ran-space-4) 0 var(--ran-space-2);
   font-size: 17px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
 }
-#landing-hero .card-body p {
+#landing-hero .pillar p {
   margin: 0;
   color: var(--ran-color-text-secondary);
   font-size: 14.5px;
-  line-height: 1.55;
-  max-width: 52ch;
-}
-/* the two wide bento cells lead with a bigger claim */
-#landing-hero .cards > :nth-child(1) .card-body h3,
-#landing-hero .cards > :nth-child(4) .card-body h3 {
-  font-size: 21px;
-  letter-spacing: -0.02em;
+  line-height: 1.6;
+  max-width: 42ch;
 }
 
-/* ---------- format entry points (open a file without Office) ---------- */
-#landing-hero .formats {
+/* ---------- format index: one row per entry point ----------
+   These seven entries are a directory, not seven products: same shape, same verb,
+   scanned down the left edge until the reader finds their extension. A grid of
+   cards makes that scan two-dimensional and leaves a ragged last row (7 does
+   not divide by 4). Rows read in one direction, cost one hairline each, and
+   put the extension -- the thing being looked up -- in a fixed left column. */
+/* No rule above the first row: the section head already draws one, and two
+   hairlines a gap apart read as an empty table header. */
+#landing-hero .index .row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--ran-space-4);
-}
-#landing-hero .formats .fmt {
-  display: block;
-  min-width: 0;
+  grid-template-columns: 132px minmax(0, 13rem) minmax(0, 1fr) 16px;
+  align-items: baseline;
+  gap: clamp(20px, 2vw, 32px);
+  /* The hover ground extends past the text into the gutter, so a row lights up
+     as a band rather than as a tight box around the words. */
+  padding: var(--ran-space-4) var(--ran-space-3);
+  margin: 0 calc(-1 * var(--ran-space-3));
+  border-bottom: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
   color: inherit;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
-#landing-hero .formats r-card {
-  display: block;
-  height: 100%;
+#landing-hero .index .row:hover {
+  background: var(--ran-color-bg-hover);
 }
-#landing-hero .formats .card-body {
-  padding: var(--ran-space-4) var(--ran-space-4) var(--ran-space-6);
+#landing-hero .index .ext {
+  font: 600 12.5px/1.5 var(--ran-font-mono);
+  letter-spacing: 0.03em;
+  color: var(--ran-color-text-secondary);
+  white-space: nowrap;
 }
-#landing-hero .formats .card-body h3 {
+#landing-hero .index .name {
   font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
-#landing-hero .formats .card-body p {
-  font-size: 13.5px;
+#landing-hero .index .desc {
+  color: var(--ran-color-text-secondary);
+  font-size: 14.5px;
+  line-height: 1.5;
 }
-/* The whole card is the <a>; this is its affordance label, not an inline prose link — the
-   arrow and the bold mono face already carry that. Rendering it blue while the card title
-   inside the *same* anchor stays ink would mean blue is decoration here, not link semantics,
-   which is exactly what ranui's design standard reserves blue against. */
-#landing-hero .fmt-go {
-  display: inline-block;
-  margin-top: var(--ran-space-4);
-  font: 600 12.5px/1 var(--ran-font-mono);
+#landing-hero .index .go {
+  justify-self: end;
+  font: 400 15px/1 var(--ran-font-mono);
+  color: var(--ran-color-text-secondary);
+  transition:
+    transform 0.15s ease,
+    color 0.15s ease;
+}
+#landing-hero .index .row:hover .go {
+  transform: translateX(3px);
   color: var(--ran-color-text);
 }
+#landing-hero .index .row:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: -2px;
+}
+/* Tablet: the row still fits all four columns, just tighter. */
+@media (max-width: 980px) {
+  #landing-hero .index .row {
+    grid-template-columns: 112px minmax(0, 11rem) minmax(0, 1fr) 16px;
+    gap: var(--ran-space-4);
+  }
+  #landing-hero .index .desc {
+    font-size: 13.5px;
+  }
+}
+@media (max-width: 760px) {
+  /* The description is the first thing to go: the extension and the verb are
+     what the row is looked up by. */
+  #landing-hero .index .row {
+    grid-template-columns: 108px minmax(0, 1fr) 16px;
+  }
+  #landing-hero .index .desc {
+    display: none;
+  }
+}
 @media (max-width: 900px) {
-  #landing-hero .formats {
-    grid-template-columns: 1fr 1fr;
+  #landing-hero .pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: clamp(28px, 4vw, 44px);
+  }
+  /* two columns: the rule goes between the pair, never before a row's first */
+  #landing-hero .pillar:nth-child(odd) {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
   }
 }
 @media (max-width: 560px) {
-  #landing-hero .formats {
-    grid-template-columns: 1fr;
+  #landing-hero .index .row {
+    grid-template-columns: 1fr 16px;
+    gap: var(--ran-space-1) var(--ran-space-4);
+  }
+  #landing-hero .index .ext {
+    grid-column: 1;
+    order: -1;
+  }
+  #landing-hero .index .go {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    align-self: center;
+  }
+  #landing-hero .pillars {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #landing-hero .pillar + .pillar {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+    border-top: 1px solid var(--ran-color-border);
+    padding-top: var(--ran-space-6);
   }
 }
 
@@ -815,7 +907,7 @@
 
 /* ---------- motion ---------- */
 /* Pure CSS, no JS: a load-in stagger on the hero, a live caret in the document
-   window, a pulse on the status dot, and a hover lift on cards. All gated
+   window, and a pulse on the status dot. All gated
    behind prefers-reduced-motion (the caret stays visible, just static). */
 @media (prefers-reduced-motion: no-preference) {
   /* orchestrated hero load-in */
@@ -886,13 +978,6 @@
   }
 }
 @media (max-width: 900px) {
-  #landing-hero .cards {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      'a a'
-      'b c'
-      'd d';
-  }
   #landing-hero .steps {
     grid-template-columns: 1fr;
     gap: var(--ran-space-6);
@@ -909,14 +994,6 @@
   }
 }
 @media (max-width: 560px) {
-  #landing-hero .cards {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'a'
-      'b'
-      'c'
-      'd';
-  }
   #landing-hero .dw-body {
     grid-template-columns: 1fr;
   }
@@ -943,12 +1020,11 @@
      flexed them apart and left "Local history" stranded on its own line. */
   display: block;
   max-width: 62ch;
-  padding: var(--ran-space-3) var(--ran-space-4);
-  border-radius: var(--ran-radius-md);
-  background: var(--ran-color-bg-subtle);
-  /* Hairline in the shadow layer, matching the document list and the recovery
-     card: the three surfaces that talk about saved work look like one feature. */
-  box-shadow: 0 0 0 1px var(--ran-color-border);
+  /* A marginal note, not a panel: one rule down the left edge is enough to
+     bound it against the buttons above and the trust row below, and it keeps
+     the hero free of filled surfaces. */
+  padding-left: var(--ran-space-4);
+  border-left: 2px solid var(--ran-color-border);
   font-size: 14px;
   line-height: 1.6;
   color: var(--ran-color-text-secondary);
