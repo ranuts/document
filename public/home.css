@@ -21,6 +21,15 @@
    Reading `var(--ran-color-text)` at the call site says which token is in play; reading
    `var(--ink)` requires a lookup. Only genuinely local values keep a name below. */
 
+/* The homepage does not load landing.css (it builds its own chrome), so the
+   document reset it carries has to exist here too -- without it the body keeps
+   the browser default 8px margin and the page floats inside a frame of
+   backdrop, which is visible the moment the theme is dark. */
+body {
+  margin: 0;
+  background: var(--ran-color-bg);
+}
+
 #landing-hero {
   /* editor-selection ground: theme-flipped by ran-tokens (light #dfefff / dark #002f62) */
   --sel: var(--ran-blue-300);
@@ -129,9 +138,12 @@
 }
 #landing-hero r-select.lang-select {
   display: inline-block;
-  /* Wide enough for the longest endonym in the menu ("Deutsch", "Español");
-     at 76px the trigger clipped them to "Deuts". */
-  min-width: 104px;
+  /* Fits the longest endonym in the menu. The component clips its own label
+     (overflow: hidden inside the shadow root) and sizes the dropdown panel to
+     the trigger, so a trigger too narrow for "Português" cuts the word in both
+     places at once. The number is checked, not guessed: language-menu.spec.ts
+     opens every locale and fails if any label is clipped. */
+  min-width: 132px;
   font-size: 14px;
   /* Matches the nav links beside it (14px on space-2/space-3 padding); the
      44px default stood a head taller than everything else in the bar. */
