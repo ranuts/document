@@ -1,5 +1,5 @@
 /** Shapes stored in the history database. Kept apart from the access layer so
- *  the history page, the recovery bar and the autosave scheduler can talk about
+ *  the history page, the landing page and the autosave scheduler can talk about
  *  records without pulling IndexedDB code into their bundles. */
 
 /** Where the document came from, for the history list's subtitle. */
@@ -35,12 +35,10 @@ export interface HistoryDoc {
   nextRev: number;
   /**
    * When bytes for this document last reached the user's disk. Compared with
-   * `updatedAt` to answer the only question the recovery bar cares about:
-   * is there work here that never made it out of the browser?
+   * `updatedAt` to answer the only question recovery cares about: is there
+   * work here that never made it out of the browser?
    */
   savedToDiskAt?: number;
-  /** When the user dismissed the recovery offer for this document. */
-  dismissedAt?: number;
 }
 
 /**

@@ -10,7 +10,7 @@ declare function post(type: string, payload?: Record<string, unknown>): Promise<
 /**
  * The whole loss-protection path with the real editor and real x2t behind it:
  * edit a document, let the tab go away, and get the work back on the next
- * visit -- through the recovery bar, with the bytes intact.
+ * visit -- through the saved documents list, with the bytes intact.
  *
  * The snapshot is triggered by hiding the page rather than by waiting out the
  * interval. That is not a shortcut around the schedule: visibilitychange is
@@ -84,7 +84,7 @@ test.describe('autosave and recovery (real editor)', () => {
     });
   });
 
-  test('edits survive the tab going away and come back through the recovery bar', async ({ page }) => {
+  test('edits survive the tab going away and come back through the saved documents list', async ({ page }) => {
     const dir = join('test-results', 'autosave-recovery');
     mkdirSync(dir, { recursive: true });
     const path = join(dir, 'Recovery.docx');
@@ -119,14 +119,19 @@ test.describe('autosave and recovery (real editor)', () => {
     // Never exported, so the browser holds the only copy of that sentence.
     expect(stored.savedToDiskAt).toBeUndefined();
 
-    // Coming back the next day: a blank editor, nothing on screen about
-    // yesterday's work until the offer appears.
+    // Coming back the next day and starting something else: yesterday's work
+    // must not interrupt it. There used to be a card here, and it arrived on
+    // top of the document the user had just opened to talk about another one.
     await page.goto('/editor?new=docx');
-    const bar = page.locator('#recovery-bar');
-    await expect(bar).toBeVisible({ timeout: 30_000 });
-    await expect(bar).toContainText('Recovery.docx');
+    await waitForEditorReady(page);
+    await page.waitForTimeout(5_000);
+    expect(await page.locator('#recovery-bar').count()).toBe(0);
 
-    await bar.locator('.recovery-restore').click();
+    // The work is where the site says it keeps it, and one click away.
+    await page.goto('/history');
+    const row = page.locator('.history-open', { hasText: 'Recovery.docx' });
+    await expect(row).toBeVisible({ timeout: 30_000 });
+    await row.click();
     await waitForEditorReady(page);
     const restoredSdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
     await restoredSdk.waitFor({ state: 'visible', timeout: 30_000 });

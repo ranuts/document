@@ -209,20 +209,8 @@ export interface I18nMessages {
   agentToolCallPrefix: string;
   agentToolErrorPrefix: string;
 
-  // Local history: autosave, the recovery offer, and the history page
+  // Local history: autosave and the history page
   autosaveStopped: string;
-  autosaveOtherTab: string;
-  recoveryTitle: string;
-  /** `{title}` is the file name, `{when}` a relative time such as "5 minutes ago". */
-  recoveryBody: string;
-  recoveryRestore: string;
-  /**
-   * Deliberately not "Discard": dismissing the offer deletes nothing. The copy
-   * stays in the local history for its seven days, and saying otherwise would
-   * be the interface promising an action it does not perform.
-   */
-  recoveryDismiss: string;
-  recoveryViewAll: string;
   historyChip: string;
   historyTitle: string;
   historyIntro: string;
@@ -334,12 +322,6 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
 
     autosaveStopped:
       '自动保存已停止：浏览器没有可用的存储空间了。请导出保存这篇文档，并到本机文档列表里删掉一些旧文件。',
-    autosaveOtherTab: '这篇文档已在另一个标签页里打开，由那个标签页负责保存；本页不会重复保存。',
-    recoveryTitle: '有一份没保存的编辑',
-    recoveryBody: '「{title}」{when}的编辑还没有保存到电脑上。',
-    recoveryRestore: '继续编辑',
-    recoveryDismiss: '以后再说',
-    recoveryViewAll: '全部文档',
     historyChip: '本机存储 · 从不上传',
     historyTitle: '本机保存的文档',
     historyIntro:
@@ -440,13 +422,6 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
 
     autosaveStopped:
       'Autosave stopped: this browser is out of storage room. Export this document, then delete a few old ones from your saved documents.',
-    autosaveOtherTab:
-      'This document is already open in another tab, which is the one saving it. This tab will not save a second copy.',
-    recoveryTitle: 'You have unsaved edits',
-    recoveryBody: '"{title}" has edits from {when} that were never saved to your computer.',
-    recoveryRestore: 'Pick up where I left off',
-    recoveryDismiss: 'Not now',
-    recoveryViewAll: 'Saved documents',
     historyChip: 'On this device · never uploaded',
     historyTitle: 'Saved documents',
     historyIntro:
@@ -561,13 +536,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentToolErrorPrefix: 'ツールエラー：',
     autosaveStopped:
       '自動保存を停止しました。このブラウザーの保存容量が不足しています。このドキュメントを書き出してから、保存済みドキュメントをいくつか削除してください。',
-    autosaveOtherTab:
-      'このドキュメントは別のタブでも開いており、保存はそちらが行っています。このタブでは二重に保存しません。',
-    recoveryTitle: '保存されていない編集があります',
-    recoveryBody: '「{title}」には {when} の編集があり、お使いのパソコンにはまだ保存されていません。',
-    recoveryRestore: '続きから始める',
-    recoveryDismiss: '後で',
-    recoveryViewAll: '保存済みドキュメント',
     historyTitle: '保存済みドキュメント',
     historyIntro:
       '編集したドキュメントの控えを、この端末のこのブラウザー内に保管しています。再読み込みしても、タブを閉じても、クラッシュしても作業が失われません。いずれもアップロードされていません。',
@@ -671,13 +639,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentToolErrorPrefix: '도구 오류: ',
     autosaveStopped:
       '자동 저장이 중지되었습니다. 이 브라우저의 저장 공간이 부족합니다. 이 문서를 내보낸 뒤 저장된 문서 몇 개를 삭제하세요.',
-    autosaveOtherTab:
-      '이 문서는 다른 탭에서도 열려 있으며 저장은 그쪽에서 하고 있습니다. 이 탭에서는 중복해서 저장하지 않습니다.',
-    recoveryTitle: '저장하지 않은 편집 내용이 있습니다',
-    recoveryBody: "'{title}'에 {when}에 편집한 내용이 있으며 아직 컴퓨터에 저장되지 않았습니다.",
-    recoveryRestore: '이어서 작업하기',
-    recoveryDismiss: '나중에',
-    recoveryViewAll: '저장된 문서',
     historyTitle: '저장된 문서',
     historyIntro:
       '편집한 문서의 사본을 이 기기의 이 브라우저 안에 보관합니다. 새로 고침하거나 탭을 닫거나 브라우저가 멈춰도 작업을 잃지 않습니다. 어느 것도 업로드되지 않았습니다.',
@@ -783,13 +744,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentToolErrorPrefix: 'Werkzeugfehler: ',
     autosaveStopped:
       'Automatisches Speichern angehalten: In diesem Browser ist kein Speicherplatz mehr frei. Exportieren Sie dieses Dokument und löschen Sie dann einige ältere aus Ihren gespeicherten Dokumenten.',
-    autosaveOtherTab:
-      'Dieses Dokument ist bereits in einem anderen Tab geöffnet, der es auch speichert. Dieser Tab legt keine zweite Kopie an.',
-    recoveryTitle: 'Sie haben ungespeicherte Änderungen',
-    recoveryBody: '„{title}“ enthält Änderungen von {when}, die nie auf Ihrem Rechner gespeichert wurden.',
-    recoveryRestore: 'Dort weitermachen, wo ich aufgehört habe',
-    recoveryDismiss: 'Jetzt nicht',
-    recoveryViewAll: 'Gespeicherte Dokumente',
     historyTitle: 'Gespeicherte Dokumente',
     historyIntro:
       'Kopien der Dokumente, die Sie bearbeitet haben – in diesem Browser auf diesem Gerät, damit ein Neuladen, ein geschlossener Tab oder ein Absturz die Arbeit nicht kostet. Nichts davon wurde hochgeladen.',
@@ -897,13 +851,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentToolErrorPrefix: 'Error de herramienta: ',
     autosaveStopped:
       'Se ha detenido el guardado automático: este navegador se ha quedado sin espacio. Exporta este documento y borra algunos de los que tienes guardados.',
-    autosaveOtherTab:
-      'Este documento ya está abierto en otra pestaña, que es la que lo guarda. Esta pestaña no guardará una segunda copia.',
-    recoveryTitle: 'Tienes cambios sin guardar',
-    recoveryBody: '«{title}» tiene cambios de {when} que nunca llegaron a guardarse en tu equipo.',
-    recoveryRestore: 'Seguir donde lo dejé',
-    recoveryDismiss: 'Ahora no',
-    recoveryViewAll: 'Documentos guardados',
     historyTitle: 'Documentos guardados',
     historyIntro:
       'Copias de los documentos que has editado, conservadas en este navegador y en este dispositivo, para que recargar, cerrar una pestaña o un fallo no te cuesten el trabajo. Nada de esto se ha subido a ningún sitio.',
@@ -1012,13 +959,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentToolErrorPrefix: 'Erro da ferramenta: ',
     autosaveStopped:
       'A gravação automática parou: este navegador ficou sem espaço. Exporte este documento e apague alguns dos que tem guardados.',
-    autosaveOtherTab:
-      'Este documento já está aberto noutro separador, que é o que o está a guardar. Este separador não guarda uma segunda cópia.',
-    recoveryTitle: 'Tem alterações por guardar',
-    recoveryBody: '«{title}» tem alterações de {when} que nunca chegaram a ser guardadas no seu computador.',
-    recoveryRestore: 'Continuar de onde parei',
-    recoveryDismiss: 'Agora não',
-    recoveryViewAll: 'Documentos guardados',
     historyTitle: 'Documentos guardados',
     historyIntro:
       'Cópias dos documentos que editou, mantidas neste navegador e neste dispositivo, para que recarregar, fechar um separador ou uma falha não lhe custem o trabalho. Nada disto foi enviado para a Internet.',
@@ -1122,12 +1062,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentToolErrorPrefix: 'خطای ابزار: ',
     autosaveStopped:
       'ذخیرهٔ خودکار متوقف شد: فضای این مرورگر پر شده است. این سند را برون‌بری کنید و سپس چند سند قدیمی را از سندهای ذخیره‌شده پاک کنید.',
-    autosaveOtherTab: 'این سند در زبانهٔ دیگری باز است و همان زبانه آن را ذخیره می‌کند. این زبانه نسخهٔ دومی نمی‌سازد.',
-    recoveryTitle: 'ویرایش‌های ذخیره‌نشده دارید',
-    recoveryBody: '«{title}» ویرایش‌هایی از {when} دارد که هرگز روی رایانهٔ شما ذخیره نشد.',
-    recoveryRestore: 'از همان‌جا که رها کردم ادامه بده',
-    recoveryDismiss: 'اکنون نه',
-    recoveryViewAll: 'سندهای ذخیره‌شده',
     historyTitle: 'سندهای ذخیره‌شده',
     historyIntro:
       'نسخه‌هایی از سندهایی که ویرایش کرده‌اید، در همین مرورگر و روی همین دستگاه نگه داشته می‌شوند تا بارگذاری دوباره، بستن زبانه یا از کار افتادن مرورگر کارتان را از بین نبرد. هیچ‌کدام جایی بارگذاری نشده‌اند.',

@@ -17,9 +17,10 @@ notes. Entries describe what users experience, not internal refactors.
 - **Your edits are kept while you work, and you can get them back.** Every
   document you edit is also saved to a recovery point inside your own browser --
   never uploaded, never leaving the device. If the tab closes, the browser
-  crashes, or you simply come back the next day, the editor offers the work
-  back by name and tells you when you made it. The homepage offers it too, so
-  you do not have to remember where you were.
+  crashes, or you simply come back the next day, the homepage offers the work
+  back by name and tells you when you made it, so you do not have to remember
+  where you were. The editor itself stays quiet: it never interrupts the
+  document you are in to talk about a different one.
 - **A page listing what this browser is holding**, at `/history`, linked from
   the homepage: your saved documents, newest first, searchable by any part of a
   file name in any language, with a delete on every row and a delete-all below

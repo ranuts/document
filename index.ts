@@ -203,19 +203,12 @@ void (async () => {
   if (savedParam && !isEmbedded) window.location.replace('/');
 })();
 
-// Boot-time recovery offer. Deliberately late and lazy: it must not compete
-// with the document that is opening for either attention or bandwidth, and the
-// history UI has no business in the critical path of an editor that may have
-// nothing to recover.
-if (!isEmbedded) {
-  window.addEventListener('load', () => {
-    window.setTimeout(() => {
-      void import('./lib/history/recovery').then(({ offerRecovery }) =>
-        offerRecovery({ excludeId: savedParam || undefined }),
-      );
-    }, 1500);
-  });
-}
+// No boot-time recovery offer here on purpose. /editor never opens empty (a
+// bare visit is redirected to the landing above), so anything shown on boot
+// interrupts a document the user is already working in to talk about a
+// different one -- which is what it did, and it was wrong every time. Old work
+// is offered where the user is not mid-task instead: the landing page's
+// "continue last time" line (public/history-recent.js) and /history.
 
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {

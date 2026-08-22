@@ -256,10 +256,11 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
   if (!ext) return;
 
   const lockName = `document-history:${input.docId}`;
+  // Losing the lock is not something to tell anyone about. The user opened a
+  // second tab; they did nothing wrong, they need do nothing, and which tab
+  // holds the write lock is our bookkeeping, not their business. This page
+  // simply stops writing snapshots -- the other tab is taking them.
   const { held, release } = await acquireLock(lockName);
-  if (!held) {
-    notify('warning', t('autosaveOtherTab'));
-  }
 
   const onVisibility = (): void => {
     // The last chance that reliably gets time to run. beforeunload cannot be

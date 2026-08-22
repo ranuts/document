@@ -6,10 +6,8 @@ import {
   MAX_REVS_PER_DOC,
   clearAllHistory,
   deleteDoc,
-  dismissRecovery,
   getDoc,
   getLatestSnapshot,
-  getRecoverableDoc,
   historyUsage,
   pruneExpired,
   listDocs,
@@ -224,29 +222,11 @@ describe('history store', () => {
     expect(daysUntilExpiry(doc!, doc!.updatedAt + MAX_AGE_MS + 1)).toBe(0);
   });
 
-  it('offers only documents whose work never reached the disk', async () => {
+  it('marks work as unsaved until the bytes reach the disk', async () => {
     const doc = await putSnapshot({ title: 'Unsaved.docx', origin: 'local', bytes: bytes(8) });
     expect(hasUnsavedWork(doc!)).toBe(true);
-    expect((await getRecoverableDoc())?.id).toBe(doc!.id);
 
     await markSavedToDisk(doc!.id);
-    expect(await getRecoverableDoc()).toBeNull();
-  });
-
-  it('stops offering a document the user dismissed, until it changes again', async () => {
-    const doc = await putSnapshot({ title: 'Dismissed.docx', origin: 'local', bytes: bytes(8) });
-
-    await dismissRecovery(doc!.id);
-    expect(await getRecoverableDoc()).toBeNull();
-
-    // A new snapshot is new work: worth offering again.
-    await putSnapshot({ id: doc!.id, title: 'Dismissed.docx', origin: 'local', bytes: bytes(9) });
-    expect((await getRecoverableDoc())?.id).toBe(doc!.id);
-  });
-
-  it('never offers the document already open in this editor', async () => {
-    const doc = await putSnapshot({ title: 'Current.docx', origin: 'local', bytes: bytes(8) });
-
-    expect(await getRecoverableDoc({ excludeId: doc!.id })).toBeNull();
+    expect(hasUnsavedWork((await getDoc(doc!.id))!)).toBe(false);
   });
 });
