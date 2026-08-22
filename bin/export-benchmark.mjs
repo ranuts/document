@@ -15,7 +15,13 @@
  *
  * Run against any server for the built site:
  *   pnpm run build && pnpm run preview      # or E2E_PORT=... playwright's
- *   node bin/export-benchmark.mjs [baseUrl] [runs]
+ *   node bin/export-benchmark.mjs [baseUrl] [runs] [cpuThrottle]
+ *
+ * The third argument slows the CPU by that factor through the DevTools
+ * protocol -- 4x and 6x are the usual stand-ins for a mid-range and a low-end
+ * phone. That matters here because the snapshot interval is derived from the
+ * export time, so a slow device is supposed to ask for snapshots less often;
+ * this is how that claim gets checked without owning the hardware.
  *
  * Read-only: opens documents through the embed API and exports them. Nothing
  * is written anywhere.
@@ -24,6 +30,7 @@ import { chromium } from '@playwright/test';
 
 const base = process.argv[2] ?? 'http://localhost:4173';
 const RUNS = Number(process.argv[3] ?? 3);
+const CPU_THROTTLE = Number(process.argv[4] ?? 1);
 
 /** Document shapes worth separating: the cost is driven by content, not format alone. */
 const SHAPES = [
@@ -45,6 +52,10 @@ const rows = [];
 for (const shape of SHAPES) {
   const context = await browser.newContext();
   const page = await context.newPage();
+  if (CPU_THROTTLE > 1) {
+    const session = await context.newCDPSession(page);
+    await session.send('Emulation.setCPUThrottlingRate', { rate: CPU_THROTTLE });
+  }
   await page.goto(`${base}/embed-demo.html`);
   await page.waitForSelector('#status:has-text("ready")', { timeout: 60_000 });
 
@@ -176,6 +187,21 @@ for (const row of rows) {
   ];
   console.log(cells.map((c, i) => String(c).padEnd(cols[i][1])).join(''));
 }
-console.log(
-  '\nWarm export is what one autosave snapshot costs; SNAPSHOT_INTERVAL_MS in\nlib/history/autosave.ts should be read against it.',
-);
+// The interval the scheduler would choose for each shape, so the table can be
+// read as a decision rather than as raw numbers.
+const MIN_MS = 30_000;
+const MAX_MS = 180_000;
+const DUTY = 300;
+const interval = (ms) => Math.min(MAX_MS, Math.max(MIN_MS, ms * DUTY));
+
+console.log(`\nCPU throttle: ${CPU_THROTTLE}x`);
+console.log('Warm export is what one autosave snapshot costs. The scheduler turns it into');
+console.log('an interval with clamp(export x 300, 30s, 180s) -- see lib/history/autosave.ts:');
+for (const row of rows) {
+  const [, ...warm] = row.timings;
+  if (!warm.length) continue;
+  const ms = median(warm);
+  console.log(
+    `  ${row.shape.padEnd(24)} ${String(ms + ' ms').padEnd(9)} -> snapshot every ${Math.round(interval(ms) / 1000)}s`,
+  );
+}
