@@ -513,6 +513,12 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    `public/embed-demo.html`、404 等）必须使用 ranui 组件/设计 token
    （`--ran-*`）与 ranuts 工具，不允许手写游离于设计体系外的样式。
    demo 页也是产品门面，风格必须与主站一致。
+   **版式只有两档宽度**（列式 1152 / 读式 720）、**正文行宽 45–75 字符**（用
+   `max-width: 60–72ch` 限制段落，不是限制容器）、**内容页有顶栏+页脚，应用页
+   有顶栏无页脚**（`/history`、`/embed-demo` 属后者）、**顶栏页脚只有一份样式**
+   （`landing.css`，页面复用其类名而不是抄数值）。取值与业界依据见
+   [docs/design-system.md](docs/design-system.md)，`node bin/design-audit.mjs <baseUrl>`
+   渲染所有页面打印这些数字，`test/unit/design-contract.test.ts` 把宽度与顶栏钉死。
 5. **用例固化制度（2026-08-15 起）**：每个缺陷修复与新功能必须附带
    对应的自动化用例（E2E 优先），否则不算完成；回归类用例优先使用
    真实复杂度语料而非手拼最小文档——合成文档全绿曾两次掩盖真实文档
