@@ -235,6 +235,9 @@ export interface I18nMessages {
   historyEmptySearch: string;
   historyOpen: string;
   historyDelete: string;
+  historyCancel: string;
+  historyDeleteTitle: string;
+  historyClearTitle: string;
   /** `{title}` is the file name. */
   historyDeleteConfirm: string;
   historyClearAll: string;
@@ -346,6 +349,9 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyEmptySearch: '没有文件名匹配的文档。',
     historyOpen: '打开',
     historyDelete: '删除',
+    historyCancel: '取消',
+    historyDeleteTitle: '删除这篇文档',
+    historyClearTitle: '删除全部文档',
     historyDeleteConfirm: '删除「{title}」及其全部保存副本？此操作不可撤销。',
     historyClearAll: '全部删除',
     historyClearConfirm: '删除这台设备上保存的全部文档副本？此操作不可撤销。',
@@ -447,6 +453,9 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyEmptySearch: 'No file name matches that search.',
     historyOpen: 'Open',
     historyDelete: 'Delete',
+    historyCancel: 'Cancel',
+    historyDeleteTitle: 'Delete this document',
+    historyClearTitle: 'Delete everything',
     historyDeleteConfirm: 'Delete "{title}" and every saved copy of it? This cannot be undone.',
     historyClearAll: 'Delete all',
     historyClearConfirm: 'Delete every document copy saved on this device? This cannot be undone.',
