@@ -17,6 +17,11 @@
 - No account, no sign-up, and no server required.
 - Open a document from a URL via the `?src=` or `?file=` query parameter.
 - Installable as a PWA and usable fully offline.
+- Saves back into the file the user picked, rather than downloading a new copy
+  each time: the first save chooses the file, every save after it writes to that
+  file. Requires the File System Access API, so Chromium browsers only; Safari
+  and Firefox fall back to a download. Nothing is uploaded either way -- the
+  write goes from the browser to the user's own disk.
 - Autosaves while editing: copies are written into the visitor's own browser
   (IndexedDB), so closing the tab, refreshing or a browser crash does not lose
   the work. Reopening the editor offers the document back, and the URL carries
