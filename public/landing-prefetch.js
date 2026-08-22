@@ -12,11 +12,17 @@
 // page's main call to action is opening an existing file). Measured, not
 // guessed: see docs/explorations/2026-08-21-landing-prefetch-warmup.md.
 //
-// Layer 2 -- intent. Hover / focus / touch on a CTA adds that format's shell
-// and SDK, which is where the remaining bulk is. Format-specific catalog
-// entries are deliberately NOT listed: they range from 2.5 MB (xlsx) to 18 MB
-// (pptx), and their indices move with the vendor. They load on demand and the
-// service worker keeps them from a second visit onwards.
+// Layer 2 -- still background, once the core is done: every editor's shell and
+// SDK, in order of how often each is opened. Their disk sizes (57 MB for all
+// three) badly overstate the cost -- they are text, and compressed the three
+// come to 11.95 MB. Declined outright when the origin has no storage room.
+//
+// Layer 3 -- intent. Hover / focus / touch on a CTA jumps that format's files
+// to the front rather than waiting for its turn.
+//
+// Format-specific font catalog entries are deliberately NOT warmed: they range
+// from 2.5 MB (xlsx) to 18 MB (pptx) and their indices move with the vendor.
+// They load on demand and the service worker keeps them from a second visit on.
 //
 // Everything is requested with fetch() AFTER the service worker controls the
 // page, so the bytes land in its cache rather than only in the HTTP cache --
@@ -157,6 +163,60 @@
       return setTimeout(fn, 1500);
     };
 
+  // Every editor, warmed after the shared core. Ordered by how often each is
+  // opened, so a visitor who clicks mid-warm-up is most likely to find theirs
+  // already done.
+  //
+  // On disk these are 57 MB and that number is misleading: they are text, and
+  // the wire carries them compressed. Measured -- docx 3.92 MB, xlsx 4.29 MB,
+  // pptx 3.74 MB, 11.95 MB for all three, against 18.79 / 20.52 / 18.04 MB raw.
+  // Warming all three is a fraction of what the disk sizes suggest, which is
+  // why this is worth doing rather than betting on one format.
+  var ENGINES = ['docx', 'xlsx', 'pptx'];
+
+  // Roughly what the cache ends up holding, uncompressed, plus room for the
+  // font entries a session pulls on demand. Used only to decline gracefully on
+  // a device that has no space for it.
+  var ESTIMATED_BYTES_NEEDED = 120 * 1024 * 1024;
+
+  /**
+   * Decline when the origin has no room. Cache.put failures are already
+   * swallowed by the worker, so a full bucket would not break anything -- it
+   * would just mean spending a visitor's bandwidth on bytes that get evicted
+   * immediately. Unknown quota counts as room: the API is not everywhere, and
+   * refusing without evidence would disable the warm-up for those browsers.
+   */
+  function hasRoom() {
+    if (!navigator.storage || typeof navigator.storage.estimate !== 'function') return Promise.resolve(true);
+    return navigator.storage
+      .estimate()
+      .then(function (est) {
+        if (!est || !est.quota) return true;
+        return est.quota - (est.usage || 0) > ESTIMATED_BYTES_NEEDED;
+      })
+      .catch(function () {
+        return true;
+      });
+  }
+
+  /**
+   * Core first, then every editor. Serial throughout: the point is to use the
+   * time the visitor spends reading, not to compete with them for bandwidth.
+   * Each step waits for an idle moment of its own, so a page that is busy
+   * (a click, a scroll, the theme switch) does not queue work behind itself.
+   */
+  function warmEverything() {
+    return [CORE].concat(ENGINES.map(formatUrls)).reduce(function (chain, urls) {
+      return chain.then(function () {
+        return new Promise(function (resolve) {
+          idle(function () {
+            warmSerially(urls).then(resolve, resolve);
+          });
+        });
+      });
+    }, Promise.resolve());
+  }
+
   /**
    * Start the background layer once the worker is in charge. Without a worker
    * (first visit before it activates, or a browser without one) the bytes would
@@ -168,10 +228,9 @@
     if (!allowedInBackground()) return;
     if (!navigator.serviceWorker) return;
     navigator.serviceWorker.ready
-      .then(function () {
-        idle(function () {
-          warmSerially(CORE);
-        });
+      .then(hasRoom)
+      .then(function (room) {
+        if (room) warmEverything();
       })
       .catch(function () {
         /* no worker, no warm-up */
@@ -187,5 +246,11 @@
 
   // Test hook: the E2E suite drives the layers directly rather than simulating
   // hover and waiting on an idle callback.
-  window.__landingPrefetch = { CORE: CORE, formatUrls: formatUrls, warmSerially: warmSerially };
+  window.__landingPrefetch = {
+    CORE: CORE,
+    ENGINES: ENGINES,
+    formatUrls: formatUrls,
+    warmSerially: warmSerially,
+    warmEverything: warmEverything,
+  };
 })();

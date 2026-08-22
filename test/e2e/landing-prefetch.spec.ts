@@ -39,6 +39,36 @@ const cachedPaths = (page: import('@playwright/test').Page, paths: string[]) =>
 test.describe('landing page warm-up', () => {
   test.describe.configure({ timeout: 240_000 });
 
+  /**
+   * Every editor, not just the shared core. Their disk sizes (57 MB for all
+   * three) overstate the cost badly: compressed they are 11.95 MB, which is why
+   * warming all three beats betting on one format.
+   */
+  test('every editor engine ends up cached, not just the shared core', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#landing-hero')).toBeVisible();
+    await page.evaluate(() => navigator.serviceWorker.ready);
+
+    // Driven directly rather than waiting on idle timing, which is unbounded.
+    await page.evaluate(() => (window as any).__landingPrefetch.warmEverything());
+
+    const result = await page.evaluate(async () => {
+      const lp = (window as any).__landingPrefetch;
+      const wanted: string[] = lp.CORE.concat(...lp.ENGINES.map(lp.formatUrls));
+      const held = new Set<string>();
+      for (const name of await caches.keys()) {
+        const cache = await caches.open(name);
+        for (const request of await cache.keys()) held.add(new URL(request.url).pathname);
+      }
+      return { engines: lp.ENGINES, missing: wanted.filter((u) => !held.has(u)), total: wanted.length };
+    });
+
+    expect(result.engines, 'all three editors must be warmed').toEqual(['docx', 'xlsx', 'pptx']);
+    expect(result.missing, `not cached after the warm-up: ${result.missing.join(', ')}`).toEqual([]);
+    // Sanity: the core (8) plus four files per editor.
+    expect(result.total).toBe(8 + 3 * 4);
+  });
+
   test('the core assets end up in the service worker cache without any interaction', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#landing-hero')).toBeVisible();
@@ -110,11 +140,16 @@ test.describe('landing page warm-up', () => {
     const core = await page.evaluate(() => (window as any).__landingPrefetch.CORE as string[]);
     await expect.poll(async () => (await cachedPaths(page, core)).length, { timeout: 180_000 }).toBe(core.length);
 
-    // Now go and open something, watching what leaves the page.
+    // Warm the engines too, then watch what still leaves the page.
+    await page.evaluate(() => (window as any).__landingPrefetch.warmEverything());
+    const watched = core.concat(
+      await page.evaluate(() => (window as any).__landingPrefetch.formatUrls('docx') as string[]),
+    );
+
     const fromNetwork: string[] = [];
     page.on('response', (res) => {
       const path = new URL(res.url()).pathname;
-      if (core.includes(path) && !res.fromServiceWorker()) fromNetwork.push(path);
+      if (watched.includes(path) && !res.fromServiceWorker()) fromNetwork.push(path);
     });
 
     await page.goto('/editor?new=docx');
@@ -133,6 +168,6 @@ test.describe('landing page warm-up', () => {
       )
       .catch(() => {});
 
-    expect(fromNetwork, `core files fetched from the network after warming: ${fromNetwork.join(', ')}`).toEqual([]);
+    expect(fromNetwork, `warmed files fetched from the network anyway: ${fromNetwork.join(', ')}`).toEqual([]);
   });
 });
