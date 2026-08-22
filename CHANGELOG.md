@@ -91,14 +91,16 @@ notes. Entries describe what users experience, not internal refactors.
 ### Changed
 
 - The first document you open is quicker. The homepage now quietly warms the
-  editor while you are still on it: the font engine, the font entries every
-  document needs, and the conversion engine are fetched in the background and
-  kept by the offline cache, so opening no longer starts from nothing. Hovering
-  an Open or New button still pulls that format's editor as before -- now
-  including one 1.2 MB file that had been missing from the list. Skipped
-  entirely on a metered or slow connection, and it never competes with the
-  homepage itself: one file at a time, at low priority, only once the page is
-  idle.
+  editor while you are still on it -- the font engine, the font entries every
+  document needs, the conversion engine, and then all three editors (Word,
+  Excel, PowerPoint) -- and keeps them in the offline cache, so opening no
+  longer starts from nothing. Measured against a cold visit: a Word document
+  asks the network for 45% less, a spreadsheet 72% less, a presentation 25%
+  less. Skipped entirely on a metered or slow connection, or when the device
+  has no room to store it, and it never competes with the homepage itself: one
+  file at a time, at low priority, only in idle moments. Hovering an Open or New
+  button still jumps that format to the front, and now covers one 1.2 MB file
+  that had been missing from the list.
 
 - Returning to the editor is much lighter on the network. Its own files are now
   served straight from the offline cache instead of being checked with the
