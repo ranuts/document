@@ -199,6 +199,20 @@ Droid Sans Fallback（TrueType）上，中文立刻回来了（PDF 76 KB）。�
 **反向验证**：把 sweep 的 CJK 源换回那两个 CFF 子集重跑一遍，用例报
 `the exported PDF page is blank`（编辑器里 12.17% 墨迹，PDF 里 0.02%，正常 1.04%）。
 
+## 上线后实测（PR #184 合并部署之后）
+
+```
+/fonts/017?cb=随机   404              ← SimSun，源站已无
+/fonts/016?cb=随机   404              ← 微软雅黑，源站已无
+/fonts/267?cb=随机   200  10,423,464  ← Noto Sans SC（新）
+/fonts/269?cb=随机   200   3,764,940  ← Noto Serif SC（新）
+/fonts/017（不带 cb）200   4,077,068  age=329273（3.8 天）  ← 旧 SimSun 的缓存副本
+```
+
+`E2E_BASE_URL=https://edit.chaxus.com` 跑 `font-substitution` + `pdf-cjk-export`：
+6 条全过（逐像素差 0.000%～0.044%，PDF 墨迹 1.04%）。Production smoke 与 Docker
+镜像构建都绿。
+
 ## 部署之后还差一步：缓存里的旧字体
 
 `_headers` 给 `/fonts/*` 设的是 `public, max-age=31536000, immutable`。这条规则在
@@ -207,7 +221,8 @@ Droid Sans Fallback（TrueType）上，中文立刻回来了（PDF 76 KB）。�
 `/fonts/017` 是 404（源站确实没有了），不带 buster 拿到的是 4 MB 的旧 SimSun，
 `age` 逐秒增长。
 
-所以合并部署后要**在 Cloudflare 面板做一次 Purge Cache**（仓库里做不到：`_headers`
+上面那张表就是它：源站 404、缓存里还在发 4 MB 的旧 SimSun。
+所以要**在 Cloudflare 面板做一次 Purge Cache**（本轮尚未执行）（仓库里做不到：`_headers`
 只能声明将来的缓存策略，改不了已经发出去的副本）。在此之前那些专有字体仍然可以从
 本站域名取到——新的 `AllFonts.js` 已经不再引用它们，正常使用不会请求到，但严格说
 仍在提供。
