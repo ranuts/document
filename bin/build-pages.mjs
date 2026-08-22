@@ -39,6 +39,8 @@ export const LOCALES = {
   ja: { prefix: '/ja', lang: 'ja', label: '日本語', home: '/ja/', dir: 'ltr' },
   de: { prefix: '/de', lang: 'de', label: 'Deutsch', home: '/de/', dir: 'ltr' },
   es: { prefix: '/es', lang: 'es', label: 'Español', home: '/es/', dir: 'ltr' },
+  ko: { prefix: '/ko', lang: 'ko', label: '한국어', home: '/ko/', dir: 'ltr' },
+  pt: { prefix: '/pt', lang: 'pt', label: 'Português', home: '/pt/', dir: 'ltr' },
 };
 const DEFAULT_LOCALE = 'en';
 
@@ -184,6 +186,62 @@ const UI = {
     generatedNote: (src) => `Fuente: ${src} en el repositorio`,
     ossNote: `<strong>Código abierto y autoalojable.</strong> Bajo AGPL-3.0: comprueba que no se sube nada, o ejecuta tu propia copia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
   },
+  ko: {
+    siteName: 'Document Editor',
+    langAria: '언어',
+    themeLabel: '테마',
+    home: '홈',
+    openEditor: '편집기 열기',
+    onThisPage: '이 페이지의 목차',
+    more: '관련 페이지',
+    sideNote: '기기에서 실행됩니다. 업로드 없음, 가입 불필요.',
+    footer: [
+      ['/ko/', '편집기 열기'],
+      ['/ko/help', '도움말'],
+      ['/ko/changelog', '변경 내역'],
+      ['/ko/open/docx', 'DOCX 열기'],
+      ['/ko/open/xlsx', 'XLSX 열기'],
+      ['/ko/open/pptx', 'PPTX 열기'],
+      ['/ko/open/pdf', 'PDF 열기'],
+      ['/ko/convert/xlsx-to-csv', 'XLSX를 CSV로'],
+      ['/ko/convert/csv-to-xlsx', 'CSV를 XLSX로'],
+      ['/ko/no-signup-document-editor', '가입 불필요'],
+      ['/ko/private-document-editor', '개인정보'],
+      ['/ko/offline-document-editor', '오프라인'],
+      ['/ko/edit-documents-without-account', '계정 불필요'],
+      ['/ko/embed-document-editor', 'Embed API'],
+    ],
+    generatedNote: (src) => `출처: 저장소의 ${src}`,
+    ossNote: `<strong>오픈 소스이며 직접 호스팅할 수 있습니다.</strong> AGPL-3.0으로 공개되어 있어, 아무것도 업로드되지 않는다는 것을 직접 확인하거나 직접 운영할 수 있습니다: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+  },
+  pt: {
+    siteName: 'Document Editor',
+    langAria: 'Idioma',
+    themeLabel: 'Tema',
+    home: 'Início',
+    openEditor: 'Abrir o editor',
+    onThisPage: 'Nesta página',
+    more: 'Páginas relacionadas',
+    sideNote: 'Roda no seu dispositivo. Sem uploads, sem cadastro.',
+    footer: [
+      ['/pt/', 'Abrir o editor'],
+      ['/pt/help', 'Ajuda'],
+      ['/pt/changelog', 'Novidades'],
+      ['/pt/open/docx', 'Abrir DOCX'],
+      ['/pt/open/xlsx', 'Abrir XLSX'],
+      ['/pt/open/pptx', 'Abrir PPTX'],
+      ['/pt/open/pdf', 'Abrir PDF'],
+      ['/pt/convert/xlsx-to-csv', 'XLSX para CSV'],
+      ['/pt/convert/csv-to-xlsx', 'CSV para XLSX'],
+      ['/pt/no-signup-document-editor', 'Sem cadastro'],
+      ['/pt/private-document-editor', 'Privacidade'],
+      ['/pt/offline-document-editor', 'Offline'],
+      ['/pt/edit-documents-without-account', 'Sem conta'],
+      ['/pt/embed-document-editor', 'Embed API'],
+    ],
+    generatedNote: (src) => `Fonte: ${src} no repositório`,
+    ossNote: `<strong>Código aberto e auto-hospedável.</strong> Sob a AGPL-3.0 — confira você mesmo que nada é enviado, ou rode a sua própria cópia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+  },
 };
 
 /**
@@ -228,6 +286,8 @@ export const PAGES = [
       ja: 'content/ja/help.md',
       de: 'content/de/help.md',
       es: 'content/es/help.md',
+      ko: 'content/ko/help.md',
+      pt: 'content/pt/help.md',
     },
   },
   {
@@ -238,6 +298,8 @@ export const PAGES = [
       ja: 'docs/embed-api.md',
       de: 'docs/embed-api.md',
       es: 'docs/embed-api.md',
+      ko: 'docs/embed-api.md',
+      pt: 'docs/embed-api.md',
     },
     meta: {
       en: {
@@ -247,6 +309,24 @@ export const PAGES = [
         eyebrow: 'Help · Embed API',
         breadcrumb: 'Embed API',
         parent: { href: '/help', name: 'Help' },
+      },
+      ko: {
+        title: 'Embed API — iframe + postMessage 참고',
+        description:
+          '내 웹 앱에 문서 편집기를 임베드하기 위한 참고 문서: iframe 설정, postMessage 명령(URL/File/buffer로 열기, 읽기 전용, 저장), 응답, 오리진 제한.',
+        eyebrow: '도움말 · Embed API',
+        breadcrumb: 'Embed API',
+        parent: { href: '/ko/help', name: '도움말' },
+        notice: 'Embed API 참고 문서는 영어로 관리됩니다(단일 출처). 한국어판은 추후 추가됩니다.',
+      },
+      pt: {
+        title: 'Embed API — referência de iframe + postMessage',
+        description:
+          'Referência para incorporar o editor de documentos no seu app web: configuração do iframe, comandos postMessage (abrir de URL/File/buffer, somente leitura, salvar), respostas e restrição de origem.',
+        eyebrow: 'Ajuda · Embed API',
+        breadcrumb: 'Embed API',
+        parent: { href: '/pt/help', name: 'Ajuda' },
+        notice: 'A referência da Embed API é mantida em inglês (fonte única). A versão em português virá depois.',
       },
       de: {
         title: 'Embed API — Referenz zu iframe + postMessage',
@@ -296,6 +376,8 @@ export const PAGES = [
       ja: 'CHANGELOG.md',
       de: 'CHANGELOG.md',
       es: 'CHANGELOG.md',
+      ko: 'CHANGELOG.md',
+      pt: 'CHANGELOG.md',
     },
     meta: {
       en: {
@@ -304,6 +386,22 @@ export const PAGES = [
           'User-facing release notes for edit.chaxus.com: new formats, editor fixes, performance and privacy changes, in reverse chronological order.',
         eyebrow: 'Changelog',
         breadcrumb: 'Changelog',
+      },
+      ko: {
+        title: '변경 내역 — 온라인 문서 편집기가 무엇이 달라졌나',
+        description:
+          'edit.chaxus.com의 사용자 대상 릴리스 노트: 새 형식, 편집기 수정, 성능과 프라이버시 변경 사항을 최신순으로 정리했습니다.',
+        eyebrow: '변경 내역',
+        breadcrumb: '변경 내역',
+        notice: '변경 내역은 영어로 관리됩니다(단일 출처 CHANGELOG.md). 한국어판은 추후 추가됩니다.',
+      },
+      pt: {
+        title: 'Novidades — o que mudou no editor de documentos online',
+        description:
+          'Notas de versão do edit.chaxus.com: novos formatos, correções do editor, mudanças de desempenho e privacidade, em ordem cronológica inversa.',
+        eyebrow: 'Novidades',
+        breadcrumb: 'Novidades',
+        notice: 'As novidades são mantidas em inglês (fonte única, CHANGELOG.md). A versão em português virá depois.',
       },
       de: {
         title: 'Änderungen — was sich im Online-Dokumenteneditor geändert hat',
