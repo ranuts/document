@@ -121,6 +121,15 @@ Qjgbc rgjc / Qjgbc qs`rgjc / Ajgai rm_bb l mrcq
 | `test/unit/update-prompt.test.ts` 五条（出现一次、点刷新会 SKIP_WAITING、接管后 reload 一次、超时兜底、忽略不动 worker） | —                                                                                              |
 | `test/e2e/entry-paths.spec.ts` 的"the home-state panel never shows while a named document loads"（从首帧起连采 12 次）   | 去掉 `opening-document` 那一行 → 用例报 `the panel was painted while the document was loading` |
 
+### 这条用例必须 `@serial`
+
+第一版没打标签，CI 里连带弄红了同分片的另外两条。原因是它"模拟部署"的手段是改写
+**整个源站共用的** `dist/sw.js`：并行跑时别的用例的 worker 也会被换掉，缓存在它们
+脚下被清空——一个正在加载的编辑器于是取不到 `spell.wasm`，`sw-vendor-cache-first`
+也看不到自己缓存的资源。打上 `@serial` 之后它只在单 worker 那一趟跑；Docker 与
+Pages 两趟本来就 `--grep-invert @serial`，而且那里的文件根本不在本机磁盘上
+（Docker 那次报的就是 `ENOENT: dist/sw.js`），所以再加一条"文件不在就 skip"。
+
 ## 给下一个人
 
 - 面板默认可见这件事本身是个坑：任何新的"启动时决定开什么"的入口（新的 query 参数、
