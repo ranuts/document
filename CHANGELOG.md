@@ -84,6 +84,15 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- **A new version now reaches you by itself.** An update used to wait until no
+  document was open anywhere, which for anyone who goes straight to the editor
+  meant never -- reloading served the same old build back, and when that build
+  referred to files a deploy had removed, the page was not merely stale but
+  broken. A tab still on an older build now moves onto the new one on its next
+  load, without asking and without interrupting anything: it happens while the
+  page is still loading, once, and never over unsaved edits.
+- The four home-screen buttons ("View/Edit Document", "New Word"...) no longer
+  flash behind the spinner while a document named in the URL is loading.
 - Chinese, Japanese and Korean text in an exported PDF came out blank. The
   export writes its own list of font files, and that list had been pointing at
   files that were not in the bundle.

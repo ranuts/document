@@ -16,20 +16,49 @@
 
 export type SwLike = {
   state: string;
+  scriptURL?: string;
   postMessage: (msg: unknown) => unknown;
   addEventListener: (t: 'statechange', cb: () => void) => void;
 };
 export type RegistrationLike = {
+  active?: SwLike | null;
   waiting: SwLike | null;
   installing: SwLike | null;
   addEventListener: (t: 'updatefound', cb: () => void) => void;
 };
 
+/**
+ * Is this waiting worker a new build of OURS?
+ *
+ * It is not a rhetorical question. The vendored editor registers its own
+ * worker -- `/document_editor_service_worker.js`, a stub we ship empty -- into
+ * the same scope from inside the editor iframe, so on the editor route
+ * `registration.waiting` is usually THAT, not a new deploy. Telling it to
+ * skipWaiting hands the whole origin to an empty worker: the vendor tree stops
+ * being served cache-first and the editor can fail to load outright. And
+ * announcing it as "a new version is ready" is simply false.
+ *
+ * The script URL we registered is the reference. `registration.active` is the
+ * fallback, but only that: right after a reload it can still be null, and
+ * "nothing to compare with" must not mean "assume it is ours" -- that is how
+ * the notice came back on every reload of the editor.
+ */
+export function isOwnWorker(reg: RegistrationLike, worker: SwLike, ownScriptURL?: string): boolean {
+  const mine = ownScriptURL ?? reg.active?.scriptURL;
+  if (!mine || !worker.scriptURL) return true; // nothing to compare: old behaviour
+  return worker.scriptURL === mine;
+}
+
 export const SKIP_WAITING_MESSAGE = { type: 'SKIP_WAITING' } as const;
 
 /** Tell a waiting worker to take over -- only if nothing is open. Returns whether it did. */
-export function promoteWaitingWorker(reg: RegistrationLike, hasOpenDocument: () => boolean): boolean {
+export function promoteWaitingWorker(
+  reg: RegistrationLike,
+  hasOpenDocument: () => boolean,
+  ownScriptURL?: string,
+): boolean {
   if (!reg.waiting || hasOpenDocument()) return false;
+  if (!isOwnWorker(reg, reg.waiting, ownScriptURL)) return false;
   reg.waiting.postMessage(SKIP_WAITING_MESSAGE);
   return true;
 }
@@ -40,15 +69,49 @@ export function promoteWaitingWorker(reg: RegistrationLike, hasOpenDocument: () 
  * open"). A worker that stays waiting because a document is open activates on
  * the next visit, when the landing page calls this again.
  */
-export function wireServiceWorkerUpdates(reg: RegistrationLike, hasOpenDocument: () => boolean): void {
-  promoteWaitingWorker(reg, hasOpenDocument);
+export function wireServiceWorkerUpdates(
+  reg: RegistrationLike,
+  hasOpenDocument: () => boolean,
+  ownScriptURL?: string,
+): void {
+  promoteWaitingWorker(reg, hasOpenDocument, ownScriptURL);
   reg.addEventListener('updatefound', () => {
     const installing = reg.installing;
     if (!installing) return;
     installing.addEventListener('statechange', () => {
-      if (installing.state === 'installed') promoteWaitingWorker(reg, hasOpenDocument);
+      if (installing.state === 'installed') promoteWaitingWorker(reg, hasOpenDocument, ownScriptURL);
     });
   });
+}
+
+/**
+ * Call back with a worker that is installed and waiting -- now, or as soon as
+ * one arrives. Three ways it can show up and all three matter: it is already
+ * waiting when the page loads, it is mid-install (`installing`), or an
+ * `updatefound` fires later. Missing the third is how a whole page lifetime
+ * can pass with nobody offering the new build.
+ */
+export function onWaitingWorker(
+  reg: RegistrationLike,
+  onWaiting: (worker: SwLike) => void,
+  ownScriptURL?: string,
+): void {
+  const report = (worker: SwLike): void => {
+    if (isOwnWorker(reg, worker, ownScriptURL)) onWaiting(worker);
+  };
+  const watch = (worker: SwLike | null): void => {
+    if (!worker) return;
+    if (worker.state === 'installed') {
+      report(worker);
+      return;
+    }
+    worker.addEventListener('statechange', () => {
+      if (worker.state === 'installed') report(worker);
+    });
+  };
+  if (reg.waiting) report(reg.waiting);
+  else watch(reg.installing);
+  reg.addEventListener('updatefound', () => watch(reg.installing));
 }
 
 /**
@@ -60,6 +123,121 @@ export function shouldReloadOnControllerChange(state: {
   hadController: boolean;
   alreadyReloading: boolean;
   hasOpenDocument: boolean;
+  /** This tab asked an older worker to step aside; the reload is the point. */
+  healingStaleBuild?: boolean;
+  hasUnsavedChanges?: boolean;
 }): boolean {
-  return state.hadController && !state.alreadyReloading && !state.hasOpenDocument;
+  if (!state.hadController || state.alreadyReloading) return false;
+  if (state.healingStaleBuild) return !state.hasUnsavedChanges;
+  return !state.hasOpenDocument;
+}
+
+/** How sw.js names the cache it keeps the vendored editor in. */
+export const RUNTIME_CACHE_PREFIX = 'document-editor-runtime-';
+
+/** Remembered per tab, so a heal can never turn into a reload loop. */
+export const HEAL_STORAGE_KEY = 'sw-heal-reloaded';
+
+export type HealInput = {
+  registration: RegistrationLike;
+  waiting: SwLike;
+  controller: SwLike | null;
+  hadController: boolean;
+  storage?: Pick<Storage, 'getItem' | 'setItem'>;
+  cacheStorage?: Pick<CacheStorage, 'keys'>;
+  ownScriptURL?: string;
+};
+
+/**
+ * Move a tab that an older build's worker is still serving onto the new one,
+ * without saying anything.
+ *
+ * The situation this exists for: a deploy whose vendor tree changed leaves its
+ * worker WAITING (activating it would delete the caches the outgoing build is
+ * still reading). Nothing promotes it while a document is open, and the editor
+ * route practically always has one -- so the tab keeps being served the old
+ * vendor tree even though the page and its bundle, fetched network-first, are
+ * already new. If that old tree references files the deploy deleted, the
+ * result is not a stale page but a broken one: a reverted font build kept
+ * rendering garbled text for a day after the revert shipped.
+ *
+ * Silent is deliberate. This runs at boot, where nothing has been typed, so
+ * the reload costs a second of loading and no work -- there is nothing worth
+ * interrupting the reader for. It happens at most once per tab, only when the
+ * waiting worker is ours and is genuinely a different build, and never when
+ * there are unsaved edits (see shouldReloadOnControllerChange).
+ */
+export async function healStaleController(input: HealInput): Promise<boolean> {
+  const { registration, waiting, controller, hadController, storage, ownScriptURL } = input;
+  if (!hadController || !controller) return false;
+  if (!isOwnWorker(registration, waiting, ownScriptURL)) return false;
+  if (storage?.getItem(HEAL_STORAGE_KEY)) return false;
+  if (!(await isUnseenBuild(waiting, input.cacheStorage))) return false;
+  storage?.setItem(HEAL_STORAGE_KEY, '1');
+  waiting.postMessage(SKIP_WAITING_MESSAGE);
+  return true;
+}
+
+/** What a worker answers `VERSION` with (public/sw.js). */
+export type WorkerVersion = { cacheVersion?: string; vendorVersion?: string };
+
+/** Ask one worker which build it is. Resolves null when it does not answer. */
+export function askVersion(worker: SwLike | null, timeoutMs = 1000): Promise<WorkerVersion | null> {
+  return new Promise((resolve) => {
+    if (!worker || typeof MessageChannel === 'undefined') {
+      resolve(null);
+      return;
+    }
+    const channel = new MessageChannel();
+    let settled = false;
+    const done = (value: WorkerVersion | null): void => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+    };
+    channel.port1.onmessage = (event: MessageEvent) => done((event.data ?? null) as WorkerVersion | null);
+    setTimeout(() => done(null), timeoutMs);
+    try {
+      // Two-argument postMessage, which the narrow SwLike shape does not model.
+      (worker as unknown as { postMessage(msg: unknown, transfer: MessagePort[]): void }).postMessage(
+        { type: 'VERSION' },
+        [channel.port2],
+      );
+    } catch {
+      done(null);
+    }
+  });
+}
+
+/**
+ * Is the waiting worker a build this browser has never run?
+ *
+ * "There is a worker waiting" is not that question, and on the editor route it
+ * is usually the wrong one: the vendored editor registers a script of its own
+ * into this scope from inside its iframe, so the scope's script alternates and
+ * OUR worker is re-installed on the next load -- waiting, same build, nothing
+ * to do.
+ *
+ * The evidence is the runtime cache, not a conversation. sw.js names it after
+ * the vendor tree's content hash (`document-editor-runtime-<vendorVersion>`),
+ * so a build whose cache is already on this machine is a build this browser
+ * has been running. Asking the CONTROLLER instead was the first attempt and it
+ * was wrong in a way worth remembering: a worker under load does not answer
+ * within a timeout, silence got read as "it is old", and tabs reloaded
+ * themselves in the middle of a test run.
+ */
+export async function isUnseenBuild(
+  waiting: SwLike | null,
+  cacheStorage: Pick<CacheStorage, 'keys'> | undefined = typeof caches === 'undefined' ? undefined : caches,
+): Promise<boolean> {
+  const version = await askVersion(waiting);
+  const vendorVersion = version?.vendorVersion;
+  if (!vendorVersion || !cacheStorage) return false; // cannot tell -- do nothing
+  const runtime = (await cacheStorage.keys()).filter((name) => name.startsWith(RUNTIME_CACHE_PREFIX));
+  // No runtime cache yet means nothing to compare against, which is not the
+  // same as "this build is new". Staying quiet is the safe reading: the worst
+  // case is one page load served by the outgoing build, and the next load has
+  // the evidence.
+  if (!runtime.length) return false;
+  return !runtime.some((name) => name.endsWith(`-${vendorVersion}`));
 }

@@ -34,9 +34,9 @@ beforeAll(() => {
 });
 
 /** A worker the page can post to, recording what it was told. */
-const fakeWorker = () => {
+const fakeWorker = (scriptURL = 'https://edit.example/sw.js') => {
   const posted: unknown[] = [];
-  return { posted, postMessage: (msg: unknown) => posted.push(msg) };
+  return { posted, scriptURL, postMessage: (msg: unknown) => posted.push(msg) };
 };
 
 /**
@@ -59,9 +59,13 @@ const legacyController = (count: number) => ({
   },
 });
 
-const fakeRegistration = (waiting: ReturnType<typeof fakeWorker> | null) => {
+const fakeRegistration = (
+  waiting: ReturnType<typeof fakeWorker> | null,
+  active: ReturnType<typeof fakeWorker> | null = fakeWorker(),
+) => {
   const listeners: Record<string, Array<() => void>> = {};
   return {
+    active,
     waiting,
     installing: null as null | { state: string; addEventListener: (t: string, cb: () => void) => void },
     addEventListener: (type: string, cb: () => void) => {
@@ -272,5 +276,20 @@ describe('the landing pages carry the policy', () => {
     // promotion, a second landing tab does not.
     expect(sw).toContain('isEditorWindow(client.url)');
     expect(sw).toMatch(/const EDITOR_ROUTE = /);
+  });
+});
+
+/**
+ * The editor iframe registers the vendor's own worker
+ * (`/document_editor_service_worker.js`, an empty stub here) into this same
+ * scope, so anyone who has opened the editor leaves one waiting. Promoting it
+ * from the landing page would hand the origin to an empty worker.
+ */
+describe('a worker from the vendored editor, waiting in the same scope', () => {
+  it('is left alone', async () => {
+    const updater = createSwUpdater(navWith(fakeController(1)));
+    const vendor = fakeWorker('https://edit.example/document_editor_service_worker.js');
+    await expect(updater.maybePromote(fakeRegistration(vendor))).resolves.toBe(false);
+    expect(vendor.posted).toEqual([]);
   });
 });
