@@ -77,6 +77,34 @@ test.describe('entry paths (real editor)', () => {
     expect(result.magic).toEqual([0x50, 0x4b]);
   });
 
+  /**
+   * Whatever the URL names, the home-state panel must not be on screen while
+   * it loads. The panel is built visible and only hidden once the document
+   * takes over, so on a cold load -- and `?saved=` adds two dynamic imports
+   * before the document even starts -- "View/Edit Document / New Word / New
+   * Excel / New PowerPoint" sat under the spinner, which is what a user
+   * reported seeing. Sampled from first paint, not after settling: the whole
+   * defect lives in the first second.
+   */
+  test('the home-state panel never shows while a named document loads', async ({ page }) => {
+    await page.goto('/editor?new=docx&saved=b0a1c2d3-0000-4000-8000-000000000000', {
+      waitUntil: 'commit',
+    });
+    const visible = async () =>
+      page.evaluate(() => {
+        const panel = document.getElementById('control-panel-container');
+        if (!panel) return false;
+        const style = getComputedStyle(panel);
+        return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0.01;
+      });
+    const seen: boolean[] = [];
+    for (let i = 0; i < 12; i++) {
+      seen.push(await visible());
+      await page.waitForTimeout(150);
+    }
+    expect(seen.filter(Boolean), 'the panel was painted while the document was loading').toEqual([]);
+  });
+
   test('?open=local consumes the file a static landing page stashed in IndexedDB', async ({ page }) => {
     // Same DB/store/key names as public/open-local.js and lib/pending-open.ts.
     await page.goto('/zh-CN/');

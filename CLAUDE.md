@@ -510,6 +510,25 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    落地页那侧的提升要覆盖三种到达方式：已经 `waiting`、`installing` 中途、
    以及 `updatefound` 时已经 `installed`（`statechange` 只报此后的迁移，
    漏掉这一支等于整页生命周期内再没人提升它）。
+   **第三条路（2026-08-22 起）：静默自愈**。前两条都到不了"直接进 /editor 且一直开着
+   文档"的用户——他们刷新只会再拿到旧构建，被 revert 的版本因此在用户屏幕上留了一天
+   （而它引用的字体已被删除，表现为乱码）。`healStaleController()`（`lib/sw-update.ts`）
+   在启动时把这类标签页悄悄换过去：等待中的 worker 是我们自己的、且是这台浏览器没跑过
+   的构建，就 skipWaiting 并 reload 一次。**每个标签页只做一次**（sessionStorage），
+   **有未保存改动时不做**，不弹任何提示（用户明确要求别打扰）。可行的前提是导航
+   network-first——卡住的标签页跑的其实已经是新 bundle。
+   **判据是"本地有没有那个构建的运行时缓存"，不是"问当前 worker 它是谁"**：问过一版，
+   并发下对方 1s 内回不上来，沉默被当成"它旧了"，页面自己刷新，E2E 稳定挂 2 条。
+   缓存名是 `document-editor-runtime-<vendorVersion>`，找不到同名的才算新构建；问不到
+   或本地还没有运行时缓存，一律不动。检测用 `onWaitingWorker()`，覆盖那三种到达方式。
+   **注意"有 worker 在等"不等于"有新版本"**：厂商的编辑器 iframe 会往同一个 scope
+   注册它自己的 worker（`/document_editor_service_worker.js`，本仓库是空 stub），
+   一个 scope 只有一个 registration，于是脚本在我们的 sw.js 与它之间来回换，`waiting`
+   几乎永远非空。两处都据此加了判断：**提升前比对脚本 URL**（不是自己的就不碰——
+   否则会把整个源站交给那个空 worker，vendor 树不再 cache-first，编辑器可能直接加载
+   失败），**提示前比对构建**（`isNewerBuild()` 用 `VERSION` 消息问两端的
+   `vendorVersion`，不同才算新版本；vendor 没变的部署压根不会等待）。见
+   docs/explorations/2026-08-22-stale-build-and-panel-flash.md。
    见 docs/explorations/2026-08-20-service-worker-update-never-promoted.md。
 4. **站点页面统一 ran 设计体系**：所有用户可见页面（落地页、demo 页如
    `public/embed-demo.html`、404 等）必须使用 ranui 组件/设计 token

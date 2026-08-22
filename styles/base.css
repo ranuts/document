@@ -92,6 +92,15 @@ body.embed-mode #landing-hero {
 body.landing-active #control-panel-container {
   display: none !important;
 }
+
+/* A URL that already names a document (?file / ?src / ?new / ?saved /
+   ?open=local) goes straight into the editor, so the home-state panel is never
+   the answer -- and it must not be visible while the document loads. index.ts
+   sets this before the panel is built; showControlPanel() removes it if we end
+   up back at the home state after all. */
+body.opening-document #control-panel-container {
+  display: none !important;
+}
 body.landing-active,
 body.landing-active #app {
   height: auto;

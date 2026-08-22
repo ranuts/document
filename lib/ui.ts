@@ -60,6 +60,10 @@ export const showControlPanel = (): void => {
   // Back to the home state (no document, or an error) — bring the hero back so
   // it, not the legacy overlay, is what the user (and crawlers) see.
   showLanding();
+  // Whatever the URL said it would open did not happen (or was closed), so the
+  // panel is the home state again; drop the flag that keeps it off the loading
+  // screen (index.ts sets it before the panel is built).
+  document.body.classList.remove('opening-document');
 
   const panel = getControlPanel();
   panel.style.display = 'flex';

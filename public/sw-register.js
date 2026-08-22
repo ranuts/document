@@ -88,6 +88,17 @@
     function maybePromote(registration) {
       var waiting = registration.waiting;
       if (!waiting) return Promise.resolve(false);
+      // Not every waiting worker is one of ours. The vendored editor registers
+      // its own (`/document_editor_service_worker.js`, an empty stub) into the
+      // same scope from inside the editor iframe, so a visitor who has opened
+      // the editor leaves one waiting here. Promoting THAT hands the origin to
+      // an empty worker and the vendor tree stops being served cache-first.
+      // SW_URL is the reference, not registration.active: right after a
+      // reload `active` can still be null, and "nothing to compare with" must
+      // not be read as "it is ours".
+      if (waiting.scriptURL && waiting.scriptURL.indexOf(SW_URL, waiting.scriptURL.length - SW_URL.length) === -1) {
+        return Promise.resolve(false);
+      }
       return countClients().then(function (answer) {
         if (!answer) return false;
         var blocked = typeof answer.editors === 'number' ? answer.editors > 0 : answer.count > 1;

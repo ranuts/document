@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   type SwLike,
   SKIP_WAITING_MESSAGE,
+  HEAL_STORAGE_KEY,
+  healStaleController,
+  isUnseenBuild,
+  onWaitingWorker,
   promoteWaitingWorker,
   shouldReloadOnControllerChange,
   wireServiceWorkerUpdates,
@@ -19,9 +23,10 @@ type FakeWorker = SwLike & {
   postMessage: ReturnType<typeof vi.fn<(msg: unknown) => unknown>>;
   listeners: Array<() => void>;
 };
-const worker = (state = 'installed'): FakeWorker => {
+const worker = (state = 'installed', scriptURL = 'https://edit.example/sw.js'): FakeWorker => {
   const w: FakeWorker = {
     state,
+    scriptURL,
     postMessage: vi.fn<(msg: unknown) => unknown>(),
     listeners: [],
     addEventListener: (_t, cb) => {
@@ -30,8 +35,12 @@ const worker = (state = 'installed'): FakeWorker => {
   };
   return w;
 };
-const registration = (waiting: ReturnType<typeof worker> | null = null) => {
+const registration = (
+  waiting: ReturnType<typeof worker> | null = null,
+  active: SwLike | null = worker('activated'),
+) => {
   const r = {
+    active,
     waiting: waiting as SwLike | null,
     installing: null as SwLike | null,
     updateListeners: [] as Array<() => void>,
@@ -487,5 +496,244 @@ describe('bin/build.sh stamps both versions into sw.js', () => {
     for (const dir of ['sdkjs', 'web-apps', 'fonts']) {
       expect(script, dir).toMatch(new RegExp(`for dir in [^\n]*\\b${dir}\\b`));
     }
+  });
+});
+
+/**
+ * The other half of the update path: someone whose document is open is never
+ * promoted automatically, so they have to be offered the new build instead.
+ * That offer is only as good as the detection -- a worker can be waiting
+ * already, be mid-install, or arrive later -- and missing the last case is how
+ * a whole page lifetime passes with nobody asking.
+ */
+describe('onWaitingWorker', () => {
+  it('reports a worker that is already waiting', () => {
+    const w = worker();
+    const seen: unknown[] = [];
+    onWaitingWorker(registration(w), (found) => seen.push(found));
+    expect(seen).toEqual([w]);
+  });
+
+  it('reports one that is still installing when the page loads', () => {
+    const r = registration();
+    const w = worker('installing');
+    r.installing = w;
+    const seen: unknown[] = [];
+    onWaitingWorker(r, (found) => seen.push(found));
+    expect(seen).toEqual([]);
+    w.state = 'installed';
+    w.listeners.forEach((cb) => cb());
+    expect(seen).toEqual([w]);
+  });
+
+  it('reports one that turns up after the page has loaded', () => {
+    const r = registration();
+    const seen: unknown[] = [];
+    onWaitingWorker(r, (found) => seen.push(found));
+    const w = worker('installing');
+    r.installing = w;
+    r.updateListeners.forEach((cb) => cb());
+    w.state = 'installed';
+    w.listeners.forEach((cb) => cb());
+    expect(seen).toEqual([w]);
+  });
+
+  it('says nothing when there is no new worker at all', () => {
+    const seen: unknown[] = [];
+    onWaitingWorker(registration(null), (found) => seen.push(found));
+    expect(seen).toEqual([]);
+  });
+});
+
+/**
+ * The vendored editor registers a worker of its own from inside the iframe --
+ * `/document_editor_service_worker.js`, a stub this repo ships empty -- into
+ * the same scope. So on the editor route `registration.waiting` is usually
+ * that, not a new deploy of ours. Promoting it hands the origin to an empty
+ * worker (no cache-first vendor tree, an editor that can fail to load), and
+ * announcing it as a new version is a lie. Both paths check the script URL.
+ */
+describe('a foreign worker in the same scope', () => {
+  const vendor = () => worker('installed', 'https://edit.example/document_editor_service_worker.js');
+
+  it('is never told to skip waiting', () => {
+    const v = vendor();
+    expect(promoteWaitingWorker(registration(v), () => false)).toBe(false);
+    expect(v.postMessage).not.toHaveBeenCalled();
+  });
+
+  it('is never announced as a new version', () => {
+    const seen: unknown[] = [];
+    onWaitingWorker(registration(vendor()), (found) => seen.push(found));
+    expect(seen).toEqual([]);
+  });
+
+  it('does not stop a real update of ours from being promoted', () => {
+    const ours = worker();
+    expect(promoteWaitingWorker(registration(ours), () => false)).toBe(true);
+    expect(ours.postMessage).toHaveBeenCalledWith(SKIP_WAITING_MESSAGE);
+  });
+});
+
+/**
+ * "A worker is waiting" does not mean "a new build is waiting". The vendored
+ * editor registers a script of its own into this scope from inside its iframe,
+ * so the scope's script alternates and OUR worker gets re-installed on the
+ * next editor load -- waiting, same build, nothing to do.
+ *
+ * The evidence is the runtime cache sw.js names after the vendor tree's
+ * content hash: a build whose cache is already here is one this browser has
+ * been running. (Asking the controller instead was tried first and reloaded
+ * tabs mid-test whenever a busy worker missed the timeout.)
+ */
+describe('isUnseenBuild', () => {
+  const answering = (version: Record<string, string> | null) =>
+    ({
+      state: 'installed',
+      addEventListener: () => {},
+      postMessage: (_msg: unknown, transfer?: MessagePort[]) => {
+        const port = transfer?.[0];
+        if (port && version) setTimeout(() => port.postMessage({ type: 'VERSION', ...version }), 0);
+      },
+    }) as unknown as SwLike;
+  const cachesWith = (...names: string[]) => ({ keys: () => Promise.resolve(names) });
+
+  it('is false when this browser already holds that build cache', async () => {
+    const seen = cachesWith('document-editor-core-123', 'document-editor-runtime-v1');
+    await expect(isUnseenBuild(answering({ vendorVersion: 'v1' }), seen)).resolves.toBe(false);
+  });
+
+  it('is true when no cache here belongs to it', async () => {
+    const seen = cachesWith('document-editor-core-123', 'document-editor-runtime-v1');
+    await expect(isUnseenBuild(answering({ vendorVersion: 'v2' }), seen)).resolves.toBe(true);
+  });
+
+  it('says nothing when the waiting worker does not answer', async () => {
+    await expect(isUnseenBuild(answering(null), cachesWith('document-editor-runtime-v1'))).resolves.toBe(false);
+  });
+
+  it('says nothing when there is no runtime cache to compare against', async () => {
+    await expect(isUnseenBuild(answering({ vendorVersion: 'v2' }), cachesWith('document-editor-core-1'))).resolves.toBe(
+      false,
+    );
+  });
+});
+
+/**
+ * The silent heal. A deploy that changed the vendor tree leaves its worker
+ * waiting, nothing promotes it while a document is open, and the editor route
+ * practically always has one -- so the tab keeps being served an outgoing
+ * build whose files the deploy may have deleted. At boot there is nothing
+ * typed to lose, so it promotes and reloads without asking.
+ */
+describe('healStaleController', () => {
+  const answering = (version: Record<string, string> | null, scriptURL = 'https://edit.example/sw.js') => {
+    const posted: unknown[] = [];
+    const w = {
+      state: 'installed',
+      scriptURL,
+      addEventListener: () => {},
+      posted,
+      postMessage: (msg: unknown, transfer?: MessagePort[]) => {
+        posted.push(msg);
+        const port = transfer?.[0];
+        if (port && version) setTimeout(() => port.postMessage({ type: 'VERSION', ...version }), 0);
+      },
+    };
+    return w as typeof w & SwLike;
+  };
+  const store = () => {
+    const map = new Map<string, string>();
+    return { getItem: (k: string) => map.get(k) ?? null, setItem: (k: string, v: string) => void map.set(k, v), map };
+  };
+  const input = (over: Partial<Parameters<typeof healStaleController>[0]> = {}) => {
+    const waiting = answering({ vendorVersion: 'v2' });
+    const controller = answering({ vendorVersion: 'v1' });
+    return {
+      registration: registration(waiting as never, controller as never),
+      waiting,
+      controller,
+      hadController: true,
+      storage: store(),
+      cacheStorage: { keys: () => Promise.resolve(['document-editor-runtime-v1']) },
+      ownScriptURL: 'https://edit.example/sw.js',
+      ...over,
+    } as Parameters<typeof healStaleController>[0] & { waiting: typeof waiting; storage: ReturnType<typeof store> };
+  };
+
+  it('promotes an older build out of the way', async () => {
+    const args = input();
+    await expect(healStaleController(args)).resolves.toBe(true);
+    expect((args.waiting as unknown as { posted: unknown[] }).posted).toContainEqual(SKIP_WAITING_MESSAGE);
+  });
+
+  it('does nothing on a first install, when there is no outgoing build', async () => {
+    const args = input({ hadController: false });
+    await expect(healStaleController(args)).resolves.toBe(false);
+  });
+
+  it('does nothing when the waiting worker is the same build', async () => {
+    const waiting = answering({ vendorVersion: 'v1' });
+    const controller = answering({ vendorVersion: 'v1' });
+    await expect(
+      healStaleController({
+        registration: registration(waiting as never, controller as never),
+        waiting,
+        controller,
+        hadController: true,
+        storage: store(),
+        cacheStorage: { keys: () => Promise.resolve(['document-editor-runtime-v1']) },
+        ownScriptURL: 'https://edit.example/sw.js',
+      }),
+    ).resolves.toBe(false);
+  });
+
+  it('leaves the vendored editor own worker alone', async () => {
+    const waiting = answering({ vendorVersion: 'v2' }, 'https://edit.example/document_editor_service_worker.js');
+    const controller = answering({ vendorVersion: 'v1' });
+    await expect(
+      healStaleController({
+        registration: registration(waiting as never, controller as never),
+        waiting,
+        controller,
+        hadController: true,
+        storage: store(),
+        cacheStorage: { keys: () => Promise.resolve(['document-editor-runtime-v1']) },
+        ownScriptURL: 'https://edit.example/sw.js',
+      }),
+    ).resolves.toBe(false);
+    expect((waiting as unknown as { posted: unknown[] }).posted).toEqual([]);
+  });
+
+  it('happens once per tab, so it can never become a reload loop', async () => {
+    const storage = store();
+    await expect(healStaleController(input({ storage }))).resolves.toBe(true);
+    expect(storage.map.get(HEAL_STORAGE_KEY)).toBe('1');
+    await expect(healStaleController(input({ storage }))).resolves.toBe(false);
+  });
+});
+
+describe('shouldReloadOnControllerChange during a heal', () => {
+  it('reloads even with a document open -- the reload is the point', () => {
+    expect(
+      shouldReloadOnControllerChange({
+        hadController: true,
+        alreadyReloading: false,
+        hasOpenDocument: true,
+        healingStaleBuild: true,
+      }),
+    ).toBe(true);
+  });
+
+  it('never reloads over unsaved edits', () => {
+    expect(
+      shouldReloadOnControllerChange({
+        hadController: true,
+        alreadyReloading: false,
+        hasOpenDocument: true,
+        healingStaleBuild: true,
+        hasUnsavedChanges: true,
+      }),
+    ).toBe(false);
   });
 });

@@ -211,6 +211,16 @@ self.addEventListener('message', (event) => {
   // document is not, so any editor window counts against promotion. Another
   // LANDING tab does not -- it has nothing to lose, and blocking on it was
   // enough to leave a two-tab reader on an old build indefinitely.
+  // Which build this worker is. A page cannot tell a NEW build waiting behind
+  // it from its own build re-installed: the vendored editor registers a second
+  // script into this scope from inside its iframe, which makes the scope's
+  // script alternate and re-installs this one on the next load. Same versions
+  // means same build, however many times it has been installed -- so the page
+  // has something better to go on than "there is a worker waiting".
+  if (event.data && event.data.type === 'VERSION') {
+    const port = event.ports && event.ports[0];
+    if (port) port.postMessage({ type: 'VERSION', cacheVersion: CACHE_VERSION, vendorVersion: VENDOR_VERSION });
+  }
   if (event.data && event.data.type === 'CLIENT_COUNT') {
     const port = event.ports && event.ports[0];
     if (!port) return;

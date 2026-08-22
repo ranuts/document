@@ -1,4 +1,9 @@
-import { shouldReloadOnControllerChange, wireServiceWorkerUpdates } from './lib/sw-update';
+import {
+  healStaleController,
+  onWaitingWorker,
+  shouldReloadOnControllerChange,
+  wireServiceWorkerUpdates,
+} from './lib/sw-update';
 import { getAllQueryString } from 'ranuts/utils';
 import { View } from 'ranui/builder';
 import { initEmbedApi } from './lib/embed-api';
@@ -13,7 +18,7 @@ import 'ranui/button';
 import 'ranui/card';
 import 'ranui/select';
 import { initWebMcp } from './lib/web-mcp';
-import { installUnsavedChangesGuard } from './lib/unsaved-guard';
+import { hasUnsavedChanges, installUnsavedChangesGuard } from './lib/unsaved-guard';
 import { initDocumentHistory } from './lib/history';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
@@ -75,6 +80,18 @@ window.onOpenDocument = onOpenDocument;
 window.hideControlPanel = hideControlPanel;
 window.showControlPanel = showControlPanel;
 
+// If the URL already says what to open, the home-state panel must never be
+// painted: it is built visible and only hidden once the document takes over,
+// and on a cold load that gap is long enough to read (a `?saved=` restore adds
+// two dynamic imports before it). Deciding here, before the panel exists,
+// keeps "View/Edit Document / New Word / New Excel / New PowerPoint" off the
+// loading screen instead of racing to remove it afterwards.
+const params = getAllQueryString();
+const opensSomething = Boolean(
+  params['file'] || params['src'] || params['new'] || params['saved'] || params['open'] === 'local',
+);
+if (opensSomething) document.body.classList.add('opening-document');
+
 // Initialize UI components
 createControlPanel();
 
@@ -88,7 +105,7 @@ createControlPanel();
 //   ?file=https://example.com/doc.docx
 //   ?src=https://example.com/doc.docx
 //   ?file=doc1.docx&src=doc2.xlsx (will use file: doc1.docx)
-const { file, src, readonly, agent } = getAllQueryString();
+const { file, src, readonly, agent } = params;
 const documentUrl = file || src;
 // Pure preview mode: ?readonly=true (also accepts ?readonly=1 or bare ?readonly).
 // Opens the document with editing/download disabled (#25, #85, #87).
@@ -116,12 +133,12 @@ window.addEventListener('message', (event: MessageEvent) => {
 // into a new file (skipping the landing hero). The localized homepages use it —
 // e.g. /zh-CN/ links to `/?locale=zh-CN&new=docx`, so i18n (which reads ?locale)
 // boots the editor UI in Chinese and drops the user directly into editing.
-const newExtRaw = getAllQueryString()['new'];
+const newExtRaw = params['new'];
 const newExt = typeof newExtRaw === 'string' ? newExtRaw.replace(/^\./, '').toLowerCase() : '';
 const createNewOnLoad = ['docx', 'xlsx', 'pptx'].includes(newExt) && !documentUrl;
 // `?open=local`: a static landing page (e.g. /zh-CN/) stashed a picked file in
 // IndexedDB via public/open-local.js — take it out and open it on boot.
-const openParam = getAllQueryString()['open'];
+const openParam = params['open'];
 const openLocalOnLoad = openParam === 'local' && !documentUrl && !createNewOnLoad;
 // `?saved=<id>`: which of this browser's saved documents to open. Every
 // editing session stamps its own id here (see lib/history/session.ts), so a
@@ -135,7 +152,7 @@ const openLocalOnLoad = openParam === 'local' && !documentUrl && !createNewOnLoa
 // would open an empty editor. It is also why it is not called `id`: what makes
 // it meaningful is not that it is an identifier, it is that the document is
 // saved on this device.
-const savedParam = getAllQueryString()['saved'] ?? '';
+const savedParam = params['saved'] ?? '';
 
 // Landing hero orchestration. Only the bare homepage (no ?file/?src/?new, not
 // embedded) shows the crawlable hero. If a document is about to load or be
@@ -216,6 +233,10 @@ if ('serviceWorker' in navigator) {
   // no document is open, then takes over and the page reloads once.
   const hadController = !!navigator.serviceWorker.controller;
   let reloadingForUpdate = false;
+  // Set when this tab asked an older worker to step aside (see below): the
+  // reload that follows is the point, so it is not blocked by having a
+  // document open the way an ordinary update is.
+  let healingStaleBuild = false;
   const hasOpenDocument = () => Boolean(getDocmentObj().fileName);
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -224,6 +245,8 @@ if ('serviceWorker' in navigator) {
         hadController,
         alreadyReloading: reloadingForUpdate,
         hasOpenDocument: hasOpenDocument(),
+        healingStaleBuild,
+        hasUnsavedChanges: hasUnsavedChanges(),
       })
     ) {
       return;
@@ -232,12 +255,45 @@ if ('serviceWorker' in navigator) {
     window.location.reload();
   });
 
+  // The script we register, absolute: the vendored editor registers one of its
+  // own into this same scope from inside the iframe, and only this URL says
+  // which waiting worker is a new build of ours.
+  const ownScriptURL = new URL('./sw.js', window.location.href).href;
+
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('./sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration);
-        wireServiceWorkerUpdates(registration, hasOpenDocument);
+        wireServiceWorkerUpdates(registration, hasOpenDocument, ownScriptURL);
+        // Promotion above is refused while a document is open, and this page
+        // is usually opened with one (?new=, ?file=, ?saved=). Without an
+        // offer, such a visitor never leaves the build their worker cached --
+        // reloading serves it again. Ask instead of deciding for them: the
+        // reload happens on click, so the mixed-version hazard the waiting
+        // exists to prevent cannot happen either.
+        // A tab whose worker is an older build heals itself, quietly. The
+        // navigation is network-first, so this page and its bundle are already
+        // the new ones; it is the vendored tree underneath that is still being
+        // served from the outgoing build's cache, and a registry that no longer
+        // matches the origin is how a reverted build kept rendering garbled
+        // text long after the revert had shipped. Promote and reload once --
+        // at boot there is nothing typed to lose, and no one has to be told.
+        onWaitingWorker(
+          registration,
+          (waiting) => {
+            void healStaleController({
+              registration,
+              waiting,
+              controller: navigator.serviceWorker.controller,
+              hadController,
+              storage: window.sessionStorage,
+            }).then((started) => {
+              if (started) healingStaleBuild = true;
+            });
+          },
+          ownScriptURL,
+        );
         // Check for updates on every page load. Firefox rejects the update
         // when the registration changed since it was scheduled (a benign race
         // right after register()); swallow it so it never surfaces as an
