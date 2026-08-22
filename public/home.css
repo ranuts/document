@@ -24,6 +24,10 @@
 #landing-hero {
   /* editor-selection ground: theme-flipped by ran-tokens (light #dfefff / dark #002f62) */
   --sel: var(--ran-blue-300);
+  /* Wide page column. The site has two: this one for anything laid out in
+     columns, and 720px for anything read as prose (landing.css .wrap). Any
+     third width makes the site look like two sites; test/unit/design-contract
+     keeps the three declarations of these two numbers in step. */
   --maxw: 1152px;
   /* fluid page gutter — the only spacing that isn't a fixed step (it scales with
      viewport); bounds are ranui steps (--ran-space-5≈20 not in scale, so raw). */
@@ -37,7 +41,10 @@
   color: var(--ran-color-text);
   font-family: var(--ran-font-family);
   font-size: 16px;
-  line-height: 1.6;
+  /* 1.65, the same as every other page (landing.css). The homepage used to sit
+     at 1.6 -- invisible on its own, and exactly the kind of drift that adds up
+     when each page picks its own numbers. */
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;

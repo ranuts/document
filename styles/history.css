@@ -9,22 +9,17 @@
  * what makes a list of files legible -- with each row free-flowing, the eye has
  * to re-find the same fact in a new place on every line.
  */
-body {
-  margin: 0;
-  background: var(--ran-color-bg);
-  color: var(--ran-color-text);
-  font-family: var(--ran-font-family);
-  line-height: var(--ran-line-height);
-  -webkit-font-smoothing: antialiased;
-}
-
+/* The bar is shared chrome (landing.css); the page's own column starts below it. */
 .history-page {
-  /* The landing pages' content column, minus the room a hero needs for its
-     illustration: wide enough that a long file name and its measurements are
-     not fighting, narrow enough to stay one comfortable read. */
-  max-width: 1040px;
+  /* The site has exactly two content widths, and this page uses the wide one:
+     1152px for anything laid out in columns (the homepage, this list), 720px
+     for anything read as prose (the landing pages, /help, /changelog). A third
+     width invented for one page is how a site stops looking like one site.
+     A table needs the horizontal room; the reading measure is enforced per
+     paragraph instead (see .history-intro). */
+  max-width: 1152px;
   margin: 0 auto;
-  padding: var(--ran-space-16) var(--ran-space-6) var(--ran-space-24);
+  padding: var(--ran-space-10) clamp(20px, 5vw, 56px) var(--ran-space-24);
   display: flex;
   flex-direction: column;
   gap: var(--ran-space-8);
@@ -43,12 +38,15 @@ body {
   gap: var(--ran-space-6);
   flex-wrap: wrap;
 }
+/* The site's page title: same size, weight and tracking as every other h1
+   (landing.css sets these on the satellites; matching them by hand here is the
+   one thing that cannot be shared, since this page's h1 is built in JS). */
 .history-title {
   margin: 0;
-  font-size: 32px;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  font-weight: 600;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-weight: 700;
 }
 .history-header-actions {
   margin-left: auto;
@@ -58,7 +56,10 @@ body {
 }
 .history-intro {
   margin: 0;
-  max-width: 68ch;
+  /* 60ch lands at roughly 65 characters per line -- the middle of the 45-75
+     range that typography settled on long before the web. The container is
+     wide because of the table; the prose must not follow it out there. */
+  max-width: 60ch;
   color: var(--ran-color-text-secondary);
   font-size: 15px;
 }
@@ -109,6 +110,24 @@ body {
 .history-switch:focus-visible {
   outline: 2px solid var(--ran-color-link);
   outline-offset: 2px;
+}
+
+/* Button scale. Two sizes, and which one to use is decided by what the button
+   acts on, not by where it happens to sit: a page-level action (open the
+   editor, delete everything) is the same 42px as a landing-page CTA, while an
+   action that belongs to one row of a table is smaller so a list of them does
+   not read as a stack of calls to action. Same split as the component libraries
+   (Ant's `size`, Material's density) -- the point is that it is a rule, not a
+   value picked per page. */
+.history-header-actions r-button::part(content),
+.history-clear::part(content) {
+  padding: var(--ran-space-2) var(--ran-space-4);
+  font-size: 15px;
+  font-weight: 600;
+}
+.history-row-actions r-button::part(content) {
+  padding: var(--ran-space-1) var(--ran-space-3);
+  font-size: 14px;
 }
 
 /* ---- toolbar ---- */
@@ -267,6 +286,7 @@ body {
   border-top: 1px solid var(--ran-color-border);
 }
 .history-note {
+  max-width: 72ch;
   color: var(--ran-color-text-secondary);
   font-size: 13px;
 }
@@ -278,7 +298,7 @@ body {
 
 @media (max-width: 860px) {
   .history-page {
-    padding: var(--ran-space-10) var(--ran-space-4) var(--ran-space-16);
+    padding: var(--ran-space-8) var(--ran-space-4) var(--ran-space-16);
     gap: var(--ran-space-6);
   }
   .history-title {
