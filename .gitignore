@@ -35,6 +35,45 @@ playwright-report-pages/
 
 # Pages rendered from markdown at build/dev time by bin/build-pages.mjs (vite
 # plugin `generated-pages`); sources live in content/, docs/, CHANGELOG.md.
+# The landing pages are generated from content/<locale>/**.md by
+# bin/build-pages.mjs, same as /help and the changelog below.
+public/offline-document-editor.html
+public/zh-CN/offline-document-editor.html
+public/no-signup-document-editor.html
+public/zh-CN/no-signup-document-editor.html
+public/private-document-editor.html
+public/zh-CN/private-document-editor.html
+public/edit-documents-without-account.html
+public/zh-CN/edit-documents-without-account.html
+public/embed-document-editor.html
+public/zh-CN/embed-document-editor.html
+public/webmcp-document-editor.html
+public/zh-CN/webmcp-document-editor.html
+public/open/docx.html
+public/zh-CN/open/docx.html
+public/open/xlsx.html
+public/zh-CN/open/xlsx.html
+public/open/pptx.html
+public/zh-CN/open/pptx.html
+public/open/pdf.html
+public/zh-CN/open/pdf.html
+public/open/odt.html
+public/zh-CN/open/odt.html
+public/open/ods.html
+public/zh-CN/open/ods.html
+public/open/odp.html
+public/zh-CN/open/odp.html
+public/convert/docx-to-pdf.html
+public/zh-CN/convert/docx-to-pdf.html
+public/convert/xlsx-to-pdf.html
+public/zh-CN/convert/xlsx-to-pdf.html
+public/convert/pptx-to-pdf.html
+public/zh-CN/convert/pptx-to-pdf.html
+public/convert/xlsx-to-csv.html
+public/zh-CN/convert/xlsx-to-csv.html
+public/convert/csv-to-xlsx.html
+public/zh-CN/convert/csv-to-xlsx.html
+
 public/help.html
 public/help/
 public/changelog.html
