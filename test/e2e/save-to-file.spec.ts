@@ -229,7 +229,15 @@ test.describe('saving into the document own file (real editor)', () => {
     // scenario: the tab was closed and the document opened again later.
     const docId = new URL(page.url()).searchParams.get('saved');
     expect(docId).toBeTruthy();
-    const later = await page.context().newPage();
+
+    // Close the first tab before opening the second -- which is what the
+    // comment above describes, and what the user does. Keeping both alive also
+    // keeps two OnlyOffice instances and their 283 MB heaps in one browser,
+    // which is what made this time out on CI while passing locally.
+    const context = page.context();
+    await page.close();
+
+    const later = await context.newPage();
     await later.addInitScript(stubPicker);
     await later.goto(`/editor?saved=${docId}`);
     await waitForEditorReady(later);
