@@ -20,6 +20,7 @@ import { formatRelativeTime } from './history/recovery';
 import { clearAllHistory, deleteDoc, historyUsage, listDocs, pruneExpired } from './history/store';
 import { isAutosaveEnabled, setAutosaveEnabled } from './history/autosave';
 import { daysUntilExpiry, hasUnsavedWork, type HistoryDoc } from './history/types';
+import { confirmDialog } from './confirm-dialog';
 
 const SEARCH_DEBOUNCE_MS = 200;
 
@@ -120,8 +121,13 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
           button(
             t('historyDelete'),
             () => {
-              if (!window.confirm(t('historyDeleteConfirm', { title: doc.title }))) return;
-              void deleteDoc(doc.id).then(refresh);
+              void confirmDialog({
+                title: t('historyDeleteTitle'),
+                body: t('historyDeleteConfirm', { title: doc.title }),
+                confirmLabel: t('historyDelete'),
+                cancelLabel: t('historyCancel'),
+                danger: true,
+              }).then((ok) => (ok ? deleteDoc(doc.id).then(refresh) : undefined));
             },
             { type: 'text', class: 'history-delete' },
           ),
@@ -280,8 +286,13 @@ async function render(): Promise<void> {
           button(
             t('historyClearAll'),
             () => {
-              if (!window.confirm(t('historyClearConfirm'))) return;
-              void clearAllHistory().then(refresh);
+              void confirmDialog({
+                title: t('historyClearTitle'),
+                body: t('historyClearConfirm'),
+                confirmLabel: t('historyClearAll'),
+                cancelLabel: t('historyCancel'),
+                danger: true,
+              }).then((ok) => (ok ? clearAllHistory().then(refresh) : undefined));
             },
             { type: 'text', id: 'history-clear-all', class: 'history-clear' },
           ),

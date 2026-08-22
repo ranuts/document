@@ -158,8 +158,11 @@ test.describe('local history page', () => {
     ]);
     await page.reload();
 
-    page.on('dialog', (dialog) => void dialog.accept());
+    // The confirmation is the design system's modal now, not the browser's:
+    // a page about the user's own documents should not be interrupted by
+    // "edit.chaxus.com says".
     await page.locator('.history-row', { hasText: 'Drop.docx' }).locator('.history-delete').click();
+    await page.locator('r-modal .confirm-ok').click();
 
     await expect(titles(page)).toHaveText(['Keep.docx']);
 
@@ -236,6 +239,18 @@ test.describe('local history page', () => {
     await expect(page.locator('.history-title')).toBeVisible();
   });
 
+  test('takes no for an answer', async ({ page }) => {
+    await seed(page, [{ id: 'stays', title: 'Stays.docx' }]);
+    await page.reload();
+
+    await page.locator('.history-delete').click();
+    await page.locator('r-modal .confirm-cancel').click();
+
+    // Cancelling deletes nothing, and the dialog gets out of the way.
+    await expect(page.locator('r-modal')).toHaveCount(0);
+    await expect(titles(page)).toHaveText(['Stays.docx']);
+  });
+
   test('clears everything at once', async ({ page }) => {
     await seed(page, [
       { id: 'a', title: 'A.docx' },
@@ -243,8 +258,8 @@ test.describe('local history page', () => {
     ]);
     await page.reload();
 
-    page.on('dialog', (dialog) => void dialog.accept());
     await page.locator('#history-clear-all').click();
+    await page.locator('r-modal .confirm-ok').click();
 
     await expect(page.locator('#history-empty')).toBeVisible();
   });

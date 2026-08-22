@@ -1,0 +1,31 @@
+/* Styles for lib/confirm-dialog.ts. Imported by that module rather than kept
+   in a page's stylesheet: the dialog is reusable, and a component whose looks
+   live in someone else's file only works until the second caller. */
+
+/* Narrower than the component's default: a question of two lines in a dialog
+   sized for content is mostly empty dialog. */
+.confirm-dialog::part(dialog) {
+  max-width: 440px;
+}
+
+/* ranui has no "danger" button type, and it does not need one: the component
+   exposes --ran-btn-* as its customisation hook, so the destructive action is a
+   primary button wearing the danger token. Going through the hook rather than
+   ::part means it keeps the component's own states (hover, focus, disabled). */
+.confirm-ok-danger {
+  --ran-btn-background: var(--ran-color-danger);
+  --ran-btn-border-color: var(--ran-color-danger);
+  --ran-btn-color: #fff;
+}
+
+.confirm-body {
+  color: var(--ran-color-text-secondary);
+  font-size: 14px;
+  /* A file name can be long; the sentence around it should still be readable. */
+  max-width: 46ch;
+}
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ran-space-2);
+}
