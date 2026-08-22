@@ -215,10 +215,19 @@ export interface I18nMessages {
   /** `{title}` is the file name, `{when}` a relative time such as "5 minutes ago". */
   recoveryBody: string;
   recoveryRestore: string;
+  /**
+   * Deliberately not "Discard": dismissing the offer deletes nothing. The copy
+   * stays in the local history for its seven days, and saying otherwise would
+   * be the interface promising an action it does not perform.
+   */
   recoveryDismiss: string;
   recoveryViewAll: string;
   historyTitle: string;
   historyIntro: string;
+  historyColDocument: string;
+  historyColEdited: string;
+  historyColSize: string;
+  historyColExpires: string;
   historyNotBackup: string;
   historySearchPlaceholder: string;
   historyEmpty: string;
@@ -315,37 +324,43 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     agentToolCallPrefix: '调用工具：',
     agentToolErrorPrefix: '工具出错：',
 
-    autosaveStopped: '自动保存已停止：浏览器没有可用的存储空间了。',
-    autosaveOtherTab: '另一个标签页正在编辑这个文档，本页不会自动保存。',
-    recoveryTitle: '有未保存到磁盘的编辑',
-    recoveryBody: '「{title}」在 {when} 还有没有保存到磁盘的编辑。',
-    recoveryRestore: '恢复',
-    recoveryDismiss: '丢弃',
-    recoveryViewAll: '查看全部',
-    historyTitle: '本地历史',
-    historyIntro: '本机浏览器在你编辑时保存下来的内容——刷新、误关标签页、浏览器崩溃都能找回。文件从未上传。',
-    historyNotBackup: '这些是恢复点，不是备份——重要文档请照常导出保存到磁盘。',
-    historySearchPlaceholder: '搜索标题',
-    historyEmpty: '还没有自动保存的文档。',
-    historyEmptySearch: '没有匹配的文档。',
+    autosaveStopped:
+      '自动保存已停止：浏览器没有可用的存储空间了。请导出保存这篇文档，并到本机文档列表里删掉一些旧文件。',
+    autosaveOtherTab: '这篇文档已在另一个标签页里打开，由那个标签页负责保存；本页不会重复保存。',
+    recoveryTitle: '有一份没保存的编辑',
+    recoveryBody: '「{title}」{when}的编辑还没有保存到电脑上。',
+    recoveryRestore: '继续编辑',
+    recoveryDismiss: '以后再说',
+    recoveryViewAll: '全部文档',
+    historyTitle: '本机保存的文档',
+    historyIntro:
+      '你编辑过的文档，副本保存在这台设备的浏览器里——刷新、误关标签页、浏览器崩溃之后都能找回。这些内容从未上传。',
+    historyColDocument: '文档',
+    historyColEdited: '最后编辑',
+    historyColSize: '大小',
+    historyColExpires: '自动删除',
+    historyNotBackup: '这些副本是为了让你接着做没做完的事，不是备份——想长期保留，请导出保存到电脑。',
+    historySearchPlaceholder: '按文件名搜索',
+    historyEmpty: '这里还是空的。你在本站编辑过的文档会自动出现在这个列表里。',
+    historyEmptySearch: '没有文件名匹配的文档。',
     historyOpen: '打开',
     historyDelete: '删除',
-    historyDeleteConfirm: '删除「{title}」及其全部快照？此操作不可撤销。',
-    historyClearAll: '清空全部',
-    historyClearConfirm: '删除这台设备上保存的全部文档？此操作不可撤销。',
-    historyUnsaved: '未存盘',
-    historyUsage: '已占用 {size}',
+    historyDeleteConfirm: '删除「{title}」及其全部保存副本？此操作不可撤销。',
+    historyClearAll: '全部删除',
+    historyClearConfirm: '删除这台设备上保存的全部文档副本？此操作不可撤销。',
+    historyUnsaved: '未导出',
+    historyUsage: '占用 {size}',
     historyCount: '{count} 篇文档',
     historyPageInfo: '第 {page} / {pages} 页',
     historyPrev: '上一页',
     historyNext: '下一页',
-    historyBack: '返回编辑器',
+    historyBack: '打开编辑器',
     historyAutosaveLabel: '自动保存',
-    historyAutosaveOff: '自动保存已关闭，不会再产生新的恢复点。',
-    historyRetention: '自动清除：每个文档在最后一次编辑或打开的 7 天后被删除。',
-    historyExpiresIn: '{days} 天后清除',
-    historyExpiresInOne: '1 天后清除',
-    historyExpiresToday: '今天清除',
+    historyAutosaveOff: '自动保存已关闭：现在编辑的内容不会再被保存，关掉页面就没有了。',
+    historyRetention: '每篇文档会在你最后一次编辑或打开的 7 天后自动删除。你也可以随时在这里手动删除，删除立即生效。',
+    historyExpiresIn: '剩 {days} 天',
+    historyExpiresInOne: '剩 1 天',
+    historyExpiresToday: '今天',
   },
   [LanguageCode.EN]: {
     webOffice: 'Web Office',
@@ -408,38 +423,46 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     agentToolCallPrefix: 'Tool call: ',
     agentToolErrorPrefix: 'Tool error: ',
 
-    autosaveStopped: 'Autosave stopped: this browser has no storage room left.',
-    autosaveOtherTab: 'Another tab is editing this document, so this tab will not autosave it.',
-    recoveryTitle: 'Unsaved changes from last time',
-    recoveryBody: '"{title}" has edits from {when} that never reached your disk.',
-    recoveryRestore: 'Restore',
-    recoveryDismiss: 'Discard',
-    recoveryViewAll: 'View all',
-    historyTitle: 'Local history',
+    autosaveStopped:
+      'Autosave stopped: this browser is out of storage room. Export this document, then delete a few old ones from your saved documents.',
+    autosaveOtherTab:
+      'This document is already open in another tab, which is the one saving it. This tab will not save a second copy.',
+    recoveryTitle: 'You have unsaved edits',
+    recoveryBody: '"{title}" has edits from {when} that were never saved to your computer.',
+    recoveryRestore: 'Pick up where I left off',
+    recoveryDismiss: 'Not now',
+    recoveryViewAll: 'Saved documents',
+    historyTitle: 'Saved documents',
     historyIntro:
-      'What this browser saved while you worked, so a refresh, a closed tab or a crash does not cost you the work. Nothing was uploaded.',
-    historyNotBackup: 'These are recovery points, not backups -- keep exporting anything important to disk.',
-    historySearchPlaceholder: 'Search by title',
-    historyEmpty: 'Nothing has been autosaved yet.',
-    historyEmptySearch: 'No documents match that search.',
+      'Copies of the documents you edited, kept in this browser on this device, so a refresh, a closed tab or a crash cannot cost you the work. None of this was uploaded.',
+    historyColDocument: 'Document',
+    historyColEdited: 'Last edited',
+    historyColSize: 'Size',
+    historyColExpires: 'Auto-deletes',
+    historyNotBackup:
+      'These copies exist so you can pick up work you were in the middle of. They are not a backup -- export anything you want to keep.',
+    historySearchPlaceholder: 'Search by file name',
+    historyEmpty: 'Nothing saved yet. Documents you edit here will show up in this list on their own.',
+    historyEmptySearch: 'No file name matches that search.',
     historyOpen: 'Open',
     historyDelete: 'Delete',
-    historyDeleteConfirm: 'Delete "{title}" and all of its snapshots? This cannot be undone.',
-    historyClearAll: 'Clear everything',
-    historyClearConfirm: 'Delete every document saved in this browser? This cannot be undone.',
-    historyUnsaved: 'not on disk',
-    historyUsage: '{size} stored',
+    historyDeleteConfirm: 'Delete "{title}" and every saved copy of it? This cannot be undone.',
+    historyClearAll: 'Delete all',
+    historyClearConfirm: 'Delete every document copy saved on this device? This cannot be undone.',
+    historyUnsaved: 'not exported',
+    historyUsage: '{size} used',
     historyCount: '{count} documents',
     historyPageInfo: 'Page {page} of {pages}',
     historyPrev: 'Previous',
     historyNext: 'Next',
-    historyBack: 'Back to the editor',
+    historyBack: 'Open the editor',
     historyAutosaveLabel: 'Autosave',
-    historyAutosaveOff: 'Autosave is off; no new recovery points are being made.',
-    historyRetention: 'Cleared automatically: each document is deleted 7 days after you last edit or open it.',
-    historyExpiresIn: 'deleted in {days} days',
-    historyExpiresInOne: 'deleted in 1 day',
-    historyExpiresToday: 'deleted today',
+    historyAutosaveOff: 'Autosave is off: what you edit now is not being saved, and closing the page will lose it.',
+    historyRetention:
+      'Each document is deleted automatically 7 days after you last edited or opened it. You can also delete anything here yourself, and that takes effect immediately.',
+    historyExpiresIn: '{days} days left',
+    historyExpiresInOne: '1 day left',
+    historyExpiresToday: 'today',
   },
 };
 
