@@ -162,4 +162,38 @@ describe('vendor contract sentinel', () => {
     // HTML-as-xls becomes optional; revisit lib/converter.ts then.
     expect(read('public/sdkjs/common/wasm/x2t/x2t.js')).toContain('_ZN10CHtmlFile2C1Ev');
   });
+
+  /**
+   * The asm.js fallbacks (*_ie.js, 27.5 MB) were removed: every one of them is
+   * chosen only when WebAssembly is unavailable, and x2t makes a browser
+   * without WebAssembly unable to open a document at all. That deletion is
+   * safe exactly as long as the *condition* stays a WebAssembly check -- if a
+   * vendor bump starts picking the _ie variant for some other reason, the
+   * files it wants are gone and the failure is a 404 answered with index.html
+   * ("Unexpected token '<'"), which is not an obvious symptom.
+   */
+  it.each(editors)('sdkjs/%s/sdk-all-min.js still gates every asm.js fallback on WebAssembly', (editor) => {
+    const src = read(`public/sdkjs/${editor}/sdk-all-min.js`);
+    const mentions = [...src.matchAll(/"([a-z]+)_ie\.js"/g)];
+    expect(mentions.length, 'no _ie reference at all -- the switch was renamed').toBeGreaterThan(0);
+    for (const mention of mentions) {
+      // Either an inline WebAssembly probe or the useWasm flag set from one.
+      const preceding = src.slice(Math.max(0, mention.index - 400), mention.index);
+      expect(preceding, `${mention[1]}_ie.js is chosen without a WebAssembly check`).toMatch(/WebAssembly|useWasm/);
+    }
+  });
+
+  /**
+   * sdk-all-min.js is the bootstrap; sdk-all.js is the full API bundle loaded
+   * after it (save-stream.ts waits on isLoadFullApi for exactly this). It
+   * looks like dead weight -- requirejs pins `sdk: ".../sdk-all-min"` and
+   * nothing in web-apps names the unminified file outside the vendor's own
+   * cache-warming pages -- and deleting it on that reasoning turned 11 specs
+   * red with "Unexpected token '<'". Both halves have to stay.
+   */
+  it.each(editors)('sdkjs/%s ships both the bootstrap and the full API bundle', (editor) => {
+    for (const bundle of ['sdk-all-min.js', 'sdk-all.js']) {
+      expect(existsSync(resolve(ROOT, `public/sdkjs/${editor}/${bundle}`)), `${editor}/${bundle}`).toBe(true);
+    }
+  });
 });

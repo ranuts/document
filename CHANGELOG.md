@@ -19,6 +19,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- The self-hosted Docker image is 27 MB smaller: the bundle carried asm.js
+  copies of five engines, only ever used by browsers without WebAssembly --
+  which cannot open a document here at all, since the conversion engine is
+  WebAssembly.
 - Chinese, Japanese and Korean text is set in one typeface again. A single
   line used to be assembled from up to four different fonts -- the characters
   from one, the comma from another, the full stop from a third -- because each
