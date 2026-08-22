@@ -19,7 +19,7 @@
  */
 import { BLOBS_BY_DOC, BLOBS_STORE, DOCS_STORE, requestToPromise, withStores } from './db';
 import type { HistoryDoc, HistoryOrigin, HistorySnapshot } from './types';
-import { MAX_AGE_MS, expiresAt, hasUnsavedWork } from './types';
+import { MAX_AGE_MS, expiresAt } from './types';
 
 /** Revisions kept per document: the newest plus two recovery points behind it. */
 export const MAX_REVS_PER_DOC = 3;
@@ -189,9 +189,6 @@ async function writeSnapshot(payload: Uint8Array, input: SnapshotInput, budget: 
           updatedAt: now,
           revCount: existing.revCount + 1,
           nextRev: existing.nextRev + 1,
-          // A fresh snapshot is fresh news: an offer the user dismissed was
-          // about work they have since added to.
-          dismissedAt: undefined,
         }
       : {
           id: input.id ?? newId(),
@@ -392,36 +389,6 @@ export function markOpened(id: string): Promise<HistoryDoc | null> {
 /** Bytes reached the user's disk, so this document has nothing left to recover. */
 export function markSavedToDisk(id: string): Promise<HistoryDoc | null> {
   return patchDoc(id, { savedToDiskAt: stamp() });
-}
-
-/** The user turned down the recovery offer; do not ask again for this revision. */
-export function dismissRecovery(id: string): Promise<HistoryDoc | null> {
-  return patchDoc(id, { dismissedAt: stamp() });
-}
-
-/**
- * The most recent document holding work that never reached the disk, ignoring
- * offers the user already turned down. This is what the recovery bar and the
- * landing page's "continue editing" line ask for.
- */
-export async function getRecoverableDoc(
-  options: { excludeId?: string; maxAgeMs?: number } = {},
-): Promise<HistoryDoc | null> {
-  try {
-    const rows = (await withStores([DOCS_STORE], 'readonly', (tx) => readAllDocs(tx))) ?? [];
-    const cutoff = options.maxAgeMs ? stamp() - options.maxAgeMs : 0;
-    return (
-      rows.find(
-        (doc) =>
-          doc.id !== options.excludeId &&
-          hasUnsavedWork(doc) &&
-          doc.updatedAt > (doc.dismissedAt ?? 0) &&
-          doc.updatedAt >= cutoff,
-      ) ?? null
-    );
-  } catch {
-    return null;
-  }
 }
 
 /**

@@ -1,30 +1,20 @@
 /**
- * The recovery offer.
+ * Getting back to a stored snapshot.
  *
- * Snapshots are worthless if nobody is told they exist. A crash or a reload
- * leaves the page open and obvious, but the common case is quieter: the user
- * closes the tab and comes back tomorrow through the homepage, where nothing
- * on screen hints that yesterday's edits were kept. So the editor asks on
- * boot -- the same thing Office does with its Document Recovery pane and
- * WordPress with "there is a more recent autosave, restore it?".
+ * Recovery is offered where the user is not already in the middle of
+ * something -- the landing page's "continue last time" line and the /history
+ * list -- and both of those end here: they hand over a document id, and this
+ * puts its newest bytes back in the editor.
  *
- * The wording follows WordPress rather than "you have a backup": what matters
- * is the comparison. This offer only appears for a document whose snapshot is
- * newer than the last time its bytes reached the disk, and it says when those
- * edits were made so the user can tell which copy is ahead.
+ * There used to be a card that made the offer on editor boot as well. It had
+ * to go: /editor never opens empty, so the card always arrived on top of a
+ * document the user had just opened, to talk about a different one.
  */
-import { t } from '@ranuts/shared/i18n';
-import { Div, View } from 'ranui/builder';
 import { openLocalFile } from '../document';
-import { dismissRecovery, getLatestSnapshot, getRecoverableDoc } from './store';
+import { getLatestSnapshot } from './store';
 import type { HistoryDoc } from './types';
 
-/** Offers older than this belong on the history page, not in the user's way. */
-export const RECOVERY_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
-
-const BAR_ID = 'recovery-bar';
-
-/** A short "5 minutes ago" for the offer's headline. */
+/** A short "5 minutes ago", for the history list's timestamps. */
 export function formatRelativeTime(timestamp: number, now = Date.now()): string {
   const seconds = Math.round((timestamp - now) / 1000);
   const units: Array<[Intl.RelativeTimeFormatUnit, number]> = [
@@ -51,10 +41,6 @@ export function formatRelativeTime(timestamp: number, now = Date.now()): string 
   }
 }
 
-export function dismissRecoveryBar(): void {
-  document.getElementById(BAR_ID)?.remove();
-}
-
 /**
  * Reopen the document from its newest snapshot.
  *
@@ -72,66 +58,4 @@ export async function restoreDocument(doc: HistoryDoc): Promise<boolean> {
   const file = new File([snapshot.bytes.buffer as ArrayBuffer], doc.title);
   await openLocalFile(file, { historyId: doc.id });
   return true;
-}
-
-function buildBar(doc: HistoryDoc): HTMLElement {
-  const restore = View('r-button')
-    .class('recovery-bar-action recovery-restore')
-    .text(t('recoveryRestore'))
-    .attr('type', 'primary')
-    .on('click', () => {
-      dismissRecoveryBar();
-      void restoreDocument(doc);
-    })
-    .build();
-
-  const discard = View('r-button')
-    .class('recovery-bar-action recovery-dismiss')
-    .text(t('recoveryDismiss'))
-    .attr('variant', 'text')
-    .attr('type', 'text')
-    .on('click', () => {
-      dismissRecoveryBar();
-      // Remembered, so the same offer does not greet every reload -- until the
-      // document changes again, which makes it news once more.
-      void dismissRecovery(doc.id);
-    })
-    .build();
-
-  const viewAll = View('r-link').class('recovery-bar-link').text(t('recoveryViewAll')).attr('href', '/history').build();
-
-  return Div()
-    .id(BAR_ID)
-    .class('recovery-bar')
-    .role('status')
-    .children(
-      Div()
-        .class('recovery-bar-text')
-        .children(
-          Div()
-            .class('recovery-bar-title')
-            .children(View('i').class('recovery-dot').build(), View('span').text(t('recoveryTitle')).build())
-            .build(),
-          Div()
-            .class('recovery-bar-body')
-            .text(t('recoveryBody', { title: doc.title, when: formatRelativeTime(doc.updatedAt) }))
-            .build(),
-        )
-        .build(),
-      Div().class('recovery-bar-actions').children(restore, discard, viewAll).build(),
-    )
-    .build();
-}
-
-/**
- * Show the offer, if there is one worth showing. Safe to call on every boot:
- * it does nothing when the history is empty, unavailable, or holds only
- * documents that already reached the disk.
- */
-export async function offerRecovery(options: { excludeId?: string } = {}): Promise<HistoryDoc | null> {
-  const doc = await getRecoverableDoc({ excludeId: options.excludeId, maxAgeMs: RECOVERY_MAX_AGE_MS });
-  if (!doc) return null;
-  dismissRecoveryBar();
-  document.body.appendChild(buildBar(doc));
-  return doc;
 }

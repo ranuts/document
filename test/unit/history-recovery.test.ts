@@ -1,12 +1,14 @@
 import 'fake-indexeddb/auto';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { openLocalFile } = vi.hoisted(() => ({ openLocalFile: vi.fn() }));
 vi.mock('../../lib/document', () => ({ openLocalFile }));
 
 import { DB_NAME, resetHistoryDbForTests } from '../../lib/history/db';
-import { getDoc, markSavedToDisk, putSnapshot, resetHistoryClockForTests } from '../../lib/history/store';
-import { dismissRecoveryBar, formatRelativeTime, offerRecovery, restoreDocument } from '../../lib/history/recovery';
+import { putSnapshot, resetHistoryClockForTests } from '../../lib/history/store';
+import { formatRelativeTime, restoreDocument } from '../../lib/history/recovery';
 
 async function wipe(): Promise<void> {
   resetHistoryDbForTests();
@@ -19,42 +21,10 @@ async function wipe(): Promise<void> {
   });
 }
 
-function bar(): HTMLElement | null {
-  return document.getElementById('recovery-bar');
-}
-
-describe('recovery offer', () => {
+describe('restoring a stored document', () => {
   beforeEach(async () => {
     await wipe();
-    dismissRecoveryBar();
     openLocalFile.mockReset();
-  });
-
-  it('says nothing when there is nothing to recover', async () => {
-    expect(await offerRecovery()).toBeNull();
-    expect(bar()).toBeNull();
-  });
-
-  it('offers the document whose edits never reached the disk, naming it', async () => {
-    const doc = await putSnapshot({ title: 'Report.docx', origin: 'local', bytes: new Uint8Array([1]) });
-
-    const offered = await offerRecovery();
-
-    expect(offered?.id).toBe(doc!.id);
-    expect(bar()?.textContent).toContain('Report.docx');
-  });
-
-  it('says nothing about a document that was saved to disk', async () => {
-    const doc = await putSnapshot({ title: 'Saved.docx', origin: 'local', bytes: new Uint8Array([1]) });
-    await markSavedToDisk(doc!.id);
-
-    expect(await offerRecovery()).toBeNull();
-  });
-
-  it('does not offer the document that is already open', async () => {
-    const doc = await putSnapshot({ title: 'Open.docx', origin: 'local', bytes: new Uint8Array([1]) });
-
-    expect(await offerRecovery({ excludeId: doc!.id })).toBeNull();
   });
 
   it('reopens the newest snapshot through the ordinary open path', async () => {
@@ -69,30 +39,27 @@ describe('recovery offer', () => {
     expect(options).toEqual({ historyId: doc!.id });
   });
 
-  it('restores from the bar and takes the bar away', async () => {
-    await putSnapshot({ title: 'Bar.docx', origin: 'local', bytes: new Uint8Array([1]) });
-    await offerRecovery();
+  it('reports failure rather than opening an empty document when nothing is stored', async () => {
+    const doc = await putSnapshot({ title: 'Gone.docx', origin: 'local', bytes: new Uint8Array([1]) });
+    await wipe();
 
-    bar()!.querySelectorAll('r-button')[0].dispatchEvent(new Event('click'));
-
-    expect(bar()).toBeNull();
-    await vi.waitFor(() => expect(openLocalFile).toHaveBeenCalled());
-  });
-
-  it('remembers a dismissal so the next boot stays quiet', async () => {
-    const doc = await putSnapshot({ title: 'Dismiss.docx', origin: 'local', bytes: new Uint8Array([1]) });
-    await offerRecovery();
-
-    bar()!.querySelectorAll('r-button')[1].dispatchEvent(new Event('click'));
-
-    expect(bar()).toBeNull();
-    await vi.waitFor(async () => expect((await getDoc(doc!.id))?.dismissedAt).toBeGreaterThan(0));
-    expect(await offerRecovery()).toBeNull();
+    expect(await restoreDocument(doc!)).toBe(false);
+    expect(openLocalFile).not.toHaveBeenCalled();
   });
 
   it('describes when the edits happened, not just that they exist', () => {
     const now = Date.UTC(2026, 0, 1, 12, 0, 0);
     expect(formatRelativeTime(now - 5 * 60_000, now)).toMatch(/5/);
     expect(formatRelativeTime(now - 3 * 60 * 60_000, now)).toMatch(/3/);
+  });
+});
+
+describe('the editor entry', () => {
+  it('does not ship a boot-time recovery card', () => {
+    // The card interrupted a document the user had just opened to talk about a
+    // different one. Old work is offered on the landing page and /history,
+    // where the user is not mid-task -- nothing here may put it back.
+    const source = readFileSync(resolve(__dirname, '../../index.ts'), 'utf8');
+    expect(source).not.toMatch(/offerRecovery/);
   });
 });
