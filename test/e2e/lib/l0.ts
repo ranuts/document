@@ -276,7 +276,23 @@ async function waitForServer(baseURL: string): Promise<void> {
   }
 }
 
-export const test = base.extend<{ l0: L0Collector; serverUp: void }>({
+export const test = base.extend<{ l0: L0Collector; serverUp: void }, { projectName: string }>({
+  // The name of the project a test is running under. `browserName` cannot
+  // stand in for it: a spec that does `test.use({ ...devices['Pixel 5'] })`
+  // pulls in the device's `defaultBrowserType: 'chromium'`, so under the
+  // nightly's webkit/firefox projects `browserName` reads 'chromium' while
+  // the project is not -- a `browserName !== 'chromium'` guard then never
+  // fires and Playwright tries to launch a browser that job never installed.
+  projectName: [
+    // Playwright rejects anything but a destructuring pattern in this position
+    // ("First argument must use the object destructuring pattern"); empty is
+    // how a fixture says it depends on no other fixture.
+    // eslint-disable-next-line no-empty-pattern
+    async ({}, use, workerInfo) => {
+      await use(workerInfo.project.name);
+    },
+    { scope: 'worker' },
+  ],
   // Opt-in per config (playwright.pages.config.ts sets the variable): every
   // other suite is served by something that does not fall over mid-run, and
   // waiting there would only hide a server that failed to start.

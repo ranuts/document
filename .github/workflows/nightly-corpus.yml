@@ -55,8 +55,14 @@ jobs:
           CORPUS_FILTER: ${{ github.event.inputs.filter || '' }}
           CORPUS_VISUAL: ${{ github.event.inputs.visual || '1' }}
           # Expected-to-fail inputs: encrypted/password files, deliberately
-          # truncated/corrupt regression samples, macro-only containers.
-          CORPUS_EXCLUDE: "password|protect|encrypt|corrupt|truncat|broken|invalid|damaged|\\.xlsm$|\\.xlsb$|\\.docm$|\\.pptm$"
+          # truncated/corrupt regression samples, macro-only containers, and
+          # POI's fuzzer output (clusterfuzz-testcase-*, *Fuzzer*, Fuzzed.doc,
+          # poi-fuzz.xls, crash-<sha1>.*) -- byte soup kept precisely because
+          # it broke a parser, so "this editor will not open it" is not a
+          # finding. 15 of the 20 red rows on 2026-08-21 were these. The terms
+          # are narrow on purpose: a bare `crash` would also drop
+          # 51921-Word-Crash067.doc, which is a real document from a bug report.
+          CORPUS_EXCLUDE: "password|protect|encrypt|corrupt|truncat|broken|invalid|damaged|clusterfuzz|fuzzer|fuzzed|poi-fuzz|crash-[0-9a-f]{6}|\\.xlsm$|\\.xlsb$|\\.docm$|\\.pptm$"
         run: pnpm exec playwright test test/e2e/corpus.spec.ts --workers=2 --reporter=list
 
       - name: Summarize

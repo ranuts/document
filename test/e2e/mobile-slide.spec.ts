@@ -19,6 +19,10 @@ import { expect, test } from './lib/l0';
  * repaints on contextlost/contextrestored; the last test drives those events
  * directly, since a real eviction cannot be provoked on demand.
  */
+// Pixel 5 carries `defaultBrowserType: 'chromium'`, so this file launches
+// Chromium under every project -- including the nightly's webkit/firefox ones,
+// which do not install it. The per-describe guards below therefore key on the
+// project name, not on `browserName` (which this line makes read 'chromium').
 test.use({ ...devices['Pixel 5'] });
 
 // Installed in every frame before any page script: the editor lives in a
@@ -44,7 +48,7 @@ const INSTALL_FRAME_FINDER = () => {
 
 test.describe('presentation on a phone-sized viewport (real editor)', () => {
   test.describe.configure({ timeout: 180_000 });
-  test.skip(({ browserName }) => browserName !== 'chromium', 'device emulation needs chromium');
+  test.skip(({ projectName }) => projectName !== 'chromium', 'device emulation needs chromium');
 
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(INSTALL_FRAME_FINDER);
@@ -211,7 +215,7 @@ test.describe('presentation on a phone-sized viewport (real editor)', () => {
  */
 test.describe('other formats on a phone-sized viewport (real editor)', () => {
   test.describe.configure({ timeout: 180_000 });
-  test.skip(({ browserName }) => browserName !== 'chromium', 'device emulation needs chromium');
+  test.skip(({ projectName }) => projectName !== 'chromium', 'device emulation needs chromium');
 
   for (const { type, canvas } of [
     { type: 'docx', canvas: '#id_viewer' },
@@ -262,7 +266,7 @@ test.describe('other formats on a phone-sized viewport (real editor)', () => {
  */
 test.describe('viewport follow on a live editor (real editor)', () => {
   test.describe.configure({ timeout: 180_000 });
-  test.skip(({ browserName }) => browserName !== 'chromium', 'device emulation needs chromium');
+  test.skip(({ projectName }) => projectName !== 'chromium', 'device emulation needs chromium');
   test.use({ viewport: { width: 1280, height: 900 }, isMobile: false, hasTouch: false, deviceScaleFactor: 1 });
 
   test('narrowing a desktop window into a phone-sized one adapts the open document', async ({ page }) => {
