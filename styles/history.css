@@ -1,0 +1,140 @@
+/* /history -- the local document library. ranui tokens only: this page is as
+   much a part of the product's face as the landing pages are (CLAUDE.md
+   convention 4), and it has to follow the theme the editor was left in. */
+body {
+  margin: 0;
+  background: var(--ran-color-bg);
+  color: var(--ran-color-text);
+  font-family: var(--ran-font-family);
+  line-height: var(--ran-line-height);
+}
+
+.history-page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: var(--ran-space-8) var(--ran-space-4) var(--ran-space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-6);
+}
+
+.history-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-2);
+}
+.history-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ran-space-4);
+  flex-wrap: wrap;
+}
+.history-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+.history-back {
+  margin-left: auto;
+}
+.history-intro,
+.history-notice {
+  margin: 0;
+  color: var(--ran-color-text-secondary);
+  font-size: 14px;
+}
+
+.history-toolbar {
+  display: flex;
+  gap: var(--ran-space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.history-search {
+  flex: 1 1 240px;
+  min-width: 180px;
+  padding: var(--ran-space-2) var(--ran-space-3);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text);
+  font: inherit;
+  font-size: 14px;
+}
+.history-usage {
+  color: var(--ran-color-text-secondary);
+  font-size: 13px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-lg);
+  overflow: hidden;
+}
+.history-row {
+  display: flex;
+  gap: var(--ran-space-4);
+  align-items: center;
+  padding: var(--ran-space-3) var(--ran-space-4);
+  border-bottom: 1px solid var(--ran-color-border);
+}
+.history-row:last-child {
+  border-bottom: none;
+}
+.history-row-main {
+  min-width: 0;
+  flex: 1;
+}
+.history-row-title {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.history-row-meta {
+  color: var(--ran-color-text-secondary);
+  font-size: 13px;
+  display: flex;
+  gap: var(--ran-space-2);
+  flex-wrap: wrap;
+}
+/* "Not on disk" is the whole point of the list: it marks the rows that hold
+   the only copy of that work. */
+.history-badge {
+  padding: 0 var(--ran-space-2);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+}
+.history-row-actions {
+  display: flex;
+  gap: var(--ran-space-2);
+  flex-shrink: 0;
+}
+
+.history-empty {
+  padding: var(--ran-space-8);
+  text-align: center;
+  color: var(--ran-color-text-secondary);
+  border: 1px dashed var(--ran-color-border);
+  border-radius: var(--ran-radius-lg);
+}
+
+.history-pager {
+  display: flex;
+  gap: var(--ran-space-3);
+  align-items: center;
+  justify-content: center;
+}
+.history-page-info {
+  color: var(--ran-color-text-secondary);
+  font-size: 13px;
+}
+
+.history-autosave {
+  display: flex;
+  gap: var(--ran-space-2);
+  align-items: center;
+  font-size: 14px;
+}

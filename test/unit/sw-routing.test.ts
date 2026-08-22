@@ -19,7 +19,7 @@ const FONT_REGEX = /\.(ttf|woff2?|otf|eot)(\?.*)?$/;
 
 /** Keep in sync with DEPLOY_COUPLED in public/sw.js and the no-cache group in public/_headers. */
 const DEPLOY_COUPLED =
-  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch)\.js$|^\/ranui-iife\//;
+  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent)\.js$|^\/ranui-iife\//;
 
 const isHtmlRequest = (mode: string, pathname: string): boolean =>
   mode === 'navigate' || pathname.endsWith('.html') || pathname === '/' || pathname.endsWith('/');
@@ -182,6 +182,8 @@ describe('deploy-coupled assets use network-first', () => {
       // the browser's disk cache indefinitely.
       '/open-local.js',
       '/landing-prefetch.js',
+      // Reads one history row so the homepage can offer the way back to it.
+      '/history-recent.js',
       '/ranui-iife/button.iife.js',
       '/ranui-iife/card.iife.js',
     ]) {

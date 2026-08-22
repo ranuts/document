@@ -92,11 +92,14 @@ export default defineConfig(() => {
     publicDir: publicDirName,
     build: {
       outDir: 'dist',
-      // Two HTML entries: / (static landing, no editor bundle) and /editor (the app).
+      // Three HTML entries: / (static landing, no editor bundle), /editor (the
+      // app) and /history (the local library, which reads IndexedDB metadata
+      // and never loads the editor stack).
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html'),
           editor: resolve(__dirname, 'editor.html'),
+          history: resolve(__dirname, 'history.html'),
         },
       },
     },

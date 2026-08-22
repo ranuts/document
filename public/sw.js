@@ -38,7 +38,7 @@ const ASSETS_TO_CACHE = ['./', './index.html', './editor', './editor.html', './m
 // its content changed.) Network-first with `cache: 'no-cache'` is what the HTML branch already
 // does, for exactly the same reason.
 const DEPLOY_COUPLED =
-  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch)\.js$|^\/ranui-iife\//;
+  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent)\.js$|^\/ranui-iife\//;
 
 // The OnlyOffice 9 tree is ~2600 files, but most of that is per-locale help
 // and on-demand font duplication a single session in one language never
