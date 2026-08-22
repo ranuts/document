@@ -76,7 +76,7 @@ export async function restoreDocument(doc: HistoryDoc): Promise<boolean> {
 
 function buildBar(doc: HistoryDoc): HTMLElement {
   const restore = View('r-button')
-    .class('recovery-bar-action')
+    .class('recovery-bar-action recovery-restore')
     .text(t('recoveryRestore'))
     .attr('type', 'primary')
     .on('click', () => {
@@ -86,7 +86,7 @@ function buildBar(doc: HistoryDoc): HTMLElement {
     .build();
 
   const discard = View('r-button')
-    .class('recovery-bar-action')
+    .class('recovery-bar-action recovery-dismiss')
     .text(t('recoveryDismiss'))
     .attr('variant', 'text')
     .attr('type', 'text')

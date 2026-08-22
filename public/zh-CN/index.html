@@ -43,6 +43,7 @@
          purpose: './sw.js' would scope the worker to /zh-CN/. -->
     <script src="/sw-register.js" defer></script>
     <script src="/open-local.js" defer></script>
+    <script src="/history-recent.js" defer></script>
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="在线文档编辑器" />
@@ -180,6 +181,15 @@
             <a href="/editor?locale=zh-CN&amp;new=xlsx"><r-button>新建 Excel</r-button></a>
             <a href="/editor?locale=zh-CN&amp;new=pptx"><r-button>新建 PPT</r-button></a>
           </div>
+          <!-- 由 /history-recent.js 在本机存有自动保存内容时填充；首次访问保持隐藏 -->
+          <div
+            class="recent reveal d5"
+            data-recent-slot
+            data-recent-locale="zh-CN"
+            data-recent-label="继续编辑"
+            data-recent-all="本地历史"
+            hidden
+          ></div>
           <div class="trust reveal d5">
             <span>不传服务器</span><span class="sep">·</span><span>免注册</span><span class="sep">·</span
             ><span>可离线</span><span class="sep">·</span><span>.docx .xlsx .pptx .csv</span>

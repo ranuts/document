@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="img/64.png" rel="shortcut icon" />
+    <link rel="icon" type="image/png" href="img/64.png" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+
+    <!-- /history: the local document library. Everything it lists lives in this
+         browser's IndexedDB and has never been uploaded, so there is nothing
+         here for a crawler to see and nothing that would mean the same thing
+         to a different visitor. Its UI language follows the app's i18n
+         (?locale=), not a per-language static page. -->
+    <title>Local history</title>
+    <meta name="robots" content="noindex" />
+    <script>
+      try {
+        var t = localStorage.getItem('ran-theme');
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.setAttribute('data-ran-theme', t);
+          document.documentElement.setAttribute('theme', t);
+        }
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/ran-fonts/fonts.css" />
+    <link rel="stylesheet" href="/ran-tokens.css" />
+  </head>
+
+  <body>
+    <main id="history-root"></main>
+
+    <noscript>
+      <p style="max-width: 720px; margin: 0 auto; padding: 24px; font-family: system-ui, sans-serif">
+        This page needs JavaScript to read the documents stored in your browser.
+      </p>
+    </noscript>
+  </body>
+  <script type="module" src="./lib/history-page.ts"></script>
+</html>

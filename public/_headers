@@ -34,6 +34,8 @@
   Cache-Control: no-cache
 /landing-prefetch.js
   Cache-Control: no-cache
+/history-recent.js
+  Cache-Control: no-cache
 /ranui-iife/*
   Cache-Control: no-cache
 

@@ -917,3 +917,26 @@
     justify-self: start;
   }
 }
+
+/* "Continue editing <file>" — only ever visible when this browser is holding
+   autosaved work (see /history-recent.js, which unhides it). It sits with the
+   trust row rather than in the CTA cluster: it is a return path for someone who
+   was already here, not one of the three things a first-time visitor chooses
+   between. */
+#landing-hero .recent {
+  margin-top: var(--ran-space-5);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ran-space-1) var(--ran-space-2);
+  font-size: 14px;
+  color: var(--ran-color-text-secondary);
+}
+#landing-hero .recent a {
+  color: var(--ran-color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+#landing-hero .recent a:hover {
+  color: var(--ran-color-primary);
+}
