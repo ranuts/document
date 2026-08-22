@@ -13,6 +13,7 @@
  */
 import 'ranui/button';
 import 'ranui/input';
+import 'ranui/icon';
 import { Div, View } from 'ranui/builder';
 import '../styles/history.css';
 import { applyDocumentLanguage, t } from '@ranuts/shared/i18n';
@@ -90,7 +91,14 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
         .attr('href', `/editor?doc=${encodeURIComponent(doc.id)}`)
         .text(doc.title)
         .build(),
-      ...(hasUnsavedWork(doc) ? [Div().class('history-badge').text(t('historyUnsaved')).build()] : []),
+      ...(hasUnsavedWork(doc)
+        ? [
+            Div()
+              .class('history-badge')
+              .children(View('i').class('history-dot').build(), View('span').text(t('historyUnsaved')).build())
+              .build(),
+          ]
+        : []),
     )
     .build();
 
@@ -236,6 +244,13 @@ async function render(): Promise<void> {
   const header = Div()
     .class('history-header')
     .children(
+      // chip -> title -> intro: the homepage hero's own opening, so the page a
+      // visitor reaches from it is recognisably the same product rather than
+      // an admin screen that happens to share a header.
+      Div()
+        .class('history-chip')
+        .children(View('i').class('history-chip-dot').build(), View('span').text(t('historyChip')).build())
+        .build(),
       Div()
         .class('history-title-row')
         .children(
@@ -267,7 +282,38 @@ async function render(): Promise<void> {
     : Div()
         .class('history-empty')
         .id('history-empty')
-        .text(query ? t('historyEmptySearch') : t('historyEmpty'))
+        .children(
+          Div()
+            .class('history-empty-mark')
+            .text(query ? '⌕' : '⌂')
+            .attr('aria-hidden', 'true')
+            .build(),
+          Div()
+            .class('history-empty-title')
+            .text(query ? t('historyEmptySearchTitle') : t('historyEmptyTitle'))
+            .build(),
+          Div()
+            .class('history-empty-body')
+            .text(query ? t('historyEmptySearch') : t('historyEmpty'))
+            .build(),
+          query
+            ? button(
+                t('historyClearSearch'),
+                () => {
+                  query = '';
+                  page = 1;
+                  refresh();
+                },
+                { type: 'text', class: 'history-empty-action' },
+              )
+            : button(
+                t('historyBack'),
+                () => {
+                  window.location.href = '/';
+                },
+                { type: 'primary', class: 'history-empty-action' },
+              ),
+        )
         .build();
 
   // The two standing facts about this data live under the list, where they read

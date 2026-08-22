@@ -223,6 +223,7 @@ export interface I18nMessages {
    */
   recoveryDismiss: string;
   recoveryViewAll: string;
+  historyChip: string;
   historyTitle: string;
   historyIntro: string;
   historyColDocument: string;
@@ -231,8 +232,11 @@ export interface I18nMessages {
   historyColExpires: string;
   historyNotBackup: string;
   historySearchPlaceholder: string;
+  historyEmptyTitle: string;
   historyEmpty: string;
+  historyEmptySearchTitle: string;
   historyEmptySearch: string;
+  historyClearSearch: string;
   historyOpen: string;
   historyDelete: string;
   historyCancel: string;
@@ -336,6 +340,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     recoveryRestore: '继续编辑',
     recoveryDismiss: '以后再说',
     recoveryViewAll: '全部文档',
+    historyChip: '本机存储 · 从不上传',
     historyTitle: '本机保存的文档',
     historyIntro:
       '你编辑过的文档，副本保存在这台设备的浏览器里——刷新、误关标签页、浏览器崩溃之后都能找回。这些内容从未上传。',
@@ -345,8 +350,11 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyColExpires: '自动删除',
     historyNotBackup: '这些副本是为了让你接着做没做完的事，不是备份——想长期保留，请导出保存到电脑。',
     historySearchPlaceholder: '按文件名搜索',
-    historyEmpty: '这里还是空的。你在本站编辑过的文档会自动出现在这个列表里。',
-    historyEmptySearch: '没有文件名匹配的文档。',
+    historyEmptyTitle: '这里还是空的',
+    historyEmpty: '你在本站编辑过的文档会自动出现在这里，不需要手动保存。',
+    historyEmptySearchTitle: '没有匹配的文档',
+    historyEmptySearch: '没有文件名包含这段文字的文档。',
+    historyClearSearch: '清除搜索',
     historyOpen: '打开',
     historyDelete: '删除',
     historyCancel: '取消',
@@ -439,6 +447,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     recoveryRestore: 'Pick up where I left off',
     recoveryDismiss: 'Not now',
     recoveryViewAll: 'Saved documents',
+    historyChip: 'On this device · never uploaded',
     historyTitle: 'Saved documents',
     historyIntro:
       'Copies of the documents you edited, kept in this browser on this device, so a refresh, a closed tab or a crash cannot cost you the work. None of this was uploaded.',
@@ -449,8 +458,11 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyNotBackup:
       'These copies exist so you can pick up work you were in the middle of. They are not a backup -- export anything you want to keep.',
     historySearchPlaceholder: 'Search by file name',
-    historyEmpty: 'Nothing saved yet. Documents you edit here will show up in this list on their own.',
-    historyEmptySearch: 'No file name matches that search.',
+    historyEmptyTitle: 'Nothing saved yet',
+    historyEmpty: 'Documents you edit here show up in this list on their own -- there is nothing to save by hand.',
+    historyEmptySearchTitle: 'No matches',
+    historyEmptySearch: 'No file name contains that text.',
+    historyClearSearch: 'Clear search',
     historyOpen: 'Open',
     historyDelete: 'Delete',
     historyCancel: 'Cancel',
