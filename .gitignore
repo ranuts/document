@@ -90,3 +90,28 @@ public/llms-full.txt
 # under public/fonts/ already carries the encoded copies; the originals are
 # ~80 MB and would be a second copy of the same bytes.
 vendor-fonts/
+
+# Same, for every additional locale (the generator writes one file per
+# locale from the same markdown).
+public/ja/offline-document-editor.html
+public/ja/no-signup-document-editor.html
+public/ja/private-document-editor.html
+public/ja/edit-documents-without-account.html
+public/ja/embed-document-editor.html
+public/ja/webmcp-document-editor.html
+public/ja/open/docx.html
+public/ja/open/xlsx.html
+public/ja/open/pptx.html
+public/ja/open/pdf.html
+public/ja/open/odt.html
+public/ja/open/ods.html
+public/ja/open/odp.html
+public/ja/convert/docx-to-pdf.html
+public/ja/convert/xlsx-to-pdf.html
+public/ja/convert/pptx-to-pdf.html
+public/ja/convert/xlsx-to-csv.html
+public/ja/convert/csv-to-xlsx.html
+public/ja/help.html
+public/ja/changelog.html
+public/ja/help/embed-api.html
+public/ja/index.html
