@@ -13,6 +13,7 @@ import 'ranui/button';
 import 'ranui/card';
 import 'ranui/select';
 import { initWebMcp } from './lib/web-mcp';
+import { installUnsavedChangesGuard } from './lib/unsaved-guard';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
 
@@ -38,6 +39,10 @@ initEmbedApi();
 // WebMCP (browser-agent tools): no-op unless the browser exposes
 // document/navigator.modelContext and this is a top-level window.
 initWebMcp();
+
+// Warn before an accidental close/reload throws away edits that never reached
+// the user's disk. No-op in embed mode -- the host page owns that UX.
+installUnsavedChangesGuard();
 
 // Privacy-friendly analytics (no-op unless VITE_CF_BEACON_TOKEN is set; never in embed mode)
 initAnalytics();
