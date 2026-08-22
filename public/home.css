@@ -129,7 +129,9 @@
 }
 #landing-hero r-select.lang-select {
   display: inline-block;
-  min-width: 76px;
+  /* Wide enough for the longest endonym in the menu ("Deutsch", "Español");
+     at 76px the trigger clipped them to "Deuts". */
+  min-width: 104px;
   font-size: 14px;
   /* Matches the nav links beside it (14px on space-2/space-3 padding); the
      44px default stood a head taller than everything else in the bar. */
