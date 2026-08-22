@@ -142,9 +142,14 @@ body {
   overflow: hidden;
   background: var(--ran-color-bg-elevated);
 }
-.history-row {
+.history-row,
+.history-head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 8.5rem 5.5rem 8.5rem auto;
+  /* The actions column is a fixed width rather than `auto` so the header's
+     empty cell and the rows' buttons produce the same track: with `auto` the
+     header's four labels sat on a different grid from the figures under them.
+     11.5rem holds "Open" + "Delete" in every shipped language. */
+  grid-template-columns: minmax(0, 1fr) 8.5rem 5.5rem 8.5rem 11.5rem;
   align-items: center;
   gap: var(--ran-space-4);
   padding: var(--ran-space-4) var(--ran-space-6);
@@ -154,6 +159,26 @@ body {
 .history-row:last-child {
   border-bottom: none;
 }
+/* Column labels: quiet enough not to compete with the file names underneath,
+   present enough that each figure below is identified. Not a `.history-row` --
+   that class means "a document" to everything that counts rows. */
+.history-head {
+  padding: var(--ran-space-3) var(--ran-space-6);
+  border-bottom: 1px solid var(--ran-color-border);
+  background: var(--ran-color-bg-subtle);
+  color: var(--ran-color-text-secondary);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.history-head .history-row-name {
+  font-weight: 500;
+}
+.history-head .history-cell {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
 .history-row:hover {
   background: var(--ran-color-bg-hover);
 }
@@ -265,6 +290,11 @@ body {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: var(--ran-space-2) var(--ran-space-4);
     padding: var(--ran-space-4);
+  }
+  /* No column headers on a narrow screen: there are no columns to label, and
+     the labels would cost a row of their own. */
+  .history-head {
+    display: none;
   }
   .history-row-name {
     grid-column: 1 / -1;

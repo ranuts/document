@@ -149,6 +149,28 @@ describe('landing pages', () => {
    * cannot handle, a workflow it does not support -- so the boundaries are part
    * of the contract, not an afterthought.
    */
+  it('both homepages answer what happens to unsaved edits, and name the retention window', () => {
+    // The single highest-value question this site can answer for a search engine
+    // or an assistant ("I closed the tab -- did I lose my work?"), and the one
+    // place the seven-day promise has to be machine-readable. Losing it to a
+    // copy edit would cost the answer, not just the wording.
+    for (const [file, ask, days] of [
+      [homepage, /tab|refresh/i, '7 days'],
+      [resolve(PUBLIC, 'zh-CN/index.html'), /标签页|刷新/, '7 天'],
+    ] as Array<[string, RegExp, string]>) {
+      const html = readFileSync(file, 'utf8');
+      const faqs = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+        .map((m) => JSON.parse(m[1]))
+        .filter((doc) => doc['@type'] === 'FAQPage');
+      const questions = faqs.flatMap(
+        (faq) => faq.mainEntity as Array<{ name: string; acceptedAnswer: { text: string } }>,
+      );
+      const answer = questions.find((q) => ask.test(q.name))?.acceptedAnswer.text;
+      expect(answer, `${file} has no question about closing the tab`).toBeTruthy();
+      expect(answer).toContain(days);
+    }
+  });
+
   it('llms.txt states the limitations, not just the features', () => {
     const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
     expect(llms).toMatch(/^## Limitations/m);

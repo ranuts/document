@@ -99,6 +99,14 @@
           },
           {
             "@type": "Question",
+            "name": "关掉标签页或刷新页面，编辑的内容会丢吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "不会丢。编辑过程中内容会随时保存进这个浏览器，所以重新打开编辑器会提示你接着编辑，刷新也会回到同一篇。保存的副本在你的设备上留存 7 天后自动删除，你也可以随时手动删除其中任何一篇。这些副本从不上传，只存在于这个浏览器里。"
+            }
+          },
+          {
+            "@type": "Question",
             "name": "能离线使用吗？",
             "acceptedAnswer": {
               "@type": "Answer",
@@ -187,9 +195,10 @@
           <div class="recent reveal d5">
             <span data-recent-slot data-recent-locale="zh-CN" data-recent-label="继续编辑" hidden></span>
             <span class="recent-note"
-              >刷新或误关标签页都不会丢：编辑内容随时自动保存在本机浏览器，保留 7 天后自动清除。</span
+              >误关标签页也不会丢：编辑内容会随时保存在本机浏览器里。保存的副本留存 7
+              天后自动删除，你也可以随时手动删除。</span
             >
-            <a class="recent-all" href="/history?locale=zh-CN">本地历史</a>
+            <a class="recent-all" href="/history?locale=zh-CN">本机保存的文档</a>
           </div>
           <div class="trust reveal d5">
             <span>不传服务器</span><span class="sep">·</span><span>免注册</span><span class="sep">·</span

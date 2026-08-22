@@ -31,7 +31,7 @@ device, so documents are never uploaded, and no account is involved.
 
 - 🔒 **Nothing is uploaded** — every conversion, edit and export happens in the tab
 - 📝 **Real editing, not preview** — DOCX, XLSX, PPTX and CSV, plus ODF, RTF, TXT and the legacy binary formats; PDFs open and can be annotated
-- 🕓 **Autosave and local history** — recovery points in your own browser, cleared after seven days ([details](#-your-data-stays-on-your-device))
+- 🕓 **Nothing is lost if you close the tab** — edits autosave into your own browser, kept for 7 days, deletable any time ([details](#-your-data-stays-on-your-device))
 - 📴 **Works offline** — installable as a PWA; after the first visit no network is needed
 - 🌍 **Multi-language** — 8 interface languages for the site, 45 for the editor itself
 - 🧩 **Embeddable** — full postMessage API for iframe integration
@@ -103,16 +103,18 @@ Parameters on `/editor`:
 Documents are never sent anywhere. Two things are kept locally, and both are
 yours to remove:
 
-- **Recovery points.** While you edit, the editor saves snapshots into this
-  browser's IndexedDB so a closed tab or a crash does not cost you the work.
-  They are recovery points, not backups — keep exporting anything important to
-  disk.
-- **A seven-day window.** Each document is deleted seven days after you last
-  edited or opened it, automatically, whether or not you come back.
+- **Copies of what you edited.** While you work, the editor saves the document
+  into this browser (IndexedDB) so a refresh, a closed tab or a crash does not
+  cost you the work. Reopening the editor offers it back. These copies exist so
+  you can pick up where you left off — they are not a backup, so keep exporting
+  anything you want to keep.
+- **Seven days, then gone.** Each document is deleted automatically seven days
+  after you last edited or opened it, whether or not you come back.
 
-[`/history`](https://edit.chaxus.com/history) lists everything being held, with
-a delete on each row and a "clear everything" button; autosave itself can be
-switched off there. On a shared machine, that page is the one to visit.
+[`/history`](https://edit.chaxus.com/history) lists what is stored, with a
+delete on every row, a delete-all, and a switch to turn autosave off entirely.
+Deleting there takes effect immediately. On a shared machine, that is the page
+to visit.
 
 ---
 

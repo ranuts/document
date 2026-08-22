@@ -254,11 +254,25 @@ async function render(): Promise<void> {
     )
     .build();
 
+  // A header row, because a column of bare figures does not say what it
+  // measures: "3 minutes ago / 51 KB / 5 days left" only reads as three
+  // different things once something names them.
+  const head = Div()
+    .class('history-head')
+    .children(
+      Div().class('history-row-name').text(t('historyColDocument')).build(),
+      Div().class('history-cell history-cell-time').text(t('historyColEdited')).build(),
+      Div().class('history-cell history-cell-size').text(t('historyColSize')).build(),
+      Div().class('history-cell history-cell-expiry').text(t('historyColExpires')).build(),
+      Div().class('history-row-actions').build(),
+    )
+    .build();
+
   const list = items.length
     ? Div()
         .class('history-list')
         .id('history-list')
-        .children(...items.map((doc) => buildRow(doc, refresh)))
+        .children(head, ...items.map((doc) => buildRow(doc, refresh)))
         .build()
     : Div()
         .class('history-empty')
