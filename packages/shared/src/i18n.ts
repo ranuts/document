@@ -232,6 +232,8 @@ export interface I18nMessages {
   historyUnsaved: string;
   /** `{size}` is a human-readable byte size. */
   historyUsage: string;
+  /** `{count}` is the number of documents currently stored. */
+  historyCount: string;
   /** `{page}` and `{pages}` are 1-based page numbers. */
   historyPageInfo: string;
   historyPrev: string;
@@ -240,8 +242,9 @@ export interface I18nMessages {
   historyAutosaveLabel: string;
   historyAutosaveOff: string;
   historyRetention: string;
-  /** `{days}` is a whole number of days, always 1 or more. */
+  /** `{days}` is a whole number of days, always 2 or more (see historyExpiresInOne). */
   historyExpiresIn: string;
+  historyExpiresInOne: string;
   historyExpiresToday: string;
 }
 
@@ -320,7 +323,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     recoveryDismiss: '丢弃',
     recoveryViewAll: '查看全部',
     historyTitle: '本地历史',
-    historyIntro: '自动保存的文档只留在这台设备的浏览器里，从未上传。随时可以删除。',
+    historyIntro: '本机浏览器在你编辑时保存下来的内容——刷新、误关标签页、浏览器崩溃都能找回。文件从未上传。',
     historyNotBackup: '这些是恢复点，不是备份——重要文档请照常导出保存到磁盘。',
     historySearchPlaceholder: '搜索标题',
     historyEmpty: '还没有自动保存的文档。',
@@ -332,6 +335,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyClearConfirm: '删除这台设备上保存的全部文档？此操作不可撤销。',
     historyUnsaved: '未存盘',
     historyUsage: '已占用 {size}',
+    historyCount: '{count} 篇文档',
     historyPageInfo: '第 {page} / {pages} 页',
     historyPrev: '上一页',
     historyNext: '下一页',
@@ -340,6 +344,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyAutosaveOff: '自动保存已关闭，不会再产生新的恢复点。',
     historyRetention: '自动清除：每个文档在最后一次编辑或打开的 7 天后被删除。',
     historyExpiresIn: '{days} 天后清除',
+    historyExpiresInOne: '1 天后清除',
     historyExpiresToday: '今天清除',
   },
   [LanguageCode.EN]: {
@@ -412,7 +417,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     recoveryViewAll: 'View all',
     historyTitle: 'Local history',
     historyIntro:
-      'Autosaved documents stay in this browser on this device and are never uploaded. Delete them any time.',
+      'What this browser saved while you worked, so a refresh, a closed tab or a crash does not cost you the work. Nothing was uploaded.',
     historyNotBackup: 'These are recovery points, not backups -- keep exporting anything important to disk.',
     historySearchPlaceholder: 'Search by title',
     historyEmpty: 'Nothing has been autosaved yet.',
@@ -424,6 +429,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyClearConfirm: 'Delete every document saved in this browser? This cannot be undone.',
     historyUnsaved: 'not on disk',
     historyUsage: '{size} stored',
+    historyCount: '{count} documents',
     historyPageInfo: 'Page {page} of {pages}',
     historyPrev: 'Previous',
     historyNext: 'Next',
@@ -432,6 +438,7 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyAutosaveOff: 'Autosave is off; no new recovery points are being made.',
     historyRetention: 'Cleared automatically: each document is deleted 7 days after you last edit or open it.',
     historyExpiresIn: 'deleted in {days} days',
+    historyExpiresInOne: 'deleted in 1 day',
     historyExpiresToday: 'deleted today',
   },
 };

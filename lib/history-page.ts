@@ -73,32 +73,31 @@ function button(
 
 function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
   const days = daysUntilExpiry(doc);
-  const meta = [
-    formatRelativeTime(doc.updatedAt),
-    formatBytes(doc.size),
-    // Per row, not only in the header: the retention window is the answer to
-    // "is this safe to rely on?", and that question gets asked about a
-    // particular document, not about the feature.
-    days > 0 ? t('historyExpiresIn', { days: String(days) }) : t('historyExpiresToday'),
-  ];
+  const expiry =
+    days === 0
+      ? t('historyExpiresToday')
+      : days === 1
+        ? t('historyExpiresInOne')
+        : t('historyExpiresIn', { days: String(days) });
 
-  const metaRow = Div()
-    .class('history-row-meta')
-    .children(...meta.map((text) => Div().text(text).build()));
-  if (hasUnsavedWork(doc)) {
-    // The rows that hold the only copy of that work are the reason to keep the
-    // list at all, so they say so rather than looking like every other row.
-    metaRow.children(Div().class('history-badge').text(t('historyUnsaved')).build());
-  }
+  const title = Div().class('history-row-title').text(doc.title).build();
+  // The badge belongs with the title, not in the meta columns: it is a fact
+  // about this document's safety, not another measurement of it.
+  const titleCell = Div()
+    .class('history-row-name')
+    .children(title, ...(hasUnsavedWork(doc) ? [Div().class('history-badge').text(t('historyUnsaved')).build()] : []))
+    .build();
 
   return Div()
     .class('history-row')
     .data('id', doc.id)
     .children(
-      Div()
-        .class('history-row-main')
-        .children(Div().class('history-row-title').text(doc.title).build(), metaRow.build())
-        .build(),
+      titleCell,
+      // Each measurement gets its own column so the eye can read down one kind
+      // of thing at a time; on a narrow screen they collapse into one line.
+      Div().class('history-cell history-cell-time').text(formatRelativeTime(doc.updatedAt)).build(),
+      Div().class('history-cell history-cell-size').text(formatBytes(doc.size)).build(),
+      Div().class('history-cell history-cell-expiry').text(expiry).build(),
       Div()
         .class('history-row-actions')
         .children(
@@ -107,7 +106,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
             () => {
               window.location.href = `/editor?doc=${encodeURIComponent(doc.id)}`;
             },
-            { class: 'history-open' },
+            { class: 'history-open', type: 'primary' },
           ),
           button(
             t('historyDelete'),
@@ -115,7 +114,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
               if (!window.confirm(t('historyDeleteConfirm', { title: doc.title }))) return;
               void deleteDoc(doc.id).then(refresh);
             },
-            { type: 'danger', class: 'history-delete' },
+            { type: 'text', class: 'history-delete' },
           ),
         )
         .build(),
@@ -123,7 +122,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
     .build();
 }
 
-function buildToolbar(usage: number, refresh: () => void): HTMLElement {
+function buildToolbar(usage: number, total: number, refresh: () => void): HTMLElement {
   const search = View('r-input')
     .id('history-search')
     .class('history-search')
@@ -148,7 +147,7 @@ function buildToolbar(usage: number, refresh: () => void): HTMLElement {
       if (!window.confirm(t('historyClearConfirm'))) return;
       void clearAllHistory().then(refresh);
     },
-    { type: 'danger', id: 'history-clear-all' },
+    { type: 'text', id: 'history-clear-all', class: 'history-clear' },
   );
 
   return Div()
@@ -157,7 +156,11 @@ function buildToolbar(usage: number, refresh: () => void): HTMLElement {
       search,
       Div()
         .class('history-usage')
-        .text(t('historyUsage', { size: formatBytes(usage) }))
+        .text(
+          total
+            ? `${t('historyCount', { count: String(total) })} · ${t('historyUsage', { size: formatBytes(usage) })}`
+            : '',
+        )
         .build(),
       clear,
     )
@@ -193,7 +196,9 @@ function buildAutosaveToggle(refresh: () => void): HTMLElement {
   const enabled = isAutosaveEnabled();
   const toggle = View('input')
     .id('history-autosave')
+    .class('history-switch')
     .attr('type', 'checkbox')
+    .attr('role', 'switch')
     .on('change', (event: Event) => {
       setAutosaveEnabled((event.target as HTMLInputElement).checked);
       refresh();
@@ -201,14 +206,10 @@ function buildAutosaveToggle(refresh: () => void): HTMLElement {
     .build() as HTMLInputElement;
   toggle.checked = enabled;
 
-  const label = View('label').class('history-autosave').attr('for', 'history-autosave').text(t('historyAutosaveLabel'));
-  return Div()
+  return View('label')
     .class('history-autosave')
-    .children(
-      toggle,
-      label.build(),
-      ...(enabled ? [] : [Div().class('history-intro').text(t('historyAutosaveOff')).build()]),
-    )
+    .attr('for', 'history-autosave')
+    .children(toggle, View('span').text(t('historyAutosaveLabel')).build())
     .build();
 }
 
@@ -235,18 +236,21 @@ async function render(): Promise<void> {
         .children(
           View('h1').class('history-title').text(t('historyTitle')).build(),
           Div()
-            .class('history-back')
+            .class('history-header-actions')
             .children(
-              button(t('historyBack'), () => {
-                window.location.href = '/';
-              }),
+              buildAutosaveToggle(refresh),
+              button(
+                t('historyBack'),
+                () => {
+                  window.location.href = '/';
+                },
+                { type: 'text', class: 'history-back' },
+              ),
             )
             .build(),
         )
         .build(),
       View('p').class('history-intro').text(t('historyIntro')).build(),
-      View('p').class('history-notice').text(t('historyRetention')).build(),
-      View('p').class('history-notice').text(t('historyNotBackup')).build(),
     )
     .build();
 
@@ -262,19 +266,31 @@ async function render(): Promise<void> {
         .text(query ? t('historyEmptySearch') : t('historyEmpty'))
         .build();
 
+  // The two standing facts about this data live under the list, where they read
+  // as terms rather than as a wall between the reader and their documents.
+  const notes = Div()
+    .class('history-notes')
+    .children(
+      Div().class('history-note').text(t('historyRetention')).build(),
+      Div().class('history-note').text(t('historyNotBackup')).build(),
+      ...(isAutosaveEnabled()
+        ? []
+        : [Div().class('history-note history-note-warn').text(t('historyAutosaveOff')).build()]),
+    )
+    .build();
+
   const pageEl = Div()
     .class('history-page')
     .children(
       header,
-      buildAutosaveToggle(refresh),
-      buildToolbar(usage, refresh),
+      buildToolbar(usage, total, refresh),
       list,
       ...(pages > 1 ? [buildPager(page, pages, refresh)] : []),
+      notes,
     )
     .build();
 
-  const container = root();
-  container.replaceChildren(pageEl);
+  root().replaceChildren(pageEl);
 }
 
 applyDocumentLanguage();
