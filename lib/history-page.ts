@@ -14,11 +14,15 @@
 import 'ranui/button';
 import 'ranui/input';
 import 'ranui/icon';
+import 'ranui/message';
 import { Div, View } from 'ranui/builder';
 import '../styles/history.css';
+import { saveFileToDisk } from 'ranuts/utils';
 import { applyDocumentLanguage, t } from '@ranuts/shared/i18n';
+import { getDocumentMimeType } from '@ranuts/shared/document-utils';
 import { formatRelativeTime } from './history/recovery';
-import { clearAllHistory, deleteDoc, historyUsage, listDocs, pruneExpired } from './history/store';
+import { clearAllHistory, deleteDoc, getLatestSnapshot, historyUsage, listDocs, pruneExpired } from './history/store';
+import { stashPendingFile } from './pending-open';
 import { isAutosaveEnabled, setAutosaveEnabled } from './history/autosave';
 import { daysUntilExpiry, hasUnsavedWork, type HistoryDoc } from './history/types';
 import { confirmDialog } from './confirm-dialog';
@@ -28,6 +32,8 @@ const SEARCH_DEBOUNCE_MS = 200;
 let query = '';
 let page = 1;
 let searchTimer = 0;
+/** Filter: only documents whose latest edit was never exported to disk. */
+let unsavedOnly = false;
 
 function root(): HTMLElement {
   return document.getElementById('history-root') as HTMLElement;
@@ -50,6 +56,8 @@ function syncUrl(): void {
   const url = new URL(window.location.href);
   if (query) url.searchParams.set('q', query);
   else url.searchParams.delete('q');
+  if (unsavedOnly) url.searchParams.set('unsaved', '1');
+  else url.searchParams.delete('unsaved');
   if (page > 1) url.searchParams.set('page', String(page));
   else url.searchParams.delete('page');
   window.history.replaceState(null, '', url);
@@ -58,6 +66,7 @@ function syncUrl(): void {
 function readUrl(): void {
   const params = new URLSearchParams(window.location.search);
   query = params.get('q') ?? '';
+  unsavedOnly = params.get('unsaved') === '1';
   page = Math.max(1, Number(params.get('page') ?? '1') || 1);
 }
 
@@ -73,6 +82,43 @@ function button(
   return builder.build();
 }
 
+/**
+ * Write the newest snapshot of one document to disk.
+ *
+ * It deliberately does NOT mark the document as exported: what lands on disk
+ * is the last autosaved revision, which is not necessarily what the editor
+ * would produce from the live session, and claiming "exported" for a copy the
+ * user has not seen would silence the badge that says work is at risk.
+ */
+async function downloadDoc(doc: HistoryDoc): Promise<void> {
+  try {
+    const snapshot = await getLatestSnapshot(doc.id);
+    if (!snapshot) throw new Error('no snapshot');
+    await saveFileToDisk(snapshot.bytes, doc.title, { mimeType: getDocumentMimeType(doc.title) });
+  } catch {
+    (window as unknown as { message?: { error?: (msg: string) => void } }).message?.error?.(t('historyDownloadFailed'));
+  }
+}
+
+/** Ask for a document and hand it to the editor through the IndexedDB handoff. */
+function pickAndOpenFile(): void {
+  const input = document.createElement('input');
+  input.type = 'file';
+  // Same list the app's own picker offers (lib/document.ts).
+  input.accept = '.docx,.xlsx,.pptx,.doc,.xls,.ppt,.csv,.pdf';
+  input.style.display = 'none';
+  input.addEventListener('change', () => {
+    const file = input.files?.[0];
+    input.remove();
+    if (!file) return;
+    void stashPendingFile(file).then((stashed) => {
+      window.location.href = stashed ? '/editor?open=local' : '/editor';
+    });
+  });
+  document.body.appendChild(input);
+  input.click();
+}
+
 function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
   const days = daysUntilExpiry(doc);
   const expiry =
@@ -81,6 +127,10 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
       : days === 1
         ? t('historyExpiresInOne')
         : t('historyExpiresIn', { days: String(days) });
+  // The countdown is the only thing on this page with a deadline, and it is
+  // the last day that matters: printed in the same grey as the file size, "1
+  // day left" reads like a fact rather than like a prompt to do something.
+  const expiryUrgent = days <= 1;
 
   // Title line: what it is called, plus the one status worth interrupting for.
   const titleLine = Div()
@@ -111,7 +161,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
         [
           ['fact-time', formatRelativeTime(doc.updatedAt)],
           ['fact-size', formatBytes(doc.size)],
-          ['fact-expiry', expiry],
+          ['fact-expiry' + (expiryUrgent ? ' fact-expiry-urgent' : ''), expiry],
         ] as Array<[string, string]>
       ).map(([kind, text]) => View('span').class(kind).text(text).build()),
     )
@@ -126,6 +176,17 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
       Div()
         .class('history-row-actions')
         .children(
+          // Getting the work out is the reason most people open this page, and
+          // until now the only way was to open the editor and save from there.
+          // The bytes are already in IndexedDB; this writes them straight to
+          // disk (File System Access where available, download elsewhere).
+          button(
+            t('historyDownload'),
+            () => {
+              void downloadDoc(doc);
+            },
+            { type: 'text', class: 'history-download' },
+          ),
           button(
             t('historyDelete'),
             () => {
@@ -145,7 +206,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
     .build();
 }
 
-function buildToolbar(usage: number, total: number, refresh: () => void): HTMLElement {
+function buildToolbar(refresh: () => void): HTMLElement {
   const search = View('r-input')
     .id('history-search')
     .class('history-search')
@@ -164,20 +225,23 @@ function buildToolbar(usage: number, total: number, refresh: () => void): HTMLEl
     })
     .build();
 
-  return Div()
-    .class('history-toolbar')
-    .children(
-      search,
-      Div()
-        .class('history-usage')
-        .text(
-          total
-            ? `${t('historyCount', { count: String(total) })} · ${t('historyUsage', { size: formatBytes(usage) })}`
-            : '',
-        )
-        .build(),
-    )
+  // One filter, and it is the one that matters: a document that was never
+  // exported is the only kind whose bytes exist nowhere else, and it is the
+  // reason someone opens this page in a hurry.
+  const filter = View('button')
+    .attr('type', 'button')
+    .id('history-filter-unsaved')
+    .class(`history-filter${unsavedOnly ? ' is-on' : ''}`)
+    .attr('aria-pressed', unsavedOnly ? 'true' : 'false')
+    .on('click', () => {
+      unsavedOnly = !unsavedOnly;
+      page = 1;
+      refresh();
+    })
+    .children(View('i').class('history-dot').build(), View('span').text(t('historyOnlyUnsaved')).build())
     .build();
+
+  return Div().class('history-toolbar').children(search, filter).build();
 }
 
 function buildPager(current: number, pages: number, refresh: () => void): HTMLElement {
@@ -232,7 +296,7 @@ async function render(): Promise<void> {
   // when that boundary is crossed.
   await pruneExpired();
   const [{ items, total, page: current, pageSize }, usage] = await Promise.all([
-    listDocs({ query, page }),
+    listDocs({ query, page, unsavedOnly }),
     historyUsage(),
   ]);
   page = current;
@@ -285,50 +349,77 @@ async function render(): Promise<void> {
         .children(
           Div()
             .class('history-empty-mark')
-            .text(query ? '⌕' : '⌂')
+            .text(query || unsavedOnly ? '⌕' : '⌂')
             .attr('aria-hidden', 'true')
             .build(),
           Div()
             .class('history-empty-title')
-            .text(query ? t('historyEmptySearchTitle') : t('historyEmptyTitle'))
+            .text(query || unsavedOnly ? t('historyEmptySearchTitle') : t('historyEmptyTitle'))
             .build(),
           Div()
             .class('history-empty-body')
-            .text(query ? t('historyEmptySearch') : t('historyEmpty'))
+            .text(query || unsavedOnly ? t('historyEmptySearch') : t('historyEmpty'))
             .build(),
-          query
+          query || unsavedOnly
             ? button(
                 t('historyClearSearch'),
                 () => {
                   query = '';
+                  unsavedOnly = false;
                   page = 1;
                   refresh();
                 },
                 { type: 'text', class: 'history-empty-action' },
               )
-            : button(
-                t('historyBack'),
+            : // "Back to the homepage" made the reader take the long way round to
+              // the thing they came to do. This page cannot open a document
+              // itself -- it deliberately does not load the editor bundle --
+              // so it hands the file to the editor the same way the static
+              // landing pages do (lib/pending-open.ts).
+              button(
+                t('historyOpenFile'),
                 () => {
-                  window.location.href = '/';
+                  pickAndOpenFile();
                 },
-                { type: 'primary', class: 'history-empty-action' },
+                { type: 'primary', id: 'history-open-file', class: 'history-empty-action' },
               ),
         )
         .build();
 
-  // The two standing facts about this data live under the list, where they read
-  // as terms rather than as a wall between the reader and their documents.
-  const notes = Div()
-    .class('history-notes')
+  /**
+   * Everything that is about the feature rather than about one document:
+   * the switch that governs it, the single destructive action, and the rules
+   * they operate under.
+   *
+   * On a wide screen this is a rail beside the list -- the same shape the
+   * content pages use, and the reason the page can now afford the site's wide
+   * frame: the space to the right of a file name used to be dead. Below the
+   * breakpoint the rail is not hidden (unlike the rail on an article page,
+   * these are controls, not navigation) -- it falls to the bottom of the
+   * column, which is where it already was.
+   */
+  const rail = View('aside')
+    .class('history-rail')
     .children(
-      // Everything that acts on the whole feature rather than on one document,
-      // together and below the list: the switch that governs it, the single
-      // destructive action, and the rules they operate under. A "delete
-      // everything" button next to a search box is a mis-click waiting.
+      // How much is being kept is a fact about the store, not about the
+      // search, so it sits at the top of the rail rather than beside the
+      // search box, where it competed with the filter for the same row.
       Div()
-        .class('history-notes-controls')
+        .class('history-usage')
+        .text(
+          total
+            ? `${t('historyCount', { count: String(total) })} · ${t('historyUsage', { size: formatBytes(usage) })}`
+            : '',
+        )
+        .build(),
+      Div()
+        .class('history-rail-block')
         .children(
+          Div().class('history-rail-label').text(t('historyRailSettings')).build(),
           buildAutosaveToggle(refresh),
+          ...(isAutosaveEnabled()
+            ? []
+            : [Div().class('history-note history-note-warn').text(t('historyAutosaveOff')).build()]),
           button(
             t('historyClearAll'),
             () => {
@@ -344,22 +435,25 @@ async function render(): Promise<void> {
           ),
         )
         .build(),
-      Div().class('history-note').text(t('historyRetention')).build(),
-      Div().class('history-note').text(t('historyNotBackup')).build(),
-      ...(isAutosaveEnabled()
-        ? []
-        : [Div().class('history-note history-note-warn').text(t('historyAutosaveOff')).build()]),
+      Div()
+        .class('history-rail-block')
+        .children(
+          Div().class('history-rail-label').text(t('historyRailRetention')).build(),
+          Div().class('history-note').text(t('historyRetention')).build(),
+          Div().class('history-note').text(t('historyNotBackup')).build(),
+        )
+        .build(),
     )
     .build();
 
   const pageEl = Div()
-    .class('history-page')
+    .class('history-shell')
     .children(
-      header,
-      buildToolbar(usage, total, refresh),
-      list,
-      ...(pages > 1 ? [buildPager(page, pages, refresh)] : []),
-      notes,
+      Div()
+        .class('history-page')
+        .children(header, buildToolbar(refresh), list, ...(pages > 1 ? [buildPager(page, pages, refresh)] : []))
+        .build(),
+      rail,
     )
     .build();
 

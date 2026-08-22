@@ -9,19 +9,61 @@
  * what makes a list of files legible -- with each row free-flowing, the eye has
  * to re-find the same fact in a new place on every line.
  */
-/* The bar is shared chrome (landing.css); the page's own column starts below it. */
-.history-page {
-  /* The site's reading width, 720px -- the same column /help and the landing
-     pages use. The width follows the LAYOUT, not the page type: this is a list
-     people read down looking for their document, not a table anyone compares
-     across, so it gets the reading column. (Measured at 1152px it was mostly
-     air: 236px of dead space between a file name and the first figure.) */
-  max-width: 720px;
+/* The bar is shared chrome (landing.css); the page's own column starts below it.
+
+   The list used to sit alone in the 720px reading column, because at 1152 it
+   was mostly air -- 236px of dead space between a file name and the first
+   figure. It now takes the site's wide frame for the same reason the content
+   pages do: there is something to put in that space. The list keeps a reading
+   column and the rail beside it holds everything that is about the feature
+   rather than about one document. */
+.history-shell {
+  max-width: 1152px;
   margin: 0 auto;
   padding: var(--ran-space-10) clamp(20px, 5vw, 56px) var(--ran-space-24);
+  display: grid;
+  gap: var(--ran-space-10);
+}
+.history-page {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--ran-space-8);
+}
+@media (min-width: 1081px) {
+  .history-shell {
+    grid-template-columns: minmax(0, 660px) minmax(0, 284px);
+    justify-content: center;
+    gap: clamp(40px, 5vw, 96px);
+  }
+  /* Unlike an article page's rail, this one holds controls, so it never
+     disappears -- below the breakpoint it simply falls under the list, which
+     is where it lived before. */
+  .history-rail {
+    position: sticky;
+    top: var(--ran-space-8);
+    align-self: start;
+  }
+}
+.history-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-6);
+  min-width: 0;
+}
+.history-rail-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ran-space-3);
+  padding-top: var(--ran-space-4);
+  border-top: 1px solid var(--ran-color-border);
+}
+.history-rail-label {
+  font: 600 11px/1 var(--ran-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ran-color-text-secondary);
 }
 
 /* ---- header ---- */
@@ -138,8 +180,7 @@
    not read as a stack of calls to action. Same split as the component libraries
    (Ant's `size`, Material's density) -- the point is that it is a rule, not a
    value picked per page. */
-.history-header-actions r-button::part(content),
-.history-clear::part(content) {
+.history-header-actions r-button::part(content) {
   padding: var(--ran-space-2) var(--ran-space-4);
   font-size: 15px;
   font-weight: 600;
@@ -164,7 +205,6 @@
   max-width: 100%;
 }
 .history-usage {
-  margin-left: auto;
   color: var(--ran-color-text-secondary);
   font-size: 13px;
   font-family: var(--ran-font-mono);
@@ -172,28 +212,25 @@
 
 /* ---- list ---- */
 
-/* Shadow-as-border, the way Geist draws its surfaces: a zero-offset, zero-blur
-   1px spread instead of a real border. It sits outside the box model, so the
-   rounded corners never clip a row's hover fill, and the line can animate with
-   the rest of the surface. */
+/* Rules, not a container: one hairline per row is all the separation a list of
+   files needs, and it is the same device the homepage's format index and the
+   FAQ use. A bordered, filled panel around the whole thing made the list read
+   as a widget dropped onto the page. The hover ground still extends past the
+   text into the gutter, so a row lights up as a band. */
 .history-list {
   display: flex;
   flex-direction: column;
-  border-radius: var(--ran-radius-lg);
-  overflow: hidden;
-  background: var(--ran-color-bg-elevated);
-  box-shadow: 0 0 0 1px var(--ran-color-border);
+  border-top: 1px solid var(--ran-color-border);
 }
 .history-row {
   display: flex;
   align-items: center;
   gap: var(--ran-space-4);
-  padding: var(--ran-space-3) var(--ran-space-4);
+  padding: var(--ran-space-3);
+  margin: 0 calc(-1 * var(--ran-space-3));
   border-bottom: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
   transition: background var(--ran-motion-duration-fast, 120ms) ease;
-}
-.history-row:last-child {
-  border-bottom: none;
 }
 .history-row:hover {
   background: var(--ran-color-bg-hover);
@@ -204,11 +241,9 @@
    a table would have got right. */
 .history-kind {
   flex-shrink: 0;
-  width: 42px;
-  padding: 3px 0;
-  border-radius: var(--ran-radius-sm);
-  background: var(--ran-color-bg-subtle);
-  box-shadow: 0 0 0 1px var(--ran-color-border);
+  width: 46px;
+  /* A stamp, not a badge: the boxed version put a third bordered object in
+     every row next to the file name and the status dot. */
   color: var(--ran-color-text-secondary);
   /* Mono is for stamping, not for reading: a file kind is a machine fact, and
      it is the one thing scanned down the whole column. */
@@ -293,24 +328,74 @@
    documents does not read as a list of things to delete. Opacity rather than
    display, so it keeps its space and nothing shifts on hover -- and it stays
    fully visible for keyboard users and anyone who cannot hover. */
+.history-download,
 .history-delete {
   opacity: 0.55;
   transition: opacity var(--ran-motion-duration-fast, 120ms) ease;
 }
+.history-row:hover .history-download,
 .history-row:hover .history-delete,
+.history-download:focus-within,
 .history-delete:focus-within {
   opacity: 1;
 }
+.history-download::part(content),
 .history-delete::part(content) {
   color: var(--ran-color-text-secondary);
+}
+/* The row's two actions are not equals: getting the bytes out is the one
+   people came for, deleting is the one that cannot be undone. Only the
+   destructive one takes a colour, and only once the pointer is on the row. */
+.history-row:hover .history-download::part(content) {
+  color: var(--ran-color-text);
 }
 .history-row:hover .history-delete::part(content) {
   color: var(--ran-color-danger);
 }
 @media (hover: none) {
+  .history-download,
   .history-delete {
     opacity: 1;
   }
+}
+
+/* ---- toolbar filter ---- */
+
+/* A pressed-state pill rather than a checkbox: it is a view switch, and it
+   reads as "showing only these" when it is on. */
+.history-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-2) var(--ran-space-3);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-full);
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background var(--ran-motion-duration-fast, 120ms) ease,
+    color var(--ran-motion-duration-fast, 120ms) ease,
+    border-color var(--ran-motion-duration-fast, 120ms) ease;
+}
+.history-filter:hover {
+  color: var(--ran-color-text);
+  border-color: var(--ran-color-border-hover);
+}
+.history-filter.is-on {
+  background: var(--ran-color-bg-active);
+  border-color: var(--ran-color-border-hover);
+  color: var(--ran-color-text);
+}
+
+/* The last day is the only deadline on this page; until now it was printed in
+   the same grey as the file size. */
+.fact-expiry-urgent {
+  color: var(--ran-color-warning);
+  font-weight: 500;
 }
 
 /* ---- empty, pager, notes ---- */
@@ -322,11 +407,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--ran-space-2);
-  padding: var(--ran-space-10) var(--ran-space-6);
+  padding: var(--ran-space-16) var(--ran-space-6);
   text-align: center;
-  border-radius: var(--ran-radius-lg);
-  background: var(--ran-color-bg-elevated);
-  box-shadow: 0 0 0 1px var(--ran-color-border);
 }
 .history-empty-mark {
   width: 44px;
@@ -368,27 +450,22 @@
    operate under. Below the list, because that is where a decision about all of
    it belongs -- and because a "delete everything" button next to a search box
    is a mis-click waiting to happen. */
-.history-notes {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ran-space-3);
-  padding: var(--ran-space-4);
-  border-radius: var(--ran-radius-lg);
-  background: var(--ran-color-bg-subtle);
-  box-shadow: 0 0 0 1px var(--ran-color-border);
-}
-.history-notes-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--ran-space-4);
-}
-.history-clear {
-  margin-left: auto;
-}
 .history-note {
   max-width: 72ch;
   color: var(--ran-color-text-secondary);
   font-size: 13px;
+  line-height: 1.5;
+}
+/* In the rail it sits with the switch it explains, so it starts at the same
+   edge and takes no indent from the button beside it. */
+.history-clear::part(content) {
+  padding: var(--ran-space-1) 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ran-color-text-secondary);
+}
+.history-clear:hover::part(content) {
+  color: var(--ran-color-danger);
 }
 .history-note-warn {
   color: var(--ran-color-warning);
@@ -397,17 +474,27 @@
 /* ---- narrow screens ---- */
 
 @media (max-width: 640px) {
-  .history-page {
+  .history-shell {
     padding: var(--ran-space-8) var(--ran-space-4) var(--ran-space-16);
+    gap: var(--ran-space-8);
+  }
+  .history-page {
     gap: var(--ran-space-6);
   }
-  /* The row keeps its shape on a phone: one line, kind badge included. Letting
-     it wrap gave every row an extra line for the delete button and, when a
-     title was long, pushed the badge onto a line of its own -- the file name
-     ellipsises instead, which is what a narrow list is supposed to do. */
+  /* Two actions changed this. With only Delete on the row, keeping everything
+     on one line and ellipsising the title was the right trade. Download beside
+     it took so much of a 390px row that the file name -- the thing being
+     looked for -- was down to "Q3 r...". The actions drop to their own line
+     instead, right-aligned under the facts. */
   .history-row {
     padding: var(--ran-space-3);
     gap: var(--ran-space-3);
+    flex-wrap: wrap;
+  }
+  .history-row-actions {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    margin-top: calc(-1 * var(--ran-space-1));
   }
   .history-row-main {
     flex: 1 1 0;
@@ -434,10 +521,7 @@
     width: 100%;
   }
   .history-usage {
-    margin-left: 0;
-    flex: 1;
     font-size: 12px;
-    white-space: nowrap;
   }
 }
 

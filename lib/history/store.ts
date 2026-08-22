@@ -19,7 +19,7 @@
  */
 import { BLOBS_BY_DOC, BLOBS_STORE, DOCS_STORE, requestToPromise, withStores } from './db';
 import type { HistoryDoc, HistoryOrigin, HistorySnapshot } from './types';
-import { MAX_AGE_MS, expiresAt } from './types';
+import { MAX_AGE_MS, expiresAt, hasUnsavedWork } from './types';
 
 /** Revisions kept per document: the newest plus two recovery points behind it. */
 export const MAX_REVS_PER_DOC = 3;
@@ -279,7 +279,7 @@ async function evictColdest(protectedId?: string): Promise<boolean> {
  * hurt, this is the one function that has to change.
  */
 export async function listDocs(
-  options: { query?: string; page?: number; pageSize?: number } = {},
+  options: { query?: string; page?: number; pageSize?: number; unsavedOnly?: boolean } = {},
 ): Promise<DocListResult> {
   const pageSize = Math.max(1, options.pageSize ?? DEFAULT_PAGE_SIZE);
   const query = (options.query ?? '').trim().toLowerCase();
@@ -291,7 +291,11 @@ export async function listDocs(
     rows = [];
   }
 
-  const matched = query ? rows.filter((doc) => doc.titleLower.includes(query)) : rows;
+  // Both filters run here rather than at the call site so `total` and the page
+  // count describe the list the user is actually looking at -- a filtered view
+  // paged by the unfiltered count shows empty pages.
+  let matched = query ? rows.filter((doc) => doc.titleLower.includes(query)) : rows;
+  if (options.unsavedOnly) matched = matched.filter(hasUnsavedWork);
   const pageCount = Math.max(1, Math.ceil(matched.length / pageSize));
   // Clamp rather than return an empty page: deleting the last row of the last
   // page would otherwise leave the user staring at nothing.
