@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { generate } from '../../bin/build-pages.mjs';
 
 /**
  * The two things that decide whether a site reads as one site: how wide its
@@ -16,6 +17,11 @@ import { describe, expect, it } from 'vitest';
  */
 const ROOT = resolve(__dirname, '../..');
 const PUBLIC = resolve(ROOT, 'public');
+// Most pages are rendered from markdown at build time and are not committed
+// (bin/build-pages.mjs, vite plugin `generated-pages`), so they are taken from
+// a fresh in-memory render rather than from disk -- the chrome contract is the
+// shell's, and the shell is the generator's.
+const GENERATED = generate({ outDir: null }) as Array<{ rel: string; html: string }>;
 
 const read = (rel: string) => readFileSync(resolve(ROOT, rel), 'utf8');
 
@@ -97,28 +103,35 @@ describe('page width scale', () => {
 });
 
 describe('page chrome', () => {
-  /** Every user-facing HTML page, wherever it is served from. */
+  /** Every hand-written HTML page on disk (the generated ones come from the render). */
   function pages(dir: string, out: string[] = []): string[] {
     for (const name of readdirSync(dir)) {
       const path = join(dir, name);
       if (statSync(path).isDirectory()) {
         if (['sdkjs', 'web-apps', 'ranui-iife', 'ran-fonts', 'fonts', 'img', 'wasm'].includes(name)) continue;
         pages(path, out);
-      } else if (name.endsWith('.html')) {
+      } else if (name.endsWith('.html') && !isGenerated(path)) {
         out.push(path);
       }
     }
     return out;
   }
+  const isGenerated = (file: string) => GENERATED.some((g) => resolve(PUBLIC, g.rel) === file);
 
-  const all = [...pages(PUBLIC), resolve(ROOT, 'index.html'), resolve(ROOT, 'history.html')];
+  /** Every user-facing page: the files on disk, plus the generated ones in memory. */
+  const all = [
+    ...[...pages(PUBLIC), resolve(ROOT, 'history.html')].map((file) => ({
+      label: relative(ROOT, file),
+      html: readFileSync(file, 'utf8'),
+    })),
+    ...GENERATED.map((g) => ({ label: `${g.rel} (generated)`, html: g.html })),
+  ];
 
   it('finds the pages (sanity)', () => {
     expect(all.length).toBeGreaterThan(15);
   });
 
-  it.each(all.map((f) => [relative(ROOT, f), f]))('%s carries the site header', (_label, file) => {
-    const html = readFileSync(file, 'utf8');
+  it.each(all.map((p) => [p.label, p.html]))('%s carries the site header', (_label, html) => {
     // The homepage builds its own bar inside #landing-hero; everything else
     // uses the shared one from landing.css. A page with neither is a page a
     // visitor arrives at and cannot tell is still this site.
@@ -131,11 +144,10 @@ describe('page chrome', () => {
     // Two stylesheets carry the bar: home.css for the homepages, landing.css
     // for everything else. A page that draws its own would be a fourth copy of
     // the same measurements, drifting on its own schedule.
-    for (const file of all) {
-      const html = readFileSync(file, 'utf8');
+    for (const { label, html } of all) {
       if (!/class="bar"/.test(html)) continue;
       const shared = /landing\.css/.test(html) || /home\.css/.test(html);
-      expect(shared, `${relative(ROOT, file)} links home.css or landing.css`).toBe(true);
+      expect(shared, `${label} links home.css or landing.css`).toBe(true);
     }
   });
 });

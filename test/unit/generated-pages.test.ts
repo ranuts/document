@@ -15,10 +15,11 @@ const ROOT = resolve(__dirname, '../..');
 
 describe('generated markdown pages', () => {
   /**
-   * The homepages are the one generated output that stays committed: the
-   * English one is index.html, a Vite build entry, and a build must not depend
-   * on a plugin having run before Rollup reads its inputs. Committed means it
-   * can go stale, so this is the check that it has not.
+   * The English homepage is the one generated output that stays committed: it
+   * is index.html, a Vite build entry, and a build must not depend on a plugin
+   * having run before Rollup reads its inputs. Every other page -- the other
+   * locales' homepages included -- is written to a gitignored path at build
+   * time. Committed means it can go stale, so this is the check that it has not.
    */
   it('has no committed page that a fresh render would change', () => {
     expect(check()).toEqual([]);

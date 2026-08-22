@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { generate } from '../../bin/build-pages.mjs';
 
 /**
  * public/sw-register.js -- the landing pages' service-worker update policy.
@@ -253,18 +254,24 @@ describe('start', () => {
 
 describe('the landing pages carry the policy', () => {
   const read = (rel: string) => readFileSync(resolve(__dirname, '../..', rel), 'utf8');
+  // Every locale's homepage is an entry point; `/zh-CN/` used to register no
+  // worker at all, so a visitor who started there never got a new build. The
+  // homepages are generated (only the English one is committed), so they are
+  // taken from the render -- which also covers the next locale for free.
+  const homepages = (generate({ outDir: null }) as Array<{ rel: string; html: string; kind: string }>).filter(
+    (o) => o.kind === 'home',
+  );
 
-  // Both locale homepages are entry points; `/zh-CN/` used to register no
-  // worker at all, so a visitor who started there never got a new build.
-  it.each(['index.html', 'public/zh-CN/index.html'])('%s loads sw-register.js', (page) => {
-    expect(read(page)).toContain('src="/sw-register.js"');
+  it.each(homepages.map((h) => [h.rel, h.html]))('%s loads sw-register.js', (_rel, html) => {
+    expect(html).toContain('src="/sw-register.js"');
   });
 
   it('leaves no page registering the worker without the update policy', () => {
     // An inline `register()` with no promotion is what silently pinned users
     // to an old build for four days on GitHub #144.
-    for (const page of ['index.html', 'public/zh-CN/index.html']) {
-      expect(read(page)).not.toMatch(/serviceWorker\s*\.\s*register/);
+    expect(homepages.length).toBeGreaterThanOrEqual(2);
+    for (const { rel, html } of homepages) {
+      expect(html, rel).not.toMatch(/serviceWorker\s*\.\s*register/);
     }
   });
 
