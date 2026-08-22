@@ -918,41 +918,57 @@
   }
 }
 
-/* "Continue editing <file>" — only ever visible when this browser is holding
-   autosaved work (see /history-recent.js, which unhides it). It sits with the
-   trust row rather than in the CTA cluster: it is a return path for someone who
-   was already here, not one of the three things a first-time visitor chooses
-   between. */
+/* The autosave line.
+ *
+ * It answers "what happens to what I type here?", so it leads with the reason
+ * (a refresh does not cost you the work) rather than with the mechanism, and
+ * it is served HTML rather than script output -- a promise about someone's
+ * data has to hold for a first-time visitor and with JavaScript off.
+ *
+ * Sits between the CTAs and the trust row as its own bounded block, because
+ * the first draft had it as two loose lines that read as a footnote to the
+ * buttons and collided with the row below.
+ */
 #landing-hero .recent {
-  margin-top: var(--ran-space-5);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--ran-space-1) var(--ran-space-2);
+  margin-top: var(--ran-space-4);
+  /* A text block, not a flex row: the sentence and the link that follows it
+     belong to the same reading line and should wrap together. The first draft
+     flexed them apart and left "Local history" stranded on its own line. */
+  display: block;
+  max-width: 62ch;
+  padding: var(--ran-space-3) var(--ran-space-4);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  background: var(--ran-color-bg-subtle);
   font-size: 14px;
+  line-height: 1.6;
   color: var(--ran-color-text-secondary);
+}
+/* The retention window is the load-bearing half of the sentence: the difference
+   between "the browser keeps my documents" and "keeps them for a week". */
+#landing-hero .recent-all {
+  margin-left: var(--ran-space-2);
 }
 #landing-hero .recent a {
   color: var(--ran-color-text);
   text-decoration: underline;
   text-underline-offset: 3px;
+  white-space: nowrap;
 }
 #landing-hero .recent a:hover {
   color: var(--ran-color-primary);
 }
-#landing-hero .recent-note {
-  /* The retention window is the load-bearing half of this line: it is the
-     difference between "the browser keeps my documents" and "the browser keeps
-     my documents for a week". */
-  color: var(--ran-color-text-secondary);
-}
+/* Only rendered when this browser is actually holding something (see
+   /history-recent.js), and then it is the first thing in the block. */
+/* Only rendered when this browser is holding something, and then it leads. */
 #landing-hero .recent-resume {
+  display: block;
+  margin-bottom: var(--ran-space-1);
   font-weight: 500;
+  color: var(--ran-color-text);
 }
-#landing-hero .recent-resume::after {
-  content: '·';
-  margin-left: var(--ran-space-2);
-  color: var(--ran-color-text-disabled);
-  text-decoration: none;
-  display: inline-block;
+@media (max-width: 560px) {
+  #landing-hero .recent {
+    font-size: 13px;
+  }
 }

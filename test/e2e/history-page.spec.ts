@@ -192,7 +192,7 @@ test.describe('local history page', () => {
     await expect(page.locator('.history-row', { hasText: 'Fresh.docx' })).toContainText('7 days');
     await expect(page.locator('.history-row', { hasText: 'Old.docx' })).toContainText('1 day');
     // And the rule itself, not just its consequence.
-    await expect(page.locator('.history-notice').first()).toContainText('7 days');
+    await expect(page.locator('.history-note').first()).toContainText('7 days');
   });
 
   test('deletes documents past the retention window without being asked', async ({ page }) => {

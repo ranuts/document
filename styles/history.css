@@ -1,70 +1,138 @@
-/* /history -- the local document library. ranui tokens only: this page is as
-   much a part of the product's face as the landing pages are (CLAUDE.md
-   convention 4), and it has to follow the theme the editor was left in. */
+/* /history -- the local document library.
+ *
+ * ranui tokens only, and the same measurements the landing pages use: this is
+ * as much the product's face as they are (CLAUDE.md convention 4), and a page
+ * that sets its own spacing scale reads as a different product.
+ *
+ * The layout is a table without being a <table>: one grid, five columns, so
+ * every row's name, age, size and expiry line up down the page. Alignment is
+ * what makes a list of files legible -- with each row free-flowing, the eye has
+ * to re-find the same fact in a new place on every line.
+ */
 body {
   margin: 0;
   background: var(--ran-color-bg);
   color: var(--ran-color-text);
   font-family: var(--ran-font-family);
   line-height: var(--ran-line-height);
+  -webkit-font-smoothing: antialiased;
 }
 
 .history-page {
-  max-width: 880px;
+  /* The landing pages' content column, minus the room a hero needs for its
+     illustration: wide enough that a long file name and its measurements are
+     not fighting, narrow enough to stay one comfortable read. */
+  max-width: 1040px;
   margin: 0 auto;
-  padding: var(--ran-space-8) var(--ran-space-4) var(--ran-space-10);
+  padding: var(--ran-space-16) var(--ran-space-6) var(--ran-space-24);
   display: flex;
   flex-direction: column;
-  gap: var(--ran-space-6);
+  gap: var(--ran-space-8);
 }
+
+/* ---- header ---- */
 
 .history-header {
   display: flex;
   flex-direction: column;
-  gap: var(--ran-space-2);
+  gap: var(--ran-space-3);
 }
 .history-title-row {
   display: flex;
-  align-items: baseline;
-  gap: var(--ran-space-4);
+  align-items: center;
+  gap: var(--ran-space-6);
   flex-wrap: wrap;
 }
 .history-title {
   margin: 0;
-  font-size: 28px;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   font-weight: 600;
 }
-.history-back {
+.history-header-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-4);
 }
-.history-intro,
-.history-notice {
+.history-intro {
   margin: 0;
+  max-width: 68ch;
   color: var(--ran-color-text-secondary);
-  font-size: 14px;
+  font-size: 15px;
 }
+
+/* Autosave switch: a real control, not a bare checkbox dropped on the page. */
+.history-autosave {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  font-size: 14px;
+  color: var(--ran-color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+.history-switch {
+  appearance: none;
+  margin: 0;
+  width: 36px;
+  height: 20px;
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-bg-muted);
+  border: 1px solid var(--ran-color-border);
+  position: relative;
+  cursor: pointer;
+  transition:
+    background var(--ran-motion-duration-fast, 120ms) ease,
+    border-color var(--ran-motion-duration-fast, 120ms) ease;
+}
+.history-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-bg-elevated);
+  box-shadow: var(--ran-shadow-elevated);
+  transition: transform var(--ran-motion-duration-fast, 120ms) ease;
+}
+.history-switch:checked {
+  background: var(--ran-color-primary);
+  border-color: var(--ran-color-primary);
+}
+.history-switch:checked::after {
+  transform: translateX(16px);
+}
+.history-switch:focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+}
+
+/* ---- toolbar ---- */
 
 .history-toolbar {
   display: flex;
-  gap: var(--ran-space-3);
   align-items: center;
+  gap: var(--ran-space-4);
   flex-wrap: wrap;
 }
 .history-search {
-  flex: 1 1 240px;
-  min-width: 180px;
-  padding: var(--ran-space-2) var(--ran-space-3);
-  border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-md);
-  background: var(--ran-color-bg-elevated);
-  color: var(--ran-color-text);
-  font: inherit;
-  font-size: 14px;
+  /* Bounded: a search box stretched across the page implies long queries and
+     leaves the controls beside it looking stranded. */
+  width: 320px;
+  max-width: 100%;
 }
 .history-usage {
+  margin-left: auto;
   color: var(--ran-color-text-secondary);
   font-size: 13px;
+  font-family: var(--ran-font-mono);
 }
+
+/* ---- list ---- */
 
 .history-list {
   display: flex;
@@ -72,69 +140,181 @@ body {
   border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-lg);
   overflow: hidden;
+  background: var(--ran-color-bg-elevated);
 }
 .history-row {
-  display: flex;
-  gap: var(--ran-space-4);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 8.5rem 5.5rem 8.5rem auto;
   align-items: center;
-  padding: var(--ran-space-3) var(--ran-space-4);
+  gap: var(--ran-space-4);
+  padding: var(--ran-space-4) var(--ran-space-6);
   border-bottom: 1px solid var(--ran-color-border);
+  transition: background var(--ran-motion-duration-fast, 120ms) ease;
 }
 .history-row:last-child {
   border-bottom: none;
 }
-.history-row-main {
+.history-row:hover {
+  background: var(--ran-color-bg-hover);
+}
+.history-row-name {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
   min-width: 0;
-  flex: 1;
 }
 .history-row-title {
   font-weight: 500;
+  font-size: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.history-row-meta {
+.history-cell {
   color: var(--ran-color-text-secondary);
   font-size: 13px;
-  display: flex;
-  gap: var(--ran-space-2);
-  flex-wrap: wrap;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
-/* "Not on disk" is the whole point of the list: it marks the rows that hold
-   the only copy of that work. */
+/* Measurements are right-aligned so the columns read as one block of figures;
+   left-aligned expiry beside a right-aligned size made the two look glued. */
+.history-cell-time,
+.history-cell-size,
+.history-cell-expiry {
+  text-align: right;
+}
+/* "Not on disk" marks the rows holding the only copy of that work -- the whole
+   reason to keep a list at all, so it reads as a status, not as more metadata. */
 .history-badge {
-  padding: 0 var(--ran-space-2);
+  flex-shrink: 0;
+  padding: 1px var(--ran-space-2);
   border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-sm);
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-bg-subtle);
+  color: var(--ran-color-text-secondary);
+  font-size: 11px;
+  line-height: 18px;
+  white-space: nowrap;
 }
 .history-row-actions {
   display: flex;
+  align-items: center;
   gap: var(--ran-space-2);
-  flex-shrink: 0;
+  justify-self: end;
+  /* Keep the destructive action off the row's edge, where a mis-aimed click
+     from the scrollbar side lands. */
+  padding-left: var(--ran-space-2);
+}
+/* Open is the action; Delete is available, not offered. Two buttons of equal
+   weight on every row would make the destructive one just as easy to hit. */
+.history-delete::part(content) {
+  color: var(--ran-color-text-secondary);
+}
+.history-row:hover .history-delete::part(content) {
+  color: var(--ran-color-danger);
 }
 
+/* ---- empty, pager, notes ---- */
+
 .history-empty {
-  padding: var(--ran-space-8);
+  padding: var(--ran-space-16) var(--ran-space-6);
   text-align: center;
   color: var(--ran-color-text-secondary);
   border: 1px dashed var(--ran-color-border);
   border-radius: var(--ran-radius-lg);
 }
-
 .history-pager {
   display: flex;
-  gap: var(--ran-space-3);
+  gap: var(--ran-space-4);
   align-items: center;
   justify-content: center;
 }
 .history-page-info {
   color: var(--ran-color-text-secondary);
   font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.history-notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-2);
+  padding-top: var(--ran-space-6);
+  border-top: 1px solid var(--ran-color-border);
+}
+.history-note {
+  color: var(--ran-color-text-secondary);
+  font-size: 13px;
+}
+.history-note-warn {
+  color: var(--ran-color-warning);
 }
 
-.history-autosave {
-  display: flex;
-  gap: var(--ran-space-2);
-  align-items: center;
-  font-size: 14px;
+/* ---- narrow screens ---- */
+
+@media (max-width: 860px) {
+  .history-page {
+    padding: var(--ran-space-10) var(--ran-space-4) var(--ran-space-16);
+    gap: var(--ran-space-6);
+  }
+  .history-title {
+    font-size: 26px;
+  }
+  /* Columns become two stacked lines: the name, then everything measured about
+     it, with the actions on their own row so neither crowds the other. */
+  .history-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--ran-space-2) var(--ran-space-4);
+    padding: var(--ran-space-4);
+  }
+  .history-row-name {
+    grid-column: 1 / -1;
+  }
+  /* Left-aligned again: right alignment is what keeps columns readable, and
+     there are no columns here -- these are two lines under a file name. */
+  .history-cell {
+    grid-column: auto;
+    text-align: left;
+  }
+  .history-cell-time {
+    grid-column: 1;
+  }
+  .history-cell-size {
+    display: none;
+  }
+  .history-cell-expiry {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .history-row-actions {
+    grid-column: 2;
+    grid-row: 2 / 4;
+  }
+  /* Nothing is pushed to the middle of a narrow column: the header's controls
+     start at the left edge like everything else, and the count keeps its row
+     with the button it describes. */
+  .history-header-actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .history-toolbar {
+    gap: var(--ran-space-3);
+  }
+  .history-search {
+    width: 100%;
+  }
+  .history-usage {
+    margin-left: 0;
+    flex: 1;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-row,
+  .history-switch,
+  .history-switch::after {
+    transition-duration: 0.01ms !important;
+  }
 }
