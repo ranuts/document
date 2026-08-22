@@ -1,0 +1,260 @@
+{
+  "title": "브라우저에서 DOCX, XLSX, PPTX 열기 — 무료 문서 뷰어 및 편집기",
+  "description": "Word(DOCX), Excel(XLSX), PowerPoint(PPTX), CSV 파일을 브라우저에서 바로 열고 볼 수 있습니다. Office 설치도, 업로드도, 가입도 필요 없습니다. 편집하고 저장하는 것도 가능합니다. 무료이고 프라이버시를 우선하며 오프라인에서도 동작합니다. OnlyOffice 기반.",
+  "ogDescription": "DOCX, XLSX, PPTX, CSV를 브라우저에서 열고 보고 편집하세요. Office 없이, 업로드 없이, 가입 없이. 무료이며 오프라인에서도 사용할 수 있습니다.",
+  "chip": "로컬 우선 · <b>오픈 소스</b>",
+  "h1": {
+    "plain": "Word, Excel, PowerPoint 파일을",
+    "accent": "브라우저에서 바로."
+  },
+  "sub": "Office가 설치되어 있지 않나요? DOCX, XLSX, PPTX를 즉시 볼 수 있고, 필요할 때 편집할 수도 있습니다. 모든 처리는 기기에서 이루어집니다. 업로드 없음, 가입 불필요, 오프라인에서도 동작합니다.",
+  "cta": {
+    "open": "파일 열기",
+    "docx": "새 Word",
+    "xlsx": "새 Excel",
+    "pptx": "새 PowerPoint"
+  },
+  "recent": {
+    "label": "이어서 편집",
+    "note": "실수로 탭을 닫아도 잃어버리지 않습니다. 작업하는 동안 편집 내용이 이 브라우저에 저장됩니다. 저장된 사본은 7일 동안 유지된 뒤 자동으로 삭제되며, 언제든 직접 삭제할 수도 있습니다.",
+    "all": "저장된 문서"
+  },
+  "trust": ["업로드 0바이트", "계정 불필요", "오프라인 동작", ".docx .xlsx .pptx .csv"],
+  "docwin": {
+    "file": "report.docx",
+    "badge": "로컬에 저장됨 ✓",
+    "selected": "입력한 내용은 모두 이 기기에 남습니다.",
+    "noteAuthor": "나 · 방금",
+    "noteBody": "업로드 0바이트 — 네트워크 탭에서 확인하세요.",
+    "net": "network · 요청 0건 · 0바이트 전송"
+  },
+  "nav": [
+    {
+      "href": "/ko/offline-document-editor",
+      "label": "오프라인"
+    },
+    {
+      "href": "/ko/no-signup-document-editor",
+      "label": "가입 불필요"
+    }
+  ],
+  "sections": {
+    "formats": {
+      "eyebrow": "파일 열기",
+      "h2": "Office가 없나요? 괜찮습니다.",
+      "rows": [
+        {
+          "href": "/ko/open/docx",
+          "ext": ".docx",
+          "name": "DOCX 열기",
+          "desc": "글꼴, 표, 이미지를 그대로 유지한 Word 문서."
+        },
+        {
+          "href": "/ko/open/xlsx",
+          "ext": ".xlsx",
+          "name": "XLSX 열기",
+          "desc": "수식, 차트, 여러 시트를 완전하게 표시."
+        },
+        {
+          "href": "/ko/open/pptx",
+          "ext": ".pptx",
+          "name": "PPTX 열기",
+          "desc": "레이아웃, 테마, 미디어가 보존된 슬라이드."
+        },
+        {
+          "href": "/ko/open/pdf",
+          "ext": ".pdf",
+          "name": "PDF 열기",
+          "desc": "읽고 의견을 달고 주석을 단 뒤 그대로 저장."
+        },
+        {
+          "href": "/ko/open/odt",
+          "ext": ".odt .ods .odp",
+          "name": "OpenDocument 열기",
+          "desc": "LibreOffice 형식 — ODT, DOCX, PDF로 다시 저장."
+        },
+        {
+          "href": "/ko/convert/docx-to-pdf",
+          "ext": ".docx → .pdf",
+          "name": "PDF로 변환",
+          "desc": "Word, Excel, PowerPoint를 기기에서 PDF로."
+        },
+        {
+          "href": "/ko/convert/xlsx-to-csv",
+          "ext": ".xlsx → .csv",
+          "name": "형식 간 변환",
+          "desc": "스프레드시트와 CSV를 서로 변환 — 1바이트도 업로드하지 않습니다."
+        }
+      ]
+    },
+    "pillars": {
+      "eyebrow": "무엇이 다른가",
+      "h2": "프라이버시는 약속이 아니라 설계입니다",
+      "items": [
+        {
+          "k": "100% 클라이언트",
+          "h3": "파일은 기기를 벗어나지 않습니다",
+          "p": "모든 문서를 로컬에서 열고 편집하고 저장합니다. 업로드할 서버 자체가 없습니다."
+        },
+        {
+          "k": "계정 불필요",
+          "h3": "가입할 것이 없습니다",
+          "p": "이메일도, 로그인 장벽도 없습니다. 페이지를 열고 바로 편집하세요."
+        },
+        {
+          "k": "PWA · 오프라인",
+          "h3": "설치하면 비행기에서도",
+          "p": "홈 화면에 추가하면 인터넷 연결 없이도 계속 동작합니다."
+        },
+        {
+          "k": "AGPL-3.0",
+          "h3": "오픈 소스이며 직접 호스팅 가능",
+          "p": "실행되는 코드를 그대로 감사하거나 직접 운영할 수 있습니다. OnlyOffice 기반."
+        }
+      ]
+    },
+    "steps": {
+      "eyebrow": "과정",
+      "h2": "사용 방법",
+      "items": [
+        {
+          "n": "01",
+          "h3": "파일 열기",
+          "p": "DOCX, XLSX, PPTX, CSV를 끌어다 놓거나 빈 문서로 시작하세요.",
+          "loc": "기기에 남습니다"
+        },
+        {
+          "n": "02",
+          "h3": "제대로 편집",
+          "p": "OnlyOffice로 완전한 서식, 표, 차트, 수식을 사용합니다.",
+          "loc": "기기에 남습니다"
+        },
+        {
+          "n": "03",
+          "h3": "다시 저장",
+          "p": "같은 형식으로 내보냅니다. 한 번도 업로드되지 않았습니다.",
+          "loc": "기기에 남습니다"
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "h2": "자주 묻는 질문",
+      "note": "더 자세한 설명 — 파일 크기 제한, 오류 코드, 직접 호스팅 — 은 <a href=\"/ko/help\">도움말</a>에 있습니다.",
+      "items": [
+        {
+          "q": "내 파일에 바로 저장할 수 있나요, 아니면 사본만 내려받나요?",
+          "a": "내 파일에 바로 저장됩니다. 처음 저장할 때 파일을 고르면 이후에는 대화 상자도, 다운로드 폴더의 중복 파일도 없이 그 파일에 바로 기록됩니다. 브라우저의 File System Access API를 사용하므로 Chrome, Edge 등 Chromium 계열 브라우저에서 동작하며, Safari와 Firefox에서는 대신 사본이 내려받아집니다. 어느 쪽이든 파일은 브라우저에서 내 디스크로 가며 업로드되지 않습니다."
+        },
+        {
+          "q": "내 파일이 어딘가로 업로드되나요?",
+          "a": "아니요. 서버가 없습니다. 파일은 기기에서 로컬로 열리고 저장되며 업로드되지 않습니다 — 네트워크 탭에서 확인하거나 소스를 읽어볼 수 있습니다."
+        },
+        {
+          "q": "어떤 형식을 편집할 수 있나요?",
+          "a": "Word(DOCX), Excel(XLSX), PowerPoint(PPTX), CSV입니다. WebAssembly에서 동작하는 OnlyOffice를 사용합니다."
+        },
+        {
+          "q": "탭을 닫거나 페이지를 새로고침하면 어떻게 되나요?",
+          "a": "아무것도 잃지 않습니다. 작업하는 동안 편집 내용이 이 브라우저에 저장되므로, 편집기를 다시 열면 그 문서를 다시 제안하고 새로고침해도 그대로 돌아옵니다. 저장된 사본은 기기에 7일 동안 남았다가 자동으로 삭제되며, 언제든 직접 삭제할 수도 있습니다. 업로드는 전혀 없습니다 — 사본은 이 브라우저 안에만 존재합니다."
+        },
+        {
+          "q": "오프라인에서도 동작하나요?",
+          "a": "네. 설치할 수 있는 PWA입니다 — 한 번 불러오면 모든 편집이 브라우저 안에서 이루어지므로 인터넷 없이도 계속 동작합니다."
+        },
+        {
+          "q": "계정이 필요한가요?",
+          "a": "계정도, 가입도, 이메일도 필요 없습니다. 페이지를 열고 편집하세요."
+        }
+      ]
+    }
+  },
+  "eco": {
+    "label": "ran 생태계의 일부 · 모두 오픈 소스",
+    "here": {
+      "name": "edit.chaxus.com",
+      "role": "Office 편집기"
+    },
+    "other": {
+      "href": "https://ran.chaxus.com",
+      "name": "ran.chaxus.com",
+      "role": "UI 컴포넌트"
+    }
+  },
+  "foot": {
+    "copy": "© 2026 Document Editor · 기기에서 실행됩니다",
+    "links": [
+      {
+        "href": "/ko/help",
+        "label": "도움말"
+      },
+      {
+        "href": "/ko/changelog",
+        "label": "변경 내역"
+      },
+      {
+        "href": "/ko/embed-document-editor",
+        "label": "Embed API"
+      },
+      {
+        "href": "/ko/webmcp-document-editor",
+        "label": "WebMCP"
+      },
+      {
+        "href": "/ko/private-document-editor",
+        "label": "개인정보"
+      },
+      {
+        "href": "/ko/offline-document-editor",
+        "label": "오프라인 편집기"
+      },
+      {
+        "href": "/ko/no-signup-document-editor",
+        "label": "가입 불필요"
+      },
+      {
+        "href": "/ko/open/docx",
+        "label": "DOCX 열기"
+      },
+      {
+        "href": "/ko/open/odt",
+        "label": "ODT"
+      },
+      {
+        "href": "/ko/open/ods",
+        "label": "ODS"
+      },
+      {
+        "href": "/ko/open/odp",
+        "label": "ODP"
+      },
+      {
+        "href": "/ko/convert/docx-to-pdf",
+        "label": "DOCX → PDF"
+      },
+      {
+        "href": "/ko/convert/xlsx-to-csv",
+        "label": "XLSX → CSV"
+      },
+      {
+        "href": "https://github.com/ranuts/document",
+        "label": "GitHub"
+      }
+    ],
+    "license": "AGPL-3.0"
+  },
+  "featureList": [
+    "Microsoft Office 없이 DOCX, XLSX, PPTX, CSV 열기 및 보기",
+    "DOCX, XLSX, PPTX, CSV 편집",
+    "100% 클라이언트에서 실행 — 파일은 기기를 벗어나지 않습니다",
+    "계정과 가입이 필요 없음",
+    "?src= 또는 ?file=로 URL에서 문서 열기",
+    "PWA로 설치 가능하며 오프라인 지원",
+    "postMessage API로 임베드 가능",
+    "무료이며 오픈 소스(AGPL-3.0)"
+  ],
+  "ecosystem": {
+    "name": "ran ecosystem",
+    "url": "https://ran.chaxus.com"
+  }
+}

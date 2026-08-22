@@ -1,0 +1,260 @@
+{
+  "title": "Abrir DOCX, XLSX e PPTX no navegador — visualizador e editor de documentos grátis",
+  "description": "Abra e veja arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV direto no navegador — sem Office instalado, sem upload, sem cadastro. Também dá para editar e salvar. Grátis, com privacidade em primeiro lugar e funcionando offline. Com OnlyOffice.",
+  "ogDescription": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no seu navegador — sem Office, sem upload, sem cadastro. Grátis e disponível offline.",
+  "chip": "Local primeiro · <b>código aberto</b>",
+  "h1": {
+    "plain": "Abra arquivos do Word, Excel e PowerPoint,",
+    "accent": "direto no navegador."
+  },
+  "sub": "Sem Office instalado? Veja qualquer DOCX, XLSX ou PPTX na hora — e edite quando precisar. Tudo roda no seu dispositivo: sem upload, sem cadastro, funciona offline.",
+  "cta": {
+    "open": "Abrir um arquivo",
+    "docx": "Novo Word",
+    "xlsx": "Novo Excel",
+    "pptx": "Novo PowerPoint"
+  },
+  "recent": {
+    "label": "Continuar editando",
+    "note": "Fechou a aba sem querer e nada se perdeu: suas edições são salvas neste navegador enquanto você trabalha. As cópias salvas ficam por 7 dias e depois são apagadas sozinhas — ou você as apaga quando quiser.",
+    "all": "Documentos salvos"
+  },
+  "trust": ["0 byte enviado", "sem conta", "funciona offline", ".docx .xlsx .pptx .csv"],
+  "docwin": {
+    "file": "report.docx",
+    "badge": "salvo localmente ✓",
+    "selected": "Tudo o que você digita fica neste dispositivo.",
+    "noteAuthor": "Você · agora mesmo",
+    "noteBody": "0 byte enviado — confira na aba de rede.",
+    "net": "network · 0 requisições · 0 byte enviado"
+  },
+  "nav": [
+    {
+      "href": "/pt/offline-document-editor",
+      "label": "Offline"
+    },
+    {
+      "href": "/pt/no-signup-document-editor",
+      "label": "Sem cadastro"
+    }
+  ],
+  "sections": {
+    "formats": {
+      "eyebrow": "Abrir um arquivo",
+      "h2": "Sem Office instalado? Sem problema.",
+      "rows": [
+        {
+          "href": "/pt/open/docx",
+          "ext": ".docx",
+          "name": "Abrir DOCX",
+          "desc": "Documentos do Word com fontes, tabelas e imagens intactas."
+        },
+        {
+          "href": "/pt/open/xlsx",
+          "ext": ".xlsx",
+          "name": "Abrir XLSX",
+          "desc": "Fórmulas, gráficos e várias planilhas, exibidos por completo."
+        },
+        {
+          "href": "/pt/open/pptx",
+          "ext": ".pptx",
+          "name": "Abrir PPTX",
+          "desc": "Slides com layouts, temas e mídia preservados."
+        },
+        {
+          "href": "/pt/open/pdf",
+          "ext": ".pdf",
+          "name": "Abrir PDF",
+          "desc": "Leia, comente, anote e salve de volta."
+        },
+        {
+          "href": "/pt/open/odt",
+          "ext": ".odt .ods .odp",
+          "name": "Abrir OpenDocument",
+          "desc": "Formatos do LibreOffice — salve de volta como ODT, DOCX ou PDF."
+        },
+        {
+          "href": "/pt/convert/docx-to-pdf",
+          "ext": ".docx → .pdf",
+          "name": "Converter para PDF",
+          "desc": "Word, Excel e PowerPoint viram PDF no seu dispositivo."
+        },
+        {
+          "href": "/pt/convert/xlsx-to-csv",
+          "ext": ".xlsx → .csv",
+          "name": "Converter entre formatos",
+          "desc": "De planilhas para CSV e de volta, sem enviar um byte."
+        }
+      ]
+    },
+    "pillars": {
+      "eyebrow": "O que muda aqui",
+      "h2": "Privacidade por construção, não por promessa",
+      "items": [
+        {
+          "k": "100% no cliente",
+          "h3": "Os arquivos nunca saem do seu dispositivo",
+          "p": "Cada documento é aberto, editado e salvo localmente. Não existe servidor para onde enviar."
+        },
+        {
+          "k": "Sem conta",
+          "h3": "Não há nada para cadastrar",
+          "p": "Sem e-mail, sem muro de login. Abra a página e comece a editar."
+        },
+        {
+          "k": "PWA · offline",
+          "h3": "Instale e use até no avião",
+          "p": "Adicione à tela de início e ele continua funcionando sem conexão."
+        },
+        {
+          "k": "AGPL-3.0",
+          "h3": "Código aberto e auto-hospedável",
+          "p": "Audite exatamente o que roda, ou hospede a sua própria cópia. Com OnlyOffice."
+        }
+      ]
+    },
+    "steps": {
+      "eyebrow": "Processo",
+      "h2": "Como funciona",
+      "items": [
+        {
+          "n": "01",
+          "h3": "Abra um arquivo",
+          "p": "Arraste um DOCX, XLSX, PPTX ou CSV — ou comece em branco.",
+          "loc": "fica no dispositivo"
+        },
+        {
+          "n": "02",
+          "h3": "Edite de verdade",
+          "p": "Formatação completa, tabelas, gráficos e fórmulas com o OnlyOffice.",
+          "loc": "fica no dispositivo"
+        },
+        {
+          "n": "03",
+          "h3": "Salve de volta",
+          "p": "Exporte no mesmo formato. Nada foi enviado em momento algum.",
+          "loc": "fica no dispositivo"
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "h2": "Perguntas, respondidas",
+      "note": "As respostas mais longas — limites de tamanho, códigos de erro, auto-hospedagem — estão na <a href=\"/pt/help\">ajuda</a>.",
+      "items": [
+        {
+          "q": "Ele salva no meu próprio arquivo ou só baixa uma cópia?",
+          "a": "Ele salva no seu próprio arquivo. No primeiro salvamento você escolhe o arquivo; a partir daí cada salvamento escreve direto nele, sem diálogo e sem duplicata na pasta de downloads. Isso usa a File System Access API do navegador, então funciona no Chrome, no Edge e em outros navegadores Chromium; Safari e Firefox baixam uma cópia. De um jeito ou de outro o arquivo vai do navegador para o seu disco e nunca é enviado."
+        },
+        {
+          "q": "Meus arquivos são enviados para algum lugar?",
+          "a": "Não. Não há servidor. Os arquivos são abertos e salvos localmente no seu dispositivo e nunca são enviados — dá para conferir na aba de rede ou ler o código."
+        },
+        {
+          "q": "Quais formatos posso editar?",
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV, com o OnlyOffice rodando em WebAssembly."
+        },
+        {
+          "q": "O que acontece se eu fechar a aba ou recarregar a página?",
+          "a": "Nada se perde. Suas edições são salvas neste navegador enquanto você trabalha, então ao reabrir o editor ele oferece o documento de volta e uma recarga retorna a ele. As cópias salvas ficam no seu dispositivo por 7 dias e depois são apagadas sozinhas; você também pode apagá-las quando quiser. Nada é enviado — as cópias existem apenas neste navegador."
+        },
+        {
+          "q": "Funciona offline?",
+          "a": "Sim. É um PWA instalável — depois de carregado ele continua funcionando sem internet, porque toda a edição acontece localmente no seu navegador."
+        },
+        {
+          "q": "Preciso de uma conta?",
+          "a": "Sem conta, sem cadastro, sem e-mail. Abra a página e edite."
+        }
+      ]
+    }
+  },
+  "eco": {
+    "label": "Parte do ecossistema ran · tudo de código aberto",
+    "here": {
+      "name": "edit.chaxus.com",
+      "role": "Editor de Office"
+    },
+    "other": {
+      "href": "https://ran.chaxus.com",
+      "name": "ran.chaxus.com",
+      "role": "Componentes de UI"
+    }
+  },
+  "foot": {
+    "copy": "© 2026 Document Editor · roda no seu dispositivo",
+    "links": [
+      {
+        "href": "/pt/help",
+        "label": "Ajuda"
+      },
+      {
+        "href": "/pt/changelog",
+        "label": "Novidades"
+      },
+      {
+        "href": "/pt/embed-document-editor",
+        "label": "Embed API"
+      },
+      {
+        "href": "/pt/webmcp-document-editor",
+        "label": "WebMCP"
+      },
+      {
+        "href": "/pt/private-document-editor",
+        "label": "Privacidade"
+      },
+      {
+        "href": "/pt/offline-document-editor",
+        "label": "Editor offline"
+      },
+      {
+        "href": "/pt/no-signup-document-editor",
+        "label": "Sem cadastro"
+      },
+      {
+        "href": "/pt/open/docx",
+        "label": "Abrir DOCX"
+      },
+      {
+        "href": "/pt/open/odt",
+        "label": "ODT"
+      },
+      {
+        "href": "/pt/open/ods",
+        "label": "ODS"
+      },
+      {
+        "href": "/pt/open/odp",
+        "label": "ODP"
+      },
+      {
+        "href": "/pt/convert/docx-to-pdf",
+        "label": "DOCX → PDF"
+      },
+      {
+        "href": "/pt/convert/xlsx-to-csv",
+        "label": "XLSX → CSV"
+      },
+      {
+        "href": "https://github.com/ranuts/document",
+        "label": "GitHub"
+      }
+    ],
+    "license": "AGPL-3.0"
+  },
+  "featureList": [
+    "Abrir e ver DOCX, XLSX, PPTX e CSV sem o Microsoft Office",
+    "Editar arquivos DOCX, XLSX, PPTX e CSV",
+    "100% no cliente — os arquivos nunca saem do seu dispositivo",
+    "Sem conta e sem cadastro",
+    "Abrir documentos a partir de uma URL com ?src= ou ?file=",
+    "PWA instalável com suporte offline",
+    "Incorporável pela API postMessage",
+    "Grátis e de código aberto (AGPL-3.0)"
+  ],
+  "ecosystem": {
+    "name": "ran ecosystem",
+    "url": "https://ran.chaxus.com"
+  }
+}
