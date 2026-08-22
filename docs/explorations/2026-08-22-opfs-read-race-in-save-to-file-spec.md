@@ -109,6 +109,58 @@ expect(await writesCommitted(page)).toBe(2); // 两次 Ctrl+S = 恰好两次写
 3. `--repeat-each=3` 跑这个 spec，6 次全绿；改动前的完整 e2e 套件（115 用例）
    也全绿。
 
+## 同类排查：`expect.poll` 回调里还有谁会抛
+
+既然放大器是"回调抛异常 = 直接判红"，就把 e2e 里全部 26 处 poll 回调扫了一遍，
+按"除了'等的东西真没发生'以外还能不能抛"来判。结论是只有一处，而且**比这次红的
+那处更严重**——就在同一个文件里，等自动保存快照的那段：
+
+```js
+const request = indexedDB.open('document-history');   // 注意：没带版本号
+request.onsuccess = () => {
+  const db = request.result;
+  const all = db.transaction('docs', 'readonly').objectStore('docs').getAllKeys();
+  ...
+};
+```
+
+不带版本号的 `open` 打开一个**还不存在**的库时，会就地建一个空的 version 1、
+没有任何 object store（app 用的是 version 2，`docs` / `blobs` / `handles` 在那里
+建，见 `lib/history/db.ts`）。而用例问的正是"快照写进去了没有"——它跑在 app 还
+没来得及建库的那一刻是**正常情况**，不是异常情况。
+
+于是：
+
+1. `db.transaction('docs')` 抛 `NotFoundError`，抛在 `onsuccess` 事件处理器里，
+   没人接——promise **永远不 settle**，`db.close()` 也就永远不会执行；
+2. 那个泄漏的 version 1 连接**挡住 app 自己的 version 2 升级**，于是自动保存再也
+   写不进去；
+3. 用例在 60s 超时后变红，报的是 "a snapshot exists to reopen"——看起来像自动保存
+   坏了。
+
+实测（每种写法各一个干净 context）：
+
+```
+old shape page error: Failed to execute 'transaction' on 'IDBDatabase':
+                      One of the specified object stores was not found.
+old shape : NEVER SETTLED
+  app afterwards: BLOCKED by a leaked connection
+new shape : resolved 0 (no store yet)
+  app afterwards: opened, stores created
+```
+
+`autosave-recovery.spec.ts` 里那份读法是对的（判 `objectStoreNames.contains`、
+每条路径都 `close()`、接 `onupgradeneeded` 和 `all.onerror`），只是没人共用它，
+`save-to-file` 与 `history-page` 各自手抄了一份不带守卫的。所以抽成
+`test/e2e/lib/history-db.ts`，三个 spec 全部改用：读法只剩一份，下一个要读历史库
+的 spec 也不用重新踩一遍。
+
+其余 25 处判定安全，各有各的理由（读的是普通 JS 值、已有 `??` 兜底、
+`Frame.url()` 同步且 detach 后仍可读、WebMCP 工具层自己把异常转成 `isError`
+结果等）。
+
 ## 顺带确认
 
-`navigator.storage.getDirectory()` 全仓只有这个 spec 在用。
+`navigator.storage.getDirectory()` 全仓只有这个 spec 在用；`indexedDB.open` 还有
+一处在 `entry-paths.spec.ts`，开的是另一个库（`document-handoff`）且带了版本号，
+不在这个坑里。

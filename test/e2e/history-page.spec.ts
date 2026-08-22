@@ -1,3 +1,4 @@
+import { readHistoryKeys } from './lib/history-db';
 import { expect, test } from './lib/l0';
 import type { Page } from '@playwright/test';
 
@@ -167,22 +168,7 @@ test.describe('local history page', () => {
     await expect(titles(page)).toHaveText(['Keep.docx']);
 
     // Gone from storage, not just from the list -- the bytes have to go too.
-    const remaining = await page.evaluate(
-      () =>
-        new Promise<number>((resolve) => {
-          const request = indexedDB.open('document-history');
-          request.onsuccess = () => {
-            const db = request.result;
-            const all = db.transaction('blobs', 'readonly').objectStore('blobs').getAllKeys();
-            all.onsuccess = () => {
-              db.close();
-              resolve(all.result.length);
-            };
-          };
-          request.onerror = () => resolve(-1);
-        }),
-    );
-    expect(remaining).toBe(1);
+    expect(await readHistoryKeys(page, 'blobs')).toHaveLength(1);
   });
 
   test('says how long each document has left', async ({ page }) => {
@@ -208,22 +194,7 @@ test.describe('local history page', () => {
     await expect(titles(page)).toHaveText(['Kept.docx']);
 
     // Gone from storage, not merely filtered out of the view.
-    const remaining = await page.evaluate(
-      () =>
-        new Promise<string[]>((resolve) => {
-          const request = indexedDB.open('document-history');
-          request.onsuccess = () => {
-            const db = request.result;
-            const all = db.transaction('docs', 'readonly').objectStore('docs').getAllKeys();
-            all.onsuccess = () => {
-              db.close();
-              resolve(all.result as string[]);
-            };
-          };
-          request.onerror = () => resolve([]);
-        }),
-    );
-    expect(remaining).toEqual(['kept']);
+    expect(await readHistoryKeys(page, 'docs')).toEqual(['kept']);
   });
 
   test('the homepage says what autosave keeps, for how long, and where to look', async ({ page }) => {

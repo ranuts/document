@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Page } from '@playwright/test';
+import { readHistoryDocs } from './lib/history-db';
 import { buildDocx, ooxmlText, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
@@ -38,34 +39,6 @@ const waitForEditorReady = (page: Page) =>
     },
     undefined,
     { timeout: 90_000 },
-  );
-
-/** Metadata rows currently in the history database. */
-const readHistory = (page: Page) =>
-  page.evaluate(
-    () =>
-      new Promise<Array<{ id: string; title: string; size: number; savedToDiskAt?: number }>>((resolve) => {
-        const request = indexedDB.open('document-history');
-        request.onsuccess = () => {
-          const db = request.result;
-          if (!db.objectStoreNames.contains('docs')) {
-            db.close();
-            resolve([]);
-            return;
-          }
-          const all = db.transaction('docs', 'readonly').objectStore('docs').getAll();
-          all.onsuccess = () => {
-            db.close();
-            resolve(all.result);
-          };
-          all.onerror = () => {
-            db.close();
-            resolve([]);
-          };
-        };
-        request.onerror = () => resolve([]);
-        request.onupgradeneeded = () => resolve([]);
-      }),
   );
 
 async function hidePage(page: Page): Promise<void> {
@@ -111,9 +84,9 @@ test.describe('autosave and recovery (real editor)', () => {
     // pass whether or not hiding the page did anything -- which is exactly
     // what it looked like before this bound was tightened.
     await expect
-      .poll(async () => (await readHistory(page)).length, { timeout: 25_000, message: 'a snapshot was stored' })
+      .poll(async () => (await readHistoryDocs(page)).length, { timeout: 25_000, message: 'a snapshot was stored' })
       .toBe(1);
-    const [stored] = await readHistory(page);
+    const [stored] = await readHistoryDocs(page);
     expect(stored.title).toBe('Recovery.docx');
     expect(stored.size).toBeGreaterThan(0);
     // Never exported, so the browser holds the only copy of that sentence.
@@ -144,7 +117,9 @@ test.describe('autosave and recovery (real editor)', () => {
     expect(text).toContain('original paragraph never saved to disk');
 
     // Saved at last: the offer has nothing left to make.
-    await expect.poll(async () => (await readHistory(page))[0]?.savedToDiskAt, { timeout: 30_000 }).toBeGreaterThan(0);
+    await expect
+      .poll(async () => (await readHistoryDocs(page))[0]?.savedToDiskAt, { timeout: 30_000 })
+      .toBeGreaterThan(0);
   });
 
   test('a reload comes back to the same document, not a fresh one', async ({ page }) => {
@@ -164,7 +139,7 @@ test.describe('autosave and recovery (real editor)', () => {
 
     await hidePage(page);
     await expect
-      .poll(async () => (await readHistory(page)).length, { timeout: 25_000, message: 'a snapshot was stored' })
+      .poll(async () => (await readHistoryDocs(page)).length, { timeout: 25_000, message: 'a snapshot was stored' })
       .toBe(1);
 
     await page.reload();
@@ -173,7 +148,7 @@ test.describe('autosave and recovery (real editor)', () => {
     await reloadedSdk.waitFor({ state: 'visible', timeout: 30_000 });
     // Same document, same row: no second id, no duplicate history entry.
     expect(new URL(page.url()).searchParams.get('saved')).toBe(docId);
-    expect(await readHistory(page)).toHaveLength(1);
+    expect(await readHistoryDocs(page)).toHaveLength(1);
 
     await reloadedSdk.click({ position: { x: 300, y: 200 } });
     const downloadPromise = page.waitForEvent('download', { timeout: 120_000 });
@@ -217,6 +192,6 @@ test.describe('autosave and recovery (real editor)', () => {
     }
     await page.waitForTimeout(3_000);
 
-    expect(await readHistory(page)).toHaveLength(0);
+    expect(await readHistoryDocs(page)).toHaveLength(0);
   });
 });
