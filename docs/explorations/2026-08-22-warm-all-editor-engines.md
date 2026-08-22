@@ -85,6 +85,35 @@ cache**，断言总数是 8 + 3×4。原有那条"预热后打开不走网络"�
 反向验证：把 `warmEverything` 砍回只有 CORE → 新用例列出 13 个未缓存文件后变红；
 让配额判定恒为 false → 后台层用例变红。
 
+## CI 抓出来的竞态：cache.put 活不过 respondWith
+
+本地全绿，CI 的 `E2E shard 2` 红在 `/sdkjs/slide/sdk-all.js` 没被缓存——**队列里的最后
+一个文件**。
+
+根因不在测试：`respondWith` 在响应交到页面手里的那一刻就算完成，此时 worker 如果没有别的
+待办事项，浏览器**可以立刻终止它**——正在写的 `cache.put` 就跟着没了。文件越大窗口越宽，
+而这正好是反的：13.7 MB 的 SDK 恰恰是最值得留住的那个。本地看不见，因为没有任何东西在催
+worker 关闭。
+
+所以修的是 `public/sw.js`：所有缓存写入都包进 `event.waitUntil(...)`。一共四处——
+vendor 的 cache-first、stale-while-revalidate，以及 network-first 分支里那两处
+CORE_CACHE 写入（HTML 更小，但失败模式一模一样）。
+
+**这是生产环境的正确性修复，不只是让测试变绿。**
+
+测试那一侧也确实有问题，一并修了：页面侧的 Promise 在读完最后一个响应时就 resolve，而
+worker 的 put 在它自己那边稍后完成。要求两者同一瞬间就位是断言的错，不是功能的错——
+改成 `expect.poll` 等最终一致。
+
+`waitUntil` 本身很难用运行时用例守护（要可靠地触发"worker 被终止"）。改用源码契约钉住，
+和仓库里 `landing-pages` / `workflow-contract` 的做法一致：
+`putInRuntimeCache` 的每个调用点都必须在 `event.waitUntil(` 里，fetch handler 里的每处
+`caches.open(CORE_CACHE)` 前面都必须紧跟 `event.waitUntil(`。反向验证：任意一处退回裸调用
+都会变红。
+
+（中途我还写了第三条"禁止裸 put"的断言，但它的正则分不出 put 有没有被 waitUntil 包着——
+删掉了，前两条已经精确覆盖。宁可少一条断言，也不要一条说不清自己在测什么的。）
+
 ## 一条工作树观察
 
 提交前 `git diff` 里出现了四个我没碰过的文件（`l0.ts` 的 projectName fixture、

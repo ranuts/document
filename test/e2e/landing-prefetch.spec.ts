@@ -52,21 +52,31 @@ test.describe('landing page warm-up', () => {
     // Driven directly rather than waiting on idle timing, which is unbounded.
     await page.evaluate(() => (window as any).__landingPrefetch.warmEverything());
 
-    const result = await page.evaluate(async () => {
-      const lp = (window as any).__landingPrefetch;
-      const wanted: string[] = lp.CORE.concat(...lp.ENGINES.map(lp.formatUrls));
-      const held = new Set<string>();
-      for (const name of await caches.keys()) {
-        const cache = await caches.open(name);
-        for (const request of await cache.keys()) held.add(new URL(request.url).pathname);
-      }
-      return { engines: lp.ENGINES, missing: wanted.filter((u) => !held.has(u)), total: wanted.length };
-    });
+    // Polled, not asserted outright. The page's promise settles when the last
+    // response has been read; the worker's cache.put runs on its own side and
+    // finishes shortly after. Demanding both at the same instant made this fail
+    // in CI on the queue's final file -- true of the assertion, not the feature.
+    const missing = async () =>
+      page.evaluate(async () => {
+        const lp = (window as any).__landingPrefetch;
+        const wanted: string[] = lp.CORE.concat(...lp.ENGINES.map(lp.formatUrls));
+        const held = new Set<string>();
+        for (const name of await caches.keys()) {
+          const cache = await caches.open(name);
+          for (const request of await cache.keys()) held.add(new URL(request.url).pathname);
+        }
+        return wanted.filter((u) => !held.has(u));
+      });
 
-    expect(result.engines, 'all three editors must be warmed').toEqual(['docx', 'xlsx', 'pptx']);
-    expect(result.missing, `not cached after the warm-up: ${result.missing.join(', ')}`).toEqual([]);
+    await expect.poll(async () => (await missing()).length, { timeout: 120_000 }).toBe(0);
+
+    const shape = await page.evaluate(() => {
+      const lp = (window as any).__landingPrefetch;
+      return { engines: lp.ENGINES, total: lp.CORE.length + lp.ENGINES.length * lp.formatUrls('docx').length };
+    });
+    expect(shape.engines, 'all three editors must be warmed').toEqual(['docx', 'xlsx', 'pptx']);
     // Sanity: the core (8) plus four files per editor.
-    expect(result.total).toBe(8 + 3 * 4);
+    expect(shape.total).toBe(8 + 3 * 4);
   });
 
   test('the core assets end up in the service worker cache without any interaction', async ({ page }) => {
