@@ -80,34 +80,43 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
         ? t('historyExpiresInOne')
         : t('historyExpiresIn', { days: String(days) });
 
-  const title = Div().class('history-row-title').text(doc.title).build();
-  // The badge belongs with the title, not in the meta columns: it is a fact
-  // about this document's safety, not another measurement of it.
-  const titleCell = Div()
-    .class('history-row-name')
-    .children(title, ...(hasUnsavedWork(doc) ? [Div().class('history-badge').text(t('historyUnsaved')).build()] : []))
+  // Title line: what it is called, plus the one status worth interrupting for.
+  const titleLine = Div()
+    .class('history-row-title-line')
+    .children(
+      View('a')
+        .class('history-row-title history-open')
+        .attr('href', `/editor?doc=${encodeURIComponent(doc.id)}`)
+        .text(doc.title)
+        .build(),
+      ...(hasUnsavedWork(doc) ? [Div().class('history-badge').text(t('historyUnsaved')).build()] : []),
+    )
+    .build();
+
+  // Facts line: read as one sentence, separated rather than aligned. Nobody
+  // compares 51 KB with 180 KB down a column; they look for their document.
+  const facts = Div()
+    .class('history-row-facts')
+    .children(
+      ...(
+        [
+          ['fact-time', formatRelativeTime(doc.updatedAt)],
+          ['fact-size', formatBytes(doc.size)],
+          ['fact-expiry', expiry],
+        ] as Array<[string, string]>
+      ).map(([kind, text]) => View('span').class(kind).text(text).build()),
+    )
     .build();
 
   return Div()
     .class('history-row')
     .data('id', doc.id)
     .children(
-      titleCell,
-      // Each measurement gets its own column so the eye can read down one kind
-      // of thing at a time; on a narrow screen they collapse into one line.
-      Div().class('history-cell history-cell-time').text(formatRelativeTime(doc.updatedAt)).build(),
-      Div().class('history-cell history-cell-size').text(formatBytes(doc.size)).build(),
-      Div().class('history-cell history-cell-expiry').text(expiry).build(),
+      Div().class('history-kind').text(doc.ext.toUpperCase()).build(),
+      Div().class('history-row-main').children(titleLine, facts).build(),
       Div()
         .class('history-row-actions')
         .children(
-          button(
-            t('historyOpen'),
-            () => {
-              window.location.href = `/editor?doc=${encodeURIComponent(doc.id)}`;
-            },
-            { class: 'history-open', type: 'primary' },
-          ),
           button(
             t('historyDelete'),
             () => {
@@ -141,15 +150,6 @@ function buildToolbar(usage: number, total: number, refresh: () => void): HTMLEl
     })
     .build();
 
-  const clear = button(
-    t('historyClearAll'),
-    () => {
-      if (!window.confirm(t('historyClearConfirm'))) return;
-      void clearAllHistory().then(refresh);
-    },
-    { type: 'text', id: 'history-clear-all', class: 'history-clear' },
-  );
-
   return Div()
     .class('history-toolbar')
     .children(
@@ -162,7 +162,6 @@ function buildToolbar(usage: number, total: number, refresh: () => void): HTMLEl
             : '',
         )
         .build(),
-      clear,
     )
     .build();
 }
@@ -238,7 +237,6 @@ async function render(): Promise<void> {
           Div()
             .class('history-header-actions')
             .children(
-              buildAutosaveToggle(refresh),
               button(
                 t('historyBack'),
                 () => {
@@ -254,25 +252,11 @@ async function render(): Promise<void> {
     )
     .build();
 
-  // A header row, because a column of bare figures does not say what it
-  // measures: "3 minutes ago / 51 KB / 5 days left" only reads as three
-  // different things once something names them.
-  const head = Div()
-    .class('history-head')
-    .children(
-      Div().class('history-row-name').text(t('historyColDocument')).build(),
-      Div().class('history-cell history-cell-time').text(t('historyColEdited')).build(),
-      Div().class('history-cell history-cell-size').text(t('historyColSize')).build(),
-      Div().class('history-cell history-cell-expiry').text(t('historyColExpires')).build(),
-      Div().class('history-row-actions').build(),
-    )
-    .build();
-
   const list = items.length
     ? Div()
         .class('history-list')
         .id('history-list')
-        .children(head, ...items.map((doc) => buildRow(doc, refresh)))
+        .children(...items.map((doc) => buildRow(doc, refresh)))
         .build()
     : Div()
         .class('history-empty')
@@ -285,6 +269,24 @@ async function render(): Promise<void> {
   const notes = Div()
     .class('history-notes')
     .children(
+      // Everything that acts on the whole feature rather than on one document,
+      // together and below the list: the switch that governs it, the single
+      // destructive action, and the rules they operate under. A "delete
+      // everything" button next to a search box is a mis-click waiting.
+      Div()
+        .class('history-notes-controls')
+        .children(
+          buildAutosaveToggle(refresh),
+          button(
+            t('historyClearAll'),
+            () => {
+              if (!window.confirm(t('historyClearConfirm'))) return;
+              void clearAllHistory().then(refresh);
+            },
+            { type: 'text', id: 'history-clear-all', class: 'history-clear' },
+          ),
+        )
+        .build(),
       Div().class('history-note').text(t('historyRetention')).build(),
       Div().class('history-note').text(t('historyNotBackup')).build(),
       ...(isAutosaveEnabled()
