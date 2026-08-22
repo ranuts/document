@@ -20,7 +20,7 @@ import { expect, test } from './lib/l0';
  *     stay cold. So the list is checked against what an actual open requests.
  */
 
-const CORE_FONTS = ['/fonts/072', '/fonts/074', '/fonts/075', '/fonts/076'];
+const CORE_FONTS = ['/fonts/062', '/fonts/059', '/fonts/060', '/fonts/061'];
 
 /** Read the SW cache: which of these paths does it hold? */
 const cachedPaths = (page: import('@playwright/test').Page, paths: string[]) =>
@@ -91,7 +91,7 @@ test.describe('landing page warm-up', () => {
     expect(core, 'the landing page must expose its core warm-up list').toContain(
       '/sdkjs/common/libfont/engine/fonts.wasm',
     );
-    for (const font of ['/fonts/072', '/fonts/074', '/fonts/075', '/fonts/076']) {
+    for (const font of CORE_FONTS) {
       expect(core, 'the shared font catalog entries belong in the core list').toContain(font);
     }
 

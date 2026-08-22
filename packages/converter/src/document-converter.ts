@@ -485,32 +485,49 @@ export class X2TConverter {
    * literal zh font names documents reference; they are data, not UI copy.
    */
   private static readonly PDF_FONT_MANIFEST: ReadonlyArray<{ file: string; aliases: string[] }> = [
-    { file: '072', aliases: ['Arial.ttf'] },
-    { file: '074', aliases: ['Arial_Bold.ttf'] },
-    { file: '076', aliases: ['Arial_Italic.ttf'] },
-    { file: '075', aliases: ['Arial_Bold_Italic.ttf'] },
-    // Calibri regular is present; Carlito (metric-compatible) fills the
-    // missing bold/italic faces under both names.
-    { file: '049', aliases: ['Calibri.ttf'] },
+    // The aliases are the names x2t looks for; the slot behind each one is an
+    // open-licensed face after bin/font-license-sweep.mjs (the proprietary
+    // originals are no longer in the catalog). Liberation and Carlito are
+    // metric-compatible with the names they answer to, so an exported PDF
+    // keeps the same line and page breaks.
+    { file: '062', aliases: ['Arial.ttf', 'LiberationSans-Regular.ttf'] },
+    { file: '059', aliases: ['Arial_Bold.ttf'] },
+    { file: '061', aliases: ['Arial_Italic.ttf'] },
+    { file: '060', aliases: ['Arial_Bold_Italic.ttf'] },
+    { file: '112', aliases: ['Calibri.ttf', 'Carlito.ttf'] },
     { file: '109', aliases: ['Calibri_Bold.ttf', 'Carlito_Bold.ttf'] },
     { file: '111', aliases: ['Calibri_Italic.ttf', 'Carlito_Italic.ttf'] },
     { file: '110', aliases: ['Calibri_Bold_Italic.ttf', 'Carlito_Bold_Italic.ttf'] },
-    { file: '018', aliases: ['Times_New_Roman.ttf', 'Times New Roman.ttf'] },
-    { file: '088', aliases: ['Times_New_Roman_Bold.ttf'] },
-    { file: '090', aliases: ['Times_New_Roman_Italic.ttf'] },
-    { file: '089', aliases: ['Times_New_Roman_Bold_Italic.ttf'] },
-    { file: '079', aliases: ['Courier_New.ttf', 'Courier New.ttf'] },
+    { file: '070', aliases: ['Times_New_Roman.ttf', 'Times New Roman.ttf'] },
+    { file: '067', aliases: ['Times_New_Roman_Bold.ttf'] },
+    { file: '069', aliases: ['Times_New_Roman_Italic.ttf'] },
+    { file: '068', aliases: ['Times_New_Roman_Bold_Italic.ttf'] },
+    { file: '058', aliases: ['Courier_New.ttf', 'Courier New.ttf'] },
     // Names the previous implementation fetched directly (kept for the same
     // default-latin coverage).
     { file: '117', aliases: ['DejaVuSans.ttf'] },
     { file: '050', aliases: ['DejaVuSans-Bold.ttf'] },
-    { file: '062', aliases: ['LiberationSans-Regular.ttf'] },
-    // CJK: SimSun (017) and Microsoft YaHei (016) exist as real files in
-    // this vendor; PingFang maps to YaHei as the closest match.
-    // 017 aliases include SimSun's zh display name, 016 includes YaHei's.
-    { file: '017', aliases: ['SimSun.ttf', 'NSimSun.ttf', '宋体.ttf'] },
-    { file: '016', aliases: ['Microsoft YaHei.ttf', '微软雅黑.ttf', 'PingFang SC.ttf'] },
-    { file: '130', aliases: ['DroidSansFallback.ttf', 'Droid Sans Fallback.ttf'] },
+    // CJK. One family per style now covers Simplified Chinese, Traditional
+    // Chinese, Japanese and Korean, so an exported PDF no longer sets a line
+    // of Chinese in three typefaces. Serif answers to the Song/Ming names a
+    // document's body text uses, sans to the Hei/YaHei names; PingFang maps
+    // to the sans as the closest match.
+    { file: '269', aliases: ['SimSun.ttf', 'NSimSun.ttf', '宋体.ttf', 'NotoSerifCJKsc-Regular.otf'] },
+    { file: '270', aliases: ['SimSun_Bold.ttf'] },
+    {
+      file: '267',
+      aliases: [
+        'Microsoft YaHei.ttf',
+        '微软雅黑.ttf',
+        'PingFang SC.ttf',
+        'SimHei.ttf',
+        '黑体.ttf',
+        'DroidSansFallback.ttf',
+        'Droid Sans Fallback.ttf',
+        'NotoSansCJKsc-Regular.otf',
+      ],
+    },
+    { file: '268', aliases: ['Microsoft YaHei_Bold.ttf', 'SimHei_Bold.ttf'] },
   ];
 
   /** Undo the catalog XOR obfuscation, returning a plain TTF byte copy. */

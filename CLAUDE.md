@@ -752,6 +752,23 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
 - **字体**：`public/fonts/{index}` 是 XOR 混淆的 catalog 线格式（裸 TTF
   放进去无效），编解码用 `bin/font-catalog.mjs`，体系说明见 docs/fonts.md；
   x2t 转 PDF 的字体注入见 `packages/converter` 的 `PDF_FONT_MANIFEST`。
+  **catalog 里只能放可再分发的字体**（2026-08-22 起）：vendor 原本带着 79 个
+  专有字体、171 MB（华文/方正/中易/微软/Monotype），已由
+  `bin/font-license-sweep.mjs` 换成开源等价物——拉丁走 metric-compatible
+  的 Liberation/Carlito（字宽一致不跑版），CJK 走 Noto Sans/Serif CJK SC。
+  `test/unit/font-catalog-licensing.test.ts` 每次跑都读每个文件自己的 name
+  表，vendor 升级重新带进专有字体会直接红。
+  **改 catalog 前必须知道的三件事**：
+  1. `__fonts_files` 是**位置索引**，删条目会打乱后面所有位置——替换的做法是
+     改写槽位的值，旧 family 名因此继续解析得到（这就是 alias 机制）；
+  2. `__fonts_ranges` 三元组的第三个数是 `__fonts_infos` 的**行号**，不是
+     `__fonts_files` 的位置（两个数组长度接近，认错了照样能解析出"某个"字体）；
+  3. 有三处按**槽位号硬编码**、改完 catalog 必须同步，否则静默 404：
+     `PDF_FONT_MANIFEST`、`public/landing-prefetch.js` 的 `CORE`、
+     `test/e2e/landing-prefetch.spec.ts` 的 `CORE_FONTS`。前两处都真的漏过。
+     回退路由（哪个语系落到哪个字体）与实测依据见 docs/fonts.md 的
+     "Script fallback" 一节，别凭印象改——每条都是拿区块对 193 个 family
+     逐个打分选出来的。
 - **粘贴 XSS**：三个编辑器的粘贴解析 iframe 均带
   `sandbox="allow-same-origin"`（无 allow-scripts），粘贴的 script/on*
   不会执行，无需额外过滤 patch（2026-08-14 排查结论）。

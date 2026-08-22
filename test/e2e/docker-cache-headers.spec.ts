@@ -31,7 +31,10 @@ test.describe('self-hosted image cache headers', () => {
     const bundle = /src="\.?\/?(assets\/[^"]+\.js)"/.exec(editorHtml)?.[1];
     expect(bundle, 'editor.html must reference a hashed bundle').toBeTruthy();
 
-    for (const path of [`/${bundle}`, '/fonts/000', '/sdkjs/common/wasm/x2t/x2t.wasm.gz']) {
+    // 062 is Liberation Sans regular -- a face every editor loads, and one of
+    // the open replacements, so it survives a license sweep. (This used to be
+    // /fonts/000, which bin/font-license-sweep.mjs removed.)
+    for (const path of [`/${bundle}`, '/fonts/062', '/sdkjs/common/wasm/x2t/x2t.wasm.gz']) {
       const response = await request.get(path);
       expect(response.status(), path).toBe(200);
       expect(response.headers()['cache-control'], path).toMatch(/max-age=31536000.*immutable/);

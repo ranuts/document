@@ -17,6 +17,23 @@ notes. Entries describe what users experience, not internal refactors.
   service worker) and try again; a full regression campaign against
   real-world documents runs nightly and gates the next release announcement.
 
+### Changed
+
+- Chinese, Japanese and Korean text is set in one typeface again. A single
+  line used to be assembled from up to four different fonts -- the characters
+  from one, the comma from another, the full stop from a third -- because each
+  Unicode block fell to whichever font happened to cover it. They now all
+  resolve to Noto Sans CJK (or Noto Serif CJK where the document asks for a
+  Song/Ming face), which also means CJK finally has a real bold instead of a
+  synthesised one. Coverage went up too: the previous Chinese fonts were
+  partial, so uncommon characters dropped out to a fallback mid-sentence.
+- Arabic, Hebrew, Armenian, Georgian and Cyrillic Supplement each got a proper
+  font of their own, and Syriac and Thaana are readable for the first time --
+  nothing in the bundle had ever covered them, so they showed as empty boxes.
+- Documents that name Arial, Times New Roman, Courier New or Calibri now
+  render in the metric-compatible open equivalents (Liberation, Carlito).
+  Character widths are identical, so line and page breaks do not move.
+
 ### Fixed
 
 - Fonts are now sent compressed. The editor's font files have no extension, so

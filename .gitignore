@@ -46,3 +46,8 @@ public/zh-CN/changelog.html
 # bin/llms-full.mjs (same plugin). A committed copy could go stale, and stale
 # text presented as authoritative is worse than none.
 public/llms-full.txt
+
+# Source faces for bin/font-license-sweep.mjs (see docs/fonts.md). The catalog
+# under public/fonts/ already carries the encoded copies; the originals are
+# ~80 MB and would be a second copy of the same bytes.
+vendor-fonts/
