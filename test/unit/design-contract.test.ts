@@ -32,16 +32,16 @@ describe('page width scale', () => {
 
   it('has exactly two widths, and every page that declares one uses them', () => {
     const wide = declaration(home, '#landing-hero', '--maxw');
-    expect(wide, 'homepage wide column').toBe('1152px');
-    // The list page is a column layout, so it takes the wide one -- not a third
-    // number chosen for it alone.
-    expect(declaration(history, '.history-page', 'max-width'), 'history column').toBe(wide);
-    expect(declaration(landing, '.wrap', 'max-width'), 'prose column').toBe('720px');
+    const prose = declaration(landing, '.wrap', 'max-width');
+    expect(wide, 'wide column').toBe('1152px');
+    expect(prose, 'prose column').toBe('720px');
+    // Width follows the layout, not the page type: /history is a list people
+    // read down looking for one document, not a table anyone compares across,
+    // so it takes the reading column. Measured at 1152 it was mostly air.
+    expect(declaration(history, '.history-page', 'max-width'), 'history column').toBe(prose);
   });
 
-  it('keeps the reading measure off the container for the wide pages', () => {
-    // A 1152px container is right for the table and wrong for a sentence, so
-    // the prose inside it is bounded in ch, not left to the column.
+  it('bounds prose by characters, not by whatever the container happens to be', () => {
     const intro = declaration(history, '.history-intro', 'max-width');
     expect(intro).toMatch(/^\d{2}ch$/);
     expect(Number.parseInt(intro!, 10)).toBeLessThanOrEqual(72);
