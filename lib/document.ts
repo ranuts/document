@@ -129,7 +129,7 @@ export const openDocumentFromUrl = async (
   options?: {
     readonly?: boolean;
     fetchOptions?: RequestInit;
-    /** Continue an existing history row (a reload of `?doc=<id>&file=<url>`). */
+    /** Continue an existing history row (a reload of `?saved=<id>&file=<url>`). */
     docId?: string;
   },
 ): Promise<void> => {

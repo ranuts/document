@@ -15,7 +15,7 @@ type SeedRow = { id: string; title: string; savedToDisk?: boolean; ageMs?: numbe
 async function seed(page: Page, rows: SeedRow[]): Promise<void> {
   await page.evaluate(async (seedRows: SeedRow[]) => {
     const db = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open('document-history', 1);
+      const request = indexedDB.open('document-history');
       request.onupgradeneeded = () => {
         const database = request.result;
         if (!database.objectStoreNames.contains('docs')) {
@@ -170,7 +170,7 @@ test.describe('local history page', () => {
     const remaining = await page.evaluate(
       () =>
         new Promise<number>((resolve) => {
-          const request = indexedDB.open('document-history', 1);
+          const request = indexedDB.open('document-history');
           request.onsuccess = () => {
             const db = request.result;
             const all = db.transaction('blobs', 'readonly').objectStore('blobs').getAllKeys();
@@ -211,7 +211,7 @@ test.describe('local history page', () => {
     const remaining = await page.evaluate(
       () =>
         new Promise<string[]>((resolve) => {
-          const request = indexedDB.open('document-history', 1);
+          const request = indexedDB.open('document-history');
           request.onsuccess = () => {
             const db = request.result;
             const all = db.transaction('docs', 'readonly').objectStore('docs').getAllKeys();
@@ -272,6 +272,6 @@ test.describe('local history page', () => {
 
     // The id is the document's identity everywhere: in the URL the editor
     // already uses, and in the link the history page hands back to it.
-    await page.waitForURL(/\/editor\?doc=reopen-me/);
+    await page.waitForURL(/\/editor\?saved=reopen-me/);
   });
 });

@@ -78,7 +78,7 @@
       // not depend on a script having run.
       var resume = document.createElement('a');
       resume.className = 'recent-resume';
-      resume.href = '/editor?doc=' + encodeURIComponent(doc.id) + suffix;
+      resume.href = '/editor?saved=' + encodeURIComponent(doc.id) + suffix;
       resume.textContent = (slot.getAttribute('data-recent-label') || 'Continue') + ' ' + doc.title;
 
       slot.appendChild(resume);

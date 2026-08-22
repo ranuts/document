@@ -123,19 +123,26 @@ const createNewOnLoad = ['docx', 'xlsx', 'pptx'].includes(newExt) && !documentUr
 // IndexedDB via public/open-local.js — take it out and open it on boot.
 const openParam = getAllQueryString()['open'];
 const openLocalOnLoad = openParam === 'local' && !documentUrl && !createNewOnLoad;
-// `?doc=<id>`: which document this is. Every editing session stamps its own id
-// here (see lib/history/session.ts), so a reload comes back to the same
-// document instead of a second blank one, and the history page's Open link is
-// the same URL the editor was already using. File names cannot play this role:
-// they repeat, and two documents sharing one would share a history.
-const docParam = getAllQueryString()['doc'] ?? '';
+// `?saved=<id>`: which of this browser's saved documents to open. Every
+// editing session stamps its own id here (see lib/history/session.ts), so a
+// reload comes back to the same document instead of a second blank one, and
+// the Open link on /history is the URL the editor was already using.
+//
+// A query parameter rather than a path segment, deliberately. Google Docs and
+// Figma put ids in the path because those ids name something on a server that
+// anyone with the link can open; this one names a row in one browser's
+// IndexedDB. In a path it would look shareable, and the person it was sent to
+// would open an empty editor. It is also why it is not called `id`: what makes
+// it meaningful is not that it is an identifier, it is that the document is
+// saved on this device.
+const savedParam = getAllQueryString()['saved'] ?? '';
 
 // Landing hero orchestration. Only the bare homepage (no ?file/?src/?new, not
 // embedded) shows the crawlable hero. If a document is about to load or be
 // created, or we're embedded, hide it immediately to avoid a flash before the
 // editor takes over.
 const isEmbedded = document.body.classList.contains('embed-mode');
-if (documentUrl || isEmbedded || createNewOnLoad || openLocalOnLoad || docParam) {
+if (documentUrl || isEmbedded || createNewOnLoad || openLocalOnLoad || savedParam) {
   hideLanding();
 } else {
   // Bare /editor with nothing to open: the landing lives at / now.
@@ -146,12 +153,12 @@ void (async () => {
   // A stored snapshot wins over every other way of opening: it is strictly
   // newer than the file on disk or the blank document the other parameters
   // would produce, and it is the copy nobody else has.
-  if (docParam && !isEmbedded) {
+  if (savedParam && !isEmbedded) {
     const [{ getDoc }, { restoreDocument }] = await Promise.all([
       import('./lib/history/store'),
       import('./lib/history/recovery'),
     ]);
-    const doc = await getDoc(docParam);
+    const doc = await getDoc(savedParam);
     if (doc && (await restoreDocument(doc))) return;
     // No snapshot yet (nothing was edited before the reload) or it expired:
     // fall through and open the same document again under the same id.
@@ -160,17 +167,17 @@ void (async () => {
   if (documentUrl) {
     try {
       const decodedUrl = decodeURIComponent(documentUrl);
-      await openDocumentFromUrl(decodedUrl, undefined, { readonly: isReadonly, docId: docParam || undefined });
+      await openDocumentFromUrl(decodedUrl, undefined, { readonly: isReadonly, docId: savedParam || undefined });
     } catch (error) {
       // If decoding fails, try using original URL
       console.warn('Failed to decode URL, using original:', error);
-      await openDocumentFromUrl(documentUrl, undefined, { readonly: isReadonly, docId: docParam || undefined });
+      await openDocumentFromUrl(documentUrl, undefined, { readonly: isReadonly, docId: savedParam || undefined });
     }
     return;
   }
 
   if (createNewOnLoad && !isEmbedded) {
-    await onCreateNew(`.${newExt}`, { docId: docParam || undefined });
+    await onCreateNew(`.${newExt}`, { docId: savedParam || undefined });
     return;
   }
 
@@ -183,7 +190,7 @@ void (async () => {
     cleaned.searchParams.delete('open');
     window.history.replaceState(null, '', cleaned);
     if (file) {
-      await openLocalFile(file, { historyId: docParam || undefined });
+      await openLocalFile(file, { historyId: savedParam || undefined });
       return;
     }
     // Stale deep link (reload, bookmarked URL): nothing pending -- back to the landing.
@@ -191,9 +198,9 @@ void (async () => {
     return;
   }
 
-  // `?doc=` on its own and nothing stored under it: the document it names was
+  // `?saved=` on its own and nothing stored under it: the document it names was
   // deleted or has expired, so there is nothing here to show.
-  if (docParam && !isEmbedded) window.location.replace('/');
+  if (savedParam && !isEmbedded) window.location.replace('/');
 })();
 
 // Boot-time recovery offer. Deliberately late and lazy: it must not compete
@@ -204,7 +211,7 @@ if (!isEmbedded) {
   window.addEventListener('load', () => {
     window.setTimeout(() => {
       void import('./lib/history/recovery').then(({ offerRecovery }) =>
-        offerRecovery({ excludeId: docParam || undefined }),
+        offerRecovery({ excludeId: savedParam || undefined }),
       );
     }, 1500);
   });

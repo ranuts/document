@@ -22,6 +22,21 @@ export function setSavedToDiskListener(listener: (() => void) | null): void {
 }
 
 /**
+ * Optional writer that puts the bytes straight into the file the document came
+ * from, instead of downloading a new copy (see lib/save-target.ts).
+ *
+ * Injected for the same reason as the listener above -- it needs the document's
+ * identity, which lives in the history layer, and that layer exports through
+ * this module. Returns true when the user's document is saved and there is
+ * nothing left to do; false means "carry on with the download".
+ */
+let diskWriter: ((file: File) => Promise<boolean>) | null = null;
+
+export function setDiskWriter(writer: ((file: File) => Promise<boolean>) | null): void {
+  diskWriter = writer;
+}
+
+/**
  * The v9 save channel end to end: the request the caller holds, the export
  * trigger on the editor frame, and the 'onlyoffice-file-stream' message the
  * finished bytes come back on.
@@ -112,14 +127,28 @@ function routeSavedFile(file: File): void {
     return;
   }
 
-  // Reaching the user's disk is the only thing that clears the unsaved-changes
-  // warning: an autosave snapshot lives in this browser, a saved file does not.
-  saveFileToDisk(file, file.name)
-    .then(() => {
-      markDocumentSaved();
-      savedToDiskListener?.();
-    })
-    .catch(notifyOperationFailed);
+  const reachedDisk = (): void => {
+    // Reaching the user's disk is the only thing that clears the unsaved-changes
+    // warning: an autosave snapshot lives in this browser, a saved file does not.
+    markDocumentSaved();
+    savedToDiskListener?.();
+  };
+
+  // Write back to the document's own file where that is possible, and download
+  // a copy where it is not. Both end in the same place from the app's point of
+  // view: the bytes are on the user's disk.
+  void (async () => {
+    try {
+      if (await diskWriter?.(file)) {
+        reachedDisk();
+        return;
+      }
+      await saveFileToDisk(file, file.name);
+      reachedDisk();
+    } catch (error) {
+      notifyOperationFailed(error);
+    }
+  })();
 }
 
 function handleFileStreamMessage(event: MessageEvent): void {

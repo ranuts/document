@@ -83,11 +83,12 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
   unsaved-guard.ts      # 未保存提示（beforeunload）+ 全局脏位，编辑器 onDocumentStateChange 驱动
   embed-mode.ts         # isEmbedMode() 单一实现（save-stream / unsaved-guard / history 共用）
+  save-target.ts        # 文档在磁盘上的那个文件：记住 File System Access 句柄，之后的保存直接写回
   history/              # 本地历史（自动保存恢复点），2026-08-22
     db.ts                 # IndexedDB schema：docs（元数据）+ blobs（字节）两个 store
     store.ts              # CRUD、内存分页与标题子串搜索、每篇 3 rev、七天过期、配额降级
     autosave.ts           # 节拍器：脏位 + 空闲 + 间隔三重条件，visibilitychange 补一刀，Web Locks 互斥
-    session.ts            # 会话身份：mint docId 并写进 ?doc=<id>
+    session.ts            # 会话身份：mint docId 并写进 ?saved=<id>
     recovery.ts           # 启动恢复条（Office Document Recovery 模型）
     types.ts / index.ts   # 记录形状与保留期工具 / 对外装配（含 savedToDisk 回调注入）
   history-page.ts       # /history 页面（第三个 vite entry，见 history.html）
@@ -109,7 +110,7 @@ content/              # 生成页面的 markdown 源（content/<locale>/*.md，f
 docs/                 # embed-api / fonts 文档、explorations/（每次改动的记录）、superpowers/plans/
 index.ts              # 编辑器入口（初始化事件、UI、PWA），挂在 editor.html
 index.html            # `/`：静态落地页（无编辑器 bundle；CTA 跳 /editor，旧深链内联脚本重定向）
-editor.html           # `/editor`：编辑器页面（?new= ?file= ?src= ?embed=1 ?open=local ?doc=<id>）
+editor.html           # `/editor`：编辑器页面（?new= ?file= ?src= ?embed=1 ?open=local ?saved=<id>）
 history.html          # `/history`：本地历史页（noindex，只读 IndexedDB 元数据，不加载编辑器）
 ```
 
@@ -240,7 +241,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）                                                                                                                                                                                                            |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
 | 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
-| 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?doc=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                                 |
+| 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?saved=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                               |
 | 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                 |
 
 另有三套独立配置：`playwright.pages.config.ts`（`bin/build.sh` + `wrangler pages dev`，
@@ -536,7 +537,7 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    快照只进本机 IndexedDB，永远不动用户磁盘上的文件，也**不清除未保存提示**（只有真正导出到
    磁盘才清）。四条硬约束，改这块前先读
    docs/explorations/2026-08-22-autosave-history-implementation.md：
-   1. **身份是 `?doc=<id>`，不是文件名**。会话在挂载前 mint id 并写进地址栏；按标题复用行
+   1. **身份是 `?saved=<id>`，不是文件名**。会话在挂载前 mint id 并写进地址栏；按标题复用行
       会把无关文档的历史合并（每个新建空文档都叫 `New_Document.docx`）。一行 = 一次编辑会话；
       只打开不编辑不留行（行由第一次快照创建）。
    2. **七天自动清除**，从 `max(updatedAt, lastOpenedAt)` 起算，在启动、每次写快照、
@@ -547,6 +548,12 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
       被用户的保存占用时跳过这一拍。
    4. **embed 模式与只读一律不写**；两个标签页开同一 id 由 Web Locks 互斥，拿不到锁的那个
       不写快照（否则两边轮流覆盖，比没有历史更糟）。
+   5. **保存优先写回文档自己的文件**（`lib/save-target.ts`，仅 Chromium）：第一次保存选文件，
+      句柄按 docId 存进 `handles` store，之后静默写回。任何异常（文件被移走、权限被拒、
+      浏览器没这个 API）都回落到下载，并**忘掉句柄**——那既是容错也是"另存为"的出口。
+      注意保存到磁盘会清掉未保存脏位，所以之后不再产生快照，直到用户又编辑。
+      `?saved=` 用查询参数而不是路径段：这个 id 指的是**某台设备上某个浏览器里的一行记录**，
+      放进路径会让它看起来可分享，而收到链接的人只会打开一个空编辑器。
       节拍是 90s 间隔 + 2s 空闲 + 脏位三重条件，另加 `visibilitychange → hidden` 补一刀
       （`beforeunload` 里发起导出来不及）。**E2E 等快照的窗口必须小于 90s**，否则周期 tick
       会替你把用例变绿，测不到它声称测的分支（踩过）。
