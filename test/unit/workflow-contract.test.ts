@@ -344,3 +344,54 @@ describe('bin/test-e2e-docker.sh', () => {
     expect(script).toMatch(/playwright test --config playwright\.docker\.config\.ts "\$@"/);
   });
 });
+
+/**
+ * The nightly runs the PR-time specs on two engines the gate does not cover,
+ * and the real-document matrix on a public corpus. Both have a way of going
+ * red for a reason that is not a defect in this repository, and a nightly that
+ * is red every morning is a nightly nobody reads.
+ */
+describe('.github/workflows/nightly-corpus.yml', () => {
+  const src = readFileSync(resolve(ROOT, '.github/workflows/nightly-corpus.yml'), 'utf8');
+  const exclude = new RegExp(/CORPUS_EXCLUDE: "(.*)"/.exec(src)![1].replace(/\\\\/g, '\\'), 'i');
+
+  it('skips a device-emulating spec by project, not by browser name', () => {
+    // `devices['Pixel 5']` carries `defaultBrowserType: 'chromium'`, which wins
+    // over the project's browser -- so under the webkit/firefox projects
+    // `browserName` reads 'chromium', a `browserName !== 'chromium'` guard
+    // never fires, and Playwright tries to launch a browser this job does not
+    // install. That was 16 of the 20 red rows on 2026-08-21.
+    const specs = readdirSync(resolve(ROOT, 'test/e2e'))
+      .filter((file) => file.endsWith('.spec.ts'))
+      .map((file) => ({ file, body: readFileSync(resolve(ROOT, 'test/e2e', file), 'utf8') }))
+      .filter(({ body }) => /test\.use\(\{\s*\.\.\.devices\[/.test(body));
+
+    expect(specs.length).toBeGreaterThan(0);
+    for (const { file, body } of specs) {
+      expect(body, `${file} guards on browserName under a device override`).not.toMatch(
+        /test\.skip\(\(\{ browserName \}\)/,
+      );
+      expect(body, `${file} has no project guard`).toMatch(/test\.skip\(\(\{ projectName \}\)/);
+    }
+    // The fixture the guard reads; `browserName` is built in, this one is ours.
+    expect(readFileSync(resolve(ROOT, 'test/e2e/lib/l0.ts'), 'utf8')).toMatch(/projectName: \[/);
+  });
+
+  it('drops the corpus fuzzer output without dropping real bug-report files', () => {
+    // Byte soup minimized by a fuzzer until it broke a parser: "this editor
+    // will not open it either" is not a finding, and 15 such files were red on
+    // 2026-08-21. The terms have to stay narrow -- a bare `crash` also matches
+    // documents attached to real bug reports.
+    for (const name of [
+      'clusterfuzz-testcase-minimized-POIXWPFFuzzer-4791943399604224.docx',
+      'crash-517626e815e0afa9decd0ebb6d1dee63fb9907dd.docx',
+      'Fuzzed.doc',
+      'poi-fuzz.xls',
+    ]) {
+      expect(exclude.test(`corpus/document/${name}`), `${name} should be excluded`).toBe(true);
+    }
+    for (const name of ['51921-Word-Crash067.doc', 'deep-table-cell.docx', 'Bug51944.doc']) {
+      expect(exclude.test(`corpus/document/${name}`), `${name} should still run`).toBe(false);
+    }
+  });
+});
