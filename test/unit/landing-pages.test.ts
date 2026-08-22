@@ -134,6 +134,22 @@ describe('landing pages', () => {
         }
       });
 
+      /**
+       * A visitor who picked a language on the site must not land in an editor
+       * that guesses one from browser settings. The app resolves `?locale=`
+       * before anything else, so every link from a translated page into the
+       * app has to carry it -- the hand-written Chinese homepage always did,
+       * and the first generated version of it silently dropped it.
+       */
+      it('hands the chosen language to the editor', () => {
+        const links = [...html.matchAll(/(?:href|data-open-local)="(\/editor\?[^"]*)"/g)].map((m) => m[1]);
+        if (!links.length) return;
+        for (const link of links) {
+          const carries = link.includes(`locale=${locale}`);
+          expect(locale === 'en' ? !link.includes('locale=') : carries, `${route}: ${link}`).toBe(true);
+        }
+      });
+
       it('offers every translation it has in the language switch', () => {
         for (const other of Object.keys(LOCALES)) {
           const target = routeIn(other, enRoute);
