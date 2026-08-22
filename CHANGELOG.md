@@ -61,23 +61,32 @@ notes. Entries describe what users experience, not internal refactors.
   copies of five engines, only ever used by browsers without WebAssembly --
   which cannot open a document here at all, since the conversion engine is
   WebAssembly.
-- Chinese, Japanese and Korean text is set in one typeface again. A single
-  line used to be assembled from up to four different fonts -- the characters
-  from one, the comma from another, the full stop from a third -- because each
-  Unicode block fell to whichever font happened to cover it. They now all
-  resolve to Noto Sans CJK (or Noto Serif CJK where the document asks for a
-  Song/Ming face), which also means CJK finally has a real bold instead of a
-  synthesised one. Coverage went up too: the previous Chinese fonts were
-  partial, so uncommon characters dropped out to a fallback mid-sentence.
+- Chinese and Japanese text is set in one typeface again. A single line used to
+  be assembled from up to four different fonts -- the characters from one, the
+  comma from another, the full stop from a third -- because each Unicode block
+  fell to whichever font happened to cover it. They now all resolve to Noto
+  Sans SC, or Noto Serif SC where the document asks for a Song/Ming face, which
+  also means Chinese finally has a real bold instead of a smeared one. Coverage
+  went up too: the previous Chinese fonts were partial, so uncommon characters
+  dropped out to another font mid-sentence. (Korean keeps its own face, which
+  was already a complete one.)
 - Arabic, Hebrew, Armenian, Georgian and Cyrillic Supplement each got a proper
   font of their own, and Syriac and Thaana are readable for the first time --
   nothing in the bundle had ever covered them, so they showed as empty boxes.
 - Documents that name Arial, Times New Roman, Courier New or Calibri now
   render in the metric-compatible open equivalents (Liberation, Carlito).
   Character widths are identical, so line and page breaks do not move.
+- The download is 136 MB lighter. The bundle shipped 79 fonts nobody was
+  allowed to redistribute -- the set an OnlyOffice server picks up from its
+  host machine -- and they have been replaced by open ones. Every font name a
+  document can reference still resolves; it just lands on a face that may be
+  shared freely.
 
 ### Fixed
 
+- Chinese, Japanese and Korean text in an exported PDF came out blank. The
+  export writes its own list of font files, and that list had been pointing at
+  files that were not in the bundle.
 - Fonts are now sent compressed. The editor's font files have no extension, so
   the CDN had been typing them as generic binary and shipping every byte raw --
   a 16 MB Chinese font arrived as 16 MB rather than the 9.9 MB it compresses to.

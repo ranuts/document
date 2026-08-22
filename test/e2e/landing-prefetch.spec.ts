@@ -20,7 +20,7 @@ import { expect, test } from './lib/l0';
  *     stay cold. So the list is checked against what an actual open requests.
  */
 
-const CORE_FONTS = ['/fonts/072', '/fonts/074', '/fonts/075', '/fonts/076'];
+const CORE_FONTS = ['/fonts/059', '/fonts/060', '/fonts/061', '/fonts/062'];
 
 /** Read the SW cache: which of these paths does it hold? */
 const cachedPaths = (page: import('@playwright/test').Page, paths: string[]) =>

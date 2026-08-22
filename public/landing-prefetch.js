@@ -42,10 +42,10 @@
     // The catalog entries all three editors load. Measured across docx/xlsx/pptx;
     // test/e2e/landing-prefetch.spec.ts fails if that stops being true, which is
     // how a vendor bump that renumbers the catalog gets noticed.
-    '/fonts/072',
-    '/fonts/074',
-    '/fonts/075',
-    '/fonts/076',
+    '/fonts/059',
+    '/fonts/060',
+    '/fonts/061',
+    '/fonts/062',
     // Only needed to open an existing file, which is what the hero CTA does.
     '/sdkjs/common/wasm/x2t/x2t.wasm.gz',
   ];
