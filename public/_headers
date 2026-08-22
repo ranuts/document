@@ -67,9 +67,18 @@
 # responseType = 'arraybuffer', where the response Content-Type takes no part.
 #
 # Edge caching is a separate axis and _headers cannot reach it: the same probe
-# showed cf-cache-status DYNAMIC on repeat GETs, i.e. every request goes to
-# origin. That needs a Cache Rule in the Cloudflare dashboard, which does not
-# live in this repo.
+# showed cf-cache-status DYNAMIC on repeat GETs. That needs a Cache Rule in the
+# Cloudflare dashboard, which does not live in this repo.
+#
+# DYNAMIC does not mean nothing is cached, though -- responses here come back
+# with an `age` that keeps climbing, so some layer (Pages' own asset serving,
+# by elimination) holds them. Which makes `immutable` below a one-way door:
+# it is right while a name maps to fixed content, but a *deleted* slot never
+# gets new content to overwrite the cached copy, so it stays servable for up
+# to a year. Removing faces from this directory therefore needs a dashboard
+# Purge Cache afterwards -- verified: after the license sweep shipped,
+# /fonts/017 still returned the old SimSun with age 310369 while
+# /fonts/017?cb=<random> was already a 404.
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
   Content-Type: font/ttf
