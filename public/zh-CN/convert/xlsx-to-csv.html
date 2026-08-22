@@ -208,81 +208,101 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">转换 · .xlsx → .csv</p>
-      <h1>在浏览器中把 XLSX 转成 CSV</h1>
-      <p class="lead">
-        把 Excel 的 <strong>.xlsx</strong> 文件转成纯 <strong>.csv</strong>——全程在浏览器本地完成，不经过任何服务器。
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">转换 · .xlsx → .csv</p>
+        <h1>在浏览器中把 XLSX 转成 CSV</h1>
+        <p class="lead">
+          把 Excel 的 <strong>.xlsx</strong> 文件转成纯 <strong>.csv</strong>——全程在浏览器本地完成，不经过任何服务器。
+        </p>
 
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 XLSX →</r-button></a>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 XLSX →</r-button></a>
 
-      <h2>如何操作</h2>
-      <ol>
-        <li>点击<strong>打开你的 XLSX</strong>，在浏览器中启动编辑器。</li>
-        <li>从你的设备中选择 <strong>.xlsx</strong> 文件，或将它拖放到页面上。</li>
-        <li>选择<strong>下载为 / 另存为</strong>，并选中 <strong>CSV</strong>。</li>
-        <li>CSV 在你的设备上生成并下载——文件留在本地。</li>
-      </ol>
+        <h2 id="如何操作">如何操作</h2>
+        <ol>
+          <li>点击<strong>打开你的 XLSX</strong>，在浏览器中启动编辑器。</li>
+          <li>从你的设备中选择 <strong>.xlsx</strong> 文件，或将它拖放到页面上。</li>
+          <li>选择<strong>下载为 / 另存为</strong>，并选中 <strong>CSV</strong>。</li>
+          <li>CSV 在你的设备上生成并下载——文件留在本地。</li>
+        </ol>
 
-      <p>
-        大多数"XLSX 转 CSV"转换器都会先把你的表格上传到它们的服务器。这个不会：它用 OnlyOffice
-        引擎在本地打开文件，因此你的数据保持私密。无需 Excel，无需账号，支持离线。
-      </p>
+        <p>
+          大多数"XLSX 转 CSV"转换器都会先把你的表格上传到它们的服务器。这个不会：它用 OnlyOffice
+          引擎在本地打开文件，因此你的数据保持私密。无需 Excel，无需账号，支持离线。
+        </p>
 
-      <p>
-        转换本身由编译为 WebAssembly 的 OnlyOffice x2t 引擎完成。它面向常见的办公和文本格式——Word、Excel 和
-        PowerPoint，外加 PDF、TXT、HTML 和 CSV——因此非常适合把表格转成便携的
-        CSV。由于一切都在浏览器标签页内运行，没有上传队列，没有服务器施加的大小上限，你的数据也不会经过网络。请注意，CSV
-        是一种扁平的单表格式：会导出当前活动的工作表，每个公式都会以其计算结果写出。
-      </p>
+        <p>
+          转换本身由编译为 WebAssembly 的 OnlyOffice x2t 引擎完成。它面向常见的办公和文本格式——Word、Excel 和
+          PowerPoint，外加 PDF、TXT、HTML 和 CSV——因此非常适合把表格转成便携的
+          CSV。由于一切都在浏览器标签页内运行，没有上传队列，没有服务器施加的大小上限，你的数据也不会经过网络。请注意，CSV
+          是一种扁平的单表格式：会导出当前活动的工作表，每个公式都会以其计算结果写出。
+        </p>
 
-      <p>
-        CSV
-        是数据领域的"最大公约数"格式：几乎所有数据库、分析工具和编程语言都能导入它。当你需要把报表喂给另一个系统、在不发送整个工作簿的情况下分享表格数据，或者把文件精简为纯数值时，在这里把表格导出为
-        CSV 就很有用。而且由于导出在你的设备上运行，即便是敏感数据——客户名单、财务导出——也始终保持私密。
-      </p>
+        <p>
+          CSV
+          是数据领域的"最大公约数"格式：几乎所有数据库、分析工具和编程语言都能导入它。当你需要把报表喂给另一个系统、在不发送整个工作簿的情况下分享表格数据，或者把文件精简为纯数值时，在这里把表格导出为
+          CSV 就很有用。而且由于导出在你的设备上运行，即便是敏感数据——客户名单、财务导出——也始终保持私密。
+        </p>
 
-      <aside class="oss">
-        <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        <aside class="oss">
+          <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>在这里怎么把 XLSX 转成 CSV？</h3>
+          <p>在编辑器中打开 XLSX，然后使用「下载为 / 另存为 CSV」— 转换在你的浏览器中运行。</p>
+          <h3>转换时我的文件会被上传吗？</h3>
+          <p>不会。它完全在你的浏览器中运行，因此你的表格永远不会被上传。</p>
+          <h3>我需要 Excel 或账号吗？</h3>
+          <p>无需 Excel、无需 365 订阅，也无需注册。</p>
+          <h3>我能把 CSV 再转回 XLSX 吗？</h3>
+          <p>可以——参见 <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>。</p>
+          <h3>会导出哪个工作表为 CSV？</h3>
+          <p>CSV 只保存单个表格，因此会导出当前活动的工作表。先打开你想要的工作表，然后另存为 CSV。</p>
+          <h3>导出的是公式还是它们的值？</h3>
+          <p>CSV 存储纯数值，因此公式会以其计算结果写出。</p>
+          <h3>这个转换器能离线使用吗？</h3>
+          <p>可以。加载后它就是一个可安装的 PWA，因此在没有网络时依然可用。</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 XLSX →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#如何操作">如何操作</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
+          <a href="/zh-CN/open/docx">打开 DOCX</a>
+          <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+          <a href="/zh-CN/open/pptx">打开 PPTX</a>
+          <a href="/zh-CN/open/pdf">打开 PDF</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>在这里怎么把 XLSX 转成 CSV？</h3>
-        <p>在编辑器中打开 XLSX，然后使用「下载为 / 另存为 CSV」— 转换在你的浏览器中运行。</p>
-        <h3>转换时我的文件会被上传吗？</h3>
-        <p>不会。它完全在你的浏览器中运行，因此你的表格永远不会被上传。</p>
-        <h3>我需要 Excel 或账号吗？</h3>
-        <p>无需 Excel、无需 365 订阅，也无需注册。</p>
-        <h3>我能把 CSV 再转回 XLSX 吗？</h3>
-        <p>可以——参见 <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>。</p>
-        <h3>会导出哪个工作表为 CSV？</h3>
-        <p>CSV 只保存单个表格，因此会导出当前活动的工作表。先打开你想要的工作表，然后另存为 CSV。</p>
-        <h3>导出的是公式还是它们的值？</h3>
-        <p>CSV 存储纯数值，因此公式会以其计算结果写出。</p>
-        <h3>这个转换器能离线使用吗？</h3>
-        <p>可以。加载后它就是一个可安装的 PWA，因此在没有网络时依然可用。</p>
-      </div>
-
-      <footer>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/help">帮助</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/docx">打开 DOCX</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
-        <a href="/zh-CN/no-signup-document-editor">免注册</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/offline-document-editor">离线</a>
-        <a href="/zh-CN/edit-documents-without-account">免账号</a>
-        <a href="/zh-CN/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/help">帮助</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/docx">打开 DOCX</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
+      <a href="/zh-CN/no-signup-document-editor">免注册</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/offline-document-editor">离线</a>
+      <a href="/zh-CN/edit-documents-without-account">免账号</a>
+      <a href="/zh-CN/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>

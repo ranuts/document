@@ -242,91 +242,111 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Open · .odp</p>
-      <h1>Open an ODP File Without LibreOffice</h1>
-      <p class="lead">
-        Got an <strong>.odp</strong> presentation and no LibreOffice? Open it in your browser, edit the slides, and save
-        it back as ODP — or as PPTX or PDF. Nothing to install, nothing uploaded.
-      </p>
-
-      <a class="cta" href="/"><r-button type="primary">Open your ODP →</r-button></a>
-
-      <h2>How it works</h2>
-      <ol>
-        <li>Click <strong>Open your ODP</strong> to launch the editor in your browser.</li>
-        <li>Pick the <strong>.odp</strong> file from your device, or drag and drop it onto the page.</li>
-        <li>Page through the slides, or edit them — it opens as a real presentation editor.</li>
-        <li>Save it back as <strong>ODP</strong>, or export as <strong>PPTX</strong> or <strong>PDF</strong>.</li>
-      </ol>
-
-      <p>
-        ODP is the OpenDocument Presentation format, produced by LibreOffice Impress and OpenOffice. Like the rest of
-        the OpenDocument family it is an open ISO standard, which is why it shows up in academia, public administration
-        and anywhere a deck has to outlive whichever office suite happened to be installed.
-      </p>
-
-      <p>
-        The OnlyOffice presentation engine, compiled to WebAssembly, renders the slides in your browser: layouts,
-        images, shapes, charts and text boxes come across as a real deck rather than a set of flat pictures. Edit the
-        slides and save back as ODP to stay in the open format, or export to PPTX for a colleague on PowerPoint, or to
-        PDF for a fixed copy that looks the same everywhere.
-      </p>
-
-      <p>
-        Nothing is uploaded — the file is read from disk into the tab and stays there. Once the page has loaded it is an
-        installable app, so opening a deck works on a train, on conference wifi you do not trust, or with no connection
-        at all.
-      </p>
-
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
-      </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>Can I open an ODP file without LibreOffice?</h3>
-        <p>Yes. This editor opens ODP directly in your browser — no LibreOffice, OpenOffice or PowerPoint needed.</p>
-        <h3>What is an ODP file?</h3>
-        <p>
-          ODP is OpenDocument Presentation, the open ISO-standard slide format used by LibreOffice Impress and
-          OpenOffice.
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Open · .odp</p>
+        <h1>Open an ODP File Without LibreOffice</h1>
+        <p class="lead">
+          Got an <strong>.odp</strong> presentation and no LibreOffice? Open it in your browser, edit the slides, and
+          save it back as ODP — or as PPTX or PDF. Nothing to install, nothing uploaded.
         </p>
-        <h3>Can I edit the slides, or only view them?</h3>
-        <p>You can edit them. It opens as a real presentation editor, not a set of flat images.</p>
-        <h3>Can I save it back as ODP?</h3>
-        <p>Yes. You can save it back in the same open format, or export it as PPTX or PDF.</p>
-        <h3>Can I convert ODP to PowerPoint?</h3>
-        <p>Yes. Open the ODP and save as PPTX — the conversion runs on your device.</p>
-        <h3>Is my presentation uploaded?</h3>
-        <p>No. It is opened locally in your browser with WebAssembly and never leaves your device.</p>
-        <h3>Do I need an account?</h3>
-        <p>No. There is no sign-up, no login and no email required.</p>
-        <h3>Does it work offline?</h3>
-        <p>Yes. Once loaded it is an installable PWA and keeps working with no internet connection.</p>
-      </div>
 
-      <footer>
-        <a href="/open/odt">Open ODT</a>
-        <a href="/open/ods">Open ODS</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/open/odp">Open ODP</a>
-        <a href="/convert/docx-to-pdf">DOCX to PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+        <a class="cta" href="/"><r-button type="primary">Open your ODP →</r-button></a>
+
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Click <strong>Open your ODP</strong> to launch the editor in your browser.</li>
+          <li>Pick the <strong>.odp</strong> file from your device, or drag and drop it onto the page.</li>
+          <li>Page through the slides, or edit them — it opens as a real presentation editor.</li>
+          <li>Save it back as <strong>ODP</strong>, or export as <strong>PPTX</strong> or <strong>PDF</strong>.</li>
+        </ol>
+
+        <p>
+          ODP is the OpenDocument Presentation format, produced by LibreOffice Impress and OpenOffice. Like the rest of
+          the OpenDocument family it is an open ISO standard, which is why it shows up in academia, public
+          administration and anywhere a deck has to outlive whichever office suite happened to be installed.
+        </p>
+
+        <p>
+          The OnlyOffice presentation engine, compiled to WebAssembly, renders the slides in your browser: layouts,
+          images, shapes, charts and text boxes come across as a real deck rather than a set of flat pictures. Edit the
+          slides and save back as ODP to stay in the open format, or export to PPTX for a colleague on PowerPoint, or to
+          PDF for a fixed copy that looks the same everywhere.
+        </p>
+
+        <p>
+          Nothing is uploaded — the file is read from disk into the tab and stays there. Once the page has loaded it is
+          an installable app, so opening a deck works on a train, on conference wifi you do not trust, or with no
+          connection at all.
+        </p>
+
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>Can I open an ODP file without LibreOffice?</h3>
+          <p>Yes. This editor opens ODP directly in your browser — no LibreOffice, OpenOffice or PowerPoint needed.</p>
+          <h3>What is an ODP file?</h3>
+          <p>
+            ODP is OpenDocument Presentation, the open ISO-standard slide format used by LibreOffice Impress and
+            OpenOffice.
+          </p>
+          <h3>Can I edit the slides, or only view them?</h3>
+          <p>You can edit them. It opens as a real presentation editor, not a set of flat images.</p>
+          <h3>Can I save it back as ODP?</h3>
+          <p>Yes. You can save it back in the same open format, or export it as PPTX or PDF.</p>
+          <h3>Can I convert ODP to PowerPoint?</h3>
+          <p>Yes. Open the ODP and save as PPTX — the conversion runs on your device.</p>
+          <h3>Is my presentation uploaded?</h3>
+          <p>No. It is opened locally in your browser with WebAssembly and never leaves your device.</p>
+          <h3>Do I need an account?</h3>
+          <p>No. There is no sign-up, no login and no email required.</p>
+          <h3>Does it work offline?</h3>
+          <p>Yes. Once loaded it is an installable PWA and keeps working with no internet connection.</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open your ODP →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/open/odt">Open ODT</a>
+          <a href="/open/ods">Open ODS</a>
+          <a href="/open/pptx">Open PPTX</a>
+          <a href="/open/docx">Open DOCX</a>
+          <a href="/open/xlsx">Open XLSX</a>
+        </nav>
+      </aside>
+    </div>
+    <footer class="page-foot">
+      <a href="/open/odt">Open ODT</a>
+      <a href="/open/ods">Open ODS</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/open/odp">Open ODP</a>
+      <a href="/convert/docx-to-pdf">DOCX to PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

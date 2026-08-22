@@ -45,6 +45,9 @@ const UI = {
     themeLabel: 'Theme',
     home: 'Home',
     openEditor: 'Open editor',
+    onThisPage: 'On this page',
+    more: 'Related pages',
+    sideNote: 'Runs on your device. No upload, no sign-up.',
     footer: [
       ['/', 'Open editor'],
       ['/help', 'Help'],
@@ -69,6 +72,9 @@ const UI = {
     themeLabel: '主题',
     home: '首页',
     openEditor: '打开编辑器',
+    onThisPage: '本页目录',
+    more: '相关页面',
+    sideNote: '在你的设备上运行，不上传、免注册。',
     footer: [
       ['/zh-CN/', '打开编辑器'],
       ['/zh-CN/help', '帮助'],
@@ -288,14 +294,33 @@ function renderPage({ page, locale, meta, body, headings, faq, source }) {
       (l) => `            <r-option value="${l}" data-href="${routeFor(l, page.slug)}">${LOCALES[l].label}</r-option>`,
     )
     .join('\n');
+  // The table of contents lives in the sidebar rail, not above the article:
+  // on /help it was 14 links between the reader and the first sentence.
   const toc =
     headings.length >= 3
-      ? `      <nav class="toc" aria-label="Contents">\n        <ul>\n${headings
-          .map((h) => `          <li><a href="#${h.id}">${h.text}</a></li>`)
-          .join('\n')}\n        </ul>\n      </nav>\n`
+      ? `        <nav class="side-block">\n          <span class="side-label">${ui.onThisPage}</span>\n${headings
+          .map((h) => `          <a href="#${h.id}">${escapeHtml(h.text.replace(/<[^>]+>/g, ''))}</a>`)
+          .join('\n')}\n        </nav>\n`
       : '';
   const notice = meta.notice ? `      <p class="notice">${escapeHtml(meta.notice)}</p>\n` : '';
   const footer = ui.footer.map(([href, label]) => `        <a href="${href}">${label}</a>`).join('\n');
+  const here = routeFor(locale, page.slug);
+  const related = ui.footer
+    .filter(([href]) => href !== here && href !== LOCALES[locale].home)
+    .slice(0, 5)
+    .map(([href, label]) => `          <a href="${href}">${label}</a>`)
+    .join('\n');
+  const aside = `      <aside class="side" aria-label="${ui.onThisPage}">
+        <div class="side-cta">
+          <a class="cta" href="${LOCALES[locale].home}"><r-button type="primary">${ui.openEditor} \u2192</r-button></a>
+          <span class="side-note">${ui.sideNote}</span>
+        </div>
+${toc}        <nav class="side-block">
+          <span class="side-label">${ui.more}</span>
+${related}
+        </nav>
+      </aside>
+`;
   const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }, null, 2)
     .split('\n')
     .map((l) => '      ' + l)
@@ -380,22 +405,23 @@ ${langOptions}
       </nav>
     </header>
 
-    <main class="wrap doc">
-      <p class="eyebrow">${escapeHtml(meta.eyebrow || meta.breadcrumb || title)}</p>
-      <h1>${escapeHtml(meta.h1 || title)}</h1>
-${meta.lead ? `      <p class="lead">${escapeHtml(meta.lead)}</p>\n` : ''}${notice}${toc}
-      <article>
+    <div class="page">
+      <main class="wrap doc">
+        <p class="eyebrow">${escapeHtml(meta.eyebrow || meta.breadcrumb || title)}</p>
+        <h1>${escapeHtml(meta.h1 || title)}</h1>
+${meta.lead ? `        <p class="lead">${escapeHtml(meta.lead)}</p>\n` : ''}${notice}
+        <article>
 ${body}
-      </article>
+        </article>
 
-      <p class="source">${escapeHtml(ui.generatedNote(source))} · <a href="${REPO}/blob/main/${source}" rel="noopener">GitHub</a></p>
-
-      <footer>
+        <p class="source">${escapeHtml(ui.generatedNote(source))} · <a href="${REPO}/blob/main/${source}" rel="noopener">GitHub</a></p>
+      </main>
+${aside}    </div>
+    <footer class="page-foot">
 ${footer}
-        <a href="${REPO}" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="${ui.themeLabel}"></r-theme-switch>
-      </footer>
-    </main>
+      <a href="${REPO}" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="${ui.themeLabel}"></r-theme-switch>
+    </footer>
   </body>
 </html>
 `;

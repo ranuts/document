@@ -236,129 +236,150 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">For browser agents · WebMCP</p>
-      <h1>A Document Editor Browser Agents Can Actually Use</h1>
-      <p class="lead">
-        This editor registers <strong>WebMCP</strong> tools, so an AI agent running in your browser can open, read,
-        convert and export documents by calling them — instead of trying to click through a user interface built for
-        humans.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">For browser agents · WebMCP</p>
+        <h1>A Document Editor Browser Agents Can Actually Use</h1>
+        <p class="lead">
+          This editor registers <strong>WebMCP</strong> tools, so an AI agent running in your browser can open, read,
+          convert and export documents by calling them — instead of trying to click through a user interface built for
+          humans.
+        </p>
 
-      <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
+        <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Use a browser that provides the WebMCP API (Chrome, behind its origin trial).</li>
-        <li>Open <strong>the editor</strong> as a normal tab — tools register only on the top-level page.</li>
-        <li>Ask your browser's AI agent to open, read, convert or export a document.</li>
-        <li>The agent calls the tools directly; the work happens on your device and nothing is uploaded.</li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Use a browser that provides the WebMCP API (Chrome, behind its origin trial).</li>
+          <li>Open <strong>the editor</strong> as a normal tab — tools register only on the top-level page.</li>
+          <li>Ask your browser's AI agent to open, read, convert or export a document.</li>
+          <li>The agent calls the tools directly; the work happens on your device and nothing is uploaded.</li>
+        </ol>
 
-      <p>
-        Most web apps are opaque to an AI agent. It sees a page of buttons and has to guess which one converts a file,
-        then hope the click landed. WebMCP — a proposal from the W3C Web Machine Learning Community Group — lets a page
-        skip that entirely by declaring what it can do as structured, callable tools with typed inputs. This editor
-        declares seven of them.
-      </p>
+        <p>
+          Most web apps are opaque to an AI agent. It sees a page of buttons and has to guess which one converts a file,
+          then hope the click landed. WebMCP — a proposal from the W3C Web Machine Learning Community Group — lets a
+          page skip that entirely by declaring what it can do as structured, callable tools with typed inputs. This
+          editor declares seven of them.
+        </p>
 
-      <p>
-        The tools are
-        <code
-          >open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly,
-          get_document_state</code
-        >. They are not a separate implementation: they call the same on-device code the buttons call, which is also
-        what the iframe embed API drives. So an agent gets exactly the capabilities a person has, with the same
-        guarantee — the conversion engine is WebAssembly running in your tab, and the file never leaves the device.
-      </p>
+        <p>
+          The tools are
+          <code
+            >open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly,
+            get_document_state</code
+          >. They are not a separate implementation: they call the same on-device code the buttons call, which is also
+          what the iframe embed API drives. So an agent gets exactly the capabilities a person has, with the same
+          guarantee — the conversion engine is WebAssembly running in your tab, and the file never leaves the device.
+        </p>
 
-      <p>
-        That property is what makes agent access reasonable here at all. Handing a document to an agent usually means
-        handing it to whichever server that agent talks to. Here the agent orchestrates, and the document stays put: it
-        is read from disk into the tab, converted in the tab, and written back out. An agent that reads the text of a
-        contract to answer a question about it never uploads that contract anywhere.
-      </p>
+        <p>
+          That property is what makes agent access reasonable here at all. Handing a document to an agent usually means
+          handing it to whichever server that agent talks to. Here the agent orchestrates, and the document stays put:
+          it is read from disk into the tab, converted in the tab, and written back out. An agent that reads the text of
+          a contract to answer a question about it never uploads that contract anywhere.
+        </p>
 
-      <p>
-        Two limits are deliberate. Tools register only when the editor is the top-level page — a cross-origin iframe
-        would need the embedding page to grant <code>allow="tools"</code>, which conflicts with how embedding is meant
-        to work, so embedded editors are driven with the postMessage API instead. And full-text reading is available for
-        word-processing documents; spreadsheets and presentations do not expose one on this engine, so the tool says so
-        rather than returning an empty answer an agent might mistake for an empty file.
-      </p>
+        <p>
+          Two limits are deliberate. Tools register only when the editor is the top-level page — a cross-origin iframe
+          would need the embedding page to grant <code>allow="tools"</code>, which conflicts with how embedding is meant
+          to work, so embedded editors are driven with the postMessage API instead. And full-text reading is available
+          for word-processing documents; spreadsheets and presentations do not expose one on this engine, so the tool
+          says so rather than returning an empty answer an agent might mistake for an empty file.
+        </p>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>What is WebMCP?</h3>
+          <p>
+            A proposal from the W3C Web Machine Learning Community Group that lets a web page register structured tools
+            an in-browser AI agent can call directly, instead of the agent having to interpret and click the user
+            interface.
+          </p>
+          <h3>Which tools does this editor register?</h3>
+          <p>
+            Seven: open_document_url, open_document_buffer, create_document, save_document, get_document_text,
+            set_readonly, get_document_state. They cover opening from a URL or from bytes, creating a new document,
+            exporting or converting, reading the text, toggling read-only, and reporting the current state.
+          </p>
+          <h3>Which browsers support it?</h3>
+          <p>
+            WebMCP is available in Chrome behind an origin trial. Firefox and Safari have not announced support. Where
+            the API is absent nothing is registered and nothing changes.
+          </p>
+          <h3>Is my document uploaded when an agent works on it?</h3>
+          <p>
+            No. The tools call the same on-device code the interface calls — the conversion engine is WebAssembly
+            running in your browser tab, and the file never leaves your device.
+          </p>
+          <h3>Can an agent read the contents of my document?</h3>
+          <p>
+            For word-processing documents, get_document_text returns the text so the agent can answer questions without
+            exporting anything. Spreadsheets and presentations have no full-text read on this engine, and the tool
+            reports that instead of returning an empty answer.
+          </p>
+          <h3>Does it work when the editor is embedded in another site?</h3>
+          <p>
+            No, by design. Tools register only on the top-level page. Embedded editors are driven through the
+            postMessage Embed API instead.
+          </p>
+          <h3>Can an agent convert a file to PDF?</h3>
+          <p>
+            Yes. save_document takes a target format, so an agent can open a DOCX, XLSX or PPTX and export a PDF, all on
+            the device.
+          </p>
+          <h3>Do I need an account or an API key?</h3>
+          <p>
+            Neither. The editor needs no account, and it does not call any AI service itself — your browser's agent does
+            the reasoning, this page just exposes the tools.
+          </p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/private-document-editor">Private editor</a>
+          <a href="/no-signup-document-editor">No sign-up</a>
+          <a href="/offline-document-editor">Offline</a>
+          <a href="/embed-document-editor">Embed API</a>
+          <a href="/help/embed-api">Embed API</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>What is WebMCP?</h3>
-        <p>
-          A proposal from the W3C Web Machine Learning Community Group that lets a web page register structured tools an
-          in-browser AI agent can call directly, instead of the agent having to interpret and click the user interface.
-        </p>
-        <h3>Which tools does this editor register?</h3>
-        <p>
-          Seven: open_document_url, open_document_buffer, create_document, save_document, get_document_text,
-          set_readonly, get_document_state. They cover opening from a URL or from bytes, creating a new document,
-          exporting or converting, reading the text, toggling read-only, and reporting the current state.
-        </p>
-        <h3>Which browsers support it?</h3>
-        <p>
-          WebMCP is available in Chrome behind an origin trial. Firefox and Safari have not announced support. Where the
-          API is absent nothing is registered and nothing changes.
-        </p>
-        <h3>Is my document uploaded when an agent works on it?</h3>
-        <p>
-          No. The tools call the same on-device code the interface calls — the conversion engine is WebAssembly running
-          in your browser tab, and the file never leaves your device.
-        </p>
-        <h3>Can an agent read the contents of my document?</h3>
-        <p>
-          For word-processing documents, get_document_text returns the text so the agent can answer questions without
-          exporting anything. Spreadsheets and presentations have no full-text read on this engine, and the tool reports
-          that instead of returning an empty answer.
-        </p>
-        <h3>Does it work when the editor is embedded in another site?</h3>
-        <p>
-          No, by design. Tools register only on the top-level page. Embedded editors are driven through the postMessage
-          Embed API instead.
-        </p>
-        <h3>Can an agent convert a file to PDF?</h3>
-        <p>
-          Yes. save_document takes a target format, so an agent can open a DOCX, XLSX or PPTX and export a PDF, all on
-          the device.
-        </p>
-        <h3>Do I need an account or an API key?</h3>
-        <p>
-          Neither. The editor needs no account, and it does not call any AI service itself — your browser's agent does
-          the reasoning, this page just exposes the tools.
-        </p>
-      </div>
-
-      <footer>
-        <a href="/help">Help center</a>
-        <a href="/help/embed-api">Embed API</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/">Open editor</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/open/odt">Open ODT</a>
-        <a href="/open/ods">Open ODS</a>
-        <a href="/open/odp">Open ODP</a>
-        <a href="/convert/docx-to-pdf">DOCX to PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/help">Help center</a>
+      <a href="/help/embed-api">Embed API</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/">Open editor</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/open/odt">Open ODT</a>
+      <a href="/open/ods">Open ODS</a>
+      <a href="/open/odp">Open ODP</a>
+      <a href="/convert/docx-to-pdf">DOCX to PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

@@ -242,106 +242,126 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Convert · .docx → .pdf</p>
-      <h1>Convert DOCX to PDF in Your Browser</h1>
-      <p class="lead">
-        Turn a Word <strong>.docx</strong> file into a <strong>.pdf</strong> — without uploading it anywhere. The whole
-        conversion happens locally in your browser.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Convert · .docx → .pdf</p>
+        <h1>Convert DOCX to PDF in Your Browser</h1>
+        <p class="lead">
+          Turn a Word <strong>.docx</strong> file into a <strong>.pdf</strong> — without uploading it anywhere. The
+          whole conversion happens locally in your browser.
+        </p>
 
-      <a class="cta" href="/"><r-button type="primary">Open your DOCX →</r-button></a>
+        <a class="cta" href="/"><r-button type="primary">Open your DOCX →</r-button></a>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Click <strong>Open your DOCX</strong> to launch the editor in your browser.</li>
-        <li>Pick the <strong>.docx</strong> file from your device, or drag and drop it onto the page.</li>
-        <li>Choose <strong>Download as / Save as</strong> and pick <strong>PDF</strong>.</li>
-        <li>The PDF is generated on your device and downloaded — nothing is uploaded.</li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Click <strong>Open your DOCX</strong> to launch the editor in your browser.</li>
+          <li>Pick the <strong>.docx</strong> file from your device, or drag and drop it onto the page.</li>
+          <li>Choose <strong>Download as / Save as</strong> and pick <strong>PDF</strong>.</li>
+          <li>The PDF is generated on your device and downloaded — nothing is uploaded.</li>
+        </ol>
 
-      <p>
-        Almost every "DOCX to PDF" service on the web works the same way: you hand them your document, their server
-        converts it, and you download the result. That means a contract, a CV or a medical letter sits on someone else's
-        machine, however briefly. This one never sends it: the file is read straight from disk into your browser tab,
-        converted there, and written back out.
-      </p>
+        <p>
+          Almost every "DOCX to PDF" service on the web works the same way: you hand them your document, their server
+          converts it, and you download the result. That means a contract, a CV or a medical letter sits on someone
+          else's machine, however briefly. This one never sends it: the file is read straight from disk into your
+          browser tab, converted there, and written back out.
+        </p>
 
-      <p>
-        The conversion is done by OnlyOffice's x2t engine compiled to WebAssembly — the same engine that renders the
-        document on screen, so what you see in the editor is what lands in the PDF. Fonts, tables, images, headers and
-        footers, page breaks and numbering all carry over. Because it runs in your tab there is no upload queue, no
-        server-imposed file size cap, and no wait for someone else's job runner.
-      </p>
+        <p>
+          The conversion is done by OnlyOffice's x2t engine compiled to WebAssembly — the same engine that renders the
+          document on screen, so what you see in the editor is what lands in the PDF. Fonts, tables, images, headers and
+          footers, page breaks and numbering all carry over. Because it runs in your tab there is no upload queue, no
+          server-imposed file size cap, and no wait for someone else's job runner.
+        </p>
 
-      <p>
-        This is the practical option when the document is not yours to share: an offer letter before it is signed, a
-        report under embargo, anything with personal data in it. It is also the option that keeps working on a plane or
-        behind a corporate firewall, because once the page has loaded it is an installable app that runs with no network
-        at all.
-      </p>
+        <p>
+          This is the practical option when the document is not yours to share: an offer letter before it is signed, a
+          report under embargo, anything with personal data in it. It is also the option that keeps working on a plane
+          or behind a corporate firewall, because once the page has loaded it is an installable app that runs with no
+          network at all.
+        </p>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>How do I convert a DOCX to PDF here?</h3>
+          <p>
+            Open the DOCX in the editor, then use Download as / Save as and choose PDF. The conversion runs in your
+            browser.
+          </p>
+          <h3>Is my document uploaded to convert it?</h3>
+          <p>No. The file is opened and converted entirely inside your browser tab, so it never leaves your device.</p>
+          <h3>Do I need Microsoft Word or an account?</h3>
+          <p>Neither. No Word, no 365 subscription, no sign-up.</p>
+          <h3>Is the formatting preserved in the PDF?</h3>
+          <p>
+            Yes. The same OnlyOffice engine that renders the document produces the PDF, so fonts, tables, images and
+            page layout carry over.
+          </p>
+          <h3>Is there a file size limit?</h3>
+          <p>
+            No fixed limit. The practical ceiling is your device's memory, because the whole document is converted
+            locally.
+          </p>
+          <h3>Does it work with old .doc files?</h3>
+          <p>
+            Yes. Both the modern .docx and the older binary .doc open with the same engine and can be exported to PDF.
+          </p>
+          <h3>Can I convert a PDF back to Word?</h3>
+          <p>
+            No. This exports to PDF; it does not rewrite an existing PDF's text back into a Word document. You can open
+            and annotate a PDF though — see <a href="/open/pdf">Open PDF</a>.
+          </p>
+          <h3>Does the conversion work offline?</h3>
+          <p>Yes. Once loaded it is an installable PWA, so it keeps converting with no internet connection.</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open your DOCX →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/convert/xlsx-to-pdf">XLSX to PDF</a>
+          <a href="/convert/pptx-to-pdf">PPTX to PDF</a>
+          <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+          <a href="/open/docx">Open DOCX</a>
+          <a href="/open/xlsx">Open XLSX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>How do I convert a DOCX to PDF here?</h3>
-        <p>
-          Open the DOCX in the editor, then use Download as / Save as and choose PDF. The conversion runs in your
-          browser.
-        </p>
-        <h3>Is my document uploaded to convert it?</h3>
-        <p>No. The file is opened and converted entirely inside your browser tab, so it never leaves your device.</p>
-        <h3>Do I need Microsoft Word or an account?</h3>
-        <p>Neither. No Word, no 365 subscription, no sign-up.</p>
-        <h3>Is the formatting preserved in the PDF?</h3>
-        <p>
-          Yes. The same OnlyOffice engine that renders the document produces the PDF, so fonts, tables, images and page
-          layout carry over.
-        </p>
-        <h3>Is there a file size limit?</h3>
-        <p>
-          No fixed limit. The practical ceiling is your device's memory, because the whole document is converted
-          locally.
-        </p>
-        <h3>Does it work with old .doc files?</h3>
-        <p>
-          Yes. Both the modern .docx and the older binary .doc open with the same engine and can be exported to PDF.
-        </p>
-        <h3>Can I convert a PDF back to Word?</h3>
-        <p>
-          No. This exports to PDF; it does not rewrite an existing PDF's text back into a Word document. You can open
-          and annotate a PDF though — see <a href="/open/pdf">Open PDF</a>.
-        </p>
-        <h3>Does the conversion work offline?</h3>
-        <p>Yes. Once loaded it is an installable PWA, so it keeps converting with no internet connection.</p>
-      </div>
-
-      <footer>
-        <a href="/convert/xlsx-to-pdf">XLSX to PDF</a>
-        <a href="/convert/pptx-to-pdf">PPTX to PDF</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/open/odt">Open ODT</a>
-        <a href="/open/ods">Open ODS</a>
-        <a href="/open/odp">Open ODP</a>
-        <a href="/convert/docx-to-pdf">DOCX to PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/convert/xlsx-to-pdf">XLSX to PDF</a>
+      <a href="/convert/pptx-to-pdf">PPTX to PDF</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/open/odt">Open ODT</a>
+      <a href="/open/ods">Open ODS</a>
+      <a href="/open/odp">Open ODP</a>
+      <a href="/convert/docx-to-pdf">DOCX to PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

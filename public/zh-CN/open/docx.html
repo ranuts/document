@@ -214,85 +214,107 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">打开 · .docx</p>
-      <h1>无需 Microsoft Word 打开 DOCX 文件</h1>
-      <p class="lead">
-        收到一个 <strong>.docx</strong> 文件，却没装 Word——或者没有微软账号，也不想用
-        Copilot？直接在浏览器里打开。无需安装，文件始终留在本地。
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">打开 · .docx</p>
+        <h1>无需 Microsoft Word 打开 DOCX 文件</h1>
+        <p class="lead">
+          收到一个 <strong>.docx</strong> 文件，却没装 Word——或者没有微软账号，也不想用
+          Copilot？直接在浏览器里打开。无需安装，文件始终留在本地。
+        </p>
 
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 DOCX →</r-button></a>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 DOCX →</r-button></a>
 
-      <p>
-        DOCX 是 Microsoft Word 的格式，但你不需要 Word 就能阅读或编辑它。这个编辑器用 OnlyOffice 引擎渲染
-        DOCX，因此你的字体、表格、图片和页面排版都能正确显示——而不是纯文本降级方案。一切都通过 WebAssembly
-        在本地运行，文件始终留在你的设备上。
-      </p>
+        <p>
+          DOCX 是 Microsoft Word 的格式，但你不需要 Word 就能阅读或编辑它。这个编辑器用 OnlyOffice 引擎渲染
+          DOCX，因此你的字体、表格、图片和页面排版都能正确显示——而不是纯文本降级方案。一切都通过 WebAssembly
+          在本地运行，文件始终留在你的设备上。
+        </p>
 
-      <p>
-        在底层，OnlyOffice 文档引擎被编译为
-        WebAssembly，运行在你的浏览器标签页内。当你选择一个文件时，它会被直接从磁盘读入内存——没有上传步骤，也没有服务器往返——因此即便是很大或很机密的文档也始终留在你的机器上。它既支持现代的
-        <strong>.docx</strong> 格式，也支持较旧的二进制 <strong>.doc</strong>，并能把你的修改导出回 DOCX、PDF 或纯 TXT。
-      </p>
+        <p>
+          在底层，OnlyOffice 文档引擎被编译为
+          WebAssembly，运行在你的浏览器标签页内。当你选择一个文件时，它会被直接从磁盘读入内存——没有上传步骤，也没有服务器往返——因此即便是很大或很机密的文档也始终留在你的机器上。它既支持现代的
+          <strong>.docx</strong> 格式，也支持较旧的二进制 <strong>.doc</strong>，并能把你的修改导出回 DOCX、PDF 或纯
+          TXT。
+        </p>
 
-      <h2>如何操作</h2>
-      <ol>
-        <li>点击<strong>打开你的 DOCX</strong>，在浏览器中启动编辑器。</li>
-        <li>从你的设备中选择一个 <strong>.docx</strong> 文件，或将它拖放到页面上。</li>
-        <li>它会用 OnlyOffice 引擎在本地渲染——阅读它，或直接编辑文本。</li>
-        <li>完成后，把它重新下载为 DOCX、PDF 或 TXT。</li>
-      </ol>
+        <h2 id="如何操作">如何操作</h2>
+        <ol>
+          <li>点击<strong>打开你的 DOCX</strong>，在浏览器中启动编辑器。</li>
+          <li>从你的设备中选择一个 <strong>.docx</strong> 文件，或将它拖放到页面上。</li>
+          <li>它会用 OnlyOffice 引擎在本地渲染——阅读它，或直接编辑文本。</li>
+          <li>完成后，把它重新下载为 DOCX、PDF 或 TXT。</li>
+        </ol>
 
-      <h2>你可以做什么</h2>
-      <ul>
-        <li>打开并阅读任何 <strong>.docx</strong>（以及 .doc）文件，完整保留排版</li>
-        <li>编辑文本，再重新下载为 DOCX、PDF 或 TXT</li>
-        <li>无需 Microsoft Word、无需微软账号、无需 Copilot</li>
-        <li>不传服务器——你的文档永远不会离开你的设备</li>
-        <li>可作为可安装 App 离线使用</li>
-      </ul>
+        <h2 id="你可以做什么">你可以做什么</h2>
+        <ul>
+          <li>打开并阅读任何 <strong>.docx</strong>（以及 .doc）文件，完整保留排版</li>
+          <li>编辑文本，再重新下载为 DOCX、PDF 或 TXT</li>
+          <li>无需 Microsoft Word、无需微软账号、无需 Copilot</li>
+          <li>不传服务器——你的文档永远不会离开你的设备</li>
+          <li>可作为可安装 App 离线使用</li>
+        </ul>
 
-      <aside class="oss">
-        <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        <aside class="oss">
+          <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>我能在没有 Microsoft Word 的情况下打开 DOCX 文件吗？</h3>
+          <p>可以。它直接在你的浏览器中打开 DOCX——无需 Word、Office 或微软账号。</p>
+          <h3>Word 的排版会被保留吗？</h3>
+          <p>会。它使用 OnlyOffice 引擎，因此字体、表格、图片和排版都会被保留。</p>
+          <h3>我的文档会被上传到某个地方吗？</h3>
+          <p>不会。文件通过 WebAssembly 在本地打开，永远不会离开你的设备。</p>
+          <h3>我能编辑并保存，而不只是查看吗？</h3>
+          <p>可以。编辑后再重新下载为 DOCX、PDF 或 TXT——无需账号。</p>
+          <h3>它支持旧的 .doc 文件吗？</h3>
+          <p>支持。它用同一个 OnlyOffice 引擎打开现代的 .docx 和较旧的二进制 .doc。</p>
+          <h3>我能把 DOCX 转成 PDF 吗？</h3>
+          <p>可以。打开 DOCX，然后选择「下载为 / 另存为 PDF」——PDF 在你的设备上生成。</p>
+          <h3>有文件大小限制吗？</h3>
+          <p>没有固定限制。一切都在你的浏览器中运行，实际上限取决于你设备的内存。</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 DOCX →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#如何操作">如何操作</a>
+          <a href="#你可以做什么">你可以做什么</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+          <a href="/zh-CN/open/pptx">打开 PPTX</a>
+          <a href="/zh-CN/open/pdf">打开 PDF</a>
+          <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+          <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>我能在没有 Microsoft Word 的情况下打开 DOCX 文件吗？</h3>
-        <p>可以。它直接在你的浏览器中打开 DOCX——无需 Word、Office 或微软账号。</p>
-        <h3>Word 的排版会被保留吗？</h3>
-        <p>会。它使用 OnlyOffice 引擎，因此字体、表格、图片和排版都会被保留。</p>
-        <h3>我的文档会被上传到某个地方吗？</h3>
-        <p>不会。文件通过 WebAssembly 在本地打开，永远不会离开你的设备。</p>
-        <h3>我能编辑并保存，而不只是查看吗？</h3>
-        <p>可以。编辑后再重新下载为 DOCX、PDF 或 TXT——无需账号。</p>
-        <h3>它支持旧的 .doc 文件吗？</h3>
-        <p>支持。它用同一个 OnlyOffice 引擎打开现代的 .docx 和较旧的二进制 .doc。</p>
-        <h3>我能把 DOCX 转成 PDF 吗？</h3>
-        <p>可以。打开 DOCX，然后选择「下载为 / 另存为 PDF」——PDF 在你的设备上生成。</p>
-        <h3>有文件大小限制吗？</h3>
-        <p>没有固定限制。一切都在你的浏览器中运行，实际上限取决于你设备的内存。</p>
-      </div>
-
-      <footer>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/help">帮助</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
-        <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
-        <a href="/zh-CN/no-signup-document-editor">免注册</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/offline-document-editor">离线</a>
-        <a href="/zh-CN/edit-documents-without-account">免账号</a>
-        <a href="/zh-CN/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/help">帮助</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+      <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
+      <a href="/zh-CN/no-signup-document-editor">免注册</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/offline-document-editor">离线</a>
+      <a href="/zh-CN/edit-documents-without-account">免账号</a>
+      <a href="/zh-CN/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>

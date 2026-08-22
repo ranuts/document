@@ -214,97 +214,118 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">No account · no sign-up</p>
-      <h1>Free Online Document Editor — No Sign-Up, No Upload</h1>
-      <p class="lead">
-        Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files right in your browser. No account, no login, no
-        subscription — and your files are never uploaded anywhere.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">No account · no sign-up</p>
+        <h1>Free Online Document Editor — No Sign-Up, No Upload</h1>
+        <p class="lead">
+          Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files right in your browser. No account, no login,
+          no subscription — and your files are never uploaded anywhere.
+        </p>
 
-      <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
+        <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
 
-      <p>
-        Most "free" online editors ask you to create an account, then quietly upload your document to their servers.
-        This one does neither. Everything runs locally in your browser with WebAssembly, so your files stay on your
-        device. Close the tab and nothing is left behind.
-      </p>
+        <p>
+          Most "free" online editors ask you to create an account, then quietly upload your document to their servers.
+          This one does neither. Everything runs locally in your browser with WebAssembly, so your files stay on your
+          device. Close the tab and nothing is left behind.
+        </p>
 
-      <p>
-        The whole editor is the OnlyOffice engine compiled to WebAssembly, running inside the page. That means there is
-        no server doing the work and no queue — you open a file and it is ready. It handles the everyday Office formats
-        (DOCX, XLSX, PPTX) plus CSV, and can export your work to PDF, TXT, HTML or CSV. Because it is an installable
-        PWA, you can add it to your home screen and keep using it with no connection at all.
-      </p>
+        <p>
+          The whole editor is the OnlyOffice engine compiled to WebAssembly, running inside the page. That means there
+          is no server doing the work and no queue — you open a file and it is ready. It handles the everyday Office
+          formats (DOCX, XLSX, PPTX) plus CSV, and can export your work to PDF, TXT, HTML or CSV. Because it is an
+          installable PWA, you can add it to your home screen and keep using it with no connection at all.
+        </p>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Click <strong>Open the editor</strong> — no sign up, login or account step.</li>
-        <li>Drag in a DOCX, XLSX, PPTX or CSV file from your device, or start a new blank document.</li>
-        <li>Edit it in your browser with the OnlyOffice engine — nothing is uploaded.</li>
-        <li>Download the file in its original format, or export it to PDF, TXT, HTML or CSV.</li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Click <strong>Open the editor</strong> — no sign up, login or account step.</li>
+          <li>Drag in a DOCX, XLSX, PPTX or CSV file from your device, or start a new blank document.</li>
+          <li>Edit it in your browser with the OnlyOffice engine — nothing is uploaded.</li>
+          <li>Download the file in its original format, or export it to PDF, TXT, HTML or CSV.</li>
+        </ol>
 
-      <h2>Why people use it</h2>
-      <ul>
-        <li><strong>No sign up, no login, no subscription</strong> — open the page and start editing.</li>
-        <li><strong>No upload</strong> — 100% client-side; your documents never leave your device.</li>
-        <li><strong>All the common formats</strong> — DOCX, XLSX, PPTX and CSV, powered by OnlyOffice.</li>
-        <li><strong>Works offline</strong> — installable as a PWA and usable with no connection.</li>
-        <li><strong>Open source</strong> — audit it or self-host it yourself.</li>
-      </ul>
+        <h2 id="why-people-use-it">Why people use it</h2>
+        <ul>
+          <li><strong>No sign up, no login, no subscription</strong> — open the page and start editing.</li>
+          <li><strong>No upload</strong> — 100% client-side; your documents never leave your device.</li>
+          <li><strong>All the common formats</strong> — DOCX, XLSX, PPTX and CSV, powered by OnlyOffice.</li>
+          <li><strong>Works offline</strong> — installable as a PWA and usable with no connection.</li>
+          <li><strong>Open source</strong> — audit it or self-host it yourself.</li>
+        </ul>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> This editor is fully open source under the AGPL-3.0 license,
-        so you don't have to take our word for it — read the code to confirm your files are never uploaded, file issues,
-        or run your own copy:
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> This editor is fully open source under the AGPL-3.0 license,
+          so you don't have to take our word for it — read the code to confirm your files are never uploaded, file
+          issues, or run your own copy:
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>Do I need to sign up or create an account?</h3>
+          <p>
+            No. There is no sign up, no login and no account of any kind. Open the editor and start editing immediately.
+          </p>
+          <h3>Are my files uploaded to a server?</h3>
+          <p>
+            No. All editing happens locally in your browser using WebAssembly. Your documents never leave your device.
+          </p>
+          <h3>Is it really free?</h3>
+          <p>
+            Yes. It is free and open source under the AGPL-3.0 license. You can also self-host it from the
+            <a href="https://github.com/ranuts/document" rel="noopener">source code on GitHub</a>.
+          </p>
+          <h3>Can I use it offline?</h3>
+          <p>Yes. It is an installable PWA and works fully offline once loaded.</p>
+          <h3>What file formats can I edit?</h3>
+          <p>DOCX, XLSX, PPTX and CSV, powered by OnlyOffice. You can also export to PDF, TXT, HTML or CSV.</p>
+          <h3>Is there a catch — a paywall or a premium tier?</h3>
+          <p>No. It is genuinely free and open source under AGPL-3.0, with no paywall and no premium tier.</p>
+          <h3>Can I use it on my phone?</h3>
+          <p>
+            Yes. It runs in any modern mobile browser, so you can edit on a phone or tablet without installing an app.
+          </p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#why-people-use-it">Why people use it</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/private-document-editor">Private editor</a>
+          <a href="/offline-document-editor">Offline</a>
+          <a href="/edit-documents-without-account">No account</a>
+          <a href="/embed-document-editor">Embed API</a>
+          <a href="/open/docx">Open DOCX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>Do I need to sign up or create an account?</h3>
-        <p>
-          No. There is no sign up, no login and no account of any kind. Open the editor and start editing immediately.
-        </p>
-        <h3>Are my files uploaded to a server?</h3>
-        <p>
-          No. All editing happens locally in your browser using WebAssembly. Your documents never leave your device.
-        </p>
-        <h3>Is it really free?</h3>
-        <p>
-          Yes. It is free and open source under the AGPL-3.0 license. You can also self-host it from the
-          <a href="https://github.com/ranuts/document" rel="noopener">source code on GitHub</a>.
-        </p>
-        <h3>Can I use it offline?</h3>
-        <p>Yes. It is an installable PWA and works fully offline once loaded.</p>
-        <h3>What file formats can I edit?</h3>
-        <p>DOCX, XLSX, PPTX and CSV, powered by OnlyOffice. You can also export to PDF, TXT, HTML or CSV.</p>
-        <h3>Is there a catch — a paywall or a premium tier?</h3>
-        <p>No. It is genuinely free and open source under AGPL-3.0, with no paywall and no premium tier.</p>
-        <h3>Can I use it on my phone?</h3>
-        <p>
-          Yes. It runs in any modern mobile browser, so you can edit on a phone or tablet without installing an app.
-        </p>
-      </div>
-
-      <footer>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/edit-documents-without-account">No account</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/edit-documents-without-account">No account</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

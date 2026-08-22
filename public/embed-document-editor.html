@@ -201,35 +201,36 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Developers · Embed</p>
-      <h1>Embed a Document Editor in Your Web App</h1>
-      <p class="lead">
-        Add a <strong>DOCX, XLSX, PPTX and CSV</strong> editor to your product with a single iframe and a
-        <strong>postMessage</strong> API. Your app keeps auth, file access and upload — the editor just edits, and never
-        sees your users' tokens.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Developers · Embed</p>
+        <h1>Embed a Document Editor in Your Web App</h1>
+        <p class="lead">
+          Add a <strong>DOCX, XLSX, PPTX and CSV</strong> editor to your product with a single iframe and a
+          <strong>postMessage</strong> API. Your app keeps auth, file access and upload — the editor just edits, and
+          never sees your users' tokens.
+        </p>
 
-      <a class="cta" href="/embed-demo.html"><r-button type="primary">Open the live demo →</r-button></a>
+        <a class="cta" href="/embed-demo.html"><r-button type="primary">Open the live demo →</r-button></a>
 
-      <p>
-        The editor runs entirely in the browser with the OnlyOffice WebAssembly engine, so documents are rendered and
-        edited on the client — you don't stand up a document server. The recommended pattern keeps a clean boundary:
-        <strong>the parent app handles authentication, fetching and saving; the iframe handles editing only.</strong>
-        Tokens, cookies and business APIs stay in your app.
-      </p>
+        <p>
+          The editor runs entirely in the browser with the OnlyOffice WebAssembly engine, so documents are rendered and
+          edited on the client — you don't stand up a document server. The recommended pattern keeps a clean boundary:
+          <strong>the parent app handles authentication, fetching and saving; the iframe handles editing only.</strong>
+          Tokens, cookies and business APIs stay in your app.
+        </p>
 
-      <h2>Add it with one iframe</h2>
-      <pre><code>&lt;iframe
+        <h2 id="add-it-with-one-iframe">Add it with one iframe</h2>
+        <pre><code>&lt;iframe
   id="documentEditor"
   src="https://edit.chaxus.com/editor?embed=1&amp;embedOrigin=https://your-app.example.com"
   style="width: 100%; height: 720px; border: 0"
 &gt;&lt;/iframe&gt;</code></pre>
-      <p>
-        Then talk to it over <code>postMessage</code>. Every command takes an <code>id</code> so you can match it to the
-        reply, and every editor event is a <code>document:*</code> message:
-      </p>
-      <pre><code>// open a file your app already fetched (auth stays with you)
+        <p>
+          Then talk to it over <code>postMessage</code>. Every command takes an <code>id</code> so you can match it to
+          the reply, and every editor event is a <code>document:*</code> message:
+        </p>
+        <pre><code>// open a file your app already fetched (auth stays with you)
 iframe.contentWindow.postMessage(
   { id, type: 'document:open-buffer', payload: { fileName: 'report.xlsx', buffer } },
   'https://edit.chaxus.com'
@@ -239,101 +240,125 @@ iframe.contentWindow.postMessage(
 iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetExt: 'XLSX' } }, editorOrigin);
 // → editor replies with { type: 'document:saved', payload: { fileName, file } }</code></pre>
 
-      <h2>What you get</h2>
-      <ul>
-        <li>One iframe + a small <strong>postMessage</strong> command/response API — no SDK to install</li>
-        <li>Open from a <strong>URL, a File, or an ArrayBuffer</strong> your app fetched with its own credentials</li>
-        <li>
-          Save back to <strong>XLSX, DOCX, PPTX or CSV</strong>, returned as a <code>File</code> for your app to upload
-        </li>
-        <li>Read-only mode, per-message origin locking (<code>embedOrigin</code>), and a state query</li>
-        <li>No document server to run — editing is 100% client-side WebAssembly</li>
-        <li>Open source (AGPL-3.0) and self-hostable — embed it under your own domain</li>
-      </ul>
+        <h2 id="what-you-get">What you get</h2>
+        <ul>
+          <li>One iframe + a small <strong>postMessage</strong> command/response API — no SDK to install</li>
+          <li>Open from a <strong>URL, a File, or an ArrayBuffer</strong> your app fetched with its own credentials</li>
+          <li>
+            Save back to <strong>XLSX, DOCX, PPTX or CSV</strong>, returned as a <code>File</code> for your app to
+            upload
+          </li>
+          <li>Read-only mode, per-message origin locking (<code>embedOrigin</code>), and a state query</li>
+          <li>No document server to run — editing is 100% client-side WebAssembly</li>
+          <li>Open source (AGPL-3.0) and self-hostable — embed it under your own domain</li>
+        </ul>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Add the iframe pointing at <code>/editor?embed=1</code>, sized to your layout.</li>
-        <li>
-          Wait for the <code>document:ready</code> event, then send <code>document:open-url</code>,
-          <code>open-file</code> or <code>open-buffer</code>.
-        </li>
-        <li>The user edits in place; the file never leaves the browser unless your app sends it somewhere.</li>
-        <li>
-          Send <code>document:save</code>; the editor returns the edited file via <code>document:saved</code>, which
-          your app uploads with its own auth.
-        </li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Add the iframe pointing at <code>/editor?embed=1</code>, sized to your layout.</li>
+          <li>
+            Wait for the <code>document:ready</code> event, then send <code>document:open-url</code>,
+            <code>open-file</code> or <code>open-buffer</code>.
+          </li>
+          <li>The user edits in place; the file never leaves the browser unless your app sends it somewhere.</li>
+          <li>
+            Send <code>document:save</code>; the editor returns the edited file via <code>document:saved</code>, which
+            your app uploads with its own auth.
+          </li>
+        </ol>
 
-      <h2>Read-only and preview mode</h2>
-      <p>
-        Open a document read-only (a viewer, a review step, a locked record) by passing <code>readonly: true</code> with
-        the open command, and switch at any time with <code>document:set-readonly</code> — no reload, the document stays
-        where the user was. In read-only mode editing is disabled and <code>document:save</code> answers with
-        <code>document:error</code>; <code>document:get-state</code> reports the current <code>readonly</code> flag.
-      </p>
-      <pre><code>// open locked, unlock later
+        <h2 id="read-only-and-preview-mode">Read-only and preview mode</h2>
+        <p>
+          Open a document read-only (a viewer, a review step, a locked record) by passing
+          <code>readonly: true</code> with the open command, and switch at any time with
+          <code>document:set-readonly</code> — no reload, the document stays where the user was. In read-only mode
+          editing is disabled and <code>document:save</code> answers with <code>document:error</code>;
+          <code>document:get-state</code> reports the current <code>readonly</code> flag.
+        </p>
+        <pre><code>// open locked, unlock later
 send('document:open-url', { url, readonly: true });
 send('document:set-readonly', { readonly: false });</code></pre>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — read the code, run your own copy, and see
-        exactly how the boundary works:
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>. Full API reference:
-        <a href="/help/embed-api">Embed API reference</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — read the code, run your own copy, and see
+          exactly how the boundary works:
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>. Full API
+          reference: <a href="/help/embed-api">Embed API reference</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>How do I embed the document editor?</h3>
+          <p>
+            Add one iframe pointing at <code>/editor?embed=1</code>, then drive it with a postMessage API to open and
+            save documents. A working demo is at <a href="/embed-demo.html">/embed-demo.html</a>.
+          </p>
+          <h3>Does the editor see my users' auth tokens?</h3>
+          <p>
+            No. Auth, file fetching and upload stay in your app — your app fetches the file with its own credentials and
+            passes the bytes to the editor, so tokens and cookies never enter the iframe.
+          </p>
+          <h3>Which file formats can the embedded editor handle?</h3>
+          <p>
+            DOCX, XLSX, PPTX and CSV, edited client-side with the OnlyOffice WebAssembly engine. The save command
+            exports to XLSX, DOCX, PPTX or CSV.
+          </p>
+          <h3>Can I self-host it or use it white-label?</h3>
+          <p>
+            Yes. It's open source under AGPL-3.0 and ships as static files, so you can host your own copy and embed it
+            under your own domain.
+          </p>
+          <h3>How do I restrict which site can talk to the editor?</h3>
+          <p>
+            Add <code>embedOrigin</code> to the iframe URL to lock messaging to a specific origin, and verify
+            <code>event.origin</code> in your own message handler.
+          </p>
+          <h3>Can I show a document read-only, or lock it after a while?</h3>
+          <p>
+            Yes. Pass <code>readonly: true</code> when opening, or send <code>document:set-readonly</code> at any time —
+            it switches the live editor without reloading, and saves are refused while locked.
+          </p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/embed-demo.html"><r-button type="primary">Open the live demo →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#add-it-with-one-iframe">Add it with one iframe</a>
+          <a href="#what-you-get">What you get</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#read-only-and-preview-mode">Read-only and preview mode</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/no-signup-document-editor">No sign-up</a>
+          <a href="/private-document-editor">Private editor</a>
+          <a href="/offline-document-editor">Offline</a>
+          <a href="/edit-documents-without-account">No account</a>
+          <a href="/open/docx">Open DOCX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>How do I embed the document editor?</h3>
-        <p>
-          Add one iframe pointing at <code>/editor?embed=1</code>, then drive it with a postMessage API to open and save
-          documents. A working demo is at <a href="/embed-demo.html">/embed-demo.html</a>.
-        </p>
-        <h3>Does the editor see my users' auth tokens?</h3>
-        <p>
-          No. Auth, file fetching and upload stay in your app — your app fetches the file with its own credentials and
-          passes the bytes to the editor, so tokens and cookies never enter the iframe.
-        </p>
-        <h3>Which file formats can the embedded editor handle?</h3>
-        <p>
-          DOCX, XLSX, PPTX and CSV, edited client-side with the OnlyOffice WebAssembly engine. The save command exports
-          to XLSX, DOCX, PPTX or CSV.
-        </p>
-        <h3>Can I self-host it or use it white-label?</h3>
-        <p>
-          Yes. It's open source under AGPL-3.0 and ships as static files, so you can host your own copy and embed it
-          under your own domain.
-        </p>
-        <h3>How do I restrict which site can talk to the editor?</h3>
-        <p>
-          Add <code>embedOrigin</code> to the iframe URL to lock messaging to a specific origin, and verify
-          <code>event.origin</code> in your own message handler.
-        </p>
-        <h3>Can I show a document read-only, or lock it after a while?</h3>
-        <p>
-          Yes. Pass <code>readonly: true</code> when opening, or send <code>document:set-readonly</code> at any time —
-          it switches the live editor without reloading, and saves are refused while locked.
-        </p>
-      </div>
-
-      <footer>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/edit-documents-without-account">No account</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/edit-documents-without-account">No account</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

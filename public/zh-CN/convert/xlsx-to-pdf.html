@@ -236,89 +236,109 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">转换 · .xlsx → .pdf</p>
-      <h1>在浏览器中把 XLSX 转成 PDF</h1>
-      <p class="lead">
-        把 Excel 的 <strong>.xlsx</strong> 表格转成 <strong>.pdf</strong>——全程在浏览器本地完成，不经过任何服务器。
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">转换 · .xlsx → .pdf</p>
+        <h1>在浏览器中把 XLSX 转成 PDF</h1>
+        <p class="lead">
+          把 Excel 的 <strong>.xlsx</strong> 表格转成 <strong>.pdf</strong>——全程在浏览器本地完成，不经过任何服务器。
+        </p>
 
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 XLSX →</r-button></a>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 XLSX →</r-button></a>
 
-      <h2>如何操作</h2>
-      <ol>
-        <li>点击<strong>打开你的 XLSX</strong>，在浏览器中启动编辑器。</li>
-        <li>从你的设备中选择 <strong>.xlsx</strong> 文件，或将它拖放到页面上。</li>
-        <li>确认工作表和打印区域的样子——PDF 会跟随编辑器渲染出的结果。</li>
-        <li>选择<strong>下载为 / 另存为</strong>，并选中 <strong>PDF</strong>，它会在你的设备上生成并下载。</li>
-      </ol>
+        <h2 id="如何操作">如何操作</h2>
+        <ol>
+          <li>点击<strong>打开你的 XLSX</strong>，在浏览器中启动编辑器。</li>
+          <li>从你的设备中选择 <strong>.xlsx</strong> 文件，或将它拖放到页面上。</li>
+          <li>确认工作表和打印区域的样子——PDF 会跟随编辑器渲染出的结果。</li>
+          <li>选择<strong>下载为 / 另存为</strong>，并选中 <strong>PDF</strong>，它会在你的设备上生成并下载。</li>
+        </ol>
 
-      <p>
-        表格恰恰是人们最不愿意交给随便一个网页转换器的文件，因为工资表、客户名单和财务导出都在里面。而大多数“XLSX 转
-        PDF”工具还是会把工作簿上传到服务器。这个不会：文件从磁盘读进你的浏览器标签页，在那里完成转换，全程不接触网络。
-      </p>
+        <p>
+          表格恰恰是人们最不愿意交给随便一个网页转换器的文件，因为工资表、客户名单和财务导出都在里面。而大多数“XLSX 转
+          PDF”工具还是会把工作簿上传到服务器。这个不会：文件从磁盘读进你的浏览器标签页，在那里完成转换，全程不接触网络。
+        </p>
 
-      <p>
-        转换运行在编译为 WebAssembly 的 OnlyOffice x2t
-        引擎上。它是一个真正的计算引擎而不是静态预览，因此公式会以其计算结果排版，数字格式、单元格样式、合并单元格和冻结窗格都会按屏幕上的渲染效果进入
-        PDF。
-      </p>
+        <p>
+          转换运行在编译为 WebAssembly 的 OnlyOffice x2t
+          引擎上。它是一个真正的计算引擎而不是静态预览，因此公式会以其计算结果排版，数字格式、单元格样式、合并单元格和冻结窗格都会按屏幕上的渲染效果进入
+          PDF。
+        </p>
 
-      <p>
-        导出前有一点值得知道：PDF
-        是分页的，而表格不分页，所以分页方式决定了结果是否易读。较宽的表格如果不先设置打印区域或缩放，就会被切到多页上。导出前先在编辑器里看一眼版面——它渲染成什么样，PDF
-        就是什么样。
-      </p>
+        <p>
+          导出前有一点值得知道：PDF
+          是分页的，而表格不分页，所以分页方式决定了结果是否易读。较宽的表格如果不先设置打印区域或缩放，就会被切到多页上。导出前先在编辑器里看一眼版面——它渲染成什么样，PDF
+          就是什么样。
+        </p>
 
-      <aside class="oss">
-        <strong>开源且可自托管。</strong>基于 AGPL-3.0——你可以自行验证没有任何上传，或运行你自己的副本：<a
-          href="https://github.com/ranuts/document"
-          rel="noopener"
-          >github.com/ranuts/document</a
-        >。
+        <aside class="oss">
+          <strong>开源且可自托管。</strong>基于 AGPL-3.0——你可以自行验证没有任何上传，或运行你自己的副本：<a
+            href="https://github.com/ranuts/document"
+            rel="noopener"
+            >github.com/ranuts/document</a
+          >。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>在这里怎么把 XLSX 转成 PDF？</h3>
+          <p>在编辑器中打开 XLSX，然后使用“下载为 / 另存为”并选择 PDF，转换会在你的浏览器中进行。</p>
+          <h3>转换时我的表格会被上传吗？</h3>
+          <p>不会。它完全在你的浏览器标签页内打开和转换，你的数据不会离开设备。</p>
+          <h3>需要 Excel 或账号吗？</h3>
+          <p>都不需要。不需要 Excel，不需要 365 订阅，也不需要注册。</p>
+          <h3>导出的是公式还是数值？</h3>
+          <p>PDF 是固定的渲染结果，因此每个公式都以其计算值出现——和编辑器中显示的值一致。</p>
+          <h3>为什么我的宽表格被分到了多页？</h3>
+          <p>PDF 是分页的而表格不是。导出前在编辑器中设置打印区域或缩放比例，PDF 就会跟随你看到的样子。</p>
+          <h3>多个工作表会一起导出吗？</h3>
+          <p>工作簿会带着全部工作表打开。导出前先确认编辑器渲染出的内容，PDF 捕捉的就是它。</p>
+          <h3>支持旧的 .xls 文件吗？</h3>
+          <p>支持。.xlsx 和旧的 .xls 都用同一个引擎打开，也都能导出为 PDF。</p>
+          <h3>离线能用吗？</h3>
+          <p>可以。加载一次之后它就是可安装的 PWA，没有网络也能继续转换。</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 XLSX →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#如何操作">如何操作</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
+          <a href="/zh-CN/convert/pptx-to-pdf">PPTX 转 PDF</a>
+          <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+          <a href="/zh-CN/open/docx">打开 DOCX</a>
+          <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>在这里怎么把 XLSX 转成 PDF？</h3>
-        <p>在编辑器中打开 XLSX，然后使用“下载为 / 另存为”并选择 PDF，转换会在你的浏览器中进行。</p>
-        <h3>转换时我的表格会被上传吗？</h3>
-        <p>不会。它完全在你的浏览器标签页内打开和转换，你的数据不会离开设备。</p>
-        <h3>需要 Excel 或账号吗？</h3>
-        <p>都不需要。不需要 Excel，不需要 365 订阅，也不需要注册。</p>
-        <h3>导出的是公式还是数值？</h3>
-        <p>PDF 是固定的渲染结果，因此每个公式都以其计算值出现——和编辑器中显示的值一致。</p>
-        <h3>为什么我的宽表格被分到了多页？</h3>
-        <p>PDF 是分页的而表格不是。导出前在编辑器中设置打印区域或缩放比例，PDF 就会跟随你看到的样子。</p>
-        <h3>多个工作表会一起导出吗？</h3>
-        <p>工作簿会带着全部工作表打开。导出前先确认编辑器渲染出的内容，PDF 捕捉的就是它。</p>
-        <h3>支持旧的 .xls 文件吗？</h3>
-        <p>支持。.xlsx 和旧的 .xls 都用同一个引擎打开，也都能导出为 PDF。</p>
-        <h3>离线能用吗？</h3>
-        <p>可以。加载一次之后它就是可安装的 PWA，没有网络也能继续转换。</p>
-      </div>
-
-      <footer>
-        <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
-        <a href="/zh-CN/convert/pptx-to-pdf">PPTX 转 PDF</a>
-        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/help">帮助</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/docx">打开 DOCX</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/open/odt">打开 ODT</a>
-        <a href="/zh-CN/open/ods">打开 ODS</a>
-        <a href="/zh-CN/open/odp">打开 ODP</a>
-        <a href="/zh-CN/no-signup-document-editor">无需注册</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/offline-document-editor">离线使用</a>
-        <a href="/zh-CN/embed-document-editor">嵌入 API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
+      <a href="/zh-CN/convert/pptx-to-pdf">PPTX 转 PDF</a>
+      <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/help">帮助</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/docx">打开 DOCX</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/open/odt">打开 ODT</a>
+      <a href="/zh-CN/open/ods">打开 ODS</a>
+      <a href="/zh-CN/open/odp">打开 ODP</a>
+      <a href="/zh-CN/no-signup-document-editor">无需注册</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/offline-document-editor">离线使用</a>
+      <a href="/zh-CN/embed-document-editor">嵌入 API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>

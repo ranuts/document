@@ -41,6 +41,21 @@ describe('page width scale', () => {
     expect(declaration(history, '.history-page', 'max-width'), 'history column').toBe(prose);
   });
 
+  it('gives the article column a rail instead of widening it', () => {
+    // The wide viewport problem is not "the text is too narrow" -- 720px with
+    // 56px gutters puts the measure at 66 characters, dead centre of the band.
+    // It is that the page was a single column with nothing beside it. The frame
+    // below is 1152 (the site's wide width), the reading column is 660 so the
+    // measure lands at ~72, and the rail takes the rest. Widening the column to
+    // fill the frame would push the measure to 77.
+    const frame = /\.page \{([^}]*)\}/.exec(landing)?.[1] ?? '';
+    expect(frame).toMatch(/max-width:\s*1152px/);
+    const columns = /grid-template-columns:\s*([^;]+);/.exec(frame)?.[1] ?? '';
+    const reading = /minmax\(0,\s*(\d+)px\)/.exec(columns);
+    expect(Number(reading?.[1]), 'reading column').toBeLessThanOrEqual(680);
+    expect(Number(reading?.[1]), 'reading column').toBeGreaterThanOrEqual(600);
+  });
+
   it('bounds prose by characters, not by whatever the container happens to be', () => {
     const intro = declaration(history, '.history-intro', 'max-width');
     expect(intro).toMatch(/^\d{2}ch$/);
