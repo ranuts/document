@@ -1,4 +1,4 @@
-# OnlyOffice Web
+# 在线文档编辑器
 
 <p align="center">
   <a href="https://github.com/ranuts/document/actions/workflows/ci.yml">
@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/github/v/release/ranuts/document" alt="版本">
   </a>
   <a href="https://edit.chaxus.com/">
-    <img src="https://img.shields.io/badge/在线-体验-brightgreen" alt="在线体验">
+    <img src="https://img.shields.io/badge/在线-edit.chaxus.com-brightgreen" alt="在线站点">
   </a>
 </p>
 
@@ -19,33 +19,37 @@
   <a href="readme.md">English</a> | <b>中文</b>
 </p>
 
-基于 OnlyOffice 的隐私优先浏览器文档编辑器。直接在浏览器中编辑 DOCX、XLSX、PPTX、CSV 文件——无需服务器、无需上传、无需注册账号。
+在浏览器标签页里打开和编辑 Word、Excel、PPT 文件。没有服务器：OnlyOffice 引擎和它的
+WASM 转换器都跑在访问者自己的设备上，文档不会被上传，也不需要注册账号。
+
+**线上地址：[edit.chaxus.com](https://edit.chaxus.com/)**
 
 ---
 
 ## ✨ 主要特性
 
-- 🔒 **隐私优先** — 所有处理在本地完成，不上传任何数据
-- 📝 **多格式支持** — DOCX、XLSX、PPTX、CSV 等
-- 🚀 **无需服务器** — 纯前端实现，可部署到任意静态托管
-- 🌐 **URL 打开** — 通过 `/editor?src=` 或 `/editor?file=` 参数直接加载远程文档（旧的 `/?src=` 会跳转）
-- 📦 **PWA 支持** — 可安装，支持离线使用
-- 🌍 **多语言** — 中文、英文及更多语言
-- 🧩 **可嵌入** — 完整的 postMessage API 支持 iframe 集成
+- 🔒 **不上传任何文件** — 转换、编辑、导出全部发生在这个标签页里
+- 📝 **是编辑，不是预览** — DOCX、XLSX、PPTX、CSV，另支持 ODF、RTF、TXT 与旧版二进制格式；PDF 可打开并批注
+- 🕓 **自动保存与本地历史** — 恢复点存在你自己的浏览器里，七天后自动清除（[说明](#-数据只留在你的设备上)）
+- 📴 **可离线使用** — 可安装为 PWA，首次访问之后无需联网
+- 🌍 **多语言** — 站点界面 8 种语言，编辑器界面 45 种
+- 🧩 **可嵌入** — 完整的 iframe postMessage API
+- 🤖 **面向 Agent** — 提供 WebMCP 工具，浏览器内的 AI Agent 可直接打开、转换、读取文档
+- 🚀 **随处部署** — 纯静态产物，放在任意 Web 服务器后面即可
 
 ---
 
 ## 🚀 快速开始
 
-**在线体验：** [edit.chaxus.com](https://edit.chaxus.com/)
+**直接使用：**[edit.chaxus.com](https://edit.chaxus.com/)，无需安装。
 
-**Docker 运行：**
+**用 Docker 自建：**
 
 ```bash
 docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 ```
 
-**本地开发：**
+**从源码运行：**
 
 ```bash
 git clone https://github.com/ranuts/document.git
@@ -56,42 +60,58 @@ pnpm run dev
 
 ---
 
-## 📖 使用方法
+## 📄 支持的格式
 
-### 打开文档
+| 类型 | 可编辑           | 也能打开                    |
+| ---- | ---------------- | --------------------------- |
+| 文档 | `.docx`          | `.doc` `.odt` `.rtf` `.txt` |
+| 表格 | `.xlsx` `.csv`   | `.xls` `.ods`               |
+| 演示 | `.pptx`          | `.ppt` `.odp`               |
+| PDF  | 批注、填写、导出 | `.pdf`                      |
 
-1. 点击上传按钮选择本地文件，或
-2. 通过 URL 参数传入：`/editor?src=https://example.com/document.docx`
-
-> 远程 URL 需支持 CORS。
-
-### URL 参数
-
-| 参数     | 说明                        | 优先级 |
-| -------- | --------------------------- | ------ |
-| `src`    | 从 URL 打开文档（推荐）     | 低     |
-| `file`   | 从 URL 打开文档（向后兼容） | 高     |
-| `locale` | 设置界面语言（`en`、`zh`）  | —      |
-
-同时提供 `src` 和 `file` 时，`file` 优先。
-
-### 离线使用（PWA）
-
-通过 HTTPS（或 localhost）访问编辑器，点击地址栏中的**安装**图标。安装后可在无网络环境下正常使用。
-
-> Service Worker 在 `file://` 协议下无法工作，请使用本地服务器或已安装的 PWA。
-
-### 作为组件库使用
-
-本项目为 [@ranui/preview](https://www.npmjs.com/package/@ranui/preview) WebComponent 组件库提供文档预览能力。
-
-📚 [预览组件文档](https://chaxus.github.io/ran/src/ranui/preview/)
+以上都可以导出为 PDF。CSV 存回时保持原编码（打开时会依次嗅探 UTF-8、GB18030、Latin-1）。
 
 ---
 
-## 🧩 iframe 嵌入
+## 🔗 路由与 URL 参数
 
-将编辑器嵌入到你的应用中，通过 postMessage 控制。推荐架构：父系统负责鉴权和文件上传，iframe 只负责编辑。
+| 路由                  | 说明                                     |
+| --------------------- | ---------------------------------------- |
+| `/`                   | 落地页。不打开文档就不会加载编辑器代码。 |
+| `/editor`             | 编辑器。                                 |
+| `/history`            | 本机浏览器当前保存的文档（见下）。       |
+| `/help`、`/changelog` | 由 `content/` 下的 markdown 生成。       |
+
+`/editor` 的参数：
+
+| 参数           | 说明                                                                     |
+| -------------- | ------------------------------------------------------------------------ |
+| `src=<url>`    | 从 URL 打开文档（该 URL 需允许 CORS）                                    |
+| `file=<url>`   | 同上，旧写法；两者同时存在时以它为准                                     |
+| `new=docx`     | 新建空白文档（`docx`、`xlsx`、`pptx`）                                   |
+| `doc=<id>`     | 从本机历史打开某一篇——编辑器会把自己的 id 写在这里，因此刷新会回到同一篇 |
+| `readonly=1`   | 只读打开：禁用编辑与导出                                                 |
+| `embed=1`      | 嵌入模式，由宿主页面通过 postMessage 驱动                                |
+| `locale=zh-CN` | 界面语言                                                                 |
+
+---
+
+## 🔐 数据只留在你的设备上
+
+文档不会被发送到任何地方。本机会保留两样东西，且都可以由你删除：
+
+- **恢复点**：编辑过程中，编辑器会把快照写进本浏览器的 IndexedDB，这样关掉标签页或
+  浏览器崩溃都不会让工作白做。它们是恢复点，不是备份——重要文档请照常导出保存到磁盘。
+- **七天窗口**：每篇文档在你最后一次编辑或打开的七天后自动删除，不需要你做任何事。
+
+[`/history`](https://edit.chaxus.com/history) 列出当前保存的全部内容，每一行都有删除，
+顶部有"清空全部"，自动保存本身也可以在那里关掉。共用电脑上，先看这一页。
+
+---
+
+## 🧩 通过 iframe 嵌入
+
+嵌入编辑器并用 postMessage 驱动。常见分工是：你的系统负责鉴权与存储，iframe 只负责编辑。
 
 ```html
 <iframe
@@ -110,32 +130,44 @@ iframe.contentWindow.postMessage(
 
 // 监听结果
 window.addEventListener('message', (e) => {
-  if (e.data?.type === 'document:opened') console.log('可以开始编辑');
+  if (e.data?.type === 'document:opened') console.log('可以编辑了');
   if (e.data?.type === 'document:saved') uploadFile(e.data.payload.file);
 });
 ```
 
-→ **[完整 API 文档](docs/embed-api.zh.md)** — 所有消息类型、参数说明及示例，包含鉴权、只读模式、保存流程等。
+嵌入模式下不会写入本地历史——那份文档属于宿主页面。
+
+→ **[完整 API 文档](docs/embed-api.zh.md)** — 全部消息类型、来源白名单、只读模式与保存流程。
+
+也可以作为组件使用：本项目为
+[@ranui/preview](https://www.npmjs.com/package/@ranui/preview)
+提供文档预览能力（[组件文档](https://chaxus.github.io/ran/src/ranui/preview/)）。
+
+---
+
+## 🤖 浏览器 AI Agent（WebMCP）
+
+在支持该能力的浏览器上，页面会注册一组工具，浏览器内的 Agent 可以直接调用，而不必去"看"和"点"
+界面：`open_document_url`、`open_document_buffer`、`create_document`、`save_document`、
+`get_document_text`、`set_readonly`、`get_document_state`。文档同样不会离开设备——由浏览器
+自己抓取和转换。浏览器没有这套 API 时整体无操作，对普通用户零影响。
 
 ---
 
 ## 🚀 部署
 
-这是纯静态应用，构建一次即可部署到任意平台。
+纯静态产物——没有运行时，没有数据库。
 
 ```bash
-pnpm build   # 输出到 dist/
+pnpm build   # 产物在 dist/
 ```
 
-### GitHub Pages
+### 静态托管（Cloudflare Pages、Nginx、Vercel、Netlify……）
 
-推送到 `main` 分支后，内置工作流（`.github/workflows/pages-build-site.yml`）会自动构建并部署。在仓库 Settings → Pages 中将 Source 设置为 **GitHub Actions** 即可。
+上传 `dist/` 即可。`public/_headers` 里写着本站期望的缓存契约（带哈希的资源永久缓存、
+service worker 永不缓存）；不支持该文件的托管也能跑，只是会多做校验。
 
-### 静态托管（Nginx、Vercel、Netlify、Cloudflare Pages 等）
-
-将 `dist/` 目录上传到任意静态托管服务，无需服务端运行时。
-
-Nginx 参考配置（将所有路由回退到 `index.html`）：
+Nginx 需要把 `index.html` 作为未知路由的兜底：
 
 ```nginx
 location / {
@@ -144,45 +176,69 @@ location / {
 }
 ```
 
+### GitHub Pages
+
+`.github/workflows/pages-build-site.yml` 会在推送到 `main` 时构建并部署。
+在仓库设置里启用 Pages，来源选 **GitHub Actions**。
+
 ### Docker
 
 ```bash
-# 基础部署
+# 基础用法
 docker run -d --name document -p 8080:80 ghcr.io/ranuts/document:latest
 
-# 启用 HTTPS 和基础认证
+# 带 HTTPS 与基础认证
 docker run -d --name document -p 443:443 \
-  -v /证书路径:/ssl \
-  -e SERVER_BASIC_AUTH='用户名:BCrypt加密密码' \
+  -v /path/to/certs:/ssl \
+  -e SERVER_BASIC_AUTH='user:$2y$...' \
   -e SERVER_HTTP2_TLS=true \
   -e SERVER_HTTP2_TLS_CERT=/ssl/cert.pem \
   -e SERVER_HTTP2_TLS_KEY=/ssl/key.pem \
   ghcr.io/ranuts/document:latest
 ```
 
-`SERVER_BASIC_AUTH` 使用 BCrypt 加密密码，加密结果中的 `$` 需替换为 `$$` 进行转义。
+`SERVER_BASIC_AUTH` 接受 BCrypt 哈希；shell 里需要把 `$` 写成 `$$` 转义。
+镜像自身的缓存策略在 `sws.toml`。
 
 ---
 
 ## 🔤 字体
 
-编辑器字体库随内置的 OnlyOffice 编译产物一起提供（`public/fonts/`，由 `public/sdkjs/common/AllFonts.js` 索引），按需加载——文档用到哪个字体才会下载哪个。
+随附的 OnlyOffice 构建把字体库放在 `public/fonts/`，由
+`public/sdkjs/common/AllFonts.js` 建立索引。字体按需拉取——一篇文档只会下载它真正用到的那些。
 
-→ **[字体管理指南](docs/fonts.zh.md)** — 注意：该指南描述的是旧版（v7）字体机制，待按新的索引字体布局重写。
+→ **[字体管理指南](docs/fonts.zh.md)** — 索引字体目录的线格式、各处注册表，
+以及如何用 `bin/font-catalog.mjs` 添加字体。
 
 ---
 
-## 📚 参考资料
+## 🛠 开发
 
-- [onlyoffice-x2t-wasm](https://github.com/cryptpad/onlyoffice-x2t-wasm) — 基于 WASM 的文档转换器
-- [web-apps](https://github.com/ONLYOFFICE/web-apps) — OnlyOffice 网页应用
-- [sdkjs](https://github.com/ONLYOFFICE/sdkjs) — OnlyOffice JavaScript SDK
-- [se-office](https://github.com/Qihoo360/se-office) — 安全文档编辑器
-- [onlyoffice-web-local](https://github.com/sweetwisdom/onlyoffice-web-local) — 本地网页版 OnlyOffice
+```bash
+pnpm install --frozen-lockfile
+pnpm run dev            # 开发服务器
+pnpm run build          # 生产构建（bin/build.sh）
+pnpm run lint           # oxlint + tsc + docker 配置检查
+pnpm run test           # 单元测试（Vitest）
+pnpm run test:e2e       # 端到端测试（Playwright，真实编辑器 + 真实 WASM）
+```
+
+端到端测试跑的是真实编辑器和真实转换器，不是 mock，覆盖文档往返、嵌入协议与恢复流程。
+`docs/explorations/` 记录了每一处不显然的设计为什么是现在这样——改编辑器集成之前值得先读。
+
+---
+
+## 📚 基于这些项目
+
+- [sdkjs](https://github.com/ONLYOFFICE/sdkjs) 与 [web-apps](https://github.com/ONLYOFFICE/web-apps) — OnlyOffice 编辑器本体
+- [onlyoffice-x2t-wasm](https://github.com/cryptpad/onlyoffice-x2t-wasm) — WASM 文档转换器
+- [ranui / ranuts](https://github.com/chaxus/ran) — 本站使用的设计体系与工具库
+- [se-office](https://github.com/Qihoo360/se-office)、[onlyoffice-web-local](https://github.com/sweetwisdom/onlyoffice-web-local) — 无文档服务器运行 OnlyOffice 的先行方案
 
 ## 🤝 贡献
 
-欢迎提交 Issue 和 Pull Request！
+欢迎提 Issue 和 PR。`main` 受保护：请在分支上开发并提 PR，CI 会跑 lint、单元测试，
+以及三套端到端测试（开发服务器、Cloudflare Pages 语义、生产 Docker 镜像）。
 
 ## 📄 许可证
 
