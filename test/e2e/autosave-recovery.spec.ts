@@ -15,8 +15,9 @@ declare function post(type: string, payload?: Record<string, unknown>): Promise<
  * The snapshot is triggered by hiding the page rather than by waiting out the
  * interval. That is not a shortcut around the schedule: visibilitychange is
  * the branch that matters most in production (it is the last moment that
- * reliably gets time to run before a tab goes away), and waiting 90 s of wall
- * clock in CI to exercise the same export would only buy a slower suite.
+ * reliably gets time to run before a tab goes away), and waiting out the
+ * periodic interval in CI to exercise the same export would only buy a slower
+ * suite.
  */
 const waitForEditorReady = (page: Page) =>
   page.waitForFunction(
@@ -104,12 +105,13 @@ test.describe('autosave and recovery (real editor)', () => {
     // The tab goes away without the user ever exporting.
     await hidePage(page);
 
-    // Well inside SNAPSHOT_INTERVAL_MS (90 s) on purpose: with a longer window
-    // the periodic tick would eventually take a snapshot too, and the test
-    // would pass whether or not hiding the page did anything -- which is
-    // exactly what it looked like before this bound was tightened.
+    // Inside the shortest interval the scheduler can ever choose
+    // (MIN_SNAPSHOT_INTERVAL_MS, 30 s) on purpose: with a longer window the
+    // periodic tick would eventually take a snapshot too, and the test would
+    // pass whether or not hiding the page did anything -- which is exactly
+    // what it looked like before this bound was tightened.
     await expect
-      .poll(async () => (await readHistory(page)).length, { timeout: 45_000, message: 'a snapshot was stored' })
+      .poll(async () => (await readHistory(page)).length, { timeout: 25_000, message: 'a snapshot was stored' })
       .toBe(1);
     const [stored] = await readHistory(page);
     expect(stored.title).toBe('Recovery.docx');
@@ -162,7 +164,7 @@ test.describe('autosave and recovery (real editor)', () => {
 
     await hidePage(page);
     await expect
-      .poll(async () => (await readHistory(page)).length, { timeout: 45_000, message: 'a snapshot was stored' })
+      .poll(async () => (await readHistory(page)).length, { timeout: 25_000, message: 'a snapshot was stored' })
       .toBe(1);
 
     await page.reload();

@@ -335,7 +335,9 @@ DOCY/XLSY 内部格式，或 changes op log 重放（y-indexeddb 那一派）。
 
 ## 八、还没答的问题
 
-1. 一次 `asc_DownloadAs` 在典型 docx/xlsx/pptx 上要多久、内存峰值多少（跑语料就有）。
+1. ~~一次 `asc_DownloadAs` 在典型 docx/xlsx/pptx 上要多久~~ —— **已测**：热导出 42~123 ms，
+   首次约 1.2 s（加载 x2t）。间隔因此改成按占空比自适应，见
+   [导出成本实测](./2026-08-22-export-cost-and-adaptive-snapshots.md)。内存峰值仍未量。
 2. `DOCY`/`XLSY` 是否绕过 x2t、产物能否重新打开、体积比 docx 大多少。
 3. PDF、只读、新建空文档要不要进历史（我倾向：新建要，只读不要，PDF 看它是否可编辑）。
 4. `visibilitychange → hidden` 那一拍在移动端到底还剩多少时间能跑完一次导出（要实测，
