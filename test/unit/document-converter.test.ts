@@ -166,9 +166,14 @@ describe('X2TConverter', () => {
       await (converter as any).loadFontsForPdf();
 
       // Catalog indexes are fetched, not the old (nonexistent) named TTFs.
+      // Which index backs which alias is not asserted here: the slots moved
+      // once already, when bin/font-license-sweep.mjs swapped the proprietary
+      // faces out, and pinning them here only produces a false red. What has
+      // to hold is that every fetch is a catalog index and every alias in the
+      // manifest gets written.
       const fetchedUrls = fetchMock.mock.calls.map((call) => String(call[0]));
-      expect(fetchedUrls.some((url) => url.endsWith('fonts/072'))).toBe(true);
-      expect(fetchedUrls.some((url) => url.endsWith('fonts/017'))).toBe(true);
+      expect(fetchedUrls.length).toBeGreaterThan(0);
+      expect(fetchedUrls.every((url) => /fonts\/\d{3}$/.test(url))).toBe(true);
 
       const writtenPaths = writeFile.mock.calls.map((call) => String(call[0]));
       expect(writtenPaths).toContain('/working/fonts/Arial.ttf');
@@ -183,8 +188,11 @@ describe('X2TConverter', () => {
 
     it('is non-fatal when a font fetch fails: remaining fonts still load', async () => {
       const { wire } = makeCatalogBytes();
+      // Fail whichever slot happens to back Arial, without naming it.
+      const manifest = (X2TConverter as any).PDF_FONT_MANIFEST as { file: string; aliases: string[] }[];
+      const arialSlot = manifest.find((entry) => entry.aliases.includes('Arial.ttf'))!.file;
       const fetchMock = vi.fn().mockImplementation(async (url: string) => {
-        if (String(url).endsWith('fonts/072')) throw new Error('network down');
+        if (String(url).endsWith(`fonts/${arialSlot}`)) throw new Error('network down');
         return { ok: true, arrayBuffer: async () => wire.buffer.slice(0) };
       });
       vi.stubGlobal('fetch', fetchMock);
