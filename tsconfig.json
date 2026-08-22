@@ -19,17 +19,7 @@
     "experimentalDecorators": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": ["./*"],
-      "@/types/*": ["./types/*"],
-      "@/src/*": ["./src/*"],
-      "@/styles/*": ["./styles/*"],
-      "@/components/*": ["./components/*"],
-      "@/router/*": ["./router/*"],
-      "@/lib/*": ["./lib/*"],
-      "@/store/*": ["./store/*"],
-      "@/assets/*": ["./assets/*"],
-      "@/pages/*": ["./pages/*"],
-      "@/locales/*": ["./locales/*"]
+      "@/*": ["./*"]
     }
   }
 }

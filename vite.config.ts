@@ -102,21 +102,12 @@ export default defineConfig(() => {
     },
     plugins: [generatedPages(), cleanUrls(publicDirName)],
     resolve: {
-      alias: {
-        '@/lib': resolve(__dirname, 'lib'),
-        '@/store': resolve(__dirname, 'store'),
-        '@/assets': resolve(__dirname, 'assets'),
-        '@/types': resolve(__dirname, 'types'),
-        '@/styles': resolve(__dirname, 'styles'),
-      },
+      // One wildcard, matching tsconfig's `"@/*": ["./*"]`, so `@/lib/x`
+      // resolves the same way for tsc and for the bundler. The five
+      // directory-specific aliases that used to live here pointed at
+      // `store/` and `assets/`, which do not exist in this repo.
+      alias: { '@': __dirname },
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
-    },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@import "@/styles/base.css";`,
-        },
-      },
     },
   };
 });

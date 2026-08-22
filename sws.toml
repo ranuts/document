@@ -55,13 +55,18 @@ source = "/ran-fonts/**"
 [advanced.headers.headers]
 Cache-Control = "public, max-age=604800, must-revalidate"
 
-# The editor's indexed font catalog (000..266, 200 KB - 5 MB each): replaced
+# The editor's indexed font catalog (000..266, 2 KB - 16 MB each): replaced
 # only together with the vendor build, and revalidating them per open is what
 # put a CJK deck on "Loading presentation" for minutes on production.
+# Content-Type mirrors _headers -- these have no extension, so without it the
+# server types them application/octet-stream and skips compression on files
+# that gzip to roughly half. The bytes are an XOR-prefixed TTF consumed via
+# XHR arraybuffer, so the label is for transport only (see public/_headers).
 [[advanced.headers]]
 source = "/fonts/*"
 [advanced.headers.headers]
 Cache-Control = "public, max-age=31536000, immutable"
+Content-Type = "font/ttf"
 X-Robots-Tag = "noindex"
 
 # The x2t WASM (9.9 MB gz): the single largest download, vendor-versioned.

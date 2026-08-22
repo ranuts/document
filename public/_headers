@@ -43,15 +43,36 @@
   Cache-Control: public, max-age=604800, must-revalidate
 
 # The editor's indexed font catalog (public/fonts/000..266, XOR wire format,
-# 200 KB - 5 MB each). Named by catalog index and only ever replaced together
+# 2 KB - 16 MB each). Named by catalog index and only ever replaced together
 # with the vendor build, so they are effectively immutable. Without an
 # explicit rule Pages served them max-age=0 / cf-cache-status DYNAMIC: every
 # open of a CJK deck re-downloaded 30+ MB of fonts through the SDK's serial
 # font queue and sat on "Loading presentation" for minutes on production
 # while localhost dev was instant. Long-lived at both the CF edge and the
 # browser.
+#
+# Content-Type is declared here for one reason: transfer compression. These
+# files have no extension, so Pages typed them application/octet-stream, which
+# is not on Cloudflare's compressible-content-type list -- production served
+# every byte raw (verified: `curl -H 'Accept-Encoding: br, gzip'` on
+# /fonts/103 returned content-length 17151049 and no content-encoding, while
+# a sibling .js on the same origin came back br-encoded). The CJK faces gzip
+# to 52-69% of their size, so the first open of a Chinese, Japanese or Korean
+# document was paying roughly double. font/ttf is on that list.
+#
+# The bytes are a TTF whose first 32 bytes are XOR-obfuscated (see
+# docs/fonts.md), so this is a transport label, not a promise that a browser
+# could use the file as a webfont directly. Nothing parses it as one: the
+# vendor font loader pulls these through XMLHttpRequest with
+# responseType = 'arraybuffer', where the response Content-Type takes no part.
+#
+# Edge caching is a separate axis and _headers cannot reach it: the same probe
+# showed cf-cache-status DYNAMIC on repeat GETs, i.e. every request goes to
+# origin. That needs a Cache Rule in the Cloudflare dashboard, which does not
+# live in this repo.
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+  Content-Type: font/ttf
   X-Robots-Tag: noindex
 
 # The x2t WASM (9.9 MB gz): the single largest first-save download; also
