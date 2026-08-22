@@ -14,6 +14,7 @@ import 'ranui/card';
 import 'ranui/select';
 import { initWebMcp } from './lib/web-mcp';
 import { installUnsavedChangesGuard } from './lib/unsaved-guard';
+import { initDocumentHistory } from './lib/history';
 import '@khmyznikov/pwa-install';
 import './styles/base.css';
 
@@ -43,6 +44,9 @@ initWebMcp();
 // Warn before an accidental close/reload throws away edits that never reached
 // the user's disk. No-op in embed mode -- the host page owns that UX.
 installUnsavedChangesGuard();
+
+// Local history: keep the recovery points in step with what reaches the disk.
+initDocumentHistory();
 
 // Privacy-friendly analytics (no-op unless VITE_CF_BEACON_TOKEN is set; never in embed mode)
 initAnalytics();
@@ -117,14 +121,20 @@ const newExt = typeof newExtRaw === 'string' ? newExtRaw.replace(/^\./, '').toLo
 const createNewOnLoad = ['docx', 'xlsx', 'pptx'].includes(newExt) && !documentUrl;
 // `?open=local`: a static landing page (e.g. /zh-CN/) stashed a picked file in
 // IndexedDB via public/open-local.js — take it out and open it on boot.
-const openLocalOnLoad = getAllQueryString()['open'] === 'local' && !documentUrl && !createNewOnLoad;
+const openParam = getAllQueryString()['open'];
+const openLocalOnLoad = openParam === 'local' && !documentUrl && !createNewOnLoad;
+// `?open=history&id=<id>`: reopen a document from the local history, and keep
+// writing snapshots to that same row rather than starting a second one for a
+// document the user already has.
+const historyIdParam = openParam === 'history' ? (getAllQueryString()['id'] ?? '') : '';
+const openHistoryOnLoad = Boolean(historyIdParam) && !documentUrl && !createNewOnLoad;
 
 // Landing hero orchestration. Only the bare homepage (no ?file/?src/?new, not
 // embedded) shows the crawlable hero. If a document is about to load or be
 // created, or we're embedded, hide it immediately to avoid a flash before the
 // editor takes over.
 const isEmbedded = document.body.classList.contains('embed-mode');
-if (documentUrl || isEmbedded || createNewOnLoad || openLocalOnLoad) {
+if (documentUrl || isEmbedded || createNewOnLoad || openLocalOnLoad || openHistoryOnLoad) {
   hideLanding();
 } else {
   // Bare /editor with nothing to open: the landing lives at / now.
@@ -144,6 +154,24 @@ if (documentUrl) {
   }
 } else if (createNewOnLoad && !isEmbedded) {
   void onCreateNew(`.${newExt}`);
+} else if (openHistoryOnLoad && !isEmbedded) {
+  void (async () => {
+    const [{ getDoc }, { restoreDocument }] = await Promise.all([
+      import('./lib/history/store'),
+      import('./lib/history/recovery'),
+    ]);
+    // One-shot param, same as ?open=local: a reload should not reopen an old
+    // snapshot over whatever the user is doing by then.
+    const cleaned = new URL(window.location.href);
+    cleaned.searchParams.delete('open');
+    cleaned.searchParams.delete('id');
+    window.history.replaceState(null, '', cleaned);
+    const doc = await getDoc(historyIdParam);
+    if (!doc || !(await restoreDocument(doc))) {
+      // The row was deleted or its bytes are gone: nothing to open.
+      window.location.replace('/');
+    }
+  })();
 } else if (openLocalOnLoad && !isEmbedded) {
   void import('./lib/pending-open').then(async ({ takePendingFile }) => {
     const file = await takePendingFile();
@@ -158,6 +186,20 @@ if (documentUrl) {
       // Stale deep link (reload, bookmarked URL): nothing pending -- back to the landing.
       window.location.replace('/');
     }
+  });
+}
+
+// Boot-time recovery offer. Deliberately late and lazy: it must not compete
+// with the document that is opening for either attention or bandwidth, and the
+// history UI has no business in the critical path of an editor that may have
+// nothing to recover.
+if (!isEmbedded) {
+  window.addEventListener('load', () => {
+    window.setTimeout(() => {
+      void import('./lib/history/recovery').then(({ offerRecovery }) =>
+        offerRecovery({ excludeId: historyIdParam || undefined }),
+      );
+    }, 1500);
   });
 }
 

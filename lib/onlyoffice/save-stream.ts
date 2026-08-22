@@ -9,6 +9,19 @@ import { isEmbedMode } from '../embed-mode';
 import { markDocumentSaved } from '../unsaved-guard';
 
 /**
+ * Notified when bytes actually reach the user's disk.
+ *
+ * Injected rather than imported: the history layer exports through this
+ * module, so importing it back would close a cycle. Same shape as
+ * setConverterCallbacks elsewhere in the app.
+ */
+let savedToDiskListener: (() => void) | null = null;
+
+export function setSavedToDiskListener(listener: (() => void) | null): void {
+  savedToDiskListener = listener;
+}
+
+/**
  * The v9 save channel end to end: the request the caller holds, the export
  * trigger on the editor frame, and the 'onlyoffice-file-stream' message the
  * finished bytes come back on.
@@ -101,7 +114,12 @@ function routeSavedFile(file: File): void {
 
   // Reaching the user's disk is the only thing that clears the unsaved-changes
   // warning: an autosave snapshot lives in this browser, a saved file does not.
-  saveFileToDisk(file, file.name).then(markDocumentSaved).catch(notifyOperationFailed);
+  saveFileToDisk(file, file.name)
+    .then(() => {
+      markDocumentSaved();
+      savedToDiskListener?.();
+    })
+    .catch(notifyOperationFailed);
 }
 
 function handleFileStreamMessage(event: MessageEvent): void {
