@@ -41,14 +41,11 @@
     '/sdkjs/common/libfont/engine/fonts.wasm',
     // The catalog entries all three editors load. Measured across docx/xlsx/pptx;
     // test/e2e/landing-prefetch.spec.ts fails if that stops being true, which is
-    // how a vendor bump that renumbers the catalog gets noticed -- and did:
-    // these were 072/074/075/076 until bin/font-license-sweep.mjs replaced the
-    // proprietary faces, and warming a deleted slot is four guaranteed 404s.
-    // The four Liberation Sans faces are what the Arial slots now resolve to.
-    '/fonts/062',
-    '/fonts/059',
-    '/fonts/060',
-    '/fonts/061',
+    // how a vendor bump that renumbers the catalog gets noticed.
+    '/fonts/072',
+    '/fonts/074',
+    '/fonts/075',
+    '/fonts/076',
     // Only needed to open an existing file, which is what the hero CTA does.
     '/sdkjs/common/wasm/x2t/x2t.wasm.gz',
   ];
