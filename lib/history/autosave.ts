@@ -27,8 +27,37 @@ import { isEmbedMode } from '../embed-mode';
 import { extensionOf, markOpened, putSnapshot } from './store';
 import type { HistoryDoc, HistoryOrigin } from './types';
 
-/** Time between snapshots of a document that is being edited continuously. */
-export const SNAPSHOT_INTERVAL_MS = 90_000;
+/**
+ * Time between snapshots, derived from what the last export actually cost
+ * rather than guessed.
+ *
+ * Measured (bin/export-benchmark.mjs, desktop, warm x2t): 42 ms for a one-page
+ * docx, 87 ms for 2000 paragraphs, 123 ms for a 20k-row workbook. The first
+ * export of a session costs ~1.2 s because it loads x2t, but that is paid once
+ * and not by a snapshot.
+ *
+ * So the fixed 90 s this started with was an order of magnitude too cautious on
+ * a desktop -- and would still be too aggressive on a phone, where the same
+ * export runs several times slower on a machine already close to losing its
+ * canvas (#145). A single number cannot be right for both.
+ *
+ * Instead: spend a fixed *fraction* of wall-clock time exporting. At 1/300, a
+ * 50 ms export buys a 15 s interval (floored to 30 s), a 200 ms export buys
+ * 60 s, and a 600 ms export on a slow phone backs off to the 180 s ceiling.
+ * The device decides, by being fast or slow, and nobody has to detect it.
+ */
+export const MIN_SNAPSHOT_INTERVAL_MS = 30_000;
+export const MAX_SNAPSHOT_INTERVAL_MS = 180_000;
+/** Export time as a fraction of elapsed time: 1/300 is 0.33% of the session. */
+export const EXPORT_DUTY_CYCLE = 300;
+/** Interval used before anything has been exported and timed. */
+export const SNAPSHOT_INTERVAL_MS = 60_000;
+
+/** The interval an export of `exportMs` earns. */
+export function snapshotInterval(exportMs: number | null): number {
+  if (!exportMs || exportMs <= 0) return SNAPSHOT_INTERVAL_MS;
+  return Math.min(MAX_SNAPSHOT_INTERVAL_MS, Math.max(MIN_SNAPSHOT_INTERVAL_MS, exportMs * EXPORT_DUTY_CYCLE));
+}
 /** How often the conditions are re-checked. Cheap: it is a handful of comparisons. */
 export const TICK_MS = 15_000;
 /** Quiet time after the last edit before an export is allowed to start. */
@@ -65,6 +94,8 @@ export interface SnapshotDecision {
   lastEditAt: number;
   /** An export this session started is still running. */
   exporting: boolean;
+  /** How long the last export took, or null before the first one. */
+  lastExportMs: number | null;
 }
 
 /**
@@ -74,7 +105,7 @@ export interface SnapshotDecision {
  */
 export function shouldSnapshot(state: SnapshotDecision): boolean {
   if (!state.enabled || !state.dirty || state.readonly || !state.holdsLock || state.exporting) return false;
-  if (state.now - state.lastSnapshotAt < SNAPSHOT_INTERVAL_MS) return false;
+  if (state.now - state.lastSnapshotAt < snapshotInterval(state.lastExportMs)) return false;
   return state.now - state.lastEditAt >= IDLE_GRACE_MS;
 }
 
@@ -98,6 +129,7 @@ interface ActiveSession {
   timer: number;
   lastSnapshotAt: number;
   exporting: boolean;
+  lastExportMs: number | null;
   failures: number;
   holdsLock: boolean;
   releaseLock: (() => void) | null;
@@ -151,6 +183,7 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
   if (!active || active.exporting || !active.ext) return null;
 
   active.exporting = true;
+  const startedAt = Date.now();
   try {
     const file = await requestSaveDocument(active.ext.toUpperCase());
     const doc = await putSnapshot({
@@ -169,6 +202,9 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
     }
     active.docId = doc.id;
     active.lastSnapshotAt = Date.now();
+    // What this export cost sets the next interval: a slow device asks for
+    // snapshots less often without anyone having to identify it as slow.
+    active.lastExportMs = active.lastSnapshotAt - startedAt;
     active.failures = 0;
     return doc;
   } catch (error) {
@@ -199,6 +235,7 @@ function tick(): void {
     lastSnapshotAt: active.lastSnapshotAt,
     lastEditAt: getLastEditAt(),
     exporting: active.exporting,
+    lastExportMs: active.lastExportMs,
   };
   if (shouldSnapshot(decision)) void takeSnapshot();
 }
@@ -244,6 +281,7 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
     // its first snapshot one interval in, not two.
     lastSnapshotAt: Date.now(),
     exporting: false,
+    lastExportMs: null,
     failures: 0,
     holdsLock: held,
     releaseLock: release,

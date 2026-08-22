@@ -11,8 +11,12 @@ vi.mock('../../lib/onlyoffice/save-stream', () => ({ requestSaveDocument }));
 vi.mock('../../lib/onlyoffice/readonly', () => ({ getReadonlyMode }));
 
 import {
+  EXPORT_DUTY_CYCLE,
   IDLE_GRACE_MS,
+  MAX_SNAPSHOT_INTERVAL_MS,
+  MIN_SNAPSHOT_INTERVAL_MS,
   SNAPSHOT_INTERVAL_MS,
+  snapshotInterval,
   beginAutosaveSession,
   getAutosaveDocId,
   isAutosaveSessionActive,
@@ -34,6 +38,7 @@ const ready: import('../../lib/history/autosave').SnapshotDecision = {
   lastSnapshotAt: 1_000_000 - SNAPSHOT_INTERVAL_MS,
   lastEditAt: 1_000_000 - IDLE_GRACE_MS,
   exporting: false,
+  lastExportMs: null,
 };
 
 function fileOf(values: number[], name = 'Report.docx'): File {
@@ -51,6 +56,35 @@ async function wipe(): Promise<void> {
   });
 }
 
+describe('snapshot interval', () => {
+  it('spends a fixed fraction of the session exporting', () => {
+    // 200 ms of work every 60 s is 1/300 of the time.
+    expect(snapshotInterval(200)).toBe(200 * EXPORT_DUTY_CYCLE);
+  });
+
+  it('does not chase a fast machine below the floor', () => {
+    // Measured desktop cost: 42 ms for a small docx would earn a 13 s interval,
+    // which buys little and interrupts often, so the floor takes over. The
+    // heaviest measured shape (123 ms, a 20k-row workbook) lands above it on
+    // its own -- the duty cycle, not the floor, is doing the work there.
+    expect(snapshotInterval(42)).toBe(MIN_SNAPSHOT_INTERVAL_MS);
+    expect(snapshotInterval(123)).toBe(123 * EXPORT_DUTY_CYCLE);
+    expect(snapshotInterval(123)).toBeGreaterThan(MIN_SNAPSHOT_INTERVAL_MS);
+  });
+
+  it('backs off on a slow device instead of fighting it', () => {
+    // A phone taking 600 ms per export gets 180 s, not 30 s. The device tells
+    // us it is slow by being slow; nothing has to detect it.
+    expect(snapshotInterval(600)).toBe(MAX_SNAPSHOT_INTERVAL_MS);
+    expect(snapshotInterval(5_000)).toBe(MAX_SNAPSHOT_INTERVAL_MS);
+  });
+
+  it('has an answer before the first export is timed', () => {
+    expect(snapshotInterval(null)).toBe(SNAPSHOT_INTERVAL_MS);
+    expect(snapshotInterval(0)).toBe(SNAPSHOT_INTERVAL_MS);
+  });
+});
+
 describe('autosave scheduling rule', () => {
   it('fires when there is work, a lull, and time since the last snapshot', () => {
     expect(shouldSnapshot(ready)).toBe(true);
@@ -64,6 +98,11 @@ describe('autosave scheduling rule', () => {
     expect(shouldSnapshot({ ...ready, exporting: true })).toBe(false);
     // Too soon after the previous snapshot.
     expect(shouldSnapshot({ ...ready, lastSnapshotAt: ready.now - 1 })).toBe(false);
+    // And "too soon" moves with the machine: an export that cost 600 ms buys
+    // the ceiling, so an interval that was long enough a moment ago is not.
+    expect(
+      shouldSnapshot({ ...ready, lastExportMs: 600, lastSnapshotAt: ready.now - MIN_SNAPSHOT_INTERVAL_MS - 1 }),
+    ).toBe(false);
     // Still typing: an export on top of active editing is felt.
     expect(shouldSnapshot({ ...ready, lastEditAt: ready.now })).toBe(false);
   });
