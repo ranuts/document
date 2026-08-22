@@ -331,7 +331,13 @@ self.addEventListener('fetch', (event) => {
           if (cached) return cached;
           return fetch(event.request).then((networkResponse) => {
             if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-              putInRuntimeCache(event.request, networkResponse.clone());
+              // waitUntil, not fire-and-forget: respondWith settles as soon as the
+              // response is handed over, and a worker with no outstanding work may
+              // be terminated right then -- taking a half-written entry with it.
+              // The bigger the file the likelier that is, which is backwards: the
+              // 13.7 MB SDK is the one entry most worth keeping. Surfaced as a CI
+              // flake where the last file of a warm-up was missing from the cache.
+              event.waitUntil(putInRuntimeCache(event.request, networkResponse.clone()));
             }
             return networkResponse;
           });
@@ -368,9 +374,9 @@ self.addEventListener('fetch', (event) => {
           // If network is ok, cache and return
           if (networkResponse && networkResponse.status === 200) {
             const responseToCache = networkResponse.clone();
-            caches.open(CORE_CACHE).then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
+            // waitUntil for the same reason as the branches above: nothing else
+            // keeps the worker alive once the response has been handed over.
+            event.waitUntil(caches.open(CORE_CACHE).then((cache) => cache.put(event.request, responseToCache)));
             return networkResponse;
           }
           // If status is not 200, try cache
@@ -392,20 +398,25 @@ self.addEventListener('fetch', (event) => {
           .then((networkResponse) => {
             // Only cache valid 200 responses
             if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-              putInRuntimeCache(event.request, networkResponse.clone());
+              // Same reasoning as the vendor branch above: the revalidation half of
+              // stale-while-revalidate runs after the cached copy was handed back,
+              // so nothing else is keeping the worker alive to finish the write.
+              event.waitUntil(putInRuntimeCache(event.request, networkResponse.clone()));
             } else if (isHashedAsset && networkResponse && networkResponse.status === 404) {
               // A hashed asset that 404s means the page HTML is from another
               // deploy. Surface a network error (never an HTML body) so the
               // browser reports a clean failure, and refresh the cached shell
               // so the next navigation picks up the current HTML.
-              caches.open(CORE_CACHE).then((cache) => {
-                fetch('./index.html', { cache: 'no-cache' }).then((fresh) => {
-                  if (fresh && fresh.status === 200) {
-                    cache.put('./index.html', fresh.clone());
-                    cache.put('./', fresh);
-                  }
-                });
-              });
+              event.waitUntil(
+                caches.open(CORE_CACHE).then((cache) =>
+                  fetch('./index.html', { cache: 'no-cache' }).then((fresh) => {
+                    if (fresh && fresh.status === 200) {
+                      return Promise.all([cache.put('./index.html', fresh.clone()), cache.put('./', fresh)]);
+                    }
+                    return undefined;
+                  }),
+                ),
+              );
               return Response.error();
             }
             return networkResponse;

@@ -423,6 +423,45 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
   });
 });
 
+/**
+ * A cache write has to outlive the response it came from.
+ *
+ * `respondWith` settles the moment the response is handed to the page, and a
+ * worker with no outstanding work may be terminated right there -- taking a
+ * half-finished `cache.put` with it. The larger the file the wider that window,
+ * which is exactly backwards: the 13.7 MB SDK bundle is the entry most worth
+ * keeping. It surfaced as a CI failure where the last file of a warm-up was
+ * missing from the cache, and it is invisible locally because nothing pressures
+ * the worker to shut down.
+ */
+describe('cache writes are held open past the response', () => {
+  const src = readFileSync(resolve(__dirname, '../../public/sw.js'), 'utf8');
+
+  it('every runtime cache write is wrapped in event.waitUntil', () => {
+    // One call site per caching branch: the vendor cache-first path and the
+    // stale-while-revalidate path. (The helper's own arrow definition does not
+    // match, which is what makes this a count of call sites.)
+    const calls = [...src.matchAll(/putInRuntimeCache\(/g)];
+    expect(calls.length, 'expected a call site in each caching branch').toBe(2);
+
+    const guarded = [...src.matchAll(/event\.waitUntil\(putInRuntimeCache\(/g)];
+    expect(guarded.length, 'a putInRuntimeCache call is not inside event.waitUntil').toBe(calls.length);
+  });
+
+  it('holds the core-cache writes open too', () => {
+    // The HTML branch had the same shape. Smaller files, same failure mode.
+    const fetchHandler = src.slice(src.indexOf("addEventListener('fetch'"));
+    const coreWrites = [...fetchHandler.matchAll(/caches\.open\(CORE_CACHE\)/g)];
+    expect(coreWrites.length, 'expected the network-first and 404-recovery writes').toBe(2);
+    for (const match of coreWrites) {
+      const before = fetchHandler.slice(Math.max(0, match.index - 200), match.index);
+      expect(before, 'a CORE_CACHE write in the fetch handler is not inside event.waitUntil').toMatch(
+        /event\.waitUntil\(\s*$/,
+      );
+    }
+  });
+});
+
 describe('bin/build.sh stamps both versions into sw.js', () => {
   const script = readFileSync(resolve(__dirname, '../../bin/build.sh'), 'utf8');
 
