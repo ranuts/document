@@ -13,24 +13,110 @@ import { expect, test } from './lib/l0';
  * structured clone into IndexedDB and comes back out the way a handle to a file
  * on disk does. That is the part worth testing -- a fake object cannot survive
  * the round trip, and the round trip is the feature.
+ *
+ * The writes are counted too, because a save does not edit the file in place:
+ * it writes elsewhere and swaps the result in when the stream closes. Any
+ * snapshot taken before that swap is dead after it, so a read that straddles
+ * one fails with NotReadableError no matter what the file ends up holding.
+ * Counting opens and closes lets this spec wait for the save it asked for and
+ * then read a file nobody is replacing, rather than poll the file's contents
+ * and hope not to land inside a swap.
+ *
+ * The counting wraps createWritable on the prototype rather than on the handle
+ * the picker returns, because the second page's handle was rebuilt out of
+ * IndexedDB: anything hung on the original object is gone by then.
  */
 const stubPicker = `
   window.__pickerCalls = 0;
+  window.__writesInFlight = 0;
+  window.__writesCommitted = 0;
+
   window.showSaveFilePicker = async () => {
     window.__pickerCalls += 1;
     const root = await navigator.storage.getDirectory();
     return root.getFileHandle('saved-document.docx', { create: true });
   };
+
+  // Every frame on the page runs this, and only the top window ever saves --
+  // so a frame without the API is not a problem to report, just nothing to wrap.
+  if (typeof FileSystemFileHandle !== 'undefined') {
+    const nativeCreateWritable = FileSystemFileHandle.prototype.createWritable;
+    FileSystemFileHandle.prototype.createWritable = async function (...args) {
+      window.__writesInFlight += 1;
+      let stream;
+      try {
+        stream = await nativeCreateWritable.apply(this, args);
+      } catch (error) {
+        window.__writesInFlight -= 1;
+        throw error;
+      }
+
+      let settled = false;
+      const settle = (committed) => {
+        if (settled) return;
+        settled = true;
+        window.__writesInFlight -= 1;
+        if (committed) window.__writesCommitted += 1;
+      };
+
+      const nativeClose = stream.close.bind(stream);
+      const nativeAbort = stream.abort.bind(stream);
+      stream.close = async () => {
+        try {
+          await nativeClose();
+        } catch (error) {
+          settle(false);
+          throw error;
+        }
+        settle(true);
+      };
+      stream.abort = async (reason) => {
+        try {
+          await nativeAbort(reason);
+        } finally {
+          settle(false);
+        }
+      };
+      return stream;
+    };
+  }
 `;
 
 const pickerCalls = (page: Page) => page.evaluate(() => (window as unknown as { __pickerCalls: number }).__pickerCalls);
 
+const writesCommitted = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __writesCommitted: number }).__writesCommitted);
+
+/**
+ * Wait until the file has taken `count` writes and no stream is open on it.
+ *
+ * This is the whole answer to reading a file that something else is writing:
+ * ask when the writing is done instead of guessing. Everything below reads the
+ * file only through this gate.
+ */
+const waitForWrites = (page: Page, count: number) =>
+  page.waitForFunction(
+    (expected) => {
+      const state = window as unknown as { __writesCommitted: number; __writesInFlight: number };
+      return state.__writesCommitted >= expected && state.__writesInFlight === 0;
+    },
+    count,
+    { timeout: 120_000 },
+  );
+
+/** The bytes now in the file the picker handed out. Call it behind waitForWrites. */
 const savedBytes = (page: Page) =>
   page.evaluate(async () => {
     const root = await navigator.storage.getDirectory();
     const handle = await root.getFileHandle('saved-document.docx');
     return Array.from(new Uint8Array(await (await handle.getFile()).arrayBuffer()));
   });
+
+/** The document text in that file, which is what every assertion here is about. */
+const savedText = async (page: Page): Promise<string> => {
+  const bytes = new Uint8Array(await savedBytes(page));
+  return ooxmlText((await zipEntryText(bytes, 'word/document.xml')) || '');
+};
 
 const waitForEditorReady = (page: Page) =>
   page.waitForFunction(
@@ -80,9 +166,8 @@ test.describe('saving into the document own file (real editor)', () => {
     await page.keyboard.press('Control+s');
 
     await expect.poll(() => pickerCalls(page), { timeout: 120_000 }).toBe(1);
-    await expect.poll(async () => (await savedBytes(page)).length, { timeout: 30_000 }).toBeGreaterThan(0);
-    const first = new Uint8Array(await savedBytes(page));
-    expect(ooxmlText((await zipEntryText(first, 'word/document.xml')) || '')).toContain('first paragraph one');
+    await waitForWrites(page, 1);
+    expect(await savedText(page)).toContain('first paragraph one');
 
     // Second save: same file, no second dialog. This is the whole difference
     // from a download -- the user chose a file, not a moment.
@@ -91,13 +176,12 @@ test.describe('saving into the document own file (real editor)', () => {
     await page.keyboard.type(' two', { delay: 60 });
     await page.keyboard.press('Control+s');
 
-    await expect
-      .poll(
-        async () => ooxmlText((await zipEntryText(new Uint8Array(await savedBytes(page)), 'word/document.xml')) || ''),
-        { timeout: 120_000 },
-      )
-      .toContain('first paragraph one two');
+    await waitForWrites(page, 2);
+    expect(await savedText(page)).toContain('first paragraph one two');
     expect(await pickerCalls(page)).toBe(1);
+    // Two saves, two writes: the file is opened for writing when the user
+    // saves and at no other time.
+    expect(await writesCommitted(page)).toBe(2);
   });
 
   test('still writes to the same file after a reload', async ({ page }) => {
@@ -117,6 +201,7 @@ test.describe('saving into the document own file (real editor)', () => {
     await sdk.click({ position: { x: 300, y: 200 } });
     await page.keyboard.press('Control+s');
     await expect.poll(() => pickerCalls(page), { timeout: 120_000 }).toBe(1);
+    await waitForWrites(page, 1);
 
     // Edit again, then let autosave take a snapshot. Saving to disk clears the
     // unsaved-changes flag -- correctly, there is nothing unsaved once the file
@@ -169,12 +254,10 @@ test.describe('saving into the document own file (real editor)', () => {
     await later.keyboard.type(' after', { delay: 60 });
     await later.keyboard.press('Control+s');
 
-    await expect
-      .poll(
-        async () => ooxmlText((await zipEntryText(new Uint8Array(await savedBytes(later)), 'word/document.xml')) || ''),
-        { timeout: 120_000 },
-      )
-      .toContain('after');
+    // The second page's own counter: one write, made through a handle it never
+    // picked.
+    await waitForWrites(later, 1);
+    expect(await savedText(later)).toContain('after');
     // The new page never opened a dialog: the link survived the tab closing.
     expect(await pickerCalls(later)).toBe(0);
   });
