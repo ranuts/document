@@ -1,7 +1,8 @@
 # 自动保存到 IndexedDB + 本地文档历史页：可行性评估
 
 日期：2026-08-22
-状态：评估，未实现
+状态：评估 → 已实施（见 [实施记录](./2026-08-22-autosave-history-implementation.md)，
+其中第三节修正了本文"按文件名复用历史行"的设计，第四节补上了本文没有的七天保留窗口）
 
 ## 零、结论先说
 
@@ -214,6 +215,8 @@ bin 是 SDK 自己的序列化产物，理论上不经过 x2t，重开时走 `op
 另外保留一个总开关（关闭时同时清空），成本很低。无痕模式下 IndexedDB 会话结束即清，
 本来就符合预期，不用特殊处理；IndexedDB 不可用时静默降级（`pending-open.ts` 已是这个写法，照抄）。
 
+**已实施**：默认开启 + 历史页每行删除 + 一键清空 + 七天自动清除（见实施记录第四节）。
+
 **顺带一提**：第 1 层（写回磁盘）从根上就不产生浏览器副本——能走那条路的用户，
 泄露面比"存在浏览器里再提供删除"小一圈。这也是把它排在第 2 层前面的原因之一。
 
@@ -242,8 +245,10 @@ blobs  (keyPath: [docId, rev])
   index: by_docId
 ```
 
-存 `Blob` 而不是 `ArrayBuffer`：Chrome/Firefox 下 Blob 走独立的 blob 存储、不必整个进
-主线程内存，读的时候才 `arrayBuffer()`。
+~~存 `Blob` 而不是 `ArrayBuffer`~~ —— **实施时改成了 typed array**：字节从编辑器 frame
+过来就是 ArrayBuffer、回去也是 ArrayBuffer，Blob 只是入口包一层、出口再异步拆一层；
+而且它是所有 structured clone 实现都忠实往返的形状（fake-indexeddb 就还不出 Blob）。
+见实施记录。
 
 **分页别用 offset。** IndexedDB 没有便宜的 count-skip，正确做法是 `by_updatedAt` 上
 `openCursor(range, 'prev')` + `advance(n)`，或 keyset（记住上一页最后的

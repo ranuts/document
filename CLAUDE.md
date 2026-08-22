@@ -67,7 +67,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
                           # font-loading / comment-selection / canvas-loss /
-                          # wasm-binary-release
+                          # wasm-binary-release / unload-prompt
     open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
     open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
     font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
@@ -81,6 +81,16 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   ui.ts                 # 落地 hero 显隐 + 控制面板（右下角 Menu FAB 已于 2026-08-20 移除）
   analytics.ts          # Cloudflare Web Analytics（刻意不用 GA；线上实际走 CF 面板边缘注入，因此 embed 视图会被计入、/embed-demo 双计，读数规则见 docs/explorations/2026-08-17-analytics-edge-injection-double-count.md）
   pending-open.ts       # 静态落地页经 IndexedDB 交接文件（?open=local）
+  unsaved-guard.ts      # 未保存提示（beforeunload）+ 全局脏位，编辑器 onDocumentStateChange 驱动
+  embed-mode.ts         # isEmbedMode() 单一实现（save-stream / unsaved-guard / history 共用）
+  history/              # 本地历史（自动保存恢复点），2026-08-22
+    db.ts                 # IndexedDB schema：docs（元数据）+ blobs（字节）两个 store
+    store.ts              # CRUD、内存分页与标题子串搜索、每篇 3 rev、七天过期、配额降级
+    autosave.ts           # 节拍器：脏位 + 空闲 + 间隔三重条件，visibilitychange 补一刀，Web Locks 互斥
+    session.ts            # 会话身份：mint docId 并写进 ?doc=<id>
+    recovery.ts           # 启动恢复条（Office Document Recovery 模型）
+    types.ts / index.ts   # 记录形状与保留期工具 / 对外装配（含 savedToDisk 回调注入）
+  history-page.ts       # /history 页面（第三个 vite entry，见 history.html）
   sw-update.ts          # SW 更新策略的编辑器一侧（有文档打开时不提升 worker）；落地页一侧在 public/sw-register.js
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
 packages/             # pnpm workspace，供 ran 生态三处站点共享（包名 @ranuts/*）
@@ -99,7 +109,8 @@ content/              # 生成页面的 markdown 源（content/<locale>/*.md，f
 docs/                 # embed-api / fonts 文档、explorations/（每次改动的记录）、superpowers/plans/
 index.ts              # 编辑器入口（初始化事件、UI、PWA），挂在 editor.html
 index.html            # `/`：静态落地页（无编辑器 bundle；CTA 跳 /editor，旧深链内联脚本重定向）
-editor.html           # `/editor`：编辑器页面（?new= ?file= ?src= ?embed=1 ?open=local）
+editor.html           # `/editor`：编辑器页面（?new= ?file= ?src= ?embed=1 ?open=local ?doc=<id>）
+history.html          # `/history`：本地历史页（noindex，只读 IndexedDB 元数据，不加载编辑器）
 ```
 
 ---
@@ -229,6 +240,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）                                                                                                                                                                                                            |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
 | 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
+| 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?doc=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                                 |
 | 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                 |
 
 另有三套独立配置：`playwright.pages.config.ts`（`bin/build.sh` + `wrangler pages dev`，
@@ -512,9 +524,27 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    在没有该修复时同样全绿（它其实被另一处改动覆盖了），`layout.rightMenu`
    单向失效的用例也是宽屏挂载、根本走不到出问题的分支。反向验证的结论
    （"去掉 X 后用例 Y 变红"）写进 PR 说明与 docs/explorations 记录。
-6. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
-7. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
-8. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
+6. **本地历史（自动保存恢复点，2026-08-22 起）**：定位是 AutoRecover 而**不是** AutoSave——
+   快照只进本机 IndexedDB，永远不动用户磁盘上的文件，也**不清除未保存提示**（只有真正导出到
+   磁盘才清）。四条硬约束，改这块前先读
+   docs/explorations/2026-08-22-autosave-history-implementation.md：
+   1. **身份是 `?doc=<id>`，不是文件名**。会话在挂载前 mint id 并写进地址栏；按标题复用行
+      会把无关文档的历史合并（每个新建空文档都叫 `New_Document.docx`）。一行 = 一次编辑会话；
+      只打开不编辑不留行（行由第一次快照创建）。
+   2. **七天自动清除**，从 `max(updatedAt, lastOpenedAt)` 起算，在启动、每次写快照、
+      打开历史页三处清扫——只在历史页清扫等于没有清扫。这个窗口是对用户的承诺，
+      写在首页 HTML（不是脚本生成）与历史页每一行的倒计时里，改数字要三处一起改。
+   3. **不能自己调 `asc_DownloadAs`**：没有 in-flight 请求时 `routeSavedFile` 会直接把
+      字节存到磁盘（用户会收到一堆莫名下载）。一律走 `requestSaveDocument`，
+      被用户的保存占用时跳过这一拍。
+   4. **embed 模式与只读一律不写**；两个标签页开同一 id 由 Web Locks 互斥，拿不到锁的那个
+      不写快照（否则两边轮流覆盖，比没有历史更糟）。
+      节拍是 90s 间隔 + 2s 空闲 + 脏位三重条件，另加 `visibilitychange → hidden` 补一刀
+      （`beforeunload` 里发起导出来不及）。**E2E 等快照的窗口必须小于 90s**，否则周期 tick
+      会替你把用例变绿，测不到它声称测的分支（踩过）。
+7. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
+8. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
+9. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
 
 ---
 

@@ -7,6 +7,30 @@ notes. Entries describe what users experience, not internal refactors.
 
 ## [Unreleased]
 
+### Added
+
+- **Your edits are kept while you work, and you can get them back.** Every
+  document you edit is now saved to a recovery point inside your own browser --
+  never uploaded, never leaving the device. If the tab closes, the browser
+  crashes, or you simply come back the next day, the editor offers the work
+  back by name and tells you when you made it. The homepage offers it too, so
+  you do not have to remember where you were.
+- **A local history page** at `/history`, linked from the homepage: everything
+  this browser is holding, newest first, searchable by title (any part of the
+  name, in any language), with a delete on every row and a "clear everything"
+  at the top. Rows that hold the only copy of your work -- edits you never
+  exported to disk -- say so.
+- **It clears itself.** A document is deleted seven days after you last edit or
+  open it, automatically, whether or not you visit the page. The rule is stated
+  on the homepage and on the history page, and every row shows how long it has
+  left. Autosave can also be switched off entirely.
+- **Closing a tab with unsaved edits now asks first.** It never did, so a
+  mistaken Cmd+W or Ctrl+R silently threw the session away.
+- **A reload comes back to the same document.** The address bar now carries the
+  document's identity (`?doc=<id>`), so refreshing an unsaved document reopens
+  it instead of starting a blank one, and two files sharing a name stay
+  separate.
+
 ### Known issues
 
 - A report of "An error occurred during the work with the document" while
