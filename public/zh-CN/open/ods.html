@@ -242,87 +242,109 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">打开 · .ods</p>
-      <h1>不用 LibreOffice 打开 ODS 文件</h1>
-      <p class="lead">
-        拿到一个 <strong>.ods</strong> 表格却没装 LibreOffice？在浏览器里打开它，公式完整保留，编辑后可存回
-        ODS——或者存成 XLSX、CSV、PDF。文件不上传。
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">打开 · .ods</p>
+        <h1>不用 LibreOffice 打开 ODS 文件</h1>
+        <p class="lead">
+          拿到一个 <strong>.ods</strong> 表格却没装 LibreOffice？在浏览器里打开它，公式完整保留，编辑后可存回
+          ODS——或者存成 XLSX、CSV、PDF。文件不上传。
+        </p>
 
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 ODS →</r-button></a>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 ODS →</r-button></a>
 
-      <h2>如何操作</h2>
-      <ol>
-        <li>点击<strong>打开你的 ODS</strong>，在浏览器中启动编辑器。</li>
-        <li>从你的设备中选择 <strong>.ods</strong> 文件，或将它拖放到页面上。</li>
-        <li>编辑单元格，公式会实时重算——这是一个真正的表格计算引擎。</li>
-        <li>存回 <strong>ODS</strong>，或导出为 <strong>XLSX</strong>、<strong>CSV</strong>、<strong>PDF</strong>。</li>
-      </ol>
+        <h2 id="如何操作">如何操作</h2>
+        <ol>
+          <li>点击<strong>打开你的 ODS</strong>，在浏览器中启动编辑器。</li>
+          <li>从你的设备中选择 <strong>.ods</strong> 文件，或将它拖放到页面上。</li>
+          <li>编辑单元格，公式会实时重算——这是一个真正的表格计算引擎。</li>
+          <li>
+            存回 <strong>ODS</strong>，或导出为 <strong>XLSX</strong>、<strong>CSV</strong>、<strong>PDF</strong>。
+          </li>
+        </ol>
 
-      <p>
-        ODS 是 OpenDocument 表格格式，LibreOffice Calc 和 OpenOffice 默认保存的就是它。它是一项开放的 ISO
-        标准，凡是数据出自坚持开放格式的机构——市政部门、高校、公共数据门户——就常常会遇到它。
-      </p>
+        <p>
+          ODS 是 OpenDocument 表格格式，LibreOffice Calc 和 OpenOffice 默认保存的就是它。它是一项开放的 ISO
+          标准，凡是数据出自坚持开放格式的机构——市政部门、高校、公共数据门户——就常常会遇到它。
+        </p>
 
-      <p>
-        编译为 WebAssembly 的 OnlyOffice 表格引擎把 ODS
-        作为实时计算引擎打开，而不是静态表格：编辑时公式会重算，数字格式和单元格样式得以保留，含多个工作表的工作簿会带着全部标签页打开。你可以存回
-        ODS 继续留在开放格式里，也可以导出为 XLSX 给用 Excel 的人、CSV 给数据管线、或 PDF 作为固定副本。
-      </p>
+        <p>
+          编译为 WebAssembly 的 OnlyOffice 表格引擎把 ODS
+          作为实时计算引擎打开，而不是静态表格：编辑时公式会重算，数字格式和单元格样式得以保留，含多个工作表的工作簿会带着全部标签页打开。你可以存回
+          ODS 继续留在开放格式里，也可以导出为 XLSX 给用 Excel 的人、CSV 给数据管线、或 PDF 作为固定副本。
+        </p>
 
-      <p>
-        文件从磁盘直接读进浏览器标签页，因此不会被上传——当表格里装着预算、成员名单或数据导出，而你不想让它经过第三方转换器时，这正是关键所在。
-      </p>
+        <p>
+          文件从磁盘直接读进浏览器标签页，因此不会被上传——当表格里装着预算、成员名单或数据导出，而你不想让它经过第三方转换器时，这正是关键所在。
+        </p>
 
-      <aside class="oss">
-        <strong>开源且可自托管。</strong>基于 AGPL-3.0——你可以自行验证没有任何上传，或运行你自己的副本：<a
-          href="https://github.com/ranuts/document"
-          rel="noopener"
-          >github.com/ranuts/document</a
-        >。
+        <aside class="oss">
+          <strong>开源且可自托管。</strong>基于 AGPL-3.0——你可以自行验证没有任何上传，或运行你自己的副本：<a
+            href="https://github.com/ranuts/document"
+            rel="noopener"
+            >github.com/ranuts/document</a
+          >。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>不装 LibreOffice 能打开 ODS 文件吗？</h3>
+          <p>可以。这个编辑器直接在浏览器中打开 ODS——不需要 LibreOffice、OpenOffice 或 Excel。</p>
+          <h3>ODS 是什么文件？</h3>
+          <p>ODS 即 OpenDocument Spreadsheet，是 LibreOffice Calc 和 OpenOffice 使用的开放 ISO 标准表格格式。</p>
+          <h3>公式还能用吗？</h3>
+          <p>能。它是真正的计算引擎，编辑时公式会重算，而不是显示冻结的快照。</p>
+          <h3>能存回 ODS 吗？</h3>
+          <p>可以。你可以存回同样的开放格式，也可以导出为 XLSX、CSV 或 PDF。</p>
+          <h3>能把 ODS 转成 Excel 吗？</h3>
+          <p>可以。打开 ODS 后另存为 XLSX——转换在你的设备上完成。</p>
+          <h3>支持多个工作表的工作簿吗？</h3>
+          <p>支持。含多个标签页的工作簿会带着全部工作表打开。</p>
+          <h3>我的表格会被上传吗？</h3>
+          <p>不会。它通过 WebAssembly 在本地浏览器中打开，不会离开你的设备。</p>
+          <h3>离线能用吗？</h3>
+          <p>可以。加载一次之后它就是可安装的 PWA，没有网络也能继续使用。</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 ODS →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#如何操作">如何操作</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/open/odt">打开 ODT</a>
+          <a href="/zh-CN/open/odp">打开 ODP</a>
+          <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+          <a href="/zh-CN/open/docx">打开 DOCX</a>
+          <a href="/zh-CN/open/pptx">打开 PPTX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>不装 LibreOffice 能打开 ODS 文件吗？</h3>
-        <p>可以。这个编辑器直接在浏览器中打开 ODS——不需要 LibreOffice、OpenOffice 或 Excel。</p>
-        <h3>ODS 是什么文件？</h3>
-        <p>ODS 即 OpenDocument Spreadsheet，是 LibreOffice Calc 和 OpenOffice 使用的开放 ISO 标准表格格式。</p>
-        <h3>公式还能用吗？</h3>
-        <p>能。它是真正的计算引擎，编辑时公式会重算，而不是显示冻结的快照。</p>
-        <h3>能存回 ODS 吗？</h3>
-        <p>可以。你可以存回同样的开放格式，也可以导出为 XLSX、CSV 或 PDF。</p>
-        <h3>能把 ODS 转成 Excel 吗？</h3>
-        <p>可以。打开 ODS 后另存为 XLSX——转换在你的设备上完成。</p>
-        <h3>支持多个工作表的工作簿吗？</h3>
-        <p>支持。含多个标签页的工作簿会带着全部工作表打开。</p>
-        <h3>我的表格会被上传吗？</h3>
-        <p>不会。它通过 WebAssembly 在本地浏览器中打开，不会离开你的设备。</p>
-        <h3>离线能用吗？</h3>
-        <p>可以。加载一次之后它就是可安装的 PWA，没有网络也能继续使用。</p>
-      </div>
-
-      <footer>
-        <a href="/zh-CN/open/odt">打开 ODT</a>
-        <a href="/zh-CN/open/odp">打开 ODP</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/help">帮助</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/docx">打开 DOCX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/open/ods">打开 ODS</a>
-        <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
-        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
-        <a href="/zh-CN/no-signup-document-editor">无需注册</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/offline-document-editor">离线使用</a>
-        <a href="/zh-CN/embed-document-editor">嵌入 API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/open/odt">打开 ODT</a>
+      <a href="/zh-CN/open/odp">打开 ODP</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/help">帮助</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/docx">打开 DOCX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/open/ods">打开 ODS</a>
+      <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
+      <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+      <a href="/zh-CN/no-signup-document-editor">无需注册</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/offline-document-editor">离线使用</a>
+      <a href="/zh-CN/embed-document-editor">嵌入 API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>

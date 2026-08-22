@@ -216,96 +216,117 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">转换 · .csv → .xlsx</p>
-      <h1>在浏览器中把 CSV 转成 XLSX</h1>
-      <p class="lead">
-        把纯 <strong>.csv</strong> 文件转成带格式的 Excel
-        <strong>.xlsx</strong>——全程在浏览器本地完成，不经过任何服务器。
-      </p>
-
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 CSV →</r-button></a>
-
-      <h2>如何操作</h2>
-      <ol>
-        <li>点击<strong>打开你的 CSV</strong>，在浏览器中启动编辑器。</li>
-        <li>从你的设备中选择 <strong>.csv</strong> 文件，或将它拖放到页面上。</li>
-        <li>如需要可先设置单元格格式，然后选择<strong>下载为 / 另存为</strong>，并选中 <strong>XLSX</strong>。</li>
-        <li>XLSX 在你的设备上生成并下载——文件留在本地。</li>
-      </ol>
-
-      <p>
-        CSV 会被 OnlyOffice 引擎解析成一个真正的表格，因此你的行和列保持完整，你可以在保存为 XLSX
-        之前添加格式或公式。无需 Excel，无需账号，支持离线。
-      </p>
-
-      <p>
-        转换由编译为 WebAssembly 的 OnlyOffice x2t 引擎完成，它面向常见的办公和文本格式——Word、Excel 和 PowerPoint，外加
-        PDF、TXT、HTML 和
-        CSV。由于它在浏览器标签页内运行，没有上传队列，也没有服务器施加的大小上限，你的数据也不会经过网络。它默认使用逗号分隔值，导入步骤允许你在保存为
-        XLSX 之前选择不同的分隔符或文本编码，并标记数字、日期或文本列。
-      </p>
-
-      <p>
-        反方向同样常见：某个系统给你一份原始的 CSV
-        导出，而你想要一个整洁、带格式的工作簿来阅读或分享。在这里打开它，就能把这个扁平文件变成一个真正的表格——你可以加宽列、添加表头、应用数字和日期格式，甚至在保存为
-        XLSX 之前写入公式——而且全程不会把数据上传到任何地方。这是让机器生成的导出变得美观易读的快捷方式。
-      </p>
-
-      <h2>为什么别的工具打开中文 CSV 会乱码</h2>
-      <p>
-        乱码几乎总是编码问题：Excel"另存为 CSV"默认用系统代码页（简体中文系统是 GBK / GB18030，也就是 Excel
-        里写的"ANSI"），而多数网页工具、macOS 数据编辑器和程序库一律按 UTF-8 读，于是"客户名称"变成一串"锟斤拷"。
-        反过来，带 UTF-8 BOM 的文件在旧版 Excel 里又会把 BOM 当成内容。这个转换器在打开前先嗅探字节：先按严格 UTF-8
-        解码，失败再按 GB18030，最后 Latin-1 兜底；分隔符（逗号、分号、制表符）同样自动识别。保存回 CSV 时写入带 BOM 的
-        UTF-8，Excel 双击打开不再乱码。整个过程在你的浏览器里完成，文件不上传。
-      </p>
-
-      <aside class="oss">
-        <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
-      </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>在这里怎么把 CSV 转成 XLSX？</h3>
-        <p>在编辑器中打开 CSV，然后使用「下载为 / 另存为 XLSX」— 转换在你的浏览器中运行。</p>
-        <h3>转换时我的文件会被上传吗？</h3>
-        <p>不会。它完全在你的浏览器中运行，因此你的数据永远不会被上传。</p>
-        <h3>我的行列会保持完整吗？</h3>
-        <p>会。CSV 会被解析成一个真正的表格，因此行和列都会被保留。</p>
-        <h3>我需要 Excel 或账号吗？</h3>
-        <p>无需 Excel、无需订阅，也无需注册。</p>
-        <h3>数字和日期列会被识别吗？</h3>
-        <p>CSV 会变成一个真正的表格，因此你可以在保存为 XLSX 之前设置数字、日期和文本单元格格式。</p>
-        <h3>它期望什么分隔符和编码？</h3>
-        <p>逗号、分号、制表符自动识别；编码同样自动嗅探：UTF-8（有无 BOM 皆可）、GB18030 / GBK、最后 Latin-1。</p>
-        <h3>中文 CSV 在别的工具里乱码，这里会吗？</h3>
-        <p>
-          通常不会。乱码是文件用 GBK / GB18030 保存却被当作 UTF-8 读的结果；这里先嗅探字节再解码，Excel 导出的中文 CSV
-          能正常打开，保存时写入带 BOM 的 UTF-8，Excel 直接打开不乱码。
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">转换 · .csv → .xlsx</p>
+        <h1>在浏览器中把 CSV 转成 XLSX</h1>
+        <p class="lead">
+          把纯 <strong>.csv</strong> 文件转成带格式的 Excel
+          <strong>.xlsx</strong>——全程在浏览器本地完成，不经过任何服务器。
         </p>
-        <h3>这个转换器能离线使用吗？</h3>
-        <p>可以。加载后它就是一个可安装的 PWA，因此在没有网络时依然可用。</p>
-      </div>
 
-      <footer>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/help">帮助</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/docx">打开 DOCX</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
-        <a href="/zh-CN/no-signup-document-editor">免注册</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/offline-document-editor">离线</a>
-        <a href="/zh-CN/edit-documents-without-account">免账号</a>
-        <a href="/zh-CN/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 CSV →</r-button></a>
+
+        <h2 id="如何操作">如何操作</h2>
+        <ol>
+          <li>点击<strong>打开你的 CSV</strong>，在浏览器中启动编辑器。</li>
+          <li>从你的设备中选择 <strong>.csv</strong> 文件，或将它拖放到页面上。</li>
+          <li>如需要可先设置单元格格式，然后选择<strong>下载为 / 另存为</strong>，并选中 <strong>XLSX</strong>。</li>
+          <li>XLSX 在你的设备上生成并下载——文件留在本地。</li>
+        </ol>
+
+        <p>
+          CSV 会被 OnlyOffice 引擎解析成一个真正的表格，因此你的行和列保持完整，你可以在保存为 XLSX
+          之前添加格式或公式。无需 Excel，无需账号，支持离线。
+        </p>
+
+        <p>
+          转换由编译为 WebAssembly 的 OnlyOffice x2t 引擎完成，它面向常见的办公和文本格式——Word、Excel 和
+          PowerPoint，外加 PDF、TXT、HTML 和
+          CSV。由于它在浏览器标签页内运行，没有上传队列，也没有服务器施加的大小上限，你的数据也不会经过网络。它默认使用逗号分隔值，导入步骤允许你在保存为
+          XLSX 之前选择不同的分隔符或文本编码，并标记数字、日期或文本列。
+        </p>
+
+        <p>
+          反方向同样常见：某个系统给你一份原始的 CSV
+          导出，而你想要一个整洁、带格式的工作簿来阅读或分享。在这里打开它，就能把这个扁平文件变成一个真正的表格——你可以加宽列、添加表头、应用数字和日期格式，甚至在保存为
+          XLSX 之前写入公式——而且全程不会把数据上传到任何地方。这是让机器生成的导出变得美观易读的快捷方式。
+        </p>
+
+        <h2 id="为什么别的工具打开中文-csv-会乱码">为什么别的工具打开中文 CSV 会乱码</h2>
+        <p>
+          乱码几乎总是编码问题：Excel"另存为 CSV"默认用系统代码页（简体中文系统是 GBK / GB18030，也就是 Excel
+          里写的"ANSI"），而多数网页工具、macOS 数据编辑器和程序库一律按 UTF-8 读，于是"客户名称"变成一串"锟斤拷"。
+          反过来，带 UTF-8 BOM 的文件在旧版 Excel 里又会把 BOM 当成内容。这个转换器在打开前先嗅探字节：先按严格 UTF-8
+          解码，失败再按 GB18030，最后 Latin-1 兜底；分隔符（逗号、分号、制表符）同样自动识别。保存回 CSV 时写入带 BOM
+          的 UTF-8，Excel 双击打开不再乱码。整个过程在你的浏览器里完成，文件不上传。
+        </p>
+
+        <aside class="oss">
+          <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>在这里怎么把 CSV 转成 XLSX？</h3>
+          <p>在编辑器中打开 CSV，然后使用「下载为 / 另存为 XLSX」— 转换在你的浏览器中运行。</p>
+          <h3>转换时我的文件会被上传吗？</h3>
+          <p>不会。它完全在你的浏览器中运行，因此你的数据永远不会被上传。</p>
+          <h3>我的行列会保持完整吗？</h3>
+          <p>会。CSV 会被解析成一个真正的表格，因此行和列都会被保留。</p>
+          <h3>我需要 Excel 或账号吗？</h3>
+          <p>无需 Excel、无需订阅，也无需注册。</p>
+          <h3>数字和日期列会被识别吗？</h3>
+          <p>CSV 会变成一个真正的表格，因此你可以在保存为 XLSX 之前设置数字、日期和文本单元格格式。</p>
+          <h3>它期望什么分隔符和编码？</h3>
+          <p>逗号、分号、制表符自动识别；编码同样自动嗅探：UTF-8（有无 BOM 皆可）、GB18030 / GBK、最后 Latin-1。</p>
+          <h3>中文 CSV 在别的工具里乱码，这里会吗？</h3>
+          <p>
+            通常不会。乱码是文件用 GBK / GB18030 保存却被当作 UTF-8 读的结果；这里先嗅探字节再解码，Excel 导出的中文 CSV
+            能正常打开，保存时写入带 BOM 的 UTF-8，Excel 直接打开不乱码。
+          </p>
+          <h3>这个转换器能离线使用吗？</h3>
+          <p>可以。加载后它就是一个可安装的 PWA，因此在没有网络时依然可用。</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 CSV →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#如何操作">如何操作</a>
+          <a href="#为什么别的工具打开中文-csv-会乱码">为什么别的工具打开中文 CSV 会乱码</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+          <a href="/zh-CN/open/docx">打开 DOCX</a>
+          <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+          <a href="/zh-CN/open/pptx">打开 PPTX</a>
+          <a href="/zh-CN/open/pdf">打开 PDF</a>
+        </nav>
+      </aside>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/help">帮助</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/docx">打开 DOCX</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+      <a href="/zh-CN/no-signup-document-editor">免注册</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/offline-document-editor">离线</a>
+      <a href="/zh-CN/edit-documents-without-account">免账号</a>
+      <a href="/zh-CN/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>

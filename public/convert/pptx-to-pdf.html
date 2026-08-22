@@ -242,99 +242,119 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Convert · .pptx → .pdf</p>
-      <h1>Convert PPTX to PDF in Your Browser</h1>
-      <p class="lead">
-        Turn a PowerPoint <strong>.pptx</strong> deck into a <strong>.pdf</strong> — without uploading it anywhere. The
-        whole conversion happens locally in your browser.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Convert · .pptx → .pdf</p>
+        <h1>Convert PPTX to PDF in Your Browser</h1>
+        <p class="lead">
+          Turn a PowerPoint <strong>.pptx</strong> deck into a <strong>.pdf</strong> — without uploading it anywhere.
+          The whole conversion happens locally in your browser.
+        </p>
 
-      <a class="cta" href="/"><r-button type="primary">Open your PPTX →</r-button></a>
+        <a class="cta" href="/"><r-button type="primary">Open your PPTX →</r-button></a>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Click <strong>Open your PPTX</strong> to launch the editor in your browser.</li>
-        <li>Pick the <strong>.pptx</strong> file from your device, or drag and drop it onto the page.</li>
-        <li>Choose <strong>Download as / Save as</strong> and pick <strong>PDF</strong>.</li>
-        <li>One page per slide is generated on your device and downloaded — nothing is uploaded.</li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Click <strong>Open your PPTX</strong> to launch the editor in your browser.</li>
+          <li>Pick the <strong>.pptx</strong> file from your device, or drag and drop it onto the page.</li>
+          <li>Choose <strong>Download as / Save as</strong> and pick <strong>PDF</strong>.</li>
+          <li>One page per slide is generated on your device and downloaded — nothing is uploaded.</li>
+        </ol>
 
-      <p>
-        A deck as PDF is how you send slides to someone who should read them but not edit them, and how you make sure
-        they look the same on a machine that does not have your fonts or your version of PowerPoint. Doing that
-        conversion through an upload service means the unreleased pitch, the internal roadmap or the client proposal
-        sits on a third-party server first. Here it does not leave the tab.
-      </p>
+        <p>
+          A deck as PDF is how you send slides to someone who should read them but not edit them, and how you make sure
+          they look the same on a machine that does not have your fonts or your version of PowerPoint. Doing that
+          conversion through an upload service means the unreleased pitch, the internal roadmap or the client proposal
+          sits on a third-party server first. Here it does not leave the tab.
+        </p>
 
-      <p>
-        OnlyOffice's rendering engine, compiled to WebAssembly, draws each slide and writes it out as one PDF page.
-        Layouts, embedded images, shapes, charts and speaker-visible text come across as rendered — this is the same
-        pipeline that paints the slides on screen, so the PDF matches what you were just looking at.
-      </p>
+        <p>
+          OnlyOffice's rendering engine, compiled to WebAssembly, draws each slide and writes it out as one PDF page.
+          Layouts, embedded images, shapes, charts and speaker-visible text come across as rendered — this is the same
+          pipeline that paints the slides on screen, so the PDF matches what you were just looking at.
+        </p>
 
-      <p>
-        Two things are worth setting expectations on, because a PDF is a still document: animations and slide
-        transitions have nothing to become and are simply flattened to the slide's final state, and speaker notes are
-        not part of the slide area, so they are not what a plain slide export captures. If a deck matters, page through
-        it in the editor before exporting.
-      </p>
+        <p>
+          Two things are worth setting expectations on, because a PDF is a still document: animations and slide
+          transitions have nothing to become and are simply flattened to the slide's final state, and speaker notes are
+          not part of the slide area, so they are not what a plain slide export captures. If a deck matters, page
+          through it in the editor before exporting.
+        </p>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>How do I convert a PPTX to PDF here?</h3>
+          <p>
+            Open the PPTX in the editor, then use Download as / Save as and choose PDF. The conversion runs in your
+            browser.
+          </p>
+          <h3>Is my presentation uploaded to convert it?</h3>
+          <p>No. It is opened and converted entirely inside your browser tab, so it never leaves your device.</p>
+          <h3>Do I need PowerPoint or an account?</h3>
+          <p>Neither. No PowerPoint, no 365 subscription, no sign-up.</p>
+          <h3>What happens to animations and transitions?</h3>
+          <p>
+            A PDF is a still document, so animated builds and slide transitions are flattened — each slide is written
+            out in its final state.
+          </p>
+          <h3>Is it one PDF page per slide?</h3>
+          <p>Yes. Each slide becomes one page, in slide order.</p>
+          <h3>Are fonts and layout preserved?</h3>
+          <p>
+            Yes. The same engine that renders the slides produces the PDF, so layout, images, shapes and charts carry
+            over.
+          </p>
+          <h3>Does it work with old .ppt files?</h3>
+          <p>Yes. Both .pptx and the older .ppt open with the same engine and can be exported to PDF.</p>
+          <h3>Does the conversion work offline?</h3>
+          <p>Yes. Once loaded it is an installable PWA, so it keeps converting with no internet connection.</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open your PPTX →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/convert/docx-to-pdf">DOCX to PDF</a>
+          <a href="/convert/xlsx-to-pdf">XLSX to PDF</a>
+          <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+          <a href="/open/pptx">Open PPTX</a>
+          <a href="/open/docx">Open DOCX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>How do I convert a PPTX to PDF here?</h3>
-        <p>
-          Open the PPTX in the editor, then use Download as / Save as and choose PDF. The conversion runs in your
-          browser.
-        </p>
-        <h3>Is my presentation uploaded to convert it?</h3>
-        <p>No. It is opened and converted entirely inside your browser tab, so it never leaves your device.</p>
-        <h3>Do I need PowerPoint or an account?</h3>
-        <p>Neither. No PowerPoint, no 365 subscription, no sign-up.</p>
-        <h3>What happens to animations and transitions?</h3>
-        <p>
-          A PDF is a still document, so animated builds and slide transitions are flattened — each slide is written out
-          in its final state.
-        </p>
-        <h3>Is it one PDF page per slide?</h3>
-        <p>Yes. Each slide becomes one page, in slide order.</p>
-        <h3>Are fonts and layout preserved?</h3>
-        <p>
-          Yes. The same engine that renders the slides produces the PDF, so layout, images, shapes and charts carry
-          over.
-        </p>
-        <h3>Does it work with old .ppt files?</h3>
-        <p>Yes. Both .pptx and the older .ppt open with the same engine and can be exported to PDF.</p>
-        <h3>Does the conversion work offline?</h3>
-        <p>Yes. Once loaded it is an installable PWA, so it keeps converting with no internet connection.</p>
-      </div>
-
-      <footer>
-        <a href="/convert/docx-to-pdf">DOCX to PDF</a>
-        <a href="/convert/xlsx-to-pdf">XLSX to PDF</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/open/odt">Open ODT</a>
-        <a href="/open/ods">Open ODS</a>
-        <a href="/open/odp">Open ODP</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/convert/docx-to-pdf">DOCX to PDF</a>
+      <a href="/convert/xlsx-to-pdf">XLSX to PDF</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/open/odt">Open ODT</a>
+      <a href="/open/ods">Open ODS</a>
+      <a href="/open/odp">Open ODP</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

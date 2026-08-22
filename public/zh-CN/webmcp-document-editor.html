@@ -236,118 +236,138 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">面向浏览器助手 · WebMCP</p>
-      <h1>一个浏览器助手真正用得了的文档编辑器</h1>
-      <p class="lead">
-        这个编辑器注册了 <strong>WebMCP</strong> 工具，浏览器里的 AI
-        助手可以直接调用它们来打开、读取、转换和导出文档——而不必去猜和点一个为人设计的界面。
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">面向浏览器助手 · WebMCP</p>
+        <h1>一个浏览器助手真正用得了的文档编辑器</h1>
+        <p class="lead">
+          这个编辑器注册了 <strong>WebMCP</strong> 工具，浏览器里的 AI
+          助手可以直接调用它们来打开、读取、转换和导出文档——而不必去猜和点一个为人设计的界面。
+        </p>
 
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开编辑器 →</r-button></a>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开编辑器 →</r-button></a>
 
-      <h2>如何操作</h2>
-      <ol>
-        <li>使用提供 WebMCP API 的浏览器（Chrome，处于 origin trial 阶段）。</li>
-        <li>把<strong>编辑器</strong>作为普通标签页打开——工具只在顶层页面注册。</li>
-        <li>让浏览器的 AI 助手打开、读取、转换或导出文档。</li>
-        <li>助手直接调用工具；处理在你的设备上完成，文件不会被上传。</li>
-      </ol>
+        <h2 id="如何操作">如何操作</h2>
+        <ol>
+          <li>使用提供 WebMCP API 的浏览器（Chrome，处于 origin trial 阶段）。</li>
+          <li>把<strong>编辑器</strong>作为普通标签页打开——工具只在顶层页面注册。</li>
+          <li>让浏览器的 AI 助手打开、读取、转换或导出文档。</li>
+          <li>助手直接调用工具；处理在你的设备上完成，文件不会被上传。</li>
+        </ol>
 
-      <p>
-        大多数网页应用对 AI 助手来说是不透明的。它看到的是一堆按钮，只能猜哪个是转换，然后祈祷点对了。WebMCP——W3C Web
-        Machine Learning
-        社区组的提案——让网页把自己能做的事直接声明成带类型输入的、可调用的结构化工具，从而绕开这一整套猜测。这个编辑器声明了七个。
-      </p>
+        <p>
+          大多数网页应用对 AI 助手来说是不透明的。它看到的是一堆按钮，只能猜哪个是转换，然后祈祷点对了。WebMCP——W3C Web
+          Machine Learning
+          社区组的提案——让网页把自己能做的事直接声明成带类型输入的、可调用的结构化工具，从而绕开这一整套猜测。这个编辑器声明了七个。
+        </p>
 
-      <p>
-        这些工具是
-        <code
-          >open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly,
-          get_document_state</code
-        >。它们不是另一套实现：调用的就是按钮调用的那套本地代码，也是 iframe 嵌入 API
-        驱动的那套。所以助手拿到的能力和人完全一致，保证也一致——转换引擎是跑在你标签页里的
-        WebAssembly，文件不会离开设备。
-      </p>
+        <p>
+          这些工具是
+          <code
+            >open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly,
+            get_document_state</code
+          >。它们不是另一套实现：调用的就是按钮调用的那套本地代码，也是 iframe 嵌入 API
+          驱动的那套。所以助手拿到的能力和人完全一致，保证也一致——转换引擎是跑在你标签页里的
+          WebAssembly，文件不会离开设备。
+        </p>
 
-      <p>
-        正是这个性质，才让「把文档交给助手」在这里是合理的。通常把文档交给助手，就等于交给了助手背后的那台服务器。而在这里，助手只负责编排，文档留在原地：从磁盘读进标签页，在标签页里转换，再写回本地。一个为了回答问题而读取合同正文的助手，从头到尾没有把这份合同上传到任何地方。
-      </p>
+        <p>
+          正是这个性质，才让「把文档交给助手」在这里是合理的。通常把文档交给助手，就等于交给了助手背后的那台服务器。而在这里，助手只负责编排，文档留在原地：从磁盘读进标签页，在标签页里转换，再写回本地。一个为了回答问题而读取合同正文的助手，从头到尾没有把这份合同上传到任何地方。
+        </p>
 
-      <p>
-        有两条限制是刻意的。工具只在编辑器作为顶层页面时注册——跨域 iframe 需要嵌入方页面授予
-        <code>allow="tools"</code>，这与嵌入的使用方式冲突，所以嵌入场景请改用 postMessage API
-        驱动。另外全文读取仅对文字文档可用；表格和演示文稿在当前引擎上没有这个接口，因此工具会明确说明，而不是返回一个可能被助手当成「文件是空的」的空结果。
-      </p>
+        <p>
+          有两条限制是刻意的。工具只在编辑器作为顶层页面时注册——跨域 iframe 需要嵌入方页面授予
+          <code>allow="tools"</code>，这与嵌入的使用方式冲突，所以嵌入场景请改用 postMessage API
+          驱动。另外全文读取仅对文字文档可用；表格和演示文稿在当前引擎上没有这个接口，因此工具会明确说明，而不是返回一个可能被助手当成「文件是空的」的空结果。
+        </p>
 
-      <aside class="oss">
-        <strong>开源且可自托管。</strong>基于 AGPL-3.0——你可以自行验证没有任何上传，或运行你自己的副本：<a
-          href="https://github.com/ranuts/document"
-          rel="noopener"
-          >github.com/ranuts/document</a
-        >。
+        <aside class="oss">
+          <strong>开源且可自托管。</strong>基于 AGPL-3.0——你可以自行验证没有任何上传，或运行你自己的副本：<a
+            href="https://github.com/ranuts/document"
+            rel="noopener"
+            >github.com/ranuts/document</a
+          >。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>WebMCP 是什么？</h3>
+          <p>
+            W3C Web Machine Learning 社区组的一项提案，让网页注册结构化工具供浏览器内的 AI
+            助手直接调用，而不必让助手去理解和点击用户界面。
+          </p>
+          <h3>这个编辑器注册了哪些工具？</h3>
+          <p>
+            七个：open_document_url, open_document_buffer, create_document, save_document, get_document_text,
+            set_readonly, get_document_state。覆盖从 URL
+            或字节打开、新建文档、导出或转换、读取正文、切换只读，以及报告当前状态。
+          </p>
+          <h3>哪些浏览器支持？</h3>
+          <p>
+            WebMCP 目前在 Chrome 的 origin trial 中可用。Firefox 和 Safari 尚未表态。浏览器没有该 API
+            时，什么也不会注册、什么也不会变。
+          </p>
+          <h3>助手处理时我的文档会被上传吗？</h3>
+          <p>
+            不会。这些工具调用的就是界面调用的那套本地代码——转换引擎是跑在你浏览器标签页里的
+            WebAssembly，文件不会离开你的设备。
+          </p>
+          <h3>助手能读取我文档的内容吗？</h3>
+          <p>
+            文字文档可以，get_document_text
+            会返回正文，助手不必导出就能回答问题。表格和演示文稿在当前引擎上没有全文读取，工具会如实说明，而不是返回一个空结果。
+          </p>
+          <h3>编辑器被嵌入到别的网站时也能用吗？</h3>
+          <p>按设计不能。工具只在顶层页面注册。嵌入场景请改用 postMessage 的 Embed API 驱动。</p>
+          <h3>助手能把文件转成 PDF 吗？</h3>
+          <p>能。save_document 接受目标格式，所以助手可以打开 DOCX、XLSX 或 PPTX 并导出 PDF，全程在设备上完成。</p>
+          <h3>需要账号或 API Key 吗？</h3>
+          <p>
+            都不需要。编辑器本身不需要账号，它也不会自己调用任何 AI
+            服务——推理由你浏览器的助手完成，这个页面只负责暴露工具。
+          </p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开编辑器 →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#如何操作">如何操作</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+          <a href="/zh-CN/no-signup-document-editor">无需注册</a>
+          <a href="/zh-CN/offline-document-editor">离线使用</a>
+          <a href="/zh-CN/embed-document-editor">嵌入 API</a>
+          <a href="/zh-CN/help/embed-api">Embed API</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>WebMCP 是什么？</h3>
-        <p>
-          W3C Web Machine Learning 社区组的一项提案，让网页注册结构化工具供浏览器内的 AI
-          助手直接调用，而不必让助手去理解和点击用户界面。
-        </p>
-        <h3>这个编辑器注册了哪些工具？</h3>
-        <p>
-          七个：open_document_url, open_document_buffer, create_document, save_document, get_document_text,
-          set_readonly, get_document_state。覆盖从 URL
-          或字节打开、新建文档、导出或转换、读取正文、切换只读，以及报告当前状态。
-        </p>
-        <h3>哪些浏览器支持？</h3>
-        <p>
-          WebMCP 目前在 Chrome 的 origin trial 中可用。Firefox 和 Safari 尚未表态。浏览器没有该 API
-          时，什么也不会注册、什么也不会变。
-        </p>
-        <h3>助手处理时我的文档会被上传吗？</h3>
-        <p>
-          不会。这些工具调用的就是界面调用的那套本地代码——转换引擎是跑在你浏览器标签页里的
-          WebAssembly，文件不会离开你的设备。
-        </p>
-        <h3>助手能读取我文档的内容吗？</h3>
-        <p>
-          文字文档可以，get_document_text
-          会返回正文，助手不必导出就能回答问题。表格和演示文稿在当前引擎上没有全文读取，工具会如实说明，而不是返回一个空结果。
-        </p>
-        <h3>编辑器被嵌入到别的网站时也能用吗？</h3>
-        <p>按设计不能。工具只在顶层页面注册。嵌入场景请改用 postMessage 的 Embed API 驱动。</p>
-        <h3>助手能把文件转成 PDF 吗？</h3>
-        <p>能。save_document 接受目标格式，所以助手可以打开 DOCX、XLSX 或 PPTX 并导出 PDF，全程在设备上完成。</p>
-        <h3>需要账号或 API Key 吗？</h3>
-        <p>
-          都不需要。编辑器本身不需要账号，它也不会自己调用任何 AI
-          服务——推理由你浏览器的助手完成，这个页面只负责暴露工具。
-        </p>
-      </div>
-
-      <footer>
-        <a href="/zh-CN/help">帮助中心</a>
-        <a href="/zh-CN/help/embed-api">Embed API</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/docx">打开 DOCX</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/open/odt">打开 ODT</a>
-        <a href="/zh-CN/open/ods">打开 ODS</a>
-        <a href="/zh-CN/open/odp">打开 ODP</a>
-        <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
-        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
-        <a href="/zh-CN/no-signup-document-editor">无需注册</a>
-        <a href="/zh-CN/offline-document-editor">离线使用</a>
-        <a href="/zh-CN/embed-document-editor">嵌入 API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/help">帮助中心</a>
+      <a href="/zh-CN/help/embed-api">Embed API</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/docx">打开 DOCX</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/open/odt">打开 ODT</a>
+      <a href="/zh-CN/open/ods">打开 ODS</a>
+      <a href="/zh-CN/open/odp">打开 ODP</a>
+      <a href="/zh-CN/convert/docx-to-pdf">DOCX 转 PDF</a>
+      <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+      <a href="/zh-CN/no-signup-document-editor">无需注册</a>
+      <a href="/zh-CN/offline-document-editor">离线使用</a>
+      <a href="/zh-CN/embed-document-editor">嵌入 API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>

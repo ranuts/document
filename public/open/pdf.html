@@ -209,100 +209,123 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Open · .pdf</p>
-      <h1>Open a PDF File Without Acrobat — and Without Uploading It</h1>
-      <p class="lead">
-        A contract, a bank statement, a scanned form — you need to read it, maybe leave a few comments, and you do not
-        want to send it to a "free online PDF tool" server. Open it right here in your browser. Nothing to install,
-        nothing uploaded.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Open · .pdf</p>
+        <h1>Open a PDF File Without Acrobat — and Without Uploading It</h1>
+        <p class="lead">
+          A contract, a bank statement, a scanned form — you need to read it, maybe leave a few comments, and you do not
+          want to send it to a "free online PDF tool" server. Open it right here in your browser. Nothing to install,
+          nothing uploaded.
+        </p>
 
-      <a class="cta" href="/"><r-button type="primary">Open your PDF →</r-button></a>
+        <a class="cta" href="/"><r-button type="primary">Open your PDF →</r-button></a>
 
-      <p>
-        Most online PDF sites work by uploading your file to their server, processing it there, and letting you download
-        the result. This editor does not have a server for your files: the OnlyOffice PDF engine is compiled to
-        WebAssembly and runs inside your browser tab. When you pick a file it is read straight from disk into memory —
-        there is no upload step and no server round-trip — so confidential PDFs stay on your machine.
-      </p>
+        <p>
+          Most online PDF sites work by uploading your file to their server, processing it there, and letting you
+          download the result. This editor does not have a server for your files: the OnlyOffice PDF engine is compiled
+          to WebAssembly and runs inside your browser tab. When you pick a file it is read straight from disk into
+          memory — there is no upload step and no server round-trip — so confidential PDFs stay on your machine.
+        </p>
 
-      <p>
-        You can scroll, zoom and search the document, add comments and free-text annotations on top of the page, and
-        save it back as a PDF that keeps those annotations. Because PDF is a fixed-layout format the body text is not
-        rewritten like a Word document; if you need to change the wording, open the original
-        <a href="/open/docx">DOCX</a>, <a href="/open/xlsx">XLSX</a> or <a href="/open/pptx">PPTX</a> here and export a
-        fresh PDF from it — also on your device.
-      </p>
+        <p>
+          You can scroll, zoom and search the document, add comments and free-text annotations on top of the page, and
+          save it back as a PDF that keeps those annotations. Because PDF is a fixed-layout format the body text is not
+          rewritten like a Word document; if you need to change the wording, open the original
+          <a href="/open/docx">DOCX</a>, <a href="/open/xlsx">XLSX</a> or <a href="/open/pptx">PPTX</a> here and export
+          a fresh PDF from it — also on your device.
+        </p>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Click <strong>Open your PDF</strong> to launch the editor in your browser.</li>
-        <li>Pick a <strong>.pdf</strong> file from your device, or drag and drop it onto the page.</li>
-        <li>It renders locally with the OnlyOffice PDF engine — read it, search it, add comments and annotations.</li>
-        <li>Download it again as PDF when you are done; your annotations are merged into the file locally.</li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Click <strong>Open your PDF</strong> to launch the editor in your browser.</li>
+          <li>Pick a <strong>.pdf</strong> file from your device, or drag and drop it onto the page.</li>
+          <li>It renders locally with the OnlyOffice PDF engine — read it, search it, add comments and annotations.</li>
+          <li>Download it again as PDF when you are done; your annotations are merged into the file locally.</li>
+        </ol>
 
-      <h2>What you can do</h2>
-      <ul>
-        <li>Open and read any <strong>.pdf</strong> file — text, scans, forms, multi-page reports</li>
-        <li>Add comments and free-text annotations, then save back as PDF</li>
-        <li>Create a PDF from a DOCX, XLSX or PPTX with <em>Download as PDF</em></li>
-        <li>No Adobe Acrobat, no Reader, no account, no Copilot</li>
-        <li>No upload — your PDF never leaves your device</li>
-        <li>Works offline as an installable app</li>
-      </ul>
+        <h2 id="what-you-can-do">What you can do</h2>
+        <ul>
+          <li>Open and read any <strong>.pdf</strong> file — text, scans, forms, multi-page reports</li>
+          <li>Add comments and free-text annotations, then save back as PDF</li>
+          <li>Create a PDF from a DOCX, XLSX or PPTX with <em>Download as PDF</em></li>
+          <li>No Adobe Acrobat, no Reader, no account, no Copilot</li>
+          <li>No upload — your PDF never leaves your device</li>
+          <li>Works offline as an installable app</li>
+        </ul>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>Can I open a PDF without Adobe Acrobat?</h3>
+          <p>
+            Yes. It opens PDF directly in your browser with the OnlyOffice PDF engine — no Acrobat, Reader or account.
+          </p>
+          <h3>Is my PDF uploaded anywhere?</h3>
+          <p>
+            No. The file is read into the browser tab and rendered locally with WebAssembly. It never leaves your
+            device.
+          </p>
+          <h3>Can I annotate the PDF, not just read it?</h3>
+          <p>Yes. Add comments and free-text annotations, then save back as a PDF that keeps them.</p>
+          <h3>Can I rewrite the text of an existing PDF like a Word document?</h3>
+          <p>
+            Not as free-flowing text — PDF is fixed-layout. Read, comment and annotate here; to change wording, open the
+            original DOCX/XLSX and export a new PDF from it.
+          </p>
+          <h3>Can I create a PDF from a Word or Excel file here?</h3>
+          <p>Yes. Open the DOCX, XLSX or PPTX and choose Download as PDF — the PDF is generated on your device.</p>
+          <h3>Does it work offline?</h3>
+          <p>
+            Yes. After the first visit the editor is cached as an installable web app and opens PDFs without a
+            connection.
+          </p>
+          <h3>Is there a file size limit?</h3>
+          <p>No fixed limit. Everything runs in your browser, so the practical ceiling is your device's memory.</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open your PDF →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#what-you-can-do">What you can do</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/open/docx">Open DOCX</a>
+          <a href="/open/xlsx">Open XLSX</a>
+          <a href="/open/pptx">Open PPTX</a>
+          <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+          <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>Can I open a PDF without Adobe Acrobat?</h3>
-        <p>
-          Yes. It opens PDF directly in your browser with the OnlyOffice PDF engine — no Acrobat, Reader or account.
-        </p>
-        <h3>Is my PDF uploaded anywhere?</h3>
-        <p>
-          No. The file is read into the browser tab and rendered locally with WebAssembly. It never leaves your device.
-        </p>
-        <h3>Can I annotate the PDF, not just read it?</h3>
-        <p>Yes. Add comments and free-text annotations, then save back as a PDF that keeps them.</p>
-        <h3>Can I rewrite the text of an existing PDF like a Word document?</h3>
-        <p>
-          Not as free-flowing text — PDF is fixed-layout. Read, comment and annotate here; to change wording, open the
-          original DOCX/XLSX and export a new PDF from it.
-        </p>
-        <h3>Can I create a PDF from a Word or Excel file here?</h3>
-        <p>Yes. Open the DOCX, XLSX or PPTX and choose Download as PDF — the PDF is generated on your device.</p>
-        <h3>Does it work offline?</h3>
-        <p>
-          Yes. After the first visit the editor is cached as an installable web app and opens PDFs without a connection.
-        </p>
-        <h3>Is there a file size limit?</h3>
-        <p>No fixed limit. Everything runs in your browser, so the practical ceiling is your device's memory.</p>
-      </div>
-
-      <footer>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/edit-documents-without-account">No account</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/edit-documents-without-account">No account</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

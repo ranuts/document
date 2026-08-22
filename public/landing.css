@@ -116,6 +116,120 @@ r-select.lang-select:not(:defined) {
   margin: 0 auto;
   padding: var(--ran-space-6) clamp(20px, 5vw, 56px) var(--ran-space-10);
 }
+
+/* ---------- two-column page frame (article + sticky sidebar) ----------
+   The reading column stays at 720px / ~66 characters -- that is the number the
+   typography wants and widening it would trade readability for filled pixels.
+   What a wide viewport gets instead is a second column, the way documentation
+   sites do it (Stripe, Vercel, MDN all keep a ~700px article and put an "on this
+   page" rail beside it): the call to action stops disappearing after the first
+   screen, the page's own sections stay reachable, and the sibling pages get a
+   real internal link rather than only a footer row.
+
+   Mobile-first: below the breakpoint this is a plain block and the rail is not
+   rendered at all -- the CTA is already on screen there, and a table of contents
+   on a phone is a list of links between the reader and the text. */
+.side {
+  display: none;
+}
+/* Below the breakpoint the footer keeps the article's own column and gutters;
+   the media query below widens it to the frame. Order matters -- both rules
+   have the same specificity, so the wide one has to come second. */
+.page-foot {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 56px) var(--ran-space-10);
+}
+@media (min-width: 1081px) {
+  .page {
+    display: grid;
+    /* 660, not 720: the old single-column page was a 720px box with 56px
+       gutters inside it, so the text itself was ~608px / 66 characters. Handing
+       the column the full 720 would have pushed the measure to 77 -- past the
+       45-75 band the rest of the site is tuned to. 660 lands at 71, the same
+       measure the homepage reads at. */
+    grid-template-columns: minmax(0, 660px) minmax(0, 284px);
+    justify-content: center;
+    gap: clamp(40px, 5vw, 96px);
+    max-width: 1152px;
+    margin: 0 auto;
+    padding-inline: clamp(20px, 5vw, 56px);
+  }
+  /* the frame owns the horizontal padding now; the column keeps its own top
+     and bottom rhythm */
+  .page > .wrap {
+    padding-inline: 0;
+  }
+  .side {
+    display: block;
+    position: sticky;
+    /* clears the top bar and leaves the same air the article has */
+    top: var(--ran-space-8);
+    align-self: start;
+    padding-top: var(--ran-space-6);
+    /* /help lists nine sections; a rail taller than the viewport would clip
+       its last links with no way to reach them. */
+    max-height: calc(100vh - var(--ran-space-16));
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .page-foot {
+    max-width: 1152px;
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5vw, 56px);
+  }
+}
+/* The rail is rules and type, like the rest of the site -- no panel, no fill. */
+.side-cta .cta {
+  display: block;
+  margin: 0;
+}
+/* Full-bleed pill: the width has to reach the exported parts too. Sizing only
+   the host leaves the shadow it paints as a rectangle behind a rounded button
+   -- a straight line poking out past both ends (same trap as the homepage CTA). */
+.side-cta r-button {
+  display: block;
+  width: 100%;
+}
+.side-cta r-button::part(button),
+.side-cta r-button::part(content) {
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+}
+.side-note {
+  display: block;
+  margin-top: var(--ran-space-3);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ran-color-text-secondary);
+}
+.side-block {
+  display: block;
+  margin-top: var(--ran-space-6);
+  padding-top: var(--ran-space-4);
+  border-top: 1px solid var(--ran-color-border);
+}
+.side-label {
+  display: block;
+  margin-bottom: var(--ran-space-2);
+  font: 600 11px/1 var(--ran-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ran-color-text-secondary);
+}
+.side-block a {
+  display: block;
+  padding: 5px 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ran-color-text-secondary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.side-block a:hover {
+  color: var(--ran-color-text);
+}
 .eyebrow {
   margin: var(--ran-space-8) 0 0;
   font: 600 12px/1 var(--ran-font-mono);
@@ -356,31 +470,6 @@ footer .theme-switch {
 .doc img {
   max-width: 100%;
   height: auto;
-}
-.doc .toc {
-  margin: var(--ran-space-4) 0 var(--ran-space-6);
-  padding: var(--ran-space-3) var(--ran-space-4);
-  border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-md);
-  font-size: 14px;
-}
-.doc .toc ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--ran-space-1) var(--ran-space-4);
-}
-.doc .toc li {
-  margin: 0;
-}
-.doc .toc a {
-  color: var(--ran-color-text-secondary);
-  text-decoration: none;
-}
-.doc .toc a:hover {
-  color: var(--ran-color-link);
 }
 .doc .notice {
   padding: var(--ran-space-2) var(--ran-space-3);

@@ -214,93 +214,114 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">打开 · .pdf</p>
-      <h1>不上传、无需 Acrobat，在浏览器里打开 PDF</h1>
-      <p class="lead">
-        一份合同、一张银行账单、一份扫描的表格——你需要读一下，也许留几条评论，但不想把它传到某个「免费在线 PDF
-        工具」的服务器上。直接在浏览器里打开。无需安装，文件始终留在本地。
-      </p>
-
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 PDF →</r-button></a>
-
-      <p>
-        大多数在线 PDF
-        网站的做法是：把你的文件上传到它们的服务器，在那里处理，再让你下载结果。这个编辑器没有存放你文件的服务器：OnlyOffice
-        PDF 引擎被编译为
-        WebAssembly，运行在你的浏览器标签页内。当你选择一个文件时，它会被直接从磁盘读入内存——没有上传步骤，也没有服务器往返——因此机密的
-        PDF 始终留在你的机器上。
-      </p>
-
-      <p>
-        你可以滚动、缩放和搜索文档，在页面之上添加评论和文字批注，并把它另存为保留这些批注的 PDF。由于 PDF
-        是固定版式格式，正文不能像 Word 文档那样重排改写；如果需要修改措辞，请在这里打开原始的
-        <a href="/zh-CN/open/docx">DOCX</a>、<a href="/zh-CN/open/xlsx">XLSX</a> 或
-        <a href="/zh-CN/open/pptx">PPTX</a>，再从它导出一份新的 PDF——同样在你的设备上完成。
-      </p>
-
-      <h2>如何操作</h2>
-      <ol>
-        <li>点击<strong>打开你的 PDF</strong>，在浏览器中启动编辑器。</li>
-        <li>从你的设备中选择一个 <strong>.pdf</strong> 文件，或将它拖放到页面上。</li>
-        <li>它会用 OnlyOffice PDF 引擎在本地渲染——阅读、搜索、添加评论和批注。</li>
-        <li>完成后重新下载为 PDF，批注会在本地合并进文件。</li>
-      </ol>
-
-      <h2>你可以做什么</h2>
-      <ul>
-        <li>打开并阅读任何 <strong>.pdf</strong> 文件——文字版、扫描件、表格、多页报告</li>
-        <li>添加评论和文字批注，再另存回 PDF</li>
-        <li>用「下载为 PDF」从 DOCX、XLSX 或 PPTX 生成 PDF</li>
-        <li>无需 Adobe Acrobat、无需 Reader、无需账号、无需 Copilot</li>
-        <li>不传服务器——你的 PDF 永远不会离开你的设备</li>
-        <li>可作为可安装 App 离线使用</li>
-      </ul>
-
-      <aside class="oss">
-        <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
-      </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>没有 Adobe Acrobat 能打开 PDF 吗？</h3>
-        <p>可以。它用 OnlyOffice PDF 引擎直接在浏览器中打开 PDF——无需 Acrobat、Reader 或账号。</p>
-        <h3>我的 PDF 会被上传到某个地方吗？</h3>
-        <p>不会。文件读入浏览器标签页后用 WebAssembly 在本地渲染，永远不会离开你的设备。</p>
-        <h3>除了阅读，还能批注 PDF 吗？</h3>
-        <p>可以。添加评论和文字批注，然后另存为保留这些批注的 PDF。</p>
-        <h3>能像 Word 一样改写 PDF 里已有的正文吗？</h3>
-        <p>
-          不能像流式文本那样改写——PDF 是固定版式。在这里阅读、评论、批注；要改措辞，请打开原始 DOCX/XLSX 再导出新的
-          PDF。
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">打开 · .pdf</p>
+        <h1>不上传、无需 Acrobat，在浏览器里打开 PDF</h1>
+        <p class="lead">
+          一份合同、一张银行账单、一份扫描的表格——你需要读一下，也许留几条评论，但不想把它传到某个「免费在线 PDF
+          工具」的服务器上。直接在浏览器里打开。无需安装，文件始终留在本地。
         </p>
-        <h3>能在这里把 Word 或 Excel 转成 PDF 吗？</h3>
-        <p>可以。打开 DOCX、XLSX 或 PPTX，选择「下载为 PDF」——PDF 在你的设备上生成。</p>
-        <h3>离线能用吗？</h3>
-        <p>能。首次访问后编辑器会被缓存为可安装的 Web App，没有网络也能打开 PDF。</p>
-        <h3>有文件大小限制吗？</h3>
-        <p>没有固定限制。一切都在你的浏览器中运行，实际上限取决于你设备的内存。</p>
-      </div>
 
-      <footer>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/help">帮助</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/docx">打开 DOCX</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
-        <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
-        <a href="/zh-CN/no-signup-document-editor">免注册</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/offline-document-editor">离线</a>
-        <a href="/zh-CN/edit-documents-without-account">免账号</a>
-        <a href="/zh-CN/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 PDF →</r-button></a>
+
+        <p>
+          大多数在线 PDF
+          网站的做法是：把你的文件上传到它们的服务器，在那里处理，再让你下载结果。这个编辑器没有存放你文件的服务器：OnlyOffice
+          PDF 引擎被编译为
+          WebAssembly，运行在你的浏览器标签页内。当你选择一个文件时，它会被直接从磁盘读入内存——没有上传步骤，也没有服务器往返——因此机密的
+          PDF 始终留在你的机器上。
+        </p>
+
+        <p>
+          你可以滚动、缩放和搜索文档，在页面之上添加评论和文字批注，并把它另存为保留这些批注的 PDF。由于 PDF
+          是固定版式格式，正文不能像 Word 文档那样重排改写；如果需要修改措辞，请在这里打开原始的
+          <a href="/zh-CN/open/docx">DOCX</a>、<a href="/zh-CN/open/xlsx">XLSX</a> 或
+          <a href="/zh-CN/open/pptx">PPTX</a>，再从它导出一份新的 PDF——同样在你的设备上完成。
+        </p>
+
+        <h2 id="如何操作">如何操作</h2>
+        <ol>
+          <li>点击<strong>打开你的 PDF</strong>，在浏览器中启动编辑器。</li>
+          <li>从你的设备中选择一个 <strong>.pdf</strong> 文件，或将它拖放到页面上。</li>
+          <li>它会用 OnlyOffice PDF 引擎在本地渲染——阅读、搜索、添加评论和批注。</li>
+          <li>完成后重新下载为 PDF，批注会在本地合并进文件。</li>
+        </ol>
+
+        <h2 id="你可以做什么">你可以做什么</h2>
+        <ul>
+          <li>打开并阅读任何 <strong>.pdf</strong> 文件——文字版、扫描件、表格、多页报告</li>
+          <li>添加评论和文字批注，再另存回 PDF</li>
+          <li>用「下载为 PDF」从 DOCX、XLSX 或 PPTX 生成 PDF</li>
+          <li>无需 Adobe Acrobat、无需 Reader、无需账号、无需 Copilot</li>
+          <li>不传服务器——你的 PDF 永远不会离开你的设备</li>
+          <li>可作为可安装 App 离线使用</li>
+        </ul>
+
+        <aside class="oss">
+          <strong>开源且可自托管。</strong> 基于 AGPL-3.0 协议——你可以核实文件确实没有被上传，或者运行你自己的副本：
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>没有 Adobe Acrobat 能打开 PDF 吗？</h3>
+          <p>可以。它用 OnlyOffice PDF 引擎直接在浏览器中打开 PDF——无需 Acrobat、Reader 或账号。</p>
+          <h3>我的 PDF 会被上传到某个地方吗？</h3>
+          <p>不会。文件读入浏览器标签页后用 WebAssembly 在本地渲染，永远不会离开你的设备。</p>
+          <h3>除了阅读，还能批注 PDF 吗？</h3>
+          <p>可以。添加评论和文字批注，然后另存为保留这些批注的 PDF。</p>
+          <h3>能像 Word 一样改写 PDF 里已有的正文吗？</h3>
+          <p>
+            不能像流式文本那样改写——PDF 是固定版式。在这里阅读、评论、批注；要改措辞，请打开原始 DOCX/XLSX 再导出新的
+            PDF。
+          </p>
+          <h3>能在这里把 Word 或 Excel 转成 PDF 吗？</h3>
+          <p>可以。打开 DOCX、XLSX 或 PPTX，选择「下载为 PDF」——PDF 在你的设备上生成。</p>
+          <h3>离线能用吗？</h3>
+          <p>能。首次访问后编辑器会被缓存为可安装的 Web App，没有网络也能打开 PDF。</p>
+          <h3>有文件大小限制吗？</h3>
+          <p>没有固定限制。一切都在你的浏览器中运行，实际上限取决于你设备的内存。</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开你的 PDF →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#如何操作">如何操作</a>
+          <a href="#你可以做什么">你可以做什么</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/open/docx">打开 DOCX</a>
+          <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+          <a href="/zh-CN/open/pptx">打开 PPTX</a>
+          <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+          <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
+        </nav>
+      </aside>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/help">帮助</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/docx">打开 DOCX</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+      <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
+      <a href="/zh-CN/no-signup-document-editor">免注册</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/offline-document-editor">离线</a>
+      <a href="/zh-CN/edit-documents-without-account">免账号</a>
+      <a href="/zh-CN/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>

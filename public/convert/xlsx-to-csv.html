@@ -214,86 +214,106 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Convert · .xlsx → .csv</p>
-      <h1>Convert XLSX to CSV in Your Browser</h1>
-      <p class="lead">
-        Turn an Excel <strong>.xlsx</strong> file into a plain <strong>.csv</strong> — without uploading it anywhere.
-        The whole conversion happens locally in your browser.
-      </p>
-
-      <a class="cta" href="/"><r-button type="primary">Open your XLSX →</r-button></a>
-
-      <h2>How it works</h2>
-      <ol>
-        <li>Click <strong>Open your XLSX</strong> to launch the editor in your browser.</li>
-        <li>Pick the <strong>.xlsx</strong> file from your device, or drag and drop it onto the page.</li>
-        <li>Choose <strong>Download as / Save as</strong> and pick <strong>CSV</strong>.</li>
-        <li>The CSV is generated on your device and downloaded — nothing is uploaded.</li>
-      </ol>
-
-      <p>
-        Most "XLSX to CSV" converters upload your spreadsheet to their servers first. This one does not: it opens the
-        file with the OnlyOffice engine locally, so your data stays private. No Excel, no account, works offline.
-      </p>
-
-      <p>
-        The conversion itself is handled by OnlyOffice's x2t engine compiled to WebAssembly. It targets the common
-        office and text formats — Word, Excel and PowerPoint plus PDF, TXT, HTML and CSV — which makes it a good fit for
-        turning a spreadsheet into a portable CSV. Because it all runs in the browser tab there is no upload queue, no
-        server-imposed size cap, and your data never touches the network. Note that CSV is a flat, single-table format:
-        the active sheet is exported, and each formula is written out as its calculated value.
-      </p>
-
-      <p>
-        CSV is the lowest-common-denominator format for data: almost every database, analytics tool and programming
-        language can import it. Exporting a spreadsheet to CSV here is useful when you need to feed a report into
-        another system, share tabular data without shipping a whole workbook, or strip a file down to raw values. And
-        because the export runs on your device, even sensitive data — customer lists, finance exports — stays private.
-      </p>
-
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
-      </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>How do I convert XLSX to CSV here?</h3>
-        <p>Open the XLSX in the editor, then use Download as / Save as CSV — the conversion runs in your browser.</p>
-        <h3>Is my file uploaded to convert it?</h3>
-        <p>No. It runs entirely in your browser, so your spreadsheet is never uploaded.</p>
-        <h3>Do I need Excel or an account?</h3>
-        <p>No Excel, no 365 subscription and no sign up.</p>
-        <h3>Can I convert CSV back to XLSX?</h3>
-        <p>Yes — see <a href="/convert/csv-to-xlsx">CSV to XLSX</a>.</p>
-        <h3>Which sheet gets exported to CSV?</h3>
-        <p>
-          CSV holds a single table, so the active sheet is exported. Open the sheet you want first, then save as CSV.
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Convert · .xlsx → .csv</p>
+        <h1>Convert XLSX to CSV in Your Browser</h1>
+        <p class="lead">
+          Turn an Excel <strong>.xlsx</strong> file into a plain <strong>.csv</strong> — without uploading it anywhere.
+          The whole conversion happens locally in your browser.
         </p>
-        <h3>Are formulas exported or their values?</h3>
-        <p>CSV stores plain values, so formulas are written out as their calculated results.</p>
-        <h3>Does the converter work offline?</h3>
-        <p>Yes. Once loaded it is an installable PWA, so it keeps working with no internet connection.</p>
-      </div>
 
-      <footer>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/edit-documents-without-account">No account</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+        <a class="cta" href="/"><r-button type="primary">Open your XLSX →</r-button></a>
+
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Click <strong>Open your XLSX</strong> to launch the editor in your browser.</li>
+          <li>Pick the <strong>.xlsx</strong> file from your device, or drag and drop it onto the page.</li>
+          <li>Choose <strong>Download as / Save as</strong> and pick <strong>CSV</strong>.</li>
+          <li>The CSV is generated on your device and downloaded — nothing is uploaded.</li>
+        </ol>
+
+        <p>
+          Most "XLSX to CSV" converters upload your spreadsheet to their servers first. This one does not: it opens the
+          file with the OnlyOffice engine locally, so your data stays private. No Excel, no account, works offline.
+        </p>
+
+        <p>
+          The conversion itself is handled by OnlyOffice's x2t engine compiled to WebAssembly. It targets the common
+          office and text formats — Word, Excel and PowerPoint plus PDF, TXT, HTML and CSV — which makes it a good fit
+          for turning a spreadsheet into a portable CSV. Because it all runs in the browser tab there is no upload
+          queue, no server-imposed size cap, and your data never touches the network. Note that CSV is a flat,
+          single-table format: the active sheet is exported, and each formula is written out as its calculated value.
+        </p>
+
+        <p>
+          CSV is the lowest-common-denominator format for data: almost every database, analytics tool and programming
+          language can import it. Exporting a spreadsheet to CSV here is useful when you need to feed a report into
+          another system, share tabular data without shipping a whole workbook, or strip a file down to raw values. And
+          because the export runs on your device, even sensitive data — customer lists, finance exports — stays private.
+        </p>
+
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>How do I convert XLSX to CSV here?</h3>
+          <p>Open the XLSX in the editor, then use Download as / Save as CSV — the conversion runs in your browser.</p>
+          <h3>Is my file uploaded to convert it?</h3>
+          <p>No. It runs entirely in your browser, so your spreadsheet is never uploaded.</p>
+          <h3>Do I need Excel or an account?</h3>
+          <p>No Excel, no 365 subscription and no sign up.</p>
+          <h3>Can I convert CSV back to XLSX?</h3>
+          <p>Yes — see <a href="/convert/csv-to-xlsx">CSV to XLSX</a>.</p>
+          <h3>Which sheet gets exported to CSV?</h3>
+          <p>
+            CSV holds a single table, so the active sheet is exported. Open the sheet you want first, then save as CSV.
+          </p>
+          <h3>Are formulas exported or their values?</h3>
+          <p>CSV stores plain values, so formulas are written out as their calculated results.</p>
+          <h3>Does the converter work offline?</h3>
+          <p>Yes. Once loaded it is an installable PWA, so it keeps working with no internet connection.</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open your XLSX →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+          <a href="/open/docx">Open DOCX</a>
+          <a href="/open/xlsx">Open XLSX</a>
+          <a href="/open/pptx">Open PPTX</a>
+          <a href="/open/pdf">Open PDF</a>
+        </nav>
+      </aside>
+    </div>
+    <footer class="page-foot">
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/edit-documents-without-account">No account</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

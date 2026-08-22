@@ -214,87 +214,110 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Offline · PWA</p>
-      <h1>An Offline Document Editor That Works Without Internet</h1>
-      <p class="lead">
-        Edit Word, Excel and PowerPoint files with no connection — on a Chromebook, a laptop on a plane, or an Android
-        tablet. Install it once and it keeps working offline, entirely on your device.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Offline · PWA</p>
+        <h1>An Offline Document Editor That Works Without Internet</h1>
+        <p class="lead">
+          Edit Word, Excel and PowerPoint files with no connection — on a Chromebook, a laptop on a plane, or an Android
+          tablet. Install it once and it keeps working offline, entirely on your device.
+        </p>
 
-      <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
+        <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
 
-      <p>
-        Because all editing runs locally in your browser with WebAssembly — there is no server — it does not need the
-        internet to work. Load it once, install it as an app (PWA), and you can open and edit documents anywhere, even
-        fully offline. Your files never leave your device.
-      </p>
+        <p>
+          Because all editing runs locally in your browser with WebAssembly — there is no server — it does not need the
+          internet to work. Load it once, install it as an app (PWA), and you can open and edit documents anywhere, even
+          fully offline. Your files never leave your device.
+        </p>
 
-      <p>
-        The first time you load the page, a service worker caches the app shell and the OnlyOffice engine on your
-        device. After that the editor starts straight from that cache, so it opens instantly and keeps working with no
-        connection — on a plane, on the subway, or anywhere with patchy Wi-Fi. Files are opened from and saved to your
-        own device, and you can edit DOCX, XLSX, PPTX and CSV and export to PDF, TXT, HTML or CSV, all without a
-        network.
-      </p>
+        <p>
+          The first time you load the page, a service worker caches the app shell and the OnlyOffice engine on your
+          device. After that the editor starts straight from that cache, so it opens instantly and keeps working with no
+          connection — on a plane, on the subway, or anywhere with patchy Wi-Fi. Files are opened from and saved to your
+          own device, and you can edit DOCX, XLSX, PPTX and CSV and export to PDF, TXT, HTML or CSV, all without a
+          network.
+        </p>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Open the editor once while connected, so the app and engine are cached on your device.</li>
-        <li>Install it as an app (PWA) — use your browser's install option, or Add to Home Screen on mobile.</li>
-        <li>With no connection, launch the installed app like any other app.</li>
-        <li>Open a DOCX, XLSX, PPTX or CSV file, edit it, and download it again — all offline.</li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Open the editor once while connected, so the app and engine are cached on your device.</li>
+          <li>Install it as an app (PWA) — use your browser's install option, or Add to Home Screen on mobile.</li>
+          <li>With no connection, launch the installed app like any other app.</li>
+          <li>Open a DOCX, XLSX, PPTX or CSV file, edit it, and download it again — all offline.</li>
+        </ol>
 
-      <h2>Why it works offline</h2>
-      <ul>
-        <li><strong>No server</strong> — the whole editor runs on your device, so no connection is required</li>
-        <li><strong>Installable PWA</strong> — add it to your home screen or desktop and launch it like an app</li>
-        <li><strong>Runs anywhere</strong> — Chromebook, Windows, macOS, Linux, Android; any modern browser</li>
-        <li>Edit DOCX, XLSX, PPTX and CSV</li>
-        <li>No upload, no account, no sign up</li>
-      </ul>
+        <h2 id="why-it-works-offline">Why it works offline</h2>
+        <ul>
+          <li><strong>No server</strong> — the whole editor runs on your device, so no connection is required</li>
+          <li><strong>Installable PWA</strong> — add it to your home screen or desktop and launch it like an app</li>
+          <li><strong>Runs anywhere</strong> — Chromebook, Windows, macOS, Linux, Android; any modern browser</li>
+          <li>Edit DOCX, XLSX, PPTX and CSV</li>
+          <li>No upload, no account, no sign up</li>
+        </ul>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>Does it really work offline?</h3>
+          <p>
+            Yes. Once loaded it is an installable PWA and keeps working with no internet — all editing runs locally.
+          </p>
+          <h3>Does it work on a Chromebook?</h3>
+          <p>Yes. It runs in any modern browser — Chromebook, laptop, Windows, macOS, Linux and Android.</p>
+          <h3>Are my files uploaded?</h3>
+          <p>No. There is no server; files stay on your device and are never uploaded.</p>
+          <h3>Which formats can I edit?</h3>
+          <p>DOCX, XLSX, PPTX and CSV, powered by OnlyOffice.</p>
+          <h3>How do I install it as an app?</h3>
+          <p>Use the install icon in Chrome or Edge's address bar, or Add to Home Screen on a phone or tablet.</p>
+          <h3>Do I need to be online the first time?</h3>
+          <p>Yes. Load it once while connected so the app and engine are cached; after that it runs offline.</p>
+          <h3>Where are my files saved when offline?</h3>
+          <p>Files are opened from and saved to your own device — there is no server involved.</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open the editor →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#why-it-works-offline">Why it works offline</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/no-signup-document-editor">No sign-up</a>
+          <a href="/private-document-editor">Private editor</a>
+          <a href="/edit-documents-without-account">No account</a>
+          <a href="/embed-document-editor">Embed API</a>
+          <a href="/open/docx">Open DOCX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>Does it really work offline?</h3>
-        <p>Yes. Once loaded it is an installable PWA and keeps working with no internet — all editing runs locally.</p>
-        <h3>Does it work on a Chromebook?</h3>
-        <p>Yes. It runs in any modern browser — Chromebook, laptop, Windows, macOS, Linux and Android.</p>
-        <h3>Are my files uploaded?</h3>
-        <p>No. There is no server; files stay on your device and are never uploaded.</p>
-        <h3>Which formats can I edit?</h3>
-        <p>DOCX, XLSX, PPTX and CSV, powered by OnlyOffice.</p>
-        <h3>How do I install it as an app?</h3>
-        <p>Use the install icon in Chrome or Edge's address bar, or Add to Home Screen on a phone or tablet.</p>
-        <h3>Do I need to be online the first time?</h3>
-        <p>Yes. Load it once while connected so the app and engine are cached; after that it runs offline.</p>
-        <h3>Where are my files saved when offline?</h3>
-        <p>Files are opened from and saved to your own device — there is no server involved.</p>
-      </div>
-
-      <footer>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/xlsx">Open XLSX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/edit-documents-without-account">No account</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/xlsx">Open XLSX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/edit-documents-without-account">No account</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

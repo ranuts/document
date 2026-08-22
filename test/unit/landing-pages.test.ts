@@ -104,6 +104,29 @@ describe('landing pages', () => {
       it('lives in the sitemap', () => {
         expect(readFileSync(resolve(PUBLIC, 'sitemap.xml'), 'utf8')).toContain(`<loc>${ORIGIN + route}</loc>`);
       });
+
+      /**
+       * The sidebar rail is what a wide viewport gets instead of a wider
+       * reading column: a call to action that survives the first screen, the
+       * page's own sections, and the sibling pages. A page shipped without it
+       * looks fine on its own and only reveals itself next to the others --
+       * which is exactly the drift this file exists to catch.
+       */
+      it('carries the sidebar rail: a call to action and its own sections', () => {
+        // Article pages only: the two homepages build their own layout.
+        if (!html.includes('<main class="wrap')) return;
+        expect(html, 'no <aside class="side">').toContain('<aside class="side"');
+        expect(html).toContain('side-cta');
+        const anchors = [...html.matchAll(/<nav class="side-block">[\s\S]*?<\/nav>/g)]
+          .join('')
+          .matchAll(/href="#([^"]+)"/g);
+        const linked = [...anchors].map((m) => m[1]);
+        const ids = [...html.matchAll(/<h2[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
+        // Every link in the rail has to land somewhere on this page, and every
+        // section this page has must be reachable from it.
+        for (const id of linked) expect(ids, `#${id} has no h2`).toContain(id);
+        if (ids.length >= 3) expect(linked.length, 'sections missing from the rail').toBe(ids.length);
+      });
     });
   }
 

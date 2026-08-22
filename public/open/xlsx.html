@@ -209,94 +209,115 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">Open · .xlsx</p>
-      <h1>Open an XLSX File Without Excel</h1>
-      <p class="lead">
-        Someone sent you an <strong>.xlsx</strong> spreadsheet but you do not have Excel — or you would rather not pay
-        for 365? Open it in your browser and keep the formulas intact. Nothing to install, nothing uploaded.
-      </p>
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">Open · .xlsx</p>
+        <h1>Open an XLSX File Without Excel</h1>
+        <p class="lead">
+          Someone sent you an <strong>.xlsx</strong> spreadsheet but you do not have Excel — or you would rather not pay
+          for 365? Open it in your browser and keep the formulas intact. Nothing to install, nothing uploaded.
+        </p>
 
-      <a class="cta" href="/"><r-button type="primary">Open your XLSX →</r-button></a>
+        <a class="cta" href="/"><r-button type="primary">Open your XLSX →</r-button></a>
 
-      <p>
-        XLSX is the Microsoft Excel format. This editor opens it with the OnlyOffice engine, so cell formulas, number
-        formats, colours and multiple sheets all survive — it is a real spreadsheet, not a read-only table. It runs
-        locally with WebAssembly, so the file stays on your device.
-      </p>
+        <p>
+          XLSX is the Microsoft Excel format. This editor opens it with the OnlyOffice engine, so cell formulas, number
+          formats, colours and multiple sheets all survive — it is a real spreadsheet, not a read-only table. It runs
+          locally with WebAssembly, so the file stays on your device.
+        </p>
 
-      <p>
-        The OnlyOffice spreadsheet engine is compiled to WebAssembly and runs inside your browser tab. Your file is read
-        straight from disk into memory — there is no upload and no server — so private data never leaves your device.
-        Because it is a live calculation engine and not a static preview, formulas recalculate as you edit. It reads the
-        modern <strong>.xlsx</strong> format as well as older <strong>.xls</strong> and plain <strong>.csv</strong>, and
-        can export back to XLSX or CSV.
-      </p>
+        <p>
+          The OnlyOffice spreadsheet engine is compiled to WebAssembly and runs inside your browser tab. Your file is
+          read straight from disk into memory — there is no upload and no server — so private data never leaves your
+          device. Because it is a live calculation engine and not a static preview, formulas recalculate as you edit. It
+          reads the modern <strong>.xlsx</strong> format as well as older <strong>.xls</strong> and plain
+          <strong>.csv</strong>, and can export back to XLSX or CSV.
+        </p>
 
-      <h2>How it works</h2>
-      <ol>
-        <li>Click <strong>Open your XLSX</strong> to launch the editor in your browser.</li>
-        <li>Pick an <strong>.xlsx</strong> file from your device, or drag and drop it onto the page.</li>
-        <li>It opens with the OnlyOffice engine — view it, or edit cells and watch formulas recalculate.</li>
-        <li>Download it again as XLSX or CSV when you are done.</li>
-      </ol>
+        <h2 id="how-it-works">How it works</h2>
+        <ol>
+          <li>Click <strong>Open your XLSX</strong> to launch the editor in your browser.</li>
+          <li>Pick an <strong>.xlsx</strong> file from your device, or drag and drop it onto the page.</li>
+          <li>It opens with the OnlyOffice engine — view it, or edit cells and watch formulas recalculate.</li>
+          <li>Download it again as XLSX or CSV when you are done.</li>
+        </ol>
 
-      <h2>What you can do</h2>
-      <ul>
-        <li>Open any <strong>.xlsx</strong> (and .xls, .csv) file with formulas preserved</li>
-        <li>Edit cells, then download again as XLSX or CSV</li>
-        <li>No Microsoft Excel and no 365 subscription</li>
-        <li>No upload — your spreadsheet never leaves your device</li>
-        <li>Works offline as an installable app</li>
-      </ul>
+        <h2 id="what-you-can-do">What you can do</h2>
+        <ul>
+          <li>Open any <strong>.xlsx</strong> (and .xls, .csv) file with formulas preserved</li>
+          <li>Edit cells, then download again as XLSX or CSV</li>
+          <li>No Microsoft Excel and no 365 subscription</li>
+          <li>No upload — your spreadsheet never leaves your device</li>
+          <li>Works offline as an installable app</li>
+        </ul>
 
-      <p>
-        It is just as good for a quick read-only look as for real work: sort a column, fix a figure, add a row or a
-        formula, then hand the file back in the same format. This is handy when someone emails you a budget or a data
-        export and you do not want to install Excel, pay for 365, or trust a random web converter with numbers you would
-        rather keep private.
-      </p>
+        <p>
+          It is just as good for a quick read-only look as for real work: sort a column, fix a figure, add a row or a
+          formula, then hand the file back in the same format. This is handy when someone emails you a budget or a data
+          export and you do not want to install Excel, pay for 365, or trust a random web converter with numbers you
+          would rather keep private.
+        </p>
 
-      <aside class="oss">
-        <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your
-        own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        <aside class="oss">
+          <strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run
+          your own copy: <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>.
+        </aside>
+
+        <h2 id="frequently-asked-questions" class="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <h3>Can I open an XLSX file without Excel?</h3>
+          <p>Yes. It opens XLSX directly in your browser — no Excel or 365 subscription needed.</p>
+          <h3>Are formulas and formatting kept?</h3>
+          <p>Yes. The OnlyOffice engine preserves formulas, number formats and styling.</p>
+          <h3>Is my spreadsheet uploaded?</h3>
+          <p>No. It runs locally with WebAssembly and never leaves your device.</p>
+          <h3>Can I export it to CSV?</h3>
+          <p>Yes. Open it and download again as XLSX or CSV.</p>
+          <h3>Does it work with old .xls files?</h3>
+          <p>Yes. It opens .xlsx, older .xls and plain .csv files with the same engine.</p>
+          <h3>Do my formulas recalculate?</h3>
+          <p>Yes. It is a real spreadsheet engine, so formulas recalculate as you edit — not a static snapshot.</p>
+          <h3>Are workbooks with multiple sheets supported?</h3>
+          <p>Yes. Workbooks with several tabs open with all their sheets intact.</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="On this page">
+        <div class="side-cta">
+          <a class="cta" href="/"><r-button type="primary">Open your XLSX →</r-button></a>
+          <span class="side-note">Runs on your device. No upload, no sign-up.</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">On this page</span>
+          <a href="#how-it-works">How it works</a>
+          <a href="#what-you-can-do">What you can do</a>
+          <a href="#frequently-asked-questions">Frequently asked questions</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">Related pages</span>
+          <a href="/open/docx">Open DOCX</a>
+          <a href="/open/pptx">Open PPTX</a>
+          <a href="/open/pdf">Open PDF</a>
+          <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+          <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+        </nav>
       </aside>
-
-      <h2 class="faq">Frequently asked questions</h2>
-      <div class="faq">
-        <h3>Can I open an XLSX file without Excel?</h3>
-        <p>Yes. It opens XLSX directly in your browser — no Excel or 365 subscription needed.</p>
-        <h3>Are formulas and formatting kept?</h3>
-        <p>Yes. The OnlyOffice engine preserves formulas, number formats and styling.</p>
-        <h3>Is my spreadsheet uploaded?</h3>
-        <p>No. It runs locally with WebAssembly and never leaves your device.</p>
-        <h3>Can I export it to CSV?</h3>
-        <p>Yes. Open it and download again as XLSX or CSV.</p>
-        <h3>Does it work with old .xls files?</h3>
-        <p>Yes. It opens .xlsx, older .xls and plain .csv files with the same engine.</p>
-        <h3>Do my formulas recalculate?</h3>
-        <p>Yes. It is a real spreadsheet engine, so formulas recalculate as you edit — not a static snapshot.</p>
-        <h3>Are workbooks with multiple sheets supported?</h3>
-        <p>Yes. Workbooks with several tabs open with all their sheets intact.</p>
-      </div>
-
-      <footer>
-        <a href="/">Open editor</a>
-        <a href="/help">Help</a>
-        <a href="/changelog">Changelog</a>
-        <a href="/open/docx">Open DOCX</a>
-        <a href="/open/pptx">Open PPTX</a>
-        <a href="/open/pdf">Open PDF</a>
-        <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
-        <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
-        <a href="/no-signup-document-editor">No sign-up</a>
-        <a href="/private-document-editor">Private editor</a>
-        <a href="/offline-document-editor">Offline</a>
-        <a href="/edit-documents-without-account">No account</a>
-        <a href="/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
-      </footer>
-    </main>
+    </div>
+    <footer class="page-foot">
+      <a href="/">Open editor</a>
+      <a href="/help">Help</a>
+      <a href="/changelog">Changelog</a>
+      <a href="/open/docx">Open DOCX</a>
+      <a href="/open/pptx">Open PPTX</a>
+      <a href="/open/pdf">Open PDF</a>
+      <a href="/convert/xlsx-to-csv">XLSX to CSV</a>
+      <a href="/convert/csv-to-xlsx">CSV to XLSX</a>
+      <a href="/no-signup-document-editor">No sign-up</a>
+      <a href="/private-document-editor">Private editor</a>
+      <a href="/offline-document-editor">Offline</a>
+      <a href="/edit-documents-without-account">No account</a>
+      <a href="/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
+    </footer>
   </body>
 </html>

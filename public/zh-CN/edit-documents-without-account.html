@@ -172,82 +172,104 @@
       </nav>
     </header>
 
-    <main class="wrap">
-      <p class="eyebrow">无需账号 · 打开即用</p>
-      <h1>想不用账号就编辑文档？</h1>
-      <p class="lead">
-        无需注册任何东西即可编辑 Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）和 CSV
-        文件。没有账号、没有登录、无需交出邮箱——打开编辑器就能开始输入。
-      </p>
-
-      <a class="cta" href="/zh-CN/"><r-button type="primary">打开编辑器 →</r-button></a>
-
-      <p>
-        你和文档之间没有任何注册墙。一切都通过 WebAssembly
-        在浏览器本地运行，之所以不需要创建账号，是因为一开始就没有服务器在存储你的文件。你打开一个文件、编辑它、再下载回来——整个流程就这么简单。
-      </p>
-
-      <p>
-        它是一个完整的编辑器，而不是简化的预览：由 OnlyOffice
-        引擎驱动，字体、表格、公式和排版都保持原样。而且由于你的文件永远不会离开你的设备，省去账号也意味着省去了用数据换取访问权限的常见交易。
-      </p>
-
-      <h2>你可以做什么</h2>
-      <ul>
-        <li><strong>无需账号即可开始</strong>——无需注册、无需登录、无需邮箱或电话号码。</li>
-        <li><strong>编辑常见格式</strong>——DOCX、XLSX、PPTX 和 CSV，完整保留排版。</li>
-        <li><strong>文件留在本机</strong>——100% 客户端处理，你的文档从不上传。</li>
-        <li><strong>离线可用</strong>——可作为 PWA 安装，无网络也能使用。</li>
-        <li><strong>始终免费</strong>——基于 AGPL-3.0 开源，没有需要解锁的付费墙。</li>
-      </ul>
-
-      <h2>如何使用</h2>
-      <ol>
-        <li>打开编辑器——不会出现任何注册页面。</li>
-        <li>从你的设备中选择一个 DOCX、XLSX、PPTX 或 CSV 文件。</li>
-        <li>直接在浏览器中编辑；文件在本地处理，而不是在服务器上。</li>
-        <li>把完成的文件下载回你的设备。</li>
-      </ol>
-
-      <aside class="oss">
-        <strong>开源且可自托管。</strong> 基于 AGPL-3.0
-        协议——你可以亲自确认这里没有账号、也不上传任何内容，或者运行你自己的副本：
-        <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
-      </aside>
-
-      <h2 class="faq">常见问题</h2>
-      <div class="faq">
-        <h3>不创建账号也能编辑文档吗？</h3>
-        <p>可以。没有账号、没有注册、没有登录。你打开编辑器就能立即开始编辑 DOCX、XLSX、PPTX 或 CSV 文件。</p>
-        <h3>需要提供邮箱地址吗？</h3>
-        <p>不需要。因为没有任何注册步骤，所以永远不会向你索要邮箱地址、电话号码或任何个人信息。</p>
-        <h3>没有账号，我的文件保存在哪里？</h3>
-        <p>
-          你的文件留在自己的设备上。编辑通过 WebAssembly 在浏览器本地完成，你再把结果下载回自己的电脑——不上传任何内容。
+    <div class="page">
+      <main class="wrap">
+        <p class="eyebrow">无需账号 · 打开即用</p>
+        <h1>想不用账号就编辑文档？</h1>
+        <p class="lead">
+          无需注册任何东西即可编辑 Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）和 CSV
+          文件。没有账号、没有登录、无需交出邮箱——打开编辑器就能开始输入。
         </p>
-        <h3>没有账号也是免费的吗？</h3>
-        <p>是的。它在 AGPL-3.0 协议下免费且开源，没有付费墙，也不需要账号来解锁功能。</p>
-        <h3>不登录也能离线使用吗？</h3>
-        <p>可以。它可作为 PWA 安装，加载后可完全离线使用，因此你和你的文档之间永远没有登录墙。</p>
-      </div>
 
-      <footer>
-        <a href="/zh-CN/">打开编辑器</a>
-        <a href="/zh-CN/help">帮助</a>
-        <a href="/zh-CN/changelog">更新日志</a>
-        <a href="/zh-CN/open/docx">打开 DOCX</a>
-        <a href="/zh-CN/open/xlsx">打开 XLSX</a>
-        <a href="/zh-CN/open/pptx">打开 PPTX</a>
-        <a href="/zh-CN/open/pdf">打开 PDF</a>
-        <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
-        <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
-        <a href="/zh-CN/no-signup-document-editor">免注册</a>
-        <a href="/zh-CN/private-document-editor">隐私编辑器</a>
-        <a href="/zh-CN/offline-document-editor">离线</a>
-        <a href="/zh-CN/embed-document-editor">Embed API</a>
-        <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
-        <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
-      </footer>
-    </main>
+        <a class="cta" href="/zh-CN/"><r-button type="primary">打开编辑器 →</r-button></a>
+
+        <p>
+          你和文档之间没有任何注册墙。一切都通过 WebAssembly
+          在浏览器本地运行，之所以不需要创建账号，是因为一开始就没有服务器在存储你的文件。你打开一个文件、编辑它、再下载回来——整个流程就这么简单。
+        </p>
+
+        <p>
+          它是一个完整的编辑器，而不是简化的预览：由 OnlyOffice
+          引擎驱动，字体、表格、公式和排版都保持原样。而且由于你的文件永远不会离开你的设备，省去账号也意味着省去了用数据换取访问权限的常见交易。
+        </p>
+
+        <h2 id="你可以做什么">你可以做什么</h2>
+        <ul>
+          <li><strong>无需账号即可开始</strong>——无需注册、无需登录、无需邮箱或电话号码。</li>
+          <li><strong>编辑常见格式</strong>——DOCX、XLSX、PPTX 和 CSV，完整保留排版。</li>
+          <li><strong>文件留在本机</strong>——100% 客户端处理，你的文档从不上传。</li>
+          <li><strong>离线可用</strong>——可作为 PWA 安装，无网络也能使用。</li>
+          <li><strong>始终免费</strong>——基于 AGPL-3.0 开源，没有需要解锁的付费墙。</li>
+        </ul>
+
+        <h2 id="如何使用">如何使用</h2>
+        <ol>
+          <li>打开编辑器——不会出现任何注册页面。</li>
+          <li>从你的设备中选择一个 DOCX、XLSX、PPTX 或 CSV 文件。</li>
+          <li>直接在浏览器中编辑；文件在本地处理，而不是在服务器上。</li>
+          <li>把完成的文件下载回你的设备。</li>
+        </ol>
+
+        <aside class="oss">
+          <strong>开源且可自托管。</strong> 基于 AGPL-3.0
+          协议——你可以亲自确认这里没有账号、也不上传任何内容，或者运行你自己的副本：
+          <a href="https://github.com/ranuts/document" rel="noopener">github.com/ranuts/document</a>。
+        </aside>
+
+        <h2 id="常见问题" class="faq">常见问题</h2>
+        <div class="faq">
+          <h3>不创建账号也能编辑文档吗？</h3>
+          <p>可以。没有账号、没有注册、没有登录。你打开编辑器就能立即开始编辑 DOCX、XLSX、PPTX 或 CSV 文件。</p>
+          <h3>需要提供邮箱地址吗？</h3>
+          <p>不需要。因为没有任何注册步骤，所以永远不会向你索要邮箱地址、电话号码或任何个人信息。</p>
+          <h3>没有账号，我的文件保存在哪里？</h3>
+          <p>
+            你的文件留在自己的设备上。编辑通过 WebAssembly
+            在浏览器本地完成，你再把结果下载回自己的电脑——不上传任何内容。
+          </p>
+          <h3>没有账号也是免费的吗？</h3>
+          <p>是的。它在 AGPL-3.0 协议下免费且开源，没有付费墙，也不需要账号来解锁功能。</p>
+          <h3>不登录也能离线使用吗？</h3>
+          <p>可以。它可作为 PWA 安装，加载后可完全离线使用，因此你和你的文档之间永远没有登录墙。</p>
+        </div>
+      </main>
+      <aside class="side" aria-label="本页目录">
+        <div class="side-cta">
+          <a class="cta" href="/zh-CN/"><r-button type="primary">打开编辑器 →</r-button></a>
+          <span class="side-note">在你的设备上运行，不上传、免注册。</span>
+        </div>
+        <nav class="side-block">
+          <span class="side-label">本页目录</span>
+          <a href="#你可以做什么">你可以做什么</a>
+          <a href="#如何使用">如何使用</a>
+          <a href="#常见问题">常见问题</a>
+        </nav>
+        <nav class="side-block">
+          <span class="side-label">相关页面</span>
+          <a href="/zh-CN/no-signup-document-editor">免注册</a>
+          <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+          <a href="/zh-CN/offline-document-editor">离线</a>
+          <a href="/zh-CN/embed-document-editor">Embed API</a>
+          <a href="/zh-CN/open/docx">打开 DOCX</a>
+        </nav>
+      </aside>
+    </div>
+    <footer class="page-foot">
+      <a href="/zh-CN/">打开编辑器</a>
+      <a href="/zh-CN/help">帮助</a>
+      <a href="/zh-CN/changelog">更新日志</a>
+      <a href="/zh-CN/open/docx">打开 DOCX</a>
+      <a href="/zh-CN/open/xlsx">打开 XLSX</a>
+      <a href="/zh-CN/open/pptx">打开 PPTX</a>
+      <a href="/zh-CN/open/pdf">打开 PDF</a>
+      <a href="/zh-CN/convert/xlsx-to-csv">XLSX 转 CSV</a>
+      <a href="/zh-CN/convert/csv-to-xlsx">CSV 转 XLSX</a>
+      <a href="/zh-CN/no-signup-document-editor">免注册</a>
+      <a href="/zh-CN/private-document-editor">隐私编辑器</a>
+      <a href="/zh-CN/offline-document-editor">离线</a>
+      <a href="/zh-CN/embed-document-editor">Embed API</a>
+      <a href="https://github.com/ranuts/document" rel="noopener">GitHub</a>
+      <r-theme-switch class="theme-switch" label="主题"></r-theme-switch>
+    </footer>
   </body>
 </html>
