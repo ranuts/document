@@ -5,11 +5,12 @@ const { openLocalFile } = vi.hoisted(() => ({ openLocalFile: vi.fn() }));
 vi.mock('../../lib/document', () => ({ openLocalFile }));
 
 import { DB_NAME, resetHistoryDbForTests } from '../../lib/history/db';
-import { getDoc, markSavedToDisk, putSnapshot } from '../../lib/history/store';
+import { getDoc, markSavedToDisk, putSnapshot, resetHistoryClockForTests } from '../../lib/history/store';
 import { dismissRecoveryBar, formatRelativeTime, offerRecovery, restoreDocument } from '../../lib/history/recovery';
 
 async function wipe(): Promise<void> {
   resetHistoryDbForTests();
+  resetHistoryClockForTests();
   await new Promise<void>((resolve) => {
     const request = indexedDB.deleteDatabase(DB_NAME);
     request.onsuccess = () => resolve();

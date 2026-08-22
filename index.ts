@@ -123,57 +123,59 @@ const createNewOnLoad = ['docx', 'xlsx', 'pptx'].includes(newExt) && !documentUr
 // IndexedDB via public/open-local.js — take it out and open it on boot.
 const openParam = getAllQueryString()['open'];
 const openLocalOnLoad = openParam === 'local' && !documentUrl && !createNewOnLoad;
-// `?open=history&id=<id>`: reopen a document from the local history, and keep
-// writing snapshots to that same row rather than starting a second one for a
-// document the user already has.
-const historyIdParam = openParam === 'history' ? (getAllQueryString()['id'] ?? '') : '';
-const openHistoryOnLoad = Boolean(historyIdParam) && !documentUrl && !createNewOnLoad;
+// `?doc=<id>`: which document this is. Every editing session stamps its own id
+// here (see lib/history/session.ts), so a reload comes back to the same
+// document instead of a second blank one, and the history page's Open link is
+// the same URL the editor was already using. File names cannot play this role:
+// they repeat, and two documents sharing one would share a history.
+const docParam = getAllQueryString()['doc'] ?? '';
 
 // Landing hero orchestration. Only the bare homepage (no ?file/?src/?new, not
 // embedded) shows the crawlable hero. If a document is about to load or be
 // created, or we're embedded, hide it immediately to avoid a flash before the
 // editor takes over.
 const isEmbedded = document.body.classList.contains('embed-mode');
-if (documentUrl || isEmbedded || createNewOnLoad || openLocalOnLoad || openHistoryOnLoad) {
+if (documentUrl || isEmbedded || createNewOnLoad || openLocalOnLoad || docParam) {
   hideLanding();
 } else {
   // Bare /editor with nothing to open: the landing lives at / now.
   window.location.replace('/');
 }
 
-if (documentUrl) {
-  // Decode URL if it's encoded
-  try {
-    const decodedUrl = decodeURIComponent(documentUrl);
-    // Open document from URL
-    openDocumentFromUrl(decodedUrl, undefined, { readonly: isReadonly });
-  } catch (error) {
-    // If decoding fails, try using original URL
-    console.warn('Failed to decode URL, using original:', error);
-    openDocumentFromUrl(documentUrl, undefined, { readonly: isReadonly });
-  }
-} else if (createNewOnLoad && !isEmbedded) {
-  void onCreateNew(`.${newExt}`);
-} else if (openHistoryOnLoad && !isEmbedded) {
-  void (async () => {
+void (async () => {
+  // A stored snapshot wins over every other way of opening: it is strictly
+  // newer than the file on disk or the blank document the other parameters
+  // would produce, and it is the copy nobody else has.
+  if (docParam && !isEmbedded) {
     const [{ getDoc }, { restoreDocument }] = await Promise.all([
       import('./lib/history/store'),
       import('./lib/history/recovery'),
     ]);
-    // One-shot param, same as ?open=local: a reload should not reopen an old
-    // snapshot over whatever the user is doing by then.
-    const cleaned = new URL(window.location.href);
-    cleaned.searchParams.delete('open');
-    cleaned.searchParams.delete('id');
-    window.history.replaceState(null, '', cleaned);
-    const doc = await getDoc(historyIdParam);
-    if (!doc || !(await restoreDocument(doc))) {
-      // The row was deleted or its bytes are gone: nothing to open.
-      window.location.replace('/');
+    const doc = await getDoc(docParam);
+    if (doc && (await restoreDocument(doc))) return;
+    // No snapshot yet (nothing was edited before the reload) or it expired:
+    // fall through and open the same document again under the same id.
+  }
+
+  if (documentUrl) {
+    try {
+      const decodedUrl = decodeURIComponent(documentUrl);
+      await openDocumentFromUrl(decodedUrl, undefined, { readonly: isReadonly, docId: docParam || undefined });
+    } catch (error) {
+      // If decoding fails, try using original URL
+      console.warn('Failed to decode URL, using original:', error);
+      await openDocumentFromUrl(documentUrl, undefined, { readonly: isReadonly, docId: docParam || undefined });
     }
-  })();
-} else if (openLocalOnLoad && !isEmbedded) {
-  void import('./lib/pending-open').then(async ({ takePendingFile }) => {
+    return;
+  }
+
+  if (createNewOnLoad && !isEmbedded) {
+    await onCreateNew(`.${newExt}`, { docId: docParam || undefined });
+    return;
+  }
+
+  if (openLocalOnLoad && !isEmbedded) {
+    const { takePendingFile } = await import('./lib/pending-open');
     const file = await takePendingFile();
     // One-shot param: strip it so a reload lands on the plain homepage instead
     // of hiding the hero again with nothing left to open.
@@ -181,13 +183,18 @@ if (documentUrl) {
     cleaned.searchParams.delete('open');
     window.history.replaceState(null, '', cleaned);
     if (file) {
-      await openLocalFile(file);
-    } else {
-      // Stale deep link (reload, bookmarked URL): nothing pending -- back to the landing.
-      window.location.replace('/');
+      await openLocalFile(file, { historyId: docParam || undefined });
+      return;
     }
-  });
-}
+    // Stale deep link (reload, bookmarked URL): nothing pending -- back to the landing.
+    window.location.replace('/');
+    return;
+  }
+
+  // `?doc=` on its own and nothing stored under it: the document it names was
+  // deleted or has expired, so there is nothing here to show.
+  if (docParam && !isEmbedded) window.location.replace('/');
+})();
 
 // Boot-time recovery offer. Deliberately late and lazy: it must not compete
 // with the document that is opening for either attention or bandwidth, and the
@@ -197,7 +204,7 @@ if (!isEmbedded) {
   window.addEventListener('load', () => {
     window.setTimeout(() => {
       void import('./lib/history/recovery').then(({ offerRecovery }) =>
-        offerRecovery({ excludeId: historyIdParam || undefined }),
+        offerRecovery({ excludeId: docParam || undefined }),
       );
     }, 1500);
   });

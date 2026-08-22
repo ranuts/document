@@ -72,19 +72,16 @@
       var locale = slot.getAttribute('data-recent-locale') || '';
       var suffix = locale ? '&locale=' + encodeURIComponent(locale) : '';
 
+      // Only the resume link is drawn here. The retention note and the link to
+      // /history are in the served HTML: they are true whether or not this
+      // browser is holding anything, and a promise about someone's data should
+      // not depend on a script having run.
       var resume = document.createElement('a');
       resume.className = 'recent-resume';
-      resume.href = '/editor?open=history&id=' + encodeURIComponent(doc.id) + suffix;
+      resume.href = '/editor?doc=' + encodeURIComponent(doc.id) + suffix;
       resume.textContent = (slot.getAttribute('data-recent-label') || 'Continue') + ' ' + doc.title;
 
-      var all = document.createElement('a');
-      all.className = 'recent-all';
-      all.href = '/history' + (locale ? '?locale=' + encodeURIComponent(locale) : '');
-      all.textContent = slot.getAttribute('data-recent-all') || 'Local history';
-
       slot.appendChild(resume);
-      slot.appendChild(document.createTextNode(' · '));
-      slot.appendChild(all);
       slot.hidden = false;
     });
   });

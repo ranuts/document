@@ -145,6 +145,44 @@ test.describe('autosave and recovery (real editor)', () => {
     await expect.poll(async () => (await readHistory(page))[0]?.savedToDiskAt, { timeout: 30_000 }).toBeGreaterThan(0);
   });
 
+  test('a reload comes back to the same document, not a fresh one', async ({ page }) => {
+    // What the id in the URL buys. Before it, a reload of a blank document
+    // opened a second blank document and the edits could only be found through
+    // the recovery bar; now the address itself names the document.
+    await page.goto('/editor?new=docx');
+    await waitForEditorReady(page);
+    const sdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await sdk.waitFor({ state: 'visible', timeout: 30_000 });
+    await sdk.click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('typed before the reload', { delay: 60 });
+
+    // The editor stamped its identity into the address bar on open.
+    const docId = new URL(page.url()).searchParams.get('doc');
+    expect(docId).toBeTruthy();
+
+    await hidePage(page);
+    await expect
+      .poll(async () => (await readHistory(page)).length, { timeout: 45_000, message: 'a snapshot was stored' })
+      .toBe(1);
+
+    await page.reload();
+    await waitForEditorReady(page);
+    const reloadedSdk = page.frameLocator('iframe[name="frameEditor"]').locator('#editor_sdk');
+    await reloadedSdk.waitFor({ state: 'visible', timeout: 30_000 });
+    // Same document, same row: no second id, no duplicate history entry.
+    expect(new URL(page.url()).searchParams.get('doc')).toBe(docId);
+    expect(await readHistory(page)).toHaveLength(1);
+
+    await reloadedSdk.click({ position: { x: 300, y: 200 } });
+    const downloadPromise = page.waitForEvent('download', { timeout: 120_000 });
+    await page.keyboard.press('Control+s');
+    const bytes = new Uint8Array(readFileSync(await (await downloadPromise).path()));
+    const text = ooxmlText((await zipEntryText(bytes, 'word/document.xml')) || '');
+    // Case-insensitive: a blank document's autocorrect capitalises the first
+    // letter of the sentence, which is the editor being an editor.
+    expect(text).toMatch(/typed before the reload/i);
+  });
+
   test('an embedded editor writes nothing to the local history', async ({ page }) => {
     // The document on screen belongs to the host page. Keeping a copy of it in
     // this origin's storage would be us retaining someone else's user's file.

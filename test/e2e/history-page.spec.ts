@@ -10,7 +10,7 @@ import type { Page } from '@playwright/test';
  * fill two pages would make it one of the slowest in the suite. The full
  * editor -> snapshot -> recovery path is covered by autosave-recovery.spec.ts.
  */
-type SeedRow = { id: string; title: string; savedToDisk?: boolean };
+type SeedRow = { id: string; title: string; savedToDisk?: boolean; ageMs?: number };
 
 async function seed(page: Page, rows: SeedRow[]): Promise<void> {
   await page.evaluate(async (seedRows: SeedRow[]) => {
@@ -32,7 +32,7 @@ async function seed(page: Page, rows: SeedRow[]): Promise<void> {
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction(['docs', 'blobs'], 'readwrite');
       seedRows.forEach((row, index) => {
-        const now = Date.now() - (seedRows.length - index) * 1000;
+        const now = Date.now() - (row.ageMs ?? 0) - (seedRows.length - index) * 1000;
         tx.objectStore('docs').put({
           id: row.id,
           title: row.title,
@@ -182,6 +182,60 @@ test.describe('local history page', () => {
     expect(remaining).toBe(1);
   });
 
+  test('says how long each document has left', async ({ page }) => {
+    await seed(page, [
+      { id: 'fresh', title: 'Fresh.docx' },
+      { id: 'old', title: 'Old.docx', ageMs: 6.5 * 24 * 60 * 60 * 1000 },
+    ]);
+    await page.reload();
+
+    await expect(page.locator('.history-row', { hasText: 'Fresh.docx' })).toContainText('7 days');
+    await expect(page.locator('.history-row', { hasText: 'Old.docx' })).toContainText('1 day');
+    // And the rule itself, not just its consequence.
+    await expect(page.locator('.history-notice').first()).toContainText('7 days');
+  });
+
+  test('deletes documents past the retention window without being asked', async ({ page }) => {
+    await seed(page, [
+      { id: 'kept', title: 'Kept.docx' },
+      { id: 'expired', title: 'Expired.docx', ageMs: 8 * 24 * 60 * 60 * 1000 },
+    ]);
+    await page.reload();
+
+    await expect(titles(page)).toHaveText(['Kept.docx']);
+
+    // Gone from storage, not merely filtered out of the view.
+    const remaining = await page.evaluate(
+      () =>
+        new Promise<string[]>((resolve) => {
+          const request = indexedDB.open('document-history', 1);
+          request.onsuccess = () => {
+            const db = request.result;
+            const all = db.transaction('docs', 'readonly').objectStore('docs').getAllKeys();
+            all.onsuccess = () => {
+              db.close();
+              resolve(all.result as string[]);
+            };
+          };
+          request.onerror = () => resolve([]);
+        }),
+    );
+    expect(remaining).toEqual(['kept']);
+  });
+
+  test('the homepage says what autosave keeps, for how long, and where to look', async ({ page }) => {
+    // Served HTML, not drawn by script: a promise about someone's documents
+    // has to hold for a first-time visitor and with JavaScript off.
+    await page.goto('/');
+    const line = page.locator('#landing-hero .recent');
+    await expect(line).toContainText('7 days');
+    await expect(line.locator('a.recent-all')).toHaveAttribute('href', '/history');
+
+    await line.locator('a.recent-all').click();
+    await page.waitForURL(/\/history/);
+    await expect(page.locator('.history-title')).toBeVisible();
+  });
+
   test('clears everything at once', async ({ page }) => {
     await seed(page, [
       { id: 'a', title: 'A.docx' },
@@ -201,6 +255,8 @@ test.describe('local history page', () => {
 
     await page.locator('.history-row', { hasText: 'Reopen.docx' }).locator('.history-open').click();
 
-    await page.waitForURL(/\/editor\?open=history&id=reopen-me/);
+    // The id is the document's identity everywhere: in the URL the editor
+    // already uses, and in the link the history page hands back to it.
+    await page.waitForURL(/\/editor\?doc=reopen-me/);
   });
 });

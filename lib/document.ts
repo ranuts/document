@@ -3,7 +3,7 @@ import { View } from 'ranui/builder';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { showLoading } from './loading';
-import { beginAutosaveSession } from './history/autosave';
+import { startDocumentSession } from './history/session';
 
 // Import UI functions with type-only to avoid circular dependency
 // These will be passed as callbacks or called after document operations
@@ -33,7 +33,7 @@ const fileInput = View('input')
   .build() as HTMLInputElement;
 document.body.appendChild(fileInput);
 
-export const onCreateNew = async (ext: string): Promise<void> => {
+export const onCreateNew = async (ext: string, options?: { docId?: string }): Promise<void> => {
   // Callers own the loading indicator (the control panel shows it around this
   // call), so showing one here too would stack two of them.
   try {
@@ -49,7 +49,7 @@ export const onCreateNew = async (ext: string): Promise<void> => {
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
     // Recovery points from here on. A blank document is the case with the most
     // to lose: there is no file on disk to fall back to at all.
-    void beginAutosaveSession({ title: fileName, origin: 'new' });
+    startDocumentSession({ title: fileName, origin: 'new', docId: options?.docId });
   } catch (error) {
     console.error('Error creating new document:', error);
     // Ensure control panel is shown on error
@@ -81,7 +81,7 @@ export const openLocalFile = async (
     });
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
-    void beginAutosaveSession({ title: file.name, origin: 'local', docId: options?.historyId });
+    startDocumentSession({ title: file.name, origin: 'local', docId: options?.historyId });
   } catch (error) {
     console.error('Error opening document:', error);
     // Ensure control panel is shown on error
@@ -129,6 +129,8 @@ export const openDocumentFromUrl = async (
   options?: {
     readonly?: boolean;
     fetchOptions?: RequestInit;
+    /** Continue an existing history row (a reload of `?doc=<id>&file=<url>`). */
+    docId?: string;
   },
 ): Promise<void> => {
   const { removeLoading } = showLoading();
@@ -194,7 +196,7 @@ export const openDocumentFromUrl = async (
       isNew: !fileBlob,
       readonly: options?.readonly,
     });
-    void beginAutosaveSession({ title: docFileName, origin: 'url' });
+    startDocumentSession({ title: docFileName, origin: 'url', docId: options?.docId });
   } catch (error) {
     console.error('Error opening document from URL:', error);
     alert(`Failed to open document: ${error instanceof Error ? error.message : 'Unknown error'}`);

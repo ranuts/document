@@ -22,7 +22,7 @@ import {
   takeSnapshot,
 } from '../../lib/history/autosave';
 import { DB_NAME, resetHistoryDbForTests } from '../../lib/history/db';
-import { getLatestSnapshot, listDocs } from '../../lib/history/store';
+import { getLatestSnapshot, listDocs, resetHistoryClockForTests } from '../../lib/history/store';
 import { markDocumentDirty, resetUnsavedGuardForTests } from '../../lib/unsaved-guard';
 
 const ready: import('../../lib/history/autosave').SnapshotDecision = {
@@ -42,6 +42,7 @@ function fileOf(values: number[], name = 'Report.docx'): File {
 
 async function wipe(): Promise<void> {
   resetHistoryDbForTests();
+  resetHistoryClockForTests();
   await new Promise<void>((resolve) => {
     const request = indexedDB.deleteDatabase(DB_NAME);
     request.onsuccess = () => resolve();
@@ -87,7 +88,7 @@ describe('autosave session', () => {
 
   it('exports the document in its own format and stores the bytes', async () => {
     requestSaveDocument.mockResolvedValue(fileOf([1, 2, 3]));
-    await beginAutosaveSession({ title: 'Report.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'report', title: 'Report.docx', origin: 'local' });
 
     const doc = await takeSnapshot();
 
@@ -99,7 +100,7 @@ describe('autosave session', () => {
 
   it('keeps appending to the same row across snapshots', async () => {
     requestSaveDocument.mockResolvedValue(fileOf([1]));
-    await beginAutosaveSession({ title: 'Report.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'report', title: 'Report.docx', origin: 'local' });
 
     const first = await takeSnapshot();
     const second = await takeSnapshot();
@@ -112,7 +113,7 @@ describe('autosave session', () => {
   it('does not start in embed mode', async () => {
     window.history.replaceState(null, '', '/editor?embed=1');
 
-    await beginAutosaveSession({ title: 'Report.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'report', title: 'Report.docx', origin: 'local' });
 
     expect(isAutosaveSessionActive()).toBe(false);
   });
@@ -120,7 +121,7 @@ describe('autosave session', () => {
   it('does not start when the user turned autosave off', async () => {
     setAutosaveEnabled(false);
 
-    await beginAutosaveSession({ title: 'Report.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'report', title: 'Report.docx', origin: 'local' });
 
     expect(isAutosaveSessionActive()).toBe(false);
     setAutosaveEnabled(true);
@@ -135,7 +136,7 @@ describe('autosave session', () => {
     });
     requestSaveDocument.mockResolvedValue(fileOf([1]));
 
-    await beginAutosaveSession({ title: 'Shared.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'shared', title: 'Shared.docx', origin: 'local' });
     markDocumentDirty();
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
     document.dispatchEvent(new Event('visibilitychange'));
@@ -147,7 +148,7 @@ describe('autosave session', () => {
 
   it('takes a snapshot when the page is hidden, without waiting for the interval', async () => {
     requestSaveDocument.mockResolvedValue(fileOf([9]));
-    await beginAutosaveSession({ title: 'Hidden.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'hidden', title: 'Hidden.docx', origin: 'local' });
     markDocumentDirty();
 
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
@@ -159,7 +160,7 @@ describe('autosave session', () => {
   it('does not snapshot a read-only document', async () => {
     getReadonlyMode.mockReturnValue(true);
     requestSaveDocument.mockResolvedValue(fileOf([1]));
-    await beginAutosaveSession({ title: 'Locked.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'locked', title: 'Locked.docx', origin: 'local' });
     markDocumentDirty();
 
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
@@ -170,7 +171,7 @@ describe('autosave session', () => {
 
   it('gives up after repeated export failures instead of retrying forever', async () => {
     requestSaveDocument.mockRejectedValue(new Error('export failed'));
-    await beginAutosaveSession({ title: 'Broken.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'broken', title: 'Broken.docx', origin: 'local' });
 
     await takeSnapshot();
     await takeSnapshot();
@@ -182,7 +183,7 @@ describe('autosave session', () => {
 
   it('waits its turn while a user-initiated save owns the channel', async () => {
     requestSaveDocument.mockRejectedValue(new Error('A save request is already in progress'));
-    await beginAutosaveSession({ title: 'Busy.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'busy', title: 'Busy.docx', origin: 'local' });
 
     await takeSnapshot();
     await takeSnapshot();
@@ -193,29 +194,30 @@ describe('autosave session', () => {
     expect(isAutosaveSessionActive()).toBe(true);
   });
 
-  it('reuses the history row of a file that was open before', async () => {
+  it('keeps writing to the row its id names, across sessions', async () => {
     requestSaveDocument.mockResolvedValue(fileOf([1]));
-    await beginAutosaveSession({ title: 'Daily.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'daily', title: 'Daily.docx', origin: 'local' });
     const first = await takeSnapshot();
 
     stopAutosaveSession();
-    await beginAutosaveSession({ title: 'Daily.docx', origin: 'local' });
+    await beginAutosaveSession({ docId: 'daily', title: 'Daily.docx', origin: 'local' });
     const second = await takeSnapshot();
 
     expect(second?.id).toBe(first?.id);
     expect((await listDocs()).total).toBe(1);
   });
 
-  it('gives every blank document its own row', async () => {
+  it('keeps documents with the same name apart', async () => {
+    // Every blank document is called New_Document.docx, and plenty of people
+    // have two unrelated Report.docx files. Identity is the id, never the name.
     requestSaveDocument.mockResolvedValue(fileOf([1], 'New_Document.docx'));
-    await beginAutosaveSession({ title: 'New_Document.docx', origin: 'new' });
+    await beginAutosaveSession({ docId: 'first-blank', title: 'New_Document.docx', origin: 'new' });
     const first = await takeSnapshot();
 
     stopAutosaveSession();
-    await beginAutosaveSession({ title: 'New_Document.docx', origin: 'new' });
+    await beginAutosaveSession({ docId: 'second-blank', title: 'New_Document.docx', origin: 'new' });
     const second = await takeSnapshot();
 
-    // They are different documents that happen to share the default name.
     expect(second?.id).not.toBe(first?.id);
     expect((await listDocs()).total).toBe(2);
   });

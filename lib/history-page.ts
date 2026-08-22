@@ -17,9 +17,9 @@ import { Div, View } from 'ranui/builder';
 import '../styles/history.css';
 import { applyDocumentLanguage, t } from '@ranuts/shared/i18n';
 import { formatRelativeTime } from './history/recovery';
-import { clearAllHistory, deleteDoc, historyUsage, listDocs } from './history/store';
+import { clearAllHistory, deleteDoc, historyUsage, listDocs, pruneExpired } from './history/store';
 import { isAutosaveEnabled, setAutosaveEnabled } from './history/autosave';
-import { hasUnsavedWork, type HistoryDoc } from './history/types';
+import { daysUntilExpiry, hasUnsavedWork, type HistoryDoc } from './history/types';
 
 const SEARCH_DEBOUNCE_MS = 200;
 
@@ -72,7 +72,15 @@ function button(
 }
 
 function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
-  const meta = [formatRelativeTime(doc.updatedAt), formatBytes(doc.size)];
+  const days = daysUntilExpiry(doc);
+  const meta = [
+    formatRelativeTime(doc.updatedAt),
+    formatBytes(doc.size),
+    // Per row, not only in the header: the retention window is the answer to
+    // "is this safe to rely on?", and that question gets asked about a
+    // particular document, not about the feature.
+    days > 0 ? t('historyExpiresIn', { days: String(days) }) : t('historyExpiresToday'),
+  ];
 
   const metaRow = Div()
     .class('history-row-meta')
@@ -97,7 +105,7 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
           button(
             t('historyOpen'),
             () => {
-              window.location.href = `/editor?open=history&id=${encodeURIComponent(doc.id)}`;
+              window.location.href = `/editor?doc=${encodeURIComponent(doc.id)}`;
             },
             { class: 'history-open' },
           ),
@@ -205,6 +213,10 @@ function buildAutosaveToggle(refresh: () => void): HTMLElement {
 }
 
 async function render(): Promise<void> {
+  // Sweep before reading: a row the user is shown must not be one the seven-day
+  // rule already deleted, and this page is the most likely thing to be open
+  // when that boundary is crossed.
+  await pruneExpired();
   const [{ items, total, page: current, pageSize }, usage] = await Promise.all([
     listDocs({ query, page }),
     historyUsage(),
@@ -233,6 +245,7 @@ async function render(): Promise<void> {
         )
         .build(),
       View('p').class('history-intro').text(t('historyIntro')).build(),
+      View('p').class('history-notice').text(t('historyRetention')).build(),
       View('p').class('history-notice').text(t('historyNotBackup')).build(),
     )
     .build();

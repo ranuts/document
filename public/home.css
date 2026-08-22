@@ -940,3 +940,19 @@
 #landing-hero .recent a:hover {
   color: var(--ran-color-primary);
 }
+#landing-hero .recent-note {
+  /* The retention window is the load-bearing half of this line: it is the
+     difference between "the browser keeps my documents" and "the browser keeps
+     my documents for a week". */
+  color: var(--ran-color-text-secondary);
+}
+#landing-hero .recent-resume {
+  font-weight: 500;
+}
+#landing-hero .recent-resume::after {
+  content: '·';
+  margin-left: var(--ran-space-2);
+  color: var(--ran-color-text-disabled);
+  text-decoration: none;
+  display: inline-block;
+}
