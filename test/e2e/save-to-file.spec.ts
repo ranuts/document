@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Page } from '@playwright/test';
+import { readHistoryKeys } from './lib/history-db';
 import { buildDocx, ooxmlText, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
@@ -216,25 +217,10 @@ test.describe('saving into the document own file (real editor)', () => {
       document.dispatchEvent(new Event('visibilitychange'));
     });
     await expect
-      .poll(
-        () =>
-          page.evaluate(
-            () =>
-              new Promise<number>((resolve) => {
-                const request = indexedDB.open('document-history');
-                request.onsuccess = () => {
-                  const db = request.result;
-                  const all = db.transaction('docs', 'readonly').objectStore('docs').getAllKeys();
-                  all.onsuccess = () => {
-                    db.close();
-                    resolve(all.result.length);
-                  };
-                };
-                request.onerror = () => resolve(0);
-              }),
-          ),
-        { timeout: 60_000, message: 'a snapshot exists to reopen' },
-      )
+      .poll(async () => (await readHistoryKeys(page, 'docs')).length, {
+        timeout: 60_000,
+        message: 'a snapshot exists to reopen',
+      })
       .toBeGreaterThan(0);
 
     // A second page rather than a reload: it starts with an empty JS heap, so
