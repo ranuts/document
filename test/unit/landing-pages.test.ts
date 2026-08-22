@@ -59,8 +59,12 @@ const slugRoute = (route: string) => {
 /** ('ja', '/open/pdf') -> '/ja/open/pdf'; ('ja', '/') -> '/ja/'. */
 const routeIn = (locale: string, slug: string) =>
   slug === '/' ? LOCALES[locale].home : `${LOCALES[locale].prefix}${slug}`;
-// The English homepage lives at the repo root (Vite entry), not under public/.
-const homepage = resolve(ROOT, 'index.html');
+/** A generated page by output path, e.g. 'zh-CN/index.html' -- the render, not the file. */
+const generated = (rel: string): string => {
+  const page = GENERATED.find((g) => g.rel === rel);
+  if (!page) throw new Error(`no generated page ${rel}`);
+  return page.html;
+};
 const attr = (html: string, re: RegExp) => html.match(re)?.[1] ?? null;
 
 describe('landing pages', () => {
@@ -178,8 +182,8 @@ describe('landing pages', () => {
   });
 
   it('every /open/* format page is cross-linked from both homepages and llms.txt', () => {
-    const en = readFileSync(homepage, 'utf8');
-    const zh = readFileSync(resolve(PUBLIC, 'zh-CN/index.html'), 'utf8');
+    const en = generated('index.html');
+    const zh = generated('zh-CN/index.html');
     const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
     for (const fmt of ['docx', 'xlsx', 'pptx', 'pdf', 'odt', 'ods', 'odp']) {
       expect(en).toContain(`href="/open/${fmt}"`);
@@ -189,8 +193,8 @@ describe('landing pages', () => {
   });
 
   it('every /convert/* page is cross-linked from both homepages and llms.txt', () => {
-    const en = readFileSync(homepage, 'utf8');
-    const zh = readFileSync(resolve(PUBLIC, 'zh-CN/index.html'), 'utf8');
+    const en = generated('index.html');
+    const zh = generated('zh-CN/index.html');
     const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
     // The homepages link one page per family (the cards would not fit seven of
     // them); the rest are reachable from those pages and from llms.txt.
@@ -214,11 +218,11 @@ describe('landing pages', () => {
     // or an assistant ("I closed the tab -- did I lose my work?"), and the one
     // place the seven-day promise has to be machine-readable. Losing it to a
     // copy edit would cost the answer, not just the wording.
-    for (const [file, ask, days] of [
-      [homepage, /tab|refresh/i, '7 days'],
-      [resolve(PUBLIC, 'zh-CN/index.html'), /标签页|刷新/, '7 天'],
+    for (const [rel, ask, days] of [
+      ['index.html', /tab|refresh/i, '7 days'],
+      ['zh-CN/index.html', /标签页|刷新/, '7 天'],
     ] as Array<[string, RegExp, string]>) {
-      const html = readFileSync(file, 'utf8');
+      const html = generated(rel);
       const faqs = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
         .flatMap((m) => {
           const doc = JSON.parse(m[1]);
@@ -229,7 +233,7 @@ describe('landing pages', () => {
         (faq) => faq.mainEntity as Array<{ name: string; acceptedAnswer: { text: string } }>,
       );
       const answer = questions.find((q) => ask.test(q.name))?.acceptedAnswer.text;
-      expect(answer, `${file} has no question about closing the tab`).toBeTruthy();
+      expect(answer, `${rel} has no question about closing the tab`).toBeTruthy();
       expect(answer).toContain(days);
     }
   });
@@ -250,11 +254,14 @@ describe('landing pages', () => {
   it('the WebMCP page lists exactly the tools the adapter registers', async () => {
     const { buildTools } = await import('../../lib/web-mcp');
     const names = buildTools().map((t) => t.name);
-    for (const locale of ['', '/zh-CN']) {
-      const file = resolve(PUBLIC, `${locale}/webmcp-document-editor.html`.replace(/^\//, ''));
-      const html = readFileSync(file, 'utf8');
+    // The page is generated from markdown and not committed, so it is read
+    // from the same in-memory render as the rest of this file -- in every
+    // locale that has a translation of it.
+    const webmcp = GENERATED.filter((g) => g.rel.endsWith('webmcp-document-editor.html'));
+    expect(webmcp.length).toBeGreaterThanOrEqual(2);
+    for (const page of webmcp) {
       for (const name of names) {
-        expect(html, `${locale || '/'}webmcp page must mention ${name}`).toContain(name);
+        expect(page.html, `${page.route} must mention ${name}`).toContain(name);
       }
     }
     const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');

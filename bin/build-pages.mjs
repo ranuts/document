@@ -13,12 +13,14 @@
  * all locales of the same slug to each other (hreflang + language select).
  * Adding a locale to LOCALES is enough for the shell; content is per file.
  *
- * Output is deterministic and committed (public/ is served as-is by vite dev
- * and copied by the build); bin/build.sh runs this first, and
- * test/unit/generated-pages.test.ts fails when a committed page is stale.
+ * Output is deterministic and NOT committed: the vite plugin `generated-pages`
+ * writes it at dev/build time, and .gitignore keeps it out of the repo so a
+ * page cannot go stale. The one exception is COMMITTED below -- the root
+ * index.html, which Rollup takes as a build entry -- and `--check` is what
+ * keeps that one honest.
  *
  *   node bin/build-pages.mjs            # write into public/
- *   node bin/build-pages.mjs --check    # exit 1 if any output would change
+ *   node bin/build-pages.mjs --check    # exit 1 if a committed output would change
  *   node bin/build-pages.mjs --out DIR  # write elsewhere (tests)
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -1070,10 +1072,20 @@ export function generate({ outDir = resolve(ROOT, 'public') } = {}) {
   return outputs;
 }
 
-/** True when every committed output matches a fresh render. */
+/**
+ * The outputs that stay in the repo. Only the default locale's homepage: it is
+ * index.html at the repo root, a Vite build entry, and a build must not depend
+ * on a plugin having written its inputs first. Every other page -- including
+ * the other locales' homepages -- is generated into a gitignored path, so
+ * there is nothing to go stale and nothing to check.
+ */
+const COMMITTED = new Set(['index.html']);
+
+/** The committed outputs a fresh render would change (empty when all current). */
 export function check({ publicDir = resolve(ROOT, 'public') } = {}) {
   const stale = [];
   for (const o of generate({ outDir: null })) {
+    if (!COMMITTED.has(o.rel)) continue;
     const target = pathFor(o, publicDir);
     if (!existsSync(target) || readFileSync(target, 'utf8') !== o.html) stale.push(o.rel);
   }
