@@ -504,7 +504,15 @@ function renderHome({ locale, data, locales }) {
   const home = L.home;
   const url = ORIGIN + home;
   const e = escapeHtml;
-  const editor = (query) => `/editor?${query}`;
+  /**
+   * Links into the app carry the locale. The app's own i18n resolves its
+   * language from `?locale=` first (then cookie, then localStorage, then
+   * navigator.language), so without this a visitor who chose Japanese on the
+   * site would land in an editor guessing from browser settings -- which is
+   * how the hand-written Chinese homepage always did it, and what the first
+   * generated version of this template dropped.
+   */
+  const editor = (query) => `/editor?${locale === DEFAULT_LOCALE ? '' : `locale=${locale}&`}${query}`;
   const alternates = locales
     .map((l) => `    <link rel="alternate" hreflang="${l}" href="${ORIGIN + LOCALES[l].home}" />`)
     .join('\n');
