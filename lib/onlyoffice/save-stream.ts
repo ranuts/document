@@ -5,6 +5,8 @@ import { oAscFileType } from '../file-types';
 import { getFileExtension, getNormalizedFile, getSavedFileMimeType } from './file-helpers';
 import { getDocumentOpenError, waitForDocumentContentReady } from './open-state';
 import { getReadonlyMode } from './readonly';
+import { isEmbedMode } from '../embed-mode';
+import { markDocumentSaved } from '../unsaved-guard';
 
 /**
  * The v9 save channel end to end: the request the caller holds, the export
@@ -31,16 +33,6 @@ let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 export const SAVE_READY_WAIT_MS = 150_000;
 export const SAVE_RETRY_WINDOW_MS = 25_000;
 export const SAVE_REQUEST_TIMEOUT_MS = 180_000;
-
-function isEmbedMode(): boolean {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const embed = params.get('embed') || params.get('embedded');
-  return window.parent !== window || embed === '' || embed === '1' || embed === 'true';
-}
 
 function resolveEmbeddedSaveRequest(request: EmbeddedSaveRequest, file: File): void {
   if (request.settled) {
@@ -107,7 +99,9 @@ function routeSavedFile(file: File): void {
     return;
   }
 
-  saveFileToDisk(file, file.name).catch(notifyOperationFailed);
+  // Reaching the user's disk is the only thing that clears the unsaved-changes
+  // warning: an autosave snapshot lives in this browser, a saved file does not.
+  saveFileToDisk(file, file.name).then(markDocumentSaved).catch(notifyOperationFailed);
 }
 
 function handleFileStreamMessage(event: MessageEvent): void {

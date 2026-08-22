@@ -18,6 +18,7 @@ import {
   releaseOpenAttemptBytes,
   setOpenRunner,
 } from './onlyoffice/open-failure';
+import { markDocumentDirty, markDocumentSaved, resetUnsavedChanges } from './unsaved-guard';
 import { getSdkEditorApi, ASC_RESTRICTION_VIEW } from './onlyoffice/sdk-api';
 import { getReadonlyMode, setReadonlyState } from './onlyoffice/readonly';
 import { resolveUiTheme } from './onlyoffice/ui-theme';
@@ -282,6 +283,20 @@ function createPersonalEditorInstance(config: {
         }
         console.log(`${t('documentLoaded')}${fileName}`);
       },
+      // The editor's modified flag. This is the only signal the app has that
+      // there is work worth protecting, and it has to be wired here: the
+      // serverless save guard routes Save/Ctrl+S to asc_DownloadAs, so the
+      // SDK's own "document saved" bookkeeping never runs.
+      onDocumentStateChange: (event: unknown) => {
+        const modified = (event as { data?: boolean } | null)?.data;
+        if (modified === false) {
+          // The SDK says there is nothing to save: a fresh document, or undo
+          // walked the history back to the state it was opened in.
+          markDocumentSaved();
+        } else {
+          markDocumentDirty();
+        }
+      },
       // Must be declared even as a no-op: the api layer only runs downloadAs
       // when this callback exists. Actual bytes arrive via the
       // onlyoffice-file-stream message, not through this event.
@@ -353,6 +368,9 @@ export function createEditorInstance(config: {
   isRetry?: boolean;
 }): Promise<void> {
   registerOpenAttempt(config);
+  // A new document is taking over the frame: whatever was unsaved belonged to
+  // the one being replaced.
+  resetUnsavedChanges();
   // Asked once per session, well before any failure needs to report it: the
   // answer is only read from the out-of-memory branch of the error toast.
   resolveBuildBitness();
