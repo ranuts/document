@@ -69,9 +69,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.116.0",
     "@khmyznikov/pwa-install": "^0.6.4",
-    "@mlc-ai/web-llm": "^0.2.84",
     "@ranuts/agent-core": "workspace:*",
     "@ranuts/chat-ui": "workspace:*",
     "@ranuts/converter": "workspace:*",

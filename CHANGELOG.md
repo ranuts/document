@@ -19,6 +19,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- Fonts are now sent compressed. The editor's font files have no extension, so
+  the CDN had been typing them as generic binary and shipping every byte raw --
+  a 16 MB Chinese font arrived as 16 MB rather than the 9.9 MB it compresses to.
+  Opening your first Chinese, Japanese or Korean document was downloading
+  roughly twice what it needed to.
 - Browser AI agents were told this editor could not open OpenDocument, RTF or
   plain-text files. It always could -- the list the tools advertised had been
   written out by hand and fallen behind the engine. It is now derived from the

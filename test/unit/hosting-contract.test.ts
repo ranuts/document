@@ -69,6 +69,18 @@ describe('public/_headers', () => {
     expect(Object.keys(rules).some((p) => p.startsWith('/sdkjs/common/wasm/x2t/x2t_helper'))).toBe(false);
   });
 
+  /**
+   * The catalog files have no extension, so Pages typed them
+   * application/octet-stream -- not on Cloudflare's compressible list, so
+   * production shipped every font byte uncompressed (a 16 MB CJK face that
+   * gzips to 9.9 MB). Declaring font/ttf is what puts them back on it. The
+   * bytes are an XOR-prefixed TTF read through XHR arraybuffer, so the label
+   * never has to be parseable as a webfont.
+   */
+  it('declares a compressible Content-Type on the font catalog', () => {
+    expect(rules['/fonts/*']?.['content-type']).toBe('font/ttf');
+  });
+
   it('keeps vendor trees and the font catalog out of search indexes, and landing pages in', () => {
     const robots = (path: string) => rules[path]?.['x-robots-tag'];
     for (const p of ['/web-apps/*', '/sdkjs/*', '/fonts/*']) expect(robots(p), p).toMatch(/noindex/);
@@ -109,6 +121,11 @@ describe('sws.toml (self-hosted Docker)', () => {
     for (const source of ['/assets/**', '/fonts/*', '/sdkjs/common/wasm/x2t/x2t.wasm.gz', '/ran-tokens.*.css']) {
       expect(cc(source), source).toMatch(/max-age=31536000.*immutable/);
     }
+  });
+
+  it('declares the same compressible Content-Type on the font catalog as _headers', () => {
+    const fonts = rules.find((r) => r.source === '/fonts/*');
+    expect(fonts?.headers['content-type']).toBe('font/ttf');
   });
 
   it('never makes the patched vendor trees immutable', () => {
