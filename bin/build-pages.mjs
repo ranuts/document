@@ -222,11 +222,23 @@ export const LANDING_SLUGS = [
 export const PAGES = [
   {
     slug: 'help',
-    sources: { en: 'content/en/help.md', 'zh-CN': 'content/zh-CN/help.md', ja: 'content/ja/help.md' },
+    sources: {
+      en: 'content/en/help.md',
+      'zh-CN': 'content/zh-CN/help.md',
+      ja: 'content/ja/help.md',
+      de: 'content/de/help.md',
+      es: 'content/es/help.md',
+    },
   },
   {
     slug: 'help/embed-api',
-    sources: { en: 'docs/embed-api.md', 'zh-CN': 'docs/embed-api.zh.md', ja: 'docs/embed-api.md' },
+    sources: {
+      en: 'docs/embed-api.md',
+      'zh-CN': 'docs/embed-api.zh.md',
+      ja: 'docs/embed-api.md',
+      de: 'docs/embed-api.md',
+      es: 'docs/embed-api.md',
+    },
     meta: {
       en: {
         title: 'Embed API — iframe + postMessage reference',
@@ -235,6 +247,25 @@ export const PAGES = [
         eyebrow: 'Help · Embed API',
         breadcrumb: 'Embed API',
         parent: { href: '/help', name: 'Help' },
+      },
+      de: {
+        title: 'Embed API — Referenz zu iframe + postMessage',
+        description:
+          'Referenz zum Einbetten des Dokumenteneditors in Ihre eigene Web-App: iframe-Einrichtung, postMessage-Befehle (aus URL/File/Buffer öffnen, schreibgeschützt, speichern), Antworten und Origin-Beschränkung.',
+        eyebrow: 'Hilfe · Embed API',
+        breadcrumb: 'Embed API',
+        parent: { href: '/de/help', name: 'Hilfe' },
+        notice: 'Die Embed-API-Referenz wird auf Englisch gepflegt (eine einzige Quelle). Eine deutsche Fassung folgt.',
+      },
+      es: {
+        title: 'Embed API — referencia de iframe + postMessage',
+        description:
+          'Referencia para integrar el editor de documentos en tu propia aplicación web: configuración del iframe, comandos postMessage (abrir desde URL/File/buffer, solo lectura, guardar), respuestas y restricción de origen.',
+        eyebrow: 'Ayuda · Embed API',
+        breadcrumb: 'Embed API',
+        parent: { href: '/es/help', name: 'Ayuda' },
+        notice:
+          'La referencia de la Embed API se mantiene en inglés (una única fuente). La versión en español llegará más adelante.',
       },
       ja: {
         title: 'Embed API — iframe + postMessage リファレンス',
@@ -259,7 +290,13 @@ export const PAGES = [
   },
   {
     slug: 'changelog',
-    sources: { en: 'CHANGELOG.md', 'zh-CN': 'CHANGELOG.md', ja: 'CHANGELOG.md' },
+    sources: {
+      en: 'CHANGELOG.md',
+      'zh-CN': 'CHANGELOG.md',
+      ja: 'CHANGELOG.md',
+      de: 'CHANGELOG.md',
+      es: 'CHANGELOG.md',
+    },
     meta: {
       en: {
         title: 'Changelog — what changed in the online document editor',
@@ -267,6 +304,24 @@ export const PAGES = [
           'User-facing release notes for edit.chaxus.com: new formats, editor fixes, performance and privacy changes, in reverse chronological order.',
         eyebrow: 'Changelog',
         breadcrumb: 'Changelog',
+      },
+      de: {
+        title: 'Änderungen — was sich im Online-Dokumenteneditor geändert hat',
+        description:
+          'Versionshinweise für edit.chaxus.com: neue Formate, Korrekturen im Editor, Änderungen an Leistung und Datenschutz, in umgekehrt chronologischer Reihenfolge.',
+        eyebrow: 'Änderungen',
+        breadcrumb: 'Änderungen',
+        notice:
+          'Die Änderungen werden auf Englisch gepflegt (eine einzige Quelle, CHANGELOG.md). Eine deutsche Fassung folgt.',
+      },
+      es: {
+        title: 'Novedades — qué ha cambiado en el editor de documentos en línea',
+        description:
+          'Notas de versión de edit.chaxus.com: formatos nuevos, correcciones del editor, cambios de rendimiento y privacidad, en orden cronológico inverso.',
+        eyebrow: 'Novedades',
+        breadcrumb: 'Novedades',
+        notice:
+          'Las novedades se mantienen en inglés (una única fuente, CHANGELOG.md). La versión en español llegará más adelante.',
       },
       ja: {
         title: '変更履歴 — オンラインドキュメントエディタの更新内容',
