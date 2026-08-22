@@ -790,23 +790,39 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
 - **字体**：`public/fonts/{index}` 是 XOR 混淆的 catalog 线格式（裸 TTF
   放进去无效），编解码用 `bin/font-catalog.mjs`，体系说明见 docs/fonts.md；
   x2t 转 PDF 的字体注入见 `packages/converter` 的 `PDF_FONT_MANIFEST`。
-  **catalog 里只能放可再分发的字体**（2026-08-22 起）：vendor 原本带着 79 个
-  专有字体、171 MB（华文/方正/中易/微软/Monotype），已由
-  `bin/font-license-sweep.mjs` 换成开源等价物——拉丁走 metric-compatible
-  的 Liberation/Carlito（字宽一致不跑版），CJK 走 Noto Sans/Serif CJK SC。
-  `test/unit/font-catalog-licensing.test.ts` 每次跑都读每个文件自己的 name
-  表，vendor 升级重新带进专有字体会直接红。
-  **改 catalog 前必须知道的三件事**：
-  1. `__fonts_files` 是**位置索引**，删条目会打乱后面所有位置——替换的做法是
-     改写槽位的值，旧 family 名因此继续解析得到（这就是 alias 机制）；
-  2. `__fonts_ranges` 三元组的第三个数是 `__fonts_infos` 的**行号**，不是
-     `__fonts_files` 的位置（两个数组长度接近，认错了照样能解析出"某个"字体）；
-  3. 有三处按**槽位号硬编码**、改完 catalog 必须同步，否则静默 404：
+  **catalog 里有 79 个专有字体（171 MB），暂时动不了**：华文 / 方正 / 中易 /
+  长城 / Stone 的中文字体，以及微软 Core Fonts 和 Monotype 的 Arial / Times /
+  Courier。它们是 vendor 离线包从宿主机带进来的，本仓库与线上都是公开的，
+  托管即再分发——**这是已知的版权问题，尚未解决**。
+  **2026-08-22 尝试替换过一次，失败并已 revert（PR #170 → #174）**：上线后
+  全页 glyph 错位，输入 `Hello` 屏幕显示 `Fcjjm`，中文完全不渲染。
+  **动手之前必读
+  [docs/explorations/2026-08-22-font-licensing-why-substitution-fails.md](docs/explorations/2026-08-22-font-licensing-why-substitution-fails.md)**，
+  里面有五种做法各自怎么坏的实测记录。要点：
+  1. **不存在"小改一处"的替换**。family 名、glyph 索引、metrics、字符覆盖被
+     绑在四份数据里（`__fonts_files` / `__fonts_infos` / `__fonts_ranges` /
+     `g_fonts_selection_bin`），改任意一处而不动其余都会坏；
+  2. `__fonts_files` 的**每个位置就是一个字体身份**（`for (x...) y[x] = new
+FontFile(files[x])`）。两个 family 共用一个位置 → glyph 错位；多个位置
+     持同一文件名 → 引擎当成多个字体各自排队下载；
+  3. **metric 兼容 ≠ glyph 顺序兼容**。Arial 与 Liberation Sans 逐码位比对
+     939 个里有 844 个 glyph 序号不同，只是基本 ASCII 恰好一致——用 `Hello`
+     测会得到"一切正常"的假象，**验证文本必须跨出 U+A0**；
+  4. `__fonts_ranges` 三元组的第三个数是**引擎构建出来那个数组**的下标，不是
+     `__fonts_infos` 的行号：构建时跳过 `ASCW3` 行，其后的 family 运行时下标
+     少 1，直接 `findIndex()` 会指到后一个 family；
+  5. `sdk-all.js` 里**硬编码**了 `Arial` / `Calibri` / `SimSun` / `Tahoma` /
+     `Batang` / `MS Mincho`（`FontPickerByCharacter` 的按语言默认字体与主题
+     默认字体）。删掉这些名字 → `GetFontInfo` 返回 undefined →
+     `Cannot set properties of undefined (setting 'NeedStyles')` → 白屏；
+  6. `g_fonts_selection_bin` **不是可选的**。它看着像字体选择器的数据，实际是
+     按 family 名携带 panose / metrics / 字符覆盖的核心索引，清空后全部字符
+     变豆腐块。替换字体必须同步重建它，而它的二进制格式没有文档。
+     **E2E 抓不到这个问题**：视觉用例比的是"原始 vs 存回"，两侧用同一套错误
+     字体渲染，逐像素一致。唯一可靠的验证是真实浏览器里输入文字看渲染。
+     另外有三处按**槽位号硬编码**、改完 catalog 必须同步，否则静默 404：
      `PDF_FONT_MANIFEST`、`public/landing-prefetch.js` 的 `CORE`、
      `test/e2e/landing-prefetch.spec.ts` 的 `CORE_FONTS`。前两处都真的漏过。
-     回退路由（哪个语系落到哪个字体）与实测依据见 docs/fonts.md 的
-     "Script fallback" 一节，别凭印象改——每条都是拿区块对 193 个 family
-     逐个打分选出来的。
 - **粘贴 XSS**：三个编辑器的粘贴解析 iframe 均带
   `sandbox="allow-same-origin"`（无 allow-scripts），粘贴的 script/on*
   不会执行，无需额外过滤 patch（2026-08-14 排查结论）。
