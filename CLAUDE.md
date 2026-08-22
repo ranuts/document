@@ -95,7 +95,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   sw-update.ts          # SW 更新策略的编辑器一侧（有文档打开时不提升 worker）；落地页一侧在 public/sw-register.js
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
 packages/             # pnpm workspace，供 ran 生态三处站点共享（包名 @ranuts/*）
-  shared/               # document-types / document-utils / i18n（en + zh-CN 词条；编辑器 UI 语言另由 vendor 45 语言包提供）/ store（createSignal）
+  shared/               # document-types / document-utils / i18n（7 种站点语言：en / zh-CN / ja / ko / de / es / pt，词条表都是完整的；编辑器 UI 语言另由 vendor 45 语言包提供）/ store（createSignal）
   converter/            # 格式转换：CSV↔XLSX（SheetJS）、docx-zip 媒体处理、签名嗅探、PDF 字体清单
   agent-core/           # LLM 运行时 + 多 Provider（anthropic/openai/gemini/ollama/webllm）+ key 存储
   chat-ui/              # 聊天面板 UI
@@ -399,6 +399,26 @@ action，wrangler 必须经 `bin/serve-pages-dev.sh` 起，分片数与 `--shard
 一致，三个汇总 job 的名字不能改。全部由 `test/unit/workflow-contract.test.ts`
 钉死。详见 docs/explorations/2026-08-19-ci-workflow-hardening.md 与
 docs/explorations/2026-08-19-ci-e2e-sharding.md。
+
+---
+
+## 多语言（站点 7 种，2026-08-23 起）
+
+站点语言 = `SHELL_LOCALES`（`packages/shared/src/i18n.ts`）= `bin/build-pages.mjs` 的
+`LOCALES` = `content/<locale>/` 目录 = README 里写的数字。**四处必须一致**，因为它们
+描述的是同一件事：用户在语言菜单里选了什么，页面、应用 UI、编辑器 vendor 就都是什么。
+
+- 加一种语言 = 加一个 `content/<locale>/` 目录（18 个落地页 markdown + `home.json` +
+  `help.md`）+ `LOCALES` 一行 + `UI` 表一段 + sitemap/llms.txt 的镜像行。**代码不用改。**
+  `test/unit/landing-pages.test.ts` 从路由推导 locale，不需要跟着改。
+- **首页的编辑器链接必须带 `?locale=`**（`renderHome` 的 `editor()`）。app 的 i18n 先读
+  URL 再读 cookie/localStorage/navigator.language，所以这是"站点是日语"与"编辑器是日语"
+  之间唯一的那根线。同一处用例钉住。
+- **加语言前先确认 vendor 有对应的语言包**（`public/web-apps/apps/*/main/locale/`，45 个）。
+  波斯语就是栽在这里：站点译文齐了，`fa` 不在 vendor 里，编辑器工具栏只能退回英文——
+  于是 2026-08-23 把 `fa` 整表从 i18n 删掉，`RTL_LANGUAGES` 留成空数组（机制保留）。
+- **RTL 还没有做**：`landing.css` / `home.css` / `history.css` / `base.css` 里仍有 31 处
+  `padding-left` 这类物理属性。真要上 ar/he/ur，先把它们换成逻辑属性，再谈翻译。
 
 ---
 

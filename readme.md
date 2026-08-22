@@ -41,7 +41,7 @@ device, so documents are never uploaded, and no account is involved.
 - 💾 **Saves into your own file** — pick it once, every save after writes back to it (Chromium; elsewhere it downloads as before)
 - 🕓 **Nothing is lost if you close the tab** — edits autosave into your own browser, kept for 7 days, deletable any time ([details](#-your-data-stays-on-your-device))
 - 📴 **Works offline** — installable as a PWA; after the first visit no network is needed
-- 🌍 **Multi-language** — the site is translated into 7 languages (English, 中文, 日本語, Deutsch, Español, 한국어, Português), the app UI into 8, and the editor itself into 45
+- 🌍 **Multi-language** — 7 languages end to end (English, 中文, 日本語, Deutsch, Español, 한국어, Português): the pages, the app UI and the editor all follow the one you pick; the editor itself ships 45
 - 🧩 **Embeddable** — full postMessage API for iframe integration
 - 🤖 **Agent-ready** — exposes WebMCP tools so a browser AI agent can open, convert and read documents
 - 🚀 **Deploy anywhere** — a static build; a directory of files behind any web server

@@ -169,13 +169,19 @@ describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh'
     expect(m.getOnlyOfficeLang()).toBe('ja');
   });
 
-  it('?locale=fa gives a Persian shell but an English editor (no vendor locale)', async () => {
+  /**
+   * Persian is the case this rule exists for: the site had a full fa table and
+   * the vendor has no fa locale, so it shipped a Persian page around an English
+   * editor. The table is gone; what is pinned here is that asking for a locale
+   * the site does not have falls back cleanly rather than half-applying.
+   */
+  it('?locale=fa falls back to English, shell and editor alike', async () => {
     window.history.pushState({}, '', '/?locale=fa');
     vi.resetModules();
     const m = await import('@ranuts/shared/i18n');
-    expect(m.getLanguage()).toBe(LanguageCode.FA);
+    expect(m.getLanguage()).toBe(LanguageCode.EN);
     expect(m.getOnlyOfficeLang()).toBe('en');
-    expect(m.t('uploadDocument')).toBe('باز کردن / ویرایش سند');
+    expect(m.t('uploadDocument')).toBe('View/Edit Document');
   });
 
   it('an unsupported ?locale (fa) falls back to the browser language for the editor', async () => {

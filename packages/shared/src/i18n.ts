@@ -25,7 +25,6 @@ export enum LanguageCode {
   /** Portuguese */
   PT = 'pt',
   /** Persian (right-to-left) */
-  FA = 'fa',
 }
 
 /**
@@ -55,11 +54,20 @@ export const SHELL_LOCALES: readonly Language[] = [
   LanguageCode.DE,
   LanguageCode.ES,
   LanguageCode.PT,
-  LanguageCode.FA,
 ];
 
-/** Right-to-left shell languages (drives `<html dir>`, see applyDocumentLanguage). */
-export const RTL_LANGUAGES: readonly Language[] = [LanguageCode.FA];
+/**
+ * Right-to-left shell languages (drives `<html dir>`, see applyDocumentLanguage).
+ *
+ * Empty on purpose rather than deleted. Persian used to be here and was removed
+ * with the rest of its table: the vendor editor ships ar, he and ur but no fa,
+ * so a Persian visitor got a Persian site around an English editor -- and the
+ * site's own stylesheets still use physical properties (padding-left and
+ * friends), so the pages would have laid out left-to-right anyway. Adding a
+ * genuine RTL locale means doing both: a vendor locale that exists, and
+ * logical properties in landing.css / home.css / history.css / base.css.
+ */
+export const RTL_LANGUAGES: readonly Language[] = [];
 
 export const isRtlLanguage = (lang: Language): boolean => RTL_LANGUAGES.includes(lang);
 
@@ -1048,115 +1056,6 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyClearSearch: 'Limpar a procura',
     historyDeleteTitle: 'Eliminar este documento',
     historyClearTitle: 'Eliminar tudo',
-  },
-  [LanguageCode.FA]: {
-    webOffice: 'Web Office',
-    uploadDocument: 'باز کردن / ویرایش سند',
-    newWord: 'سند Word جدید',
-    newExcel: 'کاربرگ Excel جدید',
-    newPowerPoint: 'ارائهٔ PowerPoint جدید',
-    themeLabel: 'پوسته',
-    themeSystem: 'سیستم',
-    themeLight: 'روشن',
-    themeDark: 'تیره',
-    fileSavedSuccess: 'فایل ذخیره شد: ',
-    documentLoaded: 'سند بارگذاری شد: ',
-    failedToLoadEditor: 'ویرایشگر بارگذاری نشد. مطمئن شوید OnlyOffice API درست نصب شده است.',
-    unsupportedFileType: 'نوع فایل پشتیبانی نمی‌شود: ',
-    invalidFileObject: 'فایل نامعتبر است',
-    documentOperationFailed: 'عملیات روی سند ناموفق بود: ',
-    editorErrorToast: 'خطای سند',
-    editorErrorFormatMismatch: 'محتوای فایل با پسوند آن هم‌خوانی ندارد؛ قالب را بررسی و دوباره تلاش کنید',
-    editorErrorOpenFailed: 'فایل باز نشد: ممکن است خراب باشد، قالب آن پشتیبانی نشود، یا با پسوندش هم‌خوانی نداشته باشد',
-    editorErrorOutOfMemory:
-      'این مرورگر نتوانست حافظه لازم برای موتور تبدیل سند (حدود {mb} مگابایت) را تخصیص دهد. زبانه‌ها یا پنجره‌های دیگر را ببندید و دوباره تلاش کنید؛ اگر همچنان ناموفق بود از یک مرورگر ۶۴ بیتی (Edge یا Chrome ۶۴ بیتی) استفاده کنید.',
-    editorOpenRetrying: 'هنگام باز شدن سند، ویرایشگر هنوز آماده نبود؛ به‌طور خودکار دوباره تلاش می‌شود…',
-    agentTitle: 'دستیار هوش مصنوعی',
-    agentOpenTip: 'باز کردن دستیار هوش مصنوعی',
-    agentSettings: 'تنظیمات',
-    agentRoleUser: 'شما',
-    agentRoleTool: 'ابزار',
-    agentRoleError: 'خطا',
-    agentProviderClaude: 'Claude (ابری، نیازمند کلید API)',
-    agentProviderOpenAI: 'OpenAI (ابری، نیازمند کلید API)',
-    agentProviderGemini: 'Gemini (ابری، نیازمند کلید API)',
-    agentProviderLocal: 'محلی و آفلاین (WebLLM، نیازمند WebGPU)',
-    agentProviderOllama: 'Ollama (کارساز محلی، خودتان اجرا می‌کنید)',
-    agentOllamaModelPlaceholder: 'نام مدل، برای نمونه llama3.2',
-    agentOllamaHint:
-      'به Ollama محلی (http://localhost:11434) وصل می‌شود؛ کلید API لازم نیست — فقط مطمئن شوید مدل در حال اجراست.',
-    agentLoadModel: 'بارگذاری مدل',
-    agentModelLoaded: 'مدل بارگذاری شد — می‌توانید گفت‌وگو را آغاز کنید.',
-    agentCheckingCache: 'در حال بررسی حافظهٔ نهان مدل…',
-    agentModelCached:
-      'این مدل در حافظهٔ نهان هست — روی «بارگذاری مدل» بزنید تا بی‌درنگ آغاز شود (بارگذاری دوبارهٔ صفحه آن را از نو دریافت نمی‌کند).',
-    agentModelFirstDownload:
-      'نخستین بار مدل ({size}) دریافت می‌شود؛ سپس در حافظهٔ نهان می‌ماند، بنابراین بارگذاری دوبارهٔ صفحه آن را از نو دریافت نمی‌کند.',
-    agentNoWebGPU: 'این مرورگر از WebGPU پشتیبانی نمی‌کند؛ حالت محلی در دسترس نیست.',
-    agentLocalChatOnly:
-      'مدل محلی فقط پاسخ می‌دهد و بازنویسی می‌کند — سند را مستقیم ویرایش نمی‌کند. برای ویرایش با هوش مصنوعی، ',
-    agentSwitchCloud: '← به حالت ابری بروید',
-    agentReviewMode: 'حالت بازبینی',
-    agentQuote: 'نقل‌قول از بخش برگزیده',
-    agentQuoteTip: 'متنی را که هم‌اکنون در سند، صفحه‌گسترده یا اسلاید برگزیده‌اید در کادر ورودی نقل می‌کند',
-    agentClear: 'پاک کردن گفت‌وگو',
-    agentInputPlaceholder: 'از هوش مصنوعی بخواهید سند را ویرایش کند… (Enter برای فرستادن، Shift+Enter برای خط تازه)',
-    agentSend: 'فرستادن',
-    agentStop: 'توقف',
-    agentNeedKey: 'نخست یک کلید API وارد کنید.',
-    agentNoSelection: 'چیزی برگزیده نشده است — نخست متنی را در سند انتخاب کنید.',
-    agentQuotePrefix: 'لطفاً محتوایی را که برگزیده‌ام در نظر بگیر:',
-    agentStopped: 'متوقف شد.',
-    agentMaxSteps: 'به بیشترین شمار گام‌ها رسید؛ متوقف شد.',
-    agentToolCallPrefix: 'فراخوانی ابزار: ',
-    agentToolErrorPrefix: 'خطای ابزار: ',
-    autosaveStopped:
-      'ذخیرهٔ خودکار متوقف شد: فضای این مرورگر پر شده است. این سند را برون‌بری کنید و سپس چند سند قدیمی را از سندهای ذخیره‌شده پاک کنید.',
-    historyTitle: 'سندهای ذخیره‌شده',
-    historyIntro:
-      'نسخه‌هایی از سندهایی که ویرایش کرده‌اید، در همین مرورگر و روی همین دستگاه نگه داشته می‌شوند تا بارگذاری دوباره، بستن زبانه یا از کار افتادن مرورگر کارتان را از بین نبرد. هیچ‌کدام جایی بارگذاری نشده‌اند.',
-    historyColDocument: 'سند',
-    historyColEdited: 'آخرین ویرایش',
-    historyColSize: 'اندازه',
-    historyColExpires: 'پاک شدن خودکار',
-    historyNotBackup:
-      'این نسخه‌ها برای آن‌اند که کار نیمه‌تمام را پی بگیرید. پشتیبان نیستند — هر چه را می‌خواهید نگه دارید برون‌بری کنید.',
-    historySearchPlaceholder: 'جست‌وجو بر پایهٔ نام پرونده',
-    historyEmpty: 'هنوز چیزی ذخیره نشده است. سندهایی که اینجا ویرایش کنید خودبه‌خود در این فهرست پدیدار می‌شوند.',
-    historyEmptySearch: 'هیچ نام پرونده‌ای با این جست‌وجو همخوانی ندارد.',
-    historyOpen: 'باز کردن',
-    historyDelete: 'پاک کردن',
-    historyDeleteConfirm: '«{title}» و همهٔ نسخه‌های ذخیره‌شدهٔ آن پاک شوند؟ این کار بازگشت‌پذیر نیست.',
-    historyClearAll: 'پاک کردن همه',
-    historyClearConfirm: 'همهٔ نسخه‌های سندهای ذخیره‌شده روی این دستگاه پاک شوند؟ این کار بازگشت‌پذیر نیست.',
-    historyUnsaved: 'برون‌بری‌نشده',
-    historyUsage: '{size} در استفاده',
-    historyCount: '{count} سند',
-    historyPageInfo: 'صفحهٔ {page} از {pages}',
-    historyPrev: 'پیشین',
-    historyNext: 'پسین',
-    historyBack: 'باز کردن ویرایشگر',
-    historyAutosaveLabel: 'ذخیرهٔ خودکار',
-    historyAutosaveOff:
-      'ذخیرهٔ خودکار خاموش است: آنچه اکنون ویرایش می‌کنید ذخیره نمی‌شود و با بستن صفحه از دست می‌رود.',
-    historyRetention:
-      'هر سند ۷ روز پس از آخرین ویرایش یا باز کردنش خودبه‌خود پاک می‌شود. از همین‌جا هم می‌توانید هر چه را بخواهید پاک کنید که بی‌درنگ اعمال می‌شود.',
-    historyExpiresIn: '{days} روز مانده',
-    historyExpiresInOne: '۱ روز مانده',
-    historyExpiresToday: 'امروز',
-    historyDownload: 'دانلود',
-    historyDownloadFailed: 'ذخیرهٔ این نسخه روی دیسک ممکن نشد.',
-    historyOnlyUnsaved: 'خروجی‌نگرفته',
-    historyOpenFile: 'باز کردن پرونده',
-    historyRailSettings: 'تنظیمات',
-    historyRailRetention: 'نگهداری',
-    historyCancel: 'انصراف',
-    historyChip: 'روی همین دستگاه · هرگز بارگذاری نشده',
-    historyEmptyTitle: 'هنوز چیزی ذخیره نشده',
-    historyEmptySearchTitle: 'نتیجه‌ای نیست',
-    historyClearSearch: 'پاک کردن جست‌وجو',
-    historyDeleteTitle: 'پاک کردن این سند',
-    historyClearTitle: 'پاک کردن همه',
   },
 };
 
