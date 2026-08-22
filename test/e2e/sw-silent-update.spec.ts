@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { expect, test } from './lib/l0';
 import { settleEditor } from './lib/visual';
@@ -20,6 +20,13 @@ import { settleEditor } from './lib/visual';
  * The test deploys a second build the only way a static preview can: it
  * rewrites the vendor stamp inside the served sw.js, which is exactly what
  * bin/build.sh does when the vendored tree changes.
+ *
+ * That rewrite is visible to the whole origin, so this case is `@serial`: run
+ * beside others it replaces THEIR service worker mid-test too, which wipes the
+ * cache under them (an editor mid-load then fails to fetch spell.wasm, and the
+ * cache-first case stops seeing its cached asset). It is skipped where the
+ * served files are not on this disk -- the Docker image and any run against a
+ * deployed site.
  */
 const PORT = process.env.E2E_PORT ?? '4173';
 const OUT_DIR = process.env.E2E_PORT ? `dist-e2e-${PORT}` : 'dist';
@@ -38,8 +45,11 @@ const controllerVendorVersion = (page: import('@playwright/test').Page) =>
     });
   });
 
-test.describe('a stale build heals itself', () => {
+test.describe('a stale build heals itself @serial', () => {
   test.describe.configure({ timeout: 240_000 });
+  // The container and a deployed site serve their own copy; there is nothing
+  // here to rewrite, and no way to deploy a second build mid-run.
+  test.skip(!existsSync(SW_PATH), 'needs the locally built site this run is serving');
 
   let original = '';
   test.beforeAll(() => {
