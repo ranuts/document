@@ -26,3 +26,49 @@ public/changelog.html
 public/zh-CN/help.html
 public/zh-CN/help/
 public/zh-CN/changelog.html
+
+# Landing pages, likewise generated from content/<locale>/**.md.
+public/offline-document-editor.html
+public/zh-CN/offline-document-editor.html
+public/no-signup-document-editor.html
+public/zh-CN/no-signup-document-editor.html
+public/private-document-editor.html
+public/zh-CN/private-document-editor.html
+public/edit-documents-without-account.html
+public/zh-CN/edit-documents-without-account.html
+public/embed-document-editor.html
+public/zh-CN/embed-document-editor.html
+public/webmcp-document-editor.html
+public/zh-CN/webmcp-document-editor.html
+public/open/docx.html
+public/zh-CN/open/docx.html
+public/open/xlsx.html
+public/zh-CN/open/xlsx.html
+public/open/pptx.html
+public/zh-CN/open/pptx.html
+public/open/pdf.html
+public/zh-CN/open/pdf.html
+public/open/odt.html
+public/zh-CN/open/odt.html
+public/open/ods.html
+public/zh-CN/open/ods.html
+public/open/odp.html
+public/zh-CN/open/odp.html
+public/convert/docx-to-pdf.html
+public/zh-CN/convert/docx-to-pdf.html
+public/convert/xlsx-to-pdf.html
+public/zh-CN/convert/xlsx-to-pdf.html
+public/convert/pptx-to-pdf.html
+public/zh-CN/convert/pptx-to-pdf.html
+public/convert/xlsx-to-csv.html
+public/zh-CN/convert/xlsx-to-csv.html
+public/convert/csv-to-xlsx.html
+public/zh-CN/convert/csv-to-xlsx.html
+
+# The homepages are generated too (from content/<locale>/home.json), but they
+# stay committed: the English one is index.html, a Vite build entry, and a
+# build must not depend on a plugin having run before Rollup reads its inputs.
+# bin/build-pages.mjs --check (and test/unit/generated-pages.test.ts) keep them
+# in step with the JSON.
+index.html
+public/zh-CN/index.html

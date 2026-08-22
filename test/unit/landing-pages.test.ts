@@ -183,8 +183,11 @@ describe('landing pages', () => {
     ] as Array<[string, RegExp, string]>) {
       const html = readFileSync(file, 'utf8');
       const faqs = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
-        .map((m) => JSON.parse(m[1]))
-        .filter((doc) => doc['@type'] === 'FAQPage');
+        .flatMap((m) => {
+          const doc = JSON.parse(m[1]);
+          return doc['@graph'] ?? [doc];
+        })
+        .filter((doc: { '@type': string }) => doc['@type'] === 'FAQPage');
       const questions = faqs.flatMap(
         (faq) => faq.mainEntity as Array<{ name: string; acceptedAnswer: { text: string } }>,
       );
