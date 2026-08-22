@@ -187,14 +187,25 @@ sweep 之后已不存在——**导出 PDF 里所有中文会是空白**。这�
 
 ## 七、留给后续
 
-**vendor 里约 85 MB 从不加载的文件**，本轮没动（主题不同，单独 PR）：
+**vendor 里从不加载的文件**，本轮没动（主题不同，单独 PR）：
 
-- `sdkjs/{word,cell,slide,visio}/sdk-all.js` 共 54 MB——requirejs 配的是
-  `sdk: "../../sdkjs/word/sdk-all-min"`，非 min 那份只有 vendor 自带的
-  `cache-scripts.html` / `preload.html` 引用，而我们不用那两个页面。
-  **但 `lib/prefetch.ts` 和 `public/landing-prefetch.js` 主动预取了它**——
-  落地页空闲时在后台下载 13.7 MB 永远用不到的数据，注释里还写着
-  "sdk-all.js alone is 13.7 MB"，说明写的时候以为它是被用的。
-- `*_ie*.js` 27.5 MB——加载条件是 `WebAssembly.Memory` 缺失，而本站 x2t 强依赖 WASM。
+- `*_ie*.js` 27.5 MB——加载条件是 `useWasm ? "x.js" : "x_ie.js"` / `WebAssembly.Memory`
+  检测，而本站 x2t 强依赖 WASM，无 WASM 的浏览器根本打不开文档。
+  **已在后续 PR 删除并实测**：删掉后全套 E2E 99 passed / 0 failed。
 - visio（`sdkjs/visio` 13 MB + `web-apps/apps/visioeditor` 7.1 MB）——
   `DOCUMENT_TYPE_MAP` 里没有 vsdx，但 `api.js` 直接引用了它，删除需要单独验证。
+
+**`sdk-all.js` 不在这个清单里，尽管一开始以为它是。** 它共 54 MB，而 requirejs
+配的是 `sdk: "../../sdkjs/word/sdk-all-min"`，看起来非 min 那份从不加载。真删掉
+之后 **11 个 E2E spec 变红**，报 `Unexpected token '<'`——那是 404 落到 SPA
+fallback 后把 index.html 当 JS 解析。trace 里有对 `/sdkjs/word/sdk-all.js` 的
+真实请求。
+
+`sdk-all-min.js` 是引导包，`sdk-all.js` 是其后加载的**完整 API 包**：
+`save-stream.ts` 的注释写着 "the full API bundle (sdk-all.js)"，`isLoadFullApi`
+就是它的标志位，`open-state.ts` 也区分了 "sdk-all-min, asc_docs_api._init"。
+所以 `lib/prefetch.ts` 与 `landing-prefetch.js` 两个都预取是**对的**。
+
+教训：requirejs 的 `paths` 只说明"模块名怎么解析成第一个文件"，不等于"运行时
+只会取这一个文件"。判断 vendor 死代码要以**实际请求**为准——删掉跑一遍 E2E，
+比读配置可靠。

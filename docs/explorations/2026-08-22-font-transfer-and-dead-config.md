@@ -103,10 +103,22 @@ node_modules/.pnpm/@anthropic-ai+sdk@0.116.0
 
 ## 三、顺带记录：本轮没有动的两件事
 
-- **vendor 死重量约 85 MB**：`sdkjs/{word,cell,slide,visio}/sdk-all.js`（54 MB，
-  requirejs 配的是 `sdk: "../../sdkjs/word/sdk-all-min"`，非 min 那份从不加载）、
-  `*_ie*.js`（27.5 MB，加载条件是 `WebAssembly.Memory` 缺失，而本站 x2t 强依赖
-  WASM）、visio 整套（`DOCUMENT_TYPE_MAP` 里没有 vsdx）。删掉不会让用户少下一个
-  字节，但镜像、部署上传、`VENDOR_VERSION` 哈希、worktree checkout 都会受益。
+- **vendor 死重量**：`*_ie*.js`（27.5 MB，加载条件是 `WebAssembly.Memory` 缺失，
+  而本站 x2t 强依赖 WASM）、visio 整套（`DOCUMENT_TYPE_MAP` 里没有 vsdx）。删掉
+  不会让用户少下一个字节，但镜像、部署上传、`VENDOR_VERSION` 哈希、worktree
+  checkout 都会受益。
+
+  > **更正（2026-08-22 当天）**：本节原本还列了
+  > `sdkjs/{word,cell,slide,visio}/sdk-all.js`（54 MB），依据是 requirejs 配的
+  > 是 `sdk: "../../sdkjs/word/sdk-all-min"`。**那个结论是错的。** 真删掉之后
+  > 11 个 E2E spec 变红，报 `Unexpected token '<'`（404 落到 SPA fallback），
+  > trace 里能看到对 `/sdkjs/word/sdk-all.js` 的真实请求。
+  > `sdk-all-min.js` 是引导包，`sdk-all.js` 是其后加载的**完整 API 包**——
+  > `save-stream.ts` 的注释早就写着 "the full API bundle (sdk-all.js)"，
+  > `isLoadFullApi` 就是它的标志位。所以 `lib/prefetch.ts` 与
+  > `landing-prefetch.js` 两个都预取是**对的**，不是浪费。
+  > 教训：requirejs 的 `paths` 只说明"模块名怎么解析成第一个文件"，不等于
+  > "运行时只会取这一个文件"；判断死代码要以实际请求为准。
+
 - **`__fonts_files` 是位置索引**：删 catalog 文件不能直接从数组里摘条目，会打乱
   后面所有位置。这条约束决定了字体清理该怎么做，见后续记录。
