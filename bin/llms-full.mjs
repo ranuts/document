@@ -19,6 +19,7 @@
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { LOCALES } from './build-pages.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PUBLIC = resolve(ROOT, 'public');
@@ -95,16 +96,37 @@ const meta = (html, re) => {
   return m ? decode(m[1]).trim() : '';
 };
 
+/**
+ * Locale prefixes to leave out of the full text.
+ *
+ * Every translated page says the same thing as its English original, so
+ * including all seven made this file seven times longer (680 KB) without
+ * adding a single fact -- and the duplication is actively unhelpful to a model
+ * reading it. /llms.txt still lists where the mirrors live, and a reader who
+ * needs the Japanese wording can fetch that page.
+ */
+const TRANSLATION_PREFIXES = Object.values(LOCALES)
+  .map((l) => l.prefix)
+  .filter(Boolean);
+const isTranslation = (route) => TRANSLATION_PREFIXES.some((p) => route === `${p}/` || route.startsWith(`${p}/`));
+
 export function render() {
-  const files = walk(PUBLIC).sort((a, b) => routeOf(a).localeCompare(routeOf(b)));
+  const files = walk(PUBLIC)
+    .filter((file) => !isTranslation(routeOf(file)))
+    .sort((a, b) => routeOf(a).localeCompare(routeOf(b)));
   const index = existsSync(resolve(PUBLIC, 'llms.txt')) ? readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8') : '';
 
   const parts = [
     '# Online Document Editor - full text',
     '',
-    '> Every page of https://edit.chaxus.com in one file, chrome stripped. This is the',
-    '> companion to /llms.txt, which indexes the same pages. Generated at build time',
-    '> from the pages themselves, so it cannot drift from what the site actually says.',
+    '> Every English page of https://edit.chaxus.com in one file, chrome stripped.',
+    '> This is the companion to /llms.txt, which indexes the same pages. Generated at',
+    '> build time from the pages themselves, so it cannot drift from what the site says.',
+    '>',
+    '> The site is also published in 中文, 日本語, Deutsch, Español, 한국어 and Português',
+    '> under /zh-CN/, /ja/, /de/, /es/, /ko/ and /pt/. Those pages are translations of',
+    '> the ones below rather than additional material, so they are left out here;',
+    '> /llms.txt links to them.',
     '',
     'The summary, capabilities, limitations and link index from /llms.txt are',
     'reproduced first, followed by the full text of each page.',

@@ -96,6 +96,18 @@ describe('page width scale', () => {
     expect(Number.parseInt(intro!, 10)).toBeLessThanOrEqual(72);
   });
 
+  it('resets the document margin in every stylesheet that owns a page', () => {
+    // The browser default is 8px. landing.css always cleared it; home.css did
+    // not, so the homepage sat in a frame of backdrop -- invisible in light
+    // mode against a white page, obvious in dark mode.
+    for (const [name, css] of [
+      ['home.css', home],
+      ['landing.css', landing],
+    ] as Array<[string, string]>) {
+      expect(declaration(css, 'body', 'margin'), name).toBe('0');
+    }
+  });
+
   it('agrees on body line-height across the stylesheets that set it', () => {
     expect(declaration(landing, 'body', 'line-height')).toBe('1.65');
     expect(declaration(home, '#landing-hero', 'line-height')).toBe('1.65');
