@@ -251,6 +251,14 @@ export interface I18nMessages {
   historyExpiresIn: string;
   historyExpiresInOne: string;
   historyExpiresToday: string;
+  /** Row action: write this snapshot straight to disk, without opening it. */
+  historyDownload: string;
+  historyDownloadFailed: string;
+  /** Toolbar filter: only the documents that were never exported to disk. */
+  historyOnlyUnsaved: string;
+  historyOpenFile: string;
+  historyRailSettings: string;
+  historyRailRetention: string;
 }
 
 /**
@@ -355,6 +363,12 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyAutosaveLabel: '自动保存',
     historyAutosaveOff: '自动保存已关闭：现在编辑的内容不会再被保存，关掉页面就没有了。',
     historyRetention: '每篇文档会在你最后一次编辑或打开的 7 天后自动删除。你也可以随时在这里手动删除，删除立即生效。',
+    historyDownload: '下载副本',
+    historyDownloadFailed: '这份副本没能保存到磁盘。',
+    historyOnlyUnsaved: '只看未导出',
+    historyOpenFile: '打开文件',
+    historyRailSettings: '设置',
+    historyRailRetention: '保留规则',
     historyExpiresIn: '剩 {days} 天',
     historyExpiresInOne: '剩 1 天',
     historyExpiresToday: '今天',
@@ -460,6 +474,12 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyExpiresIn: '{days} days left',
     historyExpiresInOne: '1 day left',
     historyExpiresToday: 'today',
+    historyDownload: 'Download',
+    historyDownloadFailed: 'That copy could not be saved to disk.',
+    historyOnlyUnsaved: 'Not exported',
+    historyOpenFile: 'Open a file',
+    historyRailSettings: 'Settings',
+    historyRailRetention: 'Retention',
   },
 };
 
@@ -567,6 +587,12 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyExpiresIn: '残り {days} 日',
     historyExpiresInOne: '残り 1 日',
     historyExpiresToday: '本日',
+    historyDownload: 'ダウンロード',
+    historyDownloadFailed: 'そのコピーをディスクに保存できませんでした。',
+    historyOnlyUnsaved: '未書き出し',
+    historyOpenFile: 'ファイルを開く',
+    historyRailSettings: '設定',
+    historyRailRetention: '保存期間',
     historyCancel: 'キャンセル',
     historyChip: 'この端末内 · アップロードなし',
     historyEmptyTitle: 'まだ何も保存されていません',
@@ -669,6 +695,12 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyExpiresIn: '{days}일 남음',
     historyExpiresInOne: '1일 남음',
     historyExpiresToday: '오늘',
+    historyDownload: '다운로드',
+    historyDownloadFailed: '해당 사본을 디스크에 저장하지 못했습니다.',
+    historyOnlyUnsaved: '내보내지 않음',
+    historyOpenFile: '파일 열기',
+    historyRailSettings: '설정',
+    historyRailRetention: '보관 기간',
     historyCancel: '취소',
     historyChip: '이 기기에만 · 업로드 없음',
     historyEmptyTitle: '아직 저장된 것이 없습니다',
@@ -778,6 +810,12 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyExpiresIn: 'noch {days} Tage',
     historyExpiresInOne: 'noch 1 Tag',
     historyExpiresToday: 'heute',
+    historyDownload: 'Herunterladen',
+    historyDownloadFailed: 'Diese Kopie konnte nicht auf der Festplatte gespeichert werden.',
+    historyOnlyUnsaved: 'Nicht exportiert',
+    historyOpenFile: 'Datei öffnen',
+    historyRailSettings: 'Einstellungen',
+    historyRailRetention: 'Aufbewahrung',
     historyCancel: 'Abbrechen',
     historyChip: 'Auf diesem Gerät · nie hochgeladen',
     historyEmptyTitle: 'Noch nichts gespeichert',
@@ -884,6 +922,12 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyExpiresIn: 'quedan {days} días',
     historyExpiresInOne: 'queda 1 día',
     historyExpiresToday: 'hoy',
+    historyDownload: 'Descargar',
+    historyDownloadFailed: 'No se pudo guardar esa copia en el disco.',
+    historyOnlyUnsaved: 'Sin exportar',
+    historyOpenFile: 'Abrir un archivo',
+    historyRailSettings: 'Ajustes',
+    historyRailRetention: 'Conservación',
     historyCancel: 'Cancelar',
     historyChip: 'En este dispositivo · nunca se sube',
     historyEmptyTitle: 'Todavía no hay nada guardado',
@@ -991,6 +1035,12 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyExpiresIn: 'faltam {days} dias',
     historyExpiresInOne: 'falta 1 dia',
     historyExpiresToday: 'hoje',
+    historyDownload: 'Transferir',
+    historyDownloadFailed: 'Não foi possível gravar essa cópia no disco.',
+    historyOnlyUnsaved: 'Não exportados',
+    historyOpenFile: 'Abrir um ficheiro',
+    historyRailSettings: 'Definições',
+    historyRailRetention: 'Retenção',
     historyCancel: 'Cancelar',
     historyChip: 'Neste dispositivo · nunca enviado',
     historyEmptyTitle: 'Ainda não há nada guardado',
@@ -1094,6 +1144,12 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyExpiresIn: '{days} روز مانده',
     historyExpiresInOne: '۱ روز مانده',
     historyExpiresToday: 'امروز',
+    historyDownload: 'دانلود',
+    historyDownloadFailed: 'ذخیرهٔ این نسخه روی دیسک ممکن نشد.',
+    historyOnlyUnsaved: 'خروجی‌نگرفته',
+    historyOpenFile: 'باز کردن پرونده',
+    historyRailSettings: 'تنظیمات',
+    historyRailRetention: 'نگهداری',
     historyCancel: 'انصراف',
     historyChip: 'روی همین دستگاه · هرگز بارگذاری نشده',
     historyEmptyTitle: 'هنوز چیزی ذخیره نشده',

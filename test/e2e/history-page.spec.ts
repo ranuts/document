@@ -235,6 +235,88 @@ test.describe('local history page', () => {
     await expect(page.locator('#history-empty')).toBeVisible();
   });
 
+  /**
+   * The reason most people open this page is that something they were working
+   * on never made it to disk. Until now the only way to get it out was to open
+   * the editor and save from there; the bytes are already in IndexedDB.
+   */
+  test('writes a stored document straight to disk, without opening the editor', async ({ page }) => {
+    // Same trick the other save specs use: with no File System Access picker,
+    // saveFileToDisk takes the anchor-download path, which Playwright can see.
+    // The picker itself never resolves under automation.
+    await page.addInitScript(() => {
+      Object.defineProperty(window, 'showSaveFilePicker', { value: undefined, configurable: true });
+    });
+    await seed(page, [{ id: 'take-it', title: 'TakeIt.docx' }]);
+    await page.reload();
+
+    const download = page.waitForEvent('download');
+    await page.locator('.history-row', { hasText: 'TakeIt.docx' }).locator('.history-download').click();
+    const file = await download;
+    expect(file.suggestedFilename()).toBe('TakeIt.docx');
+    // The seeded blob is 32 bytes; what matters is that the bytes came from
+    // the store rather than from an empty placeholder.
+    const stream = await file.createReadStream();
+    const chunks: Buffer[] = [];
+    for await (const chunk of stream) chunks.push(chunk as Buffer);
+    expect(Buffer.concat(chunks)).toHaveLength(32);
+
+    // Downloading is not exporting: what landed on disk is the last autosaved
+    // revision, not necessarily what the editor would produce, so the row must
+    // keep saying this browser holds the only copy of the live work.
+    await expect(page.locator('.history-row', { hasText: 'TakeIt.docx' }).locator('.history-badge')).toBeVisible();
+  });
+
+  test('filters down to the documents that were never exported', async ({ page }) => {
+    await seed(page, [
+      { id: 'risky', title: 'NeverExported.docx' },
+      { id: 'safe', title: 'AlreadyOnDisk.docx', savedToDisk: true },
+    ]);
+    await page.reload();
+    await expect(titles(page)).toHaveCount(2);
+
+    await page.locator('#history-filter-unsaved').click();
+    await expect(titles(page)).toHaveText(['NeverExported.docx']);
+    // The view is in the URL, so a reload keeps it -- same contract as search.
+    await page.waitForURL(/unsaved=1/);
+    await page.reload();
+    await expect(titles(page)).toHaveText(['NeverExported.docx']);
+
+    await page.locator('#history-filter-unsaved').click();
+    await expect(titles(page)).toHaveCount(2);
+  });
+
+  test('the last day of a document is not printed like every other fact', async ({ page }) => {
+    await seed(page, [
+      { id: 'fresh', title: 'Fresh.docx' },
+      { id: 'last-day', title: 'LastDay.docx', ageMs: 6.5 * 24 * 60 * 60 * 1000 },
+    ]);
+    await page.reload();
+
+    const urgent = page.locator('.history-row', { hasText: 'LastDay.docx' }).locator('.fact-expiry-urgent');
+    await expect(urgent).toHaveText(/1 day/);
+    // Not a class that happens to be there: it has to look different.
+    const [urgentColor, plainColor] = await Promise.all([
+      urgent.evaluate((el) => getComputedStyle(el).color),
+      page
+        .locator('.history-row', { hasText: 'Fresh.docx' })
+        .locator('.fact-expiry')
+        .evaluate((el) => getComputedStyle(el).color),
+    ]);
+    expect(urgentColor).not.toBe(plainColor);
+  });
+
+  test('an empty library offers the thing to do next, not the way back', async ({ page }) => {
+    await page.reload();
+    await expect(page.locator('#history-empty')).toBeVisible();
+
+    // The page deliberately does not load the editor bundle, so "open a file"
+    // is a picker plus the IndexedDB handoff the landing pages use.
+    const chooser = page.waitForEvent('filechooser');
+    await page.locator('#history-open-file').click();
+    expect((await chooser).isMultiple()).toBe(false);
+  });
+
   test('opens a stored document back in the editor', async ({ page }) => {
     await seed(page, [{ id: 'reopen-me', title: 'Reopen.docx' }]);
     await page.reload();

@@ -35,25 +35,42 @@ describe('page width scale', () => {
     const prose = declaration(landing, '.wrap', 'max-width');
     expect(wide, 'wide column').toBe('1152px');
     expect(prose, 'prose column').toBe('720px');
-    // Width follows the layout, not the page type: /history is a list people
-    // read down looking for one document, not a table anyone compares across,
-    // so it takes the reading column. Measured at 1152 it was mostly air.
-    expect(declaration(history, '.history-page', 'max-width'), 'history column').toBe(prose);
+    // /history takes the same frame as the content pages, and for the same
+    // reason: 1152 was mostly air while the list sat alone in it (236px of
+    // dead space between a file name and the first figure), and it stops
+    // being air once a rail is beside the list.
+    expect(declaration(history, '.history-shell', 'max-width'), 'history frame').toBe(wide);
   });
 
-  it('gives the article column a rail instead of widening it', () => {
+  /** Frame 1152, reading column ~660, rail takes the rest. */
+  function railFrame(css: string, selector: string): { frame: string; column: number } {
+    const frame = new RegExp(`${selector.replace('.', '\\.')} \\{([^}]*)\\}`, 'g');
+    // The frame's grid lives in a media query, so scan every block with this
+    // selector and keep the one that declares columns.
+    let columns = '';
+    let outer = '';
+    for (const match of css.matchAll(frame)) {
+      if (/max-width:\s*1152px/.test(match[1])) outer = match[1];
+      if (/grid-template-columns/.test(match[1])) columns = match[1];
+    }
+    return { frame: outer, column: Number(/minmax\(0,\s*(\d+)px\)/.exec(columns)?.[1] ?? 0) };
+  }
+
+  it.each([
+    ['content pages', 'landing.css', '.page'],
+    ['/history', 'history.css', '.history-shell'],
+  ])('%s: a rail beside the column, not a wider column', (_label, file, selector) => {
     // The wide viewport problem is not "the text is too narrow" -- 720px with
     // 56px gutters puts the measure at 66 characters, dead centre of the band.
     // It is that the page was a single column with nothing beside it. The frame
-    // below is 1152 (the site's wide width), the reading column is 660 so the
-    // measure lands at ~72, and the rail takes the rest. Widening the column to
-    // fill the frame would push the measure to 77.
-    const frame = /\.page \{([^}]*)\}/.exec(landing)?.[1] ?? '';
-    expect(frame).toMatch(/max-width:\s*1152px/);
-    const columns = /grid-template-columns:\s*([^;]+);/.exec(frame)?.[1] ?? '';
-    const reading = /minmax\(0,\s*(\d+)px\)/.exec(columns);
-    expect(Number(reading?.[1]), 'reading column').toBeLessThanOrEqual(680);
-    expect(Number(reading?.[1]), 'reading column').toBeGreaterThanOrEqual(600);
+    // is 1152 (the site's wide width), the reading column is 660 so the measure
+    // lands at ~72, and the rail takes the rest. Widening the column to fill
+    // the frame would push the measure to 77.
+    const css = file === 'landing.css' ? landing : history;
+    const { frame, column } = railFrame(css, selector);
+    expect(frame, 'frame is the wide width').toMatch(/max-width:\s*1152px/);
+    expect(column, 'reading column').toBeLessThanOrEqual(680);
+    expect(column, 'reading column').toBeGreaterThanOrEqual(600);
   });
 
   it('bounds prose by characters, not by whatever the container happens to be', () => {
