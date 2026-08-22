@@ -24,10 +24,21 @@ import { isEmbedMode } from './embed-mode';
 
 let dirty = false;
 let installed = false;
+let lastEditAt = 0;
 
 /** The editor reported an edit (`onDocumentStateChange` with modified = true). */
 export function markDocumentDirty(): void {
   dirty = true;
+  lastEditAt = Date.now();
+}
+
+/**
+ * When the editor last reported an edit. The autosave scheduler waits for a
+ * short lull before exporting: the export runs a full conversion in the editor
+ * frame, and starting one on top of active typing is felt.
+ */
+export function getLastEditAt(): number {
+  return lastEditAt;
 }
 
 /** The document's bytes reached the user's disk: nothing is at risk any more. */
@@ -67,6 +78,7 @@ export function installUnsavedChangesGuard(): void {
  */
 export function resetUnsavedGuardForTests(): void {
   dirty = false;
+  lastEditAt = 0;
   if (installed && typeof window !== 'undefined') {
     window.removeEventListener('beforeunload', handleBeforeUnload);
   }

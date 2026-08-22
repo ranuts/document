@@ -3,6 +3,7 @@ import { View } from 'ranui/builder';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { showLoading } from './loading';
+import { beginAutosaveSession } from './history/autosave';
 
 // Import UI functions with type-only to avoid circular dependency
 // These will be passed as callbacks or called after document operations
@@ -46,6 +47,9 @@ export const onCreateNew = async (ext: string): Promise<void> => {
     await loadEditorApi();
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
+    // Recovery points from here on. A blank document is the case with the most
+    // to lose: there is no file on disk to fall back to at all.
+    void beginAutosaveSession({ title: fileName, origin: 'new' });
   } catch (error) {
     console.error('Error creating new document:', error);
     // Ensure control panel is shown on error
@@ -58,7 +62,13 @@ export const onCreateNew = async (ext: string): Promise<void> => {
 
 // Open an already-picked local File (from the file input below, or handed off
 // by a static landing page via lib/pending-open.ts).
-export const openLocalFile = async (file: File): Promise<void> => {
+export const openLocalFile = async (
+  file: File,
+  options?: {
+    /** Continue an existing history row (the file came out of the history). */
+    historyId?: string;
+  },
+): Promise<void> => {
   const { removeLoading } = showLoading();
   try {
     if (hideControlPanelFn) {
@@ -71,6 +81,7 @@ export const openLocalFile = async (file: File): Promise<void> => {
     });
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
+    void beginAutosaveSession({ title: file.name, origin: 'local', docId: options?.historyId });
   } catch (error) {
     console.error('Error opening document:', error);
     // Ensure control panel is shown on error
@@ -183,6 +194,7 @@ export const openDocumentFromUrl = async (
       isNew: !fileBlob,
       readonly: options?.readonly,
     });
+    void beginAutosaveSession({ title: docFileName, origin: 'url' });
   } catch (error) {
     console.error('Error opening document from URL:', error);
     alert(`Failed to open document: ${error instanceof Error ? error.message : 'Unknown error'}`);

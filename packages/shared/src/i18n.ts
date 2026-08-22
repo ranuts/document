@@ -207,6 +207,38 @@ export interface I18nMessages {
   agentMaxSteps: string;
   agentToolCallPrefix: string;
   agentToolErrorPrefix: string;
+
+  // Local history: autosave, the recovery offer, and the history page
+  autosaveStopped: string;
+  autosaveOtherTab: string;
+  recoveryTitle: string;
+  /** `{title}` is the file name, `{when}` a relative time such as "5 minutes ago". */
+  recoveryBody: string;
+  recoveryRestore: string;
+  recoveryDismiss: string;
+  recoveryViewAll: string;
+  historyTitle: string;
+  historyIntro: string;
+  historyNotBackup: string;
+  historySearchPlaceholder: string;
+  historyEmpty: string;
+  historyEmptySearch: string;
+  historyOpen: string;
+  historyDelete: string;
+  /** `{title}` is the file name. */
+  historyDeleteConfirm: string;
+  historyClearAll: string;
+  historyClearConfirm: string;
+  historyUnsaved: string;
+  /** `{size}` is a human-readable byte size. */
+  historyUsage: string;
+  /** `{page}` and `{pages}` are 1-based page numbers. */
+  historyPageInfo: string;
+  historyPrev: string;
+  historyNext: string;
+  historyBack: string;
+  historyAutosaveLabel: string;
+  historyAutosaveOff: string;
 }
 
 /**
@@ -275,6 +307,33 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     agentMaxSteps: '已达到最大执行步数，已停止。',
     agentToolCallPrefix: '调用工具：',
     agentToolErrorPrefix: '工具出错：',
+
+    autosaveStopped: '自动保存已停止：浏览器没有可用的存储空间了。',
+    autosaveOtherTab: '另一个标签页正在编辑这个文档，本页不会自动保存。',
+    recoveryTitle: '有未保存到磁盘的编辑',
+    recoveryBody: '「{title}」在 {when} 还有没有保存到磁盘的编辑。',
+    recoveryRestore: '恢复',
+    recoveryDismiss: '丢弃',
+    recoveryViewAll: '查看全部',
+    historyTitle: '本地历史',
+    historyIntro: '自动保存的文档只留在这台设备的浏览器里，从未上传。随时可以删除。',
+    historyNotBackup: '这些是恢复点，不是备份——重要文档请照常导出保存到磁盘。',
+    historySearchPlaceholder: '搜索标题',
+    historyEmpty: '还没有自动保存的文档。',
+    historyEmptySearch: '没有匹配的文档。',
+    historyOpen: '打开',
+    historyDelete: '删除',
+    historyDeleteConfirm: '删除「{title}」及其全部快照？此操作不可撤销。',
+    historyClearAll: '清空全部',
+    historyClearConfirm: '删除这台设备上保存的全部文档？此操作不可撤销。',
+    historyUnsaved: '未存盘',
+    historyUsage: '已占用 {size}',
+    historyPageInfo: '第 {page} / {pages} 页',
+    historyPrev: '上一页',
+    historyNext: '下一页',
+    historyBack: '返回编辑器',
+    historyAutosaveLabel: '自动保存',
+    historyAutosaveOff: '自动保存已关闭，不会再产生新的恢复点。',
   },
   [LanguageCode.EN]: {
     webOffice: 'Web Office',
@@ -336,6 +395,34 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     agentMaxSteps: 'Reached the maximum number of steps; stopped.',
     agentToolCallPrefix: 'Tool call: ',
     agentToolErrorPrefix: 'Tool error: ',
+
+    autosaveStopped: 'Autosave stopped: this browser has no storage room left.',
+    autosaveOtherTab: 'Another tab is editing this document, so this tab will not autosave it.',
+    recoveryTitle: 'Unsaved changes from last time',
+    recoveryBody: '"{title}" has edits from {when} that never reached your disk.',
+    recoveryRestore: 'Restore',
+    recoveryDismiss: 'Discard',
+    recoveryViewAll: 'View all',
+    historyTitle: 'Local history',
+    historyIntro:
+      'Autosaved documents stay in this browser on this device and are never uploaded. Delete them any time.',
+    historyNotBackup: 'These are recovery points, not backups -- keep exporting anything important to disk.',
+    historySearchPlaceholder: 'Search by title',
+    historyEmpty: 'Nothing has been autosaved yet.',
+    historyEmptySearch: 'No documents match that search.',
+    historyOpen: 'Open',
+    historyDelete: 'Delete',
+    historyDeleteConfirm: 'Delete "{title}" and all of its snapshots? This cannot be undone.',
+    historyClearAll: 'Clear everything',
+    historyClearConfirm: 'Delete every document saved in this browser? This cannot be undone.',
+    historyUnsaved: 'not on disk',
+    historyUsage: '{size} stored',
+    historyPageInfo: 'Page {page} of {pages}',
+    historyPrev: 'Previous',
+    historyNext: 'Next',
+    historyBack: 'Back to the editor',
+    historyAutosaveLabel: 'Autosave',
+    historyAutosaveOff: 'Autosave is off; no new recovery points are being made.',
   },
 };
 
