@@ -65,6 +65,7 @@ const UI = {
       ['/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `Source: ${src} in the repository`,
+    ossNote: `<strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your own copy: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
   },
   'zh-CN': {
     siteName: 'Document Editor',
@@ -92,6 +93,7 @@ const UI = {
       ['/zh-CN/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `来源：仓库中的 ${src}`,
+    ossNote: `<strong>开源 · 可自托管。</strong>采用 AGPL-3.0——你可以核实没有任何上传，或者自建一份：<a href="${REPO}" rel="noopener">github.com/ranuts/document</a>。`,
   },
 };
 
@@ -102,6 +104,32 @@ const UI = {
  * own it may reuse another (e.g. the changelog is maintained in English only)
  * -- `notice` is then rendered above the body.
  */
+/**
+ * Landing-page slugs, in the order they were written. The list is explicit
+ * rather than a directory scan so a stray markdown file cannot quietly become
+ * a public page, and so the order the sitemap and llms.txt see is stable.
+ */
+export const LANDING_SLUGS = [
+  'offline-document-editor',
+  'no-signup-document-editor',
+  'private-document-editor',
+  'edit-documents-without-account',
+  'embed-document-editor',
+  'webmcp-document-editor',
+  'open/docx',
+  'open/xlsx',
+  'open/pptx',
+  'open/pdf',
+  'open/odt',
+  'open/ods',
+  'open/odp',
+  'convert/docx-to-pdf',
+  'convert/xlsx-to-pdf',
+  'convert/pptx-to-pdf',
+  'convert/xlsx-to-csv',
+  'convert/csv-to-xlsx',
+];
+
 export const PAGES = [
   {
     slug: 'help',
@@ -152,6 +180,21 @@ export const PAGES = [
     },
     stripFirstHeading: true,
   },
+  // The SEO landing pages. They were 36 hand-written HTML files (18 slugs x 2
+  // locales) with the same shell copy-pasted into each: canonical, hreflang,
+  // JSON-LD, top bar, rail, footer. That is maintainable at two languages and
+  // not at eight -- every fix had to be applied 2n times, and adding a locale
+  // meant writing 18 more files by hand. The copy now lives in content/<locale>/,
+  // and everything around it comes from this shell like /help does.
+  ...LANDING_SLUGS.map((slug) => ({
+    slug,
+    kind: 'landing',
+    sources: Object.fromEntries(
+      Object.keys(LOCALES)
+        .filter((locale) => existsSync(resolve(ROOT, `content/${locale}/${slug}.md`)))
+        .map((locale) => [locale, `content/${locale}/${slug}.md`]),
+    ),
+  })),
 ];
 
 // ---------------------------------------------------------------------------
@@ -218,18 +261,61 @@ function renderMarkdown(md, { stripFirstHeading = false } = {}) {
   return { html, headings };
 }
 
+/** Inline markdown only (no <p> wrapper): used for the lead paragraph. */
+function renderInline(md) {
+  return new Marked({ gfm: true, breaks: false }).parseInline(md).trim();
+}
+
+/**
+ * Give the FAQ section the markup the hand-written pages had: the heading
+ * carries `class="faq"` and its question/answer pairs sit in a `.faq` block,
+ * which is what draws the hairline between questions (landing.css). The
+ * section is found by its content -- the first question-shaped h3 -- rather
+ * than by a magic heading string, so it works in every language.
+ */
+function wrapFaqSection(html) {
+  const first = html.search(/<h3 id="[^"]*">[^<]*[?？]<\/h3>/);
+  if (first < 0) return html;
+  const start = html.lastIndexOf('<h2', first);
+  if (start < 0) return html;
+  const headingEnd = html.indexOf('</h2>', start) + '</h2>'.length;
+  const heading = html.slice(start, headingEnd).replace('<h2 ', '<h2 class="faq" ');
+  return `${html.slice(0, start)}${heading}\n<div class="faq">\n${html.slice(headingEnd).trim()}\n</div>\n`;
+}
+
+/**
+ * Plain text out of rendered HTML. Structured data carries text, not markup,
+ * and it must read as the page reads: marked escapes an apostrophe to &#39;,
+ * which would otherwise reach Google's parser literally.
+ */
+function textOf(html) {
+  return html
+    .replace(/<[^>]+>/g, '')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** The first ordered list on the page: the "how it works" steps. Feeds HowTo. */
+function extractSteps(html) {
+  const list = /<ol>([\s\S]*?)<\/ol>/.exec(html);
+  if (!list) return [];
+  return [...list[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => textOf(m[1]));
+}
+
 /** FAQ pairs: an h3 ending in ?/？ followed by a paragraph. Feeds FAQPage JSON-LD. */
 function extractFaq(html) {
   const out = [];
   const re = /<h3 id="[^"]*">([^<]*[?？])<\/h3>\s*<p>([\s\S]*?)<\/p>/g;
   let m;
   while ((m = re.exec(html))) {
-    const strip = (s) =>
-      s
-        .replace(/<[^>]+>/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-    out.push({ q: strip(m[1]), a: strip(m[2]) });
+    out.push({ q: textOf(m[1]), a: textOf(m[2]) });
   }
   return out;
 }
@@ -241,7 +327,7 @@ function routeFor(locale, slug) {
   return `${LOCALES[locale].prefix}/${slug}`;
 }
 
-function renderPage({ page, locale, meta, body, headings, faq, source }) {
+function renderPage({ page, locale, meta, body, headings, faq, steps, source }) {
   const L = LOCALES[locale];
   const ui = UI[locale];
   const route = routeFor(locale, page.slug);
@@ -250,15 +336,31 @@ function renderPage({ page, locale, meta, body, headings, faq, source }) {
   const title = meta.title;
   const description = meta.description;
 
+  const isLanding = page.kind === 'landing';
+  const cardDescription = meta.ogDescription || description;
   const graph = [
-    {
-      '@type': 'WebPage',
-      name: title,
-      url,
-      description,
-      inLanguage: L.lang,
-      isPartOf: { '@type': 'WebSite', name: 'Online Document Editor', url: ORIGIN + '/' },
-    },
+    // A landing page is selling the app, and Google's rich results treat a
+    // WebApplication node accordingly (price, category, platform). A generated
+    // documentation page is a page about the product, not the product.
+    isLanding
+      ? {
+          '@type': 'WebApplication',
+          name: 'Online Document Editor',
+          url,
+          applicationCategory: 'BusinessApplication',
+          operatingSystem: 'Any (web browser)',
+          isAccessibleForFree: true,
+          description: meta.appDescription || description,
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        }
+      : {
+          '@type': 'WebPage',
+          name: title,
+          url,
+          description,
+          inLanguage: L.lang,
+          isPartOf: { '@type': 'WebSite', name: 'Online Document Editor', url: ORIGIN + '/' },
+        },
     {
       '@type': 'SoftwareSourceCode',
       name: 'Online Document Editor',
@@ -267,6 +369,17 @@ function renderPage({ page, locale, meta, body, headings, faq, source }) {
       license: 'https://www.gnu.org/licenses/agpl-3.0.html',
     },
   ];
+  // The steps a landing page already lists, as structured data. Taken from the
+  // rendered list rather than written separately: the hand-written pages kept a
+  // second copy of every step inside the JSON-LD, and the two had drifted apart
+  // -- which is exactly what Google's structured-data policy forbids.
+  if (isLanding && meta.howTo && steps.length >= 2) {
+    graph.push({
+      '@type': 'HowTo',
+      name: meta.howTo,
+      step: steps.map((text) => ({ '@type': 'HowToStep', text })),
+    });
+  }
   if (faq.length >= 2) {
     graph.push({
       '@type': 'FAQPage',
@@ -302,17 +415,44 @@ function renderPage({ page, locale, meta, body, headings, faq, source }) {
           .map((h) => `          <a href="#${h.id}">${escapeHtml(h.text.replace(/<[^>]+>/g, ''))}</a>`)
           .join('\n')}\n        </nav>\n`
       : '';
-  const notice = meta.notice ? `      <p class="notice">${escapeHtml(meta.notice)}</p>\n` : '';
+  const notice = meta.notice ? `        <p class="notice">${escapeHtml(meta.notice)}</p>\n` : '';
+  // The lead carries inline emphasis on a landing page ("Got a **.docx** file
+  // but no Word installed"), so it is markdown rather than an escaped string.
+  const lead = meta.lead ? `        <p class="lead">${renderInline(meta.lead)}</p>\n` : '';
+  const cta =
+    isLanding && meta.cta
+      ? `        <a class="cta" href="${escapeHtml(meta.ctaHref || L.home)}"><r-button type="primary">${escapeHtml(meta.cta)}</r-button></a>\n`
+      : '';
+  // Every landing page ends on the same promise, so it belongs to the shell
+  // rather than to eighteen copies of the same paragraph.
+  const ossNote = isLanding ? `        <aside class="oss">${ui.ossNote}</aside>\n` : '';
+  // Where the words came from is worth saying on a page generated out of a
+  // repository document; on a landing page it is noise.
+  const sourceNote = isLanding
+    ? ''
+    : `\n        <p class="source">${escapeHtml(ui.generatedNote(source))} · <a href="${REPO}/blob/main/${source}" rel="noopener">GitHub</a></p>\n`;
   const footer = ui.footer.map(([href, label]) => `        <a href="${href}">${label}</a>`).join('\n');
   const here = routeFor(locale, page.slug);
-  const related = ui.footer
-    .filter(([href]) => href !== here && href !== LOCALES[locale].home)
+  const parentOf = (href) => href.replace(/\/[^/]*$/, '') || '/';
+  // Siblings first: from a format page the useful next click is another
+  // format, not the embed API. Help and the changelog are one row down in the
+  // footer of every page, so they do not need the rail as well.
+  const candidates = ui.footer.filter(
+    ([href]) =>
+      href !== here &&
+      href !== LOCALES[locale].home &&
+      !new RegExp(`^${LOCALES[locale].prefix}/(help|changelog)$`).test(href),
+  );
+  const related = [
+    ...candidates.filter(([href]) => parentOf(href) === parentOf(here)),
+    ...candidates.filter(([href]) => parentOf(href) !== parentOf(here)),
+  ]
     .slice(0, 5)
     .map(([href, label]) => `          <a href="${href}">${label}</a>`)
     .join('\n');
   const aside = `      <aside class="side" aria-label="${ui.onThisPage}">
         <div class="side-cta">
-          <a class="cta" href="${LOCALES[locale].home}"><r-button type="primary">${ui.openEditor} \u2192</r-button></a>
+          <a class="cta" href="${escapeHtml(meta.ctaHref || L.home)}"><r-button type="primary">${escapeHtml(meta.cta || `${ui.openEditor} \u2192`)}</r-button></a>
           <span class="side-note">${ui.sideNote}</span>
         </div>
 ${toc}        <nav class="side-block">
@@ -344,15 +484,15 @@ ${related}
 ${alternates}
     <link rel="alternate" hreflang="x-default" href="${enUrl}" />
 
-    <meta property="og:type" content="article" />
+    <meta property="og:type" content="${isLanding ? 'website' : 'article'}" />
     <meta property="og:site_name" content="Online Document Editor" />
     <meta property="og:title" content="${escapeHtml(title)}" />
-    <meta property="og:description" content="${escapeHtml(description)}" />
+    <meta property="og:description" content="${escapeHtml(cardDescription)}" />
     <meta property="og:url" content="${url}" />
     <meta property="og:image" content="${ORIGIN}/img/pwa-512.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(title)}" />
-    <meta name="twitter:description" content="${escapeHtml(description)}" />
+    <meta name="twitter:description" content="${escapeHtml(cardDescription)}" />
     <meta name="twitter:image" content="${ORIGIN}/img/pwa-512.png" />
 
     <script type="application/ld+json">
@@ -406,16 +546,14 @@ ${langOptions}
     </header>
 
     <div class="page">
-      <main class="wrap doc">
+      <main class="wrap${isLanding ? '' : ' doc'}">
         <p class="eyebrow">${escapeHtml(meta.eyebrow || meta.breadcrumb || title)}</p>
         <h1>${escapeHtml(meta.h1 || title)}</h1>
-${meta.lead ? `        <p class="lead">${escapeHtml(meta.lead)}</p>\n` : ''}${notice}
+${lead}${cta}${notice}
         <article>
 ${body}
         </article>
-
-        <p class="source">${escapeHtml(ui.generatedNote(source))} · <a href="${REPO}/blob/main/${source}" rel="noopener">GitHub</a></p>
-      </main>
+${ossNote}${sourceNote}      </main>
 ${aside}    </div>
     <footer class="page-foot">
 ${footer}
@@ -441,9 +579,18 @@ export function generate({ outDir = resolve(ROOT, 'public') } = {}) {
       }
       const { html, headings } = renderMarkdown(mdBody, { stripFirstHeading: page.stripFirstHeading });
       const faq = extractFaq(html);
-      const out = renderPage({ page, locale, meta, body: html, headings, faq, source: src });
+      const steps = extractSteps(html);
+      const body = page.kind === 'landing' ? wrapFaqSection(html) : html;
+      const out = renderPage({ page, locale, meta, body, headings, faq, steps, source: src });
       const rel = `${LOCALES[locale].prefix}/${page.slug}.html`.replace(/^\//, '');
-      outputs.push({ rel, route: routeFor(locale, page.slug), html: out, source: src, locale });
+      outputs.push({
+        rel,
+        route: routeFor(locale, page.slug),
+        html: out,
+        source: src,
+        locale,
+        kind: page.kind ?? 'doc',
+      });
     }
   }
   if (outDir) {
