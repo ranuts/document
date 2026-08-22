@@ -1,4 +1,4 @@
-# OnlyOffice Web
+# Document
 
 <p align="center">
   <a href="https://github.com/ranuts/document/actions/workflows/ci.yml">
