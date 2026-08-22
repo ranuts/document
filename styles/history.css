@@ -31,6 +31,26 @@
   flex-direction: column;
   gap: var(--ran-space-3);
 }
+/* The homepage's badge, same recipe: bordered pill on the page background, no
+   fill, mono at 12px, a live dot in the success colour. */
+.history-chip {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-1) var(--ran-space-3);
+  border-radius: var(--ran-radius-full);
+  box-shadow: 0 0 0 1px var(--ran-color-border);
+  font: 500 12px/1.8 var(--ran-font-mono);
+  color: var(--ran-color-text-secondary);
+}
+.history-chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-success);
+}
+
 .history-title-row {
   display: flex;
   align-items: center;
@@ -152,13 +172,17 @@
 
 /* ---- list ---- */
 
+/* Shadow-as-border, the way Geist draws its surfaces: a zero-offset, zero-blur
+   1px spread instead of a real border. It sits outside the box model, so the
+   rounded corners never clip a row's hover fill, and the line can animate with
+   the rest of the surface. */
 .history-list {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-lg);
   overflow: hidden;
   background: var(--ran-color-bg-elevated);
+  box-shadow: 0 0 0 1px var(--ran-color-border);
 }
 .history-row {
   display: flex;
@@ -180,15 +204,18 @@
    a table would have got right. */
 .history-kind {
   flex-shrink: 0;
-  width: 44px;
-  padding: 2px 0;
-  border: 1px solid var(--ran-color-border);
+  width: 42px;
+  padding: 3px 0;
   border-radius: var(--ran-radius-sm);
   background: var(--ran-color-bg-subtle);
+  box-shadow: 0 0 0 1px var(--ran-color-border);
   color: var(--ran-color-text-secondary);
+  /* Mono is for stamping, not for reading: a file kind is a machine fact, and
+     it is the one thing scanned down the whole column. */
   font-family: var(--ran-font-mono);
   font-size: 10px;
-  letter-spacing: 0.04em;
+  line-height: 14px;
+  letter-spacing: 0.06em;
   text-align: center;
 }
 
@@ -236,16 +263,25 @@
   margin-right: var(--ran-space-2);
   color: var(--ran-color-text-disabled);
 }
+/* A dot and a word, the same device the homepage chip uses. A dot carries a
+   state in a way a grey pill cannot: this row holds the only copy of that
+   work, which is the whole reason the list exists. */
 .history-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ran-space-1);
   flex-shrink: 0;
-  padding: 1px var(--ran-space-2);
-  border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-full);
-  background: var(--ran-color-bg-subtle);
-  color: var(--ran-color-text-secondary);
-  font-size: 11px;
-  line-height: 18px;
+  color: var(--ran-color-text-disabled);
+  font-size: 11.5px;
   white-space: nowrap;
+}
+.history-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-warning);
+  /* A ring rather than a hard edge, so the dot reads as lit rather than drawn. */
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ran-color-warning) 22%, transparent);
 }
 .history-row-actions {
   display: flex;
@@ -279,12 +315,42 @@
 
 /* ---- empty, pager, notes ---- */
 
+/* Empty space is a decision, not a gap left where the product thinking should
+   be: it says why the list is empty and offers the one thing to do next. */
 .history-empty {
-  padding: var(--ran-space-16) var(--ran-space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-10) var(--ran-space-6);
   text-align: center;
-  color: var(--ran-color-text-secondary);
-  border: 1px dashed var(--ran-color-border);
   border-radius: var(--ran-radius-lg);
+  background: var(--ran-color-bg-elevated);
+  box-shadow: 0 0 0 1px var(--ran-color-border);
+}
+.history-empty-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--ran-space-2);
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-bg-subtle);
+  box-shadow: 0 0 0 1px var(--ran-color-border);
+  color: var(--ran-color-text-secondary);
+}
+.history-empty-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ran-color-text);
+}
+.history-empty-body {
+  max-width: 44ch;
+  color: var(--ran-color-text-secondary);
+  font-size: 13.5px;
+}
+.history-empty-action {
+  margin-top: var(--ran-space-2);
 }
 .history-pager {
   display: flex;
@@ -307,9 +373,9 @@
   flex-direction: column;
   gap: var(--ran-space-3);
   padding: var(--ran-space-4);
-  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-lg);
   background: var(--ran-color-bg-subtle);
+  box-shadow: 0 0 0 1px var(--ran-color-border);
 }
 .history-notes-controls {
   display: flex;
@@ -373,6 +439,14 @@
     font-size: 12px;
     white-space: nowrap;
   }
+}
+
+/* One focus ring for the whole page, on the token layer's link colour: a page
+   whose actions are a link, a switch and a text button needs them to agree. */
+.history-page :focus-visible {
+  outline: 2px solid var(--ran-color-link);
+  outline-offset: 2px;
+  border-radius: var(--ran-radius-sm);
 }
 
 @media (prefers-reduced-motion: reduce) {

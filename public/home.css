@@ -944,9 +944,11 @@
   display: block;
   max-width: 62ch;
   padding: var(--ran-space-3) var(--ran-space-4);
-  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-md);
   background: var(--ran-color-bg-subtle);
+  /* Hairline in the shadow layer, matching the document list and the recovery
+     card: the three surfaces that talk about saved work look like one feature. */
+  box-shadow: 0 0 0 1px var(--ran-color-border);
   font-size: 14px;
   line-height: 1.6;
   color: var(--ran-color-text-secondary);

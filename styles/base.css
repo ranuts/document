@@ -387,10 +387,13 @@ r-dropdown[role='listbox'] {
   flex-direction: column;
   gap: var(--ran-space-3);
   padding: var(--ran-space-4) var(--ran-space-5, 20px);
-  border: 1px solid var(--ran-color-border);
   border-radius: var(--ran-radius-lg);
   background: var(--ran-color-bg-elevated);
-  box-shadow: var(--ran-shadow-modal);
+  /* The hairline lives in the shadow layer with the elevation, the way the rest
+     of the site draws its surfaces -- one line, no box-model side effects. */
+  box-shadow:
+    0 0 0 1px var(--ran-color-border),
+    var(--ran-shadow-modal);
   color: var(--ran-color-text);
   animation: recovery-bar-in 200ms ease-out;
 }
@@ -405,9 +408,22 @@ r-dropdown[role='listbox'] {
   flex-direction: column;
   gap: var(--ran-space-1);
 }
+/* Dot and title, the site's way of stating a state (homepage chip, the "only
+   copy here" marker in the document list). */
 .recovery-bar-title {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
   font-weight: 600;
   font-size: 15px;
+}
+.recovery-dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: var(--ran-radius-full);
+  background: var(--ran-color-warning);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ran-color-warning) 22%, transparent);
 }
 .recovery-bar-body {
   color: var(--ran-color-text-secondary);

@@ -108,7 +108,10 @@ function buildBar(doc: HistoryDoc): HTMLElement {
       Div()
         .class('recovery-bar-text')
         .children(
-          Div().class('recovery-bar-title').text(t('recoveryTitle')).build(),
+          Div()
+            .class('recovery-bar-title')
+            .children(View('i').class('recovery-dot').build(), View('span').text(t('recoveryTitle')).build())
+            .build(),
           Div()
             .class('recovery-bar-body')
             .text(t('recoveryBody', { title: doc.title, when: formatRelativeTime(doc.updatedAt) }))
