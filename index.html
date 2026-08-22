@@ -118,6 +118,14 @@
         "mainEntity": [
           {
             "@type": "Question",
+            "name": "Can it save back into my own file, or only download a copy?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It saves back into your own file. The first save asks you to pick the file; every save after that writes straight into it, with no dialog and no duplicate in your downloads folder. This uses the browser's File System Access API, so it works in Chrome, Edge and other Chromium browsers; Safari and Firefox download a copy instead. Either way the file goes from the browser to your own disk and is never uploaded."
+            }
+          },
+          {
+            "@type": "Question",
             "name": "Are my files uploaded anywhere?",
             "acceptedAnswer": {
               "@type": "Answer",

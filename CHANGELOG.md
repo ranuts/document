@@ -9,27 +9,40 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Saving now writes back into your own file.** Pick the file once and every
+  save after that goes straight into it -- no "save as" dialog each time, and
+  no "a file with that name already exists" prompt. The document ends up where
+  you keep your documents, not in a pile of downloads. (Chrome, Edge and other
+  Chromium browsers; Safari and Firefox keep the download they always had.)
 - **Your edits are kept while you work, and you can get them back.** Every
-  document you edit is now saved to a recovery point inside your own browser --
+  document you edit is also saved to a recovery point inside your own browser --
   never uploaded, never leaving the device. If the tab closes, the browser
   crashes, or you simply come back the next day, the editor offers the work
   back by name and tells you when you made it. The homepage offers it too, so
   you do not have to remember where you were.
-- **A local history page** at `/history`, linked from the homepage: everything
-  this browser is holding, newest first, searchable by title (any part of the
-  name, in any language), with a delete on every row and a "clear everything"
-  at the top. Rows that hold the only copy of your work -- edits you never
-  exported to disk -- say so.
+- **A page listing what this browser is holding**, at `/history`, linked from
+  the homepage: your saved documents, newest first, searchable by any part of a
+  file name in any language, with a delete on every row and a delete-all below
+  the list. Rows holding the only copy of your work -- edits that never reached
+  your disk -- say so.
 - **It clears itself.** A document is deleted seven days after you last edit or
   open it, automatically, whether or not you visit the page. The rule is stated
-  on the homepage and on the history page, and every row shows how long it has
-  left. Autosave can also be switched off entirely.
+  on the homepage and on that page, and every row shows how long it has left.
+  Autosave can also be switched off entirely.
 - **Closing a tab with unsaved edits now asks first.** It never did, so a
   mistaken Cmd+W or Ctrl+R silently threw the session away.
-- **A reload comes back to the same document.** The address bar now carries the
-  document's identity (`?doc=<id>`), so refreshing an unsaved document reopens
+- **A reload comes back to the same document.** The address bar carries the
+  document's identity (`?saved=<id>`), so refreshing an unsaved document reopens
   it instead of starting a blank one, and two files sharing a name stay
   separate.
+
+### Changed
+
+- Recovery points are taken more often on a fast machine and less often on a
+  slow one. The editor times its own exports and spends a fixed, small share of
+  the session on them, so a laptop keeps a recovery point about every 30
+  seconds while a phone under load backs off instead of competing with the
+  document you are editing.
 
 ### Known issues
 

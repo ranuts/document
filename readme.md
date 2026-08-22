@@ -31,6 +31,7 @@ device, so documents are never uploaded, and no account is involved.
 
 - 🔒 **Nothing is uploaded** — every conversion, edit and export happens in the tab
 - 📝 **Real editing, not preview** — DOCX, XLSX, PPTX and CSV, plus ODF, RTF, TXT and the legacy binary formats; PDFs open and can be annotated
+- 💾 **Saves into your own file** — pick it once, every save after writes back to it (Chromium; elsewhere it downloads as before)
 - 🕓 **Nothing is lost if you close the tab** — edits autosave into your own browser, kept for 7 days, deletable any time ([details](#-your-data-stays-on-your-device))
 - 📴 **Works offline** — installable as a PWA; after the first visit no network is needed
 - 🌍 **Multi-language** — 8 interface languages for the site, 45 for the editor itself
@@ -100,8 +101,10 @@ Parameters on `/editor`:
 
 ## 🔐 Your data stays on your device
 
-Documents are never sent anywhere. Two things are kept locally, and both are
-yours to remove:
+Documents are never sent anywhere. Where the browser allows it, saving writes
+straight back into the file you picked, so the document lives in your own file
+system and not in a downloads folder. Two things are kept in the browser
+itself, and both are yours to remove:
 
 - **Copies of what you edited.** While you work, the editor saves the document
   into this browser (IndexedDB) so a refresh, a closed tab or a crash does not

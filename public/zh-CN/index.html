@@ -83,6 +83,14 @@
         "mainEntity": [
           {
             "@type": "Question",
+            "name": "可以直接保存回我自己的文件吗，还是只能下载副本？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "可以直接存回你自己的文件。第一次保存时选一次文件，之后每次保存都直接写回它，不再弹对话框，也不会在下载目录里堆一堆副本。这依赖浏览器的 File System Access API，所以在 Chrome、Edge 等 Chromium 系浏览器上可用；Safari 和 Firefox 则仍是下载副本。两种方式下文件都是从浏览器直接到你自己的磁盘，从不上传。"
+            }
+          },
+          {
+            "@type": "Question",
             "name": "我的文件会被上传到服务器吗？",
             "acceptedAnswer": {
               "@type": "Answer",
