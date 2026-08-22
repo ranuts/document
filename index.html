@@ -234,15 +234,17 @@
             <a href="/editor?new=xlsx" data-prefetch="xlsx"><r-button id="hero-new-xlsx">New Excel</r-button></a>
             <a href="/editor?new=pptx" data-prefetch="pptx"><r-button id="hero-new-pptx">New PowerPoint</r-button></a>
           </div>
-          <!-- Filled by /history-recent.js when this browser holds autosaved work;
-               stays hidden (and costs nothing) for a first-time visitor. -->
-          <div
-            class="recent reveal d5"
-            data-recent-slot
-            data-recent-label="Continue editing"
-            data-recent-all="Local history"
-            hidden
-          ></div>
+          <!-- Autosave is a promise about the user's data, so it is stated in the
+               served HTML rather than drawn by script: the retention window and the
+               way to inspect and delete what is kept are visible to a first-time
+               visitor, to a crawler, and with JavaScript off. /history-recent.js
+               only fills the "continue editing" slot, and only when this browser is
+               actually holding something. -->
+          <div class="recent reveal d5">
+            <span data-recent-slot data-recent-label="Continue editing" hidden></span>
+            <span class="recent-note">Edits autosave in this browser for 7 days, then delete themselves.</span>
+            <a class="recent-all" href="/history">Local history</a>
+          </div>
           <div class="trust reveal d5">
             <span>0 bytes uploaded</span><span>no account</span><span>works offline</span
             ><span>.docx .xlsx .pptx .csv</span>

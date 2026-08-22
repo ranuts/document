@@ -24,7 +24,7 @@ import { requestSaveDocument } from '../onlyoffice/save-stream';
 import { getReadonlyMode } from '../onlyoffice/readonly';
 import { getLastEditAt, hasUnsavedChanges } from '../unsaved-guard';
 import { isEmbedMode } from '../embed-mode';
-import { extensionOf, findDocByTitle, markOpened, putSnapshot } from './store';
+import { extensionOf, markOpened, putSnapshot } from './store';
 import type { HistoryDoc, HistoryOrigin } from './types';
 
 /** Time between snapshots of a document that is being edited continuously. */
@@ -39,11 +39,20 @@ export const MAX_CONSECUTIVE_FAILURES = 3;
 const AUTOSAVE_PREF_KEY = 'document-autosave-enabled';
 
 export interface AutosaveSessionInput {
-  /** File name as shown to the user; also the key that reuses a history row. */
+  /**
+   * The document's identity for this editing session.
+   *
+   * Assigned by the caller before the editor even mounts, and put in the URL,
+   * so "which document is this?" has an answer that does not depend on the
+   * file name. Names collide -- two people both have a Report.docx, and one
+   * person has last year's too -- and an earlier version of this reused a row
+   * whenever the name matched, which quietly merged the history of unrelated
+   * documents.
+   */
+  docId: string;
+  /** File name as shown to the user. */
   title: string;
   origin: HistoryOrigin;
-  /** Set when the document was opened from history: keep appending to that row. */
-  docId?: string;
 }
 
 export interface SnapshotDecision {
@@ -84,7 +93,7 @@ export function setAutosaveEnabled(enabled: boolean): void {
 interface ActiveSession {
   title: string;
   origin: HistoryOrigin;
-  docId: string | null;
+  docId: string;
   ext: string;
   timer: number;
   lastSnapshotAt: number;
@@ -145,7 +154,7 @@ export async function takeSnapshot(): Promise<HistoryDoc | null> {
   try {
     const file = await requestSaveDocument(active.ext.toUpperCase());
     const doc = await putSnapshot({
-      id: active.docId ?? undefined,
+      id: active.docId,
       title: active.title,
       origin: active.origin,
       bytes: await file.arrayBuffer(),
@@ -209,12 +218,7 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
   // other supported type do have one, so this is the pathological case only.)
   if (!ext) return;
 
-  // A blank document always starts its own row: every one of them is called
-  // New_Document.docx, and reusing that row would have them overwrite each
-  // other's history.
-  const existing = input.docId ?? (input.origin === 'new' ? null : (await findDocByTitle(input.title))?.id) ?? null;
-
-  const lockName = `document-history:${input.title.trim().toLowerCase()}`;
+  const lockName = `document-history:${input.docId}`;
   const { held, release } = await acquireLock(lockName);
   if (!held) {
     notify('warning', t('autosaveOtherTab'));
@@ -234,7 +238,7 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
   session = {
     title: input.title,
     origin: input.origin,
-    docId: existing,
+    docId: input.docId,
     ext,
     // Not "now": a document that opens and is edited immediately should get
     // its first snapshot one interval in, not two.
@@ -249,7 +253,9 @@ export async function beginAutosaveSession(input: AutosaveSessionInput): Promise
   };
 
   document.addEventListener('visibilitychange', onVisibility);
-  if (existing) void markOpened(existing);
+  // No-op until this document has a row; from then on it restarts the
+  // seven-day clock every time the document is opened.
+  void markOpened(input.docId);
 }
 
 export function stopAutosaveSession(): void {
@@ -262,7 +268,7 @@ export function stopAutosaveSession(): void {
   active.releaseLock?.();
 }
 
-/** The history row this session writes to, once one exists. */
+/** The history row this session writes to. Known from the start, row or not. */
 export function getAutosaveDocId(): string | null {
   return session?.docId ?? null;
 }

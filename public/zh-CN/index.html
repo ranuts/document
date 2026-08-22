@@ -181,15 +181,14 @@
             <a href="/editor?locale=zh-CN&amp;new=xlsx"><r-button>新建 Excel</r-button></a>
             <a href="/editor?locale=zh-CN&amp;new=pptx"><r-button>新建 PPT</r-button></a>
           </div>
-          <!-- 由 /history-recent.js 在本机存有自动保存内容时填充；首次访问保持隐藏 -->
-          <div
-            class="recent reveal d5"
-            data-recent-slot
-            data-recent-locale="zh-CN"
-            data-recent-label="继续编辑"
-            data-recent-all="本地历史"
-            hidden
-          ></div>
+          <!-- 自动保存是对用户数据的承诺，所以保留期限和"查看/删除"的入口写在 HTML 里，
+               而不是由脚本画出来：首次访问、爬虫、关掉 JavaScript 都能看到。
+               /history-recent.js 只负责填"继续编辑"那一段，且只在本机确实存有内容时。 -->
+          <div class="recent reveal d5">
+            <span data-recent-slot data-recent-locale="zh-CN" data-recent-label="继续编辑" hidden></span>
+            <span class="recent-note">编辑内容会自动保存在本机 7 天，到期自动清除。</span>
+            <a class="recent-all" href="/history?locale=zh-CN">本地历史</a>
+          </div>
           <div class="trust reveal d5">
             <span>不传服务器</span><span class="sep">·</span><span>免注册</span><span class="sep">·</span
             ><span>可离线</span><span class="sep">·</span><span>.docx .xlsx .pptx .csv</span>

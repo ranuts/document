@@ -64,3 +64,30 @@ export interface HistorySnapshot {
 export function hasUnsavedWork(doc: HistoryDoc): boolean {
   return doc.updatedAt > (doc.savedToDiskAt ?? 0);
 }
+
+/**
+ * How long a document stays in the local history.
+ *
+ * Recovery points are for getting back to work you were in the middle of, not
+ * for keeping a library -- Office expires its AutoRecover files too. A fixed
+ * window is also the honest version of the privacy promise: "this browser
+ * forgets on its own" is something a user can rely on, in a way that "until
+ * some quota is reached" is not. Seven days is long enough to cover a holiday
+ * weekend and short enough that a shared machine does not accumulate a month
+ * of someone's documents.
+ */
+export const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+
+/**
+ * When this document is due to be deleted. The clock restarts on either kind
+ * of activity -- editing it or just opening it -- so a document someone keeps
+ * coming back to never expires under them.
+ */
+export function expiresAt(doc: HistoryDoc): number {
+  return Math.max(doc.updatedAt, doc.lastOpenedAt) + MAX_AGE_MS;
+}
+
+/** Whole days left before this document is deleted; 0 means "today". */
+export function daysUntilExpiry(doc: HistoryDoc, now = Date.now()): number {
+  return Math.max(0, Math.ceil((expiresAt(doc) - now) / (24 * 60 * 60 * 1000)));
+}

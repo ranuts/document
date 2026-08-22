@@ -5,9 +5,14 @@
  */
 import { setSavedToDiskListener } from '../onlyoffice/save-stream';
 import { getAutosaveDocId } from './autosave';
-import { markSavedToDisk } from './store';
+import { markSavedToDisk, pruneExpired } from './store';
 
 export function initDocumentHistory(): void {
+  // Expiry has to happen on its own, not when someone thinks to visit the
+  // history page: "this browser forgets after seven days" is only a promise if
+  // nothing has to be done to collect on it.
+  void pruneExpired();
+
   setSavedToDiskListener(() => {
     // The document now exists on disk, so its history row has nothing left to
     // offer back. Without this the recovery bar would keep flagging a document

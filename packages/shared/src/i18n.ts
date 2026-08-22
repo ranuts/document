@@ -239,6 +239,10 @@ export interface I18nMessages {
   historyBack: string;
   historyAutosaveLabel: string;
   historyAutosaveOff: string;
+  historyRetention: string;
+  /** `{days}` is a whole number of days, always 1 or more. */
+  historyExpiresIn: string;
+  historyExpiresToday: string;
 }
 
 /**
@@ -334,6 +338,9 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyBack: '返回编辑器',
     historyAutosaveLabel: '自动保存',
     historyAutosaveOff: '自动保存已关闭，不会再产生新的恢复点。',
+    historyRetention: '自动清除：每个文档在最后一次编辑或打开的 7 天后被删除。',
+    historyExpiresIn: '{days} 天后清除',
+    historyExpiresToday: '今天清除',
   },
   [LanguageCode.EN]: {
     webOffice: 'Web Office',
@@ -423,6 +430,9 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     historyBack: 'Back to the editor',
     historyAutosaveLabel: 'Autosave',
     historyAutosaveOff: 'Autosave is off; no new recovery points are being made.',
+    historyRetention: 'Cleared automatically: each document is deleted 7 days after you last edit or open it.',
+    historyExpiresIn: 'deleted in {days} days',
+    historyExpiresToday: 'deleted today',
   },
 };
 

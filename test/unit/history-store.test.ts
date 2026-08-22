@@ -7,18 +7,19 @@ import {
   clearAllHistory,
   deleteDoc,
   dismissRecovery,
-  findDocByTitle,
   getDoc,
   getLatestSnapshot,
   getRecoverableDoc,
   historyUsage,
+  pruneExpired,
   listDocs,
   markOpened,
   markSavedToDisk,
   putSnapshot,
+  resetHistoryClockForTests,
   storageBudget,
 } from '../../lib/history/store';
-import { hasUnsavedWork } from '../../lib/history/types';
+import { MAX_AGE_MS, daysUntilExpiry, hasUnsavedWork } from '../../lib/history/types';
 
 function bytes(size: number, fill = 65): Uint8Array {
   return new Uint8Array(size).fill(fill);
@@ -26,6 +27,7 @@ function bytes(size: number, fill = 65): Uint8Array {
 
 async function wipe(): Promise<void> {
   resetHistoryDbForTests();
+  resetHistoryClockForTests();
   await new Promise<void>((resolve) => {
     const request = indexedDB.deleteDatabase(DB_NAME);
     request.onsuccess = () => resolve();
@@ -184,11 +186,42 @@ describe('history store', () => {
     expect((await listDocs()).items.map((row) => row.title)).toEqual(['New.docx']);
   });
 
-  it('reuses the row for a file name that is opened again', async () => {
-    const first = await putSnapshot({ title: 'Daily.docx', origin: 'local', bytes: bytes(8) });
+  it('deletes documents that went seven days without being touched', async () => {
+    const stale = await putSnapshot({ title: 'Stale.docx', origin: 'local', bytes: bytes(16) });
+    const fresh = await putSnapshot({ title: 'Fresh.docx', origin: 'local', bytes: bytes(16) });
 
-    expect((await findDocByTitle('daily.docx'))?.id).toBe(first!.id);
-    expect(await findDocByTitle('other.docx')).toBeNull();
+    // Only Date is faked: faking timers as well would stall fake-indexeddb,
+    // which drives its transactions through the macrotask queue.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(Date.now() + MAX_AGE_MS + 1000);
+    // Coming back to the fresh one restarts its clock; nobody touched the other.
+    await markOpened(fresh!.id);
+
+    expect(await pruneExpired()).toEqual([stale!.id]);
+    expect(await getDoc(stale!.id)).toBeNull();
+    expect(await getLatestSnapshot(stale!.id)).toBeNull();
+    expect(await getDoc(fresh!.id)).not.toBeNull();
+    vi.useRealTimers();
+  });
+
+  it('sweeps expired documents on the next write, without waiting for a visit', async () => {
+    const stale = await putSnapshot({ title: 'Stale.docx', origin: 'local', bytes: bytes(16) });
+
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(Date.now() + MAX_AGE_MS + 1000);
+    await putSnapshot({ title: 'Later.docx', origin: 'local', bytes: bytes(16) });
+
+    expect(await getDoc(stale!.id)).toBeNull();
+    expect((await listDocs()).items.map((doc) => doc.title)).toEqual(['Later.docx']);
+    vi.useRealTimers();
+  });
+
+  it('counts the days a document has left', async () => {
+    const doc = await putSnapshot({ title: 'Counting.docx', origin: 'local', bytes: bytes(8) });
+
+    expect(daysUntilExpiry(doc!, doc!.updatedAt)).toBe(7);
+    expect(daysUntilExpiry(doc!, doc!.updatedAt + 6.5 * 24 * 60 * 60 * 1000)).toBe(1);
+    expect(daysUntilExpiry(doc!, doc!.updatedAt + MAX_AGE_MS + 1)).toBe(0);
   });
 
   it('offers only documents whose work never reached the disk', async () => {

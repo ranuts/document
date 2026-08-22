@@ -19,7 +19,7 @@
  */
 import { BLOBS_BY_DOC, BLOBS_STORE, DOCS_STORE, requestToPromise, withStores } from './db';
 import type { HistoryDoc, HistoryOrigin, HistorySnapshot } from './types';
-import { hasUnsavedWork } from './types';
+import { MAX_AGE_MS, expiresAt, hasUnsavedWork } from './types';
 
 /** Revisions kept per document: the newest plus two recovery points behind it. */
 export const MAX_REVS_PER_DOC = 3;
@@ -27,6 +27,8 @@ export const MAX_REVS_PER_DOC = 3;
 export const MAX_TOTAL_BYTES = 500 * 1024 * 1024;
 /** Never claim more than this share of the origin's reported quota. */
 export const QUOTA_SHARE = 0.5;
+/** Re-exported so callers can state the retention window without importing types. */
+export { MAX_AGE_MS };
 /** Default page size for the history list. */
 export const DEFAULT_PAGE_SIZE = 20;
 
@@ -133,6 +135,21 @@ async function trimRevisions(tx: IDBTransaction, docId: string): Promise<number>
 }
 
 /**
+ * Delete everything past its seven days. Runs inside whatever transaction the
+ * caller already has: expiry has to be something the browser does on its own,
+ * not something that waits for the user to visit a page.
+ */
+async function sweepExpired(tx: IDBTransaction, now: number): Promise<string[]> {
+  const docs = await readAllDocs(tx);
+  const expired = docs.filter((doc) => expiresAt(doc) <= now);
+  for (const doc of expired) {
+    await deleteBlobsOf(tx, doc.id);
+    tx.objectStore(DOCS_STORE).delete(doc.id);
+  }
+  return expired.map((doc) => doc.id);
+}
+
+/**
  * Evict whole documents, least-recently-opened first, until the library fits
  * the budget. `protectedId` is the document being written right now: evicting
  * it to make room for itself would be a loop that ends in an empty database.
@@ -194,6 +211,10 @@ async function writeSnapshot(payload: Uint8Array, input: SnapshotInput, budget: 
     const rev = existing ? existing.nextRev : 0;
     const snapshot: HistorySnapshot = { docId: doc.id, rev, savedAt: now, bytes: payload, byteLength };
     tx.objectStore(BLOBS_STORE).put(snapshot);
+
+    // Expiry first: room freed by documents that were due to go anyway is room
+    // the budget does not have to take from documents that are still current.
+    await sweepExpired(tx, now);
 
     const freed = await trimRevisions(tx, doc.id);
     doc.totalBytes -= freed;
@@ -379,27 +400,6 @@ export function dismissRecovery(id: string): Promise<HistoryDoc | null> {
 }
 
 /**
- * Find an existing row for a file name.
- *
- * Reopening `Report.docx` continues the same history entry rather than
- * starting a second one. Matching on the name is a judgement call: two
- * different files with one name end up sharing a row, which costs a revision
- * or two, while the alternative -- a new row per open -- fills the list with
- * duplicates of the file the user works on every day, which is the case that
- * actually happens.
- */
-export async function findDocByTitle(title: string): Promise<HistoryDoc | null> {
-  const wanted = title.trim().toLowerCase();
-  if (!wanted) return null;
-  try {
-    const rows = (await withStores([DOCS_STORE], 'readonly', (tx) => readAllDocs(tx))) ?? [];
-    return rows.find((doc) => doc.titleLower === wanted) ?? null;
-  } catch {
-    return null;
-  }
-}
-
-/**
  * The most recent document holding work that never reached the disk, ignoring
  * offers the user already turned down. This is what the recovery bar and the
  * landing page's "continue editing" line ask for.
@@ -421,6 +421,29 @@ export async function getRecoverableDoc(
     );
   } catch {
     return null;
+  }
+}
+
+/**
+ * Delete expired documents now. Called when the app starts and when the
+ * history page opens, so the seven days hold even for someone who edits
+ * nothing (a write would otherwise be the only thing that sweeps).
+ */
+/**
+ * Test seam. The monotonic clock is module-wide and only ever moves forward,
+ * which is right in a browser tab and wrong across tests: one case that winds
+ * the system clock forward would otherwise stamp every later case's records
+ * with a time in the future, and nothing would ever look expired again.
+ */
+export function resetHistoryClockForTests(): void {
+  lastStamp = 0;
+}
+
+export async function pruneExpired(): Promise<string[]> {
+  try {
+    return (await withStores([DOCS_STORE, BLOBS_STORE], 'readwrite', (tx) => sweepExpired(tx, Date.now()))) ?? [];
+  } catch {
+    return [];
   }
 }
 
