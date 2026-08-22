@@ -3,6 +3,7 @@ import {
   applyDocumentLanguage,
   getLanguage,
   isRtlLanguage,
+  RTL_LANGUAGES,
   LanguageCode,
   i18n,
   SHELL_LOCALES,
@@ -63,8 +64,8 @@ const restore = () => {
 };
 
 describe('shell locales', () => {
-  it('ships the eight languages the language menu offers', () => {
-    expect([...SHELL_LOCALES]).toEqual(['en', 'zh', 'ja', 'ko', 'de', 'es', 'pt', 'fa']);
+  it('ships the seven languages the language menu offers', () => {
+    expect([...SHELL_LOCALES]).toEqual(['en', 'zh', 'ja', 'ko', 'de', 'es', 'pt']);
   });
 
   it.each(SHELL_LOCALES.filter((l) => l !== LanguageCode.EN))(
@@ -125,17 +126,18 @@ describe('shell locales', () => {
     }
   });
 
-  it('marks only Persian as right-to-left', () => {
-    for (const lang of SHELL_LOCALES) {
-      expect(isRtlLanguage(lang), lang).toBe(lang === LanguageCode.FA);
-    }
+  /**
+   * No shell locale is right-to-left today -- Persian was removed because the
+   * vendor editor has no fa locale and the stylesheets still use physical
+   * properties. The machinery stays so that adding one is a data change, and
+   * this pins the pair together: an empty list, and a dir that follows it.
+   */
+  it('has no right-to-left shell language, and says so consistently', () => {
+    expect([...RTL_LANGUAGES]).toEqual([]);
+    for (const lang of SHELL_LOCALES) expect(isRtlLanguage(lang), lang).toBe(false);
   });
 
   it('applyDocumentLanguage sets <html lang> and dir (zh keeps the zh-CN tag)', () => {
-    applyDocumentLanguage(LanguageCode.FA);
-    expect(document.documentElement.getAttribute('lang')).toBe('fa');
-    expect(document.documentElement.getAttribute('dir')).toBe('rtl');
-
     applyDocumentLanguage(LanguageCode.ZH);
     expect(document.documentElement.getAttribute('lang')).toBe('zh-CN');
     expect(document.documentElement.getAttribute('dir')).toBe('ltr');
