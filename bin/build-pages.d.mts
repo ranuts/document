@@ -4,8 +4,11 @@ export interface GeneratedPage {
   html: string;
   source: string;
   locale: string;
-  /** 'landing' pages lead with a CTA; 'doc' pages are prose from a repo file. */
-  kind: 'landing' | 'doc';
+  /**
+   * 'home' builds its own hero from home.json; 'landing' pages lead with a CTA;
+   * 'doc' pages are prose rendered from a repository markdown file.
+   */
+  kind: 'home' | 'landing' | 'doc';
 }
 export const LOCALES: Record<string, { prefix: string; lang: string; label: string; home: string; dir: string }>;
 export const LANDING_SLUGS: string[];

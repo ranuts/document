@@ -1,0 +1,260 @@
+{
+  "title": "在浏览器打开 DOCX、XLSX、PPT 文件——免装 Office 的在线查看与编辑器",
+  "description": "不装 Office 也能直接在浏览器里打开、查看 Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）和 CSV，需要时还能编辑保存。文件不传服务器、免注册、可离线。基于 OnlyOffice。",
+  "ogDescription": "不装 Office 直接在浏览器打开、查看、编辑 DOCX、XLSX、PPTX 和 CSV。文件不传服务器、免注册、可离线。",
+  "chip": "本地优先 · <b>开源</b>",
+  "h1": {
+    "plain": "在浏览器里直接打开 Word、Excel 和 PPT，",
+    "accent": "文件留在本地。"
+  },
+  "sub": "没装 Office？任何 DOCX、XLSX、PPTX 文件即开即看，需要时随手编辑——全部在你的设备本地运行，免注册、可离线。",
+  "cta": {
+    "open": "",
+    "docx": "",
+    "xlsx": "",
+    "pptx": ""
+  },
+  "recent": {
+    "label": "继续编辑",
+    "note": "误关标签页也不会丢：编辑内容会随时保存在本机浏览器里。保存的副本留存 7 天后自动删除，你也可以随时手动删除。",
+    "all": "本机保存的文档"
+  },
+  "trust": ["不传服务器", "免注册", "可离线", ".docx .xlsx .pptx .csv"],
+  "docwin": {
+    "file": "报告.docx",
+    "badge": "已保存到本地 ✓",
+    "selected": "你输入的每一个字，都留在这台设备上。",
+    "noteAuthor": "你 · 刚刚",
+    "noteBody": "0 字节上传——可在网络面板核实。",
+    "net": "network · 0 请求 · 0 字节外发"
+  },
+  "nav": [
+    {
+      "href": "/zh-CN/offline-document-editor",
+      "label": "离线"
+    },
+    {
+      "href": "/zh-CN/no-signup-document-editor",
+      "label": "免注册"
+    }
+  ],
+  "sections": {
+    "formats": {
+      "eyebrow": "打开文件",
+      "h2": "没装 Office？没关系。",
+      "rows": [
+        {
+          "href": "/zh-CN/open/docx",
+          "ext": ".docx",
+          "name": "打开 DOCX",
+          "desc": "完整排版查看任何 Word 文档——字体、表格、图片都在。"
+        },
+        {
+          "href": "/zh-CN/open/xlsx",
+          "ext": ".xlsx",
+          "name": "打开 XLSX",
+          "desc": "公式、图表、多工作表完整呈现。"
+        },
+        {
+          "href": "/zh-CN/open/pptx",
+          "ext": ".pptx",
+          "name": "打开 PPTX",
+          "desc": "版式、主题、媒体都保留。"
+        },
+        {
+          "href": "/zh-CN/open/pdf",
+          "ext": ".pdf",
+          "name": "打开 PDF",
+          "desc": "阅读、评论、批注后再存回去。"
+        },
+        {
+          "href": "/zh-CN/open/odt",
+          "ext": ".odt .ods .odp",
+          "name": "打开 OpenDocument",
+          "desc": "LibreOffice 格式——可存回 ODT、DOCX 或 PDF。"
+        },
+        {
+          "href": "/zh-CN/convert/docx-to-pdf",
+          "ext": ".docx → .pdf",
+          "name": "转换为 PDF",
+          "desc": "Word、Excel、PowerPoint 在你的设备上变成 PDF。"
+        },
+        {
+          "href": "/zh-CN/convert/xlsx-to-csv",
+          "ext": ".xlsx → .csv",
+          "name": "格式互转",
+          "desc": "表格与 CSV 互转，一个字节都不上传。"
+        }
+      ]
+    },
+    "pillars": {
+      "eyebrow": "为什么不一样",
+      "h2": "隐私是设计出来的，不是承诺出来的",
+      "items": [
+        {
+          "k": "100% 客户端",
+          "h3": "文件永不离开你的设备",
+          "p": "每个文档都在本地打开、编辑和保存，没有服务器可供上传。"
+        },
+        {
+          "k": "免注册",
+          "h3": "没有任何注册环节",
+          "p": "没有邮箱、没有登录墙，打开页面立即开始编辑。"
+        },
+        {
+          "k": "PWA · 离线",
+          "h3": "装上它，飞机上也能用",
+          "p": "添加到主屏，断网也能继续工作。"
+        },
+        {
+          "k": "AGPL-3.0",
+          "h3": "开源 · 可自托管",
+          "p": "审计运行的每一行，或自建一份。基于 OnlyOffice。"
+        }
+      ]
+    },
+    "steps": {
+      "eyebrow": "流程",
+      "h2": "怎么用",
+      "items": [
+        {
+          "n": "01",
+          "h3": "打开文件",
+          "p": "拖入 DOCX、XLSX、PPTX 或 CSV——或新建一个空白文档。",
+          "loc": "留在本地设备"
+        },
+        {
+          "n": "02",
+          "h3": "真正地编辑",
+          "p": "完整的排版、表格、图表和公式，由 OnlyOffice 提供。",
+          "loc": "留在本地设备"
+        },
+        {
+          "n": "03",
+          "h3": "存回本地",
+          "p": "导出为同样的格式。整个过程从未上传。",
+          "loc": "留在本地设备"
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "h2": "常见问题",
+      "note": "更详细的说明——文件大小限制、错误码、自托管——在<a href=\"/zh-CN/help\">帮助文档</a>里。",
+      "items": [
+        {
+          "q": "可以直接保存回我自己的文件吗，还是只能下载副本？",
+          "a": "可以直接存回你自己的文件。第一次保存时选一次文件，之后每次保存都直接写回它，不再弹对话框，也不会在下载目录里堆一堆副本。这依赖浏览器的 File System Access API，所以在 Chrome、Edge 等 Chromium 系浏览器上可用；Safari 和 Firefox 则仍是下载副本。两种方式下文件都是从浏览器直接到你自己的磁盘，从不上传。"
+        },
+        {
+          "q": "我的文件会被上传到服务器吗？",
+          "a": "不会。没有服务端。文件在你的设备本地打开和保存，不会上传——你可以在浏览器网络面板里核实，或查看源码。"
+        },
+        {
+          "q": "能编辑哪些格式？",
+          "a": "Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX) 和 CSV，基于运行在 WebAssembly 里的 OnlyOffice。"
+        },
+        {
+          "q": "关掉标签页或刷新页面，编辑的内容会丢吗？",
+          "a": "不会丢。编辑过程中内容会随时保存进这个浏览器，所以重新打开编辑器会提示你接着编辑，刷新也会回到同一篇。保存的副本在你的设备上留存 7 天后自动删除，你也可以随时手动删除其中任何一篇。这些副本从不上传，只存在于这个浏览器里。"
+        },
+        {
+          "q": "能离线使用吗？",
+          "a": "能。它是可安装的 PWA——加载一次后断网也能继续用，因为编辑全部在你的浏览器本地进行。"
+        },
+        {
+          "q": "需要注册账号吗？",
+          "a": "不需要账号、不需要注册、不需要邮箱。打开页面就能编辑。"
+        }
+      ]
+    }
+  },
+  "eco": {
+    "label": "ran 生态的一部分 · 全部开源",
+    "here": {
+      "name": "edit.chaxus.com",
+      "role": "文档编辑器"
+    },
+    "other": {
+      "href": "https://ran.chaxus.com",
+      "name": "ran.chaxus.com",
+      "role": "UI 组件库"
+    }
+  },
+  "foot": {
+    "copy": "© 2026 文档编辑器 · 在你的设备上运行",
+    "links": [
+      {
+        "href": "/zh-CN/help",
+        "label": "帮助"
+      },
+      {
+        "href": "/zh-CN/changelog",
+        "label": "更新日志"
+      },
+      {
+        "href": "/zh-CN/embed-document-editor",
+        "label": "Embed API"
+      },
+      {
+        "href": "/zh-CN/webmcp-document-editor",
+        "label": "WebMCP"
+      },
+      {
+        "href": "/zh-CN/private-document-editor",
+        "label": "隐私"
+      },
+      {
+        "href": "/zh-CN/offline-document-editor",
+        "label": "离线编辑器"
+      },
+      {
+        "href": "/zh-CN/no-signup-document-editor",
+        "label": "免注册"
+      },
+      {
+        "href": "/zh-CN/open/docx",
+        "label": "打开 DOCX"
+      },
+      {
+        "href": "/zh-CN/open/odt",
+        "label": "ODT"
+      },
+      {
+        "href": "/zh-CN/open/ods",
+        "label": "ODS"
+      },
+      {
+        "href": "/zh-CN/open/odp",
+        "label": "ODP"
+      },
+      {
+        "href": "/zh-CN/convert/docx-to-pdf",
+        "label": "DOCX → PDF"
+      },
+      {
+        "href": "/zh-CN/convert/xlsx-to-csv",
+        "label": "XLSX → CSV"
+      },
+      {
+        "href": "https://github.com/ranuts/document",
+        "label": "GitHub"
+      }
+    ],
+    "license": "AGPL-3.0"
+  },
+  "featureList": [
+    "无需 Microsoft Office 即可打开和查看 DOCX、XLSX、PPTX 和 CSV",
+    "编辑 DOCX、XLSX、PPTX 和 CSV 文件",
+    "100% 在客户端运行——文件永不离开你的设备",
+    "无需账号、无需注册",
+    "通过 ?src= 或 ?file= 从 URL 打开文档",
+    "可安装为 PWA，支持离线使用",
+    "可通过 postMessage API 嵌入",
+    "免费且开源（AGPL-3.0）"
+  ],
+  "ecosystem": {
+    "name": "ran ecosystem",
+    "url": "https://ran.chaxus.com"
+  }
+}
