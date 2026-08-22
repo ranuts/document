@@ -71,40 +71,108 @@ XOR-decoded with the same key before being written.
 
 Only add fonts you may redistribute (open-source licensed or licensed to
 you). Font name references may remain in `AllFonts.js` for document
-compatibility even when the corresponding file is not shipped.
+compatibility even when the corresponding file is not shipped -- that is
+exactly how the substitution below works.
 
-### Known problem: 79 proprietary faces are still shipped
+`test/unit/font-catalog-licensing.test.ts` reads every catalog file's own name
+table on each run, so a vendor bump that brings proprietary faces back in turns
+the suite red. [font-licenses.md](font-licenses.md) lists what is shipped, under
+what license, and which document font names each face answers to.
+
+### The proprietary faces are gone (2026-08-22)
 
 The vendor bundle arrived with the font set an OnlyOffice Docs _server_ would
 have picked up from its host: Microsoft's core web fonts, Monotype's
 Arial/Times/Courier, and ~150 MB of Chinese faces owned by SinoType, Founder,
-ZhongYi, GreatWall and Stone. 79 files, 171 MB. This repository and its origin
-are public, so shipping them is redistributing them. **This is unresolved.**
+ZhongYi, GreatWall and Stone -- 79 files, 171 MB, redistributed from a public
+repository and a public origin.
 
-Replacing them was attempted on 2026-08-22 and reverted the same day (#170,
-reverted by #174): production came back with every glyph shifted -- typing
-"Hello" put "Fcjjm" on the page and CJK did not render at all.
+`bin/font-license-sweep.mjs` replaced all of them. Documents that name "Arial"
+or "宋体" still resolve; they land on Liberation Sans and Noto Serif SC.
+Nothing was renamed and no font file was edited: the swap is in the registry,
+not in the bytes.
 
-**Read
-[docs/explorations/2026-08-22-font-licensing-why-substitution-fails.md](explorations/2026-08-22-font-licensing-why-substitution-fails.md)
-before trying again.** It records five approaches and how each one fails. The
-short version:
+```bash
+node bin/font-license-sweep.mjs --check   # report the plan, touch nothing
+node bin/font-license-sweep.mjs           # apply
+```
 
-- There is no small, local substitution. Family name, glyph indices, metrics
-  and character coverage are tied together across four datasets --
-  `__fonts_files`, `__fonts_infos`, `__fonts_ranges` and
-  `g_fonts_selection_bin`. Changing one without the others breaks rendering.
-- A _position_ in `__fonts_files` is a font identity, not just a path. Two
-  families sharing one position renders from the wrong glyph indices; one file
-  repeated across positions makes the engine treat it as several fonts.
-- Metric compatibility is not glyph-order compatibility. Arial and Liberation
-  Sans disagree on 844 of 939 codepoints checked; only basic ASCII happens to
-  line up, which is why a `Hello`-only test says everything is fine.
-- `sdk-all.js` hardcodes `Arial`, `Calibri`, `SimSun`, `Tahoma`, `Batang` and
-  `MS Mincho`. Remove those names and the editor never finishes booting.
-- `g_fonts_selection_bin` is load-bearing, not optional: blank it and every
-  character becomes tofu.
+The source faces live in `vendor-fonts/` (gitignored -- they are a second copy
+of bytes the catalog already holds). The CJK pair is instanced from the Noto
+Sans/Serif SC variable fonts and then subset, because the full faces are 16 and
+24 MB and every Chinese document would pay for them:
 
-The E2E suite cannot catch this class of bug -- its visual cases compare a
-document against its own save round trip, and both sides render with the same
-wrong font. Verify in a real browser, with text that goes past U+00A0.
+```bash
+# Static instances at 400 and 700. --update-name-table is not optional: without
+# it both instances keep the variable font's default name ("Noto Sans SC Thin"),
+# so the two weights collide and nothing identifies the bold as bold.
+python3 -m fontTools.varLib.instancer --update-name-table NotoSansSC.ttf wght=400 -o sans-400.ttf
+python3 -m fontTools.varLib.instancer --update-name-table NotoSansSC.ttf wght=700 -o sans-700.ttf
+
+# sans: the whole CJK repertoire -- every CJK fallback range points at it, and
+# a fallback face with holes renders blanks rather than falling through again
+python3 -m fontTools.subset sans-400.ttf \
+  --output-file=vendor-fonts/NotoSansSC-Regular-cjk.ttf \
+  --unicodes="U+0000-2FFF,U+3000-33FF,U+3400-4DBF,U+4E00-9FFF,U+F900-FAFF,U+FE10-FE1F,U+FE30-FE4F,U+FF00-FFEF" \
+  --name-IDs='*' --layout-features='*' --no-hinting
+
+# serif: GB2312 plus punctuation and kana, for the Song/Fangsong/Kai names a
+# document asks for by name (vendor-fonts/cjk-subset-codepoints.txt holds the
+# GB2312 code points; regenerate by decoding every two-byte GB2312 sequence)
+python3 -m fontTools.subset serif-400.ttf \
+  --output-file=vendor-fonts/NotoSerifSC-Regular-gb.ttf \
+  --unicodes-file=vendor-fonts/cjk-subset-codepoints.txt \
+  --unicodes="U+0000-2FFF,U+3000-33FF,U+FE10-FE1F,U+FE30-FE4F,U+FF00-FFEF" \
+  --name-IDs='*' --layout-features='*' --no-hinting
+```
+
+**TrueType outlines, not CFF.** The obvious choice for these is the pan-CJK
+family (Noto Sans CJK SC and friends), and it renders perfectly in the editor
+-- but it exports to PDF as nothing at all: x2t embeds no glyphs for a
+CFF-flavoured face, so an exported PDF has its Chinese blank and its Latin
+intact. `test/e2e/pdf-cjk-export.spec.ts` measures exactly that.
+
+### The one rule substitution has to respect
+
+The engine does not trust the registry alone. When it shapes a run it reads
+`m_pFaceInfo.family_name` off the face it loaded -- the name inside the FILE --
+and resolves that name through the matcher again (`sdk-all.js`,
+`StringShaper.Shape`). So:
+
+> The family name inside the file at position P must belong to a row that
+> points at P.
+
+The pristine vendor catalog satisfies this for all 267 of its referenced
+positions. The first attempt at this sweep (PR #170, reverted by #174) broke it
+by writing a replacement's **file name** into the proprietary position, so
+position 75 -- which Arial's row points at -- held a file calling itself
+"Liberation Sans", a name that belongs to position 65. The engine shaped with
+one face and rasterised with another and every glyph came out shifted: typing
+`Hello` put `Fcjjm` on the page.
+
+The fix is not to copy file names between positions but to point the row at the
+position the replacement already occupies. `test/unit/font-catalog-licensing.ts`
+pins the invariant; `test/e2e/font-substitution.spec.ts` renders the same string
+under both names and requires the two to be pixel-identical.
+
+### Adding a family needs three things, not one
+
+A new family is a position in `__fonts_files`, a row in `__fonts_infos` **and a
+record in `g_fonts_selection_bin`**. Miss the third and the matcher cannot find
+the family by name, which lands you back in the shifted-glyph failure by a
+different route (this is what the added CJK families hit first).
+
+`g_fonts_selection_bin` used to be treated as unmodifiable. It is not: its
+reader is in `sdk-all.js`, and `bin/lib/selection-bin.mjs` implements the same
+layout in both directions. `test/unit/font-selection-bin.test.ts` checks that
+decode -> encode reproduces the shipped blob byte for byte, and that a record
+rebuilt from a font's own OS/2 + head + post tables equals the record the
+vendor's generator wrote for that file (188 of them do map one to one).
+
+### What still is not verifiable from the suite alone
+
+The visual E2E cases compare a document against its own save round trip, so a
+font fault that affects both sides equally is invisible to them. When you touch
+the catalog, look at real rendering with text that goes past U+00A0 -- and drive
+it with `pluginMethod_PasteHtml`, not `page.keyboard.type`, which drops
+characters often enough to look like a font bug.

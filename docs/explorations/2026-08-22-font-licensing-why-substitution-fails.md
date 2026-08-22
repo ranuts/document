@@ -4,6 +4,13 @@
 相关：`public/fonts/`、`public/sdkjs/common/AllFonts.js`、PR #170（已 revert）、#174（revert）
 前篇：[171 MB 专有字体与多语言回退](2026-08-22-font-licensing-and-multilingual-fallback.md)
 
+> **本文结论已被推翻（同日）。** 五种做法的失败现象是真的，但归因错了：真正的规则
+> 只有一条——位置上那个文件里的 family 名必须属于某个指向该位置的 `__fonts_infos`
+> 行。替换已经做完，见
+> [2026-08-22-font-substitution-solved.md](2026-08-22-font-substitution-solved.md)。
+> 下面这些"做不到"的判断保留在这里，是因为它们记录了当时看到的现象，以及
+> 一次归因失误长什么样。
+
 ## 结论先写
 
 vendor 的字体系统把 **family 名、glyph 索引、metrics、字符覆盖**绑成一个互相引用的整体，

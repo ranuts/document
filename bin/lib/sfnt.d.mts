@@ -1,0 +1,31 @@
+export const XOR_KEY: number[];
+export function xorPrefix(buf: Buffer): Buffer;
+export function asFace(buf: Buffer): Buffer;
+export function tables(buf: Buffer, offset?: number): Record<string, { off: number; len: number }>;
+export function readNames(buf: Buffer): Record<number, string> & {
+  records?: Array<{ platformId: number; encodingId: number; languageId: number; nameId: number; value: string }>;
+};
+export function faceMetrics(buf: Buffer): {
+  unitsPerEm: number;
+  macStyle: number;
+  isCFF: boolean;
+  isFixedPitch: boolean;
+  avgCharWidth: number;
+  weight: number;
+  width: number;
+  fsType: number;
+  familyClass: number;
+  panose: number[];
+  unicodeRange: [number, number, number, number];
+  fsSelection: number;
+  typoAscender: number;
+  typoDescender: number;
+  typoLineGap: number;
+  codePageRange: [number, number];
+  xHeight: number;
+  capHeight: number;
+  hheaAscender: number;
+  hheaDescender: number;
+};
+export function cmapSubtables(buf: Buffer): Array<{ platform: number; encoding: number; format: number; off: number }>;
+export function glyphId(buf: Buffer, codePoint: number, subtable?: { off: number }): number;

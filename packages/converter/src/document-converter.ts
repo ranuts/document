@@ -507,12 +507,12 @@ export class X2TConverter {
     // default-latin coverage).
     { file: '117', aliases: ['DejaVuSans.ttf'] },
     { file: '050', aliases: ['DejaVuSans-Bold.ttf'] },
-    // CJK. One family per style now covers Simplified Chinese, Traditional
-    // Chinese, Japanese and Korean, so an exported PDF no longer sets a line
-    // of Chinese in three typefaces. Serif answers to the Song/Ming names a
-    // document's body text uses, sans to the Hei/YaHei names; PingFang maps
-    // to the sans as the closest match.
-    { file: '269', aliases: ['SimSun.ttf', 'NSimSun.ttf', '宋体.ttf', 'NotoSerifCJKsc-Regular.otf'] },
+    // CJK. Serif answers to the Song/Ming names a document's body text uses,
+    // sans to the Hei/YaHei names; PingFang maps to the sans as the closest
+    // match. Both are TrueType on purpose: x2t embeds no glyphs at all for
+    // CFF-flavoured faces, so a pan-CJK OTF here exports a PDF whose Chinese
+    // is blank while its Latin survives (measured both ways round).
+    { file: '269', aliases: ['SimSun.ttf', 'NSimSun.ttf', '宋体.ttf', 'NotoSerifSC-Regular.ttf'] },
     { file: '270', aliases: ['SimSun_Bold.ttf'] },
     {
       file: '267',
@@ -524,7 +524,7 @@ export class X2TConverter {
         '黑体.ttf',
         'DroidSansFallback.ttf',
         'Droid Sans Fallback.ttf',
-        'NotoSansCJKsc-Regular.otf',
+        'NotoSansSC-Regular.ttf',
       ],
     },
     { file: '268', aliases: ['Microsoft YaHei_Bold.ttf', 'SimHei_Bold.ttf'] },

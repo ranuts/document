@@ -198,7 +198,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
 不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
 `test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
-`test/e2e/` 现有 34 个 spec，下面先说三条主线，再给全量清单：
+`test/e2e/` 现有 36 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -241,6 +241,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）                                                                                                                                                                                                            |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
 | 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
+| 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                     |
 | 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?saved=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                               |
 | 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                 |
 
@@ -797,39 +798,47 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
 - **字体**：`public/fonts/{index}` 是 XOR 混淆的 catalog 线格式（裸 TTF
   放进去无效），编解码用 `bin/font-catalog.mjs`，体系说明见 docs/fonts.md；
   x2t 转 PDF 的字体注入见 `packages/converter` 的 `PDF_FONT_MANIFEST`。
-  **catalog 里有 79 个专有字体（171 MB），暂时动不了**：华文 / 方正 / 中易 /
-  长城 / Stone 的中文字体，以及微软 Core Fonts 和 Monotype 的 Arial / Times /
-  Courier。它们是 vendor 离线包从宿主机带进来的，本仓库与线上都是公开的，
-  托管即再分发——**这是已知的版权问题，尚未解决**。
-  **2026-08-22 尝试替换过一次，失败并已 revert（PR #170 → #174）**：上线后
-  全页 glyph 错位，输入 `Hello` 屏幕显示 `Fcjjm`，中文完全不渲染。
-  **动手之前必读
-  [docs/explorations/2026-08-22-font-licensing-why-substitution-fails.md](docs/explorations/2026-08-22-font-licensing-why-substitution-fails.md)**，
-  里面有五种做法各自怎么坏的实测记录。要点：
-  1. **不存在"小改一处"的替换**。family 名、glyph 索引、metrics、字符覆盖被
-     绑在四份数据里（`__fonts_files` / `__fonts_infos` / `__fonts_ranges` /
-     `g_fonts_selection_bin`），改任意一处而不动其余都会坏；
-  2. `__fonts_files` 的**每个位置就是一个字体身份**（`for (x...) y[x] = new
-FontFile(files[x])`）。两个 family 共用一个位置 → glyph 错位；多个位置
-     持同一文件名 → 引擎当成多个字体各自排队下载；
-  3. **metric 兼容 ≠ glyph 顺序兼容**。Arial 与 Liberation Sans 逐码位比对
-     939 个里有 844 个 glyph 序号不同，只是基本 ASCII 恰好一致——用 `Hello`
-     测会得到"一切正常"的假象，**验证文本必须跨出 U+A0**；
-  4. `__fonts_ranges` 三元组的第三个数是**引擎构建出来那个数组**的下标，不是
-     `__fonts_infos` 的行号：构建时跳过 `ASCW3` 行，其后的 family 运行时下标
-     少 1，直接 `findIndex()` 会指到后一个 family；
-  5. `sdk-all.js` 里**硬编码**了 `Arial` / `Calibri` / `SimSun` / `Tahoma` /
-     `Batang` / `MS Mincho`（`FontPickerByCharacter` 的按语言默认字体与主题
-     默认字体）。删掉这些名字 → `GetFontInfo` 返回 undefined →
-     `Cannot set properties of undefined (setting 'NeedStyles')` → 白屏；
-  6. `g_fonts_selection_bin` **不是可选的**。它看着像字体选择器的数据，实际是
-     按 family 名携带 panose / metrics / 字符覆盖的核心索引，清空后全部字符
-     变豆腐块。替换字体必须同步重建它，而它的二进制格式没有文档。
-     **E2E 抓不到这个问题**：视觉用例比的是"原始 vs 存回"，两侧用同一套错误
-     字体渲染，逐像素一致。唯一可靠的验证是真实浏览器里输入文字看渲染。
-     另外有三处按**槽位号硬编码**、改完 catalog 必须同步，否则静默 404：
+  **catalog 已全部是可再分发的字体（2026-08-22）**：vendor 原本带着 79 个专有字体
+  （171 MB，华文 / 方正 / 中易 / 长城 / Stone 的中文字体 + 微软 Core Fonts +
+  Monotype 的 Arial / Times / Courier），已由 `bin/font-license-sweep.mjs` 换成
+  开源字体——**换的是注册表不是字节**：专有 family 的 `__fonts_infos` 行改指到替代
+  字体已经占着的位置上，文件不改名、不复制。`public/fonts/` 327 MB → 184 MB，
+  文档里写着"宋体" / "Arial" 照常解析。改这块前先读
+  [docs/explorations/2026-08-22-font-substitution-solved.md](docs/explorations/2026-08-22-font-substitution-solved.md)。
+  1. **唯一那条规则**：位置 P 上那个文件里写的 family 名，必须属于某个指向 P 的
+     `__fonts_infos` 行。引擎排版时读的是加载文件里的 `m_pFaceInfo.family_name`，
+     再拿它过一遍匹配器（`sdk-all.js` 的 `StringShaper.Shape`）；名字指到别处，
+     排版与光栅就分家，`Hello` 显示成 `Fcjjm`。原始 catalog 267 个被引用位置全部
+     满足这一条，PR #170 打破的正是它（它把替代字体的**文件名**写进了专有位置）。
+     `test/unit/font-catalog-licensing.test.ts` 钉住这条不变式。
+  2. **新增 family = 位置 + `__fonts_infos` 行 + `g_fonts_selection_bin` 记录**，
+     三样缺一不可。少了第三样，匹配器按名字找不到，又变成同一种错位（本轮的 CJK
+     family 先踩了一次）。那个 blob 不是黑盒：阅读器在 `sdk-all.js` 里，
+     `bin/lib/selection-bin.mjs` 双向实现，单测钉住"解码再编码逐字节还原"与
+     "按字体 OS/2 重建的记录与 vendor 写的完全一致"（188 个文件）。
+     metrics 缩放到 1000 em 用**整数截断**，四舍五入会差 1。
+  3. **回退区间背后的字体必须真的有那些字**。picker 查一次 `__fonts_ranges` 就
+     结束，指到一个缺字的字体上就是空白、不会再找第二个——所以 CJK 回退用的
+     Noto Sans SC 切的是**全量 CJK**（9.9 MB），只有显式点名的宋/仿/楷走
+     GB2312 子集（3.6 MB）。韩文仍走 catalog 自带的 NanumGothic。
+     **CJK 必须是 TrueType（glyf），不能用 CFF（`OTTO`）**：pan-CJK 的
+     Noto Sans/Serif CJK SC 在编辑器里渲染完全正常，但 x2t 往 PDF 里一个字形都嵌
+     不进去——导出的 PDF 中文全空白、拉丁正常。所以用 Noto Sans/Serif **SC** 的
+     可变字体实例（`fontTools.varLib.instancer --update-name-table`，那个参数不能
+     省，否则两个字重都叫 "Noto Sans SC Thin"）。`test/e2e/pdf-cjk-export.spec.ts`
+     钉住这条。
+  4. **三处按槽位号硬编码，改完 catalog 必须同步**，否则静默 404：
      `PDF_FONT_MANIFEST`、`public/landing-prefetch.js` 的 `CORE`、
-     `test/e2e/landing-prefetch.spec.ts` 的 `CORE_FONTS`。前两处都真的漏过。
+     `test/e2e/landing-prefetch.spec.ts` 的 `CORE_FONTS`。前者从 #174 那次 revert
+     起就一直指着不存在的槽位（导出 PDF 里中文全是空白），本轮修好并补了用例。
+  5. **验证只能在真实浏览器里看渲染**：视觉 E2E 比的是"原始 vs 存回"，两侧同样的
+     错字体，逐像素一致。文本必须跨出 U+A0，并且用 `pluginMethod_PasteHtml` 灌进去
+     ——`page.keyboard.type` 会丢字符，丢一个词的像素差和缺陷本身同量级。
+     `test/e2e/font-substitution.spec.ts` 用的判据是：被替换的名字与背后那个开源
+     family 指着同一个位置，两次渲染必须逐像素相同。
+  6. `sdk-all.js` 里硬编码了 `Arial` / `Calibri` / `SimSun` / `Tahoma` / `Batang` /
+     `MS Mincho`（按语言的默认字体与主题默认字体），删掉这些 family 名会白屏——
+     这也是**替换而不是删除**的理由：一个 family 名都没少。
 - **粘贴 XSS**：三个编辑器的粘贴解析 iframe 均带
   `sandbox="allow-same-origin"`（无 allow-scripts），粘贴的 script/on*
   不会执行，无需额外过滤 patch（2026-08-14 排查结论）。
