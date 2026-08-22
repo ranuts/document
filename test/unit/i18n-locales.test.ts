@@ -4,6 +4,7 @@ import {
   getLanguage,
   isRtlLanguage,
   LanguageCode,
+  i18n,
   SHELL_LOCALES,
   setLanguage,
   t,
@@ -12,10 +13,16 @@ import {
 } from '@ranuts/shared/i18n';
 
 /**
- * Shell locales beyond en/zh (roadmap direction eight, layer 2). English and
- * Chinese are complete tables; the rest translate the *core* UI and fall back
- * to English per key, so what is pinned here is: every locale covers the core
- * set, nothing silently leaks a raw key, and RTL/lang attributes are applied.
+ * Shell locales beyond en/zh (roadmap direction eight, layer 2). All eight
+ * tables are now complete, so what is pinned here is: every locale covers
+ * every key, nothing silently leaks a raw key or an English string, and
+ * RTL/lang attributes are applied.
+ *
+ * The per-key English fallback still exists in `t()` and still matters -- it
+ * is what keeps a newly added key from rendering as a raw identifier before
+ * the translations catch up. It is exercised below against a key that is not
+ * in any table rather than against a real one, so the completeness check and
+ * the fallback check cannot both be satisfied by the same gap.
  */
 const CORE_KEYS: Array<keyof I18nMessages> = [
   'uploadDocument',
@@ -43,9 +50,12 @@ const CORE_KEYS: Array<keyof I18nMessages> = [
  */
 const SAME_AS_ENGLISH: Partial<Record<string, Array<keyof I18nMessages>>> = {
   de: ['themeSystem'],
-  es: ['themeSystem'],
+  es: ['themeSystem', 'agentRoleError'],
   pt: ['themeSystem'],
 };
+
+/** The product name, which reads the same in every language. */
+const NEVER_TRANSLATED: Array<keyof I18nMessages> = ['webOffice'];
 
 const restore = () => {
   setLanguage(LanguageCode.EN);
@@ -81,12 +91,35 @@ describe('shell locales', () => {
     },
   );
 
-  it('falls back to English for untranslated keys instead of showing the key', () => {
+  /**
+   * Every key, not just the core set: a table that silently loses a key would
+   * still render -- in English -- and only a reader of that language would
+   * notice. The agent panel used to be deliberately English outside en/zh;
+   * it is translated now, and this is what keeps it that way.
+   */
+  it.each(SHELL_LOCALES.filter((l) => l !== LanguageCode.EN))('%s translates every key in the table', (lang) => {
+    setLanguage(LanguageCode.EN);
+    const english = i18n.getMessages();
+    setLanguage(lang as Language);
+    try {
+      const untranslated = (Object.keys(english) as Array<keyof I18nMessages>).filter((key) => {
+        if (NEVER_TRANSLATED.includes(key) || SAME_AS_ENGLISH[lang]?.includes(key)) return false;
+        const value = t(key);
+        return !value || value === key || value === english[key];
+      });
+      expect(untranslated, `${lang} still falls back to English for: ${untranslated.join(', ')}`).toEqual([]);
+    } finally {
+      restore();
+    }
+  });
+
+  it('falls back to English rather than showing a raw key', () => {
     setLanguage(LanguageCode.DE);
     try {
-      // The agent panel is deliberately English outside en/zh.
-      expect(t('agentSend')).toBe('Send');
+      // A real German string, to prove the table is being consulted at all...
       expect(t('uploadDocument')).toBe('Dokument öffnen / bearbeiten');
+      // ...and a key no table defines, which is what the fallback is for.
+      expect(t('__notATranslatedKey__' as keyof I18nMessages)).toBe('__notATranslatedKey__');
     } finally {
       restore();
     }
