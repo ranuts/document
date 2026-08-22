@@ -73,6 +73,17 @@ describe('page width scale', () => {
     expect(column, 'reading column').toBeGreaterThanOrEqual(600);
   });
 
+  it('themes the language menu identically in both stylesheets', () => {
+    // The menu panel is portalled to <body>, so its variables live at :root --
+    // and the homepage does not load landing.css, so the block exists twice.
+    // Two copies of a palette drift the moment someone tunes one of them.
+    const block = (css: string) => /:root \{([^}]*--ran-dropdown[^}]*)\}/.exec(css)?.[1]?.trim();
+    const inHome = block(home);
+    const inLanding = block(landing);
+    expect(inHome, 'home.css declares the menu palette').toBeTruthy();
+    expect(inLanding).toBe(inHome);
+  });
+
   it('bounds prose by characters, not by whatever the container happens to be', () => {
     const intro = declaration(history, '.history-intro', 'max-width');
     expect(intro).toMatch(/^\d{2}ch$/);

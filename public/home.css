@@ -129,13 +129,41 @@
 }
 #landing-hero r-select.lang-select {
   display: inline-block;
-  min-width: 84px;
+  min-width: 76px;
   font-size: 14px;
-  height: 44px;
+  /* Matches the nav links beside it (14px on space-2/space-3 padding); the
+     44px default stood a head taller than everything else in the bar. */
+  height: 34px;
 }
 /* hide the raw option list pre-upgrade; the reserved width avoids layout shift */
 #landing-hero r-select.lang-select:not(:defined) {
   visibility: hidden;
+}
+
+/* ---------- language menu (ranui r-select) ----------
+   The site's own palette applied to the component's variables. The panel is
+   portalled to <body>, so these have to be declared at the root: scoped to the
+   trigger they would style the trigger and never reach the menu.
+
+   Kept byte-identical in home.css and landing.css (the homepage does not load
+   landing.css); test/unit/design-contract.test.ts compares the two blocks. */
+:root {
+  --ran-dropdown-padding: 4px;
+  /* 10px, not the component's 12: the panel is 76px wide and two rows tall,
+     and at radius-md its corners eat into the rows inside it. */
+  --ran-dropdown-border-radius: 10px;
+  --ran-dropdown-box-shadow:
+    0 0 0 1px var(--ran-color-border), 0 8px 24px -6px color-mix(in srgb, var(--ran-color-text) 18%, transparent);
+  --ran-dropdown-option-item-padding: 6px 10px;
+  --ran-dropdown-option-item-border-radius: var(--ran-radius-sm);
+  --ran-dropdown-option-item-font-size: 14px;
+  --ran-dropdown-option-item-content-font-size: 14px;
+  --ran-dropdown-option-item-hover-background-color: var(--ran-color-bg-hover);
+  /* Selection is weight plus a neutral ground, not a blue fill: on this site
+     blue means a link, and every row of this menu is one. */
+  --ran-dropdown-option-active-background-color: var(--ran-color-bg-active);
+  --ran-dropdown-option-active-hover-background-color: var(--ran-color-bg-active);
+  --ran-dropdown-option-active-font-weight: 600;
 }
 
 /* ---------- top bar ---------- */
