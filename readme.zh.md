@@ -16,7 +16,14 @@
 </p>
 
 <p align="center">
-  <a href="readme.md">English</a> | <b>中文</b>
+  <a href="readme.md">English</a> |
+  <b>简体中文</b> |
+  <a href="readme.ja.md">日本語</a> |
+  <a href="readme.ko.md">한국어</a> |
+  <a href="readme.de.md">Deutsch</a> |
+  <a href="readme.es.md">Español</a> |
+  <a href="readme.pt.md">Português</a> |
+  <a href="readme.fa.md">فارسی</a>
 </p>
 
 在浏览器标签页里打开和编辑 Word、Excel、PPT 文件。没有服务器：OnlyOffice 引擎和它的
