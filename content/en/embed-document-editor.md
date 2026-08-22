@@ -16,7 +16,27 @@ The editor runs entirely in the browser with the OnlyOffice WebAssembly engine, 
 
 ## Add it with one iframe
 
+```html
+<iframe
+  id="documentEditor"
+  src="https://edit.chaxus.com/editor?embed=1&embedOrigin=https://your-app.example.com"
+  style="width: 100%; height: 720px; border: 0"
+></iframe>
+```
+
 Then talk to it over `postMessage`. Every command takes an `id` so you can match it to the reply, and every editor event is a `document:*` message:
+
+```js
+// open a file your app already fetched (auth stays with you)
+iframe.contentWindow.postMessage(
+  { id, type: 'document:open-buffer', payload: { fileName: 'report.xlsx', buffer } },
+  'https://edit.chaxus.com',
+);
+
+// ask for the edited file back, then upload it yourself
+iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetExt: 'XLSX' } }, editorOrigin);
+// → editor replies with { type: 'document:saved', payload: { fileName, file } }
+```
 
 ## What you get
 
@@ -37,6 +57,12 @@ Then talk to it over `postMessage`. Every command takes an `id` so you can match
 ## Read-only and preview mode
 
 Open a document read-only (a viewer, a review step, a locked record) by passing `readonly: true` with the open command, and switch at any time with `document:set-readonly` — no reload, the document stays where the user was. In read-only mode editing is disabled and `document:save` answers with `document:error`; `document:get-state` reports the current `readonly` flag.
+
+```js
+// open locked, unlock later
+send('document:open-url', { url, readonly: true });
+send('document:set-readonly', { readonly: false });
+```
 
 ## Frequently asked questions
 

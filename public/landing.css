@@ -435,7 +435,8 @@ footer .theme-switch {
   color: inherit;
   text-decoration: none;
 }
-.doc code {
+.doc code,
+.wrap article code {
   font-family: var(--ran-font-mono);
   font-size: 0.9em;
   padding: 1px 5px;
@@ -443,7 +444,8 @@ footer .theme-switch {
   background: var(--ran-color-bg-subtle);
   border: 1px solid var(--ran-color-border);
 }
-.doc pre {
+.doc pre,
+.wrap article pre {
   margin: var(--ran-space-4) 0;
   padding: var(--ran-space-4);
   overflow-x: auto;
@@ -453,13 +455,15 @@ footer .theme-switch {
   font-size: 13px;
   line-height: 1.55;
 }
-.doc pre code {
+.doc pre code,
+.wrap article pre code {
   padding: 0;
   border: 0;
   background: none;
   font-size: inherit;
 }
-.doc table {
+.doc table,
+.wrap article table {
   width: 100%;
   border-collapse: collapse;
   margin: var(--ran-space-4) 0;
@@ -468,13 +472,16 @@ footer .theme-switch {
   overflow-x: auto;
 }
 .doc th,
-.doc td {
+.doc td,
+.wrap article th,
+.wrap article td {
   text-align: start;
   vertical-align: top;
   padding: var(--ran-space-2) var(--ran-space-3);
   border-bottom: 1px solid var(--ran-color-border);
 }
-.doc th {
+.doc th,
+.wrap article th {
   font-weight: 600;
   color: var(--ran-color-text-secondary);
   font-size: 13px;

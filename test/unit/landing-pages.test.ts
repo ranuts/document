@@ -1,7 +1,7 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { generate } from '../../bin/build-pages.mjs';
+import { LOCALES, generate } from '../../bin/build-pages.mjs';
 
 /**
  * SEO landing-page contract. The static pages under public/ (and their
@@ -48,6 +48,17 @@ const pages: Array<{ route: string; html: string; label: string }> = [
   ...GENERATED.map((g) => ({ route: g.route, html: g.html, label: `${g.rel} (generated)` })),
 ];
 const routes = new Set(pages.map((p) => p.route));
+/** '/ja/open/pdf' -> 'ja'; '/open/pdf' -> 'en'. */
+const localeOf = (route: string) =>
+  Object.keys(LOCALES).find((l) => LOCALES[l].prefix && route.startsWith(`${LOCALES[l].prefix}/`)) ?? 'en';
+/** '/ja/open/pdf' -> '/open/pdf' (the route without any locale prefix). */
+const slugRoute = (route: string) => {
+  const prefix = LOCALES[localeOf(route)].prefix;
+  return prefix ? route.slice(prefix.length) || '/' : route;
+};
+/** ('ja', '/open/pdf') -> '/ja/open/pdf'; ('ja', '/') -> '/ja/'. */
+const routeIn = (locale: string, slug: string) =>
+  slug === '/' ? LOCALES[locale].home : `${LOCALES[locale].prefix}${slug}`;
 // The English homepage lives at the repo root (Vite entry), not under public/.
 const homepage = resolve(ROOT, 'index.html');
 const attr = (html: string, re: RegExp) => html.match(re)?.[1] ?? null;
@@ -62,17 +73,41 @@ describe('landing pages', () => {
   });
 
   for (const { route, html } of pages) {
-    const isZh = route.startsWith('/zh-CN/');
-    const enRoute = isZh ? route.replace(/^\/zh-CN/, '') || '/' : route;
-    const zhRoute = isZh ? route : `/zh-CN${route === '/' ? '/' : route}`;
+    const locale = localeOf(route);
+    const enRoute = slugRoute(route);
 
     describe(route, () => {
+      /**
+       * Every translation of a page has to point at every other translation
+       * and at itself, and each of those targets has to exist. Checking the
+       * set rather than two fixed languages is what lets a locale be added
+       * without editing this file -- and what catches a page that ships in a
+       * new language while its alternates still say there are only two.
+       */
       it('has canonical = its own URL and a full hreflang set', () => {
         expect(attr(html, /<link rel="canonical" href="([^"]+)"/)).toBe(ORIGIN + route);
-        expect(attr(html, /hreflang="en" href="([^"]+)"/)).toBe(ORIGIN + enRoute);
-        expect(attr(html, /hreflang="zh-CN" href="([^"]+)"/)).toBe(ORIGIN + zhRoute);
+        expect(attr(html, /<html lang="([^"]+)"/)).toBe(LOCALES[locale].lang);
         expect(attr(html, /hreflang="x-default" href="([^"]+)"/)).toBe(ORIGIN + enRoute);
-        expect(attr(html, /<html lang="([^"]+)"/)).toBe(isZh ? 'zh-CN' : 'en');
+
+        const alternates = [...html.matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)]
+          .filter(([, lang]) => lang !== 'x-default')
+          .map(([, lang, href]) => [lang, href] as const);
+        expect(
+          alternates.map(([lang]) => lang),
+          'lists itself',
+        ).toContain(locale);
+        for (const [lang, href] of alternates) {
+          expect(href, `hreflang ${lang}`).toBe(ORIGIN + routeIn(lang, enRoute));
+          expect(routes.has(routeIn(lang, enRoute)), `${href} does not exist`).toBe(true);
+        }
+        // Every locale that has this page must be listed, not just some.
+        for (const other of Object.keys(LOCALES)) {
+          if (!routes.has(routeIn(other, enRoute))) continue;
+          expect(
+            alternates.map(([lang]) => lang),
+            `missing ${other}`,
+          ).toContain(other);
+        }
       });
 
       it('has a title, description, og:url matching canonical', () => {
@@ -95,10 +130,12 @@ describe('landing pages', () => {
         }
       });
 
-      it('has an existing counterpart in the other language and links to it', () => {
-        const other = isZh ? enRoute : zhRoute;
-        expect(other === '/' ? existsSync(homepage) : routes.has(other), `${other} for ${route}`).toBe(true);
-        expect(html).toContain(`data-href="${other}"`);
+      it('offers every translation it has in the language switch', () => {
+        for (const other of Object.keys(LOCALES)) {
+          const target = routeIn(other, enRoute);
+          if (!routes.has(target)) continue;
+          expect(html, `${route} does not offer ${other}`).toContain(`data-href="${target}"`);
+        }
       });
 
       it('lives in the sitemap', () => {

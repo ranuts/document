@@ -34,6 +34,9 @@ const REPO = 'https://github.com/ranuts/document';
 export const LOCALES = {
   en: { prefix: '', lang: 'en', label: 'EN', home: '/', dir: 'ltr' },
   'zh-CN': { prefix: '/zh-CN', lang: 'zh-CN', label: '中文', home: '/zh-CN/', dir: 'ltr' },
+  ja: { prefix: '/ja', lang: 'ja', label: '日本語', home: '/ja/', dir: 'ltr' },
+  de: { prefix: '/de', lang: 'de', label: 'Deutsch', home: '/de/', dir: 'ltr' },
+  es: { prefix: '/es', lang: 'es', label: 'Español', home: '/es/', dir: 'ltr' },
 };
 const DEFAULT_LOCALE = 'en';
 
@@ -95,6 +98,90 @@ const UI = {
     generatedNote: (src) => `来源：仓库中的 ${src}`,
     ossNote: `<strong>开源 · 可自托管。</strong>采用 AGPL-3.0——你可以核实没有任何上传，或者自建一份：<a href="${REPO}" rel="noopener">github.com/ranuts/document</a>。`,
   },
+  ja: {
+    siteName: 'Document Editor',
+    langAria: '言語',
+    themeLabel: 'テーマ',
+    home: 'ホーム',
+    openEditor: 'エディタを開く',
+    onThisPage: 'このページの目次',
+    more: '関連ページ',
+    sideNote: 'お使いの端末で動作します。アップロードなし、登録不要。',
+    footer: [
+      ['/ja/', 'エディタを開く'],
+      ['/ja/help', 'ヘルプ'],
+      ['/ja/changelog', '変更履歴'],
+      ['/ja/open/docx', 'DOCX を開く'],
+      ['/ja/open/xlsx', 'XLSX を開く'],
+      ['/ja/open/pptx', 'PPTX を開く'],
+      ['/ja/open/pdf', 'PDF を開く'],
+      ['/ja/convert/xlsx-to-csv', 'XLSX を CSV に'],
+      ['/ja/convert/csv-to-xlsx', 'CSV を XLSX に'],
+      ['/ja/no-signup-document-editor', '登録不要'],
+      ['/ja/private-document-editor', 'プライバシー'],
+      ['/ja/offline-document-editor', 'オフライン'],
+      ['/ja/edit-documents-without-account', 'アカウント不要'],
+      ['/ja/embed-document-editor', 'Embed API'],
+    ],
+    generatedNote: (src) => `ソース: リポジトリの ${src}`,
+    ossNote: `<strong>オープンソース・セルフホスト可能。</strong>AGPL-3.0 のもとで公開——何もアップロードされないことを自分で確認でき、自分で運用することもできます: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>。`,
+  },
+  de: {
+    siteName: 'Document Editor',
+    langAria: 'Sprache',
+    themeLabel: 'Design',
+    home: 'Startseite',
+    openEditor: 'Editor öffnen',
+    onThisPage: 'Auf dieser Seite',
+    more: 'Verwandte Seiten',
+    sideNote: 'Läuft auf Ihrem Gerät. Kein Upload, keine Anmeldung.',
+    footer: [
+      ['/de/', 'Editor öffnen'],
+      ['/de/help', 'Hilfe'],
+      ['/de/changelog', 'Änderungen'],
+      ['/de/open/docx', 'DOCX öffnen'],
+      ['/de/open/xlsx', 'XLSX öffnen'],
+      ['/de/open/pptx', 'PPTX öffnen'],
+      ['/de/open/pdf', 'PDF öffnen'],
+      ['/de/convert/xlsx-to-csv', 'XLSX zu CSV'],
+      ['/de/convert/csv-to-xlsx', 'CSV zu XLSX'],
+      ['/de/no-signup-document-editor', 'Ohne Anmeldung'],
+      ['/de/private-document-editor', 'Datenschutz'],
+      ['/de/offline-document-editor', 'Offline'],
+      ['/de/edit-documents-without-account', 'Ohne Konto'],
+      ['/de/embed-document-editor', 'Embed API'],
+    ],
+    generatedNote: (src) => `Quelle: ${src} im Repository`,
+    ossNote: `<strong>Open Source &amp; selbst hostbar.</strong> Unter AGPL-3.0 — prüfen Sie selbst, dass nichts hochgeladen wird, oder betreiben Sie eine eigene Kopie: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+  },
+  es: {
+    siteName: 'Document Editor',
+    langAria: 'Idioma',
+    themeLabel: 'Tema',
+    home: 'Inicio',
+    openEditor: 'Abrir el editor',
+    onThisPage: 'En esta página',
+    more: 'Páginas relacionadas',
+    sideNote: 'Funciona en tu dispositivo. Sin subidas, sin registro.',
+    footer: [
+      ['/es/', 'Abrir el editor'],
+      ['/es/help', 'Ayuda'],
+      ['/es/changelog', 'Novedades'],
+      ['/es/open/docx', 'Abrir DOCX'],
+      ['/es/open/xlsx', 'Abrir XLSX'],
+      ['/es/open/pptx', 'Abrir PPTX'],
+      ['/es/open/pdf', 'Abrir PDF'],
+      ['/es/convert/xlsx-to-csv', 'XLSX a CSV'],
+      ['/es/convert/csv-to-xlsx', 'CSV a XLSX'],
+      ['/es/no-signup-document-editor', 'Sin registro'],
+      ['/es/private-document-editor', 'Privacidad'],
+      ['/es/offline-document-editor', 'Sin conexión'],
+      ['/es/edit-documents-without-account', 'Sin cuenta'],
+      ['/es/embed-document-editor', 'Embed API'],
+    ],
+    generatedNote: (src) => `Fuente: ${src} en el repositorio`,
+    ossNote: `<strong>Código abierto y autoalojable.</strong> Bajo AGPL-3.0: comprueba que no se sube nada, o ejecuta tu propia copia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+  },
 };
 
 /**
@@ -133,11 +220,11 @@ export const LANDING_SLUGS = [
 export const PAGES = [
   {
     slug: 'help',
-    sources: { en: 'content/en/help.md', 'zh-CN': 'content/zh-CN/help.md' },
+    sources: { en: 'content/en/help.md', 'zh-CN': 'content/zh-CN/help.md', ja: 'content/ja/help.md' },
   },
   {
     slug: 'help/embed-api',
-    sources: { en: 'docs/embed-api.md', 'zh-CN': 'docs/embed-api.zh.md' },
+    sources: { en: 'docs/embed-api.md', 'zh-CN': 'docs/embed-api.zh.md', ja: 'docs/embed-api.md' },
     meta: {
       en: {
         title: 'Embed API — iframe + postMessage reference',
@@ -146,6 +233,15 @@ export const PAGES = [
         eyebrow: 'Help · Embed API',
         breadcrumb: 'Embed API',
         parent: { href: '/help', name: 'Help' },
+      },
+      ja: {
+        title: 'Embed API — iframe + postMessage リファレンス',
+        description:
+          '自分の Web アプリにドキュメントエディタを埋め込むためのリファレンス: iframe の設定、postMessage コマンド（URL / File / buffer から開く、読み取り専用、保存）、応答、オリジン制限。',
+        eyebrow: 'ヘルプ · Embed API',
+        breadcrumb: 'Embed API',
+        parent: { href: '/ja/help', name: 'ヘルプ' },
+        notice: 'Embed API リファレンスは英語で管理されています（単一の情報源）。日本語版は今後追加します。',
       },
       'zh-CN': {
         title: 'Embed API——iframe + postMessage 参考',
@@ -161,7 +257,7 @@ export const PAGES = [
   },
   {
     slug: 'changelog',
-    sources: { en: 'CHANGELOG.md', 'zh-CN': 'CHANGELOG.md' },
+    sources: { en: 'CHANGELOG.md', 'zh-CN': 'CHANGELOG.md', ja: 'CHANGELOG.md' },
     meta: {
       en: {
         title: 'Changelog — what changed in the online document editor',
@@ -169,6 +265,14 @@ export const PAGES = [
           'User-facing release notes for edit.chaxus.com: new formats, editor fixes, performance and privacy changes, in reverse chronological order.',
         eyebrow: 'Changelog',
         breadcrumb: 'Changelog',
+      },
+      ja: {
+        title: '変更履歴 — オンラインドキュメントエディタの更新内容',
+        description:
+          'edit.chaxus.com のユーザー向けリリースノート: 新しい形式、エディタの修正、パフォーマンスとプライバシーの変更を、新しい順に掲載しています。',
+        eyebrow: '変更履歴',
+        breadcrumb: '変更履歴',
+        notice: '変更履歴は英語で管理されています（単一の情報源 CHANGELOG.md）。日本語版は今後追加します。',
       },
       'zh-CN': {
         title: '更新日志——在线文档编辑器改了什么',

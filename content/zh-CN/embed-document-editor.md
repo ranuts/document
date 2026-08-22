@@ -16,7 +16,27 @@ appDescription: 可嵌入的 DOCX/XLSX/PPTX/CSV 编辑器：用一个 iframe 嵌
 
 ## 一个 iframe 就能接入
 
+```html
+<iframe
+  id="documentEditor"
+  src="https://edit.chaxus.com/editor?embed=1&embedOrigin=https://your-app.example.com"
+  style="width: 100%; height: 720px; border: 0"
+></iframe>
+```
+
 然后用 `postMessage` 和它通信。每条命令带一个 `id` 用来匹配回复，编辑器的每个事件都是 `document:*` 消息：
+
+```js
+// 打开一个你的应用已经拉取好的文件（鉴权全在你这边）
+iframe.contentWindow.postMessage(
+  { id, type: 'document:open-buffer', payload: { fileName: 'report.xlsx', buffer } },
+  'https://edit.chaxus.com',
+);
+
+// 要回编辑后的文件，再由你自己上传
+iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetExt: 'XLSX' } }, editorOrigin);
+// → 编辑器回复 { type: 'document:saved', payload: { fileName, file } }
+```
 
 ## 你能得到什么
 
@@ -37,6 +57,12 @@ appDescription: 可嵌入的 DOCX/XLSX/PPTX/CSV 编辑器：用一个 iframe 嵌
 ## 只读与预览模式
 
 需要"只看不改"（预览器、审阅环节、已归档记录）时，在打开命令里传 `readonly: true`；随时可以用 `document:set-readonly` 切换——不重新加载，文档停在用户原来的位置。只读期间禁止编辑， `document:save` 返回 `document:error`；`document:get-state` 会报告当前的 `readonly` 状态。
+
+```js
+// 锁定打开，稍后解锁
+send('document:open-url', { url, readonly: true });
+send('document:set-readonly', { readonly: false });
+```
 
 ## 常见问题
 
