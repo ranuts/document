@@ -263,6 +263,41 @@ export function askVersion(worker: SwLike | null, timeoutMs = 1000): Promise<Wor
 }
 
 /**
+ * How patient `isUnseenBuild` is with a worker that has not answered yet.
+ * Three tries of two seconds, so a busy worker has six seconds to say which
+ * build it is before its silence is taken as an answer.
+ */
+export const ASK_VERSION_ATTEMPTS = 3;
+export const ASK_VERSION_TIMEOUT_MS = 2000;
+
+/**
+ * Ask, and keep asking for a few seconds before believing the silence.
+ *
+ * A worker answers `VERSION` from its message handler, which it cannot run
+ * while it is busy -- and it is busiest in exactly the moment this question is
+ * asked: it has just been activated, the outgoing worker is being terminated,
+ * and the page is refetching a vendor tree that is not in its cache. A single
+ * one-second question read that silence as "nothing to tell you", and the
+ * caller acts on that answer: the reload that repairs a page torn in half by
+ * the swap never happened, and the tab stayed blank. Seen once in CI on the
+ * silent-heal case -- where the test's own three-second question to the same
+ * worker was answered.
+ *
+ * Silence still decides, eventually. This only stops it deciding early.
+ */
+export async function askVersionPatiently(
+  worker: SwLike | null,
+  attempts = ASK_VERSION_ATTEMPTS,
+  timeoutMs = ASK_VERSION_TIMEOUT_MS,
+): Promise<WorkerVersion | null> {
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    const answer = await askVersion(worker, timeoutMs);
+    if (answer) return answer;
+  }
+  return null;
+}
+
+/**
  * Is the waiting worker a build this browser has never run?
  *
  * "There is a worker waiting" is not that question, and on the editor route it
@@ -278,12 +313,15 @@ export function askVersion(worker: SwLike | null, timeoutMs = 1000): Promise<Wor
  * was wrong in a way worth remembering: a worker under load does not answer
  * within a timeout, silence got read as "it is old", and tabs reloaded
  * themselves in the middle of a test run.
+ *
+ * The question it still asks -- which build is this? -- is asked patiently,
+ * for the same reason: see askVersionPatiently.
  */
 export async function isUnseenBuild(
   waiting: SwLike | null,
   cacheStorage: Pick<CacheStorage, 'keys'> | undefined = typeof caches === 'undefined' ? undefined : caches,
 ): Promise<boolean> {
-  const version = await askVersion(waiting);
+  const version = await askVersionPatiently(waiting);
   const vendorVersion = version?.vendorVersion;
   if (!vendorVersion || !cacheStorage) return false; // cannot tell -- do nothing
   const runtime = (await cacheStorage.keys()).filter((name) => name.startsWith(RUNTIME_CACHE_PREFIX));

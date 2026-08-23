@@ -7,6 +7,9 @@ import {
   HEAL_STORAGE_KEY,
   healStaleController,
   isUnseenBuild,
+  askVersionPatiently,
+  ASK_VERSION_ATTEMPTS,
+  ASK_VERSION_TIMEOUT_MS,
   onWaitingWorker,
   documentIsExpected,
   promoteWaitingWorker,
@@ -626,6 +629,18 @@ describe('isUnseenBuild', () => {
         if (port && version) setTimeout(() => port.postMessage({ type: 'VERSION', ...version }), 0);
       },
     }) as unknown as SwLike;
+  /** A worker that drops the first `deaf` questions, then answers. */
+  const ignoringFirstAsks = (deaf: number, version: Record<string, string>) => {
+    let asked = 0;
+    return {
+      state: 'installed',
+      addEventListener: () => {},
+      postMessage: (_msg: unknown, transfer?: MessagePort[]) => {
+        const port = transfer?.[0];
+        if (port && asked++ >= deaf) setTimeout(() => port.postMessage({ type: 'VERSION', ...version }), 0);
+      },
+    } as unknown as SwLike;
+  };
   const cachesWith = (...names: string[]) => ({ keys: () => Promise.resolve(names) });
 
   it('is false when this browser already holds that build cache', async () => {
@@ -639,12 +654,66 @@ describe('isUnseenBuild', () => {
   });
 
   it('says nothing when the waiting worker does not answer', async () => {
-    await expect(isUnseenBuild(answering(null), cachesWith('document-editor-runtime-v1'))).resolves.toBe(false);
+    // Fake timers because giving up now takes seconds, not one: the wait is
+    // deliberate (see 'keeps asking a worker that was too busy...').
+    vi.useFakeTimers();
+    try {
+      const verdict = isUnseenBuild(answering(null), cachesWith('document-editor-runtime-v1'));
+      await vi.advanceTimersByTimeAsync(ASK_VERSION_TIMEOUT_MS * ASK_VERSION_ATTEMPTS + 100);
+      await expect(verdict).resolves.toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('says nothing when there is no runtime cache to compare against', async () => {
     await expect(isUnseenBuild(answering({ vendorVersion: 'v2' }), cachesWith('document-editor-core-1'))).resolves.toBe(
       false,
+    );
+  });
+
+  /**
+   * The silence this reads as an answer has to be real silence.
+   *
+   * A worker is at its busiest in the moment this question gets asked: just
+   * activated, terminating the worker it replaced, with the page refetching a
+   * vendor tree it has not cached yet. One one-second question caught it
+   * mid-work, read "no answer" as "nothing new", and the caller skipped the
+   * reload that repairs a page the swap tore in half -- the tab stayed blank.
+   * That is a real CI failure, on the silent-heal case, whose own
+   * three-second question to the same worker was answered.
+   */
+  it('keeps asking a worker that was too busy to answer the first time', async () => {
+    vi.useFakeTimers();
+    try {
+      const busy = ignoringFirstAsks(1, { vendorVersion: 'v2' });
+      const verdict = isUnseenBuild(busy, cachesWith('document-editor-runtime-v1'));
+      await vi.advanceTimersByTimeAsync(ASK_VERSION_TIMEOUT_MS * ASK_VERSION_ATTEMPTS + 100);
+      await expect(verdict).resolves.toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('gives up in the end, so silence still decides', async () => {
+    vi.useFakeTimers();
+    try {
+      const mute = ignoringFirstAsks(ASK_VERSION_ATTEMPTS, { vendorVersion: 'v2' });
+      const verdict = isUnseenBuild(mute, cachesWith('document-editor-runtime-v1'));
+      await vi.advanceTimersByTimeAsync(ASK_VERSION_TIMEOUT_MS * ASK_VERSION_ATTEMPTS + 100);
+      await expect(verdict).resolves.toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('waits seconds rather than one, which is the whole point', () => {
+    expect(ASK_VERSION_ATTEMPTS * ASK_VERSION_TIMEOUT_MS).toBeGreaterThanOrEqual(3000);
+  });
+
+  it('costs nothing when the worker answers: no retry, no wait', async () => {
+    await expect(askVersionPatiently(answering({ vendorVersion: 'v9' }))).resolves.toEqual(
+      expect.objectContaining({ vendorVersion: 'v9' }),
     );
   });
 });
