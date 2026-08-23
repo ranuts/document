@@ -233,10 +233,11 @@ if ('serviceWorker' in navigator) {
   // no document is open, then takes over and the page reloads once.
   const hadController = !!navigator.serviceWorker.controller;
   let reloadingForUpdate = false;
-  // Set when this tab asked an older worker to step aside (see below): the
-  // reload that follows is the point, so it is not blocked by having a
-  // document open the way an ordinary update is.
-  let healingStaleBuild = false;
+  // Set when this tab told a waiting worker to take over -- either the
+  // ordinary update below or the stale-build heal. The reload that follows is
+  // then repair, not a preference: the swap kills whatever the outgoing worker
+  // was still fetching, so it is not blocked by having a document open.
+  let promotedFromThisTab = false;
   const hasOpenDocument = () => Boolean(getDocmentObj().fileName);
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -245,7 +246,7 @@ if ('serviceWorker' in navigator) {
         hadController,
         alreadyReloading: reloadingForUpdate,
         hasOpenDocument: hasOpenDocument(),
-        healingStaleBuild,
+        promotedFromThisTab,
         hasUnsavedChanges: hasUnsavedChanges(),
       })
     ) {
@@ -265,7 +266,15 @@ if ('serviceWorker' in navigator) {
       .register('./sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration);
-        wireServiceWorkerUpdates(registration, hasOpenDocument, ownScriptURL);
+        // The fourth argument is the whole point: promotion happens here, a
+        // few hundred milliseconds before the editor instance exists, so it
+        // sees "nothing open" and promotes -- and the controllerchange that
+        // follows arrives after the document is open. Without knowing this tab
+        // asked for it, the reload is refused and the tab is left on a blank
+        // editor whose iframe request the swap aborted.
+        wireServiceWorkerUpdates(registration, hasOpenDocument, ownScriptURL, () => {
+          promotedFromThisTab = true;
+        });
         // Promotion above is refused while a document is open, and this page
         // is usually opened with one (?new=, ?file=, ?saved=). Without an
         // offer, such a visitor never leaves the build their worker cached --
@@ -289,7 +298,7 @@ if ('serviceWorker' in navigator) {
               hadController,
               storage: window.sessionStorage,
             }).then((started) => {
-              if (started) healingStaleBuild = true;
+              if (started) promotedFromThisTab = true;
             });
           },
           ownScriptURL,
