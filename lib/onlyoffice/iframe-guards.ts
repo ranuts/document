@@ -11,6 +11,7 @@ import { installCommentSelectionGuard } from './guards/comment-selection';
 import { installCanvasLossGuard } from './guards/canvas-loss';
 import { releaseWasmBinary } from './guards/wasm-binary-release';
 import { installSingleUnloadPrompt } from './guards/unload-prompt';
+import { installHintFallbackGuard } from './guards/hint-fallback';
 
 /**
  * Same-origin preparation of the editor iframe, applied from onAppReady and
@@ -52,6 +53,7 @@ export function prepareEditorIframe(): boolean {
       installCommentSelectionGuard(win);
       installCanvasLossGuard(win, doc);
       installSingleUnloadPrompt(win);
+      installHintFallbackGuard(win);
       const wasmBinaryHandled = releaseWasmBinary(win);
 
       if (

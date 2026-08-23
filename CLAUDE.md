@@ -67,7 +67,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
                           # font-loading / comment-selection / canvas-loss /
-                          # wasm-binary-release / unload-prompt
+                          # wasm-binary-release / unload-prompt / hint-fallback
     open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
     open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
     font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
@@ -827,6 +827,20 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   -82），`registerOpenAttempt` 在用户发起新的打开时 `resetMemoryProbe()` 清掉。别把重建时导航旧 frame 到 `about:blank` 当优化加回来：它会掐断 vendor
   在 ready 之后仍在取的 SVG 图标请求，每次文档切换都报 `Failed to fetch`（试过
   并撤掉，见 docs/explorations/2026-08-20-x2t-wasm-oom-misclassified.md）。
+- **语言包缺键（vendor 补丁，2026-08-23）**：vendor 的 45 个 locale JSON **没有一个**
+  对得齐 `en.json`，少的差 1 个键、多的差 3000+。多数缺口无害（组件源码里有默认值），
+  但**有些字符串只存在于 locale 文件**，缺翻译就是 `undefined`——而 tooltip 的
+  `updateHint` 直接 `hint[0]`，于是抛 TypeError，被 app 当成文档错误，弹出
+  "文档处理时发生错误，请用『另存为』保存备份"的模态框。**空白文档、还没打字就弹**。
+  韩语实测撞到的是 `DE.Views.Statusbar.tipMultiplePages`（en 有、ko 没有，状态栏渲染时读）。
+  两道防线，都要在：
+  1. `node bin/locale-fill.mjs` 把**站点 7 种语言**的 locale 用 en 值补齐（共 ~110 KB，
+     幂等，`bin/build.sh` 在 vite build 前跑它，所以补齐结果参与 `VENDOR_VERSION` 哈希）。
+     **vendor 升级后必须重跑**，`test/unit/vendor-locale.test.ts` 会拦下漏跑。
+  2. 守卫 11（`guards/hint-fallback.ts`）：把 `updateHint(undefined)` 变成空操作。
+     这条覆盖我们没补的另外 38 种语言（`?locale=` 可以选到）以及下次升级新引入的缺口。
+     反向验证过：把那个键从 ko.json 拿掉且禁用守卫，`test/e2e/editor-locales.spec.ts`
+     的 ko 用例立刻红（弹框回来）；只拿掉键、留着守卫则不红——两道防线各自有效。
 - **CSV**：新 vendor 编辑器不能直接吃 CSV——打开前用 SheetJS 转 XLSX、保存
   流转回 CSV（`packages/converter` 的 `convertCsvToXlsx` / `xlsxToCsvBytes`）。
   解码带严格编码嗅探（fatal UTF-8 → GB18030 → latin1），GBK CSV 不再乱码。
