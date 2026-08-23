@@ -143,6 +143,17 @@ r-select.lang-select:not(:defined) {
   --ran-dropdown-option-active-font-weight: 600;
 }
 
+@media (max-width: 620px) {
+  /* Phone: the bar is brand + GitHub + a language name, and at 390px the
+     language trigger (wide enough for "Português") pushed the caret off the
+     viewport and broke the brand onto two lines. GitHub loses: it is one line
+     down in the footer of every page, while the language switch is the only
+     way to change the language. */
+  header.bar nav > a[href*='github.com'] {
+    display: none;
+  }
+}
+
 /* ---------- article column ---------- */
 .wrap {
   max-width: 720px;

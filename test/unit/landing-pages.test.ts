@@ -254,6 +254,22 @@ describe('landing pages', () => {
     }
   });
 
+  /**
+   * /history and /404 are hand-written (an app surface and an error page, both
+   * outside the generator), so their language switch does not come from
+   * LOCALES -- it was still offering en and zh long after the site had seven
+   * languages. Nothing else would have noticed: neither is in the sitemap or
+   * the hreflang graph.
+   */
+  it.each([
+    ['history.html', resolve(ROOT, 'history.html')],
+    ['404.html', resolve(PUBLIC, '404.html')],
+  ])('%s offers every language the site has', (_label, file) => {
+    const html = readFileSync(file, 'utf8');
+    const offered = [...html.matchAll(/<r-option value="([^"]+)"/g)].map((m) => m[1]);
+    expect(offered).toEqual(Object.keys(LOCALES));
+  });
+
   it('llms.txt states the limitations, not just the features', () => {
     const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
     expect(llms).toMatch(/^## Limitations/m);

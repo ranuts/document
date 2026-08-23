@@ -971,7 +971,7 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
       'O editor não estava pronto quando o documento foi aberto; a tentar novamente de forma automática…',
     agentTitle: 'Assistente de IA',
     agentOpenTip: 'Abrir o assistente de IA',
-    agentSettings: 'Definições',
+    agentSettings: 'Configurações',
     agentRoleUser: 'Você',
     agentRoleTool: 'Ferramenta',
     agentRoleError: 'Erro',
@@ -982,14 +982,14 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentProviderOllama: 'Ollama (servidor local, executado por si)',
     agentOllamaModelPlaceholder: 'Nome do modelo, por exemplo llama3.2',
     agentOllamaHint:
-      'Liga-se ao Ollama local (http://localhost:11434); não é preciso chave de API — confirme que o modelo está a correr.',
+      'Conecta ao Ollama local (http://localhost:11434); não precisa de chave de API — confirme que o modelo está rodando.',
     agentLoadModel: 'Carregar modelo',
     agentModelLoaded: 'Modelo carregado — já pode começar a conversar.',
     agentCheckingCache: 'A verificar a cache do modelo…',
     agentModelCached:
-      'Este modelo já está em cache — clique em «Carregar modelo» para começar de imediato (recarregar a página não o volta a transferir).',
+      'Este modelo já está em cache — clique em «Carregar modelo» para começar na hora (recarregar a página não baixa de novo).',
     agentModelFirstDownload:
-      'Na primeira utilização o modelo é transferido ({size}); depois fica em cache, por isso recarregar a página não o volta a transferir.',
+      'No primeiro uso o modelo é baixado ({size}); depois fica em cache, então recarregar a página não baixa de novo.',
     agentNoWebGPU: 'Este navegador não suporta WebGPU, pelo que o modo local não está disponível.',
     agentLocalChatOnly:
       'O modelo local apenas responde e reescreve — não edita o documento diretamente. Para que a IA edite, ',
@@ -1010,8 +1010,8 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     agentToolCallPrefix: 'Chamada de ferramenta: ',
     agentToolErrorPrefix: 'Erro da ferramenta: ',
     autosaveStopped:
-      'A gravação automática parou: este navegador ficou sem espaço. Exporte este documento e apague alguns dos que tem guardados.',
-    historyTitle: 'Documentos guardados',
+      'O salvamento automático parou: este navegador ficou sem espaço. Exporte este documento e apague alguns dos que estão salvos.',
+    historyTitle: 'Documentos salvos',
     historyIntro:
       'Cópias dos documentos que editou, mantidas neste navegador e neste dispositivo, para que recarregar, fechar um separador ou uma falha não lhe custem o trabalho. Nada disto foi enviado para a Internet.',
     historyColDocument: 'Documento',
@@ -1019,15 +1019,15 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyColSize: 'Tamanho',
     historyColExpires: 'Apaga-se',
     historyNotBackup:
-      'Estas cópias servem para retomar aquilo que estava a meio. Não são uma cópia de segurança — exporte tudo o que quiser guardar.',
-    historySearchPlaceholder: 'Procurar pelo nome do ficheiro',
-    historyEmpty: 'Ainda não há nada guardado. Os documentos que editar aqui aparecem sozinhos nesta lista.',
-    historyEmptySearch: 'Nenhum nome de ficheiro corresponde a essa procura.',
+      'Estas cópias servem para retomar o que ficou pela metade. Não são um backup — exporte tudo o que quiser manter.',
+    historySearchPlaceholder: 'Buscar pelo nome do arquivo',
+    historyEmpty: 'Ainda não há nada salvo. Os documentos que você editar aqui aparecem sozinhos nesta lista.',
+    historyEmptySearch: 'Nenhum nome de arquivo corresponde a essa busca.',
     historyOpen: 'Abrir',
     historyDelete: 'Eliminar',
-    historyDeleteConfirm: 'Eliminar «{title}» e todas as cópias guardadas? Não é possível anular.',
+    historyDeleteConfirm: 'Excluir «{title}» e todas as cópias salvas? Não dá para desfazer.',
     historyClearAll: 'Eliminar tudo',
-    historyClearConfirm: 'Eliminar todas as cópias de documentos guardadas neste dispositivo? Não é possível anular.',
+    historyClearConfirm: 'Excluir todas as cópias de documentos salvas neste dispositivo? Não dá para desfazer.',
     historyUnsaved: 'por exportar',
     historyUsage: '{size} em uso',
     historyCount: '{count} documentos',
@@ -1037,7 +1037,7 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyBack: 'Abrir o editor',
     historyAutosaveLabel: 'Gravação automática',
     historyAutosaveOff:
-      'A gravação automática está desligada: o que editar agora não fica guardado e perde-se ao fechar a página.',
+      'O salvamento automático está desligado: o que você editar agora não fica salvo e se perde ao fechar a página.',
     historyRetention:
       'Cada documento é eliminado automaticamente 7 dias depois de o ter editado ou aberto pela última vez. Também pode apagar aqui o que quiser, com efeito imediato.',
     historyExpiresIn: 'faltam {days} dias',
@@ -1051,7 +1051,7 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     historyRailRetention: 'Retenção',
     historyCancel: 'Cancelar',
     historyChip: 'Neste dispositivo · nunca enviado',
-    historyEmptyTitle: 'Ainda não há nada guardado',
+    historyEmptyTitle: 'Ainda não há nada salvo',
     historyEmptySearchTitle: 'Sem resultados',
     historyClearSearch: 'Limpar a procura',
     historyDeleteTitle: 'Eliminar este documento',
