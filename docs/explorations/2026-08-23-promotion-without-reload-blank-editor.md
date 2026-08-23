@@ -66,11 +66,37 @@ CLAUDE.md 里记着这条路径上相反方向的那个 bug（"打开流程排�
 理由不是偏好而是修复：交接已经发生了，拒绝 reload 不会把它撤回来，
 只会把标签页留在白屏上。
 
+## 只补第一半会变成"每次加载都刷新一次"
+
+第一版只做了上面那件事，`E2E (Cloudflare Pages semantics)` 的
+`autosave-recovery` "a reload comes back to the same document" 立刻红（重试也红，
+同一分片在没有这个改动的另一个 PR 上是绿的）。
+
+原因 CLAUDE.md 里其实写着：**"有 worker 在等"不等于"有新版本"**。厂商的编辑器 iframe
+会往同一个 scope 注册它自己的 worker，一个 scope 只有一个 registration，于是脚本在
+我们的 sw.js 与它之间来回换——**编辑器路由上我们的 worker 几乎每次加载都躺在
+`waiting` 里，跟有没有新构建无关**。原先那条"有文档打开就不 reload"顺带当了刹车；
+把它拆掉，每一次这种交接都变成一次刷新。
+
+所以第二半：**文档在路上的时候根本不要提升**。`hasOpenDocument()` 读的是 store，
+而 store 要等编辑器实例建好才有值——比 `register()` resolve 晚几百毫秒。URL 早就知道了：
+`?new=` / `?file=` / `?src=` / `?open=` / `?saved=` 任意一个在，就是"这一页要开文档"。
+`?embed=`／`?embedded=` 也算，而且理由更硬：嵌入模式下宿主随时可能推一个文档进来，
+那次 reload 扔掉的是宿主页面的东西。
+
+这些路由上等待的 worker 就老老实实等着——这不是丢失更新，正是静默自愈存在的那个场景，
+而自愈这条路**会先用 `isUnseenBuild()` 确认真的是另一个构建**才交接，不会被厂商 worker
+的来回切换骗到。
+
 ## 用例与反向验证
 
 `test/unit/sw-update.test.ts` 新增四条：`onPromoted` 在到达时提升、在稍后安装后提升、
 留在 waiting 时不报；以及那条竞态本身——"在提升与交接之间打开的文档也要 reload"。
 
-反向验证：`git stash` 掉 `lib/sw-update.ts` 与 `index.ts` 的改动，四条同时变红
-（其中两条是因为 `onPromoted` 根本不存在，另两条是因为标志位读不到）。
-E2E `sw-silent-update` + `sw-warm` 本地全绿。
+另加三条钉住 `documentIsExpected`：认得每个会挂文档的路由、把 embed 也算进去、
+没东西可开的页面照常接更新。
+
+反向验证：`git stash` 掉 `lib/sw-update.ts` 与 `index.ts`，前四条同时变红
+（两条因为 `onPromoted` 不存在，两条因为标志位读不到）；单独 stash `lib/sw-update.ts`，
+`documentIsExpected` 三条变红。E2E `autosave-recovery`（三条）+ `sw-silent-update` +
+`sw-warm` 本地全绿——其中 `autosave-recovery` 的 reload 那条正是只补第一半时红的那条。

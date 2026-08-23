@@ -8,6 +8,7 @@ import {
   healStaleController,
   isUnseenBuild,
   onWaitingWorker,
+  documentIsExpected,
   promoteWaitingWorker,
   shouldReloadOnControllerChange,
   wireServiceWorkerUpdates,
@@ -123,6 +124,31 @@ describe('wireServiceWorkerUpdates', () => {
     const onPromoted = vi.fn();
     wireServiceWorkerUpdates(registration(worker('installed')), () => true, undefined, onPromoted);
     expect(onPromoted).not.toHaveBeenCalled();
+  });
+});
+
+/**
+ * The brake on the rule above. Promotion runs before the editor exists, so
+ * "nothing is open" is true on a page that is opening something -- and the
+ * vendored editor keeps our worker in `waiting` on almost every editor load
+ * without any new build existing, so treating each of those as a promotion
+ * worth reloading for is a reload on every load.
+ */
+describe('documentIsExpected', () => {
+  it('recognises every route that mounts a document', () => {
+    for (const search of ['?new=docx', '?file=https://x/a.docx', '?src=https://x/a.docx', '?open=local', '?saved=abc'])
+      expect(documentIsExpected(search), search).toBe(true);
+  });
+
+  it('counts embed mode, where the host can push one at any moment', () => {
+    // Reloading an embedded editor would throw away the host page's document.
+    expect(documentIsExpected('?embed=1')).toBe(true);
+    expect(documentIsExpected('?embedded=1')).toBe(true);
+  });
+
+  it('leaves a page with nothing to open free to take an update', () => {
+    expect(documentIsExpected('')).toBe(false);
+    expect(documentIsExpected('?locale=ja')).toBe(false);
   });
 });
 

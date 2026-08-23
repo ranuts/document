@@ -534,7 +534,12 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    其中就有编辑器 iframe 自己的文档请求，没人重试，标签页永远白屏。所以
    `wireServiceWorkerUpdates` 有 `onPromoted` 回调，`index.ts` 用
    `promotedFromThisTab` 标志位统一两条提升路径，见到它就 reload（只有未保存改动
-   一票否决）。别把这个回调当可选参数省掉。见
+   一票否决）。别把这个回调当可选参数省掉。**同时必须有另一半**：`hasOpenDocument()`
+   要把 URL 也算进去（`documentIsExpected`：`?new=` / `?file=` / `?src=` / `?open=` /
+   `?saved=` / `?embed=`），否则——因为厂商 worker 的来回切换让我们的 sw.js 几乎每次
+   加载都在 `waiting`——上面那条规则会变成"每次加载都刷新一次"（实测把
+   `autosave-recovery` 的 reload 用例打红）。这两条路由上的等待交给静默自愈，
+   它会先 `isUnseenBuild()` 确认真是新构建。见
    docs/explorations/2026-08-23-promotion-without-reload-blank-editor.md。
    落地页那侧的提升要覆盖三种到达方式：已经 `waiting`、`installing` 中途、
    以及 `updatefound` 时已经 `installed`（`statechange` 只报此后的迁移，

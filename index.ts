@@ -1,4 +1,5 @@
 import {
+  documentIsExpected,
   healStaleController,
   onWaitingWorker,
   shouldReloadOnControllerChange,
@@ -238,7 +239,11 @@ if ('serviceWorker' in navigator) {
   // then repair, not a preference: the swap kills whatever the outgoing worker
   // was still fetching, so it is not blocked by having a document open.
   let promotedFromThisTab = false;
-  const hasOpenDocument = () => Boolean(getDocmentObj().fileName);
+  // "Is a document open?" is the wrong tense at boot: the store fills in a few
+  // hundred milliseconds after register() resolves, so a page opening a
+  // document answers "no" for exactly as long as it takes to promote a worker
+  // into the middle of its own load. The URL already knows.
+  const hasOpenDocument = () => Boolean(getDocmentObj().fileName) || documentIsExpected(window.location.search);
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (
