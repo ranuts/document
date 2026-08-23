@@ -234,11 +234,6 @@ if ('serviceWorker' in navigator) {
   // no document is open, then takes over and the page reloads once.
   const hadController = !!navigator.serviceWorker.controller;
   let reloadingForUpdate = false;
-  // Set when this tab told a waiting worker to take over -- either the
-  // ordinary update below or the stale-build heal. The reload that follows is
-  // then repair, not a preference: the swap kills whatever the outgoing worker
-  // was still fetching, so it is not blocked by having a document open.
-  let promotedFromThisTab = false;
   // "Is a document open?" is the wrong tense at boot: the store fills in a few
   // hundred milliseconds after register() resolves, so a page opening a
   // document answers "no" for exactly as long as it takes to promote a worker
@@ -250,8 +245,6 @@ if ('serviceWorker' in navigator) {
       !shouldReloadOnControllerChange({
         hadController,
         alreadyReloading: reloadingForUpdate,
-        hasOpenDocument: hasOpenDocument(),
-        promotedFromThisTab,
         hasUnsavedChanges: hasUnsavedChanges(),
       })
     ) {
@@ -271,15 +264,7 @@ if ('serviceWorker' in navigator) {
       .register('./sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration);
-        // The fourth argument is the whole point: promotion happens here, a
-        // few hundred milliseconds before the editor instance exists, so it
-        // sees "nothing open" and promotes -- and the controllerchange that
-        // follows arrives after the document is open. Without knowing this tab
-        // asked for it, the reload is refused and the tab is left on a blank
-        // editor whose iframe request the swap aborted.
-        wireServiceWorkerUpdates(registration, hasOpenDocument, ownScriptURL, () => {
-          promotedFromThisTab = true;
-        });
+        wireServiceWorkerUpdates(registration, hasOpenDocument, ownScriptURL);
         // Promotion above is refused while a document is open, and this page
         // is usually opened with one (?new=, ?file=, ?saved=). Without an
         // offer, such a visitor never leaves the build their worker cached --
@@ -302,8 +287,6 @@ if ('serviceWorker' in navigator) {
               controller: navigator.serviceWorker.controller,
               hadController,
               storage: window.sessionStorage,
-            }).then((started) => {
-              if (started) promotedFromThisTab = true;
             });
           },
           ownScriptURL,
