@@ -163,3 +163,24 @@ describe('page chrome', () => {
     }
   });
 });
+
+/**
+ * The audit script is the only thing that measures the rendered pages, so a
+ * blind spot in it is a blind spot in the design system. It had one: the page
+ * list was six English routes plus `/zh-CN/`, which left five languages
+ * unmeasured, and the character probe was hard-coded Latin, which made the CJK
+ * pages report a Latin-equivalent number (72) instead of the 41 full-width
+ * characters they actually run at.
+ */
+describe('design audit coverage', () => {
+  const src = readFileSync(resolve(__dirname, '../../bin/design-audit.mjs'), 'utf8');
+
+  it('derives its page list from the locale table, so a new language is audited on arrival', () => {
+    expect(src).toMatch(/import \{ LOCALES \} from '\.\/build-pages\.mjs'/);
+    expect(src).toMatch(/Object\.keys\(LOCALES\)/);
+  });
+
+  it('measures CJK pages in full-width characters, not Latin ones', () => {
+    expect(src).toMatch(/\/\^\(zh\|ja\|ko\)\//);
+  });
+});
