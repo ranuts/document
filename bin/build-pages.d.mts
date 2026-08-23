@@ -10,7 +10,10 @@ export interface GeneratedPage {
    */
   kind: 'home' | 'landing' | 'doc';
 }
-export const LOCALES: Record<string, { prefix: string; lang: string; label: string; home: string; dir: string }>;
+export const LOCALES: Record<
+  string,
+  { prefix: string; lang: string; label: string; home: string; dir: string; og: string }
+>;
 export const LANDING_SLUGS: string[];
 export const PAGES: Array<{
   slug: string;
