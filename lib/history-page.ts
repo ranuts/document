@@ -18,7 +18,7 @@ import 'ranui/message';
 import { Div, View } from 'ranui/builder';
 import '../styles/history.css';
 import { saveFileToDisk } from 'ranuts/utils';
-import { applyDocumentLanguage, t } from '@ranuts/shared/i18n';
+import { applyDocumentLanguage, getLanguage, localeHomePath, t, withLocale } from '@ranuts/shared/i18n';
 import { getDocumentMimeType } from '@ranuts/shared/document-utils';
 import { formatRelativeTime } from './history/recovery';
 import { clearAllHistory, deleteDoc, getLatestSnapshot, historyUsage, listDocs, pruneExpired } from './history/store';
@@ -138,7 +138,9 @@ function buildRow(doc: HistoryDoc, refresh: () => void): HTMLElement {
     .children(
       View('a')
         .class('history-row-title history-open')
-        .attr('href', `/editor?saved=${encodeURIComponent(doc.id)}`)
+        // Carry the language: this page knows which one it is in, and the
+        // editor should not have to guess it again from the browser.
+        .attr('href', withLocale(`/editor?saved=${encodeURIComponent(doc.id)}`, getLanguage()))
         .text(doc.title)
         .build(),
       ...(hasUnsavedWork(doc)
@@ -325,7 +327,8 @@ async function render(): Promise<void> {
               button(
                 t('historyBack'),
                 () => {
-                  window.location.href = '/';
+                  // Back to the homepage the reader came from, not to English.
+                  window.location.href = localeHomePath(getLanguage());
                 },
                 { type: 'text', class: 'history-back' },
               ),

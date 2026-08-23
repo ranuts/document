@@ -63,6 +63,31 @@ landing.css。白色主题下看不出来，暗色下就是页面四周一圈底
 
 顺带补上落地页 `WebApplication` 节点缺的 `inLanguage`（首页和文档页早就有）。
 
+## 9. 选了语言，走到 app 页面就丢（已修）
+
+用户报的：首页切到日语，跳去其它页面还是英文。复现路径正是这样：
+
+    /ja/ 是日语 → 点「保存したドキュメント」→ /history → 英文
+
+两个独立的原因，各修各的：
+
+1. **首页指向 app 的链接没带语言**。站点是七个静态目录 **加上一个 app**（`/editor`
+   与 `/history`），app 不在任何语言目录下面。`/ja/` 上的 `/history` 链接因此是裸的，
+   app 只能按浏览器语言猜。生成器现在输出 `/history?locale=ja`；
+   `history-recent.js` 拼的「继续编辑」链接同样带上（它读 `<html lang>`）；
+   `/history` 自己的行链接与「返回首页」也带（`withLocale` / `localeHomePath`，
+   新导出在 `packages/shared/src/i18n.ts`）。
+2. **选择从来没被记住**。`lang-switch.js` 过去只是导航——语言只存在于用户当前站着的
+   那条路径里。现在它在跳转前写 `locale` cookie（一年，`samesite=lax`）。app 的语言解析链
+   第二位就是 cookie，所以之后直接打开 `/editor` 或 `/history` 也跟随。
+
+两条缺一不可：链接带参数让**第一次点击**就对（新浏览器、别人分享的链接都算），
+cookie 让**之后的直接访问**也对。
+
+实测整条路径（浏览器语言 en-US）：落地英文首页 → 菜单选日语 → 保存的文档 → 裸
+`/editor` → 裸 `/history` → 落地页，六步全是 `lang=ja`。反向验证：去掉 cookie 那段，
+E2E 的第 4/5 步立刻回落英文。
+
 ## 复查过但没有问题的
 
 - **SEO 覆盖**：7 种语言 × 21 页齐全；hreflang 是完整的七语言互指 + x-default；

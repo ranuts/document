@@ -92,6 +92,36 @@ test.describe('language menu', () => {
   });
 });
 
+test.describe('a chosen language follows the reader', () => {
+  /**
+   * The site is seven directories of static pages plus one app (/editor and
+   * /history) that resolves its language from ?locale=, then a cookie, then
+   * localStorage, then the browser. Picking a language on a static page used
+   * to be nothing but a navigation: the choice lived in the path, and the
+   * moment a reader stepped off it -- "saved documents" from the Japanese
+   * homepage -- they were back in English.
+   */
+  test('picking a language on a static page reaches the app pages too', async ({ page }) => {
+    await page.goto('/');
+    // Choose 日本語 through the menu, the way a reader does.
+    await page.locator('r-select.lang-select').first().click();
+    await page.locator('r-dropdown-item[value="ja"]').first().click();
+    await page.waitForURL('**/ja/');
+    expect(await page.evaluate(() => document.documentElement.lang)).toBe('ja');
+
+    // The link into the app carries it...
+    const historyHref = await page.locator('a.recent-all').getAttribute('href');
+    expect(historyHref).toContain('locale=ja');
+
+    // ...and so does the app itself, even at a bare URL, because the choice
+    // was remembered rather than only navigated to.
+    await page.goto('/history');
+    await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('ja');
+    await page.goto('/editor?new=docx');
+    await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe('ja');
+  });
+});
+
 test.describe('page chrome', () => {
   /**
    * The browser's default 8px body margin. landing.css always cleared it;
