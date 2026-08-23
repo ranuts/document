@@ -58,6 +58,12 @@ else
 fi
 
 # Run Vite build
+# The vendor's locale files are short against en.json, and some of the missing
+# strings exist only there -- a gap can surface as a modal "an error occurred"
+# on a blank document (see bin/locale-fill.mjs). Fill them for the languages the
+# site ships before the tree is hashed into VENDOR_VERSION and copied to dist.
+node bin/locale-fill.mjs
+
 pnpm vite build $VITE_MODE_ARGS
 
 # Fingerprint the vendored design tokens.
