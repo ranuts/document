@@ -184,6 +184,17 @@ r-select.lang-select:not(:defined) {
   margin: 0 auto;
   padding: 0 clamp(20px, 5vw, 56px) var(--ran-space-10);
 }
+/* The ONLYOFFICE trademark notice. Section 7(e) of the vendor's AGPL terms
+   declines to grant any rights under trademark law, so every page states whose
+   mark it is and that this site is not their product. Muted and last: it is a
+   legal notice, not navigation. */
+.page-foot .tm {
+  margin: var(--ran-space-4) 0 0;
+  max-width: 72ch;
+  color: var(--ran-color-text-secondary);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
 @media (min-width: 1081px) {
   .page {
     display: grid;

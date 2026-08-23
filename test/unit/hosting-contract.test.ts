@@ -146,6 +146,9 @@ describe('sws.toml (self-hosted Docker)', () => {
 describe('public/_redirects', () => {
   it('canonicalizes the localized landing directory', () => {
     expect(read('public/_redirects')).toMatch(/^\/zh-CN\s+\/zh-CN\/\s+308/m);
+    // /zh/ is the prefix people guess for the Chinese pages; the real one is
+    // the BCP-47 tag the hreflang set and the sitemap use.
+    expect(read('public/_redirects')).toMatch(/^\/zh\/\*\s+\/zh-CN\/:splat\s+301/m);
   });
 });
 

@@ -162,6 +162,7 @@ const UI = {
     ],
     generatedNote: (src) => `Source: ${src} in the repository`,
     ossNote: `<strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your own copy: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    trademark: `ONLYOFFICE is a trademark of Ascensio System SIA. This site is not an official ONLYOFFICE product and is not affiliated with or endorsed by Ascensio System SIA.`,
   },
   'zh-CN': {
     siteName: 'Document Editor',
@@ -190,6 +191,7 @@ const UI = {
     ],
     generatedNote: (src) => `来源：仓库中的 ${src}`,
     ossNote: `<strong>开源 · 可自托管。</strong>采用 AGPL-3.0——你可以核实没有任何上传，或者自建一份：<a href="${REPO}" rel="noopener">github.com/ranuts/document</a>。`,
+    trademark: `ONLYOFFICE 是 Ascensio System SIA 的商标。本站并非官方 ONLYOFFICE 产品，与 Ascensio System SIA 无隶属关系，也未获其背书。`,
   },
   ja: {
     siteName: 'Document Editor',
@@ -218,6 +220,7 @@ const UI = {
     ],
     generatedNote: (src) => `ソース: リポジトリの ${src}`,
     ossNote: `<strong>オープンソース・セルフホスト可能。</strong>AGPL-3.0 のもとで公開——何もアップロードされないことを自分で確認でき、自分で運用することもできます: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>。`,
+    trademark: `ONLYOFFICE は Ascensio System SIA の商標です。本サイトは公式の ONLYOFFICE 製品ではなく、Ascensio System SIA との提携も推奨関係もありません。`,
   },
   de: {
     siteName: 'Document Editor',
@@ -246,6 +249,7 @@ const UI = {
     ],
     generatedNote: (src) => `Quelle: ${src} im Repository`,
     ossNote: `<strong>Open Source &amp; selbst hostbar.</strong> Unter AGPL-3.0 — prüfen Sie selbst, dass nichts hochgeladen wird, oder betreiben Sie eine eigene Kopie: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    trademark: `ONLYOFFICE ist eine Marke von Ascensio System SIA. Diese Website ist kein offizielles ONLYOFFICE-Produkt und steht in keiner Verbindung zu Ascensio System SIA.`,
   },
   es: {
     siteName: 'Document Editor',
@@ -274,6 +278,7 @@ const UI = {
     ],
     generatedNote: (src) => `Fuente: ${src} en el repositorio`,
     ossNote: `<strong>Código abierto y autoalojable.</strong> Bajo AGPL-3.0: comprueba que no se sube nada, o ejecuta tu propia copia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    trademark: `ONLYOFFICE es una marca de Ascensio System SIA. Este sitio no es un producto oficial de ONLYOFFICE ni está afiliado a Ascensio System SIA ni respaldado por ella.`,
   },
   ko: {
     siteName: 'Document Editor',
@@ -302,6 +307,7 @@ const UI = {
     ],
     generatedNote: (src) => `출처: 저장소의 ${src}`,
     ossNote: `<strong>오픈 소스이며 직접 호스팅할 수 있습니다.</strong> AGPL-3.0으로 공개되어 있어, 아무것도 업로드되지 않는다는 것을 직접 확인하거나 직접 운영할 수 있습니다: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    trademark: `ONLYOFFICE는 Ascensio System SIA의 상표입니다. 이 사이트는 공식 ONLYOFFICE 제품이 아니며 Ascensio System SIA와 제휴하거나 후원받지 않았습니다.`,
   },
   pt: {
     siteName: 'Document Editor',
@@ -330,6 +336,7 @@ const UI = {
     ],
     generatedNote: (src) => `Fonte: ${src} no repositório`,
     ossNote: `<strong>Código aberto e auto-hospedável.</strong> Sob a AGPL-3.0 — confira você mesmo que nada é enviado, ou rode a sua própria cópia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    trademark: `ONLYOFFICE é uma marca da Ascensio System SIA. Este site não é um produto oficial do ONLYOFFICE nem tem afiliação ou endosso da Ascensio System SIA.`,
   },
 };
 
@@ -1020,6 +1027,7 @@ ${footLinks}
         </nav>
         <r-theme-switch class="theme-switch" label="${e(ui.themeLabel)}"></r-theme-switch>
         <span class="lic">${e(data.foot.license)}</span>
+        <p class="tm">${e(ui.trademark)}</p>
       </footer>
     </section>
 
@@ -1266,6 +1274,7 @@ ${aside}    </div>
 ${footer}
       <a href="${REPO}" rel="noopener">GitHub</a>
       <r-theme-switch class="theme-switch" label="${ui.themeLabel}"></r-theme-switch>
+      <p class="tm">${escapeHtml(ui.trademark)}</p>
     </footer>
   </body>
 </html>

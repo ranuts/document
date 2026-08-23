@@ -934,6 +934,16 @@ body {
 #landing-hero .foot .lic {
   font: 500 12px/1 var(--ran-font-mono);
 }
+/* Same notice as the generated pages carry (see landing.css .page-foot .tm).
+   The footer is a space-between flex row, so the notice takes a row of its
+   own rather than competing with the links for the line. */
+#landing-hero .foot .tm {
+  flex: 1 0 100%;
+  margin: 0;
+  max-width: 72ch;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
 
 /* ---------- theme switch (footer) ----------
    Real ranui <r-theme-switch> (three-state pill wired to setTheme). The

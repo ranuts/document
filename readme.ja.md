@@ -263,4 +263,13 @@ Cloudflare Pages の挙動、本番 Docker イメージ）が実行されます�
 
 ## 📄 ライセンス
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE)。
+
+本プロジェクトは ONLYOFFICE（sdkjs と web-apps、(c) Ascensio System SIA）の二次的著作物です。
+上流は AGPL に第 7 条の追加条項を付して配布されており、元の製品ロゴを保持すること、そして
+商標に関する権利は許諾されないことが定められています。そのためエディタのヘッダーにある
+ONLYOFFICE ロゴと「バージョン情報」パネルはそのまま残しています。条項の全文、使用している
+vendor のバージョン、加えた変更の一覧は [NOTICE](NOTICE) を参照してください。
+
+ONLYOFFICE は Ascensio System SIA の商標です。本プロジェクトは公式の ONLYOFFICE 製品では
+なく、Ascensio System SIA との提携も推奨関係もありません。

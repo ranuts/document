@@ -253,4 +253,12 @@ pnpm run test:e2e       # 端到端测试（Playwright，真实编辑器 + 真�
 
 ## 📄 许可证
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE)。
+
+本项目是 ONLYOFFICE（sdkjs 与 web-apps，(c) Ascensio System SIA）的衍生作品。上游以
+AGPL 发布并附带第 7 条的附加条款：必须保留原产品 logo，且不授予任何商标权利。因此编辑器
+头部的 ONLYOFFICE logo 与“关于”面板都予以保留。条款原文、所用 vendor 版本以及我们对它做过
+的全部改动见 [NOTICE](NOTICE)。
+
+ONLYOFFICE 是 Ascensio System SIA 的商标。本项目并非官方 ONLYOFFICE 产品，与 Ascensio
+System SIA 无隶属关系，也未获其背书。

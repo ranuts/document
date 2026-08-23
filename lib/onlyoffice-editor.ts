@@ -213,7 +213,12 @@ function createPersonalEditorInstance(config: {
       },
       customization: {
         help: false,
-        about: false,
+        // `about` stays at its default (true). The About pane is where the
+        // ONLYOFFICE product logo, version and Ascensio System SIA copyright
+        // live, and Section 7(b) of the vendor's AGPL-3.0 headers requires a
+        // derivative work to keep the product logo. Switching it off is also
+        // what the vendor's own `canBrandingExt` check exists to prevent --
+        // this offline build just happens not to enforce it. See NOTICE.
         hideRightMenu: true,
         uiTheme: resolveUiTheme(),
         ...(isCompactViewport() ? compactViewportCustomization() : {}),

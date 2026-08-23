@@ -270,4 +270,13 @@ Cloudflare Pages semantics, and the production Docker image).
 
 ## 📄 License
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE).
+
+This is a derivative work of ONLYOFFICE (sdkjs and web-apps, (c) Ascensio System SIA),
+distributed under the AGPL with additional terms under its Section 7: the original
+product logo must be retained, and no rights under trademark law are granted. The
+editor therefore keeps the ONLYOFFICE logo in its header and its About pane. See
+[NOTICE](NOTICE) for the full text, the vendor version and every change made to it.
+
+ONLYOFFICE is a trademark of Ascensio System SIA. This project is not an official
+ONLYOFFICE product and is not affiliated with or endorsed by Ascensio System SIA.
