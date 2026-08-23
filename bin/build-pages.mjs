@@ -32,6 +32,93 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'https://edit.chaxus.com';
 const REPO = 'https://github.com/ranuts/document';
 
+/**
+ * Stable identities for the three things this site is about.
+ *
+ * Every page used to emit its own anonymous WebApplication / SoftwareSourceCode
+ * node, so 154 pages described 154 unrelated applications that happened to
+ * share a name. Naming them once and referring to the name instead is what
+ * turns a pile of pages into one entity described from many places -- the model
+ * apple.com uses (`#organization`, `#website`, `#brand`, then
+ * `manufacturer: { "@id": ... }` everywhere else). It matters more to the
+ * machines that answer questions about the site than to the ones that rank it:
+ * an assistant reading three of our pages should come away with one editor,
+ * not three.
+ */
+const ID = {
+  org: `${ORIGIN}/#organization`,
+  site: `${ORIGIN}/#website`,
+  app: `${ORIGIN}/#app`,
+  source: `${ORIGIN}/#source`,
+};
+const SITE_NAME = 'Online Document Editor';
+
+/** The publisher and the site, identical on every page so they merge into one. */
+const siteEntities = () => [
+  {
+    '@type': 'Organization',
+    '@id': ID.org,
+    name: 'ranuts',
+    url: ORIGIN + '/',
+    logo: `${ORIGIN}/img/pwa-512.png`,
+    sameAs: [REPO, 'https://github.com/ranuts', 'https://ran.chaxus.com'],
+  },
+  {
+    '@type': 'WebSite',
+    '@id': ID.site,
+    name: SITE_NAME,
+    url: ORIGIN + '/',
+    publisher: { '@id': ID.org },
+    // The site is one site in seven languages, which is a fact about the site
+    // and not about whichever page is being read. Each page states its own
+    // language on its WebPage node.
+    inLanguage: Object.keys(LOCALES),
+  },
+];
+
+/**
+ * The editor itself. One entity, `url` always the site root -- a per-page url
+ * here would make each translation look like a separate product.
+ */
+const appEntity = (extra = {}) => ({
+  '@type': 'WebApplication',
+  '@id': ID.app,
+  name: SITE_NAME,
+  url: ORIGIN + '/',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any (web browser)',
+  browserRequirements: 'Requires a modern browser with WebAssembly support',
+  isAccessibleForFree: true,
+  inLanguage: Object.keys(LOCALES),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  // The repository is the editor's other public identity, not the org's.
+  sameAs: [REPO],
+  publisher: { '@id': ID.org },
+  isPartOf: { '@id': ID.site },
+  ...extra,
+});
+
+/**
+ * The same entity, stated with just enough to be a definition rather than a
+ * dangling reference. A documentation page is a page ABOUT the editor, not a
+ * listing of it -- it should not carry a price and a category and become
+ * eligible for an app rich result. But `about: { "@id": ... }` pointing at
+ * nothing is silently dropped by the consumer, which puts the page back to
+ * describing an anonymous application. So: named, not detailed.
+ */
+const appStub = () => ({ '@type': 'WebApplication', '@id': ID.app, name: SITE_NAME, url: ORIGIN + '/' });
+
+/** The repository behind it, named so the node merges instead of repeating. */
+const sourceEntity = () => ({
+  '@type': 'SoftwareSourceCode',
+  '@id': ID.source,
+  name: SITE_NAME,
+  codeRepository: REPO,
+  programmingLanguage: 'TypeScript',
+  license: 'https://www.gnu.org/licenses/agpl-3.0.html',
+  about: { '@id': ID.app },
+});
+
 /** Locales the shell knows about. `prefix` is the URL directory; '' = root. */
 export const LOCALES = {
   en: { prefix: '', lang: 'en', label: 'EN', home: '/', dir: 'ltr', og: 'en_US' },
@@ -625,38 +712,37 @@ function renderHome({ locale, data, locales }) {
     .join('\n');
 
   const graph = [
+    ...siteEntities(),
+    appEntity({
+      description: data.description,
+      ...(data.featureList ? { featureList: data.featureList } : {}),
+      ...(data.ecosystem
+        ? { isPartOf: [{ '@id': ID.site }, { '@type': 'SoftwareApplication', ...data.ecosystem }] }
+        : {}),
+    }),
+    // This page: one homepage per language, each pointing at the same app.
     {
-      '@type': 'WebApplication',
-      name: 'Online Document Editor',
+      '@type': 'WebPage',
+      '@id': `${url}#webpage`,
       url,
-      applicationCategory: 'BusinessApplication',
-      operatingSystem: 'Any (web browser)',
-      browserRequirements: 'Requires a modern browser with WebAssembly support',
+      name: data.title,
       description: data.description,
       inLanguage: L.lang,
-      isAccessibleForFree: true,
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      ...(data.featureList ? { featureList: data.featureList } : {}),
-      sameAs: [REPO, 'https://www.npmjs.com/package/@ranui/preview', 'https://ran.chaxus.com'],
-      ...(data.ecosystem
-        ? { isPartOf: { '@type': 'SoftwareApplication', name: data.ecosystem.name, url: data.ecosystem.url } }
-        : {}),
+      isPartOf: { '@id': ID.site },
+      about: { '@id': ID.app },
+      primaryImageOfPage: `${ORIGIN}/img/pwa-512.png`,
     },
     {
       '@type': 'FAQPage',
+      '@id': `${url}#faq`,
+      inLanguage: L.lang,
       mainEntity: data.sections.faq.items.map(({ q, a }) => ({
         '@type': 'Question',
         name: q,
         acceptedAnswer: { '@type': 'Answer', text: a },
       })),
     },
-    {
-      '@type': 'SoftwareSourceCode',
-      name: 'Online Document Editor',
-      codeRepository: REPO,
-      programmingLanguage: 'TypeScript',
-      license: 'https://www.gnu.org/licenses/agpl-3.0.html',
-    },
+    sourceEntity(),
   ];
   const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }, null, 2)
     .split('\n')
@@ -737,7 +823,7 @@ function renderHome({ locale, data, locales }) {
     <title>${e(data.title)}</title>
     <meta name="description" content="${e(data.description)}" />
     <link rel="canonical" href="${url}" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 ${alternates}
     <link rel="alternate" hreflang="x-default" href="${ORIGIN + LOCALES[DEFAULT_LOCALE].home}" />
     <!-- No-flash theme restore: apply a forced light/dark before first paint so a
@@ -958,36 +1044,24 @@ function renderPage({ page, locale, meta, body, headings, faq, steps, source }) 
   const isLanding = page.kind === 'landing';
   const cardDescription = meta.ogDescription || description;
   const graph = [
-    // A landing page is selling the app, and Google's rich results treat a
-    // WebApplication node accordingly (price, category, platform). A generated
-    // documentation page is a page about the product, not the product.
-    isLanding
-      ? {
-          '@type': 'WebApplication',
-          name: 'Online Document Editor',
-          url,
-          applicationCategory: 'BusinessApplication',
-          operatingSystem: 'Any (web browser)',
-          isAccessibleForFree: true,
-          inLanguage: L.lang,
-          description: meta.appDescription || description,
-          offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        }
-      : {
-          '@type': 'WebPage',
-          name: title,
-          url,
-          description,
-          inLanguage: L.lang,
-          isPartOf: { '@type': 'WebSite', name: 'Online Document Editor', url: ORIGIN + '/' },
-        },
+    ...siteEntities(),
+    // Every page is a page; a landing page additionally describes the app, and
+    // Google's rich results treat a WebApplication node accordingly (price,
+    // category, platform). The app node is the same entity everywhere, so a
+    // landing page adds to its description rather than declaring a new one.
     {
-      '@type': 'SoftwareSourceCode',
-      name: 'Online Document Editor',
-      codeRepository: REPO,
-      programmingLanguage: 'TypeScript',
-      license: 'https://www.gnu.org/licenses/agpl-3.0.html',
+      '@type': 'WebPage',
+      '@id': `${url}#webpage`,
+      url,
+      name: title,
+      description,
+      inLanguage: L.lang,
+      isPartOf: { '@id': ID.site },
+      about: { '@id': ID.app },
+      breadcrumb: { '@id': `${url}#breadcrumb` },
     },
+    isLanding ? appEntity({ description: meta.appDescription || description }) : appStub(),
+    sourceEntity(),
   ];
   // The steps a landing page already lists, as structured data. Taken from the
   // rendered list rather than written separately: the hand-written pages kept a
@@ -996,6 +1070,8 @@ function renderPage({ page, locale, meta, body, headings, faq, steps, source }) 
   if (isLanding && meta.howTo && steps.length >= 2) {
     graph.push({
       '@type': 'HowTo',
+      '@id': `${url}#howto`,
+      inLanguage: L.lang,
       name: meta.howTo,
       step: steps.map((text) => ({ '@type': 'HowToStep', text })),
     });
@@ -1003,6 +1079,8 @@ function renderPage({ page, locale, meta, body, headings, faq, steps, source }) 
   if (faq.length >= 2) {
     graph.push({
       '@type': 'FAQPage',
+      '@id': `${url}#faq`,
+      inLanguage: L.lang,
       mainEntity: faq.map(({ q, a }) => ({
         '@type': 'Question',
         name: q,
@@ -1015,7 +1093,7 @@ function renderPage({ page, locale, meta, body, headings, faq, steps, source }) 
     crumbs.push({ '@type': 'ListItem', position: 2, name: meta.parent.name, item: ORIGIN + meta.parent.href });
   }
   crumbs.push({ '@type': 'ListItem', position: crumbs.length + 1, name: meta.breadcrumb || title, item: url });
-  graph.push({ '@type': 'BreadcrumbList', itemListElement: crumbs });
+  graph.push({ '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`, itemListElement: crumbs });
 
   const translations = Object.keys(LOCALES).filter((l) => page.sources[l]);
   const alternates = translations
@@ -1101,7 +1179,7 @@ ${related}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/img/64.png" rel="shortcut icon" />
     <link rel="icon" type="image/png" href="/img/64.png" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
 
