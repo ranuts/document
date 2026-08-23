@@ -50,6 +50,19 @@ landing.css。白色主题下看不出来，暗色下就是页面四周一圈底
 它遍历 `public/` 下所有 HTML，七种语言进来之后从 97 KB 涨到 680 KB——同样的事实说七遍。
 对读它的模型只有害处。改成只收英文页面，开头说明镜像在哪；`/llms.txt` 仍然逐语言列出。
 
+## 8. Open Graph 不知道站点有七种语言（已修）
+
+`hreflang` 是完整的七语言互指，但 Open Graph 那边**一个字都没说**：既没有 `og:locale`
+也没有 `og:locale:alternate`。后果是任何读 OG 的消费者（Facebook、LinkedIn、Slack、
+各类抓取器）把 `/ja/` 和 `/pt/` 的分享都当成英文页。补上之后每页声明自己的
+`og:locale`，并列出其余六种的 `og:locale:alternate`。
+
+映射写在 `LOCALES` 表里，因为 OG 要的是 `language_TERRITORY` 而不是 BCP47：
+`en_US` / `zh_CN` / `ja_JP` / `de_DE` / `es_ES` / `ko_KR` / **`pt_BR`**。最后一个再次
+确认了第 6 条的取舍——页面、shell 词条、vendor 包（`pt.json`）、OG locale 四处都是巴西葡语。
+
+顺带补上落地页 `WebApplication` 节点缺的 `inLanguage`（首页和文档页早就有）。
+
 ## 复查过但没有问题的
 
 - **SEO 覆盖**：7 种语言 × 21 页齐全；hreflang 是完整的七语言互指 + x-default；
@@ -60,6 +73,16 @@ landing.css。白色主题下看不出来，暗色下就是页面四周一圈底
 - **德语长词**：`Installieren und im Flugzeug nutzen`（35 字符）在 pillars 列里正常换行，
   没有溢出。
 - **`/embed-demo`**：仍然是英文，这是 CLAUDE.md 的规矩（共用页面用英文），不是遗漏。
+- **站内死链**：158 个页面、5043 条内链、165 个不同目标，逐个请求，零 4xx。
+- **基础可达性**：五类页面上没有缺 alt 的图、没有无名链接/按钮、标题层级不跳级、
+  每页恰好一个 h1、`<html lang>` 都在。格式索引的行、右栏链接、语言选择器都能 Tab 到。
+- **首屏性能**：落地页 10 个请求 / 392 KB，FCP 44 ms。首页看起来 9 MB 是
+  `landing-prefetch.js` 在预热三个编辑器引擎（既有行为，有 E2E 钉着），发生在
+  load 之后；线上走 br 压缩（`sdk-all.js` 13.7 MB → 3.0 MB）。
+- **缓存头**：`sdkjs/` 与 `web-apps/` 故意不上 `immutable`（里面有我们的补丁和
+  iframe HTML），4 小时 + `must-revalidate`。这次补齐的 locale JSON 也在这棵树里，
+  但 SW 的 runtime cache 按 `VENDOR_VERSION` 命名，vendor 一变就是新 cache，
+  拿不到旧副本。
 
 ## 还没做的
 

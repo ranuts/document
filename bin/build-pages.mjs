@@ -34,13 +34,15 @@ const REPO = 'https://github.com/ranuts/document';
 
 /** Locales the shell knows about. `prefix` is the URL directory; '' = root. */
 export const LOCALES = {
-  en: { prefix: '', lang: 'en', label: 'EN', home: '/', dir: 'ltr' },
-  'zh-CN': { prefix: '/zh-CN', lang: 'zh-CN', label: '中文', home: '/zh-CN/', dir: 'ltr' },
-  ja: { prefix: '/ja', lang: 'ja', label: '日本語', home: '/ja/', dir: 'ltr' },
-  de: { prefix: '/de', lang: 'de', label: 'Deutsch', home: '/de/', dir: 'ltr' },
-  es: { prefix: '/es', lang: 'es', label: 'Español', home: '/es/', dir: 'ltr' },
-  ko: { prefix: '/ko', lang: 'ko', label: '한국어', home: '/ko/', dir: 'ltr' },
-  pt: { prefix: '/pt', lang: 'pt', label: 'Português', home: '/pt/', dir: 'ltr' },
+  en: { prefix: '', lang: 'en', label: 'EN', home: '/', dir: 'ltr', og: 'en_US' },
+  'zh-CN': { prefix: '/zh-CN', lang: 'zh-CN', label: '中文', home: '/zh-CN/', dir: 'ltr', og: 'zh_CN' },
+  ja: { prefix: '/ja', lang: 'ja', label: '日本語', home: '/ja/', dir: 'ltr', og: 'ja_JP' },
+  de: { prefix: '/de', lang: 'de', label: 'Deutsch', home: '/de/', dir: 'ltr', og: 'de_DE' },
+  es: { prefix: '/es', lang: 'es', label: 'Español', home: '/es/', dir: 'ltr', og: 'es_ES' },
+  ko: { prefix: '/ko', lang: 'ko', label: '한국어', home: '/ko/', dir: 'ltr', og: 'ko_KR' },
+  // pt_BR, not pt_PT: the pages, the shell strings and the vendor locale the
+  // editor loads (pt.json) are all Brazilian Portuguese.
+  pt: { prefix: '/pt', lang: 'pt', label: 'Português', home: '/pt/', dir: 'ltr', og: 'pt_BR' },
 };
 const DEFAULT_LOCALE = 'en';
 
@@ -614,6 +616,10 @@ function renderHome({ locale, data, locales }) {
   const alternates = locales
     .map((l) => `    <link rel="alternate" hreflang="${l}" href="${ORIGIN + LOCALES[l].home}" />`)
     .join('\n');
+  const ogAlternates = locales
+    .filter((l) => l !== locale)
+    .map((l) => `    <meta property="og:locale:alternate" content="${LOCALES[l].og}" />`)
+    .join('\n');
   const langOptions = locales
     .map((l) => `            <r-option value="${l}" data-href="${LOCALES[l].home}">${LOCALES[l].label}</r-option>`)
     .join('\n');
@@ -751,6 +757,8 @@ ${alternates}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:locale" content="${L.og}" />
+${ogAlternates}
     <meta property="og:title" content="${e(data.title)}" />
     <meta property="og:description" content="${e(data.ogDescription || data.description)}" />
     <meta property="og:url" content="${url}" />
@@ -959,6 +967,7 @@ function renderPage({ page, locale, meta, body, headings, faq, steps, source }) 
           applicationCategory: 'BusinessApplication',
           operatingSystem: 'Any (web browser)',
           isAccessibleForFree: true,
+          inLanguage: L.lang,
           description: meta.appDescription || description,
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
         }
@@ -1006,9 +1015,16 @@ function renderPage({ page, locale, meta, body, headings, faq, steps, source }) 
   crumbs.push({ '@type': 'ListItem', position: crumbs.length + 1, name: meta.breadcrumb || title, item: url });
   graph.push({ '@type': 'BreadcrumbList', itemListElement: crumbs });
 
-  const alternates = Object.keys(LOCALES)
-    .filter((l) => page.sources[l])
+  const translations = Object.keys(LOCALES).filter((l) => page.sources[l]);
+  const alternates = translations
     .map((l) => `    <link rel="alternate" hreflang="${l}" href="${ORIGIN + routeFor(l, page.slug)}" />`)
+    .join('\n');
+  // Open Graph carries the same set as hreflang, in its own spelling: the
+  // language of this page, then the others it exists in. Without it a share of
+  // /ja/ or /pt/ is treated as English by every consumer that reads OG.
+  const ogAlternates = translations
+    .filter((l) => l !== locale)
+    .map((l) => `    <meta property="og:locale:alternate" content="${LOCALES[l].og}" />`)
     .join('\n');
   const langOptions = Object.keys(LOCALES)
     .filter((l) => page.sources[l])
@@ -1095,6 +1111,8 @@ ${alternates}
 
     <meta property="og:type" content="${isLanding ? 'website' : 'article'}" />
     <meta property="og:site_name" content="Online Document Editor" />
+    <meta property="og:locale" content="${L.og}" />
+${ogAlternates}
     <meta property="og:title" content="${escapeHtml(title)}" />
     <meta property="og:description" content="${escapeHtml(cardDescription)}" />
     <meta property="og:url" content="${url}" />

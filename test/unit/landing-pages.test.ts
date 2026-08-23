@@ -150,6 +150,22 @@ describe('landing pages', () => {
         }
       });
 
+      /**
+       * Open Graph has its own spelling of the same set hreflang carries. A
+       * share of /ja/ or /pt/ without og:locale is read as English by every
+       * consumer that looks at OG -- which is most of them.
+       */
+      it('declares its Open Graph locale, and the ones it is also published in', () => {
+        const og = (l: string) => LOCALES[l].og;
+        expect(attr(html, /property="og:locale" content="([^"]+)"/), `${route} og:locale`).toBe(og(locale));
+
+        const alternates = [...html.matchAll(/property="og:locale:alternate" content="([^"]+)"/g)].map((m) => m[1]);
+        const expected = Object.keys(LOCALES)
+          .filter((l) => l !== locale && routes.has(routeIn(l, enRoute)))
+          .map(og);
+        expect(alternates.sort(), `${route} og:locale:alternate`).toEqual(expected.sort());
+      });
+
       it('offers every translation it has in the language switch', () => {
         for (const other of Object.keys(LOCALES)) {
           const target = routeIn(other, enRoute);
