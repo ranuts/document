@@ -91,6 +91,11 @@ notes. Entries describe what users experience, not internal refactors.
   broken. A tab still on an older build now moves onto the new one on its next
   load, without asking and without interrupting anything: it happens while the
   page is still loading, once, and never over unsaved edits.
+- **An update could leave the editor blank.** When a new version took over
+  while the page was still starting up, the request for the editor itself was
+  cancelled mid-flight and nothing asked for it again -- an empty white page
+  that reloading was the only way out of. The page now always reloads itself
+  after it switches versions, which is what repairs it.
 - The four home-screen buttons ("View/Edit Document", "New Word"...) no longer
   flash behind the spinner while a document named in the URL is loading.
 - Chinese, Japanese and Korean text in an exported PDF came out blank. The

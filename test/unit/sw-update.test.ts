@@ -93,6 +93,37 @@ describe('wireServiceWorkerUpdates', () => {
     w.listeners.forEach((cb) => cb());
     expect(w.postMessage).not.toHaveBeenCalled();
   });
+
+  /**
+   * The caller has to learn that this tab caused the swap, because the reload
+   * that follows is repair rather than a courtesy -- see the race described on
+   * shouldReloadOnControllerChange.
+   */
+  it('reports a promotion it made on arrival', () => {
+    const w = worker('installed');
+    const onPromoted = vi.fn();
+    wireServiceWorkerUpdates(registration(w), () => false, undefined, onPromoted);
+    expect(onPromoted).toHaveBeenCalled();
+  });
+
+  it('reports a promotion it made after a later install', () => {
+    const r = registration();
+    const onPromoted = vi.fn();
+    wireServiceWorkerUpdates(r, () => false, undefined, onPromoted);
+    const w = worker('installing');
+    r.installing = w;
+    r.updateListeners.forEach((cb) => cb());
+    w.state = 'installed';
+    r.waiting = w;
+    w.listeners.forEach((cb) => cb());
+    expect(onPromoted).toHaveBeenCalled();
+  });
+
+  it('reports nothing when it left the worker waiting', () => {
+    const onPromoted = vi.fn();
+    wireServiceWorkerUpdates(registration(worker('installed')), () => true, undefined, onPromoted);
+    expect(onPromoted).not.toHaveBeenCalled();
+  });
 });
 
 describe('shouldReloadOnControllerChange', () => {
@@ -713,14 +744,33 @@ describe('healStaleController', () => {
   });
 });
 
-describe('shouldReloadOnControllerChange during a heal', () => {
+describe('shouldReloadOnControllerChange when this tab asked for the swap', () => {
   it('reloads even with a document open -- the reload is the point', () => {
     expect(
       shouldReloadOnControllerChange({
         hadController: true,
         alreadyReloading: false,
         hasOpenDocument: true,
-        healingStaleBuild: true,
+        promotedFromThisTab: true,
+      }),
+    ).toBe(true);
+  });
+
+  /**
+   * The exact race that left a tab on a blank editor: promotion runs when
+   * `register()` resolves, a few hundred milliseconds before the editor
+   * instance exists, so it sees nothing open and promotes. The document is
+   * open by the time the swap lands. Re-asking "is a document open?" at that
+   * point refuses the reload -- and the swap has already aborted the vendored
+   * iframe's own request, which nothing retries.
+   */
+  it('reloads a document that was opened between the promotion and the swap', () => {
+    expect(
+      shouldReloadOnControllerChange({
+        hadController: true,
+        alreadyReloading: false,
+        hasOpenDocument: true,
+        promotedFromThisTab: true,
       }),
     ).toBe(true);
   });
@@ -731,7 +781,7 @@ describe('shouldReloadOnControllerChange during a heal', () => {
         hadController: true,
         alreadyReloading: false,
         hasOpenDocument: true,
-        healingStaleBuild: true,
+        promotedFromThisTab: true,
         hasUnsavedChanges: true,
       }),
     ).toBe(false);
