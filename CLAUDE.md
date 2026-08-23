@@ -535,16 +535,18 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
    `DEPLOY_COUPLED`（由 `hosting-contract.test.ts` / `sw-routing.test.ts` 钉住）。
    `open-local.js` / `landing-prefetch.js` 同理，2026-08-20 起补齐——它们从路由
    拆分起一直漏在 SWR 上，改这两个文件的部署，落地页会一直跑旧的那份。
-   **controller 一换就 reload，唯一的否决是未保存改动**（2026-08-23）：激活新 worker
-   会终止旧 worker，它手上 in-flight 的 fetch 全部失败——其中就有编辑器 iframe 自己的
-   文档请求，没人重试，标签页永远白屏。拒绝刷新撤不回那次交接，只会把人留在白屏上。
-   **别再把"有没有文档打开"或"是不是本页请求的交接"加回判据**：换人的有三个来源，
-   只有一个跟本页面有关（`sw.js` 自己 install 里 skipWaiting、别的标签页经落地页提升、
-   **浏览器在旧 worker 的客户端全没了时自动激活**——一次 reload 正好安排了这件事，
-   实测交接落在 reload 之后 50ms、比它杀掉的请求早 170ms）。另一半是
-   `documentIsExpected`（`?new=` / `?file=` / `?src=` / `?open=` / `?saved=` / `?embed=`）：
-   正在开文档的页面**不要提升**，那种等待交给静默自愈，它会先 `isUnseenBuild()`
-   确认真是新构建。见
+   **controllerchange 的 reload 判据只有两条：是不是新构建 + 有没有未保存改动**
+   （2026-08-23）。激活新 worker 会终止旧 worker，它手上 in-flight 的 fetch 全部失败——
+   其中就有编辑器 iframe 自己的文档请求，没人重试，标签页永远白屏；拒绝刷新撤不回那次
+   交接。所以**别把"有没有文档打开"加回判据**。但也**别只按"换了就刷"**：controller
+   变更是常态（厂商 worker 的来回切换让我们的 sw.js 在普通加载里就被重装并 waiting，
+   浏览器下一次导航自己激活它），实测一次普通 reload 之后 80ms 就换人，无差别刷新会把
+   `sw-vendor-cache-first` 打成 `Execution context was destroyed`。新构建的判据是
+   `isUnseenBuild`，**缓存名快照必须在启动时取**（交接时再读，新 worker 已经建好自己的
+   那个了）。另有 `documentIsExpected`（`?new=` / `?file=` / `?src=` / `?open=` /
+   `?saved=` / `?embed=`）：正在开文档的页面**不要提升**。**别去改 `sw.js` 的 install
+   让它对同一构建不接管**——试过，本地证不出必要性，却会让"回滚到本机跑过的构建"不再
+   自动投递。见
    docs/explorations/2026-08-23-promotion-without-reload-blank-editor.md。
    落地页那侧的提升要覆盖三种到达方式：已经 `waiting`、`installing` 中途、
    以及 `updatefound` 时已经 `installed`（`statechange` 只报此后的迁移，

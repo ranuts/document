@@ -146,35 +146,42 @@ export function onWaitingWorker(
 /**
  * Whether a controllerchange should reload the page.
  *
- * The condition used to be "not while a document is open", and the reason it
- * was wrong is worth keeping: activating a worker terminates the outgoing one,
- * and every request it still had in flight fails. On the editor route the one
- * in flight is the vendored iframe's own document, which nothing retries -- so
- * refusing the reload leaves a blank editor that only a manual reload escapes.
- * By the time the event arrives the page has already been torn in half.
- * Refusing does not undo the swap.
+ * Two conditions, and the history of getting them wrong is the reason both are
+ * spelled out here.
  *
- * It is also not this page's business WHO swapped. Three different things do
- * it and only one of them is us: sw.js calls skipWaiting() itself when
- * activating would not discard vendor assets, the landing page promotes from
- * another tab, and the browser activates a waiting worker on its own once the
- * clients the old one controlled are gone -- which a reload arranges. Gating
- * the repair on "this tab asked for it" therefore missed the cases that
- * actually happen (measured: the swap landed 50ms into a reload, 170ms before
- * the iframe request it killed).
+ * **It has to be a different build.** A controller changing is routine: the
+ * vendored editor registers a worker of its own into this scope from inside
+ * its iframe, so ours is re-installed and left waiting on ordinary loads, and
+ * the browser activates it by itself at the next navigation -- same build,
+ * same caches, nothing to tell anyone. Reloading on every swap is a reload on
+ * every second page view (measured: 80ms into the load, on a plain reload of
+ * a fresh profile). The evidence for "different" is the runtime cache, named
+ * after the vendor tree's content: see isUnseenBuild.
  *
- * What genuinely must not be reloaded over is unsaved work, and that is the
- * condition. A torn page has nothing unsaved in it -- nothing finished
- * loading -- so the two never collide.
+ * **And it must not throw away unsaved work.** Nothing else is a reason to
+ * refuse. It used to be "not while a document is open", which sounds careful
+ * and is not: activating a worker terminates the outgoing one and every
+ * request it still had in flight fails -- on this route the vendored iframe's
+ * own document, which nothing retries. By the time this event arrives the page
+ * may already be torn in half, and refusing does not undo the swap; it only
+ * leaves the reader on a blank editor with no way out but a manual reload.
+ *
+ * Who asked for the swap is deliberately not a condition. Three things do it
+ * and only one is us: sw.js promotes itself on install, another tab promotes
+ * through the landing page, and the browser activates a waiting worker on its
+ * own.
  */
 export function shouldReloadOnControllerChange(state: {
   hadController: boolean;
   alreadyReloading: boolean;
+  /** The new controller is a build this browser has not been running. */
+  isNewBuild: boolean;
   hasUnsavedChanges?: boolean;
 }): boolean {
   // No controller at startup means this is the first install, not an update:
-  // nothing was being served by anyone, so nothing was torn.
+  // nobody was serving this page, so nothing was interrupted.
   if (!state.hadController || state.alreadyReloading) return false;
+  if (!state.isNewBuild) return false;
   return !state.hasUnsavedChanges;
 }
 

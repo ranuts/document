@@ -122,14 +122,25 @@ describe('documentIsExpected', () => {
 });
 
 describe('shouldReloadOnControllerChange', () => {
+  const update = { hadController: true, alreadyReloading: false, isNewBuild: true };
   it('reloads once on an update', () => {
-    expect(shouldReloadOnControllerChange({ hadController: true, alreadyReloading: false })).toBe(true);
+    expect(shouldReloadOnControllerChange(update)).toBe(true);
   });
   it('does not reload on a first install, or twice', () => {
     // No controller at startup means nobody was serving this page, so nothing
     // was interrupted -- and reloading the first visit would be a stutter.
-    expect(shouldReloadOnControllerChange({ hadController: false, alreadyReloading: false })).toBe(false);
-    expect(shouldReloadOnControllerChange({ hadController: true, alreadyReloading: true })).toBe(false);
+    expect(shouldReloadOnControllerChange({ ...update, hadController: false })).toBe(false);
+    expect(shouldReloadOnControllerChange({ ...update, alreadyReloading: true })).toBe(false);
+  });
+
+  /**
+   * The routine case, and the one that made an earlier attempt reload every
+   * second page view: the vendored editor keeps our worker re-installing, the
+   * browser activates it at the next navigation, and the controller changes
+   * with nothing behind it. Measured at 80ms into a plain reload.
+   */
+  it('ignores a swap between two instances of the same build', () => {
+    expect(shouldReloadOnControllerChange({ ...update, isNewBuild: false })).toBe(false);
   });
 });
 
@@ -750,15 +761,23 @@ describe('shouldReloadOnControllerChange after a swap this page did not ask for'
     // `hasOpenDocument` was the old condition, and passing it is the point:
     // this exact input used to return false, which is how a reader ended up
     // on a blank page with no way out but a manual reload.
-    const state = { hadController: true, alreadyReloading: false, hasOpenDocument: true } as Parameters<
-      typeof shouldReloadOnControllerChange
-    >[0];
+    const state = {
+      hadController: true,
+      alreadyReloading: false,
+      isNewBuild: true,
+      hasOpenDocument: true,
+    } as Parameters<typeof shouldReloadOnControllerChange>[0];
     expect(shouldReloadOnControllerChange(state)).toBe(true);
   });
 
   it('never reloads over unsaved edits', () => {
     expect(
-      shouldReloadOnControllerChange({ hadController: true, alreadyReloading: false, hasUnsavedChanges: true }),
+      shouldReloadOnControllerChange({
+        hadController: true,
+        alreadyReloading: false,
+        isNewBuild: true,
+        hasUnsavedChanges: true,
+      }),
     ).toBe(false);
   });
 });
