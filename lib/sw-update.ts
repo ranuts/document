@@ -94,20 +94,14 @@ export function promoteWaitingWorker(
  * future ones as soon as they finish installing (both gated on "no document
  * open"). A worker that stays waiting because a document is open activates on
  * the next visit, when the landing page calls this again.
- *
- * `onPromoted` fires when this tab actually told a worker to take over, and
- * the caller must not drop it: the swap tears down whatever the outgoing
- * worker was still fetching, so the reload afterwards is not a nicety. See
- * shouldReloadOnControllerChange for what happened when it was dropped.
  */
 export function wireServiceWorkerUpdates(
   reg: RegistrationLike,
   hasOpenDocument: () => boolean,
   ownScriptURL?: string,
-  onPromoted?: () => void,
 ): void {
   const promote = (): void => {
-    if (promoteWaitingWorker(reg, hasOpenDocument, ownScriptURL)) onPromoted?.();
+    promoteWaitingWorker(reg, hasOpenDocument, ownScriptURL);
   };
   promote();
   reg.addEventListener('updatefound', () => {
@@ -150,36 +144,38 @@ export function onWaitingWorker(
 }
 
 /**
- * Whether a controllerchange should reload the page: only when a worker was
- * already in control at startup (so this is an update, not the first
- * install), only once, and never with a document open (unsaved edits).
+ * Whether a controllerchange should reload the page.
  *
- * Unless this tab is the one that asked for the swap -- then it reloads
- * regardless of what is open, short of unsaved edits. That is not a
- * preference, it is repair. Activating a worker terminates the outgoing one,
- * and every request it still had in flight fails: on the editor route that is
- * the vendored iframe's own document, which nothing retries, so the tab is
- * left staring at a blank editor forever.
+ * The condition used to be "not while a document is open", and the reason it
+ * was wrong is worth keeping: activating a worker terminates the outgoing one,
+ * and every request it still had in flight fails. On the editor route the one
+ * in flight is the vendored iframe's own document, which nothing retries -- so
+ * refusing the reload leaves a blank editor that only a manual reload escapes.
+ * By the time the event arrives the page has already been torn in half.
+ * Refusing does not undo the swap.
  *
- * The two decisions used to be made at different times against a predicate
- * that changes underneath them. `promoteWaitingWorker` runs the moment
- * `register()` resolves, which on the editor route is a few hundred
- * milliseconds BEFORE the editor instance exists -- so "no document open" is
- * true and it promotes. By the time the swap lands, the document is open, and
- * the reload was refused. The page had already been torn in half by then.
- * Whoever promotes owns the reload.
+ * It is also not this page's business WHO swapped. Three different things do
+ * it and only one of them is us: sw.js calls skipWaiting() itself when
+ * activating would not discard vendor assets, the landing page promotes from
+ * another tab, and the browser activates a waiting worker on its own once the
+ * clients the old one controlled are gone -- which a reload arranges. Gating
+ * the repair on "this tab asked for it" therefore missed the cases that
+ * actually happen (measured: the swap landed 50ms into a reload, 170ms before
+ * the iframe request it killed).
+ *
+ * What genuinely must not be reloaded over is unsaved work, and that is the
+ * condition. A torn page has nothing unsaved in it -- nothing finished
+ * loading -- so the two never collide.
  */
 export function shouldReloadOnControllerChange(state: {
   hadController: boolean;
   alreadyReloading: boolean;
-  hasOpenDocument: boolean;
-  /** This tab told a waiting worker to take over -- an update or a heal. */
-  promotedFromThisTab?: boolean;
   hasUnsavedChanges?: boolean;
 }): boolean {
+  // No controller at startup means this is the first install, not an update:
+  // nothing was being served by anyone, so nothing was torn.
   if (!state.hadController || state.alreadyReloading) return false;
-  if (state.promotedFromThisTab) return !state.hasUnsavedChanges;
-  return !state.hasOpenDocument;
+  return !state.hasUnsavedChanges;
 }
 
 /** How sw.js names the cache it keeps the vendored editor in. */

@@ -94,37 +94,6 @@ describe('wireServiceWorkerUpdates', () => {
     w.listeners.forEach((cb) => cb());
     expect(w.postMessage).not.toHaveBeenCalled();
   });
-
-  /**
-   * The caller has to learn that this tab caused the swap, because the reload
-   * that follows is repair rather than a courtesy -- see the race described on
-   * shouldReloadOnControllerChange.
-   */
-  it('reports a promotion it made on arrival', () => {
-    const w = worker('installed');
-    const onPromoted = vi.fn();
-    wireServiceWorkerUpdates(registration(w), () => false, undefined, onPromoted);
-    expect(onPromoted).toHaveBeenCalled();
-  });
-
-  it('reports a promotion it made after a later install', () => {
-    const r = registration();
-    const onPromoted = vi.fn();
-    wireServiceWorkerUpdates(r, () => false, undefined, onPromoted);
-    const w = worker('installing');
-    r.installing = w;
-    r.updateListeners.forEach((cb) => cb());
-    w.state = 'installed';
-    r.waiting = w;
-    w.listeners.forEach((cb) => cb());
-    expect(onPromoted).toHaveBeenCalled();
-  });
-
-  it('reports nothing when it left the worker waiting', () => {
-    const onPromoted = vi.fn();
-    wireServiceWorkerUpdates(registration(worker('installed')), () => true, undefined, onPromoted);
-    expect(onPromoted).not.toHaveBeenCalled();
-  });
 });
 
 /**
@@ -153,21 +122,14 @@ describe('documentIsExpected', () => {
 });
 
 describe('shouldReloadOnControllerChange', () => {
-  it('reloads once on an update with nothing open', () => {
-    expect(
-      shouldReloadOnControllerChange({ hadController: true, alreadyReloading: false, hasOpenDocument: false }),
-    ).toBe(true);
+  it('reloads once on an update', () => {
+    expect(shouldReloadOnControllerChange({ hadController: true, alreadyReloading: false })).toBe(true);
   });
-  it('does not reload on first install, twice, or with a document open', () => {
-    expect(
-      shouldReloadOnControllerChange({ hadController: false, alreadyReloading: false, hasOpenDocument: false }),
-    ).toBe(false);
-    expect(
-      shouldReloadOnControllerChange({ hadController: true, alreadyReloading: true, hasOpenDocument: false }),
-    ).toBe(false);
-    expect(
-      shouldReloadOnControllerChange({ hadController: true, alreadyReloading: false, hasOpenDocument: true }),
-    ).toBe(false);
+  it('does not reload on a first install, or twice', () => {
+    // No controller at startup means nobody was serving this page, so nothing
+    // was interrupted -- and reloading the first visit would be a stutter.
+    expect(shouldReloadOnControllerChange({ hadController: false, alreadyReloading: false })).toBe(false);
+    expect(shouldReloadOnControllerChange({ hadController: true, alreadyReloading: true })).toBe(false);
   });
 });
 
@@ -770,46 +732,33 @@ describe('healStaleController', () => {
   });
 });
 
-describe('shouldReloadOnControllerChange when this tab asked for the swap', () => {
-  it('reloads even with a document open -- the reload is the point', () => {
-    expect(
-      shouldReloadOnControllerChange({
-        hadController: true,
-        alreadyReloading: false,
-        hasOpenDocument: true,
-        promotedFromThisTab: true,
-      }),
-    ).toBe(true);
-  });
-
+describe('shouldReloadOnControllerChange after a swap this page did not ask for', () => {
   /**
-   * The exact race that left a tab on a blank editor: promotion runs when
-   * `register()` resolves, a few hundred milliseconds before the editor
-   * instance exists, so it sees nothing open and promotes. The document is
-   * open by the time the swap lands. Re-asking "is a document open?" at that
-   * point refuses the reload -- and the swap has already aborted the vendored
-   * iframe's own request, which nothing retries.
+   * The blank editor. A worker taking over terminates the outgoing one and
+   * every request it still had in flight fails -- on the editor route that is
+   * the vendored iframe's own document, which nothing retries. Measured in CI:
+   * the swap landed 50ms into a reload, 170ms before it killed that request.
+   * Refusing the reload does not undo the swap, it only leaves the reader on
+   * a white page.
+   *
+   * And the page cannot tell who swapped: sw.js promotes itself when it would
+   * not discard vendor assets, another tab promotes through the landing page,
+   * and the browser activates a waiting worker on its own once the old one's
+   * clients are gone. Only the third of those involves this page at all.
    */
-  it('reloads a document that was opened between the promotion and the swap', () => {
-    expect(
-      shouldReloadOnControllerChange({
-        hadController: true,
-        alreadyReloading: false,
-        hasOpenDocument: true,
-        promotedFromThisTab: true,
-      }),
-    ).toBe(true);
+  it('reloads even with a document open -- the reload is the repair', () => {
+    // `hasOpenDocument` was the old condition, and passing it is the point:
+    // this exact input used to return false, which is how a reader ended up
+    // on a blank page with no way out but a manual reload.
+    const state = { hadController: true, alreadyReloading: false, hasOpenDocument: true } as Parameters<
+      typeof shouldReloadOnControllerChange
+    >[0];
+    expect(shouldReloadOnControllerChange(state)).toBe(true);
   });
 
   it('never reloads over unsaved edits', () => {
     expect(
-      shouldReloadOnControllerChange({
-        hadController: true,
-        alreadyReloading: false,
-        hasOpenDocument: true,
-        promotedFromThisTab: true,
-        hasUnsavedChanges: true,
-      }),
+      shouldReloadOnControllerChange({ hadController: true, alreadyReloading: false, hasUnsavedChanges: true }),
     ).toBe(false);
   });
 });
