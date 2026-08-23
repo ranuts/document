@@ -1,6 +1,7 @@
 import {
   documentIsExpected,
   healStaleController,
+  isUnseenBuild,
   onWaitingWorker,
   shouldReloadOnControllerChange,
   wireServiceWorkerUpdates,
@@ -240,18 +241,30 @@ if ('serviceWorker' in navigator) {
   // into the middle of its own load. The URL already knows.
   const hasOpenDocument = () => Boolean(getDocmentObj().fileName) || documentIsExpected(window.location.search);
 
+  // The runtime caches as they were before anything could have changed them.
+  // Read at boot rather than when a swap happens: by then the incoming worker
+  // has created its own, and the question is which builds this browser was
+  // running BEFORE. Taken from the cache rather than by asking the outgoing
+  // worker, which a swap may already have terminated.
+  const cachesAtBoot = typeof caches === 'undefined' ? Promise.resolve([]) : caches.keys();
+  const bootCacheNames = { keys: () => cachesAtBoot };
+
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (
-      !shouldReloadOnControllerChange({
-        hadController,
-        alreadyReloading: reloadingForUpdate,
-        hasUnsavedChanges: hasUnsavedChanges(),
-      })
-    ) {
-      return;
-    }
-    reloadingForUpdate = true;
-    window.location.reload();
+    void (async () => {
+      const isNewBuild = await isUnseenBuild(navigator.serviceWorker.controller, bootCacheNames);
+      if (
+        !shouldReloadOnControllerChange({
+          hadController,
+          alreadyReloading: reloadingForUpdate,
+          isNewBuild,
+          hasUnsavedChanges: hasUnsavedChanges(),
+        })
+      ) {
+        return;
+      }
+      reloadingForUpdate = true;
+      window.location.reload();
+    })();
   });
 
   // The script we register, absolute: the vendored editor registers one of its
