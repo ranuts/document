@@ -82,6 +82,14 @@ notes. Entries describe what users experience, not internal refactors.
   document can reference still resolves; it just lands on a face that may be
   shared freely.
 
+### Changed
+
+- **Search engines and AI assistants now see one editor, not one per page.**
+  Every page described the application from scratch, so a site of 154 pages
+  looked like 154 unrelated tools that happened to share a name. The pages now
+  all point at the same one, and say which of the seven languages they are in.
+  Nothing on the pages themselves changed.
+
 ### Fixed
 
 - **A new version now reaches you by itself.** An update used to wait until no

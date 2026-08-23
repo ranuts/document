@@ -283,7 +283,15 @@ fetchFonts 字体竞态，修复见 `lib/onlyoffice-editor.ts` 的 `prepareEdito
 超时）都属于这一层；`test/unit/hosting-contract.test.ts` 钉住 `_headers` 关键
 规则；`test/unit/landing-pages.test.ts` 钉住全部 SEO 落地页（public/**/*.html +
 index.html）的 canonical/hreflang/JSON-LD/sitemap/双语互指契约——新增落地页必须
-同时补 en+zh、sitemap、llms.txt、首页卡片，否则该测试先红。**线上冒烟** `.github/workflows/prod-smoke.yml`：每次 push main 等部署
+同时补 en+zh、sitemap、llms.txt、首页卡片，否则该测试先红。
+**结构化数据是一张有 `@id` 的图，不是每页一份副本**（2026-08-23，学 apple.com）：
+`Organization` / `WebSite` / `WebApplication` / `SoftwareSourceCode` 用固定 `@id`
+（`/#organization` / `/#website` / `/#app` / `/#source`）每页重复出现并互相引用，
+`WebPage` / `FAQPage` / `HowTo` / `BreadcrumbList` 用 `<页面 url>#webpage` 这类
+页面级 id。**app 节点的 `url` 恒为站点根**，语言写在 `WebPage.inLanguage`；
+改成当前页 URL 就等于宣称七种语言是七个产品。文档页只发 app 的 stub（`appStub()`），
+落地页才发完整节点。上面那个测试会拒绝重复 `@id` 与解析不到定义的 `@id` 引用。
+见 docs/explorations/2026-08-23-entity-graph-from-apple.md。**线上冒烟** `.github/workflows/prod-smoke.yml`：每次 push main 等部署
 上线后即跑 + 每日；`E2E_BASE_URL=<站点>` 可把任意 spec 打到部署站。CF 面板里
 的 Cache Rules 等不在仓库、CI 复现不了，只能靠冒烟兜底。
 
