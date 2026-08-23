@@ -31,7 +31,7 @@
     <title>Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor</title>
     <meta name="description" content="Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice." />
     <link rel="canonical" href="https://edit.chaxus.com/" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/" />
     <link rel="alternate" hreflang="zh-CN" href="https://edit.chaxus.com/zh-CN/" />
     <link rel="alternate" hreflang="ja" href="https://edit.chaxus.com/ja/" />
@@ -78,20 +78,75 @@
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "Organization",
+            "@id": "https://edit.chaxus.com/#organization",
+            "name": "ranuts",
+            "url": "https://edit.chaxus.com/",
+            "logo": "https://edit.chaxus.com/img/pwa-512.png",
+            "sameAs": [
+              "https://github.com/ranuts/document",
+              "https://github.com/ranuts",
+              "https://ran.chaxus.com"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://edit.chaxus.com/#website",
+            "name": "Online Document Editor",
+            "url": "https://edit.chaxus.com/",
+            "publisher": {
+              "@id": "https://edit.chaxus.com/#organization"
+            },
+            "inLanguage": [
+              "en",
+              "zh-CN",
+              "ja",
+              "de",
+              "es",
+              "ko",
+              "pt"
+            ]
+          },
+          {
             "@type": "WebApplication",
+            "@id": "https://edit.chaxus.com/#app",
             "name": "Online Document Editor",
             "url": "https://edit.chaxus.com/",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Any (web browser)",
             "browserRequirements": "Requires a modern browser with WebAssembly support",
-            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice.",
-            "inLanguage": "en",
             "isAccessibleForFree": true,
+            "inLanguage": [
+              "en",
+              "zh-CN",
+              "ja",
+              "de",
+              "es",
+              "ko",
+              "pt"
+            ],
             "offers": {
               "@type": "Offer",
               "price": "0",
               "priceCurrency": "USD"
             },
+            "sameAs": [
+              "https://github.com/ranuts/document"
+            ],
+            "publisher": {
+              "@id": "https://edit.chaxus.com/#organization"
+            },
+            "isPartOf": [
+              {
+                "@id": "https://edit.chaxus.com/#website"
+              },
+              {
+                "@type": "SoftwareApplication",
+                "name": "ran ecosystem",
+                "url": "https://ran.chaxus.com"
+              }
+            ],
+            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice.",
             "featureList": [
               "Open and view DOCX, XLSX, PPTX and CSV without Microsoft Office",
               "Edit DOCX, XLSX, PPTX and CSV files",
@@ -101,20 +156,27 @@
               "Installable PWA with offline support",
               "Embeddable via postMessage API",
               "Free and open source (AGPL-3.0)"
-            ],
-            "sameAs": [
-              "https://github.com/ranuts/document",
-              "https://www.npmjs.com/package/@ranui/preview",
-              "https://ran.chaxus.com"
-            ],
+            ]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://edit.chaxus.com/#webpage",
+            "url": "https://edit.chaxus.com/",
+            "name": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor",
+            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice.",
+            "inLanguage": "en",
             "isPartOf": {
-              "@type": "SoftwareApplication",
-              "name": "ran ecosystem",
-              "url": "https://ran.chaxus.com"
-            }
+              "@id": "https://edit.chaxus.com/#website"
+            },
+            "about": {
+              "@id": "https://edit.chaxus.com/#app"
+            },
+            "primaryImageOfPage": "https://edit.chaxus.com/img/pwa-512.png"
           },
           {
             "@type": "FAQPage",
+            "@id": "https://edit.chaxus.com/#faq",
+            "inLanguage": "en",
             "mainEntity": [
               {
                 "@type": "Question",
@@ -168,10 +230,14 @@
           },
           {
             "@type": "SoftwareSourceCode",
+            "@id": "https://edit.chaxus.com/#source",
             "name": "Online Document Editor",
             "codeRepository": "https://github.com/ranuts/document",
             "programmingLanguage": "TypeScript",
-            "license": "https://www.gnu.org/licenses/agpl-3.0.html"
+            "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+            "about": {
+              "@id": "https://edit.chaxus.com/#app"
+            }
           }
         ]
       }

@@ -20,6 +20,15 @@ const NOT_LANDING = new Set(['404.html', 'embed-demo.html']);
 const GENERATED = generate({ outDir: null }) as Array<{ rel: string; route: string; html: string }>;
 const isGeneratedFile = (file: string) => GENERATED.some((g) => resolve(PUBLIC, g.rel) === file);
 
+type LdNode = Record<string, any>;
+/** Every JSON-LD node a page ships, @graph flattened. */
+function jsonLdGraph(html: string): LdNode[] {
+  return [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].flatMap((m) => {
+    const doc = JSON.parse(m[1]);
+    return (doc['@graph'] ?? [doc]) as LdNode[];
+  });
+}
+
 function walkHtml(dir: string): string[] {
   const out: string[] = [];
   for (const name of readdirSync(dir)) {
@@ -120,18 +129,53 @@ describe('landing pages', () => {
         expect(attr(html, /property="og:url" content="([^"]+)"/)).toBe(ORIGIN + route);
       });
 
-      it('ships parseable JSON-LD whose primary node url is the page', () => {
-        const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
-        expect(blocks.length).toBeGreaterThan(0);
-        const graph = blocks.flatMap((m) => {
-          const doc = JSON.parse(m[1]);
-          return doc['@graph'] ?? [doc];
-        });
-        const app = graph.find((n: any) => ['WebApplication', 'WebPage', 'Article'].includes(n['@type']));
-        expect(app?.url).toBe(ORIGIN + route);
-        for (const faq of graph.filter((n: any) => n['@type'] === 'FAQPage')) {
+      it('ships parseable JSON-LD whose page node is this page', () => {
+        const graph = jsonLdGraph(html);
+        expect(graph.length).toBeGreaterThan(0);
+        const webPage = graph.find((n) => n['@type'] === 'WebPage');
+        expect(webPage?.url).toBe(ORIGIN + route);
+        expect(webPage?.['@id']).toBe(`${ORIGIN}${route}#webpage`);
+        for (const faq of graph.filter((n) => n['@type'] === 'FAQPage')) {
           expect(faq.mainEntity.length).toBeGreaterThan(2);
         }
+      });
+
+      /**
+       * The editor is one thing described from 154 pages, not 154 things that
+       * share a name. It is the difference between an assistant reading three
+       * of our pages and coming away with one editor or with three -- and the
+       * only thing holding it together is that the node keeps the same @id and
+       * the same url everywhere (apple.com does this with #organization).
+       */
+      it('describes one shared app entity, never a per-page copy', () => {
+        const app = jsonLdGraph(html).find((n) => n['@type'] === 'WebApplication');
+        if (!app) return; // only landing pages carry it
+        expect(app['@id']).toBe(`${ORIGIN}/#app`);
+        expect(app.url).toBe(`${ORIGIN}/`);
+      });
+
+      /**
+       * A reference to an @id that is not in the graph is silently nothing --
+       * the consumer drops the edge and the page goes back to describing an
+       * anonymous app. Cheap to break by renaming one id, invisible afterwards.
+       */
+      it('resolves every @id reference it makes', () => {
+        const graph = jsonLdGraph(html);
+        const ids = new Set(graph.map((n) => n['@id']).filter(Boolean));
+        expect(ids.size, 'no duplicate @id in one graph').toBe(graph.filter((n) => n['@id']).length);
+        const refs: string[] = [];
+        const walk = (value: unknown): void => {
+          if (Array.isArray(value)) return value.forEach(walk);
+          if (!value || typeof value !== 'object') return;
+          const node = value as Record<string, unknown>;
+          // A bare { "@id": ... } with nothing else is a reference; a node that
+          // also carries a @type is a definition.
+          if (typeof node['@id'] === 'string' && !node['@type']) refs.push(node['@id']);
+          Object.entries(node).forEach(([key, v]) => key !== '@id' && walk(v));
+        };
+        graph.forEach((n) => Object.entries(n).forEach(([key, v]) => key !== '@id' && walk(v)));
+        expect(refs.length).toBeGreaterThan(0);
+        for (const ref of refs) expect(ids, `${ref} is defined in the graph`).toContain(ref);
       });
 
       /**
