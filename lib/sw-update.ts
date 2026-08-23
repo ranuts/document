@@ -51,6 +51,32 @@ export function isOwnWorker(reg: RegistrationLike, worker: SwLike, ownScriptURL?
 
 export const SKIP_WAITING_MESSAGE = { type: 'SKIP_WAITING' } as const;
 
+/**
+ * Is this page going to have a document in it?
+ *
+ * `hasOpenDocument()` reads the store, which is empty until the editor
+ * instance exists -- a few hundred milliseconds after `register()` resolves.
+ * Asking it that early answers "nothing open" about a page whose whole purpose
+ * is to open something, and the promotion that follows lands in the middle of
+ * the editor booting.
+ *
+ * The URL knows sooner. Every route that mounts a document says so in its
+ * query string, and embed mode says the host may push one at any moment --
+ * which is also why an embedded editor must never promote: the reload that
+ * follows would throw away a document the host page owns.
+ *
+ * On these routes a waiting worker simply stays waiting. That is not a lost
+ * update: it is the ordinary case the silent heal exists for, and unlike this
+ * path the heal checks that the waiting worker is genuinely a different build
+ * before it swaps -- which matters, because the vendored editor registers a
+ * worker of its own into this scope from inside the iframe, so ours is left
+ * `waiting` on almost every editor load with no new build in sight.
+ */
+export function documentIsExpected(search: string): boolean {
+  const params = new URLSearchParams(search);
+  return ['new', 'file', 'src', 'open', 'saved', 'embed', 'embedded'].some((key) => params.has(key));
+}
+
 /** Tell a waiting worker to take over -- only if nothing is open. Returns whether it did. */
 export function promoteWaitingWorker(
   reg: RegistrationLike,
