@@ -58,6 +58,29 @@ test.describe('language menu', () => {
     });
   }
 
+  /**
+   * The trigger is sized for the longest endonym, which on a 390px phone is
+   * most of what is left after the brand: at 132px it pushed its own caret past
+   * the viewport edge and wrapped "Document Editor" onto two lines. The bar
+   * drops GitHub there (it is in every footer) rather than clipping the only
+   * control that changes the language.
+   */
+  test('fits on a phone, in the longest language, on both kinds of page', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    for (const route of ['/pt/', '/pt/open/docx']) {
+      await page.goto(route);
+      const fits = await page
+        .locator('r-select.lang-select')
+        .first()
+        .evaluate((el) => {
+          const box = el.getBoundingClientRect();
+          return { right: box.right, left: box.left, vw: window.innerWidth };
+        });
+      expect(fits.right, `${route}: the language trigger runs past the viewport`).toBeLessThanOrEqual(fits.vw);
+      expect(fits.left, `${route}: the language trigger starts off-screen`).toBeGreaterThanOrEqual(0);
+    }
+  });
+
   test('a satellite page offers the same menu as the homepage', async ({ page }) => {
     await page.goto('/pt/open/docx');
     const select = page.locator('r-select.lang-select').first();
