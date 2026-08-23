@@ -832,7 +832,9 @@ ${langOptions}
           <div class="recent reveal d5">
             <span data-recent-slot data-recent-label="${e(data.recent.label)}" hidden></span>
             <span class="recent-note">${e(data.recent.note)}</span>
-            <a class="recent-all" href="/history">${e(data.recent.all)}</a>
+            <a class="recent-all" href="${locale === DEFAULT_LOCALE ? '/history' : `/history?locale=${locale}`}"
+              >${e(data.recent.all)}</a
+            >
           </div>
           <div class="trust reveal d5">${trust}</div>
         </div>

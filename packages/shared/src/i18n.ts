@@ -72,6 +72,25 @@ export const RTL_LANGUAGES: readonly Language[] = [];
 export const isRtlLanguage = (lang: Language): boolean => RTL_LANGUAGES.includes(lang);
 
 /**
+ * Where a language's homepage lives. English is the site root; every other
+ * language is a directory under it. Mirrors LOCALES in bin/build-pages.mjs,
+ * which generates those pages -- the app needs it to send a reader back to the
+ * homepage they came from rather than to the English one.
+ */
+export const localeHomePath = (lang: Language): string => (lang === LanguageCode.EN ? '/' : `/${lang}/`);
+
+/**
+ * Add `?locale=` to an app URL when the language is not the default. The app
+ * resolves its language from the URL first, so a link that carries it works
+ * even for a reader who has never chosen one explicitly (a shared link, a new
+ * browser) -- the cookie only covers people who used the switch.
+ */
+export const withLocale = (url: string, lang: Language): string => {
+  if (lang === LanguageCode.EN) return url;
+  return `${url}${url.includes('?') ? '&' : '?'}locale=${lang}`;
+};
+
+/**
  * Editor (OnlyOffice) UI locales shipped by the vendored web-apps build --
  * `public/web-apps/apps/<app>/main/locale/<code>.json`. The site shell has
  * strings for en / zh-CN only, but the editor can speak all of these, so the

@@ -166,6 +166,21 @@ describe('landing pages', () => {
         expect(alternates.sort(), `${route} og:locale:alternate`).toEqual(expected.sort());
       });
 
+      /**
+       * /editor and /history are one app serving every language, so a link from
+       * a translated page into them has to say which one. Picking 日本語 on the
+       * homepage and then opening the saved-documents page used to land the
+       * reader back in English: the choice existed only as the path they were
+       * standing on, and /history is not under it.
+       */
+      it('carries the language on every link into the app', () => {
+        const appLinks = [...html.matchAll(/(?:href|data-open-local)="(\/(?:editor|history)[^"]*)"/g)].map((m) => m[1]);
+        for (const link of appLinks) {
+          const carries = link.includes(`locale=${locale}`);
+          expect(locale === 'en' ? !link.includes('locale=') : carries, `${route}: ${link}`).toBe(true);
+        }
+      });
+
       it('offers every translation it has in the language switch', () => {
         for (const other of Object.keys(LOCALES)) {
           const target = routeIn(other, enRoute);
