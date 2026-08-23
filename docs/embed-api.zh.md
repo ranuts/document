@@ -71,6 +71,13 @@ window.addEventListener('message', (event) => {
 
 ### 通过 URL
 
+> **这个 URL 必须允许 CORS。** 取文件的是浏览器而不是服务器，所以响应里要有覆盖编辑器所在
+> 页面的 `Access-Control-Allow-Origin` 头。没有它，请求在编辑器拿到第一个字节之前就被拦掉了；
+> URL 上的 `?src=`、`?file=` 同理。这是接入时最容易踩的一脚：如果一个文件手动下载能打开、
+> 走编辑器打不开，先看响应头。跨域跳转也要一路带着这个头。
+> 加不了的场景（第三方主机、签名 URL、需要鉴权的接口），改由父页面自己 fetch，再用
+> `document:open-buffer` 把字节传进来。
+
 ```js
 sendEditorCommand('document:open-url', {
   url: 'https://example.com/files/demo.xlsx',

@@ -63,11 +63,12 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   loading.ts            # 加载状态 UI
   onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
   onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
-    iframe-guards.ts      # 10 条运行时守卫的编排；每条守卫一个文件在 guards/
+    iframe-guards.ts      # 12 条运行时守卫的编排；每条守卫一个文件在 guards/
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
                           # font-loading / comment-selection / canvas-loss /
-                          # wasm-binary-release / unload-prompt / hint-fallback
+                          # wasm-binary-release / unload-prompt / hint-fallback /
+                          # about-source
     open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
     open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
     font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
@@ -621,6 +622,16 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
 7. **循环依赖处理**：`onlyoffice-editor.ts` 与 `converter.ts` 之间通过回调注入（`setConverterCallbacks`）解耦；`ui.ts` 与 `document.ts` 之间通过 `setUICallbacks` 解耦
 8. **编辑器操作队列**：`createEditorInstance` 内部有 `editorOperationQueue`，防止并发创建/销毁编辑器
 9. **.claude/ 目录**：已加入 `.gitignore`，不提交本地 Claude Code 配置
+10. **ONLYOFFICE 署名不许再动（2026-08-23）**：本站是 ONLYOFFICE 的衍生作品，vendor
+    的 AGPL 头附了第 7 条附加条款——**7(b) 必须保留原产品 logo**、**7(e) 不授予任何
+    商标权利**。曾经两处都被当成"界面净化"去掉了（`guards/chrome.ts` 隐藏
+    `#header-logo`、DocEditor 配置 `customization.about: false`），界面上一处标识都不剩。
+    现在：header logo 与 About 面板都保留，守卫 12（`guards/about-source.ts`）往 About
+    面板追加"非官方产品 + 源码地址"（AGPL §13），7 种语言的两个页脚都有商标声明，根目录
+    `NOTICE` 存条款原文、vendor 版本与我们对 vendor 树的全部改动（§5(a) 要求）。
+    `test/unit/branding-notice.test.ts` 与 `test/e2e/vendor-branding.spec.ts` 钉死；
+    改 vendor 版本后要核对 NOTICE 里的引文与版本号。见
+    docs/explorations/2026-08-23-onlyoffice-attribution-agpl-section-7.md。
 
 ---
 

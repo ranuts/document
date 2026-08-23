@@ -44,6 +44,14 @@ notes. Entries describe what users experience, not internal refactors.
   the session on them, so a laptop keeps a recovery point about every 30
   seconds while a phone under load backs off instead of competing with the
   document you are editing.
+- **The ONLYOFFICE logo is back in the editor header, and the About pane with
+  it.** Both had been switched off as interface clutter. They are not: this
+  editor is a modified version of ONLYOFFICE, and the license it is published
+  under requires the product logo to stay. The About pane now also says that
+  this build is not an official ONLYOFFICE product and links to the source it
+  was built from. Every page of the site carries the same trademark notice in
+  its footer, and the repository has a NOTICE file with the full terms and the
+  list of changes made to the vendor build.
 
 ### Known issues
 

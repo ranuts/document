@@ -266,4 +266,14 @@ Branch und öffnen Sie einen PR, der Lint, Unit-Tests und drei End-to-End-Suites
 
 ## 📄 Lizenz
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE).
+
+Dieses Projekt ist ein abgeleitetes Werk von ONLYOFFICE (sdkjs und web-apps,
+(c) Ascensio System SIA). Das Original steht unter der AGPL mit Zusatzbedingungen nach
+deren Abschnitt 7: Das ursprüngliche Produktlogo muss erhalten bleiben, und es werden
+keine Markenrechte eingeräumt. Deshalb bleiben das ONLYOFFICE-Logo in der Kopfzeile des
+Editors und dessen Info-Bereich unangetastet. Den vollständigen Text, die verwendete
+Vendor-Version und jede daran vorgenommene Änderung finden Sie in [NOTICE](NOTICE).
+
+ONLYOFFICE ist eine Marke von Ascensio System SIA. Dieses Projekt ist kein offizielles
+ONLYOFFICE-Produkt und steht in keiner Verbindung zu Ascensio System SIA.

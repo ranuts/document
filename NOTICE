@@ -1,0 +1,127 @@
+NOTICE
+======
+
+This product is a derivative work of ONLYOFFICE.
+
+The site (https://edit.chaxus.com/, https://github.com/ranuts/document) is
+licensed under the GNU Affero General Public License version 3 -- see LICENSE.
+It embeds the ONLYOFFICE document editors, which are distributed under the same
+license with the additional terms permitted by Section 7 of the GNU AGPL. Those
+terms are reproduced verbatim below and apply to this work as well.
+
+
+1. ONLYOFFICE editors (sdkjs, web-apps)
+---------------------------------------
+
+Copyright (C) Ascensio System SIA. All rights reserved.
+https://www.onlyoffice.com/
+
+Upstream sources:
+  https://github.com/ONLYOFFICE/sdkjs
+  https://github.com/ONLYOFFICE/web-apps
+
+Version shipped in this repository: 9.3.0.133 (build:1), under public/sdkjs/
+and public/web-apps/. It is a third-party compiled offline build of those two
+projects; the corresponding source is the 9.3.0 release of the repositories
+above.
+
+The notice carried by the upstream source files, reproduced in full:
+
+    (c) Copyright Ascensio System SIA 2010-2024
+
+    This program is a free software product. You can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License (AGPL)
+    version 3 as published by the Free Software Foundation. In accordance with
+    Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+    that Ascensio System SIA expressly excludes the warranty of non-infringement
+    of any third-party rights.
+
+    This program is distributed WITHOUT ANY WARRANTY; without even the implied
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+    details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+
+    You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+    street, Riga, Latvia, EU, LV-1050.
+
+    The  interactive user interfaces in modified source and object code versions
+    of the Program must display Appropriate Legal Notices, as required under
+    Section 5 of the GNU AGPL version 3.
+
+    Pursuant to Section 7(b) of the License you must retain the original Product
+    logo when distributing the program. Pursuant to Section 7(e) we decline to
+    grant you any rights under trademark law for use of our trademarks.
+
+    All the Product's GUI elements, including illustrations and icon sets, as
+    well as technical writing content are licensed under the terms of the
+    Creative Commons Attribution-ShareAlike 4.0 International. See the License
+    terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+
+How this work complies with those terms
+---------------------------------------
+
+Section 7(b) -- product logo. The ONLYOFFICE logo is shown in the editor
+header, and the About pane (product logo, version, Ascensio System SIA
+copyright, onlyoffice.com link) is reachable from the left rail. Neither is
+suppressed. lib/onlyoffice/guards/chrome.ts hides only the current-user and
+co-users widgets, which describe a collaboration session this serverless build
+cannot have, and lib/onlyoffice-editor.ts leaves `customization.about` at its
+default. test/unit/branding-notice.test.ts and
+test/e2e/vendor-branding.spec.ts keep both from being "cleaned up" again.
+
+Section 7(e) -- trademarks. ONLYOFFICE and the ONLYOFFICE logo are trademarks
+of Ascensio System SIA. No rights under trademark law are granted by the
+license, and none are claimed here. This project is not an official ONLYOFFICE
+product and is not affiliated with, sponsored by or endorsed by Ascensio System
+SIA. The name is used only to identify the engine this site is built on.
+
+Section 5(a) -- modifications. The vendor tree under public/ is not pristine.
+The changes made to it are:
+
+  * public/sdkjs/common/wasm/x2t/x2t_helper.js -- patched to load the x2t
+    WebAssembly module through `Module.instantiateWasm` from a gzip-compressed
+    response, so the 40 MB binary is never materialised in memory, and to
+    report load failures to the host page. See
+    docs/changelogs/2026-08-20-issue-144-memory-and-delivery.md.
+  * public/sdkjs/common/wasm/x2t/x2t.wasm -- published gzip-compressed only
+    (x2t.wasm.gz), because the uncompressed file exceeds the host's per-file
+    limit. The decompressed bytes are unmodified and pinned by sha256 in
+    test/unit/vendor-contract.test.ts.
+  * public/web-apps/apps/*/main/locale/*.json -- missing keys filled in from
+    en.json by bin/locale-fill.mjs for the seven site languages. Untranslated
+    keys returned `undefined` and crashed the tooltip renderer. Values only;
+    no key is removed.
+  * public/web-apps help content trimmed from the shipped tree.
+  * public/fonts/ -- the font catalog's proprietary font files were replaced
+    with redistributable open-source families (see docs/font-licenses.md and
+    docs/changelogs/2026-08-22-font-licensing.md). The catalog registry itself
+    is unchanged in shape; only the files behind the entries differ.
+
+Nothing else in public/sdkjs/ or public/web-apps/ is edited. The behavioural
+patches this site needs are applied at runtime from lib/onlyoffice/guards/,
+which leaves the vendor files themselves byte-identical to the build they came
+from.
+
+
+2. x2t WebAssembly converter
+----------------------------
+
+The document converter (x2t) is part of ONLYOFFICE core (AGPL-3.0, Ascensio
+System SIA) compiled to WebAssembly. The build used here comes from the
+third-party project https://github.com/cryptpad/onlyoffice-x2t-wasm.
+
+
+3. Other components
+-------------------
+
+  * ranui / ranuts (https://github.com/chaxus/ran) -- the design system and
+    utilities this site's own interface is built with.
+  * Fonts under public/fonts/ and public/ran-fonts/ -- see docs/font-licenses.md
+    for the license of each family.
+  * Monaco Editor, under public/web-apps/vendor/monaco/ -- shipped by the
+    vendor build; see the LICENSE and ThirdPartyNotices.txt files in that
+    directory.
+
+Other trademarks named in this repository and on the site (Microsoft Word,
+Excel, PowerPoint, and others) are the property of their respective owners and
+are used only to describe the file formats this editor reads and writes.

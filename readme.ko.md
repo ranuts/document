@@ -262,4 +262,13 @@ pnpm run test:e2e       # 종단 간 테스트(Playwright, 실제 편집기 + �
 
 ## 📄 라이선스
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE).
+
+이 프로젝트는 ONLYOFFICE(sdkjs 및 web-apps, (c) Ascensio System SIA)의 2차적 저작물입니다.
+원본은 AGPL과 함께 제7조의 추가 조항으로 배포되며, 원래의 제품 로고를 유지해야 하고 상표법상
+어떤 권리도 부여되지 않습니다. 그래서 편집기 헤더의 ONLYOFFICE 로고와 정보 패널을 그대로
+두었습니다. 조항 전문, 사용 중인 vendor 버전, 우리가 가한 모든 변경 사항은
+[NOTICE](NOTICE)를 참고하세요.
+
+ONLYOFFICE는 Ascensio System SIA의 상표입니다. 이 프로젝트는 공식 ONLYOFFICE 제품이 아니며
+Ascensio System SIA와 제휴하거나 후원받지 않았습니다.

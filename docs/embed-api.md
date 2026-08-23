@@ -71,6 +71,17 @@ window.addEventListener('message', (event) => {
 
 ### From URL
 
+> **The URL must allow CORS.** The browser -- not a server -- fetches the file,
+> so the response needs an `Access-Control-Allow-Origin` header that covers the
+> page the editor runs on. Without it the request is blocked before the editor
+> sees a single byte, and the same is true of `?src=` and `?file=` on the URL.
+> This is the single most common thing to get wrong when integrating: if a file
+> opens when you download it by hand but not through the editor, check the
+> response headers first. Cross-origin redirects have to keep the header too.
+> When you cannot add it (a third-party host, a signed URL, anything behind
+> auth), fetch the file in the parent page and pass the bytes with
+> `document:open-buffer` instead.
+
 ```js
 sendEditorCommand('document:open-url', {
   url: 'https://example.com/files/demo.xlsx',

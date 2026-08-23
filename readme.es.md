@@ -266,4 +266,14 @@ producción).
 
 ## 📄 Licencia
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE).
+
+Este proyecto es una obra derivada de ONLYOFFICE (sdkjs y web-apps, (c) Ascensio
+System SIA). El original se distribuye bajo la AGPL con términos adicionales de su
+Sección 7: debe conservarse el logotipo original del producto y no se conceden derechos
+de marca. Por eso el logotipo de ONLYOFFICE en la cabecera del editor y su panel Acerca
+de se mantienen intactos. El texto completo, la versión del vendor y todos los cambios
+que le hicimos están en [NOTICE](NOTICE).
+
+ONLYOFFICE es una marca de Ascensio System SIA. Este proyecto no es un producto oficial
+de ONLYOFFICE ni está afiliado a Ascensio System SIA ni respaldado por ella.

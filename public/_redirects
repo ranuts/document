@@ -4,6 +4,12 @@
 # we pin the important one explicitly so /zh-CN never 404s or double-serves.
 /zh-CN /zh-CN/ 308
 
+# /zh/ is what people (and other sites) guess for the Chinese pages -- the real
+# prefix is the BCP-47 tag /zh-CN/, which is what hreflang and the sitemap use.
+# The guess used to 404.
+/zh /zh-CN/ 301
+/zh/* /zh-CN/:splat 301
+
 # The comparison pages are gone (no "vs X" positioning) — send old links home.
 /vs/google-docs / 301
 /zh-CN/vs/google-docs /zh-CN/ 301

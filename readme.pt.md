@@ -265,4 +265,14 @@ desenvolvimento, comportamento do Cloudflare Pages e imagem Docker de produção
 
 ## 📄 Licença
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE).
+
+Este projeto é uma obra derivada do ONLYOFFICE (sdkjs e web-apps, (c) Ascensio System
+SIA). O original é distribuído sob a AGPL com termos adicionais da sua Seção 7: o
+logotipo original do produto deve ser mantido e nenhum direito de marca é concedido. Por
+isso o logotipo do ONLYOFFICE no cabeçalho do editor e o painel Sobre continuam
+intactos. O texto completo, a versão do vendor e todas as alterações que fizemos nele
+estão em [NOTICE](NOTICE).
+
+ONLYOFFICE é uma marca da Ascensio System SIA. Este projeto não é um produto oficial do
+ONLYOFFICE nem tem afiliação ou endosso da Ascensio System SIA.
