@@ -237,6 +237,10 @@
         "label": "XLSX → CSV"
       },
       {
+        "href": "/zh-CN/onlyoffice-online-free",
+        "label": "OnlyOffice 在线版"
+      },
+      {
         "href": "https://github.com/ranuts/document",
         "label": "GitHub"
       }

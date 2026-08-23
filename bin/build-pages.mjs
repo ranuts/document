@@ -157,6 +157,7 @@ const UI = {
       ['/no-signup-document-editor', 'No sign-up'],
       ['/private-document-editor', 'Private editor'],
       ['/offline-document-editor', 'Offline'],
+      ['/onlyoffice-online-free', 'ONLYOFFICE online'],
       ['/edit-documents-without-account', 'No account'],
       ['/embed-document-editor', 'Embed API'],
     ],
@@ -186,6 +187,7 @@ const UI = {
       ['/zh-CN/no-signup-document-editor', '免注册'],
       ['/zh-CN/private-document-editor', '隐私编辑器'],
       ['/zh-CN/offline-document-editor', '离线'],
+      ['/zh-CN/onlyoffice-online-free', 'OnlyOffice 在线版'],
       ['/zh-CN/edit-documents-without-account', '免账号'],
       ['/zh-CN/embed-document-editor', 'Embed API'],
     ],
@@ -354,6 +356,11 @@ const UI = {
  */
 export const LANDING_SLUGS = [
   'offline-document-editor',
+  // en + zh only, on purpose: this one targets people searching for ONLYOFFICE
+  // itself, and the shell derives hreflang and the language switch from the
+  // sources a page actually has (see `translations` in renderPage), so a page
+  // in two languages stays correct in two languages.
+  'onlyoffice-online-free',
   'no-signup-document-editor',
   'private-document-editor',
   'edit-documents-without-account',

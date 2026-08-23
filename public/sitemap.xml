@@ -79,6 +79,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://edit.chaxus.com/onlyoffice-online-free</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://edit.chaxus.com/convert/xlsx-to-csv</loc>
     <lastmod>2026-08-22</lastmod>
     <changefreq>monthly</changefreq>
@@ -201,6 +207,12 @@
   <url>
     <loc>https://edit.chaxus.com/zh-CN/offline-document-editor</loc>
     <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://edit.chaxus.com/zh-CN/onlyoffice-online-free</loc>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
