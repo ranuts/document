@@ -42,6 +42,14 @@ const CONSOLE_ALLOWLIST: RegExp[] = [
   // e.g. when an editor iframe is torn down while its toolbar sprite is
   // still streaming; the same file decodes fine (probed 2026-08-15).
   /Image corrupt or truncated/,
+  // Firefox's wording for a request the BROWSER cancelled while a service
+  // worker was answering it -- a navigation away while the landing page's
+  // warm-up or an editor asset is still streaming. It says nothing about the
+  // worker: probed 2026-08-25 with sw.js answering the same cancelled request
+  // from cache, with a synthetic 504 and with Response.error(), and the line
+  // appears identically in all three. Chromium's equivalent (net::ERR_ABORTED)
+  // is already allowed above.
+  /A ServiceWorker intercepted the request/,
 ];
 
 const FATAL_DIALOG_PATTERN = /error occurred during the work|与文档工作|критическ/i;
@@ -69,6 +77,16 @@ const INIT_SCRIPT = () => {
   window.addEventListener('unhandledrejection', (event) => {
     bucket.frameErrors.push({ kind: 'unhandledrejection', message: describe(event.reason), href: location.pathname });
   });
+  // Firefox hands `console.error(someError)` to the driver as the bare word
+  // "Error" -- the message lives in the argument object, and by the time it
+  // could be resolved the frame that logged it is usually gone (the editor
+  // iframe is torn down as part of the very failure being reported). An
+  // allowlist cannot match what it cannot see, so the vendor's own logging of
+  // a fault a test deliberately injected read as an unexplained "Error" and
+  // failed it. Stringify at the call site instead, on every engine.
+  const nativeConsoleError = console.error.bind(console);
+  console.error = (...args: unknown[]) =>
+    nativeConsoleError(...args.map((arg) => (arg instanceof Error ? `${arg.name}: ${arg.message}` : arg)));
   window.addEventListener('error', (event) => {
     const err = event.error as { stack?: unknown } | undefined;
     const stack =

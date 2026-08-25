@@ -79,15 +79,80 @@
   }
 
   /**
+   * Stop warming when the visitor leaves, and cancel what is still in flight.
+   *
+   * Not an optimisation -- a correctness fix for what the browser does to a
+   * request IT cancels at unload. The warm-up runs for the whole time the page
+   * is being read, so there is nearly always a multi-MB fetch open when the
+   * call to action is finally clicked, and that fetch fails in a way no
+   * handler can catch: Safari raises an uncaught "Fetch API cannot load <url>
+   * due to access control checks" (probed 2026-08-25 -- fetch() returns a
+   * promise normally and a rejection handler IS attached; the document simply
+   * dies before the microtask can run), and Firefox blames the service worker
+   * that was answering it, logging "A ServiceWorker intercepted the request
+   * and encountered an unexpected error". One line per file still queued, in
+   * the console of a page the visitor is leaving.
+   *
+   * Cancelling first, while the document is still alive, lets the rejection
+   * reach the `.catch` below -- and stops spending a leaving visitor's
+   * bandwidth on bytes their next page will not have time to use.
+   */
+  var leaving = false;
+  var aborter = typeof AbortController === 'function' ? new AbortController() : null;
+
+  function newAborter() {
+    return typeof AbortController === 'function' ? new AbortController() : null;
+  }
+
+  function stopWarming() {
+    if (leaving) return;
+    leaving = true;
+    if (aborter) aborter.abort();
+  }
+
+  function resumeWarming() {
+    if (!leaving) return;
+    leaving = false;
+    aborter = newAborter();
+    startBackgroundWarmUp();
+  }
+
+  // `beforeunload` and not just `pagehide`: measured on WebKit, pagehide is
+  // already too late -- the uncaught errors this exists to prevent come back.
+  window.addEventListener('beforeunload', stopWarming);
+  window.addEventListener('pagehide', stopWarming);
+
+  // Stopping must not be a one-way door. `beforeunload` also fires for a
+  // navigation that never happens (an external scheme, a download link, an
+  // unload the visitor cancels), and without a way back the visitor would
+  // carry on reading a page that has quietly stopped warming -- so the editor
+  // they open next is cold for no reason. Any sign the document is still being
+  // used picks it up again; on a navigation that does go through, none of
+  // these fire again. Deliberately not a timer: a slow navigation would let it
+  // fire just before unload and restart the very requests we cancelled.
+  ['pointerdown', 'keydown', 'scroll'].forEach(function (event) {
+    window.addEventListener(event, resumeWarming, { passive: true });
+  });
+  // Restored from the back/forward cache: same situation, different signal.
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) resumeWarming();
+  });
+
+  /**
    * Fetch through the service worker so the response is stored in ITS cache.
    * A `<link rel=prefetch>` would only populate the HTTP cache, and the worker
    * serves the vendored tree cache-first -- a miss there re-requests the file
    * even when the browser still holds a copy.
    */
   function warm(url) {
+    if (leaving) return Promise.resolve();
     if (requested[url]) return Promise.resolve();
     requested[url] = true;
-    return fetch(url, { credentials: 'same-origin', priority: 'low' })
+    return fetch(url, {
+      credentials: 'same-origin',
+      priority: 'low',
+      signal: aborter ? aborter.signal : undefined,
+    })
       .then(drain)
       .catch(function () {
         // A warm-up failure must stay invisible: the real load will just be cold.
@@ -250,6 +315,11 @@
     CORE: CORE,
     ENGINES: ENGINES,
     formatUrls: formatUrls,
+    warm: warm,
+    stopWarming: stopWarming,
+    isLeaving: function () {
+      return leaving;
+    },
     warmSerially: warmSerially,
     warmEverything: warmEverything,
   };

@@ -96,7 +96,15 @@ test.describe('landing page warm-up', () => {
     }
 
     // No hover, no click: this is the background layer doing its job.
-    await expect.poll(async () => (await cachedPaths(page, core)).length, { timeout: 180_000 }).toBe(core.length);
+    //
+    // Polled once a second, not at Playwright's default 100 ms. Reading the
+    // cache is not free and it contends with the writer: on Firefox a poll at
+    // the default rate kept the worker's put of the last (9.4 MB) core file
+    // from ever completing, and the assertion sat at 7 of 8 for its whole
+    // three-minute budget. Slowing the observer down makes it land in seconds.
+    await expect
+      .poll(async () => (await cachedPaths(page, core)).length, { timeout: 180_000, intervals: [1000] })
+      .toBe(core.length);
   });
 
   /**
@@ -148,7 +156,10 @@ test.describe('landing page warm-up', () => {
     await expect(page.locator('#landing-hero')).toBeVisible();
     await page.evaluate(() => navigator.serviceWorker.ready);
     const core = await page.evaluate(() => (window as any).__landingPrefetch.CORE as string[]);
-    await expect.poll(async () => (await cachedPaths(page, core)).length, { timeout: 180_000 }).toBe(core.length);
+    // Once a second, for the reason spelled out in the test above.
+    await expect
+      .poll(async () => (await cachedPaths(page, core)).length, { timeout: 180_000, intervals: [1000] })
+      .toBe(core.length);
 
     // Warm the engines too, then watch what still leaves the page.
     await page.evaluate(() => (window as any).__landingPrefetch.warmEverything());
