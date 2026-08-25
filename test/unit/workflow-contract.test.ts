@@ -377,6 +377,35 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     expect(readFileSync(resolve(ROOT, 'test/e2e/lib/l0.ts'), 'utf8')).toMatch(/projectName: \[/);
   });
 
+  it('keeps the cases that cannot share the run out of the parallel pass, and still runs them', () => {
+    // The same pairing ci.yml's e2e job has, for the same reason and with the
+    // same failure mode when either half goes missing. Here the case that
+    // needs it is sw-silent-update.spec.ts: it rewrites the served sw.js to
+    // stand in for a deploy, which replaces the worker under every other spec
+    // on the origin -- sw-warm read a vendor stamp that belonged to it, and
+    // the cache-first probe lost the entry it had just planted.
+    expect(src).toMatch(/--grep-invert "api surface\|corpus\|@serial"/);
+    expect(src).toMatch(/-c playwright\.browsers\.config\.ts --grep @serial --workers=1/);
+  });
+
+  it('runs each half of the night only when it has something to say', () => {
+    // `schedule` fires whether or not anything was committed, and the corpus
+    // is static: what varies is this repository. Both windows are decided in
+    // one cheap gate job so a quiet night still leaves a run explaining itself.
+    const jobs = parseJobs(src);
+    expect(jobs.map(({ name }) => name)).toContain('gate');
+    for (const name of ['browsers', 'budgets']) {
+      const job = jobs.find((candidate) => candidate.name === name);
+      expect(job, name).toBeDefined();
+      expect(job!.body, name).toMatch(/^ {4}if: needs\.gate\.outputs\.browsers == 'true'$/m);
+      expect(job!.body, name).toMatch(/^ {4}needs: gate$/m);
+    }
+    const corpus = jobs.find(({ name }) => name === 'corpus');
+    expect(corpus!.body).toMatch(/^ {4}if: needs\.gate\.outputs\.corpus == 'true'$/m);
+    // Manual runs always go through, whatever the clock says.
+    expect(src).toMatch(/MANUAL: \$\{\{ github\.event_name == 'workflow_dispatch' \}\}/);
+  });
+
   it('drops the corpus fuzzer output without dropping real bug-report files', () => {
     // Byte soup minimized by a fuzzer until it broke a parser: "this editor
     // will not open it either" is not a finding, and 15 such files were red on

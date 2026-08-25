@@ -1,7 +1,19 @@
-# Nightly real-document regression matrix (docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md,
-# section 2 tier 2 / section 6). Pulls a public corpus of real Office files
-# (never committed here), drives the real editor through open -> edit -> save
-# for each, and publishes the findings table. Red is a signal, not a gate.
+# What the pull-request gate does not cover, run on a clock instead of on a
+# diff: the PR-time specs on the two engines the gate never launches
+# (playwright.browsers.config.ts), the interaction sweeps and throttled-network
+# budgets, and the real-document matrix over a public corpus of real Office
+# files (docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md, section
+# 2 tier 2 / section 6). Red here is a signal, not a gate.
+#
+# Two cadences, one nightly trigger (see the `gate` job):
+#   - cross-browser + sweeps run nightly. They are this repository's ONLY
+#     WebKit/Firefox coverage, and on 2026-08-25 that is what surfaced a
+#     shipped Safari defect the Chromium gate cannot see.
+#   - the corpus matrix runs on Sundays. It is 80 minutes against a corpus that
+#     never changes; what varies is this repository, and a week of it at a time
+#     is enough to keep the findings table current.
+# Neither runs when nothing has been committed since the last time it did --
+# `schedule` fires whether or not there is anything new to say.
 name: Nightly corpus
 
 on:
@@ -20,10 +32,63 @@ on:
         default: "1"
 
 jobs:
+  # Which of tonight's jobs have anything to say. Cheap (one checkout, no
+  # toolchain) and it runs every night, so the run itself is the record of why
+  # a quiet night was quiet -- a workflow that simply stops appearing is
+  # indistinguishable from one that broke.
+  gate:
+    name: What to run tonight
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      browsers: ${{ steps.decide.outputs.browsers }}
+      corpus: ${{ steps.decide.outputs.corpus }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Decide
+        id: decide
+        env:
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          age_hours=$(( ( $(date -u +%s) - $(git log -1 --format=%ct) ) / 3600 ))
+          # 1..7 with 7 = Sunday. The cron fires at 19:17 UTC, so this is the
+          # UTC weekday of the trigger, not of the Asia/Shanghai morning it
+          # lands in -- which is what the comment above the crons means.
+          weekday=$(date -u +%u)
+
+          browsers=false
+          corpus=false
+          # A cycle plus an hour of slack on each window: a commit landing just
+          # before the run it belongs to would otherwise wait a whole cycle.
+          # Written as `if` blocks rather than `a || b && c` -- that list
+          # evaluates to non-zero when both tests fail, and the step runs under
+          # `bash -e`, so a quiet night would end as a failed gate.
+          if [ "$MANUAL" = "true" ] || [ "$age_hours" -lt 25 ]; then
+            browsers=true
+          fi
+          if [ "$MANUAL" = "true" ] || { [ "$weekday" -eq 7 ] && [ "$age_hours" -lt 193 ]; }; then
+            corpus=true
+          fi
+
+          {
+            echo "HEAD is ${age_hours}h old, UTC weekday ${weekday}, manual=${MANUAL}"
+            echo ""
+            echo "- cross-browser + sweeps: ${browsers}"
+            echo "- corpus matrix: ${corpus}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "browsers=${browsers}" >> "$GITHUB_OUTPUT"
+          echo "corpus=${corpus}" >> "$GITHUB_OUTPUT"
+
   corpus:
     name: Real-document matrix (Apache POI test-data)
     runs-on: ubuntu-latest
     timeout-minutes: 300
+    needs: gate
+    if: needs.gate.outputs.corpus == 'true'
 
     steps:
       - name: Checkout code
@@ -83,6 +148,8 @@ jobs:
     name: Cross-browser (WebKit + Firefox)
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    needs: gate
+    if: needs.gate.outputs.browsers == 'true'
 
     steps:
       - name: Checkout code
@@ -96,7 +163,17 @@ jobs:
       # The same PR-time suites (minus the opt-in sweeps) on the two engines
       # the gate does not cover. Same-realm/L0 rules apply unchanged.
       - name: Run E2E on WebKit and Firefox
-        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep-invert "api surface|corpus" --reporter=list
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep-invert "api surface|corpus|@serial" --reporter=list
+
+      # The other half of that `--grep-invert`, exactly as ci.yml's e2e job
+      # pairs them: an @serial case is one that cannot share the run. Without
+      # this split sw-silent-update.spec.ts rewrites the served sw.js while
+      # other specs are being served from it, replacing THEIR worker mid-test
+      # -- which is where sw-warm's "runtime-e2e-next" and cache-first's
+      # missing sentinel came from on 2026-08-25. Without the second pass
+      # nothing runs them at all and the job stays green regardless.
+      - name: Run the cases that cannot share the run
+        run: pnpm exec playwright test -c playwright.browsers.config.ts --grep @serial --workers=1 --reporter=list
 
       - name: Upload report
         if: always()
@@ -110,6 +187,8 @@ jobs:
     name: Slow-network budgets
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: gate
+    if: needs.gate.outputs.browsers == 'true'
 
     steps:
       - name: Checkout code

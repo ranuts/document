@@ -224,9 +224,10 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
   `CORPUS_LIMIT=<上限，截断会打印>` / `CORPUS_VISUAL=1`（L3：原始 vs 存回再
   打开的渲染逐像素比对）；每条用例结束即追加一行到
   `test-results/corpus-rows-<worker>.jsonl`，`node bin/corpus-report.mjs [dir]`
-  合并出 JSON + markdown 表（含 L2 内容、L3 视觉、open/save p50/p95）；**夜间 CI** `.github/workflows/nightly-corpus.yml`
+  合并出 JSON + markdown 表（含 L2 内容、L3 视觉、open/save p50/p95）；**CI 每周日**
+  由 `.github/workflows/nightly-corpus.yml`
   拉 Apache POI test-data 公开语料跑同一套（红=信号非门禁，可
-  workflow_dispatch 指定 limit/filter）；对目录下每个 docx/doc/xlsx/xls/pptx/ppt/csv 走
+  workflow_dispatch 随时手动触发并指定 limit/filter）；对目录下每个 docx/doc/xlsx/xls/pptx/ppt/csv 走
   打开 → 监听致命弹窗/asc_onError → 编辑 → 保存 → 产物 sanity，输出汇总
   报告。语料留在测试机上不入库；未设 `CORPUS_DIR` 整套 skip，CI 保持绿。
   第一天就抓出 P0（非 ASCII 文件名导致 -82 打开失败 + 永久转圈），见
@@ -250,6 +251,19 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 复现 CF Pages 托管语义，CI job `e2e-pages`）、`playwright.browsers.config.ts`
 （WebKit + Firefox，夜间）、`playwright.prod.config.ts`（打线上/preview，
 `prod-smoke.yml` 与 PR 门禁 `preview-smoke.yml` 用）。
+
+**夜间那个 workflow 有两档节奏，且没有新提交就整晚不跑**（`nightly-corpus.yml`
+的 `gate` job，2026-08-25 起）：cross-browser + sweeps **每天**（它是本仓库唯一
+的 WebKit/Firefox 覆盖，PR 门禁全是 Chromium），corpus 矩阵**每周日**（80 分钟，
+而语料是静态的，变的是本仓库）；`workflow_dispatch` 无视这两个判断。判据是
+HEAD 的提交时间，窗口各留一个周期加一小时的余量。**gate 本身每晚都跑**——安静
+的夜晚也要留下一条 run 说明为什么安静，否则"没有 run"和"workflow 坏了"长得一样。
+**cross-browser 那个 job 必须和 ci.yml 一样把 `@serial` 分成两趟**
+（`--grep-invert "api surface|corpus|@serial"` + `--grep @serial --workers=1`）：
+`sw-silent-update.spec.ts` 靠改写被服务的 `dist/sw.js` 来模拟一次部署，那是**整个
+源站可见**的，跟别的 spec 并排跑会把它们的 worker 也换掉——2026-08-25 之前
+`sw-warm` 读到 `runtime-e2e-next`、`sw-vendor-cache-first` 找不到自己刚种下的
+哨兵，都是这个。两半必须成对，`workflow-contract.test.ts` 钉住。
 
 **L0 全局 fixture（`test/e2e/lib/l0.ts`，2026-08-15 起所有 spec 从它
 导入 `test`/`expect`）**：自动把 `asc_onError`、厂商致命弹窗、编辑器 iframe
