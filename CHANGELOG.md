@@ -100,6 +100,17 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- **Safari: opening a file from the homepage landed on an empty editor.** The
+  homepage hands the file you pick to the editor through this browser's own
+  storage, and Safari refuses to store a file that way -- so the editor opened
+  with nothing in it and you had to pick the same document a second time. The
+  handoff now checks that the file really arrived, and passes the contents
+  across when it did not.
+- **Safari: leaving the homepage logged errors.** The homepage quietly loads
+  the editor while you read, and whatever was still downloading when you
+  clicked was reported as a failure. The download now stops when you leave --
+  which also stops spending your connection on a page you are no longer on --
+  and picks up again if you turn out to have stayed.
 - **A new version now reaches you by itself.** An update used to wait until no
   document was open anywhere, which for anyone who goes straight to the editor
   meant never -- reloading served the same old build back, and when that build

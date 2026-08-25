@@ -8,6 +8,21 @@ import { expect, test } from './lib/l0';
 // observe these messages.
 // ---------------------------------------------------------------------------
 
+/**
+ * Open the embedded editor and wait until it is the document being talked to.
+ *
+ * `/` is the static landing page; the embed query strings make it redirect to
+ * `/editor`, and `page.goto` resolves on the landing page's own load -- before
+ * that redirect. A `page.evaluate` started in the gap dies with "Execution
+ * context was destroyed, most likely because of a navigation", which is what
+ * made three of these tests flake on WebKit night after night (it loses the
+ * race more often than Chromium, but the race is not WebKit's).
+ */
+const openEmbed = async (page: import('@playwright/test').Page, query = 'embed=1'): Promise<void> => {
+  await page.goto(`/?${query}`);
+  await page.waitForURL(/\/editor/);
+};
+
 test.describe('embed mode activation', () => {
   test('adds embed-mode class to body when ?embed=1 is present', async ({ page }) => {
     await page.goto('/?embed=1');
@@ -42,7 +57,7 @@ test.describe('postMessage API', () => {
       });
     });
 
-    await page.goto('/?embed=1');
+    await openEmbed(page);
     // Give a tick for async postMessage dispatch
     await page.waitForTimeout(200);
 
@@ -51,7 +66,7 @@ test.describe('postMessage API', () => {
   });
 
   test('responds to document:get-state with readonly and hasDocument flags', async ({ page }) => {
-    await page.goto('/?embed=1');
+    await openEmbed(page);
 
     const response = await page.evaluate(
       () =>
@@ -71,7 +86,7 @@ test.describe('postMessage API', () => {
   });
 
   test('document:set-readonly changes readonly state', async ({ page }) => {
-    await page.goto('/?embed=1');
+    await openEmbed(page);
 
     // Query initial state
     const before = await page.evaluate(
@@ -105,7 +120,7 @@ test.describe('postMessage API', () => {
     // page.evaluate postMessage has origin http://127.0.0.1:4173 (same origin),
     // which does NOT match the allowed 'https://allowed.example.com',
     // so the message handler should be skipped and no response received.
-    await page.goto('/?embed=1&embedOrigin=https://allowed.example.com');
+    await openEmbed(page, 'embed=1&embedOrigin=https://allowed.example.com');
 
     const blocked = await page.evaluate(
       () =>

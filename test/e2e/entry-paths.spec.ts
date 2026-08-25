@@ -106,7 +106,10 @@ test.describe('entry paths (real editor)', () => {
   });
 
   test('?open=local consumes the file a static landing page stashed in IndexedDB', async ({ page }) => {
-    // Same DB/store/key names as public/open-local.js and lib/pending-open.ts.
+    // Stashed by the landing page's own writer (public/open-local.js), not by
+    // a copy of it: the record shape is a contract between that file and
+    // lib/pending-open.ts, and a third hand-written copy here would drift and
+    // still pass. test/unit/pending-open-handoff.test.ts pins the two halves.
     await page.goto('/zh-CN/');
     await page.evaluate(async (b64) => {
       const bin = atob(b64);
@@ -115,21 +118,9 @@ test.describe('entry paths (real editor)', () => {
       const file = new File([bytes], '落地页交接.docx', {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
-      await new Promise<void>((resolve, reject) => {
-        const req = indexedDB.open('document-handoff', 1);
-        req.onupgradeneeded = () => req.result.createObjectStore('files');
-        req.onerror = () => reject(req.error);
-        req.onsuccess = () => {
-          const db = req.result;
-          const tx = db.transaction('files', 'readwrite');
-          tx.objectStore('files').put(file, 'pending');
-          tx.oncomplete = () => {
-            db.close();
-            resolve();
-          };
-          tx.onerror = () => reject(tx.error);
-        };
-      });
+      await (window as unknown as { __openLocal: { stashFile: (f: File) => Promise<void> } }).__openLocal.stashFile(
+        file,
+      );
     }, Buffer.from(DOC).toString('base64'));
     await page.goto('/?locale=zh-CN&open=local');
     await settleEditor(page);

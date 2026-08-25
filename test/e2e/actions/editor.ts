@@ -33,6 +33,26 @@ export async function waitForEditorReady(
   page: Page,
   timeoutMs = 120_000,
 ): Promise<{ kind: EditorKind; loadMs: number }> {
+  const deadline = Date.now() + timeoutMs;
+  // The page under test is allowed to reload itself exactly once while this is
+  // waiting, and does: lib/sw-update.ts quietly moves a tab off a build this
+  // browser has not run before, which on a cold profile is every first visit.
+  // The evaluate below dies with "Execution context was destroyed" when that
+  // lands mid-wait -- a shipped feature working, reported as a test failure
+  // (sw-vendor-cache-first flaked on it night after night). Start over on the
+  // new document instead, within the same deadline.
+  for (;;) {
+    try {
+      return await evaluateEditorReady(page, Math.max(0, deadline - Date.now()));
+    } catch (error) {
+      const destroyed = /Execution context was destroyed/.test(String((error as Error)?.message ?? error));
+      if (!destroyed || Date.now() >= deadline) throw error;
+      await page.waitForLoadState('domcontentloaded');
+    }
+  }
+}
+
+function evaluateEditorReady(page: Page, timeoutMs: number): Promise<{ kind: EditorKind; loadMs: number }> {
   return page.evaluate(async (timeoutMs) => {
     const t0 = Date.now();
     const findSdk = (): { api: any; win: any } | null => {

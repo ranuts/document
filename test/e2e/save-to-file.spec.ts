@@ -145,6 +145,31 @@ test.describe('saving into the document own file (real editor)', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(stubPicker);
+
+    // The stub hands out a real origin-private file handle, so this spec needs
+    // OPFS writable streams. WebKit has the handles but not the streams --
+    // `createWritable().write(x)` rejects with UnknownError for every payload
+    // shape (File, Blob, Uint8Array, ArrayBuffer, string; probed 2026-08-25).
+    // Nothing to fix on our side: saving to the document's own file is
+    // Chromium-only by design (Safari has no showSaveFilePicker at all,
+    // Firefox has said it will not add one) and falls back to a download
+    // everywhere else. Probed rather than keyed to the browser name so the
+    // spec starts running by itself if WebKit ships the streams.
+    await page.goto('/');
+    const writableStreams = await page.evaluate(async () => {
+      try {
+        const root = await navigator.storage.getDirectory();
+        const handle = await root.getFileHandle('probe.bin', { create: true });
+        const stream = await handle.createWritable();
+        await stream.write(new Uint8Array([1]));
+        await stream.close();
+        await root.removeEntry('probe.bin');
+        return true;
+      } catch {
+        return false;
+      }
+    });
+    test.skip(!writableStreams, 'this engine has no origin-private writable streams to stub the picker with');
   });
 
   test('picks a file once, then writes to it on every later save', async ({ page }) => {
