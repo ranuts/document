@@ -143,14 +143,17 @@ popup，再遇到一个从不说自己开着的按钮。
 于是 `viewBox` 变成 `viewbox`——**SVG 读这个属性是大小写敏感的，小写的不生效**——
 两个环境产出的字节因此不同，`check()`（"一次全新渲染会不会改变已提交的页面"）永远红。
 
-所以这里显式用 `HTMLElementMock`（`ranui/builder` 的公开导出）：两个环境行为一致，
-属性和文本自动转义，仍然是 ranui 的体系。生态规则真正要的东西一条没丢——不手拼 HTML、
-不手动 `escapeHtml`。
-
-顺带发现 builder 的一个真实缺口：**它没有 `createElementNS` 路径**
+这暴露了 builder 的一个真实缺口：**它没有 `createElementNS` 路径**
 （`utils/builder/core.ts` 只有 `document.createElement(tag)`），所以在真实浏览器里
 它根本构造不出 SVG——`View('svg')` 得到的是 `HTMLUnknownElement`，属性被小写，浏览器
-也不会当 SVG 渲染。任何拿它做图标的人都会撞上。值得回 chaxus/ran 修。
+也不会当 SVG 渲染。任何拿它做图标的人都会撞上。
+
+**已经回 chaxus/ran 修掉了**（PR #396，ranui 0.5.0-alpha.6）：SVG-only 的标签走
+`createElementNS`，按标签名推断；SVG 与 HTML 共有的那几个（`a` / `script` / `style` /
+`title`）仍当 HTML，另外导出 `Svg()` 显式指定。升级之后这里就用回标准的
+`View()` / `Div()` 了——两个环境的输出实测逐字节一致，`viewBox` 保住驼峰。
+
+中间那版用 `HTMLElementMock` 的写法已经不需要了，留在 git 历史里。
 
 ## 别再试这些
 

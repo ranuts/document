@@ -24,8 +24,8 @@ importers:
         specifier: workspace:*
         version: link:packages/shared
       ranui:
-        specifier: 0.5.0-alpha.5
-        version: 0.5.0-alpha.5(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
+        specifier: 0.5.0-alpha.6
+        version: 0.5.0-alpha.6(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
       ranuts:
         specifier: 0.4.1-alpha.2
         version: 0.4.1-alpha.2
@@ -80,8 +80,8 @@ importers:
   packages/chat-ui:
     dependencies:
       ranui:
-        specifier: 0.5.0-alpha.5
-        version: 0.5.0-alpha.5(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
+        specifier: 0.5.0-alpha.6
+        version: 0.5.0-alpha.6(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
       ranuts:
         specifier: 0.4.1-alpha.2
         version: 0.4.1-alpha.2
@@ -96,8 +96,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       ranui:
-        specifier: 0.5.0-alpha.5
-        version: 0.5.0-alpha.5(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
+        specifier: 0.5.0-alpha.6
+        version: 0.5.0-alpha.6(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
       ranuts:
         specifier: 0.4.1-alpha.2
         version: 0.4.1-alpha.2
@@ -1497,8 +1497,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  ranui@0.5.0-alpha.5:
-    resolution: {integrity: sha512-XaUsnYKDUSA12Iuw4ZoHC1qB1SCTeSeCBkplH9q9o7OwBqqageAGSWa0wGzeHZyNHOr/ge27NFZ5AA+18UXshw==}
+  ranui@0.5.0-alpha.6:
+    resolution: {integrity: sha512-5gUeGLFMpfASX69ZsrpBB/VlO4cT5EafCvB22+xqASVHZAA7YT+82pC6yqF7N5b5FJwzR66LZHjGeJBge5vDTA==}
     engines: {node: '>=20.19.0'}
 
   ranuts@0.4.1-alpha.2:
@@ -3035,7 +3035,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  ranui@0.5.0-alpha.5(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0):
+  ranui@0.5.0-alpha.6(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0):
     dependencies:
       dashjs: 5.2.0(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
       dompurify: 3.4.13
