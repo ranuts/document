@@ -131,27 +131,28 @@ body {
   /* Panel padding: r-popover reads this off the host and hands it to the panel. */
   --ran-popover-content-padding: 4px;
 }
+/* The face of the control -- the button itself is the r-popover host. */
 #landing-hero .lang-trigger {
   display: inline-flex;
   align-items: center;
   gap: var(--ran-space-2);
   padding: var(--ran-space-2) var(--ran-space-3);
-  border: 0;
   border-radius: var(--ran-radius-sm);
-  background: none;
-  font: inherit;
   font-size: 14px;
   line-height: 1;
   color: var(--ran-color-text-secondary);
   cursor: pointer;
   transition: 0.15s ease;
 }
-#landing-hero .lang-trigger:hover,
+#landing-hero .lang-menu:hover .lang-trigger,
 #landing-hero .lang-menu[open] .lang-trigger {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
 }
-#landing-hero .lang-trigger:focus-visible {
+#landing-hero .lang-menu:focus-visible {
+  outline: none;
+}
+#landing-hero .lang-menu:focus-visible .lang-trigger {
   outline: 2px solid var(--ran-color-focus-ring, var(--ran-color-primary));
   outline-offset: 2px;
 }

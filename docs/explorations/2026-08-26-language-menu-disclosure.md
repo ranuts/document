@@ -111,6 +111,26 @@ cookie 仍然要写：静态页把语言放在 URL 里，而 `/editor` 和 `/his
 教训：**先把盒子量准，再谈对齐方式**。对齐的选择依赖于面板和触发器的相对宽度，而
 那个宽度当时是猜的。
 
+## 触发器就是 r-popover 自己，不要在里面再放一个 button
+
+第一版把 `<button class="lang-trigger">` 放进 `<r-popover>` 里。看起来天经地义——
+disclosure 的触发器就该是 button——但 **r-popover 把 `tabindex`、`aria-haspopup`、
+`aria-expanded` 设在它自己身上**，它的设计假设是"host 就是触发器"。
+
+于是这个控件占了**两个 tab stop**，而且信息是分家的：
+
+- `r-popover` 上有 `tabindex=0`、`aria-expanded="false"`，但没有 role、没有名字
+- 内层 `<button>` 上有 `aria-label="Language"`，但不报告展开状态
+
+屏幕阅读器因此永远读不到"Language, collapsed"这一个完整的控件——它先遇到一个匿名的
+popup，再遇到一个从不说自己开着的按钮。
+
+改法是把 `role="button"` 和 `aria-label` 放到 host 上，内层降成 `<span>`（它只是那排
+图标+文字的布局容器）。一个 tab stop、名字和状态在同一个元素上，正是 ARIA disclosure
+要的形状。焦点环也跟着挪到 host 上（`:focus-visible .lang-trigger`）。
+
+反向验证：把内层 button 放回去，"one tab stop" 那条用例报 `Expected 1, Received 2`。
+
 ## 生成 HTML 用 ranui 的 DOM，不要拼字符串
 
 第一版 `langMenu` 是模板字符串拼的——因为我以为 `ranui/builder` 需要浏览器 DOM，
@@ -140,6 +160,8 @@ cookie 仍然要写：静态页把语言放在 URL 里，而 `/editor` 和 `/his
   `dropdownclass`。
 - **别用 document 级事件委托监听菜单里的点击**（`stopPropagation`，见上）。
 - **别把菜单顺序改成运行时排序**。
+- **别在 `r-popover` 里再放一个 `<button>`**。host 已经是触发器（tabindex / haspopup /
+  expanded 都在它身上），再放一个就是第二个 tab stop，且名字和状态分家。
 - **别给面板写死宽度**。`max-content` 让它跟着最长的语言名走；写死的数字既会留下
   一列空白，又会把对齐方式带偏。
 - **别在这个文件里用 `View()`/`Div()` 构造 SVG**（`viewBox` 会在 jsdom 下被小写，
