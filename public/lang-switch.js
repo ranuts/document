@@ -1,33 +1,36 @@
-// Shared language-switch wiring for the static pages (satellite pages, the
-// zh-CN homepage and 404.html). Each page declares its targets on the options:
+// Remembers the language the reader picks from the switcher in the header.
 //
-//   <r-select class="lang-select" type="text" value="en">
-//     <r-option value="en" data-href="/open/docx">EN</r-option>
-//     <r-option value="zh-CN" data-href="/zh-CN/open/docx">中文</r-option>
-//   </r-select>
+// The switcher itself needs no script: it is a disclosure button (ranui's
+// <r-popover>) over a list of real <a href> links, so choosing a language is an
+// ordinary navigation — middle-clickable, copyable, and crawlable. All this file
+// adds is the cookie.
 //
-// The app homepage wires the same markup in index.ts instead (it maps locales
-// itself); this file is only loaded by pages without the app bundle.
+// The cookie exists because the static pages carry their language in the URL but
+// /editor and /history are one app that reads its language from, in order:
+// ?locale=, this cookie, localStorage, and the browser. Without it, picking
+// 日本語 on the homepage and then opening the saved-documents page landed the
+// reader back in English — the choice existed only as the path they happened to
+// be standing on.
+//
+// Listeners go on the links themselves rather than on the document, because
+// <r-popover> stops click propagation at its panel: the panel is portalled to
+// <body> and a document-level delegate never hears about it. Moving a node does
+// not disturb its listeners, so binding before the portal happens is fine.
 document.addEventListener('DOMContentLoaded', function () {
-  var select = document.querySelector('r-select.lang-select');
-  if (!select) return;
-  select.addEventListener('change', function (event) {
-    var value = event.detail && event.detail.value;
-    if (!value) return;
-    var option = select.querySelector('r-option[value="' + value + '"]');
-    var href = option && option.getAttribute('data-href');
-    if (!href || href === location.pathname) return;
-    // Remember the choice before navigating. The static pages carry their
-    // language in the URL, but /editor and /history are one app that reads
-    // its language from (in order) ?locale=, this cookie, localStorage and
-    // the browser. Without the cookie, picking 日本語 on the homepage and
-    // then opening the saved-documents page landed the reader back in
-    // English -- the choice existed only as the path they were standing on.
-    try {
-      document.cookie = 'locale=' + encodeURIComponent(value) + ';path=/;max-age=31536000;samesite=lax';
-    } catch (e) {
-      /* cookies disabled: the URL still carries the language */
-    }
-    location.href = href;
-  });
+  var links = document.querySelectorAll('a.lang-option[hreflang]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', remember);
+  }
 });
+
+function remember(event) {
+  var locale = event.currentTarget.getAttribute('hreflang');
+  if (!locale) return;
+  try {
+    document.cookie = 'locale=' + encodeURIComponent(locale) + ';path=/;max-age=31536000;samesite=lax';
+  } catch (e) {
+    /* cookies disabled: the URL still carries the language */
+  }
+  // Deliberately no preventDefault — the link navigates on its own, which is
+  // the point of it being a link.
+}

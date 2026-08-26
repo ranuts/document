@@ -39,6 +39,16 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- **The language menu is now a plain list of links.** Every language is named in
+  its own words -- English is no longer the one abbreviated "EN" among six full
+  names -- with a check on the one you are reading. Each entry is a real link, so
+  you can open a language in a new tab, copy its address, or reach it with
+  JavaScript off. The menu opens from the right edge of its button instead of
+  sliding back in from the edge of the window, and the button itself now matches
+  the other links in the bar rather than sitting in a form field. On a phone it
+  keeps the globe and drops the language name, which means the GitHub link no
+  longer has to disappear to make room.
+
 - Recovery points are taken more often on a fast machine and less often on a
   slow one. The editor times its own exports and spends a fixed, small share of
   the session on them, so a laptop keeps a recovery point about every 30

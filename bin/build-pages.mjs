@@ -121,7 +121,7 @@ const sourceEntity = () => ({
 
 /** Locales the shell knows about. `prefix` is the URL directory; '' = root. */
 export const LOCALES = {
-  en: { prefix: '', lang: 'en', label: 'EN', home: '/', dir: 'ltr', og: 'en_US' },
+  en: { prefix: '', lang: 'en', label: 'English', home: '/', dir: 'ltr', og: 'en_US' },
   'zh-CN': { prefix: '/zh-CN', lang: 'zh-CN', label: '中文', home: '/zh-CN/', dir: 'ltr', og: 'zh_CN' },
   ja: { prefix: '/ja', lang: 'ja', label: '日本語', home: '/ja/', dir: 'ltr', og: 'ja_JP' },
   de: { prefix: '/de', lang: 'de', label: 'Deutsch', home: '/de/', dir: 'ltr', og: 'de_DE' },
@@ -132,6 +132,73 @@ export const LOCALES = {
   pt: { prefix: '/pt', lang: 'pt', label: 'Português', home: '/pt/', dir: 'ltr', og: 'pt_BR' },
 };
 const DEFAULT_LOCALE = 'en';
+
+/**
+ * The order the language menu lists its entries in.
+ *
+ * Explicit rather than sorted at render time: `localeCompare` answers according
+ * to whatever ICU data the host has, so the order could differ between a local
+ * build and CI, and a menu that reorders itself is one nobody can learn. Latin
+ * endonyms alphabetically first, then the rest -- a reader scanning for their
+ * own language is looking for the shape of a word, not reading the list.
+ *
+ * Every locale in `LOCALES` must appear here; `landing-pages.test.ts` fails if
+ * one is added and this is not.
+ */
+export const MENU_ORDER = ['de', 'en', 'es', 'pt', 'zh-CN', 'ja', 'ko'];
+
+/**
+ * The language switcher: a disclosure button over a list of real links.
+ *
+ * Links, not a listbox. Switching language is navigation, so the entries are
+ * `<a href>` -- middle-clickable, copyable, crawlable, and readable by assistive
+ * tech as the set of links they are. WAI-ARIA's own guidance reserves `menu`
+ * (and, further off, `combobox`) for commands and form values; a disclosure over
+ * links is the pattern for this. The `<r-select>` this replaces announced itself
+ * as a combobox, which is a form field.
+ *
+ * Each entry carries `lang` so a screen reader pronounces it in that language
+ * rather than in the page's -- "日本語" read with English phonetics is noise, and
+ * these labels exist precisely for readers who cannot read the current page.
+ *
+ * `bottom-end` because the switcher sits at the right end of the header: aligned
+ * to its leading edge the panel would overhang the viewport and be shifted back,
+ * landing left of the trigger it belongs to.
+ */
+const langMenu = (locale, locales, ui, hrefFor) => {
+  const options = MENU_ORDER.filter((l) => locales.includes(l))
+    .map((l) => {
+      const current = l === locale;
+      return [
+        `            <a class="lang-option${current ? ' is-current' : ''}" href="${hrefFor(l)}"`,
+        ` lang="${LOCALES[l].lang}" hreflang="${LOCALES[l].lang}"${current ? ' aria-current="page"' : ''}>`,
+        `${LOCALES[l].label}</a>`,
+      ].join('');
+    })
+    .join('\n');
+  return `        <r-popover class="lang-menu" placement="bottom-end" trigger="click">
+          <button class="lang-trigger" type="button" aria-label="${escapeHtml(ui.langAria)}">
+            <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
+              <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
+              <path
+                d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+              />
+            </svg>
+            <span class="lang-current">${LOCALES[locale].label}</span>
+            <svg class="lang-caret" aria-hidden="true" viewBox="0 0 12 12">
+              <path d="M2.75 4.5 6 7.75 9.25 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <r-content>
+            <div class="lang-list">
+${options}
+            </div>
+          </r-content>
+        </r-popover>`;
+};
 
 /** Per-locale chrome strings (the shell itself is bilingual). */
 const UI = {
@@ -721,9 +788,6 @@ function renderHome({ locale, data, locales }) {
     .filter((l) => l !== locale)
     .map((l) => `    <meta property="og:locale:alternate" content="${LOCALES[l].og}" />`)
     .join('\n');
-  const langOptions = locales
-    .map((l) => `            <r-option value="${l}" data-href="${LOCALES[l].home}">${LOCALES[l].label}</r-option>`)
-    .join('\n');
 
   const graph = [
     ...siteEntities(),
@@ -873,7 +937,8 @@ ${jsonLd}
     </script>
 
     <script src="/ranui-iife/button.iife.js" defer></script>
-    <script src="/ranui-iife/select.iife.js" defer></script>
+    <script src="/ranui-iife/popover.iife.js" defer></script>
+    <script src="/ranui-iife/content.iife.js" defer></script>
     <script src="/ranui-iife/theme-switch.iife.js" defer></script>
     <script src="/lang-switch.js" defer></script>
     <script src="/open-local.js" defer></script>
@@ -896,20 +961,7 @@ ${nav}
             <a class="navlink gh" href="${REPO}" rel="noopener" target="_blank">
               <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
             </a>
-            <span class="lang-wrap">
-              <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
-                <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
-                <path
-                  d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                />
-              </svg>
-              <r-select class="lang-select" type="text" value="${locale}" aria-label="${e(ui.langAria)}">
-${langOptions}
-              </r-select>
-            </span>
+${langMenu(locale, locales, ui, (l) => LOCALES[l].home)}
           </nav>
         </div>
       </header>
@@ -1121,12 +1173,6 @@ function renderPage({ page, locale, meta, body, headings, faq, steps, source }) 
     .filter((l) => l !== locale)
     .map((l) => `    <meta property="og:locale:alternate" content="${LOCALES[l].og}" />`)
     .join('\n');
-  const langOptions = Object.keys(LOCALES)
-    .filter((l) => page.sources[l])
-    .map(
-      (l) => `            <r-option value="${l}" data-href="${routeFor(l, page.slug)}">${LOCALES[l].label}</r-option>`,
-    )
-    .join('\n');
   // The table of contents lives in the sidebar rail, not above the article:
   // on /help it was 14 links between the reader and the first sentence.
   const toc =
@@ -1234,7 +1280,8 @@ ${jsonLd}
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
     <script src="/ranui-iife/button.iife.js" defer></script>
-    <script src="/ranui-iife/select.iife.js" defer></script>
+    <script src="/ranui-iife/popover.iife.js" defer></script>
+    <script src="/ranui-iife/content.iife.js" defer></script>
     <script src="/ranui-iife/theme-switch.iife.js" defer></script>
     <script src="/lang-switch.js" defer></script>
   </head>
@@ -1247,20 +1294,7 @@ ${jsonLd}
     <header class="bar">
       <a class="brand" href="${L.home}"><span class="logo">D</span>${ui.siteName}</a>
       <nav>
-        <span class="lang-wrap">
-          <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
-            <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
-            <path
-              d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.2"
-            />
-          </svg>
-          <r-select class="lang-select" type="text" value="${locale}" aria-label="${ui.langAria}">
-${langOptions}
-          </r-select>
-        </span>
+${langMenu(locale, translations, ui, (l) => routeFor(l, page.slug))}
         <a href="${REPO}" rel="noopener" target="_blank">
           <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
         </a>
