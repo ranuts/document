@@ -39,8 +39,18 @@ playwright-report-pages/
 # bin/build-pages.mjs, same as /help and the changelog below.
 public/about.html
 public/zh-CN/about.html
+public/ja/about.html
+public/de/about.html
+public/es/about.html
+public/ko/about.html
+public/pt/about.html
 public/contact.html
 public/zh-CN/contact.html
+public/ja/contact.html
+public/de/contact.html
+public/es/contact.html
+public/ko/contact.html
+public/pt/contact.html
 public/offline-document-editor.html
 public/zh-CN/offline-document-editor.html
 public/onlyoffice-online-free.html
