@@ -75,7 +75,7 @@
     "@ranuts/chat-ui": "workspace:*",
     "@ranuts/converter": "workspace:*",
     "@ranuts/shared": "workspace:*",
-    "ranui": "0.5.0-alpha.5",
+    "ranui": "0.5.0-alpha.6",
     "ranuts": "0.4.1-alpha.2"
   }
 }
