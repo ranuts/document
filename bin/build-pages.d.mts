@@ -14,6 +14,11 @@ export const LOCALES: Record<
   string,
   { prefix: string; lang: string; label: string; home: string; dir: string; og: string }
 >;
+/**
+ * The order the language menu lists its entries in. Every key of `LOCALES`
+ * appears exactly once; `landing-pages.test.ts` pins that.
+ */
+export const MENU_ORDER: string[];
 export const LANDING_SLUGS: string[];
 export const PAGES: Array<{
   slug: string;

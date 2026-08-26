@@ -124,37 +124,84 @@ body {
 /* Language switch: same ranui <r-select> on the app homepage and the static
    localized pages (the latter wire navigation with a tiny inline script).
    Extensible: add an option per locale. */
-#landing-hero .lang-wrap {
+#landing-hero .lang-menu {
+  /* The r-popover host is `display: block`; in the nav's flex row that stretches
+     it. Shrink it to its trigger. */
+  display: inline-flex;
+  /* Panel padding: r-popover reads this off the host and hands it to the panel. */
+  --ran-popover-content-padding: 4px;
+}
+#landing-hero .lang-trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--ran-space-1);
-  padding-left: var(--ran-space-1);
+  gap: var(--ran-space-2);
+  padding: var(--ran-space-2) var(--ran-space-3);
+  border: 0;
+  border-radius: var(--ran-radius-sm);
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--ran-color-text-secondary);
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+#landing-hero .lang-trigger:hover,
+#landing-hero .lang-menu[open] .lang-trigger {
+  color: var(--ran-color-text);
+  background: var(--ran-color-bg-hover);
+}
+#landing-hero .lang-trigger:focus-visible {
+  outline: 2px solid var(--ran-color-focus-ring, var(--ran-color-primary));
+  outline-offset: 2px;
 }
 #landing-hero .langmark {
   width: 15px;
   height: 15px;
-  color: var(--ran-color-text-secondary);
   flex: none;
 }
-#landing-hero r-select.lang-select {
-  display: inline-block;
-  /* Fits the longest endonym in the menu. The component clips its own label
-     (overflow: hidden inside the shadow root) and sizes the dropdown panel to
-     the trigger, so a trigger too narrow for "Português" cuts the word in both
-     places at once. The number is checked, not guessed: language-menu.spec.ts
-     opens every locale and fails if any label is clipped. */
-  min-width: 132px;
-  font-size: 14px;
-  /* Matches the nav links beside it (14px on space-2/space-3 padding); the
-     44px default stood a head taller than everything else in the bar. */
-  height: 34px;
+#landing-hero .lang-caret {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  opacity: 0.75;
 }
-/* hide the raw option list pre-upgrade; the reserved width avoids layout shift */
-#landing-hero r-select.lang-select:not(:defined) {
-  visibility: hidden;
+/* The panel is portalled to <body>, so its rows are not under #landing-hero and
+   cannot be scoped to it. */
+.lang-list {
+  display: flex;
+  flex-direction: column;
+  min-width: 152px;
+}
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+  padding: 6px 10px;
+  border-radius: var(--ran-radius-sm);
+  font-size: 14px;
+  color: var(--ran-color-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lang-option::before {
+  content: '';
+  width: 14px;
+  flex: none;
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+}
+.lang-option.is-current::before {
+  content: '✓';
+}
+.lang-option:hover {
+  background: var(--ran-color-bg-hover);
+}
+.lang-option.is-current {
+  font-weight: 600;
 }
 
-/* ---------- language menu (ranui r-select) ----------
+/* ---------- language menu panel (ranui r-dropdown) ----------
    The site's own palette applied to the component's variables. The panel is
    portalled to <body>, so these have to be declared at the root: scoped to the
    trigger they would style the trigger and never reach the menu.
@@ -162,22 +209,28 @@ body {
    Kept byte-identical in home.css and landing.css (the homepage does not load
    landing.css); test/unit/design-contract.test.ts compares the two blocks. */
 :root {
-  --ran-dropdown-padding: 4px;
-  /* 10px, not the component's 12: the panel is 76px wide and two rows tall,
-     and at radius-md its corners eat into the rows inside it. */
+  /* 10px, not the component's 12: at radius-md the corners eat into the rows
+     inside the panel. */
   --ran-dropdown-border-radius: 10px;
   --ran-dropdown-box-shadow:
     0 0 0 1px var(--ran-color-border), 0 8px 24px -6px color-mix(in srgb, var(--ran-color-text) 18%, transparent);
-  --ran-dropdown-option-item-padding: 6px 10px;
-  --ran-dropdown-option-item-border-radius: var(--ran-radius-sm);
-  --ran-dropdown-option-item-font-size: 14px;
-  --ran-dropdown-option-item-content-font-size: 14px;
-  --ran-dropdown-option-item-hover-background-color: var(--ran-color-bg-hover);
-  /* Selection is weight plus a neutral ground, not a blue fill: on this site
-     blue means a link, and every row of this menu is one. */
-  --ran-dropdown-option-active-background-color: var(--ran-color-bg-active);
-  --ran-dropdown-option-active-hover-background-color: var(--ran-color-bg-active);
-  --ran-dropdown-option-active-font-weight: 600;
+}
+
+/* r-popover always points an arrow back at its trigger, which is right for the
+   tooltip it was built for and wrong for a navigation menu -- a menu hangs off
+   its button, it does not annotate it. The class is r-popover's own name for
+   the panel it portals to <body>; the language switcher is the only popover on
+   the site, so scoping it there keeps a future tooltip's arrow intact. */
+.ran-popover-dropdown {
+  --ran-dropdown-arrow-display: none;
+}
+
+@media (max-width: 620px) {
+  /* Phone: the trigger keeps the globe and the caret and drops the language
+     name, which is the part that costs width. */
+  #landing-hero .lang-current {
+    display: none;
+  }
 }
 
 /* ---------- top bar ---------- */

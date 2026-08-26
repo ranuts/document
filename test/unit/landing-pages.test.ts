@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { LOCALES, generate } from '../../bin/build-pages.mjs';
+import { LOCALES, MENU_ORDER, generate } from '../../bin/build-pages.mjs';
 
 /**
  * SEO landing-page contract. The static pages under public/ (and their
@@ -225,12 +225,40 @@ describe('landing pages', () => {
         }
       });
 
+      /**
+       * The switch is a list of real links, so each entry is checked as one: the
+       * href a reader would copy, and the `lang`/`hreflang` that tell a screen
+       * reader (and a crawler) what is on the other end. `lang` in particular is
+       * the difference between a screen reader pronouncing "日本語" as Japanese
+       * and reading it with the phonetics of the current page -- and these
+       * labels exist precisely for readers who cannot read the current page.
+       */
       it('offers every translation it has in the language switch', () => {
         for (const other of Object.keys(LOCALES)) {
           const target = routeIn(other, enRoute);
           if (!routes.has(target)) continue;
-          expect(html, `${route} does not offer ${other}`).toContain(`data-href="${target}"`);
+          const lang = LOCALES[other].lang;
+          expect(html, `${route} does not offer ${other}`).toContain(
+            `href="${target}" lang="${lang}" hreflang="${lang}"`,
+          );
         }
+      });
+
+      it('names each language in its own words, and marks the one being read', () => {
+        // Endonyms, never abbreviations: this menu's whole audience is readers
+        // who cannot read the page it sits on, and "EN" is only legible to
+        // someone who already reads English. It used to be the one abbreviated
+        // entry among six full names.
+        for (const other of Object.keys(LOCALES)) {
+          const target = routeIn(other, enRoute);
+          if (!routes.has(target)) continue;
+          expect(html, `${route}: ${other} is not named in its own language`).toContain(
+            `hreflang="${LOCALES[other].lang}"${other === locale ? ' aria-current="page"' : ''}>${LOCALES[other].label}</a>`,
+          );
+        }
+        // Exactly one row is the current one, and the trigger agrees with it.
+        expect([...html.matchAll(/class="lang-option is-current"/g)]).toHaveLength(1);
+        expect(html).toContain(`<span class="lang-current">${LOCALES[locale].label}</span>`);
       });
 
       it('lives in the sitemap', () => {
@@ -341,8 +369,20 @@ describe('landing pages', () => {
     ['404.html', resolve(PUBLIC, '404.html')],
   ])('%s offers every language the site has', (_label, file) => {
     const html = readFileSync(file, 'utf8');
-    const offered = [...html.matchAll(/<r-option value="([^"]+)"/g)].map((m) => m[1]);
-    expect(offered).toEqual(Object.keys(LOCALES));
+    const offered = [...html.matchAll(/class="lang-option[^"]*" href="[^"]*" lang="([^"]+)"/g)].map((m) => m[1]);
+    // In the menu's own order, so a hand-written page cannot list them in some
+    // other sequence than the generated pages do.
+    expect(offered).toEqual(MENU_ORDER.map((l) => LOCALES[l].lang));
+  });
+
+  /**
+   * The menu's order is a fixed list rather than a sort, so that it cannot come
+   * out differently depending on the host's ICU data. The cost of that choice is
+   * that adding a language to LOCALES and forgetting this list would silently
+   * drop it from every menu on the site.
+   */
+  it('lists every locale in the language menu order', () => {
+    expect([...MENU_ORDER].sort()).toEqual(Object.keys(LOCALES).sort());
   });
 
   it('llms.txt states the limitations, not just the features', () => {

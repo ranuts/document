@@ -1,0 +1,106 @@
+# 语言切换器：从 combobox 换成 disclosure（2026-08-26）
+
+起因是一张截图：顶栏的语言菜单"看着不对"。查下来不是一个问题，是一串，而且根子在
+组件选型上——**它是个表单控件，站在一排导航链接里**。
+
+## 现象与根因
+
+打开的菜单里六项是语言自称全名（中文 / 日本語 / Deutsch / Español / 한국어 /
+Português），只有英语写成 `EN`；地球图标和输入框分家；文字和箭头之间空出 ~70px；
+面板比触发器还偏左。
+
+这些是同一个原因的四种表现。`r-select` 在语义上是 combobox——一个表单字段——
+而表单字段的设计意图就是固定宽度、标签左对齐、caret 右对齐（选项长短不一，布局要稳）。
+于是：
+
+- 地球只能贴在框**外面**，因为框里塞不进去；
+- `min-width: 132px` 减掉左右各 12px padding，"EN" 占 20px、caret 占 16px，中间白白空掉；
+- 缩写是宽度紧张时的省地方；
+- 面板偏左是 `computePlacement` 的 shift：面板左对齐时会溢出视口右缘，被推回来，
+  结果落在触发器**左边** 33px（1512px 视口实测：触发器 [1291,1355]，246px 的面板被推到 1258）。
+
+W3C ARIA 的 APG 对此有明确说法：**菜单项是导航链接时用 disclosure（一个
+`aria-expanded` 按钮 + 一组链接），不要用 menu，更不要用 combobox**。combobox 是
+"从一组值里选一个填进表单"，语言切换不是那个东西。
+
+## 做法
+
+换成 `r-popover`（disclosure）+ 真链接列表：
+
+```html
+<r-popover class="lang-menu" placement="bottom-end" trigger="click">
+  <button class="lang-trigger" aria-label="Language">地球 + English + caret</button>
+  <r-content>
+    <div class="lang-list">
+      <a class="lang-option" href="/ja/" lang="ja" hreflang="ja">日本語</a>
+      …
+    </div>
+  </r-content>
+</r-popover>
+```
+
+- **触发器长得和旁边的 GitHub 链接一模一样**（`inline-flex`、8px gap、`8px 12px`
+  padding、radius-sm、14px、`text-secondary`、hover 出底色），只多一个 caret，宽度
+  `fit-content`。框没了，"图标和框分家"与"文字箭头空隙"随之消失。
+- **每项是 `<a href lang hreflang>`**。`lang` 让屏幕阅读器用日语的音去读"日本語"——
+  这个菜单的整个受众就是读不懂当前页的人，用当前页的语音去念其它语言的名字是噪音。
+  `hreflang`、真 href 让中键新开、复制链接、爬虫跟随都成立。
+- **当前项 ✓ + `aria-current="page"` + 600 字重，不用底色**。底色留给 hover：原来
+  active 和 hover 都是灰底，两个灰几乎一样，第一眼读起来像"鼠标停在上面"。
+- **`bottom-end`**：菜单在顶栏右端，向内展开，而不是先溢出再被推回来。
+- **顺序**是显式列表 `MENU_ORDER`（Deutsch, English, Español, Português, 中文,
+  日本語, 한국어），不是运行时排序——`localeCompare` 按宿主的 ICU 数据给答案，本地
+  构建和 CI 可能不同，而会自己变顺序的菜单没人记得住。
+- **手机上触发器只留地球 + caret**，藏掉语言名。原来是反过来的：为了给"装得下
+  Português"的触发器腾地方，把 GitHub 链接在窄屏隐藏掉了；现在 GitHub 可以留下。
+
+## 顺带的收获与代价
+
+**落地页少下载 84K**：`select.iife.js` 是 152K，换成 `popover.iife.js` + `content.iife.js`
+共 68K。r-select 在本站只用于语言切换器，所以它整个从 vendored 列表里移除了。
+
+**箭头要显式关掉**。`r-popover` 总给面板配一个指向触发器的小三角——那是它作为
+tooltip 的语言，不是导航菜单的（菜单挂在按钮下方，不是在注解按钮）。用
+`.ran-popover-dropdown { --ran-dropdown-arrow-display: none; }` 关掉，scope 在
+popover 自己给 portal 面板的那个 class 上，将来真要做 tooltip 不受影响。
+
+**JS 几乎不需要了**。`lang-switch.js` 从"监听 r-select 的 change 事件、读
+data-href、手动 `location.href`"缩成"点链接时写一个 cookie"——跳转是链接自己的事。
+cookie 仍然要写：静态页把语言放在 URL 里，而 `/editor` 和 `/history` 是一个 app，
+按 `?locale=` → cookie → localStorage → 浏览器的顺序解析语言；没有 cookie，在日语
+首页选了日语再打开"保存的文档"，人就回到英文了。
+
+监听器绑在链接上而不是 document 上：**`r-popover` 在面板上调了 `stopPropagation`**，
+面板又是 portal 到 `<body>` 的，document 级委托根本收不到点击。节点被移动时监听器
+跟着走，所以在 portal 发生前绑定是安全的。
+
+## 用例
+
+`test/e2e/language-menu.spec.ts` 整个重写（原来全是围绕 r-select 的 shadow DOM 写的），
+现在测的是：七种语言下菜单都列全 7 项且不裁字、每项是带 `lang`/`hreflang` 的真链接、
+当前项唯一且触发器与之一致、面板右边缘贴着触发器右边缘且不溢出视口、手机上语言名
+隐藏而触发器仍在视口内、Escape 与外点关闭。
+
+`landing-pages.test.ts` 那条 `data-href` 断言换成新结构，并补了两条：菜单里不许出现
+缩写（每项必须是该语言的 endonym）、`MENU_ORDER` 必须覆盖 `LOCALES` 的全部键——
+顺序是手写列表，加语言时漏掉它会静默地把那门语言从全站菜单里删掉。
+
+反向验证：去掉 `lang` 属性，156 条用例变红；把 `placement` 改回 `bottom`，右对齐
+用例报"偏差 24px"。
+
+## 别再试这些
+
+- **别把语言切换器做成 `r-select`/combobox**。上面那四个症状会一起回来。
+- **`::part(dropdown)` 够不到这个面板**——它是 portal 到 `<body>` 的独立
+  `r-dropdown`，不是页面 shadow root 的后代。要定制走 `.ran-popover-dropdown` 或
+  `dropdownclass`。
+- **别用 document 级事件委托监听菜单里的点击**（`stopPropagation`，见上）。
+- **别把菜单顺序改成运行时排序**。
+
+## 相关
+
+上游 ranui 侧的配套改动见 chaxus/ran#395：`placement` 的对齐后缀（`bottom-end`）、
+`open` 成为反射属性、四个生命周期事件、以及 r-select 那个"幽灵行"——`:host` 是
+inline-block 套 inline-block，在字段下方预留了没人绘制的 descender 空间，导致
+**地球图标看起来偏了 3px，而实际上偏的是菜单**。那个间隙的大小等于消费者继承的
+`line-height`，所以每个页面还不一样。
