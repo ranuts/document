@@ -34,6 +34,30 @@ export const LANDING_SLUGS = [
 ];
 
 export const PAGES = [
+  // Entity pages. Not keyword landing pages -- these exist so a reader (and a
+  // rater) can answer "who is responsible for this site and how do I reach
+  // them", which the Quality Rater Guidelines expect most sites to answer
+  // (§2.5.3, and §4.5.1 rates a site with no such information Lowest).
+  //
+  // en + zh-CN on purpose, like `onlyoffice-online-free`: the shell derives
+  // hreflang and the language switch from the sources a page actually has, so a
+  // page in two languages stays correct in two languages. A trust page is the
+  // worst place for an unreviewed translation -- awkward phrasing undermines
+  // exactly the thing the page is for. Add a locale when someone can review it.
+  {
+    slug: 'about',
+    sources: {
+      en: 'content/en/about.md',
+      'zh-CN': 'content/zh-CN/about.md',
+    },
+  },
+  {
+    slug: 'contact',
+    sources: {
+      en: 'content/en/contact.md',
+      'zh-CN': 'content/zh-CN/contact.md',
+    },
+  },
   {
     slug: 'help',
     sources: {

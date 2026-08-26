@@ -37,6 +37,10 @@ playwright-report-pages/
 # plugin `generated-pages`); sources live in content/, docs/, CHANGELOG.md.
 # The landing pages are generated from content/<locale>/**.md by
 # bin/build-pages.mjs, same as /help and the changelog below.
+public/about.html
+public/zh-CN/about.html
+public/contact.html
+public/zh-CN/contact.html
 public/offline-document-editor.html
 public/zh-CN/offline-document-editor.html
 public/onlyoffice-online-free.html
