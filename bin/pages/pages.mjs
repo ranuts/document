@@ -39,24 +39,27 @@ export const PAGES = [
   // them", which the Quality Rater Guidelines expect most sites to answer
   // (§2.5.3, and §4.5.1 rates a site with no such information Lowest).
   //
-  // en + zh-CN on purpose, like `onlyoffice-online-free`: the shell derives
-  // hreflang and the language switch from the sources a page actually has, so a
-  // page in two languages stays correct in two languages. A trust page is the
-  // worst place for an unreviewed translation -- awkward phrasing undermines
-  // exactly the thing the page is for. Add a locale when someone can review it.
+  // Every locale the site ships, deliberately. These were briefly en + zh-CN
+  // only, on the theory that a trust page is a bad place for an unreviewed
+  // translation -- but that held About/Contact to a stricter standard than the
+  // ~150 fully localised pages already here, and a fully Japanese site whose
+  // footer says "About (EN)" is itself the trust problem. Whatever standard the
+  // landing pages meet, the page that says who is behind them meets too.
   {
     slug: 'about',
-    sources: {
-      en: 'content/en/about.md',
-      'zh-CN': 'content/zh-CN/about.md',
-    },
+    sources: Object.fromEntries(
+      Object.keys(LOCALES)
+        .filter((locale) => existsSync(resolve(ROOT, `content/${locale}/about.md`)))
+        .map((locale) => [locale, `content/${locale}/about.md`]),
+    ),
   },
   {
     slug: 'contact',
-    sources: {
-      en: 'content/en/contact.md',
-      'zh-CN': 'content/zh-CN/contact.md',
-    },
+    sources: Object.fromEntries(
+      Object.keys(LOCALES)
+        .filter((locale) => existsSync(resolve(ROOT, `content/${locale}/contact.md`)))
+        .map((locale) => [locale, `content/${locale}/contact.md`]),
+    ),
   },
   {
     slug: 'help',
