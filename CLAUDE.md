@@ -106,7 +106,7 @@ types/
 styles/
   base.css              # 全局样式（含 embed-mode 布局）
 public/               # v9 vendor（sdkjs / web-apps / x2t.wasm.gz / XOR 字体目录）+ 落地页、demo、SW
-bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js、build-pages.mjs（markdown→/help /changelog；由 vite 插件 `generated-pages` 在 build/dev 时渲染进 public/，产物不入库）、sitemap-lastmod.mjs（改完落地页/内容后跑一次，按 git 提交日期刷新 sitemap 的 lastmod，`--check` 可校验）、x2t-memory-report.mjs（只读：打印 x2t 向浏览器要多少内存，以及静态/BSS 下界——vendor 升级后跑一次，判断 `initial` 是否仍然动不了）
+bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js、build-pages.mjs（markdown→/help /changelog；由 vite 插件 `generated-pages` 在 build/dev 时渲染进 public/，产物不入库。它只是装配入口，各部分在 `bin/pages/`：constants / locales / ui / pages / entities / markdown / chrome / render-home / render-page；公开导出面仍从入口 re-export，调用方不用改）、sitemap-lastmod.mjs（改完落地页/内容后跑一次，按 git 提交日期刷新 sitemap 的 lastmod，`--check` 可校验）、x2t-memory-report.mjs（只读：打印 x2t 向浏览器要多少内存，以及静态/BSS 下界——vendor 升级后跑一次，判断 `initial` 是否仍然动不了）
 content/              # 生成页面的 markdown 源（content/<locale>/*.md，frontmatter title/description）
 docs/                 # embed-api / fonts 文档、explorations/（每次改动的记录）、superpowers/plans/
 index.ts              # 编辑器入口（初始化事件、UI、PWA），挂在 editor.html
@@ -427,7 +427,7 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
 
 ## 多语言（站点 7 种，2026-08-23 起）
 
-站点语言 = `SHELL_LOCALES`（`packages/shared/src/i18n.ts`）= `bin/build-pages.mjs` 的
+站点语言 = `SHELL_LOCALES`（`packages/shared/src/i18n.ts`）= `bin/pages/locales.mjs` 的
 `LOCALES` = `content/<locale>/` 目录 = README 里写的数字。**四处必须一致**，因为它们
 描述的是同一件事：用户在语言菜单里选了什么，页面、应用 UI、编辑器 vendor 就都是什么。
 
