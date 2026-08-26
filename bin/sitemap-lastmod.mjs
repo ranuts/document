@@ -19,11 +19,22 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'https://edit.chaxus.com';
 const SITEMAP = resolve(ROOT, 'public/sitemap.xml');
 
+/**
+ * The generator, for dating a page whose output is not committed: the entry
+ * point plus every slice of it.
+ *
+ * `bin/pages/` matters as much as the entry does -- the templates live there.
+ * Naming only the entry (which is all there was before the generator was split
+ * up) would mean a template change no longer dated the pages it renders, and
+ * nothing would have said so: the check would simply stop reporting them.
+ */
+const GENERATOR = ['bin/build-pages.mjs', 'bin/pages'];
+
 /** Source files whose history dates a route. */
 function sourcesFor(route) {
   for (const page of PAGES) {
     for (const [locale, src] of Object.entries(page.sources)) {
-      if (`${LOCALES[locale].prefix}/${page.slug}` === route) return [src, 'bin/build-pages.mjs'];
+      if (`${LOCALES[locale].prefix}/${page.slug}` === route) return [src, ...GENERATOR];
     }
   }
   if (route === '/') return ['index.html'];
