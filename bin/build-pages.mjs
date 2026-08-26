@@ -27,6 +27,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Marked } from 'marked';
+import { HTMLElementMock } from 'ranui/builder';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'https://edit.chaxus.com';
@@ -148,6 +149,41 @@ const DEFAULT_LOCALE = 'en';
 export const MENU_ORDER = ['de', 'en', 'es', 'pt', 'zh-CN', 'ja', 'ko'];
 
 /**
+ * Build a markup tree with ranui's own DOM implementation, and serialize it.
+ *
+ * `HTMLElementMock` rather than the `View()`/`Div()` builders. Those choose
+ * between the mock and `document.createElement` by environment, and this file
+ * renders the same pages in two of them: node for the real build, jsdom under
+ * vitest. A real document lowercases the attribute names of an element made
+ * with `createElement`, so `viewBox` -- which SVG reads case-sensitively --
+ * came back as `viewbox`, and the two environments produced different bytes for
+ * the same page. (The builders have no `createElementNS` path at all, so in a
+ * real DOM they cannot construct SVG; worth fixing upstream, but the mock is
+ * the right tool here either way -- this is markup generation, not DOM work.)
+ *
+ * What the ecosystem rule is after still holds: no hand-concatenated HTML, and
+ * every attribute and text node escaped on the way out.
+ */
+const el = (tag, attrs = {}, ...children) => {
+  const node = new HTMLElementMock(tag);
+  for (const [name, value] of Object.entries(attrs)) {
+    // Null means "omit" -- how an attribute only some entries carry is
+    // expressed without an if.
+    if (value == null) continue;
+    node.setAttribute(name, String(value));
+  }
+  for (const child of children) if (child != null) node.appendChild(child);
+  return node;
+};
+
+/** A leaf carrying text. Separate because setting text replaces children. */
+const textEl = (tag, attrs, content) => {
+  const node = el(tag, attrs);
+  node.textContent = content;
+  return node;
+};
+
+/**
  * The language switcher: a disclosure button over a list of real links.
  *
  * Links, not a listbox. Switching language is navigation, so the entries are
@@ -165,40 +201,60 @@ export const MENU_ORDER = ['de', 'en', 'es', 'pt', 'zh-CN', 'ja', 'ko'];
  * to its leading edge the panel would overhang the viewport and be shifted back,
  * landing left of the trigger it belongs to.
  */
-const langMenu = (locale, locales, ui, hrefFor) => {
-  const options = MENU_ORDER.filter((l) => locales.includes(l))
-    .map((l) => {
-      const current = l === locale;
-      return [
-        `            <a class="lang-option${current ? ' is-current' : ''}" href="${hrefFor(l)}"`,
-        ` lang="${LOCALES[l].lang}" hreflang="${LOCALES[l].lang}"${current ? ' aria-current="page"' : ''}>`,
-        `${LOCALES[l].label}</a>`,
-      ].join('');
-    })
-    .join('\n');
-  return `        <r-popover class="lang-menu" placement="bottom-end" trigger="click">
-          <button class="lang-trigger" type="button" aria-label="${escapeHtml(ui.langAria)}">
-            <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
-              <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
-              <path
-                d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.2"
-              />
-            </svg>
-            <span class="lang-current">${LOCALES[locale].label}</span>
-            <svg class="lang-caret" aria-hidden="true" viewBox="0 0 12 12">
-              <path d="M2.75 4.5 6 7.75 9.25 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          <r-content>
-            <div class="lang-list">
-${options}
-            </div>
-          </r-content>
-        </r-popover>`;
-};
+const langMenu = (locale, locales, ui, hrefFor) =>
+  el(
+    'r-popover',
+    { class: 'lang-menu', placement: 'bottom-end', trigger: 'click' },
+    el(
+      'button',
+      { class: 'lang-trigger', type: 'button', 'aria-label': ui.langAria },
+      el(
+        'svg',
+        { class: 'langmark', 'aria-hidden': 'true', viewBox: '0 0 16 16' },
+        el('circle', { cx: '8', cy: '8', r: '6.25', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.5' }),
+        el('path', {
+          d: 'M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25',
+          fill: 'none',
+          stroke: 'currentColor',
+          'stroke-width': '1.2',
+        }),
+      ),
+      textEl('span', { class: 'lang-current' }, LOCALES[locale].label),
+      el(
+        'svg',
+        { class: 'lang-caret', 'aria-hidden': 'true', viewBox: '0 0 12 12' },
+        el('path', {
+          d: 'M2.75 4.5 6 7.75 9.25 4.5',
+          fill: 'none',
+          stroke: 'currentColor',
+          'stroke-width': '1.4',
+          'stroke-linecap': 'round',
+          'stroke-linejoin': 'round',
+        }),
+      ),
+    ),
+    el(
+      'r-content',
+      {},
+      el(
+        'div',
+        { class: 'lang-list' },
+        ...MENU_ORDER.filter((l) => locales.includes(l)).map((l) =>
+          textEl(
+            'a',
+            {
+              class: l === locale ? 'lang-option is-current' : 'lang-option',
+              href: hrefFor(l),
+              lang: LOCALES[l].lang,
+              hreflang: LOCALES[l].lang,
+              'aria-current': l === locale ? 'page' : null,
+            },
+            LOCALES[l].label,
+          ),
+        ),
+      ),
+    ),
+  ).serialize();
 
 /** Per-locale chrome strings (the shell itself is bilingual). */
 const UI = {

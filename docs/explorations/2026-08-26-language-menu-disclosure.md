@@ -88,6 +88,27 @@ cookie 仍然要写：静态页把语言放在 URL 里，而 `/editor` 和 `/his
 反向验证：去掉 `lang` 属性，156 条用例变红；把 `placement` 改回 `bottom`，右对齐
 用例报"偏差 24px"。
 
+## 生成 HTML 用 ranui 的 DOM，不要拼字符串
+
+第一版 `langMenu` 是模板字符串拼的——因为我以为 `ranui/builder` 需要浏览器 DOM，
+而这是 Node 构建脚本。**这个假设是错的，没有验证过**：builder 在 Node 里能用，
+它在没有 `document` 时自动落到 ranui 自己的 DOM mock。
+
+但直接用 `View()`/`Div()` 又踩到另一件事：它们按环境二选一（mock 或
+`document.createElement`），而这个文件会在**两个环境**里渲染同一批页面——真正构建
+时在 Node，vitest 里在 jsdom。真实 document 会把 `createElement` 元素的属性名小写化，
+于是 `viewBox` 变成 `viewbox`——**SVG 读这个属性是大小写敏感的，小写的不生效**——
+两个环境产出的字节因此不同，`check()`（"一次全新渲染会不会改变已提交的页面"）永远红。
+
+所以这里显式用 `HTMLElementMock`（`ranui/builder` 的公开导出）：两个环境行为一致，
+属性和文本自动转义，仍然是 ranui 的体系。生态规则真正要的东西一条没丢——不手拼 HTML、
+不手动 `escapeHtml`。
+
+顺带发现 builder 的一个真实缺口：**它没有 `createElementNS` 路径**
+（`utils/builder/core.ts` 只有 `document.createElement(tag)`），所以在真实浏览器里
+它根本构造不出 SVG——`View('svg')` 得到的是 `HTMLUnknownElement`，属性被小写，浏览器
+也不会当 SVG 渲染。任何拿它做图标的人都会撞上。值得回 chaxus/ran 修。
+
 ## 别再试这些
 
 - **别把语言切换器做成 `r-select`/combobox**。上面那四个症状会一起回来。
@@ -96,6 +117,8 @@ cookie 仍然要写：静态页把语言放在 URL 里，而 `/editor` 和 `/his
   `dropdownclass`。
 - **别用 document 级事件委托监听菜单里的点击**（`stopPropagation`，见上）。
 - **别把菜单顺序改成运行时排序**。
+- **别在这个文件里用 `View()`/`Div()` 构造 SVG**（`viewBox` 会在 jsdom 下被小写，
+  两个环境的产物就对不上了）。用 `HTMLElementMock`。
 
 ## 相关
 
