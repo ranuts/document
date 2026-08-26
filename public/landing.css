@@ -136,14 +136,16 @@ header.bar nav a:hover {
 .lang-list {
   display: flex;
   flex-direction: column;
-  /* Wide enough for the longest endonym without measuring the trigger: unlike
-     the old select, the panel sizes itself. */
-  min-width: 152px;
+  /* Sized by its longest row, not by a guessed number. The first attempt set
+     152px, which was 84px wider than the longest endonym actually needs -- the
+     panel hung far past the trigger on one side and carried a column of empty
+     space on the other. */
+  width: max-content;
 }
 .lang-option {
   display: flex;
   align-items: center;
-  gap: var(--ran-space-2);
+  gap: var(--ran-space-1);
   padding: 6px 10px;
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
@@ -153,11 +155,13 @@ header.bar nav a:hover {
 }
 .lang-option::before {
   /* A fixed gutter on every row, so the labels line up whether or not the row
-     carries the check. */
+     carries the check. Sized to the tick and no wider: on a panel this narrow a
+     generous gutter is most of the left half of it. */
   content: '';
-  width: 14px;
+  width: 11px;
   flex: none;
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1;
   color: var(--ran-color-text-secondary);
 }
 .lang-option.is-current::before {

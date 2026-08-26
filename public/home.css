@@ -171,12 +171,13 @@ body {
 .lang-list {
   display: flex;
   flex-direction: column;
-  min-width: 152px;
+  /* Sized by its longest row -- see landing.css for why a fixed width was wrong. */
+  width: max-content;
 }
 .lang-option {
   display: flex;
   align-items: center;
-  gap: var(--ran-space-2);
+  gap: var(--ran-space-1);
   padding: 6px 10px;
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
@@ -186,9 +187,10 @@ body {
 }
 .lang-option::before {
   content: '';
-  width: 14px;
+  width: 11px;
   flex: none;
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1;
   color: var(--ran-color-text-secondary);
 }
 .lang-option.is-current::before {
