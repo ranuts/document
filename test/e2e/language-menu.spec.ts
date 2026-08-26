@@ -71,31 +71,63 @@ test.describe('language menu', () => {
   }
 
   /**
-   * The menu sits at the right end of the header, so it opens inwards --
-   * `placement="bottom-end"`. Aligned the other way it would start out
-   * overflowing the viewport and be shifted back, landing left of the trigger it
-   * belongs to, which reads as a misaligned menu.
+   * The panel lines up with the trigger's leading edge, so its rows start where
+   * the trigger's own label does and the two read as one column.
+   *
+   * It was end-aligned first, when the panel was a guessed 152px wide -- 67px
+   * wider than the trigger, all of it hanging off the left, with the menu's
+   * labels 65px away from the trigger's. Sizing the panel to its content took
+   * the overhang away and with it the reason for the end alignment.
    */
-  test('the panel hangs from the right edge of its trigger', async ({ page }) => {
+  test('the panel lines up with its trigger, and stays on screen', async ({ page }) => {
     await page.goto('/pt/');
     const trigger = await openMenu(page);
     const triggerBox = (await trigger.boundingBox())!;
-    const panelBox = (await page.locator('a.lang-option').first().boundingBox())!;
 
-    const panel = await page.evaluate(() => {
-      const first = document.querySelector('a.lang-option')!;
-      const list = first.closest('.lang-list')!.getBoundingClientRect();
-      return { left: list.left, right: list.right, width: list.width, vw: window.innerWidth };
+    const geometry = await page.evaluate(() => {
+      const trig = document.querySelector('.lang-trigger')!;
+      const panel = document.querySelector('.ran-popover-dropdown')!.getBoundingClientRect();
+      const textStart = (el: Element) => {
+        const node = [...el.childNodes].find((n) => n.nodeType === 3)!;
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        return range.getBoundingClientRect().left;
+      };
+      return {
+        panelLeft: panel.left,
+        panelRight: panel.right,
+        panelTop: panel.top,
+        vw: window.innerWidth,
+        labelOffset:
+          textStart(trig.querySelector('.lang-current')!) - textStart(document.querySelector('.lang-option')!),
+      };
     });
 
-    expect(panel.width, 'the panel is not wider than the trigger, so this proves nothing').toBeGreaterThan(
-      triggerBox.width,
-    );
-    expect(Math.abs(panel.right - (triggerBox.x + triggerBox.width)), 'panel is not right-aligned').toBeLessThanOrEqual(
-      6,
-    );
-    expect(panel.right, 'the panel runs past the viewport').toBeLessThanOrEqual(panel.vw);
-    expect(panelBox.y, 'the panel does not hang below the trigger').toBeGreaterThan(triggerBox.y);
+    // Leading edges together.
+    expect(Math.abs(geometry.panelLeft - triggerBox.x), 'panel is not aligned to the trigger').toBeLessThanOrEqual(1);
+    // And the labels land in one column: what is left is the difference between
+    // the globe's gutter and the check's, not a placement offset.
+    expect(Math.abs(geometry.labelOffset), 'the menu labels are off the trigger label').toBeLessThanOrEqual(8);
+    expect(geometry.panelRight, 'the panel runs past the viewport').toBeLessThanOrEqual(geometry.vw);
+    expect(geometry.panelTop, 'the panel does not hang below the trigger').toBeGreaterThan(triggerBox.y);
+  });
+
+  /**
+   * Narrow enough and the trigger sits against the right edge, where a
+   * leading-edge panel would overflow. The boundary shift is what keeps it on
+   * screen, so this is the case that proves the alignment choice does not
+   * depend on there being room.
+   */
+  test('on a narrow viewport the panel is pulled back on screen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await page.goto('/pt/');
+    await openMenu(page);
+    const panel = await page.evaluate(() => {
+      const box = document.querySelector('.ran-popover-dropdown')!.getBoundingClientRect();
+      return { left: box.left, right: box.right, vw: window.innerWidth };
+    });
+    expect(panel.right).toBeLessThanOrEqual(panel.vw);
+    expect(panel.left).toBeGreaterThanOrEqual(0);
   });
 
   /**

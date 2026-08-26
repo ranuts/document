@@ -197,14 +197,19 @@ const textEl = (tag, attrs, content) => {
  * rather than in the page's -- "日本語" read with English phonetics is noise, and
  * these labels exist precisely for readers who cannot read the current page.
  *
- * `bottom-end` because the switcher sits at the right end of the header: aligned
- * to its leading edge the panel would overhang the viewport and be shifted back,
- * landing left of the trigger it belongs to.
+ * Aligned to the trigger's leading edge, so the panel's rows start where the
+ * trigger's own label does -- 5px apart, which reads as one column rather than
+ * two. It was `bottom-end` first, back when the panel was a guessed 152px wide:
+ * that overhung the trigger by 67px on the left, and put the menu's labels 65px
+ * off the trigger's. Sizing the panel to its content removed the reason for the
+ * end alignment along with the overhang. There is 236px of room to the right of
+ * the trigger at desktop width, and on a phone the boundary shift pulls the
+ * panel back on screen by itself.
  */
 const langMenu = (locale, locales, ui, hrefFor) =>
   el(
     'r-popover',
-    { class: 'lang-menu', placement: 'bottom-end', trigger: 'click' },
+    { class: 'lang-menu', placement: 'bottom', trigger: 'click' },
     el(
       'button',
       { class: 'lang-trigger', type: 'button', 'aria-label': ui.langAria },
