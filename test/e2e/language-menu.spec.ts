@@ -71,6 +71,48 @@ test.describe('language menu', () => {
   }
 
   /**
+   * One control, one tab stop, one set of ARIA.
+   *
+   * r-popover puts `tabindex`, `aria-haspopup` and `aria-expanded` on itself, so
+   * a <button> nested inside it -- which is how this was first written -- became
+   * a second tab stop that carried the accessible name while the state stayed on
+   * the host. A screen reader would have announced an anonymous popup and then a
+   * "Language" button that never reported being open.
+   */
+  test('is a single control: one tab stop, with the name and the state together', async ({ page }) => {
+    await page.goto('/');
+    const aria = await page.evaluate(() => {
+      const menu = document.querySelector('r-popover.lang-menu') as HTMLElement;
+      const inHeader = [...document.querySelectorAll('header.bar *')].filter((el) => (el as HTMLElement).tabIndex >= 0);
+      return {
+        stops: inHeader.filter((el) => el === menu || menu.contains(el)).length,
+        role: menu.getAttribute('role'),
+        name: menu.getAttribute('aria-label'),
+        expanded: menu.getAttribute('aria-expanded'),
+      };
+    });
+
+    expect(aria.stops, 'the language control should be one tab stop').toBe(1);
+    expect(aria.role).toBe('button');
+    expect(aria.name, 'the control has no accessible name').toBeTruthy();
+    expect(aria.expanded).toBe('false');
+
+    // And the state it reports is its own.
+    await page.locator('.lang-trigger').first().click();
+    await expect(page.locator('r-popover.lang-menu')).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  /** The keyboard path: reach it with Tab, open it with Enter. */
+  test('opens from the keyboard', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('r-popover.lang-menu').first().focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('a.lang-option').first()).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('a.lang-option').first()).toBeHidden();
+  });
+
+  /**
    * The panel lines up with the trigger's leading edge, so its rows start where
    * the trigger's own label does and the two read as one column.
    *

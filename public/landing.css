@@ -98,27 +98,30 @@ header.bar nav a:hover {
   /* Panel padding: r-popover reads this off the host and hands it to the panel. */
   --ran-popover-content-padding: 4px;
 }
+/* The face of the control. The button itself is the r-popover host (it carries
+   the role, the name and the state); this is the row of things inside it. */
 .lang-trigger {
   display: inline-flex;
   align-items: center;
   gap: var(--ran-space-2);
   padding: var(--ran-space-2) var(--ran-space-3);
-  border: 0;
   border-radius: var(--ran-radius-sm);
-  background: none;
-  font: inherit;
   font-size: 14px;
   line-height: 1;
   color: var(--ran-color-text-secondary);
   cursor: pointer;
   transition: 0.15s ease;
 }
-.lang-trigger:hover,
+.lang-menu:hover .lang-trigger,
 .lang-menu[open] .lang-trigger {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
 }
-.lang-trigger:focus-visible {
+/* Focus is on the host, so the ring is drawn around the face inside it. */
+.lang-menu:focus-visible {
+  outline: none;
+}
+.lang-menu:focus-visible .lang-trigger {
   outline: 2px solid var(--ran-color-focus-ring, var(--ran-color-primary));
   outline-offset: 2px;
 }

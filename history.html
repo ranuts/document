@@ -53,8 +53,8 @@
       <nav>
         <!-- Every target is this page; the locale rides in the query, which is
              what the app's i18n reads. -->
-        <r-popover class="lang-menu" placement="bottom" trigger="click">
-          <button class="lang-trigger" type="button" aria-label="Language">
+        <r-popover class="lang-menu" placement="bottom" trigger="click" role="button" aria-label="Language">
+          <span class="lang-trigger">
             <svg class="langmark" aria-hidden="true" viewBox="0 0 16 16">
               <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" />
               <path
@@ -75,7 +75,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-          </button>
+          </span>
           <r-content>
             <div class="lang-list">
               <a class="lang-option" href="/history?locale=de" lang="de" hreflang="de">Deutsch</a>

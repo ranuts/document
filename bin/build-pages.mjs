@@ -209,10 +209,22 @@ const textEl = (tag, attrs, content) => {
 const langMenu = (locale, locales, ui, hrefFor) =>
   el(
     'r-popover',
-    { class: 'lang-menu', placement: 'bottom', trigger: 'click' },
+    {
+      class: 'lang-menu',
+      placement: 'bottom',
+      trigger: 'click',
+      // The host *is* the button. r-popover puts `tabindex`, `aria-haspopup`
+      // and `aria-expanded` on itself, so a <button> inside it would be a
+      // second tab stop carrying the accessible name while the state stayed
+      // outside -- a screen reader would never announce "Language, collapsed"
+      // as one control. `role` and the name go here instead, which is also what
+      // ARIA's disclosure pattern asks for: one button, reporting its own state.
+      role: 'button',
+      'aria-label': ui.langAria,
+    },
     el(
-      'button',
-      { class: 'lang-trigger', type: 'button', 'aria-label': ui.langAria },
+      'span',
+      { class: 'lang-trigger' },
       el(
         'svg',
         { class: 'langmark', 'aria-hidden': 'true', viewBox: '0 0 16 16' },
