@@ -17,6 +17,11 @@ body {
   font-family: var(--ran-font-family);
   font-size: 16px;
   line-height: 1.65;
+  /* A run with no break opportunity wider than the column pushes the page
+     sideways -- on a phone that is a horizontal scrollbar on a text page.
+     Korean copy hit it with "Word(DOCX), Excel(XLSX), PowerPoint(PPTX)":
+     CJK breaks anywhere, Latin words do not. Only breaks what cannot fit. */
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
