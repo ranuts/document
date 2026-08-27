@@ -41,6 +41,13 @@ body {
   /* fluid page gutter — the only spacing that isn't a fixed step (it scales with
      viewport); bounds are ranui steps (--ran-space-5≈20 not in scale, so raw). */
   --pad: clamp(20px, 5vw, 56px);
+  /* Success green as *text*. --ran-color-success is green-700, which measures
+     3.06:1 on white -- enough for a 7px dot or a 3px rule, short of WCAG AA's
+     4.5:1 for the 10-12px labels that also used it (the chip's "open source",
+     the document window's badge and note headings, the step markers). green-900
+     is the same hue two stops down: 5.2:1 on white, and brighter than green-700
+     in dark mode, where these sit on black. Fills only carry the base token. */
+  --success-text: var(--ran-green-900);
 
   position: relative;
   z-index: 1;
@@ -320,7 +327,7 @@ body {
   margin-bottom: var(--ran-space-6);
 }
 #landing-hero .chip b {
-  color: var(--ran-color-success);
+  color: var(--success-text);
   font-weight: 600;
 }
 #landing-hero .chip .dot {
@@ -452,7 +459,7 @@ body {
   flex: none;
   font-size: 10.5px;
   font-weight: 600;
-  color: var(--ran-color-success);
+  color: var(--success-text);
 }
 #landing-hero .dw-tabs {
   display: flex;
@@ -572,7 +579,7 @@ body {
   margin-bottom: 2px;
   font-size: 10px;
   font-weight: 600;
-  color: var(--ran-color-success);
+  color: var(--success-text);
 }
 /* status strip: the proof, spelled out */
 #landing-hero .dw-net {
@@ -843,7 +850,7 @@ body {
   font: 600 10.5px/1 var(--ran-font-mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ran-color-success);
+  color: var(--success-text);
 }
 
 /* ---------- faq: head left, answers right ---------- */
