@@ -184,3 +184,41 @@ describe('design audit coverage', () => {
     expect(src).toMatch(/\/\^\(zh\|ja\|ko\)\//);
   });
 });
+
+/**
+ * Small text needs a stronger green than a dot does.
+ *
+ * `--ran-color-success` is ranui's green-700 (#28a948), which measures 3.06:1
+ * on white. That is fine behind a 7px status dot and short of WCAG AA's 4.5:1
+ * for text -- and the homepage used it for four 10-12px labels (the chip's
+ * "open source", the document window's badge and note headings, the step
+ * markers), which is exactly the size where contrast matters most. They now
+ * use `--success-text` (green-900, 5.2:1). Fills keep the base token.
+ */
+describe('success green', () => {
+  const css = read('public/home.css');
+  /** Every rule as (selectors, body), comments stripped. */
+  const rules = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^}]*)\}/g)].map((m) => ({
+    selector: m[1].trim(),
+    body: m[2],
+  }));
+
+  it('defines a text-grade token', () => {
+    expect(declaration(css, '#landing-hero', '--success-text')).toBe('var(--ran-green-900)');
+  });
+
+  it('never paints small text with the fill-grade green', () => {
+    const small = rules.filter((rule) => {
+      const size = /font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/.exec(rule.body);
+      return size !== null && Number(size[1]) < 14;
+    });
+    // Sanity: the homepage does have small text, so a parser change that
+    // matched nothing could not pass this by finding nothing to check.
+    expect(small.length).toBeGreaterThan(5);
+
+    const weak = small
+      .filter((rule) => /(^|[^-])color:\s*var\(--ran-color-success\)/.test(rule.body))
+      .map((rule) => rule.selector);
+    expect(weak).toEqual([]);
+  });
+});

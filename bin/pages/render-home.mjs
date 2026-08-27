@@ -129,7 +129,7 @@ export function renderHome({ locale, data, locales }) {
 <html lang="${L.lang}" dir="${L.dir}">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/img/64.png" rel="shortcut icon" />
     <link rel="icon" type="image/png" href="/img/64.png" />
     <link rel="manifest" href="/manifest.json" />
@@ -222,6 +222,7 @@ ${langMenu(locale, locales, ui, (l) => LOCALES[l].home)}
         </div>
       </header>
 
+      <main>
       <div class="hero wrap">
         <div class="hero-copy">
           <span class="chip reveal d1"><span class="dot"></span>${data.chip}</span>
@@ -334,6 +335,8 @@ ${faq}
           </nav>
         </div>
       </div>
+
+      </main>
 
       <footer class="foot wrap">
         <span>${e(data.foot.copy)}</span>

@@ -511,3 +511,77 @@ describe('homepage content data', () => {
     expect(slots(home(locale))).toEqual(slots(home('en')));
   });
 });
+
+/**
+ * Two shell rules that only the homepage template ever broke, because it is a
+ * separate renderer from the satellite pages (bin/pages/render-home.mjs vs
+ * render-page.mjs) and nothing compared the two.
+ */
+describe('page shell', () => {
+  const homepages = pages.filter(({ route }) => route === '/' || /^\/[a-zA-Z-]+\/$/.test(route));
+
+  it('finds every homepage (sanity)', () => {
+    expect(homepages.length).toBe(Object.keys(LOCALES).length);
+  });
+
+  /**
+   * `user-scalable=no` / `maximum-scale=1` take pinch-zoom away from the
+   * reader -- WCAG 2.1 SC 1.4.4, and the one thing a person with low vision
+   * does first on a phone. The seven homepages carried it (the editor keeps
+   * it: it has its own zoom, and a pinch on a document canvas means something
+   * else), so the site blocked zoom on exactly the pages a first-time visitor
+   * lands on.
+   */
+  it.each(pages)('$label lets the reader zoom', ({ html, label }) => {
+    const viewport = attr(html, /<meta name="viewport" content="([^"]+)"/);
+    expect(viewport, `${label} has no viewport meta`).toBeTruthy();
+    expect(viewport, label).not.toMatch(/user-scalable\s*=\s*no/);
+    expect(viewport, label).not.toMatch(/maximum-scale\s*=\s*[01](\.\d+)?\b/);
+  });
+
+  /**
+   * A screen reader's "skip to main content" and an agent's reading order both
+   * start from the <main> landmark. The satellite pages have had one all along;
+   * the homepages wrapped everything in a <section> instead, so on the seven
+   * busiest pages of the site there was nothing to skip to.
+   */
+  it.each(pages)('$label has exactly one main landmark', ({ html, label }) => {
+    expect((html.match(/<main[\s>]/g) ?? []).length, label).toBe(1);
+  });
+});
+
+/**
+ * llms.txt is read by agents, and the format it is read in is the one
+ * llmstxt.org describes: markdown link lists under H2 sections. Ours listed
+ * every page as "- Title: https://url", which is legible to a person and
+ * invisible to a parser -- Lighthouse's agentic-browsing audit reported the
+ * file as containing no links at all.
+ */
+describe('llms.txt', () => {
+  const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
+  /** Every bullet under the '## Links' and '## Pages' sections. */
+  const linkBullets = llms
+    .split(/^## /m)
+    .filter((section) => /^(Links|Pages)\b/.test(section))
+    .flatMap((section) => section.split('\n').filter((line) => line.startsWith('- ')));
+
+  it('lists its pages as markdown links', () => {
+    expect(linkBullets.length).toBeGreaterThan(20);
+    const unlinked = linkBullets.filter((line) => !/^- \[[^\]]+\]\(\S+\)/.test(line));
+    // The Docker image is named, not linked -- ghcr.io/... is a pull target.
+    expect(unlinked).toEqual([
+      '- Self-host Docker image: ghcr.io/ranuts/document (static site, any static host works too)',
+    ]);
+  });
+
+  it('links only to pages that exist', () => {
+    const site = linkBullets
+      .flatMap((line) => [...line.matchAll(/\((https:\/\/edit\.chaxus\.com([^)]*))\)/g)].map((m) => m[2]))
+      .map((path) => (path === '' ? '/' : path));
+    expect(site.length).toBeGreaterThan(20);
+    for (const path of site) {
+      if (path.startsWith('/editor') || path.endsWith('.txt')) continue;
+      expect(routes.has(path), `llms.txt links to ${path}`).toBe(true);
+    }
+  });
+});
