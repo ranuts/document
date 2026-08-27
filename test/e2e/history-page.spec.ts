@@ -317,6 +317,31 @@ test.describe('local history page', () => {
     expect((await chooser).isMultiple()).toBe(false);
   });
 
+  /**
+   * The page's own chrome is hand-written in history.html, so the tab title and
+   * the language switch's current entry are English literals that the runtime
+   * has to correct. It did not: /history?locale=zh-CN rendered a Chinese page
+   * whose switch still read "English" and whose tab still read "Local history"
+   * -- the reader is told they are on the English site while reading Chinese.
+   */
+  test('the chrome follows the language, not just the body', async ({ page }) => {
+    await page.goto('/history?locale=zh-CN');
+    await expect(page.locator('#history-empty')).toBeVisible();
+
+    const chrome = await page.evaluate(() => ({
+      title: document.title,
+      lang: document.documentElement.getAttribute('lang'),
+      current: document.querySelector('.lang-current')?.textContent?.trim(),
+      marked: [...document.querySelectorAll('a.lang-option[aria-current="page"]')].map((a) => a.textContent?.trim()),
+    }));
+
+    expect(chrome.lang).toBe('zh-CN');
+    expect(chrome.current).toBe('\u4e2d\u6587');
+    expect(chrome.marked).toEqual(['\u4e2d\u6587']);
+    // The heading is translated already; the tab has to say the same thing.
+    expect(chrome.title).toBe(await page.locator('.history-title').first().innerText());
+  });
+
   test('opens a stored document back in the editor', async ({ page }) => {
     await seed(page, [{ id: 'reopen-me', title: 'Reopen.docx' }]);
     await page.reload();

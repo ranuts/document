@@ -463,6 +463,33 @@ async function render(): Promise<void> {
   root().replaceChildren(pageEl);
 }
 
+/**
+ * The chrome around this page is hand-written (history.html), so its <title>
+ * and the language switch's current entry ship as English literals while the
+ * body is translated at runtime -- a Chinese reader got a Chinese page whose
+ * switch still read "English" and whose tab still read "Local history".
+ *
+ * The endonyms are already in the DOM, one per <a class="lang-option" lang>,
+ * so the current entry is copied from the link that matches <html lang>
+ * rather than from a second table that would have to be kept in step with
+ * bin/pages/locales.mjs.
+ */
+function syncPageChrome(): void {
+  document.title = t('historyTitle');
+  const lang = document.documentElement.getAttribute('lang');
+  const options = [...document.querySelectorAll<HTMLAnchorElement>('a.lang-option')];
+  const current = options.find((option) => option.getAttribute('lang') === lang);
+  if (!current) return;
+  for (const option of options) {
+    option.classList.toggle('is-current', option === current);
+    if (option === current) option.setAttribute('aria-current', 'page');
+    else option.removeAttribute('aria-current');
+  }
+  const label = document.querySelector('.lang-current');
+  if (label) label.textContent = current.textContent?.trim() ?? '';
+}
+
 applyDocumentLanguage();
+syncPageChrome();
 readUrl();
 void render();
