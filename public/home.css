@@ -28,6 +28,9 @@
 body {
   margin: 0;
   background: var(--ran-color-bg);
+  /* See landing.css: a Latin run longer than the column would otherwise widen
+     the page instead of wrapping. */
+  overflow-wrap: break-word;
 }
 
 #landing-hero {
