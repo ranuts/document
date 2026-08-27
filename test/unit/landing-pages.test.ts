@@ -469,3 +469,45 @@ describe('r-button radius overrides', () => {
     }
   });
 });
+
+/**
+ * The homepages are rendered from content/<locale>/home.json. A key that is
+ * present but empty renders as an element with no text -- the zh-CN hero
+ * shipped four blank pills where its CTA buttons should have been, because
+ * the move to data-driven homepages left content/zh-CN/home.json's `cta`
+ * strings empty and nothing read them back. Both halves matter: the shape
+ * has to match en (a missing key is a missing slot) and every string has to
+ * carry text (a present key is not a translated one).
+ */
+describe('homepage content data', () => {
+  const home = (locale: string) =>
+    JSON.parse(readFileSync(resolve(ROOT, 'content', locale, 'home.json'), 'utf8')) as unknown;
+
+  /** Every leaf string's path, e.g. 'cta.docx' or 'trust[3]'. */
+  const leaves = (value: unknown, path = ''): Array<{ path: string; text: string }> => {
+    if (typeof value === 'string') return [{ path, text: value }];
+    if (Array.isArray(value)) return value.flatMap((v, i) => leaves(v, `${path}[${i}]`));
+    if (value && typeof value === 'object')
+      return Object.entries(value).flatMap(([k, v]) => leaves(v, path ? `${path}.${k}` : k));
+    return [];
+  };
+
+  const locales = Object.keys(LOCALES);
+
+  it.each(locales)('%s/home.json has no blank strings', (locale) => {
+    const blank = leaves(home(locale))
+      .filter(({ text }) => !text.trim())
+      .map(({ path }) => path);
+    expect(blank, `${locale}/home.json`).toEqual([]);
+  });
+
+  /**
+   * Array indices are collapsed, because the lists are genuinely per-locale:
+   * the footer links to the pages that exist in that language, so ja has one
+   * fewer than en. What may not differ is the set of named slots.
+   */
+  it.each(locales.filter((l) => l !== 'en'))('%s/home.json has the same slots as en', (locale) => {
+    const slots = (value: unknown) => [...new Set(leaves(value).map((l) => l.path.replace(/\[\d+\]/g, '[]')))];
+    expect(slots(home(locale))).toEqual(slots(home('en')));
+  });
+});
