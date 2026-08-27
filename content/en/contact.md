@@ -11,7 +11,7 @@ lead: Every route below is public and traceable, so you can see what happened to
 
 **[Open an issue on GitHub](https://github.com/ranuts/document/issues)** — this is the fastest and most useful route.
 
-Rendering problems are much easier to fix with a file that reproduces them. If the document is not sensitive, attaching it (or a trimmed-down version that still shows the problem) turns a vague report into a fixable one. If it *is* sensitive, describe the structure instead: which format, roughly how large, what feature is involved (tables, embedded images, pivot tables, unusual fonts), and what you expected versus what you saw.
+Rendering problems are much easier to fix with a file that reproduces them. If the document is not sensitive, attaching it (or a trimmed-down version that still shows the problem) turns a vague report into a fixable one. If it _is_ sensitive, describe the structure instead: which format, roughly how large, what feature is involved (tables, embedded images, pivot tables, unusual fonts), and what you expected versus what you saw.
 
 Useful to include:
 

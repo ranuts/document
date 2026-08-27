@@ -11,7 +11,7 @@ lead: Todos os caminhos abaixo são públicos e rastreáveis, então você conse
 
 **[Abra uma issue no GitHub](https://github.com/ranuts/document/issues)** — é o caminho mais rápido e mais útil.
 
-Problemas de renderização ficam bem mais fáceis de corrigir com um arquivo que os reproduza. Se o documento não for sensível, anexá-lo (ou uma versão reduzida que ainda mostre o problema) transforma um relato vago em algo que dá para consertar. Se *for* sensível, descreva a estrutura no lugar: qual formato, o tamanho aproximado, qual recurso está envolvido (tabelas, imagens incorporadas, tabelas dinâmicas, fontes incomuns) e o que você esperava versus o que viu.
+Problemas de renderização ficam bem mais fáceis de corrigir com um arquivo que os reproduza. Se o documento não for sensível, anexá-lo (ou uma versão reduzida que ainda mostre o problema) transforma um relato vago em algo que dá para consertar. Se _for_ sensível, descreva a estrutura no lugar: qual formato, o tamanho aproximado, qual recurso está envolvido (tabelas, imagens incorporadas, tabelas dinâmicas, fontes incomuns) e o que você esperava versus o que viu.
 
 Vale incluir:
 
