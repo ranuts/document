@@ -9,10 +9,10 @@
   },
   "sub": "没装 Office？任何 DOCX、XLSX、PPTX 文件即开即看，需要时随手编辑——全部在你的设备本地运行，免注册、可离线。",
   "cta": {
-    "open": "",
-    "docx": "",
-    "xlsx": "",
-    "pptx": ""
+    "open": "打开文件",
+    "docx": "新建 Word",
+    "xlsx": "新建 Excel",
+    "pptx": "新建 PPT"
   },
   "recent": {
     "label": "继续编辑",
