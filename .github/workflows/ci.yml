@@ -57,7 +57,7 @@ jobs:
         run: docker compose -f docker-compose.yaml config --quiet
 
       - name: Lint Dockerfile with Hadolint
-        uses: hadolint/hadolint-action@v3.4.0
+        uses: hadolint/hadolint-action@v3.5.0
         with:
           dockerfile: Dockerfile
           failure-threshold: error
