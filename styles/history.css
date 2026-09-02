@@ -375,6 +375,9 @@
   font-family: inherit;
   font-size: 13px;
   line-height: 1;
+  /* The search field beside it is a 32px ranui control; without this the pill
+     comes out 31px and the two sit half a pixel apart in the same row. */
+  min-height: 32px;
   cursor: pointer;
   transition:
     background var(--ran-motion-duration-fast, 120ms) ease,

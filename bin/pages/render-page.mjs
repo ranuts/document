@@ -202,12 +202,12 @@ ${jsonLd}
     </svg>
 
     <header class="bar">
-      <a class="brand" href="${L.home}"><span class="logo">D</span>${ui.siteName}</a>
+      <a class="brand" href="${L.home}"><span class="logo">D</span><span class="wordmark">${ui.siteName}</span></a>
       <nav>
-${langMenu(locale, translations, ui, (l) => routeFor(l, page.slug))}
         <a href="${REPO}" rel="noopener" target="_blank">
           <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
         </a>
+${langMenu(locale, translations, ui, (l) => routeFor(l, page.slug))}
       </nav>
     </header>
 

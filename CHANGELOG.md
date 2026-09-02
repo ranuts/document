@@ -110,6 +110,17 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- **The top bar is one row again.** The language button was 8px shorter than
+  the links beside it, so hovering GitHub and hovering the language name lit up
+  two differently sized boxes; on a phone it was the other way round. The
+  language switch also sat on the left of GitHub on every page except the
+  homepage, where it sat on the right. Same order, same height, everywhere.
+- **The saved-documents and embed demo pages no longer scroll sideways on a
+  phone.** Both carry a theme switch in the top bar that other pages keep in a
+  footer, and at 390px wide the row ran past the edge of the screen -- the site
+  name broke onto two lines and the whole page could be dragged left and right.
+  On a phone the bar now shows the mark without the wordmark, which fits the
+  row on every page.
 - **Safari: opening a file from the homepage landed on an empty editor.** The
   homepage hands the file you pick to the editor through this browser's own
   storage, and Safari refuses to store a file that way -- so the editor opened

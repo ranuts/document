@@ -149,7 +149,11 @@ body {
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
-  line-height: 1;
+  /* Same 22px as the nav links beside it -- see #landing-hero .bar nav .navlink.
+     On a phone the label is hidden and only the two icons are left, so the line
+     box no longer sets the height: hold it from below instead. */
+  line-height: 22px;
+  min-height: calc(22px + var(--ran-space-2) * 2);
   color: var(--ran-color-text-secondary);
   cursor: pointer;
   transition: 0.15s ease;
@@ -244,6 +248,11 @@ body {
   #landing-hero .lang-current {
     display: none;
   }
+  /* Phone: the mark stays, the wordmark goes -- see landing.css, which does the
+     same for every other page's copy of this bar. */
+  #landing-hero .wordmark {
+    display: none;
+  }
 }
 
 /* ---------- top bar ---------- */
@@ -290,6 +299,11 @@ body {
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
+  /* One height for every item in the bar. Without this the links inherit the
+     body's prose leading (1.65 -> 23.1px) while the language trigger sets its
+     own line-height: the two hover pills came out 39px and 31px, visibly
+     different boxes in one row. 22px matches the theme switch beside them. */
+  line-height: 22px;
   color: var(--ran-color-text-secondary);
   transition: 0.15s ease;
 }
@@ -1108,16 +1122,6 @@ body {
     padding-bottom: var(--ran-space-4);
   }
   #landing-hero .bar nav .navlink:not(.gh) {
-    display: none;
-  }
-}
-@media (max-width: 620px) {
-  /* Phone: the bar is brand + GitHub + a language name, and at 390px the
-     language trigger (wide enough for "Português") pushed the caret off the
-     viewport and broke the brand onto two lines. GitHub loses: it is one line
-     down in the footer of every page, while the language switch is the only
-     way to change the language. */
-  #landing-hero .bar nav .navlink.gh {
     display: none;
   }
 }
