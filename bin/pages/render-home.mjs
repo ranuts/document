@@ -211,7 +211,7 @@ ${jsonLd}
     <section id="landing-hero">
       <header class="bar">
         <div class="wrap">
-          <a class="brand" href="${home}"><span class="logo">D</span>${e(ui.siteName)}</a>
+          <a class="brand" href="${home}"><span class="logo">D</span><span class="wordmark">${e(ui.siteName)}</span></a>
           <nav>
 ${nav}
             <a class="navlink gh" href="${REPO}" rel="noopener" target="_blank">

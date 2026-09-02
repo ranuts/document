@@ -49,8 +49,11 @@
     </svg>
 
     <header class="bar">
-      <a class="brand" href="/"><span class="logo">D</span>Document Editor</a>
+      <a class="brand" href="/"><span class="logo">D</span><span class="wordmark">Document Editor</span></a>
       <nav>
+        <a class="gh" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
+          <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+        </a>
         <!-- Every target is this page; the locale rides in the query, which is
              what the app's i18n reads. -->
         <r-popover class="lang-menu" placement="bottom" trigger="click" role="button" aria-label="Language">
@@ -90,9 +93,6 @@
             </div>
           </r-content>
         </r-popover>
-        <a href="https://github.com/ranuts/document" rel="noopener" target="_blank">
-          <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
-        </a>
         <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>
       </nav>
     </header>

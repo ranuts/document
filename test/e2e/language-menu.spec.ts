@@ -273,4 +273,80 @@ test.describe('page chrome', () => {
       expect(margin, `${route} keeps a body margin`).toEqual(['0px', '0px', '0px', '0px']);
     }
   });
+
+  /**
+   * One row, one height.
+   *
+   * The links and the language trigger are the same kind of thing -- a label in
+   * a rounded box that fills in on hover -- so a reader comparing two of them
+   * sees two different boxes the moment their heights differ, and the bar reads
+   * as two rows stacked into one.
+   *
+   * They drifted because only one of them said what its line-height was: the
+   * links inherited the body's prose leading (1.65 -> 23.1px) while the trigger
+   * set `line-height: 1`, and the hover pills came out 39px and 31px. On a
+   * phone it went the other way for the same reason -- the trigger drops its
+   * label there, so nothing was left to set a line box at all and it fell to
+   * 31px beside a 38px GitHub link.
+   *
+   * The heights are measured rather than the declarations compared, because the
+   * bar is built twice (home.css for the homepages, landing.css for the rest)
+   * and the failure is a rendered one either way.
+   */
+  for (const viewport of [
+    { width: 1280, height: 800, label: 'desktop' },
+    { width: 390, height: 844, label: 'phone' },
+  ]) {
+    test(`${viewport.label}: every item in the top bar is one height, on one baseline`, async ({ page }) => {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      for (const route of ['/', '/zh-CN/', '/help', '/history', '/embed-demo.html']) {
+        await page.goto(route);
+        await page.evaluate(() => document.fonts.ready);
+        // On a phone the homepage drops its two text links, so the first child
+        // is not necessarily the first visible one.
+        await expect(page.locator('.bar nav > *:visible').first()).toBeVisible();
+        // The theme switch on the app surfaces is a ranui component; before it
+        // upgrades it is a reserved box of another size. Poll so the assertion
+        // lands on the settled bar.
+        await expect
+          .poll(
+            async () =>
+              page.evaluate(() =>
+                [...document.querySelectorAll('.bar nav > *')]
+                  .map((item) => {
+                    // The language switcher's host is the popover; the face
+                    // that carries the hover pill is the span inside it.
+                    const face = item.classList.contains('lang-menu') ? item.querySelector('.lang-trigger') : item;
+                    const box = face?.getBoundingClientRect();
+                    if (!box || !box.height) return '';
+                    return `${Math.round(box.height)}@${Math.round(box.top)}`;
+                  })
+                  .filter(Boolean)
+                  .join(' '),
+              ),
+            { message: `${route}: top bar items differ in height or baseline` },
+          )
+          .toMatch(/^(\S+)( \1)*$/);
+      }
+    });
+  }
+
+  /**
+   * The two app surfaces are not in the sitemap (/history is noindex,
+   * /embed-demo is a demo), so the site-wide phone check in
+   * mobile-overflow.spec.ts never reaches them -- and they are the two pages
+   * that put a third control in the bar. Both scrolled sideways at 390px
+   * (17px and 27px) with a nav label broken onto two lines.
+   */
+  test('the app surfaces fit a phone too', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    for (const route of ['/history', '/embed-demo.html']) {
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      const over = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(over, `${route} scrolls sideways on a phone`).toBeLessThanOrEqual(1);
+    }
+  });
 });

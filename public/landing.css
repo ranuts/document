@@ -76,6 +76,11 @@ header.bar nav a {
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
+  /* One height for every item in the bar. Without this the links inherit the
+     body's prose leading (1.65 -> 23.1px) while the language trigger sets its
+     own line-height: the two hover pills came out 39px and 31px, visibly
+     different boxes in one row. 22px matches the theme switch beside them. */
+  line-height: 22px;
   color: var(--ran-color-text-secondary);
   text-decoration: none;
   transition: 0.15s ease;
@@ -112,7 +117,12 @@ header.bar nav a:hover {
   padding: var(--ran-space-2) var(--ran-space-3);
   border-radius: var(--ran-radius-sm);
   font-size: 14px;
-  line-height: 1;
+  /* Same 22px as the nav links beside it -- see header.bar nav a. On a phone
+     the label is hidden and only the two icons are left, so the line box no
+     longer sets the height: hold it from below instead, or the pill shrinks to
+     31px next to a 38px GitHub link. */
+  line-height: 22px;
+  min-height: calc(22px + var(--ran-space-2) * 2);
   color: var(--ran-color-text-secondary);
   cursor: pointer;
   transition: 0.15s ease;
@@ -217,6 +227,16 @@ header.bar nav a:hover {
      GitHub can stay now -- it used to be dropped to make room for a trigger
      wide enough to hold "Português". */
   .lang-current {
+    display: none;
+  }
+  /* Phone: the bar keeps the mark and drops the wordmark. The two app surfaces
+     (/history, /embed-demo) put a third control in this row -- a theme switch,
+     which every other page keeps in a footer they do not have -- and at 390px
+     brand + links + switch ran 17px and 27px past the viewport: the whole page
+     scrolled sideways and a nav label broke onto two lines. The mark is the
+     same link home and still names the site; 137px of wordmark is what the row
+     could not afford. */
+  header.bar .wordmark {
     display: none;
   }
 }
