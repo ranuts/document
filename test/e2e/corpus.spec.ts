@@ -17,13 +17,22 @@ import { ooxmlDocumentText, textCoverage } from './lib/ooxml';
  *   CORPUS_EXCLUDE='password|encrypt' ...   # optional exclude regex
  *   CORPUS_LIMIT=300 ...      # optional cap (logged, never silent)
  *   CORPUS_VISUAL=1 ...       # opt-in L3: pixel-diff original vs re-opened save
+ *   CORPUS_DEEP=1 ...         # opt-in: also export to PDF and toggle readonly
  *
  * Without CORPUS_DIR the whole suite is skipped, which keeps CI green.
  *
- * Per file: open -> fatal-dialog/asc_onError watch -> trusted-input edit ->
- * save -> output sanity. The OnlyOffice fatal dialog ("An error occurred
- * during the work with the document") and asc_onError events are hard
+ * Per file: open -> fatal-dialog/asc_onError watch -> save -> output sanity
+ * -> trusted-input edit -> save again. The OnlyOffice fatal dialog ("An error
+ * occurred during the work with the document") and asc_onError events are hard
  * failures, not just crashes.
+ *
+ * CORPUS_DEEP adds two more stages to the same loaded document. They exist
+ * because the legacy binary formats have no other route: .doc, .xls and .ppt
+ * cannot be synthesised the way a minimal OOXML package can, so every fixed
+ * spec in the suite skips them, and the only thing that has ever opened one is
+ * this run. Exporting to PDF and toggling readonly on a real legacy document
+ * are therefore covered here or nowhere. Both reuse the document already on
+ * screen -- no second open -- which is what keeps them affordable.
  */
 
 const CORPUS_DIR = process.env.CORPUS_DIR;
@@ -37,8 +46,14 @@ const LIMIT = process.env.CORPUS_LIMIT ? Number(process.env.CORPUS_LIMIT) : Infi
 // Opt-in L3: after the save, re-open the original and the saved bytes
 // readonly and pixel-diff the two renderings (roughly doubles the run time).
 const VISUAL = Boolean(process.env.CORPUS_VISUAL);
+// Opt-in: export to PDF and toggle readonly on the document already open.
+const DEEP = Boolean(process.env.CORPUS_DEEP);
 const SUPPORTED = new Set(['.docx', '.doc', '.xlsx', '.xls', '.pptx', '.ppt', '.csv']);
 const MAX_BYTES = 60 * 1024 * 1024;
+
+// Asc.c_oAscFileType.PDF, the same number the format-parity spec reaches
+// through the embed API's targetExt.
+const PDF_FORMAT_CODE = 513;
 
 const SAVE_TARGET: Record<string, string> = {
   '.docx': 'DOCX',
@@ -91,6 +106,10 @@ type Row = {
   // L3 (opt-in): pixel diff between the rendering of the original and of the
   // saved output, both re-opened readonly.
   visual: string;
+  // CORPUS_DEEP: PDF export of the pristine document, and whether a runtime
+  // readonly lock actually refuses a save.
+  exportPdf: string;
+  readonly: string;
   ascErrors: unknown[];
   fatalDialog: string | null;
   ms: number;
@@ -136,13 +155,15 @@ test.describe('real-document corpus matrix', () => {
         r.saveEdited.startsWith('fail') ||
         r.content.startsWith('fail') ||
         r.visual.startsWith('fail') ||
+        r.exportPdf.startsWith('fail') ||
+        r.readonly.startsWith('fail') ||
         r.ascErrors.length > 0 ||
         r.fatalDialog,
     );
     console.log(`\nCORPUS SUMMARY (this worker): ${rows.length} files, ${bad.length} with findings`);
     for (const r of bad) {
       console.log(
-        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} saveEdited=${r.saveEdited} content=${r.content} visual=${r.visual} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
+        `  FINDING ${r.file}: open=${r.open} edit=${r.edit} save=${r.save} saveEdited=${r.saveEdited} content=${r.content} visual=${r.visual} pdf=${r.exportPdf} readonly=${r.readonly} ascErrors=${JSON.stringify(r.ascErrors).slice(0, 120)} dialog=${r.fatalDialog}`,
       );
     }
   });
@@ -164,6 +185,8 @@ test.describe('real-document corpus matrix', () => {
         saveEdited: 'skipped',
         content: 'n/a',
         visual: 'n/a',
+        exportPdf: DEEP ? 'pending' : 'n/a',
+        readonly: DEEP ? 'pending' : 'n/a',
         ascErrors: [],
         fatalDialog: null,
         ms: 0,
@@ -301,7 +324,7 @@ test.describe('real-document corpus matrix', () => {
       //      double-click in a slide selects a word that the typed "QA"
       //      replaces, which is not a save defect).
       const targetCode = { DOCX: 65, XLSX: 257, PPTX: 129, CSV: 257 }[SAVE_TARGET[ext]] as number;
-      const runSave = (withChecks: boolean) =>
+      const runSave = (withChecks: boolean, code: number = targetCode) =>
         page.evaluate(
           async ({ code, spreadsheet, ooxmlText, withChecks }) => {
             const started = Date.now();
@@ -314,13 +337,23 @@ test.describe('real-document corpus matrix', () => {
               // turned every successful save into a 180 s timeout in the
               // second corpus run.
               const isArrayBuffer = (v: unknown) => Object.prototype.toString.call(v) === '[object ArrayBuffer]';
-              const streamPromise = new Promise<{ size: number; isZip: boolean; bytes: Uint8Array }>((resolve) => {
+              const streamPromise = new Promise<{
+                size: number;
+                isZip: boolean;
+                magic: string;
+                bytes: Uint8Array;
+              }>((resolve) => {
                 const onMsg = (e: MessageEvent) => {
                   const d = e.data;
                   if (d && d.type === 'onlyoffice-file-stream' && isArrayBuffer(d.buffer)) {
                     window.removeEventListener('message', onMsg);
                     const b = new Uint8Array(d.buffer);
-                    resolve({ size: b.byteLength, isZip: b[0] === 0x50 && b[1] === 0x4b, bytes: b });
+                    resolve({
+                      size: b.byteLength,
+                      isZip: b[0] === 0x50 && b[1] === 0x4b,
+                      magic: String.fromCharCode(...Array.from(b.subarray(0, 5))),
+                      bytes: b,
+                    });
                   }
                 };
                 window.addEventListener('message', onMsg);
@@ -394,13 +427,20 @@ test.describe('real-document corpus matrix', () => {
                   content = `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
                 }
               }
-              return { ok: true, ms: Date.now() - started, size: out.size, isZip: out.isZip, content };
+              return {
+                ok: true,
+                ms: Date.now() - started,
+                size: out.size,
+                isZip: out.isZip,
+                magic: out.magic,
+                content,
+              };
             } catch (e) {
               return { ok: false, ms: Date.now() - started, error: String((e as Error).message || e) };
             }
           },
           {
-            code: targetCode,
+            code,
             spreadsheet: withChecks && (ext === '.xlsx' || ext === '.xls' || ext === '.csv'),
             // Only OOXML inputs can be text-compared (legacy .doc/.ppt bytes have no parts to read).
             ooxmlText: withChecks && (ext === '.docx' || ext === '.pptx'),
@@ -418,6 +458,48 @@ test.describe('real-document corpus matrix', () => {
         } else {
           row.save = `fail: ${saved.error}`;
         }
+        row.fatalDialog = row.fatalDialog || (await findFatalDialog());
+      }
+
+      // ---- export to PDF (CORPUS_DEEP) ----
+      // The canvas render path, on documents nothing else in the suite can
+      // reach: a .doc or .ppt has no synthetic equivalent, so this is the only
+      // place their export is exercised at all. Reuses the loaded document, so
+      // the cost is one more save rather than another open.
+      if (DEEP && !row.fatalDialog && load.loaded) {
+        const pdf = await runSave(false, PDF_FORMAT_CODE);
+        row.exportPdf = pdf.ok
+          ? pdf.magic === '%PDF-'
+            ? `ok (${pdf.ms}ms, ${Math.round((pdf.size || 0) / 1024)}KB)`
+            : `fail: not a PDF (magic ${JSON.stringify(pdf.magic)}, ${pdf.size}B)`
+          : `fail: ${pdf.error}`;
+        row.fatalDialog = row.fatalDialog || (await findFatalDialog());
+      }
+
+      // ---- runtime readonly (CORPUS_DEEP) ----
+      // Locking has to actually refuse a save, and unlocking has to give the
+      // document back. Both directions matter: a lock that does not hold loses
+      // the guarantee, and a lock that will not lift strands the document.
+      if (DEEP && !row.fatalDialog && load.loaded) {
+        row.readonly = await page.evaluate(async () => {
+          try {
+            await post('document:set-readonly', { readonly: true });
+            const state = await post('document:get-state', {});
+            if (!state.readonly) return 'fail: set-readonly reported not readonly';
+            let refused = false;
+            try {
+              await post('document:save', {});
+            } catch {
+              refused = true;
+            }
+            await post('document:set-readonly', { readonly: false });
+            const back = await post('document:get-state', {});
+            if (back.readonly) return 'fail: still readonly after unlocking';
+            return refused ? 'ok' : 'fail: save went through while locked';
+          } catch (e) {
+            return `inconclusive: ${String((e as Error).message || e).slice(0, 80)}`;
+          }
+        });
         row.fatalDialog = row.fatalDialog || (await findFatalDialog());
       }
 
@@ -509,6 +591,8 @@ test.describe('real-document corpus matrix', () => {
       expect(row.ascErrors, `asc_onError fired: ${JSON.stringify(row.ascErrors)}`).toEqual([]);
       expect(row.open.startsWith('ok'), `open result: ${row.open}`).toBe(true);
       expect(row.save.startsWith('ok'), `save result: ${row.save}`).toBe(true);
+      expect(row.exportPdf.startsWith('fail'), `pdf export result: ${row.exportPdf}`).toBe(false);
+      expect(row.readonly.startsWith('fail'), `readonly result: ${row.readonly}`).toBe(false);
     });
   }
 });
