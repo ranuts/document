@@ -4,11 +4,19 @@
     "**/report/**",
     "**/assets/**",
     "**/temp/**",
-    "**/public/**",
-    "**/public-v9/**",
     "**/cache/**",
     "**/*.snap",
-    "**/node_modules/**"
+    "**/node_modules/**",
+    "public/sdkjs/**",
+    "public/web-apps/**",
+    "public/fonts/**",
+    "public/libs/**",
+    "public/ranui-iife/**",
+    "public/ran-iife/**",
+    "public/help/**",
+    "public/changelog/**",
+    "public/convert/**",
+    "public/document_editor_service_worker.js"
   ],
   "rules": {
     "no-debugger": "error",

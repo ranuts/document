@@ -69,7 +69,7 @@
         }, timeoutMs);
         try {
           controller.postMessage({ type: 'CLIENT_COUNT' }, [channel.port2]);
-        } catch (error) {
+        } catch {
           done(null);
         }
       });
