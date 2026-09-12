@@ -198,6 +198,24 @@ function fontSources(win: FrameScope): FontSource[] {
 }
 
 /**
+ * The string forms x2t_helper treats as somewhere to fetch from.
+ *
+ * Exported for the unit test: it mirrors a classifier in vendor code that this
+ * proxy has to agree with, and getting it wrong turns a document into a
+ * request. Pinning it directly is cheaper than reaching it through a
+ * conversion.
+ */
+export function looksLikeUrl(value: string): boolean {
+  if (/^(data|blob|file|https?):/i.test(value.trim())) return true;
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Anything the vendor hands us -- blob URL, Blob, typed array -- as bytes.
  *
  * Never `instanceof`. This runs in the page's realm and the values come from
@@ -211,6 +229,13 @@ function fontSources(win: FrameScope): FontSource[] {
 async function toBytes(value: unknown): Promise<Uint8Array | null> {
   if (value == null) return null;
   if (typeof value === 'string') {
+    // Only strings that are locations. x2t_helper's own handleFileData sorts
+    // strings into DataURL / BlobURL / FileURL / HttpURL / URL and *String*,
+    // and the last one is not an error -- it encodes the text as UTF-8 bytes.
+    // Fetching it instead would turn a document into a bogus request, so
+    // anything that is not a location is handed over untouched and the vendor
+    // decides, exactly as it did before conversion moved out of the frame.
+    if (!looksLikeUrl(value)) return null;
     const response = await fetch(value);
     if (!response.ok) throw new Error(`Failed to read document data (${response.status})`);
     return new Uint8Array(await response.arrayBuffer());
@@ -235,7 +260,9 @@ async function mediaToBytes(medias: unknown): Promise<Record<string, Uint8Array>
   for (const [path, url] of Object.entries(medias as Record<string, unknown>)) {
     try {
       const bytes = await toBytes(url);
+      // Same rule as the document itself: unresolved forms cross untouched.
       if (bytes) out[path] = bytes;
+      else if (url != null) out[path] = url as Uint8Array;
     } catch {
       // A medium that cannot be read is one the conversion does without,
       // which is what the in-frame path did with it too.
@@ -281,11 +308,14 @@ export function installX2tWorkerProxy(win: Window): boolean {
   const channel = new WorkerChannel(frame);
 
   converter.convertToBin = async (data: unknown, fileName?: string, fileExt?: string) => {
-    const bytes = await toBytes(data);
-    if (!bytes) throw new Error('Document conversion failed: nothing to convert');
+    if (data == null) throw new Error('Document conversion failed: nothing to convert');
+    // Whatever could not be resolved here crosses as it came: the worker runs
+    // the same handleFileData, so a form this does not know is still the
+    // vendor's to interpret rather than ours to reject.
+    const payload = (await toBytes(data)) ?? data;
     const result = (await channel.send(
       'convertToBin',
-      { data: bytes, fileName, fileExt },
+      { data: payload, fileName, fileExt },
       await fontSourcesWhenReady(frame),
     )) as Record<string, unknown>;
     return { ...result, media: mintMediaUrls(result.media) };
