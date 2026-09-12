@@ -39,6 +39,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- **The editor gives its memory back while you work.** Converting a document
+  used to reserve a few hundred megabytes and hold them for as long as the tab
+  was open; that work now happens off to one side and is released once it is
+  done. Nothing changes about what you see, except that the page stays
+  responsive while a large file is being opened or saved.
 - **The editor's conversion engine is 2.6 MB smaller to download.** It is the
   largest single file the app fetches, and the browser now unpacks it while it
   arrives instead of the page unpacking it afterwards. Nothing to do; the first

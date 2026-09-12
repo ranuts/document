@@ -14,6 +14,7 @@ import { installSingleUnloadPrompt } from './guards/unload-prompt';
 import { installHintFallbackGuard } from './guards/hint-fallback';
 import { installAboutSourceNotice } from './guards/about-source';
 import { installBadImageUrlGuard } from './guards/bad-image-url';
+import { installX2tWorkerProxy } from './guards/x2t-worker';
 
 /**
  * Same-origin preparation of the editor iframe, applied from onAppReady and
@@ -57,6 +58,7 @@ export function prepareEditorIframe(): boolean {
       installSingleUnloadPrompt(win);
       installHintFallbackGuard(win);
       installBadImageUrlGuard(win);
+      const x2tWorkerProxied = installX2tWorkerProxy(win);
       installAboutSourceNotice(doc);
       const wasmBinaryHandled = releaseWasmBinary(win);
 
@@ -66,6 +68,7 @@ export function prepareEditorIframe(): boolean {
         imagePipelineInstalled &&
         saveSemanticsInstalled &&
         longActionGuarded &&
+        x2tWorkerProxied &&
         wasmBinaryHandled
       ) {
         fullyApplied = true;

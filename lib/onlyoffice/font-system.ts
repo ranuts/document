@@ -59,6 +59,53 @@ const FONT_SYSTEM_POLL_MS = 50;
 export const FONT_WAIT_PROBE = '__ooFontWaitMs';
 
 /**
+ * The same wait, as a promise, for callers that do not have a vendor callback
+ * to hand over to.
+ *
+ * Guard 14 collects the font list itself and hands it to the x2t worker, so it
+ * reads the very fields `fetchFonts` walks -- `AscFonts.g_font_infos` and
+ * `g_font_loader.fontFiles[index].Id`. Losing the same race there does not
+ * throw (an absent entry is skipped) and is therefore worse: it silently
+ * produces the fontless import of #146 rather than the -82 the failure guard
+ * retries. So the proxy waits the same way, records the same probe, and warns
+ * with the same wording when the wait runs out.
+ */
+export async function waitForFontSystem(
+  win: FontSystemWindow,
+  options: { timeoutMs?: number; intervalMs?: number } = {},
+): Promise<boolean> {
+  const { timeoutMs = FONT_SYSTEM_WAIT_MS, intervalMs = FONT_SYSTEM_POLL_MS } = options;
+  const record = (waited: number): void => {
+    (win as Record<string, unknown>)[FONT_WAIT_PROBE] = waited;
+  };
+  if (isFontSystemReady(win)) {
+    record(0);
+    return true;
+  }
+  let waited = 0;
+  while (waited < timeoutMs) {
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    waited += intervalMs;
+    let ready: boolean;
+    try {
+      ready = isFontSystemReady(win);
+    } catch (error) {
+      console.warn('[OO] font wait could not read the editor frame:', error);
+      record(waited);
+      return false;
+    }
+    if (ready) {
+      record(waited);
+      console.log(`[OO] open conversion waited ${waited} ms for the font system`);
+      return true;
+    }
+  }
+  record(waited);
+  console.warn(`[OO] font system still not ready after ${timeoutMs} ms; importing without fonts`);
+  return false;
+}
+
+/**
  * The dependency the vendor never declared. `fetchFonts` is awaited by the
  * open conversion (x2t_helper `_convertDocument`, shared with the export
  * path), but the font system it walks is initialised in parallel with the

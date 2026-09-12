@@ -83,8 +83,15 @@ const installSeamProbe = () => {
     if (typeof converter.convertToBin !== 'function') return;
     converter.__probed = true;
 
-    const originalToBin = converter.convertToBin.bind(converter);
-    converter.convertToBin = async function (data: unknown, fileName?: string, fileExt?: string) {
+    // Accessors, not assignments. Guard 14 replaces both methods with its
+    // worker proxy after this runs, so a plain assignment would be overwritten
+    // and this would observe nothing while still passing. Wrapping through a
+    // setter keeps the probe in front of whichever implementation ends up
+    // there -- which is the point: the seam is what is pinned, not who fills
+    // it.
+    let toBinImpl = converter.convertToBin.bind(converter);
+    const originalToBin = (...args: unknown[]) => toBinImpl(...args);
+    const wrappedToBin = async function (data: unknown, fileName?: string, fileExt?: string) {
       const out = await originalToBin(data, fileName, fileExt);
       const shape = describe(out && out.binary);
       const note: ProbeNote = {
@@ -115,13 +122,27 @@ const installSeamProbe = () => {
       state.toBin.push(note);
       return returned;
     };
+    Object.defineProperty(converter, 'convertToBin', {
+      configurable: true,
+      get: () => wrappedToBin,
+      set: (fn: (...args: unknown[]) => unknown) => {
+        toBinImpl = fn.bind(converter);
+      },
+    });
 
     if (typeof converter.convertFromBin === 'function') {
-      const originalFromBin = converter.convertFromBin.bind(converter);
-      converter.convertFromBin = function (obj: any) {
+      let fromBinImpl = converter.convertFromBin.bind(converter);
+      const wrappedFromBin = function (obj: any) {
         state.fromBin.push({ targetExt: obj && obj.targetExt, fileExt: obj && obj.fileExt });
-        return originalFromBin(obj);
+        return fromBinImpl(obj);
       };
+      Object.defineProperty(converter, 'convertFromBin', {
+        configurable: true,
+        get: () => wrappedFromBin,
+        set: (fn: (...args: unknown[]) => unknown) => {
+          fromBinImpl = fn.bind(converter);
+        },
+      });
     }
   };
 

@@ -63,12 +63,12 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   loading.ts            # 加载状态 UI
   onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
   onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
-    iframe-guards.ts      # 13 条运行时守卫的编排；每条守卫一个文件在 guards/
+    iframe-guards.ts      # 14 条运行时守卫的编排；每条守卫一个文件在 guards/
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
                           # font-loading / comment-selection / canvas-loss /
                           # wasm-binary-release / unload-prompt / hint-fallback /
-                          # about-source / bad-image-url
+                          # about-source / bad-image-url / x2t-worker
     open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
     open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
     font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
@@ -235,17 +235,17 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 
 **全量 spec 清单**（PR 档默认全跑；标 _opt-in_ 的靠环境变量开、进夜间）：
 
-| 面向              | spec                                                                                                                                                                                                                                                                                                                                                     |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                 |
-| embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                      |
-| 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读） |
-| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`bad-image-url-locale`（守卫 13）                        |
-| 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
-| 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
-| 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                     |
-| 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?saved=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                               |
-| 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                 |
+| 面向              | spec                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                    |
+| embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                         |
+| 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读）    |
+| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 14：x2t 跑在 worker 里、流式实例化、闲置后连堆一起回收）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`bad-image-url-locale`（守卫 13） |
+| 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                                |
+| 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                      |
+| 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                        |
+| 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?saved=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                                  |
+| 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                    |
 
 另有三套独立配置：`playwright.pages.config.ts`（`bin/build.sh` + `wrangler pages dev`，
 复现 CF Pages 托管语义，CI job `e2e-pages`）、`playwright.browsers.config.ts`
@@ -901,6 +901,25 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   见 docs/explorations/2026-08-20-x2t-wasm-fetch-transient-retry.md。
   改 `packages/converter/src/**` 后本地要先 `pnpm --filter @ranuts/converter run build`
   ——用例从 `dist` 导入，不重建就还在测旧代码（CI 由包的 `prepare` 覆盖）。
+- **x2t 跑在 worker 里（守卫 14，2026-09-12）**：每次转换——打开的 `convertToBin`、
+  保存的 `convertFromBin`——都走 `public/sdkjs/common/wasm/x2t/x2t.worker.js`，
+  编辑器 frame 里**一个 `Module` 都没有**。worker 按需创建、闲置 30s 后 terminate，
+  于是那 340 MB 的堆在编辑期间是还给浏览器的（以前它随 frame 常驻：x2t.js 是未包裹的
+  classic script，`wasmMemory`/`HEAPU8` 挂在 frame 全局上，`destroy()` 既没人调、
+  调了也只丢引用）。**这仍然不是 #144 的修复**——打开那一刻照样要 283 MB；dedicated
+  worker 也和它的文档同进程，没有隔离收益。收益是生命周期 + 转换不再阻塞 frame 主线程。
+  **两边共用同一份 `x2t_helper.js`**（`typeof document` 只在三处分叉：loadScript /
+  fetchFonts / downloadFile），不另写一份转换实现——格式码、doc/xls/ppt 两步、PDF
+  changes 合并、退出码分类都只有这一处定义，`vendor-contract` 钉住这几个符号。
+  **字体过边界的是清单不是字节**（一篇最简单的拉丁 docx 每次转换要 14 个文件 4.6 MB，
+  中文导 PDF 是 16 个 25.4 MB），worker 自己按 URL 取；`fontFilesPath` 是相对**编辑器
+  frame 文档**的，必须先变绝对。三个坑都踩过、都写在
+  docs/explorations/2026-09-12-x2t-in-a-worker.md 里：**别 transfer 进 worker 的
+  buffer**（`convertFromBin` 拿到的是编辑器活着的 `Editor.bin`，transfer 等于在 frame
+  里 detach 它）、**别用 `instanceof` 判类型**（跨 realm 恒 false，PDF 编辑器直接传字节
+  而不是 blob URL，于是报"nothing to convert"）、**收集字体清单前必须 `waitForFontSystem`**
+  （守卫 3 的竞态会原样继承，但这里不抛 TypeError 而是静默跳过 → 变成 #146 的无字体导入，
+  比 -82 更糟，因为没有任何东西会去重试）。
 - **内存**：**283 MB initial 不是可调参数，别去调**（试过并回滚）。模块静态/BSS 布局
   铺到 ~267 MB（2501 个不可变 i32 global，最高地址 267.3 MB），声明的 4533 页与下界
   4277 页之间只有 16 MB 余量；降到 64 MB 会在实例化时

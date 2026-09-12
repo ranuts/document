@@ -41,22 +41,36 @@ test.describe('open retry after an environment failure (real editor)', () => {
           convertToBin?: (...args: unknown[]) => unknown;
           __faultPatched?: boolean;
         };
+        // An accessor rather than an assignment: guard 14 replaces
+        // convertToBin with its worker proxy after this runs, and a plain
+        // assignment here would simply be overwritten -- the fault would never
+        // fire and the test would pass without testing anything.
         const patch = (): boolean => {
           const x2t = (window as unknown as { AscCommon?: { x2t?: X2T } }).AscCommon?.x2t;
           if (!x2t || typeof x2t.convertToBin !== 'function' || x2t.__faultPatched) return false;
-          const original = x2t.convertToBin.bind(x2t);
+          let impl = x2t.convertToBin.bind(x2t);
           x2t.__faultPatched = true;
-          x2t.convertToBin = (...args: unknown[]) => {
-            if (sessionStorage.getItem(key) === 'armed') {
-              sessionStorage.setItem(key, 'fired');
-              // Verbatim shape of the real failure: the vendor's fetchFonts
-              // dereferencing g_font_loader.fontFiles[index].Id too early.
-              return Promise.reject(
-                new Error("Document conversion failed: TypeError: Cannot read properties of undefined (reading 'Id')"),
-              );
-            }
-            return original(...args);
-          };
+          Object.defineProperty(x2t, 'convertToBin', {
+            configurable: true,
+            get:
+              () =>
+              (...args: unknown[]) => {
+                if (sessionStorage.getItem(key) === 'armed') {
+                  sessionStorage.setItem(key, 'fired');
+                  // Verbatim shape of the real failure: the vendor's fetchFonts
+                  // dereferencing g_font_loader.fontFiles[index].Id too early.
+                  return Promise.reject(
+                    new Error(
+                      "Document conversion failed: TypeError: Cannot read properties of undefined (reading 'Id')",
+                    ),
+                  );
+                }
+                return impl(...args);
+              },
+            set: (fn: (...args: unknown[]) => unknown) => {
+              impl = fn.bind(x2t);
+            },
+          });
           return true;
         };
         if (!patch()) {
@@ -194,18 +208,26 @@ test.describe('open retry after an environment failure (real editor)', () => {
       });
 
       type X2T = { convertToBin?: (...args: unknown[]) => unknown; __oomPatched?: boolean };
+      // Accessor, not assignment: guard 14 replaces convertToBin with its
+      // worker proxy afterwards and would otherwise overwrite the fault.
       const patch = (): boolean => {
         const x2t = (window as unknown as { AscCommon?: { x2t?: X2T } }).AscCommon?.x2t;
         if (!x2t || typeof x2t.convertToBin !== 'function' || x2t.__oomPatched) return false;
         x2t.__oomPatched = true;
         // Stays armed: the retry must fail too, so the final report is what
         // the user sees. Verbatim wording of the reporter's screenshot.
-        x2t.convertToBin = () =>
-          Promise.reject(
-            new Error(
-              'Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot allocate Wasm memory for new instance. Build with -sASSERTIONS for more info.)',
+        Object.defineProperty(x2t, 'convertToBin', {
+          configurable: true,
+          get: () => () =>
+            Promise.reject(
+              new Error(
+                'Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot allocate Wasm memory for new instance. Build with -sASSERTIONS for more info.)',
+              ),
             ),
-          );
+          set: () => {
+            /* whatever replaces it, the fault stays in front */
+          },
+        });
         return true;
       };
       if (!patch()) {

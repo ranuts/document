@@ -3,26 +3,38 @@ import { expect, test } from './lib/l0';
 declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
 
 /**
- * What an open costs in memory, held down where it is cheap to hold down.
+ * Where an open's memory is held, and for how long.
  *
- * x2t declares a 283 MB initial heap (see lib/onlyoffice/wasm-memory.ts). On
- * top of that, our x2t_helper patch used to inflate the compressed `x2t.wasm.br`
- * into a 40.2 MB ArrayBuffer and hand emscripten the bytes -- so at the moment
- * WebAssembly asked the browser for the heap, the renderer was also holding
- * that buffer and compiling 40 MB of code. That moment is exactly the one that
- * fails on a browser short of memory (GitHub #144).
+ * x2t declares a 283 MB initial heap and measures ~340 MB once a document has
+ * been through it. It used to be held in the editor frame, for the life of the
+ * frame: x2t.js is an unwrapped classic script, so `wasmMemory` / `HEAPU8` are
+ * properties of the frame's global and nothing drops them.
+ * `X2TConverter.prototype.destroy` exists, is never called, and clears a JS
+ * reference anyway.
  *
- * The module is now compiled straight off the network
- * (`Module.instantiateWasm` + `instantiateStreaming` over a
- * `DecompressionStream`), so the inflated copy never exists at all. What this
- * pins is that the streaming path is the one actually taken -- silently
- * falling back to the buffered path would put the 40 MB back into the peak and
- * nothing else would notice.
+ * Guard 14 moved conversion into a worker, so the heap lives somewhere we can
+ * terminate. What this pins is that arrangement, end to end:
  *
- * The buffered fallback (engines without streaming instantiation) and the
- * guard that releases its buffer afterwards are unit-tested instead:
+ *  - the editor frame never instantiates x2t at all -- no `Module` in it after
+ *    an open and a save, which is the whole point;
+ *  - the worker compiles the module straight off the network
+ *    (`Module.instantiateWasm` + `instantiateStreaming`), so the 42 MB never
+ *    exists as one buffer at the moment WebAssembly asks for the 283 MB heap.
+ *    That moment is what fails on a browser short of memory (GitHub #144), and
+ *    silently falling back to the buffered path would put it back with nothing
+ *    else noticing;
+ *  - the worker goes away once it has been idle, which is what hands the heap
+ *    back for the rest of the editing session.
+ *
+ * The buffered fallback (engines without streaming instantiation) and the guard
+ * that releases its buffer are unit-tested instead:
  * test/unit/onlyoffice-wasm-memory.test.ts.
  */
+const WORKER_URL_PART = 'x2t.worker.js';
+
+/** How long guard 14 leaves an idle worker before terminating it. */
+const IDLE_TERMINATE_MS = 30_000;
+
 const openWorkbook = async (fileName: string) => {
   const XLSX = (window as unknown as { XLSX: any }).XLSX;
   const sheet = XLSX.utils.aoa_to_sheet([
@@ -36,78 +48,61 @@ const openWorkbook = async (fileName: string) => {
   await post('document:open-buffer', { fileName, buffer, readonly: false });
 };
 
-test.describe('wasm memory held by an open document (real editor)', () => {
-  test.describe.configure({ timeout: 180_000 });
+/** Is there an x2t module anywhere in the page's frames? There must not be. */
+const moduleInAnyFrame = () => {
+  const visit = (win: Window): boolean => {
+    try {
+      const module = (win as unknown as { Module?: { calledRun?: boolean } }).Module;
+      if (module && 'calledRun' in module) return true;
+    } catch {
+      /* cross-origin */
+    }
+    for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
+    return false;
+  };
+  return visit(window);
+};
 
-  test('the x2t module is compiled off the network, so the inflated 40 MB never exists', async ({ page }) => {
+test.describe('wasm memory held by an open document (real editor)', () => {
+  test.describe.configure({ timeout: 240_000 });
+
+  test('x2t runs in the worker, streamed, and is gone once it goes quiet', async ({ page }) => {
     await page.goto('/embed-demo.html');
     await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
     await page.evaluate(openWorkbook, 'streamed.xlsx');
+    await page.evaluate(async () => {
+      await post('document:save', {});
+    });
 
-    const state = await expect
-      .poll(
-        async () =>
-          await page.evaluate(() => {
-            const find = (
-              win: Window,
-            ): { streaming: boolean; buffered: boolean; ran: boolean; heapMb: number } | null => {
-              try {
-                const module = (
-                  win as unknown as {
-                    Module?: {
-                      wasmBinary?: unknown;
-                      instantiateWasm?: unknown;
-                      calledRun?: boolean;
-                      HEAPU8?: Uint8Array;
-                    };
-                  }
-                ).Module;
-                if (module && 'calledRun' in module) {
-                  return {
-                    streaming: typeof module.instantiateWasm === 'function',
-                    buffered: Boolean(module.wasmBinary),
-                    ran: Boolean(module.calledRun),
-                    heapMb: module.HEAPU8 ? Math.round(module.HEAPU8.buffer.byteLength / (1024 * 1024)) : 0,
-                  };
-                }
-              } catch {
-                /* cross-origin */
-              }
-              for (let i = 0; i < win.frames.length; i++) {
-                const found = find(win.frames[i]);
-                if (found) return found;
-              }
-              return null;
-            };
-            return find(window);
-          }),
-        { timeout: 120_000 },
-      )
-      .toMatchObject({ streaming: true, buffered: false, ran: true })
-      .then(() =>
-        page.evaluate(() => {
-          const find = (win: Window): number => {
-            try {
-              const module = (win as unknown as { Module?: { HEAPU8?: Uint8Array } }).Module;
-              if (module?.HEAPU8) return Math.round(module.HEAPU8.buffer.byteLength / (1024 * 1024));
-            } catch {
-              /* cross-origin */
-            }
-            for (let i = 0; i < win.frames.length; i++) {
-              const found = find(win.frames[i]);
-              if (found) return found;
-            }
-            return 0;
-          };
-          return find(window);
-        }),
-      );
+    const x2tWorker = () => page.workers().find((worker) => worker.url().includes(WORKER_URL_PART));
+    await expect.poll(() => Boolean(x2tWorker()), { timeout: 60_000 }).toBe(true);
 
-    // The heap itself is the vendor's to declare (283 MB initial, growing with
-    // the document). Bounded loosely, only to catch a vendor build that starts
-    // asking for something wildly different -- measured 340 MB after an open,
-    // 408 MB after saving a 20k-row workbook or exporting one to PDF.
-    expect(state).toBeGreaterThan(200);
-    expect(state).toBeLessThan(1024);
+    const state = await x2tWorker()!.evaluate(() => {
+      const module = (self as unknown as { Module?: Record<string, unknown> }).Module;
+      const heap = module?.HEAPU8 as Uint8Array | undefined;
+      return {
+        streaming: typeof module?.instantiateWasm === 'function',
+        buffered: Boolean(module?.wasmBinary),
+        ran: Boolean(module?.calledRun),
+        heapMb: heap ? Math.round(heap.buffer.byteLength / (1024 * 1024)) : 0,
+      };
+    });
+
+    expect(state).toMatchObject({ streaming: true, buffered: false, ran: true });
+    // The heap is the vendor's to declare (283 MB initial, growing with the
+    // document). Bounded loosely, only to catch a vendor build that starts
+    // asking for something wildly different -- measured 340 MB after an open.
+    expect(state.heapMb).toBeGreaterThan(200);
+    expect(state.heapMb).toBeLessThan(1024);
+
+    // And the editor frame itself never paid for any of it.
+    expect(await page.evaluate(moduleInAnyFrame), 'no x2t module in any frame').toBe(false);
+
+    // Left alone, the worker is terminated and the heap goes back. This is the
+    // difference the whole change exists to make: before it, the same 340 MB
+    // stayed resident for as long as the document was open.
+    await expect
+      .poll(() => Boolean(x2tWorker()), { timeout: IDLE_TERMINATE_MS + 30_000, intervals: [2_000] })
+      .toBe(false);
   });
 });
