@@ -1,8 +1,6 @@
 import { buildDocx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * document:save without targetExt must export in the document's own format.
  * It used to default to XLSX for every document, so a bare save on a docx

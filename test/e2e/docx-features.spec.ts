@@ -1,8 +1,6 @@
 import { buildDocx, ooxmlText, toBase64, zipEntryNames, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Word features a real document carries and the minimal fixture never did
  * (matrix section B "修订 / 页眉页脚"): tracked changes and header/footer

@@ -1,8 +1,6 @@
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Environment dimension "service worker already controls the page" (matrix
  * section C, escape table row 1). Every other E2E runs on a cold profile

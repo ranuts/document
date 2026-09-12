@@ -1,8 +1,6 @@
 import { buildDocx, buildPptx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Format parity for behaviors that were only pinned on xlsx (matrix section
  * A): PDF export and readonly open must hold for the word and presentation

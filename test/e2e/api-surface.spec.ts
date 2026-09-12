@@ -22,8 +22,6 @@ import { waitForEditorReady, typeIntoDocument, saveAndCapture, editorHealth, SAV
  * a console summary of the ones that misbehaved.
  */
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 // Methods that legitimately change the world in ways a sweep must not:
 // close/exit the document, kick off a save/download (covered elsewhere),
 // enter modal states that block every following call, or start long-

@@ -2,8 +2,6 @@ import { expect, test } from './lib/l0';
 import { saveAndCapture, waitForEditorReady, SAVE_FORMAT_CODE } from './actions/editor';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Review -> "Remove/Resolve comments in current selection" before the grid
  * has ever been focused. The vendor reads

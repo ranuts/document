@@ -55,8 +55,6 @@ type ProbeState = {
   fromBin: Array<{ targetExt?: string; fileExt?: string }>;
 };
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Installed in every frame before any vendor script runs. The vendor writes
  * `window.AscCommon = window.AscCommon || {}`, so a pre-made object survives,

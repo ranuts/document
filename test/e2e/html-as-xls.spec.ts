@@ -1,8 +1,6 @@
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * An HTML <table> saved under a spreadsheet extension (the usual "export to
  * Excel" of web systems) must open and round-trip. The vendor x2t.wasm has

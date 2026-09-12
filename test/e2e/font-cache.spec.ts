@@ -2,8 +2,6 @@ import { buildPptx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 import { settleEditor } from './lib/visual';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Font delivery regression guard (found live on edit.chaxus.com: the indexed
  * font catalog /fonts/NNN had no cache rule and the service worker's

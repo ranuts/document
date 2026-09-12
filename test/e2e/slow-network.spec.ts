@@ -1,8 +1,6 @@
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Cold open + first save under a throttled link (L4, matrix section C
  * "网络"). The first save pays for the ~6.6 MB x2t.wasm.br plus the import;

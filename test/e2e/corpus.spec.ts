@@ -26,8 +26,6 @@ import { ooxmlDocumentText, textCoverage } from './lib/ooxml';
  * failures, not just crashes.
  */
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 const CORPUS_DIR = process.env.CORPUS_DIR;
 const FILTER = process.env.CORPUS_FILTER ? new RegExp(process.env.CORPUS_FILTER, 'i') : null;
 // Public corpora carry files that are expected to fail (password-protected,

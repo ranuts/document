@@ -18,8 +18,6 @@ import { waitForEditorReady, saveAndCapture, SAVE_FORMAT_CODE } from './actions/
  */
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 test.describe('embed regression (real editor)', () => {
   // Each test boots the real editor iframe and loads the ~9 MB x2t WASM for
   // the save round-trip -- far heavier than the smoke tests sharing this

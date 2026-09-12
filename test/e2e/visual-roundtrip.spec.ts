@@ -3,8 +3,6 @@ import { expect, test } from './lib/l0';
 import { pixelDiff, settleEditor } from './lib/visual';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Baseline-free visual check (L3, matrix section C): the editor's rendering
  * of a document and of that document after a save round trip must be

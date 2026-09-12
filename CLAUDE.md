@@ -61,6 +61,8 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   events.ts             # MessageCodec 事件处理（桌面端集成）
   file-types.ts         # OnlyOffice 文件类型常量映射
   loading.ts            # 加载状态 UI
+  confirm-dialog.ts     # 确认弹窗（ranui r-modal 封装）
+  editor-theme.ts       # 站点主题 → 编辑器 uiTheme 的跟随
   onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
   onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
     iframe-guards.ts      # 14 条运行时守卫的编排；每条守卫一个文件在 guards/
@@ -96,7 +98,13 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   sw-update.ts          # SW 更新策略的编辑器一侧（有文档打开时不提升 worker）；落地页一侧在 public/sw-register.js
   agent-plugin/         # Agent 协同编辑：editor-bridge（直调 window.editor）、tools、ui/
 packages/             # pnpm workspace，供 ran 生态三处站点共享（包名 @ranuts/*）
-  shared/               # document-types / document-utils / i18n（7 种站点语言：en / zh-CN / ja / ko / de / es / pt，词条表都是完整的；编辑器 UI 语言另由 vendor 45 语言包提供）/ store（createSignal）
+  shared/               # document-types / document-utils / store（createSignal）
+    src/i18n.ts           # 语言解析、`t()`、locale 工具；**词条表不在这里**
+    src/i18n/types.ts     # `I18nMessages` 接口（每个 locale 文件只 import 它）
+    src/i18n/messages/    # 一个语言一个文件：zh-CN / en / ja / ko / de / es / pt，
+                          # 七张表都是完整的（编辑器 UI 语言另由 vendor 45 语言包提供）。
+                          # 2026-09-12 从 1263 行的单文件拆开：加一条文案是改七个文件而
+                          # 不是同一个文件的七处，加一种语言就是加一个文件
   converter/            # 格式转换：CSV↔XLSX（SheetJS）、docx-zip 媒体处理、签名嗅探、PDF 字体清单
   agent-core/           # LLM 运行时 + 多 Provider（anthropic/openai/gemini/ollama/webllm）+ key 存储
   chat-ui/              # 聊天面板 UI
@@ -264,6 +272,10 @@ HEAD 的提交时间，窗口各留一个周期加一小时的余量。**gate �
 源站可见**的，跟别的 spec 并排跑会把它们的 worker 也换掉——2026-08-25 之前
 `sw-warm` 读到 `runtime-e2e-next`、`sw-vendor-cache-first` 找不到自己刚种下的
 哨兵，都是这个。两半必须成对，`workflow-contract.test.ts` 钉住。
+
+`post()` 是 embed-demo 页面的协议包装（`public/embed-demo.html` 定义，多数 spec 靠它驱动
+真实编辑器），声明在 `test/e2e/lib/embed-demo.d.ts` 里一份就够，**别再在 spec 里重抄**
+——曾经 35 个 spec 各抄一遍同样的那一行。
 
 **L0 全局 fixture（`test/e2e/lib/l0.ts`，2026-08-15 起所有 spec 从它
 导入 `test`/`expect`）**：自动把 `asc_onError`、厂商致命弹窗、编辑器 iframe

@@ -2,8 +2,6 @@ import { makeStoredZip, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 import { settleEditor } from './lib/visual';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * The OpenDocument formats, which the landing pages under /open/od{t,s,p} now
  * advertise and the file picker now offers.

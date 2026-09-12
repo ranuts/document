@@ -1,7 +1,5 @@
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * A PDF must mount the pdf editor directly, never via web-apps/apps/common
  * (the "is it a form?" sniffing loader). That loader re-navigates with

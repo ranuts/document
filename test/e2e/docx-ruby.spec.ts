@@ -1,8 +1,6 @@
 import { buildDocx, ooxmlText, toBase64, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Phonetic guides (<w:ruby>: furigana / pinyin). The vendor importer drops
  * the whole element -- guide AND base word -- so "東京" with とうきょう above

@@ -2,8 +2,6 @@ import { buildDocx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 import { pixelDiff, settleEditor } from './lib/visual';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Chinese has to survive an export to PDF.
  *
