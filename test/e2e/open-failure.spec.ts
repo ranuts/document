@@ -15,15 +15,18 @@ import { expect, test } from './lib/l0';
  * asc_onError and frame rejections (a silently broken hook would make every
  * other suite look cleaner than it is).
  *
- * Three shapes of unusable input, because they fail in different places.
+ * Four shapes of unusable input, because they fail in different places.
  * Garbage bytes are rejected before anything is unpacked. A truncated file --
  * an upload that was interrupted, a file copied off a full disk -- gets
  * further: the local header says a real workbook, and only the central
  * directory at the end turns out not to be there. An encrypted workbook is not
  * a zip at all: Office wraps the whole package in the pre-2007 OLE2 container,
- * and nothing outside the file says so. All three are files a user will
- * genuinely hand us, and whichever way each fails, the user must be told and
- * the editor must stay usable.
+ * and nothing outside the file says so. The fourth is handed to a different
+ * vendor app altogether: the pdf editor reaches the same visible outcome by a
+ * different route, reporting through asc_onError alone without the frame
+ * rejection the other three produce. All four are files a user will genuinely
+ * hand us, and whichever way each fails, the user must be told and the editor
+ * must stay usable.
  */
 test.describe('open failure surfacing (real editor)', () => {
   test.describe.configure({ timeout: 120_000 });
@@ -58,15 +61,23 @@ test.describe('open failure surfacing (real editor)', () => {
       // same visible way rather than stall.
       bytes: () => buildEncryptedOoxml(),
     },
+    {
+      label: 'a PDF that is only a header',
+      name: 'junk.pdf',
+      // Routed to the pdf editor instead, which is a separate vendor app with
+      // its own load mask and its own error path -- worth its own case
+      // because none of the guarding above runs in it.
+      bytes: () => new TextEncoder().encode('%PDF-1.4 and then nothing that parses at all'),
+      // It reports through asc_onError only; no rejection escapes the frame.
+      frameRejection: false,
+    },
   ] as const;
 
-  for (const { label, name, bytes } of UNUSABLE) {
-    test(`${label} named .xlsx raises asc_onError -82, ends the load mask and fails saves fast`, async ({
-      page,
-      l0,
-    }) => {
+  for (const { label, name, bytes, ...rest } of UNUSABLE) {
+    const frameRejection = (rest as { frameRejection?: boolean }).frameRejection !== false;
+    test(`${label} raises asc_onError -82, ends the load mask and fails saves fast`, async ({ page, l0 }) => {
       l0.expectAscError(-82);
-      l0.allowFrameError(/Document conversion failed/);
+      if (frameRejection) l0.allowFrameError(/Document conversion failed/);
       // Firefox additionally prints the bare rejected Error object as "Error".
       l0.allowConsole(
         /Document conversion failed|Conversion failed with code|open conversion failed|changesError|^Error$/,
@@ -107,9 +118,10 @@ test.describe('open failure surfacing (real editor)', () => {
       expect(save.error).toMatch(/failed to open/i);
       expect(save.ms).toBeLessThan(10_000);
 
-      // The fixture saw the SDK error and the frame rejection.
+      // The fixture saw the SDK error, and the frame rejection where the app
+      // produces one.
       expect((await l0.ascErrors()).map((e) => e.id)).toContain('-82');
-      expect((await l0.frameErrors()).some((e) => /Document conversion failed/.test(e.message))).toBe(true);
+      expect((await l0.frameErrors()).some((e) => /Document conversion failed/.test(e.message))).toBe(frameRejection);
     });
   }
 });
