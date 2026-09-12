@@ -1,4 +1,5 @@
 import { expect, test } from './lib/l0';
+import { settleEditor } from './lib/visual';
 
 /**
  * Scrolling the font list to the bottom must not end the editing session.
@@ -20,9 +21,22 @@ import { expect, test } from './lib/l0';
  * require that the last row actually got its name drawn. The L0 fixture fails
  * the case on the uncaught RangeError by itself; the assertion below is what
  * says the row is *readable* rather than merely not-crashing.
+ *
+ * Everything here polls rather than sleeps. The list is filled from the
+ * engine's catalog and virtualised as it scrolls, so every step lands at a
+ * moment a loaded CI runner picks for itself.
  */
-/** Opens the toolbar's font combo and scrolls its list to the very bottom. */
-const scrollFontListToBottom = async () => {
+
+type MenuState = { found: boolean; rows: number; tiles: number; lastHasTile: boolean; open: boolean };
+
+/**
+ * One self-contained function, because `page.evaluate` ships only the function
+ * it is given -- a helper from module scope is not there when it runs.
+ *
+ * `read` reports; `open` clicks the combo's toggle; `scroll` sends the list to
+ * the end, which perfect-scrollbar turns into the same onChange the wheel does.
+ */
+const driveFontMenu = (action: 'read' | 'open' | 'scroll'): MenuState => {
   const findFrame = (win: Window): Window | null => {
     try {
       if (win.document.querySelector('a.font-item')) return win;
@@ -36,38 +50,31 @@ const scrollFontListToBottom = async () => {
     return null;
   };
 
+  const empty: MenuState = { found: false, rows: 0, tiles: 0, lastHasTile: false, open: false };
   const frame = findFrame(window);
-  if (!frame) return { error: 'no font combo in any frame' };
-  const doc = frame.document;
-
-  const menu = Array.from(doc.querySelectorAll<HTMLElement>('ul.dropdown-menu')).find((element) =>
+  if (!frame) return empty;
+  const menu = Array.from(frame.document.querySelectorAll<HTMLElement>('ul.dropdown-menu')).find((element) =>
     element.querySelector('a.font-item'),
   );
-  if (!menu) return { error: 'no font menu' };
+  if (!menu) return empty;
 
-  const group = menu.parentElement;
-  const toggle = group?.querySelector<HTMLElement>('button[data-toggle="dropdown"]');
-  if (!toggle) return { error: 'no dropdown toggle' };
-  toggle.click();
-  // The menu paints its first screen of tiles as it opens; scrolling before
-  // that has nothing to scroll.
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  if (action === 'open') {
+    const toggle = menu.parentElement?.querySelector<HTMLElement>('button[data-toggle="dropdown"]');
+    if (toggle && !menu.parentElement?.classList.contains('open')) toggle.click();
+  } else if (action === 'scroll') {
+    menu.scrollTop = menu.scrollHeight;
+    menu.dispatchEvent(new Event('scroll', { bubbles: true }));
+  }
 
-  // The list is virtualised: only the rows in view get a tile, and the crash
-  // is in the ones at the end. perfect-scrollbar turns this into the same
-  // onChange the wheel does.
   const rows = menu.querySelectorAll<HTMLElement>('a.font-item');
-  menu.scrollTop = menu.scrollHeight;
-  menu.dispatchEvent(new Event('scroll', { bubbles: true }));
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-
   const last = rows[rows.length - 1];
   return {
+    found: true,
     rows: rows.length,
-    scrolled: menu.scrollTop,
     // getImage() returns a <canvas>, appended into the row's <a>.
-    lastRowHasTile: Boolean(last?.querySelector('canvas')),
-    tilesRendered: menu.querySelectorAll('a.font-item canvas').length,
+    tiles: menu.querySelectorAll('a.font-item canvas').length,
+    lastHasTile: Boolean(last?.querySelector('canvas')),
+    open: Boolean(menu.parentElement?.classList.contains('open')),
   };
 };
 
@@ -76,37 +83,25 @@ test.describe('the font picker (real editor)', () => {
 
   test('scrolling the list to the bottom draws the last font instead of throwing', async ({ page }) => {
     await page.goto('/editor?new=docx');
-    // The font list is filled from the engine's catalog, which lands with the
-    // rest of the editor boot.
+    await settleEditor(page);
+
+    // The list is filled from the engine's catalog, which lands with the rest
+    // of the editor boot rather than with the toolbar.
     await expect
-      .poll(
-        async () =>
-          await page.evaluate(() => {
-            const visit = (win: Window): boolean => {
-              try {
-                if (win.document.querySelectorAll('a.font-item').length > 100) return true;
-              } catch {
-                /* cross-origin */
-              }
-              for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-              return false;
-            };
-            return visit(window);
-          }),
-        { timeout: 90_000 },
-      )
+      .poll(async () => (await page.evaluate(driveFontMenu, 'read' as const)).rows, { timeout: 90_000 })
+      .toBeGreaterThan(100);
+
+    // Opening is itself retried: on a loaded runner the toolbar can still be
+    // settling when the first click lands.
+    await expect
+      .poll(async () => (await page.evaluate(driveFontMenu, 'open' as const)).open, { timeout: 60_000 })
       .toBe(true);
+    await expect
+      .poll(async () => (await page.evaluate(driveFontMenu, 'read' as const)).tiles, { timeout: 60_000 })
+      .toBeGreaterThan(0);
 
-    const state = (await page.evaluate(scrollFontListToBottom)) as {
-      error?: string;
-      rows?: number;
-      lastRowHasTile?: boolean;
-      tilesRendered?: number;
-    };
-
-    expect(state.error).toBeUndefined();
-    expect(state.rows, 'the whole catalog is in the list').toBeGreaterThan(100);
-    expect(state.tilesRendered, 'the visible rows got their names drawn').toBeGreaterThan(0);
-    expect(state.lastRowHasTile, 'the last font in the list has no name drawn').toBe(true);
+    await expect
+      .poll(async () => (await page.evaluate(driveFontMenu, 'scroll' as const)).lastHasTile, { timeout: 60_000 })
+      .toBe(true);
   });
 });
