@@ -15,16 +15,17 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 `RI` = resave-idempotence.spec、`FP` = format-parity.spec、`OR` = open-retry.spec、`MS` = mobile-slide.spec、
 `MT` = main-site.spec、`VR` = visual-roundtrip.spec、`XF` = xlsx-features.spec、`XP` = xlsx-panes.spec、
 `DF` = docx-features.spec、`CM` = comments.spec、`II` = image-insert.spec、`PR` = pdf-roundtrip.spec、
-`PC` = pdf-cjk-export.spec、`CE` = csv-encoding.spec、`UC` = ui-crawl.spec、`SU` = sw-silent-update.spec。
+`PC` = pdf-cjk-export.spec、`CE` = csv-encoding.spec、`UC` = ui-crawl.spec、`SU` = sw-silent-update.spec、
+`LD` = large-document.spec。
 
 ## 现在真正空着的格子
 
-按"补它需要一个决定还是一次动手"分组，而不是按表格顺序——九处 ⬜ 里只有三件事。
+按"补它需要一个决定还是一次动手"分组，而不是按表格顺序——七处 ⬜ 里只有三件事。
 
 1. **doc / xls / ppt 的非打开动作**（表 A 里十五个 ✱ 中的大部分）。要一个决定：把
    `corpus.spec.ts` 从"打开 → 编辑 → 保存"扩成也走导出 PDF / 只读 / 插图 / 幂等。
    合成夹具这条路走不通（旧二进制手拼不出来），所以这不是十五个用例，是一次扩展。
-2. **一次动手就能补的**：pdf 的打开失败路径、固定的 MB 级夹具。
+2. **一次动手就能补的**：pdf 的环境类失败自动重试、pptx 的裸 `document:save` 默认格式。
 3. **要外部条件的**：真实安卓设备、右键菜单（vendor 的上下文菜单在 canvas 里，
    没有可枚举的 DOM）、旅程本体（需要先把 `actions/` 的动作库补齐）。
 
@@ -42,7 +43,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | 插图后保存                  | ER             | ✱   | II                     | ✱               | II         | ✱         | —      | —          |
 | 评论                        | CM             | ✱   | CM                     | ✱               | CM         | ✱         | —      | PR（注释） |
 | 再打开→再保存（幂等）       | RI             | ✱   | RI                     | ✱               | RI         | ✱         | RI     | PR         |
-| 打开失败可见 + 保存快速拒绝 | —              | —   | OF                     | —               | —          | —         | —      | ⬜         |
+| 打开失败可见 + 保存快速拒绝 | —              | —   | OF                     | —               | —          | —         | —      | OF         |
 | 环境类打开失败自动重试      | —              | —   | OR（故障注入）         | —               | —          | —         | —      | ⬜         |
 | 裸 `document:save` 默认格式 | SD             | ✱   | FN                     | HX（→xlsx）     | ⬜         | ✱         | ER     | ⬜         |
 
@@ -57,7 +58,7 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | 文件名：ASCII / CJK / 空格括号 / 全角标点 / emoji / `&%'!` / 180 字符 | FN（xlsx 全部 7 种；docx CJK+空格；pptx CJK+`&%'!`+180 字符）                                                             |
 | 体积：KB 级                                                           | 全部合成用例                                                                                                              |
-| 体积：MB～60MB                                                        | 🌙（EMP deck 6.5MB 产物）；固定用例 ⬜                                                                                    |
+| 体积：MB～60MB                                                        | `LD` = large-document.spec（2 MB / 2 万段 docx，正文长度 + 首中末三点 + 90s 预算）+ 🌙（EMP deck 6.5MB 产物）             |
 | 编码：GBK CSV / GBK HTML 表                                           | `CE`（GBK CSV 真编辑器往返）+ HX + 单测                                                                                   |
 | HTML 伪装 .xls/.xlsx                                                  | HX + 单测                                                                                                                 |
 | 垃圾字节 / 截断 / 加密                                                | OF 三种：无签名的垃圾（嗅探期就被拒）、被腰斩的真 xlsx（要到读中央目录才失败）、加密的 xlsx（根本不是 zip，是 OLE2 容器） |
