@@ -1,7 +1,7 @@
 import { COMPACT_VIEWPORT_MAX_WIDTH } from '../viewport';
 
 /**
- * Strip the OnlyOffice chrome that has no place in a single-user local editor
+ * 1. Strip the OnlyOffice chrome that has no place in a single-user local editor
  * -- the current-user / co-users widgets, which describe a collaboration
  * session this build cannot have -- and hide the right panel on phone-sized
  * viewports. There is no DocEditor config switch for either in this build.

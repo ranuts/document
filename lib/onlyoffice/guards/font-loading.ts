@@ -1,11 +1,11 @@
 /**
- * 8. Font-load acceleration. The SDK's CFontLoader works through fonts_loading
+ * 15. Font-load acceleration. The SDK's CFontLoader works through fonts_loading
  * strictly one family at a time (LoadFontAsync for the faces of
  * fonts_loading[0], poll every 50ms until they land, shift, repeat), so a real
  * CJK deck's 30 families cost 30 serial round trips of multi-MB downloads --
  * minutes on a cold CDN path. Two coordinated patches, both
  * semantics-preserving:
- * 8a. IsNeedDefaultFonts -> false: the Word/Slide editors preload
+ * 15a. IsNeedDefaultFonts -> false: the Word/Slide editors preload
  *    Arial/Symbol/Wingdings/Courier/Times (12 files, 3.2 MB) on every open
  *    "just in case"; the runtime path (LoadDocumentFonts2) already fetches any
  *    of them on first actual use.

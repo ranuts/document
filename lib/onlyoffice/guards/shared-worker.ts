@@ -1,5 +1,5 @@
 /**
- * Shadow SharedWorker inside the editor iframe. The SDK's local spellchecker
+ * 2. Shadow SharedWorker inside the editor iframe. The SDK's local spellchecker
  * prefers `new SharedWorker(spell.js, ...)`, and loading that script on a cold
  * profile of a service-worker-controlled origin hangs forever in Chromium (the
  * request never settles; warm profiles are immune only because the previous
