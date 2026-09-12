@@ -924,9 +924,17 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   `onRuntimeInitialized` 都不会再来，没人 settle 就一直等到 `INIT_TIMEOUT`——vendor 侧
   60s、`packages/converter` 侧 300s）。`loadScript()` 在 `hasScriptLoaded` 时必须返回
   `Promise.resolve()` 而不是裸 `return`：流式路径下这个分支是常走的（script 加载成功、
-  wasm 才失败），返回 `undefined` 会让下一次尝试同步抛 `undefined.then`。这两份实现
-  （`x2t_helper.js` 与 `packages/converter/src/document-converter.ts`）语义必须一致，
-  由 `x2t-helper-loading.test.ts` / `converter-wasm-loading.test.ts` 分别驱动真文件钉住。
+  wasm 才失败），返回 `undefined` 会让下一次尝试同步抛 `undefined.then`。**这两份实现
+  （`x2t_helper.js` 与 `packages/converter/src/`）语义必须一致，而站点只跑前一份**——
+  `lib/` 里那两个 `X2TConverter` 实例只调 SheetJS 那三个方法（`convertCsvToXlsx` /
+  `convertHtmlTableToXlsx` / `xlsxToCsvBytes`），一行 wasm 都不碰。所以改了一边忘了
+  另一边，E2E 与线上冒烟**全绿**，坏的是装了 `@ranuts/converter` 的人。
+  `x2t-helper-loading.test.ts` / `converter-wasm-loading.test.ts` 各自驱动真文件、
+  只证明各自自洽；**两边一致由 `x2t-loader-parity.test.ts` 钉住**：同一组答复分别喂给
+  两份实现，比对重试次数与成败（200/500/503/408/429/404/403/400/网络 reject/三连失败）、
+  退避时刻（0/500/1500 ms）、`canStreamWasm` 在四种引擎下的判断、失败消息的措辞
+  （`X2T module failed to instantiate: <原因>`）、扩展名→编辑器的表、以及 PDF 的两个
+  格式码（513 / 8196）。
   **失败消息必须带得动原因**：宿主的 `classifyOpenFailure` 按文本分类，converter 的
   `loadScript` 曾经把一切包成 `Failed to load X2T WASM script`，于是 buffered 路径上
   的 CDN 500 / 内存拒绝都落到默认分支 `document`，报"文件可能已损坏"且不重试。
