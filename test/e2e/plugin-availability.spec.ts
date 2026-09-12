@@ -111,57 +111,39 @@ const openBuffer = async ({ base64, fileName }: { base64: string; fileName: stri
 
 /** Reads the plugin manager's state out of whichever frame runs the SDK. */
 const readPlugins = (guid: string) => {
-  const visit = (win: Window): Record<string, unknown> | null => {
-    try {
-      const w = win as unknown as Record<string, any>;
-      const manager = w.g_asc_plugins;
-      if (manager) {
-        const app = w.DE || w.SSE || w.PE || w.PDFE;
-        const controller = app?.getController?.('Common.Controllers.Plugins');
-        return {
-          registered: (manager.plugins || []).map((plugin: any) => plugin.guid),
-          runned: Object.keys(manager.runnedPluginsMap || {}),
-          frames: Array.from(win.document.querySelectorAll('iframe'))
-            .map((frame) => (frame as HTMLIFrameElement).id)
-            .filter(Boolean),
-          tabs: Array.from(win.document.querySelectorAll('[data-tab]'))
-            .map((el) => el.getAttribute('data-tab'))
-            .filter(Boolean),
-          configReached: Boolean(controller?.configPlugins?.config?.pluginsData?.length),
-          configPluginCount: Array.isArray(controller?.configPlugins?.plugins)
-            ? controller.configPlugins.plugins.length
-            : -1,
-        };
-      }
-    } catch {
-      /* cross-origin frame, skip */
-    }
-    for (let i = 0; i < win.frames.length; i++) {
-      const found = visit(win.frames[i]);
-      if (found) return found;
-    }
-    return null;
+  const w = window.__ooFrames.find((win) => (win as unknown as Record<string, any>).g_asc_plugins) as any;
+  if (!w) return null;
+  const manager = w.g_asc_plugins;
+  const app = w.DE || w.SSE || w.PE || w.PDFE;
+  const controller = app?.getController?.('Common.Controllers.Plugins');
+  const state = {
+    registered: (manager.plugins || []).map((plugin: any) => plugin.guid),
+    runned: Object.keys(manager.runnedPluginsMap || {}),
+    frames: Array.from(w.document.querySelectorAll('iframe'))
+      .map((frame: any) => frame.id)
+      .filter(Boolean),
+    tabs: Array.from(w.document.querySelectorAll('[data-tab]'))
+      .map((el: any) => el.getAttribute('data-tab'))
+      .filter(Boolean),
+    configReached: Boolean(controller?.configPlugins?.config?.pluginsData?.length),
+    configPluginCount: Array.isArray(controller?.configPlugins?.plugins) ? controller.configPlugins.plugins.length : -1,
   };
   void guid;
-  return visit(window);
+  return state;
 };
 
 /** Asks the manager to start the registered plugin. */
 const runPlugin = (guid: string) => {
-  const visit = (win: Window): boolean => {
-    try {
-      const manager = (win as unknown as Record<string, any>).g_asc_plugins;
-      if (manager) {
+  const visit = (): boolean =>
+    Boolean(
+      window.__ooFrames.find((win) => {
+        const manager = (win as unknown as Record<string, any>).g_asc_plugins;
+        if (!manager) return false;
         manager.run(guid, 0, '');
         return true;
-      }
-    } catch {
-      /* cross-origin frame, skip */
-    }
-    for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-    return false;
-  };
-  return visit(window);
+      }),
+    );
+  return visit();
 };
 
 test.describe('the sdkjs plugin framework is reachable through editorConfig', () => {

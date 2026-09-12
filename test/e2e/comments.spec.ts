@@ -17,24 +17,15 @@ test.describe('comments survive a save (real editor)', () => {
     await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
     await page.evaluate(() => {
       (window as any).__addCommentAndSave = async (text: string, kind: string) => {
-        const visit = (win: Window): any => {
-          try {
-            const a = (win as any).Asc?.editor;
-            if (a && a.isDocumentLoadComplete && a.isLoadFullApi) return { api: a, Asc: (win as any).Asc };
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const f = visit(win.frames[i]);
-            if (f) return f;
-          }
-          return null;
+        const visit = (): any => {
+          const win = window.__ooFrames.readyEditor() as any;
+          return win ? { api: win.Asc.editor, Asc: win.Asc } : null;
         };
         const start = Date.now();
-        let found = visit(window);
+        let found = visit();
         while (!found && Date.now() - start < 60_000) {
           await new Promise((r) => setTimeout(r, 300));
-          found = visit(window);
+          found = visit();
         }
         if (!found) return { error: 'no api' };
         const { api, Asc } = found;

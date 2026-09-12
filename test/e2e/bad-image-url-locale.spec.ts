@@ -28,34 +28,27 @@ const readBadImageUrl = () => {
     getApplication?: () => { getController?: (name: string) => Ctl | undefined } | undefined;
   };
 
-  const visit = (win: Window): { app: string; fromInstance: string | null; fromPrototype: string | null } | null => {
-    try {
-      const scope = win as unknown as Record<string, Ns | undefined>;
-      for (const app of ['DE', 'SSE', 'PE', 'PDFE']) {
-        const ns = scope[app];
-        if (!ns?.Controllers?.Main?.prototype) continue;
-        let instance: Ctl | undefined;
-        try {
-          instance = ns.getController?.('Main') ?? ns.getApplication?.()?.getController?.('Main');
-        } catch {
-          instance = undefined;
-        }
-        return {
-          app,
-          fromInstance: instance ? (instance.errorBadImageUrl ?? null) : null,
-          fromPrototype: ns.Controllers.Main.prototype.errorBadImageUrl ?? null,
-        };
-      }
-    } catch {
-      /* cross-origin frame, skip */
-    }
-    for (let i = 0; i < win.frames.length; i++) {
-      const found = visit(win.frames[i]);
-      if (found) return found;
-    }
-    return null;
+  const APPS = ['DE', 'SSE', 'PE', 'PDFE'] as const;
+  const nameOf = (win: Window): string | null => {
+    const scope = win as unknown as Record<string, Ns | undefined>;
+    return APPS.find((app) => scope[app]?.Controllers?.Main?.prototype) ?? null;
   };
-  return visit(window);
+  const found = window.__ooFrames.find((win) => nameOf(win));
+  if (!found) return null;
+
+  const app = nameOf(found)!;
+  const ns = (found as unknown as Record<string, Ns>)[app];
+  let instance: Ctl | undefined;
+  try {
+    instance = ns.getController?.('Main') ?? ns.getApplication?.()?.getController?.('Main');
+  } catch {
+    instance = undefined;
+  }
+  return {
+    app,
+    fromInstance: instance ? (instance.errorBadImageUrl ?? null) : null,
+    fromPrototype: ns.Controllers!.Main!.prototype!.errorBadImageUrl ?? null,
+  };
 };
 
 const openBuffer = async ({ base64, fileName }: { base64: string; fileName: string }) => {

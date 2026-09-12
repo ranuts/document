@@ -224,25 +224,18 @@ test.describe('real-document corpus matrix', () => {
         // frame) carries isDocumentLoadComplete; the app-level `window.editor`
         // one frame up is the DocEditor wrapper and must not be mistaken for
         // it.
-        const visit = (win: Window): any => {
-          try {
-            const scope = win as any;
-            const api = scope.Asc?.editor;
-            if (api && typeof api.asc_registerCallback === 'function' && 'isDocumentLoadComplete' in api) return api;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const f = visit(win.frames[i]);
-            if (f) return f;
-          }
-          return null;
-        };
+        const visit = (): any =>
+          (
+            window.__ooFrames.find((win) => {
+              const api = (win as any).Asc?.editor;
+              return api && typeof api.asc_registerCallback === 'function' && 'isDocumentLoadComplete' in api;
+            }) as any
+          )?.Asc.editor ?? null;
         const t = Date.now();
-        let api = visit(window);
+        let api = visit();
         while (!api && Date.now() - t < 60_000) {
           await new Promise((r) => setTimeout(r, 500));
-          api = visit(window);
+          api = visit();
         }
         if (!api) return { loaded: false, loadMs: Date.now() - t, reason: 'editor api never appeared' };
         w.__corpusApi = true;
@@ -276,27 +269,21 @@ test.describe('real-document corpus matrix', () => {
 
       const findFatalDialog = () =>
         page.evaluate(() => {
-          const visit = (win: Window): string | null => {
-            try {
-              for (const el of Array.from(win.document.querySelectorAll('.asc-window, .modal, [role="dialog"]'))) {
-                const he = el as HTMLElement;
-                if (
-                  he.offsetParent !== null &&
-                  /error occurred during the work|与文档工作|критическ/i.test(he.textContent || '')
-                ) {
-                  return (he.textContent || '').trim().slice(0, 160);
-                }
+          let text: string | null = null;
+          window.__ooFrames.find((win) => {
+            for (const el of Array.from(win.document.querySelectorAll('.asc-window, .modal, [role="dialog"]'))) {
+              const he = el as HTMLElement;
+              if (
+                he.offsetParent !== null &&
+                /error occurred during the work|与文档工作|критическ/i.test(he.textContent || '')
+              ) {
+                text = (he.textContent || '').trim().slice(0, 160);
+                return true;
               }
-            } catch {
-              /* cross-origin */
             }
-            for (let i = 0; i < win.frames.length; i++) {
-              const found = visit(win.frames[i]);
-              if (found) return found;
-            }
-            return null;
-          };
-          return visit(window);
+            return false;
+          });
+          return text;
         });
 
       row.fatalDialog = await findFatalDialog();
@@ -338,21 +325,11 @@ test.describe('real-document corpus matrix', () => {
                 };
                 window.addEventListener('message', onMsg);
               });
-              const visit = (win: Window): any => {
-                try {
-                  const scope = win as any;
-                  const api = scope.Asc?.editor || scope.editor;
-                  if (api && typeof api.asc_DownloadAs === 'function') return { api, win: win as any };
-                } catch {
-                  /* skip */
-                }
-                for (let i = 0; i < win.frames.length; i++) {
-                  const f = visit(win.frames[i]);
-                  if (f) return f;
-                }
-                return null;
-              };
-              const found = visit(window);
+              const saveWin = window.__ooFrames.find((win) => {
+                const api = (win as any).Asc?.editor || (win as any).editor;
+                return typeof api?.asc_DownloadAs === 'function';
+              }) as any;
+              const found = saveWin ? { api: saveWin.Asc?.editor || saveWin.editor, win: saveWin } : null;
               if (!found) return { ok: false, ms: 0, error: 'no editor api for save' };
               if (!(found.api.isDocumentLoadComplete && found.api.isLoadFullApi)) {
                 return { ok: false, ms: 0, error: 'editor lost readiness before save' };

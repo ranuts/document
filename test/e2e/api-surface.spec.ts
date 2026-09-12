@@ -189,21 +189,13 @@ test.describe('api surface sweep', () => {
 
       const verdicts: Verdict[] = await page.evaluate(
         async ({ skipSource, probeEvery, onlySource }) => {
-          const visit = (win: Window): { api: any; win: any } | null => {
-            try {
-              const scope = win as any;
-              const api = scope.Asc && scope.Asc.editor;
-              if (api && typeof api.asc_registerCallback === 'function') return { api, win };
-            } catch {
-              /* cross-origin */
-            }
-            for (let i = 0; i < win.frames.length; i++) {
-              const f = visit(win.frames[i]);
-              if (f) return f;
-            }
-            return null;
+          const visit = (): { api: any; win: any } | null => {
+            const win = window.__ooFrames.find(
+              (w) => typeof (w as any).Asc?.editor?.asc_registerCallback === 'function',
+            ) as any;
+            return win ? { api: win.Asc.editor, win } : null;
           };
-          const found = visit(window);
+          const found = visit();
           if (!found) throw new Error('no sdk');
           const { api, win } = found;
           const skip = new RegExp(skipSource);

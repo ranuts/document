@@ -141,25 +141,19 @@ test.describe('embed regression (real editor)', () => {
       // embed-api readonly flag.
       const readRestriction = (): number | null => {
         type SdkApi = { restrictions?: unknown; asc_setRestriction?: unknown };
-        const visit = (win: Window): number | null => {
-          try {
-            // The vendor build has no asc_getRestriction getter, but the
-            // backing `restrictions` property is not name-mangled.
-            const scope = win as unknown as { Asc?: { editor?: SdkApi }; editor?: SdkApi };
+        // The vendor build has no asc_getRestriction getter, but the backing
+        // `restrictions` property is not name-mangled. Read it off the window
+        // rather than returning it from the walk: 0 is a real restriction.
+        const visit = (): number | null => {
+          const win = window.__ooFrames.find((w) => {
+            const scope = w as unknown as { Asc?: { editor?: SdkApi }; editor?: SdkApi };
             const api = scope.Asc?.editor || scope.editor;
-            if (api && typeof api.asc_setRestriction === 'function' && typeof api.restrictions === 'number') {
-              return api.restrictions;
-            }
-          } catch {
-            // cross-origin frame -- skip
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const found = visit(win.frames[i]);
-            if (found !== null) return found;
-          }
-          return null;
+            return typeof api?.asc_setRestriction === 'function' && typeof api.restrictions === 'number';
+          }) as unknown as { Asc?: { editor?: SdkApi }; editor?: SdkApi } | null;
+          const api = win?.Asc?.editor || win?.editor;
+          return api ? (api.restrictions as number) : null;
         };
-        return visit(window);
+        return visit();
       };
       const waitForRestriction = async (expected: number, timeoutMs = 30_000) => {
         const start = Date.now();
@@ -436,21 +430,14 @@ test.describe('embed regression (real editor)', () => {
       // Locate the editor API and insert an image by URL (the flow that
       // used to freeze the tab on save).
       const findApi = (): any => {
-        const visit = (win: Window): any => {
-          try {
-            const scope = win as any;
-            const api = scope.Asc?.editor || scope.editor;
-            if (api && typeof api.AddImageUrlAction === 'function') return api;
-          } catch {
-            /* cross-origin frame */
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const found = visit(win.frames[i]);
-            if (found) return found;
-          }
-          return null;
+        const visit = (): any => {
+          const win = window.__ooFrames.find((w) => {
+            const api = (w as any).Asc?.editor || (w as any).editor;
+            return typeof api?.AddImageUrlAction === 'function';
+          }) as any;
+          return win ? win.Asc?.editor || win.editor : null;
         };
-        return visit(window);
+        return visit();
       };
       const start = Date.now();
       let api = findApi();
@@ -511,20 +498,12 @@ test.describe('embed regression (real editor)', () => {
       });
 
       const findEditorWin = (): any => {
-        const visit = (win: Window): any => {
-          try {
-            const scope = win as any;
-            if (scope.Asc?.editor && 'isDocumentLoadComplete' in scope.Asc.editor) return win;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const found = visit(win.frames[i]);
-            if (found) return found;
-          }
-          return null;
-        };
-        return visit(window);
+        const visit = (): any =>
+          window.__ooFrames.find((w) => {
+            const api = (w as any).Asc?.editor;
+            return api && 'isDocumentLoadComplete' in api;
+          });
+        return visit();
       };
       const start = Date.now();
       let ed = findEditorWin();
@@ -562,20 +541,12 @@ test.describe('embed regression (real editor)', () => {
     await page.waitForTimeout(3500);
 
     const afterEdit = await page.evaluate(() => {
-      const visit = (win: Window): any => {
-        try {
-          const scope = win as any;
-          if (scope.Asc?.editor && 'isDocumentLoadComplete' in scope.Asc.editor) return win;
-        } catch {
-          /* skip */
-        }
-        for (let i = 0; i < win.frames.length; i++) {
-          const f = visit(win.frames[i]);
-          if (f) return f;
-        }
-        return null;
-      };
-      const ed = visit(window);
+      const visit = (): any =>
+        window.__ooFrames.find((w) => {
+          const api = (w as any).Asc?.editor;
+          return api && 'isDocumentLoadComplete' in api;
+        });
+      const ed = visit();
       return {
         canSave: ed.Asc.editor.isDocumentCanSave,
         btnDisabled: (ed.document.querySelector('#id-toolbar-btn-save') as HTMLElement).classList.contains('disabled'),
@@ -588,20 +559,12 @@ test.describe('embed regression (real editor)', () => {
     // autosave flag), inside the editor frame; the patched path routes it
     // to asc_DownloadAs and the file stream must appear.
     await page.evaluate(() => {
-      const visit = (win: Window): any => {
-        try {
-          const scope = win as any;
-          if (scope.Asc?.editor && 'isDocumentLoadComplete' in scope.Asc.editor) return win;
-        } catch {
-          /* skip */
-        }
-        for (let i = 0; i < win.frames.length; i++) {
-          const f = visit(win.frames[i]);
-          if (f) return f;
-        }
-        return null;
-      };
-      visit(window).Asc.editor.asc_Save();
+      const visit = (): any =>
+        window.__ooFrames.find((w) => {
+          const api = (w as any).Asc?.editor;
+          return api && 'isDocumentLoadComplete' in api;
+        });
+      visit().Asc.editor.asc_Save();
     });
     await expect.poll(() => page.evaluate(() => (window as any).__stream), { timeout: 60_000 }).toBeTruthy();
     const stream = await page.evaluate(() => (window as any).__stream);
@@ -632,20 +595,10 @@ test.describe('embed regression (real editor)', () => {
     expect(ready.kind).toBe('slide');
 
     const state = await page.evaluate(() => {
-      const visit = (win: Window): any => {
-        try {
-          const scope = win as any;
-          if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function') return scope.Asc.editor;
-        } catch {
-          /* cross-origin */
-        }
-        for (let i = 0; i < win.frames.length; i++) {
-          const f = visit(win.frames[i]);
-          if (f) return f;
-        }
-        return null;
-      };
-      const api = visit(window);
+      const visit = (): any =>
+        (window.__ooFrames.find((w) => typeof (w as any).Asc?.editor?.asc_registerCallback === 'function') as any)?.Asc
+          .editor ?? null;
+      const api = visit();
       const before = api.isLongAction();
       // Vendor throws here (no chart selected); the guard must swallow it
       // AND restore the counter.
@@ -684,20 +637,10 @@ test.describe('embed regression (real editor)', () => {
     expect(ready.kind).toBe('cell');
 
     const probe = await page.evaluate(() => {
-      const visit = (win: Window): any => {
-        try {
-          const scope = win as any;
-          if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function') return scope.Asc.editor;
-        } catch {
-          /* cross-origin */
-        }
-        for (let i = 0; i < win.frames.length; i++) {
-          const f = visit(win.frames[i]);
-          if (f) return f;
-        }
-        return null;
-      };
-      const api = visit(window);
+      const visit = (): any =>
+        (window.__ooFrames.find((w) => typeof (w as any).Asc?.editor?.asc_registerCallback === 'function') as any)?.Asc
+          .editor ?? null;
+      const api = visit();
       api.asc_EditSelectAll();
       const t0 = Date.now();
       const settings = api.asc_GetSeriesSettings();
@@ -738,21 +681,13 @@ test.describe('embed regression (real editor)', () => {
     expect(ready.kind).toBe('slide');
 
     const stats = await page.evaluate(() => {
-      const visit = (win: Window): any => {
-        try {
-          const scope = win as any;
-          if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function')
-            return { api: scope.Asc.editor, win };
-        } catch {
-          /* cross-origin */
-        }
-        for (let i = 0; i < win.frames.length; i++) {
-          const f = visit(win.frames[i]);
-          if (f) return f;
-        }
-        return null;
+      const visit = (): any => {
+        const win = window.__ooFrames.find(
+          (w) => typeof (w as any).Asc?.editor?.asc_registerCallback === 'function',
+        ) as any;
+        return win ? { api: win.Asc.editor, win } : null;
       };
-      const { api, win } = visit(window);
+      const { api, win } = visit();
       const fonts = (win.performance.getEntriesByType('resource') as PerformanceResourceTiming[]).filter((e) =>
         /\/fonts\/\d{3}$/.test(e.name),
       );

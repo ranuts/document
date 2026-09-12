@@ -1,4 +1,5 @@
 import { test as base, expect, type Page, type TestInfo } from '@playwright/test';
+import { FRAME_HELPERS } from './frames';
 
 /**
  * L0 liveness fixture (docs/superpowers/plans/2026-08-15-v9-test-coverage-strategy.md, section 3).
@@ -134,6 +135,11 @@ export class L0Collector {
 
   async attach(): Promise<void> {
     await this.page.addInitScript(INIT_SCRIPT);
+    // Frame lookups every spec that drives a real editor needs; see ./frames.ts
+    // for why this has to be injected rather than imported. On the context, not
+    // the page: a spec that opens a second page (save-to-file does, to prove a
+    // file handle survives) would otherwise get one without them.
+    await this.page.context().addInitScript(FRAME_HELPERS);
     this.page.on('console', (msg) => {
       if (msg.type() !== 'error') return;
       const text = msg.text();

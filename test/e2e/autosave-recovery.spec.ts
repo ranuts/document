@@ -21,19 +21,7 @@ declare const XLSX: any;
 const waitForEditorReady = (page: Page) =>
   page.waitForFunction(
     () => {
-      const visit = (win: Window): boolean => {
-        try {
-          const api = (
-            win as unknown as { Asc?: { editor?: { isDocumentLoadComplete?: boolean; isLoadFullApi?: boolean } } }
-          ).Asc?.editor;
-          if (api && api.isDocumentLoadComplete && api.isLoadFullApi) return true;
-        } catch {
-          /* cross-origin */
-        }
-        for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-        return false;
-      };
-      return visit(window);
+      return Boolean(window.__ooFrames.readyEditor());
     },
     undefined,
     { timeout: 90_000 },

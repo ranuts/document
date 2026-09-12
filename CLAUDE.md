@@ -286,6 +286,15 @@ HEAD 的提交时间，窗口各留一个周期加一小时的余量。**gate �
 真实编辑器），声明在 `test/e2e/lib/embed-demo.d.ts` 里一份就够，**别再在 spec 里重抄**
 ——曾经 35 个 spec 各抄一遍同样的那一行。
 
+**找编辑器所在的窗口用 `window.__ooFrames`，别再自己写遍历**（`test/e2e/lib/frames.ts`，
+由 L0 fixture 在 **context** 上 `addInitScript` 注入——装在 page 上的话，spec 里
+`context.newPage()` 开出来的第二个页面就没有，`save-to-file` 正好会踩）。`page.evaluate`
+只运送它拿到的那一个函数，模块作用域的 helper 在浏览器里不存在，所以只能注入。
+原语是 **`find(match) → Window | null`**（找窗口，不是找结果）：`false` / `0` 在这些问题里
+是有意义的答案——`sw-warm` 问的是编辑器 frame 有没有 controller、`format-parity` 读的
+restriction 可以是 0——按真值遍历会直接走过去。另有 `editor()` / `readyEditor()` 两个
+常用快捷方式。2026-09-12 从 20 个 spec 里的 23 份手抄遍历收敛而来。
+
 **L0 全局 fixture（`test/e2e/lib/l0.ts`，2026-08-15 起所有 spec 从它
 导入 `test`/`expect`）**：自动把 `asc_onError`、厂商致命弹窗、编辑器 iframe
 内的 `unhandledrejection`/`error`、pageerror、非白名单 console.error 判为

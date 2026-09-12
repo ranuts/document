@@ -157,31 +157,22 @@ const installSeamProbe = () => {
 
 /** Reads the offline markers out of whichever frame runs the SDK. */
 const readOfflineMarkers = () => {
-  const visit = (win: Window): Record<string, unknown> | null => {
-    try {
-      const w = win as unknown as Record<string, any>;
-      const coApi = w.AscCommon && w.AscCommon.DocsCoApi;
-      if (coApi && coApi.prototype && typeof coApi.prototype._initSocksJs === 'function') {
-        const source = String(coApi.prototype._initSocksJs);
-        return {
-          isOffline: w.isOffline === true,
-          // A real socket transport would reach for the socket.io global here.
-          socksSource: source.slice(0, 400),
-          mentionsSocketIo: /io\s*\(|io\.connect|sockjs/i.test(source),
-          hasProbe: Boolean(w.__seamProbe),
-          probe: w.__seamProbe || null,
-        };
-      }
-    } catch {
-      /* cross-origin frame, skip */
-    }
-    for (let i = 0; i < win.frames.length; i++) {
-      const found = visit(win.frames[i]);
-      if (found) return found;
-    }
-    return null;
+  const visit = (): Record<string, unknown> | null => {
+    const w = window.__ooFrames.find(
+      (win) => typeof (win as any).AscCommon?.DocsCoApi?.prototype?._initSocksJs === 'function',
+    ) as any;
+    if (!w) return null;
+    const source = String(w.AscCommon.DocsCoApi.prototype._initSocksJs);
+    return {
+      isOffline: w.isOffline === true,
+      // A real socket transport would reach for the socket.io global here.
+      socksSource: source.slice(0, 400),
+      mentionsSocketIo: /io\s*\(|io\.connect|sockjs/i.test(source),
+      hasProbe: Boolean(w.__seamProbe),
+      probe: w.__seamProbe || null,
+    };
   };
-  return visit(window);
+  return visit();
 };
 
 test.describe('the offline build answers the server protocol in-process', () => {
