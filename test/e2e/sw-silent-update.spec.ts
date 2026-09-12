@@ -89,7 +89,15 @@ test.describe('a stale build heals itself @serial', () => {
       undefined,
       { timeout: 90_000 },
     );
-    await settleEditor(page);
+    // Cold on purpose, and the reason this one wait is generous: activating a
+    // worker with a new vendor stamp deletes the old runtime cache, so the
+    // editor that comes back re-fetches the whole vendored tree -- sdk-all-min,
+    // the 14 MB sdk-all, the font catalog. Locally that settles in seconds; on
+    // a CI runner it has repeatedly crossed settleEditor's 90 s default and
+    // failed three separate PRs that changed nothing near it. What is asserted
+    // is that it healed, not that it healed inside a minute and a half, and the
+    // case still has to finish inside its own 240 s budget.
+    await settleEditor(page, 2500, 180_000);
     expect(await controllerVendorVersion(page)).toBe('e2e-next');
     expect(await page.locator('#update-notice').count(), 'nothing was shown to the reader').toBe(0);
   });
