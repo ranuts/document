@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { X2TConverter } from '@ranuts/converter';
 
 import { glyphId, readNames, xorPrefix } from '../../bin/lib/sfnt.mjs';
+import { decodeAlphaPng } from '../../bin/lib/png.mjs';
 
 /**
  * The font catalog is redistributed from a public repository and a public
@@ -151,6 +152,36 @@ describe('font picker thumbnail sprites', () => {
       const header = readFileSync(resolve(IMAGES, name)).subarray(0, 12);
       const tiles = header.readUInt32BE(8);
       expect(tiles, `${name} has ${tiles} tiles for ${families} families`).toBeGreaterThanOrEqual(families);
+    }
+  });
+
+  it('keeps each png twin pixel-identical to the mask beside it', () => {
+    // The sprite ships twice: the run-length alpha mask every browser reads,
+    // and an RGBA png only the ONLYOFFICE desktop shell reads
+    // (`supportBinaryFormat` is false only when `Desktop.isActive()`). Two
+    // encodings of one picture drift unless one is generated from the other --
+    // which is what bin/font-thumbnails.mjs does, and this is the check that
+    // it was run.
+    for (const name of spriteNames) {
+      const bytes = readFileSync(resolve(IMAGES, name));
+      const width = bytes.readUInt32BE(0);
+      const heightOne = bytes.readUInt32BE(4);
+      const tiles = bytes.readUInt32BE(8);
+      const mask = new Uint8Array(width * heightOne * tiles);
+      let offset = 12;
+      let at = 0;
+      while (offset < bytes.length) {
+        const value = bytes[offset++];
+        if (value === 0) at += bytes[offset++];
+        else mask[at++] = value;
+      }
+
+      const png = decodeAlphaPng(readFileSync(resolve(IMAGES, name.replace(/\.bin$/, ''))));
+      expect({ width: png.width, height: png.height }, `${name} png size`).toEqual({
+        width,
+        height: heightOne * tiles,
+      });
+      expect(Buffer.from(png.alpha).equals(Buffer.from(mask)), `${name} png differs from its mask`).toBe(true);
     }
   });
 

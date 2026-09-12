@@ -997,9 +997,11 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
      `RangeError: Invalid typed array length` —— 滑到底直接抛，之后每次滚动再抛一次，
      文档没法编辑了。上游不会踩是因为 `allfontsgen` 一次性写出 AllFonts.js 和精灵图
      （对照一个官方部署：144 families / 144 瓦片），我们是手改目录的。
-     改完目录跑 `node bin/font-thumbnails.mjs`（幂等，只补缺的；`--check` 只报不写），
+     改完目录跑 `node bin/font-thumbnails.mjs`（幂等，只补缺的；`--check` 只报不写）——它同时
+     **从掩码重建 `.png` 孪生文件**（只有 ONLYOFFICE 桌面壳读它，浏览器永远走不到，但一张图两种
+     编码不由同一处生成就会走散），
      `font-catalog-licensing.test.ts` 钉住"每张精灵图的瓦片数 ≥ family 数"且
-     "解码像素数正好等于 width×heightOne×count"，
+     "解码像素数正好等于 width×heightOne×count"、"`.png` 的 alpha 通道与 `.bin` 掩码逐像素相同"，
      `test/e2e/font-picker-scroll.spec.ts` 走用户路径把列表滑到底。见
      docs/explorations/2026-09-12-font-picker-sprite-shorter-than-catalog.md。
   3. **回退区间背后的字体必须真的有那些字**。picker 查一次 `__fonts_ranges` 就
