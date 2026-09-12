@@ -3,7 +3,9 @@ import {
   CANVAS_PDF_INPUT_FORMAT,
   X2TConverter,
   hasEditorBinSignature,
+  decodeCatalogFont,
   isHtmlDocument,
+  PDF_FONT_MANIFEST,
   isZipContainer,
 } from '@ranuts/converter';
 
@@ -144,7 +146,7 @@ describe('X2TConverter', () => {
     it('decodeCatalogFont restores the TTF magic and leaves bytes past 32 untouched', () => {
       const { plain, wire } = makeCatalogBytes();
 
-      const decoded = (new X2TConverter() as any).decodeCatalogFont(wire) as Uint8Array;
+      const decoded = decodeCatalogFont(wire);
 
       expect(Array.from(decoded)).toEqual(Array.from(plain));
       // Input is not mutated (decode returns a copy).
@@ -189,7 +191,7 @@ describe('X2TConverter', () => {
     it('is non-fatal when a font fetch fails: remaining fonts still load', async () => {
       const { wire } = makeCatalogBytes();
       // Fail whichever slot happens to back Arial, without naming it.
-      const manifest = (X2TConverter as any).PDF_FONT_MANIFEST as { file: string; aliases: string[] }[];
+      const manifest = PDF_FONT_MANIFEST;
       const arialSlot = manifest.find((entry) => entry.aliases.includes('Arial.ttf'))!.file;
       const fetchMock = vi.fn().mockImplementation(async (url: string) => {
         if (String(url).endsWith(`fonts/${arialSlot}`)) throw new Error('network down');

@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { X2TConverter } from '@ranuts/converter';
+import { PDF_FONT_MANIFEST } from '@ranuts/converter';
 
 import { glyphId, readNames, xorPrefix } from '../../bin/lib/sfnt.mjs';
 import { decodeAlphaPng } from '../../bin/lib/png.mjs';
@@ -329,8 +329,7 @@ describe('fallback faces carry what they are routed for', () => {
  * aliases claim.
  */
 describe('PDF export font manifest', () => {
-  const manifest = (X2TConverter as unknown as { PDF_FONT_MANIFEST: { file: string; aliases: string[] }[] })
-    .PDF_FONT_MANIFEST;
+  const manifest = PDF_FONT_MANIFEST;
 
   it('names only catalog slots that exist', () => {
     const onDisk = new Set(slots);

@@ -8,6 +8,8 @@
 export {
   X2TConverter,
   canStreamWasm,
+  decodeCatalogFont,
+  PDF_FONT_MANIFEST,
   fetchWasmResponse,
   hasEditorBinSignature,
   isHtmlDocument,
