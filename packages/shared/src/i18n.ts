@@ -192,6 +192,8 @@ export interface I18nMessages {
   unsupportedFileType: string;
   invalidFileObject: string;
   documentOperationFailed: string;
+  openUrlFailed: string;
+  openUrlUnreachable: string;
   editorErrorToast: string;
   editorErrorFormatMismatch: string;
   editorErrorOpenFailed: string;
@@ -313,6 +315,9 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     unsupportedFileType: '不支持的文件类型：',
     invalidFileObject: '无效的文件对象',
     documentOperationFailed: '文档操作失败：',
+    openUrlFailed: '无法打开该链接：',
+    openUrlUnreachable:
+      '取不到这个文件。可能是该网站不允许其它网页读取它的文件，也可能是网络不通。把文件下载下来再从本机打开即可。',
     editorErrorToast: '文档处理出错',
     editorErrorFormatMismatch: '文件内容与扩展名不一致，请确认文件格式后重试',
     editorErrorOpenFailed: '文件无法打开：可能已损坏、格式不受支持，或内容与扩展名不符',
@@ -416,6 +421,9 @@ const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> 
     unsupportedFileType: 'Unsupported file type: ',
     invalidFileObject: 'Invalid file object',
     documentOperationFailed: 'Document operation failed: ',
+    openUrlFailed: 'Could not open that link: ',
+    openUrlUnreachable:
+      'That file could not be fetched. The site may not allow other pages to read its files, or the network is down. Download it and open the file from your device instead.',
     editorErrorToast: 'Document error',
     editorErrorFormatMismatch: 'The file content does not match its extension; check the file format and try again',
     editorErrorOpenFailed:
@@ -536,6 +544,9 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     unsupportedFileType: 'サポートされていないファイル形式: ',
     invalidFileObject: '無効なファイルです',
     documentOperationFailed: 'ドキュメントの操作に失敗しました: ',
+    openUrlFailed: 'そのリンクを開けませんでした: ',
+    openUrlUnreachable:
+      'ファイルを取得できませんでした。そのサイトが他のページからの読み取りを許可していないか、ネットワークに問題がある可能性があります。ファイルをダウンロードして、端末から開いてください。',
     editorErrorToast: 'ドキュメントエラー',
     editorErrorFormatMismatch: 'ファイルの内容が拡張子と一致しません。形式を確認してからもう一度お試しください',
     editorErrorOpenFailed:
@@ -644,6 +655,9 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     unsupportedFileType: '지원하지 않는 파일 형식: ',
     invalidFileObject: '잘못된 파일입니다',
     documentOperationFailed: '문서 작업에 실패했습니다: ',
+    openUrlFailed: '해당 링크를 열 수 없습니다: ',
+    openUrlUnreachable:
+      '파일을 가져오지 못했습니다. 해당 사이트가 다른 페이지의 읽기를 허용하지 않거나 네트워크에 문제가 있을 수 있습니다. 파일을 내려받아 기기에서 직접 열어 주세요.',
     editorErrorToast: '문서 오류',
     editorErrorFormatMismatch: '파일 내용이 확장자와 일치하지 않습니다. 형식을 확인한 뒤 다시 시도하세요',
     editorErrorOpenFailed:
@@ -753,6 +767,9 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     unsupportedFileType: 'Nicht unterstützter Dateityp: ',
     invalidFileObject: 'Ungültige Datei',
     documentOperationFailed: 'Dokumentvorgang fehlgeschlagen: ',
+    openUrlFailed: 'Dieser Link konnte nicht geöffnet werden: ',
+    openUrlUnreachable:
+      'Die Datei konnte nicht abgerufen werden. Die Website erlaubt anderen Seiten möglicherweise nicht, ihre Dateien zu lesen, oder das Netzwerk ist nicht erreichbar. Laden Sie die Datei herunter und öffnen Sie sie von Ihrem Gerät.',
     editorErrorToast: 'Dokumentfehler',
     editorErrorFormatMismatch:
       'Der Inhalt der Datei passt nicht zur Dateiendung – bitte das Format prüfen und erneut versuchen',
@@ -867,6 +884,9 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     unsupportedFileType: 'Tipo de archivo no admitido: ',
     invalidFileObject: 'Archivo no válido',
     documentOperationFailed: 'Error al procesar el documento: ',
+    openUrlFailed: 'No se pudo abrir ese enlace: ',
+    openUrlUnreachable:
+      'No se pudo obtener el archivo. Puede que el sitio no permita que otras páginas lean sus archivos, o que no haya red. Descárgalo y ábrelo desde tu dispositivo.',
     editorErrorToast: 'Error del documento',
     editorErrorFormatMismatch:
       'El contenido del archivo no coincide con su extensión; comprueba el formato e inténtalo de nuevo',
@@ -979,6 +999,9 @@ const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.E
     unsupportedFileType: 'Tipo de arquivo não suportado: ',
     invalidFileObject: 'Arquivo inválido',
     documentOperationFailed: 'Falha na operação do documento: ',
+    openUrlFailed: 'Não foi possível abrir esse link: ',
+    openUrlUnreachable:
+      'Não foi possível obter o arquivo. O site pode não permitir que outras páginas leiam seus arquivos, ou a rede está indisponível. Baixe o arquivo e abra-o a partir do seu dispositivo.',
     editorErrorToast: 'Erro no documento',
     editorErrorFormatMismatch:
       'O conteúdo do arquivo não corresponde à extensão; verifique o formato e tente novamente',

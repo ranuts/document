@@ -120,6 +120,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- **A link that cannot be opened now says why, and what to do.** Opening a
+  document by URL from a site that does not allow other pages to read its
+  files used to raise a browser alert reading "Failed to fetch", in English
+  whatever language you were using. It is now the app's own message, in your
+  language, and it tells you the thing that always works: download the file and
+  open it from your device.
 - **Scrolling to the bottom of the font list no longer breaks the editor.** The
   last nine fonts had no name to draw, and reaching them threw an error that
   repeated on every scroll and left the document uneditable. All of them are
