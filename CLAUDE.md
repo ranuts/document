@@ -105,7 +105,14 @@ packages/             # pnpm workspace，供 ran 生态三处站点共享（包�
                           # 七张表都是完整的（编辑器 UI 语言另由 vendor 45 语言包提供）。
                           # 2026-09-12 从 1263 行的单文件拆开：加一条文案是改七个文件而
                           # 不是同一个文件的七处，加一种语言就是加一个文件
-  converter/            # 格式转换：CSV↔XLSX（SheetJS）、docx-zip 媒体处理、签名嗅探、PDF 字体清单
+  converter/            # 格式转换（2026-09-12 从 1130 行的单文件拆开，公开导出面不变）
+    document-converter.ts # X2TConverter 本体：加载、转换、媒体、退出码分类
+    x2t-loading.ts        # canStreamWasm / fetchWasmResponse（含重试）/ x2tInstantiateError
+                          # ——与 vendor 里的 `x2t_helper.js` 是语义必须一致的孪生
+    pdf-fonts.ts          # `PDF_FONT_MANIFEST` + XOR 解码 + 写进 FS（槽位号三处联动之一）
+    spreadsheet.ts        # SheetJS：CSV↔XLSX、HTML 表格伪装成 .xls
+    file-meta.ts          # 签名嗅探 / MIME / 另存描述 / saveFileToDisk
+    docx-zip.ts           # OOXML zip 媒体提取与预处理
   agent-core/           # LLM 运行时 + 多 Provider（anthropic/openai/gemini/ollama/webllm）+ key 存储
   chat-ui/              # 聊天面板 UI
 types/

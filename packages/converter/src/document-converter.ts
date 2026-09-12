@@ -1,22 +1,24 @@
-import {
-  createObjectURL,
-  decodeTextBytes,
-  getExtensions,
-  isHtmlDocument,
-  isZipContainer,
-  saveFileToDisk as ranutsSaveFileToDisk,
-  scriptOnLoad,
-} from 'ranuts/utils';
-import 'ranui/message';
-import { t } from '@ranuts/shared/i18n';
+import { createObjectURL, getExtensions, isZipContainer, scriptOnLoad } from 'ranuts/utils';
 import type {
   BinConversionResult,
   ConversionResult,
   DocumentType,
   EmscriptenModule,
 } from '@ranuts/shared/document-types';
-import { BASE_PATH, DOCUMENT_TYPE_MAP, getDocumentMimeType } from '@ranuts/shared/document-utils';
+import { BASE_PATH, DOCUMENT_TYPE_MAP } from '@ranuts/shared/document-utils';
 import { extractDocxMediaUrls } from './docx-zip';
+import { MIME_MAP, hasEditorBinSignature, saveFileToDisk } from './file-meta';
+import { canStreamWasm, fetchWasmResponse, x2tInstantiateError } from './x2t-loading';
+import { loadFontsForPdf } from './pdf-fonts';
+import { convertCsvToXlsx, convertHtmlTableToXlsx, loadXlsxLibrary } from './spreadsheet';
+
+// The public surface of @ranuts/converter is this module; the pieces above
+// were split out of it on 2026-09-12 and are re-exported so nothing importing
+// them has to know that.
+export { MIME_MAP, hasEditorBinSignature, isHtmlDocument, isZipContainer, saveFileToDisk } from './file-meta';
+export { canStreamWasm, fetchWasmResponse, x2tInstantiateError } from './x2t-loading';
+export { PDF_FONT_MANIFEST, decodeCatalogFont } from './pdf-fonts';
+export { convertCsvToXlsx, convertHtmlTableToXlsx, loadXlsxLibrary } from './spreadsheet';
 
 // x2t input-format constant for the editor's canvas render stream. When the
 // editor exports via "Print to PDF" (and similar render-based paths) it emits a
@@ -28,145 +30,6 @@ export const CANVAS_PDF_INPUT_FORMAT = 8196;
 // Declared explicitly because x2t cannot infer the conversion direction from
 // file extensions alone when the input is a canvas render stream.
 export const PDF_OUTPUT_FORMAT = 513;
-
-// Serialized editor documents start with a 4-byte engine signature.
-const EDITOR_BIN_SIGNATURES = new Set(['DOCY', 'XLSY', 'PPTY', 'VSDY']);
-
-export function hasEditorBinSignature(bin: Uint8Array): boolean {
-  if (bin.length < 4) return false;
-  return EDITOR_BIN_SIGNATURES.has(String.fromCharCode(bin[0]!, bin[1]!, bin[2]!, bin[3]!));
-}
-
-// Byte sniffing lives in ranuts (ecosystem first): a ZIP container is what the
-// v9 engine's offline save trigger emits instead of an editor bin, and the HTML
-// sniff catches "this .xls is really an HTML <table>", which the bundled
-// x2t.wasm cannot import at all (its HTML importer is stubbed out).
-export { isHtmlDocument, isZipContainer };
-
-const FILE_DESCRIPTION_MAP: Record<string, string> = {
-  docx: 'Word Document',
-  doc: 'Word 97-2003 Document',
-  odt: 'OpenDocument Text',
-  pdf: 'PDF Document',
-  xlsx: 'Excel Workbook',
-  xls: 'Excel 97-2003 Workbook',
-  ods: 'OpenDocument Spreadsheet',
-  pptx: 'PowerPoint Presentation',
-  ppt: 'PowerPoint 97-2003 Presentation',
-  odp: 'OpenDocument Presentation',
-  txt: 'Text Document',
-  rtf: 'Rich Text Format',
-  csv: 'CSV File',
-};
-
-/**
- * Save a finished file to the user's disk. Adapter over ranuts'
- * `saveFileToDisk` (File System Access API with an anchor fallback): this
- * build adds the document-flavoured type description the picker shows and the
- * ranui success toast. A dismissed dialog resolves without a toast; any other
- * failure rejects so the caller can surface it. Shared by the convert-and-
- * download path and the v9 file-stream save path (lib/onlyoffice-editor.ts).
- */
-export async function saveFileToDisk(data: Blob | Uint8Array, fileName: string, mimeType?: string): Promise<void> {
-  const extension = fileName.split('.').pop()?.toLowerCase() || '';
-  const written = await ranutsSaveFileToDisk(data, fileName, {
-    mimeType: mimeType || getDocumentMimeType(fileName),
-    description: FILE_DESCRIPTION_MAP[extension] || 'Document',
-  });
-  if (!written) return;
-  // ranui/message registers a global `window.message` toast API (untyped).
-  (window as unknown as { message?: { success?: (msg: string) => void } }).message?.success?.(
-    `${t('fileSavedSuccess')}${fileName}`,
-  );
-}
-
-const MIME_MAP: Record<string, string> = {
-  gif: 'image/gif',
-  png: 'image/png',
-  jpg: 'image/jpeg',
-  jpeg: 'image/jpeg',
-  svg: 'image/svg+xml',
-  webp: 'image/webp',
-  bmp: 'image/bmp',
-  tiff: 'image/tiff',
-  tif: 'image/tiff',
-  emf: 'image/x-emf',
-  wmf: 'image/x-wmf',
-};
-
-/**
- * Whether the module can be compiled straight off the network, without the
- * decompressed 42 MB ever existing as one buffer. Checked up front so a
- * failure of the streaming path itself is never retried through the buffered
- * one (see installStreamingInstantiate).
- */
-export const canStreamWasm = (): boolean =>
-  typeof WebAssembly !== 'undefined' && typeof WebAssembly.instantiateStreaming === 'function';
-
-/** Total tries for the x2t WASM fetch, and the step of the linear backoff. */
-const WASM_FETCH_ATTEMPTS = 3;
-const WASM_FETCH_BACKOFF_MS = 500;
-
-/**
- * Whether a status means "the server failed", as opposed to "the file is not
- * there". Only the first is worth asking again.
- */
-const isTransientStatus = (status: number): boolean => status >= 500 || status === 408 || status === 429;
-
-const wait = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
-
-/**
- * Fetch the x2t WASM, asking again when the answer was transient.
- *
- * This is a 9.4 MB asset off a CDN and one bad answer to it costs the whole
- * open: Cloudflare Pages served a 500 for exactly this file mid-run on
- * 2026-08-20 (PR #159) and the editor reported the document as unopenable. The
- * recovery a host has above this -- rebuilding the whole editor and re-fetching
- * everything -- is far more expensive than asking twice more, and in that run
- * it landed in the same bad window.
- *
- * Retried only when the server says it failed (5xx / 408 / 429) or the fetch
- * itself rejected (a dropped connection, an offline moment); a 404 or a 403 is
- * a deployment fact, and retrying only delays the error the user has to see.
- * Nothing is retained between attempts, so this adds nothing to the peak the
- * streaming path exists to keep down.
- *
- * Kept in step with `fetchWasmResponse` in the vendor-side loader
- * (public/sdkjs/common/wasm/x2t/x2t_helper.js).
- */
-export async function fetchWasmResponse(wasmPath: string): Promise<Response> {
-  for (let attempt = 1; ; attempt += 1) {
-    let response: Response;
-    try {
-      response = await fetch(wasmPath);
-    } catch (error) {
-      if (attempt >= WASM_FETCH_ATTEMPTS) throw error;
-      console.warn('[x2t] retrying the WASM fetch after', error);
-      await wait(WASM_FETCH_BACKOFF_MS * attempt);
-      continue;
-    }
-    if (response.ok) return response;
-    const failure = new Error(`Failed to fetch x2t WASM at '${wasmPath}' (${response.status})`);
-    if (attempt >= WASM_FETCH_ATTEMPTS || !isTransientStatus(response.status)) throw failure;
-    console.warn('[x2t] retrying the WASM fetch after', failure.message);
-    await wait(WASM_FETCH_BACKOFF_MS * attempt);
-  }
-}
-
-/**
- * The error a failed streaming instantiation reports.
- *
- * The `X2T module` prefix is the entry condition a host's open-failure
- * handling matches on (the site's own guard is
- * lib/onlyoffice/open-failure.ts); the original wording is kept after it
- * because that is what the same host reads to tell a refused wasm heap from a
- * dropped download. Without the prefix nothing claims the failure at all:
- * `loadScript()` has already resolved by the time the hook runs, emscripten's
- * success callback is simply never called, and the user watches a spinner
- * until the init timeout fires.
- */
-export const x2tInstantiateError = (error: unknown): Error =>
-  new Error(`X2T module failed to instantiate: ${error instanceof Error ? error.message : String(error)}`);
 
 export class X2TConverter {
   private x2tModule: EmscriptenModule | null = null;
@@ -400,99 +263,13 @@ export class X2TConverter {
    * first 32 bytes are XOR-obfuscated with this fixed 16-byte key (the same
    * wire format the editor's own font loader decodes).
    */
-  private static readonly CATALOG_FONT_XOR_KEY = [
-    160, 102, 214, 32, 20, 150, 71, 250, 149, 105, 184, 80, 176, 65, 73, 72,
-  ];
-
   /**
-   * PDF-export font manifest: catalog file index -> alias file names x2t
-   * matches against inside m_sFontDir. One decoded byte set is written once
-   * per alias. Indexes come from __fonts_infos in public/sdkjs/common/
-   * AllFonts.js (file position, then __fonts_files lookup). Keep Arial and
-   * other western families on their own files -- aliasing them to the CJK
-   * fallback garbles latin text and digits. The CJK alias entries carry the
-   * literal zh font names documents reference; they are data, not UI copy.
-   */
-  private static readonly PDF_FONT_MANIFEST: ReadonlyArray<{ file: string; aliases: string[] }> = [
-    // The aliases are the names x2t looks for; the slot behind each one is an
-    // open-licensed face after bin/font-license-sweep.mjs (the proprietary
-    // originals are no longer in the catalog). Liberation and Carlito are
-    // metric-compatible with the names they answer to, so an exported PDF
-    // keeps the same line and page breaks.
-    { file: '062', aliases: ['Arial.ttf', 'LiberationSans-Regular.ttf'] },
-    { file: '059', aliases: ['Arial_Bold.ttf'] },
-    { file: '061', aliases: ['Arial_Italic.ttf'] },
-    { file: '060', aliases: ['Arial_Bold_Italic.ttf'] },
-    { file: '112', aliases: ['Calibri.ttf', 'Carlito.ttf'] },
-    { file: '109', aliases: ['Calibri_Bold.ttf', 'Carlito_Bold.ttf'] },
-    { file: '111', aliases: ['Calibri_Italic.ttf', 'Carlito_Italic.ttf'] },
-    { file: '110', aliases: ['Calibri_Bold_Italic.ttf', 'Carlito_Bold_Italic.ttf'] },
-    { file: '070', aliases: ['Times_New_Roman.ttf', 'Times New Roman.ttf'] },
-    { file: '067', aliases: ['Times_New_Roman_Bold.ttf'] },
-    { file: '069', aliases: ['Times_New_Roman_Italic.ttf'] },
-    { file: '068', aliases: ['Times_New_Roman_Bold_Italic.ttf'] },
-    { file: '058', aliases: ['Courier_New.ttf', 'Courier New.ttf'] },
-    // Names the previous implementation fetched directly (kept for the same
-    // default-latin coverage).
-    { file: '117', aliases: ['DejaVuSans.ttf'] },
-    { file: '050', aliases: ['DejaVuSans-Bold.ttf'] },
-    // CJK. Serif answers to the Song/Ming names a document's body text uses,
-    // sans to the Hei/YaHei names; PingFang maps to the sans as the closest
-    // match. Both are TrueType on purpose: x2t embeds no glyphs at all for
-    // CFF-flavoured faces, so a pan-CJK OTF here exports a PDF whose Chinese
-    // is blank while its Latin survives (measured both ways round).
-    { file: '269', aliases: ['SimSun.ttf', 'NSimSun.ttf', '宋体.ttf', 'NotoSerifSC-Regular.ttf'] },
-    { file: '270', aliases: ['SimSun_Bold.ttf'] },
-    {
-      file: '267',
-      aliases: [
-        'Microsoft YaHei.ttf',
-        '微软雅黑.ttf',
-        'PingFang SC.ttf',
-        'SimHei.ttf',
-        '黑体.ttf',
-        'DroidSansFallback.ttf',
-        'Droid Sans Fallback.ttf',
-        'NotoSansSC-Regular.ttf',
-      ],
-    },
-    { file: '268', aliases: ['Microsoft YaHei_Bold.ttf', 'SimHei_Bold.ttf'] },
-  ];
-
-  /** Undo the catalog XOR obfuscation, returning a plain TTF byte copy. */
-  private decodeCatalogFont(bytes: Uint8Array): Uint8Array {
-    const out = new Uint8Array(bytes);
-    const key = X2TConverter.CATALOG_FONT_XOR_KEY;
-    const n = Math.min(32, out.length);
-    for (let i = 0; i < n; i++) {
-      out[i] ^= key[i % key.length];
-    }
-    return out;
-  }
-
-  /**
-   * Load fonts into WASM FS for PDF rendering. Called once per session.
-   * Without fonts, x2t generates a PDF with invisible (empty) text. Fonts
-   * are fetched from the indexed catalog (public/fonts/{index}) -- the same
-   * files the editor loads, so they are usually already HTTP-cached -- and
-   * XOR-decoded before being written under their alias names.
+   * Load fonts into WASM FS for PDF rendering. Called once per session;
+   * see ./pdf-fonts.ts for the manifest and why it exists.
    */
   private async loadFontsForPdf(): Promise<void> {
     if (this.fontsLoaded || !this.x2tModule) return;
-    await Promise.all(
-      X2TConverter.PDF_FONT_MANIFEST.map(async ({ file, aliases }) => {
-        try {
-          const res = await fetch(`${BASE_PATH}fonts/${file}`);
-          if (!res.ok) return;
-          const bytes = this.decodeCatalogFont(new Uint8Array(await res.arrayBuffer()));
-          for (const alias of aliases) {
-            this.x2tModule!.FS.writeFile(`/working/fonts/${alias}`, bytes);
-          }
-        } catch {
-          // Non-fatal — PDF may still render with remaining fonts
-        }
-      }),
-    );
+    await loadFontsForPdf(this.x2tModule);
     this.fontsLoaded = true;
   }
 
@@ -680,95 +457,14 @@ export class X2TConverter {
   /**
    * Load xlsx library from local file
    */
-  private async loadXlsxLibrary(): Promise<any> {
-    // Check if xlsx is already loaded
-    if (typeof window !== 'undefined' && (window as any).XLSX) {
-      return (window as any).XLSX;
-    }
-
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = `${BASE_PATH}libs/sheetjs/xlsx.full.min.js`;
-      script.onload = () => {
-        if (typeof window !== 'undefined' && (window as any).XLSX) {
-          resolve((window as any).XLSX);
-        } else {
-          reject(new Error('Failed to load xlsx library'));
-        }
-      };
-      script.onerror = () => {
-        reject(new Error('Failed to load xlsx library from local file'));
-      };
-      document.head.appendChild(script);
-    });
-  }
-
-  /**
-   * Decode CSV bytes with encoding sniffing. A non-fatal utf-8 TextDecoder
-   * never throws (invalid sequences become U+FFFD), so strict decoding is the
-   * only way to detect legacy encodings at all. Excel on zh-CN Windows still
-   * exports CSV in the ANSI code page (GBK), which is why gb18030 (its
-   * superset) is tried before the latin1 last resort.
-   */
-  private decodeCsvBytes(csvData: Uint8Array): string {
-    return decodeTextBytes(csvData);
-  }
-
-  /**
-   * Convert CSV to XLSX format using SheetJS library
-   * This is a workaround since x2t may not support CSV directly
-   */
+  /** CSV in, a real XLSX File out; see ./spreadsheet.ts. */
   async convertCsvToXlsx(csvData: Uint8Array, fileName: string): Promise<File> {
-    try {
-      // Load xlsx library
-      const XLSX = await this.loadXlsxLibrary();
-
-      const csvText = this.decodeCsvBytes(csvData);
-
-      // Parse CSV using SheetJS
-      const workbook = XLSX.read(csvText, { type: 'string', raw: false });
-
-      // Convert to XLSX binary format
-      const xlsxBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
-
-      // Create File object
-      const xlsxFileName = fileName.replace(/\.csv$/i, '.xlsx');
-      return new File([xlsxBuffer], xlsxFileName, {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-    } catch (error) {
-      throw new Error(
-        `Failed to convert CSV to XLSX: ${error instanceof Error ? error.message : 'Unknown error'}. ` +
-          'Please convert your CSV file to XLSX format manually and try again.',
-      );
-    }
+    return convertCsvToXlsx(csvData, fileName);
   }
 
-  /**
-   * Convert an HTML-table document that masquerades as a spreadsheet
-   * (.xls/.xlsx exports from web systems) into a real XLSX via SheetJS,
-   * which parses <table> markup natively. Same encoding sniffing as CSV:
-   * these exports are frequently GBK.
-   */
+  /** An HTML table wearing a spreadsheet extension; see ./spreadsheet.ts. */
   async convertHtmlTableToXlsx(htmlData: Uint8Array, fileName: string): Promise<File> {
-    try {
-      const XLSX = await this.loadXlsxLibrary();
-      const html = this.decodeCsvBytes(htmlData);
-      const workbook = XLSX.read(html, { type: 'string', raw: false });
-      if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
-        throw new Error('no table found');
-      }
-      const xlsxBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
-      const xlsxFileName = fileName.replace(/\.[^.]+$/, '') + '.xlsx';
-      return new File([xlsxBuffer], xlsxFileName, {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-    } catch (error) {
-      throw new Error(
-        `Failed to convert HTML table to XLSX: ${error instanceof Error ? error.message : 'Unknown error'}. ` +
-          'The file is an HTML page saved with a spreadsheet extension; open it in a spreadsheet application and save it as XLSX.',
-      );
-    }
+    return convertHtmlTableToXlsx(htmlData, fileName);
   }
 
   /**
@@ -1045,7 +741,7 @@ export class X2TConverter {
    * Convert XLSX bytes to CSV bytes (UTF-8 with BOM) via SheetJS.
    */
   async xlsxToCsvBytes(xlsxArray: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
-    const XLSX = await this.loadXlsxLibrary();
+    const XLSX = await loadXlsxLibrary();
     const workbook = XLSX.read(xlsxArray, { type: 'array' });
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
