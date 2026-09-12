@@ -16,16 +16,17 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 `MT` = main-site.spec、`VR` = visual-roundtrip.spec、`XF` = xlsx-features.spec、`XP` = xlsx-panes.spec、
 `DF` = docx-features.spec、`CM` = comments.spec、`II` = image-insert.spec、`PR` = pdf-roundtrip.spec、
 `PC` = pdf-cjk-export.spec、`CE` = csv-encoding.spec、`UC` = ui-crawl.spec、`SU` = sw-silent-update.spec、
-`LD` = large-document.spec。
+`LD` = large-document.spec、`OD` = odf-formats.spec。
 
 ## 现在真正空着的格子
 
-按"补它需要一个决定还是一次动手"分组，而不是按表格顺序——七处 ⬜ 里只有三件事。
+按"补它需要一个决定还是一次动手"分组，而不是按表格顺序——十一处 ⬜ 里只有三件事（ODF 那一族是新点出来的，不是新出现的）。
 
-1. **doc / xls / ppt 的非打开动作**（表 A 里十五个 ✱ 中的大部分）。要一个决定：把
-   `corpus.spec.ts` 从"打开 → 编辑 → 保存"扩成也走导出 PDF / 只读 / 插图 / 幂等。
-   合成夹具这条路走不通（旧二进制手拼不出来），所以这不是十五个用例，是一次扩展。
-2. **一次动手就能补的**：pdf 的环境类失败自动重试、pptx 的裸 `document:save` 默认格式。
+1. **doc / xls / ppt 的插图与幂等**。导出 PDF 与只读已于 2026-09-12 经
+   `CORPUS_DEEP=1` 补上（复用已打开的文档，每篇几百毫秒）；剩下这两个都要**再开一次
+   文档**，那是另一个量级的成本，等 deep 两步在夜间跑出实际耗时再决定。
+2. **一次动手就能补的**：pdf 的环境类失败自动重试、pptx 的裸 `document:save` 默认格式、
+   ODF 三种的只读与幂等。
 3. **要外部条件的**：真实安卓设备、右键菜单（vendor 的上下文菜单在 canvas 里，
    没有可枚举的 DOM）、旅程本体（需要先把 `actions/` 的动作库补齐）。
 
@@ -38,8 +39,8 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | 键盘编辑                    | MT, VR 🌙      | 🌙  | MT, ER(Ctrl+S) 🌙      | 🌙              | VR 🌙      | 🌙        | 🌙     | PR（注释） |
 | 保存往返（L1 结构）         | ER, SD, FN, RI | 🌙  | ER, FN, HX, RI         | 🌙              | RI, FP     | 🌙        | ER     | PR         |
 | 保存往返（L2 内容比对）     | RI, DF, CM, VR | 🌙  | ER, FN, HX, XF, XP, CM | HX              | RI, VR     | 🌙        | ER, CE | —          |
-| 导出 PDF                    | FP, PC         | ✱   | ER                     | ✱               | FP         | ✱         | ⬜     | —          |
-| 只读打开 / 运行时切换       | FP             | ✱   | ER                     | ✱               | FP         | ✱         | FP     | PR         |
+| 导出 PDF                    | FP, PC         | 🌙  | ER                     | 🌙              | FP         | 🌙        | 🌙     | —          |
+| 只读打开 / 运行时切换       | FP             | 🌙  | ER                     | 🌙              | FP         | 🌙        | FP     | PR         |
 | 插图后保存                  | ER             | ✱   | II                     | ✱               | II         | ✱         | —      | —          |
 | 评论                        | CM             | ✱   | CM                     | ✱               | CM         | ✱         | —      | PR（注释） |
 | 再打开→再保存（幂等）       | RI             | ✱   | RI                     | ✱               | RI         | ✱         | RI     | PR         |
@@ -47,10 +48,25 @@ embed-save-default.spec、`HX` = html-as-xls.spec、`FN` = filename-matrix.spec�
 | 环境类打开失败自动重试      | —              | —   | OR（故障注入）         | —               | —          | —         | —      | ⬜         |
 | 裸 `document:save` 默认格式 | SD             | ✱   | FN                     | HX（→xlsx）     | ⬜         | ✱         | ER     | ⬜         |
 
-**✱ = 旧二进制格式，合成不出夹具。** doc / xls / ppt 三列的固定用例只能靠真实语料
-（🌙），而语料矩阵目前只走 `打开 → 编辑 → 保存` 这一条路径。要覆盖这三列的导出 PDF /
-只读 / 插图 / 幂等，得先把 `corpus.spec.ts` 扩到那些动作上，而不是再写一个合成用例——
-这是这张表里最大的一块空白，且它是**一个**决定而不是十五个。
+**✱ = 旧二进制格式，合成不出夹具，只能靠真实语料（🌙）。** 2026-09-12 起语料跑道
+在 `CORPUS_DEEP=1`（夜间已开）下多走两步，都复用已经打开的那篇文档、不再开第二次：
+**导出 PDF**（判 `%PDF-` magic）与**运行时只读**（上锁后保存必须被拒、解锁后必须还回来）。
+所以 ✱ 里的这两个动作现在是覆盖的，剩下没覆盖的是**插图**与**幂等**——两者都要再开一次
+文档，成本是另一回事，等这两步的实际耗时有数据了再决定。
+
+### A2. ODF（odt / ods / odp）
+
+引擎读得了、文件选择器也提供，但上面那张表按 OOXML 的格式分列，把它们整族漏在外面
+——这正是台账自己会过期的样子。它们由 `OD` = odf-formats.spec 覆盖：三种各自打开
+（页内手拼最小 ODF 包）、存回原格式、导出 PDF，另加一条"文件选择器提供引擎能打开的
+每一种格式"。
+
+| 操作           | odt | ods | odp |
+| -------------- | --- | --- | --- |
+| 打开（合成）   | OD  | OD  | OD  |
+| 保存往返（L1） | OD  | OD  | OD  |
+| 导出 PDF       | OD  | OD  | OD  |
+| 其余动作       | ⬜  | ⬜  | ⬜  |
 
 ## B. 输入特征
 

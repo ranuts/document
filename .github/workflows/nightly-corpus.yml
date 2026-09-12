@@ -119,6 +119,12 @@ jobs:
           CORPUS_LIMIT: ${{ github.event.inputs.limit || '300' }}
           CORPUS_FILTER: ${{ github.event.inputs.filter || '' }}
           CORPUS_VISUAL: ${{ github.event.inputs.visual || '1' }}
+          # Export to PDF and toggle readonly on each document. Legacy binary
+          # formats have no synthetic fixture anywhere in the suite, so this is
+          # the only run that exercises either action on a real .doc, .xls or
+          # .ppt. Both reuse the document already open; measured at a few
+          # hundred milliseconds per file.
+          CORPUS_DEEP: "1"
           # Expected-to-fail inputs: encrypted/password files, deliberately
           # truncated/corrupt regression samples, macro-only containers, and
           # POI's fuzzer output (clusterfuzz-testcase-*, *Fuzzer*, Fuzzed.doc,
