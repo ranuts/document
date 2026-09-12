@@ -65,7 +65,9 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   editor-theme.ts       # 站点主题 → 编辑器 uiTheme 的跟随
   onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
   onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
-    iframe-guards.ts      # 14 条运行时守卫的编排；每条守卫一个文件在 guards/
+    iframe-guards.ts      # 16 条运行时守卫的编排；每条守卫一个文件在 guards/，
+                          # 文件头注释开头的编号就是它的身份（文档和提交信息里说
+                          # "守卫 8" 指的就是那个号），guards-numbering.test.ts 钉住不重号
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
                           # font-loading / comment-selection / canvas-loss /
