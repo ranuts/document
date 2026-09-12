@@ -110,6 +110,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- **An image that will not load now says so in your language.** When a picture
+  inserted by URL could not be fetched, the editor reported it in Chinese --
+  whatever language you were using -- and suggested a setting that does not
+  exist on this site. The message the editor already carries in 45 languages is
+  shown instead.
 - **The top bar is one row again.** The language button was 8px shorter than
   the links beside it, so hovering GitHub and hovering the language name lit up
   two differently sized boxes; on a phone it was the other way round. The

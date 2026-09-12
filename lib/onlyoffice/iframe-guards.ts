@@ -13,6 +13,7 @@ import { releaseWasmBinary } from './guards/wasm-binary-release';
 import { installSingleUnloadPrompt } from './guards/unload-prompt';
 import { installHintFallbackGuard } from './guards/hint-fallback';
 import { installAboutSourceNotice } from './guards/about-source';
+import { installBadImageUrlGuard } from './guards/bad-image-url';
 
 /**
  * Same-origin preparation of the editor iframe, applied from onAppReady and
@@ -55,6 +56,7 @@ export function prepareEditorIframe(): boolean {
       installCanvasLossGuard(win, doc);
       installSingleUnloadPrompt(win);
       installHintFallbackGuard(win);
+      installBadImageUrlGuard(win);
       installAboutSourceNotice(doc);
       const wasmBinaryHandled = releaseWasmBinary(win);
 
