@@ -1,7 +1,5 @@
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Legacy-encoded CSV end to end (matrix section B "编码"): Excel on zh-CN
  * Windows exports CSV in the ANSI code page (GBK). The converter's sniff

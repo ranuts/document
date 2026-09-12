@@ -2,8 +2,6 @@ import { buildDocx, toBase64, zipEntryNames, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Comments (matrix section A "评论"): add one through the SDK API on a
  * selection, save, and find it in the package (word/comments.xml,

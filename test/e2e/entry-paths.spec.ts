@@ -5,8 +5,6 @@ import { buildDocx, ooxmlText, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 import { settleEditor } from './lib/visual';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * The remaining ways a document reaches the editor (matrix section C):
  *   - main site `?file=<url>` (also `?src=`), i.e. links from other pages;

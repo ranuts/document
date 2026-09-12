@@ -2,8 +2,6 @@ import { buildDocx, buildPptx, ooxmlText, toBase64, zipEntryNames, zipEntryText 
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Re-open -> re-save idempotence (matrix section A, "再打开→再保存"). The
  * editor's own output must be something the editor can open again and save

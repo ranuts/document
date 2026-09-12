@@ -1,7 +1,5 @@
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Open-conversion failure must be visible and must not wedge the editor.
  *

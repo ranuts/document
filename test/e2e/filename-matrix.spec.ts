@@ -2,8 +2,6 @@ import { buildDocx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Filename dimension of the behavior matrix (strategy section 1): the name a
  * document is opened under must never influence whether it opens, and must

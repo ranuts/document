@@ -4,8 +4,6 @@ import { expect, test } from './lib/l0';
 import { editorHealth, saveAndCapture, waitForEditorReady, SAVE_FORMAT_CODE } from './actions/editor';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * UI crawl (strategy section 9.1 layer 2): every visible, enabled toolbar
  * button and every ribbon tab of each editor gets clicked once; dialogs and

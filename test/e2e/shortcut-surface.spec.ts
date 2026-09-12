@@ -25,8 +25,6 @@ import {
  * Nightly-class (SHORTCUT_SWEEP=1); a few seconds per editor.
  */
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 const MOD = process.platform === 'darwin' ? 'Meta' : 'Control';
 
 // Shortcuts common to all three editors (OnlyOffice keyboard reference),

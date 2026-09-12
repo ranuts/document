@@ -19,8 +19,6 @@ import { buildDocx, buildXlsx, toBase64 } from './lib/ooxml';
 const OFFLINE_BAD_IMAGE_URL =
   '无法加载图片：地址无效或目标站不允许跨域访问（可通过 editorConfig.imageProxy 配置图片代理）';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /** Reads `errorBadImageUrl` off the live Main controller, whichever app it is. */
 const readBadImageUrl = () => {
   type Ctl = { errorBadImageUrl?: string };

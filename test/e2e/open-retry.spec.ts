@@ -1,8 +1,6 @@
 import { FONT_SYSTEM_WAIT_MS } from '../../lib/onlyoffice/font-system';
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Environment-class open failures must be retried, not reported (GitHub #144:
  * the same .docx opens in a freshly started browser and fails with

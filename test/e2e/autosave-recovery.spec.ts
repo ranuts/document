@@ -6,8 +6,6 @@ import { buildDocx, ooxmlText, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * The whole loss-protection path with the real editor and real x2t behind it:
  * edit a document, let the tab go away, and get the work back on the next

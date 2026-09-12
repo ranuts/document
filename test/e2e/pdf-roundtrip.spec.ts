@@ -1,8 +1,6 @@
 import { buildDocx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * PDF in the pdf editor (matrix section A, pdf column): open, annotate,
  * save back as PDF, and readonly. The save goes through x2t's

@@ -2,8 +2,6 @@ import { buildPptx, toBase64, zipEntryNames } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Image insertion + save for the spreadsheet and presentation editors
  * (matrix section A "插图后保存"; the word editor case lives in

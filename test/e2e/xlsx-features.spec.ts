@@ -1,8 +1,6 @@
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Content-feature dimension for spreadsheets (matrix section B): features
  * that a real workbook carries and a minimal fixture never does. Each case

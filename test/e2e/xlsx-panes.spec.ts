@@ -1,8 +1,6 @@
 import { buildXlsx, toBase64, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Frozen panes + autofilter (matrix section B "冻结窗格"): features SheetJS
  * cannot emit, hand-built here. Frozen panes threw a burst of

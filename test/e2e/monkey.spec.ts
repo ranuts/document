@@ -23,8 +23,6 @@ import { waitForEditorReady, focusEditor, saveAndCapture, editorHealth, SAVE_FOR
  * Nightly-class (MONKEY=1). Default 150 steps per editor.
  */
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 const MOD = process.platform === 'darwin' ? 'Meta' : 'Control';
 const SEED = Number(process.env.MONKEY_SEED || 20260815);
 const STEPS = Number(process.env.MONKEY_STEPS || 150);

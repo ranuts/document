@@ -34,8 +34,6 @@ import { buildDocx, toBase64 } from './lib/ooxml';
  */
 const PLUGIN_GUID = 'asc.{11111111-2222-3333-4444-555555555555}';
 
-declare function post(type: string, payload?: Record<string, unknown>): Promise<any>;
-
 /**
  * Injects `editorConfig.plugins` into whatever config the site passes to
  * DocEditor, with the plugin's config.json handed over as a blob URL so nothing
