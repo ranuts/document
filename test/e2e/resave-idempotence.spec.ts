@@ -88,6 +88,38 @@ test.describe('re-open / re-save idempotence (real editor)', () => {
     expect(ooxmlText((await zipEntryText(bytes, 'word/document.xml')) || '')).toContain('idempotent paragraph 往返');
   });
 
+  /**
+   * csv is the one that is converted twice on every trip. The editor cannot
+   * open a CSV at all, so the page turns it into a workbook on the way in
+   * (SheetJS) and back into CSV on the way out -- and a second trip feeds
+   * that output through the same pair again. Quoting, the decimal cells and
+   * the non-ASCII columns are what a re-encode drifts on, so the second
+   * output has to be byte-comparable to the first.
+   */
+  test('csv: two round trips keep the rows, the quoting and the encoding', async ({ page }) => {
+    const SOURCE = ['k,v,note', 'x,1,"a, comma"', '中文,2.5,ünïcodé'].join('\n');
+    const result = await page.evaluate(async (source) => {
+      const trip = (window as any).__trip as (name: string, b64: string) => Promise<{ name: string; b64: string }>;
+      const utf8 = new TextEncoder().encode(source);
+      let raw = '';
+      for (const byte of utf8) raw += String.fromCharCode(byte);
+      const one = await trip('idem.csv', btoa(raw));
+      const two = await trip(one.name, one.b64);
+      const decode = (b64: string): string => {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return new TextDecoder('utf-8').decode(bytes);
+      };
+      return { name: two.name, first: decode(one.b64).trim(), second: decode(two.b64).trim() };
+    }, SOURCE);
+
+    expect(result.name).toBe('idem.csv');
+    // Saved as CSV both times rather than drifting to the xlsx it is opened as.
+    expect(result.first).toBe(SOURCE);
+    expect(result.second).toBe(result.first);
+  });
+
   test('pptx: two round trips keep the slide and its title', async ({ page }) => {
     const result = await page.evaluate(
       async ({ pptxB64 }) => {
