@@ -2,6 +2,7 @@ import 'ranui/message';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
 import { DOCUMENT_TYPE_MAP } from '@ranuts/shared/document-utils';
 import { prepareEditorIframe } from './onlyoffice/iframe-guards';
+import { markEditorFrameReady, watchEditorFrame } from './onlyoffice/frame-watchdog';
 import {
   describeOpenFailure,
   getDocumentOpenError,
@@ -165,6 +166,9 @@ function createPersonalEditorInstance(config: {
   }
 
   const normalizedType = fileType.toLowerCase();
+  // A worker changing hands mid-load can kill the frame's own document
+  // request and leave the reader on a blank page; watch for that silence.
+  watchEditorFrame();
   window.editor = new window.DocsAPI.DocEditor('iframe', {
     document: {
       title: fileName,
@@ -241,6 +245,7 @@ function createPersonalEditorInstance(config: {
     },
     events: {
       onAppReady: () => {
+        markEditorFrameReady();
         // The pdf editor's offline path differs from word/cell/slide: those
         // apps' Offline controllers fetch document.url and convert it
         // themselves, while the pdf app only listens for the host's
