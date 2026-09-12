@@ -199,7 +199,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
 不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
 `test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
-`test/e2e/` 现有 49 个 spec，下面先说三条主线，再给全量清单：
+`test/e2e/` 现有 51 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -240,7 +240,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                 |
 | embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                      |
 | 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读） |
-| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）                                                                                                                            |
+| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`bad-image-url-locale`（守卫 13）                        |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
 | 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
 | 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                     |
@@ -748,16 +748,32 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
 - API Key 存储在 localStorage，不经过中间服务器
 - **不涉及 WASM 模型量化**，"剪枝"指裁剪掉 Node.js 专属依赖，保留纯浏览器可运行的部分
 
-#### 关键前提：需先验证
+#### 关键前提：已验证（2026-09-12，结论与 v7.5 时相反）
 
-本项目使用的是 **OnlyOffice Web Apps（离线 WASM 版）**，而非 OnlyOffice Docs Server。两者在插件 API 支持上存在差异——需要实际验证 `window.Asc.plugin` 对象在当前本地加载方式下是否可用，以及 `AddComment`、Review 模式等 API 是否完整暴露。
+**v9 的插件框架是活的，而且走公开配置就能到达。**曾经"离线构建裁掉了插件基建"的结论
+是对 **v7.5** 那个包说的，现在不成立了。实测（`test/e2e/plugin-availability.spec.ts`）：
+给 DocEditor 传 `editorConfig.plugins.pluginsData`，Plugins 控制器会去取 config.json、
+向 `g_asc_plugins` 注册，`run()` 建出 `iframe_<guid>`，工具栏的 `plugins` 页签也在。
+
+两个细节让它从外面看像死的，别再被绊一次：
+
+1. **`Asc.createPluginsManager` 在 `sdk-all.js` 里，不在 `sdk-all-min.js` 里。**`-min` 只是
+   引导包，`AscCommon.loadSdk` 之后才拉 14 MB 的完整 SDK，而 `onDocumentReady` 可能在它
+   落地之前就触发——看早了，manager 确实是 undefined。（`lib/prefetch.ts` 两个都预取，
+   本来就知道这件事。）
+2. **`_checkLicenseApiFunctions()` 在这里恒为 false**（离线补丁发的是
+   `onLicense({license:{}})`，`licenseResult.plugins` 是 undefined）。它长得像一道闸，
+   但两个 bundle 里**没有任何地方调用它**。
+
+我们**没有**的是 `sdkjs-plugins/` 这棵树本身——插件页面要加载的 `v1/plugins.js` 桥
+（`Asc.plugin` 就是它给的）和各插件包。manager 的默认 `path` 是
+`../../../../sdkjs-plugins/`，在本站 404；配置里带绝对 `baseUrl` 则完全绕开它。所以这是
+**打包决策，不是能力缺失**：要上插件就把这棵树放进来（官方 documentserver 镜像里有），
+或指到自己的插件源站。见 docs/explorations/2026-09-12-plugin-framework-is-alive.md。
 
 #### 建议实施路径（分三阶段）
 
-**阶段一：验证 Plugin API 可用性**（1~2 天）
-
-- 在 `public/` 下新建一个最小插件，验证 `window.Asc.plugin.init` / `callCommand` / `PasteHtml` 是否在当前离线版本中可用
-- 若不可用，需评估是否升级到 OnlyOffice Docs Server
+**阶段一：Plugin API 可用性** — 已完成，见上。
 
 **阶段二：Agent 工具层**（新建 `lib/agent-plugin.ts`）
 
