@@ -769,7 +769,9 @@ pi agent（earendil-works/pi）是一套轻量的多 Provider LLM 调用框架�
 （`Asc.plugin` 就是它给的）和各插件包。manager 的默认 `path` 是
 `../../../../sdkjs-plugins/`，在本站 404；配置里带绝对 `baseUrl` 则完全绕开它。所以这是
 **打包决策，不是能力缺失**：要上插件就把这棵树放进来（官方 documentserver 镜像里有），
-或指到自己的插件源站。见 docs/explorations/2026-09-12-plugin-framework-is-alive.md。
+或指到自己的插件源站——**怎么配、为什么一个都不内置、以及为什么绝不能从 URL 参数读
+`pluginsData`（那等于让任何人往同源编辑器里注入并执行代码），见 [docs/plugins.md](docs/plugins.md)**。
+另见 docs/explorations/2026-09-12-plugin-framework-is-alive.md。
 
 #### 建议实施路径（分三阶段）
 

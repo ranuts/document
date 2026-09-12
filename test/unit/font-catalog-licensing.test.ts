@@ -155,7 +155,9 @@ describe('font picker thumbnail sprites', () => {
     }
   });
 
-  it('keeps each png twin pixel-identical to the mask beside it', () => {
+  // Decoding the whole set is ~17 million pixels; the default 5 s budget is
+  // not enough for that under coverage instrumentation on a CI runner.
+  it('keeps each png twin pixel-identical to the mask beside it', { timeout: 60_000 }, () => {
     // The sprite ships twice: the run-length alpha mask every browser reads,
     // and an RGBA png only the ONLYOFFICE desktop shell reads
     // (`supportBinaryFormat` is false only when `Desktop.isActive()`). Two
