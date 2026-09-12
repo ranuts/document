@@ -86,11 +86,28 @@
   Content-Type: font/ttf
   X-Robots-Tag: noindex
 
-# The x2t WASM (9.9 MB gz): the single largest first-save download; also
-# swapped only with the vendor. Editor JS/HTML under sdkjs/ and web-apps/
-# is deliberately NOT pinned here -- some of it carries our runtime patches
-# (x2t_helper.js) and the editor iframe HTML, which must revalidate.
-/sdkjs/common/wasm/x2t/x2t.wasm.gz
+# The x2t WASM: the single largest first-save download, and swapped only with
+# the vendor. Editor JS/HTML under sdkjs/ and web-apps/ is deliberately NOT
+# pinned here -- some of it carries our runtime patches (x2t_helper.js) and the
+# editor iframe HTML, which must revalidate.
+#
+# The file holds brotli bytes (6.6 MB, against 42.1 MB raw and 9.0 MB for the
+# best gzip we could produce). Declaring the encoding is what makes that legal:
+# the browser decodes it at the network layer, so instantiateStreaming compiles
+# the module straight off the response and nothing in our code decompresses
+# anything.
+#
+# The `.br` name is load-bearing, and so is the absence of a Content-Type rule
+# here. `wrangler pages dev` -- what the e2e-pages job runs -- re-compresses
+# anything it considers compressible and OVERWRITES Content-Encoding with its
+# own, which double-encodes a pre-encoded asset and leaves the browser holding
+# brotli that no browser API can decode. It leaves application/octet-stream
+# alone, and that is what an unknown extension gets. Name this `.wasm`, or set
+# Content-Type here, and the editor stops loading under that job.
+# sws.toml carries the twin rule for the Docker image, vite.config.ts for
+# dev/preview. The loader labels the response application/wasm itself.
+/sdkjs/common/wasm/x2t/x2t.wasm.br
+  Content-Encoding: br
   Cache-Control: public, max-age=31536000, immutable
 
 # Crawler hygiene: the vendored editor trees contain thousands of internal

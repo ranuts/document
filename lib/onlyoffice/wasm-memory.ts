@@ -2,7 +2,7 @@
  * The memory x2t asks the browser for, and how to tell which half a browser
  * refused.
  *
- * `public/sdkjs/common/wasm/x2t/x2t.wasm.gz` declares its own (non-shared)
+ * `public/sdkjs/common/wasm/x2t/x2t.wasm.br` declares its own (non-shared)
  * memory in the wasm memory section: `initial` 4533 pages and `maximum` 32768
  * pages. A browser therefore has to satisfy two independent requests before
  * `WebAssembly.instantiate` can return:

@@ -25,16 +25,16 @@
  * Usage: node bin/x2t-memory-report.mjs
  */
 import { readFileSync } from 'node:fs';
-import { gunzipSync } from 'node:zlib';
+import { brotliDecompressSync } from 'node:zlib';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const WASM_GZ = resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz');
+const WASM_PATH = resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.br');
 const PAGE_BYTES = 65536;
 const mb = (bytes) => (bytes / (1024 * 1024)).toFixed(1);
 
-const wasm = gunzipSync(readFileSync(WASM_GZ));
+const wasm = brotliDecompressSync(readFileSync(WASM_PATH));
 let offset = 8; // magic + version
 
 const uleb = () => {

@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { gunzipSync } from 'node:zlib';
+import { brotliDecompressSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 
 import { X2T_INITIAL_PAGES, X2T_MAXIMUM_PAGES } from '../../lib/onlyoffice/wasm-memory';
@@ -89,29 +89,31 @@ describe('vendor contract sentinel', () => {
   });
 
   it('x2t.wasm is the verified 9.4 build (content hash pinned; re-verify every guard on change)', () => {
-    // Hash the *decompressed* module, not the .gz around it. That is the
+    // Hash the *decompressed* module, not the container around it. That is the
     // invariant worth pinning -- "these are the vendor's bytes" -- and it
-    // survives recompressing the container, which we do to claw back ~350 KB
-    // off the largest download in the app (zopfli; see the size guard below).
-    // Pinning the container instead would have tied provenance to the choice
-    // of compressor.
-    const gz = readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz'));
-    const wasm = gunzipSync(gz);
+    // survives recompressing, which we have now done twice (zopfli gzip, then
+    // brotli; see the size guard below). Pinning the container instead would
+    // have tied provenance to the choice of compressor.
+    const wasm = brotliDecompressSync(readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.br')));
     expect(createHash('sha256').update(wasm).digest('hex')).toBe(
       '7db02f5c74976a82c3fe630c371a163d5df669a6c84fddc553f03e76f67d3dd2',
     );
   });
 
-  it('x2t.wasm.gz stays zopfli-compressed (the largest download in the app)', () => {
-    // 9,483,006 bytes with `zopfli --gzip --i15`, against 9,860,417 as the
-    // vendor shipped it and 10,058,136 from node's zlib at level 9: 377 KB of
-    // the single biggest download, for a container the browser decompresses
-    // identically either way. zopfli is not a repo dependency (one-off, ~15
-    // min of CPU), so this bound is the reminder: after a vendor bump, run
-    //   zopfli --gzip --i15 -c x2t.wasm > x2t.wasm.gz
+  it('x2t.wasm stays brotli-compressed (the largest download in the app)', () => {
+    // 6,898,179 bytes with `brotli -q 11`, against 9,483,006 for the best gzip
+    // we could produce (zopfli --i15) and 42,111,200 raw: 2.58 MB off the
+    // single biggest download in the app. brotli is not a repo dependency
+    // (one-off, ~80 s of CPU), so this bound is the reminder: after a vendor
+    // bump, run
+    //   brotli -q 11 -c x2t.wasm > x2t.wasm.br && mv x2t.wasm.br x2t.wasm
     // The content hash above is what proves the bytes inside are unchanged.
-    const size = readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz')).length;
-    expect(size).toBeLessThan(9_600_000);
+    //
+    // The file keeps the plain `.wasm` name and every host declares
+    // `Content-Encoding: br` for it, so the browser decodes it at the network
+    // layer -- see the hosting contract test, which pins that declaration.
+    const size = readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.br')).length;
+    expect(size).toBeLessThan(7_200_000);
   });
 
   it('x2t.wasm still declares the memory lib/onlyoffice/wasm-memory.ts quotes to the user', () => {
@@ -125,7 +127,7 @@ describe('vendor contract sentinel', () => {
     // ~267 MB static/BSS floor and `maximum` is a hard ceiling. If a bump
     // lands here, run `node bin/x2t-memory-report.mjs` before changing the
     // constants: it prints the floor and the slack above it.
-    const wasm = gunzipSync(readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.gz')));
+    const wasm = brotliDecompressSync(readFileSync(resolve(ROOT, 'public/sdkjs/common/wasm/x2t/x2t.wasm.br')));
     let offset = 8; // magic + version
     const uleb = () => {
       let result = 0;

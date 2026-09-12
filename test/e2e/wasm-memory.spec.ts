@@ -6,7 +6,7 @@ declare function post(type: string, payload?: Record<string, unknown>): Promise<
  * What an open costs in memory, held down where it is cheap to hold down.
  *
  * x2t declares a 283 MB initial heap (see lib/onlyoffice/wasm-memory.ts). On
- * top of that, our x2t_helper patch used to inflate the 9.4 MB `x2t.wasm.gz`
+ * top of that, our x2t_helper patch used to inflate the compressed `x2t.wasm.br`
  * into a 40.2 MB ArrayBuffer and hand emscripten the bytes -- so at the moment
  * WebAssembly asked the browser for the heap, the renderer was also holding
  * that buffer and compiling 40 MB of code. That moment is exactly the one that

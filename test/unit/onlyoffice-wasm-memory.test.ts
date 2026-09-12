@@ -22,7 +22,7 @@ const OOM_MESSAGE =
   'Aborted(RangeError: WebAssembly.instantiate(): Out of memory: Cannot allocate Wasm memory for new instance. Build with -sASSERTIONS for more info.)';
 
 describe('x2t memory declaration', () => {
-  // Parsed out of public/sdkjs/common/wasm/x2t/x2t.wasm.gz. If a new vendor
+  // Parsed out of public/sdkjs/common/wasm/x2t/x2t.wasm.br. If a new vendor
   // build changes them, the user-facing "about 283 MB" and the probe both go
   // stale, so pin them here next to the message that quotes the number.
   it('pins the initial and maximum the wasm binary declares', () => {

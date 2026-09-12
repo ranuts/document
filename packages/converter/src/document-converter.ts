@@ -1,7 +1,6 @@
 import {
   createObjectURL,
   decodeTextBytes,
-  gunzipMaybe,
   getExtensions,
   isHtmlDocument,
   isZipContainer,
@@ -97,75 +96,12 @@ const MIME_MAP: Record<string, string> = {
 
 /**
  * Whether the module can be compiled straight off the network, without the
- * decompressed 40 MB ever existing as one buffer. Checked up front so a
+ * decompressed 42 MB ever existing as one buffer. Checked up front so a
  * failure of the streaming path itself is never retried through the buffered
  * one (see installStreamingInstantiate).
  */
 export const canStreamWasm = (): boolean =>
-  typeof DecompressionStream === 'function' &&
-  typeof ReadableStream === 'function' &&
-  typeof WebAssembly !== 'undefined' &&
-  typeof WebAssembly.instantiateStreaming === 'function';
-
-/**
- * Re-emit a body stream, having read just enough of it to tell gzip (`1f 8b`)
- * from a raw wasm module (`00 61 73 6d`) -- hosts disagree on how they serve a
- * `.gz` file (some send `Content-Encoding: gzip` and the browser has already
- * decoded it), and the sniff has to cost two bytes rather than the whole
- * download.
- */
-export async function sniffAndRebuild(body: ReadableStream<Uint8Array>): Promise<ReadableStream<Uint8Array>> {
-  const reader = body.getReader();
-  const prefix: Uint8Array[] = [];
-  let have = 0;
-  let finished = false;
-
-  while (have < 2 && !finished) {
-    const result = await reader.read();
-    if (result.done) {
-      finished = true;
-      break;
-    }
-    prefix.push(result.value);
-    have += result.value.length;
-  }
-
-  const head = new Uint8Array(have);
-  let at = 0;
-  for (const chunk of prefix) {
-    head.set(chunk, at);
-    at += chunk.length;
-  }
-  const isGzip = head.length > 1 && head[0] === 0x1f && head[1] === 0x8b;
-
-  const rebuilt = new ReadableStream<Uint8Array>({
-    start(controller) {
-      for (const chunk of prefix) controller.enqueue(chunk);
-      if (finished) controller.close();
-    },
-    async pull(controller) {
-      if (finished) {
-        controller.close();
-        return;
-      }
-      const result = await reader.read();
-      if (result.done) {
-        finished = true;
-        controller.close();
-      } else {
-        controller.enqueue(result.value);
-      }
-    },
-    cancel(reason) {
-      return reader.cancel(reason);
-    },
-  });
-
-  // The cast is variance, not a lie: DecompressionStream accepts BufferSource,
-  // which is wider than the Uint8Array chunks this stream emits.
-  const inflate = new DecompressionStream('gzip') as unknown as ReadableWritablePair<Uint8Array, Uint8Array>;
-  return isGzip ? rebuilt.pipeThrough(inflate) : rebuilt;
-}
+  typeof WebAssembly !== 'undefined' && typeof WebAssembly.instantiateStreaming === 'function';
 
 /** Total tries for the x2t WASM fetch, and the step of the linear backoff. */
 const WASM_FETCH_ATTEMPTS = 3;
@@ -198,11 +134,11 @@ const wait = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(
  * Kept in step with `fetchWasmResponse` in the vendor-side loader
  * (public/sdkjs/common/wasm/x2t/x2t_helper.js).
  */
-export async function fetchWasmResponse(gzPath: string): Promise<Response> {
+export async function fetchWasmResponse(wasmPath: string): Promise<Response> {
   for (let attempt = 1; ; attempt += 1) {
     let response: Response;
     try {
-      response = await fetch(gzPath);
+      response = await fetch(wasmPath);
     } catch (error) {
       if (attempt >= WASM_FETCH_ATTEMPTS) throw error;
       console.warn('[x2t] retrying the WASM fetch after', error);
@@ -210,7 +146,7 @@ export async function fetchWasmResponse(gzPath: string): Promise<Response> {
       continue;
     }
     if (response.ok) return response;
-    const failure = new Error(`Failed to fetch x2t WASM at '${gzPath}' (${response.status})`);
+    const failure = new Error(`Failed to fetch x2t WASM at '${wasmPath}' (${response.status})`);
     if (attempt >= WASM_FETCH_ATTEMPTS || !isTransientStatus(response.status)) throw failure;
     console.warn('[x2t] retrying the WASM fetch after', failure.message);
     await wait(WASM_FETCH_BACKOFF_MS * attempt);
@@ -256,21 +192,24 @@ export class X2TConverter {
 
   private readonly WORKING_DIRS = ['/working', '/working/media', '/working/fonts', '/working/themes'];
   private readonly SCRIPT_PATH = `${BASE_PATH}wasm/x2t/x2t.js`;
-  private readonly WASM_GZ_PATH = `${BASE_PATH}wasm/x2t/x2t.wasm.gz`;
+  private readonly WASM_PATH = `${BASE_PATH}wasm/x2t/x2t.wasm.br`;
   private readonly INIT_TIMEOUT = 300000;
 
   /**
    * Load X2T script file (using ranuts scriptOnLoad utility).
    *
-   * Where the engine can compile while it downloads, it does: the inflated
-   * 40 MB module then never exists as a buffer at all, which matters because
-   * the alternative holds it at the exact moment WebAssembly is asking the
-   * browser for x2t's own 283 MB heap -- the moment that fails on a machine
-   * short of memory (GitHub #144). Otherwise we fall back to decompressing the
-   * gzipped WASM and handing Emscripten the bytes via `Module.wasmBinary` (see
-   * prepareWasmBinary), so x2t.js never fetches the raw 55 MB `x2t.wasm`
-   * itself either way. Both paths let us ship only the ~11 MB `x2t.wasm.gz`,
-   * staying under Cloudflare Pages' 25 MiB-per-file deploy limit.
+   * Where the engine can compile while it downloads, it does: the 42 MB module
+   * then never exists as a buffer at all, which matters because the
+   * alternative holds it at the exact moment WebAssembly is asking the browser
+   * for x2t's own 283 MB heap -- the moment that fails on a machine short of
+   * memory (GitHub #144). Otherwise we fall back to buffering the module and
+   * handing Emscripten the bytes via `Module.wasmBinary` (see
+   * prepareWasmBinary), so x2t.js never fetches the module itself either way.
+   *
+   * The file behind that URL holds brotli bytes and every host we deploy to
+   * declares `Content-Encoding: br` for it, so the browser decodes it at the
+   * network layer: 6.6 MB on the wire, under Cloudflare Pages' 25 MiB-per-file
+   * deploy limit, and nothing here decompresses anything.
    *
    * Kept in step with the same two paths in the vendor-side loader
    * (public/sdkjs/common/wasm/x2t/x2t_helper.js), which is what the editor
@@ -323,21 +262,21 @@ export class X2TConverter {
     };
     if (globalScope.Module?.instantiateWasm) return;
 
-    const gzPath = this.WASM_GZ_PATH;
+    const wasmPath = this.WASM_PATH;
     const instantiateWasm = (
       imports: WebAssembly.Imports,
       successCallback: (instance: WebAssembly.Instance, module: WebAssembly.Module) => void,
     ): Record<string, never> => {
       void (async () => {
         try {
-          const response = await fetchWasmResponse(gzPath);
+          const response = await fetchWasmResponse(wasmPath);
           if (!response.body) throw new Error('x2t WASM response has no body to stream');
-          const stream = await sniffAndRebuild(response.body);
-          // Our own Content-Type: a host's type for a .gz file is whatever it
-          // happens to be, and instantiateStreaming rejects anything that is
-          // not application/wasm.
+          // Re-wrapped only to state the Content-Type: the body is already the
+          // decoded module, but instantiateStreaming rejects anything not
+          // labelled application/wasm and we would rather not depend on each
+          // host typing a `.wasm` file correctly.
           const { instance, module } = await WebAssembly.instantiateStreaming(
-            new Response(stream, { headers: { 'Content-Type': 'application/wasm' } }),
+            new Response(response.body, { headers: { 'Content-Type': 'application/wasm' } }),
             imports,
           );
           successCallback(instance, module);
@@ -363,20 +302,13 @@ export class X2TConverter {
   /**
    * Fallback for engines without streaming instantiation (see loadScript).
    *
-   * Fetch the gzipped x2t WASM, decompress it in the browser, and stash the raw
-   * bytes on `window.Module.wasmBinary` *before* x2t.js runs. Emscripten checks
+   * Buffer the module and stash the bytes on `window.Module.wasmBinary`
+   * *before* x2t.js runs. Emscripten checks
    * `if (Module['wasmBinary']) wasmBinary = Module['wasmBinary']` and then skips
-   * its own fetch/instantiateStreaming of `x2t.wasm` entirely.
+   * its own fetch/instantiateStreaming entirely.
    *
-   * Uses the native `DecompressionStream('gzip')` — no extra dependency.
-   *
-   * Servers disagree on how they serve a `.gz` file: some (e.g. Vite's dev /
-   * preview server) send it with `Content-Encoding: gzip`, so the browser has
-   * already transparently decompressed it by the time we read the body; others
-   * (static hosts like Cloudflare Pages / GitHub Pages) serve the raw gzip
-   * bytes. We detect which by the leading magic bytes and only decompress when
-   * the payload is still gzip (`1f 8b`) rather than an already-raw wasm module
-   * (`00 61 73 6d`). This keeps it correct on every host.
+   * This puts the whole 42 MB in the frame at the moment x2t asks for its
+   * 283 MB heap, which is why it is the fallback and not the default.
    */
   private async prepareWasmBinary(): Promise<void> {
     const globalScope = window as unknown as {
@@ -384,15 +316,12 @@ export class X2TConverter {
     };
     if (globalScope.Module?.wasmBinary) return; // already prepared
 
-    // The asset is published gzipped, but whether the browser already decoded
-    // it depends on the host's Content-Encoding — the magic number decides,
-    // not the URL (ranuts gunzipMaybe). Fetched through fetchWasmResponse
-    // rather than ranuts' fetchMaybeGzip so this path survives the same
-    // transient CDN answers the streaming one does; the sniff-and-inflate half
-    // is still the ecosystem's.
-    const response = await fetchWasmResponse(this.WASM_GZ_PATH);
-    const bytes = await gunzipMaybe(new Uint8Array(await response.arrayBuffer()));
-    const wasmBinary = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+    // Fetched through fetchWasmResponse so this path survives the same
+    // transient CDN answers the streaming one does. The response body is
+    // already the decoded module: the host declares `Content-Encoding: br`
+    // for this URL and the browser undoes it.
+    const response = await fetchWasmResponse(this.WASM_PATH);
+    const wasmBinary = await response.arrayBuffer();
 
     // Pre-seed the global Module so x2t.js (which reuses an existing global
     // Module) picks up the binary. Preserve any properties already set.

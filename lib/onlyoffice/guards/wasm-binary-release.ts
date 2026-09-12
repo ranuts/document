@@ -2,7 +2,7 @@
  * 10. x2t wasm binary release.
  *
  * `x2t_helper.prepareWasmBinary` -- the fallback path for engines that cannot
- * stream (`canStreamWasm()` false) -- fetches the 9.4 MB `x2t.wasm.gz`,
+ * stream (`canStreamWasm()` false) -- fetches the 9.4 MB `x2t.wasm`,
  * inflates it to a 40.2 MB ArrayBuffer and parks it on
  * `window.Module.wasmBinary` so emscripten skips its own fetch of the raw
  * 40 MB file (which cannot be deployed: it is over Cloudflare Pages' 25 MiB

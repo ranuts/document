@@ -47,7 +47,7 @@
     '/fonts/061',
     '/fonts/062',
     // Only needed to open an existing file, which is what the hero CTA does.
-    '/sdkjs/common/wasm/x2t/x2t.wasm.gz',
+    '/sdkjs/common/wasm/x2t/x2t.wasm.br',
   ];
 
   var requested = {};

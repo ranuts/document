@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Production smoke: the core suites against the deployed site, not a local
- * build (matrix section C "线上站"). Serial and patient: the first x2t.wasm.gz
+ * build (matrix section C "线上站"). Serial and patient: the first x2t.wasm
  * fetch (~10 MB) dominates and parallel workers would starve each other.
  *   PROD_URL=https://edit.chaxus.com pnpm exec playwright test -c playwright.prod.config.ts
  */

@@ -92,7 +92,7 @@ describe('the guard only claims failures that are its own', () => {
     registerOpenAttempt({ fileName: 'a.xlsx', fileType: 'xlsx' });
     const frame = fakeFrame();
     installOpenFailureGuard(frame.win);
-    frame.reject("X2T module failed to instantiate: Failed to fetch x2t WASM at '/sdkjs/.../x2t.wasm.gz' (404)");
+    frame.reject("X2T module failed to instantiate: Failed to fetch x2t WASM at '/sdkjs/.../x2t.wasm.br' (404)");
 
     expect(isOpenRetryInFlight()).toBe(true);
   });

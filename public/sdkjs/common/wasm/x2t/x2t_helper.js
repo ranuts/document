@@ -371,10 +371,12 @@
         this.wasmInstantiateError = null;
         this.onWasmInstantiateError = null;
         this.SCRIPT_PATH = '../../../../sdkjs/common/wasm/x2t/x2t.js'
-        // The raw x2t.wasm is ~40 MB, over Cloudflare Pages' 25 MiB per-file
-        // deploy limit, so only the gzipped copy is shipped and decompressed
-        // in the browser (see prepareWasmBinary).
-        this.WASM_GZ_PATH = '../../../../sdkjs/common/wasm/x2t/x2t.wasm.gz'
+        // The file under this name holds brotli bytes (6.6 MB, against 42.1 MB
+        // raw -- over Cloudflare Pages' 25 MiB per-file deploy limit). Every
+        // server we deploy to declares `Content-Encoding: br` for it
+        // (public/_headers, sws.toml, vite.config.ts), so the browser decodes
+        // it at the network layer and nothing here decompresses anything.
+        this.WASM_PATH = '../../../../sdkjs/common/wasm/x2t/x2t.wasm.br'
         // Total tries for that fetch, and the step of the linear backoff
         // between them (0.5 s, then 1 s). Small on purpose: a CDN blip is over
         // in a moment, and anything longer is time the user spends watching a
@@ -421,19 +423,7 @@
         this.initPromise = this.doInitialize();
         return this.initPromise;
     };
-    // Fetch the gzipped x2t WASM, decompress it in the browser, and stash the
-    // raw bytes on `window.Module.wasmBinary` BEFORE x2t.js runs. Emscripten
-    // checks `Module['wasmBinary']` first and then skips its own fetch of the
-    // raw `x2t.wasm` entirely, so only the ~10 MB .gz needs to be deployed
-    // (the raw 40 MB file exceeds Cloudflare Pages' 25 MiB per-file limit).
-    //
-    // Servers disagree on how they serve a `.gz` file: some send it with
-    // `Content-Encoding: gzip` (the browser has already decompressed the body
-    // by the time we read it), others serve the raw gzip bytes. Detect which
-    // by the leading magic bytes and only decompress a real gzip payload
-    // (`1f 8b`), passing through an already-raw wasm module (`00 61 73 6d`).
-    //
-    // Transient failures are asked again before anyone above hears about them:
+    // Fetch the x2t WASM, with transient failures asked again before anyone above hears about them:
     // this is a 9.4 MB asset off a CDN, and one bad answer to it currently
     // costs the whole open. Cloudflare Pages served a 500 for exactly this
     // file mid-run on 2026-08-20 (PR #159) and the editor reported the
@@ -446,7 +436,7 @@
     // attempts, so this does not add to the peak the streaming path exists to
     // keep down.
     X2TConverter.prototype.fetchWasmResponse = function () {
-        var gzPath = this.WASM_GZ_PATH;
+        var wasmPath = this.WASM_PATH;
         var attempts = this.WASM_FETCH_ATTEMPTS;
         var backoffMs = this.WASM_FETCH_BACKOFF_MS;
 
@@ -464,11 +454,11 @@
                     return attempt(n + 1);
                 });
             };
-            return fetch(gzPath).then(
+            return fetch(wasmPath).then(
                 function (response) {
                     if (response.ok) return response;
                     var failure = new Error(
-                        "Failed to fetch x2t WASM at '" + gzPath + "' (" + response.status + ')',
+                        "Failed to fetch x2t WASM at '" + wasmPath + "' (" + response.status + ')',
                     );
                     if (isTransientStatus(response.status)) return again(failure);
                     throw failure;
@@ -486,79 +476,14 @@
     };
 
     // Whether the module can be compiled straight off the network, without the
-    // decompressed 40.2 MB ever existing as one buffer. Checked up front so a
+    // decompressed 42.1 MB ever existing as one buffer. Checked up front so a
     // failure of the streaming path itself is never retried -- see
     // installStreamingInstantiate.
     X2TConverter.prototype.canStreamWasm = function () {
         return (
-            typeof DecompressionStream === 'function' &&
-            typeof ReadableStream === 'function' &&
-            typeof WebAssembly !== 'undefined' &&
-            typeof WebAssembly.instantiateStreaming === 'function'
+            typeof WebAssembly !== 'undefined' && typeof WebAssembly.instantiateStreaming === 'function'
         );
     };
-
-    /**
-     * Re-emit a body stream, having read just enough of it to tell gzip
-     * (`1f 8b`) from a raw wasm module (`00 61 73 6d`) -- servers disagree on
-     * how they serve a `.gz` file, and the sniff has to cost two bytes rather
-     * than the whole download.
-     */
-    function sniffAndRebuild(body) {
-        var reader = body.getReader();
-        var prefix = [];
-        var have = 0;
-        var finished = false;
-
-        var readPrefix = function () {
-            if (have >= 2 || finished) return Promise.resolve();
-            return reader.read().then(function (result) {
-                if (result.done) {
-                    finished = true;
-                    return;
-                }
-                prefix.push(result.value);
-                have += result.value.length;
-                return readPrefix();
-            });
-        };
-
-        return readPrefix().then(function () {
-            // Concatenate rather than index into the chunks: a reader may split
-            // the first two bytes across chunks, or hand back an empty one.
-            var head = new Uint8Array(have);
-            var at = 0;
-            for (var h = 0; h < prefix.length; h++) {
-                head.set(prefix[h], at);
-                at += prefix[h].length;
-            }
-            var isGzip = head.length > 1 && head[0] === 0x1f && head[1] === 0x8b;
-            var rebuilt = new ReadableStream({
-                start: function (controller) {
-                    for (var i = 0; i < prefix.length; i++) controller.enqueue(prefix[i]);
-                    if (finished) controller.close();
-                },
-                pull: function (controller) {
-                    if (finished) {
-                        controller.close();
-                        return;
-                    }
-                    return reader.read().then(function (result) {
-                        if (result.done) {
-                            finished = true;
-                            controller.close();
-                        } else {
-                            controller.enqueue(result.value);
-                        }
-                    });
-                },
-                cancel: function (reason) {
-                    return reader.cancel(reason);
-                },
-            });
-            return isGzip ? rebuilt.pipeThrough(new DecompressionStream('gzip')) : rebuilt;
-        });
-    }
 
     /**
      * Compile and instantiate the module as it arrives.
@@ -582,14 +507,14 @@
             self.fetchWasmResponse()
                 .then(function (response) {
                     if (!response.body) throw new Error('x2t WASM response has no body to stream');
-                    return sniffAndRebuild(response.body);
-                })
-                .then(function (stream) {
-                    // Our own Content-Type: the server's type for a .gz file is
-                    // whatever it happens to be, and instantiateStreaming
-                    // rejects anything that is not application/wasm.
+                    // Re-wrapped only to state the Content-Type: the body is
+                    // already the decoded module (the server declared
+                    // `Content-Encoding: br` and the browser undid it), but
+                    // instantiateStreaming rejects anything not labelled
+                    // application/wasm and we would rather not depend on each
+                    // server typing a `.wasm` file correctly.
                     return WebAssembly.instantiateStreaming(
-                        new Response(stream, { headers: { 'Content-Type': 'application/wasm' } }),
+                        new Response(response.body, { headers: { 'Content-Type': 'application/wasm' } }),
                         imports,
                     );
                 })
@@ -609,7 +534,7 @@
                     // condition recognises, and the original wording kept after
                     // it so classifyOpenFailure still reads the cause. Without
                     // the prefix only the allocation refusals reach the guard:
-                    // everything else (a 404 on x2t.wasm.gz, a dropped
+                    // everything else (a 404 on x2t.wasm, a dropped
                     // connection mid-stream) leaves successCallback uncalled
                     // and the user watching the spinner until doInitialize's
                     // INIT_TIMEOUT fires a minute later. On the buffered path
@@ -634,27 +559,24 @@
         window.Module = Object.assign({}, window.Module, { instantiateWasm: instantiateWasm });
     };
 
-    // Fallback for engines without streaming instantiation: fetch the gzip,
-    // inflate it whole, and hand emscripten the bytes. Emscripten checks
-    // `Module['wasmBinary']` first and then skips its own fetch of the raw
-    // `x2t.wasm` entirely, so only the ~10 MB .gz needs to be deployed (the
-    // raw 40 MB file exceeds Cloudflare Pages' 25 MiB per-file limit).
+    // Fallback for engines without streaming instantiation: buffer the module
+    // and hand emscripten the bytes. Emscripten checks `Module['wasmBinary']`
+    // first and then skips its own fetch entirely. This is the path guard 10
+    // (guards/wasm-binary-release.ts) exists to clean up after -- it puts the
+    // whole 42.1 MB in the frame at the moment x2t asks for its 283 MB heap,
+    // which is why it is the fallback and not the default.
     X2TConverter.prototype.prepareWasmBinary = function () {
         if (window.Module && window.Module.wasmBinary) return Promise.resolve();
 
-        return this.fetchWasmResponse().then(function (response) {
-            return response.arrayBuffer();
-        }).then(function (raw) {
-            var head = new Uint8Array(raw, 0, Math.min(2, raw.byteLength));
-            var isGzip = head[0] === 0x1f && head[1] === 0x8b;
-            if (!isGzip) return raw;
-            var stream = new Response(raw).body.pipeThrough(new DecompressionStream('gzip'));
-            return new Response(stream).arrayBuffer();
-        }).then(function (wasmBinary) {
-            // Pre-seed the global Module so x2t.js (which reuses an existing
-            // global Module) picks up the binary; preserve existing props.
-            window.Module = Object.assign({}, window.Module, { wasmBinary: wasmBinary });
-        });
+        return this.fetchWasmResponse()
+            .then(function (response) {
+                return response.arrayBuffer();
+            })
+            .then(function (wasmBinary) {
+                // Pre-seed the global Module so x2t.js (which reuses an existing
+                // global Module) picks up the binary; preserve existing props.
+                window.Module = Object.assign({}, window.Module, { wasmBinary: wasmBinary });
+            });
     };
 
     X2TConverter.prototype.loadScript = function () {
@@ -665,7 +587,7 @@
         // out of every subsequent attempt.
         if (this.hasScriptLoaded) return Promise.resolve()
 
-        // Streaming keeps the inflated module out of the peak; the buffered
+        // Streaming keeps the 42.1 MB module out of the peak; the buffered
         // path stays for engines that cannot stream.
         var prepared;
         if (this.canStreamWasm()) {

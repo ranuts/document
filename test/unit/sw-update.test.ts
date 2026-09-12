@@ -209,7 +209,7 @@ describe('public/sw.js decides for itself whether it can take over', () => {
     // editor still needs -- and users stop being stranded on old code.
     const worker = loadWorker({
       'document-editor-core-1787000000': [],
-      [OWN_RUNTIME]: ['/sdkjs/common/wasm/x2t/x2t.wasm.gz'],
+      [OWN_RUNTIME]: ['/sdkjs/common/wasm/x2t/x2t.wasm.br'],
     });
     await dispatch(worker, 'install');
     expect(worker.skipWaiting).toHaveBeenCalled();
@@ -250,10 +250,10 @@ describe('public/sw.js decides for itself whether it can take over', () => {
 
   it('stays waiting when the vendor tree changed under an open page', async () => {
     // A vendor bump is the one case where activating would pull sdk-all.js /
-    // x2t.wasm.gz / the font catalog out from under a live editor, which then
+    // x2t.wasm / the font catalog out from under a live editor, which then
     // lazy-loads the new build's copies into an old session.
     const worker = loadWorker({
-      'document-editor-runtime-9f2b1c4d5e6a': ['/sdkjs/common/wasm/x2t/x2t.wasm.gz', '/fonts/012'],
+      'document-editor-runtime-9f2b1c4d5e6a': ['/sdkjs/common/wasm/x2t/x2t.wasm.br', '/fonts/012'],
     });
     await dispatch(worker, 'install');
     expect(worker.skipWaiting).not.toHaveBeenCalled();
@@ -261,7 +261,7 @@ describe('public/sw.js decides for itself whether it can take over', () => {
 
   it('still honours SKIP_WAITING, the way out of the waiting case', async () => {
     const worker = loadWorker({
-      'document-editor-runtime-9f2b1c4d5e6a': ['/sdkjs/common/wasm/x2t/x2t.wasm.gz'],
+      'document-editor-runtime-9f2b1c4d5e6a': ['/sdkjs/common/wasm/x2t/x2t.wasm.br'],
     });
     worker.listeners.message({ data: { type: 'SKIP_WAITING' } });
     expect(worker.skipWaiting).toHaveBeenCalled();
@@ -350,7 +350,7 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     // is dead on arrival (no deploy requests /assets/<hash> again) and would
     // otherwise pile up deploy after deploy against MAX_RUNTIME_ITEMS.
     const runtime = fakeCache([
-      '/sdkjs/common/wasm/x2t/x2t.wasm.gz',
+      '/sdkjs/common/wasm/x2t/x2t.wasm.br',
       '/web-apps/apps/spreadsheeteditor/main/app.js',
       '/fonts/012',
       '/assets/index-deadbeef.js',
@@ -361,7 +361,7 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     await dispatch(worker, 'activate');
 
     expect(runtime.urls()).toEqual([
-      '/sdkjs/common/wasm/x2t/x2t.wasm.gz',
+      '/sdkjs/common/wasm/x2t/x2t.wasm.br',
       '/web-apps/apps/spreadsheeteditor/main/app.js',
       '/fonts/012',
     ]);
@@ -374,7 +374,7 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     // last copy in existence (the new deployment does not serve the retired
     // build's filenames), so its next lazy import() -- the agent panel, the
     // pending-open handoff -- gets the 404 branch and never loads.
-    const runtime = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.gz', '/assets/index-deadbeef.js']);
+    const runtime = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.br', '/assets/index-deadbeef.js']);
     const worker = loadWorker({ [OWN_RUNTIME]: runtime }, [{ id: 'window-1' }]);
 
     await dispatch(worker, 'activate');
@@ -389,7 +389,7 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     // own runtime cache -- the install check saw it empty and let us through,
     // and deleting it here is the mixed-version state that check exists to
     // prevent. Asked again at delete time, with a window open, it survives.
-    const stale = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.gz']);
+    const stale = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.br']);
     const stores = { 'document-editor-runtime-oldvendor': stale, [OWN_RUNTIME]: fakeCache([]) };
     const worker = loadWorker(stores, [{ id: 'window-1' }]);
 
@@ -399,7 +399,7 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
   });
 
   it('still sweeps a stale runtime cache when no window can be hurt by it', async () => {
-    const stale = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.gz']);
+    const stale = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.br']);
     const stores = { 'document-editor-runtime-oldvendor': stale, [OWN_RUNTIME]: fakeCache([]) };
     const worker = loadWorker(stores, []);
 
@@ -420,10 +420,10 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
   it('trims an app asset rather than the vendor binary the trim was protecting', async () => {
     // keys() is insertion-ordered, so a plain keys[0] takes the OLDEST entry --
     // exactly the vendor tree, fetched during the first open. Re-downloading
-    // x2t.wasm.gz and the font catalog is what the cache-first branch exists to
+    // x2t.wasm and the font catalog is what the cache-first branch exists to
     // prevent, and an /assets/<hash> from a retired build costs one request.
     const filler = Array.from({ length: 1999 }, (_, i) => `/web-apps/apps/filler-${i}.js`);
-    const runtime = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.gz', ...filler, '/assets/index-deadbeef.js']);
+    const runtime = fakeCache(['/sdkjs/common/wasm/x2t/x2t.wasm.br', ...filler, '/assets/index-deadbeef.js']);
     const worker = loadWorker({ [OWN_RUNTIME]: runtime });
 
     // A cache-first vendor binary: it misses, gets fetched, and trims.
@@ -433,7 +433,7 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     });
 
     await vi.waitFor(() => expect(runtime.urls()).not.toContain('/assets/index-deadbeef.js'));
-    expect(runtime.urls()).toContain('/sdkjs/common/wasm/x2t/x2t.wasm.gz');
+    expect(runtime.urls()).toContain('/sdkjs/common/wasm/x2t/x2t.wasm.br');
   });
 
   it('does not conjure a runtime cache for a visitor who has none', async () => {
