@@ -105,6 +105,17 @@ export function decodeAlphaPng(bytes) {
   let at = 0;
   for (let y = 0; y < height; y++) {
     const filter = raw[at++];
+    // Filter 0 is what encodeAlphaPng writes, and reconstructing it byte by
+    // byte is pure cost: read the alpha channel straight out of the row. These
+    // sprites are ~17 million pixels across the set, so the difference is the
+    // difference between a check that runs in CI and one that times out.
+    if (filter === 0) {
+      const row = y * width;
+      for (let x = 0; x < width; x++) alpha[row + x] = raw[at + x * 4 + 3];
+      raw.copy(previous, 0, at, at + stride);
+      at += stride;
+      continue;
+    }
     raw.copy(line, 0, at, at + stride);
     at += stride;
     // The five filters PNG defines; the encoder above only ever writes 0, but
