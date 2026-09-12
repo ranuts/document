@@ -1,6 +1,6 @@
+import { buildEncryptedOoxml } from './lib/cfb';
+import { buildXlsx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
-
-declare const XLSX: any;
 
 /**
  * Open-conversion failure must be visible and must not wedge the editor.
@@ -15,12 +15,14 @@ declare const XLSX: any;
  * asc_onError and frame rejections (a silently broken hook would make every
  * other suite look cleaner than it is).
  *
- * Two shapes of unusable input, because they fail in different places. Garbage
- * bytes are rejected by the signature sniff before anything is unpacked. A
- * truncated file is the one a user actually produces -- an upload that was
- * interrupted, a file copied off a full disk -- and it gets further in: the
- * local header says a real workbook, and only the central directory at the end
- * turns out not to be there. Whichever way it fails, the user must be told and
+ * Three shapes of unusable input, because they fail in different places.
+ * Garbage bytes are rejected before anything is unpacked. A truncated file --
+ * an upload that was interrupted, a file copied off a full disk -- gets
+ * further: the local header says a real workbook, and only the central
+ * directory at the end turns out not to be there. An encrypted workbook is not
+ * a zip at all: Office wraps the whole package in the pre-2007 OLE2 container,
+ * and nothing outside the file says so. All three are files a user will
+ * genuinely hand us, and whichever way each fails, the user must be told and
  * the editor must stay usable.
  */
 test.describe('open failure surfacing (real editor)', () => {
@@ -31,31 +33,34 @@ test.describe('open failure surfacing (real editor)', () => {
       label: 'garbage bytes',
       name: 'junk.xlsx',
       // No signature at all: rejected before anything is unpacked.
-      make: () => new TextEncoder().encode('this is not a workbook at all, just text').buffer,
+      bytes: () => new TextEncoder().encode('this is not a workbook at all, just text'),
     },
     {
       label: 'a workbook cut in half',
       name: 'truncated.xlsx',
-      // A real xlsx with its second half missing, which is what an
-      // interrupted upload leaves behind: the zip's local header is intact
-      // and its central directory is gone.
-      make: () => {
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(
-          wb,
-          XLSX.utils.aoa_to_sheet([
+      // What an interrupted upload leaves behind: the zip's local header is
+      // intact and its central directory is gone.
+      bytes: () => {
+        const whole = buildXlsx({
+          rows: [
             ['k', 'v'],
             ['truncated', 1],
-          ]),
-          'S',
-        );
-        const whole = new Uint8Array(XLSX.write(wb, { bookType: 'xlsx', type: 'array' }));
-        return whole.slice(0, Math.floor(whole.length / 2)).buffer;
+          ],
+        });
+        return whole.slice(0, Math.floor(whole.length / 2));
       },
+    },
+    {
+      label: 'a password-protected workbook',
+      name: 'locked.xlsx',
+      // Still named .xlsx, still handed over by a user who expects it to
+      // open. We have no key and never ask for one, so this must fail the
+      // same visible way rather than stall.
+      bytes: () => buildEncryptedOoxml(),
     },
   ] as const;
 
-  for (const { label, name, make } of UNUSABLE) {
+  for (const { label, name, bytes } of UNUSABLE) {
     test(`${label} named .xlsx raises asc_onError -82, ends the load mask and fails saves fast`, async ({
       page,
       l0,
@@ -71,11 +76,13 @@ test.describe('open failure surfacing (real editor)', () => {
       await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
 
       await page.evaluate(
-        async ({ fileName, source }) => {
-          const buffer = new Function(`return (${source})()`)() as ArrayBuffer;
-          await post('document:open-buffer', { fileName, buffer, readonly: false });
+        async ({ fileName, b64 }) => {
+          const bin = atob(b64);
+          const buffer = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) buffer[i] = bin.charCodeAt(i);
+          await post('document:open-buffer', { fileName, buffer: buffer.buffer, readonly: false });
         },
-        { fileName: name, source: make.toString() },
+        { fileName: name, b64: toBase64(bytes()) },
       );
 
       // The SDK error path ran: the vendor's own open-error dialog is up ...
