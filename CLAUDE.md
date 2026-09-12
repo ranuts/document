@@ -199,7 +199,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
 不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
 `test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
-`test/e2e/` 现有 36 个 spec，下面先说三条主线，再给全量清单：
+`test/e2e/` 现有 49 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -240,7 +240,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                 |
 | embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                      |
 | 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读） |
-| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）                                                                                                                                                                                                            |
+| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 10：40 MB x2t 二进制用完即还）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）                                                                                                                            |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                             |
 | 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                   |
 | 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                     |
@@ -792,6 +792,24 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   key），保存经编辑器内部 x2t 转换后由 `onlyoffice-file-stream` postMessage
   抛回页面（`OO_FILE_STREAM_ONLY` 抑制其自带下载）。旧 v9 方案那套 1207 行
   iframe patch 与混淆符号 hook 已全部删除。
+- **别去写 Docs Server 的 MockSocket，vendor 里已经有一个（2026-09-12）**：离线
+  包在 `sdkjs/<app>/sdk-all-min.js` 末尾追加了一段 IIFE，置 `window.isOffline=true`
+  并把 `DocsCoApi.prototype._initSocksJs` 换成**进程内应答器**——协同客户端照常讲
+  完整的服务端协议（auth / isSaveLock / saveChanges / getLock / documentOpen），只是
+  对着一个函数讲；auth 与 license 由 `web-apps/apps/<app>/main/app.js` 里的 `Offline`
+  控制器合成。自己再写一个 MockSocket 等于换一个等价实现，结构上零收益。它唯一没答
+  的是**变更流**（`saveChanges` 只 ack 不存、`authChanges` 恒空），真要做按变更粒度的
+  崩溃恢复才需要往那儿加。
+  同一段补丁还钉死了**x2t 的唯一接缝**：打开走
+  `AscCommon.x2t.convertToBin(url, title, fileType)` → `api.loadDocumentData({binary, media})`，
+  保存走 `_downloadAsFromLocal` → `AscCommon.x2t.convertFromBin(...)`。`AscCommon.x2t`
+  就是我们自己的 `x2t_helper.js`，所以"把 x2t 挪出编辑器 frame"是给两个方法加代理，
+  不是重写服务端；跨 realm 已实测安全（编辑器接受父 realm `structuredClone` 出来的
+  结果，`sameConstructor: false` 仍能打开并往返）。`test/e2e/offline-seam.spec.ts` 钉住
+  这四件事。收益是**生命周期不是隔离**：堆 ~340 MB 在 frame 里被钉死（`destroy()` 全
+  仓库没人调、且只丢 JS 引用），换成页面侧 worker 后可 terminate 回收，守卫 10 随之
+  不再需要；但**打开那一刻的峰值不变，所以这不是 #144 的修复**。见
+  docs/explorations/2026-09-12-server-mock-already-in-vendor.md。
 - **关键代码**：`lib/onlyoffice-editor.ts` 的 `createPersonalEditorInstance` /
   `handleFileStreamMessage` / `triggerPersonalDownloadAs` / `prepareEditorIframe`
   （最后一个含多个运行时守卫：品牌元素隐藏、SharedWorker 遮蔽、fetchFonts
