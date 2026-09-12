@@ -117,6 +117,63 @@ describe('font catalog integrity', () => {
   });
 });
 
+describe('font picker thumbnail sprites', () => {
+  /**
+   * The dropdown draws each font name as a tile cut out of a sprite, indexed by
+   * the font's position in `__fonts_infos`:
+   *
+   *     spriteThumbs.getImage(i)  ->  new Uint8ClampedArray(data.buffer, i * a, a)
+   *
+   * A catalog longer than the sprite therefore does not degrade -- it throws
+   * `RangeError: Invalid typed array length` the moment the reader scrolls to
+   * the bottom, then again on every scroll after that, and the document can no
+   * longer be edited (GitHub #218). That is exactly what the licensing sweep
+   * did: it appended nine families and left the vendor's 193-tile sprites
+   * alone.
+   *
+   * Upstream cannot hit this because `allfontsgen` writes AllFonts.js and the
+   * sprites together -- a reference deployment measures 144 families against
+   * 144 tiles. We edit the catalog by hand, so this is the check that stands in
+   * for that: after touching the catalog, run `node bin/font-thumbnails.mjs`.
+   */
+  const IMAGES = resolve(ROOT, 'public/sdkjs/common/Images');
+  const spriteNames = readdirSync(IMAGES).filter((name) => /^fonts_thumbnail.*\.png\.bin$/.test(name));
+
+  it('finds the sprites the picker can ask for (sanity)', () => {
+    // Two locale variants, five pixel ratios.
+    expect(spriteNames.length).toBe(10);
+  });
+
+  it('gives every family in the catalog a tile in every sprite', () => {
+    const families = infos.length;
+    expect(families).toBeGreaterThan(100);
+    for (const name of spriteNames) {
+      const header = readFileSync(resolve(IMAGES, name)).subarray(0, 12);
+      const tiles = header.readUInt32BE(8);
+      expect(tiles, `${name} has ${tiles} tiles for ${families} families`).toBeGreaterThanOrEqual(families);
+    }
+  });
+
+  it('keeps every sprite exactly as long as its header claims', () => {
+    // A truncated or over-long payload is the same crash by another route:
+    // the last tile's view would run past the buffer.
+    for (const name of spriteNames) {
+      const bytes = readFileSync(resolve(IMAGES, name));
+      const width = bytes.readUInt32BE(0);
+      const heightOne = bytes.readUInt32BE(4);
+      const tiles = bytes.readUInt32BE(8);
+      let offset = 12;
+      let pixels = 0;
+      while (offset < bytes.length) {
+        const value = bytes[offset++];
+        if (value === 0) pixels += bytes[offset++];
+        else pixels += 1;
+      }
+      expect(pixels, `${name} decodes to ${pixels} pixels`).toBe(width * heightOne * tiles);
+    }
+  });
+});
+
 describe('script fallback routing', () => {
   const familyAt = (cp: number): string | null => {
     for (let i = 0; i < ranges.length; i += 3) {

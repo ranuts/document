@@ -106,7 +106,7 @@ types/
 styles/
   base.css              # 全局样式（含 embed-mode 布局）
 public/               # v9 vendor（sdkjs / web-apps / x2t.wasm.gz / XOR 字体目录）+ 落地页、demo、SW
-bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js、build-pages.mjs（markdown→/help /changelog；由 vite 插件 `generated-pages` 在 build/dev 时渲染进 public/，产物不入库。它只是装配入口，各部分在 `bin/pages/`：constants / locales / ui / pages / entities / markdown / chrome / render-home / render-page；公开导出面仍从入口 re-export，调用方不用改）、sitemap-lastmod.mjs（改完落地页/内容后跑一次，按 git 提交日期刷新 sitemap 的 lastmod，`--check` 可校验）、x2t-memory-report.mjs（只读：打印 x2t 向浏览器要多少内存，以及静态/BSS 下界——vendor 升级后跑一次，判断 `initial` 是否仍然动不了）
+bin/                  # build.sh、test-e2e-docker.sh、font-catalog.mjs、bundle_single_html.js、build-pages.mjs（markdown→/help /changelog；由 vite 插件 `generated-pages` 在 build/dev 时渲染进 public/，产物不入库。它只是装配入口，各部分在 `bin/pages/`：constants / locales / ui / pages / entities / markdown / chrome / render-home / render-page；公开导出面仍从入口 re-export，调用方不用改）、sitemap-lastmod.mjs（改完落地页/内容后跑一次，按 git 提交日期刷新 sitemap 的 lastmod，`--check` 可校验）、font-thumbnails.mjs（字体下拉的缩略图精灵图，改完目录必跑，见下）、x2t-memory-report.mjs（只读：打印 x2t 向浏览器要多少内存，以及静态/BSS 下界——vendor 升级后跑一次，判断 `initial` 是否仍然动不了）
 content/              # 生成页面的 markdown 源（content/<locale>/*.md，frontmatter title/description）
 docs/                 # embed-api / fonts 文档、explorations/（每次改动的记录）、superpowers/plans/
 index.ts              # 编辑器入口（初始化事件、UI、PWA），挂在 editor.html
@@ -199,7 +199,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
 不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
 `test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
-`test/e2e/` 现有 51 个 spec，下面先说三条主线，再给全量清单：
+`test/e2e/` 现有 52 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -235,17 +235,17 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 
 **全量 spec 清单**（PR 档默认全跑；标 _opt-in_ 的靠环境变量开、进夜间）：
 
-| 面向              | spec                                                                                                                                                                                                                                                                                                                                                        |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                    |
-| embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                         |
-| 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读）    |
-| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 14：x2t 跑在 worker 里、流式实例化、闲置后连堆一起回收）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`bad-image-url-locale`（守卫 13） |
-| 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                                |
-| 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                      |
-| 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                        |
-| 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?saved=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                                  |
-| 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                    |
+| 面向              | spec                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                                                                      |
+| embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                                                                           |
+| 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读）                                                      |
+| 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 14：x2t 跑在 worker 里、流式实例化、闲置后连堆一起回收）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`font-picker-scroll`（字体列表滑到底不炸，#218）、`bad-image-url-locale`（守卫 13） |
+| 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                                                                                  |
+| 交互面（策略 §9） | `api-surface` _opt-in_ `API_SWEEP=1`、`shortcut-surface` _opt-in_ `SHORTCUT_SWEEP=1`、`ui-crawl` _opt-in_ `UI_CRAWL=1`（逐页签点遍工具栏按钮，归因到按钮）、`monkey` _opt-in_ `MONKEY=1`（定种子随机序列，可精确回放）                                                                                                                                                                                        |
+| 字体              | `font-substitution`（被替换的名字与背后的开源 family 指着同一位置，两次渲染逐像素相同）、`pdf-cjk-export`（纯中文文档导出 PDF 后墨迹不得消失——CFF 字体会让它变空白）                                                                                                                                                                                                                                          |
+| 本地历史          | `history-page`（分页/中文子串搜索/删除/清空/七天过期/首页披露）、`autosave-recovery`（真实编辑器：编辑→隐藏页面→快照→恢复条→存回；`?saved=` 刷新回同一篇；embed 不写历史）                                                                                                                                                                                                                                    |
+| 真实语料          | `corpus` _opt-in_ `CORPUS_DIR=…`（见上）                                                                                                                                                                                                                                                                                                                                                                      |
 
 另有三套独立配置：`playwright.pages.config.ts`（`bin/build.sh` + `wrangler pages dev`，
 复现 CF Pages 托管语义，CI job `e2e-pages`）、`playwright.browsers.config.ts`
@@ -985,12 +985,23 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
      排版与光栅就分家，`Hello` 显示成 `Fcjjm`。原始 catalog 267 个被引用位置全部
      满足这一条，PR #170 打破的正是它（它把替代字体的**文件名**写进了专有位置）。
      `test/unit/font-catalog-licensing.test.ts` 钉住这条不变式。
-  2. **新增 family = 位置 + `__fonts_infos` 行 + `g_fonts_selection_bin` 记录**，
-     三样缺一不可。少了第三样，匹配器按名字找不到，又变成同一种错位（本轮的 CJK
+  2. **新增 family = 位置 + `__fonts_infos` 行 + `g_fonts_selection_bin` 记录 +
+     十张缩略图精灵图各一块瓦片**，四样缺一不可。少了第三样，匹配器按名字找不到，又变成同一种错位（本轮的 CJK
      family 先踩了一次）。那个 blob 不是黑盒：阅读器在 `sdk-all.js` 里，
      `bin/lib/selection-bin.mjs` 双向实现，单测钉住"解码再编码逐字节还原"与
      "按字体 OS/2 重建的记录与 vendor 写的完全一致"（188 个文件）。
      metrics 缩放到 1000 em 用**整数截断**，四舍五入会差 1。
+     **第四样是 2026-09-12 补的，代价是 issue #218**：字体下拉里每个名字不是文字，
+     是从 `sdkjs/common/Images/fonts_thumbnail*.png.bin` 里按"字体在 `__fonts_infos`
+     里的位置"裁出来的一块瓦片，目录比精灵图长就不是降级而是
+     `RangeError: Invalid typed array length` —— 滑到底直接抛，之后每次滚动再抛一次，
+     文档没法编辑了。上游不会踩是因为 `allfontsgen` 一次性写出 AllFonts.js 和精灵图
+     （对照一个官方部署：144 families / 144 瓦片），我们是手改目录的。
+     改完目录跑 `node bin/font-thumbnails.mjs`（幂等，只补缺的；`--check` 只报不写），
+     `font-catalog-licensing.test.ts` 钉住"每张精灵图的瓦片数 ≥ family 数"且
+     "解码像素数正好等于 width×heightOne×count"，
+     `test/e2e/font-picker-scroll.spec.ts` 走用户路径把列表滑到底。见
+     docs/explorations/2026-09-12-font-picker-sprite-shorter-than-catalog.md。
   3. **回退区间背后的字体必须真的有那些字**。picker 查一次 `__fonts_ranges` 就
      结束，指到一个缺字的字体上就是空白、不会再找第二个——所以 CJK 回退用的
      Noto Sans SC 切的是**全量 CJK**（9.9 MB），只有显式点名的宋/仿/楷走

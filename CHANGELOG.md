@@ -120,6 +120,10 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Fixed
 
+- **Scrolling to the bottom of the font list no longer breaks the editor.** The
+  last nine fonts had no name to draw, and reaching them threw an error that
+  repeated on every scroll and left the document uneditable. All of them are
+  drawn now.
 - **An image that will not load now says so in your language.** When a picture
   inserted by URL could not be fetched, the editor reported it in Chinese --
   whatever language you were using -- and suggested a setting that does not
