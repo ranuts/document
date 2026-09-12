@@ -406,6 +406,27 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     expect(src).toMatch(/MANUAL: \$\{\{ github\.event_name == 'workflow_dispatch' \}\}/);
   });
 
+  it('fails the lint on a warning, and lints the scripts we actually ship', () => {
+    // oxlint exits 0 on warnings, so `lint:ts` used to be green with warnings
+    // in it -- two were introduced and merged on 2026-09-12 without anything
+    // noticing. --deny-warnings is what makes the job mean something.
+    const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')) as {
+      scripts: Record<string, string>;
+    };
+    expect(pkg.scripts['lint:ts']).toMatch(/oxlint --deny-warnings/);
+
+    // public/ used to be ignored wholesale, which took our own deploy-coupled
+    // scripts out of the lint along with the vendored trees: sw.js alone is
+    // ~500 lines of routing that decides whether a deploy reaches anybody.
+    const oxlint = JSON.parse(readFileSync(resolve(ROOT, '.oxlintrc.json'), 'utf8')) as {
+      ignorePatterns: string[];
+    };
+    expect(oxlint.ignorePatterns).not.toContain('**/public/**');
+    for (const vendored of ['public/sdkjs/**', 'public/web-apps/**', 'public/fonts/**']) {
+      expect(oxlint.ignorePatterns, vendored).toContain(vendored);
+    }
+  });
+
   it('drops the corpus fuzzer output without dropping real bug-report files', () => {
     // Byte soup minimized by a fuzzer until it broke a parser: "this editor
     // will not open it either" is not a finding, and 15 such files were red on

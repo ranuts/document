@@ -28,7 +28,7 @@ function remember(event) {
   if (!locale) return;
   try {
     document.cookie = 'locale=' + encodeURIComponent(locale) + ';path=/;max-age=31536000;samesite=lax';
-  } catch (e) {
+  } catch {
     /* cookies disabled: the URL still carries the language */
   }
   // Deliberately no preventDefault — the link navigates on its own, which is

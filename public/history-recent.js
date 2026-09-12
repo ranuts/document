@@ -18,7 +18,7 @@
     var request;
     try {
       request = indexedDB.open(DB_NAME);
-    } catch (error) {
+    } catch {
       return callback(null);
     }
     // Never create or upgrade from here: a landing page that has never opened a
@@ -26,7 +26,7 @@
     request.onupgradeneeded = function () {
       try {
         request.transaction.abort();
-      } catch (error) {
+      } catch {
         /* the open below resolves with an error either way */
       }
       callback(null);
@@ -55,7 +55,7 @@
           db.close();
           callback(null);
         };
-      } catch (error) {
+      } catch {
         db.close();
         callback(null);
       }

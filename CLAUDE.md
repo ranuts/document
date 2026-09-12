@@ -454,7 +454,13 @@ docs/explorations/2026-08-19-ci-e2e-sharding.md。
   的那一行，以及 `docs/**` 与本文件。共用页面（如 `public/embed-demo.html`，英文和中文落地页
   都链到它）必须用英文。复查见
   [docs/explorations/2026-07-25-english-first-comments.md](docs/explorations/2026-07-25-english-first-comments.md)。
-- **Lint**：oxlint（规则见 `.oxlintrc.json`）+ TypeScript 6 严格模式
+- **Lint**：oxlint（规则见 `.oxlintrc.json`）+ TypeScript 6 严格模式。
+  **`lint:ts` 带 `--deny-warnings`**——oxlint 对 warning 退 0，不加这个参数它等于没跑
+  （2026-09-12 一天里混进两个 warning 谁都没发现）。`.oxlintrc.json` 的 ignore **只排除
+  vendor 那几棵树**（`public/sdkjs/**` / `public/web-apps/**` / `public/fonts/**` 等），不要
+  改回整个 `public/**`：`sw.js`（500 行路由，决定一次部署能不能到达用户）、`sw-register.js`、
+  `landing-prefetch.js`、`open-local.js` 都是我们自己写的、随部署变化的脚本。两条都由
+  `test/unit/workflow-contract.test.ts` 钉住。
 - **格式化**：prettier（配置见 `.prettierrc.json`）
 - **TypeScript**：`strict: true`，`noImplicitAny: true`，目标 ESNext，模块解析 bundler
 - `baseUrl` 已移除（TypeScript 6 废弃），路径别名使用 `paths` + `@/*` 前缀
