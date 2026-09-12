@@ -63,12 +63,12 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
   loading.ts            # 加载状态 UI
   onlyoffice-editor.ts  # 编辑器生命周期门面：挂载/重建/loadEditorApi，并对外统一导出下面这些模块
   onlyoffice/           # 编辑器周边（2026-08-19 从 1975 行的单文件拆出，公开导出面不变）
-    iframe-guards.ts      # 12 条运行时守卫的编排；每条守卫一个文件在 guards/
+    iframe-guards.ts      # 13 条运行时守卫的编排；每条守卫一个文件在 guards/
     guards/               # chrome / shared-worker / fetch-fonts / image-pipeline /
                           # serverless-save / long-action / series-settings /
                           # font-loading / comment-selection / canvas-loss /
                           # wasm-binary-release / unload-prompt / hint-fallback /
-                          # about-source
+                          # about-source / bad-image-url
     open-state.ts         # 就绪、打开失败、frame 首个错误（三处共用的单一状态源）
     open-failure.ts       # 失败分类、-82 guard、环境类失败重开一次（经 setOpenRunner 注入避免环）
     font-system.ts        # 字体系统就绪判定 + awaitFontSystem（#144）
@@ -829,6 +829,11 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   （`?new=docx`）要到几分钟后的首次保存才加载 x2t，那时定时器早停、
   onDocumentReady 也早过了——所以它给 frame 的 `Module` 与 `calledRun` 装
   accessor 订阅，装上即算就位）、字体加载加速、
+  守卫 13（`guards/bad-image-url.ts`：离线补丁在 `loadDocument` 里用实例属性
+  把 `errorBadImageUrl` 盖成一句硬编码中文，而它本是 vendor 的标准 locale 键、45 种
+  语言都有译文——七种语言的用户插图失败时都看到中文，且文案让人去配我们**故意不设**的
+  `editorConfig.imageProxy`。守卫在原型上装 accessor 只吞这一个字面量，别的写入照过；
+  `test/unit/vendor-bad-image-url.test.ts` 钉住字面量与回退译文）、
   `installOpenFailureGuard`（打开转换失败 → asc_onError -82 + toast + 遮罩终止 +
   保存快速拒绝）——其中 image pipeline 修的是"文档含图片
   时保存令主线程永久卡死"：无服务器时 sendImgUrls 注册不了图片，DOCY
