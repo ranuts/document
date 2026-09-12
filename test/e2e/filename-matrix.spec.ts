@@ -1,4 +1,4 @@
-import { buildDocx, toBase64 } from './lib/ooxml';
+import { buildDocx, buildPptx, toBase64 } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
@@ -47,6 +47,34 @@ test.describe('filename matrix (real editor)', () => {
       }, `${stem}.xlsx`);
       expect(result.name).toBe(`${stem}.xlsx`);
       expect(result.csv).toBe(`k,v\nname,${stem}.xlsx`);
+    });
+  }
+
+  /**
+   * pptx, on the three names most likely to be mishandled on the way through
+   * x2t's filename sanitiser: CJK (the campaign's day-1 false alarm was
+   * pinned on exactly this), the characters the sanitiser strips
+   * (`&` `%` `'` `!`), and a name long enough to matter to a filesystem. The
+   * deck is the format the campaign's only P0 came from, and it is the one
+   * whose open path had no filename coverage at all.
+   */
+  for (const [label, stem] of NAMES.filter(([l]) => l === 'cjk' || l === 'unsafe-chars' || l === 'long')) {
+    test(`pptx named ${label} opens and round-trips under the same name`, async ({ page }) => {
+      const result = await page.evaluate(
+        async ({ fileName, pptxB64 }) => {
+          const bin = atob(pptxB64);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          await post('document:open-buffer', { fileName, buffer: bytes.buffer, readonly: false });
+          const saved = await post('document:save', {});
+          const out = new Uint8Array(await saved.file.arrayBuffer());
+          return { name: saved.file.name as string, magic: Array.from(out.slice(0, 2)), size: out.length };
+        },
+        { fileName: `${stem}.pptx`, pptxB64: toBase64(buildPptx(`filename matrix ${label}`)) },
+      );
+      expect(result.name).toBe(`${stem}.pptx`);
+      expect(result.magic).toEqual([0x50, 0x4b]);
+      expect(result.size).toBeGreaterThan(1000);
     });
   }
 
