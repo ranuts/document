@@ -1,8 +1,19 @@
 (function () {
     'use strict';
 
-    if (typeof window.AscCommon === 'undefined') {
-        window.AscCommon = {};
+    // This file runs in two places: the editor iframe, where the vendor loads
+    // it and `AscCommon.x2t` is what the offline patch calls for every open and
+    // save, and a dedicated worker (x2t.worker.js), where the same conversion
+    // code runs so x2t's 283 MB heap lives in a realm we can terminate. Only
+    // three things differ -- how the x2t script is loaded, where the fonts come
+    // from, and whether there is a document to download into -- and each is
+    // branched on at its own site. Everything else is shared on purpose: two
+    // definitions of what a conversion is would drift.
+    var globalScope = typeof window !== 'undefined' ? window : self;
+    var hasDocument = typeof document !== 'undefined';
+
+    if (typeof globalScope.AscCommon === 'undefined') {
+        globalScope.AscCommon = {};
     }
 
     function DataTypeChecker() {
@@ -502,7 +513,7 @@
      */
     X2TConverter.prototype.installStreamingInstantiate = function () {
         var self = this;
-        if (window.Module && window.Module.instantiateWasm) return;
+        if (globalScope.Module && globalScope.Module.instantiateWasm) return;
         var instantiateWasm = function (imports, successCallback) {
             self.fetchWasmResponse()
                 .then(function (response) {
@@ -556,7 +567,7 @@
                 });
             return {};
         };
-        window.Module = Object.assign({}, window.Module, { instantiateWasm: instantiateWasm });
+        globalScope.Module = Object.assign({}, globalScope.Module, { instantiateWasm: instantiateWasm });
     };
 
     // Fallback for engines without streaming instantiation: buffer the module
@@ -566,7 +577,7 @@
     // whole 42.1 MB in the frame at the moment x2t asks for its 283 MB heap,
     // which is why it is the fallback and not the default.
     X2TConverter.prototype.prepareWasmBinary = function () {
-        if (window.Module && window.Module.wasmBinary) return Promise.resolve();
+        if (globalScope.Module && globalScope.Module.wasmBinary) return Promise.resolve();
 
         return this.fetchWasmResponse()
             .then(function (response) {
@@ -575,7 +586,7 @@
             .then(function (wasmBinary) {
                 // Pre-seed the global Module so x2t.js (which reuses an existing
                 // global Module) picks up the binary; preserve existing props.
-                window.Module = Object.assign({}, window.Module, { wasmBinary: wasmBinary });
+                globalScope.Module = Object.assign({}, globalScope.Module, { wasmBinary: wasmBinary });
             });
     };
 
@@ -597,6 +608,22 @@
             prepared = this.prepareWasmBinary();
         }
         return prepared.then(() => new Promise((resolve, reject) => {
+            // In a worker there is no document to append a <script> to, and
+            // importScripts is synchronous -- which suits the emscripten glue
+            // fine, because the hook above has already been installed on the
+            // global Module by the time it runs.
+            if (!hasDocument) {
+                try {
+                    globalScope.importScripts(this.SCRIPT_PATH)
+                    this.hasScriptLoaded = true
+                    resolve()
+                } catch (error) {
+                    console.error('Failed to load X2T WASM script', error)
+                    reject(new Error('Failed to load X2T WASM script: ' + ((error && error.message) || error)))
+                }
+                return
+            }
+
             const script = document.createElement('script')
             script.src = this.SCRIPT_PATH
             script.onload = () => {
@@ -620,7 +647,7 @@
 
         return this.loadScript().then(function () {
             return new Promise(function (resolve, reject) {
-                var x2t = window.Module;
+                var x2t = globalScope.Module;
                 if (!x2t) {
                     reject(new Error('X2T module not found after script loading'));
                     return;
@@ -855,9 +882,15 @@
                         if (mime === 'application/octet-stream') {
                             mime = sniffImageMime(fileData) || 'application/octet-stream';
                         }
-                        var blob = new Blob([fileData], {type: mime});
-                        var mediaUrl = URL.createObjectURL(blob);
-                        media['media/' + file] = mediaUrl;
+                        // In a worker the blob URL would belong to the
+                        // worker's realm; hand the frame the bytes and let it
+                        // mint the URL it is going to hold on to.
+                        if (hasDocument) {
+                            var blob = new Blob([fileData], {type: mime});
+                            media['media/' + file] = URL.createObjectURL(blob);
+                        } else {
+                            media['media/' + file] = {bytes: fileData, mime: mime};
+                        }
                     } catch (error) {
                         console.warn('Failed to read media file ' + file + ':', error);
                     }
@@ -869,6 +902,9 @@
         return media;
     };
     X2TConverter.prototype.downloadFile = function (data, fileName) {
+        // Frame-only: the worker returns bytes and the frame's own instance is
+        // what the vendor calls to hand them to the host.
+        if (!hasDocument) return;
         // ── 对外提供文件流：把导出的文件字节 postMessage 给宿主窗口（父窗口/顶层），
         //    供宿主保存/上传。宿主设置 window.OO_FILE_STREAM_ONLY=true 时只给流、不触发浏览器下载。──
         try {
@@ -994,22 +1030,76 @@
         return null;
     };
 
+    // The catalog files are XOR-obfuscated over their first 32 bytes (see
+    // docs/fonts.md and bin/font-catalog.mjs, which carry the same key). The
+    // vendor's own fetchFonts does this in the editor frame; the worker has to
+    // do it for itself because AscFonts.g_font_infos is frame state.
+    var FONT_XOR_KEY = [160, 102, 214, 32, 20, 150, 71, 250, 149, 105, 184, 80, 176, 65, 73, 72];
+
+    function decodeFontBytes(buffer) {
+        var bytes = new Uint8Array(buffer);
+        var prefix = Math.min(32, bytes.length);
+        for (var i = 0; i < prefix; i++) bytes[i] ^= FONT_XOR_KEY[i % 16];
+        return bytes;
+    }
+
+    /**
+     * Write the fonts this conversion needs into the module's FS.
+     *
+     * In the editor frame the vendor hands them over: `AscCommon.fetchFonts`
+     * walks `AscFonts.g_font_infos` for the faces the open document flagged
+     * `NeedStyles`, fetches each one and de-obfuscates it. That list is frame
+     * state, so a worker cannot read it -- but it does not have to receive the
+     * bytes either, which is the whole reason this boundary is affordable: a
+     * trivial Latin document needs 14 files and 4.6 MB of them, a CJK PDF
+     * export 16 files and 25.4 MB, per conversion. The host sends the list
+     * (`setFontSources`, a few KB) and the worker fetches the same URLs off the
+     * same HTTP and Service Worker cache the frame would have hit.
+     */
     X2TConverter.prototype.fetchFonts = async function () {
-        let that = this;
-        return new Promise(function (resolve, reject) {
-            window["AscCommon"]['fetchFonts'](function (data) {
-                try {
-                    if (data && data.length > 0) {
-                        data.forEach(function (obj) {
-                            that.x2tModule.FS.writeFile('/working/fonts/' + obj['fileName'], obj['binary']);
-                        })
+        var that = this;
+        var vendorFetchFonts = globalScope.AscCommon && globalScope.AscCommon['fetchFonts'];
+        if (typeof vendorFetchFonts === 'function') {
+            return new Promise(function (resolve, reject) {
+                vendorFetchFonts(function (data) {
+                    try {
+                        if (data && data.length > 0) {
+                            data.forEach(function (obj) {
+                                that.x2tModule.FS.writeFile('/working/fonts/' + obj['fileName'], obj['binary']);
+                            })
+                        }
+                        resolve();
+                    } catch (error) {
+                        reject(error);
                     }
-                    resolve();
-                } catch (error) {
-                    reject(error);
-                }
+                });
             });
-        });
+        }
+
+        var sources = this.fontSources || [];
+        if (!sources.length) return;
+        return Promise.all(
+            sources.map(function (source) {
+                return fetch(source.url)
+                    .then(function (response) {
+                        if (!response.ok) throw new Error('HTTP ' + response.status);
+                        return response.arrayBuffer();
+                    })
+                    .then(function (buffer) {
+                        that.x2tModule.FS.writeFile('/working/fonts/' + source.fileName, decodeFontBytes(buffer));
+                    })
+                    // One missing face is a substitution, not a failed
+                    // conversion -- the frame-side path swallows these too.
+                    .catch(function (error) {
+                        console.warn('[x2t] font ' + source.fileName + ' unavailable:', error && error.message);
+                    });
+            }),
+        ).then(function () {});
+    };
+
+    /** Fonts the next conversion should write, as `{ fileName, url }`. */
+    X2TConverter.prototype.setFontSources = function (sources) {
+        this.fontSources = sources || [];
     };
 
     X2TConverter.prototype.convertFromBin = async function (obj) {
@@ -1214,4 +1304,6 @@
     X2TConverter.prototype['convertDocument'] = X2TConverter.prototype.convertDocument;
     X2TConverter.prototype['downloadFile'] = X2TConverter.prototype.downloadFile;
     X2TConverter.prototype['destroy'] = X2TConverter.prototype.destroy;
+    X2TConverter.prototype['setFontSources'] = X2TConverter.prototype.setFontSources;
+    X2TConverter.prototype['initialize'] = X2TConverter.prototype.initialize;
 })()

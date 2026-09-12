@@ -83,9 +83,28 @@ describe('vendor contract sentinel', () => {
       // open (a Cloudflare 500 mid-run, PR #159). A re-vendored helper would
       // drop the retry as silently as it would drop the streaming path.
       'WASM_FETCH_ATTEMPTS',
+      // The dual-environment branches guard 14 depends on. This file runs both
+      // in the editor frame and inside x2t.worker.js, and a re-vendored copy
+      // that dropped them would put x2t's 283 MB heap back in the frame for
+      // the life of the frame, silently.
+      'globalScope',
+      'hasDocument',
+      'importScripts',
+      'setFontSources',
     ]) {
       expect(src.includes(symbol), `x2t_helper: missing '${symbol}'`).toBe(true);
     }
+  });
+
+  it('ships the worker entry guard 14 loads x2t through', () => {
+    const src = read('public/sdkjs/common/wasm/x2t/x2t.worker.js');
+    // It must load the same helper rather than reimplement a conversion:
+    // format codes, the doc/xls/ppt two-step, the PDF-changes merge and the
+    // exit-code classification all live in that one file.
+    expect(src).toContain("importScripts('x2t_helper.js')");
+    expect(src).toContain('setFontSources');
+    expect(src).toContain('convertToBin');
+    expect(src).toContain('convertFromBin');
   });
 
   it('x2t.wasm is the verified 9.4 build (content hash pinned; re-verify every guard on change)', () => {
