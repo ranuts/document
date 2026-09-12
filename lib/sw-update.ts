@@ -9,7 +9,7 @@
  * public/sw.js). When it waits, activating it later deletes the previous
  * build's caches, and a page that keeps running the old build with a document
  * open would from then on lazy-load pieces of the new build (sdk-all.js,
- * x2t.wasm.gz, fonts) into an old session -- a mixed-version editor. So the
+ * x2t.wasm, fonts) into an old session -- a mixed-version editor. So the
  * page promotes a waiting worker only when no document is open, and reloads
  * once it takes control.
  */

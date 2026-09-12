@@ -128,7 +128,7 @@ describe('x2t_helper streaming instantiation', () => {
   /**
    * The wasm fetch survives a transient answer.
    *
-   * Cloudflare Pages served a 500 for x2t.wasm.gz mid-run on 2026-08-20
+   * Cloudflare Pages served a 500 for x2t.wasm mid-run on 2026-08-20
    * (PR #159) and the editor told the user the document could not be opened.
    * The only recovery above this is rebuilding the whole editor frame, which
    * re-fetches everything -- and in that run it landed in the same bad window.

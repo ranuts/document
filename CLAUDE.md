@@ -841,17 +841,29 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   sendImgUrls + convertFromBin medias 兜底三件套，见
   docs/explorations/2026-08-15-image-save-hang-root-cause-fix.md。全部
   都是真实生产 bug，别删）。
-- **部署约束**：x2t.wasm 只发布 gzip（9,483,006 字节，**zopfli `--i15` 压的**——比
-  vendor 原始压缩小 377 KB，比 Node zlib 小 575 KB，解压后逐字节一致；zopfli 不是仓库
-  依赖，vendor 升级后手动重跑 `zopfli --gzip --i15 -c x2t.wasm > x2t.wasm.gz`，
-  `vendor-contract` 的尺寸门会提醒），裸 40 MB 文件超 CF Pages 25 MB 限制、不入库。
-  **契约钉的是解压后内容的 sha256**，不是 `.gz` 容器的——否则 provenance 会被压缩器
-  的选择绑住。加载走 `x2t_helper` 的 `Module.instantiateWasm` 钩子 +
-  `instantiateStreaming` 直接吃 `DecompressionStream`——**解压后的 40.2 MB 副本
-  不存在**，否则它会压在"向浏览器要 283 MB 堆 + 编译 40 MB 代码"的同一刻（#144）。
+- **部署约束（2026-09-12 改为浏览器原生解压）**：x2t.wasm 以 **brotli** 发布，文件名
+  `x2t.wasm.br`（6,898,179 字节，`brotli -q 11`；对比最好的 gzip（zopfli `--i15`）
+  9,483,006、裸 42,111,200——全站最大的那个下载省掉 2.58 MB。brotli 不是仓库依赖，
+  vendor 升级后手动重跑 `brotli -q 11 -c x2t.wasm > x2t.wasm.br`，`vendor-contract`
+  的尺寸门会提醒）。三处托管各自声明 `Content-Encoding: br`（`public/_headers` /
+  `sws.toml` / `vite.config.ts` 的 `precompressedAssets` 中间件），**浏览器在网络层
+  就解压完了，我们这边一行解压代码都没有**。
+  **`.br` 这个扩展名和 `_headers` 里"没有 Content-Type 规则"两件事都是承重的**：
+  `wrangler pages dev`（`e2e-pages` 跑的那个）会按可压缩性**重新压一遍并覆盖掉
+  `Content-Encoding`**，于是预压缩的文件被二次编码，而浏览器没有任何 API 能解 brotli
+  ——整个套件会红在 `ran: false`。它不碰 `application/octet-stream`，而认不出的扩展名
+  正好是这个类型；一旦改名成 `.wasm` 或在 `_headers` 里给它加上
+  `Content-Type: application/wasm`，编辑器在那个 job 里就不再加载。`instantiateStreaming`
+  要的 `application/wasm` 由加载器自己贴（`new Response(response.body, {...})`），不依赖托管。
+  **契约钉的是解压后内容的 sha256**（`7db02f5c…`，从 gzip 迁到 brotli 后逐字节不变），
+  不是容器的——否则 provenance 会被压缩器的选择绑住。加载走 `x2t_helper` 的
+  `Module.instantiateWasm` 钩子 + `instantiateStreaming` 直接吃响应体——**解压后的
+  42.1 MB 副本不存在**，否则它会压在"向浏览器要 283 MB 堆 + 编译 42 MB 代码"的同一刻（#144）。
+  见 docs/explorations/2026-09-12-x2t-wasm-content-encoding.md。
   钩子里**绝不能同步抛**（`createWasm()` 会变成致命 `false`），分配失败**绝不回落
   到缓冲路径**（在已耗尽的 renderer 上再要 40 MB 只会更糟）。无流式能力的引擎才走
-  `prepareWasmBinary` 缓冲兜底 + 守卫 10 回收。三个符号由 `vendor-contract` 钉住。
+  `prepareWasmBinary` 缓冲兜底（现在只有 fetch + arrayBuffer 三行）+ 守卫 10 回收。
+  三个符号由 `vendor-contract` 钉住。
   **钩子的失败要报两次，缺一次就有人干等**：rethrow 带 `X2T module` 前缀（给
   `installOpenFailureGuard` 认，它据此分类并重开），同时把失败记在实例上并通知在等的
   `doInitialize`（钩子跑的时候 `loadScript()` 早就 resolve 了，`successCallback` 与
@@ -866,7 +878,7 @@ v7 代码分支（OO_VARIANT、页面级 x2t 打开转换、empty_bin 模板、v
   的 CDN 500 / 内存拒绝都落到默认分支 `document`，报"文件可能已损坏"且不重试。
   **这个 fetch 会重试**（`fetchWasmResponse`，两份实现同策略）：5xx / 408 / 429 与
   fetch 本身 reject 重试，共 3 次、线性退避 0.5s+1s；404 / 403 立即失败（部署事实，
-  重试只是拖延错误）。9.4 MB 的 CDN 资源答坏一次就等于整篇文档打不开——2026-08-20
+  重试只是拖延错误）。6.6 MB 的 CDN 资源答坏一次就等于整篇文档打不开——2026-08-20
   CF Pages 给这个文件回了个 500，PR #159 的 preview smoke 因此变红，而这条路上唯一
   的补救原本是整个编辑器重开（贵得多，那次也没救回来）。重试的是 fetch 不是
   instantiate，所以"分配失败绝不回落到缓冲路径"照旧；不留跨次引用，不加重内存峰值。

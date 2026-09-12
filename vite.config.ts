@@ -51,6 +51,40 @@ const cleanUrls = (publicDirName: string): Plugin => {
   };
 };
 
+// The x2t WASM is stored as brotli bytes under its plain `.wasm` name, so the
+// browser decodes it at the network layer and `instantiateStreaming` can
+// compile it straight off the response (see public/_headers for why). Vite
+// serves public/ and dist/ as plain files and would hand over the compressed
+// bytes unlabelled, so dev and preview need the same declaration Cloudflare
+// Pages and static-web-server get from their own config.
+const BROTLI_ASSETS = ['/sdkjs/common/wasm/x2t/x2t.wasm.br'];
+
+const precompressedAssets = (): Plugin => {
+  const middleware = (
+    req: import('node:http').IncomingMessage,
+    res: import('node:http').ServerResponse,
+    next: () => void,
+  ): void => {
+    const pathname = (req.url ?? '/').split('?')[0];
+    if (BROTLI_ASSETS.includes(pathname)) {
+      // Content-Encoding only: the loader labels the response
+      // application/wasm itself, and a compressible Content-Type is exactly
+      // what makes wrangler re-compress the file (see public/_headers).
+      res.setHeader('Content-Encoding', 'br');
+    }
+    next();
+  };
+  return {
+    name: 'precompressed-assets',
+    configureServer(server) {
+      server.middlewares.use(middleware);
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(middleware);
+    },
+  };
+};
+
 // Render the markdown-sourced pages (/help, /changelog, ... see
 // bin/build-pages.mjs) into publicDir before Vite copies it. The outputs are
 // gitignored: generating at build/dev time means a CHANGELOG or help edit
@@ -103,7 +137,7 @@ export default defineConfig(() => {
         },
       },
     },
-    plugins: [generatedPages(), cleanUrls(publicDirName)],
+    plugins: [generatedPages(), precompressedAssets(), cleanUrls(publicDirName)],
     resolve: {
       // One wildcard, matching tsconfig's `"@/*": ["./*"]`, so `@/lib/x`
       // resolves the same way for tsc and for the bundler. The five

@@ -11,7 +11,7 @@ const CORE_CACHE = `document-editor-core-${CACHE_VERSION}`;
 // one of these two, so while the runtime cache carried the build version,
 // EVERY deploy would have discarded the outgoing build's vendor assets --
 // which is dangerous only when they actually differ. An open editor whose
-// x2t.wasm.gz / sdk-all.js / font catalog were deleted lazy-loads the new
+// x2t.wasm / sdk-all.js / font catalog were deleted lazy-loads the new
 // build's copies into an old session (mixed versions), and avoiding that is
 // why sw.js does not skipWaiting() on install. Key the cache by content and
 // the overwhelmingly common deploy -- app code changed, vendor did not --
@@ -162,7 +162,7 @@ const limitCacheSize = (name, maxItems) => {
         // Evict an app asset before a vendor one. keys() is insertion-ordered,
         // so the plain keys[0] took the OLDEST entry -- which is precisely the
         // vendor tree, fetched during the first open of the session: the trim
-        // would throw away x2t.wasm.gz and the font catalog and leave a much
+        // would throw away x2t.wasm and the font catalog and leave a much
         // younger /assets/<hash> from a build nobody runs any more.
         const victim = keys.find((request) => !isVendorAsset(request)) || keys[0];
         cache.delete(victim).then(() => limitCacheSize(name, maxItems));
@@ -182,7 +182,7 @@ self.addEventListener('install', (event) => {
       // page of the outgoing build still needs (see wouldDiscardVendorAssets).
       // When it would, stay waiting: a page with a document open is
       // deliberately not reloaded on controllerchange, so its later lazy loads
-      // (sdk-all.js, x2t.wasm.gz, fonts, spellcheck) would come from the NEW
+      // (sdk-all.js, x2t.wasm, fonts, spellcheck) would come from the NEW
       // build and run mixed with the old one. Somebody then has to ask for the
       // switch -- public/sw-register.js on the landing page, or lib/sw-update.ts
       // once no document is open, or simply every tab of the site closing.

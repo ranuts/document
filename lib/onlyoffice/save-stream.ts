@@ -54,7 +54,7 @@ type EmbeddedSaveRequest = {
 let embeddedSaveRequest: EmbeddedSaveRequest | null = null;
 
 // requestSaveDocument budget. Readiness (onDocumentReady) may take long on a
-// cold, slow link: the editor first downloads and inflates x2t.wasm.gz
+// cold, slow link: the editor first downloads and inflates x2t.wasm
 // (~10 MB) before it can import the document. The hard timeout stays above
 // the readiness wait plus the export retry window so a slow-but-alive save
 // still gets through; dead saves fail fast through documentOpenError.
@@ -285,7 +285,7 @@ export function requestSaveDocument(
     }, 8000);
 
     // Generous on purpose: on a slow link the very first save (or a save
-    // requested right after open) also pays for the ~10 MB x2t.wasm.gz fetch
+    // requested right after open) also pays for the ~10 MB x2t.wasm fetch
     // and the document import; measured 26-50 s from a mainland connection to
     // the CDN edge, which used to trip the old 60 s cap while the stream was
     // still on its way. Failures no longer need the timeout to surface: an

@@ -220,7 +220,7 @@ describe('deploy-coupled assets use network-first', () => {
     expect(strategyFor('/web-apps/apps/api/documents/api.js')).toBe('cache-first');
     // The catalog and the x2t WASM were the first entries on this path, and stay on it.
     expect(strategyFor('/fonts/103')).toBe('cache-first');
-    expect(strategyFor('/sdkjs/common/wasm/x2t/x2t.wasm.gz')).toBe('cache-first');
+    expect(strategyFor('/sdkjs/common/wasm/x2t/x2t.wasm.br')).toBe('cache-first');
     // Patched vendor files are covered too: bin/build.sh hashes what it serves,
     // so shipping a new x2t_helper.js renames the cache and empties it.
     expect(strategyFor('/sdkjs/common/wasm/x2t/x2t_helper.js')).toBe('cache-first');

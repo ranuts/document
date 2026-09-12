@@ -13,7 +13,6 @@ export {
   isHtmlDocument,
   isZipContainer,
   saveFileToDisk,
-  sniffAndRebuild,
   x2tInstantiateError,
   CANVAS_PDF_INPUT_FORMAT,
   PDF_OUTPUT_FORMAT,

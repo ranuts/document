@@ -39,6 +39,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- **The editor's conversion engine is 2.6 MB smaller to download.** It is the
+  largest single file the app fetches, and the browser now unpacks it while it
+  arrives instead of the page unpacking it afterwards. Nothing to do; the first
+  save on a slow connection just starts sooner.
+
 - **The language menu is now a plain list of links.** Every language is named in
   its own words -- English is no longer the one abbreviated "EN" among six full
   names -- with a check on the one you are reading. Each entry is a real link, so

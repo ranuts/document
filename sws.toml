@@ -69,8 +69,12 @@ Cache-Control = "public, max-age=31536000, immutable"
 Content-Type = "font/ttf"
 X-Robots-Tag = "noindex"
 
-# The x2t WASM (9.9 MB gz): the single largest download, vendor-versioned.
+# The x2t WASM: the single largest download, vendor-versioned. The file holds
+# brotli bytes; Content-Encoding is what makes the browser decode them (see the
+# same rule in public/_headers). Without it the editor gets an opaque blob and
+# never loads.
 [[advanced.headers]]
-source = "/sdkjs/common/wasm/x2t/x2t.wasm.gz"
+source = "/sdkjs/common/wasm/x2t/x2t.wasm.br"
 [advanced.headers.headers]
+Content-Encoding = "br"
 Cache-Control = "public, max-age=31536000, immutable"

@@ -5,7 +5,7 @@
  * vendor assets an open page still needs (see wouldDiscardVendorAssets in
  * public/sw.js); otherwise the new worker waits, because activating it deletes
  * the previous build's caches and a page still running the old build would
- * then lazy-load pieces of the new one (sdk-all.js, x2t.wasm.gz, fonts) into an
+ * then lazy-load pieces of the new one (sdk-all.js, x2t.wasm.br, fonts) into an
  * old session. So for that case something has to ask for the switch, and
  * lib/sw-update.ts was written to do it "when no document is open".
  *

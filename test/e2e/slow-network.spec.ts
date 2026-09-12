@@ -5,7 +5,7 @@ declare function post(type: string, payload?: Record<string, unknown>): Promise<
 
 /**
  * Cold open + first save under a throttled link (L4, matrix section C
- * "网络"). The first save pays for the ~10 MB x2t.wasm.gz plus the import;
+ * "网络"). The first save pays for the ~6.6 MB x2t.wasm.br plus the import;
  * on a mainland-to-CDN link that measured 26-50 s and used to trip the old
  * 60 s save timeout ("Save request timed out" while the file was still on
  * its way). Emulate a slow but common profile with CDP and assert the whole

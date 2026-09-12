@@ -12,6 +12,8 @@ import { describe, expect, it } from 'vitest';
  * `e2e-pages` job (wrangler pages dev) and the production smoke.
  */
 const ROOT = resolve(__dirname, '../..');
+/** The x2t module, shipped brotli-compressed under its plain name. */
+const WASM_PATH = '/sdkjs/common/wasm/x2t/x2t.wasm.br';
 const read = (rel: string) => readFileSync(resolve(ROOT, rel), 'utf8');
 
 /** Parse the simple `_headers` format into { path: { header: value } }. */
@@ -54,8 +56,18 @@ describe('public/_headers', () => {
     }
   });
 
+  it('declares the x2t wasm pre-encoded, which is the only thing that makes it loadable', () => {
+    // The file under that name holds brotli bytes (6.6 MB, against 42.1 MB
+    // raw and 9.0 MB for the best gzip). The browser decoding it at the
+    // network layer is what lets `instantiateStreaming` compile the module
+    // straight off the response with nothing in our code decompressing
+    // anything. Drop this line and every host serves an opaque blob: x2t
+    // never instantiates and no document opens at all.
+    expect(rules[WASM_PATH]?.['content-encoding']).toBe('br');
+  });
+
   it('keeps hashed/immutable assets long-lived: build assets, font catalog, x2t wasm', () => {
-    for (const p of ['/assets/*', '/fonts/*', '/sdkjs/common/wasm/x2t/x2t.wasm.gz', '/ran-tokens.*.css']) {
+    for (const p of ['/assets/*', '/fonts/*', WASM_PATH, '/ran-tokens.*.css']) {
       expect(cc(p), p).toMatch(/max-age=31536000.*immutable/);
     }
   });
@@ -117,8 +129,17 @@ describe('sws.toml (self-hosted Docker)', () => {
     expect(cc('**')).toBe('no-cache');
   });
 
+  it('declares the x2t wasm pre-encoded, the same as _headers', () => {
+    // Same reason as the Pages rule: the file holds brotli bytes under its
+    // plain name, so without this the self-hosted image serves an opaque blob
+    // and no document opens. test/e2e/docker-cache-headers.spec.ts checks the
+    // header on a running container.
+    const rule = rules.find((entry) => entry.source === WASM_PATH);
+    expect(rule?.headers['content-encoding']).toBe('br');
+  });
+
   it('pins the same immutable set as _headers (hashed assets, font catalog, x2t wasm)', () => {
-    for (const source of ['/assets/**', '/fonts/*', '/sdkjs/common/wasm/x2t/x2t.wasm.gz', '/ran-tokens.*.css']) {
+    for (const source of ['/assets/**', '/fonts/*', WASM_PATH, '/ran-tokens.*.css']) {
       expect(cc(source), source).toMatch(/max-age=31536000.*immutable/);
     }
   });
