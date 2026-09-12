@@ -79,14 +79,25 @@ Section 5(a) -- modifications. The vendor tree under public/ is not pristine.
 The changes made to it are:
 
   * public/sdkjs/common/wasm/x2t/x2t_helper.js -- patched to load the x2t
-    WebAssembly module through `Module.instantiateWasm` from a gzip-compressed
-    response, so the 40 MB binary is never materialised in memory, and to
-    report load failures to the host page. See
-    docs/changelogs/2026-08-20-issue-144-memory-and-delivery.md.
-  * public/sdkjs/common/wasm/x2t/x2t.wasm -- published gzip-compressed only
-    (x2t.wasm.gz), because the uncompressed file exceeds the host's per-file
-    limit. The decompressed bytes are unmodified and pinned by sha256 in
+    WebAssembly module through `Module.instantiateWasm` straight off the
+    response, so the 42 MB binary is never materialised in memory, and to
+    report load failures to the host page. Also made to run in a worker as
+    well as in the editor frame (it branches on `typeof document` in three
+    places), so conversion happens in a realm whose memory can be handed
+    back. See docs/changelogs/2026-08-20-issue-144-memory-and-delivery.md and
+    docs/explorations/2026-09-12-x2t-in-a-worker.md.
+  * public/sdkjs/common/wasm/x2t/x2t.worker.js -- added by this project. It
+    loads the file above and drives it; no vendor code is reimplemented in it.
+  * public/sdkjs/common/wasm/x2t/x2t.wasm -- published brotli-compressed only
+    (x2t.wasm.br), because the uncompressed file exceeds the host's per-file
+    limit; every host declares `Content-Encoding: br` for it, so the browser
+    decodes it. The decompressed bytes are unmodified and pinned by sha256 in
     test/unit/vendor-contract.test.ts.
+  * public/sdkjs/common/Images/fonts_thumbnail*.png and *.png.bin -- the font
+    picker's name sprites, extended from 193 tiles to 202 so every family in
+    the catalog has one. The vendor's own tiles are untouched; the nine added
+    are rendered by bin/font-thumbnails.mjs. Without them the editor threw on
+    scrolling the font list to the end (GitHub #218).
   * public/web-apps/apps/*/main/locale/*.json -- missing keys filled in from
     en.json by bin/locale-fill.mjs for the seven site languages. Untranslated
     keys returned `undefined` and crashed the tooltip renderer. Values only;
@@ -94,13 +105,17 @@ The changes made to it are:
   * public/web-apps help content trimmed from the shipped tree.
   * public/fonts/ -- the font catalog's proprietary font files were replaced
     with redistributable open-source families (see docs/font-licenses.md and
-    docs/changelogs/2026-08-22-font-licensing.md). The catalog registry itself
-    is unchanged in shape; only the files behind the entries differ.
+    docs/changelogs/2026-08-22-font-licensing.md).
+  * public/sdkjs/common/AllFonts.js -- the catalog registry that goes with
+    those files. Rows for the replaced families now point at the open-source
+    face standing in for each, so a document asking for a proprietary name
+    still resolves, and nine families were added for scripts the remaining set
+    did not cover.
 
 Nothing else in public/sdkjs/ or public/web-apps/ is edited. The behavioural
 patches this site needs are applied at runtime from lib/onlyoffice/guards/,
-which leaves the vendor files themselves byte-identical to the build they came
-from.
+which leaves the rest of the vendor files byte-identical to the build they
+came from.
 
 
 2. x2t WebAssembly converter

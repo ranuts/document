@@ -55,6 +55,9 @@ public/fonts/<new-name>` (pick an unused file name; by convention a
    `["My Font", P, 0, -1, -1, -1, -1, -1, -1]`. Add extra alias rows (for
    example a localized display name) pointing at the same `P` so documents
    using either name resolve to the file.
+4. Run `node bin/font-thumbnails.mjs`. The font picker draws names as tiles cut
+   out of a sprite, indexed by the row's position -- a catalog longer than the
+   sprite throws rather than degrading (see below).
 
 ## PDF export fonts (x2t path)
 
@@ -155,12 +158,14 @@ position the replacement already occupies. `test/unit/font-catalog-licensing.ts`
 pins the invariant; `test/e2e/font-substitution.spec.ts` renders the same string
 under both names and requires the two to be pixel-identical.
 
-### Adding a family needs three things, not one
+### Adding a family needs four things, not one
 
-A new family is a position in `__fonts_files`, a row in `__fonts_infos` **and a
-record in `g_fonts_selection_bin`**. Miss the third and the matcher cannot find
-the family by name, which lands you back in the shifted-glyph failure by a
-different route (this is what the added CJK families hit first).
+A new family is a position in `__fonts_files`, a row in `__fonts_infos`, **a
+record in `g_fonts_selection_bin`** and **a tile in every thumbnail sprite**.
+Miss the third and the matcher cannot find the family by name, which lands you
+back in the shifted-glyph failure by a different route (this is what the added
+CJK families hit first). Miss the fourth and the editor stops working the
+moment a reader scrolls the font list to the end.
 
 `g_fonts_selection_bin` used to be treated as unmodifiable. It is not: its
 reader is in `sdk-all.js`, and `bin/lib/selection-bin.mjs` implements the same
@@ -168,6 +173,59 @@ layout in both directions. `test/unit/font-selection-bin.test.ts` checks that
 decode -> encode reproduces the shipped blob byte for byte, and that a record
 rebuilt from a font's own OS/2 + head + post tables equals the record the
 vendor's generator wrote for that file (188 of them do map one to one).
+
+### The font picker's name sprites (GitHub #218)
+
+The dropdown does not draw font names as text. Each row is a tile cut out of a
+sprite, indexed by the font's position in `__fonts_infos`:
+
+```js
+s = Math.floor(store.at(n).get('imgidx') / r);
+spriteThumbs.getImage(s);
+// -> s.data.set(new Uint8ClampedArray(this.data.buffer, i * a, a))
+```
+
+A catalog longer than the sprite does not degrade -- that view constructor
+throws `RangeError: Invalid typed array length`, and it throws again on every
+subsequent scroll, leaving the document uneditable. The licensing sweep
+appended nine families and left the vendor's 193-tile sprites alone; that is
+issue #218.
+
+Upstream cannot hit this because `allfontsgen` writes `AllFonts.js` and the
+sprites in one pass (a reference deployment measures 144 families against 144
+tiles). Running that generator here is not an option: it derives families from
+the files' own name tables, and **60 of our 202 rows are aliases** -- `Arial`,
+`Calibri`, `Microsoft YaHei`, `KaiTi` and the rest, names no file carries. It
+would drop every one of them, and with them every document that asks for a
+proprietary font by name.
+
+So the sprites are ours to keep in step:
+
+```sh
+node bin/font-thumbnails.mjs          # append what is missing, rebuild the pngs
+node bin/font-thumbnails.mjs --check  # report drift, write nothing
+node bin/font-thumbnails.mjs --calibrate  # print the vendor's type metrics
+```
+
+It is idempotent -- the tiles that came with the vendor are never re-rendered --
+and it writes all ten sprites (`fonts_thumbnail` and `fonts_thumbnail_ea`, at
+ratios 1 / 1.25 / 1.5 / 1.75 / 2), because the picker indexes every one of them
+by the same font position. Names are rendered in their own face in a headless
+Chromium, with metrics measured off the vendor's tiles rather than guessed.
+
+Each sprite ships twice: the run-length alpha mask (`*.png.bin`) that every
+browser reads, and an RGBA `.png` only the ONLYOFFICE desktop shell reads. The
+png is rebuilt from the mask rather than appended to, so the two cannot
+disagree. The format, which nothing else documents: a 12-byte big-endian header
+(`width`, `heightOne`, `count`), then an alpha mask where a byte is one pixel's
+coverage, except `0`, which is followed by a one-byte run length of fully
+transparent pixels.
+
+`test/unit/font-catalog-licensing.test.ts` pins all of it -- tile count against
+family count, decoded pixel count against the header, and the png's alpha
+channel against the mask byte for byte. `test/e2e/font-picker-scroll.spec.ts`
+walks the user's path: open the list, scroll to the end, require the last row to
+have its name drawn.
 
 ### What still is not verifiable from the suite alone
 
