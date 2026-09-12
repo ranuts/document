@@ -1,6 +1,8 @@
 import { createObjectURL } from 'ranuts/utils';
 import { View } from 'ranui/builder';
 import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
+import { t } from '@ranuts/shared/i18n';
+import 'ranui/message';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { showLoading } from './loading';
 import { startDocumentSession } from './history/session';
@@ -123,6 +125,35 @@ export const onOpenDocument = (): void => {
   fileInput.click();
 };
 
+/**
+ * Why `?file=` / `?src=` did not open, in the reader's own language.
+ *
+ * This used to be `alert()` with an English string built from the exception,
+ * which for the most common failure said "Failed to open document: Failed to
+ * fetch" -- a browser modal, untranslated, naming nothing the reader can act
+ * on. That message is what a cross-origin refusal looks like: `fetch` rejects
+ * with a TypeError and no status, because the response was never handed to the
+ * page. A site that does not send `Access-Control-Allow-Origin` cannot be read
+ * by this one, and no amount of retrying changes that.
+ *
+ * A dropped connection rejects identically, and the two cannot be told apart
+ * from here -- the browser deliberately does not say which it was. So the
+ * message covers both and points at the way out either way: download the file
+ * and open it from the device, which always works because that path never
+ * leaves the browser.
+ */
+function reportUrlOpenFailure(error: unknown): void {
+  // A TypeError from fetch means the request never produced a response;
+  // anything else already carries a status or a parse failure worth quoting.
+  const unreachable = error instanceof TypeError;
+  const detail = error instanceof Error ? error.message : String(error);
+  const text = unreachable ? t('openUrlUnreachable') : `${t('openUrlFailed')}${detail}`;
+  // ranui/message registers a global `window.message` toast API (untyped).
+  const toast = (window as unknown as { message?: { error?: (msg: string) => void } }).message;
+  if (toast?.error) toast.error(text);
+  else console.error(text);
+}
+
 export const openDocumentFromUrl = async (
   url: string,
   fileName?: string,
@@ -199,7 +230,7 @@ export const openDocumentFromUrl = async (
     startDocumentSession({ title: docFileName, origin: 'url', docId: options?.docId });
   } catch (error) {
     console.error('Error opening document from URL:', error);
-    alert(`Failed to open document: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    reportUrlOpenFailure(error);
     if (showControlPanelFn) {
       showControlPanelFn();
     }
