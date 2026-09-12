@@ -28,12 +28,14 @@
  *   node bin/font-thumbnails.mjs --check    # report drift, write nothing
  *   node bin/font-thumbnails.mjs --calibrate # print vendor vs rendered metrics
  *
- * Only the `.bin` sprites are written. The `.png` twins beside them are read
- * exclusively when `supportBinaryFormat` is false, which requires the
- * ONLYOFFICE desktop shell (`Common.Controllers.Desktop.isActive()`); no
- * browser takes that path.
+ * Both files are written. The `.png` twin beside each `.bin` is read only when
+ * `supportBinaryFormat` is false, which requires the ONLYOFFICE desktop shell
+ * (`Common.Controllers.Desktop.isActive()`) -- no browser takes that path --
+ * but two encodings of one picture drift unless one is generated from the
+ * other, so the PNG is rebuilt from the mask every time.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { encodeAlphaPng } from './lib/png.mjs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -83,6 +85,15 @@ function readCatalog() {
   return { files, infos };
 }
 
+/** The PNG twin's pixel size, straight out of IHDR. */
+function pngSize(path) {
+  if (!existsSync(path)) return null;
+  const bytes = readFileSync(path);
+  // signature (8) + length (4) + 'IHDR' (4)
+  if (bytes.length < 24) return null;
+  return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
+}
+
 /** Header plus the raw RLE payload; the payload is never rewritten. */
 function readSprite(path) {
   const bytes = readFileSync(path);
@@ -116,10 +127,9 @@ function encodeTile(alpha) {
   return Buffer.from(out);
 }
 
-/** Decode a sprite far enough to measure one tile, for --calibrate. */
-function decodeTile(sprite, index) {
-  const perTile = sprite.width * sprite.heightOne;
-  const alpha = new Uint8Array(perTile * sprite.count);
+/** The whole mask, one byte of coverage per pixel. */
+function decodeSheet(sprite) {
+  const alpha = new Uint8Array(sprite.width * sprite.heightOne * sprite.count);
   const bytes = sprite.payload;
   let o = 0;
   let a = 0;
@@ -128,7 +138,13 @@ function decodeTile(sprite, index) {
     if (value === 0) a += bytes[o++];
     else alpha[a++] = value;
   }
-  return alpha.subarray(index * perTile, (index + 1) * perTile);
+  return alpha;
+}
+
+/** One tile out of the mask, for --calibrate. */
+function decodeTile(sprite, index) {
+  const perTile = sprite.width * sprite.heightOne;
+  return decodeSheet(sprite).subarray(index * perTile, (index + 1) * perTile);
 }
 
 function inkBox(alpha, width, height) {
@@ -218,6 +234,10 @@ async function main() {
   if (!sprites.length) throw new Error('no fonts_thumbnail*.png.bin found');
 
   const short = sprites.filter((sprite) => sprite.count < families);
+  const stalePng = sprites.filter((sprite) => {
+    const size = pngSize(sprite.path.replace(/\.bin$/, ''));
+    return !size || size.width !== sprite.width || size.height !== sprite.heightOne * sprite.count;
+  });
   console.log(`catalog: ${families} families; sprites: ${sprites.map((s) => s.count).join(', ')}`);
 
   if (mode === '--calibrate') {
@@ -229,16 +249,23 @@ async function main() {
     return;
   }
 
-  if (!short.length) {
-    console.log('every sprite already covers the catalog');
-    return;
-  }
   if (mode === '--check') {
     for (const sprite of short) {
       console.error(`${sprite.name}: ${sprite.count} tiles for ${families} families`);
     }
+    for (const sprite of stalePng) {
+      console.error(`${sprite.name}.png does not match its mask`);
+    }
+    if (!short.length && !stalePng.length) {
+      console.log('every sprite already covers the catalog, and every png matches its mask');
+      return;
+    }
     console.error('\nRun `node bin/font-thumbnails.mjs` after changing the catalog.');
     process.exit(1);
+  }
+  if (!short.length && !stalePng.length) {
+    console.log('every sprite already covers the catalog, and every png matches its mask');
+    return;
   }
 
   // One browser for every missing tile of every sprite.
@@ -290,6 +317,15 @@ async function main() {
     header.writeUInt32BE(families, 8);
     writeFileSync(sprite.path, Buffer.concat([header, sprite.payload, ...chunks]));
     console.log(`${sprite.name}: ${sprite.count} -> ${families} tiles (+${chunks.length})`);
+  }
+
+  // The PNG twin is rebuilt from the mask rather than appended to, so the two
+  // cannot disagree about anything -- not the tile count, not a pixel.
+  for (const sprite of new Set([...short, ...stalePng])) {
+    const grown = readSprite(sprite.path);
+    const png = sprite.path.replace(/\.bin$/, '');
+    writeFileSync(png, encodeAlphaPng(decodeSheet(grown), grown.width, grown.heightOne * grown.count));
+    console.log(`${sprite.name}.png rebuilt from its mask (${grown.count} tiles)`);
   }
 }
 
