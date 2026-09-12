@@ -26,20 +26,10 @@ test('bulk comment actions without a cell selection are a no-op, not an uncaught
 
   // Deliberately no click into the grid: this is the state the crawl hit.
   const result = await page.evaluate(async () => {
-    const visit = (win: Window): any => {
-      try {
-        const a = (win as any).Asc?.editor;
-        if (a && typeof a.asc_RemoveAllComments === 'function') return a;
-      } catch {
-        /* cross-origin */
-      }
-      for (let i = 0; i < win.frames.length; i++) {
-        const f = visit(win.frames[i]);
-        if (f) return f;
-      }
-      return null;
-    };
-    const api = visit(window);
+    const visit = (): any =>
+      (window.__ooFrames.find((win) => typeof (win as any).Asc?.editor?.asc_RemoveAllComments === 'function') as any)
+        ?.Asc.editor ?? null;
+    const api = visit();
     if (!api) return { error: 'no api' };
     // Force the state the crawl reached after a long click sequence: the
     // worksheet reports no selection. (Right after load there is one, so the

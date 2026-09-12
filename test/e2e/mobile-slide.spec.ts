@@ -29,20 +29,12 @@ test.use({ ...devices['Pixel 5'] });
 // same-origin iframe, and each test needs its window to read the SDK state.
 const INSTALL_FRAME_FINDER = () => {
   (window as any).__findEditorFrame = () => {
-    const visit = (win: Window): Window | null => {
-      try {
+    const visit = (): Window | null =>
+      window.__ooFrames.find((win) => {
         const api = (win as any).Asc?.editor;
-        if (api && 'isDocumentLoadComplete' in api) return win;
-      } catch {
-        /* cross-origin */
-      }
-      for (let i = 0; i < win.frames.length; i++) {
-        const found = visit(win.frames[i]);
-        if (found) return found;
-      }
-      return null;
-    };
-    return visit(window);
+        return api && 'isDocumentLoadComplete' in api;
+      });
+    return visit();
   };
 };
 
@@ -55,16 +47,7 @@ test.describe('presentation on a phone-sized viewport (real editor)', () => {
     await page.goto('/editor?new=pptx');
     await page.waitForFunction(
       () => {
-        const visit = (win: Window): boolean => {
-          try {
-            if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-          return false;
-        };
-        return visit(window);
+        return Boolean(window.__ooFrames.find((win) => (win as any).Asc?.editor?.isDocumentLoadComplete));
       },
       null,
       { timeout: 150_000 },
@@ -166,16 +149,7 @@ test.describe('presentation on a phone-sized viewport (real editor)', () => {
     await page.reload();
     await page.waitForFunction(
       () => {
-        const visit = (win: Window): boolean => {
-          try {
-            if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-          return false;
-        };
-        return visit(window);
+        return Boolean(window.__ooFrames.find((win) => (win as any).Asc?.editor?.isDocumentLoadComplete));
       },
       null,
       { timeout: 150_000 },
@@ -226,16 +200,7 @@ test.describe('other formats on a phone-sized viewport (real editor)', () => {
       await page.goto(`/editor?new=${type}`);
       await page.waitForFunction(
         () => {
-          const visit = (win: Window): boolean => {
-            try {
-              if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
-            } catch {
-              /* cross-origin */
-            }
-            for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-            return false;
-          };
-          return visit(window);
+          return Boolean(window.__ooFrames.find((win) => (win as any).Asc?.editor?.isDocumentLoadComplete));
         },
         null,
         { timeout: 150_000 },
@@ -274,16 +239,7 @@ test.describe('viewport follow on a live editor (real editor)', () => {
     await page.goto('/editor?new=pptx');
     await page.waitForFunction(
       () => {
-        const visit = (win: Window): boolean => {
-          try {
-            if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-          return false;
-        };
-        return visit(window);
+        return Boolean(window.__ooFrames.find((win) => (win as any).Asc?.editor?.isDocumentLoadComplete));
       },
       null,
       { timeout: 150_000 },
@@ -345,16 +301,7 @@ test.describe('viewport follow on a live editor (real editor)', () => {
     await page.goto('/editor?new=pptx');
     await page.waitForFunction(
       () => {
-        const visit = (win: Window): boolean => {
-          try {
-            if ((win as any).Asc?.editor?.isDocumentLoadComplete) return true;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-          return false;
-        };
-        return visit(window);
+        return Boolean(window.__ooFrames.find((win) => (win as any).Asc?.editor?.isDocumentLoadComplete));
       },
       null,
       { timeout: 150_000 },

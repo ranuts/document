@@ -48,17 +48,12 @@ const openWorkbook = async (fileName: string) => {
 
 /** Is there an x2t module anywhere in the page's frames? There must not be. */
 const moduleInAnyFrame = () => {
-  const visit = (win: Window): boolean => {
-    try {
+  return Boolean(
+    window.__ooFrames.find((win) => {
       const module = (win as unknown as { Module?: { calledRun?: boolean } }).Module;
-      if (module && 'calledRun' in module) return true;
-    } catch {
-      /* cross-origin */
-    }
-    for (let i = 0; i < win.frames.length; i++) if (visit(win.frames[i])) return true;
-    return false;
-  };
-  return visit(window);
+      return module && 'calledRun' in module;
+    }),
+  );
 };
 
 test.describe('wasm memory held by an open document (real editor)', () => {

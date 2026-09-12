@@ -23,20 +23,8 @@ test.describe('image insert + save: xlsx / pptx (real editor)', () => {
     page.evaluate(() => {
       (window as any).__insertAndSave = async (kind: string) => {
         const findApi = (): any => {
-          const visit = (win: Window): any => {
-            try {
-              const a = (win as any).Asc?.editor;
-              if (a && a.isDocumentLoadComplete && a.isLoadFullApi) return a;
-            } catch {
-              /* cross-origin */
-            }
-            for (let i = 0; i < win.frames.length; i++) {
-              const f = visit(win.frames[i]);
-              if (f) return f;
-            }
-            return null;
-          };
-          return visit(window);
+          const win = window.__ooFrames.readyEditor();
+          return win ? (win as any).Asc.editor : null;
         };
         const start = Date.now();
         let api = findApi();

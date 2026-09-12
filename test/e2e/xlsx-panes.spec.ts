@@ -60,24 +60,15 @@ test.describe('xlsx frozen panes / autofilter (real editor)', () => {
         for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
         // Same workbook without panes: freeze via API, then save.
         await post('document:open-buffer', { fileName: 'freeze-api.xlsx', buffer: bytes.buffer, readonly: false });
-        const visit = (win: Window): any => {
-          try {
-            const a = (win as any).Asc?.editor;
-            if (a && typeof a.asc_freezePane === 'function' && a.isDocumentLoadComplete && a.isLoadFullApi) return a;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const f = visit(win.frames[i]);
-            if (f) return f;
-          }
-          return null;
+        const visit = (): any => {
+          const win = window.__ooFrames.readyEditor() as any;
+          return typeof win?.Asc.editor.asc_freezePane === 'function' ? win.Asc.editor : null;
         };
         const t = Date.now();
-        let api = visit(window);
+        let api = visit();
         while (!api && Date.now() - t < 60_000) {
           await new Promise((r) => setTimeout(r, 300));
-          api = visit(window);
+          api = visit();
         }
         if (!api) return { error: 'no api' };
         // Select B2 so the freeze splits above/left of it, then toggle.

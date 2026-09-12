@@ -71,22 +71,16 @@ test.describe('format parity: docx / pptx (real editor)', () => {
       const result = await page.evaluate(
         async ({ name, b64 }) => {
           const readRestriction = (): number | null => {
-            const visit = (win: Window): number | null => {
-              try {
-                const api = (win as any).Asc?.editor;
-                if (api && typeof api.asc_setRestriction === 'function' && typeof api.restrictions === 'number') {
-                  return api.restrictions;
-                }
-              } catch {
-                /* cross-origin */
-              }
-              for (let i = 0; i < win.frames.length; i++) {
-                const found = visit(win.frames[i]);
-                if (found !== null) return found;
-              }
-              return null;
+            // Read the value off the window rather than returning it from the
+            // walk: 0 is a legitimate restriction.
+            const visit = (): number | null => {
+              const win = window.__ooFrames.find((w) => {
+                const api = (w as any).Asc?.editor;
+                return typeof api?.asc_setRestriction === 'function' && typeof api.restrictions === 'number';
+              }) as any;
+              return win ? win.Asc.editor.restrictions : null;
             };
-            return visit(window);
+            return visit();
           };
           const waitFor = async (expected: number) => {
             const start = Date.now();

@@ -44,20 +44,11 @@ test.describe('warm service worker (real editor)', () => {
       const saved = await post('document:save', {});
       const out = XLSX.read(new Uint8Array(await saved.file.arrayBuffer()), { type: 'array' });
       const frameControlled = (() => {
-        const visit = (win: Window): boolean | null => {
-          try {
-            if (win.location.pathname.includes('/web-apps/apps/'))
-              return Boolean(win.navigator.serviceWorker.controller);
-          } catch {
-            return null;
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const r = visit(win.frames[i]);
-            if (r !== null) return r;
-          }
-          return null;
+        const visit = (): boolean | null => {
+          const win = window.__ooFrames.find((w) => w.location.pathname.includes('/web-apps/apps/'));
+          return win ? Boolean(win.navigator.serviceWorker.controller) : null;
         };
-        return visit(window);
+        return visit();
       })();
       return {
         name: saved.file.name as string,

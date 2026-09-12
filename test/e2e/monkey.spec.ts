@@ -238,21 +238,10 @@ test.describe('seeded monkey', () => {
 
       // Error collector + probe, same shape as the other sweeps.
       await page.evaluate(() => {
-        const visit = (win: Window): any => {
-          try {
-            const scope = win as any;
-            if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function')
-              return scope.Asc.editor;
-          } catch {
-            /* cross-origin */
-          }
-          for (let i = 0; i < win.frames.length; i++) {
-            const f = visit(win.frames[i]);
-            if (f) return f;
-          }
-          return null;
-        };
-        const api = visit(window);
+        const visit = (): any =>
+          (window.__ooFrames.find((win) => typeof (win as any).Asc?.editor?.asc_registerCallback === 'function') as any)
+            ?.Asc.editor ?? null;
+        const api = visit();
         (window as any).__mkErrors = [];
         api.asc_registerCallback('asc_onError', (id: unknown, level: unknown) =>
           (window as any).__mkErrors.push(`${id}/${level}`),
@@ -260,21 +249,10 @@ test.describe('seeded monkey', () => {
       });
       const probe = () =>
         page.evaluate(() => {
-          const visit = (win: Window): any => {
-            try {
-              const scope = win as any;
-              if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function')
-                return { api: scope.Asc.editor, win };
-            } catch {
-              /* cross-origin */
-            }
-            for (let i = 0; i < win.frames.length; i++) {
-              const f = visit(win.frames[i]);
-              if (f) return f;
-            }
-            return null;
-          };
-          const found = visit(window);
+          const editorWin = window.__ooFrames.find(
+            (win) => typeof (win as any).Asc?.editor?.asc_registerCallback === 'function',
+          ) as any;
+          const found = editorWin ? { api: editorWin.Asc.editor, win: editorWin } : null;
           if (!found)
             return {
               loaded: false,
@@ -320,21 +298,12 @@ test.describe('seeded monkey', () => {
         });
       const callApi = (name: string) =>
         page.evaluate((name) => {
-          const visit = (win: Window): any => {
-            try {
-              const scope = win as any;
-              if (scope.Asc?.editor && typeof scope.Asc.editor.asc_registerCallback === 'function')
-                return scope.Asc.editor;
-            } catch {
-              /* cross-origin */
-            }
-            for (let i = 0; i < win.frames.length; i++) {
-              const f = visit(win.frames[i]);
-              if (f) return f;
-            }
-            return null;
-          };
-          const api = visit(window);
+          const api =
+            (
+              window.__ooFrames.find(
+                (win) => typeof (win as any).Asc?.editor?.asc_registerCallback === 'function',
+              ) as any
+            )?.Asc.editor ?? null;
           if (!api || typeof api[name] !== 'function') return 'absent';
           try {
             api[name]();

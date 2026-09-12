@@ -29,26 +29,17 @@ test.describe('pdf open / annotate / save (real pdf editor)', () => {
       const exported = await post('document:save', { targetExt: 'PDF' });
       const pdf = new Uint8Array(await exported.file.arrayBuffer());
       await post('document:open-buffer', { fileName: 'annot.pdf', buffer: pdf.buffer, readonly: false });
-      const visit = (win: Window): any => {
-        try {
-          const a = (win as any).Asc?.editor;
-          // Do NOT poke getPDFDoc() before the load completes: it materialises
-          // an empty document and the incoming binary then fails to open.
-          if (a && a.isDocumentLoadComplete && a.isLoadFullApi && typeof a.AddFreeTextAnnot === 'function') return a;
-        } catch {
-          /* cross-origin */
-        }
-        for (let i = 0; i < win.frames.length; i++) {
-          const f = visit(win.frames[i]);
-          if (f) return f;
-        }
-        return null;
+      // Do NOT poke getPDFDoc() before the load completes: it materialises an
+      // empty document and the incoming binary then fails to open.
+      const visit = (): any => {
+        const win = window.__ooFrames.readyEditor() as any;
+        return typeof win?.Asc.editor.AddFreeTextAnnot === 'function' ? win.Asc.editor : null;
       };
       const start = Date.now();
-      let api = visit(window);
+      let api = visit();
       while (!api && Date.now() - start < 60_000) {
         await new Promise((r) => setTimeout(r, 300));
-        api = visit(window);
+        api = visit();
       }
       if (!api) return { error: 'no pdf api' };
       let annotError = '';
