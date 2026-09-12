@@ -1,4 +1,4 @@
-import { buildDocx, toBase64, zipEntryNames, zipEntryText } from './lib/ooxml';
+import { buildDocx, buildPptx, toBase64, zipEntryNames, zipEntryText } from './lib/ooxml';
 import { expect, test } from './lib/l0';
 
 declare const XLSX: any;
@@ -35,6 +35,14 @@ test.describe('comments survive a save (real editor)', () => {
           // current selection; select the first paragraph's text first.
           api.SelectAll?.();
           api.pluginMethod_AddComment({ Text: text, UserName: 'E2E', Time: String(Date.now()), Solved: false });
+        } else if (kind === 'pptx') {
+          // Slide: the comment is anchored to whatever is selected, so give it
+          // a slide to land on first.
+          const data = new Asc.asc_CCommentData();
+          data.asc_putText(text);
+          data.asc_putUserName('E2E');
+          data.asc_putTime(String(Date.now()));
+          api.asc_addComment(data);
         } else {
           // Cell: a comment is a *cell* comment only when bDocument is false;
           // otherwise it lands in the workbook-level store (workbookComments.bin,
@@ -94,5 +102,27 @@ test.describe('comments survive a save (real editor)', () => {
     const part = names.find((n) => /^xl\/comments\d*\.xml$/.test(n));
     expect(part, `comments part missing in ${names.join(',')}`).toBeTruthy();
     expect((await zipEntryText(bytes, part!)) || '').toContain('cell note');
+  });
+
+  test('pptx: a comment added via the API is written to the deck', async ({ page }) => {
+    const result = await page.evaluate(
+      async (pptxB64) => {
+        const bin = atob(pptxB64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        await post('document:open-buffer', { fileName: 'comment.pptx', buffer: bytes.buffer, readonly: false });
+        return (window as any).__addCommentAndSave('slide note 幻灯片批注', 'pptx');
+      },
+      toBase64(buildPptx('Commented Slide')),
+    );
+    expect(result.error).toBeUndefined();
+    const bytes = new Uint8Array(Buffer.from(result.b64, 'base64'));
+    const names = zipEntryNames(bytes);
+    // The deck writes either the classic comments part or the modern one,
+    // depending on the vendor build; both are the same user-visible thing.
+    const part = names.find((n) => /^ppt\/(comments|modernComments)\/.*\.xml$/.test(n));
+    expect(part, `comments part missing in ${names.join(',')}`).toBeTruthy();
+    const xml = (await zipEntryText(bytes, part!)) || '';
+    expect(xml).toContain('slide note');
   });
 });
