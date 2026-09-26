@@ -55,3 +55,35 @@ TypeScript / Vite / pnpm workspace 结构，修复可复现的问题。
 嵌入命令只由直接父窗口发送；父窗口来源改变后应重新加载编辑器建立通信。
 宿主使用正式的 `document:save` / `document:saved` 接口获取文件，决定后续上传。
 原来由顶层页面直接监听底层文件流的测试路径已迁移到直接宿主。
+
+## SEO / GEO 复查
+
+- 2026-09-26 再次运行页面生成与 SEO 契约测试：2 个文件、2413 项通过。
+  覆盖 canonical、hreflang 互指、语言入口、sitemap 路由、JSON-LD 解析与实体引用。
+- 线上首页与 robots.txt 用 curl GET 返回 200；随机不存在路径返回 404。
+  首页具有自引用 canonical、index/follow、单个 H1 和静态正文。
+  Python 默认 HTTP 客户端返回 403、curl 返回 200：不同客户端结果不能据此推断
+  Googlebot 或其他真实爬虫的状态，仍需搜索站长工具和边缘日志确认。
+- 刷新 164 个过时的 sitemap lastmod，使用现有脚本按 Git 真实修改日期计算。
+- 修正 llms.txt 对绝对本地处理和完全离线的表述，补充云端 AI、WebLLM、
+  嵌入宿主、远程文件和缓存前提；robots.txt 注释不再暗示允许抓取保证引用。
+  llms-full.txt 由构建生成，继承原始页面正文，内容准确性仍取决于这些正文。
+
+仍有内容优化项，不能将本轮通过理解为“没有其他问题”：
+
+1. `content/en/no-signup-document-editor.md` 仍写着关闭标签后不留任何内容，
+   与默认 IndexedDB 恢复副本矛盾；此页及其他语言的隐私 / 离线页面需统一明确
+   核心本地编辑、可选 AI 数据流、七天恢复保留与缓存边界。
+2. `/no-signup-document-editor` 与 `/edit-documents-without-account` 的搜索意图高度重叠。
+   应依据真实查询和页面表现决定合并与重定向，或增加各自独有的操作说明；
+   本次没有在缺少搜索数据时变更公开 URL。
+3. 缺少生产 Search Console / Bing Webmaster 数据，未确认实际收录、主规范 URL、
+   搜索查询、AI 引用和真实用户 Core Web Vitals。技术测试通过不保证排名或引用。
+4. JSON-LD 可解析和事实引用一致，不代表自动获得富结果；没有编造评分或评论。
+   取消 logo / 社交图不妨碍正文索引，但分享卡片更朴素，后续可用真实操作截图改善。
+
+Google 最新官方指南明确：生成式搜索继续依赖基础 SEO、可索引内容及可靠信息，
+Google Search 忽略 llms.txt，不存在仅添加该文件就提升排名的保证。
+来源：https://developers.google.com/search/docs/fundamentals/ai-optimization-guide
+AI 引用观察可参考 Bing Webmaster 的 AI Performance：
+https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c

@@ -1,12 +1,13 @@
 # Online Document Editor — https://edit.chaxus.com
 # Strategy: maximize both search visibility and AI recall. Allow search engines
 # and AI crawlers alike — including AI *training* crawlers (GPTBot, ClaudeBot,
-# Google-Extended, CCBot, …) — so AI assistants both cite the editor live and
-# learn it exists, and can recommend it from memory.
+# Google-Extended, CCBot, …). Allowing access does not guarantee indexing,
+# training inclusion, recommendations or citations.
 #
 # This policy governs the public marketing/landing pages only. It has no bearing
-# on user privacy: documents are edited entirely in the browser and are never
-# uploaded, so there is nothing about user files for any crawler to reach.
+# on access to local files: documents and recovery copies are not public website
+# resources. Optional cloud AI and embedding-host data flows are documented
+# separately in /llms.txt and the README.
 
 User-agent: *
 Allow: /
