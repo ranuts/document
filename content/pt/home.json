@@ -1,6 +1,6 @@
 {
   "title": "Abrir DOCX, XLSX e PPTX no navegador — visualizador e editor de documentos grátis",
-  "description": "Abra e veja arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV direto no navegador — sem Office instalado, sem upload, sem cadastro. Também dá para editar e salvar. Grátis, com privacidade em primeiro lugar e funcionando offline. Com OnlyOffice.",
+  "description": "Abra e veja arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV direto no navegador — sem Office instalado, sem upload, sem cadastro. Também dá para editar e salvar. Grátis, com privacidade em primeiro lugar e funcionando offline.",
   "ogDescription": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no seu navegador — sem Office, sem upload, sem cadastro. Grátis e disponível offline.",
   "chip": "Local primeiro · <b>código aberto</b>",
   "h1": {
@@ -109,7 +109,7 @@
         {
           "k": "AGPL-3.0",
           "h3": "Código aberto e auto-hospedável",
-          "p": "Audite exatamente o que roda, ou hospede a sua própria cópia. Com OnlyOffice."
+          "p": "Audite exatamente o que roda, ou hospede a sua própria cópia."
         }
       ]
     },
@@ -126,7 +126,7 @@
         {
           "n": "02",
           "h3": "Edite de verdade",
-          "p": "Formatação completa, tabelas, gráficos e fórmulas com o OnlyOffice.",
+          "p": "Formatação completa, tabelas, gráficos e fórmulas no navegador.",
           "loc": "fica no dispositivo"
         },
         {
@@ -152,7 +152,7 @@
         },
         {
           "q": "Quais formatos posso editar?",
-          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV, com o OnlyOffice rodando em WebAssembly."
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV, com um motor WebAssembly no navegador."
         },
         {
           "q": "O que acontece se eu fechar a aba ou recarregar a página?",
@@ -167,18 +167,6 @@
           "a": "Sem conta, sem cadastro, sem e-mail. Abra a página e edite."
         }
       ]
-    }
-  },
-  "eco": {
-    "label": "Parte do ecossistema ran · tudo de código aberto",
-    "here": {
-      "name": "edit.chaxus.com",
-      "role": "Editor de Office"
-    },
-    "other": {
-      "href": "https://ran.chaxus.com",
-      "name": "ran.chaxus.com",
-      "role": "Componentes de UI"
     }
   },
   "foot": {
@@ -252,9 +240,5 @@
     "PWA instalável com suporte offline",
     "Incorporável pela API postMessage",
     "Grátis e de código aberto (AGPL-3.0)"
-  ],
-  "ecosystem": {
-    "name": "ran ecosystem",
-    "url": "https://ran.chaxus.com"
-  }
+  ]
 }

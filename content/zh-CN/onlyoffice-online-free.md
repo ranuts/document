@@ -1,14 +1,14 @@
 ---
-title: 免费的 OnlyOffice 在线版——浏览器直接用，不装服务器
-description: 免费在线使用 OnlyOffice 编辑器，不用部署 Document Server，也不用注册。编辑器以 WebAssembly 在你的浏览器里运行，DOCX、XLSX、PPTX 文件不会被上传。开源、可自托管，与 Ascensio System SIA 无隶属关系。
-eyebrow: OnlyOffice 引擎 · 无需服务器
-h1: 在线免费用 OnlyOffice 编辑器——不用架服务器
-lead: 本站把 OnlyOffice 的文档、表格、演示文稿编辑器整个编译成 WebAssembly，跑在你的浏览器里。不用部署 Document Server，不用注册账号，也没有上传——你打开的文件始终留在自己的设备上。
+title: 免费在线文档编辑器 — 无需服务器或账号
+description: 免费在线使用文档编辑器，不用部署 Document Server，也不用注册。编辑器以 WebAssembly 在你的浏览器里运行，DOCX、XLSX、PPTX 文件不会被上传。开源、可自托管，与 Ascensio System SIA 无隶属关系。
+eyebrow: 浏览器编辑器 · 无需服务器
+h1: 在浏览器中编辑文档 — 无需运行服务器
+lead: 本站的文档、表格和演示文稿编辑器及 WebAssembly 转换引擎都在你的浏览器里运行。不用部署 Document Server，不用注册账号，也没有上传——你打开的文件始终留在自己的设备上。
 cta: 打开编辑器 →
 ctaHref: /zh-CN/
-ogDescription: OnlyOffice 编辑器在浏览器本地运行。不用 Document Server、不用注册、不上传。免费开源。
-breadcrumb: OnlyOffice 在线版
-appDescription: 把 OnlyOffice 编辑器编译成 WebAssembly，在浏览器本地运行，不需要 Document Server，也不上传文件。
+ogDescription: 文档编辑器在浏览器本地运行。不用 Document Server、不用注册、不上传。免费开源。
+breadcrumb: 编辑器说明
+appDescription: 文档编辑器及 WebAssembly 转换引擎在浏览器本地运行，不需要 Document Server，也不上传文件。
 ---
 
 OnlyOffice 通常是要装的：编辑器只是前端，背后是 ONLYOFFICE Docs（Document Server）在做转换和存储，而那台机器得你自己跑起来、并且一直跑着。对团队来说这个形态是对的。但如果你只是想打开别人发来的一个 `.docx`，这套机器就太重了。

@@ -39,8 +39,8 @@ device, so documents are never uploaded, and no account is involved.
 - 🔒 **Nothing is uploaded** — every conversion, edit and export happens in the tab
 - 📝 **Real editing, not preview** — DOCX, XLSX, PPTX and CSV, plus ODF, RTF, TXT and the legacy binary formats; PDFs open and can be annotated
 - 💾 **Saves into your own file** — pick it once, every save after writes back to it (Chromium; elsewhere it downloads as before)
-- 🕓 **Nothing is lost if you close the tab** — edits autosave into your own browser, kept for 7 days, deletable any time ([details](#-your-data-stays-on-your-device))
-- 📴 **Works offline** — installable as a PWA; after the first visit no network is needed
+- 🕓 **Nothing is lost if you close the tab** — edits autosave into your own browser, kept for 7 days, deletable any time ([details](#-local-editing-and-data-handling))
+- 📴 **Works offline** — installable as a PWA; cached editor resources can be reused offline; uncached assets and remote files still require a network
 - 🌍 **Multi-language** — 7 languages end to end (English, 中文, 日本語, Deutsch, Español, 한국어, Português): the pages, the app UI and the editor all follow the one you pick; the editor itself ships 45
 - 🧩 **Embeddable** — full postMessage API for iframe integration
 - 🤖 **Agent-ready** — exposes WebMCP tools so a browser AI agent can open, convert and read documents
@@ -106,9 +106,9 @@ Parameters on `/editor`:
 
 ---
 
-## 🔐 Your data stays on your device
+## 🔐 Local editing and data handling
 
-Documents are never sent anywhere. Where the browser allows it, saving writes
+Editing and conversion run locally. Where the browser allows it, saving writes
 straight back into the file you picked, so the document lives in your own file
 system and not in a downloads folder. Two things are kept in the browser
 itself, and both are yours to remove:
@@ -125,6 +125,11 @@ itself, and both are yours to remove:
 delete on every row, a delete-all, and a switch to turn autosave off entirely.
 Deleting there takes effect immediately. On a shared machine, that is the page
 to visit.
+
+The optional AI panel (`?agent=1`) sends prompts and document content returned by
+tools to the cloud provider you select. WebLLM inference runs locally after the
+model download. In embed mode, exported files are returned to the parent
+application, which controls any subsequent upload.
 
 ---
 
@@ -272,11 +277,21 @@ Cloudflare Pages semantics, and the production Docker image).
 
 [AGPL-3.0](LICENSE).
 
-This is a derivative work of ONLYOFFICE (sdkjs and web-apps, (c) Ascensio System SIA),
-distributed under the AGPL with additional terms under its Section 7: the original
-product logo must be retained, and no rights under trademark law are granted. The
-editor therefore keeps the ONLYOFFICE logo in its header and its About pane. See
-[NOTICE](NOTICE) for the full text, the vendor version and every change made to it.
+This project is a modified version of the ONLYOFFICE editors (sdkjs and web-apps,
+copyright Ascensio System SIA). Its interface uses neutral descriptions without
+product logos or promotional branding. Copyright, license, modification and
+source information remain available in the editor's About pane and in
+[NOTICE](NOTICE). Third-party GUI assets and fonts retain their respective
+licenses; removing product marks does not change those licenses.
+
+The decision to omit product logos follows the FSF's published interpretation
+of AGPLv3 Section 7. It is not described as a court ruling or a guarantee of
+legal compliance; the upstream position and the rationale are recorded in NOTICE.
 
 ONLYOFFICE is a trademark of Ascensio System SIA. This project is not an official
-ONLYOFFICE product and is not affiliated with or endorsed by Ascensio System SIA.
+ONLYOFFICE product and is not affiliated with, sponsored by or endorsed by
+Ascensio System SIA. Names in legal notices and source references identify the
+upstream technology, not this project's brand.
+
+PWA installation and browser tabs use an independently drawn, neutral document
+icon. It contains no upstream logo, trademark or project initials.

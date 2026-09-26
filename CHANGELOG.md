@@ -64,14 +64,31 @@ notes. Entries describe what users experience, not internal refactors.
   the session on them, so a laptop keeps a recovery point about every 30
   seconds while a phone under load backs off instead of competing with the
   document you are editing.
-- **The ONLYOFFICE logo is back in the editor header, and the About pane with
-  it.** Both had been switched off as interface clutter. They are not: this
-  editor is a modified version of ONLYOFFICE, and the license it is published
-  under requires the product logo to stay. The About pane now also says that
-  this build is not an official ONLYOFFICE product and links to the source it
-  was built from. Every page of the site carries the same trademark notice in
-  its footer, and the repository has a NOTICE file with the full terms and the
-  list of changes made to the vendor build.
+- **Neutral presentation with legal attribution retained.** Product logos
+  and ecosystem promotion are removed. A neutral document icon supplies PWA and browser icons. The editor's About pane stays
+  available with the upstream copyright and version, a modified-version notice,
+  license and source links. NOTICE explains the logo decision with reference to
+  the FSF's interpretation of AGPLv3; it does not claim a court ruling. Offline caching remains available.
+
+### Fixed
+
+- Browser icons, theme-color and native controls now follow the effective light
+  or dark theme, including manual choices opposite to the OS preference.
+  Universal PWA / touch icons remain stable. The editor's existing theme
+  follow behavior is covered by light/dark browser tests.
+
+- Save messages are accepted only from the same-origin editor frame. Embedded
+  commands are accepted only from the direct parent, with a fixed origin.
+  Exported document bytes no longer bypass the host API by going straight to
+  the top-level ancestor.
+- Service Worker cache eviction stays within its `waitUntil` lifetime, removes
+  excess entries in a batch and tolerates storage failures.
+- Editor title updates preserve the filename and unsaved marker without
+  restoring a product-name suffix. Language controls include the visible
+  language in their accessible names.
+- Image-export tests use the current neutral icon. All README translations
+  distinguish local editing from optional cloud AI, qualify offline resource
+  availability and state the seven supported site languages.
 
 ### Known issues
 

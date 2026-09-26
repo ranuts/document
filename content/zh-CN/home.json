@@ -1,6 +1,6 @@
 {
   "title": "在浏览器打开 DOCX、XLSX、PPT 文件——免装 Office 的在线查看与编辑器",
-  "description": "不装 Office 也能直接在浏览器里打开、查看 Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）和 CSV，需要时还能编辑保存。文件不传服务器、免注册、可离线。基于 OnlyOffice。",
+  "description": "不装 Office 也能直接在浏览器里打开、查看 Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）和 CSV，需要时还能编辑保存。文件不传服务器、免注册、可离线。",
   "ogDescription": "不装 Office 直接在浏览器打开、查看、编辑 DOCX、XLSX、PPTX 和 CSV。文件不传服务器、免注册、可离线。",
   "chip": "本地优先 · <b>开源</b>",
   "h1": {
@@ -109,7 +109,7 @@
         {
           "k": "AGPL-3.0",
           "h3": "开源 · 可自托管",
-          "p": "审计运行的每一行，或自建一份。基于 OnlyOffice。"
+          "p": "审计运行的每一行，或自建一份。"
         }
       ]
     },
@@ -126,7 +126,7 @@
         {
           "n": "02",
           "h3": "真正地编辑",
-          "p": "完整的排版、表格、图表和公式，由 OnlyOffice 提供。",
+          "p": "完整的排版、表格、图表和公式，在浏览器中完成。",
           "loc": "留在本地设备"
         },
         {
@@ -152,7 +152,7 @@
         },
         {
           "q": "能编辑哪些格式？",
-          "a": "Word(DOCX)、Excel(XLSX)、PowerPoint(PPTX) 和 CSV，基于运行在 WebAssembly 里的 OnlyOffice。"
+          "a": "Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）和 CSV，通过浏览器中的 WebAssembly 引擎编辑。"
         },
         {
           "q": "关掉标签页或刷新页面，编辑的内容会丢吗？",
@@ -167,18 +167,6 @@
           "a": "不需要账号、不需要注册、不需要邮箱。打开页面就能编辑。"
         }
       ]
-    }
-  },
-  "eco": {
-    "label": "ran 生态的一部分 · 全部开源",
-    "here": {
-      "name": "edit.chaxus.com",
-      "role": "文档编辑器"
-    },
-    "other": {
-      "href": "https://ran.chaxus.com",
-      "name": "ran.chaxus.com",
-      "role": "UI 组件库"
     }
   },
   "foot": {
@@ -238,7 +226,7 @@
       },
       {
         "href": "/zh-CN/onlyoffice-online-free",
-        "label": "OnlyOffice 在线版"
+        "label": "编辑器说明"
       },
       {
         "href": "https://github.com/ranuts/document",
@@ -256,9 +244,5 @@
     "可安装为 PWA，支持离线使用",
     "可通过 postMessage API 嵌入",
     "免费且开源（AGPL-3.0）"
-  ],
-  "ecosystem": {
-    "name": "ran ecosystem",
-    "url": "https://ran.chaxus.com"
-  }
+  ]
 }

@@ -152,6 +152,12 @@ function routeSavedFile(file: File): void {
 }
 
 function handleFileStreamMessage(event: MessageEvent): void {
+  // Exported bytes may reach an already-authorized file handle. Only the
+  // current vendor frame may supply them, never a host, opener or sibling.
+  const editorFrame = document.querySelector<HTMLIFrameElement>('iframe[name="frameEditor"]');
+  if (event.origin !== window.location.origin || !editorFrame || event.source !== editorFrame.contentWindow) {
+    return;
+  }
   const data = event.data as FileStreamMessage | undefined;
   if (!data || data.type !== 'onlyoffice-file-stream' || !(data.buffer instanceof ArrayBuffer)) {
     return;

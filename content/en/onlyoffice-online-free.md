@@ -1,14 +1,14 @@
 ---
-title: Free ONLYOFFICE Online — the Editors in Your Browser, No Server
-description: Use the ONLYOFFICE editors online for free, with no Document Server to install and no account. They run inside your browser as WebAssembly, so your DOCX, XLSX and PPTX files are never uploaded. Open source, self-hostable, not affiliated with Ascensio System SIA.
-eyebrow: ONLYOFFICE engine · no server
-h1: The ONLYOFFICE Editors, Online and Free — Without Running a Server
-lead: This site runs the ONLYOFFICE document, spreadsheet and presentation editors entirely inside your browser, compiled to WebAssembly. There is no Document Server to install, no account to create, and no upload — the file you open stays on your device.
+title: Free Online Document Editor — No Server or Account
+description: Use the document, spreadsheet and presentation editors online for free, with no Document Server to install and no account. They run inside your browser as WebAssembly, so your DOCX, XLSX and PPTX files are never uploaded. Open source, self-hostable, not affiliated with Ascensio System SIA.
+eyebrow: Browser editor · no server
+h1: Edit Documents in Your Browser — Without Running a Server
+lead: This site runs document, spreadsheet and presentation editors entirely inside your browser, compiled to WebAssembly. There is no Document Server to install, no account to create, and no upload — the file you open stays on your device.
 cta: Open the editor →
 ctaHref: /
-ogDescription: The ONLYOFFICE editors, running client-side in your browser. No Document Server, no account, no upload. Free and open source.
-breadcrumb: ONLYOFFICE online
-appDescription: The ONLYOFFICE editors compiled to WebAssembly and running client-side in the browser, with no Document Server and no upload.
+ogDescription: Document, spreadsheet and presentation editors, running client-side in your browser. No Document Server, no account, no upload. Free and open source.
+breadcrumb: Editor details
+appDescription: Document, spreadsheet and presentation editors compiled to WebAssembly and running client-side in the browser, with no Document Server and no upload.
 ---
 
 ONLYOFFICE is normally something you install: the editors are a front end for ONLYOFFICE Docs (the Document Server), which converts and stores your files on a machine you have to run and keep running. That is the right shape for a team. It is a lot of machinery when all you wanted was to open a `.docx` someone sent you.

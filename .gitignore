@@ -220,3 +220,7 @@ public/pt/help.html
 public/pt/changelog.html
 public/pt/help/embed-api.html
 public/pt/index.html
+
+# Generated copies of the root legal notices for static hosting.
+/public/LICENSE
+/public/NOTICE

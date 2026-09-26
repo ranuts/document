@@ -3,9 +3,10 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icons/document.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/document-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/document-180.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/img/64.png" rel="shortcut icon" />
-    <link rel="icon" type="image/png" href="/img/64.png" />
     <link rel="manifest" href="/manifest.json" />
     <!-- Route split: this is a static landing page, /editor hosts the app. Deep
          links that used to target it (?file= ?src= ?new= ?open=local ?embed=
@@ -29,7 +30,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     <title>Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor</title>
-    <meta name="description" content="Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice." />
+    <meta name="description" content="Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline." />
     <link rel="canonical" href="https://edit.chaxus.com/" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/" />
@@ -51,6 +52,7 @@
         }
       } catch (e) {}
     </script>
+    <script src="/theme-presentation.js"></script>
     <link rel="stylesheet" href="/ran-fonts/fonts.css" />
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/home.css" />
@@ -67,36 +69,19 @@
     <meta property="og:title" content="Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor" />
     <meta property="og:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser — no Office, no upload, no sign-up. Free and offline-capable." />
     <meta property="og:url" content="https://edit.chaxus.com/" />
-    <meta property="og:image" content="https://edit.chaxus.com/img/pwa-512.png" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor" />
     <meta name="twitter:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser — no Office, no upload, no sign-up. Free and offline-capable." />
-    <meta name="twitter:image" content="https://edit.chaxus.com/img/pwa-512.png" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": "Organization",
-            "@id": "https://edit.chaxus.com/#organization",
-            "name": "ranuts",
-            "url": "https://edit.chaxus.com/",
-            "logo": "https://edit.chaxus.com/img/pwa-512.png",
-            "sameAs": [
-              "https://github.com/ranuts/document",
-              "https://github.com/ranuts",
-              "https://ran.chaxus.com"
-            ]
-          },
-          {
             "@type": "WebSite",
             "@id": "https://edit.chaxus.com/#website",
             "name": "Online Document Editor",
             "url": "https://edit.chaxus.com/",
-            "publisher": {
-              "@id": "https://edit.chaxus.com/#organization"
-            },
             "inLanguage": [
               "en",
               "zh-CN",
@@ -133,20 +118,10 @@
             "sameAs": [
               "https://github.com/ranuts/document"
             ],
-            "publisher": {
-              "@id": "https://edit.chaxus.com/#organization"
+            "isPartOf": {
+              "@id": "https://edit.chaxus.com/#website"
             },
-            "isPartOf": [
-              {
-                "@id": "https://edit.chaxus.com/#website"
-              },
-              {
-                "@type": "SoftwareApplication",
-                "name": "ran ecosystem",
-                "url": "https://ran.chaxus.com"
-              }
-            ],
-            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice.",
+            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline.",
             "featureList": [
               "Open and view DOCX, XLSX, PPTX and CSV without Microsoft Office",
               "Edit DOCX, XLSX, PPTX and CSV files",
@@ -163,15 +138,14 @@
             "@id": "https://edit.chaxus.com/#webpage",
             "url": "https://edit.chaxus.com/",
             "name": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor",
-            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice.",
+            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline.",
             "inLanguage": "en",
             "isPartOf": {
               "@id": "https://edit.chaxus.com/#website"
             },
             "about": {
               "@id": "https://edit.chaxus.com/#app"
-            },
-            "primaryImageOfPage": "https://edit.chaxus.com/img/pwa-512.png"
+            }
           },
           {
             "@type": "FAQPage",
@@ -199,7 +173,7 @@
                 "name": "Which formats can I edit?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, powered by OnlyOffice running in WebAssembly."
+                  "text": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, using a WebAssembly engine in your browser."
                 }
               },
               {
@@ -254,22 +228,17 @@
   </head>
 
   <body>
-    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
-      <symbol id="gh-mark" viewBox="0 0 16 16">
-        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
-      </symbol>
-    </svg>
     <section id="landing-hero">
       <header class="bar">
         <div class="wrap">
-          <a class="brand" href="/"><span class="logo">D</span><span class="wordmark">Document Editor</span></a>
+          <a class="brand" href="/"><span class="wordmark">Document Editor</span></a>
           <nav>
             <a class="navlink" href="/offline-document-editor">Offline</a>
             <a class="navlink" href="/no-signup-document-editor">No sign-up</a>
             <a class="navlink gh" href="https://github.com/ranuts/document" rel="noopener" target="_blank">
-              <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+              GitHub
             </a>
-<r-popover class="lang-menu" placement="bottom" trigger="click" role="button" aria-label="Language"><span class="lang-trigger"><svg class="langmark" aria-hidden="true" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg><span class="lang-current">English</span><svg class="lang-caret" aria-hidden="true" viewBox="0 0 12 12"><path d="M2.75 4.5 6 7.75 9.25 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><r-content><div class="lang-list"><a class="lang-option" href="/de/" lang="de" hreflang="de">Deutsch</a><a class="lang-option is-current" href="/" lang="en" hreflang="en" aria-current="page">English</a><a class="lang-option" href="/es/" lang="es" hreflang="es">Español</a><a class="lang-option" href="/pt/" lang="pt" hreflang="pt">Português</a><a class="lang-option" href="/zh-CN/" lang="zh-CN" hreflang="zh-CN">中文</a><a class="lang-option" href="/ja/" lang="ja" hreflang="ja">日本語</a><a class="lang-option" href="/ko/" lang="ko" hreflang="ko">한국어</a></div></r-content></r-popover>
+<r-popover class="lang-menu" placement="bottom" trigger="click" role="button" aria-label="Language: English"><span class="lang-trigger"><svg class="langmark" aria-hidden="true" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M1.75 8h12.5M8 1.75c1.7 1.8 2.6 3.9 2.6 6.25S9.7 12.45 8 14.25M8 1.75c-1.7 1.8-2.6 3.9-2.6 6.25s.9 4.45 2.6 6.25" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg><span class="lang-current">English</span><svg class="lang-caret" aria-hidden="true" viewBox="0 0 12 12"><path d="M2.75 4.5 6 7.75 9.25 4.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><r-content><div class="lang-list"><a class="lang-option" href="/de/" lang="de" hreflang="de">Deutsch</a><a class="lang-option is-current" href="/" lang="en" hreflang="en" aria-current="page">English</a><a class="lang-option" href="/es/" lang="es" hreflang="es">Español</a><a class="lang-option" href="/pt/" lang="pt" hreflang="pt">Português</a><a class="lang-option" href="/zh-CN/" lang="zh-CN" hreflang="zh-CN">中文</a><a class="lang-option" href="/ja/" lang="ja" hreflang="ja">日本語</a><a class="lang-option" href="/ko/" lang="ko" hreflang="ko">한국어</a></div></r-content></r-popover>
           </nav>
         </div>
       </header>
@@ -405,7 +374,7 @@
           <div class="pillar">
             <span class="k">AGPL-3.0</span>
             <h3>Open source &amp; self-hostable</h3>
-            <p>Audit exactly what runs, or host your own copy. Powered by OnlyOffice.</p>
+            <p>Audit exactly what runs, or host your own copy.</p>
           </div>
         </div>
       </div>
@@ -425,7 +394,7 @@
           <div class="step">
             <div class="n">02</div>
             <h3>Edit for real</h3>
-            <p>Full formatting, tables, charts and formulas via OnlyOffice.</p>
+            <p>Full formatting, tables, charts and formulas in your browser.</p>
             <span class="loc">stays on device</span>
           </div>
           <div class="step">
@@ -455,7 +424,7 @@
             </details>
             <details>
               <summary>Which formats can I edit?</summary>
-              <p class="a">Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, powered by OnlyOffice running in WebAssembly.</p>
+              <p class="a">Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, using a WebAssembly engine in your browser.</p>
             </details>
             <details>
               <summary>What happens if I close the tab or refresh the page?</summary>
@@ -470,21 +439,6 @@
               <p class="a">No account, no sign-up, no email. Open the page and edit.</p>
             </details>
           </div>
-        </div>
-      </div>
-
-      <div class="eco">
-        <div class="wrap">
-          <span class="eco-label">
-            <svg class="gitmark" aria-hidden="true"><use href="#gh-mark"></use></svg>
-            Part of the ran ecosystem · all open source
-          </span>
-          <nav>
-            <span class="here"><b>edit.chaxus.com</b> <small>Office editor</small></span>
-            <a href="https://ran.chaxus.com" rel="noopener" target="_blank">
-              <b>ran.chaxus.com</b> <small>UI components</small>
-            </a>
-          </nav>
         </div>
       </div>
 
@@ -506,7 +460,7 @@
           <a href="/open/odp">ODP</a>
           <a href="/convert/docx-to-pdf">DOCX → PDF</a>
           <a href="/convert/xlsx-to-csv">XLSX → CSV</a>
-          <a href="/onlyoffice-online-free">ONLYOFFICE online</a>
+          <a href="/onlyoffice-online-free">Editor details</a>
           <a href="https://github.com/ranuts/document">GitHub</a>
         </nav>
         <r-theme-switch class="theme-switch" label="Theme"></r-theme-switch>

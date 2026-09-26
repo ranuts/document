@@ -1,6 +1,6 @@
 {
   "title": "브라우저에서 DOCX, XLSX, PPTX 열기 — 무료 문서 뷰어 및 편집기",
-  "description": "Word(DOCX), Excel(XLSX), PowerPoint(PPTX), CSV 파일을 브라우저에서 바로 열고 볼 수 있습니다. Office 설치도, 업로드도, 가입도 필요 없습니다. 편집하고 저장하는 것도 가능합니다. 무료이고 프라이버시를 우선하며 오프라인에서도 동작합니다. OnlyOffice 기반.",
+  "description": "Word(DOCX), Excel(XLSX), PowerPoint(PPTX), CSV 파일을 브라우저에서 바로 열고 볼 수 있습니다. Office 설치도, 업로드도, 가입도 필요 없습니다. 편집하고 저장하는 것도 가능합니다. 무료이고 프라이버시를 우선하며 오프라인에서도 동작합니다.",
   "ogDescription": "DOCX, XLSX, PPTX, CSV를 브라우저에서 열고 보고 편집하세요. Office 없이, 업로드 없이, 가입 없이. 무료이며 오프라인에서도 사용할 수 있습니다.",
   "chip": "로컬 우선 · <b>오픈 소스</b>",
   "h1": {
@@ -109,7 +109,7 @@
         {
           "k": "AGPL-3.0",
           "h3": "오픈 소스이며 직접 호스팅 가능",
-          "p": "실행되는 코드를 그대로 감사하거나 직접 운영할 수 있습니다. OnlyOffice 기반."
+          "p": "실행되는 코드를 그대로 감사하거나 직접 운영할 수 있습니다."
         }
       ]
     },
@@ -126,7 +126,7 @@
         {
           "n": "02",
           "h3": "제대로 편집",
-          "p": "OnlyOffice로 완전한 서식, 표, 차트, 수식을 사용합니다.",
+          "p": "브라우저에서 완전한 서식, 표, 차트, 수식을 사용합니다.",
           "loc": "기기에 남습니다"
         },
         {
@@ -152,7 +152,7 @@
         },
         {
           "q": "어떤 형식을 편집할 수 있나요?",
-          "a": "Word(DOCX), Excel(XLSX), PowerPoint(PPTX), CSV입니다. WebAssembly에서 동작하는 OnlyOffice를 사용합니다."
+          "a": "Word(DOCX), Excel(XLSX), PowerPoint(PPTX), CSV입니다. 브라우저의 WebAssembly 엔진으로 편집합니다."
         },
         {
           "q": "탭을 닫거나 페이지를 새로고침하면 어떻게 되나요?",
@@ -167,18 +167,6 @@
           "a": "계정도, 가입도, 이메일도 필요 없습니다. 페이지를 열고 편집하세요."
         }
       ]
-    }
-  },
-  "eco": {
-    "label": "ran 생태계의 일부 · 모두 오픈 소스",
-    "here": {
-      "name": "edit.chaxus.com",
-      "role": "Office 편집기"
-    },
-    "other": {
-      "href": "https://ran.chaxus.com",
-      "name": "ran.chaxus.com",
-      "role": "UI 컴포넌트"
     }
   },
   "foot": {
@@ -252,9 +240,5 @@
     "PWA로 설치 가능하며 오프라인 지원",
     "postMessage API로 임베드 가능",
     "무료이며 오픈 소스(AGPL-3.0)"
-  ],
-  "ecosystem": {
-    "name": "ran ecosystem",
-    "url": "https://ran.chaxus.com"
-  }
+  ]
 }

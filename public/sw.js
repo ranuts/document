@@ -19,7 +19,24 @@ const CORE_CACHE = `document-editor-core-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `document-editor-runtime-${VENDOR_VERSION}`;
 const RUNTIME_PREFIX = 'document-editor-runtime-';
 
-const ASSETS_TO_CACHE = ['./', './index.html', './editor', './editor.html', './manifest.json', './img/64.png'];
+const ASSETS_TO_CACHE = [
+  './',
+  './index.html',
+  './editor',
+  './editor.html',
+  './manifest.json',
+  './theme-presentation.js',
+  './icons/document-light.svg',
+  './icons/document-dark.svg',
+  './icons/document-light-32.png',
+  './icons/document-dark-32.png',
+  './icons/document.svg',
+  './icons/document-32.png',
+  './icons/document-180.png',
+  './icons/document-192.png',
+  './icons/document-512.png',
+  './icons/document-maskable-512.png',
+];
 
 // Unhashed but deploy-coupled: stable filenames whose *content* changes every deploy.
 // Mirrors the group public/_headers pins to `Cache-Control: no-cache` — keep the two in sync.
@@ -38,7 +55,7 @@ const ASSETS_TO_CACHE = ['./', './index.html', './editor', './editor.html', './m
 // its content changed.) Network-first with `cache: 'no-cache'` is what the HTML branch already
 // does, for exactly the same reason.
 const DEPLOY_COUPLED =
-  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent)\.js$|^\/ranui-iife\//;
+  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent|theme-presentation)\.js$|^\/ranui-iife\//;
 
 // The OnlyOffice 9 tree is ~2600 files, but most of that is per-locale help
 // and on-demand font duplication a single session in one language never
@@ -147,25 +164,27 @@ const pruneAppAssets = (name) =>
 // bytes and the next visit simply re-fetches, whereas an unhandled rejection here
 // propagates into the respondWith chain and fails the request outright.
 const putInRuntimeCache = (request, response) =>
-  caches.open(RUNTIME_CACHE).then((cache) =>
-    cache.put(request, response).then(
-      () => limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS),
-      () => {},
-    ),
-  );
+  caches
+    .open(RUNTIME_CACHE)
+    .then((cache) => cache.put(request, response))
+    .then(() => limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS))
+    .catch(() => {});
 
 // Helper: Trim cache to a certain size
 const limitCacheSize = (name, maxItems) => {
-  caches.open(name).then((cache) => {
-    cache.keys().then((keys) => {
-      if (keys.length > maxItems) {
+  return caches.open(name).then((cache) => {
+    return cache.keys().then((keys) => {
+      const excess = keys.length - maxItems;
+      if (excess > 0) {
         // Evict an app asset before a vendor one. keys() is insertion-ordered,
         // so the plain keys[0] took the OLDEST entry -- which is precisely the
         // vendor tree, fetched during the first open of the session: the trim
         // would throw away x2t.wasm and the font catalog and leave a much
         // younger /assets/<hash> from a build nobody runs any more.
-        const victim = keys.find((request) => !isVendorAsset(request)) || keys[0];
-        cache.delete(victim).then(() => limitCacheSize(name, maxItems));
+        // Return the full cleanup promise to waitUntil. One snapshot also
+        // avoids reading all cache keys again for each excess entry.
+        const victims = keys.filter((request) => !isVendorAsset(request)).concat(keys.filter(isVendorAsset));
+        return Promise.all(victims.slice(0, excess).map((request) => cache.delete(request)));
       }
     });
   });

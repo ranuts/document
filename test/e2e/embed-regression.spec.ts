@@ -445,7 +445,7 @@ test.describe('embed regression (real editor)', () => {
         await new Promise((r) => setTimeout(r, 500));
         api = api || findApi();
       }
-      api.AddImageUrlAction(`${location.origin}/img/64.png`);
+      api.AddImageUrlAction(`${location.origin}/icons/document-192.png`);
       await new Promise((r) => setTimeout(r, 6000));
 
       const saved = await Promise.race([
@@ -515,14 +515,16 @@ test.describe('embed regression (real editor)', () => {
       const btn = ed.document.querySelector('#id-toolbar-btn-save') as HTMLElement;
       const initiallyDisabled = btn.classList.contains('disabled');
 
-      // Watch for the save stream on every window in the chain (the vendor
-      // posts it up the parent chain; where it lands depends on
-      // OO_FILE_STREAM_ONLY placement).
+      // Raw export bytes return only to the editor's immediate host.
       (window as any).__stream = null;
-      for (const w of [window, window.frames[0], ed]) {
+      for (const w of [ed.parent]) {
         w.addEventListener('message', (e: MessageEvent) => {
           const d = e.data;
-          if (d && d.type === 'onlyoffice-file-stream' && d.buffer instanceof ArrayBuffer) {
+          if (
+            d &&
+            d.type === 'onlyoffice-file-stream' &&
+            Object.prototype.toString.call(d.buffer) === '[object ArrayBuffer]'
+          ) {
             (window as any).__stream = { bytes: d.buffer.byteLength };
           }
         });

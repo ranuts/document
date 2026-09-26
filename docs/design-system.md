@@ -125,3 +125,48 @@ Notion 正文 708）。**不存在"一个正确的宽度"，只存在按内容�
   侧栏不是正文列，短行宽是常态。
 - **`/embed-demo.html` 顶栏 72px vs 全站 77px**：它少一个语言切换控件（它只有英文版），
   是内容差异不是样式差异。
+
+## Application icon
+
+The PWA and browser icon is a neutral folded document with three text lines,
+without lettering or product marks. SVG sources live in `public/icons/`.
+The palette resolves the light-theme tokens `--ran-gray-1000` (#171717),
+`--ran-background-100` (#ffffff) and `--ran-gray-300` (#e6e6e6).
+Exported application assets use these fixed values because launcher icons do not
+inherit the page's CSS variables. The geometry uses rounded corners and rounded
+line caps consistent with the interface.
+
+The ordinary icon has a rounded background; the maskable variant has an opaque,
+full-bleed background. All document content fits within the central 80%-diameter
+safe circle, so platform masks can crop the background without clipping the page.
+The 32 px favicon, 180 px touch icon, 192/512 px PWA icons and 512 px maskable icon
+are checked in. Regenerate PNG files from the SVG sources with:
+
+```sh
+npm install --prefix /tmp/document-icon-tools --no-audit --no-fund @resvg/resvg-js@2.6.2
+node bin/build-app-icons.mjs /tmp/document-icon-tools/package.json
+```
+
+Keep this functional icon separate from legal attribution and from page headers.
+
+### Light and dark browser presentation
+
+Browser favicons use `document-light.svg` / `document-dark.svg` and their 32 px
+PNG fallbacks. Both share the document geometry. The light variant uses the
+light background / foreground tokens; the dark variant resolves
+`--ran-background-100` to #000000, `--ran-gray-1000` to #ededed and
+`--ran-gray-300` to #292929. Regenerate these PNGs with the same command above.
+
+`public/theme-presentation.js` follows the effective `data-ran-theme`, then the
+stored choice, then the system preference. It updates the favicon, native
+`color-scheme` and browser `theme-color` before page styles paint, and follows
+runtime changes. A manual choice takes precedence over an opposite OS theme.
+The helper is precached and treated as a deploy-coupled, revalidated asset.
+
+The manifest and Apple touch icons retain the universal document design.
+Manifest icon entries have no theme selector; publishing competing light/dark
+entries at the same size would not establish a reliable selection rule.
+The manifest's white startup background is a fallback; the page's browser color
+tracks its effective theme once running. Native launch screens remain subject
+to platform behavior. See [manifest icons](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/icons)
+and [theme colors](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/theme_color).

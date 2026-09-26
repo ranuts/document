@@ -37,9 +37,9 @@ Dokumente werden also nie hochgeladen, und ein Konto braucht es auch nicht.
 
 - 🔒 **Nichts wird hochgeladen** — jede Umwandlung, jede Änderung, jeder Export passiert im Tab
 - 📝 **Echtes Bearbeiten, keine Vorschau** — DOCX, XLSX, PPTX und CSV, dazu ODF, RTF, TXT und die alten Binärformate; PDFs lassen sich öffnen und kommentieren
-- 🕓 **Nichts geht verloren, wenn der Tab zugeht** — Änderungen werden im eigenen Browser gesichert, 7 Tage aufbewahrt, jederzeit löschbar ([Einzelheiten](#-ihre-daten-bleiben-auf-ihrem-gerät))
-- 📴 **Funktioniert offline** — als PWA installierbar; nach dem ersten Besuch ist kein Netz nötig
-- 🌍 **Mehrsprachig** — 8 Oberflächensprachen für die Website, 45 für den Editor selbst
+- 🕓 **Nichts geht verloren, wenn der Tab zugeht** — Änderungen werden im eigenen Browser gesichert, 7 Tage aufbewahrt, jederzeit löschbar ([Einzelheiten](#-lokale-bearbeitung-und-datenverarbeitung))
+- 📴 **Funktioniert offline** — als PWA installierbar; zwischengespeicherte Editor-Ressourcen sind offline nutzbar; nicht gespeicherte Ressourcen und entfernte Dateien benötigen Netz
+- 🌍 **Mehrsprachig** — 7 Oberflächensprachen für die Website, 45 für den Editor selbst
 - 🧩 **Einbettbar** — vollständige postMessage-API für die iframe-Integration
 - 🤖 **Bereit für Agenten** — stellt WebMCP-Werkzeuge bereit, mit denen ein KI-Agent im Browser Dokumente öffnen, umwandeln und lesen kann
 - 🚀 **Überall betreibbar** — ein statischer Build; ein Verzeichnis hinter irgendeinem Webserver
@@ -104,9 +104,9 @@ Parameter für `/editor`:
 
 ---
 
-## 🔐 Ihre Daten bleiben auf Ihrem Gerät
+## 🔐 Lokale Bearbeitung und Datenverarbeitung
 
-Dokumente werden nirgendwohin geschickt. Zwei Dinge bleiben lokal liegen, und beide
+Bearbeitung und Konvertierung laufen lokal. Zwei Dinge bleiben lokal liegen, und beide
 können Sie selbst entfernen:
 
 - **Kopien dessen, was Sie bearbeitet haben.** Während Sie arbeiten, sichert der Editor
@@ -121,6 +121,11 @@ können Sie selbst entfernen:
 Löschen pro Zeile, einem Alles-Löschen und einem Schalter, der das automatische Speichern
 ganz abstellt. Löschen wirkt dort sofort. Auf einem gemeinsam genutzten Rechner ist das
 die Seite, die man aufsucht.
+
+Das optionale KI-Panel (`?agent=1`) sendet Eingaben und von Werkzeugen gelieferte
+Dokumentinhalte an den gewählten Cloud-Anbieter. WebLLM läuft nach dem
+Modelldownload lokal. Im eingebetteten Modus gehen Exporte an die übergeordnete
+Anwendung, die über weitere Uploads entscheidet.
 
 ---
 
@@ -268,12 +273,22 @@ Branch und öffnen Sie einen PR, der Lint, Unit-Tests und drei End-to-End-Suites
 
 [AGPL-3.0](LICENSE).
 
-Dieses Projekt ist ein abgeleitetes Werk von ONLYOFFICE (sdkjs und web-apps,
-(c) Ascensio System SIA). Das Original steht unter der AGPL mit Zusatzbedingungen nach
-deren Abschnitt 7: Das ursprüngliche Produktlogo muss erhalten bleiben, und es werden
-keine Markenrechte eingeräumt. Deshalb bleiben das ONLYOFFICE-Logo in der Kopfzeile des
-Editors und dessen Info-Bereich unangetastet. Den vollständigen Text, die verwendete
-Vendor-Version und jede daran vorgenommene Änderung finden Sie in [NOTICE](NOTICE).
+Dieses Projekt ist eine veränderte Version der ONLYOFFICE-Editoren (sdkjs und
+web-apps, Copyright Ascensio System SIA). Die Oberfläche verwendet neutrale
+Funktionsbezeichnungen ohne Produktlogos oder Markenwerbung. Urheberrechts- und
+Lizenzhinweise, Änderungen und Quellcode-Links bleiben im Infofenster des Editors
+und in [NOTICE](NOTICE) verfügbar. GUI-Materialien und Schriftarten Dritter
+behalten ihre jeweiligen Lizenzen.
 
-ONLYOFFICE ist eine Marke von Ascensio System SIA. Dieses Projekt ist kein offizielles
-ONLYOFFICE-Produkt und steht in keiner Verbindung zu Ascensio System SIA.
+Der Verzicht auf Produktlogos orientiert sich an der veröffentlichten Auslegung
+des AGPLv3-Abschnitts 7 durch die FSF. Diese ist kein Gerichtsurteil und keine
+Garantie vollständiger Rechtskonformität. Die Position des ursprünglichen
+Projekts und die Begründung sind in NOTICE dokumentiert.
+
+ONLYOFFICE ist eine Marke von Ascensio System SIA. Dieses Projekt ist kein
+offizielles ONLYOFFICE-Produkt und wird von Ascensio System SIA weder unterstützt
+noch gesponsert; es besteht keine Verbindung. Namen in rechtlichen Hinweisen und
+Quellverweisen kennzeichnen die zugrunde liegende Technik, nicht unsere Marke.
+
+PWA-Installation und Browser-Tabs verwenden ein unabhängig gezeichnetes, neutrales
+Dokumentsymbol ohne Upstream-Logo, Markenzeichen oder Projektinitialen.

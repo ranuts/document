@@ -1,6 +1,6 @@
 {
   "title": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor",
-  "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline. Powered by OnlyOffice.",
+  "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline.",
   "ogDescription": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser — no Office, no upload, no sign-up. Free and offline-capable.",
   "chip": "Local-first · <b>open source</b>",
   "h1": {
@@ -109,7 +109,7 @@
         {
           "k": "AGPL-3.0",
           "h3": "Open source & self-hostable",
-          "p": "Audit exactly what runs, or host your own copy. Powered by OnlyOffice."
+          "p": "Audit exactly what runs, or host your own copy."
         }
       ]
     },
@@ -126,7 +126,7 @@
         {
           "n": "02",
           "h3": "Edit for real",
-          "p": "Full formatting, tables, charts and formulas via OnlyOffice.",
+          "p": "Full formatting, tables, charts and formulas in your browser.",
           "loc": "stays on device"
         },
         {
@@ -152,7 +152,7 @@
         },
         {
           "q": "Which formats can I edit?",
-          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, powered by OnlyOffice running in WebAssembly."
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, using a WebAssembly engine in your browser."
         },
         {
           "q": "What happens if I close the tab or refresh the page?",
@@ -167,18 +167,6 @@
           "a": "No account, no sign-up, no email. Open the page and edit."
         }
       ]
-    }
-  },
-  "eco": {
-    "label": "Part of the ran ecosystem · all open source",
-    "here": {
-      "name": "edit.chaxus.com",
-      "role": "Office editor"
-    },
-    "other": {
-      "href": "https://ran.chaxus.com",
-      "name": "ran.chaxus.com",
-      "role": "UI components"
     }
   },
   "foot": {
@@ -238,7 +226,7 @@
       },
       {
         "href": "/onlyoffice-online-free",
-        "label": "ONLYOFFICE online"
+        "label": "Editor details"
       },
       {
         "href": "https://github.com/ranuts/document",
@@ -256,9 +244,5 @@
     "Installable PWA with offline support",
     "Embeddable via postMessage API",
     "Free and open source (AGPL-3.0)"
-  ],
-  "ecosystem": {
-    "name": "ran ecosystem",
-    "url": "https://ran.chaxus.com"
-  }
+  ]
 }

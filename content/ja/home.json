@@ -1,6 +1,6 @@
 {
   "title": "ブラウザで DOCX・XLSX・PPTX を開く — 無料のドキュメントビューア＆エディタ",
-  "description": "Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）、CSV のファイルをブラウザでそのまま開いて表示できます。Office のインストールも、アップロードも、登録も不要。編集して保存することもできます。無料、プライバシー優先、オフライン対応。OnlyOffice を使用。",
+  "description": "Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）、CSV のファイルをブラウザでそのまま開いて表示できます。Office のインストールも、アップロードも、登録も不要。編集して保存することもできます。無料、プライバシー優先、オフライン対応。",
   "ogDescription": "DOCX・XLSX・PPTX・CSV をブラウザで開いて表示・編集。Office 不要、アップロードなし、登録不要。無料でオフラインでも使えます。",
   "chip": "ローカル優先 · <b>オープンソース</b>",
   "h1": {
@@ -109,7 +109,7 @@
         {
           "k": "AGPL-3.0",
           "h3": "オープンソース・セルフホスト可能",
-          "p": "動いているコードをそのまま監査でき、自分で運用することもできます。OnlyOffice を使用。"
+          "p": "動いているコードをそのまま監査でき、自分で運用することもできます。"
         }
       ]
     },
@@ -126,7 +126,7 @@
         {
           "n": "02",
           "h3": "しっかり編集する",
-          "p": "OnlyOffice による完全な書式・表・グラフ・数式。",
+          "p": "ブラウザーで完全な書式・表・グラフ・数式を利用できます。",
           "loc": "端末に留まります"
         },
         {
@@ -152,7 +152,7 @@
         },
         {
           "q": "どの形式を編集できますか？",
-          "a": "Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）、CSV です。WebAssembly 上で動作する OnlyOffice を使用しています。"
+          "a": "Word（DOCX）、Excel（XLSX）、PowerPoint（PPTX）、CSV です。ブラウザー内の WebAssembly エンジンで編集できます。"
         },
         {
           "q": "タブを閉じたり、ページを再読み込みしたらどうなりますか？",
@@ -167,18 +167,6 @@
           "a": "アカウントも、登録も、メールも不要です。ページを開いて編集するだけです。"
         }
       ]
-    }
-  },
-  "eco": {
-    "label": "ran エコシステムの一部 · すべてオープンソース",
-    "here": {
-      "name": "edit.chaxus.com",
-      "role": "Office エディタ"
-    },
-    "other": {
-      "href": "https://ran.chaxus.com",
-      "name": "ran.chaxus.com",
-      "role": "UI コンポーネント"
     }
   },
   "foot": {
@@ -252,9 +240,5 @@
     "PWA としてインストールでき、オフラインに対応",
     "postMessage API で埋め込み可能",
     "無料でオープンソース（AGPL-3.0）"
-  ],
-  "ecosystem": {
-    "name": "ran ecosystem",
-    "url": "https://ran.chaxus.com"
-  }
+  ]
 }

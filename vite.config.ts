@@ -94,6 +94,10 @@ const generatedPages = (): Plugin => {
   const sources = new Set<string>();
   for (const page of PAGES) for (const src of Object.values(page.sources)) sources.add(path.resolve(__dirname, src));
   const run = () => {
+    // The same legal notices must be available in dev, static hosting and Docker.
+    for (const name of ['LICENSE', 'NOTICE']) {
+      fs.copyFileSync(path.join(__dirname, name), path.join(__dirname, 'public', name));
+    }
     const outputs = generatePages();
     // After the markdown pages: llms-full.txt is assembled from the rendered
     // pages, so /help and /changelog have to exist before it is written.
