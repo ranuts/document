@@ -1,10 +1,10 @@
 ---
-title: Ayuda — usar el editor de documentos en línea
-description: Cómo abrir, editar y guardar archivos de Word, Excel, PowerPoint, CSV y PDF en el navegador sin subirlos; solo lectura e integración, uso sin conexión, límites de privacidad, códigos de error y autoalojamiento.
+title: 'Ayuda — usar el editor de documentos en línea'
+description: 'Cómo abrir, editar, guardar y recuperar documentos; privacidad y requisitos sin conexión. Edición local sin subidas obligatorias.'
 eyebrow: Ayuda
 breadcrumb: Ayuda
 h1: Ayuda
-lead: Respuestas prácticas para usar el editor. Todo se ejecuta dentro de la pestaña de tu navegador; tus archivos nunca se suben.
+lead: 'Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.'
 ---
 
 ## Abrir y crear documentos
@@ -15,7 +15,7 @@ Word (`.docx`, el antiguo `.doc`), Excel (`.xlsx`, el antiguo `.xls`), PowerPoin
 
 ### ¿Cómo creo un documento nuevo?
 
-Usa **Nuevo Word / Nuevo Excel / Nuevo PowerPoint** en la página de inicio, o abre directamente `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx`. No se crea nada en ningún servidor: el documento en blanco existe solo en tu pestaña hasta que lo descargas.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
 
 ### ¿Hay un límite de tamaño?
 
@@ -25,7 +25,7 @@ No hay límite fijo. El techo real es la memoria de tu dispositivo, porque todo 
 
 ### ¿Cómo guardo mis cambios?
 
-Pulsa **Ctrl+S / ⌘S** o usa **Archivo → Descargar como**. Como no hay servidor, «guardar» significa que el navegador te entrega el archivo: aterriza en tu carpeta de descargas con el nombre original. Elige otro formato en **Descargar como** para convertir (por ejemplo DOCX → PDF, XLSX → CSV).
+En Chrome, Edge y otros navegadores con File System Access API, el primer guardado permite elegir un archivo y los siguientes escriben en él. Otros navegadores descargan una copia. Exporta otros formatos desde Archivo → Descargar como. Las copias de recuperación del navegador son independientes del archivo guardado.
 
 ### ¿Por qué a veces el botón Guardar está en gris?
 
@@ -63,9 +63,7 @@ Sí: el editor está pensado para integrarse en un iframe y controlarse con `pos
 
 ### ¿Puede un asistente de IA de mi navegador manejar el editor?
 
-Sí, donde el navegador lo admita. El editor registra un conjunto de herramientas WebMCP, de modo que un agente de IA del navegador puede abrir, convertir, leer y exportar documentos llamándolas directamente en vez de hacer clic por la interfaz. Todo sigue ejecutándose en tu dispositivo: el agente dispara el mismo código local que los botones, y no se sube nada.
-
-Las herramientas son `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` y `get_document_state`.
+Las herramientas WebMCP editan y convierten localmente, pero un agente del navegador puede recibir texto o archivos exportados y enviarlos a su propio servicio de IA. Revisa su política de datos antes de compartir contenido confidencial.
 
 ### ¿Qué navegadores lo admiten?
 
@@ -83,7 +81,7 @@ En documentos de texto, sí: `get_document_text` devuelve el texto para que el a
 
 ### ¿Funciona sin conexión?
 
-Sí. Tras la primera visita, un service worker guarda el editor en caché; puedes instalarlo como aplicación desde la barra de direcciones del navegador (PWA) y abrir documentos sin conexión. La primera vez que abres un documento con muchas fuentes, aún hace falta la red una vez para descargarlas; después también quedan en caché.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
 
 ### ¿Cómo consigo la versión más reciente?
 
@@ -93,11 +91,11 @@ El sitio se actualiza solo en la siguiente visita. Si una página parece atascad
 
 ### ¿Mis documentos se suben a algún sitio?
 
-No. El documento se lee desde tu disco a la pestaña del navegador y se procesa ahí con WebAssembly. En este sitio no hay ningún punto final de subida. Puedes comprobarlo en el panel de red del navegador mientras abres y guardas un documento, y el código es abierto bajo AGPL-3.0.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Qué carga la página desde la red?
 
-Solo la propia aplicación: el JavaScript del editor, el conversor WebAssembly, las fuentes y los recursos de la página, todo desde el origen de este sitio, además de una baliza de Cloudflare Web Analytics respetuosa con la privacidad (sin cookies, sin rastreo entre sitios). Si activas el asistente de IA opcional con tu propia clave de API, sus peticiones van directamente desde tu navegador al proveedor que elijas; nada pasa por este sitio.
+La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas, las descargas de modelos y la IA en la nube opcional pueden generar solicitudes adicionales. Las aplicaciones anfitrionas y los agentes tienen sus propias políticas de datos.
 
 ## Errores
 
@@ -117,3 +115,11 @@ Abre una incidencia en [GitHub](https://github.com/ranuts/document/issues) indic
 ### ¿Puedo ejecutar mi propia copia?
 
 Sí. Es un sitio estático, así que sirve cualquier servidor web: `docker run -d -p 8080:80 ghcr.io/ranuts/document:latest`, o compílalo con `pnpm run build` y sirve la carpeta `dist/`. En el [README](https://github.com/ranuts/document#readme) están las opciones de HTTPS y autenticación básica, y en las [novedades](/es/changelog) lo que cambió en cada versión.
+
+### ¿Qué queda después de cerrar la pestaña?
+
+Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
+
+### ¿Cómo tratan los datos la IA en la nube y la aplicación anfitriona?
+
+La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

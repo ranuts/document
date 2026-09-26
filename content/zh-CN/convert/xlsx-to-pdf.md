@@ -1,15 +1,15 @@
 ---
-title: 在浏览器中把 XLSX 转成 PDF — 免费、本地、不上传
-description: 把 Excel 的 XLSX 表格转成 PDF，全程在你的设备上完成，不上传到任何服务器。免费、无需账号、无需安装 Excel，支持离线。
+title: '在浏览器中把 XLSX 转成 PDF — 免费、本地、不上传'
+description: '无需 Office 或账号，即可在浏览器本地将 XLSX 转成 PDF。 本地编辑，无需上传文档.'
 eyebrow: 转换 · .xlsx → .pdf
 h1: 在浏览器中把 XLSX 转成 PDF
-lead: 把 Excel 的 **.xlsx** 表格转成 **.pdf**——全程在浏览器本地完成，不经过任何服务器。
+lead: '无需 Office 或账号，即可在浏览器本地将 XLSX 转成 PDF。 本地编辑，无需上传文档.'
 cta: 打开你的 XLSX →
 ctaHref: /zh-CN/
-ogDescription: 在浏览器本地把 Excel XLSX 转成 PDF。不上传、不注册，免费开源。
+ogDescription: '无需 Office 或账号，即可在浏览器本地将 XLSX 转成 PDF。 本地编辑，无需上传文档.'
 breadcrumb: xlsx-to-pdf
 howTo: 如何在不上传的情况下把 XLSX 转成 PDF
-appDescription: 在浏览器中把 Excel XLSX 表格转成 PDF，无需上传，无需账号。
+appDescription: '无需 Office 或账号，即可在浏览器本地将 XLSX 转成 PDF。 本地编辑，无需上传文档.'
 ---
 
 ## 如何操作
@@ -33,7 +33,7 @@ appDescription: 在浏览器中把 Excel XLSX 表格转成 PDF，无需上传，
 
 ### 转换时我的表格会被上传吗？
 
-不会。它完全在你的浏览器标签页内打开和转换，你的数据不会离开设备。
+核心的打开、编辑和格式转换在浏览器本地运行，不要求上传文档。 可选云端 AI 会向你选择的服务商发送提示词和工具提供的文档内容。WebLLM 在下载模型后本地推理。嵌入宿主可以接收导出文件，并按自己的策略上传。
 
 ### 需要 Excel 或账号吗？
 
@@ -57,4 +57,4 @@ PDF 是分页的而表格不是。导出前在编辑器中设置打印区域或�
 
 ### 离线能用吗？
 
-可以。加载一次之后它就是可安装的 PWA，没有网络也能继续转换。
+离线编辑要求浏览器已缓存并保留应用、编辑引擎、转换器及所需字体和格式资源。访问一次或安装 PWA 不保证所有资源可用。远程文件 URL 和云端 AI 需要联网；本地 WebLLM 需要模型已下载可用。

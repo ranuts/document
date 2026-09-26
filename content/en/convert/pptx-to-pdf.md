@@ -1,15 +1,15 @@
 ---
-title: Convert PPTX to PDF in Your Browser — Free, No Upload
-description: Turn a PowerPoint (PPTX) deck into a PDF without uploading it anywhere. The conversion runs entirely on your device — free, no account, no PowerPoint, works offline.
+title: 'Convert PPTX to PDF in Your Browser — Free, No Upload'
+description: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 eyebrow: Convert · .pptx → .pdf
 h1: Convert PPTX to PDF in Your Browser
-lead: Turn a PowerPoint **.pptx** deck into a **.pdf** — without uploading it anywhere. The whole conversion happens locally in your browser.
+lead: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 cta: Open your PPTX →
 ctaHref: /
-ogDescription: Convert PowerPoint PPTX decks to PDF locally in your browser. Nothing uploaded, no account, free and open source.
+ogDescription: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 breadcrumb: pptx-to-pdf
 howTo: How to convert a PPTX to PDF without uploading it
-appDescription: Convert PowerPoint PPTX decks to PDF in the browser, with no upload and no account.
+appDescription: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 ---
 
 ## How it works
@@ -17,7 +17,7 @@ appDescription: Convert PowerPoint PPTX decks to PDF in the browser, with no upl
 1. Click **Open your PPTX** to launch the editor in your browser.
 2. Pick the **.pptx** file from your device, or drag and drop it onto the page.
 3. Choose **Download as / Save as** and pick **PDF**.
-4. One page per slide is generated on your device and downloaded — nothing is uploaded.
+4. Core local editing: One page per slide is generated on your device and downloaded — nothing is uploaded.
 
 A deck as PDF is how you send slides to someone who should read them but not edit them, and how you make sure they look the same on a machine that does not have your fonts or your version of PowerPoint. Doing that conversion through an upload service means the unreleased pitch, the internal roadmap or the client proposal sits on a third-party server first. Here it does not leave the tab.
 
@@ -33,7 +33,7 @@ Open the PPTX in the editor, then use Download as / Save as and choose PDF. The 
 
 ### Is my presentation uploaded to convert it?
 
-No. It is opened and converted entirely inside your browser tab, so it never leaves your device.
+Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need PowerPoint or an account?
 
@@ -57,4 +57,4 @@ Yes. Both .pptx and the older .ppt open with the same engine and can be exported
 
 ### Does the conversion work offline?
 
-Yes. Once loaded it is an installable PWA, so it keeps converting with no internet connection.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.

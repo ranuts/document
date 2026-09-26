@@ -1,15 +1,15 @@
 ---
-title: CSV im Browser in XLSX umwandeln — kostenlos, ohne Upload
-description: Eine CSV-Datei vollständig im Browser in XLSX (Excel) umwandeln — öffnen und als XLSX exportieren. Kostenlos, quelloffen, nichts wird hochgeladen, offlinefähig. Weder Excel noch ein Konto nötig.
+title: 'CSV im Browser in XLSX umwandeln — kostenlos, ohne Upload'
+description: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 eyebrow: Umwandeln · .csv → .xlsx
 h1: CSV im Browser in XLSX umwandeln
-lead: 'Eine einfache **.csv**-Datei in eine formatierte Excel-**.xlsx** verwandeln — ohne sie irgendwohin hochzuladen. Die gesamte Umwandlung passiert lokal in Ihrem Browser.'
+lead: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 cta: CSV öffnen →
 ctaHref: /de/
-ogDescription: CSV im Browser in XLSX umwandeln — nichts wird hochgeladen, kein Excel, kein Konto. Quelloffen.
+ogDescription: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 breadcrumb: CSV zu XLSX
 howTo: CSV im Browser in XLSX umwandeln
-appDescription: CSV im Browser in XLSX umwandeln, indem die Datei geöffnet und als XLSX exportiert wird — ohne Upload, ohne Konto.
+appDescription: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 ---
 
 ## So funktioniert es
@@ -17,7 +17,7 @@ appDescription: CSV im Browser in XLSX umwandeln, indem die Datei geöffnet und 
 1. Klicken Sie auf **CSV öffnen**, um den Editor im Browser zu starten.
 2. Wählen Sie die **.csv**-Datei von Ihrem Gerät oder ziehen Sie sie auf die Seite.
 3. Wählen Sie **Herunterladen als / Speichern unter** und dort **XLSX**.
-4. Die XLSX entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
+4. Bei der lokalen Kernbearbeitung: Die XLSX entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
 
 CSV ist überall, aber unhandlich: keine Formatierung, keine Formeln, keine mehreren Blätter. Als XLSX können Sie Spaltenbreiten setzen, Formeln ergänzen, formatieren und die Datei weitergeben. Die Umwandlung passiert hier im Browser, Ihre Daten verlassen das Gerät also nicht.
 
@@ -33,7 +33,7 @@ Kundenlisten, Buchhaltungsexporte, Log-Auszüge — je weniger Sie sie einem fre
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Nein. Alles läuft im Browser, Ihre CSV wird also nie hochgeladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Brauche ich Excel oder ein Konto?
 
@@ -49,4 +49,4 @@ Ja — siehe [XLSX zu CSV](/de/convert/xlsx-to-csv).
 
 ### Funktioniert die Umwandlung offline?
 
-Ja. Einmal geladen ist es eine installierbare PWA und funktioniert ohne Internetverbindung weiter.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs und Cloud-KI benötigen eine Verbindung; für lokales WebLLM muss das Modell bereits verfügbar sein.

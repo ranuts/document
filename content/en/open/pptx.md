@@ -1,20 +1,20 @@
 ---
-title: Open PPTX Without PowerPoint — Free Online, No Upload
-description: Open and edit a PPTX (PowerPoint) presentation without Microsoft PowerPoint or an account. Slides, images and layout preserved, free and open source, runs in your browser — nothing is uploaded.
+title: 'Open PPTX Without PowerPoint — Free Online, No Upload'
+description: 'Open and edit PPTX files in your browser without Microsoft PowerPoint or an account. Local editing without required uploads.'
 eyebrow: Open · .pptx
 h1: Open a PPTX File Without PowerPoint
-lead: Need to open a **.pptx** deck but do not have PowerPoint? View and edit it right in your browser — slides, images and layout intact. Nothing to install, nothing uploaded.
+lead: 'Open and edit PPTX files in your browser without Microsoft PowerPoint or an account. Local editing without required uploads.'
 cta: Open your PPTX →
 ctaHref: /
-ogDescription: Open and edit PPTX presentations without PowerPoint or an account. Open source, nothing uploaded.
+ogDescription: 'Open and edit PPTX files in your browser without Microsoft PowerPoint or an account. Local editing without required uploads.'
 breadcrumb: Open PPTX
 howTo: How to open a PPTX file without PowerPoint
-appDescription: Open and edit PPTX (PowerPoint) presentations in the browser without PowerPoint, no account and no upload.
+appDescription: 'Open and edit PPTX files in your browser without Microsoft PowerPoint or an account. Local editing without required uploads.'
 ---
 
-PPTX is the Microsoft PowerPoint format. This editor opens it with the OnlyOffice engine, so slide layouts, images, shapes and text all render correctly. It runs locally with WebAssembly, so your presentation stays on your device.
+Core local editing: PPTX is the Microsoft PowerPoint format. This editor opens it with the OnlyOffice engine, so slide layouts, images, shapes and text all render correctly. It runs locally with WebAssembly, so your presentation stays on your device.
 
-The OnlyOffice presentation engine is compiled to WebAssembly and runs inside your browser tab. When you pick a deck it is read straight from disk into memory — there is no upload and no server round-trip — so a confidential pitch or internal deck never leaves your machine. It opens both the modern **.pptx** format and the older binary **.ppt**, and can export your slides back to PPTX or PDF.
+Core local editing: The OnlyOffice presentation engine is compiled to WebAssembly and runs inside your browser tab. When you pick a deck it is read straight from disk into memory — there is no upload and no server round-trip — so a confidential pitch or internal deck never leaves your machine. It opens both the modern **.pptx** format and the older binary **.ppt**, and can export your slides back to PPTX or PDF.
 
 ## How it works
 
@@ -28,8 +28,8 @@ The OnlyOffice presentation engine is compiled to WebAssembly and runs inside yo
 - Open any **.pptx** (and .ppt) presentation with full layout
 - Edit slides, then download again as PPTX or PDF
 - No Microsoft PowerPoint and no account
-- No upload — your presentation never leaves your device
-- Works offline as an installable app
+- Core local editing: No upload — your presentation never leaves your device
+- Cached editing resources can work offline; remote files and cloud AI need a connection.
 
 Whether a colleague sent you a deck to review, you need to pull a couple of slides for your own talk, or you just want to read a **.pptx** on a machine without Office installed, opening it here takes a few seconds. Because the render is produced by the same OnlyOffice engine used in its desktop apps, what you see matches what a teammate on PowerPoint will see — so you can review or tweak a deck with confidence and hand it straight back.
 
@@ -45,7 +45,7 @@ Yes. The OnlyOffice engine preserves slide layouts, images, shapes and text.
 
 ### Is my presentation uploaded?
 
-No. It runs locally with WebAssembly and never leaves your device.
+Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can I edit the slides, not just view?
 

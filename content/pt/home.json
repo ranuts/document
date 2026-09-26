@@ -1,13 +1,13 @@
 {
   "title": "Abrir DOCX, XLSX e PPTX no navegador — visualizador e editor de documentos grátis",
-  "description": "Abra e veja arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV direto no navegador — sem Office instalado, sem upload, sem cadastro. Também dá para editar e salvar. Grátis, com privacidade em primeiro lugar e funcionando offline.",
-  "ogDescription": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no seu navegador — sem Office, sem upload, sem cadastro. Grátis e disponível offline.",
+  "description": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.",
+  "ogDescription": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.",
   "chip": "Local primeiro · <b>código aberto</b>",
   "h1": {
     "plain": "Abra arquivos do Word, Excel e PowerPoint,",
     "accent": "direto no navegador."
   },
-  "sub": "Sem Office instalado? Veja qualquer DOCX, XLSX ou PPTX na hora — e edite quando precisar. Tudo roda no seu dispositivo: sem upload, sem cadastro, funciona offline.",
+  "sub": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.",
   "cta": {
     "open": "Abrir um arquivo",
     "docx": "Novo Word",
@@ -16,17 +16,17 @@
   },
   "recent": {
     "label": "Continuar editando",
-    "note": "Fechou a aba sem querer e nada se perdeu: suas edições são salvas neste navegador enquanto você trabalha. As cópias salvas ficam por 7 dias e depois são apagadas sozinhas — ou você as apaga quando quiser.",
+    "note": "Com o salvamento automático ativado, cópias ficam neste navegador por 7 dias após a última edição ou abertura. Exclua-as ou desative o salvamento em Documentos salvos. O navegador pode limpar seu armazenamento; salve também o arquivo.",
     "all": "Documentos salvos"
   },
-  "trust": ["0 byte enviado", "sem conta", "funciona offline", ".docx .xlsx .pptx .csv"],
+  "trust": ["Edição local", "sem conta", "Offline com recursos em cache", ".docx .xlsx .pptx .csv"],
   "docwin": {
     "file": "report.docx",
     "badge": "salvo localmente ✓",
-    "selected": "Tudo o que você digita fica neste dispositivo.",
+    "selected": "Edição local sem envio obrigatório",
     "noteAuthor": "Você · agora mesmo",
-    "noteBody": "0 byte enviado — confira na aba de rede.",
-    "net": "network · 0 requisições · 0 byte enviado"
+    "noteBody": "Edição local sem envio obrigatório",
+    "net": "Edição local"
   },
   "nav": [
     {
@@ -92,9 +92,9 @@
       "h2": "Privacidade por construção, não por promessa",
       "items": [
         {
-          "k": "100% no cliente",
-          "h3": "Os arquivos nunca saem do seu dispositivo",
-          "p": "Cada documento é aberto, editado e salvo localmente. Não existe servidor para onde enviar."
+          "k": "Edição local",
+          "h3": "Edição local sem envio obrigatório",
+          "p": "A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento."
         },
         {
           "k": "Sem conta",
@@ -103,8 +103,8 @@
         },
         {
           "k": "PWA · offline",
-          "h3": "Instale e use até no avião",
-          "p": "Adicione à tela de início e ele continua funcionando sem conexão."
+          "h3": "Offline com recursos em cache",
+          "p": "Recursos de edição em cache funcionam offline; arquivos remotos e IA na nuvem precisam de conexão."
         },
         {
           "k": "AGPL-3.0",
@@ -132,7 +132,7 @@
         {
           "n": "03",
           "h3": "Salve de volta",
-          "p": "Exporte no mesmo formato. Nada foi enviado em momento algum.",
+          "p": "Salve no seu arquivo ou baixe uma cópia.",
           "loc": "fica no dispositivo"
         }
       ]
@@ -144,11 +144,11 @@
       "items": [
         {
           "q": "Ele salva no meu próprio arquivo ou só baixa uma cópia?",
-          "a": "Ele salva no seu próprio arquivo. No primeiro salvamento você escolhe o arquivo; a partir daí cada salvamento escreve direto nele, sem diálogo e sem duplicata na pasta de downloads. Isso usa a File System Access API do navegador, então funciona no Chrome, no Edge e em outros navegadores Chromium; Safari e Firefox baixam uma cópia. De um jeito ou de outro o arquivo vai do navegador para o seu disco e nunca é enviado."
+          "a": "No Chrome, Edge e outros navegadores com File System Access API, o primeiro salvamento pede um arquivo e os seguintes gravam nele. Outros navegadores baixam uma cópia. Exporte outros formatos em Arquivo → Baixar como. As cópias de recuperação no navegador são independentes do arquivo salvo."
         },
         {
           "q": "Meus arquivos são enviados para algum lugar?",
-          "a": "Não. Não há servidor. Os arquivos são abertos e salvos localmente no seu dispositivo e nunca são enviados — dá para conferir na aba de rede ou ler o código."
+          "a": "A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política."
         },
         {
           "q": "Quais formatos posso editar?",
@@ -156,11 +156,11 @@
         },
         {
           "q": "O que acontece se eu fechar a aba ou recarregar a página?",
-          "a": "Nada se perde. Suas edições são salvas neste navegador enquanto você trabalha, então ao reabrir o editor ele oferece o documento de volta e uma recarga retorna a ele. As cópias salvas ficam no seu dispositivo por 7 dias e depois são apagadas sozinhas; você também pode apagá-las quando quiser. Nada é enviado — as cópias existem apenas neste navegador."
+          "a": "Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo."
         },
         {
           "q": "Funciona offline?",
-          "a": "Sim. É um PWA instalável — depois de carregado ele continua funcionando sem internet, porque toda a edição acontece localmente no seu navegador."
+          "a": "A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos e IA na nuvem precisam de conexão; o WebLLM local precisa do modelo já disponível."
         },
         {
           "q": "Preciso de uma conta?",
@@ -234,10 +234,10 @@
   "featureList": [
     "Abrir e ver DOCX, XLSX, PPTX e CSV sem o Microsoft Office",
     "Editar arquivos DOCX, XLSX, PPTX e CSV",
-    "100% no cliente — os arquivos nunca saem do seu dispositivo",
+    "Edição local sem envio obrigatório",
     "Sem conta e sem cadastro",
     "Abrir documentos a partir de uma URL com ?src= ou ?file=",
-    "PWA instalável com suporte offline",
+    "Offline com recursos em cache",
     "Incorporável pela API postMessage",
     "Grátis e de código aberto (AGPL-3.0)"
   ]

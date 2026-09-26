@@ -1,19 +1,19 @@
 ---
-title: Free Online Document Editor — No Server or Account
-description: Use the document, spreadsheet and presentation editors online for free, with no Document Server to install and no account. They run inside your browser as WebAssembly, so your DOCX, XLSX and PPTX files are never uploaded. Open source, self-hostable, not affiliated with Ascensio System SIA.
+title: 'Free Online Document Editor — No Server or Account'
+description: 'Use an independent modified editor build without installing Document Server. Local editing without required uploads.'
 eyebrow: Browser editor · no server
 h1: Edit Documents in Your Browser — Without Running a Server
-lead: This site runs document, spreadsheet and presentation editors entirely inside your browser, compiled to WebAssembly. There is no Document Server to install, no account to create, and no upload — the file you open stays on your device.
+lead: 'Use an independent modified editor build without installing Document Server. Core opening, editing and conversion run locally in your browser without a required document upload.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: Document, spreadsheet and presentation editors, running client-side in your browser. No Document Server, no account, no upload. Free and open source.
+ogDescription: 'Use an independent modified editor build without installing Document Server. Local editing without required uploads.'
 breadcrumb: Editor details
-appDescription: Document, spreadsheet and presentation editors compiled to WebAssembly and running client-side in the browser, with no Document Server and no upload.
+appDescription: 'Use an independent modified editor build without installing Document Server. Local editing without required uploads.'
 ---
 
 ONLYOFFICE is normally something you install: the editors are a front end for ONLYOFFICE Docs (the Document Server), which converts and stores your files on a machine you have to run and keep running. That is the right shape for a team. It is a lot of machinery when all you wanted was to open a `.docx` someone sent you.
 
-This site is the other shape. The same editors, plus the same `x2t` conversion engine, are compiled to WebAssembly and loaded into the page. Your browser is the document server — which is why nothing is uploaded, why there is no account, and why it keeps working after you go offline.
+Core local editing: This site is the other shape. The same editors, plus the same `x2t` conversion engine, are compiled to WebAssembly and loaded into the page. Your browser is the document server — which is why nothing is uploaded, why there is no account, and why it keeps working after you go offline. Cached editing resources can work offline; remote files and cloud AI need a connection.
 
 It is a modified version of the ONLYOFFICE editors, published under the same AGPL-3.0 license. It is not an official ONLYOFFICE product, and this project is not affiliated with, sponsored by or endorsed by Ascensio System SIA.
 
@@ -21,8 +21,8 @@ It is a modified version of the ONLYOFFICE editors, published under the same AGP
 
 - **The real editors** — the ONLYOFFICE document, spreadsheet, presentation and PDF editors, not a viewer or a reimplementation.
 - **The real converter** — `x2t`, the same engine ONLYOFFICE Docs uses, compiled to WebAssembly. DOCX, XLSX, PPTX, ODT, ODS, ODP, CSV and PDF in; DOCX, XLSX, PPTX, PDF, TXT, HTML and CSV out.
-- **No server, no account, no upload** — the file is read from your disk into the tab and written back to it.
-- **Offline** — installable as a PWA; after the first visit the engine is cached and the editor opens with no connection.
+- Core local editing: **No server, no account, no upload** — the file is read from your disk into the tab and written back to it.
+- Cached editing resources can work offline; remote files and cloud AI need a connection.
 - **Open source** — AGPL-3.0, and it deploys as static files, so you can host your own copy on any web server.
 
 ## How it differs from ONLYOFFICE Docs
@@ -31,7 +31,7 @@ Being honest about this is more useful than a feature list:
 
 - **No collaboration.** Co-editing, comments-in-real-time, user presence and everything else that needs a server between two people is not here. This is a single-user editor.
 - **No connectors.** The Nextcloud / ownCloud / SharePoint integrations belong to ONLYOFFICE Docs. This site opens files from your disk, from a URL, or from a parent page that embeds it.
-- **No admin.** There is nothing to configure, back up or update — and nothing to secure, since there is no stored copy of your document anywhere.
+- **No document server to administer.** Self-hosted deployments still need updates and security maintenance. When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 - **Your browser does the work.** A large document costs your own memory rather than a server's. The engine asks for a few hundred megabytes when it starts, which is fine on a laptop and can be tight on an old phone.
 - **Everything else is the same engine**, so fonts, tables, formulas, revisions and layout survive a round trip the way ONLYOFFICE handles them.
 
@@ -58,7 +58,7 @@ No. The conversion engine that a Document Server would run is compiled to WebAss
 
 ### Are my files uploaded anywhere?
 
-No. Files are read from your device and processed in the tab. You can check this in your browser's network panel while opening and saving a document, or read the source.
+Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can several people edit the same document together?
 

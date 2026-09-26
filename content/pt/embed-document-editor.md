@@ -1,18 +1,18 @@
 ---
-title: Incorporar um editor de documentos no seu site — iframe + API postMessage
-description: Incorpore um editor de DOCX, XLSX, PPTX e CSV no seu app web com um iframe e uma API postMessage. Autenticação e arquivos ficam no seu app — o editor nunca vê seus tokens. Código aberto (AGPL-3.0), auto-hospedável, white-label.
+title: 'Incorporar um editor de documentos no seu site — iframe + API postMessage'
+description: 'Incorpore um editor com iframe e postMessage; o app anfitrião controla arquivos e envios.'
 eyebrow: Desenvolvedores · Incorporar
 h1: Incorporar um editor de documentos no seu app web
 lead: 'Adicione ao seu produto um editor de **DOCX, XLSX, PPTX e CSV** com um único iframe e uma API **postMessage**. Seu app mantém autenticação, acesso a arquivos e upload — o editor só edita, e nunca vê os tokens dos seus usuários.'
 cta: Abrir a demo ao vivo →
 ctaHref: /embed-demo.html
-ogDescription: Coloque um editor de DOCX/XLSX/PPTX/CSV no seu app com um iframe. A autenticação fica no seu app; o editor nunca vê seus tokens. Código aberto e auto-hospedável.
+ogDescription: 'Incorpore um editor com iframe e postMessage; o app anfitrião controla arquivos e envios.'
 breadcrumb: Embed Document Editor
 howTo: Como incorporar um editor de documentos no seu site
-appDescription: Um editor de documentos no navegador que se incorpora ao seu próprio app web por iframe e API postMessage.
+appDescription: 'Incorpore um editor com iframe e postMessage; o app anfitrião controla arquivos e envios.'
 ---
 
-O editor roda inteiramente no navegador com o motor WebAssembly do OnlyOffice, então os documentos são renderizados e editados no cliente — você não sobe nenhum servidor de documentos. O padrão recomendado mantém a fronteira limpa: **o app pai cuida da autenticação, da busca e do salvamento; o iframe cuida só da edição.** Tokens, cookies e APIs de negócio ficam no seu app.
+Na edição básica local: O editor roda inteiramente no navegador com o motor WebAssembly do OnlyOffice, então os documentos são renderizados e editados no cliente — você não sobe nenhum servidor de documentos. O padrão recomendado mantém a fronteira limpa: **o app pai cuida da autenticação, da busca e do salvamento; o iframe cuida só da edição.** Tokens, cookies e APIs de negócio ficam no seu app.
 
 ## Adicione com um iframe
 
@@ -44,7 +44,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 - Abrir a partir de uma **URL, um File ou um ArrayBuffer** que seu app buscou com as próprias credenciais
 - Salvar de volta em **XLSX, DOCX, PPTX ou CSV**, devolvido como um `File` para o seu app enviar
 - Modo somente leitura, trava de origem por mensagem (`embedOrigin`) e uma consulta de estado
-- Nenhum servidor de documentos para operar — a edição é 100% WebAssembly no cliente
+- Na edição básica local: Nenhum servidor de documentos para operar — a edição é 100% WebAssembly no cliente
 - Código aberto (AGPL-3.0) e auto-hospedável — incorpore sob o seu próprio domínio
 
 ## Como funciona

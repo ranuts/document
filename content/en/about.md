@@ -1,6 +1,6 @@
 ---
-title: About — who builds this document editor and why
-description: Who is behind edit.chaxus.com, what it does, how it is built, and where the source code lives. An open-source (AGPL-3.0) in-browser editor for Word, Excel, PowerPoint, CSV and PDF files that never uploads your documents.
+title: 'About — who builds this document editor and why'
+description: 'About this open-source browser editor, its authors, source code and data handling. Local editing without required uploads.'
 eyebrow: About
 breadcrumb: About
 h1: About this editor
@@ -11,9 +11,9 @@ lead: Who builds this, what it actually does, and how you can check both.
 
 An **in-browser editor for office documents**. You open a Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV or PDF file and edit it directly in a browser tab.
 
-The part that matters most: **your file never leaves your device**. There is no upload step, no account, and no server-side copy of your document. The editing engine runs inside your browser, so the file goes from your disk to your tab and back — nothing in between.
+Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
 
-That single property drives most of the design decisions here: no sign-up flow, no cloud storage, no telemetry that could carry document contents, and an offline mode that keeps working when the network does not.
+When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 
 ## Who builds it
 
@@ -26,8 +26,8 @@ It is a personal open-source project, not a company product. There is no sales t
 Claims about privacy are cheap. These are the ways to check them yourself:
 
 - **Read the source.** The whole thing is open source under **AGPL-3.0** at [github.com/ranuts/document](https://github.com/ranuts/document). The license means any hosted modification has to publish its source too.
-- **Watch the network tab.** Open your browser's developer tools, load a document, edit it, and look at the network requests. You will not see your file being sent anywhere.
-- **Turn off the network.** Load the site once, go offline, then open and edit a file. It keeps working, which is only possible because the editing happens locally.
+- Inspect the browser’s network panel while opening, editing and saving a local file. Test optional AI, remote URLs and host integrations separately; their requests are not covered by the core local-editing claim.
+- While online, open the editor and test the file formats, fonts and exports you will need. Then disconnect and verify the same workflow before relying on it offline.
 - **Self-host it.** The repository includes what you need to run your own copy.
 
 ## What it is built on
@@ -41,7 +41,7 @@ Being built on an existing engine is deliberate. Document formats — especially
 An honest list, because a page that only lists strengths is not useful:
 
 - **Large files are bound by your device.** Everything runs in your browser, so a very large spreadsheet is limited by your own memory and CPU, not by a server you can pay to upgrade.
-- **No sync and no collaboration.** There is no server holding your document, which also means no real-time co-editing and no cross-device sync.
+- Core local editing: **No sync and no collaboration.** There is no server holding your document, which also means no real-time co-editing and no cross-device sync.
 - **Fidelity is very good, not perfect.** Complex layouts, unusual fonts and macros can differ from a desktop suite.
 
 If any of these matter more to you than keeping the file local, a hosted suite is the better tool — and that is a reasonable choice.

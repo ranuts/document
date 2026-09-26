@@ -1,26 +1,26 @@
 ---
-title: Edit Documents Without an Account — No Sign-Up, Just Start
-description: Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files with no account, no sign-up and no login. Open the editor and start immediately in your browser. Free, open source (AGPL-3.0), nothing uploaded, works offline.
+title: 'Edit Documents Without an Account — No Sign-Up, Just Start'
+description: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Local editing without required uploads.'
 eyebrow: No account · just start
 h1: Want to Edit Documents Without an Account?
-lead: Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files without signing up for anything. There is no account, no login and no email to hand over — you open the editor and start typing.
+lead: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Core opening, editing and conversion run locally in your browser without a required document upload.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: Edit DOCX, XLSX, PPTX and CSV with no account and no sign-up — open the editor and start right away. Free and open source.
+ogDescription: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Local editing without required uploads.'
 breadcrumb: Edit documents without an account
-appDescription: Edit DOCX, XLSX, PPTX and CSV files in the browser with no account, no sign-up and no login. Open it and start editing immediately — nothing uploaded.
+appDescription: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Local editing without required uploads.'
 ---
 
-No registration wall stands between you and your document. Everything runs locally in your browser with WebAssembly, so there is no account to create because there is no server storing your files in the first place. You open a file, edit it, and download it again — that is the whole flow.
+Core local editing: No registration wall stands between you and your document. Everything runs locally in your browser with WebAssembly, so there is no account to create because there is no server storing your files in the first place. You open a file, edit it, and download it again — that is the whole flow.
 
-It is a full editor, not a stripped-down preview: powered by the OnlyOffice engine, your fonts, tables, formulas and layout stay intact. And because your files never leave your device, skipping the account also means skipping the usual trade of your data for access.
+Core local editing: It is a full editor, not a stripped-down preview: powered by the OnlyOffice engine, your fonts, tables, formulas and layout stay intact. And because your files never leave your device, skipping the account also means skipping the usual trade of your data for access.
 
 ## What you can do
 
 - **Start with no account** — no sign-up, no login, no email or phone number.
 - **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with full formatting preserved.
-- **Keep files on-device** — 100% client-side; your documents are never uploaded.
-- **Work offline** — installable as a PWA and usable with no connection.
+- Core local editing: **Keep files on-device** — 100% client-side; your documents are never uploaded.
+- Cached editing resources can work offline; remote files and cloud AI need a connection.
 - **Stay free** — open source under AGPL-3.0, with no paywall to unlock.
 
 ## How it works
@@ -42,7 +42,7 @@ No. Because there is no registration step, you are never asked for an email addr
 
 ### Where are my files saved if there is no account?
 
-Your files stay on your own device. Editing happens locally in your browser with WebAssembly, and you download the result back to your computer — nothing is uploaded.
+Core local editing: Your files stay on your own device. Editing happens locally in your browser with WebAssembly, and you download the result back to your computer — nothing is uploaded.
 
 ### Is it free without an account?
 
@@ -50,4 +50,12 @@ Yes. It is free and open source under the AGPL-3.0 license, with no paywall and 
 
 ### Can I use it offline without signing in?
 
-Yes. It installs as a PWA and works fully offline once loaded, so there is never a sign-in wall between you and your documents.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+
+### What remains after I close the tab?
+
+When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+
+### What happens when I use cloud AI or an embedding host?
+
+Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.

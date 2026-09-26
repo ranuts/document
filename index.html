@@ -30,7 +30,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     <title>Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor</title>
-    <meta name="description" content="Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline." />
+    <meta name="description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources." />
     <link rel="canonical" href="https://edit.chaxus.com/" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/" />
@@ -67,11 +67,11 @@
     <meta property="og:locale:alternate" content="ko_KR" />
     <meta property="og:locale:alternate" content="pt_BR" />
     <meta property="og:title" content="Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor" />
-    <meta property="og:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser — no Office, no upload, no sign-up. Free and offline-capable." />
+    <meta property="og:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources." />
     <meta property="og:url" content="https://edit.chaxus.com/" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor" />
-    <meta name="twitter:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser — no Office, no upload, no sign-up. Free and offline-capable." />
+    <meta name="twitter:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources." />
 
     <script type="application/ld+json">
       {
@@ -121,14 +121,14 @@
             "isPartOf": {
               "@id": "https://edit.chaxus.com/#website"
             },
-            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline.",
+            "description": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
             "featureList": [
               "Open and view DOCX, XLSX, PPTX and CSV without Microsoft Office",
               "Edit DOCX, XLSX, PPTX and CSV files",
-              "100% client-side — files never leave your device",
+              "Local editing without required uploads",
               "No account or sign-up required",
               "Open documents from a URL via ?src= or ?file=",
-              "Installable PWA with offline support",
+              "Offline with cached resources",
               "Embeddable via postMessage API",
               "Free and open source (AGPL-3.0)"
             ]
@@ -138,7 +138,7 @@
             "@id": "https://edit.chaxus.com/#webpage",
             "url": "https://edit.chaxus.com/",
             "name": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor",
-            "description": "Open and view Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files directly in your browser — no Office installed, no upload, no sign-up. Edit and save them too. Free, privacy-first, works offline.",
+            "description": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
             "inLanguage": "en",
             "isPartOf": {
               "@id": "https://edit.chaxus.com/#website"
@@ -157,7 +157,7 @@
                 "name": "Can it save back into my own file, or only download a copy?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "It saves back into your own file. The first save asks you to pick the file; every save after that writes straight into it, with no dialog and no duplicate in your downloads folder. This uses the browser's File System Access API, so it works in Chrome, Edge and other Chromium browsers; Safari and Firefox download a copy instead. Either way the file goes from the browser to your own disk and is never uploaded."
+                  "text": "In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file."
                 }
               },
               {
@@ -165,7 +165,7 @@
                 "name": "Are my files uploaded anywhere?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "No. There is no server. Files are opened and saved locally on your device and are never uploaded — you can verify it in the network tab, or read the source."
+                  "text": "Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy."
                 }
               },
               {
@@ -181,7 +181,7 @@
                 "name": "What happens if I close the tab or refresh the page?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Nothing is lost. Your edits are saved into this browser as you work, so reopening the editor offers the document back and a refresh returns to it. The saved copies stay on your device for 7 days and are then deleted automatically; you can also delete any of them yourself at any time. Nothing is uploaded — the copies exist only in this browser."
+                  "text": "When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file."
                 }
               },
               {
@@ -189,7 +189,7 @@
                 "name": "Does it work offline?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. It is an installable PWA — once loaded it keeps working with no internet, because all editing runs locally in your browser."
+                  "text": "Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available."
                 }
               },
               {
@@ -248,7 +248,7 @@
         <div class="hero-copy">
           <span class="chip reveal d1"><span class="dot"></span>Local-first · <b>open source</b></span>
           <h1 class="reveal d2">Open Word, Excel &amp; PowerPoint files, <span class="accent">right in your browser.</span></h1>
-          <p class="sub reveal d3">No Office installed? View any DOCX, XLSX or PPTX instantly — and edit it when you need to. Everything runs on your device: no upload, no sign-up, works offline.</p>
+          <p class="sub reveal d3">Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.</p>
           <div class="cta reveal d4">
             <r-button type="primary" id="hero-open" data-open-local="/editor?open=local">Open a file</r-button>
             <a href="/editor?new=docx" data-prefetch="docx"><r-button id="hero-new-docx">New Word</r-button></a>
@@ -261,12 +261,12 @@
                visitor, to a crawler, and with JavaScript off. -->
           <div class="recent reveal d5">
             <span data-recent-slot data-recent-label="Continue editing" hidden></span>
-            <span class="recent-note">Close the tab by accident and nothing is lost: your edits are saved into this browser as you work. Saved copies stay for 7 days and are then deleted automatically — or delete them yourself at any time.</span>
+            <span class="recent-note">Recovery copies stay in this browser for 7 days after the last edit or open when autosave is enabled. Delete them or turn autosave off in Saved documents. Browser storage can be cleared; save your file too.</span>
             <a class="recent-all" href="/history"
               >Saved documents</a
             >
           </div>
-          <div class="trust reveal d5"><span>0 bytes uploaded</span><span>no account</span><span>works offline</span><span>.docx .xlsx .pptx .csv</span></div>
+          <div class="trust reveal d5"><span>Local editing</span><span>no account</span><span>Offline with cached resources</span><span>.docx .xlsx .pptx .csv</span></div>
         </div>
 
         <!-- Decorative "document being edited locally" window -- pure CSS, no JS. -->
@@ -282,7 +282,7 @@
               <span class="dl t"></span>
               <span class="dl w92"></span>
               <span class="dl w78"></span>
-              <p class="dw-text"><mark>Everything you type stays on this device.</mark><i class="caret"></i></p>
+              <p class="dw-text"><mark>Local editing without required uploads</mark><i class="caret"></i></p>
               <span class="dl w85"></span>
               <span class="dl w60"></span>
               <span class="dl t2"></span>
@@ -292,10 +292,10 @@
             </div>
             <aside class="dw-note">
               <b>You · just now</b>
-              <span>0 bytes uploaded — check the network tab.</span>
+              <span>Local editing without required uploads</span>
             </aside>
           </div>
-          <div class="dw-net"><i class="ok"></i>network · 0 requests · 0 bytes out</div>
+          <div class="dw-net"><i class="ok"></i>Local editing</div>
         </div>
       </div>
 
@@ -357,9 +357,9 @@
         </div>
         <div class="pillars">
           <div class="pillar">
-            <span class="k">100% client-side</span>
-            <h3>Files never leave your device</h3>
-            <p>Every document is opened, edited and saved locally. There is no server to upload to.</p>
+            <span class="k">Local editing</span>
+            <h3>Local editing without required uploads</h3>
+            <p>Core opening, editing and conversion run locally in your browser without a required document upload.</p>
           </div>
           <div class="pillar">
             <span class="k">No account</span>
@@ -368,8 +368,8 @@
           </div>
           <div class="pillar">
             <span class="k">PWA · offline</span>
-            <h3>Install it, use it on a plane</h3>
-            <p>Add it to your home screen and it keeps working with no internet connection.</p>
+            <h3>Offline with cached resources</h3>
+            <p>Cached editing resources can work offline; remote files and cloud AI need a connection.</p>
           </div>
           <div class="pillar">
             <span class="k">AGPL-3.0</span>
@@ -400,7 +400,7 @@
           <div class="step">
             <div class="n">03</div>
             <h3>Save it back</h3>
-            <p>Export to the same format. Nothing was ever uploaded.</p>
+            <p>Save into your own file or download a copy.</p>
             <span class="loc">stays on device</span>
           </div>
         </div>
@@ -416,11 +416,11 @@
           <div class="qa">
             <details open>
               <summary>Can it save back into my own file, or only download a copy?</summary>
-              <p class="a">It saves back into your own file. The first save asks you to pick the file; every save after that writes straight into it, with no dialog and no duplicate in your downloads folder. This uses the browser's File System Access API, so it works in Chrome, Edge and other Chromium browsers; Safari and Firefox download a copy instead. Either way the file goes from the browser to your own disk and is never uploaded.</p>
+              <p class="a">In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file.</p>
             </details>
             <details>
               <summary>Are my files uploaded anywhere?</summary>
-              <p class="a">No. There is no server. Files are opened and saved locally on your device and are never uploaded — you can verify it in the network tab, or read the source.</p>
+              <p class="a">Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.</p>
             </details>
             <details>
               <summary>Which formats can I edit?</summary>
@@ -428,11 +428,11 @@
             </details>
             <details>
               <summary>What happens if I close the tab or refresh the page?</summary>
-              <p class="a">Nothing is lost. Your edits are saved into this browser as you work, so reopening the editor offers the document back and a refresh returns to it. The saved copies stay on your device for 7 days and are then deleted automatically; you can also delete any of them yourself at any time. Nothing is uploaded — the copies exist only in this browser.</p>
+              <p class="a">When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.</p>
             </details>
             <details>
               <summary>Does it work offline?</summary>
-              <p class="a">Yes. It is an installable PWA — once loaded it keeps working with no internet, because all editing runs locally in your browser.</p>
+              <p class="a">Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.</p>
             </details>
             <details>
               <summary>Do I need an account?</summary>

@@ -1,15 +1,15 @@
 ---
-title: PPTX im Browser in PDF umwandeln — kostenlos, ohne Upload
-description: Eine PowerPoint-Datei (PPTX) in ein PDF umwandeln, ohne sie irgendwohin hochzuladen. Die Umwandlung läuft vollständig auf Ihrem Gerät — kostenlos, ohne Konto, ohne PowerPoint, offlinefähig.
+title: 'PPTX im Browser in PDF umwandeln — kostenlos, ohne Upload'
+description: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 eyebrow: Umwandeln · .pptx → .pdf
 h1: PPTX im Browser in PDF umwandeln
-lead: 'Ein PowerPoint-Deck **.pptx** in ein **.pdf** verwandeln — ohne sie irgendwohin hochzuladen. Die gesamte Umwandlung passiert lokal in Ihrem Browser.'
+lead: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 cta: PPTX öffnen →
 ctaHref: /de/
-ogDescription: PowerPoint-PPTX-Dateien lokal im Browser in PDF umwandeln. Nichts wird hochgeladen, kein Konto, kostenlos und quelloffen.
+ogDescription: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 breadcrumb: pptx-to-pdf
 howTo: Eine PPTX ohne Upload in ein PDF umwandeln
-appDescription: PowerPoint-PPTX-Dateien im Browser in PDF umwandeln — ohne Upload und ohne Konto.
+appDescription: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
 ---
 
 ## So funktioniert es
@@ -17,11 +17,11 @@ appDescription: PowerPoint-PPTX-Dateien im Browser in PDF umwandeln — ohne Upl
 1. Klicken Sie auf **PPTX öffnen**, um den Editor im Browser zu starten.
 2. Wählen Sie die **.pptx**-Datei von Ihrem Gerät oder ziehen Sie sie auf die Seite.
 3. Wählen Sie **Herunterladen als / Speichern unter** und dort **PDF**.
-4. Das PDF entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
+4. Bei der lokalen Kernbearbeitung: Das PDF entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
 
 Fast jeder „PPTX zu PDF“-Dienst im Netz funktioniert gleich: Sie geben Ihr Dokument ab, dessen Server wandelt es um, Sie laden das Ergebnis herunter. Damit liegt ein Vertrag, ein Lebenslauf oder ein Arztbrief auf einem fremden Rechner, und sei es kurz. Dieser hier schickt nichts weg: Die Datei wird direkt von der Festplatte in Ihren Browser-Tab gelesen, dort umgewandelt und wieder herausgeschrieben.
 
-Die Umwandlung übernimmt die nach WebAssembly kompilierte x2t-Engine von OnlyOffice — dieselbe Engine, die das Dokument am Bildschirm darstellt. Was Sie im Editor sehen, landet also im PDF. Schriften, Tabellen, Bilder, Kopf- und Fußzeilen, Seitenumbrüche und Nummerierung werden übernommen. Weil sie in Ihrem Tab läuft, gibt es keine Upload-Warteschlange, keine serverseitige Größenbeschränkung und kein Warten auf fremde Jobs.
+Bei der lokalen Kernbearbeitung: Die Umwandlung übernimmt die nach WebAssembly kompilierte x2t-Engine von OnlyOffice — dieselbe Engine, die das Dokument am Bildschirm darstellt. Was Sie im Editor sehen, landet also im PDF. Schriften, Tabellen, Bilder, Kopf- und Fußzeilen, Seitenumbrüche und Nummerierung werden übernommen. Weil sie in Ihrem Tab läuft, gibt es keine Upload-Warteschlange, keine serverseitige Größenbeschränkung und kein Warten auf fremde Jobs.
 
 Das ist die praktische Wahl, wenn das Dokument nicht Ihres ist, um es weiterzugeben: ein Angebot vor der Unterschrift, ein Bericht unter Sperrfrist, alles mit personenbezogenen Daten. Es ist auch die Wahl, die im Flugzeug oder hinter einer Firewall weiterläuft, denn nach dem ersten Laden ist es eine installierbare App, die ganz ohne Netz funktioniert.
 
@@ -33,7 +33,7 @@ Das ist die praktische Wahl, wenn das Dokument nicht Ihres ist, um es weiterzuge
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Nein. Die Datei wird vollständig in Ihrem Browser-Tab geöffnet und umgewandelt, sie verlässt Ihr Gerät also nie.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Brauche ich PowerPoint oder ein Konto?
 
@@ -53,4 +53,4 @@ Nein. Hier wird nach PDF exportiert; der Text eines vorhandenen PDFs wird nicht 
 
 ### Funktioniert die Umwandlung offline?
 
-Ja. Einmal geladen ist es eine installierbare PWA und wandelt auch ohne Internetverbindung weiter um.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs und Cloud-KI benötigen eine Verbindung; für lokales WebLLM muss das Modell bereits verfügbar sein.

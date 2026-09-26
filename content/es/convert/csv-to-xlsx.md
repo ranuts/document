@@ -1,15 +1,15 @@
 ---
-title: Convertir CSV a XLSX en el navegador — gratis, sin subirlo
-description: Convierte un archivo CSV a XLSX (Excel) por completo en tu navegador: ábrelo y expórtalo a XLSX. Gratis, de código abierto, no se sube nada, funciona sin conexión. No hace falta Excel ni cuenta.
+title: 'Convertir CSV a XLSX en el navegador — gratis, sin subirlo'
+description: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
 eyebrow: Convertir · .csv → .xlsx
 h1: Convertir CSV a XLSX en el navegador
-lead: 'Convierte un archivo **.csv** plano en un **.xlsx** de Excel con formato, sin subirlo a ningún sitio. Toda la conversión ocurre en local, en tu navegador.'
+lead: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
 cta: Abrir tu CSV →
 ctaHref: /es/
-ogDescription: Convierte CSV a XLSX en tu navegador: nada se sube, sin Excel, sin cuenta. Código abierto.
+ogDescription: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
 breadcrumb: CSV a XLSX
 howTo: Cómo convertir CSV a XLSX en el navegador
-appDescription: Convierte CSV a XLSX en el navegador abriendo el archivo y exportándolo a XLSX, sin subidas y sin cuenta.
+appDescription: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
 ---
 
 ## Cómo funciona
@@ -17,7 +17,7 @@ appDescription: Convierte CSV a XLSX en el navegador abriendo el archivo y expor
 1. Pulsa **Abrir tu CSV** para lanzar el editor en tu navegador.
 2. Elige el archivo **.csv** de tu dispositivo, o arrástralo a la página.
 3. Elige **Descargar como / Guardar como** y selecciona **XLSX**.
-4. El XLSX se genera en tu dispositivo y se descarga: no se sube nada.
+4. En la edición básica local: El XLSX se genera en tu dispositivo y se descarga: no se sube nada.
 
 El CSV está en todas partes, pero es incómodo: sin formato, sin fórmulas, sin varias hojas. Como XLSX puedes ajustar el ancho de las columnas, añadir fórmulas, dar formato y compartirlo. Aquí la conversión ocurre en tu navegador, así que tus datos no salen del dispositivo.
 
@@ -33,7 +33,7 @@ Abre el CSV en el editor y usa Descargar como / Guardar como XLSX: la conversió
 
 ### ¿Se sube mi archivo para convertirlo?
 
-No. Todo se ejecuta en tu navegador, así que tu CSV nunca se sube.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Necesito Excel o una cuenta?
 
@@ -49,4 +49,4 @@ Sí: consulta [XLSX a CSV](/es/convert/xlsx-to-csv).
 
 ### ¿La conversión funciona sin conexión?
 
-Sí. Una vez cargada es una PWA instalable, así que sigue funcionando sin conexión a internet.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.

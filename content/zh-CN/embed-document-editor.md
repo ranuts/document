@@ -1,15 +1,15 @@
 ---
-title: 在你的网站里嵌入文档编辑器 —— iframe + postMessage API
-description: 用一个 iframe 加 postMessage API，把 DOCX、XLSX、PPTX、CSV 编辑器嵌入你的 Web 应用。鉴权与文件都留在你的应用里——编辑器看不到你的 token。开源（AGPL-3.0）、可自托管、可白标。
+title: '在你的网站里嵌入文档编辑器 —— iframe + postMessage API'
+description: '通过 iframe 和 postMessage 嵌入文档编辑器，由宿主控制文件访问和上传。'
 eyebrow: 开发者 · 嵌入
 h1: 把文档编辑器嵌入你的 Web 应用
 lead: 用一个 iframe 加 **postMessage** API，把 **DOCX、XLSX、PPTX、CSV** 编辑器加进你的产品。鉴权、文件访问和上传都留在你的应用里——编辑器只负责编辑，永远看不到用户的 token。
 cta: 打开在线 demo →
 ctaHref: /embed-demo.html
-ogDescription: 用一个 iframe 把 DOCX/XLSX/PPTX/CSV 编辑器嵌入你的应用。鉴权留在你的应用里，编辑器看不到 token。开源、可自托管。
+ogDescription: '通过 iframe 和 postMessage 嵌入文档编辑器，由宿主控制文件访问和上传。'
 breadcrumb: 嵌入文档编辑器
 howTo: 如何在网站里嵌入文档编辑器
-appDescription: 可嵌入的 DOCX/XLSX/PPTX/CSV 编辑器：用一个 iframe 嵌入任意 Web 应用，用 postMessage API 驱动。鉴权与文件访问都留在父应用里。
+appDescription: '通过 iframe 和 postMessage 嵌入文档编辑器，由宿主控制文件访问和上传。'
 ---
 
 编辑器完全在浏览器里用 OnlyOffice WebAssembly 引擎运行，文档在客户端渲染和编辑——你不需要部署文档服务器。推荐模式保持清晰边界： **父应用负责鉴权、拉取与保存；iframe 只负责编辑。**token、cookie 和业务 API 都留在你的应用里。
@@ -72,7 +72,7 @@ send('document:set-readonly', { readonly: false });
 
 ### 编辑器会看到我用户的鉴权 token 吗？
 
-不会。鉴权、文件拉取和上传都留在你的应用里——你的应用用自己的凭据拉取文件、把二进制传给编辑器，token 和 cookie 永远不会进入 iframe。
+核心本地编辑：不会。鉴权、文件拉取和上传都留在你的应用里——你的应用用自己的凭据拉取文件、把二进制传给编辑器，token 和 cookie 永远不会进入 iframe。
 
 ### 嵌入的编辑器支持哪些文件格式？
 

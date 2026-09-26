@@ -1,20 +1,20 @@
 ---
-title: Abrir PPTX sin PowerPoint — gratis, en línea, sin subirlo
-description: Abre y edita una presentación PPTX (PowerPoint) sin Microsoft PowerPoint ni cuenta. Diapositivas, imágenes y diseño se conservan; gratis y de código abierto, funciona en tu navegador: no se sube nada.
+title: 'Abrir PPTX sin PowerPoint — gratis, en línea, sin subirlo'
+description: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
 eyebrow: Abrir · .pptx
 h1: Abrir un archivo PPTX sin PowerPoint
-lead: '¿Necesitas abrir una presentación **.pptx** y no tienes PowerPoint? Consúltala y edítala en tu navegador, con diapositivas, imágenes y diseño intactos. Nada que instalar, nada que subir.'
+lead: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
 cta: Abrir tu PPTX →
 ctaHref: /es/
-ogDescription: Abre y edita presentaciones PPTX sin PowerPoint ni cuenta. Código abierto, nada se sube.
+ogDescription: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
 breadcrumb: Abrir PPTX
 howTo: Cómo abrir un archivo PPTX sin PowerPoint
-appDescription: Abre y edita presentaciones PPTX (PowerPoint) en el navegador, sin PowerPoint, sin cuenta y sin subidas.
+appDescription: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
 ---
 
 PPTX es el formato de Microsoft PowerPoint. Este editor lo abre con el motor de OnlyOffice, así que los diseños de diapositiva, las imágenes, las formas y el texto se representan correctamente. Se ejecuta en local con WebAssembly, de modo que tu presentación se queda en tu dispositivo.
 
-El motor de presentaciones de OnlyOffice está compilado a WebAssembly y se ejecuta dentro de tu pestaña. Cuando eliges una presentación, se lee directamente del disco a la memoria — sin subida y sin ida y vuelta a un servidor — así que una propuesta confidencial o una presentación interna nunca sale de tu máquina. Abre tanto el **.pptx** moderno como el antiguo **.ppt** binario, y puede exportar tus diapositivas a PPTX o PDF.
+En la edición básica local: El motor de presentaciones de OnlyOffice está compilado a WebAssembly y se ejecuta dentro de tu pestaña. Cuando eliges una presentación, se lee directamente del disco a la memoria — sin subida y sin ida y vuelta a un servidor — así que una propuesta confidencial o una presentación interna nunca sale de tu máquina. Abre tanto el **.pptx** moderno como el antiguo **.ppt** binario, y puede exportar tus diapositivas a PPTX o PDF.
 
 ## Cómo funciona
 
@@ -28,8 +28,8 @@ El motor de presentaciones de OnlyOffice está compilado a WebAssembly y se ejec
 - Abrir cualquier presentación **.pptx** (y .ppt) con el diseño completo
 - Editar diapositivas y volver a descargarlas como PPTX o PDF
 - Sin Microsoft PowerPoint y sin cuenta
-- Sin subidas: tu presentación nunca sale de tu dispositivo
-- Funciona sin conexión como aplicación instalable
+- En la edición básica local: Sin subidas: tu presentación nunca sale de tu dispositivo
+- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
 
 Da igual si un compañero te envía una presentación para revisar, si necesitas un par de diapositivas para tu propia charla o si solo quieres leer un **.pptx** en un equipo sin Office: abrirlo lleva unos segundos. Como la representación la produce el mismo motor de OnlyOffice que usan sus aplicaciones de escritorio, lo que ves coincide con lo que verá alguien en PowerPoint, así que puedes revisar o retocar con confianza y devolverla tal cual.
 
@@ -45,7 +45,7 @@ Sí. El motor de OnlyOffice conserva diseños de diapositiva, imágenes, formas 
 
 ### ¿Se sube mi presentación?
 
-No. Se ejecuta en local con WebAssembly y nunca sale de tu dispositivo.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Puedo editar las diapositivas, no solo verlas?
 

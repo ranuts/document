@@ -87,3 +87,21 @@ Google Search 忽略 llms.txt，不存在仅添加该文件就提升排名的保
 来源：https://developers.google.com/search/docs/fundamentals/ai-optimization-guide
 AI 引用观察可参考 Bing Webmaster 的 AI Performance：
 https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c
+
+## 隐私与离线文案统一
+
+已处理上述 SEO / GEO 复查的第 1 项：七种语言首页、落地页、帮助与 FAQ、
+页面摘要、社交摘要和应用结构化数据均统一核心本地编辑的范围。
+
+- 核心文件打开、编辑、转换无需上传；可选云端 AI、WebLLM、嵌入宿主及
+  WebMCP 浏览器代理的后续数据共享分别说明。
+- 不再把一次访问或 PWA 安装等同于所有资源离线可用。明确应用、引擎、
+  转换器、字体、格式资源和本地模型的缓存前提，以及远程文件与云端 AI 的网络要求。
+- 删除关闭标签页“不留内容”的错误说法。启用自动保存时，IndexedDB 恢复副本
+  按最后一次编辑或打开保留七天；可删除或停用，浏览器清理与未及时保存仍可导致丢失。
+- 帮助页补充文件写回和下载回退，恢复副本与正式保存的文件分开说明。
+- 保持现有公开路由与语言链接。FAQ 正文与 FAQPage JSON-LD 来自同一内容；
+  七语言恢复窗口测试使用实际 MAX_AGE_MS，避免实现与宣传期限脱节。
+
+相关页面生成、SEO 与版权测试 2431 项通过；语言菜单与全站移动横向溢出
+浏览器回归 20 项通过。搜索意图重叠与生产收录 / 引用数据仍是待评估项。

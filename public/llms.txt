@@ -24,10 +24,11 @@
   file. Requires the File System Access API, so Chromium browsers only; Safari
   and Firefox fall back to a download. Nothing is uploaded either way -- the
   write goes from the browser to the user's own disk.
-- Autosaves while editing: copies are written into the visitor's own browser
-  (IndexedDB), so closing the tab, refreshing or a browser crash does not lose
-  the work. Reopening the editor offers the document back, and the URL carries
-  the document's id so a reload returns to the same one.
+- When autosave is enabled, recovery copies are written into the visitor's own
+  browser (IndexedDB). Reopening the editor can offer a retained copy, and the
+  document id in the URL can restore it on reload. Closing a tab does not delete
+  these copies. Browser storage can be cleared or evicted and edits not yet
+  autosaved can be lost; save the file separately rather than relying on recovery.
 - Those copies stay on the device for 7 days after the last edit or open, then
   delete themselves. A `/history` page lists what is stored, with per-document
   delete and a delete-all, and autosave can be switched off there. Nothing is
@@ -50,6 +51,9 @@
 - Offline operation depends on cached application, engine, format and font
   resources, browser storage retention and available device memory. Cloud AI
   needs network access; local AI needs its model already available.
+- Browser agents using WebMCP can receive document text or exported files and
+  may send them to their own AI service. Local tool execution does not guarantee
+  that the agent keeps its inputs or results on-device.
 - This is an independent modified build using ONLYOFFICE editor code, not an
   official ONLYOFFICE product. Copyright, license and modification information
   are available in the repository LICENSE and NOTICE files.

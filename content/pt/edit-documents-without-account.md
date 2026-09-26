@@ -1,26 +1,26 @@
 ---
-title: Editar documentos sem conta — sem cadastro, é só começar
-description: Edite arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV sem conta, sem cadastro e sem login. Abra o editor e comece na hora, no navegador. Grátis, de código aberto (AGPL-3.0), nada é enviado, funciona offline.
+title: 'Editar documentos sem conta — sem cadastro, é só começar'
+description: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
 eyebrow: Sem conta · é só começar
 h1: Quer editar documentos sem conta?
-lead: Edite arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV sem se cadastrar em nada. Não há conta, login nem e-mail para entregar — você abre o editor e começa a digitar.
+lead: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: Edite DOCX, XLSX, PPTX e CSV sem conta e sem cadastro — abra o editor e comece na hora. Grátis e de código aberto.
+ogDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
 breadcrumb: Editar sem conta
-appDescription: Edite arquivos DOCX, XLSX, PPTX e CSV no navegador sem conta, sem cadastro e sem login. Abra e comece; nada é enviado.
+appDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
 ---
 
 Não há muro de cadastro entre você e o seu documento. Tudo roda localmente no navegador com WebAssembly, então não há conta para criar porque, de saída, não existe servidor guardando seus arquivos. Você abre um arquivo, edita e baixa de novo — é esse o fluxo inteiro.
 
-E é um editor completo, não uma prévia reduzida: com o motor do OnlyOffice, suas fontes, tabelas, fórmulas e layout ficam intactos. E como seus arquivos nunca saem do dispositivo, pular a conta também significa pular a troca habitual dos seus dados por acesso.
+Na edição básica local: E é um editor completo, não uma prévia reduzida: com o motor do OnlyOffice, suas fontes, tabelas, fórmulas e layout ficam intactos. E como seus arquivos nunca saem do dispositivo, pular a conta também significa pular a troca habitual dos seus dados por acesso.
 
 ## O que dá para fazer
 
 - **Comece sem conta** — sem cadastro, sem login, sem e-mail nem telefone.
 - **Edite os formatos comuns** — DOCX, XLSX, PPTX e CSV, com a formatação completa preservada.
-- **Arquivos ficam no dispositivo** — 100% no cliente; seus documentos nunca são enviados.
-- **Trabalhe offline** — instalável como PWA e utilizável sem conexão.
+- Na edição básica local: **Arquivos ficam no dispositivo** — 100% no cliente; seus documentos nunca são enviados.
+- Recursos de edição em cache funcionam offline; arquivos remotos e IA na nuvem precisam de conexão.
 - **Continue grátis** — código aberto sob AGPL-3.0, sem muro de pagamento para destravar.
 
 ## Como funciona
@@ -42,7 +42,7 @@ Não. Como não existe etapa de cadastro, nunca pedimos e-mail, telefone ou dado
 
 ### Onde meus arquivos ficam salvos se não há conta?
 
-Seus arquivos ficam no seu próprio dispositivo. A edição acontece localmente no navegador com WebAssembly, e você baixa o resultado de volta para o computador — nada é enviado.
+Na edição básica local: Seus arquivos ficam no seu próprio dispositivo. A edição acontece localmente no navegador com WebAssembly, e você baixa o resultado de volta para o computador — nada é enviado.
 
 ### É grátis sem conta?
 
@@ -50,4 +50,12 @@ Sim. É grátis e de código aberto sob a licença AGPL-3.0, sem muro de pagamen
 
 ### Dá para usar offline sem fazer login?
 
-Sim. Ele se instala como PWA e funciona totalmente offline depois de carregado, então nunca há uma barreira de login entre você e seus documentos.
+A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos e IA na nuvem precisam de conexão; o WebLLM local precisa do modelo já disponível.
+
+### O que fica depois de fechar a aba?
+
+Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
+
+### Como a IA na nuvem e o app que incorpora o editor tratam os dados?
+
+A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.

@@ -1,41 +1,41 @@
 ---
-title: Offline Document Editor — Edit DOCX, XLSX, PPTX Without Internet
-description: An offline document editor that works without internet — great on a Chromebook, laptop or Android. Edit DOCX, XLSX, PPTX and CSV locally in your browser. Free, open source, installable, nothing uploaded.
+title: 'Offline Document Editor — Edit DOCX, XLSX, PPTX Without Internet'
+description: 'Edit DOCX, XLSX, PPTX and CSV offline using previously cached application, engine and font resources.'
 eyebrow: Offline · PWA
 h1: An Offline Document Editor That Works Without Internet
-lead: Edit Word, Excel and PowerPoint files with no connection — on a Chromebook, a laptop on a plane, or an Android tablet. Install it once and it keeps working offline, entirely on your device.
+lead: 'Cached editing resources can work offline; remote files and cloud AI need a connection.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: Offline document editor for Chromebook, laptop and Android. Edit DOCX, XLSX, PPTX locally. Open source, nothing uploaded.
+ogDescription: 'Edit DOCX, XLSX, PPTX and CSV offline using previously cached application, engine and font resources.'
 breadcrumb: Offline document editor
 howTo: How to use the document editor offline
-appDescription: An offline, installable document editor that edits DOCX, XLSX, PPTX and CSV locally in the browser with no internet and no upload.
+appDescription: 'Edit DOCX, XLSX, PPTX and CSV offline using previously cached application, engine and font resources.'
 ---
 
-Because all editing runs locally in your browser with WebAssembly — there is no server — it does not need the internet to work. Load it once, install it as an app (PWA), and you can open and edit documents anywhere, even fully offline. Your files never leave your device.
+Core opening, editing and conversion run locally in your browser without a required document upload.
 
-The first time you load the page, a service worker caches the app shell and the OnlyOffice engine on your device. After that the editor starts straight from that cache, so it opens instantly and keeps working with no connection — on a plane, on the subway, or anywhere with patchy Wi-Fi. Files are opened from and saved to your own device, and you can edit DOCX, XLSX, PPTX and CSV and export to PDF, TXT, HTML or CSV, all without a network.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
 
 ## How it works
 
-1. Open the editor once while connected, so the app and engine are cached on your device.
-2. Install it as an app (PWA) — use your browser's install option, or Add to Home Screen on mobile.
-3. With no connection, launch the installed app like any other app.
-4. Open a DOCX, XLSX, PPTX or CSV file, edit it, and download it again — all offline.
+1. While online, open the editor and test the file formats, fonts and exports you will need. Then disconnect and verify the same workflow before relying on it offline.
+2. PWA installation is optional: use the browser’s install option or Add to Home Screen. Installation does not guarantee that every resource has been cached.
+3. Open the previously cached editor without a connection. If a required resource is missing or browser storage was cleared, reconnect to load it.
+4. In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file.
 
 ## Why it works offline
 
-- **No server** — the whole editor runs on your device, so no connection is required
+- Cached editing resources can work offline; remote files and cloud AI need a connection.
 - **Installable PWA** — add it to your home screen or desktop and launch it like an app
 - **Runs anywhere** — Chromebook, Windows, macOS, Linux, Android; any modern browser
 - Edit DOCX, XLSX, PPTX and CSV
-- No upload, no account, no sign up
+- Core local editing: No upload, no account, no sign up
 
 ## Frequently asked questions
 
 ### Does it really work offline?
 
-Yes. Once loaded it is an installable PWA and keeps working with no internet — all editing runs locally.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
 
 ### Does it work on a Chromebook?
 
@@ -43,7 +43,7 @@ Yes. It runs in any modern browser — Chromebook, laptop, Windows, macOS, Linux
 
 ### Are my files uploaded?
 
-No. There is no server; files stay on your device and are never uploaded.
+Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Which formats can I edit?
 
@@ -55,8 +55,16 @@ Use the install icon in Chrome or Edge's address bar, or Add to Home Screen on a
 
 ### Do I need to be online the first time?
 
-Yes. Load it once while connected so the app and engine are cached; after that it runs offline.
+While online, open the editor and test the file formats, fonts and exports you will need. Then disconnect and verify the same workflow before relying on it offline.
 
 ### Where are my files saved when offline?
 
-Files are opened from and saved to your own device — there is no server involved.
+In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file. When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+
+### What remains after I close the tab?
+
+When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+
+### What happens when I use cloud AI or an embedding host?
+
+Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.

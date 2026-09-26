@@ -1,13 +1,13 @@
 {
   "title": "Abrir DOCX, XLSX y PPTX en el navegador — visor y editor de documentos gratis",
-  "description": "Abre y consulta archivos de Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV directamente en el navegador: sin Office instalado, sin subidas, sin registro. También puedes editarlos y guardarlos. Gratis, con privacidad por diseño y sin conexión.",
-  "ogDescription": "Abre, consulta y edita DOCX, XLSX, PPTX y CSV en tu navegador: sin Office, sin subidas, sin registro. Gratis y disponible sin conexión.",
+  "description": "Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.",
+  "ogDescription": "Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.",
   "chip": "Local primero · <b>código abierto</b>",
   "h1": {
     "plain": "Abre archivos de Word, Excel y PowerPoint,",
     "accent": "en tu propio navegador."
   },
-  "sub": "¿Sin Office instalado? Consulta cualquier DOCX, XLSX o PPTX al instante, y edítalo cuando lo necesites. Todo se ejecuta en tu dispositivo: sin subidas, sin registro, funciona sin conexión.",
+  "sub": "Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.",
   "cta": {
     "open": "Abrir un archivo",
     "docx": "Nuevo Word",
@@ -16,17 +16,17 @@
   },
   "recent": {
     "label": "Seguir editando",
-    "note": "Cierra la pestaña sin querer y no pierdes nada: tus cambios se guardan en este navegador mientras trabajas. Las copias guardadas duran 7 días y luego se borran solas, o puedes borrarlas tú en cualquier momento.",
+    "note": "Con el guardado automático activado, las copias quedan en este navegador 7 días desde la última edición o apertura. Bórralas o desactiva el guardado automático en Documentos guardados. El navegador puede borrar su almacenamiento; guarda también el archivo.",
     "all": "Documentos guardados"
   },
-  "trust": ["0 bytes subidos", "sin cuenta", "funciona sin conexión", ".docx .xlsx .pptx .csv"],
+  "trust": ["Edición local", "sin cuenta", "Sin conexión con recursos en caché", ".docx .xlsx .pptx .csv"],
   "docwin": {
     "file": "report.docx",
     "badge": "guardado en local ✓",
-    "selected": "Todo lo que escribes se queda en este dispositivo.",
+    "selected": "Edición local sin subidas obligatorias",
     "noteAuthor": "Tú · ahora mismo",
-    "noteBody": "0 bytes subidos: compruébalo en la pestaña de red.",
-    "net": "network · 0 peticiones · 0 bytes enviados"
+    "noteBody": "Edición local sin subidas obligatorias",
+    "net": "Edición local"
   },
   "nav": [
     {
@@ -92,9 +92,9 @@
       "h2": "Privacidad por diseño, no por promesa",
       "items": [
         {
-          "k": "100% en el cliente",
-          "h3": "Los archivos nunca salen de tu dispositivo",
-          "p": "Cada documento se abre, se edita y se guarda en local. No hay ningún servidor al que subirlo."
+          "k": "Edición local",
+          "h3": "Edición local sin subidas obligatorias",
+          "p": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento."
         },
         {
           "k": "Sin cuenta",
@@ -103,8 +103,8 @@
         },
         {
           "k": "PWA · sin conexión",
-          "h3": "Instálalo y úsalo en un avión",
-          "p": "Añádelo a la pantalla de inicio y seguirá funcionando sin conexión a internet."
+          "h3": "Sin conexión con recursos en caché",
+          "p": "Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red."
         },
         {
           "k": "AGPL-3.0",
@@ -132,7 +132,7 @@
         {
           "n": "03",
           "h3": "Guárdalo de vuelta",
-          "p": "Exporta al mismo formato. Nunca se subió nada.",
+          "p": "Guarda en tu archivo o descarga una copia.",
           "loc": "se queda en el dispositivo"
         }
       ]
@@ -144,11 +144,11 @@
       "items": [
         {
           "q": "¿Guarda en mi propio archivo o solo descarga una copia?",
-          "a": "Guarda en tu propio archivo. La primera vez te pide elegir el archivo; a partir de ahí cada guardado escribe directamente en él, sin diálogo y sin duplicados en la carpeta de descargas. Usa la File System Access API del navegador, así que funciona en Chrome, Edge y otros navegadores Chromium; Safari y Firefox descargan una copia en su lugar. En ambos casos el archivo va del navegador a tu propio disco y nunca se sube."
+          "a": "En Chrome, Edge y otros navegadores con File System Access API, el primer guardado permite elegir un archivo y los siguientes escriben en él. Otros navegadores descargan una copia. Exporta otros formatos desde Archivo → Descargar como. Las copias de recuperación del navegador son independientes del archivo guardado."
         },
         {
           "q": "¿Mis archivos se suben a algún sitio?",
-          "a": "No. No hay servidor. Los archivos se abren y se guardan en local, en tu dispositivo, y nunca se suben: puedes comprobarlo en la pestaña de red del navegador o leer el código."
+          "a": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política."
         },
         {
           "q": "¿Qué formatos puedo editar?",
@@ -156,11 +156,11 @@
         },
         {
           "q": "¿Qué pasa si cierro la pestaña o recargo la página?",
-          "a": "No se pierde nada. Tus cambios se guardan en este navegador mientras trabajas, así que al volver a abrir el editor te ofrece el documento y una recarga vuelve a él. Las copias guardadas se quedan en tu dispositivo 7 días y luego se borran solas; también puedes borrarlas tú cuando quieras. No se sube nada: las copias existen únicamente en este navegador."
+          "a": "Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo."
         },
         {
           "q": "¿Funciona sin conexión?",
-          "a": "Sí. Es una PWA instalable: una vez cargada sigue funcionando sin internet, porque toda la edición ocurre en local, en tu navegador."
+          "a": "La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible."
         },
         {
           "q": "¿Necesito una cuenta?",
@@ -234,10 +234,10 @@
   "featureList": [
     "Abrir y consultar DOCX, XLSX, PPTX y CSV sin Microsoft Office",
     "Editar archivos DOCX, XLSX, PPTX y CSV",
-    "100% en el cliente: los archivos nunca salen de tu dispositivo",
+    "Edición local sin subidas obligatorias",
     "Sin cuenta ni registro",
     "Abrir documentos desde una URL con ?src= o ?file=",
-    "PWA instalable con soporte sin conexión",
+    "Sin conexión con recursos en caché",
     "Integrable mediante la API postMessage",
     "Gratis y de código abierto (AGPL-3.0)"
   ]

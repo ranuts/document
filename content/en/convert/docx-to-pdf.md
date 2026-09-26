@@ -1,15 +1,15 @@
 ---
-title: Convert DOCX to PDF in Your Browser — Free, No Upload
-description: Turn a Word (DOCX) file into a PDF without uploading it anywhere. The conversion runs entirely on your device — free, no account, no Microsoft Word, works offline.
+title: 'Convert DOCX to PDF in Your Browser — Free, No Upload'
+description: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 eyebrow: Convert · .docx → .pdf
 h1: Convert DOCX to PDF in Your Browser
-lead: Turn a Word **.docx** file into a **.pdf** — without uploading it anywhere. The whole conversion happens locally in your browser.
+lead: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 cta: Open your DOCX →
 ctaHref: /
-ogDescription: Convert Word DOCX files to PDF locally in your browser. Nothing uploaded, no account, free and open source.
+ogDescription: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 breadcrumb: docx-to-pdf
 howTo: How to convert a DOCX to PDF without uploading it
-appDescription: Convert Word DOCX files to PDF in the browser, with no upload and no account.
+appDescription: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 ---
 
 ## How it works
@@ -17,13 +17,13 @@ appDescription: Convert Word DOCX files to PDF in the browser, with no upload an
 1. Click **Open your DOCX** to launch the editor in your browser.
 2. Pick the **.docx** file from your device, or drag and drop it onto the page.
 3. Choose **Download as / Save as** and pick **PDF**.
-4. The PDF is generated on your device and downloaded — nothing is uploaded.
+4. Core local editing: The PDF is generated on your device and downloaded — nothing is uploaded.
 
 Almost every "DOCX to PDF" service on the web works the same way: you hand them your document, their server converts it, and you download the result. That means a contract, a CV or a medical letter sits on someone else's machine, however briefly. This one never sends it: the file is read straight from disk into your browser tab, converted there, and written back out.
 
-The conversion is done by OnlyOffice's x2t engine compiled to WebAssembly — the same engine that renders the document on screen, so what you see in the editor is what lands in the PDF. Fonts, tables, images, headers and footers, page breaks and numbering all carry over. Because it runs in your tab there is no upload queue, no server-imposed file size cap, and no wait for someone else's job runner.
+Core local editing: The conversion is done by OnlyOffice's x2t engine compiled to WebAssembly — the same engine that renders the document on screen, so what you see in the editor is what lands in the PDF. Fonts, tables, images, headers and footers, page breaks and numbering all carry over. Because it runs in your tab there is no upload queue, no server-imposed file size cap, and no wait for someone else's job runner.
 
-This is the practical option when the document is not yours to share: an offer letter before it is signed, a report under embargo, anything with personal data in it. It is also the option that keeps working on a plane or behind a corporate firewall, because once the page has loaded it is an installable app that runs with no network at all.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
 
 ## Frequently asked questions
 
@@ -33,7 +33,7 @@ Open the DOCX in the editor, then use Download as / Save as and choose PDF. The 
 
 ### Is my document uploaded to convert it?
 
-No. The file is opened and converted entirely inside your browser tab, so it never leaves your device.
+Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need Microsoft Word or an account?
 
@@ -57,4 +57,4 @@ No. This exports to PDF; it does not rewrite an existing PDF's text back into a 
 
 ### Does the conversion work offline?
 
-Yes. Once loaded it is an installable PWA, so it keeps converting with no internet connection.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.

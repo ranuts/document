@@ -1,15 +1,15 @@
 ---
-title: Abrir PDF sin Acrobat — leer y anotar en el navegador, sin subirlo
-description: 'Abre un PDF sin Adobe Acrobat y sin subirlo: léelo, añade comentarios y anotaciones de texto y guárdalo de vuelta como PDF. Gratis, de código abierto, funciona por completo en tu navegador.'
+title: 'Abrir PDF sin Acrobat — leer y anotar en el navegador, sin subirlo'
+description: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Edición local sin subidas obligatorias.'
 eyebrow: Abrir · .pdf
 h1: Abrir un archivo PDF sin Acrobat — y sin subirlo
-lead: Un contrato, un extracto bancario, un formulario escaneado: necesitas leerlo, quizá dejar algún comentario, y no quieres mandarlo al servidor de una «herramienta PDF en línea gratis». Ábrelo aquí mismo, en tu navegador. Nada que instalar, nada que subir.
+lead: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Edición local sin subidas obligatorias.'
 cta: Abrir tu PDF →
 ctaHref: /es/
-ogDescription: Abre, lee y anota archivos PDF en tu navegador sin Acrobat ni cuenta. Gratis, de código abierto, nada se sube.
+ogDescription: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Edición local sin subidas obligatorias.'
 breadcrumb: Abrir PDF
 howTo: Cómo abrir y anotar un PDF sin Acrobat
-appDescription: Abre, lee y anota archivos PDF en el navegador, sin Adobe Acrobat, sin cuenta y sin subidas.
+appDescription: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Edición local sin subidas obligatorias.'
 ---
 
 El PDF es un formato de maquetación fija. Este editor lo abre directamente con el motor PDF de OnlyOffice, así que el texto, los escaneados y los formularios se ven como quien los envió pretendía. Todo se ejecuta en local con WebAssembly, de modo que el archivo se queda en tu dispositivo.
@@ -29,8 +29,8 @@ La mayoría de las «herramientas PDF en línea» empiezan pidiéndote que subas
 - Añadir comentarios y anotaciones de texto libre y guardarlo de vuelta como PDF
 - Crear un PDF a partir de un DOCX, XLSX o PPTX con _Descargar como PDF_
 - Sin Adobe Acrobat, sin Reader, sin cuenta, sin Copilot
-- Sin subidas: tu PDF nunca sale de tu dispositivo
-- Funciona sin conexión como aplicación instalable
+- En la edición básica local: Sin subidas: tu PDF nunca sale de tu dispositivo
+- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
 
 ## Preguntas frecuentes
 
@@ -40,7 +40,7 @@ Sí. Se abre directamente en tu navegador con el motor PDF de OnlyOffice: sin Ac
 
 ### ¿Mi PDF se sube a algún sitio?
 
-No. El archivo se lee en la pestaña del navegador y se representa en local con WebAssembly. Nunca sale de tu dispositivo.
+En la edición básica local: No. El archivo se lee en la pestaña del navegador y se representa en local con WebAssembly. Nunca sale de tu dispositivo.
 
 ### ¿Puedo anotar el PDF, no solo leerlo?
 
