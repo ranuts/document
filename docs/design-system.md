@@ -128,13 +128,13 @@ Notion 正文 708）。**不存在"一个正确的宽度"，只存在按内容�
 
 ## Application icon
 
-The PWA and browser icon is a neutral folded document with three text lines,
+The PWA and browser icon is two overlapping pages with an offset rear outline and a detached diagonal fold,
 without lettering or product marks. SVG sources live in `public/icons/`.
 The palette resolves the light-theme tokens `--ran-gray-1000` (#171717),
 `--ran-background-100` (#ffffff) and `--ran-gray-300` (#e6e6e6).
 Exported application assets use these fixed values because launcher icons do not
-inherit the page's CSS variables. The geometry uses rounded corners and rounded
-line caps consistent with the interface.
+inherit the page's CSS variables. The front page has two broad cutout lines; the staggered silhouette and open fold
+remain legible at favicon size. Rounded corners and line caps match the interface.
 
 The ordinary icon has a rounded background; the maskable variant has an opaque,
 full-bleed background. All document content fits within the central 80%-diameter
