@@ -29,7 +29,7 @@ En la edición básica local: El motor de presentaciones de OnlyOffice está com
 - Editar diapositivas y volver a descargarlas como PPTX o PDF
 - Sin Microsoft PowerPoint y sin cuenta
 - En la edición básica local: Sin subidas: tu presentación nunca sale de tu dispositivo
-- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 
 Da igual si un compañero te envía una presentación para revisar, si necesitas un par de diapositivas para tu propia charla o si solo quieres leer un **.pptx** en un equipo sin Office: abrirlo lleva unos segundos. Como la representación la produce el mismo motor de OnlyOffice que usan sus aplicaciones de escritorio, lo que ves coincide con lo que verá alguien en PowerPoint, así que puedes revisar o retocar con confianza y devolverla tal cual.
 
@@ -45,7 +45,7 @@ Sí. El motor de OnlyOffice conserva diseños de diapositiva, imágenes, formas 
 
 ### ¿Se sube mi presentación?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Puedo editar las diapositivas, no solo verlas?
 

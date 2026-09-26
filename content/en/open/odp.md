@@ -23,7 +23,7 @@ ODP is the OpenDocument Presentation format, produced by LibreOffice Impress and
 
 The OnlyOffice presentation engine, compiled to WebAssembly, renders the slides in your browser: layouts, images, shapes, charts and text boxes come across as a real deck rather than a set of flat pictures. Edit the slides and save back as ODP to stay in the open format, or export to PPTX for a colleague on PowerPoint, or to PDF for a fixed copy that looks the same everywhere.
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
 
 ## Frequently asked questions
 
@@ -49,7 +49,7 @@ Yes. Open the ODP and save as PPTX — the conversion runs on your device.
 
 ### Is my presentation uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need an account?
 
@@ -57,4 +57,4 @@ No. There is no sign-up, no login and no email required.
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.

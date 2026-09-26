@@ -20,7 +20,7 @@ Core local editing: It is a full editor, not a stripped-down preview: powered by
 - **Start with no account** — no sign-up, no login, no email or phone number.
 - **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with full formatting preserved.
 - Core local editing: **Keep files on-device** — 100% client-side; your documents are never uploaded.
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 - **Stay free** — open source under AGPL-3.0, with no paywall to unlock.
 
 ## How it works
@@ -50,12 +50,12 @@ Yes. It is free and open source under the AGPL-3.0 license, with no paywall and 
 
 ### Can I use it offline without signing in?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
 
 ### What remains after I close the tab?
 
 When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 
-### What happens when I use cloud AI or an embedding host?
+### Is a built-in AI assistant available?
 
-Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.

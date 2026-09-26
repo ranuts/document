@@ -81,7 +81,7 @@ For word-processing documents, yes: `get_document_text` returns the text so the 
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
 
 ### How do I get the newest version?
 
@@ -91,11 +91,11 @@ The site updates itself on the next visit. If a page seems stuck on an old build
 
 ### Are my documents uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### What does the page load from the network?
 
-The page loads application code, editor resources, fonts and a Cloudflare Web Analytics beacon. Remote file URLs, model downloads and optional cloud AI can make additional requests. An embedding host or browser agent determines its own data handling.
+The page loads application code, editor resources, fonts and a Cloudflare Web Analytics beacon. Remote file URLs can make additional requests. Embedding hosts and external browser agents determine their own data handling.
 
 ## Errors
 
@@ -120,6 +120,6 @@ Yes. It is a static site, so any web server works: `docker run -d -p 8080:80 ghc
 
 When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 
-### What happens when I use cloud AI or an embedding host?
+### Is a built-in AI assistant available?
 
-Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.

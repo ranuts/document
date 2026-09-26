@@ -29,7 +29,7 @@ En la edición básica local: El motor de hojas de cálculo de OnlyOffice está 
 - Editar celdas y volver a descargarlo como XLSX o CSV
 - Sin Microsoft Excel y sin suscripción a 365
 - En la edición básica local: Sin subidas: tu hoja de cálculo nunca sale de tu dispositivo
-- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 
 Sirve igual para una consulta rápida que para trabajar de verdad: ordena una columna, corrige una cifra, añade una fila o una fórmula y devuelve el archivo en el mismo formato. Viene bien cuando alguien te manda un presupuesto o una exportación de datos y no quieres instalar Excel, pagar 365 ni confiar cifras privadas a un conversor web cualquiera.
 
@@ -45,7 +45,7 @@ Sí. El motor de OnlyOffice conserva fórmulas, formatos numéricos y estilos.
 
 ### ¿Se sube mi hoja de cálculo?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Puedo exportarla a CSV?
 

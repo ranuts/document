@@ -1,17 +1,17 @@
 ---
 title: 'Editor de documentos privado — edición local sin subidas obligatorias'
-description: 'Edita DOCX, XLSX, PPTX y CSV localmente; la IA opcional y la aplicación anfitriona tienen políticas de datos propias.'
+description: 'Edita DOCX, XLSX, PPTX y CSV localmente; la aplicación anfitriona controla las subidas posteriores.'
 eyebrow: 'Edición local'
 h1: ¿Buscas un editor de documentos que mantenga tus archivos privados?
-lead: 'Edita DOCX, XLSX, PPTX y CSV localmente; la IA opcional y la aplicación anfitriona tienen políticas de datos propias. La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento.'
+lead: 'Edita DOCX, XLSX, PPTX y CSV localmente; la aplicación anfitriona controla las subidas posteriores. La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento.'
 cta: Abrir el editor →
 ctaHref: /es/
-ogDescription: 'Edita DOCX, XLSX, PPTX y CSV localmente; la IA opcional y la aplicación anfitriona tienen políticas de datos propias.'
+ogDescription: 'Edita DOCX, XLSX, PPTX y CSV localmente; la aplicación anfitriona controla las subidas posteriores.'
 breadcrumb: Editor privado
-appDescription: 'Edita DOCX, XLSX, PPTX y CSV localmente; la IA opcional y la aplicación anfitriona tienen políticas de datos propias.'
+appDescription: 'Edita DOCX, XLSX, PPTX y CSV localmente; la aplicación anfitriona controla las subidas posteriores.'
 ---
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 Eso lo hace adecuado para contratos, hojas financieras, notas médicas, papeleo de recursos humanos o cualquier cosa que prefieras no entregar a un tercero. Obtienes un editor de fidelidad completa — con el motor de OnlyOffice, así que se conservan fuentes, tablas, fórmulas y maquetación — sin el peaje de enviar antes el archivo.
 
@@ -20,7 +20,7 @@ Eso lo hace adecuado para contratos, hojas financieras, notas médicas, papeleo 
 - En la edición básica local: **Cada archivo se queda en el dispositivo**: 100% en el cliente; tus documentos nunca salen de tu máquina.
 - **Edita los formatos habituales**: DOCX, XLSX, PPTX y CSV, con el formato completo conservado.
 - **Sáltate la cuenta**: sin registro, sin inicio de sesión, nada que dar de alta.
-- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 - **Verifica la promesa**: lee el código abierto o aloja tu propia copia.
 
 ## Cómo funciona
@@ -50,12 +50,12 @@ Sí. El editor entero es de código abierto bajo la licencia AGPL-3.0: puedes le
 
 ### ¿Sigue funcionando sin conexión a internet?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
 
 ### ¿Qué queda después de cerrar la pestaña?
 
 Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
 
-### ¿Cómo tratan los datos la IA en la nube y la aplicación anfitriona?
+### ¿Está disponible un asistente de IA integrado?
 
-La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

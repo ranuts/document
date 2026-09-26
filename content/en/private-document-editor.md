@@ -1,17 +1,17 @@
 ---
 title: 'Private Document Editor — Local Editing Without Required Uploads'
-description: 'Edit DOCX, XLSX, PPTX and CSV locally, with separate data policies for optional AI and embedding hosts.'
+description: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads.'
 eyebrow: 'Local editing'
 h1: Looking for a Document Editor That Keeps Your Files Private?
-lead: 'Edit DOCX, XLSX, PPTX and CSV locally, with separate data policies for optional AI and embedding hosts. Core opening, editing and conversion run locally in your browser without a required document upload.'
+lead: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads. Core opening, editing and conversion run locally in your browser without a required document upload.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: 'Edit DOCX, XLSX, PPTX and CSV locally, with separate data policies for optional AI and embedding hosts.'
+ogDescription: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads.'
 breadcrumb: Private document editor
-appDescription: 'Edit DOCX, XLSX, PPTX and CSV locally, with separate data policies for optional AI and embedding hosts.'
+appDescription: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads.'
 ---
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 That makes it a good fit for contracts, financial spreadsheets, medical notes, HR paperwork or anything else you would rather not hand to a third party. You get a full-fidelity editor — powered by the OnlyOffice engine, so fonts, tables, formulas and layout are preserved — without the trade-off of sending the file away first.
 
@@ -20,7 +20,7 @@ That makes it a good fit for contracts, financial spreadsheets, medical notes, H
 - Core local editing: **Keep every file on-device** — 100% client-side; your documents never leave your machine.
 - **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with full formatting preserved.
 - **Skip the account** — no sign-up, no login, nothing to register.
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 - **Verify the privacy claim** — read the open-source code or self-host your own copy.
 
 ## How it works
@@ -38,7 +38,7 @@ Core local editing: Your files are opened and edited entirely inside your own br
 
 ### Do my files ever get uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need an account to keep my files private?
 
@@ -46,16 +46,16 @@ No account, no sign-up and no login. You open the editor and start working immed
 
 ### Can I verify that nothing is uploaded?
 
-Inspect the browser’s network panel while opening, editing and saving a local file. Test optional AI, remote URLs and host integrations separately; their requests are not covered by the core local-editing claim. Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Inspect the browser’s network panel while opening, editing and saving a local file. Test optional AI, remote URLs and host integrations separately; their requests are not covered by the core local-editing claim. Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Does it still work without an internet connection?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
 
 ### What remains after I close the tab?
 
 When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 
-### What happens when I use cloud AI or an embedding host?
+### Is a built-in AI assistant available?
 
-Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.

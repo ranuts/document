@@ -19,7 +19,7 @@ appDescription: 'Convert XLSX to CSV locally in your browser without Office or a
 3. Choose **Download as / Save as** and pick **CSV**.
 4. Core local editing: The CSV is generated on your device and downloaded — nothing is uploaded.
 
-Most "XLSX to CSV" converters upload your spreadsheet to their servers first. This one does not: it opens the file with the OnlyOffice engine locally, so your data stays private. No Excel, no account, works offline. Cached editing resources can work offline; remote files and cloud AI need a connection.
+Most "XLSX to CSV" converters upload your spreadsheet to their servers first. This one does not: it opens the file with the OnlyOffice engine locally, so your data stays private. No Excel, no account, works offline. Cached editing resources can work offline; remote file URLs need a connection.
 
 Core local editing: The conversion itself is handled by OnlyOffice's x2t engine compiled to WebAssembly. It targets the common office and text formats — Word, Excel and PowerPoint plus PDF, TXT, HTML and CSV — which makes it a good fit for turning a spreadsheet into a portable CSV. Because it all runs in the browser tab there is no upload queue, no server-imposed size cap, and your data never touches the network. Note that CSV is a flat, single-table format: the active sheet is exported, and each formula is written out as its calculated value.
 
@@ -33,7 +33,7 @@ Open the XLSX in the editor, then use Download as / Save as CSV — the conversi
 
 ### Is my file uploaded to convert it?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need Excel or an account?
 
@@ -53,4 +53,4 @@ CSV stores plain values, so formulas are written out as their calculated results
 
 ### Does the converter work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.

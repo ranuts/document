@@ -29,7 +29,7 @@ Por baixo, o motor de documentos do OnlyOffice é compilado para WebAssembly e r
 - Editar o texto e baixar de novo como DOCX, PDF ou TXT
 - Sem Microsoft Word, sem conta da Microsoft, sem Copilot
 - Na edição básica local: Sem upload — seu documento nunca sai do dispositivo
-- Recursos de edição em cache funcionam offline; arquivos remotos e IA na nuvem precisam de conexão.
+- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
 
 ## Perguntas frequentes
 
@@ -43,7 +43,7 @@ Sim. Ele usa o motor do OnlyOffice, então fontes, tabelas, imagens e layout sã
 
 ### Meu documento é enviado para algum lugar?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Dá para editar e salvar, não só visualizar?
 

@@ -11,7 +11,7 @@ lead: Quién lo hace, qué hace de verdad, y cómo puedes comprobar ambas cosas 
 
 Un **editor de documentos de oficina dentro del navegador**. Abres un archivo de Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV o PDF y lo editas directamente en una pestaña.
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
 

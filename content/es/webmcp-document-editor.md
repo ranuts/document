@@ -23,7 +23,7 @@ Para un agente de IA, la mayoría de las aplicaciones web son opacas. Ve una pá
 
 open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly, get_document_state. Las herramientas WebMCP editan y convierten localmente, pero un agente del navegador puede recibir texto o archivos exportados y enviarlos a su propio servicio de IA. Revisa su política de datos antes de compartir contenido confidencial.
 
-La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 Hay dos límites deliberados. Las herramientas solo se registran cuando el editor es la página de nivel superior: un iframe de otro origen necesitaría que la página que lo integra concediera `allow="tools"`, lo que choca con el sentido de la integración, así que los editores integrados se controlan con la API postMessage. Y la lectura del texto completo está disponible para documentos de texto; las hojas de cálculo y las presentaciones no la exponen en este motor, así que la herramienta lo dice en lugar de devolver una respuesta vacía que un agente podría confundir con un archivo vacío.
 
@@ -59,4 +59,4 @@ Sí. save_document acepta un formato de destino, así que un agente puede abrir 
 
 ### ¿Necesito una cuenta o una clave de API?
 
-Las herramientas WebMCP no necesitan cuenta ni clave de API. La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Las herramientas WebMCP no necesitan cuenta ni clave de API. La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

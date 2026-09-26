@@ -104,7 +104,7 @@
         {
           "k": "PWA · sin conexión",
           "h3": "Sin conexión con recursos en caché",
-          "p": "Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red."
+          "p": "Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red."
         },
         {
           "k": "AGPL-3.0",
@@ -148,7 +148,7 @@
         },
         {
           "q": "¿Mis archivos se suben a algún sitio?",
-          "a": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política."
+          "a": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política."
         },
         {
           "q": "¿Qué formatos puedo editar?",
@@ -160,7 +160,7 @@
         },
         {
           "q": "¿Funciona sin conexión?",
-          "a": "La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible."
+          "a": "La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión."
         },
         {
           "q": "¿Necesito una cuenta?",

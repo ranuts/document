@@ -20,7 +20,7 @@ En la edición básica local: Y es un editor completo, no una vista previa recor
 - **Empieza sin cuenta**: sin registro, sin inicio de sesión, sin correo ni número de teléfono.
 - **Edita los formatos habituales**: DOCX, XLSX, PPTX y CSV, con el formato completo conservado.
 - En la edición básica local: **Los archivos se quedan en el dispositivo**: 100% en el cliente; tus documentos nunca se suben.
-- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 - **Sigue siendo gratis**: código abierto bajo AGPL-3.0, sin muro de pago que desbloquear.
 
 ## Cómo funciona
@@ -50,12 +50,12 @@ Sí. Es gratis y de código abierto bajo la licencia AGPL-3.0, sin muro de pago 
 
 ### ¿Puedo usarlo sin conexión y sin iniciar sesión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
 
 ### ¿Qué queda después de cerrar la pestaña?
 
 Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
 
-### ¿Cómo tratan los datos la IA en la nube y la aplicación anfitriona?
+### ¿Está disponible un asistente de IA integrado?
 
-La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

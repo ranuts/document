@@ -14,7 +14,7 @@ appDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. 
 
 Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload.
 
-DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab. Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab. Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 
 ## So funktioniert es
 
@@ -28,7 +28,7 @@ DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und 
 - **Keine Anmeldung, kein Login, kein Abo** — Seite öffnen und loslegen.
 - Bei der lokalen Kernbearbeitung: **Kein Upload** — 100% clientseitig; Ihre Dokumente verlassen Ihr Gerät nie.
 - **Alle gängigen Formate** — DOCX, XLSX, PPTX und CSV, mit OnlyOffice.
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 - **Quelloffen** — prüfen Sie ihn selbst oder betreiben Sie eine eigene Kopie.
 
 ## Häufige Fragen
@@ -39,7 +39,7 @@ Nein. Es gibt keine Anmeldung, kein Login und kein Konto irgendeiner Art. Öffne
 
 ### Werden meine Dateien auf einen Server hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Ist es wirklich kostenlos?
 
@@ -47,7 +47,7 @@ Ja. Kostenlos und quelloffen unter der AGPL-3.0. Sie können ihn auch selbst bet
 
 ### Kann ich ihn offline nutzen?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs und Cloud-KI benötigen eine Verbindung; für lokales WebLLM muss das Modell bereits verfügbar sein.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
 
 ### Welche Dateiformate kann ich bearbeiten?
 
@@ -65,6 +65,6 @@ Ja. Er läuft in jedem modernen mobilen Browser, Sie können also auf Handy oder
 
 Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
 
-### Wie verarbeiten Cloud-KI und einbettende Anwendungen Daten?
+### Ist ein integrierter KI-Assistent verfügbar?
 
-Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

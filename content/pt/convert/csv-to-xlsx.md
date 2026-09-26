@@ -33,7 +33,7 @@ Abra o CSV no editor e use Baixar como / Salvar como XLSX — a conversão roda 
 
 ### Meu arquivo é enviado para converter?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Preciso do Excel ou de uma conta?
 
@@ -49,4 +49,4 @@ Sim — veja [XLSX para CSV](/pt/convert/xlsx-to-csv).
 
 ### A conversão funciona offline?
 
-A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos e IA na nuvem precisam de conexão; o WebLLM local precisa do modelo já disponível.
+A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.

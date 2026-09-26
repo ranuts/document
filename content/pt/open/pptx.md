@@ -29,7 +29,7 @@ Na edição básica local: O motor de apresentações do OnlyOffice é compilado
 - Editar slides e baixar de novo como PPTX ou PDF
 - Sem Microsoft PowerPoint e sem conta
 - Na edição básica local: Sem upload — sua apresentação nunca sai do dispositivo
-- Recursos de edição em cache funcionam offline; arquivos remotos e IA na nuvem precisam de conexão.
+- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
 
 Seja um colega que mandou uma apresentação para revisar, seja porque você precisa de dois slides para a sua própria palestra, seja só para ler um **.pptx** numa máquina sem Office, abrir leva alguns segundos. Como a renderização vem do mesmo motor do OnlyOffice usado nos aplicativos de desktop, o que você vê é o que um colega no PowerPoint verá — dá para revisar ou ajustar com confiança e devolver na hora.
 
@@ -45,7 +45,7 @@ Sim. O motor do OnlyOffice preserva layouts de slide, imagens, formas e texto.
 
 ### Minha apresentação é enviada?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Dá para editar os slides, não só visualizar?
 

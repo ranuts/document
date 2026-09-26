@@ -126,10 +126,7 @@ delete on every row, a delete-all, and a switch to turn autosave off entirely.
 Deleting there takes effect immediately. On a shared machine, that is the page
 to visit.
 
-The optional AI panel (`?agent=1`) sends prompts and document content returned by
-tools to the cloud provider you select. WebLLM inference runs locally after the
-model download. In embed mode, exported files are returned to the parent
-application, which controls any subsequent upload.
+The built-in AI assistant is unfinished and is not a released feature. The repository contains experimental AI modules; their presence does not mean the assistant is ready to use. Development tests that connect these modules to a cloud provider can transmit prompts and tool-returned content. In embed mode, exported files are returned to the parent application, which controls subsequent uploads.
 
 ---
 

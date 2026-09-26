@@ -29,7 +29,7 @@ Bei der lokalen Kernbearbeitung: Die Tabellenkalkulations-Engine von OnlyOffice 
 - Zellen bearbeiten und wieder als XLSX oder CSV herunterladen
 - Kein Microsoft Excel und kein 365-Abo
 - Bei der lokalen Kernbearbeitung: Kein Upload — Ihre Tabelle verlässt Ihr Gerät nie
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 
 Für den schnellen Blick genauso geeignet wie für echte Arbeit: eine Spalte sortieren, eine Zahl korrigieren, eine Zeile oder Formel ergänzen und die Datei im selben Format zurückgeben. Praktisch, wenn Ihnen jemand ein Budget oder einen Datenexport mailt und Sie weder Excel installieren, noch für 365 zahlen, noch Zahlen einem beliebigen Web-Konverter anvertrauen wollen.
 
@@ -45,7 +45,7 @@ Ja. Die OnlyOffice-Engine erhält Formeln, Zahlenformate und Formatierung.
 
 ### Wird meine Tabelle hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Kann ich sie als CSV exportieren?
 

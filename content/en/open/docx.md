@@ -29,7 +29,7 @@ Core local editing: Under the hood, the OnlyOffice document engine is compiled t
 - Edit the text, then download again as DOCX, PDF or TXT
 - No Microsoft Word, no Microsoft account, no Copilot
 - Core local editing: No upload — your document never leaves your device
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 
 ## Frequently asked questions
 
@@ -43,7 +43,7 @@ Yes. It uses the OnlyOffice engine, so fonts, tables, images and layout are pres
 
 ### Is my document uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can I edit and save it, not just view?
 

@@ -14,7 +14,7 @@ appDescription: 'Edit DOCX, XLSX, PPTX and CSV without registration or an accoun
 
 Core opening, editing and conversion run locally in your browser without a required document upload.
 
-Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources. Cached editing resources can work offline; remote files and cloud AI need a connection.
+Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources. Cached editing resources can work offline; remote file URLs need a connection.
 
 ## How it works
 
@@ -28,7 +28,7 @@ Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or a
 - **No sign up, no login, no subscription** — open the page and start editing.
 - Core local editing: **No upload** — 100% client-side; your documents never leave your device.
 - **All the common formats** — DOCX, XLSX, PPTX and CSV, powered by OnlyOffice.
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 - **Open source** — audit it or self-host it yourself.
 
 ## Frequently asked questions
@@ -39,7 +39,7 @@ No. There is no sign up, no login and no account of any kind. Open the editor an
 
 ### Are my files uploaded to a server?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Is it really free?
 
@@ -47,7 +47,7 @@ Yes. It is free and open source under the AGPL-3.0 license. You can also self-ho
 
 ### Can I use it offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
 
 ### What file formats can I edit?
 
@@ -65,6 +65,6 @@ Yes. It runs in any modern mobile browser, so you can edit on a phone or tablet 
 
 When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 
-### What happens when I use cloud AI or an embedding host?
+### Is a built-in AI assistant available?
 
-Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.

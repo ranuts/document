@@ -29,7 +29,7 @@ Bei der lokalen Kernbearbeitung: Die Präsentations-Engine von OnlyOffice ist na
 - Folien bearbeiten und wieder als PPTX oder PDF herunterladen
 - Kein Microsoft PowerPoint und kein Konto
 - Bei der lokalen Kernbearbeitung: Kein Upload — Ihre Präsentation verlässt Ihr Gerät nie
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 
 Ob eine Kollegin Ihnen ein Deck zur Durchsicht schickt, Sie zwei Folien für den eigenen Vortrag brauchen oder eine **.pptx** einfach auf einem Rechner ohne Office lesen wollen — das Öffnen dauert Sekunden. Da dieselbe OnlyOffice-Engine wie in den Desktop-Apps rendert, sehen Sie, was ein Kollege in PowerPoint sieht — Sie können also gefahrlos prüfen, anpassen und direkt zurückgeben.
 
@@ -45,7 +45,7 @@ Ja. Die OnlyOffice-Engine erhält Folienlayouts, Bilder, Formen und Text.
 
 ### Wird meine Präsentation hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Kann ich die Folien bearbeiten, nicht nur ansehen?
 

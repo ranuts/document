@@ -6,7 +6,7 @@
 #
 # This policy governs the public marketing/landing pages only. It has no bearing
 # on access to local files: documents and recovery copies are not public website
-# resources. Optional cloud AI and embedding-host data flows are documented
+# resources. Unfinished AI modules and embedding-host data flows are documented
 # separately in /llms.txt and the README.
 
 User-agent: *

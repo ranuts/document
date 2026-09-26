@@ -23,7 +23,7 @@ Casi todos los servicios de «PPTX a PDF» de la web funcionan igual: les entreg
 
 La conversión la hace el motor x2t de OnlyOffice compilado a WebAssembly, el mismo que representa el documento en pantalla, así que lo que ves en el editor es lo que acaba en el PDF. Fuentes, tablas, imágenes, encabezados y pies, saltos de página y numeración se trasladan. Como se ejecuta en tu pestaña, no hay cola de subida, ni límite de tamaño impuesto por un servidor, ni espera al ejecutor de trabajos de otro.
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
 
 ## Preguntas frecuentes
 
@@ -33,7 +33,7 @@ Abre el PPTX en el editor y usa Descargar como / Guardar como eligiendo PDF. La 
 
 ### ¿Se sube mi documento para convertirlo?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Necesito PowerPoint o una cuenta?
 
@@ -53,4 +53,4 @@ No. Aquí se exporta a PDF; no se reescribe el texto de un PDF existente en un a
 
 ### ¿La conversión funciona sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.

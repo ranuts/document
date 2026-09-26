@@ -20,7 +20,7 @@ Na edição básica local: E é um editor completo, não uma prévia reduzida: c
 - **Comece sem conta** — sem cadastro, sem login, sem e-mail nem telefone.
 - **Edite os formatos comuns** — DOCX, XLSX, PPTX e CSV, com a formatação completa preservada.
 - Na edição básica local: **Arquivos ficam no dispositivo** — 100% no cliente; seus documentos nunca são enviados.
-- Recursos de edição em cache funcionam offline; arquivos remotos e IA na nuvem precisam de conexão.
+- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
 - **Continue grátis** — código aberto sob AGPL-3.0, sem muro de pagamento para destravar.
 
 ## Como funciona
@@ -50,12 +50,12 @@ Sim. É grátis e de código aberto sob a licença AGPL-3.0, sem muro de pagamen
 
 ### Dá para usar offline sem fazer login?
 
-A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos e IA na nuvem precisam de conexão; o WebLLM local precisa do modelo já disponível.
+A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.
 
 ### O que fica depois de fechar a aba?
 
 Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
 
-### Como a IA na nuvem e o app que incorpora o editor tratam os dados?
+### O assistente de IA integrado está disponível?
 
-A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.

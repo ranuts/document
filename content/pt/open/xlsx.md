@@ -29,7 +29,7 @@ Na edição básica local: O motor de planilhas do OnlyOffice é compilado para 
 - Editar células e baixar de novo como XLSX ou CSV
 - Sem Microsoft Excel e sem assinatura do 365
 - Na edição básica local: Sem upload — sua planilha nunca sai do dispositivo
-- Recursos de edição em cache funcionam offline; arquivos remotos e IA na nuvem precisam de conexão.
+- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
 
 Serve tanto para uma olhada rápida quanto para trabalho de verdade: ordenar uma coluna, corrigir um número, acrescentar uma linha ou uma fórmula e devolver o arquivo no mesmo formato. Ajuda quando alguém te manda um orçamento ou uma exportação de dados e você não quer instalar o Excel, pagar o 365 nem confiar números privados a um conversor web qualquer.
 
@@ -45,7 +45,7 @@ Sim. O motor do OnlyOffice preserva fórmulas, formatos numéricos e estilos.
 
 ### Minha planilha é enviada?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Dá para exportar para CSV?
 

@@ -30,7 +30,7 @@ La mayoría de las «herramientas PDF en línea» empiezan pidiéndote que subas
 - Crear un PDF a partir de un DOCX, XLSX o PPTX con _Descargar como PDF_
 - Sin Adobe Acrobat, sin Reader, sin cuenta, sin Copilot
 - En la edición básica local: Sin subidas: tu PDF nunca sale de tu dispositivo
-- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 
 ## Preguntas frecuentes
 

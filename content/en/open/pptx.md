@@ -29,7 +29,7 @@ Core local editing: The OnlyOffice presentation engine is compiled to WebAssembl
 - Edit slides, then download again as PPTX or PDF
 - No Microsoft PowerPoint and no account
 - Core local editing: No upload — your presentation never leaves your device
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 
 Whether a colleague sent you a deck to review, you need to pull a couple of slides for your own talk, or you just want to read a **.pptx** on a machine without Office installed, opening it here takes a few seconds. Because the render is produced by the same OnlyOffice engine used in its desktop apps, what you see matches what a teammate on PowerPoint will see — so you can review or tweak a deck with confidence and hand it straight back.
 
@@ -45,7 +45,7 @@ Yes. The OnlyOffice engine preserves slide layouts, images, shapes and text.
 
 ### Is my presentation uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can I edit the slides, not just view?
 

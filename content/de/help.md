@@ -81,7 +81,7 @@ Bei Textdokumenten ja: `get_document_text` gibt den Text zurück, sodass der Age
 
 ### Funktioniert es offline?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs und Cloud-KI benötigen eine Verbindung; für lokales WebLLM muss das Modell bereits verfügbar sein.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
 
 ### Wie bekomme ich die neueste Version?
 
@@ -91,11 +91,11 @@ Die Seite aktualisiert sich beim nächsten Besuch selbst. Wenn eine Seite auf ei
 
 ### Werden meine Dokumente irgendwohin hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Was lädt die Seite aus dem Netz?
 
-Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs, Modelldownloads und optionale Cloud-KI können zusätzliche Anfragen auslösen. Einbettende Anwendungen und Browser-Agenten bestimmen ihre eigene Datenverarbeitung.
+Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs können weitere Anfragen auslösen. Einbettende Anwendungen und externe Browser-Agenten bestimmen ihre eigene Datenverarbeitung.
 
 ## Fehler
 
@@ -120,6 +120,6 @@ Ja. Es ist eine statische Website, jeder Webserver genügt: `docker run -d -p 80
 
 Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
 
-### Wie verarbeiten Cloud-KI und einbettende Anwendungen Daten?
+### Ist ein integrierter KI-Assistent verfügbar?
 
-Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

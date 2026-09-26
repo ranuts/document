@@ -19,7 +19,7 @@ appDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni c
 3. Elige **Descargar como / Guardar como** y selecciona **CSV**.
 4. En la edición básica local: El CSV se genera en tu dispositivo y se descarga: no se sube nada.
 
-La mayoría de los conversores de «XLSX a CSV» suben primero tu hoja de cálculo a sus servidores. Este no: abre el archivo en local con el motor de OnlyOffice, así que tus datos siguen siendo privados. Sin Excel, sin cuenta, funciona sin conexión. Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+La mayoría de los conversores de «XLSX a CSV» suben primero tu hoja de cálculo a sus servidores. Este no: abre el archivo en local con el motor de OnlyOffice, así que tus datos siguen siendo privados. Sin Excel, sin cuenta, funciona sin conexión. Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 
 La conversión la realiza el motor x2t de OnlyOffice compilado a WebAssembly. Cubre los formatos habituales de oficina y de texto — Word, Excel y PowerPoint, además de PDF, TXT, HTML y CSV — así que encaja bien para convertir una hoja en un CSV portátil. Como todo se ejecuta en la pestaña del navegador, no hay cola de subida, ni límite de tamaño impuesto por un servidor, ni datos viajando por la red. Ten en cuenta que el CSV es un formato plano de una sola tabla: se exporta la hoja activa y cada fórmula se escribe como su resultado calculado.
 
@@ -33,7 +33,7 @@ Abre el XLSX en el editor y usa Descargar como / Guardar como CSV: la conversió
 
 ### ¿Se sube mi archivo para convertirlo?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Necesito Excel o una cuenta?
 
@@ -53,4 +53,4 @@ El CSV almacena valores planos, así que las fórmulas se escriben como sus resu
 
 ### ¿El conversor funciona sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.

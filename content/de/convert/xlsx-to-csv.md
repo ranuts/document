@@ -19,7 +19,7 @@ appDescription: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto.
 3. Wählen Sie **Herunterladen als / Speichern unter** und dort **CSV**.
 4. Bei der lokalen Kernbearbeitung: Die CSV entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
 
-Die meisten „XLSX zu CSV“-Konverter laden Ihre Tabelle zuerst auf ihre Server. Dieser nicht: Er öffnet die Datei lokal mit der OnlyOffice-Engine, Ihre Daten bleiben also privat. Kein Excel, kein Konto, funktioniert offline. Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+Die meisten „XLSX zu CSV“-Konverter laden Ihre Tabelle zuerst auf ihre Server. Dieser nicht: Er öffnet die Datei lokal mit der OnlyOffice-Engine, Ihre Daten bleiben also privat. Kein Excel, kein Konto, funktioniert offline. Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 
 Bei der lokalen Kernbearbeitung: Die Umwandlung selbst übernimmt die nach WebAssembly kompilierte x2t-Engine von OnlyOffice. Sie deckt die gängigen Büro- und Textformate ab — Word, Excel und PowerPoint sowie PDF, TXT, HTML und CSV — und eignet sich damit gut dafür, eine Tabelle in ein portables CSV zu überführen. Da alles im Browser-Tab läuft, gibt es keine Upload-Warteschlange, keine serverseitige Größenbeschränkung und Ihre Daten gehen nicht durchs Netz. Beachten Sie: CSV ist ein flaches Einblatt-Format. Exportiert wird das aktive Blatt, und Formeln werden als ihre berechneten Werte geschrieben.
 
@@ -33,7 +33,7 @@ Kundenlisten, Buchhaltungsexporte, Messdaten — je weniger Sie sie einem fremde
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Brauche ich Excel oder ein Konto?
 
@@ -53,4 +53,4 @@ CSV speichert einfache Werte, Formeln werden also als ihre berechneten Ergebniss
 
 ### Funktioniert der Konverter offline?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs und Cloud-KI benötigen eine Verbindung; für lokales WebLLM muss das Modell bereits verfügbar sein.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.

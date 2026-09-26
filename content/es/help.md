@@ -81,7 +81,7 @@ En documentos de texto, sí: `get_document_text` devuelve el texto para que el a
 
 ### ¿Funciona sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
 
 ### ¿Cómo consigo la versión más reciente?
 
@@ -91,11 +91,11 @@ El sitio se actualiza solo en la siguiente visita. Si una página parece atascad
 
 ### ¿Mis documentos se suben a algún sitio?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Qué carga la página desde la red?
 
-La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas, las descargas de modelos y la IA en la nube opcional pueden generar solicitudes adicionales. Las aplicaciones anfitrionas y los agentes tienen sus propias políticas de datos.
+La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas pueden generar solicitudes adicionales. Las aplicaciones anfitrionas y los agentes externos del navegador tienen sus propias políticas de datos.
 
 ## Errores
 
@@ -120,6 +120,6 @@ Sí. Es un sitio estático, así que sirve cualquier servidor web: `docker run -
 
 Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
 
-### ¿Cómo tratan los datos la IA en la nube y la aplicación anfitriona?
+### ¿Está disponible un asistente de IA integrado?
 
-La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

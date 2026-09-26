@@ -29,7 +29,7 @@ Bei der lokalen Kernbearbeitung: Unter der Haube ist die OnlyOffice-Dokumentenen
 - Den Text bearbeiten und wieder als DOCX, PDF oder TXT herunterladen
 - Kein Microsoft Word, kein Microsoft-Konto, kein Copilot
 - Bei der lokalen Kernbearbeitung: Kein Upload — Ihr Dokument verlässt Ihr Gerät nie
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 
 ## Häufige Fragen
 
@@ -43,7 +43,7 @@ Ja. Es wird die OnlyOffice-Engine verwendet, Schriften, Tabellen, Bilder und Lay
 
 ### Wird mein Dokument irgendwohin hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Kann ich sie bearbeiten und speichern, nicht nur ansehen?
 

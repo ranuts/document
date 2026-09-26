@@ -122,10 +122,7 @@ eliminar em cada linha, um para eliminar tudo e um interruptor para desligar por
 gravação automática. Eliminar ali tem efeito imediato. Num computador partilhado, é a página
 a visitar.
 
-O painel de IA opcional (`?agent=1`) envia os pedidos e o conteúdo dos documentos
-devolvido pelas ferramentas ao fornecedor de nuvem escolhido. O WebLLM executa
-localmente após descarregar o modelo. No modo incorporado, os ficheiros exportados
-são devolvidos à aplicação anfitriã, que controla os carregamentos posteriores.
+O assistente de IA integrado ainda não está concluído e não é uma função publicada. Os módulos de IA no repositório são experimentais e não significam que o assistente esteja pronto. Testes de desenvolvimento com um provedor na nuvem podem transmitir instruções e resultados das ferramentas. No modo incorporado, o app anfitrião recebe os arquivos exportados e controla seus envios posteriores.
 
 ---
 

@@ -13,7 +13,7 @@ appDescription: 'Use an independent modified editor build without installing Doc
 
 ONLYOFFICE is normally something you install: the editors are a front end for ONLYOFFICE Docs (the Document Server), which converts and stores your files on a machine you have to run and keep running. That is the right shape for a team. It is a lot of machinery when all you wanted was to open a `.docx` someone sent you.
 
-Core local editing: This site is the other shape. The same editors, plus the same `x2t` conversion engine, are compiled to WebAssembly and loaded into the page. Your browser is the document server — which is why nothing is uploaded, why there is no account, and why it keeps working after you go offline. Cached editing resources can work offline; remote files and cloud AI need a connection.
+Core local editing: This site is the other shape. The same editors, plus the same `x2t` conversion engine, are compiled to WebAssembly and loaded into the page. Your browser is the document server — which is why nothing is uploaded, why there is no account, and why it keeps working after you go offline. Cached editing resources can work offline; remote file URLs need a connection.
 
 It is a modified version of the ONLYOFFICE editors, published under the same AGPL-3.0 license. It is not an official ONLYOFFICE product, and this project is not affiliated with, sponsored by or endorsed by Ascensio System SIA.
 
@@ -22,7 +22,7 @@ It is a modified version of the ONLYOFFICE editors, published under the same AGP
 - **The real editors** — the ONLYOFFICE document, spreadsheet, presentation and PDF editors, not a viewer or a reimplementation.
 - **The real converter** — `x2t`, the same engine ONLYOFFICE Docs uses, compiled to WebAssembly. DOCX, XLSX, PPTX, ODT, ODS, ODP, CSV and PDF in; DOCX, XLSX, PPTX, PDF, TXT, HTML and CSV out.
 - Core local editing: **No server, no account, no upload** — the file is read from your disk into the tab and written back to it.
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 - **Open source** — AGPL-3.0, and it deploys as static files, so you can host your own copy on any web server.
 
 ## How it differs from ONLYOFFICE Docs
@@ -58,7 +58,7 @@ No. The conversion engine that a Document Server would run is compiled to WebAss
 
 ### Are my files uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can several people edit the same document together?
 

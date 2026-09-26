@@ -30,7 +30,7 @@ You can scroll, zoom and search the document, add comments and free-text annotat
 - Create a PDF from a DOCX, XLSX or PPTX with _Download as PDF_
 - No Adobe Acrobat, no Reader, no account, no Copilot
 - Core local editing: No upload — your PDF never leaves your device
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 
 ## Frequently asked questions
 
@@ -40,7 +40,7 @@ Yes. It opens PDF directly in your browser with the OnlyOffice PDF engine — no
 
 ### Is my PDF uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can I annotate the PDF, not just read it?
 
@@ -56,7 +56,7 @@ Yes. Open the DOCX, XLSX or PPTX and choose Download as PDF — the PDF is gener
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs and cloud AI need a network connection; local WebLLM needs its model already available.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
 
 ### Is there a file size limit?
 

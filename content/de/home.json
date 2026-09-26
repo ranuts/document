@@ -109,7 +109,7 @@
         {
           "k": "PWA · offline",
           "h3": "Offline mit zwischengespeicherten Ressourcen",
-          "p": "Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung."
+          "p": "Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung."
         },
         {
           "k": "AGPL-3.0",
@@ -153,7 +153,7 @@
         },
         {
           "q": "Werden meine Dateien irgendwohin hochgeladen?",
-          "a": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen."
+          "a": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen."
         },
         {
           "q": "Welche Formate kann ich bearbeiten?",
@@ -165,7 +165,7 @@
         },
         {
           "q": "Funktioniert es offline?",
-          "a": "Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs und Cloud-KI benötigen eine Verbindung; für lokales WebLLM muss das Modell bereits verfügbar sein."
+          "a": "Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung."
         },
         {
           "q": "Brauche ich ein Konto?",

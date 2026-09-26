@@ -29,7 +29,7 @@ Por dentro, el motor de documentos de OnlyOffice está compilado a WebAssembly y
 - Editar el texto y volver a descargarlo como DOCX, PDF o TXT
 - Sin Microsoft Word, sin cuenta de Microsoft, sin Copilot
 - En la edición básica local: Sin subidas: tu documento nunca sale de tu dispositivo
-- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 
 ## Preguntas frecuentes
 

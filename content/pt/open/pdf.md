@@ -30,7 +30,7 @@ A maioria das «ferramentas de PDF online» começa pedindo que você envie o ar
 - Criar um PDF a partir de um DOCX, XLSX ou PPTX com _Baixar como PDF_
 - Sem Adobe Acrobat, sem Reader, sem conta, sem Copilot
 - Na edição básica local: Sem upload — seu PDF nunca sai do dispositivo
-- Recursos de edição em cache funcionam offline; arquivos remotos e IA na nuvem precisam de conexão.
+- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
 
 ## Perguntas frequentes
 
@@ -40,7 +40,7 @@ Sim. Ele abre o PDF direto no navegador com o motor de PDF do OnlyOffice — sem
 
 ### Meu PDF é enviado para algum lugar?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. A IA na nuvem opcional pode enviar instruções e conteúdo obtido pelas ferramentas ao provedor escolhido. O WebLLM faz inferência local após baixar o modelo. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Dá para anotar o PDF, não só ler?
 

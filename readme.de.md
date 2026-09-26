@@ -122,10 +122,7 @@ Löschen pro Zeile, einem Alles-Löschen und einem Schalter, der das automatisch
 ganz abstellt. Löschen wirkt dort sofort. Auf einem gemeinsam genutzten Rechner ist das
 die Seite, die man aufsucht.
 
-Das optionale KI-Panel (`?agent=1`) sendet Eingaben und von Werkzeugen gelieferte
-Dokumentinhalte an den gewählten Cloud-Anbieter. WebLLM läuft nach dem
-Modelldownload lokal. Im eingebetteten Modus gehen Exporte an die übergeordnete
-Anwendung, die über weitere Uploads entscheidet.
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Die KI-Module im Repository sind experimentell und bedeuten nicht, dass der Assistent einsatzbereit ist. Entwicklungstests mit Cloud-Anbietern können Eingaben und Werkzeugergebnisse übertragen. Im eingebetteten Modus gehen Exporte an die übergeordnete Anwendung, die weitere Uploads kontrolliert.
 
 ---
 

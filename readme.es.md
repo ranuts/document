@@ -122,10 +122,7 @@ borrar en cada fila, otro para borrarlo todo y un interruptor para desactivar po
 el guardado automático. Borrar ahí surte efecto de inmediato. En un ordenador compartido,
 esa es la página a la que ir.
 
-El panel de IA opcional (`?agent=1`) envía las instrucciones y el contenido del
-documento devuelto por las herramientas al proveedor de nube elegido. WebLLM se
-ejecuta localmente tras descargar el modelo. En modo integrado, los archivos
-exportados se devuelven a la aplicación anfitriona, que controla cualquier subida posterior.
+El asistente de IA integrado está sin terminar y no es una función publicada. Los módulos de IA del repositorio son experimentales y no implican que el asistente esté listo. Las pruebas de desarrollo conectadas a un proveedor en la nube pueden transmitir instrucciones y resultados de herramientas. En modo integrado, la aplicación anfitriona recibe los archivos exportados y controla sus subidas posteriores.
 
 ---
 

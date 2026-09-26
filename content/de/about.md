@@ -11,7 +11,7 @@ lead: Wer das hier baut, was es wirklich kann — und wie Sie beides selbst übe
 
 Ein **Editor für Office-Dokumente im Browser**. Sie öffnen eine Word- (DOCX), Excel- (XLSX), PowerPoint- (PPTX), CSV- oder PDF-Datei und bearbeiten sie direkt im Browser-Tab.
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
 
@@ -27,7 +27,7 @@ Behauptungen über Datenschutz sind billig. So können Sie sie selbst nachprüfe
 
 - **Lesen Sie den Quellcode.** Alles ist quelloffen unter **AGPL-3.0** auf [github.com/ranuts/document](https://github.com/ranuts/document). Die Lizenz verlangt, dass auch eine gehostete Abwandlung ihren Quellcode veröffentlicht.
 - Prüfen Sie im Netzwerk-Tab das Öffnen, Bearbeiten und Speichern einer lokalen Datei. Testen Sie optionale KI, Datei-URLs und einbettende Anwendungen separat; deren Anfragen gehören nicht zur rein lokalen Kernbearbeitung.
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 - **Hosten Sie es selbst.** Das Repository enthält, was Sie für eine eigene Instanz brauchen.
 
 ## Worauf es aufbaut

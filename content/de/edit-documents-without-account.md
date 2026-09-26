@@ -20,7 +20,7 @@ Und es ist ein vollwertiger Editor, keine abgespeckte Vorschau: Mit der OnlyOffi
 - **Ohne Konto starten** — keine Anmeldung, kein Login, keine E-Mail und keine Telefonnummer.
 - **Die gängigen Formate bearbeiten** — DOCX, XLSX, PPTX und CSV, mit voller Formatierung.
 - Bei der lokalen Kernbearbeitung: **Dateien bleiben auf dem Gerät** — 100% clientseitig; Ihre Dokumente werden nie hochgeladen.
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 - **Kostenlos bleiben** — quelloffen unter AGPL-3.0, ohne Paywall.
 
 ## So funktioniert es
@@ -50,12 +50,12 @@ Ja. Kostenlos und quelloffen unter der AGPL-3.0, ohne Paywall und ohne Konto, da
 
 ### Kann ich es ohne Anmeldung offline nutzen?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs und Cloud-KI benötigen eine Verbindung; für lokales WebLLM muss das Modell bereits verfügbar sein.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
 
 ### Was bleibt nach dem Schließen des Tabs?
 
 Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
 
-### Wie verarbeiten Cloud-KI und einbettende Anwendungen Daten?
+### Ist ein integrierter KI-Assistent verfügbar?
 
-Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

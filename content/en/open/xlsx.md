@@ -29,7 +29,7 @@ Core local editing: The OnlyOffice spreadsheet engine is compiled to WebAssembly
 - Edit cells, then download again as XLSX or CSV
 - No Microsoft Excel and no 365 subscription
 - Core local editing: No upload — your spreadsheet never leaves your device
-- Cached editing resources can work offline; remote files and cloud AI need a connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 
 It is just as good for a quick read-only look as for real work: sort a column, fix a figure, add a row or a formula, then hand the file back in the same format. This is handy when someone emails you a budget or a data export and you do not want to install Excel, pay for 365, or trust a random web converter with numbers you would rather keep private.
 
@@ -45,7 +45,7 @@ Yes. The OnlyOffice engine preserves formulas, number formats and styling.
 
 ### Is my spreadsheet uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. Optional cloud AI can send prompts and tool-provided document content to your selected provider. WebLLM runs inference locally after its model is downloaded. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can I export it to CSV?
 

@@ -30,7 +30,7 @@ Die meisten „Online-PDF-Tools“ verlangen zuerst einen Upload auf ihre Server
 - Aus einer DOCX, XLSX oder PPTX per _Als PDF herunterladen_ ein PDF erzeugen
 - Kein Adobe Acrobat, kein Reader, kein Konto, kein Copilot
 - Bei der lokalen Kernbearbeitung: Kein Upload — Ihr PDF verlässt Ihr Gerät nie
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs und Cloud-KI benötigen eine Verbindung.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 
 ## Häufige Fragen
 
@@ -40,7 +40,7 @@ Ja. Es wird direkt im Browser mit der PDF-Engine von OnlyOffice geöffnet — oh
 
 ### Wird mein PDF irgendwohin hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Optionale Cloud-KI kann Prompts und von Werkzeugen bereitgestellte Dokumentinhalte an den gewählten Anbieter senden. WebLLM führt die Inferenz nach dem Modelldownload lokal aus. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Kann ich das PDF kommentieren, nicht nur lesen?
 

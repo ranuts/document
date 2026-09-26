@@ -14,7 +14,7 @@ appDescription: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Edición l
 
 La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento.
 
-Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché. Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché. Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 
 ## Cómo funciona
 
@@ -28,7 +28,7 @@ Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cue
 - **Sin registro, sin inicio de sesión, sin suscripción**: abre la página y empieza a editar.
 - En la edición básica local: **Sin subidas**: 100% en el cliente; tus documentos nunca salen de tu dispositivo.
 - **Todos los formatos habituales**: DOCX, XLSX, PPTX y CSV, con OnlyOffice.
-- Los recursos de edición en caché funcionan sin conexión; los archivos remotos y la IA en la nube necesitan red.
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 - **Código abierto**: audítalo o aloja tu propia copia.
 
 ## Preguntas frecuentes
@@ -39,7 +39,7 @@ No. No hay registro, ni inicio de sesión, ni cuenta de ningún tipo. Abre el ed
 
 ### ¿Mis archivos se suben a un servidor?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Es realmente gratis?
 
@@ -47,7 +47,7 @@ Sí. Es gratis y de código abierto bajo la licencia AGPL-3.0. También puedes a
 
 ### ¿Puedo usarlo sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos y la IA en la nube necesitan conexión; WebLLM local necesita el modelo ya disponible.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
 
 ### ¿Qué formatos de archivo puedo editar?
 
@@ -65,6 +65,6 @@ Sí. Funciona en cualquier navegador móvil moderno, así que puedes editar en u
 
 Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
 
-### ¿Cómo tratan los datos la IA en la nube y la aplicación anfitriona?
+### ¿Está disponible un asistente de IA integrado?
 
-La IA en la nube opcional puede enviar instrucciones y contenido obtenido por las herramientas al proveedor elegido. WebLLM ejecuta la inferencia localmente después de descargar el modelo. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
