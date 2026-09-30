@@ -67,7 +67,7 @@ test.describe('format parity: docx / pptx / csv (real editor)', () => {
         { name: doc.name, b64: doc.b64() },
       );
       expect(result.opened.readonly).toBe(true);
-      expect(result.state).toEqual({ readonly: true, hasDocument: true });
+      expect(result.state).toEqual({ readonly: true, hasDocument: true, dirty: false });
       expect(result.saveError).not.toBe('');
     });
   }
@@ -100,7 +100,7 @@ test.describe('format parity: docx / pptx / csv (real editor)', () => {
       { name: CSV_NAME, b64: csvB64(), source: CSV_SOURCE },
     );
     expect(result.opened.readonly).toBe(true);
-    expect(result.state).toEqual({ readonly: true, hasDocument: true });
+    expect(result.state).toEqual({ readonly: true, hasDocument: true, dirty: false });
     expect(result.saveError).not.toBe('');
   });
 

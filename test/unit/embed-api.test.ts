@@ -44,6 +44,20 @@ function expectMessagePosted(
   }
 }
 
+// Stale listeners from earlier module instances answer the same id with their
+// own state, so look for the current instance's answer among all of them.
+type PostedMessage = { type?: string; id?: string; payload?: Record<string, unknown> };
+
+function postedMessages(spy: ReturnType<typeof vi.spyOn>): PostedMessage[] {
+  return (spy.mock.calls as unknown[][]).map((call) => call[0] as PostedMessage);
+}
+
+function postedPayloads(spy: ReturnType<typeof vi.spyOn>, type: string, id: string) {
+  return postedMessages(spy)
+    .filter((msg) => msg?.type === type && msg?.id === id)
+    .map((msg) => msg.payload);
+}
+
 function expectMessageNotPosted(spy: ReturnType<typeof vi.spyOn>, id: string) {
   const found = spy.mock.calls.find((call: unknown[]) => {
     const msg = call[0] as { id?: string };
@@ -155,6 +169,54 @@ describe('embed-api', () => {
         readonly: false,
         hasDocument: false,
       });
+    });
+
+    it('reports the unsaved-changes flag in document:state', async () => {
+      window.history.pushState({}, '', '/?embed=1');
+      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { markDocumentDirty } = await import('../../lib/unsaved-guard');
+      initEmbedApi();
+
+      markDocumentDirty();
+      await dispatchMessage({ type: 'document:get-state', id: 'state-dirty-1' });
+
+      expect(postedPayloads(postMessageSpy, 'document:state', 'state-dirty-1')).toContainEqual(
+        expect.objectContaining({ dirty: true }),
+      );
+    });
+
+    it('pushes document:dirty-changed when the flag flips', async () => {
+      window.history.pushState({}, '', '/?embed=1');
+      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { markDocumentDirty, markDocumentSaved } = await import('../../lib/unsaved-guard');
+      initEmbedApi();
+
+      markDocumentDirty();
+      markDocumentDirty();
+      markDocumentSaved();
+
+      const dirtyMessages = postedMessages(postMessageSpy)
+        .filter((msg) => msg?.type === 'document:dirty-changed')
+        .map((msg) => msg.payload?.dirty);
+      expect(dirtyMessages).toEqual([true, false]);
+    });
+
+    it('keeps the document dirty after a save it cannot pin to a history point', async () => {
+      // No editor frame in jsdom: the save point cannot be captured, so the
+      // host must not be told its copy is current.
+      window.history.pushState({}, '', '/?embed=1');
+      mockRequestSaveDocument.mockResolvedValue(new File(['x'], 'a.docx'));
+      const { initEmbedApi } = await import('../../lib/embed-api');
+      const { markDocumentDirty } = await import('../../lib/unsaved-guard');
+      initEmbedApi();
+
+      markDocumentDirty();
+      await dispatchMessage({ type: 'document:save', id: 'save-dirty-1', payload: {} });
+      mockRequestSaveDocument.mockReset();
+
+      expect(postedPayloads(postMessageSpy, 'document:saved', 'save-dirty-1')).toContainEqual(
+        expect.objectContaining({ dirty: true }),
+      );
     });
 
     it('responds to document:set-readonly and updates readonly mode', async () => {

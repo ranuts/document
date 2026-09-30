@@ -4,6 +4,7 @@ import {
   installUnsavedChangesGuard,
   markDocumentDirty,
   markDocumentSaved,
+  onUnsavedChangesChange,
   resetUnsavedChanges,
   resetUnsavedGuardForTests,
 } from '../../lib/unsaved-guard';
@@ -68,6 +69,30 @@ describe('unsaved changes guard', () => {
 
     // The host page owns the unload experience for its own iframe.
     expect(fireBeforeUnload().defaultPrevented).toBe(false);
+  });
+
+  it('notifies listeners when the flag flips, not on every edit', () => {
+    const listener = vi.fn();
+    onUnsavedChangesChange(listener);
+
+    markDocumentDirty();
+    markDocumentDirty();
+    markDocumentSaved();
+    markDocumentSaved();
+    markDocumentDirty();
+    resetUnsavedChanges();
+
+    expect(listener.mock.calls).toEqual([[true], [false], [true], [false]]);
+  });
+
+  it('stops notifying a listener once it unsubscribes', () => {
+    const listener = vi.fn();
+    const unsubscribe = onUnsavedChangesChange(listener);
+
+    unsubscribe();
+    markDocumentDirty();
+
+    expect(listener).not.toHaveBeenCalled();
   });
 
   it('installs a single listener however many times it is called', () => {

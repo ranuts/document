@@ -129,7 +129,7 @@ test.describe('embed regression (real editor)', () => {
     });
 
     expect(result.opened.readonly).toBe(true);
-    expect(result.state).toEqual({ readonly: true, hasDocument: true });
+    expect(result.state).toEqual({ readonly: true, hasDocument: true, dirty: false });
     expect(result.saveError).not.toBe('');
   });
 
@@ -319,7 +319,7 @@ test.describe('embed regression (real editor)', () => {
     });
 
     expect(result.opened.readonly).toBe(false);
-    expect(result.state).toEqual({ readonly: false, hasDocument: true });
+    expect(result.state).toEqual({ readonly: false, hasDocument: true, dirty: false });
     expect(result.savedFileName).toBe('buffer-open.docx');
     expect(result.magic).toEqual([0x50, 0x4b, 0x03, 0x04]); // PK zip container
     expect(result.size).toBeGreaterThan(500);
@@ -751,6 +751,6 @@ test.describe('embed regression (real editor)', () => {
       .toBe(true);
 
     const state = await page.evaluate(async () => post('document:get-state', {}));
-    expect(state).toEqual({ readonly: false, hasDocument: true });
+    expect(state).toEqual({ readonly: false, hasDocument: true, dirty: false });
   });
 });

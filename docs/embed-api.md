@@ -174,7 +174,48 @@ window.addEventListener('message', async (event) => {
 
 ```js
 sendEditorCommand('document:get-state');
-// Response: { type: 'document:state', payload: { readonly: false, hasDocument: true } }
+// Response: { type: 'document:state', payload: { readonly: false, hasDocument: true, dirty: false } }
+```
+
+---
+
+## Tracking unsaved changes
+
+The editor tells the parent whether the open document has edits the parent does not hold yet, so the parent can save when it matters (switching documents, an idle timer, closing its own page) without exporting documents nobody touched.
+
+```js
+window.addEventListener('message', (event) => {
+  if (event.origin !== editorOrigin) return;
+  const { type, payload } = event.data || {};
+  if (type === 'document:dirty-changed') {
+    console.log(payload.dirty ? 'Unsaved changes' : 'Everything saved');
+  }
+});
+```
+
+- `document:dirty-changed` is pushed when the flag flips, not on every keystroke: `{ dirty: true }` after the first edit, `{ dirty: false }` once a `document:save` covered every edit (or undo went back to the saved state).
+- A successful `document:save` clears the flag: the parent now holds the bytes. Edits made while the export was running are not in those bytes, so they keep the document dirty -- check `payload.dirty` on `document:saved` and save again when it is `true`.
+- If the upload on the parent side fails, the editor cannot know: keep your own "needs saving" state until the upload succeeds.
+- `document:save` with `returnOriginalOnTimeout: true` never clears the flag, since the file returned on timeout may be the original.
+- Opening another document resets the flag to `false`.
+
+A save-on-idle loop for the parent could look like this:
+
+```js
+let idleTimer;
+window.addEventListener('message', (event) => {
+  if (event.origin !== editorOrigin) return;
+  const { type, payload } = event.data || {};
+  if (type === 'document:dirty-changed' && payload.dirty) {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => sendEditorCommand('document:save'), 30_000);
+  }
+  if (type === 'document:saved' && payload.dirty) {
+    // Edits landed during the export: they still need a save.
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => sendEditorCommand('document:save'), 30_000);
+  }
+});
 ```
 
 ---
@@ -192,6 +233,7 @@ sendEditorCommand('document:get-state');
 | iframe → parent | `document:ready`            | Editor initialised                              |
 | iframe → parent | `document:opened`           | Document opened                                 |
 | iframe → parent | `document:readonly-changed` | Read-only state changed                         |
-| iframe → parent | `document:saved`            | Save complete, file returned                    |
+| iframe → parent | `document:saved`            | Save complete, file returned (with `dirty`)     |
+| iframe → parent | `document:dirty-changed`    | Unsaved-changes flag flipped (`{ dirty }`)      |
 | iframe → parent | `document:state`            | Current state response                          |
 | iframe → parent | `document:error`            | Operation failed                                |
