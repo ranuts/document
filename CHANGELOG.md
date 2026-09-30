@@ -9,6 +9,12 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Embed API: the host page can tell when a document has unsaved edits.**
+  `document:dirty-changed` is pushed when the flag flips, and `dirty` is
+  reported on `document:state` and `document:saved`, so an embedding page can
+  save when the user switches documents or goes idle instead of exporting
+  documents nobody touched. Edits made after a save are reported again, and
+  edits made while an export is running keep the document dirty.
 - **Saving now writes back into your own file.** Pick the file once and every
   save after that goes straight into it -- no "save as" dialog each time, and
   no "a file with that name already exists" prompt. The document ends up where

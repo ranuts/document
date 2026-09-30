@@ -81,6 +81,7 @@ lib/                  # 应用层（纯 TypeScript，只在本站点用）
     viewport.ts           # 紧凑视口判定与布局同步（#145）
     sdk-api.ts            # 同源 iframe 里的 Asc.editor 访问、restriction 常量
     readonly.ts           # 运行时只读（挂载永远可编辑，加载后加 restriction）
+    save-point.ts         # embed 保存后移动 SDK 的 SavedIndex（导出期间历史没动才移），让之后的编辑重新触发 onDocumentStateChange
     ui-theme.ts           # 默认经典主题与站点主题跟随
     file-helpers.ts       # 文件名/MIME/字节形状小工具
   ui.ts                 # 落地 hero 显隐 + 控制面板（右下角 Menu FAB 已于 2026-08-20 移除）
@@ -145,12 +146,13 @@ history.html          # `/history`：本地历史页（noindex，只读 IndexedD
 
 支持的消息类型：
 
-| 消息类型                                                                              | 说明                                                          |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `document:open` / `document:open-url` / `document:open-file` / `document:open-buffer` | 打开文档（支持 url / File / Blob / ArrayBuffer / Uint8Array） |
-| `document:set-readonly`                                                               | 切换只读模式                                                  |
-| `document:save`                                                                       | 触发保存，父页面收到带 File 的 `document:saved` 响应          |
-| `document:get-state`                                                                  | 查询当前状态（readonly、hasDocument）                         |
+| 消息类型                                                                              | 说明                                                                                            |
+| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `document:open` / `document:open-url` / `document:open-file` / `document:open-buffer` | 打开文档（支持 url / File / Blob / ArrayBuffer / Uint8Array）                                   |
+| `document:set-readonly`                                                               | 切换只读模式                                                                                    |
+| `document:save`                                                                       | 触发保存，父页面收到带 File 的 `document:saved` 响应                                            |
+| `document:get-state`                                                                  | 查询当前状态（readonly、hasDocument、dirty）                                                    |
+| `document:dirty-changed`（iframe → 父页面）                                           | 未保存标志翻转时推送；保存后由 `onlyoffice/save-point.ts` 移动 SDK 的保存点，之后的编辑才会再报 |
 
 使用 `?embedOrigin=https://example.com` 可限制消息来源。
 
@@ -216,7 +218,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 单一配置 `playwright.config.ts`（端口 4173，webServer 自动 build + preview，
 不需要手动先 build；`E2E_PORT=<port>` 另起一套并隔离 `dist-e2e-<port>/` 与
 `test-results-<port>/`，`E2E_BASE_URL=<站点>` 则不起本地服务、直接打线上）。
-`test/e2e/` 现有 53 个 spec，下面先说三条主线，再给全量清单：
+`test/e2e/` 现有 55 个 spec，下面先说三条主线，再给全量清单：
 
 - `app-smoke.spec.ts` — 应用加载、PWA manifest 冒烟
 - `embed-api.spec.ts` — embed postMessage 协议
@@ -255,7 +257,7 @@ test/setup/vitest.ts          # 全局 mock：matchMedia、URL.createObjectURL�
 | 面向              | spec                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 站点 / 入口       | `app-smoke`、`main-site`（hero 打开 + Ctrl+S 下载）、`entry-paths`（`?file=` / `document:open-url` / `?open=local`）、`sw-warm`（SW 已控制页面）、`font-cache`（第二次打开字体全走缓存）                                                                                                                                                                                                                                                                                                 |
-| embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）                                                                                                                                                                                                                                                                                                                                                                                      |
+| embed 协议        | `embed-api`、`embed-regression`（真实编辑器主回归）、`embed-save-default`（裸 save 用文档自身格式）、`embed-dirty-state`（未保存标志：保存后的编辑要再报，docx/xlsx/pptx）                                                                                                                                                                                                                                                                                                               |
 | 格式与内容        | `filename-matrix`、`format-parity`（docx/pptx 导出 PDF + 只读 + 运行时切换）、`resave-idempotence`、`xlsx-features`（合并/公式/2 万行）、`xlsx-panes`（冻结窗格/筛选）、`docx-features`（修订/页眉页脚）、`docx-ruby`（注音底文）、`comments`、`image-insert`、`csv-encoding`（GBK）、`html-as-xls`、`pdf-route`、`pdf-roundtrip`（打开/注释/存回/只读）                                                                                                                                 |
 | 失败与守卫        | `open-failure`（-82 可见 + 保存快速拒绝，兼作 L0 自检）、`comment-bulk-actions`（守卫 8）、`wasm-memory`（守卫 14：x2t 跑在 worker 里、流式实例化、闲置后连堆一起回收）、`offline-seam`（vendor 的进程内服务端应答器 + x2t 的唯一接缝 + 跨 realm 安全）、`plugin-availability`（插件框架经 `editorConfig.plugins` 可达）、`font-picker-scroll`（字体列表滑到底不炸，#218）、`open-url-failure`（`?src=` 取不到文件时给的是本地化 toast 而不是 alert）、`bad-image-url-locale`（守卫 13） |
 | 视觉 / 性能       | `visual-roundtrip`（无基线：原始 vs 存回再打开逐像素）、`slow-network` _opt-in_ `SLOW_NET=1`                                                                                                                                                                                                                                                                                                                                                                                             |

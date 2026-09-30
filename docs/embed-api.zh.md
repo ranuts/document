@@ -170,8 +170,30 @@ window.addEventListener('message', async (event) => {
 
 ```js
 sendEditorCommand('document:get-state');
-// 响应：{ type: 'document:state', payload: { readonly: false, hasDocument: true } }
+// 响应：{ type: 'document:state', payload: { readonly: false, hasDocument: true, dirty: false } }
 ```
+
+---
+
+## 跟踪未保存的修改
+
+编辑器会告诉父页面：当前文档是否有父页面尚未拿到的修改。父页面据此决定何时保存（切换文档、空闲定时器、关闭自己的页面），而不必导出没人动过的文档。
+
+```js
+window.addEventListener('message', (event) => {
+  if (event.origin !== editorOrigin) return;
+  const { type, payload } = event.data || {};
+  if (type === 'document:dirty-changed') {
+    console.log(payload.dirty ? '有未保存的修改' : '已全部保存');
+  }
+});
+```
+
+- `document:dirty-changed` 只在状态翻转时推送，而不是每次按键：第一次编辑后是 `{ dirty: true }`，一次 `document:save` 覆盖了全部修改（或撤销回到保存时的状态）后是 `{ dirty: false }`。
+- `document:save` 成功即清除标志：父页面已经拿到字节。导出进行中做的修改不在这份字节里，文档仍保持 dirty——请检查 `document:saved` 的 `payload.dirty`，为 `true` 时再保存一次。
+- 父页面一侧上传失败时编辑器无从得知：在上传成功之前请自己保留"需要保存"的状态。
+- 带 `returnOriginalOnTimeout: true` 的 `document:save` 永远不会清除标志，因为超时返回的可能是原始文件。
+- 打开另一篇文档会把标志重置为 `false`。
 
 ---
 
@@ -188,6 +210,7 @@ sendEditorCommand('document:get-state');
 | iframe → 父页面 | `document:ready`            | 编辑器初始化完成                           |
 | iframe → 父页面 | `document:opened`           | 文档打开完成                               |
 | iframe → 父页面 | `document:readonly-changed` | 只读状态已切换                             |
-| iframe → 父页面 | `document:saved`            | 保存完成，返回文件                         |
+| iframe → 父页面 | `document:saved`            | 保存完成，返回文件（含 `dirty`）           |
+| iframe → 父页面 | `document:dirty-changed`    | 未保存标志翻转（`{ dirty }`）              |
 | iframe → 父页面 | `document:state`            | 当前状态响应                               |
 | iframe → 父页面 | `document:error`            | 操作失败                                   |

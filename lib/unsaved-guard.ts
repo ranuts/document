@@ -26,10 +26,31 @@ let dirty = false;
 let installed = false;
 let lastEditAt = 0;
 
+type UnsavedChangesListener = (dirty: boolean) => void;
+const listeners = new Set<UnsavedChangesListener>();
+
+function setDirty(next: boolean): void {
+  if (dirty === next) return;
+  dirty = next;
+  for (const listener of listeners) listener(next);
+}
+
+/**
+ * Called whenever the flag flips (not on every edit: the editor only reports
+ * transitions). The embed API relays it to the host page. Returns the
+ * unsubscribe function.
+ */
+export function onUnsavedChangesChange(listener: UnsavedChangesListener): () => void {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
 /** The editor reported an edit (`onDocumentStateChange` with modified = true). */
 export function markDocumentDirty(): void {
-  dirty = true;
   lastEditAt = Date.now();
+  setDirty(true);
 }
 
 /**
@@ -43,12 +64,12 @@ export function getLastEditAt(): number {
 
 /** The document's bytes reached the user's disk: nothing is at risk any more. */
 export function markDocumentSaved(): void {
-  dirty = false;
+  setDirty(false);
 }
 
 /** A different document is taking over the editor; its edit history is not ours. */
 export function resetUnsavedChanges(): void {
-  dirty = false;
+  setDirty(false);
 }
 
 export function hasUnsavedChanges(): boolean {
@@ -79,6 +100,7 @@ export function installUnsavedChangesGuard(): void {
 export function resetUnsavedGuardForTests(): void {
   dirty = false;
   lastEditAt = 0;
+  listeners.clear();
   if (installed && typeof window !== 'undefined') {
     window.removeEventListener('beforeunload', handleBeforeUnload);
   }

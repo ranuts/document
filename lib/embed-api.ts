@@ -2,6 +2,8 @@ import { getDocmentObj, setDocmentObj } from '@ranuts/shared/store';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { openDocumentFromUrl } from './document';
 import { getReadonlyMode, requestSaveDocument, setReadonlyMode } from './onlyoffice-editor';
+import { captureSavePoint, commitSavePoint } from './onlyoffice/save-point';
+import { hasUnsavedChanges, markDocumentSaved, onUnsavedChangesChange } from './unsaved-guard';
 
 type EmbedMessageType =
   | 'document:open'
@@ -189,9 +191,19 @@ async function handleMessage(event: MessageEvent): Promise<void> {
         const currentExt = (getDocmentObj()?.fileName || '').split('.').pop()?.toUpperCase() || '';
         const LEGACY_TARGET: Record<string, string> = { XLS: 'XLSX', DOC: 'DOCX', PPT: 'PPTX' };
         const defaultExt = LEGACY_TARGET[currentExt] || currentExt || 'XLSX';
+        const returnOriginalOnTimeout = Boolean(payload.returnOriginalOnTimeout);
+        // Taken before the export starts: edits made while it runs are not in
+        // the bytes the host receives, so they must keep the document dirty.
+        const savePoint = captureSavePoint();
         const file = await requestSaveDocument(payload.targetExt || defaultExt, {
-          returnOriginalOnTimeout: Boolean(payload.returnOriginalOnTimeout),
+          returnOriginalOnTimeout,
         });
+        // The host now holds the edited bytes. A timeout fallback may have
+        // handed it the original file instead, which saves nothing -- the
+        // request cannot tell the two apart, so that mode never clears the flag.
+        if (!returnOriginalOnTimeout && commitSavePoint(savePoint)) {
+          markDocumentSaved();
+        }
         postToParent(
           'document:saved',
           {
@@ -199,6 +211,7 @@ async function handleMessage(event: MessageEvent): Promise<void> {
             fileName: file.name,
             mimeType: file.type,
             size: file.size,
+            dirty: hasUnsavedChanges(),
           },
           message.id,
         );
@@ -208,7 +221,7 @@ async function handleMessage(event: MessageEvent): Promise<void> {
       case 'document:get-state':
         postToParent(
           'document:state',
-          { readonly: getReadonlyMode(), hasDocument: Boolean(window.editor) },
+          { readonly: getReadonlyMode(), hasDocument: Boolean(window.editor), dirty: hasUnsavedChanges() },
           message.id,
         );
         break;
@@ -240,6 +253,11 @@ export function initEmbedApi(): void {
   }
 
   document.body.classList.add('embed-mode');
+  // Pushed, not polled: the host needs it to decide when to save (a tab
+  // switch, an idle timer) without exporting documents nobody touched.
+  onUnsavedChangesChange((dirty) => {
+    postToParent('document:dirty-changed', { dirty });
+  });
   window.addEventListener('message', (event) => {
     void handleMessage(event);
   });
