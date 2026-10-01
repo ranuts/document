@@ -3,7 +3,7 @@ title: 'Offline-Dokumenteneditor — DOCX, XLSX, PPTX ohne Internet bearbeiten'
 description: 'DOCX, XLSX, PPTX und CSV mit zwischengespeicherten App-, Engine- und Schriftressourcen offline bearbeiten.'
 eyebrow: Offline · PWA
 h1: Ein Offline-Dokumenteneditor, der ohne Internet funktioniert
-lead: 'Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.'
+lead: 'Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.'
 cta: Editor öffnen →
 ctaHref: /de/
 ogDescription: 'DOCX, XLSX, PPTX und CSV mit zwischengespeicherten App-, Engine- und Schriftressourcen offline bearbeiten.'
@@ -12,30 +12,30 @@ howTo: Den Dokumenteneditor offline nutzen
 appDescription: 'DOCX, XLSX, PPTX und CSV mit zwischengespeicherten App-, Engine- und Schriftressourcen offline bearbeiten.'
 ---
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload.
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.
 
 ## So funktioniert es
 
 1. Öffnen Sie den Editor online und testen Sie die benötigten Formate, Schriften und Exporte. Trennen Sie dann die Verbindung und prüfen Sie denselben Ablauf vor der Offline-Nutzung.
 2. Die PWA-Installation ist optional: Nutzen Sie die Installationsfunktion des Browsers oder Zum Startbildschirm hinzufügen. Sie garantiert nicht, dass alle Ressourcen zwischengespeichert sind.
-3. Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
-4. In Chrome, Edge und anderen Browsern mit File System Access API wählen Sie beim ersten Speichern eine Datei; spätere Speichervorgänge schreiben in diese Datei zurück. Andere Browser laden eine Kopie herunter. Andere Formate exportieren Sie über Datei → Herunterladen als. Wiederherstellungskopien im Browser sind davon unabhängig.
+3. Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
+4. In Chrome und Edge wählen Sie beim ersten Speichern eine Datei; danach speichern Sie Änderungen direkt darin. Safari, Firefox und andere Browser laden eine Kopie herunter.
 
 ## Warum es offline funktioniert
 
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 - **Installierbare PWA** — auf Startbildschirm oder Desktop legen und wie eine App starten
 - **Läuft überall** — Chromebook, Windows, macOS, Linux, Android; jeder moderne Browser
 - DOCX, XLSX, PPTX und CSV bearbeiten
-- Bei der lokalen Kernbearbeitung: Kein Upload, kein Konto, keine Anmeldung
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## Häufige Fragen
 
 ### Funktioniert es wirklich offline?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.
 
 ### Funktioniert es auf einem Chromebook?
 
@@ -43,7 +43,7 @@ Ja. Es läuft in jedem modernen Browser — Chromebook, Laptop, Windows, macOS, 
 
 ### Werden meine Dateien hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Welche Formate kann ich bearbeiten?
 
@@ -59,12 +59,8 @@ DOCX, XLSX, PPTX und CSV, mit OnlyOffice.
 
 ### Wo werden meine Dateien offline gespeichert?
 
-In Chrome, Edge und anderen Browsern mit File System Access API wählen Sie beim ersten Speichern eine Datei; spätere Speichervorgänge schreiben in diese Datei zurück. Andere Browser laden eine Kopie herunter. Andere Formate exportieren Sie über Datei → Herunterladen als. Wiederherstellungskopien im Browser sind davon unabhängig. Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
+Ja. In Chrome und Edge wählen Sie beim ersten Speichern eine Datei; danach speichern Sie Änderungen direkt darin. Safari, Firefox und andere Browser laden eine Kopie herunter. Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.
 
 ### Was bleibt nach dem Schließen des Tabs?
 
-Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
-
-### Ist ein integrierter KI-Assistent verfügbar?
-
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.

@@ -14,7 +14,7 @@ export const UI = {
     openEditor: 'Open editor',
     onThisPage: 'On this page',
     more: 'Related pages',
-    sideNote: 'Runs on your device. No upload, no sign-up.',
+    sideNote: 'Open source. Runs on your device. No sign-up.',
     footer: [
       ['/', 'Open editor'],
       ['/help', 'Help'],
@@ -35,7 +35,7 @@ export const UI = {
       ['/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `Source: ${src} in the repository`,
-    ossNote: `<strong>Open source &amp; self-hostable.</strong> Under AGPL-3.0 — verify that nothing is uploaded, or run your own copy: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    ossNote: `<strong>Open source.</strong> AGPL-3.0 — Read the public source code to see how files are handled, or host your own copy: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
     trademark: `ONLYOFFICE is a trademark of Ascensio System SIA. This site is not an official ONLYOFFICE product and is not affiliated with or endorsed by Ascensio System SIA.`,
   },
   'zh-CN': {
@@ -46,7 +46,7 @@ export const UI = {
     openEditor: '打开编辑器',
     onThisPage: '本页目录',
     more: '相关页面',
-    sideNote: '在你的设备上运行，不上传、免注册。',
+    sideNote: '代码开源，在你的设备上处理文档，无需注册。',
     footer: [
       ['/zh-CN/', '打开编辑器'],
       ['/zh-CN/help', '帮助'],
@@ -67,7 +67,7 @@ export const UI = {
       ['/zh-CN/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `来源：仓库中的 ${src}`,
-    ossNote: `<strong>开源 · 可自托管。</strong>采用 AGPL-3.0——你可以核实没有任何上传，或者自建一份：<a href="${REPO}" rel="noopener">github.com/ranuts/document</a>。`,
+    ossNote: `<strong>开源 · 可自行部署。</strong> AGPL-3.0 — 源代码公开，可随时查看文件处理方式，也可以自行部署: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
     trademark: `ONLYOFFICE 是 Ascensio System SIA 的商标。本站并非官方 ONLYOFFICE 产品，与 Ascensio System SIA 无隶属关系，也未获其背书。`,
   },
   ja: {
@@ -78,7 +78,7 @@ export const UI = {
     openEditor: 'エディタを開く',
     onThisPage: 'このページの目次',
     more: '関連ページ',
-    sideNote: 'お使いの端末で動作します。アップロードなし、登録不要。',
+    sideNote: 'オープンソース。端末上で処理。登録不要。',
     footer: [
       ['/ja/', 'エディタを開く'],
       ['/ja/help', 'ヘルプ'],
@@ -98,7 +98,7 @@ export const UI = {
       ['/ja/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `ソース: リポジトリの ${src}`,
-    ossNote: `<strong>オープンソース・セルフホスト可能。</strong>AGPL-3.0 のもとで公開——何もアップロードされないことを自分で確認でき、自分で運用することもできます: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>。`,
+    ossNote: `<strong>オープンソース。</strong> AGPL-3.0 — 公開されたソースコードでファイルの扱いを確認したり、自分で運用したりできます: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
     trademark: `ONLYOFFICE は Ascensio System SIA の商標です。本サイトは公式の ONLYOFFICE 製品ではなく、Ascensio System SIA との提携も推奨関係もありません。`,
   },
   de: {
@@ -109,7 +109,7 @@ export const UI = {
     openEditor: 'Editor öffnen',
     onThisPage: 'Auf dieser Seite',
     more: 'Verwandte Seiten',
-    sideNote: 'Läuft auf Ihrem Gerät. Kein Upload, keine Anmeldung.',
+    sideNote: 'Open Source. Verarbeitung auf Ihrem Gerät. Ohne Anmeldung.',
     footer: [
       ['/de/', 'Editor öffnen'],
       ['/de/help', 'Hilfe'],
@@ -129,7 +129,7 @@ export const UI = {
       ['/de/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `Quelle: ${src} im Repository`,
-    ossNote: `<strong>Open Source &amp; selbst hostbar.</strong> Unter AGPL-3.0 — prüfen Sie selbst, dass nichts hochgeladen wird, oder betreiben Sie eine eigene Kopie: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    ossNote: `<strong>Open Source.</strong> AGPL-3.0 — Prüfen Sie im öffentlichen Quellcode, wie Dateien verarbeitet werden, oder betreiben Sie eine eigene Kopie: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
     trademark: `ONLYOFFICE ist eine Marke von Ascensio System SIA. Diese Website ist kein offizielles ONLYOFFICE-Produkt und steht in keiner Verbindung zu Ascensio System SIA.`,
   },
   es: {
@@ -140,7 +140,7 @@ export const UI = {
     openEditor: 'Abrir el editor',
     onThisPage: 'En esta página',
     more: 'Páginas relacionadas',
-    sideNote: 'Funciona en tu dispositivo. Sin subidas, sin registro.',
+    sideNote: 'Código abierto. Procesamiento en tu dispositivo. Sin registro.',
     footer: [
       ['/es/', 'Abrir el editor'],
       ['/es/help', 'Ayuda'],
@@ -160,7 +160,7 @@ export const UI = {
       ['/es/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `Fuente: ${src} en el repositorio`,
-    ossNote: `<strong>Código abierto y autoalojable.</strong> Bajo AGPL-3.0: comprueba que no se sube nada, o ejecuta tu propia copia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    ossNote: `<strong>Código abierto.</strong> AGPL-3.0 — Consulta el código público para ver cómo se procesan los archivos o aloja tu propia copia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
     trademark: `ONLYOFFICE es una marca de Ascensio System SIA. Este sitio no es un producto oficial de ONLYOFFICE ni está afiliado a Ascensio System SIA ni respaldado por ella.`,
   },
   ko: {
@@ -171,7 +171,7 @@ export const UI = {
     openEditor: '편집기 열기',
     onThisPage: '이 페이지의 목차',
     more: '관련 페이지',
-    sideNote: '기기에서 실행됩니다. 업로드 없음, 가입 불필요.',
+    sideNote: '오픈 소스. 내 기기에서 처리. 가입 불필요.',
     footer: [
       ['/ko/', '편집기 열기'],
       ['/ko/help', '도움말'],
@@ -191,7 +191,7 @@ export const UI = {
       ['/ko/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `출처: 저장소의 ${src}`,
-    ossNote: `<strong>오픈 소스이며 직접 호스팅할 수 있습니다.</strong> AGPL-3.0으로 공개되어 있어, 아무것도 업로드되지 않는다는 것을 직접 확인하거나 직접 운영할 수 있습니다: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    ossNote: `<strong>오픈 소스.</strong> AGPL-3.0 — 공개된 소스 코드에서 파일 처리 방식을 확인하거나 직접 호스팅할 수 있습니다: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
     trademark: `ONLYOFFICE는 Ascensio System SIA의 상표입니다. 이 사이트는 공식 ONLYOFFICE 제품이 아니며 Ascensio System SIA와 제휴하거나 후원받지 않았습니다.`,
   },
   pt: {
@@ -202,7 +202,7 @@ export const UI = {
     openEditor: 'Abrir o editor',
     onThisPage: 'Nesta página',
     more: 'Páginas relacionadas',
-    sideNote: 'Roda no seu dispositivo. Sem uploads, sem cadastro.',
+    sideNote: 'Código aberto. Processamento no seu dispositivo. Sem cadastro.',
     footer: [
       ['/pt/', 'Abrir o editor'],
       ['/pt/help', 'Ajuda'],
@@ -222,7 +222,7 @@ export const UI = {
       ['/pt/embed-document-editor', 'Embed API'],
     ],
     generatedNote: (src) => `Fonte: ${src} no repositório`,
-    ossNote: `<strong>Código aberto e auto-hospedável.</strong> Sob a AGPL-3.0 — confira você mesmo que nada é enviado, ou rode a sua própria cópia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
+    ossNote: `<strong>Código aberto.</strong> AGPL-3.0 — Consulte o código público para ver como os arquivos são tratados ou hospede sua própria cópia: <a href="${REPO}" rel="noopener">github.com/ranuts/document</a>.`,
     trademark: `ONLYOFFICE é uma marca da Ascensio System SIA. Este site não é um produto oficial do ONLYOFFICE nem tem afiliação ou endosso da Ascensio System SIA.`,
   },
 };

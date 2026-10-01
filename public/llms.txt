@@ -2,7 +2,7 @@
 
 > A free, privacy-first document editor that runs entirely in the browser. Edit
 > Microsoft Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files, and open
-> PDF files, with no required document upload or sign-up. Core editing and
+> PDF files, with public source code and no sign-up. Local file editing and
 > conversion happen on the user's device. Offline use requires the relevant
 > resources to be cached. The built-in AI assistant is unfinished and is not a
 > released feature. Embedding hosts and external browser agents have separate

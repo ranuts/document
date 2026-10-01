@@ -26,9 +26,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Open and edit Word, Excel and PowerPoint files in a browser tab. There is no
-server: the OnlyOffice engine and its WASM converter run on the visitor's own
-device, so documents are never uploaded, and no account is involved.
+Edit Word, Excel and PowerPoint files in your browser. No Office installation or account needed. Documents are processed on your device, with source code open for inspection.
 
 **Live site: [edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -36,10 +34,10 @@ device, so documents are never uploaded, and no account is involved.
 
 ## ✨ Features
 
-- 🔒 **Nothing is uploaded** — every conversion, edit and export happens in the tab
+- 🔒 Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
 - 📝 **Real editing, not preview** — DOCX, XLSX, PPTX and CSV, plus ODF, RTF, TXT and the legacy binary formats; PDFs open and can be annotated
 - 💾 **Saves into your own file** — pick it once, every save after writes back to it (Chromium; elsewhere it downloads as before)
-- 🕓 **Nothing is lost if you close the tab** — edits autosave into your own browser, kept for 7 days, deletable any time ([details](#-local-editing-and-data-handling))
+- 🕓 With autosave enabled, recovery copies stay in this browser for 7 days after the last edit or open. Delete them or turn autosave off at /history (Saved documents). Browser data can be cleared and edits not yet saved can be lost; save important changes to a file. ([details](#-local-editing-and-data-handling))
 - 📴 **Works offline** — installable as a PWA; cached editor resources can be reused offline; uncached assets and remote files still require a network
 - 🌍 **Multi-language** — 7 languages end to end (English, 中文, 日本語, Deutsch, Español, 한국어, Português): the pages, the app UI and the editor all follow the one you pick; the editor itself ships 45
 - 🧩 **Embeddable** — full postMessage API for iframe integration

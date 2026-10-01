@@ -1,20 +1,20 @@
 ---
-title: 'PowerPoint 없이 PPTX 열기 — 무료, 온라인, 업로드 없이'
-description: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
+title: 'PowerPoint 없이 PPTX 열기 — 무료, 온라인, 오픈 소스'
+description: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 eyebrow: 열기 · .pptx
 h1: PowerPoint 없이 PPTX 파일 열기
-lead: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
+lead: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 cta: PPTX 열기 →
 ctaHref: /ko/
-ogDescription: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
+ogDescription: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 breadcrumb: PPTX 열기
 howTo: PowerPoint 없이 PPTX 파일을 여는 방법
-appDescription: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
+appDescription: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 ---
 
-기본 로컬 편집의 경우: PPTX는 Microsoft PowerPoint의 형식입니다. 이 편집기는 OnlyOffice 엔진으로 파일을 열기 때문에 슬라이드 레이아웃, 이미지, 도형, 텍스트가 모두 제대로 표시됩니다. WebAssembly로 로컬에서 실행되므로 프레젠테이션은 기기에 남습니다.
+Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.
 
-기본 로컬 편집의 경우: OnlyOffice의 프레젠테이션 엔진은 WebAssembly로 컴파일되어 브라우저 탭 안에서 실행됩니다. 자료를 고르면 디스크에서 메모리로 곧바로 읽히며 — 업로드도, 서버 왕복도 없습니다 — 대외비 제안서나 내부 자료가 기기를 벗어나지 않습니다. 최신 **.pptx**와 예전 이진 **.ppt**를 모두 열 수 있고, 슬라이드를 PPTX나 PDF로 내보낼 수 있습니다.
+로컬 파일 열기, 편집, 형식 변환은 내 기기에서 이루어지며 문서 처리 서버가 필요하지 않습니다. 소스 코드는 공개되어 있으며 직접 확인하거나 호스팅할 수 있습니다.
 
 ## 사용 방법
 
@@ -28,8 +28,8 @@ appDescription: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX �
 - 모든 **.pptx**(및 .ppt) 프레젠테이션을 레이아웃 그대로 열기
 - 슬라이드를 편집하고 PPTX나 PDF로 다시 내려받기
 - Microsoft PowerPoint도 계정도 필요 없음
-- 기본 로컬 편집의 경우: 업로드 없음 — 프레젠테이션이 기기를 벗어나지 않습니다
-- 캐시된 편집 리소스는 오프라인에서 사용할 수 있습니다. 원격 파일 URL에는 네트워크가 필요합니다.
+- 로컬 파일 열기, 편집, 형식 변환은 내 기기에서 이루어지며 문서 처리 서버가 필요하지 않습니다. 소스 코드는 공개되어 있으며 직접 확인하거나 호스팅할 수 있습니다.
+- 필요한 기능을 온라인에서 먼저 사용해 보세요. 브라우저에 저장된 기능은 오프라인에서 사용할 수 있습니다. 링크로 파일을 열려면 인터넷이 필요합니다.
 
 동료가 검토용으로 자료를 보냈든, 내 발표에 쓸 슬라이드 몇 장이 필요하든, Office가 없는 컴퓨터에서 **.pptx**를 읽고 싶을 뿐이든, 여는 데는 몇 초면 충분합니다. 데스크톱 앱과 같은 OnlyOffice 엔진으로 렌더링하므로 PowerPoint를 쓰는 상대가 보는 것과 일치합니다 — 안심하고 검토하거나 손본 뒤 그대로 돌려줄 수 있습니다.
 
@@ -45,7 +45,7 @@ appDescription: 'Microsoft PowerPoint나 계정 없이 브라우저에서 PPTX �
 
 ### 프레젠테이션이 업로드되나요?
 
-기본 파일 열기, 편집, 형식 변환은 브라우저에서 로컬로 실행되며 문서 업로드가 필수는 아닙니다. 내장 AI 어시스턴트는 아직 완성되지 않았으며 출시된 기능이 아닙니다. 임베드 호스트는 내보낸 파일을 받아 자체 정책에 따라 업로드할 수 있습니다.
+아니요. 이 사이트에서 로컬 파일을 직접 열면 보기, 편집, 변환이 내 기기에서 이루어지므로 문서를 업로드할 필요가 없습니다.
 
 ### 보기만 하는 게 아니라 슬라이드를 편집할 수 있나요?
 

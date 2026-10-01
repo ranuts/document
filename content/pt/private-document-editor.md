@@ -1,26 +1,26 @@
 ---
-title: 'Editor de documentos privado — edição local sem envio obrigatório'
-description: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos.'
+title: 'Editor de documentos privado — código aberto, processamento no seu dispositivo'
+description: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 eyebrow: 'Edição local'
 h1: Procurando um editor de documentos que mantenha seus arquivos privados?
-lead: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento.'
+lead: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos.'
+ogDescription: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 breadcrumb: Editor privado
-appDescription: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos.'
+appDescription: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 ---
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
-Isso serve bem para contratos, planilhas financeiras, anotações médicas, papelada de RH ou qualquer coisa que você prefira não entregar a terceiros. E você tem um editor de fidelidade completa — com o motor do OnlyOffice, então fontes, tabelas, fórmulas e layout são preservados — sem o preço de mandar o arquivo antes.
+Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV. Layouts complexos e fontes especiais podem variar; confira o resultado antes de compartilhar.
 
 ## O que dá para fazer
 
-- Na edição básica local: **Todo arquivo fica no dispositivo** — 100% no cliente; seus documentos nunca saem da sua máquina.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 - **Edite os formatos comuns** — DOCX, XLSX, PPTX e CSV, com a formatação completa preservada.
 - **Sem conta** — sem cadastro, sem login, nada para registrar.
-- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 - **Verifique a promessa** — leia o código aberto ou hospede a sua própria cópia.
 
 ## Como funciona
@@ -34,11 +34,11 @@ Isso serve bem para contratos, planilhas financeiras, anotações médicas, pape
 
 ### O que torna este um editor de documentos privado?
 
-Na edição básica local: Seus arquivos são abertos e editados inteiramente dentro do seu próprio navegador com WebAssembly. O documento nunca é enviado a um servidor, então fica no seu dispositivo o tempo todo.
+Seus arquivos são abertos e editados inteiramente dentro do seu próprio navegador com WebAssembly. O documento nunca é enviado a um servidor, então fica no seu dispositivo o tempo todo.
 
 ### Meus arquivos chegam a ser enviados?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Preciso de conta para manter meus arquivos privados?
 
@@ -46,16 +46,12 @@ Sem conta, sem cadastro e sem login. Você abre o editor e trabalha na hora, e n
 
 ### Dá para verificar que nada é enviado?
 
-Confira no painel de rede a abertura, edição e salvamento de um arquivo local. Teste separadamente a IA opcional, URLs remotas e apps que incorporam o editor; suas requisições não fazem parte da edição básica local. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Confira no painel de rede a abertura, edição e salvamento de um arquivo local. Teste separadamente a IA opcional, URLs remotas e apps que incorporam o editor; suas requisições não fazem parte da edição básica local. Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Continua funcionando sem conexão com a internet?
 
-A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
 
 ### O que fica depois de fechar a aba?
 
-Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
-
-### O assistente de IA integrado está disponível?
-
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.

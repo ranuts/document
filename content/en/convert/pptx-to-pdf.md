@@ -1,15 +1,15 @@
 ---
-title: 'Convert PPTX to PDF in Your Browser — Free, No Upload'
-description: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+title: 'Convert PPTX to PDF in Your Browser — Free, Open source'
+description: 'Convert PPTX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 eyebrow: Convert · .pptx → .pdf
 h1: Convert PPTX to PDF in Your Browser
-lead: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+lead: 'Turn PPTX into PDF right in your browser. No Office installation or sign-up, with conversion on your device.'
 cta: Open your PPTX →
 ctaHref: /
-ogDescription: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+ogDescription: 'Convert PPTX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 breadcrumb: pptx-to-pdf
-howTo: How to convert a PPTX to PDF without uploading it
-appDescription: 'Convert PPTX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+howTo: How to convert PPTX to PDF on your device
+appDescription: 'Convert PPTX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 ---
 
 ## How it works
@@ -17,13 +17,11 @@ appDescription: 'Convert PPTX to PDF locally in your browser without Office or a
 1. Click **Open your PPTX** to launch the editor in your browser.
 2. Pick the **.pptx** file from your device, or drag and drop it onto the page.
 3. Choose **Download as / Save as** and pick **PDF**.
-4. Core local editing: One page per slide is generated on your device and downloaded — nothing is uploaded.
+4. One page per slide is generated on your device and downloaded — nothing is uploaded.
 
-A deck as PDF is how you send slides to someone who should read them but not edit them, and how you make sure they look the same on a machine that does not have your fonts or your version of PowerPoint. Doing that conversion through an upload service means the unreleased pitch, the internal roadmap or the client proposal sits on a third-party server first. Here it does not leave the tab.
+Sending a report, a CV or presentation slides? Export a PDF that is easy to open and read. Review the content and layout in the editor, make any changes, then export.
 
-OnlyOffice's rendering engine, compiled to WebAssembly, draws each slide and writes it out as one PDF page. Layouts, embedded images, shapes, charts and speaker-visible text come across as rendered — this is the same pipeline that paints the slides on screen, so the PDF matches what you were just looking at.
-
-Two things are worth setting expectations on, because a PDF is a still document: animations and slide transitions have nothing to become and are simply flattened to the slide's final state, and speaker notes are not part of the slide area, so they are not what a plain slide export captures. If a deck matters, page through it in the editor before exporting.
+Conversion happens on your device, so you do not need to upload a contract or personal document to a conversion service.
 
 ## Frequently asked questions
 
@@ -33,7 +31,7 @@ Open the PPTX in the editor, then use Download as / Save as and choose PDF. The 
 
 ### Is my presentation uploaded to convert it?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need PowerPoint or an account?
 
@@ -57,4 +55,4 @@ Yes. Both .pptx and the older .ppt open with the same engine and can be exported
 
 ### Does the conversion work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

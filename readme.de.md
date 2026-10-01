@@ -25,9 +25,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Word-, Excel- und PowerPoint-Dateien in einem Browser-Tab öffnen und bearbeiten. Ohne Server:
-Die OnlyOffice-Engine und ihr WASM-Konverter laufen auf dem Gerät der Besucherin selbst,
-Dokumente werden also nie hochgeladen, und ein Konto braucht es auch nicht.
+Word-, Excel- und PowerPoint-Dateien im Browser bearbeiten, ohne Office-Installation oder Konto. Dokumente werden auf Ihrem Gerät verarbeitet. Der Quellcode ist öffentlich einsehbar.
 
 **Live-Website: [edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -35,9 +33,9 @@ Dokumente werden also nie hochgeladen, und ein Konto braucht es auch nicht.
 
 ## ✨ Funktionen
 
-- 🔒 **Nichts wird hochgeladen** — jede Umwandlung, jede Änderung, jeder Export passiert im Tab
+- 🔒 Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 - 📝 **Echtes Bearbeiten, keine Vorschau** — DOCX, XLSX, PPTX und CSV, dazu ODF, RTF, TXT und die alten Binärformate; PDFs lassen sich öffnen und kommentieren
-- 🕓 **Nichts geht verloren, wenn der Tab zugeht** — Änderungen werden im eigenen Browser gesichert, 7 Tage aufbewahrt, jederzeit löschbar ([Einzelheiten](#-lokale-bearbeitung-und-datenverarbeitung))
+- 🕓 Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei. ([Einzelheiten](#-lokale-bearbeitung-und-datenverarbeitung))
 - 📴 **Funktioniert offline** — als PWA installierbar; zwischengespeicherte Editor-Ressourcen sind offline nutzbar; nicht gespeicherte Ressourcen und entfernte Dateien benötigen Netz
 - 🌍 **Mehrsprachig** — 7 Oberflächensprachen für die Website, 45 für den Editor selbst
 - 🧩 **Einbettbar** — vollständige postMessage-API für die iframe-Integration

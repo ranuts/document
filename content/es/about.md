@@ -1,6 +1,6 @@
 ---
 title: 'Acerca de — quién hace este editor y por qué'
-description: 'Sobre este editor de código abierto, sus autores, el código y el tratamiento de datos. Edición local sin subidas obligatorias.'
+description: 'Sobre este editor de código abierto, sus autores, el código y el tratamiento de datos. Procesamiento de documentos sin servidor.'
 eyebrow: Acerca de
 breadcrumb: Acerca de
 h1: Acerca de este editor
@@ -11,9 +11,9 @@ lead: Quién lo hace, qué hace de verdad, y cómo puedes comprobar ambas cosas 
 
 Un **editor de documentos de oficina dentro del navegador**. Abres un archivo de Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV o PDF y lo editas directamente en una pestaña.
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
-Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
+Con el guardado automático activado, las copias de recuperación permanecen en este navegador durante 7 días desde la última edición o apertura. Puedes borrarlas o desactivar el guardado automático en /history. Los datos del navegador y los cambios aún no guardados pueden perderse; guarda los cambios importantes en un archivo.
 
 ## Quién lo hace
 
@@ -41,7 +41,7 @@ Construir sobre un motor existente es deliberado. Los formatos de documento — 
 Una lista honesta, porque una página que solo enumera virtudes no sirve de nada:
 
 - **Los archivos grandes dependen de tu equipo.** Todo corre en tu navegador, así que una hoja de cálculo muy grande está limitada por tu memoria y tu CPU, no por un servidor que puedas ampliar pagando.
-- En la edición básica local: **Ni sincronización ni colaboración.** Ningún servidor guarda tu documento, lo que también significa que no hay coedición en tiempo real ni sincronización entre dispositivos.
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 - **La fidelidad es muy buena, no perfecta.** Los diseños complejos, las fuentes poco habituales y las macros pueden diferir de una suite de escritorio.
 
 Si algo de esto te importa más que mantener el archivo en local, una suite alojada es la mejor herramienta — y es una elección razonable.

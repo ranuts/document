@@ -1,15 +1,15 @@
 ---
-title: 'DOCX im Browser in PDF umwandeln — kostenlos, ohne Upload'
-description: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+title: 'DOCX im Browser in PDF umwandeln — kostenlos, Open Source'
+description: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 eyebrow: Umwandeln · .docx → .pdf
 h1: DOCX im Browser in PDF umwandeln
-lead: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+lead: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 cta: DOCX öffnen →
 ctaHref: /de/
-ogDescription: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+ogDescription: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 breadcrumb: docx-to-pdf
-howTo: Eine DOCX ohne Upload in ein PDF umwandeln
-appDescription: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+howTo: DOCX auf Ihrem Gerät in PDF umwandeln
+appDescription: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 ---
 
 ## So funktioniert es
@@ -17,11 +17,11 @@ appDescription: 'DOCX lokal im Browser in PDF umwandeln, ohne Office oder Konto.
 1. Klicken Sie auf **DOCX öffnen**, um den Editor im Browser zu starten.
 2. Wählen Sie die **.docx**-Datei von Ihrem Gerät oder ziehen Sie sie auf die Seite.
 3. Wählen Sie **Herunterladen als / Speichern unter** und dort **PDF**.
-4. Bei der lokalen Kernbearbeitung: Das PDF entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
+4. Das PDF entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
 
 Fast jeder „DOCX zu PDF“-Dienst im Netz funktioniert gleich: Sie geben Ihr Dokument ab, dessen Server wandelt es um, Sie laden das Ergebnis herunter. Damit liegt ein Vertrag, ein Lebenslauf oder ein Arztbrief auf einem fremden Rechner, und sei es kurz. Dieser hier schickt nichts weg: Die Datei wird direkt von der Festplatte in Ihren Browser-Tab gelesen, dort umgewandelt und wieder herausgeschrieben.
 
-Bei der lokalen Kernbearbeitung: Die Umwandlung übernimmt die nach WebAssembly kompilierte x2t-Engine von OnlyOffice — dieselbe Engine, die das Dokument am Bildschirm darstellt. Was Sie im Editor sehen, landet also im PDF. Schriften, Tabellen, Bilder, Kopf- und Fußzeilen, Seitenumbrüche und Nummerierung werden übernommen. Weil sie in Ihrem Tab läuft, gibt es keine Upload-Warteschlange, keine serverseitige Größenbeschränkung und kein Warten auf fremde Jobs.
+Die Umwandlung übernimmt die nach WebAssembly kompilierte x2t-Engine von OnlyOffice — dieselbe Engine, die das Dokument am Bildschirm darstellt. Was Sie im Editor sehen, landet also im PDF. Schriften, Tabellen, Bilder, Kopf- und Fußzeilen, Seitenumbrüche und Nummerierung werden übernommen. Weil sie in Ihrem Tab läuft, gibt es keine Upload-Warteschlange, keine serverseitige Größenbeschränkung und kein Warten auf fremde Jobs.
 
 Das ist die praktische Wahl, wenn das Dokument nicht Ihres ist, um es weiterzugeben: ein Angebot vor der Unterschrift, ein Bericht unter Sperrfrist, alles mit personenbezogenen Daten. Es ist auch die Wahl, die im Flugzeug oder hinter einer Firewall weiterläuft, denn nach dem ersten Laden ist es eine installierbare App, die ganz ohne Netz funktioniert.
 
@@ -33,7 +33,7 @@ Das ist die praktische Wahl, wenn das Dokument nicht Ihres ist, um es weiterzuge
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Brauche ich Word oder ein Konto?
 
@@ -53,4 +53,4 @@ Nein. Hier wird nach PDF exportiert; der Text eines vorhandenen PDFs wird nicht 
 
 ### Funktioniert die Umwandlung offline?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.

@@ -1,26 +1,24 @@
 ---
 title: 'Edit Documents Without an Account — No Sign-Up, Just Start'
-description: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Local editing without required uploads.'
+description: 'A free document editor with no sign-up or login. Open and edit Word, Excel, PowerPoint and CSV in your browser, without Office. Process files locally.'
 eyebrow: No account · just start
 h1: Want to Edit Documents Without an Account?
-lead: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Core opening, editing and conversion run locally in your browser without a required document upload.'
+lead: 'Just need to edit a file, without creating another account? Open the editor, make your changes to Word, Excel or PowerPoint files and save them to your device.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Local editing without required uploads.'
+ogDescription: 'A free document editor with no sign-up or login. Open and edit Word, Excel, PowerPoint and CSV in your browser, without Office. Process files locally.'
 breadcrumb: Edit documents without an account
-appDescription: 'Edit DOCX, XLSX, PPTX and CSV without registration or an account. Local editing without required uploads.'
+appDescription: 'A free document editor with no sign-up or login. Open and edit Word, Excel, PowerPoint and CSV in your browser, without Office. Process files locally.'
 ---
 
-Core local editing: No registration wall stands between you and your document. Everything runs locally in your browser with WebAssembly, so there is no account to create because there is no server storing your files in the first place. You open a file, edit it, and download it again — that is the whole flow.
-
-Core local editing: It is a full editor, not a stripped-down preview: powered by the OnlyOffice engine, your fonts, tables, formulas and layout stay intact. And because your files never leave your device, skipping the account also means skipping the usual trade of your data for access.
+No office suite to install and no account to create. View, edit and convert local files on your own device.
 
 ## What you can do
 
 - **Start with no account** — no sign-up, no login, no email or phone number.
-- **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with full formatting preserved.
-- Core local editing: **Keep files on-device** — 100% client-side; your documents are never uploaded.
-- Cached editing resources can work offline; remote file URLs need a connection.
+- **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with support for common formatting.
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
+- Try the features you need while online, then use what your browser has saved offline. Opening files from links still needs a connection.
 - **Stay free** — open source under AGPL-3.0, with no paywall to unlock.
 
 ## How it works
@@ -42,7 +40,7 @@ No. Because there is no registration step, you are never asked for an email addr
 
 ### Where are my files saved if there is no account?
 
-Core local editing: Your files stay on your own device. Editing happens locally in your browser with WebAssembly, and you download the result back to your computer — nothing is uploaded.
+Your files stay on your own device. Editing happens locally in your browser with WebAssembly, and you download the result back to your computer — nothing is uploaded.
 
 ### Is it free without an account?
 
@@ -50,12 +48,8 @@ Yes. It is free and open source under the AGPL-3.0 license, with no paywall and 
 
 ### Can I use it offline without signing in?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.
 
 ### What remains after I close the tab?
 
-When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
-
-### Is a built-in AI assistant available?
-
-The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+With autosave enabled, you can recover your work in the same browser. Copies stay for 7 days after the last edit or open and can be managed at /history (Saved documents). Browser data can be cleared, so save important changes to a file.

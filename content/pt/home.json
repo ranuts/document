@@ -1,13 +1,13 @@
 {
   "title": "Abrir DOCX, XLSX e PPTX no navegador — visualizador e editor de documentos grátis",
-  "description": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.",
-  "ogDescription": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.",
-  "chip": "Local primeiro · <b>código aberto</b>",
+  "description": "Edite arquivos do Word, Excel e PowerPoint no navegador, sem instalar o Office ou criar uma conta. Os documentos são processados no seu dispositivo e o código está disponível para consulta.",
+  "ogDescription": "Edite arquivos do Word, Excel e PowerPoint no navegador, sem instalar o Office ou criar uma conta. Os documentos são processados no seu dispositivo e o código está disponível para consulta.",
+  "chip": "Grátis · <b>código aberto</b>",
   "h1": {
     "plain": "Abra arquivos do Word, Excel e PowerPoint,",
     "accent": "direto no navegador."
   },
-  "sub": "Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.",
+  "sub": "Edite arquivos do Word, Excel e PowerPoint no navegador, sem instalar o Office ou criar uma conta. Os documentos são processados no seu dispositivo e o código está disponível para consulta.",
   "cta": {
     "open": "Abrir um arquivo",
     "docx": "Novo Word",
@@ -16,17 +16,17 @@
   },
   "recent": {
     "label": "Continuar editando",
-    "note": "Com o salvamento automático ativado, cópias ficam neste navegador por 7 dias após a última edição ou abertura. Exclua-as ou desative o salvamento em Documentos salvos. O navegador pode limpar seu armazenamento; salve também o arquivo.",
+    "note": "Ative o salvamento automático para continuar depois. As cópias de recuperação ficam por 7 dias; salve as alterações importantes em um arquivo.",
     "all": "Documentos salvos"
   },
-  "trust": ["Edição local", "sem conta", "Offline com recursos em cache", ".docx .xlsx .pptx .csv"],
+  "trust": ["Código aberto", "sem conta", "Prepare antes e trabalhe offline", ".docx .xlsx .pptx .csv"],
   "docwin": {
     "file": "report.docx",
     "badge": "salvo localmente ✓",
-    "selected": "Edição local sem envio obrigatório",
+    "selected": "Seu documento, editado no seu dispositivo.",
     "noteAuthor": "Você · agora mesmo",
-    "noteBody": "Edição local sem envio obrigatório",
-    "net": "Edição local"
+    "noteBody": "Salve as alterações no seu próprio arquivo.",
+    "net": "Processamento local · sem enviar documentos"
   },
   "nav": [
     {
@@ -47,54 +47,59 @@
           "href": "/pt/open/docx",
           "ext": ".docx",
           "name": "Abrir DOCX",
-          "desc": "Documentos do Word com fontes, tabelas e imagens intactas."
+          "desc": "Veja e edite texto, tabelas e imagens em documentos do Word."
         },
         {
           "href": "/pt/open/xlsx",
           "ext": ".xlsx",
           "name": "Abrir XLSX",
-          "desc": "Fórmulas, gráficos e várias planilhas, exibidos por completo."
+          "desc": "Edite células, fórmulas, gráficos e várias planilhas."
         },
         {
           "href": "/pt/open/pptx",
           "ext": ".pptx",
           "name": "Abrir PPTX",
-          "desc": "Slides com layouts, temas e mídia preservados."
+          "desc": "Ajuste texto, imagens e layouts dos slides."
         },
         {
           "href": "/pt/open/pdf",
           "ext": ".pdf",
           "name": "Abrir PDF",
-          "desc": "Leia, comente, anote e salve de volta."
+          "desc": "Leia, comente e anote PDFs, depois salve o resultado."
         },
         {
           "href": "/pt/open/odt",
           "ext": ".odt .ods .odp",
           "name": "Abrir OpenDocument",
-          "desc": "Formatos do LibreOffice — salve de volta como ODT, DOCX ou PDF."
+          "desc": "Abra ODT, ODS e ODP e exporte para formatos comuns de escritório."
         },
         {
           "href": "/pt/convert/docx-to-pdf",
           "ext": ".docx → .pdf",
           "name": "Converter para PDF",
-          "desc": "Word, Excel e PowerPoint viram PDF no seu dispositivo."
+          "desc": "Converta Word, Excel e PowerPoint em PDF no seu dispositivo."
         },
         {
           "href": "/pt/convert/xlsx-to-csv",
           "ext": ".xlsx → .csv",
           "name": "Converter entre formatos",
-          "desc": "De planilhas para CSV e de volta, sem enviar um byte."
+          "desc": "Converta planilhas e CSV no seu dispositivo."
         }
       ]
     },
     "pillars": {
       "eyebrow": "O que muda aqui",
-      "h2": "Privacidade por construção, não por promessa",
+      "h2": "Código aberto. Seus arquivos nas suas mãos.",
       "items": [
         {
+          "k": "AGPL-3.0",
+          "h3": "Código disponível para consulta",
+          "p": "Veja no GitHub como os arquivos são tratados ou hospede sua própria cópia."
+        },
+        {
           "k": "Edição local",
-          "h3": "Edição local sem envio obrigatório",
-          "p": "A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento."
+          "h3": "Processamento de documentos sem servidor",
+          "p": "Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia."
         },
         {
           "k": "Sem conta",
@@ -103,13 +108,8 @@
         },
         {
           "k": "PWA · offline",
-          "h3": "Offline com recursos em cache",
-          "p": "Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão."
-        },
-        {
-          "k": "AGPL-3.0",
-          "h3": "Código aberto e auto-hospedável",
-          "p": "Audite exatamente o que roda, ou hospede a sua própria cópia."
+          "h3": "Prepare antes e trabalhe offline",
+          "p": "Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão."
         }
       ]
     },
@@ -144,23 +144,23 @@
       "items": [
         {
           "q": "Ele salva no meu próprio arquivo ou só baixa uma cópia?",
-          "a": "No Chrome, Edge e outros navegadores com File System Access API, o primeiro salvamento pede um arquivo e os seguintes gravam nele. Outros navegadores baixam uma cópia. Exporte outros formatos em Arquivo → Baixar como. As cópias de recuperação no navegador são independentes do arquivo salvo."
+          "a": "Em navegadores compatíveis como Chrome e Edge, o primeiro salvamento permite escolher um arquivo; os seguintes o atualizam. Outros navegadores baixam uma cópia. Para outro formato, use Arquivo → Baixar como. As cópias de recuperação não substituem salvar o arquivo."
         },
         {
           "q": "Meus arquivos são enviados para algum lugar?",
-          "a": "A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política."
+          "a": "Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos."
         },
         {
           "q": "Quais formatos posso editar?",
-          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV, com um motor WebAssembly no navegador."
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV. Layouts complexos e fontes especiais podem variar; confira o resultado antes de compartilhar."
         },
         {
           "q": "O que acontece se eu fechar a aba ou recarregar a página?",
-          "a": "Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo."
+          "a": "Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo."
         },
         {
           "q": "Funciona offline?",
-          "a": "A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão."
+          "a": "Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet."
         },
         {
           "q": "Preciso de uma conta?",
@@ -234,10 +234,10 @@
   "featureList": [
     "Abrir e ver DOCX, XLSX, PPTX e CSV sem o Microsoft Office",
     "Editar arquivos DOCX, XLSX, PPTX e CSV",
-    "Edição local sem envio obrigatório",
+    "Processamento de documentos sem servidor",
     "Sem conta e sem cadastro",
     "Abrir documentos a partir de uma URL com ?src= ou ?file=",
-    "Offline com recursos em cache",
+    "Prepare antes e trabalhe offline",
     "Incorporável pela API postMessage",
     "Grátis e de código aberto (AGPL-3.0)"
   ]

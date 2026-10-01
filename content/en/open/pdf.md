@@ -1,20 +1,20 @@
 ---
-title: 'Open PDF Without Acrobat — Read & Annotate in Your Browser, No Upload'
-description: 'Open, read and annotate PDF files in your browser without Acrobat or an account. Local editing without required uploads.'
+title: 'Open PDF Without Acrobat — Read & Annotate in Your Browser, Open source'
+description: 'Open PDF files in your browser for free, with no installation or sign-up. Read, comment and annotate PDFs on your device.'
 eyebrow: Open · .pdf
 h1: Open a PDF File Without Acrobat — and Without Uploading It
-lead: 'Open, read and annotate PDF files in your browser without Acrobat or an account. Local editing without required uploads.'
+lead: 'Got a PDF file but no app to open it? Open it in your browser, read and annotate it, then save a PDF.'
 cta: Open your PDF →
 ctaHref: /
-ogDescription: 'Open, read and annotate PDF files in your browser without Acrobat or an account. Local editing without required uploads.'
+ogDescription: 'Open PDF files in your browser for free, with no installation or sign-up. Read, comment and annotate PDFs on your device.'
 breadcrumb: Open PDF
 howTo: How to open and annotate a PDF without Acrobat
-appDescription: 'Open, read and annotate PDF files in your browser without Acrobat or an account. Local editing without required uploads.'
+appDescription: 'Open PDF files in your browser for free, with no installation or sign-up. Read, comment and annotate PDFs on your device.'
 ---
 
-Core local editing: Most online PDF sites work by uploading your file to their server, processing it there, and letting you download the result. This editor does not have a server for your files: the OnlyOffice PDF engine is compiled to WebAssembly and runs inside your browser tab. When you pick a file it is read straight from disk into memory — there is no upload step and no server round-trip — so confidential PDFs stay on your machine.
+Comment on a contract, highlight a report or annotate your reading material. Save a PDF to keep or share your notes.
 
-You can scroll, zoom and search the document, add comments and free-text annotations on top of the page, and save it back as a PDF that keeps those annotations. Because PDF is a fixed-layout format the body text is not rewritten like a Word document; if you need to change the wording, open the original [DOCX](/open/docx), [XLSX](/open/xlsx) or [PPTX](/open/pptx) here and export a fresh PDF from it — also on your device.
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -25,12 +25,12 @@ You can scroll, zoom and search the document, add comments and free-text annotat
 
 ## What you can do
 
-- Open and read any **.pdf** file — text, scans, forms, multi-page reports
+- Open and read **.pdf** file — text, scans, forms, multi-page reports
 - Add comments and free-text annotations, then save back as PDF
 - Create a PDF from a DOCX, XLSX or PPTX with _Download as PDF_
 - No Adobe Acrobat, no Reader, no account, no Copilot
-- Core local editing: No upload — your PDF never leaves your device
-- Cached editing resources can work offline; remote file URLs need a connection.
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
+- Try the features you need while online, then use what your browser has saved offline. Opening files from links still needs a connection.
 
 ## Frequently asked questions
 
@@ -40,7 +40,7 @@ Yes. It opens PDF directly in your browser with the OnlyOffice PDF engine — no
 
 ### Is my PDF uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Can I annotate the PDF, not just read it?
 
@@ -56,7 +56,7 @@ Yes. Open the DOCX, XLSX or PPTX and choose Download as PDF — the PDF is gener
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.
 
 ### Is there a file size limit?
 

@@ -1,16 +1,20 @@
 ---
 title: 'Abrir un archivo ODP sin LibreOffice — gratis, en el navegador'
-description: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+description: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .odp
 h1: Abrir un archivo ODP sin LibreOffice
-lead: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+lead: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu ODP →
 ctaHref: /es/
-ogDescription: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+ogDescription: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: odp
 howTo: Cómo abrir un archivo ODP sin LibreOffice
-appDescription: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+appDescription: 'Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 ---
+
+Abre y edita archivos ODP en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.
+
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 
@@ -23,7 +27,7 @@ ODP es el formato OpenDocument Presentation, lo que produce por defecto LibreOff
 
 Este editor abre el ODP directamente con el motor de presentaciones de OnlyOffice sobre WebAssembly, así que los diseños de diapositiva, las imágenes, las formas y el texto se representan intactos. Puedes guardarlo de vuelta como ODP, exportarlo a PPTX para alguien con PowerPoint, o a PDF para quien solo deba leerlo.
 
-En la edición básica local: El archivo se lee directamente del disco a la pestaña de tu navegador y no se sube nada. Una propuesta confidencial o una presentación interna nunca sale de tu máquina.
+El archivo se lee directamente del disco a la pestaña de tu navegador y no se sube nada. Una propuesta confidencial o una presentación interna nunca sale de tu máquina.
 
 ## Preguntas frecuentes
 

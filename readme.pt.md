@@ -25,9 +25,7 @@
   <a href="readme.fa.md">فارسی</a>
 </p>
 
-Abra e edite ficheiros do Word, do Excel e do PowerPoint num separador do navegador. Não há
-servidor: o motor do OnlyOffice e o respetivo conversor WASM correm no próprio dispositivo de
-quem visita, por isso os documentos nunca são enviados para lado nenhum e não é preciso conta.
+Edite arquivos do Word, Excel e PowerPoint no navegador, sem instalar o Office ou criar uma conta. Os documentos são processados no seu dispositivo e o código está disponível para consulta.
 
 **Site: [edit.chaxus.com](https://edit.chaxus.com/)**
 
@@ -35,9 +33,9 @@ quem visita, por isso os documentos nunca são enviados para lado nenhum e não 
 
 ## ✨ Funcionalidades
 
-- 🔒 **Nada é enviado** — cada conversão, edição e exportação acontece dentro do separador
+- 🔒 Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 - 📝 **Edição a sério, não pré-visualização** — DOCX, XLSX, PPTX e CSV, além de ODF, RTF, TXT e os antigos formatos binários; os PDF abrem e podem ser anotados
-- 🕓 **Nada se perde ao fechar o separador** — o que edita é guardado no seu próprio navegador, mantido 7 dias e apagável a qualquer momento ([pormenores](#-edição-local-e-tratamento-de-dados))
+- 🕓 Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo. ([pormenores](#-edição-local-e-tratamento-de-dados))
 - 📴 **Funciona sem ligação** — instalável como PWA; os recursos do editor em cache podem ser reutilizados offline; recursos não guardados e ficheiros remotos precisam de rede
 - 🌍 **Multilingue** — 7 idiomas de interface para o site e 45 para o editor
 - 🧩 **Incorporável** — API completa de postMessage para integração em iframe

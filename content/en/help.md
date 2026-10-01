@@ -1,10 +1,10 @@
 ---
 title: 'Help — using the online document editor'
-description: 'How to open, edit, save and recover documents; privacy boundaries and offline prerequisites. Local editing without required uploads.'
+description: 'Learn how to open, create, edit and save documents in your browser. Find help with file recovery, offline preparation and common questions.'
 eyebrow: Help
 breadcrumb: Help
 h1: Help
-lead: 'Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.'
+lead: 'From opening your first file to saving your changes, find the steps you need here.'
 ---
 
 ## Opening and creating documents
@@ -15,7 +15,7 @@ Word (`.docx`, legacy `.doc`), Excel (`.xlsx`, legacy `.xls`), PowerPoint (`.ppt
 
 ### How do I create a new document?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+Choose New Word, New Excel or New PowerPoint on the homepage to start a blank file. Save it to your device when finished.
 
 ### Is there a file size limit?
 
@@ -25,7 +25,7 @@ No fixed limit. The practical ceiling is your device's memory, because the whole
 
 ### How do I save my changes?
 
-In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file.
+In supported browsers such as Chrome and Edge, the first save asks you to choose a file; later saves update that file. Other browsers download a copy. Use File → Download as to export another format. Autosave recovery copies are separate from the files you save.
 
 ### Why is the Save button sometimes greyed out?
 
@@ -81,7 +81,7 @@ For word-processing documents, yes: `get_document_text` returns the text so the 
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Connect first, open the files you need and try editing and exporting. Then disconnect and test the same steps. Visiting the homepage or installing the app does not make every feature available offline. Clearing browser data may require reconnecting. Opening files from links needs a connection.
 
 ### How do I get the newest version?
 
@@ -91,7 +91,7 @@ The site updates itself on the next visit. If a page seems stuck on an old build
 
 ### Are my documents uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+When you edit local files directly on this site, documents are processed on your device and are not sent to our servers. The source code is public for inspection. If you use the editor through another website or let an external browser assistant read files, check its data policy.
 
 ### What does the page load from the network?
 
@@ -118,8 +118,8 @@ Yes. It is a static site, so any web server works: `docker run -d -p 8080:80 ghc
 
 ### What remains after I close the tab?
 
-When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+With autosave enabled, recovery copies stay in this browser for 7 days after the last edit or open. Delete them or turn autosave off at /history (Saved documents). Browser data can be cleared and edits not yet saved can be lost; save important changes to a file.
 
 ### Is a built-in AI assistant available?
 
-The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+The built-in AI assistant is unfinished and is not a released feature.

@@ -1,16 +1,20 @@
 ---
 title: 'Open an ODP File Without LibreOffice — Free, in Your Browser'
-description: 'Open and edit ODP files in your browser without LibreOffice or an account. Local editing without required uploads.'
+description: 'Open ODP files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .odp
 h1: Open an ODP File Without LibreOffice
-lead: 'Open and edit ODP files in your browser without LibreOffice or an account. Local editing without required uploads.'
+lead: 'Got a ODP presentation but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your ODP →
 ctaHref: /
-ogDescription: 'Open and edit ODP files in your browser without LibreOffice or an account. Local editing without required uploads.'
+ogDescription: 'Open ODP files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: odp
 howTo: How to open an ODP file without LibreOffice
-appDescription: 'Open and edit ODP files in your browser without LibreOffice or an account. Local editing without required uploads.'
+appDescription: 'Open ODP files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
+
+You do not need to install an office suite just to open an occasional file. Export to common office formats when you are ready to keep working or share.
+
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -23,7 +27,7 @@ ODP is the OpenDocument Presentation format, produced by LibreOffice Impress and
 
 The OnlyOffice presentation engine, compiled to WebAssembly, renders the slides in your browser: layouts, images, shapes, charts and text boxes come across as a real deck rather than a set of flat pictures. Edit the slides and save back as ODP to stay in the open format, or export to PPTX for a colleague on PowerPoint, or to PDF for a fixed copy that looks the same everywhere.
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.
 
 ## Frequently asked questions
 
@@ -49,7 +53,7 @@ Yes. Open the ODP and save as PPTX — the conversion runs on your device.
 
 ### Is my presentation uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need an account?
 
@@ -57,4 +61,4 @@ No. There is no sign-up, no login and no email required.
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

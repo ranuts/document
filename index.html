@@ -30,7 +30,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     <title>Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor</title>
-    <meta name="description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources." />
+    <meta name="description" content="Open, view and edit Word, Excel, PowerPoint and CSV files in your browser. Free, no Office installation or sign-up. Process documents locally, convert formats and prepare for offline editing." />
     <link rel="canonical" href="https://edit.chaxus.com/" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="alternate" hreflang="en" href="https://edit.chaxus.com/" />
@@ -67,11 +67,11 @@
     <meta property="og:locale:alternate" content="ko_KR" />
     <meta property="og:locale:alternate" content="pt_BR" />
     <meta property="og:title" content="Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor" />
-    <meta property="og:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources." />
+    <meta property="og:description" content="Open and edit Word, Excel and PowerPoint without installing Office. Free, no sign-up, with documents processed on your device." />
     <meta property="og:url" content="https://edit.chaxus.com/" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Open DOCX, XLSX &amp; PPTX in Your Browser — Free Document Viewer &amp; Editor" />
-    <meta name="twitter:description" content="Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources." />
+    <meta name="twitter:description" content="Open and edit Word, Excel and PowerPoint without installing Office. Free, no sign-up, with documents processed on your device." />
 
     <script type="application/ld+json">
       {
@@ -121,14 +121,14 @@
             "isPartOf": {
               "@id": "https://edit.chaxus.com/#website"
             },
-            "description": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
+            "description": "Open, view and edit Word, Excel, PowerPoint and CSV files in your browser. Free, no Office installation or sign-up. Process documents locally, convert formats and prepare for offline editing.",
             "featureList": [
               "Open and view DOCX, XLSX, PPTX and CSV without Microsoft Office",
               "Edit DOCX, XLSX, PPTX and CSV files",
-              "Local editing without required uploads",
+              "No server needed to process documents",
               "No account or sign-up required",
               "Open documents from a URL via ?src= or ?file=",
-              "Offline with cached resources",
+              "Prepare once, work offline",
               "Embeddable via postMessage API",
               "Free and open source (AGPL-3.0)"
             ]
@@ -138,7 +138,7 @@
             "@id": "https://edit.chaxus.com/#webpage",
             "url": "https://edit.chaxus.com/",
             "name": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor",
-            "description": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
+            "description": "Open, view and edit Word, Excel, PowerPoint and CSV files in your browser. Free, no Office installation or sign-up. Process documents locally, convert formats and prepare for offline editing.",
             "inLanguage": "en",
             "isPartOf": {
               "@id": "https://edit.chaxus.com/#website"
@@ -157,7 +157,7 @@
                 "name": "Can it save back into my own file, or only download a copy?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file."
+                  "text": "In supported browsers such as Chrome and Edge, the first save asks you to choose a file; later saves update that file. Other browsers download a copy. Use File → Download as to export another format. Autosave recovery copies are separate from the files you save."
                 }
               },
               {
@@ -165,7 +165,7 @@
                 "name": "Are my files uploaded anywhere?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy."
+                  "text": "No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents."
                 }
               },
               {
@@ -173,7 +173,7 @@
                 "name": "Which formats can I edit?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, using a WebAssembly engine in your browser."
+                  "text": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV. You can also view and annotate PDF files."
                 }
               },
               {
@@ -181,7 +181,7 @@
                 "name": "What happens if I close the tab or refresh the page?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file."
+                  "text": "With autosave enabled, you can recover your work in the same browser. Copies stay for 7 days after the last edit or open and can be managed at /history (Saved documents). Browser data can be cleared, so save important changes to a file."
                 }
               },
               {
@@ -189,7 +189,7 @@
                 "name": "Does it work offline?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection."
+                  "text": "Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection."
                 }
               },
               {
@@ -246,9 +246,9 @@
       <main>
       <div class="hero wrap">
         <div class="hero-copy">
-          <span class="chip reveal d1"><span class="dot"></span>Local-first · <b>open source</b></span>
+          <span class="chip reveal d1"><span class="dot"></span>Free · <b>open source</b></span>
           <h1 class="reveal d2">Open Word, Excel &amp; PowerPoint files, <span class="accent">right in your browser.</span></h1>
-          <p class="sub reveal d3">Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.</p>
+          <p class="sub reveal d3">No Office installed? Open Word, Excel and PowerPoint files in your browser, make your changes and save them to your device. Free to use, with no sign-up.</p>
           <div class="cta reveal d4">
             <r-button type="primary" id="hero-open" data-open-local="/editor?open=local">Open a file</r-button>
             <a href="/editor?new=docx" data-prefetch="docx"><r-button id="hero-new-docx">New Word</r-button></a>
@@ -261,12 +261,12 @@
                visitor, to a crawler, and with JavaScript off. -->
           <div class="recent reveal d5">
             <span data-recent-slot data-recent-label="Continue editing" hidden></span>
-            <span class="recent-note">Recovery copies stay in this browser for 7 days after the last edit or open when autosave is enabled. Delete them or turn autosave off in Saved documents. Browser storage can be cleared; save your file too.</span>
+            <span class="recent-note">Turn on autosave to pick up where you left off. Recovery copies stay for 7 days; save important changes to a file.</span>
             <a class="recent-all" href="/history"
               >Saved documents</a
             >
           </div>
-          <div class="trust reveal d5"><span>Local editing</span><span>no account</span><span>Offline with cached resources</span><span>.docx .xlsx .pptx .csv</span></div>
+          <div class="trust reveal d5"><span>Open source</span><span>no account</span><span>offline support</span><span>.docx .xlsx .pptx .csv</span></div>
         </div>
 
         <!-- Decorative "document being edited locally" window -- pure CSS, no JS. -->
@@ -282,7 +282,7 @@
               <span class="dl t"></span>
               <span class="dl w92"></span>
               <span class="dl w78"></span>
-              <p class="dw-text"><mark>Local editing without required uploads</mark><i class="caret"></i></p>
+              <p class="dw-text"><mark>Your document, edited on your device.</mark><i class="caret"></i></p>
               <span class="dl w85"></span>
               <span class="dl w60"></span>
               <span class="dl t2"></span>
@@ -292,10 +292,10 @@
             </div>
             <aside class="dw-note">
               <b>You · just now</b>
-              <span>Local editing without required uploads</span>
+              <span>Make your changes. Save to your own file.</span>
             </aside>
           </div>
-          <div class="dw-net"><i class="ok"></i>Local editing</div>
+          <div class="dw-net"><i class="ok"></i>Local processing · no document uploads</div>
         </div>
       </div>
 
@@ -308,43 +308,43 @@
           <a class="row" href="/open/docx">
             <span class="ext">.docx</span>
             <span class="name">Open DOCX</span>
-            <span class="desc">Word documents with fonts, tables and images intact.</span>
+            <span class="desc">View and edit text, tables and images in Word documents.</span>
             <span class="go" aria-hidden="true">&rarr;</span>
           </a>
           <a class="row" href="/open/xlsx">
             <span class="ext">.xlsx</span>
             <span class="name">Open XLSX</span>
-            <span class="desc">Formulas, charts and multiple sheets, fully rendered.</span>
+            <span class="desc">Work with cells, formulas, charts and multiple sheets.</span>
             <span class="go" aria-hidden="true">&rarr;</span>
           </a>
           <a class="row" href="/open/pptx">
             <span class="ext">.pptx</span>
             <span class="name">Open PPTX</span>
-            <span class="desc">Slides with layouts, themes and media preserved.</span>
+            <span class="desc">View and adjust slide text, images and layouts.</span>
             <span class="go" aria-hidden="true">&rarr;</span>
           </a>
           <a class="row" href="/open/pdf">
             <span class="ext">.pdf</span>
             <span class="name">Open PDF</span>
-            <span class="desc">Read, comment and annotate, then save it back.</span>
+            <span class="desc">Read, comment and annotate, then save as PDF.</span>
             <span class="go" aria-hidden="true">&rarr;</span>
           </a>
           <a class="row" href="/open/odt">
             <span class="ext">.odt .ods .odp</span>
             <span class="name">Open OpenDocument</span>
-            <span class="desc">LibreOffice formats — save back as ODT, DOCX or PDF.</span>
+            <span class="desc">Open ODT, ODS and ODP and export to common office formats.</span>
             <span class="go" aria-hidden="true">&rarr;</span>
           </a>
           <a class="row" href="/convert/docx-to-pdf">
             <span class="ext">.docx → .pdf</span>
             <span class="name">Convert to PDF</span>
-            <span class="desc">Word, Excel and PowerPoint become PDFs on your device.</span>
+            <span class="desc">Turn Word, Excel and PowerPoint files into PDFs on your device.</span>
             <span class="go" aria-hidden="true">&rarr;</span>
           </a>
           <a class="row" href="/convert/xlsx-to-csv">
             <span class="ext">.xlsx → .csv</span>
             <span class="name">Convert between formats</span>
-            <span class="desc">Spreadsheets to CSV and back, without uploading a byte.</span>
+            <span class="desc">Convert spreadsheets to CSV and back on your device.</span>
             <span class="go" aria-hidden="true">&rarr;</span>
           </a>
         </div>
@@ -353,13 +353,18 @@
       <div class="section wrap">
         <div class="section-head">
           <span class="eyebrow">Why it's different</span>
-          <h2>Private by design, not by promise</h2>
+          <h2>Open code. Your files in your hands.</h2>
         </div>
         <div class="pillars">
           <div class="pillar">
-            <span class="k">Local editing</span>
-            <h3>Local editing without required uploads</h3>
-            <p>Core opening, editing and conversion run locally in your browser without a required document upload.</p>
+            <span class="k">Local processing</span>
+            <h3>Edit without uploading your documents</h3>
+            <p>Open, edit and convert local files on your device.</p>
+          </div>
+          <div class="pillar">
+            <span class="k">AGPL-3.0</span>
+            <h3>Source code you can inspect</h3>
+            <p>Read the code on GitHub to see how files are handled, or host your own copy.</p>
           </div>
           <div class="pillar">
             <span class="k">No account</span>
@@ -368,13 +373,8 @@
           </div>
           <div class="pillar">
             <span class="k">PWA · offline</span>
-            <h3>Offline with cached resources</h3>
-            <p>Cached editing resources can work offline; remote file URLs need a connection.</p>
-          </div>
-          <div class="pillar">
-            <span class="k">AGPL-3.0</span>
-            <h3>Open source &amp; self-hostable</h3>
-            <p>Audit exactly what runs, or host your own copy.</p>
+            <h3>Keep editing when you disconnect</h3>
+            <p>Before your trip, open the files you need online, try editing and exporting, and check they work offline.</p>
           </div>
         </div>
       </div>
@@ -416,23 +416,23 @@
           <div class="qa">
             <details open>
               <summary>Can it save back into my own file, or only download a copy?</summary>
-              <p class="a">In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file.</p>
+              <p class="a">In supported browsers such as Chrome and Edge, the first save asks you to choose a file; later saves update that file. Other browsers download a copy. Use File → Download as to export another format. Autosave recovery copies are separate from the files you save.</p>
             </details>
             <details>
               <summary>Are my files uploaded anywhere?</summary>
-              <p class="a">Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.</p>
+              <p class="a">No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.</p>
             </details>
             <details>
               <summary>Which formats can I edit?</summary>
-              <p class="a">Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, using a WebAssembly engine in your browser.</p>
+              <p class="a">Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV. You can also view and annotate PDF files.</p>
             </details>
             <details>
               <summary>What happens if I close the tab or refresh the page?</summary>
-              <p class="a">When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.</p>
+              <p class="a">With autosave enabled, you can recover your work in the same browser. Copies stay for 7 days after the last edit or open and can be managed at /history (Saved documents). Browser data can be cleared, so save important changes to a file.</p>
             </details>
             <details>
               <summary>Does it work offline?</summary>
-              <p class="a">Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.</p>
+              <p class="a">Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.</p>
             </details>
             <details>
               <summary>Do I need an account?</summary>

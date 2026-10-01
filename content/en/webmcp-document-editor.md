@@ -23,7 +23,7 @@ Most web apps are opaque to an AI agent. It sees a page of buttons and has to gu
 
 open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly, get_document_state. WebMCP tools perform editing and conversion locally, but a browser agent can receive document text or exported files and may send them to its own AI service. Check the agent’s data policy before sharing confidential content.
 
-The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+The built-in AI assistant is unfinished and is not a released feature.
 
 Two limits are deliberate. Tools register only when the editor is the top-level page — a cross-origin iframe would need the embedding page to grant `allow="tools"`, which conflicts with how embedding is meant to work, so embedded editors are driven with the postMessage API instead. And full-text reading is available for word-processing documents; spreadsheets and presentations do not expose one on this engine, so the tool says so rather than returning an empty answer an agent might mistake for an empty file.
 
@@ -59,4 +59,4 @@ Yes. save_document takes a target format, so an agent can open a DOCX, XLSX or P
 
 ### Do I need an account or an API key?
 
-WebMCP tools require no account or API key. Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+WebMCP tools require no account or API key. When you edit local files directly on this site, documents are processed on your device and are not sent to our servers. The source code is public for inspection. If you use the editor through another website or let an external browser assistant read files, check its data policy.

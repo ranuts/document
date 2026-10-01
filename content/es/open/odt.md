@@ -1,16 +1,20 @@
 ---
 title: 'Abrir un archivo ODT sin LibreOffice — gratis, en el navegador'
-description: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+description: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .odt
 h1: Abrir un archivo ODT sin LibreOffice
-lead: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+lead: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu ODT →
 ctaHref: /es/
-ogDescription: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+ogDescription: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: odt
 howTo: Cómo abrir un archivo ODT sin LibreOffice
-appDescription: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+appDescription: 'Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 ---
+
+Abre y edita archivos ODT en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.
+
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 
@@ -23,7 +27,7 @@ ODT es el formato OpenDocument Text, lo que producen por defecto LibreOffice, Op
 
 Este editor abre el ODT directamente con el motor de OnlyOffice compilado a WebAssembly, así que párrafos, estilos, tablas, imágenes y listas se representan como un documento real y no como una vista de texto recortada. Puedes editarlo y guardarlo de vuelta como ODT, manteniéndolo en el formato abierto, o exportarlo a DOCX para un compañero con Word, o a PDF para alguien que solo deba leerlo.
 
-En la edición básica local: No se sube nada: el archivo se lee directamente del disco a la pestaña de tu navegador. Eso importa con la clase de documentos que suele transportar el ODT — formularios de la administración, borradores académicos, cualquier cosa de una organización que eligió un formato abierto a propósito y preferiría no hacerla pasar por una nube comercial.
+No se sube nada: el archivo se lee directamente del disco a la pestaña de tu navegador. Eso importa con la clase de documentos que suele transportar el ODT — formularios de la administración, borradores académicos, cualquier cosa de una organización que eligió un formato abierto a propósito y preferiría no hacerla pasar por una nube comercial.
 
 ## Preguntas frecuentes
 

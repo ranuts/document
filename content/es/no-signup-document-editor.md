@@ -1,34 +1,34 @@
 ---
-title: 'Editor de documentos — sin registro, sin subidas · gratis y de código abierto'
-description: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Edición local sin subidas obligatorias.'
+title: 'Editor de documentos — sin registro, gratis y de código abierto'
+description: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Sin cuenta · sin registro
-h1: Editor de documentos en línea gratis — sin registro, sin subidas
-lead: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento.'
+h1: Editor de documentos en línea gratis — sin registro, código abierto
+lead: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.'
 cta: Abrir el editor →
 ctaHref: /es/
-ogDescription: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Edición local sin subidas obligatorias.'
+ogDescription: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: Editor sin registro
 howTo: Cómo editar un documento sin registrarse
-appDescription: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Edición local sin subidas obligatorias.'
+appDescription: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento.
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
-Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché. Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
+Edita archivos de Word, Excel y PowerPoint en el navegador, sin instalar Office ni crear una cuenta. Los documentos se procesan en tu dispositivo y el código está disponible para consultarlo. Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 ## Cómo funciona
 
 1. Pulsa **Abrir el editor**: sin registro, sin inicio de sesión, sin paso de cuenta.
 2. Arrastra un archivo DOCX, XLSX, PPTX o CSV desde tu dispositivo, o empieza un documento en blanco.
-3. En la edición básica local: Edítalo en tu navegador con el motor de OnlyOffice: no se sube nada.
+3. Edítalo en tu navegador con el motor de OnlyOffice: no se sube nada.
 4. Descarga el archivo en su formato original, o expórtalo a PDF, TXT, HTML o CSV.
 
 ## Por qué lo usa la gente
 
 - **Sin registro, sin inicio de sesión, sin suscripción**: abre la página y empieza a editar.
-- En la edición básica local: **Sin subidas**: 100% en el cliente; tus documentos nunca salen de tu dispositivo.
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 - **Todos los formatos habituales**: DOCX, XLSX, PPTX y CSV, con OnlyOffice.
-- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
+- Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 - **Código abierto**: audítalo o aloja tu propia copia.
 
 ## Preguntas frecuentes
@@ -39,7 +39,7 @@ No. No hay registro, ni inicio de sesión, ni cuenta de ningún tipo. Abre el ed
 
 ### ¿Mis archivos se suben a un servidor?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Es realmente gratis?
 
@@ -47,7 +47,7 @@ Sí. Es gratis y de código abierto bajo la licencia AGPL-3.0. También puedes a
 
 ### ¿Puedo usarlo sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.
 
 ### ¿Qué formatos de archivo puedo editar?
 
@@ -63,8 +63,4 @@ Sí. Funciona en cualquier navegador móvil moderno, así que puedes editar en u
 
 ### ¿Qué queda después de cerrar la pestaña?
 
-Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
-
-### ¿Está disponible un asistente de IA integrado?
-
-El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Con el guardado automático activado, las copias de recuperación permanecen en este navegador durante 7 días desde la última edición o apertura. Puedes borrarlas o desactivar el guardado automático en /history. Los datos del navegador y los cambios aún no guardados pueden perderse; guarda los cambios importantes en un archivo.

@@ -1,10 +1,10 @@
 ---
 title: 'Ajuda — usando o editor de documentos online'
-description: 'Como abrir, editar, salvar e recuperar documentos; privacidade e requisitos offline. Edição local sem envio obrigatório.'
+description: 'Como abrir, editar, salvar e recuperar documentos; privacidade e requisitos offline. Processamento de documentos sem servidor.'
 eyebrow: Ajuda
 breadcrumb: Ajuda
 h1: Ajuda
-lead: 'Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.'
+lead: 'Edite arquivos do Word, Excel e PowerPoint no navegador, sem instalar o Office ou criar uma conta. Os documentos são processados no seu dispositivo e o código está disponível para consulta.'
 ---
 
 ## Abrir e criar documentos
@@ -15,7 +15,7 @@ Word (`.docx`, o antigo `.doc`), Excel (`.xlsx`, o antigo `.xls`), PowerPoint (`
 
 ### Como crio um documento novo?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
+Escolha um novo arquivo do Word, Excel ou PowerPoint na página inicial. Edite o arquivo em branco e salve-o no seu dispositivo.
 
 ### Existe limite de tamanho?
 
@@ -25,7 +25,7 @@ Não há limite fixo. O teto prático é a memória do seu dispositivo, porque o
 
 ### Como salvo minhas alterações?
 
-No Chrome, Edge e outros navegadores com File System Access API, o primeiro salvamento pede um arquivo e os seguintes gravam nele. Outros navegadores baixam uma cópia. Exporte outros formatos em Arquivo → Baixar como. As cópias de recuperação no navegador são independentes do arquivo salvo.
+Em navegadores compatíveis como Chrome e Edge, o primeiro salvamento permite escolher um arquivo; os seguintes o atualizam. Outros navegadores baixam uma cópia. Para outro formato, use Arquivo → Baixar como. As cópias de recuperação não substituem salvar o arquivo.
 
 ### Por que o botão Salvar às vezes fica cinza?
 
@@ -33,7 +33,7 @@ Ele acende quando o editor carregou o documento por completo e você fez alguma 
 
 ### Dá para converter entre formatos?
 
-Na edição básica local: Sim, no seu dispositivo: abra um documento e escolha o formato de destino em **Baixar como**. Documentos do Word exportam para DOCX / PDF / TXT, planilhas para XLSX / CSV / PDF e apresentações para PPTX / PDF. Arquivos CSV são abertos como planilha e podem ser salvos de volta como CSV.
+Sim, no seu dispositivo: abra um documento e escolha o formato de destino em **Baixar como**. Documentos do Word exportam para DOCX / PDF / TXT, planilhas para XLSX / CSV / PDF e apresentações para PPTX / PDF. Arquivos CSV são abertos como planilha e podem ser salvos de volta como CSV.
 
 ### Meu CSV com acentos ou caracteres chineses aparece quebrado em outras ferramentas. E aqui?
 
@@ -47,7 +47,7 @@ Abrir e ler (rolar, ampliar, pesquisar), adicionar comentários e anotações de
 
 ### Dá para reescrever o texto de um PDF existente como num documento do Word?
 
-Na edição básica local: Não como texto que flui livremente — o PDF é um formato de layout fixo. Para mudar a redação, abra o DOCX / XLSX / PPTX original e exporte um novo PDF. As duas etapas acontecem no seu dispositivo.
+Não como texto que flui livremente — o PDF é um formato de layout fixo. Para mudar a redação, abra o DOCX / XLSX / PPTX original e exporte um novo PDF. As duas etapas acontecem no seu dispositivo.
 
 ## Somente leitura e incorporação
 
@@ -81,7 +81,7 @@ Em documentos de texto, sim: `get_document_text` devolve o texto para o agente r
 
 ### Funciona offline?
 
-A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.
+Conecte-se primeiro, abra os arquivos necessários e teste a edição e a exportação. Depois desconecte-se e verifique os mesmos passos. Visitar a página inicial ou instalar o app não garante todas as funções offline. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de conexão.
 
 ### Como recebo a versão mais nova?
 
@@ -91,7 +91,7 @@ O site se atualiza sozinho na próxima visita. Se uma página parecer presa numa
 
 ### Meus documentos são enviados para algum lugar?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Ao editar arquivos locais diretamente neste site, os documentos são processados no seu dispositivo e não são enviados aos nossos servidores. O código é público para consulta. Se usar o editor em outro site ou permitir que um assistente externo leia arquivos, consulte a política de dados dele.
 
 ### O que a página carrega da rede?
 
@@ -118,8 +118,8 @@ Sim. É um site estático, então qualquer servidor web serve: `docker run -d -p
 
 ### O que fica depois de fechar a aba?
 
-Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.
 
 ### O assistente de IA integrado está disponível?
 
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+O assistente de IA integrado ainda não está concluído e não é uma função publicada.

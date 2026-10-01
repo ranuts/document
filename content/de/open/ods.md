@@ -1,16 +1,20 @@
 ---
 title: 'Eine ODS-Datei ohne LibreOffice öffnen — kostenlos, im Browser'
-description: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+description: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Öffnen · .ods
 h1: Eine ODS-Datei ohne LibreOffice öffnen
-lead: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+lead: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 cta: ODS öffnen →
 ctaHref: /de/
-ogDescription: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+ogDescription: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: ods
 howTo: Eine ODS-Datei ohne LibreOffice öffnen
-appDescription: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+appDescription: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
+
+ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.
+
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## So funktioniert es
 
@@ -23,7 +27,7 @@ ODS ist das Format OpenDocument Spreadsheet, das LibreOffice Calc standardmäßi
 
 Dieser Editor öffnet ODS direkt mit der OnlyOffice-Tabellenengine auf WebAssembly. Es ist eine Rechenengine, keine statische Vorschau: Formeln rechnen neu, Zahlenformate und mehrere Blätter bleiben erhalten. Sie können als ODS zurückspeichern, als XLSX für jemanden mit Excel exportieren oder als CSV für ein anderes Werkzeug.
 
-Bei der lokalen Kernbearbeitung: Die Datei wird direkt von der Festplatte in Ihren Browser-Tab gelesen, es wird nichts hochgeladen. Das zählt bei Budgets oder Messdaten — bei Zahlen, die ohnehin auf keinem fremden Server liegen sollten.
+Die Datei wird direkt von der Festplatte in Ihren Browser-Tab gelesen, es wird nichts hochgeladen. Das zählt bei Budgets oder Messdaten — bei Zahlen, die ohnehin auf keinem fremden Server liegen sollten.
 
 ## Häufige Fragen
 
@@ -41,7 +45,7 @@ Ja. Es ist eine echte Tabellen-Engine: Formeln bleiben erhalten und rechnen beim
 
 ### Kann ich ODS in Excel umwandeln?
 
-Bei der lokalen Kernbearbeitung: Ja. Öffnen Sie die ODS und speichern Sie sie als XLSX — die Umwandlung läuft auf Ihrem Gerät.
+Ja. Öffnen Sie die ODS und speichern Sie sie als XLSX — die Umwandlung läuft auf Ihrem Gerät.
 
 ### Kann ich sie als CSV exportieren?
 

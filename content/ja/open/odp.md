@@ -1,16 +1,20 @@
 ---
 title: 'LibreOffice なしで ODP ファイルを開く — 無料・ブラウザ内'
-description: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
+description: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 文書処理にサーバーは不要.'
 eyebrow: 開く · .odp
 h1: LibreOffice なしで ODP ファイルを開く
-lead: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
+lead: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 文書処理にサーバーは不要.'
 cta: ODP を開く →
 ctaHref: /ja/
-ogDescription: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
+ogDescription: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 文書処理にサーバーは不要.'
 breadcrumb: odp
 howTo: LibreOffice なしで ODP ファイルを開く方法
-appDescription: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
+appDescription: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 文書処理にサーバーは不要.'
 ---
+
+LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 文書処理にサーバーは不要.
+
+ローカルファイルの読み込み・編集・形式変換は端末上で行い、文書処理用のサーバーを必要としません。ソースコードは公開されており、確認や自己運用ができます。
 
 ## 使い方
 

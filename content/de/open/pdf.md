@@ -1,20 +1,20 @@
 ---
-title: 'PDF ohne Acrobat öffnen — im Browser lesen und kommentieren, ohne Upload'
-description: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Lokal bearbeiten ohne erforderlichen Upload.'
+title: 'PDF ohne Acrobat öffnen — im Browser lesen und kommentieren, Open Source'
+description: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Dokumentverarbeitung ohne Server.'
 eyebrow: Öffnen · .pdf
 h1: Ein PDF ohne Acrobat öffnen — und ohne es hochzuladen
-lead: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Lokal bearbeiten ohne erforderlichen Upload.'
+lead: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Dokumentverarbeitung ohne Server.'
 cta: PDF öffnen →
 ctaHref: /de/
-ogDescription: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Lokal bearbeiten ohne erforderlichen Upload.'
+ogDescription: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Dokumentverarbeitung ohne Server.'
 breadcrumb: PDF öffnen
 howTo: Ein PDF ohne Acrobat öffnen und kommentieren
-appDescription: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Lokal bearbeiten ohne erforderlichen Upload.'
+appDescription: 'PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Dokumentverarbeitung ohne Server.'
 ---
 
-Bei der lokalen Kernbearbeitung: PDF ist ein Format mit festem Layout. Dieser Editor öffnet es direkt mit der PDF-Engine von OnlyOffice, sodass Text, Scans und Formulare so aussehen, wie sie gemeint waren. Alles läuft lokal mit WebAssembly, die Datei bleibt also auf Ihrem Gerät.
+PDFs ohne Acrobat oder Konto im Browser öffnen, lesen und kommentieren. Dokumentverarbeitung ohne Server.
 
-Die meisten „Online-PDF-Tools“ verlangen zuerst einen Upload auf ihre Server. Hier nicht: Die Datei wird direkt von der Festplatte in Ihren Browser-Tab gelesen, und Anmerkungen werden lokal wieder hineingeschrieben — was genau bei den Dokumenten zählt, die PDFs meist sind: Verträge, Abrechnungen, alles, was auf niemandes fremdem Server liegen sollte.
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## So funktioniert es
 
@@ -29,8 +29,8 @@ Die meisten „Online-PDF-Tools“ verlangen zuerst einen Upload auf ihre Server
 - Kommentare und freie Textanmerkungen hinzufügen und wieder als PDF speichern
 - Aus einer DOCX, XLSX oder PPTX per _Als PDF herunterladen_ ein PDF erzeugen
 - Kein Adobe Acrobat, kein Reader, kein Konto, kein Copilot
-- Bei der lokalen Kernbearbeitung: Kein Upload — Ihr PDF verlässt Ihr Gerät nie
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 
 ## Häufige Fragen
 
@@ -40,7 +40,7 @@ Ja. Es wird direkt im Browser mit der PDF-Engine von OnlyOffice geöffnet — oh
 
 ### Wird mein PDF irgendwohin hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Kann ich das PDF kommentieren, nicht nur lesen?
 

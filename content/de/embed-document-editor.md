@@ -44,7 +44,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 - Öffnen aus einer **URL, einer File oder einem ArrayBuffer**, den Ihre App mit eigenen Zugangsdaten geholt hat
 - Zurückspeichern nach **XLSX, DOCX, PPTX oder CSV**, zurückgegeben als `File`, das Ihre App hochlädt
 - Schreibgeschützter Modus, Origin-Sperre pro Nachricht (`embedOrigin`) und eine Statusabfrage
-- Bei der lokalen Kernbearbeitung: Kein Dokumentenserver zu betreiben — bearbeitet wird zu 100% clientseitig mit WebAssembly
+- Kein Dokumentenserver zu betreiben — bearbeitet wird zu 100% clientseitig mit WebAssembly
 - Quelloffen (AGPL-3.0) und selbst hostbar — betten Sie ihn unter Ihrer eigenen Domain ein
 
 ## So funktioniert es

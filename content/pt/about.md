@@ -1,6 +1,6 @@
 ---
 title: 'Sobre — quem faz este editor e por quê'
-description: 'Sobre este editor de código aberto, seus autores, código-fonte e tratamento de dados. Edição local sem envio obrigatório.'
+description: 'Sobre este editor de código aberto, seus autores, código-fonte e tratamento de dados. Processamento de documentos sem servidor.'
 eyebrow: Sobre
 breadcrumb: Sobre
 h1: Sobre este editor
@@ -11,9 +11,9 @@ lead: Quem faz isto, o que ele realmente faz — e como você pode verificar as 
 
 Um **editor de documentos de escritório dentro do navegador**. Você abre um arquivo do Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV ou PDF e edita direto na aba.
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
-Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.
 
 ## Quem faz
 
@@ -41,7 +41,7 @@ Construir sobre um motor existente é deliberado. Formatos de documento — sobr
 Uma lista honesta, porque uma página que só lista virtudes não serve para nada:
 
 - **Arquivos grandes dependem do seu aparelho.** Tudo roda no seu navegador, então uma planilha muito grande é limitada pela sua memória e CPU, não por um servidor que você possa pagar para ampliar.
-- Na edição básica local: **Sem sincronização e sem colaboração.** Nenhum servidor guarda seu documento, o que também significa nada de coedição em tempo real nem sincronia entre dispositivos.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 - **A fidelidade é muito boa, não perfeita.** Layouts complexos, fontes incomuns e macros podem diferir de uma suíte de desktop.
 
 Se algum desses pontos importa mais para você do que manter o arquivo local, uma suíte hospedada é a ferramenta melhor — e essa é uma escolha razoável.

@@ -1,16 +1,20 @@
 ---
 title: 'Open an ODS File Without LibreOffice — Free, in Your Browser'
-description: 'Open and edit ODS files in your browser without LibreOffice or an account. Local editing without required uploads.'
+description: 'Open ODS files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .ods
 h1: Open an ODS File Without LibreOffice
-lead: 'Open and edit ODS files in your browser without LibreOffice or an account. Local editing without required uploads.'
+lead: 'Got a ODS spreadsheet but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your ODS →
 ctaHref: /
-ogDescription: 'Open and edit ODS files in your browser without LibreOffice or an account. Local editing without required uploads.'
+ogDescription: 'Open ODS files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: ods
 howTo: How to open an ODS file without LibreOffice
-appDescription: 'Open and edit ODS files in your browser without LibreOffice or an account. Local editing without required uploads.'
+appDescription: 'Open ODS files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
+
+You do not need to install an office suite just to open an occasional file. Export to common office formats when you are ready to keep working or share.
+
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -23,7 +27,7 @@ ODS is the OpenDocument Spreadsheet format, what LibreOffice Calc and OpenOffice
 
 The OnlyOffice spreadsheet engine, compiled to WebAssembly, opens ODS as a live calculation engine rather than a static table: formulas recalculate as you edit, number formats and cell styling survive, and workbooks with several sheets open with all their tabs. Save it back as ODS to stay in the open format, or export to XLSX for someone on Excel, CSV for a data pipeline, or PDF for a fixed copy.
 
-Core local editing: The file is read straight from disk into the browser tab, so nothing is uploaded — which is the point when the spreadsheet holds a budget, a member list or a data export you would rather not put through a third-party converter.
+The file is read straight from disk into the browser tab, so nothing is uploaded — which is the point when the spreadsheet holds a budget, a member list or a data export you would rather not put through a third-party converter.
 
 ## Frequently asked questions
 
@@ -53,8 +57,8 @@ Yes. Workbooks with several tabs open with all their sheets intact.
 
 ### Is my spreadsheet uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

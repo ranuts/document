@@ -1,20 +1,20 @@
 ---
-title: 'XLSX ohne Excel öffnen — kostenlos online, ohne Upload'
-description: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+title: 'XLSX ohne Excel öffnen — kostenlos online, Open Source'
+description: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Öffnen · .xlsx
 h1: Eine XLSX-Datei ohne Excel öffnen
-lead: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+lead: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 cta: XLSX öffnen →
 ctaHref: /de/
-ogDescription: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+ogDescription: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: XLSX öffnen
 howTo: Eine XLSX-Datei ohne Excel öffnen
-appDescription: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+appDescription: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
 
-Bei der lokalen Kernbearbeitung: XLSX ist das Format von Microsoft Excel. Dieser Editor öffnet es mit der OnlyOffice-Engine, sodass Zellformeln, Zahlenformate, Farben und mehrere Blätter erhalten bleiben — eine echte Tabelle, keine schreibgeschützte Ansicht. Alles läuft lokal mit WebAssembly, die Datei bleibt also auf Ihrem Gerät.
+XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.
 
-Bei der lokalen Kernbearbeitung: Die Tabellenkalkulations-Engine von OnlyOffice ist nach WebAssembly kompiliert und läuft in Ihrem Browser-Tab. Ihre Datei wird direkt von der Festplatte in den Speicher gelesen — kein Upload, kein Server — vertrauliche Daten verlassen Ihr Gerät also nie. Weil es eine echte Rechenengine und keine statische Vorschau ist, werden Formeln beim Bearbeiten neu berechnet. Gelesen werden das moderne **.xlsx** ebenso wie ältere **.xls** und einfache **.csv**; exportieren können Sie nach XLSX oder CSV.
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## So funktioniert es
 
@@ -28,8 +28,8 @@ Bei der lokalen Kernbearbeitung: Die Tabellenkalkulations-Engine von OnlyOffice 
 - Jede **.xlsx**-Datei (und .xls, .csv) mit erhaltenen Formeln öffnen
 - Zellen bearbeiten und wieder als XLSX oder CSV herunterladen
 - Kein Microsoft Excel und kein 365-Abo
-- Bei der lokalen Kernbearbeitung: Kein Upload — Ihre Tabelle verlässt Ihr Gerät nie
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 
 Für den schnellen Blick genauso geeignet wie für echte Arbeit: eine Spalte sortieren, eine Zahl korrigieren, eine Zeile oder Formel ergänzen und die Datei im selben Format zurückgeben. Praktisch, wenn Ihnen jemand ein Budget oder einen Datenexport mailt und Sie weder Excel installieren, noch für 365 zahlen, noch Zahlen einem beliebigen Web-Konverter anvertrauen wollen.
 
@@ -45,7 +45,7 @@ Ja. Die OnlyOffice-Engine erhält Formeln, Zahlenformate und Formatierung.
 
 ### Wird meine Tabelle hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Kann ich sie als CSV exportieren?
 

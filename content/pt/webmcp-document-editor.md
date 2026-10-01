@@ -23,7 +23,7 @@ Para um agente de IA, a maioria dos apps web é opaca. Ele vê uma página de bo
 
 open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly, get_document_state. As ferramentas WebMCP editam e convertem localmente, mas um agente do navegador pode receber texto ou arquivos exportados e enviá-los ao seu próprio serviço de IA. Confira a política de dados do agente antes de compartilhar conteúdo confidencial.
 
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+O assistente de IA integrado ainda não está concluído e não é uma função publicada.
 
 Há dois limites deliberados. As ferramentas só são registradas quando o editor é a página de nível superior — um iframe de outra origem exigiria que a página incorporadora concedesse `allow="tools"`, o que conflita com o sentido da incorporação, então editores incorporados são controlados pela API postMessage. E a leitura do texto completo está disponível para documentos de texto; planilhas e apresentações não a expõem neste motor, então a ferramenta diz isso em vez de devolver uma resposta vazia que um agente poderia confundir com um arquivo vazio.
 
@@ -59,4 +59,4 @@ Sim. save_document recebe um formato de destino, então um agente pode abrir um 
 
 ### Preciso de conta ou de uma chave de API?
 
-As ferramentas WebMCP não exigem conta nem chave de API. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+As ferramentas WebMCP não exigem conta nem chave de API. Ao editar arquivos locais diretamente neste site, os documentos são processados no seu dispositivo e não são enviados aos nossos servidores. O código é público para consulta. Se usar o editor em outro site ou permitir que um assistente externo leia arquivos, consulte a política de dados dele.

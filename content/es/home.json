@@ -1,13 +1,13 @@
 {
   "title": "Abrir DOCX, XLSX y PPTX en el navegador — visor y editor de documentos gratis",
-  "description": "Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.",
-  "ogDescription": "Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.",
-  "chip": "Local primero · <b>código abierto</b>",
+  "description": "Edita archivos de Word, Excel y PowerPoint en el navegador, sin instalar Office ni crear una cuenta. Los documentos se procesan en tu dispositivo y el código está disponible para consultarlo.",
+  "ogDescription": "Edita archivos de Word, Excel y PowerPoint en el navegador, sin instalar Office ni crear una cuenta. Los documentos se procesan en tu dispositivo y el código está disponible para consultarlo.",
+  "chip": "Gratis · <b>código abierto</b>",
   "h1": {
     "plain": "Abre archivos de Word, Excel y PowerPoint,",
     "accent": "en tu propio navegador."
   },
-  "sub": "Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.",
+  "sub": "Edita archivos de Word, Excel y PowerPoint en el navegador, sin instalar Office ni crear una cuenta. Los documentos se procesan en tu dispositivo y el código está disponible para consultarlo.",
   "cta": {
     "open": "Abrir un archivo",
     "docx": "Nuevo Word",
@@ -16,17 +16,17 @@
   },
   "recent": {
     "label": "Seguir editando",
-    "note": "Con el guardado automático activado, las copias quedan en este navegador 7 días desde la última edición o apertura. Bórralas o desactiva el guardado automático en Documentos guardados. El navegador puede borrar su almacenamiento; guarda también el archivo.",
+    "note": "Activa el guardado automático para continuar más tarde. Las copias de recuperación duran 7 días; guarda los cambios importantes en un archivo.",
     "all": "Documentos guardados"
   },
-  "trust": ["Edición local", "sin cuenta", "Sin conexión con recursos en caché", ".docx .xlsx .pptx .csv"],
+  "trust": ["Código abierto", "sin cuenta", "Prepáralo y trabaja sin conexión", ".docx .xlsx .pptx .csv"],
   "docwin": {
     "file": "report.docx",
     "badge": "guardado en local ✓",
-    "selected": "Edición local sin subidas obligatorias",
+    "selected": "Tu documento, editado en tu dispositivo.",
     "noteAuthor": "Tú · ahora mismo",
-    "noteBody": "Edición local sin subidas obligatorias",
-    "net": "Edición local"
+    "noteBody": "Guarda los cambios en tu propio archivo.",
+    "net": "Procesamiento local · sin subir documentos"
   },
   "nav": [
     {
@@ -47,54 +47,59 @@
           "href": "/es/open/docx",
           "ext": ".docx",
           "name": "Abrir DOCX",
-          "desc": "Documentos de Word con sus fuentes, tablas e imágenes intactas."
+          "desc": "Visualiza y edita texto, tablas e imágenes en documentos de Word."
         },
         {
           "href": "/es/open/xlsx",
           "ext": ".xlsx",
           "name": "Abrir XLSX",
-          "desc": "Fórmulas, gráficos y varias hojas, representados por completo."
+          "desc": "Edita celdas, fórmulas, gráficos y varias hojas."
         },
         {
           "href": "/es/open/pptx",
           "ext": ".pptx",
           "name": "Abrir PPTX",
-          "desc": "Diapositivas con diseños, temas y elementos multimedia."
+          "desc": "Ajusta el texto, las imágenes y el diseño de las diapositivas."
         },
         {
           "href": "/es/open/pdf",
           "ext": ".pdf",
           "name": "Abrir PDF",
-          "desc": "Léelo, comenta, anota y vuelve a guardarlo."
+          "desc": "Lee, comenta y anota archivos PDF, y guarda el resultado."
         },
         {
           "href": "/es/open/odt",
           "ext": ".odt .ods .odp",
           "name": "Abrir OpenDocument",
-          "desc": "Formatos de LibreOffice: guarda de vuelta en ODT, DOCX o PDF."
+          "desc": "Abre ODT, ODS y ODP y exporta a formatos de oficina habituales."
         },
         {
           "href": "/es/convert/docx-to-pdf",
           "ext": ".docx → .pdf",
           "name": "Convertir a PDF",
-          "desc": "Word, Excel y PowerPoint se convierten en PDF en tu dispositivo."
+          "desc": "Convierte Word, Excel y PowerPoint a PDF en tu dispositivo."
         },
         {
           "href": "/es/convert/xlsx-to-csv",
           "ext": ".xlsx → .csv",
           "name": "Convertir entre formatos",
-          "desc": "De hojas de cálculo a CSV y al revés, sin subir ni un byte."
+          "desc": "Convierte hojas de cálculo y CSV en tu dispositivo."
         }
       ]
     },
     "pillars": {
       "eyebrow": "Qué lo diferencia",
-      "h2": "Privacidad por diseño, no por promesa",
+      "h2": "Código abierto. Tus archivos bajo tu control.",
       "items": [
         {
+          "k": "AGPL-3.0",
+          "h3": "Código disponible para consultar",
+          "p": "Consulta en GitHub cómo se procesan los archivos o aloja tu propia copia."
+        },
+        {
           "k": "Edición local",
-          "h3": "Edición local sin subidas obligatorias",
-          "p": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento."
+          "h3": "Procesamiento de documentos sin servidor",
+          "p": "Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia."
         },
         {
           "k": "Sin cuenta",
@@ -103,13 +108,8 @@
         },
         {
           "k": "PWA · sin conexión",
-          "h3": "Sin conexión con recursos en caché",
-          "p": "Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red."
-        },
-        {
-          "k": "AGPL-3.0",
-          "h3": "Código abierto y autoalojable",
-          "p": "Audita exactamente lo que se ejecuta, o aloja tu propia copia."
+          "h3": "Prepáralo y trabaja sin conexión",
+          "p": "Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión."
         }
       ]
     },
@@ -144,23 +144,23 @@
       "items": [
         {
           "q": "¿Guarda en mi propio archivo o solo descarga una copia?",
-          "a": "En Chrome, Edge y otros navegadores con File System Access API, el primer guardado permite elegir un archivo y los siguientes escriben en él. Otros navegadores descargan una copia. Exporta otros formatos desde Archivo → Descargar como. Las copias de recuperación del navegador son independientes del archivo guardado."
+          "a": "En navegadores compatibles como Chrome y Edge, el primer guardado permite elegir un archivo; los siguientes lo actualizan. Otros navegadores descargan una copia. Para otro formato, usa Archivo → Descargar como. Las copias de recuperación no sustituyen guardar el archivo."
         },
         {
           "q": "¿Mis archivos se suben a algún sitio?",
-          "a": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política."
+          "a": "No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos."
         },
         {
           "q": "¿Qué formatos puedo editar?",
-          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV, mediante un motor WebAssembly en tu navegador."
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV. Los diseños complejos y las fuentes especiales pueden variar; revisa el resultado antes de compartirlo."
         },
         {
           "q": "¿Qué pasa si cierro la pestaña o recargo la página?",
-          "a": "Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo."
+          "a": "Con el guardado automático activado, las copias de recuperación permanecen en este navegador durante 7 días desde la última edición o apertura. Puedes borrarlas o desactivar el guardado automático en /history. Los datos del navegador y los cambios aún no guardados pueden perderse; guarda los cambios importantes en un archivo."
         },
         {
           "q": "¿Funciona sin conexión?",
-          "a": "La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión."
+          "a": "Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión."
         },
         {
           "q": "¿Necesito una cuenta?",
@@ -234,10 +234,10 @@
   "featureList": [
     "Abrir y consultar DOCX, XLSX, PPTX y CSV sin Microsoft Office",
     "Editar archivos DOCX, XLSX, PPTX y CSV",
-    "Edición local sin subidas obligatorias",
+    "Procesamiento de documentos sin servidor",
     "Sin cuenta ni registro",
     "Abrir documentos desde una URL con ?src= o ?file=",
-    "Sin conexión con recursos en caché",
+    "Prepáralo y trabaja sin conexión",
     "Integrable mediante la API postMessage",
     "Gratis y de código abierto (AGPL-3.0)"
   ]

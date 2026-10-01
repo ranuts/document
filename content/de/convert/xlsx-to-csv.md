@@ -1,15 +1,15 @@
 ---
-title: 'XLSX im Browser in CSV umwandeln — kostenlos, ohne Upload'
-description: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+title: 'XLSX im Browser in CSV umwandeln — kostenlos, Open Source'
+description: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 eyebrow: Umwandeln · .xlsx → .csv
 h1: XLSX im Browser in CSV umwandeln
-lead: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+lead: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 cta: XLSX öffnen →
 ctaHref: /de/
-ogDescription: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+ogDescription: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 breadcrumb: XLSX zu CSV
 howTo: XLSX im Browser in CSV umwandeln
-appDescription: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Lokal bearbeiten ohne erforderlichen Upload.'
+appDescription: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 ---
 
 ## So funktioniert es
@@ -17,11 +17,11 @@ appDescription: 'XLSX lokal im Browser in CSV umwandeln, ohne Office oder Konto.
 1. Klicken Sie auf **XLSX öffnen**, um den Editor im Browser zu starten.
 2. Wählen Sie die **.xlsx**-Datei von Ihrem Gerät oder ziehen Sie sie auf die Seite.
 3. Wählen Sie **Herunterladen als / Speichern unter** und dort **CSV**.
-4. Bei der lokalen Kernbearbeitung: Die CSV entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
+4. Die CSV entsteht auf Ihrem Gerät und wird heruntergeladen — nichts wird hochgeladen.
 
-Die meisten „XLSX zu CSV“-Konverter laden Ihre Tabelle zuerst auf ihre Server. Dieser nicht: Er öffnet die Datei lokal mit der OnlyOffice-Engine, Ihre Daten bleiben also privat. Kein Excel, kein Konto, funktioniert offline. Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
+Die meisten „XLSX zu CSV“-Konverter laden Ihre Tabelle zuerst auf ihre Server. Dieser nicht: Er öffnet die Datei lokal mit der OnlyOffice-Engine, Ihre Daten bleiben also privat. Kein Excel, kein Konto, funktioniert offline. Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 
-Bei der lokalen Kernbearbeitung: Die Umwandlung selbst übernimmt die nach WebAssembly kompilierte x2t-Engine von OnlyOffice. Sie deckt die gängigen Büro- und Textformate ab — Word, Excel und PowerPoint sowie PDF, TXT, HTML und CSV — und eignet sich damit gut dafür, eine Tabelle in ein portables CSV zu überführen. Da alles im Browser-Tab läuft, gibt es keine Upload-Warteschlange, keine serverseitige Größenbeschränkung und Ihre Daten gehen nicht durchs Netz. Beachten Sie: CSV ist ein flaches Einblatt-Format. Exportiert wird das aktive Blatt, und Formeln werden als ihre berechneten Werte geschrieben.
+Die Umwandlung selbst übernimmt die nach WebAssembly kompilierte x2t-Engine von OnlyOffice. Sie deckt die gängigen Büro- und Textformate ab — Word, Excel und PowerPoint sowie PDF, TXT, HTML und CSV — und eignet sich damit gut dafür, eine Tabelle in ein portables CSV zu überführen. Da alles im Browser-Tab läuft, gibt es keine Upload-Warteschlange, keine serverseitige Größenbeschränkung und Ihre Daten gehen nicht durchs Netz. Beachten Sie: CSV ist ein flaches Einblatt-Format. Exportiert wird das aktive Blatt, und Formeln werden als ihre berechneten Werte geschrieben.
 
 Kundenlisten, Buchhaltungsexporte, Messdaten — je weniger Sie sie einem fremden Server geben wollen, desto besser passt dieser Weg.
 
@@ -33,7 +33,7 @@ Kundenlisten, Buchhaltungsexporte, Messdaten — je weniger Sie sie einem fremde
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Brauche ich Excel oder ein Konto?
 
@@ -53,4 +53,4 @@ CSV speichert einfache Werte, Formeln werden also als ihre berechneten Ergebniss
 
 ### Funktioniert der Konverter offline?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.

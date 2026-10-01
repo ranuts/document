@@ -1,16 +1,20 @@
 ---
 title: 'Open an ODT File Without LibreOffice — Free, in Your Browser'
-description: 'Open and edit ODT files in your browser without LibreOffice or an account. Local editing without required uploads.'
+description: 'Open ODT files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .odt
 h1: Open an ODT File Without LibreOffice
-lead: 'Open and edit ODT files in your browser without LibreOffice or an account. Local editing without required uploads.'
+lead: 'Got a ODT document but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your ODT →
 ctaHref: /
-ogDescription: 'Open and edit ODT files in your browser without LibreOffice or an account. Local editing without required uploads.'
+ogDescription: 'Open ODT files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: odt
 howTo: How to open an ODT file without LibreOffice
-appDescription: 'Open and edit ODT files in your browser without LibreOffice or an account. Local editing without required uploads.'
+appDescription: 'Open ODT files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
+
+You do not need to install an office suite just to open an occasional file. Export to common office formats when you are ready to keep working or share.
+
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -23,7 +27,7 @@ ODT is the OpenDocument Text format — what LibreOffice, OpenOffice and a lot o
 
 This editor opens ODT directly with the OnlyOffice engine compiled to WebAssembly, so paragraphs, styles, tables, images and lists render as a real document rather than a stripped-down text view. You can edit it and save it back as ODT, keeping it in the open format — or export to DOCX for a colleague on Word, or to PDF for someone who should only read it.
 
-Core local editing: Nothing is uploaded: the file is read straight from disk into your browser tab. That matters for the kind of documents ODT tends to carry — government forms, academic drafts, anything from an organisation that picked an open format on purpose and would rather not route it through a commercial cloud.
+Nothing is uploaded: the file is read straight from disk into your browser tab. That matters for the kind of documents ODT tends to carry — government forms, academic drafts, anything from an organisation that picked an open format on purpose and would rather not route it through a commercial cloud.
 
 ## Frequently asked questions
 
@@ -49,7 +53,7 @@ Yes. Open the ODT and save as DOCX — the conversion runs on your device.
 
 ### Is my document uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need an account?
 
@@ -57,4 +61,4 @@ No. There is no sign-up, no login and no email required.
 
 ### Does it work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

@@ -1,10 +1,10 @@
 ---
 title: 'Ayuda — usar el editor de documentos en línea'
-description: 'Cómo abrir, editar, guardar y recuperar documentos; privacidad y requisitos sin conexión. Edición local sin subidas obligatorias.'
+description: 'Cómo abrir, editar, guardar y recuperar documentos; privacidad y requisitos sin conexión. Procesamiento de documentos sin servidor.'
 eyebrow: Ayuda
 breadcrumb: Ayuda
 h1: Ayuda
-lead: 'Abre, visualiza y edita DOCX, XLSX, PPTX y CSV en el navegador sin Office ni cuenta. La edición básica no exige subir documentos; el uso sin conexión depende de los recursos en caché.'
+lead: 'Edita archivos de Word, Excel y PowerPoint en el navegador, sin instalar Office ni crear una cuenta. Los documentos se procesan en tu dispositivo y el código está disponible para consultarlo.'
 ---
 
 ## Abrir y crear documentos
@@ -15,7 +15,7 @@ Word (`.docx`, el antiguo `.doc`), Excel (`.xlsx`, el antiguo `.xls`), PowerPoin
 
 ### ¿Cómo creo un documento nuevo?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
+Elige un nuevo archivo de Word, Excel o PowerPoint en la página de inicio. Edita el archivo en blanco y guárdalo en tu dispositivo.
 
 ### ¿Hay un límite de tamaño?
 
@@ -25,7 +25,7 @@ No hay límite fijo. El techo real es la memoria de tu dispositivo, porque todo 
 
 ### ¿Cómo guardo mis cambios?
 
-En Chrome, Edge y otros navegadores con File System Access API, el primer guardado permite elegir un archivo y los siguientes escriben en él. Otros navegadores descargan una copia. Exporta otros formatos desde Archivo → Descargar como. Las copias de recuperación del navegador son independientes del archivo guardado.
+En navegadores compatibles como Chrome y Edge, el primer guardado permite elegir un archivo; los siguientes lo actualizan. Otros navegadores descargan una copia. Para otro formato, usa Archivo → Descargar como. Las copias de recuperación no sustituyen guardar el archivo.
 
 ### ¿Por qué a veces el botón Guardar está en gris?
 
@@ -81,7 +81,7 @@ En documentos de texto, sí: `get_document_text` devuelve el texto para que el a
 
 ### ¿Funciona sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
+Conéctate primero, abre los archivos que necesitas y prueba la edición y la exportación. Luego desconéctate y comprueba los mismos pasos. Visitar la página de inicio o instalar la aplicación no garantiza todas las funciones sin conexión. Borrar los datos del navegador puede requerir otra conexión. Abrir archivos desde enlaces requiere conexión.
 
 ### ¿Cómo consigo la versión más reciente?
 
@@ -91,7 +91,7 @@ El sitio se actualiza solo en la siguiente visita. Si una página parece atascad
 
 ### ¿Mis documentos se suben a algún sitio?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Al editar archivos locales directamente en este sitio, los documentos se procesan en tu dispositivo y no se envían a nuestros servidores. El código es público. Si usas el editor desde otra web o permites que un asistente externo lea archivos, consulta su política de datos.
 
 ### ¿Qué carga la página desde la red?
 
@@ -118,8 +118,8 @@ Sí. Es un sitio estático, así que sirve cualquier servidor web: `docker run -
 
 ### ¿Qué queda después de cerrar la pestaña?
 
-Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
+Con el guardado automático activado, las copias de recuperación permanecen en este navegador durante 7 días desde la última edición o apertura. Puedes borrarlas o desactivar el guardado automático en /history. Los datos del navegador y los cambios aún no guardados pueden perderse; guarda los cambios importantes en un archivo.
 
 ### ¿Está disponible un asistente de IA integrado?
 
-El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+El asistente de IA integrado está sin terminar y no es una función publicada.

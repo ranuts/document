@@ -1,15 +1,15 @@
 ---
-title: 'Convert DOCX to PDF in Your Browser — Free, No Upload'
-description: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+title: 'Convert DOCX to PDF in Your Browser — Free, Open source'
+description: 'Convert DOCX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 eyebrow: Convert · .docx → .pdf
 h1: Convert DOCX to PDF in Your Browser
-lead: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+lead: 'Turn DOCX into PDF right in your browser. No Office installation or sign-up, with conversion on your device.'
 cta: Open your DOCX →
 ctaHref: /
-ogDescription: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+ogDescription: 'Convert DOCX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 breadcrumb: docx-to-pdf
-howTo: How to convert a DOCX to PDF without uploading it
-appDescription: 'Convert DOCX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+howTo: How to convert DOCX to PDF on your device
+appDescription: 'Convert DOCX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 ---
 
 ## How it works
@@ -17,13 +17,11 @@ appDescription: 'Convert DOCX to PDF locally in your browser without Office or a
 1. Click **Open your DOCX** to launch the editor in your browser.
 2. Pick the **.docx** file from your device, or drag and drop it onto the page.
 3. Choose **Download as / Save as** and pick **PDF**.
-4. Core local editing: The PDF is generated on your device and downloaded — nothing is uploaded.
+4. The PDF is generated on your device and downloaded — nothing is uploaded.
 
-Almost every "DOCX to PDF" service on the web works the same way: you hand them your document, their server converts it, and you download the result. That means a contract, a CV or a medical letter sits on someone else's machine, however briefly. This one never sends it: the file is read straight from disk into your browser tab, converted there, and written back out.
+Sending a report, a CV or presentation slides? Export a PDF that is easy to open and read. Review the content and layout in the editor, make any changes, then export.
 
-Core local editing: The conversion is done by OnlyOffice's x2t engine compiled to WebAssembly — the same engine that renders the document on screen, so what you see in the editor is what lands in the PDF. Fonts, tables, images, headers and footers, page breaks and numbering all carry over. Because it runs in your tab there is no upload queue, no server-imposed file size cap, and no wait for someone else's job runner.
-
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Conversion happens on your device, so you do not need to upload a contract or personal document to a conversion service.
 
 ## Frequently asked questions
 
@@ -33,7 +31,7 @@ Open the DOCX in the editor, then use Download as / Save as and choose PDF. The 
 
 ### Is my document uploaded to convert it?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need Microsoft Word or an account?
 
@@ -41,7 +39,7 @@ Neither. No Word, no 365 subscription, no sign-up.
 
 ### Is the formatting preserved in the PDF?
 
-Yes. The same OnlyOffice engine that renders the document produces the PDF, so fonts, tables, images and page layout carry over.
+Text, tables, images and page layouts can be exported to PDF. Review the document before exporting, and check the result if it uses unusual fonts or complex layouts.
 
 ### Is there a file size limit?
 
@@ -57,4 +55,4 @@ No. This exports to PDF; it does not rewrite an existing PDF's text back into a 
 
 ### Does the conversion work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

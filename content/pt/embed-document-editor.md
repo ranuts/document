@@ -12,7 +12,7 @@ howTo: Como incorporar um editor de documentos no seu site
 appDescription: 'Incorpore um editor com iframe e postMessage; o app anfitrião controla arquivos e envios.'
 ---
 
-Na edição básica local: O editor roda inteiramente no navegador com o motor WebAssembly do OnlyOffice, então os documentos são renderizados e editados no cliente — você não sobe nenhum servidor de documentos. O padrão recomendado mantém a fronteira limpa: **o app pai cuida da autenticação, da busca e do salvamento; o iframe cuida só da edição.** Tokens, cookies e APIs de negócio ficam no seu app.
+O editor roda inteiramente no navegador com o motor WebAssembly do OnlyOffice, então os documentos são renderizados e editados no cliente — você não sobe nenhum servidor de documentos. O padrão recomendado mantém a fronteira limpa: **o app pai cuida da autenticação, da busca e do salvamento; o iframe cuida só da edição.** Tokens, cookies e APIs de negócio ficam no seu app.
 
 ## Adicione com um iframe
 
@@ -44,7 +44,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 - Abrir a partir de uma **URL, um File ou um ArrayBuffer** que seu app buscou com as próprias credenciais
 - Salvar de volta em **XLSX, DOCX, PPTX ou CSV**, devolvido como um `File` para o seu app enviar
 - Modo somente leitura, trava de origem por mensagem (`embedOrigin`) e uma consulta de estado
-- Na edição básica local: Nenhum servidor de documentos para operar — a edição é 100% WebAssembly no cliente
+- Nenhum servidor de documentos para operar — a edição é 100% WebAssembly no cliente
 - Código aberto (AGPL-3.0) e auto-hospedável — incorpore sob o seu próprio domínio
 
 ## Como funciona

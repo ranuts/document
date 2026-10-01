@@ -1,10 +1,10 @@
 ---
 title: 'Hilfe — den Online-Dokumenteneditor nutzen'
-description: 'Dokumente öffnen, bearbeiten, speichern und wiederherstellen; Datenschutz und Offline-Voraussetzungen. Lokal bearbeiten ohne erforderlichen Upload.'
+description: 'Dokumente öffnen, bearbeiten, speichern und wiederherstellen; Datenschutz und Offline-Voraussetzungen. Dokumentverarbeitung ohne Server.'
 eyebrow: Hilfe
 breadcrumb: Hilfe
 h1: Hilfe
-lead: 'DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.'
+lead: 'Word-, Excel- und PowerPoint-Dateien im Browser bearbeiten, ohne Office-Installation oder Konto. Dokumente werden auf Ihrem Gerät verarbeitet. Der Quellcode ist öffentlich einsehbar.'
 ---
 
 ## Öffnen und Anlegen
@@ -15,7 +15,7 @@ Word (`.docx`, älteres `.doc`), Excel (`.xlsx`, älteres `.xls`), PowerPoint (`
 
 ### Wie lege ich ein neues Dokument an?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
+Wählen Sie auf der Startseite ein neues Word-, Excel- oder PowerPoint-Dokument aus. Bearbeiten Sie die leere Datei und speichern Sie sie auf Ihrem Gerät.
 
 ### Gibt es eine Größenbeschränkung?
 
@@ -25,7 +25,7 @@ Keine feste Grenze. Die praktische Obergrenze ist der Arbeitsspeicher Ihres Ger�
 
 ### Wie speichere ich meine Änderungen?
 
-In Chrome, Edge und anderen Browsern mit File System Access API wählen Sie beim ersten Speichern eine Datei; spätere Speichervorgänge schreiben in diese Datei zurück. Andere Browser laden eine Kopie herunter. Andere Formate exportieren Sie über Datei → Herunterladen als. Wiederherstellungskopien im Browser sind davon unabhängig.
+In unterstützten Browsern wie Chrome und Edge wählen Sie beim ersten Speichern eine Datei; spätere Speicherungen aktualisieren diese Datei. Andere Browser laden eine Kopie herunter. Für andere Formate nutzen Sie Datei → Herunterladen als. Wiederherstellungskopien ersetzen nicht das Speichern Ihrer Datei.
 
 ### Warum ist die Schaltfläche „Speichern“ manchmal ausgegraut?
 
@@ -33,7 +33,7 @@ Sie wird aktiv, sobald der Editor das Dokument vollständig geladen hat und Sie 
 
 ### Kann ich zwischen Formaten umwandeln?
 
-Bei der lokalen Kernbearbeitung: Ja, auf Ihrem Gerät: Dokument öffnen und unter **Herunterladen als** das Zielformat wählen. Word-Dokumente exportieren nach DOCX / PDF / TXT, Tabellen nach XLSX / CSV / PDF, Präsentationen nach PPTX / PDF. CSV-Dateien werden als Tabelle geöffnet und können wieder als CSV gespeichert werden.
+Ja, auf Ihrem Gerät: Dokument öffnen und unter **Herunterladen als** das Zielformat wählen. Word-Dokumente exportieren nach DOCX / PDF / TXT, Tabellen nach XLSX / CSV / PDF, Präsentationen nach PPTX / PDF. CSV-Dateien werden als Tabelle geöffnet und können wieder als CSV gespeichert werden.
 
 ### Meine CSV mit Umlauten oder chinesischen Zeichen erscheint anderswo als Zeichensalat. Und hier?
 
@@ -47,7 +47,7 @@ Der Editor erkennt die Kodierung der CSV vor dem Öffnen — zuerst striktes UTF
 
 ### Kann ich den Text eines vorhandenen PDFs wie in Word umschreiben?
 
-Bei der lokalen Kernbearbeitung: Nicht als frei fließenden Text — PDF ist ein Format mit festem Layout. Um den Wortlaut zu ändern, öffnen Sie die ursprüngliche DOCX / XLSX / PPTX und exportieren daraus ein neues PDF. Beide Schritte passieren auf Ihrem Gerät.
+Nicht als frei fließenden Text — PDF ist ein Format mit festem Layout. Um den Wortlaut zu ändern, öffnen Sie die ursprüngliche DOCX / XLSX / PPTX und exportieren daraus ein neues PDF. Beide Schritte passieren auf Ihrem Gerät.
 
 ## Schreibgeschützt und Einbetten
 
@@ -81,7 +81,7 @@ Bei Textdokumenten ja: `get_document_text` gibt den Text zurück, sodass der Age
 
 ### Funktioniert es offline?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
+Öffnen Sie die benötigten Dateien zunächst online und testen Sie Bearbeitung und Export. Trennen Sie dann die Verbindung und prüfen Sie dieselben Schritte. Ein Besuch der Startseite oder die Installation macht nicht alle Funktionen offline verfügbar. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen eine Verbindung.
 
 ### Wie bekomme ich die neueste Version?
 
@@ -91,7 +91,7 @@ Die Seite aktualisiert sich beim nächsten Besuch selbst. Wenn eine Seite auf ei
 
 ### Werden meine Dokumente irgendwohin hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Wenn Sie lokale Dateien direkt auf dieser Website bearbeiten, werden Dokumente auf Ihrem Gerät verarbeitet und nicht an unsere Server gesendet. Der Quellcode ist öffentlich einsehbar. Bei anderen Websites oder externen Browser-Assistenten prüfen Sie bitte deren Datenrichtlinien.
 
 ### Was lädt die Seite aus dem Netz?
 
@@ -118,8 +118,8 @@ Ja. Es ist eine statische Website, jeder Webserver genügt: `docker run -d -p 80
 
 ### Was bleibt nach dem Schließen des Tabs?
 
-Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
+Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.
 
 ### Ist ein integrierter KI-Assistent verfügbar?
 
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion.

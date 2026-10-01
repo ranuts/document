@@ -1,17 +1,17 @@
 ---
 title: 'Dokumente ohne Konto bearbeiten — keine Anmeldung, einfach anfangen'
-description: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+description: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Kein Konto · einfach anfangen
 h1: Sie wollen Dokumente ohne Konto bearbeiten?
-lead: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload.'
+lead: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.'
 cta: Editor öffnen →
 ctaHref: /de/
-ogDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+ogDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: Ohne Konto bearbeiten
-appDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+appDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
 
-Bei der lokalen Kernbearbeitung: Zwischen Ihnen und Ihrem Dokument steht keine Registrierungshürde. Alles läuft lokal im Browser mit WebAssembly; es gibt kein Konto anzulegen, weil es überhaupt keinen Server gibt, der Ihre Dateien speichert. Sie öffnen eine Datei, bearbeiten sie und laden sie wieder herunter — das ist der ganze Ablauf.
+Zwischen Ihnen und Ihrem Dokument steht keine Registrierungshürde. Alles läuft lokal im Browser mit WebAssembly; es gibt kein Konto anzulegen, weil es überhaupt keinen Server gibt, der Ihre Dateien speichert. Sie öffnen eine Datei, bearbeiten sie und laden sie wieder herunter — das ist der ganze Ablauf.
 
 Und es ist ein vollwertiger Editor, keine abgespeckte Vorschau: Mit der OnlyOffice-Engine bleiben Schriften, Tabellen, Formeln und Layout unverändert. Weil Ihre Dateien Ihr Gerät nie verlassen, sparen Sie sich mit dem Konto auch den üblichen Tausch Ihrer Daten gegen Zugang.
 
@@ -19,8 +19,8 @@ Und es ist ein vollwertiger Editor, keine abgespeckte Vorschau: Mit der OnlyOffi
 
 - **Ohne Konto starten** — keine Anmeldung, kein Login, keine E-Mail und keine Telefonnummer.
 - **Die gängigen Formate bearbeiten** — DOCX, XLSX, PPTX und CSV, mit voller Formatierung.
-- Bei der lokalen Kernbearbeitung: **Dateien bleiben auf dem Gerät** — 100% clientseitig; Ihre Dokumente werden nie hochgeladen.
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 - **Kostenlos bleiben** — quelloffen unter AGPL-3.0, ohne Paywall.
 
 ## So funktioniert es
@@ -42,7 +42,7 @@ Nein. Da es keinen Registrierungsschritt gibt, werden Sie nie nach E-Mail, Telef
 
 ### Wo werden meine Dateien gespeichert, wenn es kein Konto gibt?
 
-Bei der lokalen Kernbearbeitung: Ihre Dateien bleiben auf Ihrem eigenen Gerät. Bearbeitet wird lokal im Browser mit WebAssembly, und Sie laden das Ergebnis auf Ihren Rechner zurück — nichts wird hochgeladen.
+Ihre Dateien bleiben auf Ihrem eigenen Gerät. Bearbeitet wird lokal im Browser mit WebAssembly, und Sie laden das Ergebnis auf Ihren Rechner zurück — nichts wird hochgeladen.
 
 ### Ist es ohne Konto kostenlos?
 
@@ -50,12 +50,8 @@ Ja. Kostenlos und quelloffen unter der AGPL-3.0, ohne Paywall und ohne Konto, da
 
 ### Kann ich es ohne Anmeldung offline nutzen?
 
-Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.
 
 ### Was bleibt nach dem Schließen des Tabs?
 
-Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
-
-### Ist ein integrierter KI-Assistent verfügbar?
-
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.

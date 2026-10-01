@@ -1,15 +1,15 @@
 ---
-title: 'Convertir XLSX a PDF en el navegador — gratis, sin subirlo'
-description: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+title: 'Convertir XLSX a PDF en el navegador — gratis, código abierto'
+description: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Convertir · .xlsx → .pdf
 h1: Convertir XLSX a PDF en el navegador
-lead: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+lead: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu XLSX →
 ctaHref: /es/
-ogDescription: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+ogDescription: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: xlsx-to-pdf
-howTo: Cómo convertir un XLSX a PDF sin subirlo
-appDescription: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+howTo: Cómo convertir XLSX a PDF en tu dispositivo
+appDescription: 'Convierte XLSX a PDF localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
 ## Cómo funciona
@@ -17,13 +17,13 @@ appDescription: 'Convierte XLSX a PDF localmente en el navegador sin Office ni c
 1. Pulsa **Abrir tu XLSX** para lanzar el editor en tu navegador.
 2. Elige el archivo **.xlsx** de tu dispositivo, o arrástralo a la página.
 3. Elige **Descargar como / Guardar como** y selecciona **PDF**.
-4. En la edición básica local: El PDF se genera en tu dispositivo y se descarga: no se sube nada.
+4. El PDF se genera en tu dispositivo y se descarga: no se sube nada.
 
 Casi todos los servicios de «XLSX a PDF» de la web funcionan igual: les entregas tu documento, su servidor lo convierte y tú descargas el resultado. Eso significa que un contrato, un currículum o un informe médico pasa por la máquina de otra persona, aunque sea un momento. Este no lo envía nunca: el archivo se lee directamente del disco a tu pestaña, se convierte ahí y se vuelve a escribir.
 
 La conversión la hace el motor x2t de OnlyOffice compilado a WebAssembly, el mismo que representa el documento en pantalla, así que lo que ves en el editor es lo que acaba en el PDF. Fuentes, tablas, imágenes, encabezados y pies, saltos de página y numeración se trasladan. Como se ejecuta en tu pestaña, no hay cola de subida, ni límite de tamaño impuesto por un servidor, ni espera al ejecutor de trabajos de otro.
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.
 
 ## Preguntas frecuentes
 
@@ -33,7 +33,7 @@ Abre el XLSX en el editor y usa Descargar como / Guardar como eligiendo PDF. La 
 
 ### ¿Se sube mi documento para convertirlo?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Necesito Excel o una cuenta?
 
@@ -53,4 +53,4 @@ No. Aquí se exporta a PDF; no se reescribe el texto de un PDF existente en un a
 
 ### ¿La conversión funciona sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.

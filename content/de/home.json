@@ -1,13 +1,13 @@
 {
   "title": "DOCX, XLSX & PPTX im Browser öffnen — kostenloser Dokumentenbetrachter und -editor",
-  "description": "DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.",
-  "ogDescription": "DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.",
-  "chip": "Local-first · <b>Open Source</b>",
+  "description": "Word-, Excel- und PowerPoint-Dateien im Browser bearbeiten, ohne Office-Installation oder Konto. Dokumente werden auf Ihrem Gerät verarbeitet. Der Quellcode ist öffentlich einsehbar.",
+  "ogDescription": "Word-, Excel- und PowerPoint-Dateien im Browser bearbeiten, ohne Office-Installation oder Konto. Dokumente werden auf Ihrem Gerät verarbeitet. Der Quellcode ist öffentlich einsehbar.",
+  "chip": "Kostenlos · <b>Open Source</b>",
   "h1": {
     "plain": "Word-, Excel- und PowerPoint-Dateien öffnen,",
     "accent": "direkt im Browser."
   },
-  "sub": "DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.",
+  "sub": "Word-, Excel- und PowerPoint-Dateien im Browser bearbeiten, ohne Office-Installation oder Konto. Dokumente werden auf Ihrem Gerät verarbeitet. Der Quellcode ist öffentlich einsehbar.",
   "cta": {
     "open": "Datei öffnen",
     "docx": "Neues Word",
@@ -16,22 +16,17 @@
   },
   "recent": {
     "label": "Weiterbearbeiten",
-    "note": "Bei aktivierter automatischer Sicherung bleiben Kopien 7 Tage nach dem letzten Bearbeiten oder Öffnen in diesem Browser. Unter Gespeicherte Dokumente können Sie sie löschen oder die Sicherung deaktivieren. Browserspeicher kann gelöscht werden; speichern Sie auch die Datei.",
+    "note": "Automatische Speicherung einschalten und später weiterarbeiten. Wiederherstellungskopien bleiben 7 Tage erhalten; wichtige Änderungen als Datei speichern.",
     "all": "Gesicherte Dokumente"
   },
-  "trust": [
-    "Lokale Bearbeitung",
-    "kein Konto",
-    "Offline mit zwischengespeicherten Ressourcen",
-    ".docx .xlsx .pptx .csv"
-  ],
+  "trust": ["Open Source", "kein Konto", "Vorbereiten und offline weiterarbeiten", ".docx .xlsx .pptx .csv"],
   "docwin": {
     "file": "report.docx",
     "badge": "lokal gesichert ✓",
-    "selected": "Lokal bearbeiten ohne erforderlichen Upload",
+    "selected": "Ihr Dokument, auf Ihrem Gerät bearbeitet.",
     "noteAuthor": "Sie · gerade eben",
-    "noteBody": "Lokal bearbeiten ohne erforderlichen Upload",
-    "net": "Lokale Bearbeitung"
+    "noteBody": "Änderungen direkt in Ihrer Datei speichern.",
+    "net": "Lokal verarbeitet · ohne Dokument-Upload"
   },
   "nav": [
     {
@@ -52,54 +47,59 @@
           "href": "/de/open/docx",
           "ext": ".docx",
           "name": "DOCX öffnen",
-          "desc": "Word-Dokumente mit Schriften, Tabellen und Bildern, unverändert."
+          "desc": "Text, Tabellen und Bilder in Word-Dokumenten ansehen und bearbeiten."
         },
         {
           "href": "/de/open/xlsx",
           "ext": ".xlsx",
           "name": "XLSX öffnen",
-          "desc": "Formeln, Diagramme und mehrere Blätter, vollständig dargestellt."
+          "desc": "Zellen, Formeln, Diagramme und mehrere Blätter bearbeiten."
         },
         {
           "href": "/de/open/pptx",
           "ext": ".pptx",
           "name": "PPTX öffnen",
-          "desc": "Folien mit Layouts, Designs und Medien erhalten."
+          "desc": "Text, Bilder und Layouts von Folien anpassen."
         },
         {
           "href": "/de/open/pdf",
           "ext": ".pdf",
           "name": "PDF öffnen",
-          "desc": "Lesen, kommentieren, anmerken — und wieder speichern."
+          "desc": "PDFs lesen, kommentieren und mit Anmerkungen speichern."
         },
         {
           "href": "/de/open/odt",
           "ext": ".odt .ods .odp",
           "name": "OpenDocument öffnen",
-          "desc": "LibreOffice-Formate — als ODT, DOCX oder PDF zurückspeichern."
+          "desc": "ODT, ODS und ODP öffnen und in gängige Office-Formate exportieren."
         },
         {
           "href": "/de/convert/docx-to-pdf",
           "ext": ".docx → .pdf",
           "name": "In PDF umwandeln",
-          "desc": "Word, Excel und PowerPoint werden auf Ihrem Gerät zu PDFs."
+          "desc": "Word, Excel und PowerPoint auf Ihrem Gerät in PDF umwandeln."
         },
         {
           "href": "/de/convert/xlsx-to-csv",
           "ext": ".xlsx → .csv",
           "name": "Formate umwandeln",
-          "desc": "Tabellen zu CSV und zurück, ohne ein einziges Byte hochzuladen."
+          "desc": "Tabellen und CSV auf Ihrem Gerät konvertieren."
         }
       ]
     },
     "pillars": {
       "eyebrow": "Was anders ist",
-      "h2": "Datenschutz durch Konstruktion, nicht per Versprechen",
+      "h2": "Offener Code. Ihre Dateien in Ihrer Hand.",
       "items": [
         {
+          "k": "AGPL-3.0",
+          "h3": "Quellcode jederzeit einsehbar",
+          "p": "Auf GitHub können Sie prüfen, wie Dateien verarbeitet werden, oder eine eigene Kopie betreiben."
+        },
+        {
           "k": "Lokale Bearbeitung",
-          "h3": "Lokal bearbeiten ohne erforderlichen Upload",
-          "p": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload."
+          "h3": "Dokumentverarbeitung ohne Server",
+          "p": "Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar."
         },
         {
           "k": "Kein Konto",
@@ -108,13 +108,8 @@
         },
         {
           "k": "PWA · offline",
-          "h3": "Offline mit zwischengespeicherten Ressourcen",
-          "p": "Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung."
-        },
-        {
-          "k": "AGPL-3.0",
-          "h3": "Open Source, selbst hostbar",
-          "p": "Prüfen Sie genau, was läuft, oder betreiben Sie eine eigene Kopie."
+          "h3": "Vorbereiten und offline weiterarbeiten",
+          "p": "Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung."
         }
       ]
     },
@@ -149,23 +144,23 @@
       "items": [
         {
           "q": "Speichert es zurück in meine eigene Datei oder lädt es nur eine Kopie herunter?",
-          "a": "In Chrome, Edge und anderen Browsern mit File System Access API wählen Sie beim ersten Speichern eine Datei; spätere Speichervorgänge schreiben in diese Datei zurück. Andere Browser laden eine Kopie herunter. Andere Formate exportieren Sie über Datei → Herunterladen als. Wiederherstellungskopien im Browser sind davon unabhängig."
+          "a": "In unterstützten Browsern wie Chrome und Edge wählen Sie beim ersten Speichern eine Datei; spätere Speicherungen aktualisieren diese Datei. Andere Browser laden eine Kopie herunter. Für andere Formate nutzen Sie Datei → Herunterladen als. Wiederherstellungskopien ersetzen nicht das Speichern Ihrer Datei."
         },
         {
           "q": "Werden meine Dateien irgendwohin hochgeladen?",
-          "a": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen."
+          "a": "Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen."
         },
         {
           "q": "Welche Formate kann ich bearbeiten?",
-          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV, mit einer WebAssembly-Engine im Browser."
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV. Komplexe Layouts und besondere Schriftarten können abweichen; prüfen Sie das Ergebnis vor dem Teilen."
         },
         {
           "q": "Was passiert, wenn ich den Tab schließe oder die Seite neu lade?",
-          "a": "Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht."
+          "a": "Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei."
         },
         {
           "q": "Funktioniert es offline?",
-          "a": "Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung."
+          "a": "Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet."
         },
         {
           "q": "Brauche ich ein Konto?",
@@ -239,10 +234,10 @@
   "featureList": [
     "DOCX, XLSX, PPTX und CSV ohne Microsoft Office öffnen und ansehen",
     "DOCX-, XLSX-, PPTX- und CSV-Dateien bearbeiten",
-    "Lokal bearbeiten ohne erforderlichen Upload",
+    "Dokumentverarbeitung ohne Server",
     "Kein Konto, keine Anmeldung nötig",
     "Dokumente per ?src= oder ?file= aus einer URL öffnen",
-    "Offline mit zwischengespeicherten Ressourcen",
+    "Vorbereiten und offline weiterarbeiten",
     "Über die postMessage-API einbettbar",
     "Kostenlos und quelloffen (AGPL-3.0)"
   ]

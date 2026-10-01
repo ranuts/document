@@ -1,16 +1,20 @@
 ---
 title: 'Abrir un archivo ODS sin LibreOffice — gratis, en el navegador'
-description: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+description: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .ods
 h1: Abrir un archivo ODS sin LibreOffice
-lead: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+lead: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu ODS →
 ctaHref: /es/
-ogDescription: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+ogDescription: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: ods
 howTo: Cómo abrir un archivo ODS sin LibreOffice
-appDescription: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Edición local sin subidas obligatorias.'
+appDescription: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 ---
+
+Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.
+
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 
@@ -23,7 +27,7 @@ ODS es el formato OpenDocument Spreadsheet, lo que produce por defecto LibreOffi
 
 Este editor abre el ODS directamente con el motor de hojas de cálculo de OnlyOffice sobre WebAssembly. Es un motor de cálculo, no una vista previa estática: las fórmulas se recalculan y se conservan los formatos numéricos y las varias hojas. Puedes guardarlo de vuelta como ODS, exportarlo a XLSX para alguien con Excel, o a CSV para otra herramienta.
 
-En la edición básica local: El archivo se lee directamente del disco a la pestaña de tu navegador y no se sube nada. Eso importa con presupuestos o datos de laboratorio: cifras que, de entrada, no deberían acabar en el servidor de otra persona.
+El archivo se lee directamente del disco a la pestaña de tu navegador y no se sube nada. Eso importa con presupuestos o datos de laboratorio: cifras que, de entrada, no deberían acabar en el servidor de otra persona.
 
 ## Preguntas frecuentes
 

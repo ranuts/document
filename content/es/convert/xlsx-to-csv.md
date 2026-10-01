@@ -1,15 +1,15 @@
 ---
-title: 'Convertir XLSX a CSV en el navegador — gratis, sin subirlo'
-description: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+title: 'Convertir XLSX a CSV en el navegador — gratis, código abierto'
+description: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Convertir · .xlsx → .csv
 h1: Convertir XLSX a CSV en el navegador
-lead: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+lead: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu XLSX →
 ctaHref: /es/
-ogDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+ogDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: XLSX a CSV
 howTo: Cómo convertir XLSX a CSV en el navegador
-appDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Edición local sin subidas obligatorias.'
+appDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
 ## Cómo funciona
@@ -17,9 +17,9 @@ appDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni c
 1. Pulsa **Abrir tu XLSX** para lanzar el editor en tu navegador.
 2. Elige el archivo **.xlsx** de tu dispositivo, o arrástralo a la página.
 3. Elige **Descargar como / Guardar como** y selecciona **CSV**.
-4. En la edición básica local: El CSV se genera en tu dispositivo y se descarga: no se sube nada.
+4. El CSV se genera en tu dispositivo y se descarga: no se sube nada.
 
-La mayoría de los conversores de «XLSX a CSV» suben primero tu hoja de cálculo a sus servidores. Este no: abre el archivo en local con el motor de OnlyOffice, así que tus datos siguen siendo privados. Sin Excel, sin cuenta, funciona sin conexión. Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
+La mayoría de los conversores de «XLSX a CSV» suben primero tu hoja de cálculo a sus servidores. Este no: abre el archivo en local con el motor de OnlyOffice, así que tus datos siguen siendo privados. Sin Excel, sin cuenta, funciona sin conexión. Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 La conversión la realiza el motor x2t de OnlyOffice compilado a WebAssembly. Cubre los formatos habituales de oficina y de texto — Word, Excel y PowerPoint, además de PDF, TXT, HTML y CSV — así que encaja bien para convertir una hoja en un CSV portátil. Como todo se ejecuta en la pestaña del navegador, no hay cola de subida, ni límite de tamaño impuesto por un servidor, ni datos viajando por la red. Ten en cuenta que el CSV es un formato plano de una sola tabla: se exporta la hoja activa y cada fórmula se escribe como su resultado calculado.
 
@@ -33,7 +33,7 @@ Abre el XLSX en el editor y usa Descargar como / Guardar como CSV: la conversió
 
 ### ¿Se sube mi archivo para convertirlo?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Necesito Excel o una cuenta?
 
@@ -53,4 +53,4 @@ El CSV almacena valores planos, así que las fórmulas se escriben como sus resu
 
 ### ¿El conversor funciona sin conexión?
 
-La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.

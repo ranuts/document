@@ -1,26 +1,26 @@
 ---
 title: 'Editar documentos sem conta — sem cadastro, é só começar'
-description: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
+description: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 eyebrow: Sem conta · é só começar
 h1: Quer editar documentos sem conta?
-lead: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento.'
+lead: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
+ogDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 breadcrumb: Editar sem conta
-appDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
+appDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 ---
 
 Não há muro de cadastro entre você e o seu documento. Tudo roda localmente no navegador com WebAssembly, então não há conta para criar porque, de saída, não existe servidor guardando seus arquivos. Você abre um arquivo, edita e baixa de novo — é esse o fluxo inteiro.
 
-Na edição básica local: E é um editor completo, não uma prévia reduzida: com o motor do OnlyOffice, suas fontes, tabelas, fórmulas e layout ficam intactos. E como seus arquivos nunca saem do dispositivo, pular a conta também significa pular a troca habitual dos seus dados por acesso.
+E é um editor completo, não uma prévia reduzida: com o motor do OnlyOffice, suas fontes, tabelas, fórmulas e layout ficam intactos. E como seus arquivos nunca saem do dispositivo, pular a conta também significa pular a troca habitual dos seus dados por acesso.
 
 ## O que dá para fazer
 
 - **Comece sem conta** — sem cadastro, sem login, sem e-mail nem telefone.
 - **Edite os formatos comuns** — DOCX, XLSX, PPTX e CSV, com a formatação completa preservada.
-- Na edição básica local: **Arquivos ficam no dispositivo** — 100% no cliente; seus documentos nunca são enviados.
-- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 - **Continue grátis** — código aberto sob AGPL-3.0, sem muro de pagamento para destravar.
 
 ## Como funciona
@@ -42,7 +42,7 @@ Não. Como não existe etapa de cadastro, nunca pedimos e-mail, telefone ou dado
 
 ### Onde meus arquivos ficam salvos se não há conta?
 
-Na edição básica local: Seus arquivos ficam no seu próprio dispositivo. A edição acontece localmente no navegador com WebAssembly, e você baixa o resultado de volta para o computador — nada é enviado.
+Seus arquivos ficam no seu próprio dispositivo. A edição acontece localmente no navegador com WebAssembly, e você baixa o resultado de volta para o computador — nada é enviado.
 
 ### É grátis sem conta?
 
@@ -50,12 +50,8 @@ Sim. É grátis e de código aberto sob a licença AGPL-3.0, sem muro de pagamen
 
 ### Dá para usar offline sem fazer login?
 
-A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
 
 ### O que fica depois de fechar a aba?
 
-Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
-
-### O assistente de IA integrado está disponível?
-
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.

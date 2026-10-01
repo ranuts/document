@@ -1,6 +1,6 @@
 ---
 title: 'About — who builds this document editor and why'
-description: 'About this open-source browser editor, its authors, source code and data handling. Local editing without required uploads.'
+description: 'About this open-source browser editor, its authors, source code and data handling. No server needed to process documents.'
 eyebrow: About
 breadcrumb: About
 h1: About this editor
@@ -11,15 +11,15 @@ lead: Who builds this, what it actually does, and how you can check both.
 
 An **in-browser editor for office documents**. You open a Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV or PDF file and edit it directly in a browser tab.
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
-When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+Editing an occasional file should not mean installing software, creating an account and handing over your documents. That is why we built this editor: open it, work locally and save your own files.
 
 ## Who builds it
 
 This site is built and maintained by **ranuts**, the same author behind the [`ranuts` GitHub account](https://github.com/ranuts) and the [ran component/utility libraries](https://ran.chaxus.com).
 
-It is a personal open-source project, not a company product. There is no sales team and no venture funding behind it — which is also why there is no upsell, no "free tier" that expires, and no reason for the site to want your files.
+It is an independently maintained open-source product. There is no sales team and no venture funding behind it — which is also why there is no upsell, no "free tier" that expires, and no reason for the site to want your files.
 
 ## How you can verify all of this
 
@@ -41,7 +41,7 @@ Being built on an existing engine is deliberate. Document formats — especially
 An honest list, because a page that only lists strengths is not useful:
 
 - **Large files are bound by your device.** Everything runs in your browser, so a very large spreadsheet is limited by your own memory and CPU, not by a server you can pay to upgrade.
-- Core local editing: **No sync and no collaboration.** There is no server holding your document, which also means no real-time co-editing and no cross-device sync.
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
 - **Fidelity is very good, not perfect.** Complex layouts, unusual fonts and macros can differ from a desktop suite.
 
 If any of these matter more to you than keeping the file local, a hosted suite is the better tool — and that is a reasonable choice.

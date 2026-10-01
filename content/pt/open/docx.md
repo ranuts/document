@@ -1,20 +1,20 @@
 ---
-title: 'Abrir DOCX sem o Word — grátis, no navegador, sem upload'
-description: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Edição local sem envio obrigatório.'
+title: 'Abrir DOCX sem o Word — grátis, no navegador, código aberto'
+description: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .docx
 h1: Abrir um arquivo DOCX sem o Microsoft Word
-lead: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Edição local sem envio obrigatório.'
+lead: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu DOCX →
 ctaHref: /pt/
-ogDescription: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Edição local sem envio obrigatório.'
+ogDescription: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Processamento de documentos sem servidor.'
 breadcrumb: Abrir DOCX
 howTo: Como abrir um arquivo DOCX sem o Word
-appDescription: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Edição local sem envio obrigatório.'
+appDescription: 'Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Processamento de documentos sem servidor.'
 ---
 
-Na edição básica local: DOCX é o formato do Microsoft Word, mas você não precisa do Word para ler ou editar um. Este editor renderiza o DOCX com o motor do OnlyOffice, então suas fontes, tabelas, imagens e o layout da página ficam certos — não é um texto simples de emergência. Tudo roda localmente com WebAssembly, então o arquivo fica no seu dispositivo.
+Abra e edite arquivos DOCX no navegador sem Microsoft Word nem conta. Processamento de documentos sem servidor.
 
-Por baixo, o motor de documentos do OnlyOffice é compilado para WebAssembly e roda dentro da sua aba. Quando você escolhe um arquivo, ele é lido direto do disco para a memória — sem etapa de upload e sem ida e volta a um servidor — então mesmo documentos grandes ou confidenciais ficam na sua máquina. Ele abre tanto o **.docx** moderno quanto o antigo **.doc** binário, e exporta suas edições de volta para DOCX, PDF ou TXT.
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 
@@ -28,8 +28,8 @@ Por baixo, o motor de documentos do OnlyOffice é compilado para WebAssembly e r
 - Abrir e ler qualquer arquivo **.docx** (e .doc) com a formatação completa
 - Editar o texto e baixar de novo como DOCX, PDF ou TXT
 - Sem Microsoft Word, sem conta da Microsoft, sem Copilot
-- Na edição básica local: Sem upload — seu documento nunca sai do dispositivo
-- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 
 ## Perguntas frequentes
 
@@ -43,7 +43,7 @@ Sim. Ele usa o motor do OnlyOffice, então fontes, tabelas, imagens e layout sã
 
 ### Meu documento é enviado para algum lugar?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Dá para editar e salvar, não só visualizar?
 
@@ -55,7 +55,7 @@ Sim. Ele abre tanto o .docx moderno quanto o .doc binário antigo com o mesmo mo
 
 ### Dá para converter um DOCX em PDF?
 
-Na edição básica local: Sim. Abra o DOCX e escolha Baixar como / Salvar como PDF — o PDF é gerado no seu dispositivo.
+Sim. Abra o DOCX e escolha Baixar como / Salvar como PDF — o PDF é gerado no seu dispositivo.
 
 ### Existe limite de tamanho?
 

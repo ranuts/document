@@ -1,15 +1,15 @@
 ---
-title: 'Convert XLSX to PDF in Your Browser — Free, No Upload'
-description: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+title: 'Convert XLSX to PDF in Your Browser — Free, Open source'
+description: 'Convert XLSX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 eyebrow: Convert · .xlsx → .pdf
 h1: Convert XLSX to PDF in Your Browser
-lead: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+lead: 'Turn XLSX into PDF right in your browser. No Office installation or sign-up, with conversion on your device.'
 cta: Open your XLSX →
 ctaHref: /
-ogDescription: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+ogDescription: 'Convert XLSX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 breadcrumb: xlsx-to-pdf
-howTo: How to convert an XLSX to PDF without uploading it
-appDescription: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
+howTo: How to convert XLSX to PDF on your device
+appDescription: 'Convert XLSX to PDF for free in your browser. No Office installation, sign-up or document upload. Save the result to your device to share or keep working.'
 ---
 
 ## How it works
@@ -19,11 +19,9 @@ appDescription: 'Convert XLSX to PDF locally in your browser without Office or a
 3. Check the sheet and print area look right — the PDF follows what the editor renders.
 4. Choose **Download as / Save as** and pick **PDF**. It is generated on your device and downloaded.
 
-Spreadsheets are the files people are least willing to hand to a random web converter, because they are where the salary tables, customer lists and finance exports live. Most "XLSX to PDF" tools upload the workbook to a server anyway. This one does not: the file is read from disk into your browser tab, converted there, and never touches the network.
+Sending a report, a CV or presentation slides? Export a PDF that is easy to open and read. Review the content and layout in the editor, make any changes, then export.
 
-The conversion runs on OnlyOffice's x2t engine compiled to WebAssembly. It is a live calculation engine rather than a static preview, so formulas are laid out with their computed values, and number formats, cell styling, merged cells and frozen panes carry into the PDF the way they render on screen.
-
-Worth knowing before you export: a PDF has pages and a spreadsheet does not, so how the sheet is paginated is what decides whether the result is readable. A wide sheet will break across pages unless you set a print area or scale it first. Check the layout in the editor before saving — what it renders is what the PDF gets.
+Conversion happens on your device, so you do not need to upload a contract or personal document to a conversion service.
 
 ## Frequently asked questions
 
@@ -33,7 +31,7 @@ Open the XLSX in the editor, then use Download as / Save as and choose PDF. The 
 
 ### Is my spreadsheet uploaded to convert it?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need Excel or an account?
 
@@ -57,4 +55,4 @@ Yes. Both .xlsx and the older .xls open with the same engine and can be exported
 
 ### Does the conversion work offline?
 
-Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

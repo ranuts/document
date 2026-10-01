@@ -1,20 +1,20 @@
 ---
-title: 'Abrir PPTX sin PowerPoint — gratis, en línea, sin subirlo'
-description: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
+title: 'Abrir PPTX sin PowerPoint — gratis, en línea, código abierto'
+description: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .pptx
 h1: Abrir un archivo PPTX sin PowerPoint
-lead: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
+lead: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu PPTX →
 ctaHref: /es/
-ogDescription: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
+ogDescription: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: Abrir PPTX
 howTo: Cómo abrir un archivo PPTX sin PowerPoint
-appDescription: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Edición local sin subidas obligatorias.'
+appDescription: 'Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
-PPTX es el formato de Microsoft PowerPoint. Este editor lo abre con el motor de OnlyOffice, así que los diseños de diapositiva, las imágenes, las formas y el texto se representan correctamente. Se ejecuta en local con WebAssembly, de modo que tu presentación se queda en tu dispositivo.
+Abre y edita archivos PPTX en el navegador sin Microsoft PowerPoint ni cuenta. Procesamiento de documentos sin servidor.
 
-En la edición básica local: El motor de presentaciones de OnlyOffice está compilado a WebAssembly y se ejecuta dentro de tu pestaña. Cuando eliges una presentación, se lee directamente del disco a la memoria — sin subida y sin ida y vuelta a un servidor — así que una propuesta confidencial o una presentación interna nunca sale de tu máquina. Abre tanto el **.pptx** moderno como el antiguo **.ppt** binario, y puede exportar tus diapositivas a PPTX o PDF.
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 
@@ -28,8 +28,8 @@ En la edición básica local: El motor de presentaciones de OnlyOffice está com
 - Abrir cualquier presentación **.pptx** (y .ppt) con el diseño completo
 - Editar diapositivas y volver a descargarlas como PPTX o PDF
 - Sin Microsoft PowerPoint y sin cuenta
-- En la edición básica local: Sin subidas: tu presentación nunca sale de tu dispositivo
-- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
+- Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 Da igual si un compañero te envía una presentación para revisar, si necesitas un par de diapositivas para tu propia charla o si solo quieres leer un **.pptx** en un equipo sin Office: abrirlo lleva unos segundos. Como la representación la produce el mismo motor de OnlyOffice que usan sus aplicaciones de escritorio, lo que ves coincide con lo que verá alguien en PowerPoint, así que puedes revisar o retocar con confianza y devolverla tal cual.
 
@@ -45,7 +45,7 @@ Sí. El motor de OnlyOffice conserva diseños de diapositiva, imágenes, formas 
 
 ### ¿Se sube mi presentación?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Puedo editar las diapositivas, no solo verlas?
 

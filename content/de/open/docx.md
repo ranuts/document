@@ -1,20 +1,20 @@
 ---
-title: 'DOCX ohne Word öffnen — kostenlos, im Browser, ohne Upload'
-description: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+title: 'DOCX ohne Word öffnen — kostenlos, im Browser, Open Source'
+description: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Öffnen · .docx
 h1: Eine DOCX-Datei ohne Microsoft Word öffnen
-lead: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+lead: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 cta: DOCX öffnen →
 ctaHref: /de/
-ogDescription: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+ogDescription: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: DOCX öffnen
 howTo: Eine DOCX-Datei ohne Word öffnen
-appDescription: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
+appDescription: 'DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
 
-Bei der lokalen Kernbearbeitung: DOCX ist das Format von Microsoft Word, aber zum Lesen oder Bearbeiten brauchen Sie Word nicht. Dieser Editor stellt DOCX mit der OnlyOffice-Engine dar, sodass Schriften, Tabellen, Bilder und Seitenlayout korrekt aussehen — kein reiner Textersatz. Alles läuft lokal mit WebAssembly, die Datei bleibt also auf Ihrem Gerät.
+DOCX-Dateien ohne Microsoft Word oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.
 
-Bei der lokalen Kernbearbeitung: Unter der Haube ist die OnlyOffice-Dokumentenengine nach WebAssembly kompiliert und läuft in Ihrem Browser-Tab. Wenn Sie eine Datei auswählen, wird sie direkt von der Festplatte in den Speicher gelesen — kein Upload-Schritt, kein Server-Roundtrip — sodass auch große oder vertrauliche Dokumente auf Ihrem Rechner bleiben. Sowohl das moderne **.docx** als auch das ältere binäre **.doc** werden geöffnet, und Ihre Änderungen lassen sich als DOCX, PDF oder reines TXT exportieren.
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## So funktioniert es
 
@@ -28,8 +28,8 @@ Bei der lokalen Kernbearbeitung: Unter der Haube ist die OnlyOffice-Dokumentenen
 - Jede **.docx**-Datei (und .doc) mit vollständiger Formatierung öffnen und lesen
 - Den Text bearbeiten und wieder als DOCX, PDF oder TXT herunterladen
 - Kein Microsoft Word, kein Microsoft-Konto, kein Copilot
-- Bei der lokalen Kernbearbeitung: Kein Upload — Ihr Dokument verlässt Ihr Gerät nie
-- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 
 ## Häufige Fragen
 
@@ -43,7 +43,7 @@ Ja. Es wird die OnlyOffice-Engine verwendet, Schriften, Tabellen, Bilder und Lay
 
 ### Wird mein Dokument irgendwohin hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Kann ich sie bearbeiten und speichern, nicht nur ansehen?
 
@@ -55,7 +55,7 @@ Ja. Das moderne .docx und das ältere binäre .doc werden mit derselben OnlyOffi
 
 ### Kann ich eine DOCX in ein PDF umwandeln?
 
-Bei der lokalen Kernbearbeitung: Ja. Öffnen Sie die DOCX und wählen Sie unter „Herunterladen als / Speichern unter“ das PDF — es wird auf Ihrem Gerät erzeugt.
+Ja. Öffnen Sie die DOCX und wählen Sie unter „Herunterladen als / Speichern unter“ das PDF — es wird auf Ihrem Gerät erzeugt.
 
 ### Gibt es eine Größenbeschränkung?
 

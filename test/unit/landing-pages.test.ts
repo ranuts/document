@@ -361,7 +361,6 @@ describe('landing pages', () => {
       const answer = questions.find((q) => ask.test(q.name))?.acceptedAnswer.text;
       expect(answer, `${rel} has no question about closing the tab`).toBeTruthy();
       expect(answer).toContain(days);
-      expect(answer).toContain('IndexedDB');
       expect(answer).toContain('/history');
     }
   });

@@ -1,34 +1,34 @@
 ---
-title: 'Editor de documentos — sem cadastro, sem upload · grátis e de código aberto'
-description: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
+title: 'Editor de documentos — sem cadastro, grátis e de código aberto'
+description: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 eyebrow: Sem conta · sem cadastro
-h1: Editor de documentos online grátis — sem cadastro, sem upload
-lead: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento.'
+h1: Editor de documentos online grátis — sem cadastro, código aberto
+lead: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
+ogDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 breadcrumb: Editor sem cadastro
 howTo: Como editar um documento sem cadastro
-appDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Edição local sem envio obrigatório.'
+appDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 ---
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento.
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
-Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache. Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
+Edite arquivos do Word, Excel e PowerPoint no navegador, sem instalar o Office ou criar uma conta. Os documentos são processados no seu dispositivo e o código está disponível para consulta. Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 
 ## Como funciona
 
 1. Clique em **Abrir o editor** — sem cadastro, login ou etapa de conta.
 2. Arraste um arquivo DOCX, XLSX, PPTX ou CSV do seu dispositivo, ou comece um documento em branco.
-3. Na edição básica local: Edite no navegador com o motor do OnlyOffice — nada é enviado.
+3. Edite no navegador com o motor do OnlyOffice — nada é enviado.
 4. Baixe o arquivo no formato original, ou exporte para PDF, TXT, HTML ou CSV.
 
 ## Por que as pessoas usam
 
 - **Sem cadastro, sem login, sem assinatura** — abra a página e comece a editar.
-- Na edição básica local: **Sem upload** — 100% no cliente; seus documentos nunca saem do dispositivo.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 - **Todos os formatos comuns** — DOCX, XLSX, PPTX e CSV, com o OnlyOffice.
-- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 - **Código aberto** — audite ou hospede a sua própria cópia.
 
 ## Perguntas frequentes
@@ -39,7 +39,7 @@ Não. Não há cadastro, login nem conta de nenhum tipo. Abra o editor e comece 
 
 ### Meus arquivos são enviados para um servidor?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### É realmente grátis?
 
@@ -47,7 +47,7 @@ Sim. É grátis e de código aberto sob a licença AGPL-3.0. Você também pode 
 
 ### Dá para usar offline?
 
-A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
 
 ### Quais formatos de arquivo posso editar?
 
@@ -63,8 +63,4 @@ Sim. Ele roda em qualquer navegador móvel moderno, então você pode editar no 
 
 ### O que fica depois de fechar a aba?
 
-Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
-
-### O assistente de IA integrado está disponível?
-
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.

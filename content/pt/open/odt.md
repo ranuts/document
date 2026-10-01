@@ -1,16 +1,20 @@
 ---
 title: 'Abrir um arquivo ODT sem o LibreOffice — grátis, no navegador'
-description: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+description: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .odt
 h1: Abrir um arquivo ODT sem o LibreOffice
-lead: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+lead: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu ODT →
 ctaHref: /pt/
-ogDescription: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+ogDescription: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 breadcrumb: odt
 howTo: Como abrir um arquivo ODT sem o LibreOffice
-appDescription: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+appDescription: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 ---
+
+Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.
+
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 
@@ -23,7 +27,7 @@ ODT é o formato OpenDocument Text — o que o LibreOffice, o OpenOffice e boa p
 
 Este editor abre o ODT direto com o motor do OnlyOffice compilado para WebAssembly, então parágrafos, estilos, tabelas, imagens e listas aparecem como um documento real, e não como uma visão de texto reduzida. Você pode editá-lo e salvar de volta como ODT, mantendo o formato aberto — ou exportar para DOCX para um colega no Word, ou para PDF para quem só precisa ler.
 
-Na edição básica local: Nada é enviado: o arquivo é lido direto do disco para a aba do navegador. Isso importa justamente com o tipo de documento que o ODT costuma carregar — formulários do governo, rascunhos acadêmicos, qualquer coisa de uma organização que escolheu um formato aberto de propósito e preferiria não passar por uma nuvem comercial.
+Nada é enviado: o arquivo é lido direto do disco para a aba do navegador. Isso importa justamente com o tipo de documento que o ODT costuma carregar — formulários do governo, rascunhos acadêmicos, qualquer coisa de uma organização que escolheu um formato aberto de propósito e preferiria não passar por uma nuvem comercial.
 
 ## Perguntas frequentes
 
@@ -45,4 +49,4 @@ Sim. Você pode salvar no mesmo formato aberto, ou exportar como DOCX ou PDF.
 
 ### Dá para converter ODT em Word?
 
-Na edição básica local: Sim. Abra o ODT e salve como DOCX — a conversão roda no seu dispositivo.
+Sim. Abra o ODT e salve como DOCX — a conversão roda no seu dispositivo.

@@ -1,13 +1,13 @@
 {
   "title": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor",
-  "description": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
-  "ogDescription": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
-  "chip": "Local-first · <b>open source</b>",
+  "description": "Open, view and edit Word, Excel, PowerPoint and CSV files in your browser. Free, no Office installation or sign-up. Process documents locally, convert formats and prepare for offline editing.",
+  "ogDescription": "Open and edit Word, Excel and PowerPoint without installing Office. Free, no sign-up, with documents processed on your device.",
+  "chip": "Free · <b>open source</b>",
   "h1": {
     "plain": "Open Word, Excel & PowerPoint files,",
     "accent": "right in your browser."
   },
-  "sub": "Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.",
+  "sub": "No Office installed? Open Word, Excel and PowerPoint files in your browser, make your changes and save them to your device. Free to use, with no sign-up.",
   "cta": {
     "open": "Open a file",
     "docx": "New Word",
@@ -16,17 +16,17 @@
   },
   "recent": {
     "label": "Continue editing",
-    "note": "Recovery copies stay in this browser for 7 days after the last edit or open when autosave is enabled. Delete them or turn autosave off in Saved documents. Browser storage can be cleared; save your file too.",
+    "note": "Turn on autosave to pick up where you left off. Recovery copies stay for 7 days; save important changes to a file.",
     "all": "Saved documents"
   },
-  "trust": ["Local editing", "no account", "Offline with cached resources", ".docx .xlsx .pptx .csv"],
+  "trust": ["Open source", "no account", "offline support", ".docx .xlsx .pptx .csv"],
   "docwin": {
     "file": "report.docx",
     "badge": "saved locally ✓",
-    "selected": "Local editing without required uploads",
+    "selected": "Your document, edited on your device.",
     "noteAuthor": "You · just now",
-    "noteBody": "Local editing without required uploads",
-    "net": "Local editing"
+    "noteBody": "Make your changes. Save to your own file.",
+    "net": "Local processing · no document uploads"
   },
   "nav": [
     {
@@ -47,54 +47,59 @@
           "href": "/open/docx",
           "ext": ".docx",
           "name": "Open DOCX",
-          "desc": "Word documents with fonts, tables and images intact."
+          "desc": "View and edit text, tables and images in Word documents."
         },
         {
           "href": "/open/xlsx",
           "ext": ".xlsx",
           "name": "Open XLSX",
-          "desc": "Formulas, charts and multiple sheets, fully rendered."
+          "desc": "Work with cells, formulas, charts and multiple sheets."
         },
         {
           "href": "/open/pptx",
           "ext": ".pptx",
           "name": "Open PPTX",
-          "desc": "Slides with layouts, themes and media preserved."
+          "desc": "View and adjust slide text, images and layouts."
         },
         {
           "href": "/open/pdf",
           "ext": ".pdf",
           "name": "Open PDF",
-          "desc": "Read, comment and annotate, then save it back."
+          "desc": "Read, comment and annotate, then save as PDF."
         },
         {
           "href": "/open/odt",
           "ext": ".odt .ods .odp",
           "name": "Open OpenDocument",
-          "desc": "LibreOffice formats — save back as ODT, DOCX or PDF."
+          "desc": "Open ODT, ODS and ODP and export to common office formats."
         },
         {
           "href": "/convert/docx-to-pdf",
           "ext": ".docx → .pdf",
           "name": "Convert to PDF",
-          "desc": "Word, Excel and PowerPoint become PDFs on your device."
+          "desc": "Turn Word, Excel and PowerPoint files into PDFs on your device."
         },
         {
           "href": "/convert/xlsx-to-csv",
           "ext": ".xlsx → .csv",
           "name": "Convert between formats",
-          "desc": "Spreadsheets to CSV and back, without uploading a byte."
+          "desc": "Convert spreadsheets to CSV and back on your device."
         }
       ]
     },
     "pillars": {
       "eyebrow": "Why it's different",
-      "h2": "Private by design, not by promise",
+      "h2": "Open code. Your files in your hands.",
       "items": [
         {
-          "k": "Local editing",
-          "h3": "Local editing without required uploads",
-          "p": "Core opening, editing and conversion run locally in your browser without a required document upload."
+          "k": "Local processing",
+          "h3": "Edit without uploading your documents",
+          "p": "Open, edit and convert local files on your device."
+        },
+        {
+          "k": "AGPL-3.0",
+          "h3": "Source code you can inspect",
+          "p": "Read the code on GitHub to see how files are handled, or host your own copy."
         },
         {
           "k": "No account",
@@ -103,13 +108,8 @@
         },
         {
           "k": "PWA · offline",
-          "h3": "Offline with cached resources",
-          "p": "Cached editing resources can work offline; remote file URLs need a connection."
-        },
-        {
-          "k": "AGPL-3.0",
-          "h3": "Open source & self-hostable",
-          "p": "Audit exactly what runs, or host your own copy."
+          "h3": "Keep editing when you disconnect",
+          "p": "Before your trip, open the files you need online, try editing and exporting, and check they work offline."
         }
       ]
     },
@@ -144,23 +144,23 @@
       "items": [
         {
           "q": "Can it save back into my own file, or only download a copy?",
-          "a": "In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file."
+          "a": "In supported browsers such as Chrome and Edge, the first save asks you to choose a file; later saves update that file. Other browsers download a copy. Use File → Download as to export another format. Autosave recovery copies are separate from the files you save."
         },
         {
           "q": "Are my files uploaded anywhere?",
-          "a": "Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy."
+          "a": "No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents."
         },
         {
           "q": "Which formats can I edit?",
-          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV, using a WebAssembly engine in your browser."
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV. You can also view and annotate PDF files."
         },
         {
           "q": "What happens if I close the tab or refresh the page?",
-          "a": "When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file."
+          "a": "With autosave enabled, you can recover your work in the same browser. Copies stay for 7 days after the last edit or open and can be managed at /history (Saved documents). Browser data can be cleared, so save important changes to a file."
         },
         {
           "q": "Does it work offline?",
-          "a": "Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection."
+          "a": "Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection."
         },
         {
           "q": "Do I need an account?",
@@ -238,10 +238,10 @@
   "featureList": [
     "Open and view DOCX, XLSX, PPTX and CSV without Microsoft Office",
     "Edit DOCX, XLSX, PPTX and CSV files",
-    "Local editing without required uploads",
+    "No server needed to process documents",
     "No account or sign-up required",
     "Open documents from a URL via ?src= or ?file=",
-    "Offline with cached resources",
+    "Prepare once, work offline",
     "Embeddable via postMessage API",
     "Free and open source (AGPL-3.0)"
   ]

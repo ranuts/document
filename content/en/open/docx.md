@@ -1,20 +1,20 @@
 ---
-title: 'Open DOCX Without Word — Free, in Your Browser, No Upload'
-description: 'Open and edit DOCX files in your browser without Microsoft Word or an account. Local editing without required uploads.'
+title: 'Open DOCX Without Word — Free, in Your Browser, Open source'
+description: 'Open DOCX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .docx
 h1: Open a DOCX File Without Microsoft Word
-lead: 'Open and edit DOCX files in your browser without Microsoft Word or an account. Local editing without required uploads.'
+lead: 'Got a Word document but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your DOCX →
 ctaHref: /
-ogDescription: 'Open and edit DOCX files in your browser without Microsoft Word or an account. Local editing without required uploads.'
+ogDescription: 'Open DOCX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: Open DOCX
 howTo: How to open a DOCX file without Word
-appDescription: 'Open and edit DOCX files in your browser without Microsoft Word or an account. Local editing without required uploads.'
+appDescription: 'Open DOCX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
 
-Core local editing: DOCX is the Microsoft Word format, but you do not need Word to read or edit one. This editor renders DOCX with the OnlyOffice engine, so your fonts, tables, images and page layout look right — not a plain-text fallback. Everything runs locally with WebAssembly, so the file stays on your device.
+Update a few lines in your CV, adjust a table in a report or export a PDF. Work with text, images and common page layouts, and open older DOC files too.
 
-Core local editing: Under the hood, the OnlyOffice document engine is compiled to WebAssembly and runs inside your browser tab. When you pick a file it is read straight from disk into memory — there is no upload step and no server round-trip — so even large or confidential documents stay on your machine. It handles both the modern **.docx** format and the older binary **.doc**, and can export your edits back to DOCX, PDF or plain TXT.
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -25,11 +25,11 @@ Core local editing: Under the hood, the OnlyOffice document engine is compiled t
 
 ## What you can do
 
-- Open and read any **.docx** (and .doc) file with full formatting
+- Open and read **.docx** (and .doc) file with support for common formatting
 - Edit the text, then download again as DOCX, PDF or TXT
 - No Microsoft Word, no Microsoft account, no Copilot
-- Core local editing: No upload — your document never leaves your device
-- Cached editing resources can work offline; remote file URLs need a connection.
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
+- Try the features you need while online, then use what your browser has saved offline. Opening files from links still needs a connection.
 
 ## Frequently asked questions
 
@@ -43,7 +43,7 @@ Yes. It uses the OnlyOffice engine, so fonts, tables, images and layout are pres
 
 ### Is my document uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Can I edit and save it, not just view?
 

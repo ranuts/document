@@ -1,16 +1,20 @@
 ---
 title: 'Abrir um arquivo ODS sem o LibreOffice — grátis, no navegador'
-description: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+description: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .ods
 h1: Abrir um arquivo ODS sem o LibreOffice
-lead: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+lead: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu ODS →
 ctaHref: /pt/
-ogDescription: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+ogDescription: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 breadcrumb: ods
 howTo: Como abrir um arquivo ODS sem o LibreOffice
-appDescription: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
+appDescription: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 ---
+
+Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.
+
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 
@@ -23,7 +27,7 @@ ODS é o formato OpenDocument Spreadsheet, o que o LibreOffice Calc produz por p
 
 Este editor abre o ODS direto com o motor de planilhas do OnlyOffice sobre WebAssembly. É um motor de cálculo, não uma prévia estática: as fórmulas recalculam e os formatos numéricos e as várias planilhas são preservados. Você pode salvar de volta como ODS, exportar para XLSX para alguém no Excel, ou para CSV para outra ferramenta.
 
-Na edição básica local: O arquivo é lido direto do disco para a aba do navegador e nada é enviado. Isso importa com orçamentos ou dados de laboratório: números que, de saída, não deveriam parar no servidor de outra pessoa.
+O arquivo é lido direto do disco para a aba do navegador e nada é enviado. Isso importa com orçamentos ou dados de laboratório: números que, de saída, não deveriam parar no servidor de outra pessoa.
 
 ## Perguntas frequentes
 
@@ -41,7 +45,7 @@ Sim. É um motor de planilhas de verdade: as fórmulas são preservadas e recalc
 
 ### Dá para converter ODS em Excel?
 
-Na edição básica local: Sim. Abra o ODS e salve como XLSX — a conversão roda no seu dispositivo.
+Sim. Abra o ODS e salve como XLSX — a conversão roda no seu dispositivo.
 
 ### Dá para exportar para CSV?
 

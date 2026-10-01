@@ -44,14 +44,14 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 - Open from a **URL, a File, or an ArrayBuffer** your app fetched with its own credentials
 - Save back to **XLSX, DOCX, PPTX or CSV**, returned as a `File` for your app to upload
 - Read-only mode, per-message origin locking (`embedOrigin`), and a state query
-- Core local editing: No document server to run — editing is 100% client-side WebAssembly
+- No document server to run — editing is 100% client-side WebAssembly
 - Open source (AGPL-3.0) and self-hostable — embed it under your own domain
 
 ## How it works
 
 1. Add the iframe pointing at `/editor?embed=1`, sized to your layout.
 2. Wait for the `document:ready` event, then send `document:open-url`, `open-file` or `open-buffer`.
-3. Core local editing: The user edits in place; the file never leaves the browser unless your app sends it somewhere.
+3. The user edits in place; the file never leaves the browser unless your app sends it somewhere.
 4. Send `document:save`; the editor returns the edited file via `document:saved`, which your app uploads with its own auth.
 
 ## Read-only and preview mode

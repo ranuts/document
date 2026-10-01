@@ -1,20 +1,20 @@
 ---
-title: 'Abrir XLSX sem o Excel — grátis, online, sem upload'
-description: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Edição local sem envio obrigatório.'
+title: 'Abrir XLSX sem o Excel — grátis, online, código aberto'
+description: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .xlsx
 h1: Abrir um arquivo XLSX sem o Excel
-lead: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Edição local sem envio obrigatório.'
+lead: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu XLSX →
 ctaHref: /pt/
-ogDescription: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Edição local sem envio obrigatório.'
+ogDescription: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Processamento de documentos sem servidor.'
 breadcrumb: Abrir XLSX
 howTo: Como abrir um arquivo XLSX sem o Excel
-appDescription: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Edição local sem envio obrigatório.'
+appDescription: 'Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Processamento de documentos sem servidor.'
 ---
 
-Na edição básica local: XLSX é o formato do Microsoft Excel. Este editor o abre com o motor do OnlyOffice, então fórmulas de célula, formatos numéricos, cores e várias planilhas sobrevivem — é uma planilha de verdade, não uma tabela somente leitura. Roda localmente com WebAssembly, então o arquivo fica no seu dispositivo.
+Abra e edite arquivos XLSX no navegador sem Microsoft Excel nem conta. Processamento de documentos sem servidor.
 
-Na edição básica local: O motor de planilhas do OnlyOffice é compilado para WebAssembly e roda dentro da sua aba. Seu arquivo é lido direto do disco para a memória — sem upload e sem servidor — então dados privados nunca saem do dispositivo. Por ser um motor de cálculo de verdade, e não uma prévia estática, as fórmulas são recalculadas conforme você edita. Ele lê o **.xlsx** moderno, além dos antigos **.xls** e dos **.csv** simples, e exporta de volta para XLSX ou CSV.
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 
@@ -28,8 +28,8 @@ Na edição básica local: O motor de planilhas do OnlyOffice é compilado para 
 - Abrir qualquer arquivo **.xlsx** (e .xls, .csv) com as fórmulas preservadas
 - Editar células e baixar de novo como XLSX ou CSV
 - Sem Microsoft Excel e sem assinatura do 365
-- Na edição básica local: Sem upload — sua planilha nunca sai do dispositivo
-- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 
 Serve tanto para uma olhada rápida quanto para trabalho de verdade: ordenar uma coluna, corrigir um número, acrescentar uma linha ou uma fórmula e devolver o arquivo no mesmo formato. Ajuda quando alguém te manda um orçamento ou uma exportação de dados e você não quer instalar o Excel, pagar o 365 nem confiar números privados a um conversor web qualquer.
 
@@ -45,7 +45,7 @@ Sim. O motor do OnlyOffice preserva fórmulas, formatos numéricos e estilos.
 
 ### Minha planilha é enviada?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Dá para exportar para CSV?
 
