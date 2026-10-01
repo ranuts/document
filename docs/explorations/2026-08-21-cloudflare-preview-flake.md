@@ -84,3 +84,26 @@ E2E 的、Docker 的、以及每个新克隆的开发机——都要为它付一
 第一条是可以靠纪律根除的：**提交前跑完整的 CI lint 三件套**
 （`format:check` + `lint:ts` + `test:coverage`），而不是挑着跑其中两个。已在
 `2026-08-21-webmcp-completion.md` 里记过一次，这里重复一遍是因为它值得。
+
+## 2026-10-01：fork PR 根本没有触发预览
+
+PR #246 的常规 CI 全绿，但 head SHA 没有任何 `Cloudflare Pages` check。
+这与上面的慢构建不同：继续等待或重新运行 Actions 都不会创建部署。
+把贡献者的 **原始 head SHA** 推到主仓库的预览分支，Cloudflare 才创建了检查，
+约一分钟后部署成功；原 PR 无需修改，检查按同一 SHA 关联。
+
+维护者确认贡献内容可以部署后，可以这样操作（不要推到生产分支）：
+
+```sh
+gh pr view 246 --repo ranuts/document --json headRefOid --jq .headRefOid
+git fetch origin pull/246/head
+git push origin FETCH_HEAD:refs/heads/preview/pr-246
+```
+
+随后重跑原 PR 的 `Preview smoke`，等待所有必需检查通过再合并。
+如贡献者又推送了提交，必须重新镜像新 head SHA，并核对原 PR 当前 SHA。
+本仓库预览分支需在 Cloudflare Pages 的 branch deployment controls 中启用。
+
+等待脚本现在区分两种情况：检查始终缺失时五分钟内给出处置提示；已经出现的
+检查仍保留原来的 45 分钟构建窗口。GitHub API 错误直接显示，避免被误报成缺失。
+依赖和浏览器安装移到预览准备好之后，缺失部署时不再浪费安装时间。

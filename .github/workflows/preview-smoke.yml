@@ -1,5 +1,5 @@
 # PR gate against the REAL deployment: Cloudflare Pages (Git integration)
-# builds a preview for every PR branch and reports it as the "Cloudflare
+# builds previews for branches in this repository and reports it as the "Cloudflare
 # Pages" check with the preview URL in its summary. This workflow waits for
 # that deployment and runs the production-smoke suites against the preview,
 # so hosting-level breakage (redirects, headers, CDN, wasm delivery) is caught
@@ -26,14 +26,6 @@ jobs:
     if: github.event.pull_request.draft == false
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Set up the toolchain
-        uses: ./.github/actions/setup
-        with:
-          browsers: chromium
-
       # How long to wait for Cloudflare. The old window was 25 minutes (75 x 20s)
       # and that is not enough: a preview of this repository was measured taking
       # 36 minutes from PR push to a concluded check. The job itself gets 60
@@ -45,18 +37,29 @@ jobs:
       # Why it is that slow: the vendored editor is in the repository, so every
       # preview clones ~616 MiB, checks out ~625 MB and uploads ~697 MB of
       # output. The build script itself runs in about seven seconds.
+      # Fork heads need a maintainer to mirror the exact SHA into a preview
+      # branch here; waiting longer cannot create a missing deployment. Only
+      # install dependencies and browsers once there is a preview to test.
       - name: Wait for the Cloudflare Pages preview of this commit
         id: preview
         env:
           GH_TOKEN: ${{ github.token }}
           SHA: ${{ github.event.pull_request.head.sha }}
           WAIT_MINUTES: "45"
+          CHECK_WAIT_MINUTES: "5"
         run: |
           ATTEMPTS=$(( WAIT_MINUTES * 3 ))
+          CHECK_ATTEMPTS=$(( CHECK_WAIT_MINUTES * 3 ))
+          SEEN_CHECK=false
           for i in $(seq 1 "$ATTEMPTS"); do
             RUN=$(gh api "repos/${{ github.repository }}/commits/$SHA/check-runs" \
-              --jq '.check_runs[] | select(.name=="Cloudflare Pages") | {status, conclusion, summary: .output.summary}' 2>/dev/null | head -c 20000)
+              --jq '.check_runs | map(select(.name=="Cloudflare Pages")) | max_by(.id) | if . == null then empty else {status, conclusion, summary: .output.summary} end')
             STATUS=$(printf '%s' "$RUN" | jq -r '.status // empty' 2>/dev/null | head -1)
+            if [ -n "$STATUS" ]; then SEEN_CHECK=true; fi
+            if [ "$SEEN_CHECK" = false ] && [ "$i" -ge "$CHECK_ATTEMPTS" ]; then
+              echo "::error::Cloudflare Pages check never appeared for $SHA within $CHECK_WAIT_MINUTES minutes. For a fork PR, a maintainer must push the exact head SHA to a preview branch in this repository, then rerun this workflow. For same-repository PRs, check Pages branch deployment controls and the GitHub integration."
+              exit 1
+            fi
             if [ "$STATUS" = "completed" ]; then
               CONCLUSION=$(printf '%s' "$RUN" | jq -r '.conclusion' | head -1)
               if [ "$CONCLUSION" != "success" ]; then
@@ -78,6 +81,14 @@ jobs:
             echo "waiting for the Cloudflare Pages check ($i/$ATTEMPTS, status=${STATUS:-absent})..."; sleep 20
           done
           echo "::error::Cloudflare Pages preview did not finish within $WAIT_MINUTES minutes"; exit 1
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up the toolchain
+        uses: ./.github/actions/setup
+        with:
+          browsers: chromium
 
       - name: Smoke the preview
         env:
