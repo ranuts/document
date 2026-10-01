@@ -1,16 +1,20 @@
 ---
-title: Abrir um arquivo ODP sem o LibreOffice — grátis, no navegador
-description: Abra e edite um arquivo ODP (apresentação OpenDocument) no navegador — sem LibreOffice, sem conta. Salve de volta como ODP, PPTX ou PDF. Nada é enviado.
+title: 'Abrir um arquivo ODP sem o LibreOffice — grátis, no navegador'
+description: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .odp
 h1: Abrir um arquivo ODP sem o LibreOffice
-lead: 'Tem uma apresentação **.odp** e não tem o LibreOffice? Abra no navegador, edite os slides e salve de volta como ODP — ou como PPTX ou PDF. Nada para instalar, nada para enviar.'
+lead: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu ODP →
 ctaHref: /pt/
-ogDescription: Abra e edite ODP no navegador sem o LibreOffice. Salve como ODP, PPTX ou PDF. Nada é enviado.
+ogDescription: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 breadcrumb: odp
 howTo: Como abrir um arquivo ODP sem o LibreOffice
-appDescription: Abra e edite arquivos ODP (apresentações OpenDocument) no navegador, sem LibreOffice, sem upload e sem conta.
+appDescription: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 ---
+
+Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.
+
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 

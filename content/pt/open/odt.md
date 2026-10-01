@@ -1,16 +1,20 @@
 ---
-title: Abrir um arquivo ODT sem o LibreOffice — grátis, no navegador
-description: Abra e edite um arquivo ODT (OpenDocument Text) no navegador — sem LibreOffice, sem OpenOffice, sem conta. Salve de volta como ODT, DOCX ou PDF. Nada é enviado.
+title: 'Abrir um arquivo ODT sem o LibreOffice — grátis, no navegador'
+description: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .odt
 h1: Abrir um arquivo ODT sem o LibreOffice
-lead: 'Alguém te mandou um arquivo **.odt** e você não tem o LibreOffice? Abra no navegador, edite e salve de volta como ODT — ou como DOCX ou PDF. Nada para instalar, nada para enviar.'
+lead: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu ODT →
 ctaHref: /pt/
-ogDescription: Abra e edite arquivos ODT no navegador sem o LibreOffice. Salve como ODT, DOCX ou PDF. Nada é enviado.
+ogDescription: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 breadcrumb: odt
 howTo: Como abrir um arquivo ODT sem o LibreOffice
-appDescription: Abra e edite arquivos ODT (OpenDocument Text) no navegador, sem LibreOffice, sem upload e sem conta.
+appDescription: 'Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 ---
+
+Abra e edite arquivos ODT no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.
+
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 

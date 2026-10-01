@@ -1,10 +1,10 @@
 ---
-title: Ayuda — usar el editor de documentos en línea
-description: Cómo abrir, editar y guardar archivos de Word, Excel, PowerPoint, CSV y PDF en el navegador sin subirlos; solo lectura e integración, uso sin conexión, límites de privacidad, códigos de error y autoalojamiento.
+title: 'Ayuda — usar el editor de documentos en línea'
+description: 'Cómo abrir, editar, guardar y recuperar documentos; privacidad y requisitos sin conexión. Procesamiento de documentos sin servidor.'
 eyebrow: Ayuda
 breadcrumb: Ayuda
 h1: Ayuda
-lead: Respuestas prácticas para usar el editor. Todo se ejecuta dentro de la pestaña de tu navegador; tus archivos nunca se suben.
+lead: 'Edita archivos de Word, Excel y PowerPoint en el navegador, sin instalar Office ni crear una cuenta. Los documentos se procesan en tu dispositivo y el código está disponible para consultarlo.'
 ---
 
 ## Abrir y crear documentos
@@ -15,7 +15,7 @@ Word (`.docx`, el antiguo `.doc`), Excel (`.xlsx`, el antiguo `.xls`), PowerPoin
 
 ### ¿Cómo creo un documento nuevo?
 
-Usa **Nuevo Word / Nuevo Excel / Nuevo PowerPoint** en la página de inicio, o abre directamente `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx`. No se crea nada en ningún servidor: el documento en blanco existe solo en tu pestaña hasta que lo descargas.
+Elige un nuevo archivo de Word, Excel o PowerPoint en la página de inicio. Edita el archivo en blanco y guárdalo en tu dispositivo.
 
 ### ¿Hay un límite de tamaño?
 
@@ -25,7 +25,7 @@ No hay límite fijo. El techo real es la memoria de tu dispositivo, porque todo 
 
 ### ¿Cómo guardo mis cambios?
 
-Pulsa **Ctrl+S / ⌘S** o usa **Archivo → Descargar como**. Como no hay servidor, «guardar» significa que el navegador te entrega el archivo: aterriza en tu carpeta de descargas con el nombre original. Elige otro formato en **Descargar como** para convertir (por ejemplo DOCX → PDF, XLSX → CSV).
+En navegadores compatibles como Chrome y Edge, el primer guardado permite elegir un archivo; los siguientes lo actualizan. Otros navegadores descargan una copia. Para otro formato, usa Archivo → Descargar como. Las copias de recuperación no sustituyen guardar el archivo.
 
 ### ¿Por qué a veces el botón Guardar está en gris?
 
@@ -63,9 +63,7 @@ Sí: el editor está pensado para integrarse en un iframe y controlarse con `pos
 
 ### ¿Puede un asistente de IA de mi navegador manejar el editor?
 
-Sí, donde el navegador lo admita. El editor registra un conjunto de herramientas WebMCP, de modo que un agente de IA del navegador puede abrir, convertir, leer y exportar documentos llamándolas directamente en vez de hacer clic por la interfaz. Todo sigue ejecutándose en tu dispositivo: el agente dispara el mismo código local que los botones, y no se sube nada.
-
-Las herramientas son `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` y `get_document_state`.
+Las herramientas WebMCP editan y convierten localmente, pero un agente del navegador puede recibir texto o archivos exportados y enviarlos a su propio servicio de IA. Revisa su política de datos antes de compartir contenido confidencial.
 
 ### ¿Qué navegadores lo admiten?
 
@@ -83,7 +81,7 @@ En documentos de texto, sí: `get_document_text` devuelve el texto para que el a
 
 ### ¿Funciona sin conexión?
 
-Sí. Tras la primera visita, un service worker guarda el editor en caché; puedes instalarlo como aplicación desde la barra de direcciones del navegador (PWA) y abrir documentos sin conexión. La primera vez que abres un documento con muchas fuentes, aún hace falta la red una vez para descargarlas; después también quedan en caché.
+Conéctate primero, abre los archivos que necesitas y prueba la edición y la exportación. Luego desconéctate y comprueba los mismos pasos. Visitar la página de inicio o instalar la aplicación no garantiza todas las funciones sin conexión. Borrar los datos del navegador puede requerir otra conexión. Abrir archivos desde enlaces requiere conexión.
 
 ### ¿Cómo consigo la versión más reciente?
 
@@ -93,11 +91,11 @@ El sitio se actualiza solo en la siguiente visita. Si una página parece atascad
 
 ### ¿Mis documentos se suben a algún sitio?
 
-No. El documento se lee desde tu disco a la pestaña del navegador y se procesa ahí con WebAssembly. En este sitio no hay ningún punto final de subida. Puedes comprobarlo en el panel de red del navegador mientras abres y guardas un documento, y el código es abierto bajo AGPL-3.0.
+Al editar archivos locales directamente en este sitio, los documentos se procesan en tu dispositivo y no se envían a nuestros servidores. El código es público. Si usas el editor desde otra web o permites que un asistente externo lea archivos, consulta su política de datos.
 
 ### ¿Qué carga la página desde la red?
 
-Solo la propia aplicación: el JavaScript del editor, el conversor WebAssembly, las fuentes y los recursos de la página, todo desde el origen de este sitio, además de una baliza de Cloudflare Web Analytics respetuosa con la privacidad (sin cookies, sin rastreo entre sitios). Si activas el asistente de IA opcional con tu propia clave de API, sus peticiones van directamente desde tu navegador al proveedor que elijas; nada pasa por este sitio.
+La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas pueden generar solicitudes adicionales. Las aplicaciones anfitrionas y los agentes externos del navegador tienen sus propias políticas de datos.
 
 ## Errores
 
@@ -117,3 +115,11 @@ Abre una incidencia en [GitHub](https://github.com/ranuts/document/issues) indic
 ### ¿Puedo ejecutar mi propia copia?
 
 Sí. Es un sitio estático, así que sirve cualquier servidor web: `docker run -d -p 8080:80 ghcr.io/ranuts/document:latest`, o compílalo con `pnpm run build` y sirve la carpeta `dist/`. En el [README](https://github.com/ranuts/document#readme) están las opciones de HTTPS y autenticación básica, y en las [novedades](/es/changelog) lo que cambió en cada versión.
+
+### ¿Qué queda después de cerrar la pestaña?
+
+Con el guardado automático activado, las copias de recuperación permanecen en este navegador durante 7 días desde la última edición o apertura. Puedes borrarlas o desactivar el guardado automático en /history. Los datos del navegador y los cambios aún no guardados pueden perderse; guarda los cambios importantes en un archivo.
+
+### ¿Está disponible un asistente de IA integrado?
+
+El asistente de IA integrado está sin terminar y no es una función publicada.

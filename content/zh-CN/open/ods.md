@@ -1,16 +1,20 @@
 ---
-title: 不用 LibreOffice 打开 ODS 文件 — 免费、在浏览器中
-description: 在浏览器中打开并编辑 ODS（OpenDocument 表格）文件——无需 LibreOffice 或 Excel，公式照常重算。可存回 ODS，也可导出 XLSX、CSV 或 PDF。文件不会被上传。
+title: '不用 LibreOffice 打开 ODS 文件 — 免费、在浏览器中'
+description: '免费在浏览器中打开ODS文件，无需安装办公软件，无需注册。支持查看、编辑和导出，文档在自己的设备上处理。'
 eyebrow: 打开 · .ods
 h1: 不用 LibreOffice 打开 ODS 文件
-lead: 拿到一个 **.ods** 表格却没装 LibreOffice？在浏览器里打开它，公式完整保留，编辑后可存回 ODS——或者存成 XLSX、CSV、PDF。文件不上传。
+lead: '收到ODS 表格，却没装相应软件？直接在浏览器里打开，查看内容，按需修改，再保存到自己的设备。'
 cta: 打开你的 ODS →
 ctaHref: /zh-CN/
-ogDescription: 不用 LibreOffice，在浏览器中打开并编辑 ODS 表格，公式照常重算，文件不上传。
+ogDescription: '免费在浏览器中打开ODS文件，无需安装办公软件，无需注册。支持查看、编辑和导出，文档在自己的设备上处理。'
 breadcrumb: ods
 howTo: 如何在没有 LibreOffice 的情况下打开 ODS 文件
-appDescription: 不用 LibreOffice，在浏览器中打开并编辑 ODS（OpenDocument 表格）文件，无需上传，无需账号。
+appDescription: '免费在浏览器中打开ODS文件，无需安装办公软件，无需注册。支持查看、编辑和导出，文档在自己的设备上处理。'
 ---
+
+无需为了偶尔打开一份文件而安装整套办公软件。编辑完成后，可导出为常见办公格式，方便继续使用和分享。
+
+文件在你的设备上打开和处理，无需上传文档，也无需注册账号。
 
 ## 如何操作
 
@@ -53,8 +57,8 @@ ODS 即 OpenDocument Spreadsheet，是 LibreOffice Calc 和 OpenOffice 使用的
 
 ### 我的表格会被上传吗？
 
-不会。它通过 WebAssembly 在本地浏览器中打开，不会离开你的设备。
+不会。直接在本站打开本地文件时，查看、编辑和格式转换都在你的设备上完成，无需上传文档。
 
 ### 离线能用吗？
 
-可以。加载一次之后它就是可安装的 PWA，没有网络也能继续使用。
+可以提前准备后离线使用。先联网打开所需文件并试用编辑、导出，再断网确认可用。清理浏览器数据后可能需要重新联网；通过链接打开文件仍需联网。

@@ -1,20 +1,20 @@
 ---
-title: Word 없이 DOCX 열기 — 무료, 브라우저에서, 업로드 없이
-description: Microsoft Word 없이, Microsoft 계정 없이, Copilot 없이 DOCX(Word) 파일을 열고 편집하세요. 무료이고 오픈 소스이며 브라우저에서 동작합니다 — 파일은 업로드되지 않습니다.
+title: 'Word 없이 DOCX 열기 — 무료, 브라우저에서, 오픈 소스'
+description: 'Microsoft Word나 계정 없이 브라우저에서 DOCX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 eyebrow: 열기 · .docx
 h1: Microsoft Word 없이 DOCX 파일 열기
-lead: '**.docx** 파일을 받았는데 Word가 없나요 — 아니면 Microsoft 계정도, Copilot도 원하지 않나요? 여기 브라우저에서 바로 여세요. 설치할 것도, 업로드할 것도 없습니다.'
+lead: 'Microsoft Word나 계정 없이 브라우저에서 DOCX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 cta: DOCX 열기 →
 ctaHref: /ko/
-ogDescription: Microsoft Word나 계정 없이 DOCX를 열고 편집하세요. 오픈 소스, 업로드 없음.
+ogDescription: 'Microsoft Word나 계정 없이 브라우저에서 DOCX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 breadcrumb: DOCX 열기
 howTo: Word 없이 DOCX 파일을 여는 방법
-appDescription: Word 없이, 계정 없이, 업로드 없이 브라우저에서 DOCX(Word) 파일을 열고 편집합니다.
+appDescription: 'Microsoft Word나 계정 없이 브라우저에서 DOCX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 ---
 
-DOCX는 Microsoft Word의 형식이지만, 읽거나 편집하는 데 Word가 필요하지는 않습니다. 이 편집기는 OnlyOffice 엔진으로 DOCX를 렌더링하므로 글꼴, 표, 이미지, 페이지 레이아웃이 제대로 보입니다 — 단순한 텍스트 대체가 아닙니다. 모든 처리는 WebAssembly로 로컬에서 이루어지므로 파일은 기기에 남습니다.
+Microsoft Word나 계정 없이 브라우저에서 DOCX 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.
 
-내부적으로 OnlyOffice 문서 엔진은 WebAssembly로 컴파일되어 브라우저 탭 안에서 실행됩니다. 파일을 고르면 디스크에서 메모리로 곧바로 읽어 들이며 — 업로드 단계도, 서버 왕복도 없습니다 — 크거나 기밀인 문서도 기기를 벗어나지 않습니다. 최신 **.docx**와 예전의 이진 **.doc**을 모두 열 수 있고, 편집 결과를 DOCX, PDF 또는 일반 TXT로 내보낼 수 있습니다.
+로컬 파일 열기, 편집, 형식 변환은 내 기기에서 이루어지며 문서 처리 서버가 필요하지 않습니다. 소스 코드는 공개되어 있으며 직접 확인하거나 호스팅할 수 있습니다.
 
 ## 사용 방법
 
@@ -28,8 +28,8 @@ DOCX는 Microsoft Word의 형식이지만, 읽거나 편집하는 데 Word가 �
 - 모든 **.docx**(및 .doc) 파일을 서식 그대로 열고 읽기
 - 본문을 편집하고 DOCX, PDF, TXT로 다시 내려받기
 - Microsoft Word도, Microsoft 계정도, Copilot도 필요 없음
-- 업로드 없음 — 문서가 기기를 벗어나지 않습니다
-- 설치 가능한 앱으로 오프라인에서도 동작
+- 로컬 파일 열기, 편집, 형식 변환은 내 기기에서 이루어지며 문서 처리 서버가 필요하지 않습니다. 소스 코드는 공개되어 있으며 직접 확인하거나 호스팅할 수 있습니다.
+- 필요한 기능을 온라인에서 먼저 사용해 보세요. 브라우저에 저장된 기능은 오프라인에서 사용할 수 있습니다. 링크로 파일을 열려면 인터넷이 필요합니다.
 
 ## 자주 묻는 질문
 
@@ -43,7 +43,7 @@ DOCX는 Microsoft Word의 형식이지만, 읽거나 편집하는 데 Word가 �
 
 ### 문서가 어딘가로 업로드되나요?
 
-아니요. 파일은 WebAssembly로 로컬에서 열리며 기기를 벗어나지 않습니다.
+아니요. 이 사이트에서 로컬 파일을 직접 열면 보기, 편집, 변환이 내 기기에서 이루어지므로 문서를 업로드할 필요가 없습니다.
 
 ### 보기만 하는 게 아니라 편집하고 저장할 수 있나요?
 

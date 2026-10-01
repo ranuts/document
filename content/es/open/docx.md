@@ -1,20 +1,20 @@
 ---
-title: Abrir DOCX sin Word — gratis, en el navegador, sin subirlo
-description: Abre y edita un archivo DOCX (Word) sin Microsoft Word, sin cuenta de Microsoft y sin Copilot. Gratis, de código abierto, funciona en tu navegador: tu archivo nunca se sube.
+title: 'Abrir DOCX sin Word — gratis, en el navegador, código abierto'
+description: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .docx
 h1: Abrir un archivo DOCX sin Microsoft Word
-lead: '¿Tienes un archivo **.docx** pero no tienes Word, o no quieres una cuenta de Microsoft ni Copilot? Ábrelo aquí mismo, en tu navegador. Nada que instalar, nada que subir.'
+lead: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu DOCX →
 ctaHref: /es/
-ogDescription: Abre y edita archivos DOCX sin Microsoft Word ni cuenta. Código abierto, nada se sube.
+ogDescription: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: Abrir DOCX
 howTo: Cómo abrir un archivo DOCX sin Word
-appDescription: Abre y edita archivos DOCX (Word) en el navegador, sin Word, sin cuenta y sin subidas.
+appDescription: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
-DOCX es el formato de Microsoft Word, pero no necesitas Word para leer ni editar uno. Este editor representa el DOCX con el motor de OnlyOffice, así que tus fuentes, tablas, imágenes y maquetación se ven como deben, no como un texto plano de emergencia. Todo se ejecuta en local con WebAssembly, de modo que el archivo se queda en tu dispositivo.
+Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Procesamiento de documentos sin servidor.
 
-Por dentro, el motor de documentos de OnlyOffice está compilado a WebAssembly y se ejecuta dentro de tu pestaña. Cuando eliges un archivo, se lee directamente del disco a la memoria — sin paso de subida y sin ida y vuelta a un servidor — así que incluso los documentos grandes o confidenciales se quedan en tu máquina. Admite tanto el **.docx** moderno como el antiguo **.doc** binario, y puede exportar tus cambios de vuelta a DOCX, PDF o TXT.
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 
@@ -28,8 +28,8 @@ Por dentro, el motor de documentos de OnlyOffice está compilado a WebAssembly y
 - Abrir y leer cualquier archivo **.docx** (y .doc) con el formato completo
 - Editar el texto y volver a descargarlo como DOCX, PDF o TXT
 - Sin Microsoft Word, sin cuenta de Microsoft, sin Copilot
-- Sin subidas: tu documento nunca sale de tu dispositivo
-- Funciona sin conexión como aplicación instalable
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
+- Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 ## Preguntas frecuentes
 

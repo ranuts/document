@@ -1,16 +1,20 @@
 ---
-title: Abrir un archivo ODS sin LibreOffice — gratis, en el navegador
-description: Abre y edita un archivo ODS (hoja de cálculo OpenDocument) en tu navegador: sin LibreOffice y sin cuenta. Las fórmulas se conservan; guárdalo como ODS, XLSX, CSV o PDF. No se sube nada.
+title: 'Abrir un archivo ODS sin LibreOffice — gratis, en el navegador'
+description: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .ods
 h1: Abrir un archivo ODS sin LibreOffice
-lead: '¿Tienes una hoja **.ods** y no tienes LibreOffice? Ábrela en tu navegador con las fórmulas intactas, edítala y guárdala de vuelta como ODS, o como XLSX, CSV o PDF. No se sube nada.'
+lead: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu ODS →
 ctaHref: /es/
-ogDescription: Abre y edita ODS en el navegador sin LibreOffice. Fórmulas conservadas; guarda como ODS, XLSX, CSV o PDF. Nada se sube.
+ogDescription: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: ods
 howTo: Cómo abrir un archivo ODS sin LibreOffice
-appDescription: Abre y edita archivos ODS (hojas de cálculo OpenDocument) en el navegador, sin LibreOffice, sin subidas y sin cuenta.
+appDescription: 'Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.'
 ---
+
+Abre y edita archivos ODS en el navegador sin LibreOffice ni cuenta. Procesamiento de documentos sin servidor.
+
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 

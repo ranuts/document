@@ -905,7 +905,9 @@
         // Frame-only: the worker returns bytes and the frame's own instance is
         // what the vendor calls to hand them to the host.
         if (!hasDocument) return;
-        // ── 对外提供文件流：把导出的文件字节 postMessage 给宿主窗口（父窗口/顶层），
+        // Modified 2026-09-26: return file bytes only to the immediate host;
+        // outer ancestors are not authorized recipients of the document.
+        // ── 对外提供文件流：把导出的文件字节 postMessage 给直接父窗口，
         //    供宿主保存/上传。宿主设置 window.OO_FILE_STREAM_ONLY=true 时只给流、不触发浏览器下载。──
         try {
             var buffer;
@@ -921,7 +923,6 @@
                 var payload = { type: 'onlyoffice-file-stream', fileName: fileName, fileType: ext, buffer: buffer };
                 var targets = [];
                 if (window.parent && window.parent !== window) targets.push(window.parent);
-                if (window.top && window.top !== window && window.top !== window.parent) targets.push(window.top);
                 targets.forEach(function (t) {
                     try { t.postMessage(payload, '*'); } catch (e) {}
                 });

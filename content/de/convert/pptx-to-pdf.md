@@ -1,15 +1,15 @@
 ---
-title: PPTX im Browser in PDF umwandeln — kostenlos, ohne Upload
-description: Eine PowerPoint-Datei (PPTX) in ein PDF umwandeln, ohne sie irgendwohin hochzuladen. Die Umwandlung läuft vollständig auf Ihrem Gerät — kostenlos, ohne Konto, ohne PowerPoint, offlinefähig.
+title: 'PPTX im Browser in PDF umwandeln — kostenlos, Open Source'
+description: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 eyebrow: Umwandeln · .pptx → .pdf
 h1: PPTX im Browser in PDF umwandeln
-lead: 'Ein PowerPoint-Deck **.pptx** in ein **.pdf** verwandeln — ohne sie irgendwohin hochzuladen. Die gesamte Umwandlung passiert lokal in Ihrem Browser.'
+lead: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 cta: PPTX öffnen →
 ctaHref: /de/
-ogDescription: PowerPoint-PPTX-Dateien lokal im Browser in PDF umwandeln. Nichts wird hochgeladen, kein Konto, kostenlos und quelloffen.
+ogDescription: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 breadcrumb: pptx-to-pdf
-howTo: Eine PPTX ohne Upload in ein PDF umwandeln
-appDescription: PowerPoint-PPTX-Dateien im Browser in PDF umwandeln — ohne Upload und ohne Konto.
+howTo: PPTX auf Ihrem Gerät in PDF umwandeln
+appDescription: 'PPTX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 ---
 
 ## So funktioniert es
@@ -33,7 +33,7 @@ Das ist die praktische Wahl, wenn das Dokument nicht Ihres ist, um es weiterzuge
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Nein. Die Datei wird vollständig in Ihrem Browser-Tab geöffnet und umgewandelt, sie verlässt Ihr Gerät also nie.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Brauche ich PowerPoint oder ein Konto?
 
@@ -53,4 +53,4 @@ Nein. Hier wird nach PDF exportiert; der Text eines vorhandenen PDFs wird nicht 
 
 ### Funktioniert die Umwandlung offline?
 
-Ja. Einmal geladen ist es eine installierbare PWA und wandelt auch ohne Internetverbindung weiter um.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.

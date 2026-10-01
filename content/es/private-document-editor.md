@@ -1,26 +1,26 @@
 ---
-title: Editor de documentos privado — tus archivos nunca salen de tu dispositivo
-description: Un editor de documentos privado que mantiene tus archivos en tu dispositivo. Edita Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV 100% en local, en tu navegador: no se sube nada. Gratis, de código abierto (AGPL-3.0), funciona sin conexión.
-eyebrow: Privado · 100% en el dispositivo
+title: 'Editor de documentos privado — código abierto, procesamiento en tu dispositivo'
+description: 'Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.'
+eyebrow: 'Edición local'
 h1: ¿Buscas un editor de documentos que mantenga tus archivos privados?
-lead: Edita archivos de Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV directamente en tu navegador, donde el archivo se queda en tu propio dispositivo de principio a fin. No se sube nada y no hay ninguna cuenta que crear.
+lead: 'Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.'
 cta: Abrir el editor →
 ctaHref: /es/
-ogDescription: Edita DOCX, XLSX, PPTX y CSV 100% en local, en tu navegador: nada se sube, sin cuenta. Gratis y de código abierto.
+ogDescription: 'Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.'
 breadcrumb: Editor privado
-appDescription: Un editor de documentos privado que se ejecuta 100% en local en el navegador. Edita DOCX, XLSX, PPTX y CSV sin que se suba nada.
+appDescription: 'Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.'
 ---
 
-Aquí la privacidad es simple y literal: el documento que abres nunca sale de tu ordenador. Todo se ejecuta en local, en tu navegador, con WebAssembly, así que abrir, editar y descargar ocurren en tu máquina. No hay ninguna copia del archivo en un servidor de la que preocuparse, ni una carpeta en la nube que lo sincronice a otro sitio.
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
-Eso lo hace adecuado para contratos, hojas financieras, notas médicas, papeleo de recursos humanos o cualquier cosa que prefieras no entregar a un tercero. Obtienes un editor de fidelidad completa — con el motor de OnlyOffice, así que se conservan fuentes, tablas, fórmulas y maquetación — sin el peaje de enviar antes el archivo.
+Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV. Los diseños complejos y las fuentes especiales pueden variar; revisa el resultado antes de compartirlo.
 
 ## Qué puedes hacer
 
-- **Cada archivo se queda en el dispositivo**: 100% en el cliente; tus documentos nunca salen de tu máquina.
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 - **Edita los formatos habituales**: DOCX, XLSX, PPTX y CSV, con el formato completo conservado.
 - **Sáltate la cuenta**: sin registro, sin inicio de sesión, nada que dar de alta.
-- **Trabaja sin conexión**: instalable como PWA y utilizable sin conexión.
+- Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 - **Verifica la promesa**: lee el código abierto o aloja tu propia copia.
 
 ## Cómo funciona
@@ -50,4 +50,8 @@ Sí. El editor entero es de código abierto bajo la licencia AGPL-3.0: puedes le
 
 ### ¿Sigue funcionando sin conexión a internet?
 
-Sí. Es una PWA instalable y funciona por completo sin conexión una vez cargada, lo que mantiene tu edición contenida en tu máquina.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.
+
+### ¿Qué queda después de cerrar la pestaña?
+
+Con el guardado automático activado, las copias de recuperación permanecen en este navegador durante 7 días desde la última edición o apertura. Puedes borrarlas o desactivar el guardado automático en /history. Los datos del navegador y los cambios aún no guardados pueden perderse; guarda los cambios importantes en un archivo.

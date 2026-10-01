@@ -1,16 +1,20 @@
 ---
-title: Open an ODT File Without LibreOffice — Free, in Your Browser
-description: Open and edit an ODT (OpenDocument Text) file in your browser — no LibreOffice, no OpenOffice, no account. Save it back as ODT, DOCX or PDF. Nothing is uploaded.
+title: 'Open an ODT File Without LibreOffice — Free, in Your Browser'
+description: 'Open ODT files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .odt
 h1: Open an ODT File Without LibreOffice
-lead: Someone sent you an **.odt** file and you do not have LibreOffice? Open it in your browser, edit it, and save it back as ODT — or as DOCX or PDF. Nothing to install, nothing uploaded.
+lead: 'Got a ODT document but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your ODT →
 ctaHref: /
-ogDescription: Open and edit ODT files in the browser without LibreOffice. Save back as ODT, DOCX or PDF. Nothing uploaded.
+ogDescription: 'Open ODT files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: odt
 howTo: How to open an ODT file without LibreOffice
-appDescription: Open and edit ODT (OpenDocument Text) files in the browser without LibreOffice, with no upload and no account.
+appDescription: 'Open ODT files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
+
+You do not need to install an office suite just to open an occasional file. Export to common office formats when you are ready to keep working or share.
+
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -49,7 +53,7 @@ Yes. Open the ODT and save as DOCX — the conversion runs on your device.
 
 ### Is my document uploaded?
 
-No. It is opened locally in your browser with WebAssembly and never leaves your device.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need an account?
 
@@ -57,4 +61,4 @@ No. There is no sign-up, no login and no email required.
 
 ### Does it work offline?
 
-Yes. Once loaded it is an installable PWA and keeps working with no internet connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

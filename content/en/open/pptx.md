@@ -1,20 +1,20 @@
 ---
-title: Open PPTX Without PowerPoint — Free Online, No Upload
-description: Open and edit a PPTX (PowerPoint) presentation without Microsoft PowerPoint or an account. Slides, images and layout preserved, free and open source, runs in your browser — nothing is uploaded.
+title: 'Open PPTX Without PowerPoint — Free Online, Open source'
+description: 'Open PPTX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .pptx
 h1: Open a PPTX File Without PowerPoint
-lead: Need to open a **.pptx** deck but do not have PowerPoint? View and edit it right in your browser — slides, images and layout intact. Nothing to install, nothing uploaded.
+lead: 'Got a PowerPoint presentation but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your PPTX →
 ctaHref: /
-ogDescription: Open and edit PPTX presentations without PowerPoint or an account. Open source, nothing uploaded.
+ogDescription: 'Open PPTX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: Open PPTX
 howTo: How to open a PPTX file without PowerPoint
-appDescription: Open and edit PPTX (PowerPoint) presentations in the browser without PowerPoint, no account and no upload.
+appDescription: 'Open PPTX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
 
-PPTX is the Microsoft PowerPoint format. This editor opens it with the OnlyOffice engine, so slide layouts, images, shapes and text all render correctly. It runs locally with WebAssembly, so your presentation stays on your device.
+Review a presentation before a meeting, update text and images, and adjust slide layouts. Save as PPTX or export a PDF to share.
 
-The OnlyOffice presentation engine is compiled to WebAssembly and runs inside your browser tab. When you pick a deck it is read straight from disk into memory — there is no upload and no server round-trip — so a confidential pitch or internal deck never leaves your machine. It opens both the modern **.pptx** format and the older binary **.ppt**, and can export your slides back to PPTX or PDF.
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -25,11 +25,11 @@ The OnlyOffice presentation engine is compiled to WebAssembly and runs inside yo
 
 ## What you can do
 
-- Open any **.pptx** (and .ppt) presentation with full layout
+- Open **.pptx** (and .ppt) presentation with editable layouts
 - Edit slides, then download again as PPTX or PDF
 - No Microsoft PowerPoint and no account
-- No upload — your presentation never leaves your device
-- Works offline as an installable app
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
+- Try the features you need while online, then use what your browser has saved offline. Opening files from links still needs a connection.
 
 Whether a colleague sent you a deck to review, you need to pull a couple of slides for your own talk, or you just want to read a **.pptx** on a machine without Office installed, opening it here takes a few seconds. Because the render is produced by the same OnlyOffice engine used in its desktop apps, what you see matches what a teammate on PowerPoint will see — so you can review or tweak a deck with confidence and hand it straight back.
 
@@ -45,7 +45,7 @@ Yes. The OnlyOffice engine preserves slide layouts, images, shapes and text.
 
 ### Is my presentation uploaded?
 
-No. It runs locally with WebAssembly and never leaves your device.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Can I edit the slides, not just view?
 

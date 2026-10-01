@@ -1,15 +1,15 @@
 ---
-title: Convertir CSV a XLSX en el navegador — gratis, sin subirlo
-description: Convierte un archivo CSV a XLSX (Excel) por completo en tu navegador: ábrelo y expórtalo a XLSX. Gratis, de código abierto, no se sube nada, funciona sin conexión. No hace falta Excel ni cuenta.
+title: 'Convertir CSV a XLSX en el navegador — gratis, código abierto'
+description: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Convertir · .csv → .xlsx
 h1: Convertir CSV a XLSX en el navegador
-lead: 'Convierte un archivo **.csv** plano en un **.xlsx** de Excel con formato, sin subirlo a ningún sitio. Toda la conversión ocurre en local, en tu navegador.'
+lead: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu CSV →
 ctaHref: /es/
-ogDescription: Convierte CSV a XLSX en tu navegador: nada se sube, sin Excel, sin cuenta. Código abierto.
+ogDescription: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: CSV a XLSX
 howTo: Cómo convertir CSV a XLSX en el navegador
-appDescription: Convierte CSV a XLSX en el navegador abriendo el archivo y exportándolo a XLSX, sin subidas y sin cuenta.
+appDescription: 'Convierte CSV a XLSX localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
 ## Cómo funciona
@@ -33,7 +33,7 @@ Abre el CSV en el editor y usa Descargar como / Guardar como XLSX: la conversió
 
 ### ¿Se sube mi archivo para convertirlo?
 
-No. Todo se ejecuta en tu navegador, así que tu CSV nunca se sube.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Necesito Excel o una cuenta?
 
@@ -49,4 +49,4 @@ Sí: consulta [XLSX a CSV](/es/convert/xlsx-to-csv).
 
 ### ¿La conversión funciona sin conexión?
 
-Sí. Una vez cargada es una PWA instalable, así que sigue funcionando sin conexión a internet.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.

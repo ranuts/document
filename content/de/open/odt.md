@@ -1,16 +1,20 @@
 ---
-title: Eine ODT-Datei ohne LibreOffice öffnen — kostenlos, im Browser
-description: Eine ODT-Datei (OpenDocument Text) im Browser öffnen und bearbeiten — ohne LibreOffice, ohne OpenOffice, ohne Konto. Als ODT, DOCX oder PDF zurückspeichern. Nichts wird hochgeladen.
+title: 'Eine ODT-Datei ohne LibreOffice öffnen — kostenlos, im Browser'
+description: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Öffnen · .odt
 h1: Eine ODT-Datei ohne LibreOffice öffnen
-lead: 'Jemand hat Ihnen eine **.odt**-Datei geschickt und Sie haben kein LibreOffice? Öffnen Sie sie im Browser, bearbeiten Sie sie und speichern Sie sie als ODT zurück — oder als DOCX oder PDF. Nichts zu installieren, nichts wird hochgeladen.'
+lead: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 cta: ODT öffnen →
 ctaHref: /de/
-ogDescription: ODT-Dateien im Browser ohne LibreOffice öffnen und bearbeiten. Als ODT, DOCX oder PDF speichern. Nichts wird hochgeladen.
+ogDescription: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: odt
 howTo: Eine ODT-Datei ohne LibreOffice öffnen
-appDescription: ODT-Dateien (OpenDocument Text) im Browser öffnen und bearbeiten — ohne LibreOffice, ohne Upload, ohne Konto.
+appDescription: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
+
+ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.
+
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## So funktioniert es
 

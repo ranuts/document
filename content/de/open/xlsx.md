@@ -1,20 +1,20 @@
 ---
-title: XLSX ohne Excel öffnen — kostenlos online, ohne Upload
-description: Eine XLSX-Tabelle (Excel) ohne Microsoft Excel und ohne 365-Konto öffnen und bearbeiten. Formeln und Formatierung bleiben erhalten, kostenlos und quelloffen, läuft im Browser — nichts wird hochgeladen.
+title: 'XLSX ohne Excel öffnen — kostenlos online, Open Source'
+description: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Öffnen · .xlsx
 h1: Eine XLSX-Datei ohne Excel öffnen
-lead: 'Jemand hat Ihnen eine **.xlsx**-Tabelle geschickt, aber Sie haben kein Excel — oder wollen für 365 nicht zahlen? Öffnen Sie sie im Browser, samt Formeln. Nichts zu installieren, nichts wird hochgeladen.'
+lead: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 cta: XLSX öffnen →
 ctaHref: /de/
-ogDescription: XLSX-Tabellen ohne Excel oder Konto öffnen und bearbeiten. Formeln bleiben erhalten, quelloffen, nichts wird hochgeladen.
+ogDescription: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: XLSX öffnen
 howTo: Eine XLSX-Datei ohne Excel öffnen
-appDescription: XLSX-Tabellen (Excel) im Browser öffnen und bearbeiten — ohne Excel, ohne Konto, ohne Upload.
+appDescription: 'XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
 
-XLSX ist das Format von Microsoft Excel. Dieser Editor öffnet es mit der OnlyOffice-Engine, sodass Zellformeln, Zahlenformate, Farben und mehrere Blätter erhalten bleiben — eine echte Tabelle, keine schreibgeschützte Ansicht. Alles läuft lokal mit WebAssembly, die Datei bleibt also auf Ihrem Gerät.
+XLSX-Dateien ohne Microsoft Excel oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.
 
-Die Tabellenkalkulations-Engine von OnlyOffice ist nach WebAssembly kompiliert und läuft in Ihrem Browser-Tab. Ihre Datei wird direkt von der Festplatte in den Speicher gelesen — kein Upload, kein Server — vertrauliche Daten verlassen Ihr Gerät also nie. Weil es eine echte Rechenengine und keine statische Vorschau ist, werden Formeln beim Bearbeiten neu berechnet. Gelesen werden das moderne **.xlsx** ebenso wie ältere **.xls** und einfache **.csv**; exportieren können Sie nach XLSX oder CSV.
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## So funktioniert es
 
@@ -28,8 +28,8 @@ Die Tabellenkalkulations-Engine von OnlyOffice ist nach WebAssembly kompiliert u
 - Jede **.xlsx**-Datei (und .xls, .csv) mit erhaltenen Formeln öffnen
 - Zellen bearbeiten und wieder als XLSX oder CSV herunterladen
 - Kein Microsoft Excel und kein 365-Abo
-- Kein Upload — Ihre Tabelle verlässt Ihr Gerät nie
-- Funktioniert offline als installierbare App
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 
 Für den schnellen Blick genauso geeignet wie für echte Arbeit: eine Spalte sortieren, eine Zahl korrigieren, eine Zeile oder Formel ergänzen und die Datei im selben Format zurückgeben. Praktisch, wenn Ihnen jemand ein Budget oder einen Datenexport mailt und Sie weder Excel installieren, noch für 365 zahlen, noch Zahlen einem beliebigen Web-Konverter anvertrauen wollen.
 
@@ -45,7 +45,7 @@ Ja. Die OnlyOffice-Engine erhält Formeln, Zahlenformate und Formatierung.
 
 ### Wird meine Tabelle hochgeladen?
 
-Nein. Sie läuft lokal mit WebAssembly und verlässt Ihr Gerät nie.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Kann ich sie als CSV exportieren?
 

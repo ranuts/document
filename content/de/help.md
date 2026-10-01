@@ -1,10 +1,10 @@
 ---
-title: Hilfe — den Online-Dokumenteneditor nutzen
-description: Wie Sie Word-, Excel-, PowerPoint-, CSV- und PDF-Dateien im Browser öffnen, bearbeiten und speichern, ohne sie hochzuladen; schreibgeschützt und eingebettet, Offline-Nutzung, Datenschutzgrenzen, Fehlercodes und Selbst-Hosting.
+title: 'Hilfe — den Online-Dokumenteneditor nutzen'
+description: 'Dokumente öffnen, bearbeiten, speichern und wiederherstellen; Datenschutz und Offline-Voraussetzungen. Dokumentverarbeitung ohne Server.'
 eyebrow: Hilfe
 breadcrumb: Hilfe
 h1: Hilfe
-lead: Praktische Antworten zur Nutzung des Editors. Alles läuft in Ihrem Browser-Tab; Ihre Dateien werden nie hochgeladen.
+lead: 'Word-, Excel- und PowerPoint-Dateien im Browser bearbeiten, ohne Office-Installation oder Konto. Dokumente werden auf Ihrem Gerät verarbeitet. Der Quellcode ist öffentlich einsehbar.'
 ---
 
 ## Öffnen und Anlegen
@@ -15,7 +15,7 @@ Word (`.docx`, älteres `.doc`), Excel (`.xlsx`, älteres `.xls`), PowerPoint (`
 
 ### Wie lege ich ein neues Dokument an?
 
-Nutzen Sie **Neues Word / Neues Excel / Neues PowerPoint** auf der Startseite oder öffnen Sie direkt `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx`. Auf einem Server entsteht dabei nichts: Das leere Dokument existiert nur in Ihrem Tab, bis Sie es herunterladen.
+Wählen Sie auf der Startseite ein neues Word-, Excel- oder PowerPoint-Dokument aus. Bearbeiten Sie die leere Datei und speichern Sie sie auf Ihrem Gerät.
 
 ### Gibt es eine Größenbeschränkung?
 
@@ -25,7 +25,7 @@ Keine feste Grenze. Die praktische Obergrenze ist der Arbeitsspeicher Ihres Ger�
 
 ### Wie speichere ich meine Änderungen?
 
-Drücken Sie **Strg+S / ⌘S** oder nutzen Sie **Datei → Herunterladen als**. Weil es keinen Server gibt, heißt „Speichern“ hier: Der Browser gibt Ihnen die Datei; sie landet unter dem ursprünglichen Namen in Ihrem Download-Ordner. Wählen Sie unter **Herunterladen als** ein anderes Format, um umzuwandeln (etwa DOCX → PDF, XLSX → CSV).
+In unterstützten Browsern wie Chrome und Edge wählen Sie beim ersten Speichern eine Datei; spätere Speicherungen aktualisieren diese Datei. Andere Browser laden eine Kopie herunter. Für andere Formate nutzen Sie Datei → Herunterladen als. Wiederherstellungskopien ersetzen nicht das Speichern Ihrer Datei.
 
 ### Warum ist die Schaltfläche „Speichern“ manchmal ausgegraut?
 
@@ -63,9 +63,7 @@ Ja — der Editor ist dafür gebaut, in einem iframe eingebettet und per `postMe
 
 ### Kann ein KI-Assistent in meinem Browser den Editor bedienen?
 
-Ja, wo der Browser es unterstützt. Der Editor registriert eine Reihe von WebMCP-Tools, sodass ein KI-Agent im Browser Dokumente öffnen, umwandeln, lesen und exportieren kann, indem er sie direkt aufruft, statt sich durch die Oberfläche zu klicken. Alles läuft weiterhin auf Ihrem Gerät — der Agent löst denselben lokalen Code aus wie die Schaltflächen, und nichts wird hochgeladen.
-
-Die Tools sind `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` und `get_document_state`.
+WebMCP-Werkzeuge bearbeiten und konvertieren lokal. Ein Browser-Agent kann jedoch Dokumenttext oder exportierte Dateien erhalten und an seinen eigenen KI-Dienst senden. Prüfen Sie seine Datenrichtlinie vor der Freigabe vertraulicher Inhalte.
 
 ### Welche Browser unterstützen es?
 
@@ -83,7 +81,7 @@ Bei Textdokumenten ja: `get_document_text` gibt den Text zurück, sodass der Age
 
 ### Funktioniert es offline?
 
-Ja. Nach dem ersten Besuch wird der Editor von einem Service Worker zwischengespeichert; Sie können ihn über die Adressleiste des Browsers als App (PWA) installieren und Dokumente ohne Verbindung öffnen. Beim ersten Öffnen eines Dokuments mit vielen Schriften wird das Netz einmal gebraucht, um diese Schriften zu laden; danach sind auch sie im Cache.
+Öffnen Sie die benötigten Dateien zunächst online und testen Sie Bearbeitung und Export. Trennen Sie dann die Verbindung und prüfen Sie dieselben Schritte. Ein Besuch der Startseite oder die Installation macht nicht alle Funktionen offline verfügbar. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen eine Verbindung.
 
 ### Wie bekomme ich die neueste Version?
 
@@ -93,11 +91,11 @@ Die Seite aktualisiert sich beim nächsten Besuch selbst. Wenn eine Seite auf ei
 
 ### Werden meine Dokumente irgendwohin hochgeladen?
 
-Nein. Das Dokument wird von Ihrer Festplatte in den Browser-Tab gelesen und dort mit WebAssembly verarbeitet. Auf dieser Website gibt es keinen Upload-Endpunkt. Sie können das im Netzwerk-Panel des Browsers beim Öffnen und Speichern überprüfen — und der Quellcode ist unter AGPL-3.0 offen.
+Wenn Sie lokale Dateien direkt auf dieser Website bearbeiten, werden Dokumente auf Ihrem Gerät verarbeitet und nicht an unsere Server gesendet. Der Quellcode ist öffentlich einsehbar. Bei anderen Websites oder externen Browser-Assistenten prüfen Sie bitte deren Datenrichtlinien.
 
 ### Was lädt die Seite aus dem Netz?
 
-Nur die Anwendung selbst: das JavaScript des Editors, den WebAssembly-Konverter, Schriften und die eigenen Assets der Seite — alles von der Origin dieser Website — sowie einen datenschutzfreundlichen Cloudflare-Web-Analytics-Beacon (keine Cookies, kein seitenübergreifendes Tracking). Wenn Sie den optionalen KI-Assistenten mit Ihrem eigenen API-Schlüssel aktivieren, gehen dessen Anfragen direkt von Ihrem Browser an den gewählten Anbieter; nichts läuft über diese Website.
+Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs können weitere Anfragen auslösen. Einbettende Anwendungen und externe Browser-Agenten bestimmen ihre eigene Datenverarbeitung.
 
 ## Fehler
 
@@ -117,3 +115,11 @@ Nur die Anwendung selbst: das JavaScript des Editors, den WebAssembly-Konverter,
 ### Kann ich eine eigene Kopie betreiben?
 
 Ja. Es ist eine statische Website, jeder Webserver genügt: `docker run -d -p 8080:80 ghcr.io/ranuts/document:latest`, oder mit `pnpm run build` bauen und den Ordner `dist/` ausliefern. Optionen für HTTPS und Basic Auth stehen in der [README](https://github.com/ranuts/document#readme), was jede Version geändert hat in den [Änderungen](/de/changelog).
+
+### Was bleibt nach dem Schließen des Tabs?
+
+Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.
+
+### Ist ein integrierter KI-Assistent verfügbar?
+
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion.

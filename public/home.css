@@ -275,18 +275,6 @@ body {
   font-size: 16px;
   letter-spacing: -0.01em;
 }
-#landing-hero .brand .logo {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--ran-radius-sm);
-  /* monochrome mark (Geist): ink on page bg, inverts with the theme */
-  background: var(--ran-color-text);
-  display: inline-grid;
-  place-items: center;
-  color: var(--ran-color-bg);
-  font-size: 13px;
-  font-weight: 700;
-}
 #landing-hero .bar nav {
   display: flex;
   align-items: center;
@@ -310,12 +298,6 @@ body {
 #landing-hero .bar nav .navlink:hover {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
-}
-#landing-hero .ghmark {
-  width: 15px;
-  height: 15px;
-  fill: currentColor;
-  flex: none;
 }
 
 /* ---------- hero: copy left, document window right ---------- */
@@ -923,72 +905,7 @@ body {
   max-width: 62ch;
 }
 
-/* ---------- ecosystem + footer ---------- */
-#landing-hero .eco {
-  margin-top: clamp(56px, 7vw, 96px);
-  border-top: 1px solid var(--ran-color-border);
-  background: var(--ran-color-bg-subtle);
-}
-#landing-hero .eco .wrap {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ran-space-4) var(--ran-space-6);
-  padding-top: var(--ran-space-6);
-  padding-bottom: var(--ran-space-6);
-}
-#landing-hero .eco-label {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ran-space-2);
-  font: 600 11px/1.4 var(--ran-font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ran-color-text-secondary);
-}
-#landing-hero .eco-label .gitmark {
-  width: 15px;
-  height: 15px;
-  fill: currentColor;
-  flex: none;
-}
-#landing-hero .eco nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--ran-space-3);
-}
-#landing-hero .eco nav a,
-#landing-hero .eco nav .here {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--ran-space-2);
-  font-size: 13.5px;
-  padding: var(--ran-space-2) var(--ran-space-4);
-  border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-md);
-  background: var(--ran-color-bg);
-}
-#landing-hero .eco nav a {
-  color: var(--ran-color-text-secondary);
-  transition: 0.15s ease;
-}
-#landing-hero .eco nav a:hover {
-  border-color: var(--ran-color-border-hover);
-  color: var(--ran-color-text);
-}
-#landing-hero .eco nav b {
-  font: 700 12.5px/1 var(--ran-font-mono);
-}
-#landing-hero .eco nav small {
-  color: var(--ran-color-text-secondary);
-}
-#landing-hero .eco nav .here {
-  color: var(--ran-color-text);
-  border-color: var(--ran-color-text);
-}
-/* the footer carries both classes (<footer class="foot wrap">), so the layout
-   sits on the compound selector — a descendant `.foot .wrap` never matches */
+/* ---------- footer ---------- */
 #landing-hero .foot {
   border-top: 1px solid var(--ran-color-border);
 }

@@ -1,26 +1,24 @@
 ---
-title: Edit Documents Without an Account — No Sign-Up, Just Start
-description: Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files with no account, no sign-up and no login. Open the editor and start immediately in your browser. Free, open source (AGPL-3.0), nothing uploaded, works offline.
+title: 'Edit Documents Without an Account — No Sign-Up, Just Start'
+description: 'A free document editor with no sign-up or login. Open and edit Word, Excel, PowerPoint and CSV in your browser, without Office. Process files locally.'
 eyebrow: No account · just start
 h1: Want to Edit Documents Without an Account?
-lead: Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files without signing up for anything. There is no account, no login and no email to hand over — you open the editor and start typing.
+lead: 'Just need to edit a file, without creating another account? Open the editor, make your changes to Word, Excel or PowerPoint files and save them to your device.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: Edit DOCX, XLSX, PPTX and CSV with no account and no sign-up — open the editor and start right away. Free and open source.
+ogDescription: 'A free document editor with no sign-up or login. Open and edit Word, Excel, PowerPoint and CSV in your browser, without Office. Process files locally.'
 breadcrumb: Edit documents without an account
-appDescription: Edit DOCX, XLSX, PPTX and CSV files in the browser with no account, no sign-up and no login. Open it and start editing immediately — nothing uploaded.
+appDescription: 'A free document editor with no sign-up or login. Open and edit Word, Excel, PowerPoint and CSV in your browser, without Office. Process files locally.'
 ---
 
-No registration wall stands between you and your document. Everything runs locally in your browser with WebAssembly, so there is no account to create because there is no server storing your files in the first place. You open a file, edit it, and download it again — that is the whole flow.
-
-It is a full editor, not a stripped-down preview: powered by the OnlyOffice engine, your fonts, tables, formulas and layout stay intact. And because your files never leave your device, skipping the account also means skipping the usual trade of your data for access.
+No office suite to install and no account to create. View, edit and convert local files on your own device.
 
 ## What you can do
 
 - **Start with no account** — no sign-up, no login, no email or phone number.
-- **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with full formatting preserved.
-- **Keep files on-device** — 100% client-side; your documents are never uploaded.
-- **Work offline** — installable as a PWA and usable with no connection.
+- **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with support for common formatting.
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
+- Try the features you need while online, then use what your browser has saved offline. Opening files from links still needs a connection.
 - **Stay free** — open source under AGPL-3.0, with no paywall to unlock.
 
 ## How it works
@@ -50,4 +48,8 @@ Yes. It is free and open source under the AGPL-3.0 license, with no paywall and 
 
 ### Can I use it offline without signing in?
 
-Yes. It installs as a PWA and works fully offline once loaded, so there is never a sign-in wall between you and your documents.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.
+
+### What remains after I close the tab?
+
+With autosave enabled, you can recover your work in the same browser. Copies stay for 7 days after the last edit or open and can be managed at /history (Saved documents). Browser data can be cleared, so save important changes to a file.

@@ -1,16 +1,20 @@
 ---
-title: Abrir um arquivo ODS sem o LibreOffice — grátis, no navegador
-description: Abra e edite um arquivo ODS (planilha OpenDocument) no navegador — sem LibreOffice, sem conta. As fórmulas são preservadas; salve de volta como ODS, XLSX, CSV ou PDF. Nada é enviado.
+title: 'Abrir um arquivo ODS sem o LibreOffice — grátis, no navegador'
+description: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .ods
 h1: Abrir um arquivo ODS sem o LibreOffice
-lead: 'Tem uma planilha **.ods** e não tem o LibreOffice? Abra no navegador com as fórmulas intactas, edite e salve de volta como ODS — ou como XLSX, CSV ou PDF. Nada é enviado.'
+lead: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu ODS →
 ctaHref: /pt/
-ogDescription: Abra e edite ODS no navegador sem o LibreOffice. Fórmulas preservadas; salve como ODS, XLSX, CSV ou PDF. Nada é enviado.
+ogDescription: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 breadcrumb: ods
 howTo: Como abrir um arquivo ODS sem o LibreOffice
-appDescription: Abra e edite arquivos ODS (planilhas OpenDocument) no navegador, sem LibreOffice, sem upload e sem conta.
+appDescription: 'Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.'
 ---
+
+Abra e edite arquivos ODS no navegador sem LibreOffice nem conta. Processamento de documentos sem servidor.
+
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 

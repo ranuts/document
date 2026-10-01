@@ -1,41 +1,41 @@
 ---
-title: Editor de documentos offline — edite DOCX, XLSX e PPTX sem internet
-description: Um editor de documentos offline que funciona sem internet — ótimo em Chromebook, notebook ou Android. Edite DOCX, XLSX, PPTX e CSV localmente no navegador. Grátis, de código aberto, instalável, nada é enviado.
+title: 'Editor de documentos offline — edite DOCX, XLSX e PPTX sem internet'
+description: 'Edite DOCX, XLSX, PPTX e CSV offline com app, motor e fontes já armazenados em cache.'
 eyebrow: Offline · PWA
 h1: Um editor de documentos offline que funciona sem internet
-lead: Edite arquivos do Word, Excel e PowerPoint sem conexão — num Chromebook, num notebook dentro do avião ou num tablet Android. Instale uma vez e ele continua funcionando offline, inteiramente no seu dispositivo.
+lead: 'Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: Editor de documentos offline para Chromebook, notebook e Android. Edite DOCX, XLSX e PPTX localmente. Código aberto, nada é enviado.
+ogDescription: 'Edite DOCX, XLSX, PPTX e CSV offline com app, motor e fontes já armazenados em cache.'
 breadcrumb: Editor offline
 howTo: Como usar o editor de documentos offline
-appDescription: Um editor de documentos offline que roda no navegador: edite DOCX, XLSX, PPTX e CSV sem conexão com a internet.
+appDescription: 'Edite DOCX, XLSX, PPTX e CSV offline com app, motor e fontes já armazenados em cache.'
 ---
 
-Como toda a edição roda localmente no seu navegador com WebAssembly — não há servidor —, ele não precisa de internet para funcionar. Carregue uma vez, instale como aplicativo (PWA) e você pode abrir e editar documentos em qualquer lugar, mesmo totalmente offline. Seus arquivos nunca saem do dispositivo.
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
-Na primeira vez que a página carrega, um service worker guarda no seu dispositivo a casca do aplicativo e o motor do OnlyOffice. Depois disso o editor abre direto desse cache, então inicia na hora e continua funcionando sem conexão — num avião, no metrô ou onde o Wi-Fi falha. Os arquivos são abertos do seu próprio dispositivo e salvos nele, e você pode editar DOCX, XLSX, PPTX e CSV e exportar para PDF, TXT, HTML ou CSV, tudo sem rede.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
 
 ## Como funciona
 
-1. Abra o editor uma vez com conexão, para que o aplicativo e o motor fiquem no seu dispositivo.
-2. Instale como aplicativo (PWA) — use a opção de instalar do navegador, ou «Adicionar à tela de início» no celular.
-3. Sem conexão, abra o aplicativo instalado como qualquer outro.
-4. Abra um DOCX, XLSX, PPTX ou CSV, edite e baixe de novo — tudo offline.
+1. Abra o editor conectado e teste os formatos, fontes e exportações necessários. Depois desconecte e confira o mesmo fluxo antes de depender do modo offline.
+2. Instalar a PWA é opcional: use a opção do navegador ou Adicionar à tela de início. A instalação não garante que todos os recursos estejam em cache.
+3. Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
+4. No Chrome e Edge, escolha um arquivo no primeiro salvamento e depois salve as alterações diretamente nele. Safari, Firefox e outros navegadores baixam uma cópia.
 
 ## Por que funciona offline
 
-- **Sem servidor** — o editor inteiro roda no seu dispositivo, então nenhuma conexão é necessária
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 - **PWA instalável** — coloque na tela de início ou na área de trabalho e abra como um aplicativo
 - **Roda em qualquer lugar** — Chromebook, Windows, macOS, Linux, Android; qualquer navegador moderno
 - Edite DOCX, XLSX, PPTX e CSV
-- Sem upload, sem conta, sem cadastro
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Perguntas frequentes
 
 ### Funciona mesmo offline?
 
-Sim. Depois de carregado é um PWA instalável e continua funcionando sem internet — toda a edição roda localmente.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
 
 ### Funciona num Chromebook?
 
@@ -43,7 +43,7 @@ Sim. Ele roda em qualquer navegador moderno — Chromebook, notebook, Windows, m
 
 ### Meus arquivos são enviados?
 
-Não. Não há servidor; os arquivos ficam no seu dispositivo e nunca são enviados.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Quais formatos posso editar?
 
@@ -55,8 +55,12 @@ Use o ícone de instalar na barra de endereços do Chrome ou do Edge, ou «Adici
 
 ### Preciso estar online na primeira vez?
 
-Sim. Carregue uma vez com conexão para que o aplicativo e o motor fiquem em cache; depois disso ele roda offline.
+Abra o editor conectado e teste os formatos, fontes e exportações necessários. Depois desconecte e confira o mesmo fluxo antes de depender do modo offline.
 
 ### Onde meus arquivos são salvos quando estou offline?
 
-Os arquivos são abertos do seu próprio dispositivo e salvos nele — nenhum servidor está envolvido.
+Sim. No Chrome e Edge, escolha um arquivo no primeiro salvamento e depois salve as alterações diretamente nele. Safari, Firefox e outros navegadores baixam uma cópia. Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.
+
+### O que fica depois de fechar a aba?
+
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.

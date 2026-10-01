@@ -67,6 +67,7 @@ test.describe('language menu', () => {
       // the page can still see which one they are on.
       const triggerText = await page.locator('.lang-current').first().textContent();
       expect(triggerText?.trim()).toBe(current[0].text);
+      await expect(page.locator('.lang-menu').first()).toHaveAccessibleName(new RegExp(current[0].text));
     });
   }
 

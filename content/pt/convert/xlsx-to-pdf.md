@@ -1,15 +1,15 @@
 ---
-title: Converter XLSX em PDF no navegador — grátis, sem upload
-description: Transforme um arquivo do Excel (XLSX) em PDF sem enviá-lo para lugar nenhum. A conversão roda inteiramente no seu dispositivo — grátis, sem conta, sem Excel, funciona offline.
+title: 'Converter XLSX em PDF no navegador — grátis, código aberto'
+description: 'Converta XLSX em PDF localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 eyebrow: Converter · .xlsx → .pdf
 h1: Converter XLSX em PDF no navegador
-lead: 'Transforme uma planilha **.xlsx** do Excel em um **.pdf** — sem enviar para lugar nenhum. Toda a conversão acontece localmente, no seu navegador.'
+lead: 'Converta XLSX em PDF localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu XLSX →
 ctaHref: /pt/
-ogDescription: Converta arquivos XLSX do Excel em PDF localmente, no navegador. Nada é enviado, sem conta, grátis e de código aberto.
+ogDescription: 'Converta XLSX em PDF localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 breadcrumb: xlsx-to-pdf
-howTo: Como converter um XLSX em PDF sem enviá-lo
-appDescription: Converta arquivos XLSX do Excel em PDF no navegador, sem upload e sem conta.
+howTo: Como converter XLSX em PDF no seu dispositivo
+appDescription: 'Converta XLSX em PDF localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 ---
 
 ## Como funciona
@@ -23,7 +23,7 @@ Quase todo serviço de «XLSX para PDF» na web funciona igual: você entrega o 
 
 A conversão é feita pelo motor x2t do OnlyOffice compilado para WebAssembly — o mesmo que desenha o documento na tela, então o que você vê no editor é o que vai para o PDF. Fontes, tabelas, imagens, cabeçalhos e rodapés, quebras de página e numeração são mantidos. Como roda na sua aba, não há fila de upload, nem limite de tamanho imposto por servidor, nem espera pela fila de processamento de outra pessoa.
 
-É a opção prática quando o documento não é seu para compartilhar: uma carta-proposta antes da assinatura, um relatório sob embargo, qualquer coisa com dados pessoais. É também a opção que continua funcionando num avião ou atrás do firewall da empresa, porque depois de carregada a página é um aplicativo instalável que roda sem rede.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
 
 ## Perguntas frequentes
 
@@ -33,7 +33,7 @@ Abra o XLSX no editor e use Baixar como / Salvar como escolhendo PDF. A convers�
 
 ### Meu documento é enviado para converter?
 
-Não. O arquivo é aberto e convertido inteiramente dentro da sua aba, então nunca sai do seu dispositivo.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Preciso do Excel ou de uma conta?
 
@@ -53,4 +53,4 @@ Não. Aqui exportamos para PDF; não reescrevemos o texto de um PDF existente de
 
 ### A conversão funciona offline?
 
-Sim. Depois de carregada é um PWA instalável, então continua convertendo sem conexão com a internet.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.

@@ -41,6 +41,6 @@ This project is built and maintained by **ranuts** — see [About](/about) for w
 
 Worth stating plainly, because contact pages usually collect things:
 
-- **We do not want your documents.** The editor never uploads them, and support does not need them either unless you choose to attach a file to an issue.
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
 - **There is no account**, so there is nothing to recover, reset or delete.
 - **There is no mailing list.** Watching the [repository](https://github.com/ranuts/document) is how you follow changes; the [changelog](/changelog) lists what shipped.

@@ -1,20 +1,20 @@
 ---
-title: Dokumenteneditor — ohne Anmeldung, ohne Upload · kostenlos und quelloffen
-description: Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV im Browser bearbeiten — ohne Anmeldung, ohne Login, ohne Upload. Kostenlos, quelloffen (AGPL-3.0) und offlinefähig — Ihre Dateien verlassen Ihr Gerät nie.
+title: 'Dokumenteneditor — ohne Anmeldung, kostenlos und quelloffen'
+description: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Kein Konto · keine Anmeldung
-h1: Kostenloser Online-Dokumenteneditor — ohne Anmeldung, ohne Upload
-lead: Bearbeiten Sie Word- (DOCX), Excel- (XLSX), PowerPoint- (PPTX) und CSV-Dateien direkt im Browser. Kein Konto, kein Login, kein Abo — und Ihre Dateien werden nirgendwohin hochgeladen.
+h1: Kostenloser Online-Dokumenteneditor — ohne Anmeldung, Open Source
+lead: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.'
 cta: Editor öffnen →
 ctaHref: /de/
-ogDescription: DOCX, XLSX, PPTX und CSV im Browser bearbeiten — ohne Anmeldung, ohne Upload, offlinefähig. Kostenlos und quelloffen.
+ogDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: Editor ohne Anmeldung
 howTo: Ein Dokument ohne Anmeldung bearbeiten
-appDescription: DOCX, XLSX, PPTX und CSV im Browser bearbeiten — ohne Anmeldung, ohne Login, ohne Upload.
+appDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
 
-Die meisten „kostenlosen“ Online-Editoren verlangen zuerst ein Konto und laden Ihr Dokument dann stillschweigend auf ihre Server. Dieser tut beides nicht. Alles läuft lokal im Browser mit WebAssembly, Ihre Dateien bleiben also auf Ihrem Gerät. Schließen Sie den Tab, und es bleibt nichts zurück.
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
-Der ganze Editor ist die nach WebAssembly kompilierte OnlyOffice-Engine, die in der Seite läuft. Es gibt also keinen Server, der arbeitet, und keine Warteschlange — Sie öffnen eine Datei und sie ist da. Er beherrscht die alltäglichen Office-Formate (DOCX, XLSX, PPTX) sowie CSV und exportiert nach PDF, TXT, HTML oder CSV. Da es eine installierbare PWA ist, können Sie sie auf den Startbildschirm legen und ganz ohne Verbindung weiterarbeiten.
+Word-, Excel- und PowerPoint-Dateien im Browser bearbeiten, ohne Office-Installation oder Konto. Dokumente werden auf Ihrem Gerät verarbeitet. Der Quellcode ist öffentlich einsehbar. Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 
 ## So funktioniert es
 
@@ -26,9 +26,9 @@ Der ganze Editor ist die nach WebAssembly kompilierte OnlyOffice-Engine, die in 
 ## Warum Leute ihn nutzen
 
 - **Keine Anmeldung, kein Login, kein Abo** — Seite öffnen und loslegen.
-- **Kein Upload** — 100% clientseitig; Ihre Dokumente verlassen Ihr Gerät nie.
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 - **Alle gängigen Formate** — DOCX, XLSX, PPTX und CSV, mit OnlyOffice.
-- **Funktioniert offline** — als PWA installierbar und ohne Verbindung nutzbar.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 - **Quelloffen** — prüfen Sie ihn selbst oder betreiben Sie eine eigene Kopie.
 
 ## Häufige Fragen
@@ -39,7 +39,7 @@ Nein. Es gibt keine Anmeldung, kein Login und kein Konto irgendeiner Art. Öffne
 
 ### Werden meine Dateien auf einen Server hochgeladen?
 
-Nein. Das Bearbeiten passiert vollständig lokal im Browser mit WebAssembly. Ihre Dokumente verlassen Ihr Gerät nie.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Ist es wirklich kostenlos?
 
@@ -47,7 +47,7 @@ Ja. Kostenlos und quelloffen unter der AGPL-3.0. Sie können ihn auch selbst bet
 
 ### Kann ich ihn offline nutzen?
 
-Ja. Es ist eine installierbare PWA und funktioniert nach dem ersten Laden vollständig offline.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.
 
 ### Welche Dateiformate kann ich bearbeiten?
 
@@ -60,3 +60,7 @@ Nein. Es ist tatsächlich kostenlos und quelloffen unter AGPL-3.0, ohne Paywall 
 ### Kann ich ihn auf dem Handy nutzen?
 
 Ja. Er läuft in jedem modernen mobilen Browser, Sie können also auf Handy oder Tablet bearbeiten, ohne eine App zu installieren.
+
+### Was bleibt nach dem Schließen des Tabs?
+
+Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.

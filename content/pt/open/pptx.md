@@ -1,20 +1,20 @@
 ---
-title: Abrir PPTX sem o PowerPoint — grátis, online, sem upload
-description: Abra e edite uma apresentação PPTX (PowerPoint) sem o Microsoft PowerPoint e sem conta. Slides, imagens e layout preservados, grátis e de código aberto, roda no navegador — nada é enviado.
+title: 'Abrir PPTX sem o PowerPoint — grátis, online, código aberto'
+description: 'Abra e edite arquivos PPTX no navegador sem Microsoft PowerPoint nem conta. Processamento de documentos sem servidor.'
 eyebrow: Abrir · .pptx
 h1: Abrir um arquivo PPTX sem o PowerPoint
-lead: 'Precisa abrir uma apresentação **.pptx** e não tem o PowerPoint? Veja e edite direto no navegador — slides, imagens e layout intactos. Nada para instalar, nada para enviar.'
+lead: 'Abra e edite arquivos PPTX no navegador sem Microsoft PowerPoint nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu PPTX →
 ctaHref: /pt/
-ogDescription: Abra e edite apresentações PPTX sem o PowerPoint ou conta. Código aberto, nada é enviado.
+ogDescription: 'Abra e edite arquivos PPTX no navegador sem Microsoft PowerPoint nem conta. Processamento de documentos sem servidor.'
 breadcrumb: Abrir PPTX
 howTo: Como abrir um arquivo PPTX sem o PowerPoint
-appDescription: Abra e edite apresentações PPTX (PowerPoint) no navegador, sem PowerPoint, sem conta e sem upload.
+appDescription: 'Abra e edite arquivos PPTX no navegador sem Microsoft PowerPoint nem conta. Processamento de documentos sem servidor.'
 ---
 
-PPTX é o formato do Microsoft PowerPoint. Este editor o abre com o motor do OnlyOffice, então layouts de slide, imagens, formas e texto são exibidos corretamente. Roda localmente com WebAssembly, então sua apresentação fica no seu dispositivo.
+Abra e edite arquivos PPTX no navegador sem Microsoft PowerPoint nem conta. Processamento de documentos sem servidor.
 
-O motor de apresentações do OnlyOffice é compilado para WebAssembly e roda dentro da sua aba. Quando você escolhe uma apresentação, ela é lida direto do disco para a memória — sem upload e sem ida e volta a um servidor — então uma proposta confidencial ou um material interno nunca sai da sua máquina. Ele abre tanto o **.pptx** moderno quanto o antigo **.ppt** binário, e exporta seus slides de volta para PPTX ou PDF.
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
 ## Como funciona
 
@@ -28,8 +28,8 @@ O motor de apresentações do OnlyOffice é compilado para WebAssembly e roda de
 - Abrir qualquer apresentação **.pptx** (e .ppt) com o layout completo
 - Editar slides e baixar de novo como PPTX ou PDF
 - Sem Microsoft PowerPoint e sem conta
-- Sem upload — sua apresentação nunca sai do dispositivo
-- Funciona offline como aplicativo instalável
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 
 Seja um colega que mandou uma apresentação para revisar, seja porque você precisa de dois slides para a sua própria palestra, seja só para ler um **.pptx** numa máquina sem Office, abrir leva alguns segundos. Como a renderização vem do mesmo motor do OnlyOffice usado nos aplicativos de desktop, o que você vê é o que um colega no PowerPoint verá — dá para revisar ou ajustar com confiança e devolver na hora.
 
@@ -45,7 +45,7 @@ Sim. O motor do OnlyOffice preserva layouts de slide, imagens, formas e texto.
 
 ### Minha apresentação é enviada?
 
-Não. Ela roda localmente com WebAssembly e nunca sai do seu dispositivo.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Dá para editar os slides, não só visualizar?
 

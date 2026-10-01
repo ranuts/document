@@ -1,15 +1,15 @@
 ---
-title: Integrar un editor de documentos en tu web — iframe + API postMessage
-description: Integra un editor de DOCX, XLSX, PPTX y CSV en tu aplicación web con un iframe y una API postMessage. La autenticación y los archivos se quedan en tu app: el editor nunca ve tus tokens. Código abierto (AGPL-3.0), autoalojable, marca blanca.
+title: 'Integrar un editor de documentos en tu web — iframe + API postMessage'
+description: 'Integra un editor con iframe y postMessage; la aplicación anfitriona controla archivos y subidas.'
 eyebrow: Desarrolladores · Integración
 h1: Integrar un editor de documentos en tu aplicación web
 lead: 'Añade a tu producto un editor de **DOCX, XLSX, PPTX y CSV** con un solo iframe y una API **postMessage**. Tu aplicación conserva la autenticación, el acceso a los archivos y la subida; el editor solo edita, y nunca ve los tokens de tus usuarios.'
 cta: Abrir la demo en vivo →
 ctaHref: /embed-demo.html
-ogDescription: Añade un editor de DOCX/XLSX/PPTX/CSV a tu app con un iframe. La auth se queda en tu app; el editor nunca ve tus tokens. Código abierto y autoalojable.
+ogDescription: 'Integra un editor con iframe y postMessage; la aplicación anfitriona controla archivos y subidas.'
 breadcrumb: Embed Document Editor
 howTo: Cómo integrar un editor de documentos en tu web
-appDescription: Un editor de documentos en el navegador que se integra en tu propia aplicación web mediante un iframe y una API postMessage.
+appDescription: 'Integra un editor con iframe y postMessage; la aplicación anfitriona controla archivos y subidas.'
 ---
 
 El editor se ejecuta por completo en el navegador con el motor WebAssembly de OnlyOffice, así que los documentos se representan y se editan en el cliente: no levantas ningún servidor de documentos. El patrón recomendado mantiene una frontera limpia: **la aplicación padre se encarga de la autenticación, la obtención y el guardado; el iframe se encarga solo de editar.** Los tokens, las cookies y las API de negocio se quedan en tu app.

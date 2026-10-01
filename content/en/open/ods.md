@@ -1,16 +1,20 @@
 ---
-title: Open an ODS File Without LibreOffice — Free, in Your Browser
-description: Open and edit an ODS (OpenDocument Spreadsheet) file in your browser — no LibreOffice, no Excel, no account. Formulas recalculate. Save back as ODS, XLSX, CSV or PDF. Nothing uploaded.
+title: 'Open an ODS File Without LibreOffice — Free, in Your Browser'
+description: 'Open ODS files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .ods
 h1: Open an ODS File Without LibreOffice
-lead: Got an **.ods** spreadsheet and no LibreOffice? Open it in your browser with the formulas intact, edit it, and save it back as ODS — or as XLSX, CSV or PDF. Nothing uploaded.
+lead: 'Got a ODS spreadsheet but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your ODS →
 ctaHref: /
-ogDescription: Open and edit ODS spreadsheets in the browser without LibreOffice. Formulas recalculate. Nothing uploaded.
+ogDescription: 'Open ODS files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: ods
 howTo: How to open an ODS file without LibreOffice
-appDescription: Open and edit ODS (OpenDocument Spreadsheet) files in the browser without LibreOffice, with no upload and no account.
+appDescription: 'Open ODS files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
+
+You do not need to install an office suite just to open an occasional file. Export to common office formats when you are ready to keep working or share.
+
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -53,8 +57,8 @@ Yes. Workbooks with several tabs open with all their sheets intact.
 
 ### Is my spreadsheet uploaded?
 
-No. It is opened locally in your browser with WebAssembly and never leaves your device.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Does it work offline?
 
-Yes. Once loaded it is an installable PWA and keeps working with no internet connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

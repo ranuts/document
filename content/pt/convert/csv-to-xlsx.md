@@ -1,15 +1,15 @@
 ---
-title: Converter CSV em XLSX no navegador — grátis, sem upload
-description: Converta um arquivo CSV em XLSX (Excel) inteiramente no navegador — abra e exporte para XLSX. Grátis, de código aberto, nada é enviado, funciona offline. Sem Excel e sem conta.
+title: 'Converter CSV em XLSX no navegador — grátis, código aberto'
+description: 'Converta CSV em XLSX localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 eyebrow: Converter · .csv → .xlsx
 h1: Converter CSV em XLSX no navegador
-lead: 'Transforme um arquivo **.csv** simples em um **.xlsx** do Excel com formatação — sem enviar para lugar nenhum. Toda a conversão acontece localmente, no seu navegador.'
+lead: 'Converta CSV em XLSX localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu CSV →
 ctaHref: /pt/
-ogDescription: Converta CSV em XLSX no navegador — nada é enviado, sem Excel, sem conta. Código aberto.
+ogDescription: 'Converta CSV em XLSX localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 breadcrumb: CSV para XLSX
 howTo: Como converter CSV em XLSX no navegador
-appDescription: Converta CSV em XLSX no navegador abrindo o arquivo e exportando para XLSX — sem upload e sem conta.
+appDescription: 'Converta CSV em XLSX localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 ---
 
 ## Como funciona
@@ -33,7 +33,7 @@ Abra o CSV no editor e use Baixar como / Salvar como XLSX — a conversão roda 
 
 ### Meu arquivo é enviado para converter?
 
-Não. Tudo roda no seu navegador, então seu CSV nunca é enviado.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Preciso do Excel ou de uma conta?
 
@@ -49,4 +49,4 @@ Sim — veja [XLSX para CSV](/pt/convert/xlsx-to-csv).
 
 ### A conversão funciona offline?
 
-Sim. Depois de carregado é um PWA instalável, então continua funcionando sem conexão com a internet.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.

@@ -1,20 +1,20 @@
 ---
-title: Open XLSX Without Excel — Free Online, No Upload
-description: Open and edit an XLSX (Excel) spreadsheet without Microsoft Excel or a 365 account. Formulas and formatting preserved, free and open source, runs in your browser — nothing is uploaded.
+title: 'Open XLSX Without Excel — Free Online, Open source'
+description: 'Open XLSX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .xlsx
 h1: Open an XLSX File Without Excel
-lead: Someone sent you an **.xlsx** spreadsheet but you do not have Excel — or you would rather not pay for 365? Open it in your browser and keep the formulas intact. Nothing to install, nothing uploaded.
+lead: 'Got a Excel spreadsheet but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your XLSX →
 ctaHref: /
-ogDescription: Open and edit XLSX spreadsheets without Excel or an account. Formulas preserved, open source, nothing uploaded.
+ogDescription: 'Open XLSX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: Open XLSX
 howTo: How to open an XLSX file without Excel
-appDescription: Open and edit XLSX (Excel) spreadsheets in the browser without Excel, no account and no upload.
+appDescription: 'Open XLSX files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
 
-XLSX is the Microsoft Excel format. This editor opens it with the OnlyOffice engine, so cell formulas, number formats, colours and multiple sheets all survive — it is a real spreadsheet, not a read-only table. It runs locally with WebAssembly, so the file stays on your device.
+Check a budget, update data, work with formulas and charts, or switch between worksheets. Save as XLSX or export a PDF or CSV.
 
-The OnlyOffice spreadsheet engine is compiled to WebAssembly and runs inside your browser tab. Your file is read straight from disk into memory — there is no upload and no server — so private data never leaves your device. Because it is a live calculation engine and not a static preview, formulas recalculate as you edit. It reads the modern **.xlsx** format as well as older **.xls** and plain **.csv**, and can export back to XLSX or CSV.
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -25,11 +25,11 @@ The OnlyOffice spreadsheet engine is compiled to WebAssembly and runs inside you
 
 ## What you can do
 
-- Open any **.xlsx** (and .xls, .csv) file with formulas preserved
+- Open **.xlsx** (and .xls, .csv) file with formulas preserved
 - Edit cells, then download again as XLSX or CSV
 - No Microsoft Excel and no 365 subscription
-- No upload — your spreadsheet never leaves your device
-- Works offline as an installable app
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
+- Try the features you need while online, then use what your browser has saved offline. Opening files from links still needs a connection.
 
 It is just as good for a quick read-only look as for real work: sort a column, fix a figure, add a row or a formula, then hand the file back in the same format. This is handy when someone emails you a budget or a data export and you do not want to install Excel, pay for 365, or trust a random web converter with numbers you would rather keep private.
 
@@ -45,7 +45,7 @@ Yes. The OnlyOffice engine preserves formulas, number formats and styling.
 
 ### Is my spreadsheet uploaded?
 
-No. It runs locally with WebAssembly and never leaves your device.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Can I export it to CSV?
 

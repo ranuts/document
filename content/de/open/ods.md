@@ -1,16 +1,20 @@
 ---
-title: Eine ODS-Datei ohne LibreOffice öffnen — kostenlos, im Browser
-description: Eine ODS-Datei (OpenDocument-Tabelle) im Browser öffnen und bearbeiten — ohne LibreOffice, ohne Konto. Formeln bleiben erhalten; als ODS, XLSX, CSV oder PDF zurückspeichern. Nichts wird hochgeladen.
+title: 'Eine ODS-Datei ohne LibreOffice öffnen — kostenlos, im Browser'
+description: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 eyebrow: Öffnen · .ods
 h1: Eine ODS-Datei ohne LibreOffice öffnen
-lead: 'Sie haben eine **.ods**-Tabelle und kein LibreOffice? Öffnen Sie sie im Browser samt Formeln, bearbeiten Sie sie und speichern Sie sie als ODS zurück — oder als XLSX, CSV oder PDF. Nichts wird hochgeladen.'
+lead: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 cta: ODS öffnen →
 ctaHref: /de/
-ogDescription: ODS im Browser ohne LibreOffice öffnen und bearbeiten. Formeln bleiben erhalten; als ODS, XLSX, CSV oder PDF speichern. Nichts wird hochgeladen.
+ogDescription: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 breadcrumb: ods
 howTo: Eine ODS-Datei ohne LibreOffice öffnen
-appDescription: ODS-Dateien (OpenDocument-Tabellen) im Browser öffnen und bearbeiten — ohne LibreOffice, ohne Upload, ohne Konto.
+appDescription: 'ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.'
 ---
+
+ODS-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Dokumentverarbeitung ohne Server.
+
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
 ## So funktioniert es
 

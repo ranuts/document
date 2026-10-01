@@ -1,26 +1,26 @@
 ---
-title: Privater Dokumenteneditor — Ihre Dateien verlassen Ihr Gerät nie
-description: Ein privater Dokumenteneditor, der Ihre Dateien auf Ihrem Gerät behält. Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV 100% lokal im Browser bearbeiten — nichts wird hochgeladen. Kostenlos, quelloffen (AGPL-3.0), offlinefähig.
-eyebrow: Privat · 100% auf dem Gerät
+title: 'Privater Dokumenteneditor — Open Source, Verarbeitung auf Ihrem Gerät'
+description: 'Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.'
+eyebrow: 'Lokale Bearbeitung'
 h1: Suchen Sie einen Dokumenteneditor, der Ihre Dateien privat hält?
-lead: Bearbeiten Sie Word- (DOCX), Excel- (XLSX), PowerPoint- (PPTX) und CSV-Dateien direkt im Browser — die Datei bleibt dabei von Anfang bis Ende auf Ihrem eigenen Gerät. Nichts wird hochgeladen, und es gibt kein Konto anzulegen.
+lead: 'Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.'
 cta: Editor öffnen →
 ctaHref: /de/
-ogDescription: DOCX, XLSX, PPTX und CSV 100% lokal im Browser bearbeiten — nichts wird hochgeladen, kein Konto. Kostenlos und quelloffen.
+ogDescription: 'Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.'
 breadcrumb: Privater Editor
-appDescription: Ein privater Dokumenteneditor, der 100% lokal im Browser läuft. DOCX, XLSX, PPTX und CSV bearbeiten, ohne dass etwas hochgeladen wird.
+appDescription: 'Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.'
 ---
 
-Datenschutz ist hier einfach und wörtlich gemeint: Das Dokument, das Sie öffnen, verlässt Ihren Computer nie. Alles läuft lokal im Browser mit WebAssembly, also passieren Öffnen, Bearbeiten und Herunterladen auf Ihrem Rechner. Es gibt keine serverseitige Kopie Ihrer Datei, um die Sie sich sorgen müssten, und keinen Cloud-Ordner, der sie anderswohin synchronisiert.
+Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 
-Damit eignet er sich für Verträge, Finanztabellen, ärztliche Notizen, Personalunterlagen — alles, was Sie ungern Dritten geben. Sie bekommen einen originalgetreuen Editor auf Basis der OnlyOffice-Engine, in dem Schriften, Tabellen, Formeln und Layout erhalten bleiben, ohne den Preis, die Datei vorher wegzuschicken.
+Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV. Komplexe Layouts und besondere Schriftarten können abweichen; prüfen Sie das Ergebnis vor dem Teilen.
 
 ## Was Sie tun können
 
-- **Jede Datei bleibt auf dem Gerät** — 100% clientseitig; Ihre Dokumente verlassen Ihren Rechner nie.
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 - **Die gängigen Formate bearbeiten** — DOCX, XLSX, PPTX und CSV, mit voller Formatierung.
 - **Ohne Konto** — keine Anmeldung, kein Login, nichts zu registrieren.
-- **Offline arbeiten** — als PWA installierbar und ohne Verbindung nutzbar.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 - **Das Versprechen überprüfen** — den quelloffenen Code lesen oder eine eigene Kopie betreiben.
 
 ## So funktioniert es
@@ -38,7 +38,7 @@ Ihre Dateien werden vollständig in Ihrem eigenen Browser mit WebAssembly geöff
 
 ### Werden meine Dateien jemals hochgeladen?
 
-Nein. Die gesamte Verarbeitung ist 100% clientseitig. Ihre DOCX, XLSX, PPTX oder CSV wird lokal gelesen und geschrieben und verlässt Ihr Gerät nie.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Brauche ich ein Konto, damit meine Dateien privat bleiben?
 
@@ -46,8 +46,12 @@ Kein Konto, keine Anmeldung und kein Login. Sie öffnen den Editor und arbeiten 
 
 ### Kann ich überprüfen, dass nichts hochgeladen wird?
 
-Ja. Der gesamte Editor ist quelloffen unter der AGPL-3.0 — Sie können den Code lesen, den Netzwerk-Tab beobachten oder eine eigene Kopie betreiben.
+Prüfen Sie im Netzwerk-Tab das Öffnen, Bearbeiten und Speichern einer lokalen Datei. Testen Sie optionale KI, Datei-URLs und einbettende Anwendungen separat; deren Anfragen gehören nicht zur rein lokalen Kernbearbeitung. Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Funktioniert er auch ohne Internetverbindung?
 
-Ja. Es ist eine installierbare PWA und funktioniert nach dem ersten Laden vollständig offline, was Ihre Arbeit vollständig auf Ihrem Rechner hält.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.
+
+### Was bleibt nach dem Schließen des Tabs?
+
+Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.

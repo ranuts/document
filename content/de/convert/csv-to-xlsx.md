@@ -1,15 +1,15 @@
 ---
-title: CSV im Browser in XLSX umwandeln — kostenlos, ohne Upload
-description: Eine CSV-Datei vollständig im Browser in XLSX (Excel) umwandeln — öffnen und als XLSX exportieren. Kostenlos, quelloffen, nichts wird hochgeladen, offlinefähig. Weder Excel noch ein Konto nötig.
+title: 'CSV im Browser in XLSX umwandeln — kostenlos, Open Source'
+description: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 eyebrow: Umwandeln · .csv → .xlsx
 h1: CSV im Browser in XLSX umwandeln
-lead: 'Eine einfache **.csv**-Datei in eine formatierte Excel-**.xlsx** verwandeln — ohne sie irgendwohin hochzuladen. Die gesamte Umwandlung passiert lokal in Ihrem Browser.'
+lead: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 cta: CSV öffnen →
 ctaHref: /de/
-ogDescription: CSV im Browser in XLSX umwandeln — nichts wird hochgeladen, kein Excel, kein Konto. Quelloffen.
+ogDescription: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 breadcrumb: CSV zu XLSX
 howTo: CSV im Browser in XLSX umwandeln
-appDescription: CSV im Browser in XLSX umwandeln, indem die Datei geöffnet und als XLSX exportiert wird — ohne Upload, ohne Konto.
+appDescription: 'CSV lokal im Browser in XLSX umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 ---
 
 ## So funktioniert es
@@ -33,7 +33,7 @@ Kundenlisten, Buchhaltungsexporte, Log-Auszüge — je weniger Sie sie einem fre
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Nein. Alles läuft im Browser, Ihre CSV wird also nie hochgeladen.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Brauche ich Excel oder ein Konto?
 
@@ -49,4 +49,4 @@ Ja — siehe [XLSX zu CSV](/de/convert/xlsx-to-csv).
 
 ### Funktioniert die Umwandlung offline?
 
-Ja. Einmal geladen ist es eine installierbare PWA und funktioniert ohne Internetverbindung weiter.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.

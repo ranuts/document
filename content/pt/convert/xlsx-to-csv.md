@@ -1,15 +1,15 @@
 ---
-title: Converter XLSX em CSV no navegador — grátis, sem upload
-description: Converta um arquivo XLSX (Excel) em CSV inteiramente no navegador — abra e exporte para CSV. Grátis, de código aberto, nada é enviado, funciona offline. Sem Excel e sem conta.
+title: 'Converter XLSX em CSV no navegador — grátis, código aberto'
+description: 'Converta XLSX em CSV localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 eyebrow: Converter · .xlsx → .csv
 h1: Converter XLSX em CSV no navegador
-lead: 'Transforme um arquivo **.xlsx** do Excel em um **.csv** simples — sem enviar para lugar nenhum. Toda a conversão acontece localmente, no seu navegador.'
+lead: 'Converta XLSX em CSV localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 cta: Abrir seu XLSX →
 ctaHref: /pt/
-ogDescription: Converta XLSX em CSV no navegador — nada é enviado, sem Excel, sem conta. Código aberto.
+ogDescription: 'Converta XLSX em CSV localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 breadcrumb: XLSX para CSV
 howTo: Como converter XLSX em CSV no navegador
-appDescription: Converta XLSX em CSV no navegador abrindo a planilha e exportando para CSV — sem upload e sem conta.
+appDescription: 'Converta XLSX em CSV localmente no navegador sem Office nem conta. Processamento de documentos sem servidor.'
 ---
 
 ## Como funciona
@@ -19,7 +19,7 @@ appDescription: Converta XLSX em CSV no navegador abrindo a planilha e exportand
 3. Escolha **Baixar como / Salvar como** e selecione **CSV**.
 4. O CSV é gerado no seu dispositivo e baixado — nada é enviado.
 
-A maioria dos conversores de «XLSX para CSV» envia sua planilha para os servidores deles primeiro. Este não: ele abre o arquivo localmente com o motor do OnlyOffice, então seus dados continuam privados. Sem Excel, sem conta, funciona offline.
+A maioria dos conversores de «XLSX para CSV» envia sua planilha para os servidores deles primeiro. Este não: ele abre o arquivo localmente com o motor do OnlyOffice, então seus dados continuam privados. Sem Excel, sem conta, funciona offline. Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 
 A conversão em si é feita pelo motor x2t do OnlyOffice compilado para WebAssembly. Ele cobre os formatos de escritório e de texto do dia a dia — Word, Excel e PowerPoint, além de PDF, TXT, HTML e CSV — então serve bem para transformar uma planilha em um CSV portátil. Como tudo roda dentro da aba do navegador, não há fila de upload, nem limite de tamanho imposto por servidor, e seus dados não passam pela rede. Lembre que o CSV é um formato plano de uma única tabela: a planilha ativa é exportada e cada fórmula é gravada como o valor calculado.
 
@@ -33,7 +33,7 @@ Abra o XLSX no editor e use Baixar como / Salvar como CSV — a conversão roda 
 
 ### Meu arquivo é enviado para converter?
 
-Não. Tudo roda no seu navegador, então sua planilha nunca é enviada.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Preciso do Excel ou de uma conta?
 
@@ -53,4 +53,4 @@ O CSV guarda valores simples, então as fórmulas são gravadas como seus result
 
 ### O conversor funciona offline?
 
-Sim. Depois de carregado é um PWA instalável, então continua funcionando sem conexão com a internet.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.

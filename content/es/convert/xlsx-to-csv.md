@@ -1,15 +1,15 @@
 ---
-title: Convertir XLSX a CSV en el navegador — gratis, sin subirlo
-description: Convierte un archivo XLSX (Excel) a CSV por completo en tu navegador: ábrelo y expórtalo a CSV. Gratis, de código abierto, no se sube nada, funciona sin conexión. No hace falta Excel ni cuenta.
+title: 'Convertir XLSX a CSV en el navegador — gratis, código abierto'
+description: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Convertir · .xlsx → .csv
 h1: Convertir XLSX a CSV en el navegador
-lead: 'Convierte un archivo **.xlsx** de Excel en un **.csv** plano, sin subirlo a ningún sitio. Toda la conversión ocurre en local, en tu navegador.'
+lead: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu XLSX →
 ctaHref: /es/
-ogDescription: Convierte XLSX a CSV en tu navegador: nada se sube, sin Excel, sin cuenta. Código abierto.
+ogDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: XLSX a CSV
 howTo: Cómo convertir XLSX a CSV en el navegador
-appDescription: Convierte XLSX a CSV en el navegador abriendo la hoja y exportándola a CSV, sin subidas y sin cuenta.
+appDescription: 'Convierte XLSX a CSV localmente en el navegador sin Office ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
 ## Cómo funciona
@@ -19,7 +19,7 @@ appDescription: Convierte XLSX a CSV en el navegador abriendo la hoja y exportá
 3. Elige **Descargar como / Guardar como** y selecciona **CSV**.
 4. El CSV se genera en tu dispositivo y se descarga: no se sube nada.
 
-La mayoría de los conversores de «XLSX a CSV» suben primero tu hoja de cálculo a sus servidores. Este no: abre el archivo en local con el motor de OnlyOffice, así que tus datos siguen siendo privados. Sin Excel, sin cuenta, funciona sin conexión.
+La mayoría de los conversores de «XLSX a CSV» suben primero tu hoja de cálculo a sus servidores. Este no: abre el archivo en local con el motor de OnlyOffice, así que tus datos siguen siendo privados. Sin Excel, sin cuenta, funciona sin conexión. Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 La conversión la realiza el motor x2t de OnlyOffice compilado a WebAssembly. Cubre los formatos habituales de oficina y de texto — Word, Excel y PowerPoint, además de PDF, TXT, HTML y CSV — así que encaja bien para convertir una hoja en un CSV portátil. Como todo se ejecuta en la pestaña del navegador, no hay cola de subida, ni límite de tamaño impuesto por un servidor, ni datos viajando por la red. Ten en cuenta que el CSV es un formato plano de una sola tabla: se exporta la hoja activa y cada fórmula se escribe como su resultado calculado.
 
@@ -33,7 +33,7 @@ Abre el XLSX en el editor y usa Descargar como / Guardar como CSV: la conversió
 
 ### ¿Se sube mi archivo para convertirlo?
 
-No. Todo se ejecuta en tu navegador, así que tu hoja de cálculo nunca se sube.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Necesito Excel o una cuenta?
 
@@ -53,4 +53,4 @@ El CSV almacena valores planos, así que las fórmulas se escriben como sus resu
 
 ### ¿El conversor funciona sin conexión?
 
-Sí. Una vez cargada es una PWA instalable, así que sigue funcionando sin conexión a internet.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.

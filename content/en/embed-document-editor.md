@@ -1,15 +1,15 @@
 ---
-title: Embed a Document Editor in Your Website — iframe + postMessage API
-description: Embed a DOCX, XLSX, PPTX and CSV editor into your web app with one iframe and a postMessage API. Auth and files stay in your app — the editor never sees your tokens. Open source (AGPL-3.0), self-hostable, white-label.
+title: 'Embed a Document Editor in Your Website — iframe + postMessage API'
+description: 'Embed a document editor through iframe and postMessage; the host controls file access and uploads.'
 eyebrow: Developers · Embed
 h1: Embed a Document Editor in Your Web App
 lead: Add a **DOCX, XLSX, PPTX and CSV** editor to your product with a single iframe and a **postMessage** API. Your app keeps auth, file access and upload — the editor just edits, and never sees your users' tokens.
 cta: Open the live demo →
 ctaHref: /embed-demo.html
-ogDescription: Drop a DOCX/XLSX/PPTX/CSV editor into your app with one iframe. Auth stays in your app; the editor never sees your tokens. Open source & self-hostable.
+ogDescription: 'Embed a document editor through iframe and postMessage; the host controls file access and uploads.'
 breadcrumb: Embed Document Editor
 howTo: How to embed a document editor in your website
-appDescription: 'An embeddable DOCX/XLSX/PPTX/CSV editor: drop it into any web app with an iframe and drive it with a postMessage API. Authentication and file access stay in the parent app.'
+appDescription: 'Embed a document editor through iframe and postMessage; the host controls file access and uploads.'
 ---
 
 The editor runs entirely in the browser with the OnlyOffice WebAssembly engine, so documents are rendered and edited on the client — you don't stand up a document server. The recommended pattern keeps a clean boundary: **the parent app handles authentication, fetching and saving; the iframe handles editing only.** Tokens, cookies and business APIs stay in your app.

@@ -1,20 +1,20 @@
 ---
-title: Abrir PDF sin Acrobat — leer y anotar en el navegador, sin subirlo
-description: 'Abre un PDF sin Adobe Acrobat y sin subirlo: léelo, añade comentarios y anotaciones de texto y guárdalo de vuelta como PDF. Gratis, de código abierto, funciona por completo en tu navegador.'
+title: 'Abrir PDF sin Acrobat — leer y anotar en el navegador, código abierto'
+description: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .pdf
-h1: Abrir un archivo PDF sin Acrobat — y sin subirlo
-lead: Un contrato, un extracto bancario, un formulario escaneado: necesitas leerlo, quizá dejar algún comentario, y no quieres mandarlo al servidor de una «herramienta PDF en línea gratis». Ábrelo aquí mismo, en tu navegador. Nada que instalar, nada que subir.
+h1: Abrir un archivo PDF sin Acrobat — y código abierto
+lead: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu PDF →
 ctaHref: /es/
-ogDescription: Abre, lee y anota archivos PDF en tu navegador sin Acrobat ni cuenta. Gratis, de código abierto, nada se sube.
+ogDescription: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: Abrir PDF
 howTo: Cómo abrir y anotar un PDF sin Acrobat
-appDescription: Abre, lee y anota archivos PDF en el navegador, sin Adobe Acrobat, sin cuenta y sin subidas.
+appDescription: 'Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
-El PDF es un formato de maquetación fija. Este editor lo abre directamente con el motor PDF de OnlyOffice, así que el texto, los escaneados y los formularios se ven como quien los envió pretendía. Todo se ejecuta en local con WebAssembly, de modo que el archivo se queda en tu dispositivo.
+Abre, lee y anota PDF en el navegador sin Acrobat ni cuenta. Procesamiento de documentos sin servidor.
 
-La mayoría de las «herramientas PDF en línea» empiezan pidiéndote que subas el archivo a sus servidores. Esta no: el archivo se lee directamente del disco a tu pestaña, y las anotaciones se escriben de vuelta en local, que es justo lo que importa con la clase de documentos que suelen ser PDF — contratos, extractos, cualquier cosa que no debería acabar en el servidor de otra persona.
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 
@@ -29,8 +29,8 @@ La mayoría de las «herramientas PDF en línea» empiezan pidiéndote que subas
 - Añadir comentarios y anotaciones de texto libre y guardarlo de vuelta como PDF
 - Crear un PDF a partir de un DOCX, XLSX o PPTX con _Descargar como PDF_
 - Sin Adobe Acrobat, sin Reader, sin cuenta, sin Copilot
-- Sin subidas: tu PDF nunca sale de tu dispositivo
-- Funciona sin conexión como aplicación instalable
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
+- Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 ## Preguntas frecuentes
 

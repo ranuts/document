@@ -1,6 +1,6 @@
 ---
-title: Über diesen Editor — wer ihn baut und warum
-description: Wer hinter edit.chaxus.com steht, was der Editor tatsächlich tut, wie er gebaut ist und wo der Quellcode liegt. Ein quelloffener (AGPL-3.0) Editor im Browser für Word-, Excel-, PowerPoint-, CSV- und PDF-Dateien, der Ihre Dokumente nie hochlädt.
+title: 'Über diesen Editor — wer ihn baut und warum'
+description: 'Über diesen quelloffenen Browser-Editor, seine Autoren, den Quellcode und die Datenverarbeitung. Dokumentverarbeitung ohne Server.'
 eyebrow: Über uns
 breadcrumb: Über diesen Editor
 h1: Über diesen Editor
@@ -11,9 +11,9 @@ lead: Wer das hier baut, was es wirklich kann — und wie Sie beides selbst übe
 
 Ein **Editor für Office-Dokumente im Browser**. Sie öffnen eine Word- (DOCX), Excel- (XLSX), PowerPoint- (PPTX), CSV- oder PDF-Datei und bearbeiten sie direkt im Browser-Tab.
 
-Das Entscheidende: **Ihre Datei verlässt Ihr Gerät nie.** Es gibt keinen Upload-Schritt, kein Konto und keine serverseitige Kopie Ihres Dokuments. Die Bearbeitungs-Engine läuft in Ihrem Browser, die Datei geht also von Ihrer Festplatte in den Tab und wieder zurück — dazwischen liegt nichts.
+Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
-Diese eine Eigenschaft bestimmt fast alle Entwurfsentscheidungen hier: kein Registrierungsprozess, kein Cloud-Speicher, keine Telemetrie, die Dokumentinhalte transportieren könnte, und ein Offline-Modus, der weiterarbeitet, wenn das Netz es nicht tut.
+Bei aktivierter automatischer Speicherung bleiben Wiederherstellungskopien nach dem letzten Bearbeiten oder Öffnen 7 Tage in diesem Browser. Unter /history können Sie sie löschen oder die automatische Speicherung deaktivieren. Browserdaten und noch nicht gespeicherte Änderungen können verloren gehen; speichern Sie wichtige Änderungen als Datei.
 
 ## Wer das baut
 
@@ -26,8 +26,8 @@ Es ist ein persönliches Open-Source-Projekt, kein Firmenprodukt. Dahinter stehe
 Behauptungen über Datenschutz sind billig. So können Sie sie selbst nachprüfen:
 
 - **Lesen Sie den Quellcode.** Alles ist quelloffen unter **AGPL-3.0** auf [github.com/ranuts/document](https://github.com/ranuts/document). Die Lizenz verlangt, dass auch eine gehostete Abwandlung ihren Quellcode veröffentlicht.
-- **Schauen Sie in den Netzwerk-Tab.** Öffnen Sie die Entwicklerwerkzeuge, laden Sie ein Dokument, bearbeiten Sie es und sehen Sie sich die Anfragen an. Sie werden Ihre Datei nirgendwohin gehen sehen.
-- **Trennen Sie die Verbindung.** Laden Sie die Seite einmal, gehen Sie offline, öffnen und bearbeiten Sie dann eine Datei. Es funktioniert weiter — was nur möglich ist, weil lokal gerechnet wird.
+- Prüfen Sie im Netzwerk-Tab das Öffnen, Bearbeiten und Speichern einer lokalen Datei. Testen Sie optionale KI, Datei-URLs und einbettende Anwendungen separat; deren Anfragen gehören nicht zur rein lokalen Kernbearbeitung.
+- Testen Sie die benötigten Funktionen online. Was Ihr Browser gespeichert hat, kann offline genutzt werden. Dateien über Links benötigen eine Verbindung.
 - **Hosten Sie es selbst.** Das Repository enthält, was Sie für eine eigene Instanz brauchen.
 
 ## Worauf es aufbaut
@@ -41,7 +41,7 @@ Auf einer bestehenden Engine aufzubauen, ist eine bewusste Entscheidung. Dokumen
 Eine ehrliche Liste, denn eine Seite, die nur Stärken aufzählt, nützt nichts:
 
 - **Große Dateien sind an Ihr Gerät gebunden.** Alles läuft im Browser, eine sehr große Tabelle wird also von Ihrem Arbeitsspeicher und Ihrer CPU begrenzt — nicht von einem Server, den Sie aufrüsten könnten.
-- **Keine Synchronisierung, keine Zusammenarbeit.** Kein Server hält Ihr Dokument, also gibt es auch kein gleichzeitiges Bearbeiten und keinen Abgleich zwischen Geräten.
+- Lokale Dateien werden auf Ihrem Gerät geöffnet, bearbeitet und konvertiert, ohne Server zur Dokumentverarbeitung. Der Quellcode ist öffentlich einsehbar und selbst hostbar.
 - **Die Wiedergabetreue ist sehr gut, aber nicht perfekt.** Komplexe Layouts, ungewöhnliche Schriften und Makros können von einer Desktop-Suite abweichen.
 
 Wenn Ihnen davon etwas wichtiger ist, als die Datei lokal zu behalten, ist eine gehostete Suite das bessere Werkzeug — und das ist eine vernünftige Wahl.

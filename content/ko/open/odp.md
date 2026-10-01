@@ -1,16 +1,20 @@
 ---
-title: LibreOffice 없이 ODP 파일 열기 — 무료, 브라우저에서
-description: LibreOffice도 계정도 없이 브라우저에서 ODP(OpenDocument 프레젠테이션) 파일을 열고 편집하세요. ODP, PPTX, PDF로 다시 저장할 수 있습니다. 아무것도 업로드되지 않습니다.
+title: 'LibreOffice 없이 ODP 파일 열기 — 무료, 브라우저에서'
+description: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 eyebrow: 열기 · .odp
 h1: LibreOffice 없이 ODP 파일 열기
-lead: '**.odp** 프레젠테이션이 있는데 LibreOffice가 없나요? 브라우저에서 열어 슬라이드를 편집하고 ODP 그대로 — 또는 PPTX나 PDF로 다시 저장하세요. 설치할 것도, 업로드할 것도 없습니다.'
+lead: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 cta: ODP 열기 →
 ctaHref: /ko/
-ogDescription: LibreOffice 없이 브라우저에서 ODP를 열고 편집하세요. ODP, PPTX, PDF로 저장. 업로드 없음.
+ogDescription: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 breadcrumb: odp
 howTo: LibreOffice 없이 ODP 파일을 여는 방법
-appDescription: LibreOffice 없이, 계정 없이, 업로드 없이 브라우저에서 ODP(OpenDocument 프레젠테이션) 파일을 열고 편집합니다.
+appDescription: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 ---
+
+LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.
+
+로컬 파일 열기, 편집, 형식 변환은 내 기기에서 이루어지며 문서 처리 서버가 필요하지 않습니다. 소스 코드는 공개되어 있으며 직접 확인하거나 호스팅할 수 있습니다.
 
 ## 사용 방법
 

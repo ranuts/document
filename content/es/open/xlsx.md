@@ -1,20 +1,20 @@
 ---
-title: Abrir XLSX sin Excel — gratis, en línea, sin subirlo
-description: Abre y edita una hoja de cálculo XLSX (Excel) sin Microsoft Excel ni cuenta de 365. Se conservan las fórmulas y el formato; gratis y de código abierto, funciona en tu navegador: no se sube nada.
+title: 'Abrir XLSX sin Excel — gratis, en línea, código abierto'
+description: 'Abre y edita archivos XLSX en el navegador sin Microsoft Excel ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Abrir · .xlsx
 h1: Abrir un archivo XLSX sin Excel
-lead: '¿Te han enviado una hoja **.xlsx** y no tienes Excel, o prefieres no pagar por 365? Ábrela en tu navegador conservando las fórmulas. Nada que instalar, nada que subir.'
+lead: 'Abre y edita archivos XLSX en el navegador sin Microsoft Excel ni cuenta. Procesamiento de documentos sin servidor.'
 cta: Abrir tu XLSX →
 ctaHref: /es/
-ogDescription: Abre y edita hojas XLSX sin Excel ni cuenta. Fórmulas conservadas, código abierto, nada se sube.
+ogDescription: 'Abre y edita archivos XLSX en el navegador sin Microsoft Excel ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: Abrir XLSX
 howTo: Cómo abrir un archivo XLSX sin Excel
-appDescription: Abre y edita hojas de cálculo XLSX (Excel) en el navegador, sin Excel, sin cuenta y sin subidas.
+appDescription: 'Abre y edita archivos XLSX en el navegador sin Microsoft Excel ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
-XLSX es el formato de Microsoft Excel. Este editor lo abre con el motor de OnlyOffice, así que las fórmulas de celda, los formatos numéricos, los colores y las varias hojas sobreviven: es una hoja de cálculo de verdad, no una tabla de solo lectura. Se ejecuta en local con WebAssembly, de modo que el archivo se queda en tu dispositivo.
+Abre y edita archivos XLSX en el navegador sin Microsoft Excel ni cuenta. Procesamiento de documentos sin servidor.
 
-El motor de hojas de cálculo de OnlyOffice está compilado a WebAssembly y se ejecuta dentro de tu pestaña. Tu archivo se lee directamente del disco a la memoria — sin subida y sin servidor — así que los datos privados nunca salen de tu dispositivo. Al ser un motor de cálculo real y no una vista previa estática, las fórmulas se recalculan mientras editas. Lee el **.xlsx** moderno además de los antiguos **.xls** y los **.csv** planos, y puede exportar de vuelta a XLSX o CSV.
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
 ## Cómo funciona
 
@@ -28,8 +28,8 @@ El motor de hojas de cálculo de OnlyOffice está compilado a WebAssembly y se e
 - Abrir cualquier archivo **.xlsx** (y .xls, .csv) con las fórmulas conservadas
 - Editar celdas y volver a descargarlo como XLSX o CSV
 - Sin Microsoft Excel y sin suscripción a 365
-- Sin subidas: tu hoja de cálculo nunca sale de tu dispositivo
-- Funciona sin conexión como aplicación instalable
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
+- Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 Sirve igual para una consulta rápida que para trabajar de verdad: ordena una columna, corrige una cifra, añade una fila o una fórmula y devuelve el archivo en el mismo formato. Viene bien cuando alguien te manda un presupuesto o una exportación de datos y no quieres instalar Excel, pagar 365 ni confiar cifras privadas a un conversor web cualquiera.
 
@@ -45,7 +45,7 @@ Sí. El motor de OnlyOffice conserva fórmulas, formatos numéricos y estilos.
 
 ### ¿Se sube mi hoja de cálculo?
 
-No. Se ejecuta en local con WebAssembly y nunca sale de tu dispositivo.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Puedo exportarla a CSV?
 

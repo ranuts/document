@@ -183,12 +183,12 @@ export async function saveAndCapture(
         const onMsg = (e: MessageEvent) => {
           const d = e.data;
           if (d && d.type === 'onlyoffice-file-stream' && isArrayBuffer(d.buffer)) {
-            window.removeEventListener('message', onMsg);
+            win.parent.removeEventListener('message', onMsg);
             const b = new Uint8Array(d.buffer);
             resolve({ bytes: b.byteLength, head: Array.from(b.slice(0, 4)) });
           }
         };
-        window.addEventListener('message', onMsg);
+        win.parent.addEventListener('message', onMsg);
       });
       api.asc_DownloadAs(new win.Asc.asc_CDownloadOptions(formatCode));
       const out = await Promise.race([

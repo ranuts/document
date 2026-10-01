@@ -20,8 +20,12 @@ vi.mock('../../lib/onlyoffice-editor', () => ({
   requestSaveDocument: mockRequestSaveDocument,
 }));
 
-async function dispatchMessage(data: unknown, origin = 'https://parent.example.com') {
-  window.dispatchEvent(new MessageEvent('message', { data, origin }));
+async function dispatchMessage(
+  data: unknown,
+  origin = 'https://parent.example.com',
+  source: MessageEventSource | null = window.parent,
+) {
+  window.dispatchEvent(new MessageEvent('message', { data, origin, source }));
   await new Promise((r) => setTimeout(r, 0));
 }
 
@@ -54,16 +58,20 @@ function expectMessageNotPosted(spy: ReturnType<typeof vi.spyOn>, id: string) {
 
 describe('embed-api', () => {
   let postMessageSpy: ReturnType<typeof vi.spyOn>;
+  let listenerSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
     postMessageSpy = vi.spyOn(window, 'postMessage');
+    listenerSpy = vi.spyOn(window, 'addEventListener');
     document.body.classList.remove('embed-mode');
     window.history.pushState({}, '', '/');
   });
 
   afterEach(() => {
+    for (const [type, listener, options] of listenerSpy.mock.calls) window.removeEventListener(type, listener, options);
+    listenerSpy.mockRestore();
     postMessageSpy.mockRestore();
     delete (window as any).editor;
   });
@@ -109,6 +117,42 @@ describe('embed-api', () => {
   });
 
   describe('message handling', () => {
+    it('ignores commands from a sibling frame even when its origin matches', async () => {
+      window.history.pushState({}, '', '/?embed=1');
+      const frame = document.createElement('iframe');
+      document.body.appendChild(frame);
+      try {
+        const { initEmbedApi } = await import('../../lib/embed-api');
+        initEmbedApi();
+        await dispatchMessage(
+          { type: 'document:get-state', id: 'sibling-forgery' },
+          'https://parent.example.com',
+          frame.contentWindow,
+        );
+        expectMessageNotPosted(postMessageSpy, 'sibling-forgery');
+      } finally {
+        frame.remove();
+      }
+    });
+
+    it('keeps replies bound to the first parent origin', async () => {
+      window.history.pushState({}, '', '/?embed=1');
+      const { initEmbedApi } = await import('../../lib/embed-api');
+      initEmbedApi();
+      await dispatchMessage({ type: 'document:get-state', id: 'bind-parent' });
+      await dispatchMessage({ type: 'document:get-state', id: 'parent-origin-changed' }, 'https://other.example.com');
+      expectMessagePosted(postMessageSpy, 'document:state', 'bind-parent');
+      expectMessageNotPosted(postMessageSpy, 'parent-origin-changed');
+    });
+
+    it('ignores malformed message types without an unhandled rejection', async () => {
+      window.history.pushState({}, '', '/?embed=1');
+      const { initEmbedApi } = await import('../../lib/embed-api');
+      initEmbedApi();
+      await dispatchMessage({ type: 123, id: 'malformed-type' });
+      expectMessageNotPosted(postMessageSpy, 'malformed-type');
+    });
+
     it('ignores messages that lack a document: prefix', async () => {
       window.history.pushState({}, '', '/?embed=1');
       const { initEmbedApi } = await import('../../lib/embed-api');
@@ -126,8 +170,7 @@ describe('embed-api', () => {
       const { initEmbedApi } = await import('../../lib/embed-api');
       initEmbedApi();
 
-      // All active listeners (including accumulated ones) read the current URL's embedOrigin,
-      // so they will all reject this disallowed origin too.
+      // The explicit origin allowlist rejects the command before it is handled.
       await dispatchMessage({ type: 'document:get-state', id: 'origin-block-1' }, 'https://evil.example.com');
 
       expectMessageNotPosted(postMessageSpy, 'origin-block-1');

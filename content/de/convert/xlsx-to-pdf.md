@@ -1,15 +1,15 @@
 ---
-title: XLSX im Browser in PDF umwandeln — kostenlos, ohne Upload
-description: Eine Excel-Datei (XLSX) in ein PDF umwandeln, ohne sie irgendwohin hochzuladen. Die Umwandlung läuft vollständig auf Ihrem Gerät — kostenlos, ohne Konto, ohne Excel, offlinefähig.
+title: 'XLSX im Browser in PDF umwandeln — kostenlos, Open Source'
+description: 'XLSX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 eyebrow: Umwandeln · .xlsx → .pdf
 h1: XLSX im Browser in PDF umwandeln
-lead: 'Eine Excel-Tabelle **.xlsx** in ein **.pdf** verwandeln — ohne sie irgendwohin hochzuladen. Die gesamte Umwandlung passiert lokal in Ihrem Browser.'
+lead: 'XLSX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 cta: XLSX öffnen →
 ctaHref: /de/
-ogDescription: Excel-XLSX-Dateien lokal im Browser in PDF umwandeln. Nichts wird hochgeladen, kein Konto, kostenlos und quelloffen.
+ogDescription: 'XLSX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 breadcrumb: xlsx-to-pdf
-howTo: Eine XLSX ohne Upload in ein PDF umwandeln
-appDescription: Excel-XLSX-Dateien im Browser in PDF umwandeln — ohne Upload und ohne Konto.
+howTo: XLSX auf Ihrem Gerät in PDF umwandeln
+appDescription: 'XLSX lokal im Browser in PDF umwandeln, ohne Office oder Konto. Dokumentverarbeitung ohne Server.'
 ---
 
 ## So funktioniert es
@@ -33,7 +33,7 @@ Das ist die praktische Wahl, wenn das Dokument nicht Ihres ist, um es weiterzuge
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Nein. Die Datei wird vollständig in Ihrem Browser-Tab geöffnet und umgewandelt, sie verlässt Ihr Gerät also nie.
+Nein. Wenn Sie lokale Dateien direkt auf dieser Website öffnen, werden sie auf Ihrem Gerät angezeigt, bearbeitet und konvertiert, ohne die Dokumente hochzuladen.
 
 ### Brauche ich Excel oder ein Konto?
 
@@ -53,4 +53,4 @@ Nein. Hier wird nach PDF exportiert; der Text eines vorhandenen PDFs wird nicht 
 
 ### Funktioniert die Umwandlung offline?
 
-Ja. Einmal geladen ist es eine installierbare PWA und wandelt auch ohne Internetverbindung weiter um.
+Mit Vorbereitung können Sie offline arbeiten: benötigte Dateien online öffnen, Bearbeitung und Export ausprobieren, dann ohne Verbindung prüfen. Nach dem Löschen von Browserdaten kann eine erneute Verbindung nötig sein. Dateien über Links benötigen Internet.

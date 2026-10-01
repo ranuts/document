@@ -1,14 +1,14 @@
 ---
-title: Editar documentos sem conta — sem cadastro, é só começar
-description: Edite arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV sem conta, sem cadastro e sem login. Abra o editor e comece na hora, no navegador. Grátis, de código aberto (AGPL-3.0), nada é enviado, funciona offline.
+title: 'Editar documentos sem conta — sem cadastro, é só começar'
+description: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 eyebrow: Sem conta · é só começar
 h1: Quer editar documentos sem conta?
-lead: Edite arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV sem se cadastrar em nada. Não há conta, login nem e-mail para entregar — você abre o editor e começa a digitar.
+lead: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: Edite DOCX, XLSX, PPTX e CSV sem conta e sem cadastro — abra o editor e comece na hora. Grátis e de código aberto.
+ogDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 breadcrumb: Editar sem conta
-appDescription: Edite arquivos DOCX, XLSX, PPTX e CSV no navegador sem conta, sem cadastro e sem login. Abra e comece; nada é enviado.
+appDescription: 'Edite DOCX, XLSX, PPTX e CSV sem cadastro nem conta. Processamento de documentos sem servidor.'
 ---
 
 Não há muro de cadastro entre você e o seu documento. Tudo roda localmente no navegador com WebAssembly, então não há conta para criar porque, de saída, não existe servidor guardando seus arquivos. Você abre um arquivo, edita e baixa de novo — é esse o fluxo inteiro.
@@ -19,8 +19,8 @@ E é um editor completo, não uma prévia reduzida: com o motor do OnlyOffice, s
 
 - **Comece sem conta** — sem cadastro, sem login, sem e-mail nem telefone.
 - **Edite os formatos comuns** — DOCX, XLSX, PPTX e CSV, com a formatação completa preservada.
-- **Arquivos ficam no dispositivo** — 100% no cliente; seus documentos nunca são enviados.
-- **Trabalhe offline** — instalável como PWA e utilizável sem conexão.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 - **Continue grátis** — código aberto sob AGPL-3.0, sem muro de pagamento para destravar.
 
 ## Como funciona
@@ -50,4 +50,8 @@ Sim. É grátis e de código aberto sob a licença AGPL-3.0, sem muro de pagamen
 
 ### Dá para usar offline sem fazer login?
 
-Sim. Ele se instala como PWA e funciona totalmente offline depois de carregado, então nunca há uma barreira de login entre você e seus documentos.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
+
+### O que fica depois de fechar a aba?
+
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.

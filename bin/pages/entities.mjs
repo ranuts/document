@@ -19,28 +19,18 @@ import { LOCALES } from './locales.mjs';
  * not three.
  */
 export const ID = {
-  org: `${ORIGIN}/#organization`,
   site: `${ORIGIN}/#website`,
   app: `${ORIGIN}/#app`,
   source: `${ORIGIN}/#source`,
 };
 
-/** The publisher and the site, identical on every page so they merge into one. */
+/** The site identity is shared by every page, without promotional publisher branding. */
 export const siteEntities = () => [
-  {
-    '@type': 'Organization',
-    '@id': ID.org,
-    name: 'ranuts',
-    url: ORIGIN + '/',
-    logo: `${ORIGIN}/img/pwa-512.png`,
-    sameAs: [REPO, 'https://github.com/ranuts', 'https://ran.chaxus.com'],
-  },
   {
     '@type': 'WebSite',
     '@id': ID.site,
     name: SITE_NAME,
     url: ORIGIN + '/',
-    publisher: { '@id': ID.org },
     // The site is one site in seven languages, which is a fact about the site
     // and not about whichever page is being read. Each page states its own
     // language on its WebPage node.
@@ -65,7 +55,6 @@ export const appEntity = (extra = {}) => ({
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   // The repository is the editor's other public identity, not the org's.
   sameAs: [REPO],
-  publisher: { '@id': ID.org },
   isPartOf: { '@id': ID.site },
   ...extra,
 });

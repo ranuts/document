@@ -1,10 +1,10 @@
 ---
-title: Ajuda — usando o editor de documentos online
-description: Como abrir, editar e salvar arquivos do Word, Excel, PowerPoint, CSV e PDF no navegador sem enviá-los; somente leitura e incorporação, uso offline, limites de privacidade, códigos de erro e auto-hospedagem.
+title: 'Ajuda — usando o editor de documentos online'
+description: 'Como abrir, editar, salvar e recuperar documentos; privacidade e requisitos offline. Processamento de documentos sem servidor.'
 eyebrow: Ajuda
 breadcrumb: Ajuda
 h1: Ajuda
-lead: Respostas práticas para usar o editor. Tudo roda dentro da aba do seu navegador; seus arquivos nunca são enviados.
+lead: 'Edite arquivos do Word, Excel e PowerPoint no navegador, sem instalar o Office ou criar uma conta. Os documentos são processados no seu dispositivo e o código está disponível para consulta.'
 ---
 
 ## Abrir e criar documentos
@@ -15,7 +15,7 @@ Word (`.docx`, o antigo `.doc`), Excel (`.xlsx`, o antigo `.xls`), PowerPoint (`
 
 ### Como crio um documento novo?
 
-Use **Novo Word / Novo Excel / Novo PowerPoint** na página inicial, ou abra direto `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx`. Nada é criado em servidor nenhum: o documento em branco existe só na sua aba até você baixá-lo.
+Escolha um novo arquivo do Word, Excel ou PowerPoint na página inicial. Edite o arquivo em branco e salve-o no seu dispositivo.
 
 ### Existe limite de tamanho?
 
@@ -25,7 +25,7 @@ Não há limite fixo. O teto prático é a memória do seu dispositivo, porque o
 
 ### Como salvo minhas alterações?
 
-Pressione **Ctrl+S / ⌘S** ou use **Arquivo → Baixar como**. Como não há servidor, «salvar» significa que o navegador entrega o arquivo para você: ele cai na sua pasta de downloads com o nome original. Escolha outro formato em **Baixar como** para converter (por exemplo DOCX → PDF, XLSX → CSV).
+Em navegadores compatíveis como Chrome e Edge, o primeiro salvamento permite escolher um arquivo; os seguintes o atualizam. Outros navegadores baixam uma cópia. Para outro formato, use Arquivo → Baixar como. As cópias de recuperação não substituem salvar o arquivo.
 
 ### Por que o botão Salvar às vezes fica cinza?
 
@@ -63,9 +63,7 @@ Sim — o editor foi feito para ser incorporado num iframe e controlado por `pos
 
 ### Um assistente de IA do meu navegador pode operar o editor?
 
-Sim, onde o navegador der suporte. O editor registra um conjunto de ferramentas WebMCP, então um agente de IA do navegador pode abrir, converter, ler e exportar documentos chamando-as diretamente, em vez de clicar pela interface. Tudo continua rodando no seu dispositivo — o agente aciona o mesmo código local que os botões, e nada é enviado.
-
-As ferramentas são `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` e `get_document_state`.
+As ferramentas WebMCP editam e convertem localmente, mas um agente do navegador pode receber texto ou arquivos exportados e enviá-los ao seu próprio serviço de IA. Confira a política de dados do agente antes de compartilhar conteúdo confidencial.
 
 ### Quais navegadores dão suporte?
 
@@ -83,7 +81,7 @@ Em documentos de texto, sim: `get_document_text` devolve o texto para o agente r
 
 ### Funciona offline?
 
-Sim. Depois da primeira visita, o editor fica em cache por um service worker; você pode instalá-lo como aplicativo pela barra de endereços do navegador (PWA) e abrir documentos sem conexão. A primeira abertura de um documento com muitas fontes ainda precisa da rede uma vez para buscá-las; depois elas também ficam em cache.
+Conecte-se primeiro, abra os arquivos necessários e teste a edição e a exportação. Depois desconecte-se e verifique os mesmos passos. Visitar a página inicial ou instalar o app não garante todas as funções offline. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de conexão.
 
 ### Como recebo a versão mais nova?
 
@@ -93,11 +91,11 @@ O site se atualiza sozinho na próxima visita. Se uma página parecer presa numa
 
 ### Meus documentos são enviados para algum lugar?
 
-Não. O documento é lido do seu disco para a aba do navegador e processado ali com WebAssembly. Não existe endpoint de upload neste site. Você pode conferir no painel de rede do navegador enquanto abre e salva um documento — e o código é aberto sob a AGPL-3.0.
+Ao editar arquivos locais diretamente neste site, os documentos são processados no seu dispositivo e não são enviados aos nossos servidores. O código é público para consulta. Se usar o editor em outro site ou permitir que um assistente externo leia arquivos, consulte a política de dados dele.
 
 ### O que a página carrega da rede?
 
-Só a própria aplicação: o JavaScript do editor, o conversor WebAssembly, as fontes e os recursos da página — tudo da origem deste site — além de um beacon do Cloudflare Web Analytics respeitoso com a privacidade (sem cookies, sem rastreamento entre sites). Se você ativar o assistente de IA opcional com a sua própria chave de API, as requisições dele vão direto do seu navegador para o provedor escolhido; nada passa por este site.
+A página carrega código, recursos do editor, fontes e uma requisição do Cloudflare Web Analytics. URLs remotas podem gerar requisições adicionais. Apps anfitriões e agentes externos do navegador definem suas próprias políticas de dados.
 
 ## Erros
 
@@ -117,3 +115,11 @@ Abra uma issue no [GitHub](https://github.com/ranuts/document/issues) com o nave
 ### Posso rodar a minha própria cópia?
 
 Sim. É um site estático, então qualquer servidor web serve: `docker run -d -p 8080:80 ghcr.io/ranuts/document:latest`, ou compile com `pnpm run build` e sirva a pasta `dist/`. Veja o [README](https://github.com/ranuts/document#readme) para opções de HTTPS e autenticação básica, e as [novidades](/pt/changelog) para o que mudou em cada versão.
+
+### O que fica depois de fechar a aba?
+
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.
+
+### O assistente de IA integrado está disponível?
+
+O assistente de IA integrado ainda não está concluído e não é uma função publicada.

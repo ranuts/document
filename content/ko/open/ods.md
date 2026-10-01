@@ -1,16 +1,20 @@
 ---
-title: LibreOffice 없이 ODS 파일 열기 — 무료, 브라우저에서
-description: LibreOffice도 계정도 없이 브라우저에서 ODS(OpenDocument 스프레드시트) 파일을 열고 편집하세요. 수식이 유지되며 ODS, XLSX, CSV, PDF로 다시 저장할 수 있습니다. 아무것도 업로드되지 않습니다.
+title: 'LibreOffice 없이 ODS 파일 열기 — 무료, 브라우저에서'
+description: 'LibreOffice나 계정 없이 브라우저에서 ODS 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 eyebrow: 열기 · .ods
 h1: LibreOffice 없이 ODS 파일 열기
-lead: '**.ods** 스프레드시트가 있는데 LibreOffice가 없나요? 수식을 그대로 둔 채 브라우저에서 열어 편집하고 ODS 그대로 — 또는 XLSX, CSV, PDF로 다시 저장하세요. 업로드 없음.'
+lead: 'LibreOffice나 계정 없이 브라우저에서 ODS 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 cta: ODS 열기 →
 ctaHref: /ko/
-ogDescription: LibreOffice 없이 브라우저에서 ODS를 열고 편집하세요. 수식 유지, ODS·XLSX·CSV·PDF로 저장. 업로드 없음.
+ogDescription: 'LibreOffice나 계정 없이 브라우저에서 ODS 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 breadcrumb: ods
 howTo: LibreOffice 없이 ODS 파일을 여는 방법
-appDescription: LibreOffice 없이, 계정 없이, 업로드 없이 브라우저에서 ODS(OpenDocument 스프레드시트) 파일을 열고 편집합니다.
+appDescription: 'LibreOffice나 계정 없이 브라우저에서 ODS 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.'
 ---
+
+LibreOffice나 계정 없이 브라우저에서 ODS 파일을 열고 편집하세요. 문서 처리에 서버가 필요하지 않습니다.
+
+로컬 파일 열기, 편집, 형식 변환은 내 기기에서 이루어지며 문서 처리 서버가 필요하지 않습니다. 소스 코드는 공개되어 있으며 직접 확인하거나 호스팅할 수 있습니다.
 
 ## 사용 방법
 

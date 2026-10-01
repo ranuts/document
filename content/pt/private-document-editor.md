@@ -1,26 +1,26 @@
 ---
-title: Editor de documentos privado — seus arquivos nunca saem do dispositivo
-description: Um editor de documentos privado que mantém seus arquivos no seu dispositivo. Edite Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV 100% localmente no navegador — nada é enviado. Grátis, de código aberto (AGPL-3.0), funciona offline.
-eyebrow: Privado · 100% no dispositivo
+title: 'Editor de documentos privado — código aberto, processamento no seu dispositivo'
+description: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
+eyebrow: 'Edição local'
 h1: Procurando um editor de documentos que mantenha seus arquivos privados?
-lead: Edite arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV direto no navegador — onde o arquivo fica no seu próprio dispositivo do começo ao fim. Nada é enviado, e não há conta para criar.
+lead: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: Edite DOCX, XLSX, PPTX e CSV 100% localmente no navegador — nada é enviado, sem conta. Grátis e de código aberto.
+ogDescription: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 breadcrumb: Editor privado
-appDescription: Um editor de documentos privado que roda 100% localmente no navegador. Edite DOCX, XLSX, PPTX e CSV sem que nada seja enviado.
+appDescription: 'Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.'
 ---
 
-Aqui privacidade é simples e literal: o documento que você abre nunca sai do seu computador. Tudo roda localmente no navegador com WebAssembly, então abrir, editar e baixar acontecem na sua máquina. Não há cópia do arquivo em servidor para se preocupar, nem pasta na nuvem sincronizando para outro lugar.
+Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 
-Isso serve bem para contratos, planilhas financeiras, anotações médicas, papelada de RH ou qualquer coisa que você prefira não entregar a terceiros. E você tem um editor de fidelidade completa — com o motor do OnlyOffice, então fontes, tabelas, fórmulas e layout são preservados — sem o preço de mandar o arquivo antes.
+Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV. Layouts complexos e fontes especiais podem variar; confira o resultado antes de compartilhar.
 
 ## O que dá para fazer
 
-- **Todo arquivo fica no dispositivo** — 100% no cliente; seus documentos nunca saem da sua máquina.
+- Arquivos locais são abertos, editados e convertidos no seu dispositivo, sem um servidor de processamento de documentos. O código é público para consulta e você pode hospedar sua própria cópia.
 - **Edite os formatos comuns** — DOCX, XLSX, PPTX e CSV, com a formatação completa preservada.
 - **Sem conta** — sem cadastro, sem login, nada para registrar.
-- **Trabalhe offline** — instalável como PWA e utilizável sem conexão.
+- Teste as funções necessárias com conexão. Depois use offline o que o navegador salvou. Abrir arquivos por links ainda precisa de conexão.
 - **Verifique a promessa** — leia o código aberto ou hospede a sua própria cópia.
 
 ## Como funciona
@@ -38,7 +38,7 @@ Seus arquivos são abertos e editados inteiramente dentro do seu próprio navega
 
 ### Meus arquivos chegam a ser enviados?
 
-Não. Todo o processamento é 100% no cliente. Seu arquivo DOCX, XLSX, PPTX ou CSV é lido e escrito localmente e nunca sai do dispositivo.
+Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Preciso de conta para manter meus arquivos privados?
 
@@ -46,8 +46,12 @@ Sem conta, sem cadastro e sem login. Você abre o editor e trabalha na hora, e n
 
 ### Dá para verificar que nada é enviado?
 
-Sim. O editor inteiro é de código aberto sob a licença AGPL-3.0 — você pode ler o código, observar a aba de rede ou hospedar a sua cópia.
+Confira no painel de rede a abertura, edição e salvamento de um arquivo local. Teste separadamente a IA opcional, URLs remotas e apps que incorporam o editor; suas requisições não fazem parte da edição básica local. Não. Ao abrir arquivos locais diretamente neste site, você pode visualizar, editar e converter no seu dispositivo sem enviar os documentos.
 
 ### Continua funcionando sem conexão com a internet?
 
-Sim. É um PWA instalável e funciona totalmente offline depois de carregado, o que mantém sua edição contida na sua máquina.
+Você pode trabalhar offline com preparação: abra os arquivos online, teste a edição e a exportação e confira os mesmos passos sem conexão. Limpar os dados do navegador pode exigir uma nova conexão. Abrir arquivos por links precisa de internet.
+
+### O que fica depois de fechar a aba?
+
+Com o salvamento automático ativado, as cópias de recuperação ficam neste navegador por 7 dias após a última edição ou abertura. Você pode excluí-las ou desativar o salvamento automático em /history. Os dados do navegador e as alterações ainda não salvas podem ser perdidos; salve as alterações importantes em um arquivo.

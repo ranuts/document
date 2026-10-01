@@ -1,26 +1,24 @@
 ---
-title: Private Document Editor — Your Files Never Leave Your Device
-description: A private document editor that keeps your files on your device. Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV 100% locally in your browser — nothing is uploaded. Free, open source (AGPL-3.0), works offline.
-eyebrow: Private · 100% on-device
+title: 'Private Document Editor — Open Source, On-Device Editing'
+description: 'Edit Word, Excel, PowerPoint and CSV locally in your browser. No document uploads or sign-up. Free and open source, with self-hosting available.'
+eyebrow: 'Local editing'
 h1: Looking for a Document Editor That Keeps Your Files Private?
-lead: Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files right in your browser — where the file stays on your own device from start to finish. Nothing is uploaded, and there is no account to create.
+lead: 'Edit contracts, CVs and work documents without uploading them. Open a file in your browser, make your changes and save it locally.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: Edit DOCX, XLSX, PPTX and CSV 100% locally in your browser — nothing uploaded, no account. Free and open source.
+ogDescription: 'Edit Word, Excel, PowerPoint and CSV locally in your browser. No document uploads or sign-up. Free and open source, with self-hosting available.'
 breadcrumb: Private document editor
-appDescription: A private document editor that runs 100% locally in the browser. Edit DOCX, XLSX, PPTX and CSV with nothing uploaded — your files never leave your device.
+appDescription: 'Edit Word, Excel, PowerPoint and CSV locally in your browser. No document uploads or sign-up. Free and open source, with self-hosting available.'
 ---
 
-Privacy here is simple and literal: the document you open never leaves your computer. Everything runs locally in your browser with WebAssembly, so opening, editing and downloading all happen on your machine. There is no server-side copy of your file to worry about, and no cloud folder syncing it somewhere else.
-
-That makes it a good fit for contracts, financial spreadsheets, medical notes, HR paperwork or anything else you would rather not hand to a third party. You get a full-fidelity editor — powered by the OnlyOffice engine, so fonts, tables, formulas and layout are preserved — without the trade-off of sending the file away first.
+No office suite to install and no account to create. View, edit and convert local files on your own device.
 
 ## What you can do
 
-- **Keep every file on-device** — 100% client-side; your documents never leave your machine.
-- **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with full formatting preserved.
+- Local files are opened, edited and converted on your device, without a document-processing server. The source code is public for inspection and self-hosting.
+- **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with support for common formatting.
 - **Skip the account** — no sign-up, no login, nothing to register.
-- **Work offline** — installable as a PWA and usable with no connection.
+- Try the features you need while online, then use what your browser has saved offline. Opening files from links still needs a connection.
 - **Verify the privacy claim** — read the open-source code or self-host your own copy.
 
 ## How it works
@@ -38,7 +36,7 @@ Your files are opened and edited entirely inside your own browser with WebAssemb
 
 ### Do my files ever get uploaded?
 
-No. All processing is 100% client-side. Your DOCX, XLSX, PPTX or CSV file is read and written locally and never leaves your device.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need an account to keep my files private?
 
@@ -46,8 +44,12 @@ No account, no sign-up and no login. You open the editor and start working immed
 
 ### Can I verify that nothing is uploaded?
 
-Yes. The whole editor is open source under the AGPL-3.0 license, so you can read the code, watch the network tab, or self-host your own copy.
+Inspect the browser’s network panel while opening, editing and saving a local file. Test optional AI, remote URLs and host integrations separately; their requests are not covered by the core local-editing claim. No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Does it still work without an internet connection?
 
-Yes. It is an installable PWA and works fully offline once loaded, which keeps your editing self-contained on your machine.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.
+
+### What remains after I close the tab?
+
+With autosave enabled, you can recover your work in the same browser. Copies stay for 7 days after the last edit or open and can be managed at /history (Saved documents). Browser data can be cleared, so save important changes to a file.

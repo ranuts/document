@@ -1,20 +1,20 @@
 ---
-title: Editor de documentos — sin registro, sin subidas · gratis y de código abierto
-description: Edita Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV en tu navegador sin registro, sin inicio de sesión y sin subidas. Gratis, de código abierto (AGPL-3.0) y funciona sin conexión: tus archivos nunca salen de tu dispositivo.
+title: 'Editor de documentos — sin registro, gratis y de código abierto'
+description: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Procesamiento de documentos sin servidor.'
 eyebrow: Sin cuenta · sin registro
-h1: Editor de documentos en línea gratis — sin registro, sin subidas
-lead: Edita archivos de Word (DOCX), Excel (XLSX), PowerPoint (PPTX) y CSV directamente en tu navegador. Sin cuenta, sin inicio de sesión, sin suscripción, y tus archivos no se suben a ninguna parte.
+h1: Editor de documentos en línea gratis — sin registro, código abierto
+lead: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.'
 cta: Abrir el editor →
 ctaHref: /es/
-ogDescription: Edita DOCX, XLSX, PPTX y CSV en tu navegador: sin registro, sin subidas, funciona sin conexión. Gratis y de código abierto.
+ogDescription: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Procesamiento de documentos sin servidor.'
 breadcrumb: Editor sin registro
 howTo: Cómo editar un documento sin registrarse
-appDescription: Edita DOCX, XLSX, PPTX y CSV en el navegador sin registro, sin inicio de sesión y sin subidas.
+appDescription: 'Edita DOCX, XLSX, PPTX y CSV sin registro ni cuenta. Procesamiento de documentos sin servidor.'
 ---
 
-La mayoría de los editores en línea «gratis» te piden crear una cuenta y después suben tu documento a sus servidores sin decirlo. Este no hace ni lo uno ni lo otro. Todo se ejecuta en local, en tu navegador, con WebAssembly, así que tus archivos se quedan en tu dispositivo. Cierra la pestaña y no queda nada.
+Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 
-El editor entero es el motor de OnlyOffice compilado a WebAssembly, ejecutándose dentro de la página. Eso significa que ningún servidor hace el trabajo y no hay cola: abres un archivo y ya está listo. Admite los formatos de oficina de cada día (DOCX, XLSX, PPTX) además de CSV, y puede exportar tu trabajo a PDF, TXT, HTML o CSV. Al ser una PWA instalable, puedes añadirlo a la pantalla de inicio y seguir usándolo sin conexión alguna.
+Edita archivos de Word, Excel y PowerPoint en el navegador, sin instalar Office ni crear una cuenta. Los documentos se procesan en tu dispositivo y el código está disponible para consultarlo. Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 
 ## Cómo funciona
 
@@ -26,9 +26,9 @@ El editor entero es el motor de OnlyOffice compilado a WebAssembly, ejecutándos
 ## Por qué lo usa la gente
 
 - **Sin registro, sin inicio de sesión, sin suscripción**: abre la página y empieza a editar.
-- **Sin subidas**: 100% en el cliente; tus documentos nunca salen de tu dispositivo.
+- Los archivos locales se abren, editan y convierten en tu dispositivo, sin un servidor de procesamiento de documentos. El código es público y puedes consultarlo o alojar tu propia copia.
 - **Todos los formatos habituales**: DOCX, XLSX, PPTX y CSV, con OnlyOffice.
-- **Funciona sin conexión**: instalable como PWA y utilizable sin conexión.
+- Prueba las funciones que necesitas con conexión. Después puedes usar lo que el navegador haya guardado. Abrir archivos desde enlaces requiere conexión.
 - **Código abierto**: audítalo o aloja tu propia copia.
 
 ## Preguntas frecuentes
@@ -39,7 +39,7 @@ No. No hay registro, ni inicio de sesión, ni cuenta de ningún tipo. Abre el ed
 
 ### ¿Mis archivos se suben a un servidor?
 
-No. Toda la edición ocurre en local, en tu navegador, con WebAssembly. Tus documentos nunca salen de tu dispositivo.
+No. Al abrir archivos locales directamente en este sitio, puedes verlos, editarlos y convertirlos en tu dispositivo sin subir los documentos.
 
 ### ¿Es realmente gratis?
 
@@ -47,7 +47,7 @@ Sí. Es gratis y de código abierto bajo la licencia AGPL-3.0. También puedes a
 
 ### ¿Puedo usarlo sin conexión?
 
-Sí. Es una PWA instalable y funciona por completo sin conexión una vez cargada.
+Puedes trabajar sin conexión si lo preparas antes: abre los archivos online, prueba la edición y la exportación y comprueba los mismos pasos sin conexión. Si borras los datos del navegador, puede que necesites conectarte de nuevo. Abrir archivos desde enlaces requiere conexión.
 
 ### ¿Qué formatos de archivo puedo editar?
 
@@ -60,3 +60,7 @@ No. Es genuinamente gratis y de código abierto bajo AGPL-3.0, sin muro de pago 
 ### ¿Puedo usarlo en el móvil?
 
 Sí. Funciona en cualquier navegador móvil moderno, así que puedes editar en un móvil o una tableta sin instalar ninguna aplicación.
+
+### ¿Qué queda después de cerrar la pestaña?
+
+Con el guardado automático activado, las copias de recuperación permanecen en este navegador durante 7 días desde la última edición o apertura. Puedes borrarlas o desactivar el guardado automático en /history. Los datos del navegador y los cambios aún no guardados pueden perderse; guarda los cambios importantes en un archivo.

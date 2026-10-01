@@ -1,16 +1,20 @@
 ---
-title: Open an ODP File Without LibreOffice — Free, in Your Browser
-description: Open and edit an ODP (OpenDocument Presentation) file in your browser — no LibreOffice, no PowerPoint, no account. Save it back as ODP, PPTX or PDF. Nothing is uploaded.
+title: 'Open an ODP File Without LibreOffice — Free, in Your Browser'
+description: 'Open ODP files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 eyebrow: Open · .odp
 h1: Open an ODP File Without LibreOffice
-lead: Got an **.odp** presentation and no LibreOffice? Open it in your browser, edit the slides, and save it back as ODP — or as PPTX or PDF. Nothing to install, nothing uploaded.
+lead: 'Got a ODP presentation but no app to open it? Open it in your browser, make your changes and save to your device.'
 cta: Open your ODP →
 ctaHref: /
-ogDescription: Open and edit ODP presentations in the browser without LibreOffice. Save back as ODP, PPTX or PDF. Nothing uploaded.
+ogDescription: 'Open ODP files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 breadcrumb: odp
 howTo: How to open an ODP file without LibreOffice
-appDescription: Open and edit ODP (OpenDocument Presentation) files in the browser without LibreOffice, with no upload and no account.
+appDescription: 'Open ODP files in your browser for free, with no installation or sign-up. View, edit and export documents on your device.'
 ---
+
+You do not need to install an office suite just to open an occasional file. Export to common office formats when you are ready to keep working or share.
+
+Files are opened and processed on your device, with no document upload or account required.
 
 ## How it works
 
@@ -23,7 +27,7 @@ ODP is the OpenDocument Presentation format, produced by LibreOffice Impress and
 
 The OnlyOffice presentation engine, compiled to WebAssembly, renders the slides in your browser: layouts, images, shapes, charts and text boxes come across as a real deck rather than a set of flat pictures. Edit the slides and save back as ODP to stay in the open format, or export to PPTX for a colleague on PowerPoint, or to PDF for a fixed copy that looks the same everywhere.
 
-Nothing is uploaded — the file is read from disk into the tab and stays there. Once the page has loaded it is an installable app, so opening a deck works on a train, on conference wifi you do not trust, or with no connection at all.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.
 
 ## Frequently asked questions
 
@@ -49,7 +53,7 @@ Yes. Open the ODP and save as PPTX — the conversion runs on your device.
 
 ### Is my presentation uploaded?
 
-No. It is opened locally in your browser with WebAssembly and never leaves your device.
+No. When you open local files directly on this site, viewing, editing and conversion happen on your device without uploading your documents.
 
 ### Do I need an account?
 
@@ -57,4 +61,4 @@ No. There is no sign-up, no login and no email required.
 
 ### Does it work offline?
 
-Yes. Once loaded it is an installable PWA and keeps working with no internet connection.
+Yes, with some preparation. Open the files you need online and try editing and exporting, then disconnect to check they work. Clearing browser data may require reconnecting. Files opened from links need a connection.

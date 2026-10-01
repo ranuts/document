@@ -1,16 +1,20 @@
 ---
-title: 不用 LibreOffice 打开 ODP 文件 — 免费、在浏览器中
-description: 在浏览器中打开并编辑 ODP（OpenDocument 演示文稿）文件——无需 LibreOffice、PowerPoint 或账号。可存回 ODP，也可导出 PPTX 或 PDF。文件不会被上传。
+title: '不用 LibreOffice 打开 ODP 文件 — 免费、在浏览器中'
+description: '免费在浏览器中打开ODP文件，无需安装办公软件，无需注册。支持查看、编辑和导出，文档在自己的设备上处理。'
 eyebrow: 打开 · .odp
 h1: 不用 LibreOffice 打开 ODP 文件
-lead: 拿到一个 **.odp** 演示文稿却没装 LibreOffice？在浏览器里打开它、编辑幻灯片，再存回 ODP——或者存成 PPTX、PDF。无需安装，不上传。
+lead: '收到ODP 演示文稿，却没装相应软件？直接在浏览器里打开，查看内容，按需修改，再保存到自己的设备。'
 cta: 打开你的 ODP →
 ctaHref: /zh-CN/
-ogDescription: 不用 LibreOffice，在浏览器中打开并编辑 ODP 演示文稿。可存回 ODP、PPTX 或 PDF，文件不上传。
+ogDescription: '免费在浏览器中打开ODP文件，无需安装办公软件，无需注册。支持查看、编辑和导出，文档在自己的设备上处理。'
 breadcrumb: odp
 howTo: 如何在没有 LibreOffice 的情况下打开 ODP 文件
-appDescription: 不用 LibreOffice，在浏览器中打开并编辑 ODP（OpenDocument 演示文稿）文件，无需上传，无需账号。
+appDescription: '免费在浏览器中打开ODP文件，无需安装办公软件，无需注册。支持查看、编辑和导出，文档在自己的设备上处理。'
 ---
+
+无需为了偶尔打开一份文件而安装整套办公软件。编辑完成后，可导出为常见办公格式，方便继续使用和分享。
+
+文件在你的设备上打开和处理，无需上传文档，也无需注册账号。
 
 ## 如何操作
 
@@ -23,7 +27,7 @@ ODP 是 OpenDocument 演示文稿格式，由 LibreOffice Impress 和 OpenOffice
 
 编译为 WebAssembly 的 OnlyOffice 演示引擎会在你的浏览器中渲染幻灯片：版式、图片、形状、图表和文本框都作为真正的演示文稿呈现，而不是一组扁平图片。编辑幻灯片后可以存回 ODP 继续留在开放格式里，也可以导出为 PPTX 给用 PowerPoint 的同事，或导出为 PDF 作为在哪里看都一样的固定副本。
 
-文件不会被上传——它从磁盘读进标签页后就留在那里。页面加载过一次之后它就是可安装的应用，所以在火车上、在你并不信任的会场 wifi 下，甚至完全断网时，打开演示文稿都照样可用。
+可以提前准备后离线使用。先联网打开所需文件并试用编辑、导出，再断网确认可用。清理浏览器数据后可能需要重新联网；通过链接打开文件仍需联网。
 
 ## 常见问题
 
@@ -49,7 +53,7 @@ ODP 即 OpenDocument Presentation，是 LibreOffice Impress 和 OpenOffice 使�
 
 ### 我的演示文稿会被上传吗？
 
-不会。它通过 WebAssembly 在本地浏览器中打开，不会离开你的设备。
+不会。直接在本站打开本地文件时，查看、编辑和格式转换都在你的设备上完成，无需上传文档。
 
 ### 需要账号吗？
 
@@ -57,4 +61,4 @@ ODP 即 OpenDocument Presentation，是 LibreOffice Impress 和 OpenOffice 使�
 
 ### 离线能用吗？
 
-可以。加载一次之后它就是可安装的 PWA，没有网络也能继续使用。
+可以提前准备后离线使用。先联网打开所需文件并试用编辑、导出，再断网确认可用。清理浏览器数据后可能需要重新联网；通过链接打开文件仍需联网。

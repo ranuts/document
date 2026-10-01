@@ -36,6 +36,8 @@
   Cache-Control: no-cache
 /history-recent.js
   Cache-Control: no-cache
+/theme-presentation.js
+  Cache-Control: no-cache
 /ranui-iife/*
   Cache-Control: no-cache
 
