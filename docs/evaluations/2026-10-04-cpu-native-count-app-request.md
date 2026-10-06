@@ -1,0 +1,11 @@
+# Complete application SDK request replay
+
+Replayed the first actual captured request from the CPU system/sampling diagnostic through the isolated native count prototype. System instructions, contextual document-scope wrapper, user message, temperature, top_p and max_tokens were preserved; stream=true became stream=false to retrieve blocking usage. Repeated counts and actual generation usage all reported 162 prompt tokens. This is an archival SDK-request replay, not a new application-integrated preflight test.
+
+The [raw replay](2026-10-04-cpu-native-count-app-request.json) binds the archive and driver hashes and retains exact request options. The [verifier](verify-cpu-native-count-app-request.py) compares those options against the original capture. Browser/server closed normally; the existing overflow, structured rejection and recovery checks also completed. No editor operation or production modification.
+
+Current source confirms the integration gap: runtime.ts budgets contextual LLM messages in bytes before calling the provider, while wllama.ts subsequently converts messages and injects system instructions and JSON response format. Accurate counting must therefore operate on those final provider options, including output reservation; counting only runtime messages would reproduce the known system-overflow defect.
+
+History trimming must operate on original complete turns/tool-result pairs, then regenerate and recount final options. Preserve the current request and document selection, custom system instruction, archival history and existing trim notice semantics. If the current complete turn itself cannot fit, report the existing actionable overflow error instead of silently shortening it. Count and generation must share the same provider queue and cancellation lifetime to prevent state/configuration races.
+
+CPU chat currently names its tool argument `_tools` and does not include tool definitions in its completion options. The earlier synthetic tool/schema count tests establish native capability, not actual CPU provider tool integration. Do not use those tests as proof that CPU IM tool execution is complete. Exact budget integration, runtime artifact packaging, GPU parity and lifecycle/browser acceptance remain open.

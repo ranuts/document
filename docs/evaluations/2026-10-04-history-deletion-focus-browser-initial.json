@@ -1,0 +1,89 @@
+{
+  "status": "completed",
+  "probeSHA256": "17f7e7ae37b81d25962979c0c2d9fcc0266ae50b643976ea2a42c8584238f8ce",
+  "errors": [],
+  "scope": "Actual Chromium keyboard Enter confirmation and deletion focus restoration, also IndexedDB reload and download in isolated source harness; no model/editor integration or OS persistence certification.",
+  "sourceHashes": {
+    "lib/agent-plugin/ui/sessions.ts": "22bb810133fd9e1bb239a1478b834e8cd8dcbd659e5d19f7d7412c2c68be836d",
+    "lib/agent-plugin/ui/conversation-db.ts": "94cc763ca2360588f5ca419f8f1b82f55585467e53e23e7cd134b16b8b9a93d3",
+    "lib/agent-plugin/ui/history-controls.ts": "2bfaf84ea0d943813482df4323439557f7cbef3fb2b868a241c723743beb93e2"
+  },
+  "initial": {
+    "saving": false,
+    "history": []
+  },
+  "beforeReload": {
+    "id": "734e42c6-4776-449e-b685-b83a21c73c6d",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "restored": {
+    "saving": true,
+    "id": "734e42c6-4776-449e-b685-b83a21c73c6d",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "downloadName": "conversations-2026-10-04.json",
+  "downloadError": null,
+  "export": {
+    "version": 1,
+    "activeId": "734e42c6-4776-449e-b685-b83a21c73c6d",
+    "sessions": [
+      {
+        "id": "734e42c6-4776-449e-b685-b83a21c73c6d",
+        "title": "中文🧾 640 EUR Literal \\n",
+        "createdAt": 1791078814149,
+        "updatedAt": 1791078814178,
+        "messages": [
+          {
+            "role": "user",
+            "content": "中文🧾\n640 EUR\nLiteral \\n"
+          },
+          {
+            "role": "assistant",
+            "content": "**原文** <script>data</script>"
+          }
+        ]
+      }
+    ],
+    "exportedAt": "2026-10-04T01:53:34.318Z"
+  },
+  "focusResults": [
+    {
+      "selector": ".agent-history-delete-current",
+      "active": "",
+      "hidden": true
+    },
+    {
+      "selector": ".agent-history-delete-all",
+      "active": "",
+      "hidden": true
+    }
+  ],
+  "messages": [
+    {
+      "role": "user",
+      "content": "中文🧾\n640 EUR\nLiteral \\n"
+    },
+    {
+      "role": "assistant",
+      "content": "**原文** <script>data</script>"
+    }
+  ]
+}

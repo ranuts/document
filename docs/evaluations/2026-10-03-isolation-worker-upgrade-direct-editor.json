@@ -1,0 +1,259 @@
+{
+  "entry": "editor",
+  "browserVersion": "151.0.7922.34",
+  "scope": "Real HTTP proxy (no Playwright resource routes): warm native editor caches with old nonisolated worker; change host policy; actual app registration migrates to isolated worker; native startup and offline reopening. No AI inference or physical-device coverage.",
+  "vendor": "59e2dc593998",
+  "warm": [
+    {
+      "type": "docx",
+      "isolated": false,
+      "iframeIsolated": false,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js"
+    },
+    {
+      "type": "xlsx",
+      "isolated": false,
+      "iframeIsolated": false,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js"
+    },
+    {
+      "type": "pptx",
+      "isolated": false,
+      "iframeIsolated": false,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js"
+    }
+  ],
+  "upgraded": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js?isolation=1",
+      "edited": "WORKER_UPGRADE_docx\r\n",
+      "nativeSave": {
+        "bytes": 25799,
+        "failure": null
+      },
+      "reopened": {
+        "isolated": true,
+        "iframeIsolated": true,
+        "fullApi": true,
+        "loaded": true,
+        "controller": "http://127.0.0.1:63075/sw.js?isolation=1"
+      },
+      "reopenedText": "WORKER_UPGRADE_docx\r\n",
+      "reopenExact": true
+    },
+    {
+      "type": "xlsx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js?isolation=1",
+      "edited": "WORKER_UPGRADE_xlsx",
+      "nativeSave": {
+        "bytes": 8427,
+        "failure": null
+      },
+      "reopened": {
+        "isolated": true,
+        "iframeIsolated": true,
+        "fullApi": true,
+        "loaded": true,
+        "controller": "http://127.0.0.1:63075/sw.js?isolation=1"
+      },
+      "reopenedText": "WORKER_UPGRADE_xlsx",
+      "reopenExact": true
+    },
+    {
+      "type": "pptx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js?isolation=1",
+      "edited": [
+        [
+          "\r\n",
+          "\r\n",
+          "WORKER_UPGRADE_pptx\r\n"
+        ]
+      ],
+      "nativeSave": {
+        "bytes": 33969,
+        "failure": null
+      },
+      "reopened": {
+        "isolated": true,
+        "iframeIsolated": true,
+        "fullApi": true,
+        "loaded": true,
+        "controller": "http://127.0.0.1:63075/sw.js?isolation=1"
+      },
+      "reopenedText": [
+        [
+          "\r\n",
+          "\r\n",
+          "WORKER_UPGRADE_pptx\r\n"
+        ]
+      ],
+      "reopenExact": true
+    }
+  ],
+  "offline": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js?isolation=1",
+      "online": false,
+      "networkRejected": true
+    },
+    {
+      "type": "xlsx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js?isolation=1",
+      "online": false,
+      "networkRejected": true
+    },
+    {
+      "type": "pptx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:63075/sw.js?isolation=1",
+      "online": false,
+      "networkRejected": true
+    }
+  ],
+  "errors": [],
+  "oldCachedPolicy": {
+    "name": "document-editor-runtime-59e2dc593998",
+    "policy": null
+  },
+  "entryEditor": {
+    "isolated": true,
+    "iframeIsolated": true,
+    "fullApi": true,
+    "loaded": true,
+    "controller": "http://127.0.0.1:63075/sw.js?isolation=1"
+  },
+  "passed": true,
+  "spellNetworkRequests": [
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": false,
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": false,
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    }
+  ]
+}

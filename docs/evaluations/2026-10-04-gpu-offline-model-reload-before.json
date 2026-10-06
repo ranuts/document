@@ -1,0 +1,26 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+    }
+  ],
+  "offlineRequests": [],
+  "probeSHA256": "8c8cfeb93d9b1577f00ebb092cb7facb1bda1ffb68eeb8b5d2e58b4ae6bb1d7b",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "status": "failed",
+  "error": "Error: locator.selectOption: Error: Element is not a <select> element\nCall log:\n\u001b[2m  - waiting for locator('.agent-panel-provider')\u001b[22m\n\u001b[2m    - locator resolved to <r-select tabindex=\"0\" value=\"webllm\" role=\"combobox\" aria-expanded=\"false\" aria-disabled=\"false\" aria-haspopup=\"listbox\" aria-label=\"AI provider\" class=\"agent-panel-provider\" aria-controls=\"ran-select-listbox-u2f8xnt\" aria-activedescendant=\"ran-select-listbox-u2f8xnt-option-0\">…</r-select>\u001b[22m\n\u001b[2m  - attempting select option action\u001b[22m\n\u001b[2m    - waiting for element to be visible and enabled\u001b[22m\n"
+}

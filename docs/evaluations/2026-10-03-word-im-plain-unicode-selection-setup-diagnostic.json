@@ -1,0 +1,35 @@
+{
+  "status": "failed",
+  "scope": "Actual production local-model IM Word replacement with native track revisions disabled; exact raw text and character review types, unchanged neighbor, native Undo/Redo and visible error checks. No preview card.",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "language": "zh",
+  "replacement": "项目 😀 Payment · NOT approved",
+  "results": [],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-C0HYF5Sa.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "setup": {
+    "text": "\r\n",
+    "nativeText": "\r\n",
+    "selected": "\r\n",
+    "paragraphs": [
+      {
+        "text": "\r\n",
+        "nativeText": "\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "\r\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      }
+    ]
+  },
+  "error": "Error: Native setup did not select exact first word in two paragraphs"
+}

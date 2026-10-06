@@ -1,0 +1,271 @@
+{
+  "runtime": "d71a1e8",
+  "font100Requests": [
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/100",
+      "method": "GET"
+    }
+  ],
+  "font100CatalogRows": [
+    [
+      "ASCW3",
+      103,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1
+    ]
+  ],
+  "font100Bytes": 6868,
+  "font100Sha256": "ddfb8a36f48419deceab57dc8fa59b2273c334cdeba945dd9e6683ee4be6aa28",
+  "allFontRequests": [
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/233",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/058",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/057",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/055",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/056",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/062",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/061",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/059",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/060",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/267",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/268",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/070",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/069",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/067",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5194/fonts/068",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/233",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/058",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/057",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/055",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/056",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/062",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/061",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/059",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/060",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/267",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/268",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/070",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/069",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/067",
+      "method": "GET"
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5194/fonts/068",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/062",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/059",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/060",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/061",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/058",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/055",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/056",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/057",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/233",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/070",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/067",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/068",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/069",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/267",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/268",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/267",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/268",
+      "method": "GET"
+    },
+    {
+      "phase": "save",
+      "url": "http://127.0.0.1:5194/fonts/100",
+      "method": "GET"
+    }
+  ],
+  "interpretation": "Font 100 first observed in Save, not online warm-up; runtime cache cannot contain an unrequested face merely because the editor/model were warmed. Font source exists locally. No all-font prefetch or product fix established.",
+  "font100FilePositions": [
+    103
+  ]
+}

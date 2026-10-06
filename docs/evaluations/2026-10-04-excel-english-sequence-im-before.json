@@ -1,0 +1,20 @@
+{
+  "probeSHA256": "e3ee30c4daa530ee0037600cd156e2e4652b7d24ea5aee11c74916a7fde954b3",
+  "markers": {
+    "docx": "IM_WORD_四季_日本_ä_2026",
+    "xlsx": "IM_CELL_四季_日本_ä_2026",
+    "pptx": "IM_PPT_四季_日本_ä_2026"
+  },
+  "sources": {
+    "lib/agent-plugin/document-tool-sequence.ts": "7078721d4b34134047407ef72aeba52bd7dd9661b4612c935dad964091b2181a",
+    "lib/agent-plugin/office-tools.ts": "0a4f73939c014ac0561453a72dafd7afdae8e6e91f4746d4698eebdc40ffb89c"
+  },
+  "scope": "Current production preview, warm GPU model readiness. Real deterministic English IM read A1:C3 then text write B2, seeded neighbors and formulas, native Undo/Redo, Save and file chooser reopen. No model-output substitution; no general instruction-quality certification.",
+  "results": [],
+  "errors": [],
+  "passed": false,
+  "error": "Error: Literal value mismatch",
+  "visibleErrors": [
+    "The request could not be completed. Try again or check settings.Restore request"
+  ]
+}

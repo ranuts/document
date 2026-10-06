@@ -1,0 +1,9 @@
+# Native count prototype: red test and first implementation
+
+The actual verified 4.0.20 baseline loaded successfully, then the first count preflight failed with native `Unknown action: count_chat`, before completion. [Raw red test](2026-10-04-cpu-native-count-red.json) and [driver](probe-cpu-native-count-red.mjs) preserve the expected missing-action failure. The existing dispatcher aborts on unknown actions; this test used its own browser/model instance and closed afterward.
+
+Added an isolated native [prototype patch](cpu-native-count-prototype.patch): explicit `count_chat` dispatch, a new `cntc_res` glue response with prompt/context token fields, and a text-only implementation. It reuses the existing completion request serialization so it receives the same options and explicit files array; this avoids duplicating the input schema, a refinement of the original separate-request proposal. Generated TypeScript glue in the isolated checkout was regenerated, but the current product SDK has not been replaced.
+
+The native implementation parses with loaded chat parameters, uses generation's tokenizer and special-token flags, returns actual slot context capacity, rejects media/content parts, and never posts a task or evaluates tokens. These are source-level properties only; count equivalence and absence of runtime state effects still require actual tests. Started the isolated 4.0.20 build with log `/private/tmp/document-wllama-count-prototype-build.log`. Compilation/linking is not yet accepted at this checkpoint. Next provide matching client glue response decoding, then run the declared count/usage and state-preservation cases.
+
+The original 4.0.20 baseline artifacts remain preserved separately. No product source, dependency, model default, editor operation or IM control changed. The extension is a prototype, not a completed context-budget fix.

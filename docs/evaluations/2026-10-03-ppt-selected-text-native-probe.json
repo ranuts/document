@@ -1,0 +1,246 @@
+{
+  "scope": "Isolated production PPT selected-text native feasibility; not an IM implementation or model validation",
+  "results": [
+    {
+      "method": "asc_enterText",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "Alex target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex target body\r\n",
+            "runs": [
+              {
+                "text": "Alex target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "Alex target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex target body\r\n",
+            "runs": [
+              {
+                "text": "Alex target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "Alex target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex target body\r\n",
+            "runs": [
+              {
+                "text": "Alex target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": true,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "redoExact": true
+    },
+    {
+      "method": "pluginMethod_InputText",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "after": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "selected": "\r\n",
+        "count": 2,
+        "historyIndex": -1,
+        "paragraphs": [
+          {
+            "text": "\r\n",
+            "runs": [
+              {
+                "text": ""
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body"
+              },
+              {
+                "text": "\r\n"
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": false,
+      "neighborUnchanged": true,
+      "undoExact": false,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

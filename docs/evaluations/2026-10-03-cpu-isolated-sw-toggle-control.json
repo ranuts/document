@@ -1,0 +1,55 @@
+{
+  "scope": "Cached CPU model, isolated same-origin response hosting via Playwright, actual production Worker registration and response delivery, actual native Wllama thread diagnostics and online/offline inference. Diagnostic bundle instrumentation only. Not model quality, cold model download, or physical-device coverage.",
+  "results": [
+    {
+      "offline": false,
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "responseMs": 3397,
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true,
+      "iframeIsolated": true,
+      "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "online": true,
+      "networkRejected": false,
+      "replies": [
+        "HELLO."
+      ],
+      "errors": [],
+      "previewCount": 0,
+      "documentUnchanged": true
+    },
+    {
+      "offline": true,
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "responseMs": 3140,
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true,
+      "iframeIsolated": true,
+      "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "online": false,
+      "networkRejected": true,
+      "replies": [
+        "OFFLINE."
+      ],
+      "errors": [],
+      "previewCount": 0,
+      "documentUnchanged": true
+    }
+  ],
+  "errors": [],
+  "cacheReset": {
+    "registrations": 1,
+    "removed": 4
+  },
+  "passed": true
+}

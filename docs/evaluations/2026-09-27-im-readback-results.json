@@ -1,0 +1,42 @@
+{
+  "backend": "actual bundled editor SDK in Chrome",
+  "tests": [
+    {
+      "editor": "DOCX",
+      "operation": "insert at cursor",
+      "before": "\r\n",
+      "preview": "\r\n",
+      "result": "verified",
+      "after": "Budget 1250 EUR. Alex has not approved phase two.\r\n",
+      "undo": "\r\n"
+    },
+    {
+      "editor": "XLSX",
+      "operation": "set host-selected C3",
+      "before": "",
+      "preview": "",
+      "result": "verified",
+      "after": "1250",
+      "undo": ""
+    },
+    {
+      "editor": "DOCX",
+      "operation": "replace full selection",
+      "before": "We will process your request as soon as possible.\r\n",
+      "selected": "We will process your request as soon as possible.\n",
+      "result": "verified",
+      "after": "We will promptly review your request.\r\n",
+      "undo": "We will process your request as soon as possible.\r\n"
+    },
+    {
+      "editor": "DOCX",
+      "operation": "replace with multiline text",
+      "before": "We will process your request as soon as possible.\r\n",
+      "preview": "We will process your request as soon as possible.\r\n",
+      "result": "verified",
+      "after": "Line one\rLine two\r\n",
+      "undo": "We will process your request as soon as possible.\r\n"
+    }
+  ],
+  "scope": "Direct production ReviewedAction and actual SDK; the later IM UI test is recorded separately. Text readback does not verify formatting. Header/footer/drawing targets fall back to sent."
+}

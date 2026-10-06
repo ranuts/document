@@ -1,0 +1,31 @@
+[
+  {
+    "id": "formal-zh",
+    "language": "zh-CN",
+    "task": "rewrite",
+    "source": "嘿，Cora 将于 2047-06-12 向 Davi 支付 640 EUR，作为修理 7 个阀门的费用。Davi 不会向 Cora 付款。",
+    "instruction": "请用正式中文改写，保持事实、姓名、日期、金额、数量和付款方向不变。"
+  },
+  {
+    "id": "summary-zh",
+    "language": "zh-CN",
+    "task": "summarize",
+    "source": "Lena 提议于 2048-03-19 运送价值 920 PLN 的 13 个过滤器，前提是安全检查通过。检查仍待完成，运输尚未获准。另有会议讨论停车安排。",
+    "instruction": "用一句中文概括，保留条件、检查待完成、运输尚未获准、日期、数量和金额，不提停车。"
+  },
+  {
+    "id": "translate-zh",
+    "language": "zh-CN",
+    "task": "translate",
+    "targetLanguage": "zh-CN",
+    "source": "Suri alleged that Vero replaced 6 sensors on 2049-01-23. Vero denied the allegation, and no investigation has confirmed it.",
+    "instruction": "忠实翻译，保留 Suri、Vero 的原拼写，指控者、被指控者、否认者和未证实状态不得改变。"
+  },
+  {
+    "id": "formal-en",
+    "language": "en",
+    "task": "rewrite",
+    "source": "Hey, Cora will pay Davi 640 EUR on 2047-06-12 for repairing 7 valves. Davi will not pay Cora.",
+    "instruction": "Rewrite in formal English while preserving all facts, including the future payer, repair service and reverse-payment denial."
+  }
+]

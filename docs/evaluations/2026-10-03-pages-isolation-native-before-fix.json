@@ -1,0 +1,11 @@
+{
+  "browserVersion": "151.0.7922.34",
+  "scope": "Independent fresh Chromium context per document type, actual configured Wrangler Pages local headers forwarded unchanged from first navigation, real app Worker registration, native edit/Save/reopen and offline restart; no AI inference or physical-device coverage.",
+  "vendor": "59e2dc593998",
+  "cold": [],
+  "offline": [],
+  "errors": [],
+  "error": "Error: page.waitForFunction: SecurityError: Failed to read a named property 'editor' from 'Window': Blocked a frame with origin \"http://127.0.0.1:53047\" from accessing a cross-origin frame.\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)",
+  "passed": false,
+  "spellNetworkRequests": []
+}

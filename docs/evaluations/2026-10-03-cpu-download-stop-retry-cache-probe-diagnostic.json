@@ -1,0 +1,17 @@
+{
+  "scope": "Actual CPU GGUF download GET held before response; cache reads deliberately miss without deleting cached model. Existing loading Stop, observed download AbortSignal, controlled late route release, restore cache access, existing Load retry and real CPU inference. Not partial byte-stream or physical network disconnection.",
+  "errors": [],
+  "held": [],
+  "passed": false,
+  "error": "TimeoutError: page.waitForFunction: Timeout 120000ms exceeded.",
+  "probe": {
+    "forceMissing": true,
+    "cacheMisses": 0,
+    "gets": 0,
+    "signals": 0,
+    "aborts": 0
+  },
+  "notes": [
+    "Model loaded — you can start chatting."
+  ]
+}

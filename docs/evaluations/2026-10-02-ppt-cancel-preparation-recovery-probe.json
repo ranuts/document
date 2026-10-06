@@ -1,0 +1,80 @@
+{
+  "scope": "Controlled native pre_Paste cancellation gate with 200ms preparation delay; not actual font/network cancellation or product integration",
+  "result": {
+    "before": {
+      "history": 0,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": false
+    },
+    "pending": {
+      "history": 2,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": true
+    },
+    "canceled": {
+      "history": 0,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": true
+    },
+    "afterLate": {
+      "history": 0,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": true
+    },
+    "resumed": {
+      "history": 1,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n",
+        "恢复写入 / Resumed paste\r\n"
+      ],
+      "busy": true
+    },
+    "afterUndo": {
+      "history": 0,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": true
+    },
+    "afterRedo": {
+      "history": 1,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n",
+        "恢复写入 / Resumed paste\r\n"
+      ],
+      "busy": true
+    },
+    "resumedCallbacks": 1,
+    "prepared": 1,
+    "skipped": 1,
+    "completed": 0,
+    "pasteStart": false
+  },
+  "released": {
+    "busy": false,
+    "lock": false
+  },
+  "status": "passed"
+}

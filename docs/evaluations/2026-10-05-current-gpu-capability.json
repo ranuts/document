@@ -1,0 +1,97 @@
+{
+  "scope": "Fresh full Chromium native WebGPU capability, no model, no forced GPU flags",
+  "runs": [
+    {
+      "headless": true,
+      "version": "151.0.7922.34",
+      "adapter": {
+        "available": true,
+        "adapter": true,
+        "info": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": "",
+          "description": "",
+          "isFallbackAdapter": false
+        },
+        "features": [
+          "depth32float-stencil8",
+          "rg11b10ufloat-renderable",
+          "bgra8unorm-storage",
+          "texture-formats-tier1",
+          "texture-compression-bc",
+          "dual-source-blending",
+          "core-features-and-limits",
+          "float32-filterable",
+          "indirect-first-instance",
+          "texture-compression-astc-sliced-3d",
+          "float32-blendable",
+          "texture-compression-astc",
+          "texture-compression-etc2",
+          "depth-clip-control",
+          "texture-compression-bc-sliced-3d",
+          "timestamp-query",
+          "clip-distances",
+          "texture-formats-tier2",
+          "shader-f16",
+          "primitive-index",
+          "texture-component-swizzle",
+          "subgroups"
+        ],
+        "limits": {
+          "maxBufferSize": 4294967292,
+          "maxStorageBufferBindingSize": 4294967292
+        },
+        "deviceCreated": true
+      },
+      "contextClosed": true,
+      "browserClosed": true
+    },
+    {
+      "headless": false,
+      "version": "151.0.7922.34",
+      "adapter": {
+        "available": true,
+        "adapter": true,
+        "info": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": "",
+          "description": "",
+          "isFallbackAdapter": false
+        },
+        "features": [
+          "depth32float-stencil8",
+          "rg11b10ufloat-renderable",
+          "bgra8unorm-storage",
+          "texture-formats-tier1",
+          "texture-compression-bc",
+          "dual-source-blending",
+          "core-features-and-limits",
+          "float32-filterable",
+          "indirect-first-instance",
+          "texture-compression-astc-sliced-3d",
+          "float32-blendable",
+          "texture-compression-astc",
+          "texture-compression-etc2",
+          "depth-clip-control",
+          "texture-compression-bc-sliced-3d",
+          "texture-formats-tier2",
+          "shader-f16",
+          "clip-distances",
+          "timestamp-query",
+          "primitive-index",
+          "texture-component-swizzle",
+          "subgroups"
+        ],
+        "limits": {
+          "maxBufferSize": 4294967292,
+          "maxStorageBufferBindingSize": 4294967292
+        },
+        "deviceCreated": true
+      },
+      "contextClosed": true,
+      "browserClosed": true
+    }
+  ]
+}

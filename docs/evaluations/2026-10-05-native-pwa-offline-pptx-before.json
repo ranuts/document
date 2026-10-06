@@ -1,0 +1,928 @@
+{
+  "scope": "Native Chromium PWA install and standalone launch in a fresh owned profile; explicit native standalone preference, then owned serving origin shut down before browser process restart. Cached self-hosted CPU model inference and IM PPT edit after origin shutdown, including native PPTX Save download fallback and local-file reopening, File System Access picker intentionally unavailable; not physical full-network or model-quality certification.",
+  "steps": [
+    {
+      "phase": "seed",
+      "controller": "http://127.0.0.1:62981/sw.js?isolation=1",
+      "caches": [
+        "document-editor-runtime-59e2dc593998",
+        "document-editor-core-1791134366"
+      ]
+    },
+    {
+      "phase": "launch",
+      "url": "http://127.0.0.1:62981/editor?new=pptx&agent=1&locale=en&saved=336a8870-85c1-4063-a3ff-8e4a9f54021d",
+      "state": {
+        "standalone": false,
+        "controller": "http://127.0.0.1:62981/sw.js?isolation=1",
+        "online": true,
+        "title": "Document Editor"
+      }
+    },
+    {
+      "phase": "launch",
+      "url": "http://127.0.0.1:62981/",
+      "state": {
+        "standalone": true,
+        "controller": "http://127.0.0.1:62981/sw.js?isolation=1",
+        "online": true,
+        "title": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor"
+      }
+    }
+  ],
+  "errors": [
+    "Error: Offline native edit history mismatch"
+  ],
+  "origin": "http://127.0.0.1:62981/",
+  "served": [
+    {
+      "method": "HEAD",
+      "url": "/offline-model.gguf"
+    },
+    {
+      "method": "GET",
+      "url": "/offline-model.gguf"
+    }
+  ],
+  "artifactBytes": 491400032,
+  "artifactSHA256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "probeSHA256": "7cab8aab7e1ba31f746d7db017f31cc8c79dd8c65e575b3ba7cf18e9dc37e37c",
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/151.0.7922.34",
+    "revision": "@782af9cb30a53f54487e5d2e44738645a8ec457c",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "jsVersion": "15.1.206.8"
+  },
+  "seedSlides": "[[\"\\r\\n\",\"\\r\\n\"]]",
+  "seedEngine": "CPU · offline-model.gguf",
+  "install": {},
+  "osState": {
+    "badgeCount": 0,
+    "fileHandlers": []
+  },
+  "displaySetting": {},
+  "launch": {
+    "targetId": "0EF6B1B9C938F8F155158AD0FD992178"
+  },
+  "seedContextClosed": true,
+  "serverClosed": true,
+  "originFailure": "TypeError: fetch failed",
+  "offlineResponses": [
+    {
+      "url": "http://127.0.0.1:62981/ran-tokens.88df51ac.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/fonts.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/home.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/theme-presentation.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/Geist-Variable.woff2",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/GeistMono-Variable.woff2",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/button.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/popover.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/lang-switch.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/content.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/open-local.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/landing-prefetch.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/history-recent.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/theme-switch.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sw-register.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/manifest.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/icons/document-192.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/api/documents/api.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/libfont/engine/fonts.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/libfont/engine/fonts.wasm",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/059",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/060",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/061",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/062",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/documenteditor/main/app.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/documenteditor/main/code.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/word/sdk-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/word/sdk-all.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/spreadsheeteditor/main/app.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/spreadsheeteditor/main/code.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/cell/sdk-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/app.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/code.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/slide/sdk-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/slide/sdk-all.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/fonts.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-tokens.88df51ac.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/home.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/theme-presentation.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/Geist-Variable.woff2",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/button.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/GeistMono-Variable.woff2",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/popover.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/lang-switch.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/content.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/open-local.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ranui-iife/theme-switch.iife.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/history-recent.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/landing-prefetch.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sw-register.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/manifest.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/icons/document-light.svg",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/icons/document-192.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/api/documents/api.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/manifest.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/theme-presentation.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/libfont/engine/fonts.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/fonts.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/libfont/engine/fonts.wasm",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-tokens.88df51ac.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/rolldown-runtime-DK3Fl9T5.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/editor-L3bkLgjh.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/builder-EH76YCFS-BT43qACE.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/input-DEoPNM0j-DbuKQQNt.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/editor-CMo_3mUo.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/059",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/060",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/061",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/062",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/input-CWDEwWP7.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/api/documents/api.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/agent-plugin-CZlc4Aww.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/documenteditor/main/app.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/documenteditor/main/code.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/word/sdk-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/word/sdk-all.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/icons/document-192.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/ran-fonts/Geist-Variable.woff2",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/spreadsheeteditor/main/app.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/spreadsheeteditor/main/code.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/cell/sdk-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/app.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/code.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/slide/sdk-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/slide/sdk-all.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/lib-CSLy4uO1.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:62981&uitheme=theme-classic-light&fileType=pptx",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/vendor/requirejs/require.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/resources/css/app.css",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/app.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/locale/en.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/AllFonts.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/vendor/socketio/socket.io.min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/slide/sdk-all-min.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/cursors/svg.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/resources/img/iconssmall.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/libfont/engine/fonts.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Charts/ChartStyles.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/slide/themes//themes.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/resources/img/iconsbig.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/libfont/engine/fonts.wasm",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/slide/sdk-all.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/icons/anchor.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/image.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/chart.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/image_url.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/table.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/table_active.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/chart_active.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/audio.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/video.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/smartart.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/placeholders/smartart_active.png",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/sdkjs/common/Images/fonts_thumbnail.png.bin",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/267",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/062",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/268",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/061",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/059",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/060",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/070",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/069",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/067",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/068",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/117",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/116",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/050",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/114",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/233",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/112",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/058",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/057",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/055",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/fonts/056",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/plugins.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/code.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/resources/img/iconssmall@2.5x.svg",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/resources/img/iconsbig@2.5x.svg",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/presentationeditor/main/resources/img/iconshuge@2.5x.svg",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/themes.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/manifest.json",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/icons/document-light.svg",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/wllama-cpu-runtime-DJxspbgv.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/client-D5_UYdz1.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/wllama-DCn7BVDp.js",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "blob:http://127.0.0.1:62981/8f7927a5-ef50-45d2-998b-0789c965f067",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:62981/879712ac-50da-4c4e-b710-ff523517a8c0",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:62981/eb9c174a-dbc5-4965-b0c0-e265d9646f79",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:62981/assets/wllama-BITawafS.wasm",
+      "status": 200,
+      "fromServiceWorker": true
+    },
+    {
+      "url": "blob:http://127.0.0.1:62981/fc5a512e-8435-48b5-9f3e-0936206559de",
+      "status": 200,
+      "fromServiceWorker": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:62981/a83ac438-93e8-4135-a34a-956e1e3007d6",
+      "status": 200,
+      "fromServiceWorker": false
+    }
+  ],
+  "offlineLaunch": {
+    "targetId": "371991B285C62E399FFBB06A60EB4CF9"
+  },
+  "offlinePages": [
+    {
+      "url": "about:blank",
+      "state": {
+        "standalone": false,
+        "online": true,
+        "title": ""
+      }
+    },
+    {
+      "url": "http://127.0.0.1:62981/",
+      "state": {
+        "standalone": true,
+        "controller": "http://127.0.0.1:62981/sw.js?isolation=1",
+        "online": true,
+        "title": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor"
+      }
+    }
+  ],
+  "offlineReload": {
+    "url": "http://127.0.0.1:62981/",
+    "status": 200,
+    "fromServiceWorker": true
+  },
+  "offlineEditorLaunch": {
+    "targetId": "3F8C9239CD4F0CC2396D5BECB533631F"
+  },
+  "offlineEditor": {
+    "url": "http://127.0.0.1:62981/editor?new=pptx&agent=1&locale=en&saved=014863e4-3f50-4fc3-8fd5-1dd16c410083",
+    "state": {
+      "standalone": true,
+      "controller": "http://127.0.0.1:62981/sw.js?isolation=1",
+      "isolated": true
+    },
+    "text": "[[\"\\r\\n\",\"\\r\\n\"]]"
+  },
+  "offlineEngine": "CPU · offline-model.gguf",
+  "reply": "Hello!Write to document",
+  "chatErrors": [],
+  "editErrors": [],
+  "previews": 0,
+  "editText": "[[\"\\r\\n\",\"\\r\\n\",\"Add a slide\\r\\n\",\"PWA_PPT_四季_2026\\r\\n\"]]",
+  "undoText": "[[\"\\r\\n\",\"\\r\\n\"]]",
+  "redoText": "[[\"\\r\\n\",\"\\r\\n\",\"Add a slide\\r\\n\",\"PWA_PPT_四季_2026\\r\\n\"]]",
+  "status": "failed",
+  "uninstalled": true,
+  "contextClosed": true
+}

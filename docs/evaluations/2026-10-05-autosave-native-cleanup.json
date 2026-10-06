@@ -1,0 +1,347 @@
+{
+  "scope": "Native Chromium actual recovery exports and cancelled write, delegated observation of explicit store-like AbortSignal registration/removal; synthetic hidden visibility, not heap/GC or all resources certification",
+  "asset": "input-DEoPNM0j-CEoLgyYS.js",
+  "assetSHA256": "45da15936cb5ceb9a8ccf1a16f7b9651e44230e4f6a3695806b78184b0dd371c",
+  "errors": [],
+  "cycles": [
+    {
+      "records": {
+        "nextRev": 1,
+        "revCount": 1,
+        "rows": [
+          {
+            "rev": 0,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 1,
+        "removes": 1,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 2,
+        "revCount": 2,
+        "rows": [
+          {
+            "rev": 0,
+            "size": 7993
+          },
+          {
+            "rev": 1,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 2,
+        "removes": 2,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 3,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 0,
+            "size": 7993
+          },
+          {
+            "rev": 1,
+            "size": 7993
+          },
+          {
+            "rev": 2,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 3,
+        "removes": 3,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 4,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 1,
+            "size": 7993
+          },
+          {
+            "rev": 2,
+            "size": 7993
+          },
+          {
+            "rev": 3,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 4,
+        "removes": 4,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 5,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 2,
+            "size": 7993
+          },
+          {
+            "rev": 3,
+            "size": 7993
+          },
+          {
+            "rev": 4,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 5,
+        "removes": 5,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 6,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 3,
+            "size": 7993
+          },
+          {
+            "rev": 4,
+            "size": 7993
+          },
+          {
+            "rev": 5,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 6,
+        "removes": 6,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 7,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 4,
+            "size": 7993
+          },
+          {
+            "rev": 5,
+            "size": 7993
+          },
+          {
+            "rev": 6,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 7,
+        "removes": 7,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 8,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 5,
+            "size": 7993
+          },
+          {
+            "rev": 6,
+            "size": 7993
+          },
+          {
+            "rev": 7,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 8,
+        "removes": 8,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 9,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 6,
+            "size": 7993
+          },
+          {
+            "rev": 7,
+            "size": 7993
+          },
+          {
+            "rev": 8,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 9,
+        "removes": 9,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    },
+    {
+      "records": {
+        "nextRev": 10,
+        "revCount": 3,
+        "rows": [
+          {
+            "rev": 7,
+            "size": 7993
+          },
+          {
+            "rev": 8,
+            "size": 7993
+          },
+          {
+            "rev": 9,
+            "size": 7993
+          }
+        ]
+      },
+      "cleanup": {
+        "adds": 10,
+        "removes": 10,
+        "active": 0,
+        "sources": [
+          "()=>{try{e.abort()}catch{}}",
+          "()=>{try{e.abort()}catch{}}"
+        ]
+      }
+    }
+  ],
+  "browser": "151.0.7922.34",
+  "apiSource": "function po(e){a(lo,e?`true`:`false`),e||yo()}",
+  "beforeCancel": {
+    "records": {
+      "nextRev": 10,
+      "revCount": 3,
+      "rows": [
+        {
+          "rev": 7,
+          "size": 7993
+        },
+        {
+          "rev": 8,
+          "size": 7993
+        },
+        {
+          "rev": 9,
+          "size": 7993
+        }
+      ]
+    },
+    "cleanup": {
+      "adds": 10,
+      "removes": 10,
+      "active": 0,
+      "sources": [
+        "()=>{try{e.abort()}catch{}}",
+        "()=>{try{e.abort()}catch{}}"
+      ]
+    }
+  },
+  "afterCancel": {
+    "records": {
+      "nextRev": 10,
+      "revCount": 3,
+      "rows": [
+        {
+          "rev": 7,
+          "size": 7993
+        },
+        {
+          "rev": 8,
+          "size": 7993
+        },
+        {
+          "rev": 9,
+          "size": 7993
+        }
+      ]
+    },
+    "cleanup": {
+      "adds": 11,
+      "removes": 11,
+      "active": 0,
+      "sources": [
+        "()=>{try{e.abort()}catch{}}",
+        "()=>{try{e.abort()}catch{}}"
+      ]
+    }
+  },
+  "passed": true,
+  "contextClosed": true
+}

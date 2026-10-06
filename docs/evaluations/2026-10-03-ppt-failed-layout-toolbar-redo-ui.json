@@ -1,0 +1,251 @@
+{
+  "date": "2026-10-02T17:06:23.159Z",
+  "scope": "Production offline 1.7B IM failed layout after native Undo; prior retained edit, exact native redo branch and saved-state metadata, actual native toolbar Redo restores saved undone edit",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790957719"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "before": {
+    "lastStateRestored": true,
+    "currentAdditionalRestored": true,
+    "selectedIds": [],
+    "canRedo": true,
+    "points": 2,
+    "savedIndex": 1,
+    "userSavedIndex": null,
+    "forceSave": false,
+    "storedRedoDepth": 0,
+    "redoRefsRestored": true,
+    "history": 0,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Prior kept edit\r\n",
+        "bounds": {
+          "l": 145.62557820638023,
+          "t": 90.17,
+          "r": 193.04108846028646,
+          "b": 100.33,
+          "x": 145.62557820638023,
+          "y": 90.17,
+          "w": 47.415510253906234,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "responseMs": 7083,
+  "afterFailure": {
+    "lastStateRestored": true,
+    "currentAdditionalRestored": true,
+    "selectedIds": [],
+    "canRedo": true,
+    "points": 2,
+    "savedIndex": 1,
+    "userSavedIndex": null,
+    "forceSave": false,
+    "storedRedoDepth": 0,
+    "redoRefsRestored": true,
+    "history": 0,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Prior kept edit\r\n",
+        "bounds": {
+          "l": 145.62557820638023,
+          "t": 90.17,
+          "r": 193.04108846028646,
+          "b": 100.33,
+          "x": 145.62557820638023,
+          "y": 90.17,
+          "w": 47.415510253906234,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "failureEvents": {
+    "redoBackups": {
+      "save": 1,
+      "restore": 1
+    },
+    "groups": {
+      "start": 1,
+      "end": 0,
+      "cancel": 1
+    },
+    "nativePastes": 1,
+    "nativeCompletions": 1
+  },
+  "visibleErrors": [
+    "There is not enough space on this slide. Use less text or another slide.Restore request"
+  ],
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BB26vwDY.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "restoreRequest": 1,
+  "previewCount": 0,
+  "toolbarRedo": {
+    "visible": true,
+    "enabled": true,
+    "className": "btn btn-header canfocused",
+    "disabled": null
+  },
+  "afterRedo": {
+    "lastStateRestored": true,
+    "currentAdditionalRestored": false,
+    "selectedIds": [
+      "undefined_33"
+    ],
+    "canRedo": false,
+    "points": 2,
+    "savedIndex": 1,
+    "userSavedIndex": null,
+    "forceSave": false,
+    "storedRedoDepth": 0,
+    "redoRefsRestored": true,
+    "history": 1,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Prior kept edit\r\n",
+        "bounds": {
+          "l": 145.62557820638023,
+          "t": 90.17,
+          "r": 193.04108846028646,
+          "b": 100.33,
+          "x": 145.62557820638023,
+          "y": 90.17,
+          "w": 47.415510253906234,
+          "h": 10.159999999999997
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790960786514.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

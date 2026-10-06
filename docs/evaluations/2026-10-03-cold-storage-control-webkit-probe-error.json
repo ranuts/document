@@ -1,0 +1,15 @@
+{
+  "browser": "Playwright WebKit",
+  "scope": "Minimal same-origin synthetic cache/localStorage/IndexedDB/SW persistence across closing and relaunching isolated browser process; no model or editor loaded",
+  "phases": [
+    {
+      "phase": 0,
+      "error": "Error: page.evaluate: TypeError: r.url is not a function. (In 'r.url()', 'r.url' is \"http://127.0.0.1:5193/index.html\")"
+    },
+    {
+      "phase": 1,
+      "error": "Error: page.evaluate: TypeError: r.url is not a function. (In 'r.url()', 'r.url' is \"http://127.0.0.1:5193/index.html\")"
+    }
+  ],
+  "persisted": false
+}

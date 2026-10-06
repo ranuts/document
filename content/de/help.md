@@ -1,10 +1,10 @@
 ---
-title: Hilfe — den Online-Dokumenteneditor nutzen
-description: Wie Sie Word-, Excel-, PowerPoint-, CSV- und PDF-Dateien im Browser öffnen, bearbeiten und speichern, ohne sie hochzuladen; schreibgeschützt und eingebettet, Offline-Nutzung, Datenschutzgrenzen, Fehlercodes und Selbst-Hosting.
+title: 'Hilfe — den Online-Dokumenteneditor nutzen'
+description: 'Dokumente öffnen, bearbeiten, speichern und wiederherstellen; Datenschutz und Offline-Voraussetzungen. Lokal bearbeiten ohne erforderlichen Upload.'
 eyebrow: Hilfe
 breadcrumb: Hilfe
 h1: Hilfe
-lead: Praktische Antworten zur Nutzung des Editors. Alles läuft in Ihrem Browser-Tab; Ihre Dateien werden nie hochgeladen.
+lead: 'DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.'
 ---
 
 ## Öffnen und Anlegen
@@ -15,7 +15,7 @@ Word (`.docx`, älteres `.doc`), Excel (`.xlsx`, älteres `.xls`), PowerPoint (`
 
 ### Wie lege ich ein neues Dokument an?
 
-Nutzen Sie **Neues Word / Neues Excel / Neues PowerPoint** auf der Startseite oder öffnen Sie direkt `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx`. Auf einem Server entsteht dabei nichts: Das leere Dokument existiert nur in Ihrem Tab, bis Sie es herunterladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
 
 ### Gibt es eine Größenbeschränkung?
 
@@ -25,7 +25,7 @@ Keine feste Grenze. Die praktische Obergrenze ist der Arbeitsspeicher Ihres Ger�
 
 ### Wie speichere ich meine Änderungen?
 
-Drücken Sie **Strg+S / ⌘S** oder nutzen Sie **Datei → Herunterladen als**. Weil es keinen Server gibt, heißt „Speichern“ hier: Der Browser gibt Ihnen die Datei; sie landet unter dem ursprünglichen Namen in Ihrem Download-Ordner. Wählen Sie unter **Herunterladen als** ein anderes Format, um umzuwandeln (etwa DOCX → PDF, XLSX → CSV).
+In Chrome, Edge und anderen Browsern mit File System Access API wählen Sie beim ersten Speichern eine Datei; spätere Speichervorgänge schreiben in diese Datei zurück. Andere Browser laden eine Kopie herunter. Andere Formate exportieren Sie über Datei → Herunterladen als. Wiederherstellungskopien im Browser sind davon unabhängig.
 
 ### Warum ist die Schaltfläche „Speichern“ manchmal ausgegraut?
 
@@ -33,7 +33,7 @@ Sie wird aktiv, sobald der Editor das Dokument vollständig geladen hat und Sie 
 
 ### Kann ich zwischen Formaten umwandeln?
 
-Ja, auf Ihrem Gerät: Dokument öffnen und unter **Herunterladen als** das Zielformat wählen. Word-Dokumente exportieren nach DOCX / PDF / TXT, Tabellen nach XLSX / CSV / PDF, Präsentationen nach PPTX / PDF. CSV-Dateien werden als Tabelle geöffnet und können wieder als CSV gespeichert werden.
+Bei der lokalen Kernbearbeitung: Ja, auf Ihrem Gerät: Dokument öffnen und unter **Herunterladen als** das Zielformat wählen. Word-Dokumente exportieren nach DOCX / PDF / TXT, Tabellen nach XLSX / CSV / PDF, Präsentationen nach PPTX / PDF. CSV-Dateien werden als Tabelle geöffnet und können wieder als CSV gespeichert werden.
 
 ### Meine CSV mit Umlauten oder chinesischen Zeichen erscheint anderswo als Zeichensalat. Und hier?
 
@@ -47,7 +47,7 @@ Der Editor erkennt die Kodierung der CSV vor dem Öffnen — zuerst striktes UTF
 
 ### Kann ich den Text eines vorhandenen PDFs wie in Word umschreiben?
 
-Nicht als frei fließenden Text — PDF ist ein Format mit festem Layout. Um den Wortlaut zu ändern, öffnen Sie die ursprüngliche DOCX / XLSX / PPTX und exportieren daraus ein neues PDF. Beide Schritte passieren auf Ihrem Gerät.
+Bei der lokalen Kernbearbeitung: Nicht als frei fließenden Text — PDF ist ein Format mit festem Layout. Um den Wortlaut zu ändern, öffnen Sie die ursprüngliche DOCX / XLSX / PPTX und exportieren daraus ein neues PDF. Beide Schritte passieren auf Ihrem Gerät.
 
 ## Schreibgeschützt und Einbetten
 
@@ -63,9 +63,7 @@ Ja — der Editor ist dafür gebaut, in einem iframe eingebettet und per `postMe
 
 ### Kann ein KI-Assistent in meinem Browser den Editor bedienen?
 
-Ja, wo der Browser es unterstützt. Der Editor registriert eine Reihe von WebMCP-Tools, sodass ein KI-Agent im Browser Dokumente öffnen, umwandeln, lesen und exportieren kann, indem er sie direkt aufruft, statt sich durch die Oberfläche zu klicken. Alles läuft weiterhin auf Ihrem Gerät — der Agent löst denselben lokalen Code aus wie die Schaltflächen, und nichts wird hochgeladen.
-
-Die Tools sind `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` und `get_document_state`.
+WebMCP-Werkzeuge bearbeiten und konvertieren lokal. Ein Browser-Agent kann jedoch Dokumenttext oder exportierte Dateien erhalten und an seinen eigenen KI-Dienst senden. Prüfen Sie seine Datenrichtlinie vor der Freigabe vertraulicher Inhalte.
 
 ### Welche Browser unterstützen es?
 
@@ -83,7 +81,7 @@ Bei Textdokumenten ja: `get_document_text` gibt den Text zurück, sodass der Age
 
 ### Funktioniert es offline?
 
-Ja. Nach dem ersten Besuch wird der Editor von einem Service Worker zwischengespeichert; Sie können ihn über die Adressleiste des Browsers als App (PWA) installieren und Dokumente ohne Verbindung öffnen. Beim ersten Öffnen eines Dokuments mit vielen Schriften wird das Netz einmal gebraucht, um diese Schriften zu laden; danach sind auch sie im Cache.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
 
 ### Wie bekomme ich die neueste Version?
 
@@ -93,11 +91,11 @@ Die Seite aktualisiert sich beim nächsten Besuch selbst. Wenn eine Seite auf ei
 
 ### Werden meine Dokumente irgendwohin hochgeladen?
 
-Nein. Das Dokument wird von Ihrer Festplatte in den Browser-Tab gelesen und dort mit WebAssembly verarbeitet. Auf dieser Website gibt es keinen Upload-Endpunkt. Sie können das im Netzwerk-Panel des Browsers beim Öffnen und Speichern überprüfen — und der Quellcode ist unter AGPL-3.0 offen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Was lädt die Seite aus dem Netz?
 
-Nur die Anwendung selbst: das JavaScript des Editors, den WebAssembly-Konverter, Schriften und die eigenen Assets der Seite — alles von der Origin dieser Website — sowie einen datenschutzfreundlichen Cloudflare-Web-Analytics-Beacon (keine Cookies, kein seitenübergreifendes Tracking). Wenn Sie den optionalen KI-Assistenten mit Ihrem eigenen API-Schlüssel aktivieren, gehen dessen Anfragen direkt von Ihrem Browser an den gewählten Anbieter; nichts läuft über diese Website.
+Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs können weitere Anfragen auslösen. Einbettende Anwendungen und externe Browser-Agenten bestimmen ihre eigene Datenverarbeitung.
 
 ## Fehler
 
@@ -117,3 +115,11 @@ Nur die Anwendung selbst: das JavaScript des Editors, den WebAssembly-Konverter,
 ### Kann ich eine eigene Kopie betreiben?
 
 Ja. Es ist eine statische Website, jeder Webserver genügt: `docker run -d -p 8080:80 ghcr.io/ranuts/document:latest`, oder mit `pnpm run build` bauen und den Ordner `dist/` ausliefern. Optionen für HTTPS und Basic Auth stehen in der [README](https://github.com/ranuts/document#readme), was jede Version geändert hat in den [Änderungen](/de/changelog).
+
+### Was bleibt nach dem Schließen des Tabs?
+
+Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
+
+### Ist ein integrierter KI-Assistent verfügbar?
+
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

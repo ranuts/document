@@ -1,26 +1,26 @@
 ---
-title: Private Document Editor — Your Files Never Leave Your Device
-description: A private document editor that keeps your files on your device. Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV 100% locally in your browser — nothing is uploaded. Free, open source (AGPL-3.0), works offline.
-eyebrow: Private · 100% on-device
+title: 'Private Document Editor — Local Editing Without Required Uploads'
+description: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads.'
+eyebrow: 'Local editing'
 h1: Looking for a Document Editor That Keeps Your Files Private?
-lead: Edit Word (DOCX), Excel (XLSX), PowerPoint (PPTX) and CSV files right in your browser — where the file stays on your own device from start to finish. Nothing is uploaded, and there is no account to create.
+lead: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads. Core opening, editing and conversion run locally in your browser without a required document upload.'
 cta: Open the editor →
 ctaHref: /
-ogDescription: Edit DOCX, XLSX, PPTX and CSV 100% locally in your browser — nothing uploaded, no account. Free and open source.
+ogDescription: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads.'
 breadcrumb: Private document editor
-appDescription: A private document editor that runs 100% locally in the browser. Edit DOCX, XLSX, PPTX and CSV with nothing uploaded — your files never leave your device.
+appDescription: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads.'
 ---
 
-Privacy here is simple and literal: the document you open never leaves your computer. Everything runs locally in your browser with WebAssembly, so opening, editing and downloading all happen on your machine. There is no server-side copy of your file to worry about, and no cloud folder syncing it somewhere else.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 That makes it a good fit for contracts, financial spreadsheets, medical notes, HR paperwork or anything else you would rather not hand to a third party. You get a full-fidelity editor — powered by the OnlyOffice engine, so fonts, tables, formulas and layout are preserved — without the trade-off of sending the file away first.
 
 ## What you can do
 
-- **Keep every file on-device** — 100% client-side; your documents never leave your machine.
+- Core local editing: **Keep every file on-device** — 100% client-side; your documents never leave your machine.
 - **Edit the common formats** — DOCX, XLSX, PPTX and CSV, with full formatting preserved.
 - **Skip the account** — no sign-up, no login, nothing to register.
-- **Work offline** — installable as a PWA and usable with no connection.
+- Cached editing resources can work offline; remote file URLs need a connection.
 - **Verify the privacy claim** — read the open-source code or self-host your own copy.
 
 ## How it works
@@ -34,11 +34,11 @@ That makes it a good fit for contracts, financial spreadsheets, medical notes, H
 
 ### What makes this a private document editor?
 
-Your files are opened and edited entirely inside your own browser with WebAssembly. The document is never uploaded to a server, so it stays on your device the whole time.
+Core local editing: Your files are opened and edited entirely inside your own browser with WebAssembly. The document is never uploaded to a server, so it stays on your device the whole time.
 
 ### Do my files ever get uploaded?
 
-No. All processing is 100% client-side. Your DOCX, XLSX, PPTX or CSV file is read and written locally and never leaves your device.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need an account to keep my files private?
 
@@ -46,8 +46,16 @@ No account, no sign-up and no login. You open the editor and start working immed
 
 ### Can I verify that nothing is uploaded?
 
-Yes. The whole editor is open source under the AGPL-3.0 license, so you can read the code, watch the network tab, or self-host your own copy.
+Inspect the browser’s network panel while opening, editing and saving a local file. Test optional AI, remote URLs and host integrations separately; their requests are not covered by the core local-editing claim. Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Does it still work without an internet connection?
 
-Yes. It is an installable PWA and works fully offline once loaded, which keeps your editing self-contained on your machine.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
+
+### What remains after I close the tab?
+
+When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+
+### Is a built-in AI assistant available?
+
+The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.

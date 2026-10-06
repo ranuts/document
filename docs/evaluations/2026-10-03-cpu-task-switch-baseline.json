@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-02T17:21:08.053Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright WebKit CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Unmodified current production bundle; rewrite, summarize, rewrite requests on the same loaded model and document to investigate warm prefix reuse. No navigation or model reload between requests. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-BB26vwDY.js",
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 41266,
+      "documentUnchanged": true,
+      "previewCount": 0
+    },
+    {
+      "editorModule": "./assets/editor-BB26vwDY.js",
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08, but it has not been approved.\r\n",
+      "error": [],
+      "responseMs": 36898,
+      "documentUnchanged": false,
+      "previewCount": 0
+    },
+    {
+      "editorModule": "./assets/editor-BB26vwDY.js",
+      "id": "formal-en-after-summary",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 5768,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "errors": [],
+  "assessment": {
+    "productionBundle": "editor-BB26vwDY.js",
+    "responseMs": [
+      41266,
+      36898,
+      5768
+    ],
+    "quality": "Rewrite attempts rejected with unchanged document; summary shorter, preserving sampled amount/date/negation.",
+    "limitations": "Single same-page task sequence; no raw backend timing in baseline."
+  }
+}

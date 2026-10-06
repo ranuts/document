@@ -1,0 +1,51 @@
+{
+  "scope": "Actual model worker creation with held initialization transport, existing loading Stop button, native terminate called, delayed postMessage, existing Load retry and real hello inference on four GPU models plus CPU fallback. Cached model path; not network download stall, real OOM, or cancellation after device allocation.",
+  "entries": [
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "engine": "WebGPU \u00b7 Qwen3-1.7B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-local-load-stop-retry-gpu.json",
+      "reportSHA256": "b31720a7008962968e7619aeb0dae2933cf194a557a7f09b340217b934a0c58f",
+      "probe": "docs/evaluations/probe-local-load-stop-retry-initial.mjs",
+      "probeSHA256": "038fd6a75dccbfb3ae2cf2f9cb2ac89d2eb0d059e01e636b22fc07cb4599fa41",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-0.6B-GGUF-CPU",
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "report": "docs/evaluations/2026-10-03-local-load-stop-retry-cpu.json",
+      "reportSHA256": "f06ebffe8f9432f38210774b948982a3f46fbfe2c49c4c51e09fefa3b40a508f",
+      "probe": "docs/evaluations/probe-local-load-stop-retry-initial.mjs",
+      "probeSHA256": "038fd6a75dccbfb3ae2cf2f9cb2ac89d2eb0d059e01e636b22fc07cb4599fa41",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "engine": "WebGPU \u00b7 Qwen3.5-0.8B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-local-load-stop-retry-0_8.json",
+      "reportSHA256": "ad1204401ca909f8595a37df448619fb18b7335df473d4ec0d1799bc04ce7412",
+      "probe": "docs/evaluations/probe-local-load-stop-retry-ui.mjs",
+      "probeSHA256": "e7a59d44bc23e7ee97367c81088fb06c24f1037dd5b246990318ebb1e5254eb9",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "engine": "WebGPU \u00b7 Qwen3.5-2B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-local-load-stop-retry-2b.json",
+      "reportSHA256": "5fe7d49add4281d4756e824bee49db06af4914757de3fbd44574ba23f81a4e26",
+      "probe": "docs/evaluations/probe-local-load-stop-retry-ui.mjs",
+      "probeSHA256": "e7a59d44bc23e7ee97367c81088fb06c24f1037dd5b246990318ebb1e5254eb9",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "engine": "WebGPU \u00b7 Qwen3-4B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-local-load-stop-retry-4b.json",
+      "reportSHA256": "dda83a85b2777466134f9d9b05036fdc404fe88925731764ec08a3111b2b598d",
+      "probe": "docs/evaluations/probe-local-load-stop-retry-ui.mjs",
+      "probeSHA256": "e7a59d44bc23e7ee97367c81088fb06c24f1037dd5b246990318ebb1e5254eb9",
+      "passed": true
+    }
+  ],
+  "allPassed": true
+}

@@ -1,0 +1,27 @@
+{
+  "scope": "Actual production CPU Qwen 0.6B pending generation interrupted before visible text using visible Stop; plain status, restore request without resending, preserve new draft, and next real inference. Desktop Chromium; no native document mutation or physical mobile coverage.",
+  "errors": [],
+  "stopped": {
+    "status": "Stopped.Restore request",
+    "statusCount": 1,
+    "errorCount": 0,
+    "statusApplyCount": 0,
+    "borderWidth": "0px",
+    "background": "rgba(0, 0, 0, 0)",
+    "inputEnabled": true,
+    "userCount": 1
+  },
+  "restored": {
+    "draft": "Write a detailed essay with 20 paragraphs about the history of mathematics.",
+    "userCount": 1,
+    "running": false
+  },
+  "newDraftProtected": true,
+  "passed": false,
+  "error": "TimeoutError: locator.getAttribute: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cui-msg-agent').last()\u001b[22m\n",
+  "note": "Model loaded \u2014 you can start chatting.",
+  "visibleErrors": [],
+  "draft": "Please reply with only hello.",
+  "probeSource": "probe-im-stop-neutral-status-cpu-reload-race.mjs",
+  "probeSHA256": "df2861586c259a81c7ee15520dd3a775f7d0f56f86c8cf8e285dcbe99dd273ec"
+}

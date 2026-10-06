@@ -1,0 +1,87 @@
+{
+  "scope": "Supplement to the earlier writing-model decision index. Existing observed diagnostic reports, not a new evaluation or model ranking.",
+  "rows": [
+    {
+      "report": "docs/evaluations/2026-10-05-conditional-cpu-im-summary.json",
+      "reportSHA256": "49db1cc3201599fc8d89b4845aa10718f2b91400d5f86627d7b7bb47e0824a55",
+      "review": "docs/evaluations/2026-10-05-conditional-cpu-im-summary.md",
+      "reviewSHA256": "5da4c80118b70bc65f9c61c11d2c202955d8d3d385602bcdffa38a3a9a5077e2",
+      "modelId": "qwen2.5-3b-instruct-q4_k_m.gguf",
+      "results": 3,
+      "languages": [
+        "en",
+        "ja",
+        "zh-CN"
+      ],
+      "variants": [
+        "production"
+      ],
+      "nativeApplied": 3,
+      "qualityAccepted": false,
+      "futureHeldoutEligible": false
+    },
+    {
+      "report": "docs/evaluations/2026-10-05-conditional-status-transfer.json",
+      "reportSHA256": "f663cd2f97ce18e1e6d1e4ce143b488f478139abeb9a41d18862c06609a636a9",
+      "review": "docs/evaluations/2026-10-05-conditional-status-transfer.md",
+      "reviewSHA256": "210cb4005445d69c5a1eb79bf777435ef83848261590945b9fee9b5092c223b5",
+      "modelId": "qwen2.5-3b-instruct-q4_k_m.gguf",
+      "results": 6,
+      "languages": [
+        "en",
+        "ja",
+        "zh-CN"
+      ],
+      "variants": [
+        "production",
+        "status-explicit"
+      ],
+      "nativeApplied": 6,
+      "qualityAccepted": false,
+      "futureHeldoutEligible": false
+    },
+    {
+      "report": "docs/evaluations/2026-10-05-summary-single-transfer.json",
+      "reportSHA256": "52ea313a1bdf38fc420a7116eb832622a889a7e844cca2283dc3f269eb5c0e04",
+      "review": "docs/evaluations/2026-10-05-summary-single-transfer.md",
+      "reviewSHA256": "a6a92b7430e0f14bbdee0c1fdfce807b26800abe9d6789be184af7ba0805aa2b",
+      "modelId": "qwen2.5-3b-instruct-q4_k_m.gguf",
+      "results": 4,
+      "languages": [
+        "en",
+        "ja"
+      ],
+      "variants": [
+        "status-explicit",
+        "status-single"
+      ],
+      "nativeApplied": 4,
+      "qualityAccepted": false,
+      "futureHeldoutEligible": false
+    },
+    {
+      "report": "docs/evaluations/2026-10-05-summary-single-extra.json",
+      "reportSHA256": "5d85f1fe7aab642d78c5fd4f10264822de56bbc3979918c211abe521e0b84e47",
+      "review": "docs/evaluations/2026-10-05-summary-single-extra.md",
+      "reviewSHA256": "9da0782bc0a744efa7c0a844bee2b2cd5d259d53224db162ff0a26e77e538a01",
+      "modelId": "qwen2.5-3b-instruct-q4_k_m.gguf",
+      "results": 10,
+      "languages": [
+        "de",
+        "es",
+        "ko",
+        "pt",
+        "zh-CN"
+      ],
+      "variants": [
+        "status-explicit",
+        "status-single"
+      ],
+      "nativeApplied": 10,
+      "qualityAccepted": false,
+      "futureHeldoutEligible": false
+    }
+  ],
+  "defaultPromotionAccepted": false,
+  "nextGate": "Freeze a revised general candidate before inference; evaluate other unused sources, operations and languages. Separate relational fidelity, form and native editing outcomes."
+}

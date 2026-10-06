@@ -1,0 +1,2560 @@
+{
+  "scope": "Actual production IM PPT selection replacement, mixed bold prefix, native Save/download and homepage file-chooser reopen; no OS overwrite or external PowerPoint claim",
+  "errors": [],
+  "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BiUnm7sH.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "probeSHA256": "a5a22ea9e35e91881a6350b8413296fde456577f3217efcd069cc65340d692c6",
+  "before": [
+    [
+      {
+        "text": "Alpha Alpha\n",
+        "characters": [
+          {
+            "text": "A",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "A",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        }
+      },
+      {
+        "text": "\n",
+        "characters": [
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 24,
+              "ascii": "等线",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        }
+      }
+    ]
+  ],
+  "boldPrefix": true,
+  "literal": "项目 😀\tPayment\n  NOT approved  ",
+  "after": [
+    [
+      {
+        "text": "Alpha 项目 😀\tPayment\n  NOT approved  \n",
+        "characters": [
+          {
+            "text": "A",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "项",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "目",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "😀",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "P",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "y",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "m",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "N",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "O",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "T",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "r",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "o",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "v",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "d",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        }
+      },
+      {
+        "text": "\n",
+        "characters": [
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 24,
+              "ascii": "等线",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        }
+      }
+    ]
+  ],
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "exactText": true,
+  "prefixPreserved": true,
+  "neighborsPreserved": true,
+  "save": {
+    "artifact": ".scratch/ai-csp/ppt-selection-replacement-saved-0_8.pptx",
+    "filename": "New_Document.pptx",
+    "bytes": 33886,
+    "failure": null,
+    "sha256": "cd259ff4652767a2d682dcc485fb73d6f85d046a35fad524eca8404f37939281"
+  },
+  "afterUndo": [
+    [
+      {
+        "text": "Alpha Alpha\n",
+        "characters": [
+          {
+            "text": "A",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "A",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        }
+      },
+      {
+        "text": "\n",
+        "characters": [
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 24,
+              "ascii": "等线",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        }
+      }
+    ]
+  ],
+  "afterRedo": [
+    [
+      {
+        "text": "Alpha 项目 😀\tPayment\n  NOT approved  \n",
+        "characters": [
+          {
+            "text": "A",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "项",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "目",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "😀",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "P",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "y",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "m",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "N",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "O",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "T",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "r",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "o",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "v",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "d",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        }
+      },
+      {
+        "text": "\n",
+        "characters": [
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 24,
+              "ascii": "等线",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        }
+      }
+    ]
+  ],
+  "undoExact": true,
+  "redoExact": true,
+  "typingBeforeSave": [
+    [
+      {
+        "text": "Alpha 项目 😀\tPayment字\n  NOT approved  \n",
+        "characters": [
+          {
+            "text": "A",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "项",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "目",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "😀",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "P",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "y",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "m",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "字",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "N",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "O",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "T",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "r",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "o",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "v",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "d",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        }
+      },
+      {
+        "text": "\n",
+        "characters": [
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 24,
+              "ascii": "等线",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        }
+      }
+    ]
+  ],
+  "reopened": [
+    [
+      {
+        "text": "Alpha 项目 😀\tPayment\n  NOT approved  \n",
+        "characters": [
+          {
+            "text": "A",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "项",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "目",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "😀",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "P",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "y",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "m",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "N",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "O",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "T",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "r",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "o",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "v",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "d",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 60,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        }
+      },
+      {
+        "text": "\n",
+        "characters": [
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 24,
+              "ascii": "等线",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        }
+      }
+    ]
+  ],
+  "charactersExact": true,
+  "geometryExact": true,
+  "typingAfterReopen": [
+    [
+      {
+        "text": "Alpha 项目 😀\tPayment字\n  NOT approved  \n",
+        "characters": [
+          {
+            "text": "A",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "l",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "h",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": "项",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "目",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "😀",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "P",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "y",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "m",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "t",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "字",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "N",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "O",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "T",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "a",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "p",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "r",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "o",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "v",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "e",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "d",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": " ",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "等线 Light"
+            }
+          },
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 57,
+              "ascii": "等线 Light",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        }
+      },
+      {
+        "text": "\n",
+        "characters": [
+          {
+            "text": "\n",
+            "style": {
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "size": 24,
+              "ascii": "等线",
+              "eastAsia": "Arial"
+            }
+          }
+        ],
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        }
+      }
+    ]
+  ],
+  "insertedCharacterStyleExact": true,
+  "typingAtBoundaryExact": true,
+  "allPassed": true
+}

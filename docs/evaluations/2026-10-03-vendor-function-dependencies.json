@@ -1,0 +1,636 @@
+{
+  "scope": "Actual fresh native editor startup under current host policies, observer-only Function proxy in vendor frames; no body text captured, no CSP weakening, no native Save or AI inference claim.",
+  "rows": [
+    {
+      "type": "docx",
+      "status": "completed",
+      "errors": [],
+      "functions": {
+        "count": 242,
+        "sites": [
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js:2194:121\n    at http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js:2194:498",
+            "count": 1,
+            "bodyLength": 42
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:214893\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:249148\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)",
+            "count": 1,
+            "bodyLength": 306
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:251103\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1216
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:285750\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 3734
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:324566\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1311
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:392039\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1327
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:412829\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 212
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:416136\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 878
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:435056\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 805
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:447386\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1167
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:455640\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 175
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:457319\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1721
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:476212\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1254
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:476568\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 281
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:477625\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 271
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:486611\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 443
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:499204\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 233
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:501272\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 2194
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:523676\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 256
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:530387\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 476
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:535893\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 2718
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:556850\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1429
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:565930\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 288
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:579040\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 506
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:590918\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 521
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:636781\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 406
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:638676\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 371
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:641532\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 685
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:646167\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1595
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:652622\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 2271
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:669372\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 703
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:680327\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:691540\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)",
+            "count": 1,
+            "bodyLength": 1248
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:692060\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 331
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:704073\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1017
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:988189\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 682
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:994347\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 773
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:1001042\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 813
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:1002846\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 209
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:1005248\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 3650
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js:8:1136149\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 455
+          }
+        ]
+      }
+    },
+    {
+      "type": "xlsx",
+      "status": "completed",
+      "errors": [],
+      "functions": {
+        "count": 233,
+        "sites": [
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js:2346:121\n    at http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js:2346:498",
+            "count": 1,
+            "bodyLength": 42
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:214893\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:249148\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)",
+            "count": 1,
+            "bodyLength": 306
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:251103\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1216
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:285750\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 3734
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:324846\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1544
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:374646\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1429
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:397141\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 288
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:410251\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 506
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:422129\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 521
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:468942\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 758
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:509236\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1327
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:530026\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 212
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:533333\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 878
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:552253\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 805
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:564583\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1167
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:572435\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 371
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:575291\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 685
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:579926\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1595
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:586381\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 2271
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:603131\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 703
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:610384\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 707
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:615767\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:626980\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)",
+            "count": 1,
+            "bodyLength": 1248
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:627500\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 331
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:639510\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1017
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:670300\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 17969
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:978923\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 219
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:987044\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 3217
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1066915\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1782
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1080802\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 4678
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1106735\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 9407
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1159469\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1581
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1162910\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1670
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1165185\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1502
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1167766\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1427
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1171701\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1456
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1181208\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 631
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1182821\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 455
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1187751\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 394
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1194065\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 300
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js:8:1203011\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 11621
+          }
+        ]
+      }
+    },
+    {
+      "type": "pptx",
+      "status": "completed",
+      "errors": [],
+      "functions": {
+        "count": 187,
+        "sites": [
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at http://127.0.0.1:5193/sdkjs/slide/sdk-all-min.js:2226:121\n    at http://127.0.0.1:5193/sdkjs/slide/sdk-all-min.js:2226:498",
+            "count": 1,
+            "bodyLength": 42
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:214893\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:249148\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)",
+            "count": 1,
+            "bodyLength": 306
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:251103\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1216
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:285747\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 3734
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:316502\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 682
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:322660\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 773
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:329355\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 813
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:330984\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1193
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:368026\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1415
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:409251\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1429
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:431743\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 288
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:444853\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 506
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:477533\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 212
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:480840\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 878
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:499760\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 805
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:512090\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1167
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:520206\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 331
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:539987\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1327
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:573046\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 685
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:577681\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1595
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:584136\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 2271
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:606542\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 631
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:608155\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 455
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:613085\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 394
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:619399\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 300
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:628267\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 7648
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:689307\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 406
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:744860\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 371
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:746389\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 703
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:757344\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:768557\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)",
+            "count": 1,
+            "bodyLength": 1248
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:768902\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1017
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:797435\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 331
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1020058\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 210
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1020494\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 2921
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1064693\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1762
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1078383\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 4767
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1099272\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 6416
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1130523\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1581
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1133964\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1670
+          },
+          {
+            "stack": "    at Object.construct (<anonymous>:7:156)\n    at it.template (http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:102735)\n    at http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js:8:1136239\n    at Object.execCb (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:16817)\n    at i.check (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:10539)\n    at i.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:13315)\n    at Object.enable (http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js:11:15880)",
+            "count": 1,
+            "bodyLength": 1502
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true
+}

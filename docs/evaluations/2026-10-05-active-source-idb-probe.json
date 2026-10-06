@@ -1,0 +1,35 @@
+{
+  "expected": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3",
+  "rows": [
+    {
+      "name": "chromium",
+      "write": {
+        "key": "edfb463b-bc16-405f-920b-8dc806a27f42",
+        "size": 25849
+      },
+      "read": {
+        "name": "测试 résumé.docx",
+        "size": 25849,
+        "lastModified": 1700000000000,
+        "hash": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3"
+      },
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "webkit",
+      "write": {
+        "key": "4f86ed62-ba01-4eb2-8850-bea05af4e99e",
+        "size": 25849
+      },
+      "read": {
+        "name": "测试 résumé.docx",
+        "size": 25849,
+        "lastModified": 1700000000000,
+        "hash": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3"
+      },
+      "passed": true,
+      "closed": true
+    }
+  ]
+}

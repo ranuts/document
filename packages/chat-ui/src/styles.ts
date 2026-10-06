@@ -10,241 +10,58 @@ import { Style } from 'ranui/builder';
  * with an embedded circular send button; subtle tool/error chips.
  */
 export const CHAT_UI_CSS = `
-.cui-root {
-  --cui-accent: #4f46e5;
-  --cui-accent-contrast: #fff;
-  --cui-bg: #fff;
-  --cui-user-bg: #eef0ff;
-  --cui-text: #1f2937;
-  --cui-muted: #9ca3af;
-  --cui-border: #e7e8ec;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  height: 100%;
-  background: var(--cui-bg);
-  color: var(--cui-text);
-  font-size: 14px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── Messages ─────────────────────────────────────────────────────────────*/
-.cui-messages {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 18px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  overscroll-behavior: contain;
-}
-.cui-empty {
-  margin: auto;
-  color: var(--cui-muted);
-  text-align: center;
-  font-size: 13px;
-  padding: 24px;
-  max-width: 80%;
-}
-.cui-msg {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  animation: cui-rise 0.18s ease;
-}
-@keyframes cui-rise {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: none; }
-}
-.cui-role {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--cui-muted);
-  padding: 0 2px;
-}
-.cui-bubble {
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* User: compact accent bubble, right-aligned. */
-.cui-msg-user {
-  align-self: flex-end;
-  align-items: flex-end;
-  max-width: 88%;
-}
-.cui-msg-user .cui-bubble {
-  background: var(--cui-user-bg);
-  color: var(--cui-text);
-  padding: 9px 13px;
-  border-radius: 16px 16px 4px 16px;
-}
-
-/* Assistant: bubble-less, full width for readable long-form answers. */
-.cui-msg-agent {
-  align-self: stretch;
-}
-
-/* Tool: a subtle inline status chip. */
-.cui-msg-tool {
-  align-self: flex-start;
-}
-.cui-msg-tool .cui-bubble {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #f4f5f7;
-  color: #6b7280;
-  font-size: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  padding: 4px 10px;
-  border-radius: 999px;
-}
-.cui-msg-tool .cui-bubble::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #a3a3a3;
-}
-
-/* Error: subtle red block. */
-.cui-msg-error {
-  align-self: stretch;
-}
-.cui-msg-error .cui-bubble {
-  background: #fef2f2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
-  padding: 9px 13px;
-  border-radius: 10px;
-}
-
-/* Streaming caret. */
-.cui-streaming .cui-bubble::after {
-  content: '';
-  display: inline-block;
-  width: 7px;
-  height: 1.05em;
-  margin-left: 3px;
-  border-radius: 1px;
-  vertical-align: text-bottom;
-  background: var(--cui-accent);
-  opacity: 0.7;
-  animation: cui-blink 1s steps(2, start) infinite;
-}
-@keyframes cui-blink { to { visibility: hidden; } }
-
-/* ── Footer (jump-to-latest + actions + composer) ─────────────────────────*/
-.cui-footer {
-  position: relative;
-  flex: 0 0 auto;
-  padding: 8px 12px 12px;
-}
-.cui-scroll-bottom {
-  position: absolute;
-  top: -46px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 32px;
-  height: 32px;
-  /* A round button is round only if its 32px includes the UA's own 1px 6px
-     button padding and this 1px border. Declared here rather than left to a
-     host reset: this file ships in @ranuts/chat-ui, and a host without one
-     renders these as ellipses (which is exactly what happened to the site's
-     own launcher when its CSS framework went away). */
-  box-sizing: border-box;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--cui-border);
-  border-radius: 50%;
-  background: var(--cui-bg);
-  color: #4b5563;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  transition: opacity 0.15s, transform 0.15s;
-}
-.cui-scroll-bottom:hover { color: var(--cui-text); }
-.cui-hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-50%) translateY(6px);
-}
-
-/* Compose toolbar: host-populated quick actions just above the composer. */
-.cui-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  padding: 0 4px 8px;
-  font-size: 13px;
-}
-.cui-actions:empty {
-  display: none;
-}
-
-/* Composer: rounded container with the textarea + an embedded send button. */
-.cui-composer {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  padding: 8px 8px 8px 14px;
-  border: 1px solid var(--cui-border);
-  border-radius: 22px;
-  background: var(--cui-bg);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.cui-composer:focus-within {
-  border-color: var(--cui-accent);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
-}
-.cui-input {
-  flex: 1 1 auto;
-  resize: none;
-  border: none;
-  outline: none;
-  background: transparent;
-  padding: 4px 0;
-  font: inherit;
-  line-height: 1.5;
-  color: inherit;
-  max-height: 160px;
-}
-.cui-input::placeholder { color: var(--cui-muted); }
-.cui-send {
-  flex: 0 0 auto;
-  width: 32px;
-  height: 32px;
-  /* Same reason as .cui-scroll-bottom: the 32px circle owns its own box. */
-  box-sizing: border-box;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  background: var(--cui-accent);
-  color: var(--cui-accent-contrast);
-  transition: background 0.15s, opacity 0.15s;
-}
-.cui-send:hover { filter: brightness(1.06); }
-.cui-send:disabled {
-  background: #e5e7eb;
-  color: #b0b4bb;
-  cursor: default;
-}
-.cui-send-stop { background: #6b7280; }
+.cui-root { --cui-accent:#171717; --cui-accent-contrast:#fff; --cui-bg:#fff; --cui-user-bg:#f4f4f4; --cui-text:#171717; --cui-muted:#737373; --cui-border:#e5e5e5; position:relative; display:flex; flex-direction:column; min-height:0; height:100%; background:var(--cui-bg); color:var(--cui-text); font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+.cui-messages { flex:1 1 auto; min-height:0; overflow:auto; overflow-x:hidden; padding:24px 20px; display:flex; flex-direction:column; gap:24px; overscroll-behavior:contain; scrollbar-width:thin; }
+.cui-empty { margin:auto; max-width:260px; padding:32px 8px; text-align:left; font-size:22px; font-weight:500; line-height:1.45; letter-spacing:-.035em; color:var(--cui-text); }
+.cui-empty-actions { margin-top:20px; font-size:12px; letter-spacing:0; font-weight:400; }
+.cui-empty-actions button { font:inherit; color:var(--cui-muted); border:1px solid var(--cui-border); background:transparent; padding:7px 12px; border-radius:8px; cursor:pointer; }
+.cui-msg { display:flex; flex-direction:column; gap:8px; min-width:0; }
+.cui-bubble { white-space:pre-wrap; overflow-wrap:anywhere; }
+.cui-msg-user { align-self:flex-end; max-width:88%; }
+.cui-msg-user .cui-bubble { background:var(--cui-user-bg); padding:10px 14px; border-radius:16px; }
+.cui-msg-agent { align-self:stretch; }
+.cui-msg-agent .cui-bubble { white-space:normal; }
+.cui-bubble p { margin:0 0 12px; }
+.cui-bubble p:last-child { margin-bottom:0; }
+.cui-bubble h2,.cui-bubble h3,.cui-bubble h4,.cui-bubble h5,.cui-bubble h6 { font-size:1.08em; line-height:1.45; margin:20px 0 8px; font-weight:600; }
+.cui-bubble :is(h2,h3,h4,h5,h6):first-child { margin-top:0; }
+.cui-bubble ul,.cui-bubble ol { padding-left:22px; margin:8px 0 14px; }
+.cui-bubble li { padding-left:2px; margin:4px 0; }
+.cui-bubble blockquote { margin:12px 0; border-left:2px solid var(--cui-border); padding-left:12px; color:var(--cui-muted); }
+.cui-bubble code { font-family:ui-monospace,monospace; font-size:.88em; background:var(--cui-user-bg); padding:2px 4px; border-radius:4px; }
+.cui-bubble pre { margin:12px 0; background:var(--cui-user-bg); padding:12px; border-radius:10px; overflow:auto; white-space:pre; }
+.cui-bubble pre code { padding:0; background:none; }
+.cui-bubble a { color:var(--cui-text); text-underline-offset:3px; }
+.cui-table { overflow:auto; }
+.cui-table table { border-collapse:collapse; font-size:13px; }
+.cui-table th,.cui-table td { border-bottom:1px solid var(--cui-border); padding:8px; text-align:left; }
+.cui-message-actions { display:flex; gap:8px; }
+.cui-message-actions button { border:0; background:transparent; color:var(--cui-muted); cursor:pointer; font:inherit; font-size:11px; min-height:28px; padding:4px; border-radius:6px; }
+.cui-message-actions button:hover { color:var(--cui-text); background:var(--cui-user-bg); }
+.cui-message-actions button:disabled { opacity:.5; cursor:default; }
+.cui-root button:focus-visible { outline:2px solid var(--cui-accent); outline-offset:3px; }
+.cui-streaming .cui-message-actions { display:none; }
+.cui-streaming .cui-bubble { white-space:pre-wrap; }
+.cui-activity { color:var(--cui-muted); font-size:12px; margin:-10px 0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.cui-activity summary { cursor:pointer; padding:6px 0; }
+.cui-activity ul { list-style:none; margin:4px 0 8px 5px; border-left:1px solid var(--cui-border); padding-left:16px; }
+.cui-activity li { padding:4px 0; }
+.cui-msg-status { color:var(--cui-muted); font-size:12px; }
+.cui-msg-error .cui-bubble { padding:12px; border:1px solid var(--cui-border); border-radius:10px; font-size:13px; }
+.cui-status { flex:0 0 auto; padding:0 20px 12px; color:var(--cui-muted); font-size:12px; }
+.cui-status:empty { display:none; }
+.cui-footer { position:relative; flex:0 0 auto; padding:12px 16px 16px; }
+.cui-scroll-bottom { position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:32px; height:32px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:1px solid var(--cui-border); border-radius:50%; background:var(--cui-bg); color:var(--cui-muted); cursor:pointer; box-shadow:0 2px 6px #00000012; }
+.cui-scroll-bottom[hidden] { display:none; }
+.cui-composer { display:flex; flex-direction:column; padding:12px; border:1px solid var(--cui-border); border-radius:16px; background:var(--cui-bg); }
+.cui-composer:focus-within { border-color:var(--cui-muted); }
+.cui-composer-bar { display:flex; align-items:center; gap:8px; margin-top:12px; }
+.cui-actions { display:flex; flex:1; min-width:0; align-items:center; gap:6px; font-size:12px; flex-wrap:wrap; }
+.cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:40px; }
+.cui-input::placeholder { color:var(--cui-muted); }
+.cui-send { flex:0 0 auto; width:30px; height:30px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); }
+.cui-send:disabled { opacity:.35; cursor:default; }
+.cui-streaming .cui-bubble::after { content:''; display:inline-block; width:6px; height:6px; margin-left:5px; border-radius:50%; background:currentColor; vertical-align:middle; }
 `;
 
 let injected = false;

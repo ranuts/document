@@ -1,0 +1,62 @@
+[
+  {
+    "engine": "chromium",
+    "locale": "zh-CN",
+    "version": "151.0.7922.34",
+    "errors": [],
+    "before": "\r\n",
+    "missingAnswer": "请先生成一条完整回答，再写入文档。\n恢复请求",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "请取消选区后对齐当前段落，或明确要求对齐选区。\n恢复请求",
+    "actions": [],
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "chromium",
+    "locale": "en",
+    "version": "151.0.7922.34",
+    "errors": [],
+    "before": "\r\n",
+    "missingAnswer": "Generate a complete answer before writing it to the document.\nRestore request",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "Clear the selection to align the current paragraph, or ask to align the selection.\nRestore request",
+    "actions": [],
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "webkit",
+    "locale": "zh-CN",
+    "version": "26.5",
+    "errors": [],
+    "before": "\r\n",
+    "missingAnswer": "请先生成一条完整回答，再写入文档。\n恢复请求",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "请取消选区后对齐当前段落，或明确要求对齐选区。\n恢复请求",
+    "actions": [],
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "webkit",
+    "locale": "en",
+    "version": "26.5",
+    "errors": [],
+    "before": "\r\n",
+    "missingAnswer": "Generate a complete answer before writing it to the document.\nRestore request",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "Generate a complete answer before writing it to the document.\nRestore request",
+    "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.conflict.includes(locale==='zh-CN'?'请取消选区后对齐当前段落，或明确要求对齐选区。':'Clear the selection to align the current paragraph, or ask to align the selection.'))\n",
+    "chat": "write the previous answer into the document\nGenerate a complete answer before writing it to the document.\nRestore request",
+    "contextClosed": true,
+    "browserClosed": true
+  }
+]

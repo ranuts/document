@@ -1,0 +1,156 @@
+{
+  "scope": "Independent local multilingual NLI WASM feasibility experiment, separate Dedicated Worker and strict self-only CSP. Predeclared controls plus archived generation failures; no product integration, IM, native document operation, model coexistence, offline or physical-device claim.",
+  "status": "failed",
+  "sdkVersion": "3.8.1",
+  "model": {
+    "model": "onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX",
+    "revision": "ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e",
+    "files": [
+      {
+        "name": "config.json",
+        "bytes": 989,
+        "sha256": "3ebbbdf3c3803649b49715fd169207c0f42c4250dfea5dd304b1d8b8f745852a",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/config.json"
+      },
+      {
+        "name": "tokenizer.json",
+        "bytes": 17082832,
+        "sha256": "d0091a328b3441d754e481db5a390d7f3b8dabc6016869fd13ba350d23ddc4cd",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/tokenizer.json"
+      },
+      {
+        "name": "tokenizer_config.json",
+        "bytes": 1286,
+        "sha256": "329b7d21f02c6c6c9d358733b03a34a89cd8e4fe36998869a6ab824b98e9bf9d",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/tokenizer_config.json"
+      },
+      {
+        "name": "special_tokens_map.json",
+        "bytes": 964,
+        "sha256": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/special_tokens_map.json"
+      },
+      {
+        "name": "onnx/model_quantized.onnx",
+        "bytes": 107415176,
+        "sha256": "55614f3c7da74184742eaa0006b978744437aa91de9ba4913db42f94d7844a8f",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/onnx/model_quantized.onnx"
+      }
+    ]
+  },
+  "decision": {
+    "supportedLabel": "entailment",
+    "minimumProbability": 0.8,
+    "policy": "Unchanged predeclared rule."
+  },
+  "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self'; base-uri 'none'",
+  "cases": [
+    {
+      "id": "identity",
+      "premise": "Mira did not approve the shipment.",
+      "hypothesis": "Mira did not approve the shipment.",
+      "expectedSupport": true,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "affirmative-identity",
+      "premise": "The dog is running.",
+      "hypothesis": "The dog is running.",
+      "expectedSupport": true,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "direct-contradiction",
+      "premise": "The dog is running.",
+      "hypothesis": "The dog is not running.",
+      "expectedSupport": false,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "unrelated",
+      "premise": "The dog is running.",
+      "hypothesis": "The stock market closed lower.",
+      "expectedSupport": false,
+      "language": "en",
+      "category": "calibration"
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:54855/",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/page.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/worker.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/sdk/transformers.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/tokenizer.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/tokenizer_config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/onnx/model_quantized.onnx",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:54855/sdk/ort-wasm-simd-threaded.jsep.wasm",
+      "method": "GET",
+      "bodyBytes": 0
+    }
+  ],
+  "externalRequests": [],
+  "probeSHA256": "5311e8771a93644c90b33631b6cfb1c0effc057e70a7e9bbb2aed0aa6359a447",
+  "sdkSHA256": "ca697cc102b304de065fbbbd7f3714084d18531509741066ea0bb0326a8ac815",
+  "runtime": {
+    "kind": "loaded",
+    "loadMs": 1131.7750000953674,
+    "labels": {
+      "0": "entailment",
+      "1": "neutral",
+      "2": "contradiction"
+    },
+    "isolated": true,
+    "configuredThreads": 4,
+    "spawned": [
+      "http://127.0.0.1:54855/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "http://127.0.0.1:54855/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "http://127.0.0.1:54855/sdk/ort-wasm-simd-threaded.jsep.mjs"
+    ]
+  },
+  "violations": [],
+  "error": "Error: {\"kind\":\"error\",\"error\":\"Error: token_ids must be a non-empty array of integers.\",\"stack\":\"Error: token_ids must be a non-empty array of integers.\\n    at closure.decode (http://127.0.0.1:54855/sdk/transformers.js:33630:19)\\n    at self.onmessage (http://127.0.0.1:54855/worker.mjs:36:77)\"}"
+}

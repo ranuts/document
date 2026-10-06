@@ -1,0 +1,105 @@
+{
+  "status": "completed",
+  "probeSHA256": "2b04f24eed4d64b4a6d324dedbebaf8eb6baf6bf6130b5dc0c916b6290d868aa",
+  "errors": [],
+  "scope": "Actual Chromium keyboard deletion failure and retry in isolated source harness; repository failure is injected, not a physical IndexedDB outage. Includes original reload/export/success checks.",
+  "sourceHashes": {
+    "lib/agent-plugin/ui/sessions.ts": "22bb810133fd9e1bb239a1478b834e8cd8dcbd659e5d19f7d7412c2c68be836d",
+    "lib/agent-plugin/ui/conversation-db.ts": "94cc763ca2360588f5ca419f8f1b82f55585467e53e23e7cd134b16b8b9a93d3",
+    "lib/agent-plugin/ui/history-controls.ts": "75b57b3c2f805c20851cce4f3f48ea9b045b0ffe58857b99527d4d94e021ebef"
+  },
+  "initial": {
+    "saving": false,
+    "history": []
+  },
+  "beforeReload": {
+    "id": "b96a1b98-f16d-466e-bf22-3a614907eca6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "restored": {
+    "saving": true,
+    "id": "b96a1b98-f16d-466e-bf22-3a614907eca6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "downloadName": "conversations-2026-10-04.json",
+  "downloadError": null,
+  "export": {
+    "version": 1,
+    "activeId": "b96a1b98-f16d-466e-bf22-3a614907eca6",
+    "sessions": [
+      {
+        "id": "b96a1b98-f16d-466e-bf22-3a614907eca6",
+        "title": "中文🧾 640 EUR Literal \\n",
+        "createdAt": 1791083422442,
+        "updatedAt": 1791083422467,
+        "messages": [
+          {
+            "role": "user",
+            "content": "中文🧾\n640 EUR\nLiteral \\n"
+          },
+          {
+            "role": "assistant",
+            "content": "**原文** <script>data</script>"
+          }
+        ]
+      }
+    ],
+    "exportedAt": "2026-10-04T03:10:22.605Z"
+  },
+  "focusResults": [
+    {
+      "selector": ".agent-history-delete-current",
+      "active": "agent-history-delete-current",
+      "hidden": true
+    },
+    {
+      "selector": ".agent-history-delete-all",
+      "active": "agent-history-delete-all",
+      "hidden": true
+    }
+  ],
+  "failedDeletion": {
+    "active": "agent-history-confirm",
+    "hidden": false,
+    "messages": [
+      {
+        "role": "user",
+        "content": "preserve on failure"
+      }
+    ],
+    "status": "Could not save history. Your conversation remains in this page; export it before closing."
+  },
+  "retriedDeletion": {
+    "active": "agent-history-delete-all",
+    "hidden": true,
+    "messages": []
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": "中文🧾\n640 EUR\nLiteral \\n"
+    },
+    {
+      "role": "assistant",
+      "content": "**原文** <script>data</script>"
+    }
+  ]
+}

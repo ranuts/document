@@ -1,0 +1,7 @@
+# Native Word reopen at unavailable origin after Home readiness
+
+Unchanged f2eb0ed, fresh desktop WebKit 26.5, same exact saved DOCX identity as prior reports. The intentional prerequisite added after 7cc132b is waiting for actual production worker control at Home before initial online file import. No product/registration/cache changes or manual asset prefetch occur. Native initial import succeeds with exact text.
+
+The initial page and owned forwarding server are closed, all server connections removed and closure awaited. A new Home page at the unavailable origin opens the same local DOCX via the actual file chooser. Actual native document/full API readiness completes; GetText equals the online text and fixed literal plus CRLF exactly. No page errors, browser/context/server cleanup normal. Failed worker update and two spelling-script requests are retained.
+
+This proves native local-file reopen for this warmed context after application-origin shutdown, beyond prior online reopen and ZIP/XML checks. Remote internet remains possible and browser online state is unchanged; not full disconnect, physical Safari/iOS, process restart, layout or all-document acceptance. The wait is a diagnostic readiness prerequisite, not a product solution for immediate Home Open. The original immediate-navigation installation failure remains unresolved. No model load or general semantic-quality acceptance is claimed. Evidence-only changes run no new unit suite/build.

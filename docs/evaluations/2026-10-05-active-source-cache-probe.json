@@ -1,0 +1,46 @@
+{
+  "scope": "Cache API source feasibility only; no product change",
+  "expected": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3",
+  "rows": [
+    {
+      "name": "chromium",
+      "write": {
+        "key": "http://127.0.0.1:5193/__active-source/f1af94ae-6421-4c1c-a9fe-896228d351ef",
+        "size": 25849,
+        "keys": [
+          "http://127.0.0.1:5193/__active-source/f1af94ae-6421-4c1c-a9fe-896228d351ef"
+        ],
+        "immediate": true
+      },
+      "read": {
+        "name": "测试 résumé.docx",
+        "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "lastModified": 1700000000000,
+        "size": 25849,
+        "hash": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3",
+        "deleted": true
+      },
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "webkit",
+      "write": {
+        "key": "http://127.0.0.1:5193/__active-source/07800ce5-ba06-483e-be66-59832b90ea94",
+        "size": 25849,
+        "keys": [
+          "http://127.0.0.1:5193/__active-source/07800ce5-ba06-483e-be66-59832b90ea94"
+        ],
+        "immediate": true
+      },
+      "read": {
+        "key": "http://127.0.0.1:5193/__active-source/07800ce5-ba06-483e-be66-59832b90ea94",
+        "href": "http://127.0.0.1:5193/",
+        "keys": [],
+        "missing": true
+      },
+      "error": "Error: Source mismatch",
+      "closed": true
+    }
+  ]
+}

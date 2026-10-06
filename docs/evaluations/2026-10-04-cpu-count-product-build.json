@@ -1,0 +1,24 @@
+{
+  "scope": "Built product contains both hash-matched CPU count WASM variants; no IM browser acceptance claim",
+  "wasmAssets": {
+    "native/compat/wllama.wasm": {
+      "file": "dist/assets/wllama-J6krg_E0.wasm",
+      "sha256": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179",
+      "bytes": 12995286
+    },
+    "native/default/wllama.wasm": {
+      "file": "dist/assets/wllama-BITawafS.wasm",
+      "sha256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6",
+      "bytes": 6570369
+    }
+  },
+  "buildExitCode": 0,
+  "typecheckExitCode": 0,
+  "targetedTestFiles": 6,
+  "targetedTestsPassed": 65,
+  "fullTests": {
+    "exitCode": 0,
+    "filesPassed": 118,
+    "testsPassed": 4278
+  }
+}

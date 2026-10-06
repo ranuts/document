@@ -1,0 +1,31 @@
+{
+  "scope": "Native Chromium PWA install and standalone launch in a fresh owned profile; explicit native standalone preference, then owned serving origin shut down before browser process restart. Cached self-hosted CPU model inference and IM Word edit after origin shutdown, not physical full-network or model-quality certification.",
+  "steps": [
+    {
+      "phase": "seed",
+      "controller": "http://127.0.0.1:61271/sw.js?isolation=1",
+      "caches": [
+        "document-editor-runtime-59e2dc593998",
+        "document-editor-core-1791134366"
+      ]
+    }
+  ],
+  "errors": [
+    "TimeoutError: locator.click: Timeout 90000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#app iframe').contentFrame().locator('.agent-sidebar-entry')\u001b[22m\n"
+  ],
+  "origin": "http://127.0.0.1:61271/",
+  "served": [],
+  "artifactBytes": 491400032,
+  "artifactSHA256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "probeSHA256": "04d99d445758569d22ab8951df447dfb8a297489f07b19af98e28e2d7a29f40f",
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/151.0.7922.34",
+    "revision": "@782af9cb30a53f54487e5d2e44738645a8ec457c",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "jsVersion": "15.1.206.8"
+  },
+  "seedWordText": "\r\n",
+  "status": "failed",
+  "contextClosed": true
+}

@@ -1,0 +1,553 @@
+{
+  "plugin": "agent-plugin-BrCFnRZ2.js",
+  "pluginSHA256": "f3d6ac9f872b3c93ede667278062324a0b27e1125e1ded94cef18e2bd19fca93",
+  "offlineRequests": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-Ck_MupWi.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CYJn2sbW.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-BrCFnRZ2.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-B0MAkvvr.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/en.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail.png.bin",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-cpu-runtime-D85rvp_H.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/client-D5_UYdz1.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/8d3e27d0-59b6-4a09-b929-40387043e308",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/185ef036-35bb-4670-aa0e-a96508991714",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/4a58607f-c5b6-4c79-adde-2d53af0a0b32",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/c5d3ff0b-a86a-4bf2-ab2e-4e7595e05dc6",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/03b60cc4-b513-4362-8f81-2e55886adab6",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-BITawafS.wasm",
+      "method": "GET",
+      "hasBody": false
+    }
+  ],
+  "probeSHA256": "a1b0d749d6a83b007057a32ab09dc42fab775a8380a8a675ef3269d99a622e8c",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "coldState": {
+        "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+        "isolated": true
+      },
+      "browserOnline": false,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "actions": [
+        "load",
+        "count_chat",
+        "completion",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result"
+      ],
+      "resources": [
+        "http://127.0.0.1:5193/theme-presentation.js",
+        "http://127.0.0.1:5193/ran-fonts/fonts.css",
+        "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+        "http://127.0.0.1:5193/assets/editor-Ck_MupWi.js",
+        "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+        "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+        "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+        "http://127.0.0.1:5193/assets/input-DEoPNM0j-CYJn2sbW.js",
+        "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+        "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+        "http://127.0.0.1:5193/assets/agent-plugin-BrCFnRZ2.js",
+        "http://127.0.0.1:5193/assets/input-B0MAkvvr.js",
+        "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+        "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+        "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+        "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+        "http://127.0.0.1:5193/manifest.json",
+        "http://127.0.0.1:5193/manifest.json",
+        "http://127.0.0.1:5193/icons/document-light.svg",
+        "http://127.0.0.1:5193/assets/wllama-cpu-runtime-D85rvp_H.js",
+        "http://127.0.0.1:5193/assets/client-D5_UYdz1.js",
+        "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js"
+      ],
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 36.7 token/s · First text: 0.92 s · Overall response rate: 3.15 token/s · 3 tokens",
+      "reply": "Hello!Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "seedResources": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/ran-fonts/fonts.css",
+    "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+    "http://127.0.0.1:5193/assets/editor-Ck_MupWi.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/input-DEoPNM0j-CYJn2sbW.js",
+    "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+    "http://127.0.0.1:5193/assets/agent-plugin-BrCFnRZ2.js",
+    "http://127.0.0.1:5193/assets/input-B0MAkvvr.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+    "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+    "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+    "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/icons/document-light.svg",
+    "http://127.0.0.1:5193/assets/wllama-cpu-runtime-D85rvp_H.js",
+    "http://127.0.0.1:5193/assets/client-D5_UYdz1.js",
+    "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js"
+  ],
+  "seedState": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "isolated": true
+  },
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "closedSeedContext": true,
+  "status": "completed"
+}

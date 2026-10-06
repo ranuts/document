@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "scope": "Actual production automatic GPU adapter rejection to cached CPU Qwen3-0.6B fallback and chat response in isolated desktop Playwright WebKit. Controlled adapter failure, network available.",
+  "errors": [],
+  "phases": [
+    {
+      "time": "2026-10-02T19:09:46.799Z",
+      "text": "Real automatic CPU model loaded"
+    },
+    {
+      "time": "2026-10-02T19:09:58.084Z",
+      "text": "CPU reply verified"
+    }
+  ],
+  "loadMs": 4348,
+  "note": "Model loaded — you can start chatting.",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "selectedProvider": "webllm",
+  "before": "\r\n",
+  "responseMs": 11178,
+  "reply": [
+    "Hello.Write to document"
+  ],
+  "visibleErrors": [],
+  "after": "\r\n",
+  "documentUnchanged": true,
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css",
+    "http://127.0.0.1:5193/assets/editor-PVYdgt1D.js"
+  ],
+  "adapterRequestCalls": 1,
+  "productionBundle": "editor-PVYdgt1D.js",
+  "limitations": [
+    "Desktop Playwright WebKit controlled failure with warm CPU cache and network available; no physical Safari/iOS/Android or offline proof.",
+    "Initialization fallback only; no generation replay, OOM/VRAM reclamation, smaller-model recovery or GPU device-loss claim.",
+    "One short CPU chat sample; no multilingual writing quality or document tool reliability claim."
+  ],
+  "assessment": "Automatic provider loaded real CPU Qwen3-0.6B and answered Hello without mutating the Word document."
+}

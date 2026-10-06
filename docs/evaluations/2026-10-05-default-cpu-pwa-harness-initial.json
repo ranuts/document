@@ -1,0 +1,1617 @@
+{
+  "runtime": "d71a1e8",
+  "protocol": "2026-10-05-default-cpu-pwa-protocol.md",
+  "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "requests": [
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-C7eSWAmW.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/input-D771JG4c.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.worker.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/index.html",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/en.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/de.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/es.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/pt.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/ja.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/ko.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/en.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/de.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/es.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/pt.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/ja.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/ko.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/en.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/de.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/es.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/pt.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/ja.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/ko.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/index.html",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/editor",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/editor.html",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-dark.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light-32.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-dark-32.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-32.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-180.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-192.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-512.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-maskable-512.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/add-user-DfBFkCnJ-B1fmP7dz.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-C7eSWAmW.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/arc-BODut2Nf-Cd45hEQu.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/arrow-down-B6_1Kbcg-DEfGzY_t.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/book-DUmorlwf-B2UalI4T.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/cast-B3elr6fu-JAqcYgSG.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/check-BEoPhSfZ-Cz2sWZHN.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/check-circle-CnpiEx1K-BFYv5_oA.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/circle-fold-BTxpiOuH-C_vzogpi.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/circle-line-DRB7oWlP-ZPt8ezG5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/circle-rotate-DbCoEwES-DuorpAZn.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/circle-spin-0DNX-C6W-kYkmpNIh.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/circle-turn-BXVMEyxr-DaZXNcj0.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/client-D5_UYdz1.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/close-D4AmwT1V-Dz1BZAwQ.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/close-circle-CJkjIM8m-KEkcvpue.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/copy-CqZjV4i2-e91bZHo4.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/cube-CoQphUIu-DiOWDYXg.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/cube-dim-C3XrB652-Dj8JyqT3.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/cube-fold-CzRngjX5-tYzhjJ8U.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/cube-grid-BuVRuYHG-CVruUlsG.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/dot-bar-s3ka1x3Q-BjFmgzmI.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/dot-circle-Bb9HSrui-DGvPcY0o.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/dot-line-Dc17eMQU-SiBWOg0-.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/dot-pulse-CYeqwG5l-CeGzgBcP.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/double-bounce-D6AfxJFe-BRMfGRWu.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/download-vhNSLCeg-DmRpC0Ey.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/drop-5kzMtVNd-JRMiXnio.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/drop-DBZkUjZr-BzQOAcjX.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/esm-BgvLHT16.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/eye-Ctsj5bfE-QFZMYX4C.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/eye-close-BSoIc1oj-CLZwNFpd.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/fullscreen-BU4JuuEL-Csmibi7s.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/github-CeDoYKhZ-Z69VzvoI.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/globe-DIZ0Ki22-B0DACu5m.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/history-B9M2qSzg.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/history-DlytvTnF.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/home-CcLgxiaO-CjDbOka2.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/info-circle-JzD8z-kG-DmDxv6fy.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/input-D771JG4c.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/issue-CWRKJS2V-BskJ-i1L.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/line-b2g7AXLN-Co5cJk-x.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/line-scale-Ds4RPBRN-BywSuOT2.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/loading--1eC6HwB-oClVEDsq.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/loading-scene-DmzV6WiL-VZ_PKgzc.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/lock-DoqyIASp-CQG7ugt5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/menu-CbeCzN4--DsQl4Apv.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/message-BCrZnSBS-DfjcNjZn.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/mic-CcjXOqQV-DuZFtf5g.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/mic-off-UhngXK2Y-pQdEXDvH.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/more-h7nyGZMk-CyxZaWji.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/pacman-h5U-SPYq-DdArsvQU.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/pause-BH0W0dLI-DqBiMHsd.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/pencil-H40a5VG9-DEyacAyg.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/pending-open-BKBmFD6R.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/pip-U67u-Uw_-SEYbpv1G.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/play-VYD6FTp--C0WDtI-3.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/plus-DxQEUhuw-A33mKXPU.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/power-off-BKpAz0aZ-Dti8Us--.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/preview-gd9ayK9s-BykPUjeS.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/pulse-Cl2nj-eH-DykGFKvj.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/recovery-DmiSe00Y.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/refresh-D2t33mZ3-BlSpgVRP.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rotate-CgvsSjDf-pAhEIuvV.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/scale-out-CWupYSU_-BQPJiQyz.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/search-DkXPfdII-DTHgrXs9.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/setting-CMt5fbYQ-CY1UmMjj.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/solar-BB6dvn8C-BTq2jOxN.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/sort-BN5B1X9F-bRALZC1V.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/sprite-CUyEIYBs-CueT7qkj.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/square-DUjZUNBe-Br8P7Rdy.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/stretch-DgU8wfiG-DxS8fHu9.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/team-C4Kz47a5-B3SCBAGS.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/text-SIeN3Zk6-D7Dh9_ID.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/triple-bounce-BcSy-fhB-D87C34Cv.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/unlock-DIzOKbH5-CWkdGrt3.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/user-BzcQqO9f-Ccg7cKvB.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/volume-BPWjdmsr-CVH6nJX_.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/volume-mute-CnXptGgN-BmehIYOm.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/warning-circle-ncTxgs_n-CXx29g01.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/without-content-DhxOdACo-ETxN-ji9.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-BIOZ48O-.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-BITawafS.wasm",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-BcotrvZo.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-CaONujPU.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-D0WL0fvJ.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-J6krg_E0.wasm",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-XMlyubPs.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-cpu-runtime-BHaXJdkH.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/wllama-xnr7mLRC.wasm",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/zoom-in--8CF2Gmz-Be6YNBZ5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/zoom-out-C_uyMrpy-BBc6Pc-p.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET"
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET"
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "browserVersion": "151.0.7922.34",
+  "fileCount": 0,
+  "error": "TimeoutError: page.waitForFunction: Timeout 60000ms exceeded.",
+  "failedPhase": "open",
+  "failureHint": "GGUF 模型网址；CPU 模式可能较慢。也可选择本地 GGUF 文件。",
+  "failureStatus": "",
+  "contextClosed": true,
+  "browserClosed": true
+}

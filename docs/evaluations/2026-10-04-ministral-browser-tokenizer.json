@@ -1,0 +1,287 @@
+{
+  "probeSHA256": "cc34f0bd553c0100b6f62c80ffea442174185e036c87bdfc262558c618fce1dc",
+  "sdkSHA256": "ea4dcbc184039e045f6b1c3dfd7511e739945ee0bcf91166f68cbfb6daf7af25",
+  "instrumentedSHA256": "22c459d7c936abeb1a549929aa034b79b82d47d649e51fb9861be3638af84286",
+  "fixtures": [
+    "640 EUR on 2026-10-12",
+    "Alex pays Morgan; Morgan pays Alex.",
+    "林青还没有批准在 2026-10-12 支付 640 EUR。",
+    "四季 日本 ä 😀\nLine 2\t  space",
+    "<s>[SYSTEM_PROMPT]System[/SYSTEM_PROMPT][INST]640[/INST]</s>",
+    "[THINK]secret[/THINK]"
+  ],
+  "files": [
+    {
+      "name": "mlc",
+      "path": ".scratch/ministral-tokenizer-audit/mlc-tokenizer.json",
+      "sha256": "577575622324b2e099e2648be26bdeb5e5815ffe66d7004e9e3ddbf421db6bf1"
+    },
+    {
+      "name": "official",
+      "path": ".scratch/ministral-tokenizer-audit/official-tokenizer.json",
+      "sha256": "d5f6046775b112f0e2d456ee9dba450684ab964fe5c4e231599bdc6773028135"
+    }
+  ],
+  "results": [
+    {
+      "name": "mlc",
+      "text": "640 EUR on 2026-10-12",
+      "ids": [
+        1054,
+        1052,
+        1048,
+        102815,
+        1408,
+        1032,
+        1050,
+        1048,
+        1050,
+        1054,
+        1045,
+        1049,
+        1048,
+        1045,
+        1049,
+        1050
+      ],
+      "decoded": "640 EUR on 2026-10-12",
+      "vocabSize": 131072
+    },
+    {
+      "name": "mlc",
+      "text": "Alex pays Morgan; Morgan pays Alex.",
+      "ids": [
+        27818,
+        11318,
+        23441,
+        1059,
+        23441,
+        11318,
+        7044,
+        1046
+      ],
+      "decoded": "Alex pays Morgan; Morgan pays Alex.",
+      "vocabSize": 131072
+    },
+    {
+      "name": "mlc",
+      "text": "林青还没有批准在 2026-10-12 支付 640 EUR。",
+      "ids": [
+        35185,
+        46904,
+        15969,
+        16685,
+        60608,
+        61262,
+        2998,
+        1032,
+        1050,
+        1048,
+        1050,
+        1054,
+        1045,
+        1049,
+        1048,
+        1045,
+        1049,
+        1050,
+        28010,
+        1175,
+        46393,
+        1032,
+        1054,
+        1052,
+        1048,
+        102815,
+        1320
+      ],
+      "decoded": "林青还没有批准在 2026-10-12 支付 640 EUR。",
+      "vocabSize": 131072
+    },
+    {
+      "name": "mlc",
+      "text": "四季 日本 ä 😀\nLine 2\t  space",
+      "ids": [
+        13235,
+        34252,
+        30367,
+        7221,
+        119685,
+        1152,
+        1128,
+        1010,
+        6473,
+        1032,
+        1050,
+        17152,
+        5702
+      ],
+      "decoded": "四季 日本 ä 😀\nLine 2\t  space",
+      "vocabSize": 131072
+    },
+    {
+      "name": "mlc",
+      "text": "<s>[SYSTEM_PROMPT]System[/SYSTEM_PROMPT][INST]640[/INST]</s>",
+      "ids": [
+        1,
+        17,
+        6775,
+        18,
+        3,
+        1054,
+        1052,
+        1048,
+        4,
+        2
+      ],
+      "decoded": "<s>[SYSTEM_PROMPT]System[/SYSTEM_PROMPT][INST]640[/INST]</s>",
+      "vocabSize": 131072
+    },
+    {
+      "name": "mlc",
+      "text": "[THINK]secret[/THINK]",
+      "ids": [
+        34,
+        54870,
+        35
+      ],
+      "decoded": "[THINK]secret[/THINK]",
+      "vocabSize": 131072
+    },
+    {
+      "name": "official",
+      "text": "640 EUR on 2026-10-12",
+      "ids": [
+        1054,
+        1052,
+        1048,
+        102815,
+        1408,
+        1032,
+        1050,
+        1048,
+        1050,
+        1054,
+        1045,
+        1049,
+        1048,
+        1045,
+        1049,
+        1050
+      ],
+      "decoded": "640 EUR on 2026-10-12",
+      "vocabSize": 131072
+    },
+    {
+      "name": "official",
+      "text": "Alex pays Morgan; Morgan pays Alex.",
+      "ids": [
+        27818,
+        11318,
+        23441,
+        1059,
+        23441,
+        11318,
+        7044,
+        1046
+      ],
+      "decoded": "Alex pays Morgan; Morgan pays Alex.",
+      "vocabSize": 131072
+    },
+    {
+      "name": "official",
+      "text": "林青还没有批准在 2026-10-12 支付 640 EUR。",
+      "ids": [
+        35185,
+        46904,
+        15969,
+        16685,
+        60608,
+        61262,
+        2998,
+        1032,
+        1050,
+        1048,
+        1050,
+        1054,
+        1045,
+        1049,
+        1048,
+        1045,
+        1049,
+        1050,
+        28010,
+        1175,
+        46393,
+        1032,
+        1054,
+        1052,
+        1048,
+        102815,
+        1320
+      ],
+      "decoded": "林青还没有批准在 2026-10-12 支付 640 EUR。",
+      "vocabSize": 131072
+    },
+    {
+      "name": "official",
+      "text": "四季 日本 ä 😀\nLine 2\t  space",
+      "ids": [
+        13235,
+        34252,
+        30367,
+        7221,
+        119685,
+        1152,
+        1128,
+        1010,
+        6473,
+        1032,
+        1050,
+        17152,
+        5702
+      ],
+      "decoded": "四季 日本 ä 😀\nLine 2\t  space",
+      "vocabSize": 131072
+    },
+    {
+      "name": "official",
+      "text": "<s>[SYSTEM_PROMPT]System[/SYSTEM_PROMPT][INST]640[/INST]</s>",
+      "ids": [
+        1,
+        17,
+        6775,
+        18,
+        3,
+        1054,
+        1052,
+        1048,
+        4,
+        2
+      ],
+      "decoded": "<s>[SYSTEM_PROMPT]System[/SYSTEM_PROMPT][INST]640[/INST]</s>",
+      "vocabSize": 131072
+    },
+    {
+      "name": "official",
+      "text": "[THINK]secret[/THINK]",
+      "ids": [
+        1091,
+        12001,
+        57142,
+        1093,
+        54870,
+        1091,
+        1047,
+        12001,
+        57142,
+        1093
+      ],
+      "decoded": "[THINK]secret[/THINK]",
+      "vocabSize": 131072
+    }
+  ],
+  "errors": [],
+  "scope": "Real Chromium direct use of installed SDK bundled tokenizer with pinned MLC/official JSON; diagnostic export only, no engine/GPU inference or production cache proof.",
+  "completed": true
+}

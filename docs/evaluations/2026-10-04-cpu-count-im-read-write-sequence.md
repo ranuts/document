@@ -1,0 +1,9 @@
+# First ordered read-then-write implementation
+
+Added generateDocumentToolSequence around the existing immutable validated plans. The complete reproduced Chinese literal request produces get_range/A1:B4 followed by set_cell/B2/99, without model subset selection. Numeric/plain JSON-quoted text assignments validate before any execution; formulas, invalid destinations and trailing extra operations reject. Existing single requests delegate to the original planner. Returned arrays are immutable.
+
+The panel accepts at most four plans with mutations allowed only as the last step. Each action uses the original captured target, checks abort and conversation/generation freshness, and retains existing native target/value verification. Every completed step is appended to operation history and the existing activity UI. Multiple activity items retain read detail inside the existing disclosure; no new preview/confirmation UI was added.
+
+Full suite passed 119 files/4300 tests; TypeScript, lint and build passed. Existing asynchronous rejection warnings remain. Actual current CPU IM read all eight pre-write values (B2=30), then changed only B2 to 99, displayed verified status and retained the full read in activity detail. Native Undo restored the entire initial snapshot and Redo restored the correct final table. No errors or preview cards appeared. Dedicated verifier checks every pre-write address/value and exact post-write/history snapshots.
+
+This implements the first bounded Chinese literal sequence, not arbitrary model-generated compound operations. Additional cancellation-between-steps, stale-target and conversation-switch sequence-specific failure tests from the implementation plan remain outstanding. Archived history follows existing panel code but this browser probe does not inspect persistent history. Those requirements remain open before declaring broad sequence acceptance.

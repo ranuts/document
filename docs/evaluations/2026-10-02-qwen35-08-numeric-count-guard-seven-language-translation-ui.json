@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-02T13:27:42.308Z",
+  "scope": "Actual production IM Korean translation after numeric occurrence validation, Qwen3.5-0.8B Chromium Metal GPU isolated Word document.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "ko",
+      "language": "ko",
+      "task": "translate",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 2622,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Single real-model rerun; raw completion not captured, so exact repeated output from earlier run is not asserted.",
+    "Numeric occurrence guard does not establish names, event attachment, negation, units or full semantic fidelity."
+  ]
+}

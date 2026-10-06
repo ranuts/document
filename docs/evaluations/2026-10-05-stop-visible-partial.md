@@ -1,0 +1,9 @@
+# Actual IM: visible interrupted partial plus stopped state
+
+Frozen driver and protocol: `328196e`. Result: `2026-10-05-stop-visible-partial.json`; verification: `python3 docs/evaluations/verify-stop-visible-partial.py`.
+
+The actual Word IM streamed a new story on local Qwen2.5 0.5B CPU, stopped through the native product path (worker exit), recovered without a controlled reload gate, and accepted an explicit new send. The diagnostic adapter inserted the actual displayed assistant source followed by `\n[已停止。]` between the preserved old and current user requests. The source excludes the UI action label. Token counting and generation received identical adjusted messages; original messages and raw SDK output are retained.
+
+The new raw answer was `BRAVO.` and the DOM displayed that answer plus its normal write action. It followed the current label instead of continuing the interrupted story, but the extra period fails the strict “only BRAVO” requirement. The native document remained unchanged, there were no previews, browser errors or refresh guidance, and the browser context closed. The JSON `passed` field represents lifecycle mechanics, not exact instruction quality.
+
+This is one development observation with unfixed sampling (temperature 0.7, top_p 0.8), streaming and the product 1024-token limit. It does not establish a general causal repair, quality acceptance, offline acceptance or physical-device performance. Earlier standalone partial-plus-status and simple-status-only runs differ in prompt text and execution conditions; they are diagnostic context, not a controlled comparison. No production history, model default or Stop behavior was changed. Any production approach must preserve earlier completed turns and verify persistence, tool exchanges and model switching, without adding preview or confirmation UI.

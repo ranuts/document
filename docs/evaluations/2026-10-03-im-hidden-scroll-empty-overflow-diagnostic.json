@@ -1,0 +1,98 @@
+{
+  "scope": "Actual production IM with cached GPU Qwen 1.7B. Keyboard navigation, native smooth scroll during real streaming, Stop and new conversation; narrow/light/dark layout simulations in isolated Chromium.",
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "empty": {
+    "hidden": true,
+    "display": "none",
+    "focused": "agent-configure",
+    "scrollTop": 0,
+    "remaining": 0,
+    "replyLength": 0,
+    "running": false
+  },
+  "readingBefore": {
+    "hidden": false,
+    "display": "flex",
+    "focused": "opening-document agent-docked",
+    "scrollTop": 0,
+    "remaining": 259,
+    "replyLength": 950,
+    "running": true
+  },
+  "readingAfter": {
+    "hidden": false,
+    "display": "flex",
+    "focused": "opening-document agent-docked",
+    "scrollTop": 0,
+    "remaining": 283,
+    "replyLength": 993,
+    "running": true
+  },
+  "afterJump": {
+    "hidden": true,
+    "display": "none",
+    "focused": "cui-messages",
+    "scrollTop": 357,
+    "remaining": 0,
+    "replyLength": 1046,
+    "running": true
+  },
+  "completed": {
+    "hidden": true,
+    "display": "none",
+    "focused": "cui-restore",
+    "scrollTop": 424,
+    "remaining": 0,
+    "replyLength": 1047,
+    "running": false
+  },
+  "layouts": [
+    {
+      "width": 1280,
+      "height": 900,
+      "colorScheme": "light",
+      "theme": null,
+      "panelWidth": 399,
+      "scrollWidth": 399,
+      "sendBottom": 863,
+      "viewportHeight": 900,
+      "sendReachable": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "theme": null,
+      "panelWidth": 389,
+      "scrollWidth": 389,
+      "sendBottom": 811,
+      "viewportHeight": 844,
+      "sendReachable": true
+    },
+    {
+      "width": 390,
+      "height": 420,
+      "colorScheme": "dark",
+      "theme": null,
+      "panelWidth": 389,
+      "scrollWidth": 389,
+      "sendBottom": 401,
+      "viewportHeight": 420,
+      "sendReachable": true
+    }
+  ],
+  "passed": false,
+  "error": "TimeoutError: page.waitForFunction: Timeout 5000ms exceeded.",
+  "lastState": {
+    "hidden": false,
+    "display": "flex",
+    "focused": "cui-input",
+    "scrollTop": 0,
+    "remaining": 136,
+    "replyLength": 0,
+    "running": false
+  },
+  "probeSource": "probe-im-hidden-scroll-initial.mjs",
+  "probeSHA256": "79050168108bd3fd243c195a25eb5b21b55b927cf0e42d6cce21956cdb5b679d"
+}

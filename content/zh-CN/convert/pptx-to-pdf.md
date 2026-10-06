@@ -1,15 +1,15 @@
 ---
-title: 在浏览器中把 PPTX 转成 PDF — 免费、本地、不上传
-description: 把 PowerPoint 的 PPTX 演示文稿转成 PDF，全程在你的设备上完成，不上传到任何服务器。免费、无需账号、无需安装 PowerPoint，支持离线。
+title: '在浏览器中把 PPTX 转成 PDF — 免费、本地、不上传'
+description: '无需 Office 或账号，即可在浏览器本地将 PPTX 转成 PDF。 本地编辑，无需上传文档.'
 eyebrow: 转换 · .pptx → .pdf
 h1: 在浏览器中把 PPTX 转成 PDF
-lead: 把 PowerPoint 的 **.pptx** 演示文稿转成 **.pdf**——全程在浏览器本地完成，不经过任何服务器。
+lead: '无需 Office 或账号，即可在浏览器本地将 PPTX 转成 PDF。 本地编辑，无需上传文档.'
 cta: 打开你的 PPTX →
 ctaHref: /zh-CN/
-ogDescription: 在浏览器本地把 PowerPoint PPTX 转成 PDF。不上传、不注册，免费开源。
+ogDescription: '无需 Office 或账号，即可在浏览器本地将 PPTX 转成 PDF。 本地编辑，无需上传文档.'
 breadcrumb: pptx-to-pdf
 howTo: 如何在不上传的情况下把 PPTX 转成 PDF
-appDescription: 在浏览器中把 PowerPoint PPTX 转成 PDF，无需上传，无需账号。
+appDescription: '无需 Office 或账号，即可在浏览器本地将 PPTX 转成 PDF。 本地编辑，无需上传文档.'
 ---
 
 ## 如何操作
@@ -33,7 +33,7 @@ appDescription: 在浏览器中把 PowerPoint PPTX 转成 PDF，无需上传，�
 
 ### 转换时我的演示文稿会被上传吗？
 
-不会。它完全在你的浏览器标签页内打开和转换，不会离开你的设备。
+核心的打开、编辑和格式转换在浏览器本地运行，不要求上传文档。 内置 AI 助手尚未完成，不属于已发布的可用功能。 嵌入宿主可以接收导出文件，并按自己的策略上传。
 
 ### 需要 PowerPoint 或账号吗？
 
@@ -57,4 +57,4 @@ PDF 是静态文档，因此动画和幻灯片切换会被拍平——每张幻�
 
 ### 离线能用吗？
 
-可以。加载一次之后它就是可安装的 PWA，没有网络也能继续转换。
+离线编辑要求浏览器已缓存并保留应用、编辑引擎、转换器及所需字体和格式资源。访问一次或安装 PWA 不保证所有资源可用。 远程文件 URL 需要联网。

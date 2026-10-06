@@ -1,0 +1,87 @@
+{
+  "status": "completed",
+  "scope": "Actual helper source against isolated desktop WebKit native Word API; controlled preparation and wrapper completion delays with shortened 50 ms cleanup deadline. Tests late callbacks after a subsequent independent native edit, not physical font loading or production IM timeout duration.",
+  "result": {
+    "before": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "index": 0,
+      "counts": [
+        87
+      ],
+      "busy": false,
+      "html": false,
+      "stored": 0
+    },
+    "outcome": {
+      "error": "The change could not be verified. Check the document and use Undo if needed."
+    },
+    "afterDeadline": {
+      "text": " target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "index": 1,
+      "counts": [
+        87,
+        28
+      ],
+      "busy": false,
+      "html": false,
+      "stored": 0
+    },
+    "afterForeign": {
+      "text": "Independent target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "index": 2,
+      "counts": [
+        87,
+        28,
+        47
+      ],
+      "busy": false,
+      "html": false,
+      "stored": 0
+    },
+    "afterLate": {
+      "text": "Independent target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "index": 2,
+      "counts": [
+        87,
+        28,
+        47
+      ],
+      "busy": false,
+      "html": false,
+      "stored": 0
+    },
+    "exactHistoryUnchanged": true,
+    "foreignUndo": {
+      "text": " target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "index": 1,
+      "counts": [
+        87,
+        28,
+        47
+      ],
+      "busy": false,
+      "html": false,
+      "stored": 0
+    },
+    "originalUndo": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "index": 0,
+      "counts": [
+        87,
+        28,
+        47
+      ],
+      "busy": false,
+      "html": false,
+      "stored": 0
+    },
+    "lateMutationSuppressed": true,
+    "manualOriginalRecovery": true
+  }
+}

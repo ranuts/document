@@ -1,0 +1,1638 @@
+{
+  "status": "incomplete",
+  "error": "Error: Bounded diagnostic deadline exceeded",
+  "date": "2026-10-02T06:44:38.685Z",
+  "trace": [
+    {
+      "at": "2026-10-02T06:41:38.687Z",
+      "kind": "phase",
+      "text": "PROBE import"
+    },
+    {
+      "at": "2026-10-02T06:41:38.724Z",
+      "kind": "phase",
+      "text": "PROBE imported SDK"
+    },
+    {
+      "at": "2026-10-02T06:41:38.726Z",
+      "kind": "phase",
+      "text": "PROBE runtime"
+    },
+    {
+      "at": "2026-10-02T06:41:38.727Z",
+      "kind": "phase",
+      "text": "PROBE load"
+    },
+    {
+      "at": "2026-10-02T06:41:38.730Z",
+      "kind": "request",
+      "method": "HEAD",
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:39.214Z",
+      "kind": "response",
+      "status": 302,
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:39.214Z",
+      "kind": "request",
+      "method": "HEAD",
+      "host": "us.aws.cdn.hf.co",
+      "path": "/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75"
+    },
+    {
+      "at": "2026-10-02T06:41:39.942Z",
+      "kind": "response",
+      "status": 200,
+      "host": "us.aws.cdn.hf.co",
+      "path": "/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75"
+    },
+    {
+      "at": "2026-10-02T06:41:39.943Z",
+      "kind": "request",
+      "method": "GET",
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/raw/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:40.289Z",
+      "kind": "response",
+      "status": 200,
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/raw/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:40.289Z",
+      "kind": "phase",
+      "text": "PROBE read ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:40.289Z",
+      "kind": "request",
+      "method": "GET",
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:40.630Z",
+      "kind": "response",
+      "status": 302,
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:40.630Z",
+      "kind": "request",
+      "method": "GET",
+      "host": "us.aws.cdn.hf.co",
+      "path": "/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75"
+    },
+    {
+      "at": "2026-10-02T06:41:41.509Z",
+      "kind": "response",
+      "status": 200,
+      "host": "us.aws.cdn.hf.co",
+      "path": "/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75"
+    },
+    {
+      "at": "2026-10-02T06:41:41.511Z",
+      "kind": "phase",
+      "text": "PROBE write begin ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:41:41.557Z",
+      "kind": "phase",
+      "text": "PROBE progress 16375/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:41.669Z",
+      "kind": "phase",
+      "text": "PROBE progress 103380/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:41.780Z",
+      "kind": "phase",
+      "text": "PROBE progress 343938/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:41.897Z",
+      "kind": "phase",
+      "text": "PROBE progress 1015313/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:42.016Z",
+      "kind": "phase",
+      "text": "PROBE progress 3504313/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:42.172Z",
+      "kind": "phase",
+      "text": "PROBE progress 5094992/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:42.340Z",
+      "kind": "phase",
+      "text": "PROBE progress 8337242/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:42.458Z",
+      "kind": "phase",
+      "text": "PROBE progress 8830733/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:42.603Z",
+      "kind": "phase",
+      "text": "PROBE progress 9715046/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:42.734Z",
+      "kind": "phase",
+      "text": "PROBE progress 10812171/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:42.907Z",
+      "kind": "phase",
+      "text": "PROBE progress 13352537/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:43.047Z",
+      "kind": "phase",
+      "text": "PROBE progress 14482475/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:43.179Z",
+      "kind": "phase",
+      "text": "PROBE progress 15383100/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:43.324Z",
+      "kind": "phase",
+      "text": "PROBE progress 16627600/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:43.455Z",
+      "kind": "phase",
+      "text": "PROBE progress 19348154/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:43.632Z",
+      "kind": "phase",
+      "text": "PROBE progress 20478029/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:43.765Z",
+      "kind": "phase",
+      "text": "PROBE progress 22379770/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:43.939Z",
+      "kind": "phase",
+      "text": "PROBE progress 23755333/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:44.472Z",
+      "kind": "phase",
+      "text": "PROBE progress 27753137/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:44.697Z",
+      "kind": "phase",
+      "text": "PROBE progress 28604637/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:44.842Z",
+      "kind": "phase",
+      "text": "PROBE progress 28637387/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:45.079Z",
+      "kind": "phase",
+      "text": "PROBE progress 30602387/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:45.313Z",
+      "kind": "phase",
+      "text": "PROBE progress 30635137/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:45.451Z",
+      "kind": "phase",
+      "text": "PROBE progress 30667887/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:45.589Z",
+      "kind": "phase",
+      "text": "PROBE progress 34551066/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:45.801Z",
+      "kind": "phase",
+      "text": "PROBE progress 35386191/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:46.010Z",
+      "kind": "phase",
+      "text": "PROBE progress 35779191/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:46.239Z",
+      "kind": "phase",
+      "text": "PROBE progress 36909066/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:46.402Z",
+      "kind": "phase",
+      "text": "PROBE progress 39989870/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:46.618Z",
+      "kind": "phase",
+      "text": "PROBE progress 40759495/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:46.736Z",
+      "kind": "phase",
+      "text": "PROBE progress 41758370/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:46.869Z",
+      "kind": "phase",
+      "text": "PROBE progress 44020424/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:47.036Z",
+      "kind": "phase",
+      "text": "PROBE progress 44216924/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:47.298Z",
+      "kind": "phase",
+      "text": "PROBE progress 47180799/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:47.435Z",
+      "kind": "phase",
+      "text": "PROBE progress 48149228/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:47.633Z",
+      "kind": "phase",
+      "text": "PROBE progress 49573853/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:47.893Z",
+      "kind": "phase",
+      "text": "PROBE progress 51260478/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:48.009Z",
+      "kind": "phase",
+      "text": "PROBE progress 53244157/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:48.438Z",
+      "kind": "phase",
+      "text": "PROBE progress 56554211/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:48.659Z",
+      "kind": "phase",
+      "text": "PROBE progress 57798711/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:48.859Z",
+      "kind": "phase",
+      "text": "PROBE progress 58682961/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:49.018Z",
+      "kind": "phase",
+      "text": "PROBE progress 60549711/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:49.211Z",
+      "kind": "phase",
+      "text": "PROBE progress 61026890/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:49.344Z",
+      "kind": "phase",
+      "text": "PROBE progress 61681890/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:49.562Z",
+      "kind": "phase",
+      "text": "PROBE progress 64203640/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:49.694Z",
+      "kind": "phase",
+      "text": "PROBE progress 66563944/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:49.841Z",
+      "kind": "phase",
+      "text": "PROBE progress 67579194/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:49.990Z",
+      "kind": "phase",
+      "text": "PROBE progress 70528998/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:50.151Z",
+      "kind": "phase",
+      "text": "PROBE progress 71658873/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:50.284Z",
+      "kind": "phase",
+      "text": "PROBE progress 72035498/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:50.502Z",
+      "kind": "phase",
+      "text": "PROBE progress 72821498/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:50.791Z",
+      "kind": "phase",
+      "text": "PROBE progress 74540873/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:50.923Z",
+      "kind": "phase",
+      "text": "PROBE progress 77425177/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:51.073Z",
+      "kind": "phase",
+      "text": "PROBE progress 79032231/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:51.243Z",
+      "kind": "phase",
+      "text": "PROBE progress 79490731/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:51.357Z",
+      "kind": "phase",
+      "text": "PROBE progress 83109606/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:51.488Z",
+      "kind": "phase",
+      "text": "PROBE progress 84192660/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:51.664Z",
+      "kind": "phase",
+      "text": "PROBE progress 84814910/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:51.871Z",
+      "kind": "phase",
+      "text": "PROBE progress 88730839/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:52.123Z",
+      "kind": "phase",
+      "text": "PROBE progress 89926214/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:52.342Z",
+      "kind": "phase",
+      "text": "PROBE progress 93563768/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:52.552Z",
+      "kind": "phase",
+      "text": "PROBE progress 94579018/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:52.724Z",
+      "kind": "phase",
+      "text": "PROBE progress 94595393/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:53.005Z",
+      "kind": "phase",
+      "text": "PROBE progress 95348643/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:53.196Z",
+      "kind": "phase",
+      "text": "PROBE progress 96822393/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:53.371Z",
+      "kind": "phase",
+      "text": "PROBE progress 99018947/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:53.571Z",
+      "kind": "phase",
+      "text": "PROBE progress 99199072/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:53.710Z",
+      "kind": "phase",
+      "text": "PROBE progress 100967572/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:53.833Z",
+      "kind": "phase",
+      "text": "PROBE progress 102130197/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:54.029Z",
+      "kind": "phase",
+      "text": "PROBE progress 102948947/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:54.271Z",
+      "kind": "phase",
+      "text": "PROBE progress 107225126/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:54.393Z",
+      "kind": "phase",
+      "text": "PROBE progress 108078930/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:54.567Z",
+      "kind": "phase",
+      "text": "PROBE progress 108979555/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:54.703Z",
+      "kind": "phase",
+      "text": "PROBE progress 111665055/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:54.852Z",
+      "kind": "phase",
+      "text": "PROBE progress 113812484/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:55.017Z",
+      "kind": "phase",
+      "text": "PROBE progress 114369234/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:55.138Z",
+      "kind": "phase",
+      "text": "PROBE progress 117286288/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:55.291Z",
+      "kind": "phase",
+      "text": "PROBE progress 118465288/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:55.438Z",
+      "kind": "phase",
+      "text": "PROBE progress 120413913/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:55.612Z",
+      "kind": "phase",
+      "text": "PROBE progress 121281788/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:55.738Z",
+      "kind": "phase",
+      "text": "PROBE progress 123412842/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:55.879Z",
+      "kind": "phase",
+      "text": "PROBE progress 124411717/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:56.028Z",
+      "kind": "phase",
+      "text": "PROBE progress 124870217/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:56.255Z",
+      "kind": "phase",
+      "text": "PROBE progress 128900771/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:56.394Z",
+      "kind": "phase",
+      "text": "PROBE progress 129654021/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:56.670Z",
+      "kind": "phase",
+      "text": "PROBE progress 131490325/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:56.801Z",
+      "kind": "phase",
+      "text": "PROBE progress 131965200/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:56.951Z",
+      "kind": "phase",
+      "text": "PROBE progress 132423700/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:57.104Z",
+      "kind": "phase",
+      "text": "PROBE progress 135832004/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:57.319Z",
+      "kind": "phase",
+      "text": "PROBE progress 137027379/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:57.538Z",
+      "kind": "phase",
+      "text": "PROBE progress 138484754/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:57.872Z",
+      "kind": "phase",
+      "text": "PROBE progress 140501183/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:58.010Z",
+      "kind": "phase",
+      "text": "PROBE progress 141762058/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:58.161Z",
+      "kind": "phase",
+      "text": "PROBE progress 142007683/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:58.291Z",
+      "kind": "phase",
+      "text": "PROBE progress 144513058/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:58.453Z",
+      "kind": "phase",
+      "text": "PROBE progress 147380987/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:58.641Z",
+      "kind": "phase",
+      "text": "PROBE progress 148396237/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:58.843Z",
+      "kind": "phase",
+      "text": "PROBE progress 151689916/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:58.984Z",
+      "kind": "phase",
+      "text": "PROBE progress 152443166/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:59.167Z",
+      "kind": "phase",
+      "text": "PROBE progress 153998791/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:59.325Z",
+      "kind": "phase",
+      "text": "PROBE progress 156440970/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:59.559Z",
+      "kind": "phase",
+      "text": "PROBE progress 159014149/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:59.700Z",
+      "kind": "phase",
+      "text": "PROBE progress 159521774/484220320"
+    },
+    {
+      "at": "2026-10-02T06:41:59.856Z",
+      "kind": "phase",
+      "text": "PROBE progress 159685524/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:00.074Z",
+      "kind": "phase",
+      "text": "PROBE progress 163306703/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:00.212Z",
+      "kind": "phase",
+      "text": "PROBE progress 163781578/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:00.393Z",
+      "kind": "phase",
+      "text": "PROBE progress 164305578/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:00.618Z",
+      "kind": "phase",
+      "text": "PROBE progress 168418007/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:00.847Z",
+      "kind": "phase",
+      "text": "PROBE progress 170202882/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:00.964Z",
+      "kind": "phase",
+      "text": "PROBE progress 172923436/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:01.069Z",
+      "kind": "phase",
+      "text": "PROBE progress 173955061/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:01.325Z",
+      "kind": "phase",
+      "text": "PROBE progress 175379686/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:01.551Z",
+      "kind": "phase",
+      "text": "PROBE progress 178935365/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:01.710Z",
+      "kind": "phase",
+      "text": "PROBE progress 179966990/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:01.863Z",
+      "kind": "phase",
+      "text": "PROBE progress 180441865/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:02.009Z",
+      "kind": "phase",
+      "text": "PROBE progress 184144919/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:02.265Z",
+      "kind": "phase",
+      "text": "PROBE progress 186109919/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:02.542Z",
+      "kind": "phase",
+      "text": "PROBE progress 187880723/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:02.706Z",
+      "kind": "phase",
+      "text": "PROBE progress 190601277/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:02.953Z",
+      "kind": "phase",
+      "text": "PROBE progress 192320652/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:03.248Z",
+      "kind": "phase",
+      "text": "PROBE progress 194645902/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:03.470Z",
+      "kind": "phase",
+      "text": "PROBE progress 196973456/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:03.964Z",
+      "kind": "phase",
+      "text": "PROBE progress 198512706/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:04.165Z",
+      "kind": "phase",
+      "text": "PROBE progress 200611010/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:04.326Z",
+      "kind": "phase",
+      "text": "PROBE progress 202052010/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:04.483Z",
+      "kind": "phase",
+      "text": "PROBE progress 202346760/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:04.605Z",
+      "kind": "phase",
+      "text": "PROBE progress 205820564/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:04.921Z",
+      "kind": "phase",
+      "text": "PROBE progress 209242939/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:05.051Z",
+      "kind": "phase",
+      "text": "PROBE progress 210014868/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:05.287Z",
+      "kind": "phase",
+      "text": "PROBE progress 211930743/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:05.420Z",
+      "kind": "phase",
+      "text": "PROBE progress 214553047/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:05.854Z",
+      "kind": "phase",
+      "text": "PROBE progress 218024547/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:05.987Z",
+      "kind": "phase",
+      "text": "PROBE progress 219975476/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:06.244Z",
+      "kind": "phase",
+      "text": "PROBE progress 220712351/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:06.443Z",
+      "kind": "phase",
+      "text": "PROBE progress 223053976/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:06.649Z",
+      "kind": "phase",
+      "text": "PROBE progress 225528905/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:06.829Z",
+      "kind": "phase",
+      "text": "PROBE progress 225709030/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:06.941Z",
+      "kind": "phase",
+      "text": "PROBE progress 227199155/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:07.281Z",
+      "kind": "phase",
+      "text": "PROBE progress 227281030/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:07.420Z",
+      "kind": "phase",
+      "text": "PROBE progress 229674084/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:07.582Z",
+      "kind": "phase",
+      "text": "PROBE progress 231246084/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:07.815Z",
+      "kind": "phase",
+      "text": "PROBE progress 232785334/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:07.953Z",
+      "kind": "phase",
+      "text": "PROBE progress 235669638/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:08.061Z",
+      "kind": "phase",
+      "text": "PROBE progress 236963263/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:08.185Z",
+      "kind": "phase",
+      "text": "PROBE progress 238224138/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:08.372Z",
+      "kind": "phase",
+      "text": "PROBE progress 239552817/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:08.490Z",
+      "kind": "phase",
+      "text": "PROBE progress 241959942/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:08.770Z",
+      "kind": "phase",
+      "text": "PROBE progress 243550621/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:08.891Z",
+      "kind": "phase",
+      "text": "PROBE progress 246713300/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:08.994Z",
+      "kind": "phase",
+      "text": "PROBE progress 247433800/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:09.141Z",
+      "kind": "phase",
+      "text": "PROBE progress 248678300/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:09.257Z",
+      "kind": "phase",
+      "text": "PROBE progress 251218729/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:09.625Z",
+      "kind": "phase",
+      "text": "PROBE progress 252446854/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:09.751Z",
+      "kind": "phase",
+      "text": "PROBE progress 254968604/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:10.021Z",
+      "kind": "phase",
+      "text": "PROBE progress 257361658/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:10.197Z",
+      "kind": "phase",
+      "text": "PROBE progress 257394408/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:10.350Z",
+      "kind": "phase",
+      "text": "PROBE progress 260491587/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:10.512Z",
+      "kind": "phase",
+      "text": "PROBE progress 261867087/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:10.637Z",
+      "kind": "phase",
+      "text": "PROBE progress 262751337/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:10.819Z",
+      "kind": "phase",
+      "text": "PROBE progress 263062462/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:10.932Z",
+      "kind": "phase",
+      "text": "PROBE progress 266159641/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:11.124Z",
+      "kind": "phase",
+      "text": "PROBE progress 266192391/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:11.256Z",
+      "kind": "phase",
+      "text": "PROBE progress 267895391/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:11.406Z",
+      "kind": "phase",
+      "text": "PROBE progress 268927016/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:11.728Z",
+      "kind": "phase",
+      "text": "PROBE progress 270959820/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:11.845Z",
+      "kind": "phase",
+      "text": "PROBE progress 272662820/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:12.007Z",
+      "kind": "phase",
+      "text": "PROBE progress 273942374/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:12.138Z",
+      "kind": "phase",
+      "text": "PROBE progress 273958749/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:12.395Z",
+      "kind": "phase",
+      "text": "PROBE progress 274679249/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:12.545Z",
+      "kind": "phase",
+      "text": "PROBE progress 277299249/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:12.702Z",
+      "kind": "phase",
+      "text": "PROBE progress 277383428/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:12.845Z",
+      "kind": "phase",
+      "text": "PROBE progress 278758928/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:13.014Z",
+      "kind": "phase",
+      "text": "PROBE progress 279315678/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:13.258Z",
+      "kind": "phase",
+      "text": "PROBE progress 283280732/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:13.658Z",
+      "kind": "phase",
+      "text": "PROBE progress 284164982/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:13.759Z",
+      "kind": "phase",
+      "text": "PROBE progress 284361482/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:13.969Z",
+      "kind": "phase",
+      "text": "PROBE progress 287032911/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:14.104Z",
+      "kind": "phase",
+      "text": "PROBE progress 288408411/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:14.261Z",
+      "kind": "phase",
+      "text": "PROBE progress 290424840/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:14.385Z",
+      "kind": "phase",
+      "text": "PROBE progress 291718465/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:14.674Z",
+      "kind": "phase",
+      "text": "PROBE progress 295487019/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:14.813Z",
+      "kind": "phase",
+      "text": "PROBE progress 297206394/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:15.052Z",
+      "kind": "phase",
+      "text": "PROBE progress 299286019/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:15.276Z",
+      "kind": "phase",
+      "text": "PROBE progress 301793698/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:15.435Z",
+      "kind": "phase",
+      "text": "PROBE progress 302530573/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:15.592Z",
+      "kind": "phase",
+      "text": "PROBE progress 303529448/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:15.743Z",
+      "kind": "phase",
+      "text": "PROBE progress 304331823/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:15.954Z",
+      "kind": "phase",
+      "text": "PROBE progress 307232502/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:16.078Z",
+      "kind": "phase",
+      "text": "PROBE progress 308313252/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:16.237Z",
+      "kind": "phase",
+      "text": "PROBE progress 308608002/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:16.357Z",
+      "kind": "phase",
+      "text": "PROBE progress 310409252/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:16.497Z",
+      "kind": "phase",
+      "text": "PROBE progress 311721556/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:16.650Z",
+      "kind": "phase",
+      "text": "PROBE progress 311999931/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:16.917Z",
+      "kind": "phase",
+      "text": "PROBE progress 315833985/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:17.190Z",
+      "kind": "phase",
+      "text": "PROBE progress 317356860/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:17.417Z",
+      "kind": "phase",
+      "text": "PROBE progress 319960485/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:17.629Z",
+      "kind": "phase",
+      "text": "PROBE progress 321240039/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:17.764Z",
+      "kind": "phase",
+      "text": "PROBE progress 322189789/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:17.984Z",
+      "kind": "phase",
+      "text": "PROBE progress 323450664/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:18.201Z",
+      "kind": "phase",
+      "text": "PROBE progress 326646093/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:18.336Z",
+      "kind": "phase",
+      "text": "PROBE progress 327825093/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:18.503Z",
+      "kind": "phase",
+      "text": "PROBE progress 328889468/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:19.002Z",
+      "kind": "phase",
+      "text": "PROBE progress 334459272/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:19.177Z",
+      "kind": "phase",
+      "text": "PROBE progress 336492076/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:19.423Z",
+      "kind": "phase",
+      "text": "PROBE progress 337785701/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:19.807Z",
+      "kind": "phase",
+      "text": "PROBE progress 340096880/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:19.960Z",
+      "kind": "phase",
+      "text": "PROBE progress 341587005/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:20.196Z",
+      "kind": "phase",
+      "text": "PROBE progress 342684130/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:20.400Z",
+      "kind": "phase",
+      "text": "PROBE progress 342749630/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:20.531Z",
+      "kind": "phase",
+      "text": "PROBE progress 346698309/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:20.746Z",
+      "kind": "phase",
+      "text": "PROBE progress 347435184/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:20.923Z",
+      "kind": "phase",
+      "text": "PROBE progress 348859809/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:21.343Z",
+      "kind": "phase",
+      "text": "PROBE progress 350827113/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:21.589Z",
+      "kind": "phase",
+      "text": "PROBE progress 351694988/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:21.716Z",
+      "kind": "phase",
+      "text": "PROBE progress 354413238/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:21.951Z",
+      "kind": "phase",
+      "text": "PROBE progress 356347792/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:22.098Z",
+      "kind": "phase",
+      "text": "PROBE progress 357739667/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:22.251Z",
+      "kind": "phase",
+      "text": "PROBE progress 359968971/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:22.384Z",
+      "kind": "phase",
+      "text": "PROBE progress 361852096/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:22.519Z",
+      "kind": "phase",
+      "text": "PROBE progress 361917596/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:22.763Z",
+      "kind": "phase",
+      "text": "PROBE progress 364095471/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:22.898Z",
+      "kind": "phase",
+      "text": "PROBE progress 365587900/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:23.045Z",
+      "kind": "phase",
+      "text": "PROBE progress 365604275/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:23.191Z",
+      "kind": "phase",
+      "text": "PROBE progress 367340025/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:23.371Z",
+      "kind": "phase",
+      "text": "PROBE progress 369847704/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:23.478Z",
+      "kind": "phase",
+      "text": "PROBE progress 371059454/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:23.593Z",
+      "kind": "phase",
+      "text": "PROBE progress 371681704/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:23.803Z",
+      "kind": "phase",
+      "text": "PROBE progress 372893454/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:23.939Z",
+      "kind": "phase",
+      "text": "PROBE progress 373139079/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:24.172Z",
+      "kind": "phase",
+      "text": "PROBE progress 376383633/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:24.401Z",
+      "kind": "phase",
+      "text": "PROBE progress 379448062/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:24.564Z",
+      "kind": "phase",
+      "text": "PROBE progress 380774437/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:24.692Z",
+      "kind": "phase",
+      "text": "PROBE progress 381642312/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:24.892Z",
+      "kind": "phase",
+      "text": "PROBE progress 382381491/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:25.010Z",
+      "kind": "phase",
+      "text": "PROBE progress 384755866/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:25.143Z",
+      "kind": "phase",
+      "text": "PROBE progress 387097491/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:25.339Z",
+      "kind": "phase",
+      "text": "PROBE progress 388079991/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:25.494Z",
+      "kind": "phase",
+      "text": "PROBE progress 389343170/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:25.653Z",
+      "kind": "phase",
+      "text": "PROBE progress 389752545/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:25.845Z",
+      "kind": "phase",
+      "text": "PROBE progress 390685920/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:26.100Z",
+      "kind": "phase",
+      "text": "PROBE progress 394749224/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:26.406Z",
+      "kind": "phase",
+      "text": "PROBE progress 398452278/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:26.554Z",
+      "kind": "phase",
+      "text": "PROBE progress 399991528/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:26.787Z",
+      "kind": "phase",
+      "text": "PROBE progress 401072278/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:27.022Z",
+      "kind": "phase",
+      "text": "PROBE progress 403940207/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:27.165Z",
+      "kind": "phase",
+      "text": "PROBE progress 405201082/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:27.487Z",
+      "kind": "phase",
+      "text": "PROBE progress 408789511/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:27.696Z",
+      "kind": "phase",
+      "text": "PROBE progress 410066761/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:27.909Z",
+      "kind": "phase",
+      "text": "PROBE progress 410817204/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:28.160Z",
+      "kind": "phase",
+      "text": "PROBE progress 414667633/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:28.320Z",
+      "kind": "phase",
+      "text": "PROBE progress 415977633/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:28.480Z",
+      "kind": "phase",
+      "text": "PROBE progress 416277494/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:28.733Z",
+      "kind": "phase",
+      "text": "PROBE progress 418471744/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:28.860Z",
+      "kind": "phase",
+      "text": "PROBE progress 421519798/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:29.250Z",
+      "kind": "phase",
+      "text": "PROBE progress 423877798/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:29.478Z",
+      "kind": "phase",
+      "text": "PROBE progress 427138727/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:29.644Z",
+      "kind": "phase",
+      "text": "PROBE progress 430088531/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:29.832Z",
+      "kind": "phase",
+      "text": "PROBE progress 431791531/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:29.962Z",
+      "kind": "phase",
+      "text": "PROBE progress 433019656/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:30.143Z",
+      "kind": "phase",
+      "text": "PROBE progress 433167031/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:30.410Z",
+      "kind": "phase",
+      "text": "PROBE progress 436935585/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:30.545Z",
+      "kind": "phase",
+      "text": "PROBE progress 437934460/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:30.645Z",
+      "kind": "phase",
+      "text": "PROBE progress 438245585/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:30.809Z",
+      "kind": "phase",
+      "text": "PROBE progress 440142278/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:31.316Z",
+      "kind": "phase",
+      "text": "PROBE progress 444811457/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:31.502Z",
+      "kind": "phase",
+      "text": "PROBE progress 445188082/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:31.679Z",
+      "kind": "phase",
+      "text": "PROBE progress 445204457/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:31.951Z",
+      "kind": "phase",
+      "text": "PROBE progress 445286332/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:32.215Z",
+      "kind": "phase",
+      "text": "PROBE progress 447698568/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:32.389Z",
+      "kind": "phase",
+      "text": "PROBE progress 447976943/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:32.519Z",
+      "kind": "phase",
+      "text": "PROBE progress 451598122/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:32.660Z",
+      "kind": "phase",
+      "text": "PROBE progress 452757940/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:32.888Z",
+      "kind": "phase",
+      "text": "PROBE progress 453986065/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:33.073Z",
+      "kind": "phase",
+      "text": "PROBE progress 456824051/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:33.312Z",
+      "kind": "phase",
+      "text": "PROBE progress 457691926/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:33.432Z",
+      "kind": "phase",
+      "text": "PROBE progress 459610105/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:33.631Z",
+      "kind": "phase",
+      "text": "PROBE progress 459872105/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:34.011Z",
+      "kind": "phase",
+      "text": "PROBE progress 464459409/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:34.218Z",
+      "kind": "phase",
+      "text": "PROBE progress 465507409/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:34.421Z",
+      "kind": "phase",
+      "text": "PROBE progress 467174852/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:34.740Z",
+      "kind": "phase",
+      "text": "PROBE progress 467191227/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:35.014Z",
+      "kind": "phase",
+      "text": "PROBE progress 470978963/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:35.155Z",
+      "kind": "phase",
+      "text": "PROBE progress 471500156/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:35.288Z",
+      "kind": "phase",
+      "text": "PROBE progress 472335281/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:35.487Z",
+      "kind": "phase",
+      "text": "PROBE progress 473814142/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:35.622Z",
+      "kind": "phase",
+      "text": "PROBE progress 475907335/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:35.797Z",
+      "kind": "phase",
+      "text": "PROBE progress 477926571/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:36.059Z",
+      "kind": "phase",
+      "text": "PROBE progress 479613196/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:36.178Z",
+      "kind": "phase",
+      "text": "PROBE progress 482595750/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:36.476Z",
+      "kind": "phase",
+      "text": "PROBE progress 484220320/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:36.477Z",
+      "kind": "phase",
+      "text": "PROBE progress 484220320/484220320"
+    },
+    {
+      "at": "2026-10-02T06:42:37.379Z",
+      "kind": "phase",
+      "text": "PROBE write done ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:42:37.379Z",
+      "kind": "phase",
+      "text": "PROBE write begin __metadata__ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:42:37.382Z",
+      "kind": "phase",
+      "text": "PROBE write done __metadata__ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:42:37.773Z",
+      "kind": "phase",
+      "text": "PROBE read __metadata__ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:42:37.777Z",
+      "kind": "request",
+      "method": "GET",
+      "host": "",
+      "path": "http://127.0.0.1:5192/5f4a1af4-b06d-43dc-b244-213bef2aab38"
+    },
+    {
+      "at": "2026-10-02T06:42:37.981Z",
+      "kind": "response",
+      "status": 200,
+      "host": "",
+      "path": "http://127.0.0.1:5192/5f4a1af4-b06d-43dc-b244-213bef2aab38"
+    },
+    {
+      "at": "2026-10-02T06:42:37.982Z",
+      "kind": "phase",
+      "text": "PROBE read __metadata__ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:42:37.983Z",
+      "kind": "request",
+      "method": "GET",
+      "host": "",
+      "path": "http://127.0.0.1:5192/55c41573-644c-4100-8496-e50d4cd5caa9"
+    },
+    {
+      "at": "2026-10-02T06:42:37.984Z",
+      "kind": "response",
+      "status": 200,
+      "host": "",
+      "path": "http://127.0.0.1:5192/55c41573-644c-4100-8496-e50d4cd5caa9"
+    },
+    {
+      "at": "2026-10-02T06:42:37.984Z",
+      "kind": "phase",
+      "text": "PROBE read ce940091cef2f16c6ca7d17c78e7b2156976bbbc_Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    {
+      "at": "2026-10-02T06:42:38.348Z",
+      "kind": "request",
+      "method": "GET",
+      "host": "",
+      "path": "http://127.0.0.1:5192/ae2a5716-f376-45e1-988e-55aa6d482fe2"
+    },
+    {
+      "at": "2026-10-02T06:42:38.348Z",
+      "kind": "response",
+      "status": 200,
+      "host": "",
+      "path": "http://127.0.0.1:5192/ae2a5716-f376-45e1-988e-55aa6d482fe2"
+    }
+  ],
+  "scope": "WebKit staged actual runtime with experimental Cache API backend on isolated dev origin; not production integration",
+  "logs": [
+    "Unhandled Promise Rejection: RuntimeError: Aborted(CompileError: WebAssembly.Module doesn't parse at byte 4617: Memory64 is not enabled). Build with -sASSERTIONS for more info."
+  ]
+}

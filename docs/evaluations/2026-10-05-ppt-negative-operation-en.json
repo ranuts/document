@@ -1,0 +1,22 @@
+{
+  "browser": "151.0.7922.34",
+  "errors": [],
+  "blockedExternal": [],
+  "views": [],
+  "loadedNote": "模型已加载，可以开始对话。",
+  "loadedStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "loadedFilename": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "before": {
+    "count": 1,
+    "page": 0
+  },
+  "request": "Do not add or duplicate any slides. Keep this presentation unchanged.",
+  "after": {
+    "count": 1,
+    "page": 0
+  },
+  "chat": "Do not add or duplicate any slides. Keep this presentation unchanged.\n没有选出可执行的操作。请明确说明需求，或换个模型重试。\n恢复请求",
+  "noSlideMutation": true,
+  "contextClosed": true,
+  "browserClosed": true
+}

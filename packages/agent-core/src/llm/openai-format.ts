@@ -18,11 +18,25 @@ export interface OpenAIMessage {
   tool_calls?: OpenAIToolCall[];
   tool_call_id?: string;
 }
+export interface OpenAITimings {
+  prompt_ms?: number;
+  predicted_ms?: number;
+  predicted_per_second?: number;
+}
+
 export interface OpenAICompletion {
+  timings?: OpenAITimings | null;
+  usage?: OpenAIUsage | null;
   choices: Array<{
     message: { content?: string | null; tool_calls?: OpenAIToolCall[] };
     finish_reason?: string;
   }>;
+}
+
+export interface OpenAIUsage {
+  completion_tokens?: number;
+  prompt_tokens?: number;
+  extra?: { decode_tokens_per_s?: number; time_to_first_token_s?: number };
 }
 
 function safeParseArgs(args: string): Record<string, unknown> {
@@ -83,6 +97,8 @@ export function toOpenAIMessages(messages: LLMMessage[], systemPrompt?: string):
 
 /** A streamed chat-completions chunk (OpenAI `stream: true` / WebLLM delta). */
 export interface OpenAIStreamChunk {
+  timings?: OpenAITimings | null;
+  usage?: OpenAIUsage | null;
   choices?: Array<{
     delta?: {
       content?: string | null;
@@ -103,12 +119,22 @@ export async function accumulateOpenAIStream(
   chunks: AsyncIterable<OpenAIStreamChunk>,
   onDelta: (textDelta: string) => void,
   signal?: AbortSignal,
+  options: { drainOnAbort?: boolean } = {},
 ): Promise<OpenAICompletion> {
   let content = '';
   let finishReason: string | undefined;
+  let usage: OpenAIUsage | undefined;
+  let timings: OpenAITimings | undefined;
   const byIndex = new Map<number, { id: string; name: string; args: string }>();
   for await (const chunk of chunks) {
-    if (signal?.aborted) break; // Stop pressed — quit consuming the stream
+    if (signal?.aborted) {
+      // WebLLM's remote generator releases its model lock only after its tail is consumed.
+      // Interrupt generation separately, then discard the remaining chunks without displaying them.
+      if (options.drainOnAbort) continue;
+      break;
+    }
+    if (chunk.usage) usage = chunk.usage;
+    if (chunk.timings) timings = { ...timings, ...chunk.timings };
     const choice = chunk.choices?.[0];
     if (!choice) continue;
     const piece = choice.delta?.content;
@@ -131,7 +157,11 @@ export async function accumulateOpenAIStream(
     .map(([, c]) => ({ id: c.id, type: 'function', function: { name: c.name, arguments: c.args } }));
   const message: OpenAICompletion['choices'][number]['message'] = { content: content || null };
   if (tool_calls.length) message.tool_calls = tool_calls;
-  return { choices: [{ message, finish_reason: finishReason ?? 'stop' }] };
+  return {
+    choices: [{ message, finish_reason: finishReason ?? 'stop' }],
+    ...(usage ? { usage } : {}),
+    ...(timings ? { timings } : {}),
+  };
 }
 
 /** Parse an OpenAI completion into the neutral {@link LLMResponse}. */
@@ -145,11 +175,27 @@ export function parseOpenAIResponse(completion: OpenAICompletion): LLMResponse {
     input: safeParseArgs(call.function.arguments),
   }));
   const assistant: LLMContent[] = [];
+  const usage: NonNullable<LLMResponse['usage']> = {};
+  const validCount = (value: unknown): value is number =>
+    typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+  const validRate = (value: unknown): value is number =>
+    typeof value === 'number' && Number.isFinite(value) && value >= 0;
+  const raw = completion.usage;
+  if (validCount(raw?.completion_tokens)) usage.completionTokens = raw.completion_tokens;
+  if (validCount(raw?.prompt_tokens)) usage.promptTokens = raw.prompt_tokens;
+  if (validRate(raw?.extra?.decode_tokens_per_s)) usage.decodeTokensPerSecond = raw.extra.decode_tokens_per_s;
+  if (validRate(raw?.extra?.time_to_first_token_s) && Number.isFinite(raw.extra.time_to_first_token_s * 1000))
+    usage.timeToFirstTokenMs = raw.extra.time_to_first_token_s * 1000;
+  if (validRate(completion.timings?.prompt_ms)) usage.promptProcessingDurationMs = completion.timings.prompt_ms;
+  if (validRate(completion.timings?.predicted_ms)) usage.decodingDurationMs = completion.timings.predicted_ms;
+  if (usage.decodeTokensPerSecond === undefined && validRate(completion.timings?.predicted_per_second))
+    usage.decodeTokensPerSecond = completion.timings.predicted_per_second;
   if (text) assistant.push({ type: 'text', text });
   for (const call of toolCalls) {
     assistant.push({ type: 'tool_use', id: call.id, name: call.name, input: call.input });
   }
   return {
+    ...(Object.keys(usage).length ? { usage } : {}),
     text,
     toolCalls,
     stopReason: choice?.finish_reason ?? 'stop',

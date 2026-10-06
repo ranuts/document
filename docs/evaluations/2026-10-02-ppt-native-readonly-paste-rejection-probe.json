@@ -1,0 +1,28 @@
+{
+  "scope": "Actual native PPT view-only paste rejection and callback/action behavior; isolated browser disposed after probe",
+  "result": {
+    "before": [
+      "\r\n",
+      "\r\n"
+    ],
+    "initialBusy": false,
+    "native": {
+      "canEdit": false,
+      "viewMode": true,
+      "callbacks": 0,
+      "busy": false,
+      "after": [
+        "\r\n",
+        "\r\n"
+      ]
+    },
+    "plugin": {
+      "busy": true,
+      "after": [
+        "\r\n",
+        "\r\n"
+      ]
+    }
+  },
+  "status": "passed"
+}

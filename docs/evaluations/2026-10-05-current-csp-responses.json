@@ -1,0 +1,49 @@
+{
+  "scope": "Fresh owned local Vite production preview, actual GET headers and exact served bytes. No deployed edge, browser enforcement, model generation, offline or physical-device acceptance.",
+  "sourceCommit": "2a5024ee419d3a25a38fd3225f1a785d4c64dc20",
+  "probeSHA256": "c3bf498ccda8a48e3289eea314760395324756bd33844c304034b55e5fcaa252",
+  "rows": [
+    {
+      "pathname": "/assets/webllm.worker-CMk6FPDh.js",
+      "status": 200,
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "diskSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "passed": true
+    },
+    {
+      "pathname": "/assets/agent-plugin-CYrCDxc6.js",
+      "status": 200,
+      "csp": null,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "sha256": "c40fea284080becdfe536a35a41337b16890d1625611ccff12a73216cc85f76c",
+      "diskSHA256": "c40fea284080becdfe536a35a41337b16890d1625611ccff12a73216cc85f76c",
+      "passed": true
+    },
+    {
+      "pathname": "/editor",
+      "status": 200,
+      "csp": null,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "sha256": "d7a73bfdd40427cc933ba3923048dccb7a2b1652b9fa88dff3217820d098be83",
+      "diskSHA256": "d7a73bfdd40427cc933ba3923048dccb7a2b1652b9fa88dff3217820d098be83",
+      "passed": true
+    },
+    {
+      "pathname": "/web-apps/apps/documenteditor/main/index.html",
+      "status": 200,
+      "csp": null,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "sha256": "1b939b57774661af363ff31471c74fd779e7511a9a8c5cc86e53a4f8de75dd71",
+      "diskSHA256": "1b939b57774661af363ff31471c74fd779e7511a9a8c5cc86e53a4f8de75dd71",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "serverClosed": true
+}

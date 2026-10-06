@@ -1,0 +1,61 @@
+{
+  "scope": "Actual browser navigation, blank native Word editor, no model inference; inspect natural BFCache admission",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "8ad6ef69-aae5-4bff-900b-05ea3f53d964",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        }
+      ],
+      "draft": "",
+      "handles": 1,
+      "entries": 0,
+      "notRestoredReasons": {
+        "src": null,
+        "id": null,
+        "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=eee0adb6-d8f6-4d39-9392-92499c91a378",
+        "name": null,
+        "reasons": [
+          {
+            "reason": "masked"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [
+    {
+      "loaderId": "43D29860304B329F52453F2F5F0A0CD1",
+      "frameId": "AE48E1C670F94611A834E4CA38810429",
+      "notRestoredExplanations": [
+        {
+          "type": "Circumstantial",
+          "reason": "BrowsingInstanceNotSwapped"
+        },
+        {
+          "type": "PageSupportNeeded",
+          "reason": "UnloadHandlerExistsInSubFrame"
+        }
+      ],
+      "notRestoredExplanationsTree": {
+        "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=eee0adb6-d8f6-4d39-9392-92499c91a378",
+        "explanations": [
+          {
+            "type": "Circumstantial",
+            "reason": "BrowsingInstanceNotSwapped"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "token": "3920e405-f9f5-4220-a73b-f16aed846f6d",
+  "cached": false,
+  "contextClosed": true
+}

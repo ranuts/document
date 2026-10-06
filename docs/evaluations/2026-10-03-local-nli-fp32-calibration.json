@@ -1,0 +1,239 @@
+{
+  "scope": "Independent local multilingual NLI WASM feasibility experiment, separate Dedicated Worker and strict self-only CSP. Predeclared controls plus archived generation failures; no product integration, IM, native document operation, model coexistence, offline or physical-device claim.",
+  "status": "completed",
+  "dtype": "fp32",
+  "sdkVersion": "3.8.1",
+  "model": {
+    "model": "onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX",
+    "revision": "ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e",
+    "files": [
+      {
+        "name": "config.json",
+        "bytes": 989,
+        "sha256": "3ebbbdf3c3803649b49715fd169207c0f42c4250dfea5dd304b1d8b8f745852a",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/config.json"
+      },
+      {
+        "name": "tokenizer.json",
+        "bytes": 17082832,
+        "sha256": "d0091a328b3441d754e481db5a390d7f3b8dabc6016869fd13ba350d23ddc4cd",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/tokenizer.json"
+      },
+      {
+        "name": "tokenizer_config.json",
+        "bytes": 1286,
+        "sha256": "329b7d21f02c6c6c9d358733b03a34a89cd8e4fe36998869a6ab824b98e9bf9d",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/tokenizer_config.json"
+      },
+      {
+        "name": "special_tokens_map.json",
+        "bytes": 964,
+        "sha256": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/special_tokens_map.json"
+      },
+      {
+        "name": "onnx/model_quantized.onnx",
+        "bytes": 107415176,
+        "sha256": "55614f3c7da74184742eaa0006b978744437aa91de9ba4913db42f94d7844a8f",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/onnx/model_quantized.onnx"
+      },
+      {
+        "name": "onnx/model.onnx",
+        "bytes": 428150190,
+        "sha256": "95743cad9148e16eac551a13ddccd5cef2bd1e3a56e325451a5e9212fea30cc9",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/onnx/model.onnx"
+      }
+    ]
+  },
+  "decision": {
+    "supportedLabel": "entailment",
+    "minimumProbability": 0.8,
+    "policy": "Unchanged predeclared rule."
+  },
+  "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self'; base-uri 'none'",
+  "cases": [
+    {
+      "id": "identity",
+      "premise": "Mira did not approve the shipment.",
+      "hypothesis": "Mira did not approve the shipment.",
+      "expectedSupport": true,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "affirmative-identity",
+      "premise": "The dog is running.",
+      "hypothesis": "The dog is running.",
+      "expectedSupport": true,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "direct-contradiction",
+      "premise": "The dog is running.",
+      "hypothesis": "The dog is not running.",
+      "expectedSupport": false,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "unrelated",
+      "premise": "The dog is running.",
+      "hypothesis": "The stock market closed lower.",
+      "expectedSupport": false,
+      "language": "en",
+      "category": "calibration"
+    }
+  ],
+  "rows": [
+    {
+      "kind": "row",
+      "id": "identity",
+      "tokens": 22,
+      "encoded": "<s> Mira did not approve the shipment.</s></s> Mira did not approve the shipment.</s>",
+      "logits": [
+        3.755077838897705,
+        -1.2624402046203613,
+        -2.5442111492156982
+      ],
+      "probabilities": {
+        "entailment": 0.9916123968690825,
+        "neutral": 0.006565405405829444,
+        "contradiction": 0.0018221977250881826
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 41.71500015258789,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "affirmative-identity",
+      "tokens": 14,
+      "encoded": "<s> The dog is running.</s></s> The dog is running.</s>",
+      "logits": [
+        3.327773094177246,
+        -1.6526747941970825,
+        -1.7003653049468994
+      ],
+      "probabilities": {
+        "entailment": 0.9867557845836048,
+        "neutral": 0.006779983636202757,
+        "contradiction": 0.006464231780192359
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 5.829999923706055,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "direct-contradiction",
+      "tokens": 15,
+      "encoded": "<s> The dog is running.</s></s> The dog is not running.</s>",
+      "logits": [
+        -1.5935451984405518,
+        -2.1656389236450195,
+        3.8732829093933105
+      ],
+      "probabilities": {
+        "entailment": 0.004196874888529918,
+        "neutral": 0.0023684753809514515,
+        "contradiction": 0.9934346497305186
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 5.235000133514404,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "unrelated",
+      "tokens": 15,
+      "encoded": "<s> The dog is running.</s></s> The stock market closed lower.</s>",
+      "logits": [
+        -0.998434841632843,
+        -0.04591410234570503,
+        1.0732579231262207
+      ],
+      "probabilities": {
+        "entailment": 0.08672661987126853,
+        "neutral": 0.22481584720497275,
+        "contradiction": 0.6884575329237587
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 10.864999771118164,
+      "supported": false
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:55817/",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/page.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/worker.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/sdk/transformers.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/tokenizer.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/tokenizer_config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/onnx/model.onnx",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55817/sdk/ort-wasm-simd-threaded.jsep.wasm",
+      "method": "GET",
+      "bodyBytes": 0
+    }
+  ],
+  "externalRequests": [],
+  "probeSHA256": "2347a6740efb1f95b634c55353b35e869659d05b701ba8d0973975a5dc031fcd",
+  "sdkSHA256": "ca697cc102b304de065fbbbd7f3714084d18531509741066ea0bb0326a8ac815",
+  "runtime": {
+    "kind": "loaded",
+    "loadMs": 2502.920000076294,
+    "labels": {
+      "0": "entailment",
+      "1": "neutral",
+      "2": "contradiction"
+    },
+    "isolated": true,
+    "configuredThreads": 4,
+    "spawned": [
+      "http://127.0.0.1:55817/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "http://127.0.0.1:55817/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "http://127.0.0.1:55817/sdk/ort-wasm-simd-threaded.jsep.mjs"
+    ]
+  },
+  "violations": []
+}

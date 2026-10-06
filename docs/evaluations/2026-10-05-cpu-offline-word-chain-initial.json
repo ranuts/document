@@ -1,0 +1,12 @@
+{
+  "runtime": "422b49e",
+  "profile": ".scratch/default-cpu-process-profile-20261005",
+  "errors": [],
+  "failures": [],
+  "onlineCaches": [
+    "document-editor-runtime-70cdcd40a53e",
+    "document-editor-core-1791146346"
+  ],
+  "error": "Error: Current core not installed",
+  "closed": true
+}

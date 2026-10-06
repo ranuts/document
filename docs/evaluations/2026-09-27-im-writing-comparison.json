@@ -1,0 +1,92 @@
+{
+  "context": "default browser context",
+  "status": "done",
+  "results": [
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "loadMs": 131656.69999980927
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "rewrite",
+        "text": "We will process your request as soon as possible.",
+        "instruction": "Make it more polite and concise."
+      },
+      "error": "Error: No rewrite was proposed",
+      "ms": 3312.699999809265
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "rewrite",
+        "text": "预算为1,250 EUR，截止日期2026-10-08，Alex未批准第二阶段。",
+        "instruction": "改善表达，保留全部事实。"
+      },
+      "error": "Error: Writing changed or omitted source numbers; review the request",
+      "ms": 2725.300000190735
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "de"
+      },
+      "output": "Budget: 1250 EUR. Fälligkeit: 2026-10-08. Alex hat Phase zwei nicht genehmigt.",
+      "ms": 2782.5999999046326
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "summarize",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two. The team will wait for approval before starting."
+      },
+      "output": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two. The team will wait for approval before starting.",
+      "ms": 3188.699999809265
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "loadMs": 71601.30000019073
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "rewrite",
+        "text": "We will process your request as soon as possible.",
+        "instruction": "Make it more polite and concise."
+      },
+      "error": "Error: No rewrite was proposed",
+      "ms": 1300.3999996185303
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "rewrite",
+        "text": "预算为1,250 EUR，截止日期2026-10-08，Alex未批准第二阶段。",
+        "instruction": "改善表达，保留全部事实。"
+      },
+      "output": "预算为1250 EUR，截止日期2026-10-08，Alex未批准第二阶段。",
+      "ms": 1239.6000003814697
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "de"
+      },
+      "output": "Budget: 1250 EUR. Due: 2026-10-08. Alex hat Phase zwei nicht genehmigt.",
+      "ms": 1237.2999997138977
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "summarize",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two. The team will wait for approval before starting."
+      },
+      "output": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two. The team will wait for approval before starting.",
+      "ms": 1474.7000002861023
+    }
+  ]
+}

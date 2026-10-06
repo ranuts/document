@@ -1,0 +1,83 @@
+{
+  "scope": "Experimental COOP same-origin and COEP require-corp on same-origin responses. Real GPU inference, IM edits and native Undo/Redo in isolated new Word, Excel and PPT documents. No production header change yet.",
+  "results": [
+    {
+      "type": "docx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "\r\n",
+      "after": "ISOLATED_WORD_2026\r\n",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "\r\n",
+      "afterRedo": "ISOLATED_WORD_2026\r\n",
+      "undoExact": true,
+      "redoExact": true
+    },
+    {
+      "type": "xlsx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "",
+      "after": "ISOLATED_CELL_2026",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "",
+      "afterRedo": "ISOLATED_CELL_2026",
+      "undoExact": true,
+      "redoExact": true
+    },
+    {
+      "type": "pptx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "after": [
+        [
+          "\r\n",
+          "\r\n",
+          "ISOLATED_PPT_2026\r\n"
+        ]
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "afterRedo": [
+        [
+          "\r\n",
+          "\r\n",
+          "ISOLATED_PPT_2026\r\n"
+        ]
+      ],
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [
+    "Failed to read the 'localStorage' property from 'Window': Access is denied for this document."
+  ],
+  "passed": false,
+  "probeSource": "probe-isolated-editor-tools-initial.txt",
+  "probeSha256": "7bc4a9309e0a3ebe85507b6e4e58562e4915c65ba054dbe99c072519afdab32c",
+  "productionHeadersChanged": false,
+  "limitations": [
+    "One Chromium GPU 1.7B sample per editor.",
+    "Native download fallback tested; browser file-picker dialog was disabled in final run.",
+    "No offline, stale-header cache upgrade, physical mobile or alternative browser coverage.",
+    "Exact text snapshots do not prove complete styling or document feature fidelity."
+  ],
+  "diagnosticNote": "Three native edit/history checks passed but test init script attempted localStorage on an opaque about:blank page. Final probe guards its origin and adds Save/reopen coverage."
+}

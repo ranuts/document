@@ -1,0 +1,18 @@
+{
+  "scope": "Actual cross-origin nonisolated parent embedding isolated-policy editor after warming old nonisolated vendor caches. Native startup only; diagnostic, no production change.",
+  "errors": [],
+  "warm": {
+    "isolated": false,
+    "policy": null,
+    "controller": "http://127.0.0.1:51189/sw.js"
+  },
+  "embedded": {
+    "isolated": false,
+    "framePresent": false,
+    "fullApi": false,
+    "loaded": false,
+    "controller": "http://127.0.0.1:51189/sw.js"
+  },
+  "parentIsolated": false,
+  "compatible": false
+}

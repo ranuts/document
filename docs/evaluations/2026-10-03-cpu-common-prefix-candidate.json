@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-02T17:23:03.950Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright WebKit CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Temporary common-prefix reorder candidate; rewrite, summarize, rewrite requests on the same loaded model and document to investigate warm prefix reuse. No navigation or model reload between requests. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-jJAn-gm1.js",
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 40028,
+      "documentUnchanged": true,
+      "previewCount": 0
+    },
+    {
+      "editorModule": "./assets/editor-jJAn-gm1.js",
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a 1,250 EUR payment on 2026-10-08, which has not been approved.\r\n",
+      "error": [],
+      "responseMs": 16386,
+      "documentUnchanged": false,
+      "previewCount": 0
+    },
+    {
+      "editorModule": "./assets/editor-jJAn-gm1.js",
+      "id": "formal-en-after-summary",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 14235,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [
+    {
+      "task": "rewrite",
+      "text": "{\"text\": \"Alex is going to pay 1,250 EUR on October 8, 2026.\"}",
+      "usage": {
+        "completionTokens": 29,
+        "promptTokens": 447,
+        "promptProcessingDurationMs": 34444,
+        "decodingDurationMs": 5499,
+        "decodeTokensPerSecond": 5.091834879068922,
+        "responseDurationMs": 39994,
+        "endToEndTokensPerSecond": 0.7251087663149473
+      }
+    },
+    {
+      "task": "summarize",
+      "text": "{\"text\": \"Alex proposed a 1,250 EUR payment on 2026-10-08, which has not been approved.\"}",
+      "usage": {
+        "completionTokens": 36,
+        "promptTokens": 460,
+        "promptProcessingDurationMs": 9328,
+        "decodingDurationMs": 6960,
+        "decodeTokensPerSecond": 5.028735632183908,
+        "responseDurationMs": 16329,
+        "endToEndTokensPerSecond": 2.204666544185192
+      }
+    },
+    {
+      "task": "rewrite",
+      "text": "{\"text\": \"Hey, Alex is going to pay 1,250 EUR on October 8, 2026.\"}",
+      "usage": {
+        "completionTokens": 31,
+        "promptTokens": 447,
+        "promptProcessingDurationMs": 8308.999,
+        "decodingDurationMs": 5852,
+        "decodeTokensPerSecond": 5.126452494873547,
+        "responseDurationMs": 14196,
+        "endToEndTokensPerSecond": 2.1837137221752605
+      }
+    }
+  ],
+  "errors": [],
+  "assessment": {
+    "change": "Only reordered existing common instructions ahead of task-specific text; unchanged schema and guards. Temporary diagnostics captured raw output and timing.",
+    "runtimeMarkerObserved": 3,
+    "candidateBundle": "editor-jJAn-gm1.js",
+    "baselineResponseMs": [
+      41266,
+      36898,
+      5768
+    ],
+    "candidateResponseMs": [
+      40028,
+      16386,
+      14235
+    ],
+    "firstTaskSwitch": "Summary 36898 -> 16386 ms, with candidate prefill 9328 ms.",
+    "returnToPreviousTask": "Rewrite 5768 -> 14235 ms: warm return is slower in this candidate. Do not describe every task switch as faster.",
+    "quality": "Both rewrite attempts changed ISO date format and were rejected; second also retained Hey. Summary retained sampled amount/date and current non-approval.",
+    "decision": "Not adopted pending repeated cross-task, multilingual and GPU evaluation. Original source restored and full production build completed.",
+    "candidateUnitTests": "agent-writing-task.test.ts: 32 passed."
+  },
+  "limitations": [
+    "One baseline and one candidate sequence, not a statistical causal estimate.",
+    "Backend prefill/decode timings only captured for candidate; no baseline raw provider data.",
+    "No actual physical-device, offline, translation, long-text or GPU-model proof.",
+    "Prompt reordering does not fix CPU formal writing fidelity."
+  ]
+}

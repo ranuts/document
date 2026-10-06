@@ -169,6 +169,7 @@ describe('public/sw.js decides for itself whether it can take over', () => {
       open: vi.fn((name: string) =>
         Promise.resolve({
           addAll: vi.fn().mockResolvedValue(undefined),
+          match: async () => ({ text: async () => '<script src="/assets/current.js"></script>' }),
           keys: () => Promise.resolve((existingCaches[name] ?? []).map((url) => ({ url: `http://localhost${url}` }))),
         }),
       ),
@@ -180,6 +181,7 @@ describe('public/sw.js decides for itself whether it can take over', () => {
     };
     const listeners: Record<string, (event: unknown) => void> = {};
     const scope = {
+      location: { origin: 'http://localhost' },
       addEventListener: (type: string, cb: (event: unknown) => void) => {
         listeners[type] = cb;
       },
@@ -344,6 +346,31 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     await Promise.all(pending);
   };
 
+  it('preserves model and unrelated caches while sweeping only owned retired caches', async () => {
+    const model = fakeCache(['/model.gguf']);
+    const protectedNames = ['local-ai-wllama-models-v1', 'webllm-models', 'plugin-assets', 'document-editor-models'];
+    const retiredNames = [
+      'document-editor-core-old',
+      'document-editor-runtime-old',
+      'document-editor-1786000000',
+      'document-editor-dev-1786000000',
+      'document-editor-v1',
+    ];
+    const stores: Record<string, ReturnType<typeof fakeCache>> = { [OWN_RUNTIME]: fakeCache([]) };
+    for (const name of protectedNames) stores[name] = model;
+    for (const name of retiredNames) stores[name] = fakeCache([]);
+    const worker = loadWorker(stores);
+
+    await dispatch(worker, 'activate');
+
+    for (const name of protectedNames) {
+      expect(stores[name], name).toBe(model);
+      expect(worker.caches.delete).not.toHaveBeenCalledWith(name);
+    }
+    expect(model.urls()).toEqual(['/model.gguf']);
+    for (const name of retiredNames) expect(stores[name], name).toBeUndefined();
+  });
+
   it('drops the outgoing app build from the runtime cache and keeps the vendor tree', async () => {
     // Keying the cache by vendor content is what lets a deploy activate at
     // once -- and it also means nothing clears the cache any more. The app half
@@ -493,7 +520,7 @@ describe('cache writes are held open past the response', () => {
   it('holds the core-cache writes open too', () => {
     // The HTML branch had the same shape. Smaller files, same failure mode.
     const fetchHandler = src.slice(src.indexOf("addEventListener('fetch'"));
-    const coreWrites = [...fetchHandler.matchAll(/caches\.open\(CORE_CACHE\)/g)];
+    const coreWrites = [...fetchHandler.matchAll(/caches\.open\(CORE_CACHE\)\.then/g)];
     expect(coreWrites.length, 'expected the network-first and 404-recovery writes').toBe(2);
     for (const match of coreWrites) {
       const before = fetchHandler.slice(Math.max(0, match.index - 200), match.index);
@@ -726,7 +753,11 @@ describe('isUnseenBuild', () => {
  * typed to lose, so it promotes and reloads without asking.
  */
 describe('healStaleController', () => {
-  const answering = (version: Record<string, string> | null, scriptURL = 'https://edit.example/sw.js') => {
+  const answering = (
+    version: Record<string, unknown> | null,
+    scriptURL = 'https://edit.example/sw.js',
+    editors: unknown = 1,
+  ) => {
     const posted: unknown[] = [];
     const w = {
       state: 'installed',
@@ -736,7 +767,9 @@ describe('healStaleController', () => {
       postMessage: (msg: unknown, transfer?: MessagePort[]) => {
         posted.push(msg);
         const port = transfer?.[0];
-        if (port && version) setTimeout(() => port.postMessage({ type: 'VERSION', ...version }), 0);
+        if (port && (msg as { type?: string }).type === 'CLIENT_COUNT') {
+          setTimeout(() => port.postMessage({ type: 'CLIENT_COUNT', count: 3, editors }), 0);
+        } else if (port && version) setTimeout(() => port.postMessage({ type: 'VERSION', ...version }), 0);
       },
     };
     return w as typeof w & SwLike;
@@ -764,6 +797,91 @@ describe('healStaleController', () => {
     const args = input();
     await expect(healStaleController(args)).resolves.toBe(true);
     expect((args.waiting as unknown as { posted: unknown[] }).posted).toContainEqual(SKIP_WAITING_MESSAGE);
+  });
+
+  it('compares actual versions even after the waiting build has precached its assets', async () => {
+    const args = input({
+      cacheStorage: { keys: () => Promise.resolve(['document-editor-runtime-v1', 'document-editor-runtime-v2']) },
+    });
+    await expect(healStaleController(args)).resolves.toBe(true);
+    expect(args.waiting.posted).toContainEqual(SKIP_WAITING_MESSAGE);
+  });
+
+  it('does not promote when the outgoing version is unknown', async () => {
+    vi.useFakeTimers();
+    try {
+      const args = input({ controller: answering(null) });
+      const verdict = healStaleController(args);
+      await vi.advanceTimersByTimeAsync(ASK_VERSION_TIMEOUT_MS * ASK_VERSION_ATTEMPTS + 100);
+      await expect(verdict).resolves.toBe(false);
+      expect(args.waiting.posted).not.toContainEqual(SKIP_WAITING_MESSAGE);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it.each([{}, 7, '', null])('does not promote for malformed vendor version %j', async (vendorVersion) => {
+    const args = input({ controller: answering({ vendorVersion }) });
+    await expect(healStaleController(args)).resolves.toBe(false);
+    expect(args.waiting.posted).not.toContainEqual(SKIP_WAITING_MESSAGE);
+  });
+
+  it.each([2, undefined, '1', -1])('leaves the candidate waiting when editor count is unsafe: %j', async (editors) => {
+    const args = input({
+      controller: answering(
+        { vendorVersion: 'v1' },
+        'https://edit.example/sw.js',
+        editors === undefined ? null : editors,
+      ),
+    });
+    await expect(healStaleController(args)).resolves.toBe(false);
+    expect(args.waiting.posted).not.toContainEqual(SKIP_WAITING_MESSAGE);
+    expect(args.storage.map.has(HEAL_STORAGE_KEY)).toBe(false);
+  });
+
+  it('does not promote when another editor opens while version replies are pending', async () => {
+    let release!: (value: { vendorVersion: string }) => void;
+    let editors = 1;
+    const controller = answering({ vendorVersion: 'v1' });
+    controller.postMessage = (msg: unknown, transfer?: MessagePort[]) => {
+      if ((msg as { type?: string }).type === 'CLIENT_COUNT') {
+        transfer?.[0].postMessage({ type: 'CLIENT_COUNT', count: editors + 1, editors });
+      }
+    };
+    const controllerVersion = new Promise<{ vendorVersion: string }>((resolve) => {
+      release = resolve;
+    });
+    const args = input({ controller, controllerVersion });
+    const verdict = healStaleController(args);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    editors = 2;
+    release({ vendorVersion: 'v1' });
+    await expect(verdict).resolves.toBe(false);
+    expect(args.waiting.posted).not.toContainEqual(SKIP_WAITING_MESSAGE);
+  });
+
+  it('does not promote over existing unsaved edits', async () => {
+    const args = input({ hasUnsavedChanges: () => true });
+    await expect(healStaleController(args)).resolves.toBe(false);
+    expect(args.waiting.posted).not.toContainEqual(SKIP_WAITING_MESSAGE);
+    expect(args.storage.map.has(HEAL_STORAGE_KEY)).toBe(false);
+  });
+
+  it('rechecks edits after waiting for version replies', async () => {
+    const hasUnsavedChanges = vi.fn().mockReturnValueOnce(false).mockReturnValue(true);
+    const args = input({ hasUnsavedChanges });
+    await expect(healStaleController(args)).resolves.toBe(false);
+    expect(args.waiting.posted).not.toContainEqual(SKIP_WAITING_MESSAGE);
+    expect(args.storage.map.has(HEAL_STORAGE_KEY)).toBe(false);
+  });
+
+  it('promotes once when two waiting-worker callbacks overlap', async () => {
+    const args = input();
+    const results = await Promise.all([healStaleController(args), healStaleController(args)]);
+    expect(results.filter(Boolean)).toHaveLength(1);
+    expect(
+      args.waiting.posted.filter((message) => JSON.stringify(message) === JSON.stringify(SKIP_WAITING_MESSAGE)),
+    ).toHaveLength(1);
   });
 
   it('does nothing on a first install, when there is no outgoing build', async () => {

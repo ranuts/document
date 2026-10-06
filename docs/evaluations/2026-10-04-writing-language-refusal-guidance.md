@@ -1,0 +1,9 @@
+# Writing language refusal guidance — 2026-10-04
+
+Actual Qwen3.5 2B English translation in the seven-language run returned Chinese source and was refused by the existing script guard. The IM showed generic request failure because `displayError` did not recognize the guard's exact error text. This obscured the actionable reason without changing document preservation.
+
+The presentation layer now maps that exact known message to a concise seven-locale language-mismatch message. Already localized guidance survives repeated error formatting. Unknown errors, including the same text with additional private details, still use generic guidance. There are no new controls, preview cards, confirmation steps, dependencies or model/guard changes.
+
+Before implementation, the regression test failed with generic request failure instead of the expected language guidance. After implementation: production build exit 0; full Vitest 116 files / 4,190 tests passed; lint (oxlint, TypeScript, Docker configuration) exit 0. Existing PromiseRejectionHandledWarning messages appeared in the full test run. Coverage includes all seven shell locales, repeated formatting, restored tool-result errors and privacy of non-exact error strings. Independent read-only review found no Critical/Important issue. Final test-file formatting is whitespace only.
+
+This is unit-level presentation and history-projection verification, not a new browser/model inference run or native-device visual acceptance. The prior actual model report identifies the real triggering failure. The coarse language guard still cannot establish same-language Latin output or semantic correctness; those writing-quality issues remain open. Persisted host-guidance prose is retained as written rather than retranslated after switching shell language.

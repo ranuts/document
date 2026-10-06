@@ -1,15 +1,15 @@
 ---
-title: LibreOffice なしで ODT ファイルを開く — 無料・ブラウザ内
-description: LibreOffice も OpenOffice もアカウントもなしで、ブラウザ内で ODT（OpenDocument Text）ファイルを開いて編集できます。ODT・DOCX・PDF として保存し直せます。何もアップロードされません。
+title: 'LibreOffice なしで ODT ファイルを開く — 無料・ブラウザ内'
+description: 'LibreOffice やアカウントなしで、ブラウザで ODT ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 eyebrow: 開く · .odt
 h1: LibreOffice なしで ODT ファイルを開く
-lead: '**.odt** ファイルが届いたのに LibreOffice がない？ ブラウザで開いて編集し、ODT のまま——あるいは DOCX や PDF として保存し直せます。インストール不要、アップロードなし。'
+lead: 'LibreOffice やアカウントなしで、ブラウザで ODT ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 cta: ODT を開く →
 ctaHref: /ja/
-ogDescription: LibreOffice なしでブラウザ内で ODT を開いて編集。ODT・DOCX・PDF で保存。アップロードなし。
+ogDescription: 'LibreOffice やアカウントなしで、ブラウザで ODT ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 breadcrumb: odt
 howTo: LibreOffice なしで ODT ファイルを開く方法
-appDescription: LibreOffice なし・アカウントなし・アップロードなしで、ブラウザ内で ODT（OpenDocument Text）ファイルを開いて編集します。
+appDescription: 'LibreOffice やアカウントなしで、ブラウザで ODT ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 ---
 
 ## 使い方

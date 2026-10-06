@@ -1,0 +1,9 @@
+# Local conditional-response isolation fix
+
+Two real WebKit recovery runs restored original/latest document text correctly but failed the clean-run criterion with a spell.js access-control page error. A dedicated network probe isolated the failure to the first HTTP cache revalidation: the same-origin worker request reported `Worker load was blocked by Cross-Origin-Embedder-Policy`. Its initial 200 carried COOP/COEP, but a direct conditional request to the previous Vite preview returned 304 with neither header. The failed runs and network receipt remain retained.
+
+A Vite middleware now sets the existing isolation policy before static handling in both dev and preview. This preserves `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` when Vite's early 304 response bypasses its configured static headers. Built assets, Pages policy, service-worker caching and the model/editor runtime are unchanged.
+
+Actual dev (5196) and preview (5195) HTTP checks both return 200 then 304 with the two policy headers. WebKit's native file import followed by two reloads now receives 304 for spell.js successfully, loads spell.wasm, and reports no page error. A further independent native source recovery run on the fixed preview passes original-source reload, actual native edit, real timed autosave (65.1 seconds), and latest-snapshot reload with the same saved id and zero page errors. The final receipt has `passed:true` and `closed:true`.
+
+TypeScript, changed-file oxlint and diff check pass; independent review found no Important issue. The integration's full 139-file/4,501-test suite and production build precede this config-only fix; they are not claimed to have been rerun after it. The fix was verified through the actual dev/preview servers rather than source-text assertions. Production Pages/other servers' conditional-response behavior is not certified by this local check.

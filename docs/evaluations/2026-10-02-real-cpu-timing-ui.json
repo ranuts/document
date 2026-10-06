@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-02T04:49:14.845Z",
+  "runtime": "Isolated persistent Chromium, forced no GPU, actual editor and default local fallback",
+  "status": "completed",
+  "loadMs": 3463,
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "firstVisibleMs": 23906,
+  "totalMs": 23908,
+  "text": [
+    "helloWrite to document"
+  ],
+  "statistics": "First text: 23.83 s · Overall response rate: 0.08 token/s · 2 tokens",
+  "errors": [],
+  "conversationRequests": [],
+  "navigations": [
+    "http://localhost:5192/editor?new=docx&agent=1&locale=en",
+    "http://localhost:5192/editor?new=docx&agent=1&locale=en&saved=0f50f879-a8e0-44f0-b099-12a9f7335ff1",
+    "http://localhost:5192/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://localhost:5192&uitheme=theme-classic-light&fileType=docx"
+  ]
+}

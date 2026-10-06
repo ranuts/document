@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-02T11:05:00.482Z",
+  "scope": "Synthetic loopback literal-response SW navigation: Playwright offline flag versus stopping the origin. No application/model/cache required.",
+  "platform": "darwin",
+  "playwright": "1.62.1",
+  "upstream": "https://github.com/microsoft/playwright/issues/42775",
+  "results": [
+    {
+      "browser": "webkit",
+      "browserVersion": "26.5",
+      "outage": "offline-flag",
+      "controlled": true,
+      "originListening": true,
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:65213/probe\", waiting until \"load\"\u001b[22m\n",
+      "literalFallbackWorked": false
+    },
+    {
+      "browser": "webkit",
+      "browserVersion": "26.5",
+      "outage": "origin-stopped",
+      "controlled": true,
+      "originListening": false,
+      "status": 200,
+      "fromServiceWorker": true,
+      "heading": "Literal fallback",
+      "literalFallbackWorked": true
+    },
+    {
+      "browser": "chromium",
+      "browserVersion": "151.0.7922.34",
+      "outage": "offline-flag",
+      "controlled": true,
+      "originListening": true,
+      "status": 200,
+      "fromServiceWorker": true,
+      "heading": "Literal fallback",
+      "literalFallbackWorked": true
+    },
+    {
+      "browser": "chromium",
+      "browserVersion": "151.0.7922.34",
+      "outage": "origin-stopped",
+      "controlled": true,
+      "originListening": false,
+      "status": 200,
+      "fromServiceWorker": true,
+      "heading": "Literal fallback",
+      "literalFallbackWorked": true
+    }
+  ],
+  "assessment": "WebKit 26.5 fails navigation under setOffline even for a literal SW response; same engine passes when only origin is stopped. Chromium passes both. This independently reproduces a harness/engine offline-emulation difference, not application cache failure."
+}

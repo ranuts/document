@@ -1,0 +1,9 @@
+# Actual default CPU selected-text summary result
+
+Frozen 3261efa, runtime d71a1e8/native Word, full Chromium 151.0.7922.34. Actual selected source captured (native CRLF included), actual summarize selector, default CPU binary and settings. SDK completes JSON-schema requests normally, 44/33 generated tokens, no truncation. Replies are directly applied through production writing action. Both outputs shorter; both actual native Undo restore exact source and Redo restore exact edited text. Page/chat errors empty, context/browser close. No extra preview added; measured .agent-plan-preview count zero is only a narrow DOM selector observation, not all possible UI components. Tool-message selector returns empty, so verified operation is established by native document equality/Undo/Redo, not that selector.
+
+A, 11,056 ms: `会议记录：周宁已收到实验报告，尚未批准上线。审批由许岚负责，预计周四完成。报告收件与上线审批不同，未批准结果尚未确定。` Critical recipient/approver/not-approved/expected Thursday retained, but three sentences instead of requested one, and final clause is awkward/redundant. Full declared quality gate fails format, no broad factual guarantee.
+
+B, 10,584 ms: `宋远周五建议交付样机，但方案未获批准。需韩岚确认预算后采购零件，预算待确认。` Preserves unapproved plan and budget prerequisite/pending state, but **shifts Friday from the proposed delivery date to the date of suggesting delivery**, which source does not state. Also two sentences instead of one. Declared quality gate fails. Host length/numeric/currency/schema checks do not establish relational semantic fidelity; actual applied document contains this observed defect.
+
+No product repair, output postprocessing, prompt/model tuning or preview flow introduced. No default promotion. These are synthetic owned documents; this does not certify real-user document safety or generally reliable automatic summaries. Frozen developer cases are now development data. Default fallback quality remains experimental and unresolved. No new unit/build claim for evidence-only work.

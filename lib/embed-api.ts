@@ -26,6 +26,7 @@ const EMBED_QUERY_KEYS = ['embed', 'embedded'];
 
 let initialized = false;
 let parentOrigin = '*';
+let acceptedParentOrigin: string | null = null;
 let isEmbedMode = false;
 
 function getQueryValue(key: string): string | null {
@@ -48,12 +49,10 @@ function normalizeTargetOrigin(origin: string): string {
 }
 
 function shouldAcceptMessage(event: MessageEvent): boolean {
+  if (event.source !== window.parent) return false;
   const allowedOrigin = getQueryValue('embedOrigin');
-  if (!allowedOrigin) {
-    return true;
-  }
-
-  return event.origin === allowedOrigin;
+  if (allowedOrigin && event.origin !== allowedOrigin) return false;
+  return acceptedParentOrigin === null || event.origin === acceptedParentOrigin;
 }
 
 function postToParent(type: string, payload: EmbedResponsePayload = {}, id?: string): void {
@@ -156,7 +155,12 @@ async function handleOpen(payload: Record<string, any>): Promise<void> {
 
 async function handleMessage(event: MessageEvent): Promise<void> {
   const message = event.data as EmbedMessage;
-  if (!message || typeof message !== 'object' || !message.type?.startsWith('document:')) {
+  if (
+    !message ||
+    typeof message !== 'object' ||
+    typeof message.type !== 'string' ||
+    !message.type.startsWith('document:')
+  ) {
     return;
   }
 
@@ -164,7 +168,8 @@ async function handleMessage(event: MessageEvent): Promise<void> {
     return;
   }
 
-  parentOrigin = normalizeTargetOrigin(event.origin);
+  acceptedParentOrigin ??= event.origin;
+  parentOrigin = normalizeTargetOrigin(acceptedParentOrigin);
   const payload = message.payload || {};
 
   try {
@@ -247,6 +252,8 @@ export function initEmbedApi(): void {
 
   initialized = true;
   isEmbedMode = detectEmbedMode();
+  acceptedParentOrigin = getQueryValue('embedOrigin');
+  if (acceptedParentOrigin) parentOrigin = normalizeTargetOrigin(acceptedParentOrigin);
 
   if (!isEmbedMode) {
     return;

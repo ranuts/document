@@ -229,4 +229,96 @@ describe('history store', () => {
     await markSavedToDisk(doc!.id);
     expect(hasUnsavedWork((await getDoc(doc!.id))!)).toBe(false);
   });
+  it('does not start a snapshot write after cancellation during the storage estimate', async () => {
+    const controller = new AbortController();
+    let estimated!: (value: { quota: number }) => void;
+    Object.defineProperty(navigator, 'storage', {
+      configurable: true,
+      value: {
+        estimate: () =>
+          new Promise((resolve) => {
+            estimated = resolve;
+          }),
+      },
+    });
+    const pending = putSnapshot(
+      { id: 'cancelled', title: 'Cancelled.docx', origin: 'local', bytes: bytes(4) },
+      controller.signal,
+    );
+    controller.abort();
+    estimated({ quota: 1000 });
+    expect(await pending).toBeNull();
+    expect(await getDoc('cancelled')).toBeNull();
+    mockQuota(1000);
+  });
+  it('rolls back in-progress snapshot writes when their owner cancels', async () => {
+    mockQuota(1000);
+    const controller = new AbortController();
+    const put = IDBObjectStore.prototype.put;
+    vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(function (this: IDBObjectStore, ...args) {
+      const request = put.apply(this, args as Parameters<typeof put>);
+      if (this.name === 'blobs') controller.abort();
+      return request;
+    });
+    expect(
+      await putSnapshot(
+        { id: 'rolled-back', title: 'Rollback.docx', origin: 'local', bytes: bytes(4) },
+        controller.signal,
+      ),
+    ).toBeNull();
+    expect(await getDoc('rolled-back')).toBeNull();
+    expect(await getLatestSnapshot('rolled-back')).toBeNull();
+  });
+  it('does not evict other recovery documents for an export cancelled at quota failure', async () => {
+    mockQuota(1000);
+    const old = await putSnapshot({ title: 'Keep.docx', origin: 'local', bytes: bytes(4) });
+    const controller = new AbortController();
+    const put = IDBObjectStore.prototype.put;
+    let first = true;
+    vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(function (this: IDBObjectStore, ...args) {
+      if (this.name === 'blobs' && first) {
+        first = false;
+        controller.abort();
+        throw Object.assign(new Error('quota'), { name: 'QuotaExceededError' });
+      }
+      return put.apply(this, args as Parameters<typeof put>);
+    });
+    expect(
+      await putSnapshot(
+        { id: 'cancelled-quota', title: 'New.docx', origin: 'local', bytes: bytes(4) },
+        controller.signal,
+      ),
+    ).toBeNull();
+    expect(await getDoc(old!.id)).not.toBeNull();
+    expect(await getDoc('cancelled-quota')).toBeNull();
+  });
+  it('rolls back quota eviction if the export is cancelled while old blobs are being deleted', async () => {
+    mockQuota(1000);
+    const old = await putSnapshot({ title: 'Keep.docx', origin: 'local', bytes: bytes(4, 7) });
+    const controller = new AbortController();
+    const put = IDBObjectStore.prototype.put;
+    let first = true;
+    vi.spyOn(IDBObjectStore.prototype, 'put').mockImplementation(function (this: IDBObjectStore, ...args) {
+      if (this.name === 'blobs' && first) {
+        first = false;
+        throw Object.assign(new Error('quota'), { name: 'QuotaExceededError' });
+      }
+      return put.apply(this, args as Parameters<typeof put>);
+    });
+    const remove = IDBObjectStore.prototype.delete;
+    vi.spyOn(IDBObjectStore.prototype, 'delete').mockImplementation(function (this: IDBObjectStore, ...args) {
+      const request = remove.apply(this, args);
+      if (this.name === 'blobs') controller.abort();
+      return request;
+    });
+    expect(
+      await putSnapshot(
+        { id: 'aborted-eviction', title: 'New.docx', origin: 'local', bytes: bytes(4) },
+        controller.signal,
+      ),
+    ).toBeNull();
+    expect(await getDoc(old!.id)).not.toBeNull();
+    expect(Array.from((await getLatestSnapshot(old!.id))!.bytes)).toEqual([7, 7, 7, 7]);
+    expect(await getDoc('aborted-eviction')).toBeNull();
+  });
 });

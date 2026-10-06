@@ -1,0 +1,74 @@
+{
+  "version": "26.5",
+  "scope": "fresh shell-only context; browser remains online; owned forwarding origin stopped; no model inference",
+  "failures": [],
+  "cases": [
+    {
+      "mode": "reload",
+      "result": "navigated",
+      "title": "Document Editor",
+      "controller": "http://127.0.0.1:5194/sw.js?isolation=1"
+    },
+    {
+      "mode": "newPage",
+      "result": "navigated",
+      "title": "Document Editor",
+      "controller": "http://127.0.0.1:5194/sw.js?isolation=1"
+    }
+  ],
+  "online": {
+    "controller": "http://127.0.0.1:5194/sw.js?isolation=1",
+    "caches": [
+      {
+        "name": "document-editor-runtime-70cdcd40a53e",
+        "entries": []
+      },
+      {
+        "name": "document-editor-core-1791146346",
+        "entries": [
+          {
+            "url": "http://127.0.0.1:5194/editor",
+            "status": 200,
+            "type": "basic",
+            "headers": {
+              "cache-control": "no-cache",
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "text/html;charset=utf-8",
+              "cross-origin-embedder-policy": "require-corp",
+              "cross-origin-opener-policy": "same-origin",
+              "date": "Sun, 04 Oct 2026 22:07:02 GMT",
+              "etag": "W/\"3613-1791146345575\"",
+              "keep-alive": "timeout=5",
+              "last-modified": "Sun, 04 Oct 2026 20:39:05 GMT",
+              "transfer-encoding": "Identity",
+              "vary": "Origin"
+            }
+          },
+          {
+            "url": "http://127.0.0.1:5194/editor.html",
+            "status": 200,
+            "type": "basic",
+            "headers": {
+              "cache-control": "no-cache",
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "text/html;charset=utf-8",
+              "cross-origin-embedder-policy": "require-corp",
+              "cross-origin-opener-policy": "same-origin",
+              "date": "Sun, 04 Oct 2026 22:07:02 GMT",
+              "etag": "W/\"3613-1791146345575\"",
+              "keep-alive": "timeout=5",
+              "last-modified": "Sun, 04 Oct 2026 20:39:05 GMT",
+              "transfer-encoding": "Identity",
+              "vary": "Origin"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "navigatorOnline": true,
+  "originStopped": true,
+  "closed": true
+}

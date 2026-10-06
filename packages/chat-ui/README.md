@@ -39,7 +39,7 @@ Override the look via the `--cui-*` custom properties on `.cui-root`.
 
 ## API
 
-- `append({ role, text })` — add a finished message (`user` / `agent` / `tool` / `error`).
+- `append({ role, text })` — add a finished message (`user` / `agent` / `tool` / `status` / `error`).
 - `appendDelta(text)` — stream text into a live agent bubble (auto-created).
 - `endStream()` — finalise the streaming bubble.
 - `setRunning(bool)` — toggle Send⇄Stop and lock the input.
@@ -47,3 +47,7 @@ Override the look via the `--cui-*` custom properties on `.cui-root`.
 - `getInput()` / `setInput(text)` / `focus()` — input helpers.
 - `setLabels(labels)` — update labels live (e.g. language change).
 - `actionsEl` — host-populated slot above the input (compose toolbar); collapses when empty.
+
+Intentional cancellation can use `status`: plain muted text with the same draft recovery as an error, without an error border. Status text is never returned by `getLastAnswer()` or offered as document content.
+
+Hosts may provide `canSend(text)` to keep drafts editable while a dependency is unavailable. Call `refreshSendAvailability()` when readiness changes. This blocks both Send and Enter without clearing or queuing the draft; Stop remains available during a running turn.

@@ -1,0 +1,7 @@
+# Default CPU PWA reload protocol, frozen before run
+
+Repeat the prior exact default URL/native settings probe in a new full Chromium context, but allow production service workers. Await actual controller script URL ending /sw.js before online model load. No manual service worker registration, cache insertion, response stubbing or uploaded model. Record Cache API runtime entry headers and read-only OPFS model size/metadata. Native URL setter/change is the already disclosed custom UI control intervention.
+
+After online loaded state, Playwright context.setOffline(true), same native URL change disposes current runtime, native load button creates a fresh CPU runtime. Fixed prompt and criteria remain previous cache protocol: 不要操作文档。只回复 CACHE_OK。 Record exact source as individual format gate; mechanical completion requires offline loaded state, finished generation, same document, empty page/chat errors, closed contexts. This is production PWA caching with controlled offline on the same loaded page, not app restart, physical network disconnect or OS reboot. Retain failures with phase and UI hint/status. Generation defaults unchanged; no semantic promotion.
+
+Pre-load observer correction: first PWA attempt used literal scriptURL.endsWith('/sw.js') and timed out in open phase before loading. Audited registration uses /sw.js?isolation=1 when cross-origin isolated. Correct the observer to URL pathname === /sw.js, preserving original JSON/driver. No registration, routing, model or response changes.

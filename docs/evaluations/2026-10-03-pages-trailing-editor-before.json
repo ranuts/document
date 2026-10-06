@@ -1,0 +1,73 @@
+{
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5196/editor/theme-presentation.js",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/ran-fonts/fonts.css",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/ran-tokens.88df51ac.css",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/assets/editor-Bs2dljCm.js",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/assets/rolldown-runtime-DK3Fl9T5.js",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/assets/builder-EH76YCFS-BT43qACE.js",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/assets/input-DEoPNM0j-7RXO3Yxo.js",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    },
+    {
+      "url": "http://127.0.0.1:5196/editor/assets/editor-Ci0XLiSK.css",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    }
+  ],
+  "errors": [],
+  "online": "http://127.0.0.1:5196/editor?new=docx&locale=en&saved=c53af0d5-c8d8-490d-9d50-b17068caa88c",
+  "offline": {
+    "url": "http://127.0.0.1:5196/editor/?new=docx&locale=en",
+    "frames": [
+      "http://127.0.0.1:5196/editor/?new=docx&locale=en"
+    ],
+    "text": ""
+  }
+}

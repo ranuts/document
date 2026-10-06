@@ -1,0 +1,6 @@
+{
+  "scope": "Minimal harness semantics control; an async false result must not establish readiness.",
+  "returnedValue": false,
+  "elapsedMs": 13,
+  "explicitPollingRejectedFalse": true
+}

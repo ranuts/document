@@ -11,8 +11,9 @@
  * document the user had just opened, to talk about a different one.
  */
 import { openLocalFile } from '../document';
-import { getLatestSnapshot } from './store';
+import { getLatestSnapshot, readDocumentRecord } from './store';
 import type { HistoryDoc } from './types';
+import { readActiveSource } from '../active-document-source';
 
 /** A short "5 minutes ago", for the history list's timestamps. */
 export function formatRelativeTime(timestamp: number, now = Date.now()): string {
@@ -50,12 +51,22 @@ export function formatRelativeTime(timestamp: number, now = Date.now()): string 
  * session is told which history row this came from, so editing continues that
  * row instead of starting a second one for the same document.
  */
-export async function restoreDocument(doc: HistoryDoc): Promise<boolean> {
+export async function restoreDocument(doc: HistoryDoc, options?: { readonly?: boolean }): Promise<boolean> {
   const snapshot = await getLatestSnapshot(doc.id);
   if (!snapshot) return false;
   // Records come back from IndexedDB as a whole buffer, never a view into a
   // larger one, so handing over the buffer avoids copying tens of megabytes.
   const file = new File([snapshot.bytes.buffer as ArrayBuffer], doc.title);
-  await openLocalFile(file, { historyId: doc.id });
+  await openLocalFile(file, { historyId: doc.id, ...options });
+  return true;
+}
+
+export async function restoreSavedDocument(id: string, options?: { readonly?: boolean }): Promise<boolean> {
+  const record = await readDocumentRecord(id);
+  if (!record) return false;
+  if (record.doc) return restoreDocument(record.doc, options);
+  const source = await readActiveSource(id);
+  if (!source) return false;
+  await openLocalFile(source, { historyId: id, ...options });
   return true;
 }

@@ -1,0 +1,24 @@
+{
+  "scope": "Current production CPU selected-text summary of a synthetic source within the 8000-character application limit, testing actual native context rejection and unchanged document; no broad writing-quality or memory claim.",
+  "sourceLength": 5000,
+  "status": "completed",
+  "consoleErrors": [
+    "srv    send_error: task id = 0, error: request (3419 tokens) exceeds the available context size (2048 tokens), try increasing it",
+    "Model returned an error: {code: 400, message: request (3419 tokens) exceeds the available context size (2048 tokens), try increasing it, type: exceed_context_size_error, n_prompt_tokens: 3419, n_ctx: 2048}"
+  ],
+  "errors": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "responseMs": 49,
+  "visibleErrors": [
+    "This request is too long. Select a shorter passage or split the task.Restore request"
+  ],
+  "unchanged": true,
+  "previewCount": 0,
+  "restore": {
+    "draft": "请用一句话忠实概括这段中文。",
+    "userCount": 1,
+    "running": false
+  },
+  "nextReply": "Hello.",
+  "errorCountAfterRecovery": 1
+}

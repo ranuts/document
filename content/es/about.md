@@ -1,6 +1,6 @@
 ---
-title: Acerca de — quién hace este editor y por qué
-description: Quién está detrás de edit.chaxus.com, qué hace realmente, cómo está construido y dónde vive el código fuente. Un editor de código abierto (AGPL-3.0) para archivos de Word, Excel, PowerPoint, CSV y PDF que funciona en el navegador y nunca sube tus documentos.
+title: 'Acerca de — quién hace este editor y por qué'
+description: 'Sobre este editor de código abierto, sus autores, el código y el tratamiento de datos. Edición local sin subidas obligatorias.'
 eyebrow: Acerca de
 breadcrumb: Acerca de
 h1: Acerca de este editor
@@ -11,9 +11,9 @@ lead: Quién lo hace, qué hace de verdad, y cómo puedes comprobar ambas cosas 
 
 Un **editor de documentos de oficina dentro del navegador**. Abres un archivo de Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV o PDF y lo editas directamente en una pestaña.
 
-Lo que más importa: **tu archivo nunca sale de tu dispositivo**. No hay paso de subida, no hay cuenta y no hay copia de tu documento en ningún servidor. El motor de edición se ejecuta dentro de tu navegador, así que el archivo va de tu disco a la pestaña y vuelve — sin nada en medio.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
-Esa sola propiedad determina casi todas las decisiones de diseño de aquí: sin registro, sin almacenamiento en la nube, sin telemetría que pudiera llevarse el contenido de un documento, y un modo sin conexión que sigue funcionando cuando la red no lo hace.
+Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
 
 ## Quién lo hace
 
@@ -26,8 +26,8 @@ Es un proyecto personal de código abierto, no el producto de una empresa. No ha
 Las afirmaciones sobre privacidad son baratas. Estas son las formas de verificarlas tú mismo:
 
 - **Lee el código.** Todo es de código abierto bajo **AGPL-3.0** en [github.com/ranuts/document](https://github.com/ranuts/document). La licencia obliga a que cualquier versión modificada y alojada publique también su código.
-- **Mira la pestaña de red.** Abre las herramientas de desarrollo del navegador, carga un documento, edítalo y observa las peticiones. No verás tu archivo yendo a ninguna parte.
-- **Desconecta la red.** Carga el sitio una vez, ponte sin conexión y abre y edita un archivo. Sigue funcionando, algo que solo es posible porque la edición ocurre en local.
+- Comprueba en el panel de red la apertura, edición y guardado de un archivo local. Prueba por separado la IA opcional, las URL remotas y las aplicaciones anfitrionas; sus solicitudes no pertenecen a la edición básica local.
+- Abre el editor con conexión y prueba los formatos, fuentes y exportaciones necesarios. Después desconecta y verifica el mismo flujo antes de depender del modo sin conexión.
 - **Alójalo tú mismo.** El repositorio incluye lo necesario para ejecutar tu propia copia.
 
 ## Sobre qué está construido
@@ -41,7 +41,7 @@ Construir sobre un motor existente es deliberado. Los formatos de documento — 
 Una lista honesta, porque una página que solo enumera virtudes no sirve de nada:
 
 - **Los archivos grandes dependen de tu equipo.** Todo corre en tu navegador, así que una hoja de cálculo muy grande está limitada por tu memoria y tu CPU, no por un servidor que puedas ampliar pagando.
-- **Ni sincronización ni colaboración.** Ningún servidor guarda tu documento, lo que también significa que no hay coedición en tiempo real ni sincronización entre dispositivos.
+- En la edición básica local: **Ni sincronización ni colaboración.** Ningún servidor guarda tu documento, lo que también significa que no hay coedición en tiempo real ni sincronización entre dispositivos.
 - **La fidelidad es muy buena, no perfecta.** Los diseños complejos, las fuentes poco habituales y las macros pueden diferir de una suite de escritorio.
 
 Si algo de esto te importa más que mantener el archivo en local, una suite alojada es la mejor herramienta — y es una elección razonable.

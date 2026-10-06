@@ -1,0 +1,113 @@
+{
+  "scope": "Throwaway startup instrumentation appended to JavaScript Blobs, executes only in em-pthread contexts, captures normal-execution CSP controls before blocking native work. Actual CPU SDK/model/native thread pool and reply remain real. No product/on-disk changes or uninstrumented-thread execution claim.",
+  "status": "completed",
+  "errors": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "controls": [
+    {
+      "url": "blob:http://127.0.0.1:5193/2ab40809-8dc5-4d57-93e1-1f2b0cc12b49",
+      "name": "em-pthread",
+      "eval": {
+        "blocked": true,
+        "name": "EvalError",
+        "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='\".\n"
+      },
+      "module": {
+        "blocked": true,
+        "name": "TypeError",
+        "message": "Failed to fetch dynamically imported module: data:text/javascript,export default 42"
+      }
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/fdb0fbb5-8206-4506-ba34-dd0fc6737845",
+      "name": "em-pthread",
+      "eval": {
+        "blocked": true,
+        "name": "EvalError",
+        "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='\".\n"
+      },
+      "module": {
+        "blocked": true,
+        "name": "TypeError",
+        "message": "Failed to fetch dynamically imported module: data:text/javascript,export default 42"
+      }
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/01a7652f-4dfd-4082-9933-51320e9dcbac",
+      "name": "em-pthread",
+      "eval": {
+        "blocked": true,
+        "name": "EvalError",
+        "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='\".\n"
+      },
+      "module": {
+        "blocked": true,
+        "name": "TypeError",
+        "message": "Failed to fetch dynamically imported module: data:text/javascript,export default 42"
+      }
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/eaefc061-0d6b-4daa-80d8-4d746e5dcaa0",
+      "name": "em-pthread",
+      "eval": {
+        "blocked": true,
+        "name": "EvalError",
+        "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='\".\n"
+      },
+      "module": {
+        "blocked": true,
+        "name": "TypeError",
+        "message": "Failed to fetch dynamically imported module: data:text/javascript,export default 42"
+      }
+    }
+  ],
+  "blobs": [
+    {
+      "parts": 1,
+      "originalCharacters": 155266
+    },
+    {
+      "parts": 1,
+      "originalCharacters": 139293
+    }
+  ],
+  "shell": {
+    "isolated": true,
+    "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'"
+  },
+  "threads": [
+    {
+      "url": "blob:http://127.0.0.1:5193/01a7652f-4dfd-4082-9933-51320e9dcbac",
+      "title": "em-pthread"
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/2ab40809-8dc5-4d57-93e1-1f2b0cc12b49",
+      "title": "em-pthread"
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/fdb0fbb5-8206-4506-ba34-dd0fc6737845",
+      "title": "em-pthread"
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/eaefc061-0d6b-4daa-80d8-4d746e5dcaa0",
+      "title": "em-pthread"
+    }
+  ],
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "baselineMeta": null,
+  "baseline": [
+    {
+      "url": "blob:http://127.0.0.1:5193/07dabf5c-9ee7-48fa-b2fa-d3115821602e",
+      "name": "em-pthread",
+      "eval": {
+        "blocked": false,
+        "value": 2
+      },
+      "module": {
+        "blocked": false,
+        "value": 42
+      }
+    }
+  ]
+}

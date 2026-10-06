@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-02T04:46:48.200Z",
+  "runtime": "Isolated persistent Chromium, forced no GPU, actual editor and default local fallback",
+  "status": "failed",
+  "loadMs": 3992,
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "error": "TimeoutError: locator.waitFor: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cui-msg-agent') to be visible\u001b[22m\n",
+  "errors": [],
+  "conversationRequests": []
+}

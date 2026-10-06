@@ -1,0 +1,14 @@
+{
+  "model": "Qwen3-0.6B-GGUF-CPU",
+  "cpu": true,
+  "status": "failed",
+  "scope": "New isolated browser process starts offline with previously cached model; current app shell warmed online in a separate process and closed first. Network denied from browser launch through navigation and actual inference. Not physical network removal, OS reboot, eviction, or mobile.",
+  "network": {
+    "online": true,
+    "fetchRejected": false,
+    "controller": "http://127.0.0.1:5193/sw.js"
+  },
+  "error": "Error: Invalid offline control",
+  "errors": [],
+  "failed": []
+}

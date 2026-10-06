@@ -1,0 +1,27 @@
+{
+  "scope": "Compiled source proxy with mock Worker transport; not actual WASM or IM Stop",
+  "bundleSHA256": "3717fc4adaf5db884cf93f9e13ae7997cbcb4c4264215cc03fd06f43257728c1",
+  "retirement": {
+    "before": {
+      "state": "rejected",
+      "error": "RuntimeError: Wllama worker terminated"
+    },
+    "late": {
+      "state": "rejected",
+      "error": "RuntimeError: Wllama worker terminated"
+    },
+    "terminated": 1
+  },
+  "abort": {
+    "result": {
+      "state": "rejected",
+      "error": "RuntimeError: (ABORT) Diagnostic native failure"
+    },
+    "late": {
+      "state": "rejected",
+      "error": "RuntimeError: (ABORT) Diagnostic native failure"
+    },
+    "terminated": 1
+  },
+  "errors": []
+}

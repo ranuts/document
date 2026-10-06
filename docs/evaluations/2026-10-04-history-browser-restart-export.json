@@ -1,0 +1,101 @@
+{
+  "status": "completed",
+  "probeSHA256": "a50d375adfffbf1c8cd9a53f090728aa79c948b9811e42c0560a8c7e21557eec",
+  "errors": [],
+  "scope": "Actual Chromium IndexedDB, full browser-process restart restoration and native JSON download in isolated source harness; no model/editor integration or OS persistence certification.",
+  "sourceHashes": {
+    "lib/agent-plugin/ui/sessions.ts": "22bb810133fd9e1bb239a1478b834e8cd8dcbd659e5d19f7d7412c2c68be836d",
+    "lib/agent-plugin/ui/conversation-db.ts": "94cc763ca2360588f5ca419f8f1b82f55585467e53e23e7cd134b16b8b9a93d3",
+    "lib/agent-plugin/ui/history-controls.ts": "4bf0c561750b2c7c9489839b2fee56ad21ee0a13f5157477a654b0a89189261e"
+  },
+  "profile": "/private/tmp/document-history-restart-K5Szrq",
+  "initial": {
+    "saving": false,
+    "history": []
+  },
+  "beforeReload": {
+    "id": "5827820f-ba92-4dd4-9eae-927834a14204",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "firstProcessPid": null,
+  "firstProcessClosed": true,
+  "restored": {
+    "saving": true,
+    "id": "5827820f-ba92-4dd4-9eae-927834a14204",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "downloadName": "conversations-2026-10-04.json",
+  "downloadError": null,
+  "export": {
+    "version": 1,
+    "activeId": "5827820f-ba92-4dd4-9eae-927834a14204",
+    "sessions": [
+      {
+        "id": "5827820f-ba92-4dd4-9eae-927834a14204",
+        "title": "中文🧾 640 EUR Literal \\n",
+        "createdAt": 1791078602488,
+        "updatedAt": 1791078602506,
+        "messages": [
+          {
+            "role": "user",
+            "content": "中文🧾\n640 EUR\nLiteral \\n"
+          },
+          {
+            "role": "assistant",
+            "content": "**原文** <script>data</script>"
+          }
+        ]
+      }
+    ],
+    "exportedAt": "2026-10-04T01:50:02.852Z"
+  },
+  "optOutMemory": [
+    {
+      "role": "user",
+      "content": "Unsaved after opt-out"
+    }
+  ],
+  "secondProcessClosed": true,
+  "afterOptOutRestart": {
+    "saving": false,
+    "messages": []
+  },
+  "explicitRestored": [
+    {
+      "role": "user",
+      "content": "中文🧾\n640 EUR\nLiteral \\n"
+    },
+    {
+      "role": "assistant",
+      "content": "**原文** <script>data</script>"
+    }
+  ],
+  "messages": [
+    {
+      "role": "user",
+      "content": "中文🧾\n640 EUR\nLiteral \\n"
+    },
+    {
+      "role": "assistant",
+      "content": "**原文** <script>data</script>"
+    }
+  ]
+}

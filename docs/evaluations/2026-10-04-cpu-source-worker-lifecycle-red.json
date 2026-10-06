@@ -1,0 +1,25 @@
+{
+  "scope": "Compiled source proxy with mock Worker transport; not actual WASM or IM Stop",
+  "bundleSHA256": "33c2abbdd0ac230564f43cf9bc0325cc62d979ba0a0f444a351bcbcb0db3457b",
+  "retirement": {
+    "before": {
+      "state": "pending"
+    },
+    "late": {
+      "state": "pending"
+    },
+    "terminated": 1
+  },
+  "abort": {
+    "result": {
+      "state": "pending"
+    },
+    "late": {
+      "state": "pending"
+    },
+    "terminated": 0
+  },
+  "errors": [
+    "TypeError: message.replace is not a function"
+  ]
+}

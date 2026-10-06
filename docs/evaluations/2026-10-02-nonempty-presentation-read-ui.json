@@ -1,0 +1,40 @@
+{
+  "scope": "Production UI real Metal GPU Qwen3-1.7B planning: nonempty PPT shape text read. Fixture text injected into an isolated title placeholder using SDK paragraph/run objects; not a test of IM writing.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "pptx",
+      "prompt": "Read the plain text of the current presentation. Do not add or modify anything.",
+      "expected": "Alex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "before": {
+        "slides": 1,
+        "text": [
+          "Alex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "slides": 1,
+        "text": [
+          "Alex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n\n\r\n"
+        ]
+      },
+      "elapsedMs": 1554,
+      "feedback": [
+        "Slide 1:\nAlex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.Slide 1:\nAlex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Chromium Metal Qwen3-1.7B only; no cross-model/device claim.",
+    "Fixture text uses actual SDK paragraph/run objects in isolated title placeholders. This validates IM reading, not IM slide text writing.",
+    "Only ordinary text placeholders covered; group text, tables, charts, images and speaker notes not verified.",
+    "Selection state not captured for PPT; no selection-preservation claim.",
+    "Activity DOM textContent includes summary and details; repeated text is not duplicate tool execution."
+  ]
+}

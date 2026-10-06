@@ -1,0 +1,118 @@
+[
+  {
+    "id": "approval-granted",
+    "task": "rewrite",
+    "language": "zh-CN",
+    "source": "喂，顾宁已经批准在 2047-06-19 向陆舟支付 780 CNY，这钱是修 6 台风机的哦！陆舟不会向顾宁付钱。",
+    "instruction": "改成正式书面中文，删除口语，保留批准状态、付款方向和全部事实。",
+    "rubric": [
+      "formal Chinese",
+      "Gu Ning approval status exact",
+      "payment Gu Ning to Lu Zhou, never inverse",
+      "future proposed payment",
+      "780 CNY, 6 fans, 2047-06-19",
+      "no unsupported claims"
+    ]
+  },
+  {
+    "id": "approval-denied",
+    "task": "rewrite",
+    "language": "zh-CN",
+    "source": "喂，顾宁还没批准在 2047-06-19 向陆舟支付 780 CNY，这钱是修 6 台风机的哦！陆舟不会向顾宁付钱。",
+    "instruction": "改成正式书面中文，删除口语，保留批准状态、付款方向和全部事实。",
+    "rubric": [
+      "formal Chinese",
+      "Gu Ning approval status exact",
+      "payment Gu Ning to Lu Zhou, never inverse",
+      "future proposed payment",
+      "780 CNY, 6 fans, 2047-06-19",
+      "no unsupported claims"
+    ]
+  },
+  {
+    "id": "inspection-pending",
+    "task": "summarize",
+    "language": "zh-CN",
+    "source": "许澄提议在 2048-03-27 发出价值 910 CNY 的 14 个泵，但必须先通过验收。验收尚未通过，发货尚未获准。另一次会议只讨论茶水供应。",
+    "instruction": "用一句更短的中文概括，保留提议人、发货日期、货物数量和价值、验收通过前提、当前验收状态及未获发货批准，省略茶水会议。",
+    "rubric": [
+      "one shorter Chinese sentence",
+      "Xu Cheng proposed, not executed",
+      "14 pumps 910 CNY 2048-03-27",
+      "pass inspection prerequisite",
+      "inspection current state exact",
+      "shipping unauthorized",
+      "tea meeting omitted"
+    ]
+  },
+  {
+    "id": "inspection-passed",
+    "task": "summarize",
+    "language": "zh-CN",
+    "source": "许澄提议在 2048-03-27 发出价值 910 CNY 的 14 个泵，但必须先通过验收。验收已经通过，发货尚未获准。另一次会议只讨论茶水供应。",
+    "instruction": "用一句更短的中文概括，保留提议人、发货日期、货物数量和价值、验收通过前提、当前验收状态及未获发货批准，省略茶水会议。",
+    "rubric": [
+      "one shorter Chinese sentence",
+      "Xu Cheng proposed, not executed",
+      "14 pumps 910 CNY 2048-03-27",
+      "pass inspection prerequisite",
+      "inspection current state exact",
+      "shipping unauthorized",
+      "tea meeting omitted"
+    ]
+  },
+  {
+    "id": "allegation-zh",
+    "task": "summarize",
+    "language": "zh-CN",
+    "source": "韩松声称孟遥在 2049-12-04 更换了 8 个传感器。孟遥否认了这一说法，调查尚未证实韩松的指控。另一段话介绍了餐厅的新菜单。",
+    "instruction": "用一句更短的中文概括，保留谁指控谁、否认以及尚未证实的状态、数量和日期，省略菜单。",
+    "rubric": [
+      "Han Song allegation only",
+      "Meng Yao replacement actor and denier",
+      "unconfirmed, not proven false",
+      "8 sensors 2049-12-04",
+      "menu omitted"
+    ]
+  },
+  {
+    "id": "payment-en",
+    "task": "rewrite",
+    "language": "en",
+    "source": "Hey, Quinn will pay Rowan 360 GBP on 2046-11-28 for repairing 7 pumps, okay? Rowan will not pay Quinn.",
+    "instruction": "Rewrite in formal English, removing conversational fillers while preserving every fact.",
+    "rubric": [
+      "formal English",
+      "Quinn pays Rowan future",
+      "denial of reverse payment, not reimbursement",
+      "360 GBP 7 pumps 2046-11-28"
+    ]
+  },
+  {
+    "id": "approval-en",
+    "task": "rewrite",
+    "language": "en",
+    "source": "Hey, Casey has not approved paying Morgan 520 USD on 2046-02-13 for replacing 3 motors, okay? Morgan will not pay Casey.",
+    "instruction": "Rewrite in formal English. Keep the lack of approval and payment direction, all names, numbers, dates and the service.",
+    "rubric": [
+      "formal English",
+      "approval absent",
+      "Casey to Morgan, not reverse",
+      "520 USD 3 motors 2046-02-13"
+    ]
+  },
+  {
+    "id": "inspection-en",
+    "task": "summarize",
+    "language": "en",
+    "source": "Ellis proposes shipping 12 valves worth 690 GBP on 2049-01-16, but only if inspection passes. Inspection is pending and shipment is not authorized. A separate discussion concerns curtains.",
+    "instruction": "Summarize in one shorter English sentence. Retain Ellis, proposed shipping date, goods/count/value, the inspection-pass prerequisite, pending inspection and unauthorized shipment. Omit curtains.",
+    "rubric": [
+      "one shorter English sentence",
+      "Ellis proposal not shipment commitment",
+      "12 valves 690 GBP 2049-01-16",
+      "pass prerequisite, pending, unauthorized",
+      "curtains omitted"
+    ]
+  }
+]

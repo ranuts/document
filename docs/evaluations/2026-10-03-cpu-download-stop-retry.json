@@ -1,0 +1,70 @@
+{
+  "scope": "Actual CPU GGUF download GET held before response; cache reads deliberately miss without deleting cached model. Existing loading Stop, observed download AbortSignal, controlled late route release, restore cache access, existing Load retry and real CPU inference. Not partial byte-stream or physical network disconnection.",
+  "errors": [],
+  "held": [
+    {
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "GET"
+    }
+  ],
+  "remoteRequests": [
+    {
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "HEAD"
+    },
+    {
+      "host": "us.aws.cdn.hf.co",
+      "path": "/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75",
+      "method": "HEAD"
+    },
+    {
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/raw/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "GET"
+    },
+    {
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "GET"
+    },
+    {
+      "host": "",
+      "path": "http://127.0.0.1:5193/306928fb-51fc-4b16-ac70-32ae8492ee85",
+      "method": "GET"
+    }
+  ],
+  "before": {
+    "forceMissing": true,
+    "opfsDenied": 1,
+    "cacheMisses": 1,
+    "gets": 1,
+    "signals": 1,
+    "aborts": 0,
+    "lastGET": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+  },
+  "afterStop": {
+    "probe": {
+      "forceMissing": true,
+      "opfsDenied": 1,
+      "cacheMisses": 1,
+      "gets": 1,
+      "signals": 1,
+      "aborts": 1,
+      "lastGET": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    "note": "Stopped.",
+    "loadDisabled": false,
+    "stopHidden": true
+  },
+  "afterLateNote": "Stopped.",
+  "stopErrors": [],
+  "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "passed": true,
+  "probeSource": {
+    "path": "docs/evaluations/probe-cpu-download-stop-retry.mjs",
+    "sha256": "514bad20c947e38b7482f22f15612bf597fd0398cf4147fcdb7bb118e22e27c7"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-02T14:17:08.153Z",
+  "scope": "Isolated GPU1.7B PPT bilingual multiline text offline final verification",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790950608"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "before": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "responseMs": 2252,
+  "after": [
+    [
+      "\r\n",
+      "\r\n",
+      "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+    ]
+  ],
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "requestedText": "项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved",
+  "inserted": true,
+  "afterUndo": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "undoRestored": true,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790950631940.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "limitations": [
+    "Single model/default slide; not broad reliability.",
+    "Shape.getText returned undefined for multi-paragraph content; initial empty string snapshots did not prove actual empty text.",
+    "Default placement overlaps placeholders; layout quality not achieved."
+  ]
+}

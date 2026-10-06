@@ -1,0 +1,7 @@
+# Home navigation timing affects worker readiness
+
+Fresh desktop WebKit 26.5, unchanged f2eb0ed, owned forwarding origin 5194, same saved DOCX. Relative to server diagnostic 21f1d23, the intentional change is waiting at Home for actual navigator.serviceWorker.controller before the file chooser/import navigation (15-second limit, no registration/cache mutation). That wait succeeds.
+
+The Home snapshot shows isolated true, production controller `/sw.js?isolation=1`, activated root registration, and actual runtime/core cache names. After the same native local-file import, both controller snapshots retain the activated worker and both caches, with exact native document text and no page errors. Cleanup completes. The owned server observes 271 requests, contrasting with the immediate-navigation run's 101 and installing/no-cache state. These counts are individual observations, not timing benchmarks or unique asset counts.
+
+This controlled result supports a navigation-timing dependency in the observed installation failure. It does not trace the worker's internal cause or prove that arbitrary delays, blocking user Open, retries, or product navigation changes are correct fixes. The diagnostic wait is not an implemented UI requirement. No server-closed reopen occurs in this run; general offline/privacy/platform/model quality remain unaccepted. A following native unavailable-origin reopen probe can use this proven online-readiness prerequisite while preserving the failing immediate-open path as unresolved evidence.

@@ -18,8 +18,37 @@ const CORE_CACHE = `document-editor-core-${CACHE_VERSION}`;
 // shares one cache, deletes nothing, and is safe to activate at once.
 const RUNTIME_CACHE = `document-editor-runtime-${VENDOR_VERSION}`;
 const RUNTIME_PREFIX = 'document-editor-runtime-';
+// Model providers and plugins share this origin's CacheStorage. Retire only
+// our app caches, including the original single-cache versioned names.
+const isOwnedAppCache = (name) =>
+  name.startsWith('document-editor-core-') ||
+  name.startsWith(RUNTIME_PREFIX) ||
+  /^document-editor-(?:(?:dev-)?\d+|v\d+(?:\.\d+)*)$/.test(name);
 
-const ASSETS_TO_CACHE = ['./', './index.html', './editor', './editor.html', './manifest.json', './img/64.png'];
+const ASSETS_TO_CACHE = [
+  './',
+  './index.html',
+  './editor',
+  './editor.html',
+  './manifest.json',
+  './theme-presentation.js',
+  './icons/document-light.svg',
+  './icons/document-dark.svg',
+  './icons/document-light-32.png',
+  './icons/document-dark-32.png',
+  './icons/document.svg',
+  './icons/document-32.png',
+  './icons/document-180.png',
+  './icons/document-192.png',
+  './icons/document-512.png',
+  './icons/document-maskable-512.png',
+];
+const APP_ASSETS_TO_CACHE = []; // BUILD_APP_ASSETS
+const EDITOR_BOOTSTRAP_HTML = [
+  '/web-apps/apps/documenteditor/main/index.html',
+  '/web-apps/apps/spreadsheeteditor/main/index.html',
+  '/web-apps/apps/presentationeditor/main/index.html',
+];
 
 // Unhashed but deploy-coupled: stable filenames whose *content* changes every deploy.
 // Mirrors the group public/_headers pins to `Cache-Control: no-cache` — keep the two in sync.
@@ -38,7 +67,7 @@ const ASSETS_TO_CACHE = ['./', './index.html', './editor', './editor.html', './m
 // its content changed.) Network-first with `cache: 'no-cache'` is what the HTML branch already
 // does, for exactly the same reason.
 const DEPLOY_COUPLED =
-  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent)\.js$|^\/ranui-iife\//;
+  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent|theme-presentation)\.js$|^\/ranui-iife\//;
 
 // The OnlyOffice 9 tree is ~2600 files, but most of that is per-locale help
 // and on-demand font duplication a single session in one language never
@@ -147,36 +176,92 @@ const pruneAppAssets = (name) =>
 // bytes and the next visit simply re-fetches, whereas an unhandled rejection here
 // propagates into the respondWith chain and fails the request outright.
 const putInRuntimeCache = (request, response) =>
-  caches.open(RUNTIME_CACHE).then((cache) =>
-    cache.put(request, response).then(
-      () => limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS),
-      () => {},
-    ),
-  );
+  caches
+    .open(RUNTIME_CACHE)
+    .then((cache) => cache.put(request, response))
+    .then(() => limitCacheSize(RUNTIME_CACHE, MAX_RUNTIME_ITEMS))
+    .catch(() => {});
 
 // Helper: Trim cache to a certain size
 const limitCacheSize = (name, maxItems) => {
-  caches.open(name).then((cache) => {
-    cache.keys().then((keys) => {
-      if (keys.length > maxItems) {
+  return caches.open(name).then((cache) => {
+    return cache.keys().then((keys) => {
+      const excess = keys.length - maxItems;
+      if (excess > 0) {
         // Evict an app asset before a vendor one. keys() is insertion-ordered,
         // so the plain keys[0] took the OLDEST entry -- which is precisely the
         // vendor tree, fetched during the first open of the session: the trim
         // would throw away x2t.wasm and the font catalog and leave a much
         // younger /assets/<hash> from a build nobody runs any more.
-        const victim = keys.find((request) => !isVendorAsset(request)) || keys[0];
-        cache.delete(victim).then(() => limitCacheSize(name, maxItems));
+        // Return the full cleanup promise to waitUntil. One snapshot also
+        // avoids reading all cache keys again for each excess entry.
+        const victims = keys.filter((request) => !isVendorAsset(request)).concat(keys.filter(isVendorAsset));
+        return Promise.all(victims.slice(0, excess).map((request) => cache.delete(request)));
       }
     });
   });
 };
 
+// The first navigation loads JS/CSS before a new worker can control it.
+// Cache the current build's HTML dependencies during install as well as its shell.
+async function precacheBootAssets(cache, vendor = false) {
+  const assets = new Set();
+  for (const path of vendor ? EDITOR_BOOTSTRAP_HTML : ['/index.html', '/editor.html']) {
+    const page = await cache.match(new URL(path, self.location.origin).href);
+    if (!page) throw new Error(`Missing offline shell: ${path}`);
+    // Inline legacy code contains document.write strings for removed IE assets.
+    // Preserve actual opening tags; do not interpret strings inside scripts.
+    const html = (await page.text()).replace(/<script\b([^>]*)>[\s\S]*?<\/script>/gi, '<script$1></script>');
+    for (const match of html.matchAll(/(?:src|href)\s*=\s*["']([^"']+)["']/g)) {
+      const url = new URL(match[1], new URL(path, self.location.origin));
+      if (url.origin !== self.location.origin) continue;
+      if (vendor) {
+        if (url.pathname.startsWith('/web-apps/') && /\.(js|css)$/.test(url.pathname)) assets.add(url.href);
+        continue;
+      }
+      if (
+        url.pathname.startsWith('/assets/') ||
+        DEPLOY_COUPLED.test(url.pathname) ||
+        /^\/ran-tokens\.[^/]+\.css$/.test(url.pathname) ||
+        url.pathname === '/ran-fonts/fonts.css' ||
+        url.pathname.startsWith('/ranui-iife/')
+      )
+        assets.add(url.href);
+    }
+  }
+  if (assets.size) await cache.addAll([...assets]);
+}
+
 // Install event: Pre-cache core UI assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     Promise.all([
-      caches.open(CORE_CACHE).then((cache) => {
-        return cache.addAll(ASSETS_TO_CACHE);
+      // This entry is requested before the app can register its first worker.
+      caches.open(RUNTIME_CACHE).then(async (cache) => {
+        await cache.addAll([
+          '/web-apps/apps/api/documents/api.js',
+          '/sdkjs/common/AllFonts.js',
+          '/web-apps/vendor/xregexp/xregexp-all-min.js',
+          '/web-apps/vendor/socketio/socket.io.min.js',
+          '/sdkjs/common/wasm/x2t/x2t_helper.js',
+          // Export must work on the first offline save, before conversion has run.
+          '/sdkjs/common/wasm/x2t/x2t.js',
+          '/sdkjs/common/wasm/x2t/x2t.wasm.br',
+          '/sdkjs/common/wasm/x2t/x2t.worker.js',
+          ...EDITOR_BOOTSTRAP_HTML,
+          ...EDITOR_BOOTSTRAP_HTML.map((path) => path.replace('/index.html', '/app.js')),
+          ...EDITOR_BOOTSTRAP_HTML.map((path) => path.replace('/index.html', '/code.js')),
+          ...EDITOR_BOOTSTRAP_HTML.flatMap((path) =>
+            ['en', 'de', 'es', 'pt', 'ja', 'ko', 'zh'].map((language) =>
+              path.replace('/index.html', `/locale/${language}.json`),
+            ),
+          ),
+        ]);
+        await precacheBootAssets(cache, true);
+      }),
+      caches.open(CORE_CACHE).then(async (cache) => {
+        await cache.addAll([...ASSETS_TO_CACHE, ...APP_ASSETS_TO_CACHE]);
+        await precacheBootAssets(cache);
       }),
       // Take over at once unless doing so would discard vendor assets an open
       // page of the outgoing build still needs (see wouldDiscardVendorAssets).
@@ -260,7 +345,7 @@ const holdsVendorAssetsForOpenWindow = (cacheName) =>
       })
     : Promise.resolve(false);
 
-// Activate event: Clean up caches from every previous version
+// Activate event: Retire owned app caches from previous versions.
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
@@ -268,7 +353,7 @@ self.addEventListener('activate', (event) => {
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== CORE_CACHE && cacheName !== RUNTIME_CACHE) {
+            if (isOwnedAppCache(cacheName) && cacheName !== CORE_CACHE && cacheName !== RUNTIME_CACHE) {
               return holdsVendorAssetsForOpenWindow(cacheName).then((keep) =>
                 keep ? undefined : caches.delete(cacheName),
               );
@@ -284,14 +369,73 @@ self.addEventListener('activate', (event) => {
 });
 
 // Fetch event: Strategy-based resource handling
+// An isolated host also needs its cached iframe and Worker responses to carry
+// the current policy. Reuse the body stream so large SDK assets are not copied.
+let cachedShellPolicy;
+async function isolationPolicyEnabled() {
+  if (self.location.href && new URL(self.location.href).searchParams.get('isolation') === '1') return true;
+  // A COEP editor embedded under a nonisolated parent still requires policy
+  // on its native iframe. Its capability flag is false, so use our own shell
+  // from this build's core cache, never another provider's cached response.
+  if (!cachedShellPolicy) {
+    cachedShellPolicy = Promise.resolve()
+      .then(() => caches.match(new URL('/editor.html', self.location.origin).href, { cacheName: CORE_CACHE, ignoreVary: true }))
+      .then((shell) =>
+        shell?.headers?.get?.('cross-origin-opener-policy') === 'same-origin' &&
+        shell?.headers?.get?.('cross-origin-embedder-policy') === 'require-corp',
+      )
+      .catch(() => false)
+      .then((enabled) => {
+        // An early missing entry or a transient storage failure is not a
+        // permanent policy decision. Share concurrent reads, retry later.
+        if (!enabled) cachedShellPolicy = undefined;
+        return enabled;
+      });
+  }
+  return cachedShellPolicy;
+}
+async function withIsolationHeaders(response) {
+  if (!response || response.status === 0 || !(await isolationPolicyEnabled())) return response;
+  if (
+    response.headers.get('cross-origin-opener-policy') === 'same-origin' &&
+    response.headers.get('cross-origin-embedder-policy') === 'require-corp'
+  ) return response;
+  const headers = new Headers(response.headers);
+  headers.set('cross-origin-opener-policy', 'same-origin');
+  headers.set('cross-origin-embedder-policy', 'require-corp');
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+  const respondWith = (response) => event.respondWith(Promise.resolve(response).then((resolved) => {
+    // Pages canonicalizes application HTML. A cached followed redirect cannot
+    // answer redirect:manual navigation; preserve our same-origin shell bytes.
+    if (resolved?.redirected && event.request.mode === 'navigate' &&
+        (EDITOR_BOOTSTRAP_HTML.includes(url.pathname) || EDITOR_ROUTE.test(url.pathname)) &&
+        new URL(resolved.url).origin === self.location.origin) {
+      resolved = new Response(resolved.body, { status: resolved.status, statusText: resolved.statusText, headers: resolved.headers });
+    }
+    return withIsolationHeaders(resolved);
+  }));
 
   // 1. Only handle GET requests
   if (event.request.method !== 'GET') return;
 
   // 2. Only handle same-origin requests to avoid caching external APIs/documents
   if (url.origin !== self.location.origin) return;
+
+  // Match Pages' canonical route offline too. Otherwise the cached root shell
+  // would resolve its relative assets under /editor/ and render a blank page.
+  if (event.request.mode === 'navigate' && url.pathname === '/editor/') {
+    url.pathname = '/editor';
+    event.respondWith(Response.redirect(url.href, 308));
+    return;
+  }
 
   // 3. Skip caching for requests with dynamic parameters (like ?file= or ?src=)
   // These are typically documents being edited, which should always be fresh.
@@ -300,7 +444,7 @@ self.addEventListener('fetch', (event) => {
   // 4. Skip font files — let the browser cache them natively to avoid SW
   // interception latency triggering Chrome's font-loading intervention, which
   // causes a crash in OnlyOffice v7.5's fallback font code path.
-  if (/\.(ttf|woff2?|otf|eot)(\?.*)?$/.test(url.pathname)) return;
+  if (/\.(ttf|woff2?|otf|eot)(\?.*)?$/.test(url.pathname) && !url.pathname.startsWith('/ran-fonts/')) return;
 
   // 4a. Skip the spellchecker engine: it is importScripts'd from inside a
   // dedicated worker during the editor's first boot, and routing that request
@@ -333,10 +477,10 @@ self.addEventListener('fetch', (event) => {
   // invisible to page-level request events -- but on a slow link it is 46
   // conditional requests competing with the ones that matter.
   if (isVendorAsset(event.request)) {
-    event.respondWith(
+    respondWith(
       caches
         .open(RUNTIME_CACHE)
-        .then((cache) => cache.match(event.request))
+        .then((cache) => cache.match(event.request, { ignoreSearch: EDITOR_BOOTSTRAP_HTML.includes(url.pathname) }))
         .then((cached) => {
           if (cached) return cached;
           return fetch(event.request).then((networkResponse) => {
@@ -371,6 +515,17 @@ self.addEventListener('fetch', (event) => {
 
   // Same strategy as HTML: these files must match the HTML of the current deploy.
   const isNetworkFirst = isHtml || DEPLOY_COUPLED.test(url.pathname);
+  const cachedNavigation = async () => {
+    const exact = await caches.match(event.request);
+    if (exact) return exact;
+    // Local document ids live in the URL; the HTML shell is identical for them.
+    // Limit the fallback to editor navigations and this build's core cache.
+    if (event.request.mode === 'navigate' && EDITOR_ROUTE.test(url.pathname)) {
+      const core = await caches.open(CORE_CACHE);
+      return core.match(new URL('/editor.html', self.location.origin).href);
+    }
+    return undefined;
+  };
 
   if (isNetworkFirst) {
     // Strategy: Network-First for HTML/navigation and for deploy-coupled assets.
@@ -378,7 +533,7 @@ self.addEventListener('fetch', (event) => {
     // accepting a possibly-stale HTTP-cache copy — a stale HTML references
     // hashed assets that no longer exist after a deploy (the exact broken
     // state this rewrite fixes). Offline still falls back to the SW cache.
-    event.respondWith(
+    respondWith(
       fetch(event.request, { cache: 'no-cache' })
         .then((networkResponse) => {
           // If network is ok, cache and return
@@ -390,53 +545,58 @@ self.addEventListener('fetch', (event) => {
             return networkResponse;
           }
           // If status is not 200, try cache
-          return caches.match(event.request).then((cached) => cached || networkResponse);
+          return cachedNavigation().then((cached) => cached || networkResponse);
         })
         .catch(() => {
           // If fetch fails (offline), try cache
-          return caches.match(event.request);
+          return cachedNavigation();
         }),
     );
   } else {
     // Strategy: Stale-While-Revalidate for other static assets (JS, CSS, Images)
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        // `cache: 'no-cache'` on the revalidation too: without it this fetch can be served
-        // from the browser's HTTP cache, so the "revalidate" half of stale-while-revalidate
-        // never actually reaches the server and the entry can never converge.
-        const fetchPromise = fetch(event.request, { cache: 'no-cache' })
-          .then((networkResponse) => {
-            // Only cache valid 200 responses
-            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-              // Same reasoning as the vendor branch above: the revalidation half of
-              // stale-while-revalidate runs after the cached copy was handed back,
-              // so nothing else is keeping the worker alive to finish the write.
-              event.waitUntil(putInRuntimeCache(event.request, networkResponse.clone()));
-            } else if (isHashedAsset && networkResponse && networkResponse.status === 404) {
-              // A hashed asset that 404s means the page HTML is from another
-              // deploy. Surface a network error (never an HTML body) so the
-              // browser reports a clean failure, and refresh the cached shell
-              // so the next navigation picks up the current HTML.
-              event.waitUntil(
-                caches.open(CORE_CACHE).then((cache) =>
-                  fetch('./index.html', { cache: 'no-cache' }).then((fresh) => {
-                    if (fresh && fresh.status === 200) {
-                      return Promise.all([cache.put('./index.html', fresh.clone()), cache.put('./', fresh)]);
-                    }
-                    return undefined;
-                  }),
-                ),
-              );
-              return Response.error();
-            }
-            return networkResponse;
-          })
-          .catch(() => {
-            return cachedResponse;
-          });
+    respondWith(
+      // Public build outputs have identical bytes for every Origin. A preview
+      // server may add Vary: Origin; HTML-precache requests and module-script
+      // requests then differ even though they address the same immutable file.
+      caches
+        .match(event.request, { ignoreVary: isHashedAsset || url.pathname.startsWith('/ran-fonts/') })
+        .then((cachedResponse) => {
+          // `cache: 'no-cache'` on the revalidation too: without it this fetch can be served
+          // from the browser's HTTP cache, so the "revalidate" half of stale-while-revalidate
+          // never actually reaches the server and the entry can never converge.
+          const fetchPromise = fetch(event.request, { cache: 'no-cache' })
+            .then((networkResponse) => {
+              // Only cache valid 200 responses
+              if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+                // Same reasoning as the vendor branch above: the revalidation half of
+                // stale-while-revalidate runs after the cached copy was handed back,
+                // so nothing else is keeping the worker alive to finish the write.
+                event.waitUntil(putInRuntimeCache(event.request, networkResponse.clone()));
+              } else if (isHashedAsset && networkResponse && networkResponse.status === 404) {
+                // A hashed asset that 404s means the page HTML is from another
+                // deploy. Surface a network error (never an HTML body) so the
+                // browser reports a clean failure, and refresh the cached shell
+                // so the next navigation picks up the current HTML.
+                event.waitUntil(
+                  caches.open(CORE_CACHE).then((cache) =>
+                    fetch('./index.html', { cache: 'no-cache' }).then((fresh) => {
+                      if (fresh && fresh.status === 200) {
+                        return Promise.all([cache.put('./index.html', fresh.clone()), cache.put('./', fresh)]);
+                      }
+                      return undefined;
+                    }),
+                  ),
+                );
+                return Response.error();
+              }
+              return networkResponse;
+            })
+            .catch(() => {
+              return cachedResponse;
+            });
 
-        return cachedResponse || fetchPromise;
-      }),
+          return cachedResponse || fetchPromise;
+        }),
     );
   }
 });

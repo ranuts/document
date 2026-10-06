@@ -1,0 +1,927 @@
+{
+  "scope": "Independent local multilingual NLI WASM feasibility experiment, separate Dedicated Worker and strict self-only CSP. Predeclared controls plus archived generation failures; no product integration, IM, native document operation, model coexistence, offline or physical-device claim.",
+  "status": "completed",
+  "dtype": "fp32",
+  "sdkVersion": "3.8.1",
+  "model": {
+    "model": "onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX",
+    "revision": "ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e",
+    "files": [
+      {
+        "name": "config.json",
+        "bytes": 989,
+        "sha256": "3ebbbdf3c3803649b49715fd169207c0f42c4250dfea5dd304b1d8b8f745852a",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/config.json"
+      },
+      {
+        "name": "tokenizer.json",
+        "bytes": 17082832,
+        "sha256": "d0091a328b3441d754e481db5a390d7f3b8dabc6016869fd13ba350d23ddc4cd",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/tokenizer.json"
+      },
+      {
+        "name": "tokenizer_config.json",
+        "bytes": 1286,
+        "sha256": "329b7d21f02c6c6c9d358733b03a34a89cd8e4fe36998869a6ab824b98e9bf9d",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/tokenizer_config.json"
+      },
+      {
+        "name": "special_tokens_map.json",
+        "bytes": 964,
+        "sha256": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/special_tokens_map.json"
+      },
+      {
+        "name": "onnx/model_quantized.onnx",
+        "bytes": 107415176,
+        "sha256": "55614f3c7da74184742eaa0006b978744437aa91de9ba4913db42f94d7844a8f",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/onnx/model_quantized.onnx"
+      },
+      {
+        "name": "onnx/model.onnx",
+        "bytes": 428150190,
+        "sha256": "95743cad9148e16eac551a13ddccd5cef2bd1e3a56e325451a5e9212fea30cc9",
+        "source": "https://huggingface.co/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/resolve/ca5daf3d11b6c4b3143b1f4602a2edfb64c3ad7e/onnx/model.onnx"
+      }
+    ]
+  },
+  "decision": {
+    "supportedLabel": "entailment",
+    "minimumProbability": 0.8,
+    "policy": "Predeclared before classifier observation; no threshold fitting on these cases."
+  },
+  "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self'; base-uri 'none'",
+  "cases": [
+    {
+      "id": "en-positive",
+      "language": "en",
+      "category": "positive",
+      "premise": "Mira did not approve the shipment of 17 valves.",
+      "hypothesis": "The shipment of 17 valves was not approved by Mira.",
+      "expectedSupport": true
+    },
+    {
+      "id": "en-polarity",
+      "language": "en",
+      "category": "polarity",
+      "premise": "Mira did not approve the shipment of 17 valves.",
+      "hypothesis": "Mira approved the shipment of 17 valves.",
+      "expectedSupport": false
+    },
+    {
+      "id": "zh-positive",
+      "language": "zh",
+      "category": "positive",
+      "premise": "Mira 没有批准发运 17 个阀门。",
+      "hypothesis": "Mira 未批准发运 17 个阀门。",
+      "expectedSupport": true
+    },
+    {
+      "id": "zh-polarity",
+      "language": "zh",
+      "category": "polarity",
+      "premise": "Mira 没有批准发运 17 个阀门。",
+      "hypothesis": "Mira 批准发运 17 个阀门。",
+      "expectedSupport": false
+    },
+    {
+      "id": "ja-positive",
+      "language": "ja",
+      "category": "positive",
+      "premise": "Mira は 17 個のバルブの出荷を承認していません。",
+      "hypothesis": "17 個のバルブの出荷は Mira に承認されていません。",
+      "expectedSupport": true
+    },
+    {
+      "id": "ja-polarity",
+      "language": "ja",
+      "category": "polarity",
+      "premise": "Mira は 17 個のバルブの出荷を承認していません。",
+      "hypothesis": "Mira は 17 個のバルブの出荷を承認しました。",
+      "expectedSupport": false
+    },
+    {
+      "id": "ko-positive",
+      "language": "ko",
+      "category": "positive",
+      "premise": "Mira는 밸브 17개의 출하를 승인하지 않았습니다.",
+      "hypothesis": "밸브 17개의 출하는 Mira의 승인을 받지 못했습니다.",
+      "expectedSupport": true
+    },
+    {
+      "id": "ko-polarity",
+      "language": "ko",
+      "category": "polarity",
+      "premise": "Mira는 밸브 17개의 출하를 승인하지 않았습니다.",
+      "hypothesis": "Mira는 밸브 17개의 출하를 승인했습니다.",
+      "expectedSupport": false
+    },
+    {
+      "id": "de-positive",
+      "language": "de",
+      "category": "positive",
+      "premise": "Mira hat den Versand von 17 Ventilen nicht genehmigt.",
+      "hypothesis": "Der Versand von 17 Ventilen wurde von Mira nicht genehmigt.",
+      "expectedSupport": true
+    },
+    {
+      "id": "de-polarity",
+      "language": "de",
+      "category": "polarity",
+      "premise": "Mira hat den Versand von 17 Ventilen nicht genehmigt.",
+      "hypothesis": "Mira hat den Versand von 17 Ventilen genehmigt.",
+      "expectedSupport": false
+    },
+    {
+      "id": "es-positive",
+      "language": "es",
+      "category": "positive",
+      "premise": "Mira no aprobó el envío de 17 válvulas.",
+      "hypothesis": "El envío de 17 válvulas no fue aprobado por Mira.",
+      "expectedSupport": true
+    },
+    {
+      "id": "es-polarity",
+      "language": "es",
+      "category": "polarity",
+      "premise": "Mira no aprobó el envío de 17 válvulas.",
+      "hypothesis": "Mira aprobó el envío de 17 válvulas.",
+      "expectedSupport": false
+    },
+    {
+      "id": "pt-positive",
+      "language": "pt",
+      "category": "positive",
+      "premise": "Mira não aprovou o envio de 17 válvulas.",
+      "hypothesis": "O envio de 17 válvulas não foi aprovado por Mira.",
+      "expectedSupport": true
+    },
+    {
+      "id": "pt-polarity",
+      "language": "pt",
+      "category": "polarity",
+      "premise": "Mira não aprovou o envio de 17 válvulas.",
+      "hypothesis": "Mira aprovou o envio de 17 válvulas.",
+      "expectedSupport": false
+    },
+    {
+      "id": "archived-2026-10-03-gpu-summary-focused-attribution-denial-en-summary",
+      "language": "en",
+      "category": "polarity",
+      "premise": "Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.",
+      "hypothesis": "Tomas alleged Noor removed 12 files on 2038-07-03; Noor denied, investigation confirmed.",
+      "expectedSupport": false,
+      "requestedFactLoss": false,
+      "archive": "2026-10-03-gpu-summary-focused.json",
+      "archiveSHA256": "4e6568ed2e568da767b6780c927d9579a8653658ffc444f53441c3b8521e656c",
+      "archiveCase": "attribution-denial-en",
+      "archiveVariant": "summary"
+    },
+    {
+      "id": "archived-2026-10-03-gpu-summary-focused-2b-conditional-repair-zh-summary",
+      "language": "zh",
+      "category": "person",
+      "premise": "Rui 计划在 2039-11-08 修理 6 台泵，前提是备件到货。备件尚未到货，修理工作还未开始。这项计划不包括更换设备。部门同时安排了午餐。",
+      "hypothesis": "刘计划于 2039-11-08 修理 6 台泵，因备件未到货且工作尚未开始，且不包括更换设备。",
+      "expectedSupport": false,
+      "requestedFactLoss": false,
+      "archive": "2026-10-03-gpu-summary-focused-2b.json",
+      "archiveSHA256": "24bef605750ecade6b97edd17354d1e5b876ad94e2b4309147d1492a7703c702",
+      "archiveCase": "conditional-repair-zh",
+      "archiveVariant": "summary"
+    },
+    {
+      "id": "archived-2026-10-03-cpu-summary-focused-shipment-condition-zh-summary",
+      "language": "zh",
+      "category": "value-destination/date-role",
+      "premise": "Mira 提议在 2036-02-19 运送价值 480 NOK 的 17 个阀门，但仅限安全检查通过后。检查尚未完成，发货尚未获得授权。另一次会议将讨论仓库空间。",
+      "hypothesis": "Mira 于 2036-02-19 提议将 17 个阀门运至 480 NOK，需安全检查通过后发货，检查未完成且未获授权。",
+      "expectedSupport": false,
+      "requestedFactLoss": false,
+      "archive": "2026-10-03-cpu-summary-focused.json",
+      "archiveSHA256": "56815404d07ade8295d6cf597ac66ac7352305c3311fc29af378b148c44efc15",
+      "archiveCase": "shipment-condition-zh",
+      "archiveVariant": "summary"
+    },
+    {
+      "id": "archived-2026-10-03-cpu-summary-focused-shipment-condition-en-summary",
+      "language": "en",
+      "category": "authorization-object",
+      "premise": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes. The inspection is pending and the shipment has not been authorized. A separate meeting will discuss warehouse space.",
+      "hypothesis": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, pending safety inspection authorization.",
+      "expectedSupport": false,
+      "requestedFactLoss": false,
+      "archive": "2026-10-03-cpu-summary-focused.json",
+      "archiveSHA256": "56815404d07ade8295d6cf597ac66ac7352305c3311fc29af378b148c44efc15",
+      "archiveCase": "shipment-condition-en",
+      "archiveVariant": "summary"
+    },
+    {
+      "id": "archived-2026-10-03-gpu-summary-focused-4b-shipment-condition-en-summary",
+      "language": "en",
+      "category": "unsupported-causality",
+      "premise": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes. The inspection is pending and the shipment has not been authorized. A separate meeting will discuss warehouse space.",
+      "hypothesis": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes, but the shipment has not been authorized due to the pending inspection.",
+      "expectedSupport": false,
+      "requestedFactLoss": false,
+      "archive": "2026-10-03-gpu-summary-focused-4b.json",
+      "archiveSHA256": "ebe02c6101b5979d09c49a990b770b7574950ac1976665af36d3d3d74061acc7",
+      "archiveCase": "shipment-condition-en",
+      "archiveVariant": "summary"
+    },
+    {
+      "id": "archived-2026-10-03-gpu-summary-focused-4b-attribution-denial-en-current",
+      "language": "en",
+      "category": "positive",
+      "premise": "Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.",
+      "hypothesis": "Tomas alleged that Noor removed 12 files on 2038-07-03, but Noor denied the allegation and no investigation has confirmed it.",
+      "expectedSupport": true,
+      "requestedFactLoss": false,
+      "archive": "2026-10-03-gpu-summary-focused-4b.json",
+      "archiveSHA256": "ebe02c6101b5979d09c49a990b770b7574950ac1976665af36d3d3d74061acc7",
+      "archiveCase": "attribution-denial-en",
+      "archiveVariant": "current"
+    },
+    {
+      "id": "archived-2026-10-03-cpu-summary-focused-payer-recipient-en-summary",
+      "language": "en",
+      "category": "positive",
+      "premise": "Sana will pay Ivo 620 CHF on 2037-04-22 for repairing 8 sensors. Ivo will not pay Sana. The team will separately choose a new logo.",
+      "hypothesis": "Sana pays Ivo 620 CHF on 2037-04-22 for repairing 8 sensors, and Ivo will not pay Sana.",
+      "expectedSupport": true,
+      "requestedFactLoss": false,
+      "archive": "2026-10-03-cpu-summary-focused.json",
+      "archiveSHA256": "56815404d07ade8295d6cf597ac66ac7352305c3311fc29af378b148c44efc15",
+      "archiveCase": "payer-recipient-en",
+      "archiveVariant": "summary"
+    },
+    {
+      "id": "archived-2026-10-03-gpu-summary-focused-0_8-attribution-denial-en-summary",
+      "language": "en",
+      "category": "attribution-omitted",
+      "premise": "Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.",
+      "hypothesis": "Noor denied the allegation that Noor removed 12 files on 2038-07-03, and no investigation has confirmed it.",
+      "expectedSupport": true,
+      "requestedFactLoss": true,
+      "archive": "2026-10-03-gpu-summary-focused-0_8.json",
+      "archiveSHA256": "28baefab87df2c8d3f08a89fa3a9f5419d250d6ba4c115cf90e1de5c018a4d12",
+      "archiveCase": "attribution-denial-en",
+      "archiveVariant": "summary"
+    },
+    {
+      "id": "payer-swap-positive",
+      "language": "en",
+      "category": "payer-swap",
+      "premise": "Sana will pay Ivo 620 CHF on 2037-04-22. Ivo will not pay Sana.",
+      "hypothesis": "Sana will pay Ivo 620 CHF on 2037-04-22.",
+      "expectedSupport": true
+    },
+    {
+      "id": "payer-swap-inconsistent",
+      "language": "en",
+      "category": "payer-swap",
+      "premise": "Sana will pay Ivo 620 CHF on 2037-04-22. Ivo will not pay Sana.",
+      "hypothesis": "Ivo will pay Sana 620 CHF on 2037-04-22.",
+      "expectedSupport": false
+    },
+    {
+      "id": "proposal-firm-positive",
+      "language": "en",
+      "category": "proposal-firm",
+      "premise": "Mira proposed sending 17 valves on 2036-02-19. The shipment has not been authorized.",
+      "hypothesis": "Mira proposed sending 17 valves on 2036-02-19.",
+      "expectedSupport": true
+    },
+    {
+      "id": "proposal-firm-inconsistent",
+      "language": "en",
+      "category": "proposal-firm",
+      "premise": "Mira proposed sending 17 valves on 2036-02-19. The shipment has not been authorized.",
+      "hypothesis": "Mira will send 17 valves on 2036-02-19.",
+      "expectedSupport": false
+    },
+    {
+      "id": "conditional-firm-positive",
+      "language": "en",
+      "category": "conditional-firm",
+      "premise": "Rui plans to repair 6 pumps on 2039-11-08 only if the parts arrive. The parts have not arrived and the repair has not started.",
+      "hypothesis": "Rui plans to repair 6 pumps on 2039-11-08, conditional on parts arriving.",
+      "expectedSupport": true
+    },
+    {
+      "id": "conditional-firm-inconsistent",
+      "language": "en",
+      "category": "conditional-firm",
+      "premise": "Rui plans to repair 6 pumps on 2039-11-08 only if the parts arrive. The parts have not arrived and the repair has not started.",
+      "hypothesis": "Rui will repair 6 pumps on 2039-11-08 regardless of whether the parts arrive.",
+      "expectedSupport": false
+    }
+  ],
+  "rows": [
+    {
+      "kind": "row",
+      "id": "en-positive",
+      "tokens": 30,
+      "encoded": "<s> Mira did not approve the shipment of 17 valves.</s></s> The shipment of 17 valves was not approved by Mira.</s>",
+      "logits": [
+        3.627077102661133,
+        -1.9734605550765991,
+        -1.673808217048645
+      ],
+      "probabilities": {
+        "entailment": 0.9913916936068128,
+        "neutral": 0.003664060832262546,
+        "contradiction": 0.004944245560924607
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 46.36999988555908,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "en-polarity",
+      "tokens": 27,
+      "encoded": "<s> Mira did not approve the shipment of 17 valves.</s></s> Mira approved the shipment of 17 valves.</s>",
+      "logits": [
+        -1.343374252319336,
+        -1.809025526046753,
+        3.2454843521118164
+      ],
+      "probabilities": {
+        "entailment": 0.009999020161981668,
+        "neutral": 0.00627664643488811,
+        "contradiction": 0.9837243334031303
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 15.714999675750732,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "zh-positive",
+      "tokens": 28,
+      "encoded": "<s> Mira 没有批准发运 17 个阀门。</s></s> Mira 未批准发运 17 个阀门。</s>",
+      "logits": [
+        3.7986416816711426,
+        -2.1419663429260254,
+        -1.675027847290039
+      ],
+      "probabilities": {
+        "entailment": 0.9932200445463213,
+        "neutral": 0.0026125956018099796,
+        "contradiction": 0.0041673598518687785
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 18.544999599456787,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "zh-polarity",
+      "tokens": 27,
+      "encoded": "<s> Mira 没有批准发运 17 个阀门。</s></s> Mira 批准发运 17 个阀门。</s>",
+      "logits": [
+        -1.0676169395446777,
+        -2.485686779022217,
+        3.6613898277282715
+      ],
+      "probabilities": {
+        "entailment": 0.008739328268885684,
+        "neutral": 0.002116499384417131,
+        "contradiction": 0.9891441723466973
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 26.34000015258789,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "ja-positive",
+      "tokens": 38,
+      "encoded": "<s> Mira は 17 個のバルブの出荷を承認していません。</s></s> 17 個のバルブの出荷は Mira に承認されていません。</s>",
+      "logits": [
+        3.856635093688965,
+        -2.442751169204712,
+        -1.4268901348114014
+      ],
+      "probabilities": {
+        "entailment": 0.9931355044517187,
+        "neutral": 0.0018248190866375447,
+        "contradiction": 0.00503967646164372
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 63.92500019073486,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "ja-polarity",
+      "tokens": 37,
+      "encoded": "<s> Mira は 17 個のバルブの出荷を承認していません。</s></s> Mira は 17 個のバルブの出荷を承認しました。</s>",
+      "logits": [
+        -0.16185645759105682,
+        -3.0651912689208984,
+        3.323474407196045
+      ],
+      "probabilities": {
+        "entailment": 0.029684105423475455,
+        "neutral": 0.001627877339243822,
+        "contradiction": 0.9686880172372806
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 9.735000133514404,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "ko-positive",
+      "tokens": 36,
+      "encoded": "<s> Mira는 밸브 17개의 출하를 승인하지 않았습니다.</s></s> 밸브 17개의 출하는 Mira의 승인을 받지 못했습니다.</s>",
+      "logits": [
+        3.845698595046997,
+        -2.2171952724456787,
+        -1.648331880569458
+      ],
+      "probabilities": {
+        "entailment": 0.9936022984451771,
+        "neutral": 0.002312763562617603,
+        "contradiction": 0.004084937992205341
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 11.035000324249268,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "ko-polarity",
+      "tokens": 32,
+      "encoded": "<s> Mira는 밸브 17개의 출하를 승인하지 않았습니다.</s></s> Mira는 밸브 17개의 출하를 승인했습니다.</s>",
+      "logits": [
+        -0.24997268617153168,
+        -2.8280789852142334,
+        3.170060634613037
+      ],
+      "probabilities": {
+        "entailment": 0.03159921949691244,
+        "neutral": 0.00239893795767901,
+        "contradiction": 0.9660018425454086
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 7.555000305175781,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "de-positive",
+      "tokens": 31,
+      "encoded": "<s> Mira hat den Versand von 17 Ventilen nicht genehmigt.</s></s> Der Versand von 17 Ventilen wurde von Mira nicht genehmigt.</s>",
+      "logits": [
+        3.949523448944092,
+        -1.9779860973358154,
+        -2.0038304328918457
+      ],
+      "probabilities": {
+        "entailment": 0.9947653195313088,
+        "neutral": 0.002651160061568068,
+        "contradiction": 0.002583520407123161
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 7.760000228881836,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "de-polarity",
+      "tokens": 29,
+      "encoded": "<s> Mira hat den Versand von 17 Ventilen nicht genehmigt.</s></s> Mira hat den Versand von 17 Ventilen genehmigt.</s>",
+      "logits": [
+        -1.4669380187988281,
+        -2.2628889083862305,
+        3.8405494689941406
+      ],
+      "probabilities": {
+        "entailment": 0.004918993736671967,
+        "neutral": 0.0022192140350499067,
+        "contradiction": 0.9928617922282781
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 7.235000133514404,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "es-positive",
+      "tokens": 29,
+      "encoded": "<s> Mira no aprobó el envío de 17 válvulas.</s></s> El envío de 17 válvulas no fue aprobado por Mira.</s>",
+      "logits": [
+        3.8412814140319824,
+        -2.4020771980285645,
+        -1.4524240493774414
+      ],
+      "probabilities": {
+        "entailment": 0.9930817649322048,
+        "neutral": 0.0019298733710631899,
+        "contradiction": 0.004988361696732064
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 8.264999866485596,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "es-polarity",
+      "tokens": 27,
+      "encoded": "<s> Mira no aprobó el envío de 17 válvulas.</s></s> Mira aprobó el envío de 17 válvulas.</s>",
+      "logits": [
+        -1.62015962600708,
+        -2.3936471939086914,
+        4.1362481117248535
+      ],
+      "probabilities": {
+        "entailment": 0.0031479031921877575,
+        "neutral": 0.0014524459684011823,
+        "contradiction": 0.9953996508394112
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 7.980000019073486,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "pt-positive",
+      "tokens": 31,
+      "encoded": "<s> Mira não aprovou o envio de 17 válvulas.</s></s> O envio de 17 válvulas não foi aprovado por Mira.</s>",
+      "logits": [
+        3.8996524810791016,
+        -2.2793543338775635,
+        -1.638418436050415
+      ],
+      "probabilities": {
+        "entailment": 0.994029269812961,
+        "neutral": 0.002060110944198413,
+        "contradiction": 0.0039106192428405365
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 8.375,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "pt-polarity",
+      "tokens": 29,
+      "encoded": "<s> Mira não aprovou o envio de 17 válvulas.</s></s> Mira aprovou o envio de 17 válvulas.</s>",
+      "logits": [
+        -1.0886178016662598,
+        -2.5847158432006836,
+        3.7852542400360107
+      ],
+      "probabilities": {
+        "entailment": 0.007572860060620569,
+        "neutral": 0.0016963396280370018,
+        "contradiction": 0.9907308003113425
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 6.534999847412109,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-gpu-summary-focused-attribution-denial-en-summary",
+      "tokens": 64,
+      "encoded": "<s> Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.</s></s> Tomas alleged Noor removed 12 files on 2038-07-03; Noor denied, investigation confirmed.</s>",
+      "logits": [
+        0.15700191259384155,
+        -2.4118223190307617,
+        2.3276829719543457
+      ],
+      "probabilities": {
+        "entailment": 0.10161696398369391,
+        "neutral": 0.007786459455584398,
+        "contradiction": 0.8905965765607217
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 15.53000020980835,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-gpu-summary-focused-2b-conditional-repair-zh-summary",
+      "tokens": 84,
+      "encoded": "<s> Rui 计划在 2039-11-08 修理 6 台泵,前提是备件到货。备件尚未到货,修理工作还未开始。这项计划不包括更换设备。部门同时安排了午餐。</s></s> 刘计划于 2039-11-08 修理 6 台泵,因备件未到货且工作尚未开始,且不包括更换设备。</s>",
+      "logits": [
+        3.6208672523498535,
+        -1.674656629562378,
+        -1.9801764488220215
+      ],
+      "probabilities": {
+        "entailment": 0.9913671813111715,
+        "neutral": 0.004970702109999027,
+        "contradiction": 0.003662116578829551
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 21.079999923706055,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-cpu-summary-focused-shipment-condition-zh-summary",
+      "tokens": 89,
+      "encoded": "<s> Mira 提议在 2036-02-19 运送价值 480 NOK 的 17 个阀门,但仅限安全检查通过后。检查尚未完成,发货尚未获得授权。另一次会议将讨论仓库空间。</s></s> Mira 于 2036-02-19 提议将 17 个阀门运至 480 NOK,需安全检查通过后发货,检查未完成且未获授权。</s>",
+      "logits": [
+        3.52186918258667,
+        -2.304847240447998,
+        -1.226922631263733
+      ],
+      "probabilities": {
+        "entailment": 0.9885233481021488,
+        "neutral": 0.0029139100498598116,
+        "contradiction": 0.008562741847991452
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 19.539999961853027,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-cpu-summary-focused-shipment-condition-en-summary",
+      "tokens": 78,
+      "encoded": "<s> Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes. The inspection is pending and the shipment has not been authorized. A separate meeting will discuss warehouse space.</s></s> Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, pending safety inspection authorization.</s>",
+      "logits": [
+        0.17828302085399628,
+        -0.6461073160171509,
+        0.486269474029541
+      ],
+      "probabilities": {
+        "entailment": 0.35724686631112407,
+        "neutral": 0.1566535545549018,
+        "contradiction": 0.48609957913397417
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 16.369999885559082,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-gpu-summary-focused-4b-shipment-condition-en-summary",
+      "tokens": 96,
+      "encoded": "<s> Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes. The inspection is pending and the shipment has not been authorized. A separate meeting will discuss warehouse space.</s></s> Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes, but the shipment has not been authorized due to the pending inspection.</s>",
+      "logits": [
+        1.5768394470214844,
+        0.39531296491622925,
+        -2.0251994132995605
+      ],
+      "probabilities": {
+        "entailment": 0.7495812965149112,
+        "neutral": 0.22997906826084147,
+        "contradiction": 0.020439635224247354
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 19.230000019073486,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-gpu-summary-focused-4b-attribution-denial-en-current",
+      "tokens": 72,
+      "encoded": "<s> Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.</s></s> Tomas alleged that Noor removed 12 files on 2038-07-03, but Noor denied the allegation and no investigation has confirmed it.</s>",
+      "logits": [
+        3.09733510017395,
+        -1.1370532512664795,
+        -1.9987869262695312
+      ],
+      "probabilities": {
+        "entailment": 0.9798070535994494,
+        "neutral": 0.014196100536052202,
+        "contradiction": 0.005996845864498254
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 13.900000095367432,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-cpu-summary-focused-payer-recipient-en-summary",
+      "tokens": 64,
+      "encoded": "<s> Sana will pay Ivo 620 CHF on 2037-04-22 for repairing 8 sensors. Ivo will not pay Sana. The team will separately choose a new logo.</s></s> Sana pays Ivo 620 CHF on 2037-04-22 for repairing 8 sensors, and Ivo will not pay Sana.</s>",
+      "logits": [
+        1.5610605478286743,
+        -2.233205556869507,
+        0.7062914371490479
+      ],
+      "probabilities": {
+        "entailment": 0.6906645869299106,
+        "neutral": 0.01553954707569652,
+        "contradiction": 0.2937958659943929
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 14.360000133514404,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "archived-2026-10-03-gpu-summary-focused-0_8-attribution-denial-en-summary",
+      "tokens": 68,
+      "encoded": "<s> Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.</s></s> Noor denied the allegation that Noor removed 12 files on 2038-07-03, and no investigation has confirmed it.</s>",
+      "logits": [
+        2.9998831748962402,
+        -1.355884075164795,
+        -1.6705493927001953
+      ],
+      "probabilities": {
+        "entailment": 0.9782813649449068,
+        "neutral": 0.012553883661617901,
+        "contradiction": 0.00916475139347522
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 12.824999809265137,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "payer-swap-positive",
+      "tokens": 36,
+      "encoded": "<s> Sana will pay Ivo 620 CHF on 2037-04-22. Ivo will not pay Sana.</s></s> Sana will pay Ivo 620 CHF on 2037-04-22.</s>",
+      "logits": [
+        0.4712817072868347,
+        -2.0675456523895264,
+        1.6507656574249268
+      ],
+      "probabilities": {
+        "entailment": 0.23085868925295847,
+        "neutral": 0.018228356459717952,
+        "contradiction": 0.7509129542873236
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 7.440000057220459,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "payer-swap-inconsistent",
+      "tokens": 36,
+      "encoded": "<s> Sana will pay Ivo 620 CHF on 2037-04-22. Ivo will not pay Sana.</s></s> Ivo will pay Sana 620 CHF on 2037-04-22.</s>",
+      "logits": [
+        0.25874271988868713,
+        -2.068749189376831,
+        1.869591236114502
+      ],
+      "probabilities": {
+        "entailment": 0.16381094833664425,
+        "neutral": 0.01597813299378773,
+        "contradiction": 0.8202109186695681
+      },
+      "topLabel": "contradiction",
+      "inferenceMs": 7.795000076293945,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "proposal-firm-positive",
+      "tokens": 39,
+      "encoded": "<s> Mira proposed sending 17 valves on 2036-02-19. The shipment has not been authorized.</s></s> Mira proposed sending 17 valves on 2036-02-19.</s>",
+      "logits": [
+        2.4165666103363037,
+        -1.541015386581421,
+        -0.8843419551849365
+      ],
+      "probabilities": {
+        "entailment": 0.9470065220895632,
+        "neutral": 0.01809659833562058,
+        "contradiction": 0.03489687957481637
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 8.414999961853027,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "proposal-firm-inconsistent",
+      "tokens": 38,
+      "encoded": "<s> Mira proposed sending 17 valves on 2036-02-19. The shipment has not been authorized.</s></s> Mira will send 17 valves on 2036-02-19.</s>",
+      "logits": [
+        1.690291166305542,
+        -0.31855061650276184,
+        -1.402604579925537
+      ],
+      "probabilities": {
+        "entailment": 0.8478065674583655,
+        "neutral": 0.11372812396578703,
+        "contradiction": 0.038465308575847436
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 8.105000019073486,
+      "supported": true
+    },
+    {
+      "kind": "row",
+      "id": "conditional-firm-positive",
+      "tokens": 56,
+      "encoded": "<s> Rui plans to repair 6 pumps on 2039-11-08 only if the parts arrive. The parts have not arrived and the repair has not started.</s></s> Rui plans to repair 6 pumps on 2039-11-08, conditional on parts arriving.</s>",
+      "logits": [
+        -0.404171884059906,
+        0.763251781463623,
+        -0.3726344108581543
+      ],
+      "probabilities": {
+        "entailment": 0.19063078513167933,
+        "neutral": 0.6126306100942531,
+        "contradiction": 0.19673860477406763
+      },
+      "topLabel": "neutral",
+      "inferenceMs": 10.980000019073486,
+      "supported": false
+    },
+    {
+      "kind": "row",
+      "id": "conditional-firm-inconsistent",
+      "tokens": 54,
+      "encoded": "<s> Rui plans to repair 6 pumps on 2039-11-08 only if the parts arrive. The parts have not arrived and the repair has not started.</s></s> Rui will repair 6 pumps on 2039-11-08 regardless of whether the parts arrive.</s>",
+      "logits": [
+        1.9095427989959717,
+        -1.9891455173492432,
+        0.10044996440410614
+      ],
+      "probabilities": {
+        "entailment": 0.8445438467926518,
+        "neutral": 0.017117619942046497,
+        "contradiction": 0.13833853326530163
+      },
+      "topLabel": "entailment",
+      "inferenceMs": 12.085000038146973,
+      "supported": true
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:55893/",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/page.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/worker.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/sdk/transformers.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/tokenizer.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/tokenizer_config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/models/onnx-community/multilingual-MiniLMv2-L6-mnli-xnli-ONNX/onnx/model.onnx",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:55893/sdk/ort-wasm-simd-threaded.jsep.wasm",
+      "method": "GET",
+      "bodyBytes": 0
+    }
+  ],
+  "externalRequests": [],
+  "probeSHA256": "2347a6740efb1f95b634c55353b35e869659d05b701ba8d0973975a5dc031fcd",
+  "sdkSHA256": "ca697cc102b304de065fbbbd7f3714084d18531509741066ea0bb0326a8ac815",
+  "runtime": {
+    "kind": "loaded",
+    "loadMs": 2674.2750000953674,
+    "labels": {
+      "0": "entailment",
+      "1": "neutral",
+      "2": "contradiction"
+    },
+    "isolated": true,
+    "configuredThreads": 4,
+    "spawned": [
+      "http://127.0.0.1:55893/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "http://127.0.0.1:55893/sdk/ort-wasm-simd-threaded.jsep.mjs",
+      "http://127.0.0.1:55893/sdk/ort-wasm-simd-threaded.jsep.mjs"
+    ]
+  },
+  "violations": []
+}

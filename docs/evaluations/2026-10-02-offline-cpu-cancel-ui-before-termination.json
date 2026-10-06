@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-02T06:06:43.942Z",
+  "scope": "Offline cold CPU process: cancel before first text, then perform another real inference",
+  "status": "passed",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "policy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+  "visibleBeforeStop": [],
+  "stopMs": 23282,
+  "messagesAfterStop": [
+    "Write a detailed essay about astronomy.",
+    "The request could not be completed. Try again or check settings.Restore request"
+  ],
+  "nextMs": 7320,
+  "reply": [
+    "Hello.Write to document"
+  ],
+  "errors": []
+}

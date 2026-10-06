@@ -1,0 +1,9 @@
+# Real Chromium chat content security probe
+
+An owned temporary Vite server serves the current source ChatView directly, without the application CSP. A fresh Chromium context renders twelve hostile fixtures in four paths: completed assistant, literal user, literal tool, and assistant streaming one character at a time with event-loop turns between chunks. The driver checks message content DOM for executable elements, resource elements, links and event-handler attributes; reads an injection sentinel; monitors page errors, dialogs and page requests after module loading/network-idle. It aborts any attacker-domain requests if they occur while recording them. No model replies are substituted: this is a direct renderer test without inference.
+
+Result: 48/48 cases have sentinel zero, no unsafe content elements or handler attributes, no observed post-load page requests, page errors or dialogs. Browser and temporary server close in finally. This strengthens the jsdom tests with real browser behavior under these samples and without CSP masking renderer defects. It is not complete XSS/privacy assurance: deployed editor integration, other sinks, allowed-link clicks, downloads, Worker transport and all adversarial payloads remain outside scope.
+
+The first attempt timed out before ChatView became available and ran zero cases. Its middleware was registered after Vite's internal middleware; the successful driver installs the harness through configureServer and transformIndexHtml. The first driver's bytes and raw failure are preserved. No product code changed and the initial timeout is not a product security defect.
+
+The verifier checks driver/source hashes, exact case matrix and findings, plus the preserved negative harness record. Sources/hashes bind this evidence to the current rendering code; a later source change requires revalidation.

@@ -1,0 +1,147 @@
+{
+  "scope": "Production UI real WASM CPU CPU Qwen3-0.6B GGUF / WebKit planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-BiHmoN8W.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 53184,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "editorModule": "./assets/editor-BiHmoN8W.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 3134,
+      "feedback": [
+        "A1\n12",
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "providerTimings": [
+    {
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 50310.999,
+        "decodingDurationMs": 2809.001,
+        "decodeTokensPerSecond": 4.6279798405198145,
+        "responseDurationMs": 53153,
+        "endToEndTokensPerSecond": 0.2633905894305119
+      },
+      "responseChars": 41,
+      "stopReason": "stop"
+    },
+    {
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 227.999,
+        "decodingDurationMs": 2857.001,
+        "decodeTokensPerSecond": 4.550225918716864,
+        "responseDurationMs": 3118,
+        "endToEndTokensPerSecond": 4.490057729313663
+      },
+      "responseChars": 41,
+      "stopReason": "stop"
+    }
+  ],
+  "repeatedRequestSpeedup": 17.047145606157795,
+  "limitations": [
+    "Two identical requests in one live CPU model instance; not different-request cache coverage.",
+    "Cache hit inferred from sharp backend prompt-processing reduction, not a measured cache_n field.",
+    "Does not measure cache persistence across model disposal, reload or engine switch.",
+    "No new cache configuration was supplied; current runtime already reuses identical prompts."
+  ]
+}

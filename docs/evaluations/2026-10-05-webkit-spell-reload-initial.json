@@ -1,0 +1,125 @@
+{
+  "events": [
+    {
+      "type": "response",
+      "phase": "import",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "status": 200,
+      "headers": {
+        "content-type": "text/javascript",
+        "keep-alive": "timeout=5",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "content-encoding": "gzip",
+        "transfer-encoding": "Identity",
+        "cache-control": "no-cache",
+        "date": "Sun, 04 Oct 2026 23:52:26 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "connection": "keep-alive",
+        "etag": "W/\"33552-1791157661971\"",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "response",
+      "phase": "import",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/wasm",
+        "content-length": "510644",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin",
+        "date": "Sun, 04 Oct 2026 23:52:26 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "keep-alive": "timeout=5",
+        "cache-control": "no-cache",
+        "etag": "W/\"510644-1791157661973\""
+      }
+    },
+    {
+      "type": "pageerror",
+      "phase": "reload1",
+      "message": "/127.0.0.1:5193/sdkjs/common/spell/spell/spell.js due to access control checks.",
+      "stack": ""
+    },
+    {
+      "type": "failed",
+      "phase": "reload1",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "failure": {
+        "errorText": "Worker load was blocked by Cross-Origin-Embedder-Policy"
+      },
+      "headers": {
+        "accept": "*/*",
+        "referer": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+        "sec-fetch-dest": "worker",
+        "sec-fetch-mode": "same-origin",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+        "if-modified-since": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "if-none-match": "W/\"33552-1791157661971\""
+      }
+    },
+    {
+      "type": "response",
+      "phase": "reload1",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "text/html",
+        "transfer-encoding": "Identity",
+        "cross-origin-embedder-policy": "require-corp",
+        "etag": "W/\"63a1-GE957wRMb0gghtJlDLwLEsdfC2M\"",
+        "date": "Sun, 04 Oct 2026 23:52:30 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "content-encoding": "gzip",
+        "keep-alive": "timeout=5",
+        "cache-control": "no-cache",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "response",
+      "phase": "reload2",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "status": 200,
+      "headers": {
+        "content-type": "text/javascript",
+        "keep-alive": "timeout=5",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "content-encoding": "gzip",
+        "transfer-encoding": "Identity",
+        "cache-control": "no-cache",
+        "date": "Sun, 04 Oct 2026 23:52:35 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "connection": "keep-alive",
+        "etag": "W/\"33552-1791157661971\"",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "response",
+      "phase": "reload2",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/wasm",
+        "content-length": "510644",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin",
+        "date": "Sun, 04 Oct 2026 23:52:35 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "keep-alive": "timeout=5",
+        "cache-control": "no-cache",
+        "etag": "W/\"510644-1791157661973\""
+      }
+    }
+  ]
+}

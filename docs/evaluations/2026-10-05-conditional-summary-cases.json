@@ -1,0 +1,56 @@
+[
+  {
+    "id": "conditional-zh",
+    "task": "summarize",
+    "language": "zh-CN",
+    "source": "林岚建议由采购组更换仓库的传感器，但必须先取得维修组的书面确认。维修组尚未确认，采购组也尚未下单。行政组下周另行讨论门禁卡颜色。",
+    "instruction": "用原文语言写一句更短的摘要，保留提议者、负责更换的团队、书面确认这一前提，以及尚未确认和尚未下单的状态，省略门禁卡讨论。",
+    "rubric": [
+      "Chinese",
+      "one shorter sentence",
+      "Lin Lan proposes, not authorizes",
+      "procurement group replaces sensors",
+      "written maintenance confirmation is prerequisite",
+      "maintenance has not confirmed",
+      "procurement has not ordered",
+      "omit access-card discussion",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "conditional-en",
+    "task": "summarize",
+    "language": "en",
+    "source": "Mira asked the archives team to release the draft only after the legal team approves the redactions. Legal has not approved them, and archives has not released the draft. The reception team separately discussed refreshments.",
+    "instruction": "Produce one shorter sentence in the source language, preserving who requested release, who releases it, approval as a prerequisite, and both pending approval and non-release. Omit refreshments.",
+    "rubric": [
+      "English",
+      "one shorter sentence",
+      "Mira requested release",
+      "archives releases draft",
+      "legal approval of redactions is prerequisite",
+      "legal has not approved",
+      "archives has not released",
+      "omit refreshments",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "conditional-ja",
+    "task": "summarize",
+    "language": "ja",
+    "source": "美咲は、品質管理部が修正案を承認した場合に限り、広報部が告知文を公開するよう提案した。品質管理部はまだ承認しておらず、広報部も公開していない。総務部は別件で会議室の配置を相談した。",
+    "instruction": "原文と同じ言語で、より短い一文に要約してください。提案者、公開する部署、承認が前提であること、未承認と未公開の状態を保持し、会議室の話は省いてください。",
+    "rubric": [
+      "Japanese",
+      "one shorter sentence",
+      "Misaki proposes",
+      "PR publishes announcement",
+      "quality control approval of revision is prerequisite",
+      "quality control has not approved",
+      "PR has not published",
+      "omit meeting room",
+      "no unsupported fact"
+    ]
+  }
+]

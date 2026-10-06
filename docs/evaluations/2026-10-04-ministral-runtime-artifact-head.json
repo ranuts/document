@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-03T20:32:33.600Z",
+  "method": "HEAD",
+  "scope": "Artifact endpoint availability only; no body integrity or browser runtime proof.",
+  "checks": [
+    {
+      "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Ministral-3-3B-Instruct-2512-BF16-q4f16_1_cs1k-webgpu.wasm",
+      "status": 200,
+      "resolvedURL": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Ministral-3-3B-Instruct-2512-BF16-q4f16_1_cs1k-webgpu.wasm",
+      "contentLength": "5251744",
+      "contentType": "application/octet-stream"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC/resolve/main/tokenizer.json",
+      "status": 200,
+      "resolvedURL": "https://us.aws.cdn.hf.co/xet-bridge-us/6982b66e2b265bf333685c93/187c8f6cc6fd217e11ecc3dfbc82048b314c6d4608b6b6eb42769e12728cd987?X-Xet-Cas-Uid=public&response-content-type=application%2Fjson%3B+charset%3Dutf-8&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27tokenizer.json%3B+filename%3D%22tokenizer.json%22%3B&user_id=public&Expires=1791063152&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjk4MmI2NmUyYjI2NWJmMzMzNjg1YzkzLzE4N2M4ZjZjYzZmZDIxN2UxMWVjYzNkZmJjODIwNDhiMzE0YzZkNDYwOGI2YjZlYjQyNzY5ZTEyNzI4Y2Q5ODdcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZqc29uJTNCK2NoYXJzZXQlM0R1dGYtOCZ4aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3Rva2VuaXplci5qc29uJTNCK2ZpbGVuYW1lJTNEJTIydG9rZW5pemVyLmpzb24lMjIlM0ImdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2MzE1Mn19fV19&Signature=MEUCIQCo1N2dqggFXd8CrUMhUS4wYCCwT5RV8CpGmLV7oIJC6QIgXAfNp-5SQE%7EGlU38xbk3uW3XR7GnSSF2JCuI9186PPw_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "contentLength": "17078110",
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC/resolve/main/tokenizer_config.json",
+      "status": 200,
+      "resolvedURL": "https://huggingface.co/api/resolve-cache/models/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC/eebad8da4ac64947d8dc9507007fc0279bf52454/tokenizer_config.json?%2Fmlc-ai%2FMinistral-3-3B-Instruct-2512-BF16-q4f16_1-MLC%2Fresolve%2Fmain%2Ftokenizer_config.json=&etag=%22a0eeb06d09b8a240ad7b9c8287955f7bc52033f4%22",
+      "contentLength": "198076",
+      "contentType": "text/plain; charset=utf-8"
+    }
+  ]
+}

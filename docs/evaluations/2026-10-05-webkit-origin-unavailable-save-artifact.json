@@ -1,0 +1,14 @@
+{
+  "zipIntegrity": "pass",
+  "bytes": 25849,
+  "sha256": "0027d58f6f33fb2e94b955cd22811d42f23559d5d7ca8b29c1304674ef5b4a24",
+  "documentTextRuns": [
+    "WEBKIT_WORD_20261005"
+  ],
+  "documentXmlSha256": "636bf4b339cad6d7e70a14d1ed40f0eb3993751c8570543a55fb1fa88bb6caaf",
+  "nativeSaveArtifact": "pass",
+  "pageErrors": [
+    "TypeError: Load failed"
+  ],
+  "scope": "DOCX ZIP/XML integrity and literal text; no native reopen or layout verification"
+}

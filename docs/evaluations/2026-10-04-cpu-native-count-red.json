@@ -1,0 +1,691 @@
+{
+  "status": "failed",
+  "scope": "Native count missing-action red test on verified baseline; expected count 16/context 2048 before any generation; standalone SDK, no editor write or production changes",
+  "files": {
+    "js": "9708f2b93fa3bc6df5d06c75bc651f32201228532f07423447aa1b912f52f97c",
+    "wasm": "fddda23989a10ce01d4da501cb444467bc269ca55b7374766604fe08ce728ee4"
+  },
+  "served": [
+    {
+      "method": "GET",
+      "url": "/runtime.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "HEAD",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 484220320
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.wasm",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    }
+  ],
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "debug",
+      "text": "Downloading model files: [http://127.0.0.1:52340/model.gguf]"
+    },
+    {
+      "type": "debug",
+      "text": "Multithread enabled: false, pthreadPoolSize: 0"
+    },
+    {
+      "type": "debug",
+      "text": "Loading \"wllama.wasm\" from \"http://127.0.0.1:52340/runtime.wasm\""
+    },
+    {
+      "type": "debug",
+      "text": "Calling wllamaStart..."
+    },
+    {
+      "type": "debug",
+      "text": "Using async file read"
+    },
+    {
+      "type": "debug",
+      "text": "Loading model..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: loaded meta data with 31 key-value pairs and 311 tensors from models/model-00001-of-00001.gguf (version GGUF V3 (latest))"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   0:                       general.architecture str              = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   1:                               general.type str              = model"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   2:                               general.name str              = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   3:                           general.basename str              = Qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   4:                         general.size_label str              = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   5:                          qwen3.block_count u32              = 28"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   6:                       qwen3.context_length u32              = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   7:                     qwen3.embedding_length u32              = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   8:                  qwen3.feed_forward_length u32              = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   9:                 qwen3.attention.head_count u32              = 16"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  10:              qwen3.attention.head_count_kv u32              = 8"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  11:                       qwen3.rope.freq_base f32              = 1000000.000000"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  12:     qwen3.attention.layer_norm_rms_epsilon f32              = 0.000001"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  13:                 qwen3.attention.key_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  14:               qwen3.attention.value_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  15:                       tokenizer.ggml.model str              = gpt2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  16:                         tokenizer.ggml.pre str              = qwen2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  17:                      tokenizer.ggml.tokens arr[str,151936]  = [\"!\", \"\\\"\", \"#\", \"$\", \"%\", \"&\", \"'\", ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  18:                  tokenizer.ggml.token_type arr[i32,151936]  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  19:                      tokenizer.ggml.merges arr[str,151387]  = [\"Ġ Ġ\", \"ĠĠ ĠĠ\", \"i n\", \"Ġ t\",..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  20:                tokenizer.ggml.eos_token_id u32              = 151645"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  21:            tokenizer.ggml.padding_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  22:                tokenizer.ggml.bos_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  23:               tokenizer.ggml.add_bos_token bool             = false"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  24:                    tokenizer.chat_template str              = {%- if tools %}\\n    {{- '<|im_start|>..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  25:               general.quantization_version u32              = 2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  26:                          general.file_type u32              = 15"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  27:                      quantize.imatrix.file str              = /models_out/Qwen3-0.6B-GGUF/Qwen_Qwen..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  28:                   quantize.imatrix.dataset str              = /training_dir/calibration_datav3.txt"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  29:             quantize.imatrix.entries_count i32              = 196"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  30:              quantize.imatrix.chunks_count i32              = 137"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type  f32:  113 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q4_K:  169 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q6_K:   29 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file format = GGUF V3 (latest)"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file type   = Q4_K - Medium"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file size   = 456.11 MiB (5.09 BPW) "
+    },
+    {
+      "type": "debug",
+      "text": "load: 0 unused tokens"
+    },
+    {
+      "type": "warning",
+      "text": "load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden"
+    },
+    {
+      "type": "debug",
+      "text": "load: printing all EOG tokens:"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 128247 ('</s>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151643 ('<|endoftext|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151645 ('<|im_end|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151662 ('<|fim_pad|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151663 ('<|repo_name|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151664 ('<|file_sep|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load: special tokens cache size = 27"
+    },
+    {
+      "type": "debug",
+      "text": "load: token to piece cache size = 0.9311 MB"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: arch                  = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab_only            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: no_alloc              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_train           = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_inp            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd                = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_out            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer               = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer_all           = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head                = 16"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head_kv             = 8"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_rot                 = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_swa                 = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: is_swa_any            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_k         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_v         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_gqa                 = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_k_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_v_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_eps            = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_rms_eps        = 1.0e-06"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_clamp_kqv           = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_max_alibi_bias      = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_logit_scale         = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_scale          = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_value_scale    = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ff                  = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_used         = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_groups       = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_group_used          = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: causal attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: pooling type          = -1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope type             = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope scaling          = linear"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_base_train       = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_scale_train      = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_orig_yarn       = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_yarn_log_mul     = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_finetuned        = unknown"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model type            = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model params          = 751.63 M"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: general.name          = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab type            = BPE"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_vocab               = 151936"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_merges              = 151387"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: BOS token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOS token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOT token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: PAD token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: LF token              = 198 'Ċ'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PRE token         = 151659 '<|fim_prefix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SUF token         = 151661 '<|fim_suffix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM MID token         = 151660 '<|fim_middle|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PAD token         = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM REP token         = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SEP token         = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 128247 '</s>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: max token length      = 256"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors: loading model tensors, this can take a while... (load_mode = none)"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors:          CPU model buffer size =   456.11 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: constructing llama_context"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_seq_max             = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx                 = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq             = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_batch               = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ubatch              = 512"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: causal_attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: flash_attn            = auto"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: kv_unified            = true"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_base             = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_scale            = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_rs_seq              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max         = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max_per_seq = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq (2048) < n_ctx_train (32768) -- the full capacity of the model will not be utilized"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context:        CPU  output buffer size =     2.32 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache:        CPU KV buffer size =   224.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: size =  224.00 MiB (  2048 cells,  28 layers,  4/1 seqs), K (f16):  112.00 MiB, V (f16):  112.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_k = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_v = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserving ..."
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Flash Attention enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Gated Delta Net support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (autoregressive) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (chunked) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Lightning Indexer support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Lightning Indexer enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused DeepSeek V4 HC support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC pre enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC comb enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC post enabled"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve:        CPU compute buffer size =    28.01 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph nodes  = 986"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph splits = 1"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserve took 16.56 ms, sched copies = 1"
+    },
+    {
+      "type": "debug",
+      "text": "{loadedCtxInfo: Object}"
+    },
+    {
+      "type": "error",
+      "text": "Unknown action: count_chat"
+    },
+    {
+      "type": "error",
+      "text": "Stack trace (abort):\n    at http://127.0.0.1:52340/runtime.wasm:wasm-function[726]:0x86682\n    at http://127.0.0.1:52340/runtime.wasm:wasm-function[2579]:0x31ebb0\n    at wrapper (d560a0c6-3b33-45db-b738-b884f14dd38f:22:85011)\n    at ccall (d560a0c6-3b33-45db-b738-b884f14dd38f:22:89549)\n    at blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:22:90106\n    at blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:343:34\n    at runAction (d560a0c6-3b33-45db-b738-b884f14dd38f:397:29)"
+    },
+    {
+      "type": "error",
+      "text": "RuntimeError: Aborted(). Build with -sASSERTIONS for more info.\n    at abort (blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:22:6236)\n    at __abort_js (blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:22:72280)\n    at http://127.0.0.1:52340/runtime.wasm:wasm-function[726]:0x8683c\n    at http://127.0.0.1:52340/runtime.wasm:wasm-function[2579]:0x31ebb0\n    at wrapper (blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:22:85011)\n    at ccall (blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:22:89549)\n    at blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:22:90106\n    at blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:343:34\n    at runAction (blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:397:29)\n    at async runWasmCall (blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:371:5)"
+    }
+  ],
+  "error": "Error: page.evaluate: RuntimeError: (ABORT) \n    at http://127.0.0.1:52340/runtime.wasm:wasm-function[2579]:0x31ebb0\n    at wrapper (d560a0c6-3b33-45db-b738-b884f14dd38f:22:85011)\n    at ccall (d560a0c6-3b33-45db-b738-b884f14dd38f:22:89549)\n    at blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:22:90106\n    at blob:http://127.0.0.1:5193/d560a0c6-3b33-45db-b738-b884f14dd38f:343:34\n    at runAction (d560a0c6-3b33-45db-b738-b884f14dd38f:397:29)",
+  "phase": "generate"
+}

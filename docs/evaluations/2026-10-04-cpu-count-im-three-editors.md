@@ -1,0 +1,9 @@
+# CPU document operations through actual IM
+
+The current built local CPU fallback (Qwen3-0.6B GGUF) executed three exact-text document operations through the visible Operate document mode: Word cursor insertion, Excel B2 assignment, and a new PowerPoint text box. Each included Chinese, Japanese and accented Latin characters. All three preserved the marker, had no visible errors or preview cards, restored the initial snapshot on native Undo, restored the edit on native Redo, downloaded through native Save, and reopened through the homepage file chooser with the same content snapshot.
+
+The ordinary chat wrapper deliberately strips native model tool calls. That does not mean CPU document tools are unavailable: the IM document mode calls `generateDocumentToolPlan`, validates a structured operation, then executes `DocumentToolAction` against existing editor APIs. The legacy `generateActionPlan` helper is not the active panel path. Previous broad statements that CPU document tool execution was unavailable should be read as referring only to direct native chat tool calls; this actual UI evidence establishes the separate operation path.
+
+The driver uses the normal loader and model, forces CPU detection, blocks service workers, and applies experimental same-origin isolation response headers. It does not replace inference outputs. Undo/Redo and content snapshots use native editor APIs for verification. This is not a production deployment header certification, a full arbitrary-instruction tool evaluation, semantic writing acceptance, or full offline certification.
+
+Raw report: `2026-10-04-cpu-count-im-three-editors.json`. The executed driver matches the recorded source hash. The runnable driver now uses separate CPU scratch save paths; the successful downloaded files were preserved there and previous scratch artifacts restored. The verifier checks source provenance, actual snapshots and saved-file hashes. Saved artifacts remain local scratch files.

@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-02T10:03:11.565Z",
+  "scope": "Isolated production UI experiment with unconstrained chat instead of generateJSON (no writing examples) selected-text direct writing path; Chromium Metal GPU Qwen3-1.7B. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 1965,
+      "chatCalls": 1,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "experimentalPathConfirmed": true,
+      "rawResponse": "<think>\n\n</think>\n\n{\"task\":\"rewrite\",\"targetLanguage\":\"source\",\"text\":\"Alex 于 2026-10-08 支付 1,250 EUR\"}"
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 2054,
+      "chatCalls": 2,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "experimentalPathConfirmed": true,
+      "rawResponse": "<think>\n\n</think>\n\n{\"task\":\"rewrite\",\"targetLanguage\":\"source\",\"text\":\"Yes, Alex is set to pay 1,250 EUR on 2026-10-08.\"}"
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex proposed 1,250 EUR on 2026-10-08. The payment has not been approved.\r\n",
+      "error": [],
+      "responseMs": 1945,
+      "chatCalls": 3,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "experimentalPathConfirmed": true,
+      "rawResponse": "<think>\n\n</think>\n\n{\"text\":\"Alex proposed 1,250 EUR on 2026-10-08. The payment has not been approved.\"}"
+    },
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 1986,
+      "chatCalls": 4,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "experimentalPathConfirmed": true,
+      "rawResponse": "<think>\n\n</think>\n\n{\"task\":\"rewrite\",\"targetLanguage\":\"source\",\"text\":\"Alex 于 2026-10-08 支付 1,250 EUR\"}"
+    }
+  ],
+  "errors": [],
+  "outputMeaning": "output is resulting document text; rawResponse is captured model response.",
+  "assessment": "Three rewrites rejected due to extra schema fields. One summary preserves Alex, date, amount and non-approval. Single-example success insufficient to change routing."
+}

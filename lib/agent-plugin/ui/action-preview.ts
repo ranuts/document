@@ -1,0 +1,103 @@
+import { Div, Span, View } from 'ranui/builder';
+import { t } from '@ranuts/shared/i18n';
+import { displayError } from './presentation';
+import { ReviewedAction } from '../reviewed-action';
+
+/** Transient, text-only preview. Proposed actions are never persisted/replayed. */
+export class ActionPreview {
+  readonly el = Div().class('agent-plan-preview').attr('aria-live', 'polite').build();
+  private readonly title = Span().build();
+  private readonly target = Span().class('agent-plan-target').build();
+  private readonly beforeLabel = Span().build();
+  private readonly before = View('pre').class('agent-plan-before').build();
+  private readonly afterLabel = Span().build();
+  private readonly content = View('pre').class('agent-plan-content').build();
+  private readonly status = Span().class('agent-plan-status').build();
+  private readonly applyButton = View('r-button').class('agent-plan-apply').build();
+  private readonly cancelButton = View('r-button').class('agent-plan-cancel').build();
+  private action: ReviewedAction | null = null;
+  private settled = false;
+  private timer?: ReturnType<typeof setInterval>;
+  private readonly updateLanguage = () => this.labels();
+  constructor() {
+    this.el.hidden = true;
+    this.el.append(
+      this.title,
+      this.target,
+      View('details')
+        .class('agent-plan-original')
+        .children(View('summary').children(this.beforeLabel).build(), this.before)
+        .build(),
+      this.afterLabel,
+      this.content,
+      this.status,
+      Div().class('agent-plan-buttons').children([this.applyButton, this.cancelButton]).build(),
+    );
+    this.applyButton.addEventListener('click', () => void this.apply());
+    this.cancelButton.addEventListener('click', () => this.hide());
+    window.addEventListener('languagechange', this.updateLanguage);
+    this.labels();
+  }
+  private labels(): void {
+    this.title.textContent = t('agentPlanTitle');
+    this.beforeLabel.textContent = t('agentPlanBefore');
+    this.afterLabel.textContent = t('agentPlanAfter');
+    this.applyButton.textContent = t('agentPlanApply');
+    this.cancelButton.textContent = t('agentPlanCancel');
+    const action = this.action;
+    if (action)
+      this.target.textContent = `${action.target.label} · ${
+        action.plan.tool === 'set_cell'
+          ? action.plan.input.cell
+          : t(action.target.selectedText ? 'agentPlanSelection' : 'agentPlanCursor')
+      }`;
+  }
+  show(action: ReviewedAction): void {
+    this.hide();
+    this.action = action;
+    this.settled = false;
+    this.el.hidden = false;
+    this.before.textContent = action.target.selectedText;
+    this.before.hidden = this.beforeLabel.hidden = !action.target.selectedText;
+    this.before.parentElement!.hidden = !action.target.selectedText;
+    this.content.textContent = action.plan.tool === 'set_cell' ? action.plan.input.value : action.plan.input.text;
+    this.status.textContent = t('agentPlanReady');
+    this.applyButton.removeAttribute('disabled');
+    this.labels();
+    this.timer = setInterval(() => {
+      if (!action.isCurrent()) this.invalidate();
+    }, 500);
+  }
+  invalidate(): void {
+    if (!this.action || this.settled) return;
+    this.action.cancel();
+    this.settled = true;
+    clearInterval(this.timer);
+    this.applyButton.setAttribute('disabled', '');
+    this.status.textContent = t('agentPlanExpired');
+  }
+  hide(): void {
+    this.action?.cancel();
+    this.action = null;
+    clearInterval(this.timer);
+    this.el.hidden = true;
+  }
+  private async apply(): Promise<void> {
+    if (!this.action || this.settled) return;
+    const action = this.action;
+    this.settled = true;
+    clearInterval(this.timer);
+    this.applyButton.setAttribute('disabled', '');
+    try {
+      const result = await action.apply();
+      if (this.action === action)
+        this.status.textContent = t(result === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
+    } catch (error) {
+      if (this.action === action) this.status.textContent = displayError(error);
+    }
+  }
+  dispose(): void {
+    this.hide();
+    window.removeEventListener('languagechange', this.updateLanguage);
+  }
+}

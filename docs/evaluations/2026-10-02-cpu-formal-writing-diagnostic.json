@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-02T12:33:15.926Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright WebKit CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 36639,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [
+    {
+      "text": "{\"text\": \"Hey, Alex will pay 1,250 EUR on October 8, 2026.\"}",
+      "usage": {
+        "completionTokens": 29,
+        "promptTokens": 447,
+        "promptProcessingDurationMs": 31624,
+        "decodingDurationMs": 4938,
+        "decodeTokensPerSecond": 5.6703118671526935,
+        "responseDurationMs": 36604,
+        "endToEndTokensPerSecond": 0.7922631406403672
+      },
+      "stopReason": "stop"
+    }
+  ],
+  "errors": [],
+  "assessment": {
+    "jsonValid": true,
+    "isoDateFormatPreserved": false,
+    "formalStyleSatisfied": false,
+    "reason": "Raw output kept Hey and changed ISO date to spelled-out English date. Existing numeric-token preservation check rejects before document application."
+  },
+  "limitations": [
+    "One reproduced formal-rewrite failure, not full model quality.",
+    "The earlier uninstrumented failure had no raw output; this run establishes the cause for this reproduced sample.",
+    "New feedback is verified by unit regression, not a new real-model browser run after localization change."
+  ]
+}

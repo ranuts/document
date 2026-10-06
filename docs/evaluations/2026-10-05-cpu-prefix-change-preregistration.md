@@ -1,0 +1,5 @@
+# Changing suffix cache diagnostic: pre-inference
+
+Extend the successful default-cache contrast to two requests with the same long reference prefix but a different final label. On fresh omitted-mode and false-mode engines, ask for ALPHA then BRAVO, preserving all other generation settings and reference text. Capture complete requests, raw completions, cached-token counters and wall times. Match actual served client bytes against its recorded disk hash. Commit driver before inference.
+
+Default-mode reuse must be established by native counters, not timing alone. Inspect whether both modes produce the current request's label; preserve any mismatch instead of claiming a general stale-state fix. This small literal-label test is not factual summarization quality, comprehensive isolation, cancellation recovery, trimmed-context behavior, UI responsiveness, physical devices or offline acceptance. Fixed mode order and one pair are not a general speed benchmark. Keep product defaults and UI unchanged.

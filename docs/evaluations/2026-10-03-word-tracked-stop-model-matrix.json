@@ -1,0 +1,41 @@
+{
+  "scope": "Actual IM tracked Unicode/tab replacement in native pre_Paste preparation, controlled held callback, Stop before insertion, late callback, strict native history identity check and prior Redo, subsequent IM write and native Undo/Redo; five configured text models. No foreign edit, physical OOM, tracked Save-after-Stop or other cancellation phase claim.",
+  "entries": [
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-word-im-tracked-unicode-stop-1_7.json",
+      "sha256": "8694647afb499fe332846dc2389bae27b4452eee880a306fcfc3a3fb53e05422",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-word-im-tracked-unicode-stop-0_8.json",
+      "sha256": "6e4af8e6b5dd2ba8e276ceccae3c86aed5b616b1f03d86afafee22fe49733f4b",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-word-im-tracked-unicode-stop-2b.json",
+      "sha256": "641656f8e82ed07d887c2330f5be61b5c27e271d1ef6909317eb9089f2c12546",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "report": "docs/evaluations/2026-10-03-word-im-tracked-unicode-stop-4b.json",
+      "sha256": "73a95d9b7c5f423f7fd0aa86e9c7409c1c5469dd0d324326316d77ea4fab56aa",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-0.6B-GGUF-CPU",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "report": "docs/evaluations/2026-10-03-word-im-tracked-unicode-stop-cpu-wait-fixed.json",
+      "sha256": "e77546dfa15b7087af763149b7d0ccb5fbc30b4efe415a11241ac2c07a20a4a3",
+      "passed": true
+    }
+  ],
+  "allPassed": true
+}

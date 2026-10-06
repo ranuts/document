@@ -1,15 +1,15 @@
 ---
-title: Abrir DOCX sin Word — gratis, en el navegador, sin subirlo
-description: Abre y edita un archivo DOCX (Word) sin Microsoft Word, sin cuenta de Microsoft y sin Copilot. Gratis, de código abierto, funciona en tu navegador: tu archivo nunca se sube.
+title: 'Abrir DOCX sin Word — gratis, en el navegador, sin subirlo'
+description: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Edición local sin subidas obligatorias.'
 eyebrow: Abrir · .docx
 h1: Abrir un archivo DOCX sin Microsoft Word
-lead: '¿Tienes un archivo **.docx** pero no tienes Word, o no quieres una cuenta de Microsoft ni Copilot? Ábrelo aquí mismo, en tu navegador. Nada que instalar, nada que subir.'
+lead: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Edición local sin subidas obligatorias.'
 cta: Abrir tu DOCX →
 ctaHref: /es/
-ogDescription: Abre y edita archivos DOCX sin Microsoft Word ni cuenta. Código abierto, nada se sube.
+ogDescription: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Edición local sin subidas obligatorias.'
 breadcrumb: Abrir DOCX
 howTo: Cómo abrir un archivo DOCX sin Word
-appDescription: Abre y edita archivos DOCX (Word) en el navegador, sin Word, sin cuenta y sin subidas.
+appDescription: 'Abre y edita archivos DOCX en el navegador sin Microsoft Word ni cuenta. Edición local sin subidas obligatorias.'
 ---
 
 DOCX es el formato de Microsoft Word, pero no necesitas Word para leer ni editar uno. Este editor representa el DOCX con el motor de OnlyOffice, así que tus fuentes, tablas, imágenes y maquetación se ven como deben, no como un texto plano de emergencia. Todo se ejecuta en local con WebAssembly, de modo que el archivo se queda en tu dispositivo.
@@ -28,8 +28,8 @@ Por dentro, el motor de documentos de OnlyOffice está compilado a WebAssembly y
 - Abrir y leer cualquier archivo **.docx** (y .doc) con el formato completo
 - Editar el texto y volver a descargarlo como DOCX, PDF o TXT
 - Sin Microsoft Word, sin cuenta de Microsoft, sin Copilot
-- Sin subidas: tu documento nunca sale de tu dispositivo
-- Funciona sin conexión como aplicación instalable
+- En la edición básica local: Sin subidas: tu documento nunca sale de tu dispositivo
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 
 ## Preguntas frecuentes
 
@@ -43,7 +43,7 @@ Sí. Usa el motor de OnlyOffice, así que fuentes, tablas, imágenes y maquetaci
 
 ### ¿Mi documento se sube a algún sitio?
 
-No. El archivo se abre en local con WebAssembly y nunca sale de tu dispositivo.
+En la edición básica local: No. El archivo se abre en local con WebAssembly y nunca sale de tu dispositivo.
 
 ### ¿Puedo editarlo y guardarlo, no solo verlo?
 

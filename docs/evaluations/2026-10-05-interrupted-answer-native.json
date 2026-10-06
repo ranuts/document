@@ -1,0 +1,20 @@
+{
+  "version": "151.0.7922.34",
+  "errors": [],
+  "model": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "before": "\r\n",
+  "request": "写一篇约600字的关于海边灯塔的短篇故事。",
+  "partial": "海边灯塔静静矗立，守护着这片宁静的海岸线。每当夜幕降临",
+  "applyCount": 0,
+  "copyCount": 1,
+  "afterStop": "\r\n",
+  "requestRestored": true,
+  "directWriteMessages": "写一篇约600字的关于海边灯塔的短篇故事。\n\n海边灯塔静静矗立，守护着这片宁静的海岸线。每当夜幕降临\n\n已停止。\n恢复请求\n写到当前的文档上\n未能完成请求。请重试或检查设置。\n恢复请求",
+  "writeCalls": [],
+  "restoredPartial": "海边灯塔静静矗立，守护着这片宁静的海岸线。每当夜幕降临",
+  "afterReload": "\r\n",
+  "previewCount": 0,
+  "pass": true,
+  "contextClosed": true,
+  "browserClosed": true
+}

@@ -1,0 +1,18 @@
+{
+  "errors": [],
+  "model": "CPU · Qwen3 · 0.6B",
+  "modelTitle": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "speed": "生成速度: 30.6 token/s",
+  "details": "生成速度: 30.6 token/s · 首段文字等待: 2.63 s · 整体响应速率: 1.13 token/s · 3 tokens",
+  "mainDetailsVisible": false,
+  "previewCount": 0,
+  "compact": {
+    "footerTop": 429,
+    "footerBottom": 550,
+    "footerHeight": 121,
+    "settingsScroll": 929,
+    "settingsHeight": 192,
+    "panelWidth": 390
+  },
+  "status": "completed"
+}

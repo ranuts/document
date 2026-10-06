@@ -1,0 +1,7 @@
+# Default CPU URL/cache diagnostic result
+
+Original protocol 4cbfe09; pre-load harness correction db5bcf1. Corrected full Chromium run loads the exact default URL in 37,394 ms; no model file uploaded. Read-only browser OPFS inventory shows 484,220,320 model bytes and metadata with exact original URL, size and SHA256 9acfc1e001311f34b4252001b626f2e466d592a42065f66571bff3790d4e1b14. Online request ledger also retains a redirect request marked ERR_ABORTED; successful loaded state and full stored model are recorded independently.
+
+The controlled offline reload **fails**: local wllama-BITawafS.wasm has three ERR_INTERNET_DISCONNECTED requests and native runtime raises XMLHttpRequest NetworkError; loaded-hint wait expires after 180 seconds. Offline inference is not reached. Context/browser close. Initial record with failed r-input fill is preserved separately, before any model loading.
+
+Service workers deliberately blocked in this diagnostic context. Therefore full model cache is established, but this does not test the application's PWA offline runtime caching, and the offline failure is not yet a product PWA defect. Cold native CPU runtime needs its WASM file as well as the GGUF model. Cache API inventory alone would miss CPU OPFS model storage; actual OPFS metadata was read without modification. Browser-controlled offline is not a physical network/OS restart. Product source unchanged.

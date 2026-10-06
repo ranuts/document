@@ -1,0 +1,24 @@
+{
+  "scope": "Current source reconciliation with archived evidence, not fresh browser inference or completion certification",
+  "head": "9ba5cbd9eed9d669054ecb0f68b27ab4eb9b58f4",
+  "attachmentSHA256": "180bafd68848654c020662388de555d0746de20326654c42b8215088e16b62a8",
+  "sourceHashes": {
+    "packages/agent-core/src/llm/wllama.ts": "a3d328f1d31bf372f8b28823a492fbe8ed867e6d3ec1e96c218622fd13a0dd50",
+    "packages/agent-core/src/context-budget.ts": "fd84a5b1a984c2cc661c8f78a5ca76df6a5dd43c63e1a6934ba5a027ae952785",
+    "packages/agent-core/src/llm/local.ts": "a036738064f3cc02f542f69b430aee660987e86dd71eb8258d51c52b50e548b9",
+    "packages/agent-core/src/llm/webllm.ts": "64edc4b16cb7f1e40f175a8d74b4a3e9984cafddb4fab12c4a02cfdd9a8f32aa",
+    "lib/agent-plugin/ui/panel.ts": "5d6df8bc394f38e2843be60129ed71f430f367aabe25edc391df80b8e07ae99a",
+    "test/unit/agent-panel-loading.test.ts": "8e3d6aa0cea661fcbdb9e4b24957d32893d3f9bcd6af3f81f7bfa3b6daa12364",
+    "test/unit/wllama-cpu-loader.test.ts": "9c5ef5dcd4159bd4016d749222b7fc16cebd8f77d78f178fb5c9d80376f547cd"
+  },
+  "archivedEvidenceHashes": {
+    "docs/evaluations/2026-10-04-writing-model-decision-index.json": "bf576d590ccdfc8e8d6f3917f72511fd0a227cee57b51809c6794b7610142217",
+    "docs/evaluations/2026-10-04-cpu-count-product-build.md": "1c9adb6207681bbc83b29dcf64dc2dd0fc52edd2e30c033da8c04fa80209df2d",
+    "docs/evaluations/2026-10-04-cpu-count-process-restart-offline.md": "bdf720648bf0f96b5e125d1ee58649578ea06918b4db58cc5c61c17726c6a0d5",
+    "docs/evaluations/2026-10-04-chat-network-content-audit.md": "24b0d0a02c36d82d3953c72598dce1913c0feba5c83fc7bd0c0dc0e9d779fb46",
+    "docs/evaluations/2026-10-04-cold-selfhost-cpu-fresh.md": "ffb22bf98454edf0ee7e78acb83c64e09d2109dbb90889d187a8c770ae643dd7",
+    "docs/evaluations/2026-10-04-history-browser-security.md": "bd78cacf8573834e477c83278a5ffd519c4488964e009093d8e415dced86d718"
+  },
+  "qualityAccepted": false,
+  "freshBrowserRuns": 0
+}

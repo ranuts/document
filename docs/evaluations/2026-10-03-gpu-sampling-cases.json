@@ -1,0 +1,20 @@
+[
+  {
+    "id": "formal-en-new",
+    "task": "rewrite",
+    "source": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?",
+    "instruction": "Rewrite in formal English. Preserve all facts and remove conversational expressions."
+  },
+  {
+    "id": "formal-zh-new",
+    "task": "rewrite",
+    "source": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！",
+    "instruction": "改写成正式书面中文，去除口语，保留全部事实。"
+  },
+  {
+    "id": "proposal-summary-new",
+    "task": "summarize",
+    "source": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.",
+    "instruction": "Summarize in one sentence. Preserve the proposed delivery, its value, date and unapproved status."
+  }
+]

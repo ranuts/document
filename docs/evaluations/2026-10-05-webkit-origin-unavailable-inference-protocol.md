@@ -1,0 +1,7 @@
+# WebKit owned origin unavailable: native CPU inference protocol
+
+Unchanged production runtime d71a1e8, fresh desktop Playwright WebKit context. An owned forwarding HTTP server on 5194 serves the existing 5193 preview without modifying it. Online default CPU fallback downloads the pinned model naturally; no file picker, model-source override, capability override, or cloud inference. Require actual CPU ready and production service-worker controller.
+
+Close the online page and all forwarding-server connections, await server closure. Do not call browser setOffline: navigator.onLine remains true, remote internet remains available. Open a new native Word page at the now-unavailable application origin. Require actual native editor readiness and default CPU ready without manually loading again, then send `不要操作文档。只回复 WEBKIT_ORIGIN_OK。`. Record exact raw response, native document before/after, errors, request ledger, model readiness, and cleanup. Exact format is separate from inference completion. Preserve all failures; no hidden retry.
+
+This tests application-origin unavailability, not full disconnection or global network privacy. Remote model requests remain possible and must be assessed in the ledger before claiming cache reuse. No physical Safari/iOS, mobile resource budget, OS/process restart, general summary-quality acceptance, or product workaround is implied. Prior controlled-offline WebKit failures remain authoritative. The diagnostic is based on the preceding shell-only positive result c8d445c.

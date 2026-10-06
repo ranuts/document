@@ -1,0 +1,65 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+import http from 'node:http';
+import { execFileSync } from 'node:child_process';
+const built = await fs.readFile('dist/sw.js', 'utf8');
+const version = built.match(/const CACHE_VERSION = '([^']+)'/)[1];
+const vendor = built.match(/const VENDOR_VERSION = '([^']+)'/)[1];
+const old = execFileSync('git', ['show', '2a675a7:public/sw.js'], { encoding: 'utf8' }).replaceAll('SW_VERSION_PLACEHOLDER', 'embed-old-control').replaceAll('VENDOR_VERSION_PLACEHOLDER', vendor);
+let isolated = false;
+const server = http.createServer((request, response) => {
+  const policy = isolated ? { 'cross-origin-opener-policy': 'same-origin', 'cross-origin-embedder-policy': 'require-corp' } : {};
+  if (request.url === '/sw.js' && !isolated) { response.writeHead(200, { 'content-type': 'application/javascript', 'cache-control': 'no-cache' }); response.end(old); return; }
+  const upstream = http.request({ hostname: '127.0.0.1', port: 5193, path: request.url, headers: { ...request.headers, host: '127.0.0.1:5193' } }, incoming => { response.writeHead(incoming.statusCode, { ...incoming.headers, ...policy }); incoming.pipe(response); });
+  upstream.on('error', () => { if (!response.destroyed) { response.writeHead(502); response.end(); } });
+  request.pipe(upstream);
+});
+await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+const origin = 'http://127.0.0.1:' + server.address().port;
+const fixtureBase64 = (await fs.readFile('.scratch/ai-csp/isolated-cold-native.docx')).toString('base64');
+const parent = http.createServer((_request, response) => { response.writeHead(200, { 'content-type': 'text/html' }); response.end('<!doctype html><script>window.embedMessages=[];window.addEventListener("message",e=>{window.embedMessages.push({type:e.data?.type,payload:e.data?.payload});if(e.data?.type==="document:ready")document.querySelector("#embedded").contentWindow.postMessage({id:"embed-test",type:"document:open-buffer",payload:{fileName:"probe.docx",base64:' + JSON.stringify(fixtureBase64) + '}},' + JSON.stringify(origin) + ');});</script><iframe id="embedded" style="width:1400px;height:900px" src="' + origin + '/editor?locale=en&embed=1"></iframe>'); });
+await new Promise(resolve => parent.listen(0, '127.0.0.1', resolve));
+const browser = await chromium.launch(); const context = await browser.newContext(); const page = await context.newPage();
+const report = { scope: 'Actual cross-origin nonisolated parent embedding isolated-policy editor after warming old nonisolated vendor caches. Native startup after product cache-policy fallback; no manual cache repair. Not all third-party storage partitions or model inference.', errors: [], failed: [], console: [] };
+page.on('console',message=>{if(message.type()==='error'||message.text().includes('SW'))report.console.push(message.text().slice(0,300));});
+context.on('requestfailed', request => report.failed.push({url:request.url(),error:request.failure()?.errorText}));
+page.on('pageerror', error => report.errors.push(error.message));
+try {
+  await page.goto(origin + '/editor?new=docx&locale=en');
+  await page.waitForFunction(() => { const frame = document.querySelector('#app iframe'); const api = frame?.contentWindow?.editor ?? frame?.contentWindow?.Asc?.editor; return api?.isLoadFullApi && api?.isDocumentLoadComplete; }, {}, { timeout: 120000 });
+  report.warm = await page.evaluate(async () => { const name = (await caches.keys()).find(n => n.startsWith('document-editor-runtime-')); const response = await (await caches.open(name)).match('/web-apps/apps/documenteditor/main/index.html'); return { isolated: crossOriginIsolated, policy: response?.headers.get('cross-origin-embedder-policy'), controller: navigator.serviceWorker.controller?.scriptURL }; });
+  await page.goto('http://127.0.0.1:' + parent.address().port + '/');
+  await page.frameLocator('#embedded').locator('body').evaluate(() => new Promise((resolve, reject) => {
+    const began = Date.now(); const timer = setInterval(() => {
+      const frame = document.querySelector('#app iframe'); const api = frame?.contentWindow?.editor ?? frame?.contentWindow?.Asc?.editor;
+      if (api?.isLoadFullApi && api?.isDocumentLoadComplete) { clearInterval(timer); resolve(true); }
+      else if (Date.now() - began > 60000) { clearInterval(timer); reject(Error('Nonisolated embed control did not load')); }
+    }, 100);
+  }));
+  report.controlMessages = await page.evaluate(() => window.embedMessages);
+  report.controlLoaded = true;
+  isolated = true;
+  await page.goto('http://127.0.0.1:' + parent.address().port + '/');
+  const child = page.frameLocator('#embedded').locator('body');
+  await child.waitFor();
+  await page.waitForTimeout(20000);
+  report.embedded = await child.evaluate(() => { const frame = document.querySelector('#app iframe'); let api, error; try { api = frame?.contentWindow?.editor ?? frame?.contentWindow?.Asc?.editor; } catch (e) { error = String(e); } return { isolated: crossOriginIsolated, framePresent: !!frame, fullApi: !!api?.isLoadFullApi, loaded: !!api?.isDocumentLoadComplete, controller: navigator.serviceWorker.controller?.scriptURL, frameError: error }; });
+  report.isolatedMessages = await page.evaluate(() => window.embedMessages);
+  report.parentIsolated = await page.evaluate(() => crossOriginIsolated);
+  report.compatible = report.embedded.fullApi && report.embedded.loaded;
+  report.policy = await child.evaluate(async version => {
+    const shell = await caches.match(new URL('/editor.html', location.origin).href, {cacheName:'document-editor-core-'+version});
+    const cache = await caches.open((await caches.keys()).find(name=>name.startsWith('document-editor-runtime-')));
+    const native = await cache.match('/web-apps/apps/documenteditor/main/index.html');
+    const workerVersion = await new Promise(resolve=>{
+      const channel=new MessageChannel();channel.port1.onmessage=event=>resolve(event.data.cacheVersion);
+      navigator.serviceWorker.controller.postMessage({type:'VERSION'},[channel.port2]);
+    });
+    const registrations=await navigator.serviceWorker.getRegistrations();
+    return {cacheNames:await caches.keys(),registrations:registrations.map(r=>({active:r.active?.state,waiting:r.waiting?.state,installing:r.installing?.state})),shellCoep:shell?.headers.get('cross-origin-embedder-policy'),shellCoop:shell?.headers.get('cross-origin-opener-policy'),nativeStoredCoep:native?.headers.get('cross-origin-embedder-policy'),workerVersion};
+  },version);
+  report.passed=report.controlLoaded && report.compatible && !report.parentIsolated && !report.embedded.isolated && report.policy.shellCoep==='require-corp' && report.policy.shellCoop==='same-origin' && report.policy.workerVersion===version && !report.errors.length;
+  if(!report.passed) process.exitCode=1;
+
+} catch (error) { report.error = String(error); report.compatible = false; report.passed=false; process.exitCode=1; }
+finally { await fs.writeFile('docs/evaluations/2026-10-03-isolated-cross-origin-embed-fixed.json', JSON.stringify(report, null, 2) + '\n'); console.log(JSON.stringify(report)); await context.close(); await browser.close(); await Promise.all([new Promise(resolve => server.close(resolve)), new Promise(resolve => parent.close(resolve))]); }

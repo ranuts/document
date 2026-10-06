@@ -1,0 +1,52 @@
+{
+  "version": "26.5",
+  "cases": [
+    {
+      "mode": "immediate",
+      "events": [
+        "/mark?bootstrap",
+        "/mark?install",
+        "/mark?activate"
+      ],
+      "registration": {
+        "installing": "installing"
+      },
+      "state": {
+        "controller": "http://127.0.0.1:52187/sw.js",
+        "caches": [
+          "minimal"
+        ],
+        "registrations": [
+          {
+            "active": "activated"
+          }
+        ]
+      },
+      "closed": true
+    },
+    {
+      "mode": "controlled",
+      "events": [
+        "/mark?bootstrap",
+        "/mark?install",
+        "/mark?activate"
+      ],
+      "registration": {
+        "installing": "installing"
+      },
+      "state": {
+        "controller": "http://127.0.0.1:52189/sw.js",
+        "caches": [
+          "minimal"
+        ],
+        "registrations": [
+          {
+            "active": "activated"
+          }
+        ]
+      },
+      "closed": true
+    }
+  ],
+  "closed": true
+}

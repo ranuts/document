@@ -52,18 +52,6 @@ header.bar .brand {
   color: var(--ran-color-text);
   text-decoration: none;
 }
-header.bar .logo {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--ran-radius-sm);
-  /* monochrome mark (Geist): ink on page bg, inverts with the theme */
-  background: var(--ran-color-text);
-  display: inline-grid;
-  place-items: center;
-  color: var(--ran-color-bg);
-  font-size: 13px;
-  font-weight: 700;
-}
 header.bar nav {
   display: flex;
   align-items: center;
@@ -88,12 +76,6 @@ header.bar nav a {
 header.bar nav a:hover {
   color: var(--ran-color-text);
   background: var(--ran-color-bg-hover);
-}
-.ghmark {
-  width: 15px;
-  height: 15px;
-  fill: currentColor;
-  flex: none;
 }
 /* ---------- language switcher ----------
    A disclosure button over a list of links (see bin/build-pages.mjs for why

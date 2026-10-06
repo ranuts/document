@@ -16,7 +16,8 @@
     "public/help/**",
     "public/changelog/**",
     "public/convert/**",
-    "public/document_editor_service_worker.js"
+    "public/document_editor_service_worker.js",
+    "packages/agent-core/vendor/wllama-count/**"
   ],
   "rules": {
     "no-debugger": "error",

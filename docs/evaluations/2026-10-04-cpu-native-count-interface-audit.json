@@ -1,0 +1,26 @@
+{
+  "scope": "Installed patched @wllama/wllama 3.6.1 source interface audit; not a runtime token-count experiment or upstream latest-version claim",
+  "files": {
+    "esm/wllama.d.ts": "59e314500678fb272d704ce93e94a728eacd1c77c34a1c29b6226c4521906fe6",
+    "esm/glue/messages.d.ts": "a5e63b44e16244100dbec474dff5d37fd58904defa3eb50bb82b81f0d4b34d8a",
+    "src/wllama.ts": "40837721100d8330d6fa7a08cf1cbaf9bb462338bef3ea9ee3776c33369a4f3f",
+    "cpp/wllama.cpp": "eaf6c00e2835f4940f9e1d040d9241fe2547f6aa075f213a9579c6f9346d899c",
+    "cpp/wllama-context.h": "480fe2d9168d3de0117da6d96161f41f86a491f8011ff9bb11c8bedde6488a88"
+  },
+  "nativeActions": [
+    "load",
+    "completion",
+    "embedding",
+    "rerank",
+    "get_result",
+    "cancel",
+    "test_backend_ops"
+  ],
+  "findings": {
+    "templateGetterOnly": true,
+    "chatUsesNativeTemplateParser": "oaicompat_chat_params_parse",
+    "chatPostsTask": "SERVER_TASK_TYPE_COMPLETION",
+    "countOnlyNativeAction": false,
+    "zeroLimitRuntimeEvidence": "2026-10-04-cpu-zero-token-limit-diagnostic.json"
+  }
+}

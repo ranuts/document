@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-02T05:36:43.600Z",
+  "scope": "New browser process starts offline using previously warmed isolated profile; no online request allowed",
+  "status": "failed",
+  "error": "Error: page.goto: net::ERR_INTERNET_DISCONNECTED at http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en\", waiting until \"load\"\u001b[22m\n",
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    }
+  ]
+}

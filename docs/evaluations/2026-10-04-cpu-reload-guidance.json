@@ -1,0 +1,51 @@
+{
+  "probeSHA256": "57007f50ccda12cea033051d66a5c9999ddf0fb471859e145023af33408110d0",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "invalidFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "true"
+      },
+      "correctedFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "false"
+      },
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [
+        "Reload the model in settings, then try your request again.Restore request"
+      ],
+      "previews": 0,
+      "stats": "",
+      "reply": [],
+      "failureState": {
+        "armed": false,
+        "injected": 1,
+        "terminated": 1
+      },
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true,
+      "recoveryReply": "Hello!Write to document",
+      "recoveryDocument": "\r\n"
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

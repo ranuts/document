@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-02T08:13:57.383Z",
+  "scope": "Actual built UI with isolated persistent Playwright Chromium Metal / GPU Qwen3-1.7B, fresh navigation per case; seven language rewrite probes, not full model/language acceptance",
+  "status": "completed",
+  "results": [
+    {
+      "id": "rewrite-en",
+      "locale": "en",
+      "prompt": "Rewrite this sentence in more formal English. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Alex will pay 1,250 EUR on 2026-10-08.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex will pay 1,250 EUR on 2026-10-08.",
+      "responseMs": 1899,
+      "stats": "Decode speed: 42.0 token/s · First token: 1.26 s · 23 tokens"
+    },
+    {
+      "id": "rewrite-zh-CN",
+      "locale": "zh-CN",
+      "prompt": "Rewrite this sentence in more formal Chinese. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Alex 将于 2026-10-08 支付 1,250 EUR。",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex 将于 2026-10-08 支付 1,250 EUR。",
+      "responseMs": 1651,
+      "stats": "Decode speed: 46.0 token/s · First token: 1.05 s · 26 tokens"
+    },
+    {
+      "id": "rewrite-ja",
+      "locale": "ja",
+      "prompt": "Rewrite this sentence in more formal Japanese. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Alexは2026-10-08に1,250 EURを支払います。",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alexは2026年10月8日には1,250 EURを支払います。",
+      "responseMs": 1739,
+      "stats": "Decode speed: 43.6 token/s · First token: 1.13 s · 24 tokens"
+    },
+    {
+      "id": "rewrite-ko",
+      "locale": "ko",
+      "prompt": "Rewrite this sentence in more formal Korean. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Alex는 2026-10-08에 1,250 EUR를 지불할 예정입니다.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex는 2026-10-08에 1,250 EUR를 지불할 예정입니다.",
+      "responseMs": 1893,
+      "stats": "Decode speed: 44.1 token/s · First token: 1.19 s · 29 tokens"
+    },
+    {
+      "id": "rewrite-de",
+      "locale": "de",
+      "prompt": "Rewrite this sentence in more formal German. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Alex wird am 2026-10-08 1,250 EUR bezahlen.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex wird am 2026-10-08 1,250 EUR bezahlen.",
+      "responseMs": 1724,
+      "stats": "Decode speed: 43.9 token/s · First token: 1.14 s · 24 tokens"
+    },
+    {
+      "id": "rewrite-es",
+      "locale": "es",
+      "prompt": "Rewrite this sentence in more formal Spanish. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Alex pagará 1,250 EUR el 2026-10-08.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex pagará 1,250 EUR el 2026-10-08.",
+      "responseMs": 1684,
+      "stats": "Decode speed: 44.4 token/s · First token: 1.12 s · 23 tokens"
+    },
+    {
+      "id": "rewrite-pt",
+      "locale": "pt",
+      "prompt": "Rewrite this sentence in more formal Portuguese. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Alex pagará 1,250 EUR em 2026-10-08.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex pagará 1,250 EUR em 2026-10-08.",
+      "responseMs": 1671,
+      "stats": "Decode speed: 44.1 token/s · First token: 1.10 s · 23 tokens"
+    }
+  ],
+  "errors": [],
+  "coverage": {
+    "model": "Qwen3-1.7B-q4f16_1-MLC",
+    "device": "Isolated Chromium with explicit Metal WebGPU flags",
+    "fullModelAndLanguageAcceptanceComplete": false
+  },
+  "review": "All seven outputs use the requested language and retain the source facts in these short samples. Six repeat the neutral source essentially unchanged; this does not establish a register/style improvement. Shared 1,250 EUR notation is not a locale-specific number-format test."
+}

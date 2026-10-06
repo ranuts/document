@@ -1,0 +1,30 @@
+[
+  {
+    "engine": "chromium",
+    "version": "151.0.7922.34",
+    "errors": [],
+    "before": 1,
+    "after": 2,
+    "status": ["已完成，可以撤销。"],
+    "undo": 1,
+    "redo": 2,
+    "previewCount": 0,
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "webkit",
+    "version": "26.5",
+    "errors": [],
+    "before": 1,
+    "after": 2,
+    "status": ["已完成，可以撤销。"],
+    "undo": 1,
+    "redo": 2,
+    "previewCount": 0,
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  }
+]

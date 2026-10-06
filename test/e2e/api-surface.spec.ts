@@ -240,18 +240,18 @@ test.describe('api surface sweep', () => {
               const onMsg = (e: MessageEvent) => {
                 const d = e.data;
                 if (d && d.type === 'onlyoffice-file-stream' && isArrayBuffer(d.buffer)) {
-                  window.removeEventListener('message', onMsg);
+                  win.parent.removeEventListener('message', onMsg);
                   resolve(true);
                 }
               };
-              window.addEventListener('message', onMsg);
+              win.parent.addEventListener('message', onMsg);
               try {
                 api.asc_DownloadAs(new win.Asc.asc_CDownloadOptions(api.documentFormatSave));
               } catch {
                 /* judged by the timeout */
               }
               setTimeout(() => {
-                window.removeEventListener('message', onMsg);
+                win.parent.removeEventListener('message', onMsg);
                 resolve(false);
               }, 8000);
             });

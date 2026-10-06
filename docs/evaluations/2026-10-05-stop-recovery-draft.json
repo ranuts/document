@@ -1,0 +1,35 @@
+{
+  "scope": "Actual CPU stream/Stop/reload with one controlled reload gate and draft preservation. Not natural-fault, quality, offline/PWA or physical-device certification.",
+  "probeSHA256": "304302ae213ea173895ac6b5d5c04e91c2fbd479fc1061a68d0b64b94eb70c61",
+  "plugin": "agent-plugin-BwcNzVdU.js",
+  "pluginSHA256": "6632762ebd9582d1b05121a19c7a28f9dc76d410c5c05c6df69a5bb4b613c861",
+  "errors": [],
+  "engine": "CPU · Qwen3 · 0.6B",
+  "documentBefore": "\r\n",
+  "partialText": "一位工匠在废弃的钟楼中，细心地修理着一台古老的钟表。他不仅修复了钟表的机械写入文档",
+  "waiting": {
+    "draft": "为什么旧钟会走慢？",
+    "sendDisabled": true,
+    "userMessages": 1,
+    "loads": 1,
+    "generations": 1
+  },
+  "ready": {
+    "draft": "为什么旧钟会走慢？",
+    "sendDisabled": false,
+    "userMessages": 1,
+    "loads": 1,
+    "generations": 1
+  },
+  "sent": {
+    "draft": "",
+    "userMessages": 2,
+    "loads": 1,
+    "generations": 2
+  },
+  "guidance": [],
+  "previewCount": 0,
+  "documentAfter": "\r\n",
+  "passed": true,
+  "contextClosed": true
+}

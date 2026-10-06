@@ -1,0 +1,4 @@
+{
+  "sharedSystemSuffix": "For summaries, preserve the relationships, not just the keywords. State who proposed what action and which team must perform it; state the exact prerequisite with its actor and object; separately state each explicit current incomplete or unapproved fact. A requirement is not a report that it was satisfied. Preserve negation and proposal status. Do not add causal explanations, reasons, outcomes, deadlines or certainty absent from the source. Remove unrelated topics. Use natural source-language wording.",
+  "finalUserSuffix": "Write one shorter sentence containing the proposal, its prerequisite and every specified current status. Keep the prerequisite distinct from the current status; use neutral conjunctions rather than inventing a causal explanation. Return the requested JSON only."
+}

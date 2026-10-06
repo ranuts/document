@@ -1,0 +1,111 @@
+{
+  "scope": "Production UI real Metal GPU Qwen3-4B-q4f16_1-MLC planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 4486,
+      "feedback": [
+        "A1\n12A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true,
+      "diagnosticResponseCaptured": false
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "Calculate the sum of range A1:A3 and report the result only. Do not write any destination cell.",
+      "expected": "A1:A3: 42",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 4776,
+      "feedback": [],
+      "visibleErrors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": false,
+      "diagnosticResponseCaptured": true,
+      "rawResponse": "<think>\n\n</think>\n\n{\n  \"tool\": \"sum_range\",\n  \"input\": {\n    \"range\": \"A1:A3\",\n    \"target\": \"\"\n  }\n}"
+    },
+    {
+      "kind": "pptx",
+      "prompt": "Read the plain text of the current presentation. Do not add or modify anything.",
+      "expected": "No readable text was found.",
+      "before": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "elapsedMs": 3332,
+      "feedback": [
+        "No readable text was found.No readable text was found."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "resultMatched": true,
+      "diagnosticResponseCaptured": true,
+      "rawResponse": "<think>\n\n</think>\n\n{\n  \"tool\": \"get_presentation_text\",\n  \"input\": {\n    \"maxChars\": 8000\n  }\n}"
+    }
+  ],
+  "errors": [],
+  "assessment": "Confirmed sum response selects correct tool but supplies empty optional target; exact parser rejects empty strings. First cell-read row has no diagnostic runtime output, excluded from diagnostic conclusions.",
+  "limitations": [
+    "Temporary built instrumentation restored after probe; product sources unchanged.",
+    "Only sum and PPT response capture confirmed.",
+    "Cause established for this 4B sum case only, not the other models.",
+    "PPT selection not measured."
+  ]
+}

@@ -19,7 +19,7 @@ const FONT_REGEX = /\.(ttf|woff2?|otf|eot)(\?.*)?$/;
 
 /** Keep in sync with DEPLOY_COUPLED in public/sw.js and the no-cache group in public/_headers. */
 const DEPLOY_COUPLED =
-  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent)\.js$|^\/ranui-iife\//;
+  /^\/(?:home|landing)\.css$|^\/(?:lang-switch|sw-register|open-local|landing-prefetch|history-recent|theme-presentation)\.js$|^\/ranui-iife\//;
 
 const isHtmlRequest = (mode: string, pathname: string): boolean =>
   mode === 'navigate' || pathname.endsWith('.html') || pathname === '/' || pathname.endsWith('/');

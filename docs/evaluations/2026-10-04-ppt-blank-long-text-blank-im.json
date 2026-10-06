@@ -1,0 +1,134 @@
+{
+  "probeSHA256": "32d328dced8cd98ac91dee91165e502c6b96ecbc9537e6945595b9b19cc656b7",
+  "cases": [
+    {
+      "id": "multiline",
+      "text": "Line 1: 四季 日本 ä / native text.\nLine 2: 四季 日本 ä / native text.\nLine 3: 四季 日本 ä / native text.\nLine 4: 四季 日本 ä / native text.\nLine 5: 四季 日本 ä / native text.\nLine 6: 四季 日本 ä / native text."
+    },
+    {
+      "id": "long-word",
+      "text": "ExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinary 四季 日本 ä END"
+    }
+  ],
+  "scope": "Actual default GPU IM add-slide-text literal planning and native PPT layout, same two predeclared examples after native blank layout change; warm profile/network, no physical-device or all-format acceptance.",
+  "rows": [
+    {
+      "setup": {
+        "index": 6,
+        "type": 0,
+        "count": 0
+      },
+      "id": "multiline",
+      "text": "Line 1: 四季 日本 ä / native text.\nLine 2: 四季 日本 ä / native text.\nLine 3: 四季 日本 ä / native text.\nLine 4: 四季 日本 ä / native text.\nLine 5: 四季 日本 ä / native text.\nLine 6: 四季 日本 ä / native text.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "before": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": []
+      },
+      "after": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": null,
+            "x": 10.16,
+            "y": 5.715,
+            "width": 220.14333333333335,
+            "height": 48.27000000000001,
+            "contentHeight": 45.720000000000006
+          }
+        ]
+      },
+      "visibleErrors": [],
+      "previews": 0,
+      "applied": true,
+      "literalExact": false,
+      "boxInside": true,
+      "contentHeightFits": true,
+      "undo": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": []
+      },
+      "redo": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": null,
+            "x": 10.16,
+            "y": 5.715,
+            "width": 220.14333333333335,
+            "height": 48.27000000000001,
+            "contentHeight": 45.720000000000006
+          }
+        ]
+      },
+      "undoExact": true,
+      "redoExact": true,
+      "screenshotPath": ".scratch/ai-csp/ppt-blank-long-text-multiline.png",
+      "screenshotSHA256": "331e8be2f777a22489cb5a594b939b6218bc8b646a2b6316a39dc33cca189731"
+    },
+    {
+      "setup": {
+        "index": 6,
+        "type": 0,
+        "count": 0
+      },
+      "id": "long-word",
+      "text": "ExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinary 四季 日本 ä END",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "before": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": []
+      },
+      "after": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": "ExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinary 四季 日本 ä END\r\n",
+            "x": 10.16,
+            "y": 5.715,
+            "width": 220.14333333333335,
+            "height": 78.75,
+            "contentHeight": 60.96000000000001
+          }
+        ]
+      },
+      "visibleErrors": [],
+      "previews": 0,
+      "applied": true,
+      "literalExact": false,
+      "boxInside": true,
+      "contentHeightFits": true,
+      "undo": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": []
+      },
+      "redo": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": "ExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinary 四季 日本 ä END\r\n",
+            "x": 10.16,
+            "y": 5.715,
+            "width": 220.14333333333335,
+            "height": 78.75,
+            "contentHeight": 60.96000000000001
+          }
+        ]
+      },
+      "undoExact": true,
+      "redoExact": true,
+      "screenshotPath": ".scratch/ai-csp/ppt-blank-long-text-long-word.png",
+      "screenshotSHA256": "6e952a5579b783b2ae14f0230c2b511813384708db749f5edca1523cb903ff99"
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

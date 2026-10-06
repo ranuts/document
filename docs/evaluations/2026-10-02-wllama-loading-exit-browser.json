@@ -1,0 +1,10 @@
+{
+  "status": "rejected",
+  "name": "RuntimeError",
+  "message": "Wllama worker terminated",
+  "elapsedMs": 0,
+  "terminated": 1,
+  "workerEntered": true,
+  "date": "2026-10-02T07:49:28.049Z",
+  "scope": "Actual built SDK in isolated WebKit; explicit exit during deliberately blocked Worker initialization, tiny Blob; no model inference"
+}

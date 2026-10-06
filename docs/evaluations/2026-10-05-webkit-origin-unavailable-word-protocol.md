@@ -1,0 +1,5 @@
+# WebKit unavailable origin: direct IM Word write
+
+Extend prior native CPU cache restoration 1fda099 in a fresh desktop WebKit context, unchanged production d71a1e8. Owned forwarding server 5194 forwards 5193 only for initial warm-up. Load the default CPU model naturally, require service-worker controller, close the online page and server connections/server. Browser remains online; this is origin unavailability, not full disconnection.
+
+New native Word page must restore the default CPU model with no manual reload/source changes. Select the existing tools task and send `Insert the exact text WEBKIT_WORD_20261005 at the cursor.` through IM. Require native GetText to be exactly `WEBKIT_WORD_20261005\r\n`, actual native Undo to restore the initial CRLF, and Redo to restore the exact edited text. Record raw response, errors, requests, readiness and narrow `.agent-plan-preview` count; no preview interaction or confirmation. Preserve failures and cleanup. Do not infer Save/reopen or general tool/language/semantic competence from one literal write. Prior controlled-offline failures and general summary-quality failures remain unresolved.

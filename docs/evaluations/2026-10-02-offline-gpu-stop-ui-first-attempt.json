@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-02T05:57:39.737Z",
+  "scope": "New browser process starts offline using previously warmed isolated profile; no online request allowed; actual streaming stop and follow-up inference",
+  "status": "failed",
+  "policy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+  "controller": "http://127.0.0.1:5193/sw.js",
+  "adapter": {
+    "vendor": "apple",
+    "architecture": "metal-3"
+  },
+  "loadedEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "text": [
+    "Hello.Write to document"
+  ],
+  "stats": "Decode speed: 31.6 token/s · First token: 1.06 s · 2 tokens",
+  "responseMs": 1299,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "stopMs": 43,
+  "stoppedTextStable": true,
+  "error": "TimeoutError: page.waitForFunction: Timeout 60000ms exceeded."
+}

@@ -1,0 +1,11 @@
+# Browser execution of Ministral tokenizers
+
+Fresh owned Chromium uses the installed WebLLM bundle's actual embedded `libExports.Tokenizer.fromJSON`, exposed by appending one diagnostic export to a served copy. The SDK source itself is unchanged; raw and instrumented hashes are retained. A temporary local Vite harness serves the two pinned tokenizer artifacts from the preceding audit. No GPU model/engine is loaded and no prior production browser-cache artifact is substituted or certified.
+
+Six fixtures per tokenizer cover 640/date text, payer/recipient English, Chinese not-yet-approved text, Unicode including emoji/line break/tab/spacing, system/instruction boundary tokens, and THINK markers. All twelve encode→decode operations reproduce source characters exactly. First five fixtures produce identical token IDs across MLC/official tokenizers. Combined boundary sequence yields `[1,17,6775,18,3,1054,1052,1048,4,2]`, recognizing BOS, system and instruction delimiters and EOS. Vocabulary size is 131072 in both.
+
+As expected from the file audit, MLC encodes `[THINK]secret[/THINK]` as `[34,54870,35]`; official treats the marker spelling as ordinary text. Both decode their own sequences exactly. This is an observed behavioral difference, not proof of a failure cause. No writing instruction explicitly included THINK markers in the Ministral runs; model-generated token IDs and internal prompt assembly have not been captured.
+
+Conclusion: the fixtures do not reproduce a tokenizer roundtrip or ordinary numeric token-ID mismatch. This narrows the investigation; it does not certify all Unicode/token splits, the model's cached tokenizer bytes, compiled weights, the full generation pipeline or conversation-template assembly. Next check should inspect actual prompt assembly/template versus expected boundaries and consider compiled-artifact correctness. The harness completes with no page errors, closes browser and server, and leaves product/model defaults unchanged.
+
+Verifier checks driver, actual installed SDK, diagnostic-export reconstruction and tokenizer artifact hashes before validating the exact fixture matrix and IDs. Scratch files are prerequisites for reproduction. This is not a general writing, physical-device, offline/cache-integrity, privacy or performance acceptance test.

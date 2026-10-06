@@ -1,0 +1,58 @@
+{
+  "scope": "Source-built SDK download cancellation using mocked network/storage, no model download",
+  "bundleSHA256": "602231dcbb36f210a11e9ddcf5d8c57025d890001bcb989c803598026d8df1ff",
+  "results": [
+    {
+      "phase": "metadata",
+      "calls": [
+        {
+          "url": "https://huggingface.co/example/model/raw/pinned/model.gguf",
+          "hasSignal": false,
+          "headers": {
+            "X-Test": "marker"
+          }
+        },
+        {
+          "url": "https://huggingface.co/example/model/resolve/pinned/model.gguf",
+          "hasSignal": true,
+          "headers": {
+            "X-Test": "marker"
+          }
+        }
+      ],
+      "deletes": 0,
+      "result": {
+        "state": "pending"
+      }
+    },
+    {
+      "phase": "cache-head",
+      "calls": [
+        {
+          "url": "https://models.example/model.gguf",
+          "hasSignal": false,
+          "headers": {
+            "X-Test": "marker"
+          }
+        }
+      ],
+      "deletes": 0,
+      "result": {
+        "state": "pending"
+      }
+    },
+    {
+      "phase": "model-head",
+      "calls": [
+        {
+          "url": "https://models.example/model.gguf",
+          "hasSignal": false
+        }
+      ],
+      "deletes": 0,
+      "result": {
+        "state": "pending"
+      }
+    }
+  ]
+}

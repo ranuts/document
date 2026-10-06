@@ -1,0 +1,24 @@
+{
+  "scope": "Isolated desktop Chromium production homepage; controlled Service Worker registration failures and Playwright blocked registration. Online navigation, no physical browser privacy mode claim.",
+  "results": [
+    {
+      "mode": "blocked",
+      "errors": [],
+      "openVisible": true,
+      "registerCalls": null
+    },
+    {
+      "mode": "rejected",
+      "errors": [],
+      "openVisible": true,
+      "registerCalls": 1
+    },
+    {
+      "mode": "synchronous",
+      "errors": [],
+      "openVisible": true,
+      "registerCalls": 1
+    }
+  ],
+  "allPassed": true
+}

@@ -1,0 +1,309 @@
+{
+  "probeSHA256": "c316e61dc3d3b2f6f34305a929fd8a87eacb03b7c1a2fcf68b01f005def54649",
+  "markers": {
+    "docx": "IM_WORD_四季_日本_ä_2026",
+    "xlsx": "IM_CELL_四季_日本_ä_2026",
+    "pptx": "IM_PPT_四季_日本_ä_2026"
+  },
+  "diagnostic": "CDP observes caught exceptions without substituting requests or results",
+  "sources": {
+    "lib/agent-plugin/document-tool-sequence.ts": "7078721d4b34134047407ef72aeba52bd7dd9661b4612c935dad964091b2181a",
+    "lib/agent-plugin/office-tools.ts": "0a4f73939c014ac0561453a72dafd7afdae8e6e91f4746d4698eebdc40ffb89c"
+  },
+  "scope": "Current production preview, warm GPU model readiness. Real deterministic English IM read A1:C3 then text write B2, seeded neighbors and formulas, native Undo/Redo, Save and file chooser reopen. No model-output substitution; no general instruction-quality certification.",
+  "results": [
+    {
+      "type": "xlsx",
+      "engine": "WebGPU · Qwen3 · 1.7B",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "17",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "34",
+            "formula": "B1*2",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "Original target",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "Keep right",
+            "formula": "",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "92",
+            "formula": "A3+1",
+            "format": "General"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": "",
+            "format": "General"
+          }
+        ]
+      ],
+      "prompt": "Read A1:C3, then set B2 to \"00123\".",
+      "after": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "17",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "34",
+            "formula": "B1*2",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "00123",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "Keep right",
+            "formula": "",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "92",
+            "formula": "A3+1",
+            "format": "General"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": "",
+            "format": "General"
+          }
+        ]
+      ],
+      "activities": [
+        "Done. Result checked; use Undo if needed.A1:C3\nA1: \"邻居 四季\"\nB1: \"17\"\nC1: \"34\"\nA2: \"日本 ä\"\nB2: \"Original target\"\nC2: \"Keep right\"\nA3: \"91\"\nB3: \"92\"\nC3: \"Unchanged END\""
+      ],
+      "reply": [
+        "Read A1:C3, then set B2 to \"00123\"."
+      ],
+      "neighborsExact": true,
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "17",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "34",
+            "formula": "B1*2",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "Original target",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "Keep right",
+            "formula": "",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "92",
+            "formula": "A3+1",
+            "format": "General"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": "",
+            "format": "General"
+          }
+        ]
+      ],
+      "afterRedo": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "17",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "34",
+            "formula": "B1*2",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "00123",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "Keep right",
+            "formula": "",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "92",
+            "formula": "A3+1",
+            "format": "General"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": "",
+            "format": "General"
+          }
+        ]
+      ],
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/excel-english-sequence-im-saved.xlsx",
+        "sha256": "dc0cef4d8e6698e3ef02559432aed7734ade752bfc70a60129a4153ac6df1999",
+        "bytes": 8572,
+        "failure": null
+      },
+      "reopened": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "17",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "34",
+            "formula": "B1*2",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "00123",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "Keep right",
+            "formula": "",
+            "format": "General"
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": "",
+            "format": "General"
+          },
+          {
+            "value": "92",
+            "formula": "A3+1",
+            "format": "General"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": "",
+            "format": "General"
+          }
+        ]
+      ],
+      "reopenExact": true
+    }
+  ],
+  "errors": [],
+  "exceptions": [],
+  "passed": true
+}

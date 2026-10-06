@@ -1,0 +1,15 @@
+{
+  "browser": "Chromium",
+  "scope": "Minimal same-origin synthetic cache/localStorage/IndexedDB/SW persistence across closing and relaunching isolated browser process; no model or editor loaded",
+  "phases": [
+    {
+      "phase": 0,
+      "error": "Error: page.evaluate: TypeError: r.url is not a function\n    at eval (eval at evaluate (:311:30), <anonymous>:1:173)\n    at Array.map (<anonymous>)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:164)\n    at async Promise.all (index 0)\n    at async eval (eval at evaluate (:311:30), <anonymous>:1:57)\n    at async <anonymous>:337:30"
+    },
+    {
+      "phase": 1,
+      "error": "Error: page.evaluate: TypeError: r.url is not a function\n    at eval (eval at evaluate (:311:30), <anonymous>:1:173)\n    at Array.map (<anonymous>)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:164)\n    at async Promise.all (index 0)\n    at async eval (eval at evaluate (:311:30), <anonymous>:1:57)\n    at async <anonymous>:337:30"
+    }
+  ],
+  "persisted": false
+}

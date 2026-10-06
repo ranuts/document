@@ -1,0 +1,7 @@
+# Remaining-language transfer of frozen sentence-position candidate
+
+Retain the exact previously frozen summary-single-candidate.json: shared explicit-status system suffix versus the same suffix plus final-user single-sentence directive. No candidate edits after the English/Japanese results. Freeze five new unused Chinese/Korean/German/Spanish/Portuguese sources and oracle rubrics before inference. Oracle labels/rubrics never enter the model request.
+
+Run ten actual native Word IM summaries with the same configured local CPU Qwen2.5 3B, temperature/schema/profile and product guards. Both native count and completion use the same request transformation. Compare each fixed-order baseline/candidate pair; record exact request-only differences and model outputs, no replacement responses or punctuation postprocessing. Every output must preserve all roles, prerequisite objects and current negative states, source language, one shorter sentence, omission of irrelevant topic and no unsupported facts. Refusal is not quality success; application and Undo/Redo are separate mechanics.
+
+This is one repetition of five sources, not global semantic acceptance, randomized benchmarking, Save/reopen, offline/PWA, physical mobile or privacy certification. Preserve partial failures. Previously observed English/Japanese cases remain separate historical evidence and are not retuned or rerun. No product/default change; even complete case success requires other operations/models/latency and additional unused material. These sources become observed after the run.

@@ -1,0 +1,43 @@
+{
+  "version": "26.5",
+  "cases": [
+    {
+      "mode": "immediate",
+      "events": [],
+      "registration": {
+        "registerStartedWithoutAwait": true
+      },
+      "waitError": "TimeoutError: page.waitForFunction: Timeout 5000ms exceeded.",
+      "state": {
+        "controller": null,
+        "caches": [],
+        "registrations": []
+      },
+      "closed": true
+    },
+    {
+      "mode": "controlled",
+      "events": [
+        "/mark?bootstrap",
+        "/mark?install",
+        "/mark?activate"
+      ],
+      "registration": {
+        "registerStartedWithoutAwait": true
+      },
+      "state": {
+        "controller": "http://127.0.0.1:52222/sw.js",
+        "caches": [
+          "minimal"
+        ],
+        "registrations": [
+          {
+            "active": "activated"
+          }
+        ]
+      },
+      "closed": true
+    }
+  ],
+  "closed": true
+}

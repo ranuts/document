@@ -1,0 +1,11 @@
+# Silent update: compare serving versions
+
+The serial Chromium E2E was previously a false positive: its asynchronous waitForFunction predicate could return a false handle immediately. Correct explicit expect.poll reproduced a real failure after 90 seconds: the original vendor controller remained active. No new controller takeover had been established.
+
+The incoming worker creates its runtime cache while installing. healStaleController treated that cache as evidence the incoming build was already used and declined promotion. The product now compares actual outgoing/incoming VERSION replies; bootstrap captures the outgoing version before activation can terminate its worker. Missing or non-string/empty vendor versions cannot establish a change.
+
+Automatic promotion checks local unsaved work before querying and again immediately before promotion. It queries outgoing CLIENT_COUNT after confirming versions, and requires exactly one confirmed editor; other editors and unknown/malformed counts keep the candidate waiting. A session-storage recheck prevents overlapping callbacks from promoting twice. This is a conservative controlled-client snapshot, not atomic cross-window dirty consensus: uncontrolled windows and windows appearing after the final count are outside its guarantee. Embedded editor promotion remains disabled by the existing bootstrap gate.
+
+Regression evidence: initial cache/version/dirty/concurrency regressions failed against the earlier implementation, then passed. Eight malformed/count cases subsequently failed, then passed. A delayed VERSION regression with another editor opening failed before moving CLIENT_COUNT after version confirmation, then passed. Targeted suite: 68 tests. Final build and lint passed; the full suite passed 116 files / 4,175 tests; the corrected serial Chromium E2E passed in 22.3 seconds. Read-only review found no remaining Important in this minimal fix and retained the controlled-client snapshot limitation.
+
+The E2E rewrites only the served dist/sw.js vendor stamp to simulate a changed build and restores its exact original content afterward. It verifies actual controller VERSION and editor readiness without an update notice; it is not a real deployment of two release artifacts, a native Save round trip or physical-device acceptance.

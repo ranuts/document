@@ -1,0 +1,37 @@
+{
+  "scope": "Production UI, real Qwen3-1.7B Metal GPU planning, document API and editor Undo on isolated new Word/Excel/PPT documents",
+  "results": [
+    {
+      "kind": "xlsx",
+      "prompt": "Write the plain value Hello tools to cell A1.",
+      "before": "",
+      "after": "",
+      "elapsedMs": 14,
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "visibleErrors": [
+        "The request could not be completed. Try again or check settings."
+      ],
+      "feedback": [],
+      "previewCount": 0,
+      "operationPassed": false
+    },
+    {
+      "kind": "pptx",
+      "prompt": "Add one new slide using the current layout.",
+      "before": 1,
+      "after": 1,
+      "elapsedMs": 1557,
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "visibleErrors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "feedback": [],
+      "previewCount": 0,
+      "operationPassed": false
+    }
+  ],
+  "errors": [],
+  "diagnostics": [
+    "api-diagnostic catch TypeError: Converting circular structure to JSON\n    --> starting at object with constructor 'e'\n    |     property 'FontLoader' -> object with constructor 'e'\n    --- property 'Api' closes the circle TypeError: Converting circular structure to JSON\n    --> starting at object with constructor 'e'\n    |     property 'FontLoader' -> object with constructor 'e'\n    --- property 'Api' closes the circle\n    at JSON.stringify (<anonymous>)\n    at f (http://127.0.0.1:5193/assets/agent-plugin-PC8eYgK4.js:10:1265)\n    at rt (http://127.0.0.1:5193/assets/agent-plugin-PC8eYgK4.js:10:1373)\n    at pt (http://127.0.0.1:5193/assets/agent-plugin-PC8eYgK4.js:122:43255)\n    at Object.onSend (http://127.0.0.1:5193/assets/agent-plugin-PC8eYgK4.js:122:32780)\n    at In.submit (http://127.0.0.1:5193/assets/agent-plugin-PC8eYgK4.js:122:9606)\n    at HTMLTextAreaElement.<anonymous> (http://127.0.0.1:5193/assets/agent-plugin-PC8eYgK4.js:122:4376)"
+  ]
+}

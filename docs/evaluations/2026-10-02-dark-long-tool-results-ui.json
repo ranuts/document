@@ -1,0 +1,49 @@
+{
+  "scope": "Dark-theme real IM long single-cell read on desktop Chromium Metal Qwen3-1.7B, 1440x960 and 390x844 viewport emulation. Isolated spreadsheet.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "LONG_VALUE_",
+      "before": {
+        "values": [
+          "LONG_VALUE_abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij 付款尚未获批。",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "LONG_VALUE_abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij 付款尚未获批。",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 1985,
+      "feedback": [
+        "A1\nLONG_VALUE_abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij 付款尚未获批。"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true,
+      "disclosureCount": 0,
+      "resultVisible": true,
+      "mobileOverflow": false
+    }
+  ],
+  "errors": [],
+  "visualReview": "Viewed both screenshot artifacts. Long unbroken text wraps inside panel, result shown once without disclosure/preview, fixed input remains visible at bottom. No horizontal page overflow at 390px.",
+  "limitations": [
+    "Viewport emulation only, not physical phone/browser or virtual keyboard.",
+    "Grouped multi-tool activity, long conversations, seven UI locales and keyboard accessibility remain unverified.",
+    "Initial fixture failed because async paste was followed by selection changes; final fixture waits for A1 value before moving selection."
+  ]
+}

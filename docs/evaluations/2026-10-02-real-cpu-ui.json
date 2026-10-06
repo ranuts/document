@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-02T04:44:19.610Z",
+  "runtime": "Isolated persistent Chromium, forced no GPU, actual editor and default local fallback",
+  "status": "completed",
+  "loadMs": 3813,
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "firstVisibleMs": 24428,
+  "totalMs": 24431,
+  "text": [
+    "hello.Write to document"
+  ],
+  "statistics": "3 tokens",
+  "errors": [],
+  "conversationRequests": []
+}

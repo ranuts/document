@@ -190,9 +190,10 @@ r-button[type='text']::part(content) {
   z-index: 10000;
   display: flex;
   flex-direction: column;
-  width: 360px;
-  max-width: 90vw;
-  height: 100vh;
+  width: min(var(--agent-panel-width, 400px), 100vw);
+  max-width: 100vw;
+  height: 100dvh;
+  container: agent-panel / size;
   /* The 360px has to include the border, or the panel is 361px wide while the
      editor below only gives up 360px and a hairline of document shows through. */
   box-sizing: border-box;
@@ -209,9 +210,40 @@ r-button[type='text']::part(content) {
   transition: width var(--ran-motion-duration-base) ease;
 }
 body.agent-docked #app iframe {
-  width: calc(100% - 360px) !important;
+  width: calc(100% - var(--agent-panel-width, 400px)) !important;
+}
+.agent-panel-resizer {
+  position: absolute;
+  left: -4px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  z-index: 1;
+  cursor: col-resize;
+  touch-action: none;
+}
+.agent-panel-resizer:hover,
+.agent-panel-resizer:focus-visible {
+  background: var(--ran-color-border);
+  outline: none;
+}
+.agent-panel-resize-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  cursor: col-resize;
+}
+body.agent-panel-resizing {
+  user-select: none;
+  cursor: col-resize;
+}
+body.agent-panel-resizing #app iframe {
+  transition: none;
 }
 @media (max-width: 480px) {
+  .agent-panel-resizer {
+    display: none;
+  }
   body.agent-docked #app iframe {
     width: 100% !important;
   }
@@ -228,6 +260,67 @@ body.agent-docked #app iframe {
 }
 .agent-panel-title {
   font-weight: 600;
+}
+.agent-session-bar {
+  padding: var(--ran-space-2) var(--ran-space-4) var(--ran-space-3);
+  border-bottom: 1px solid var(--ran-color-border-secondary);
+}
+.agent-session-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ran-space-2);
+}
+.agent-document-scope {
+  display: inline-flex;
+  max-width: 100%;
+  margin-top: var(--ran-space-2);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-muted);
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  line-height: 1.2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.agent-document-scope:empty {
+  display: none;
+}
+.agent-session-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  color: inherit;
+  background: var(--ran-color-bg-elevated);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  padding: var(--ran-space-2);
+  font: inherit;
+  font-size: var(--ran-text-label-2);
+  text-overflow: ellipsis;
+}
+.agent-session-select:focus-visible,
+.agent-panel-clear:focus-visible {
+  outline: 2px solid var(--ran-blue-700);
+  outline-offset: 2px;
+}
+.agent-panel-clear {
+  flex: 0 0 var(--ran-size-7);
+  width: var(--ran-size-7);
+  height: var(--ran-size-7);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text-secondary);
+  cursor: pointer;
+}
+.agent-panel-clear:hover {
+  background: var(--ran-color-bg-hover);
+  color: var(--ran-color-text);
 }
 .agent-panel-close {
   border: none;
@@ -265,6 +358,109 @@ body.agent-docked #app iframe {
 .agent-panel-settings-hidden {
   display: none;
 }
+.agent-history-options {
+  min-width: 0;
+  margin: 0;
+  padding: var(--ran-space-3);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-md);
+  font-size: var(--ran-text-label-2);
+  line-height: 1.5;
+}
+.agent-history-options legend {
+  padding: 0 var(--ran-space-1);
+  color: var(--ran-color-text-secondary);
+}
+.agent-history-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ran-space-2);
+}
+.agent-history-status {
+  margin: var(--ran-space-2) 0;
+  color: var(--ran-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.agent-history-actions,
+.agent-history-confirmation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
+}
+.agent-history-confirmation {
+  margin-top: var(--ran-space-3);
+}
+.agent-history-confirmation[hidden] {
+  display: none;
+}
+.agent-history-confirmation span {
+  flex-basis: 100%;
+}
+.agent-history-options button {
+  min-height: var(--ran-size-7);
+  max-width: 100%;
+  padding: var(--ran-space-1) var(--ran-space-2);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text);
+  font: inherit;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.agent-history-options button:disabled {
+  color: var(--ran-color-text-disabled);
+  cursor: default;
+}
+.agent-history-options button:focus-visible,
+.agent-history-options input:focus-visible,
+.agent-generation-options input:focus-visible,
+.agent-generation-options textarea:focus-visible,
+.agent-generation-options summary:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.agent-generation-options {
+  font-size: var(--ran-text-label-2);
+  line-height: 1.5;
+}
+.agent-generation-options summary {
+  cursor: pointer;
+}
+.agent-generation-options label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-1);
+  margin-top: var(--ran-space-2);
+}
+.agent-generation-options input,
+.agent-generation-options textarea {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  padding: var(--ran-space-2);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text);
+  font: inherit;
+}
+.agent-generation-options textarea {
+  resize: vertical;
+}
+.agent-generation-details {
+  display: block;
+  margin-top: var(--ran-space-2);
+  color: var(--ran-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.agent-generation-details:empty {
+  display: none;
+}
+.agent-generation-status {
+  margin: var(--ran-space-2) 0 0;
+  color: var(--ran-color-text-secondary);
+}
 .agent-panel-key-label {
   font-size: 12px;
   color: var(--ran-color-text-secondary);
@@ -279,9 +475,144 @@ body.agent-docked #app iframe {
    @ranuts/chat-ui ChatView (it injects its own `cui-*` styles). It must flex to
    fill the panel's remaining height below the header/settings/toolbar. */
 .agent-panel .cui-root {
+  --cui-bg: var(--ran-color-bg-elevated);
+  --cui-text: var(--ran-color-text);
+  --cui-muted: var(--ran-color-text-secondary);
+  --cui-border: var(--ran-color-border);
+  --cui-accent: var(--ran-color-primary);
+  --cui-accent-contrast: var(--ran-color-primary-text);
+  --cui-user-bg: var(--ran-color-bg-active);
   flex: 1 1 auto;
   min-height: 0;
   height: auto;
+}
+.agent-panel .cui-messages {
+  gap: var(--ran-space-6);
+  padding: var(--ran-space-6) var(--ran-space-4);
+}
+.agent-panel .cui-msg-agent,
+.agent-panel .cui-msg-error,
+.agent-panel .cui-activity {
+  max-width: 72ch;
+}
+.agent-panel .cui-msg-user {
+  max-width: min(88%, 64ch);
+}
+.agent-panel .cui-footer {
+  padding: var(--ran-space-3) var(--ran-space-4) var(--ran-space-4);
+  border-top: 1px solid var(--ran-color-border-secondary);
+}
+.agent-panel .cui-composer {
+  border-radius: var(--ran-radius-md);
+  border-color: var(--ran-color-border);
+}
+.agent-panel .cui-composer:focus-within {
+  border-color: var(--ran-color-border-active);
+  box-shadow: var(--ran-focus-ring);
+}
+.agent-panel .cui-empty {
+  max-width: 28ch;
+  font-size: var(--ran-text-heading-3);
+  font-weight: var(--ran-text-heading-weight);
+  line-height: 1.45;
+}
+.agent-panel .cui-send {
+  width: var(--ran-size-7);
+  height: var(--ran-size-7);
+}
+.agent-panel .cui-message-actions .cui-apply {
+  min-height: var(--ran-size-7);
+  padding: var(--ran-space-1) var(--ran-space-2);
+  border: 1px solid var(--ran-color-border);
+  border-radius: var(--ran-radius-sm);
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+  font-weight: var(--ran-text-button-weight);
+}
+.agent-panel .cui-message-actions .cui-apply:hover:not(:disabled) {
+  border-color: var(--ran-color-border-hover);
+  background: var(--ran-color-bg-hover);
+  color: var(--ran-color-text);
+}
+.agent-panel .cui-message-actions .cui-apply[data-state='verified'] {
+  border-color: var(--ran-color-success);
+  color: var(--ran-color-success);
+}
+.agent-panel .cui-message-actions .cui-apply:focus-visible {
+  outline: 2px solid var(--ran-blue-700);
+  outline-offset: 2px;
+}
+.agent-panel .cui-msg-tool .cui-bubble,
+.agent-panel .cui-send:disabled {
+  background: var(--ran-color-bg-muted);
+  color: var(--ran-color-text-secondary);
+}
+.agent-panel .cui-scroll-bottom {
+  color: var(--ran-color-text-secondary);
+}
+.agent-plan-mode {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ran-color-text-secondary);
+  font-size: 12px;
+}
+.agent-writing-task,
+.agent-writing-language {
+  min-width: 0;
+  max-width: 100%;
+  border: 0;
+  padding: 5px 2px;
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+.agent-plan-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  margin: 0;
+  border: 1px solid var(--ran-color-border);
+  border-radius: 8px;
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text);
+  max-height: none;
+  overflow: auto;
+  flex-shrink: 0;
+}
+.agent-plan-preview[hidden],
+.agent-writing-task[hidden],
+.agent-writing-language[hidden] {
+  display: none;
+}
+.agent-plan-target,
+.agent-plan-status {
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.agent-plan-before,
+.agent-plan-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  margin: 0;
+}
+.agent-plan-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.agent-panel .cui-msg-error .cui-bubble {
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--ran-color-danger);
+  border-radius: 0;
+  padding: 2px 0 2px 12px;
+  color: var(--ran-color-text-secondary);
 }
 
 /* r-select draws its own control — host carries layout only. */
@@ -291,7 +622,7 @@ body.agent-docked #app iframe {
 }
 .agent-panel-note {
   font-size: 12px;
-  color: var(--ran-color-text-disabled);
+  color: var(--ran-color-text-secondary);
   white-space: pre-line; /* honour \n so multi-line hints (e.g. cache status + chat-only note) stack */
 }
 .agent-panel-note:empty {
@@ -338,40 +669,385 @@ r-dropdown[role='listbox'] {
   flex-shrink: 0;
 }
 
-.agent-launcher {
-  position: fixed;
-  right: var(--ran-space-4);
-  /* Stacks above the main FAB: its 24 bottom + 40 height + a 16 gap. Derived, not arbitrary. */
-  bottom: 80px;
-  z-index: 9999;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: none;
-  /* Monochrome FAB, inverted against the page. ranui 0.4 renamed the contrast action
-     tokens: --ran-color-contrast-bg/-text are now --ran-color-primary/-primary-text,
-     and both flip with the theme. */
-  background: var(--ran-color-primary);
-  color: var(--ran-color-primary-text);
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  box-shadow: var(--ran-shadow-menu);
-}
-.agent-launcher-hidden {
-  display: none;
-}
-/* .agent-panel-quote / .agent-panel-clear are r-buttons — no host styling needed. */
+/* ranui controls in the model row own their internal appearance. */
 
 /* ranui DESIGN.md §5: motion is a preference, not a given. Everything animated here is
    decoration on a state that is already visible from the layout change, so honouring the
    setting costs nothing and removes the vestibular trigger. Kept to this file's own
    selectors — ranui's components carry their own reduced-motion rules. */
 @media (prefers-reduced-motion: reduce) {
-  .loading-mask,
-  .agent-launcher {
+  .loading-mask {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+.agent-panel-gguf-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-2, 8px);
+  min-width: 0;
+}
+/* The real file input remains focusable and opens the native picker. */
+.agent-panel-gguf-choose {
+  position: relative;
+  align-self: flex-start;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 7px 12px;
+  border: 1px solid var(--ran-color-border, #ddd);
+  border-radius: 6px;
+  color: var(--ran-color-text);
+  cursor: pointer;
+}
+.agent-panel-gguf-choose:focus-within {
+  outline: 2px solid var(--ran-color-primary, #2563eb);
+  outline-offset: 2px;
+}
+.agent-panel-gguf-files {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.agent-panel-gguf-filenames {
+  overflow-wrap: anywhere;
+  color: var(--ran-color-text);
+  font-size: 12px;
+}
+.agent-panel-gguf-filenames:empty {
+  display: none;
+}
+
+/* Document assistant: conversation, configuration and review are distinct surfaces. */
+.agent-panel-header {
+  min-height: 56px;
+  padding: 8px 16px;
+  gap: 4px;
+  box-sizing: border-box;
+}
+.agent-panel-title {
+  flex: 1;
+  font-size: var(--ran-text-heading-4);
+  font-weight: var(--ran-text-heading-weight);
+  letter-spacing: var(--ran-text-heading-tracking);
+}
+.agent-panel-header button,
+.agent-panel-quote {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  cursor: pointer;
+}
+.agent-panel-header button:hover,
+.agent-panel-quote:hover {
+  background: var(--ran-color-bg-muted);
+  color: var(--ran-color-text);
+}
+.agent-panel-settings-toggle {
+  margin: 0;
+}
+.agent-panel-header button:focus-visible,
+.agent-panel-quote:focus-visible,
+.agent-writing-task:focus-visible,
+.agent-writing-language:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.agent-panel-settings {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 55%;
+  overflow: auto;
+  gap: var(--ran-space-3);
+  padding: var(--ran-space-4);
+}
+.agent-panel-settings-hidden {
+  display: none;
+}
+.agent-panel-review {
+  font-size: 12px;
+}
+.agent-panel-note {
+  line-height: 1.6;
+}
+.agent-panel .cui-root {
+  font-family: inherit;
+}
+.agent-panel .cui-actions {
+  gap: 8px;
+}
+.agent-panel-quote {
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+}
+.agent-plan-preview > span:first-child {
+  font-weight: 600;
+}
+.agent-plan-content,
+.agent-plan-before {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.agent-plan-content {
+  padding: 12px;
+  background: var(--ran-color-bg-muted);
+  border-radius: 6px;
+}
+.agent-plan-original {
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+}
+.agent-plan-original summary {
+  cursor: pointer;
+  padding: 4px 0;
+}
+.agent-plan-original .agent-plan-before {
+  max-height: 160px;
+  overflow: auto;
+  margin-top: 8px;
+}
+@media (max-width: 760px) {
+  body.agent-docked #app iframe {
+    width: 100% !important;
+  }
+}
+
+.agent-model-status,
+.agent-generation-stats {
+  font-size: 11px;
+  color: var(--ran-color-text-secondary);
+  padding: 0 var(--ran-space-4) var(--ran-space-2);
+  overflow-wrap: anywhere;
+}
+.agent-model-status:empty,
+.agent-generation-stats:empty {
+  display: none;
+}
+
+/* A writing surface beside the document: quiet chrome, readable conversation,
+   and task choices that prepare a draft instead of sending on the user's behalf. */
+.agent-panel-header {
+  min-height: 68px;
+  padding: 12px 20px;
+}
+.agent-panel-title {
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+.agent-model-status {
+  margin: 0 20px 12px;
+  padding: 0 0 0 10px;
+  border-left: 2px solid var(--ran-color-primary);
+  line-height: 1.55;
+}
+.agent-session-bar {
+  padding: 0 20px 14px;
+}
+.agent-session-select {
+  min-height: 38px;
+  background: var(--ran-color-bg-muted);
+  border-color: transparent;
+}
+.agent-panel .cui-messages {
+  padding: 28px 22px;
+  gap: 28px;
+  line-height: 1.75;
+}
+.agent-panel .cui-empty {
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
+  padding: 28px 0;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.45;
+}
+.agent-panel .cui-empty-actions {
+  margin-top: 24px;
+}
+.agent-writing-starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.agent-writing-starters button {
+  min-height: 40px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: var(--ran-color-bg-muted);
+  border-color: transparent;
+  color: var(--ran-color-text);
+  font-size: 13px;
+}
+.agent-writing-starters button:hover {
+  background: var(--ran-color-bg-hover);
+  border-color: var(--ran-color-border);
+}
+.agent-panel .cui-empty-actions .agent-configure {
+  border: 0;
+  padding: 4px 0;
+  min-height: 32px;
+  border-radius: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.agent-panel .cui-msg-user .cui-bubble {
+  padding: 12px 16px;
+  border-radius: 16px 16px 4px 16px;
+}
+.agent-panel .cui-message-actions {
+  gap: 10px;
+  margin-top: 2px;
+}
+.agent-panel .cui-message-actions button {
+  min-height: 32px;
+}
+.agent-panel .cui-footer {
+  padding: 16px 18px 20px;
+}
+.agent-panel .cui-composer {
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--ran-color-bg-elevated);
+}
+.agent-panel .cui-input {
+  min-height: 56px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  line-height: 1.65;
+}
+.agent-panel .cui-composer-bar {
+  margin-top: 16px;
+}
+.agent-panel .cui-send {
+  width: 34px;
+  height: 34px;
+}
+@media (max-width: 480px) {
+  .agent-panel-header button,
+  .agent-panel-quote,
+  .agent-panel-clear,
+  .agent-panel .cui-send {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+  .agent-panel-clear {
+    flex-basis: 44px;
+  }
+  .agent-panel .cui-messages {
+    padding: 24px 20px;
+  }
+  .agent-panel .cui-footer {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Reserve the composer when a keyboard or short window reduces usable height. */
+@container agent-panel (max-height: 600px) {
+  .agent-panel-header {
+    min-height: 48px;
+    padding: 8px 16px;
+  }
+  .agent-model-status {
+    margin-bottom: 6px;
+  }
+  .agent-session-bar {
+    padding-bottom: 6px;
+  }
+  .agent-panel-settings {
+    box-sizing: border-box;
+    max-height: min(35%, max(32px, calc(100dvh - 280px)));
+    padding: 8px;
+  }
+  .agent-panel .cui-root {
+    min-height: 124px;
+  }
+  .agent-panel .cui-messages {
+    padding: 0 16px;
+  }
+  .agent-panel .cui-footer {
+    padding: 8px 12px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .agent-panel .cui-composer {
+    padding: 10px;
+  }
+  .agent-panel .cui-input {
+    min-height: 40px;
+    max-height: 40px;
+  }
+  .agent-panel .cui-composer-bar {
+    margin-top: 8px;
+  }
+}
+
+/* A single compact loading surface beside the existing model status. */
+.agent-runtime-row {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  padding: 0 20px 12px;
+}
+.agent-runtime-row[hidden],
+.agent-runtime-row [hidden] {
+  display: none !important;
+}
+.agent-runtime-main {
+  flex: 1;
+  min-width: 0;
+}
+.agent-runtime-row .agent-model-status {
+  display: block;
+  margin: 0;
+}
+.agent-model-progress {
+  display: block;
+  width: 100%;
+  height: 3px;
+  margin-top: 8px;
+  accent-color: var(--ran-color-primary);
+}
+.agent-runtime-row r-button {
+  flex: 0 0 auto;
+}
+@media (max-height: 600px) {
+  .agent-runtime-row {
+    padding: 0 16px 6px;
+  }
+}
+
+/* Optional GPU sources stay together without occupying the settings home. */
+.agent-model-sources[hidden] {
+  display: none;
+}
+.agent-model-sources summary {
+  cursor: pointer;
+  padding: 4px 0;
+  color: var(--ran-color-text-secondary);
+  font-size: 12px;
+}
+.agent-model-sources summary:focus-visible {
+  outline: 2px solid var(--ran-color-primary);
+  outline-offset: 2px;
+}
+.agent-model-sources r-input {
+  display: block;
+  margin-top: 12px;
 }

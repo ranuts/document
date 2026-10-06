@@ -1,0 +1,29 @@
+{
+  "scope": "Actual cached default WebGPU initialization/chat under injected Worker response CSP, followed by Worker eval and foreign module negative controls. No shipped policy, CPU/iframe, fresh download, offline or general security claim.",
+  "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+  "workerResponses": [
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:"
+    }
+  ],
+  "status": "failed",
+  "consoleErrors": [],
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "workerControls": {
+    "eval": {
+      "value": 2,
+      "blocked": false
+    },
+    "foreign": {
+      "blocked": true,
+      "name": "TypeError",
+      "message": "Failed to fetch dynamically imported module: https://worker-csp-probe.invalid/probe.js"
+    },
+    "isolated": true
+  },
+  "nextReply": "Hello.",
+  "errorCountAfterRecovery": 0,
+  "error": "Error: Inference or negative controls failed"
+}

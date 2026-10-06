@@ -1,0 +1,50 @@
+[
+  {
+    "id": "copy-ascii",
+    "source": "ABC",
+    "prompt": "Copy exactly ABC.",
+    "expected": "ABC",
+    "task": "rewrite",
+    "instruction": "Diagnostic shortest instruction"
+  },
+  {
+    "id": "copy-amount",
+    "source": "640 EUR",
+    "prompt": "Copy exactly 640 EUR.",
+    "expected": "640 EUR",
+    "task": "rewrite",
+    "instruction": "Diagnostic shortest instruction"
+  },
+  {
+    "id": "copy-date",
+    "source": "2026-10-12",
+    "prompt": "Copy exactly 2026-10-12.",
+    "expected": "2026-10-12",
+    "task": "rewrite",
+    "instruction": "Diagnostic shortest instruction"
+  },
+  {
+    "id": "copy-chinese",
+    "source": "尚未批准",
+    "prompt": "逐字复制：尚未批准",
+    "expected": "尚未批准",
+    "task": "rewrite",
+    "instruction": "Diagnostic shortest instruction"
+  },
+  {
+    "id": "arithmetic",
+    "source": "2 + 2",
+    "prompt": "What is 2 + 2? Give only the answer.",
+    "expected": "4",
+    "task": "rewrite",
+    "instruction": "Diagnostic shortest instruction"
+  },
+  {
+    "id": "formal-english",
+    "source": "Hey, Alex is gonna pay Morgan 640 EUR.",
+    "prompt": "Rewrite in formal English: Hey, Alex is gonna pay Morgan 640 EUR.",
+    "expected": "Alex will pay Morgan 640 EUR.",
+    "task": "rewrite",
+    "instruction": "Diagnostic shortest instruction"
+  }
+]

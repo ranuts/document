@@ -1,0 +1,497 @@
+{
+  "status": "completed",
+  "sourceSHA256": "bb7e9d2ec04fdd42d489bc0af5aa61f73455851d01ae0dd81f93b1189fe4dd1b",
+  "errors": [],
+  "cases": [
+    {
+      "value": "00123",
+      "originalFormat": "General",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "00123",
+        "format": "General",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "00123",
+        "format": "General",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      }
+    },
+    {
+      "value": "1e3",
+      "originalFormat": "General",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "1e3",
+        "format": "General",
+        "type": 1,
+        "raw": "1e3",
+        "edit": "1e3"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "1e3",
+        "format": "General",
+        "type": 1,
+        "raw": "1e3",
+        "edit": "1e3"
+      }
+    },
+    {
+      "value": "2026-10-04",
+      "originalFormat": "General",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "2026-10-04",
+        "format": "General",
+        "type": 1,
+        "raw": "2026-10-04",
+        "edit": "2026-10-04"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "2026-10-04",
+        "format": "General",
+        "type": 1,
+        "raw": "2026-10-04",
+        "edit": "2026-10-04"
+      }
+    },
+    {
+      "value": "99",
+      "originalFormat": "General",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "99",
+        "format": "General",
+        "type": 1,
+        "raw": "99",
+        "edit": "99"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "99",
+        "format": "General",
+        "type": 1,
+        "raw": "99",
+        "edit": "99"
+      }
+    },
+    {
+      "value": "'quoted",
+      "originalFormat": "General",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'quoted",
+        "format": "General",
+        "type": 1,
+        "raw": "'quoted",
+        "edit": "'quoted"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'quoted",
+        "format": "General",
+        "type": 1,
+        "raw": "'quoted",
+        "edit": "'quoted"
+      }
+    },
+    {
+      "value": "text",
+      "originalFormat": "General",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "text",
+        "format": "General",
+        "type": 1,
+        "raw": "text",
+        "edit": "text"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "text",
+        "format": "General",
+        "type": 1,
+        "raw": "text",
+        "edit": "text"
+      }
+    },
+    {
+      "value": "12345678901234567890",
+      "originalFormat": "General",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "12345678901234567890",
+        "format": "General",
+        "type": 1,
+        "raw": "12345678901234567890",
+        "edit": "12345678901234567890"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "12345678901234567890",
+        "format": "General",
+        "type": 1,
+        "raw": "12345678901234567890",
+        "edit": "12345678901234567890"
+      }
+    },
+    {
+      "value": "00123",
+      "originalFormat": "0.00",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "00123",
+        "format": "0.00",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "00123",
+        "format": "0.00",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      }
+    },
+    {
+      "value": "1e3",
+      "originalFormat": "0.00",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "1e3",
+        "format": "0.00",
+        "type": 1,
+        "raw": "1e3",
+        "edit": "1e3"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "1e3",
+        "format": "0.00",
+        "type": 1,
+        "raw": "1e3",
+        "edit": "1e3"
+      }
+    },
+    {
+      "value": "2026-10-04",
+      "originalFormat": "0.00",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "2026-10-04",
+        "format": "0.00",
+        "type": 1,
+        "raw": "2026-10-04",
+        "edit": "2026-10-04"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "2026-10-04",
+        "format": "0.00",
+        "type": 1,
+        "raw": "2026-10-04",
+        "edit": "2026-10-04"
+      }
+    },
+    {
+      "value": "99",
+      "originalFormat": "0.00",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "99",
+        "format": "0.00",
+        "type": 1,
+        "raw": "99",
+        "edit": "99"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "99",
+        "format": "0.00",
+        "type": 1,
+        "raw": "99",
+        "edit": "99"
+      }
+    },
+    {
+      "value": "'quoted",
+      "originalFormat": "0.00",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'quoted",
+        "format": "0.00",
+        "type": 1,
+        "raw": "'quoted",
+        "edit": "'quoted"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'quoted",
+        "format": "0.00",
+        "type": 1,
+        "raw": "'quoted",
+        "edit": "'quoted"
+      }
+    },
+    {
+      "value": "text",
+      "originalFormat": "0.00",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "text",
+        "format": "0.00",
+        "type": 1,
+        "raw": "text",
+        "edit": "text"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "text",
+        "format": "0.00",
+        "type": 1,
+        "raw": "text",
+        "edit": "text"
+      }
+    },
+    {
+      "value": "12345678901234567890",
+      "originalFormat": "0.00",
+      "completion": {
+        "ok": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "12345678901234567890",
+        "format": "0.00",
+        "type": 1,
+        "raw": "12345678901234567890",
+        "edit": "12345678901234567890"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "12345678901234567890",
+        "format": "0.00",
+        "type": 1,
+        "raw": "12345678901234567890",
+        "edit": "12345678901234567890"
+      }
+    }
+  ]
+}

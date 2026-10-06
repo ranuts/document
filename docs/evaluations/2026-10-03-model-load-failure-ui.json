@@ -1,0 +1,32 @@
+{
+  "status": "completed",
+  "scope": "Isolated desktop browsers with deliberately aborted GGUF download; verifies failure presentation and reachable retry, not successful model recovery.",
+  "results": [
+    {
+      "kind": "webkit",
+      "folded": true,
+      "errors": [
+        "Model loading failed. Retry loading or choose another model."
+      ],
+      "attempts": 2,
+      "retryObserved": true,
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css",
+        "http://127.0.0.1:5193/assets/editor-DViW8J2w.js"
+      ]
+    },
+    {
+      "kind": "chromium",
+      "folded": true,
+      "errors": [
+        "Model loading failed. Retry loading or choose another model."
+      ],
+      "attempts": 2,
+      "retryObserved": true,
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-DViW8J2w.js",
+        "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+      ]
+    }
+  ]
+}

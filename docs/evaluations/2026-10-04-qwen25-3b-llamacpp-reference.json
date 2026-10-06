@@ -1,0 +1,805 @@
+{
+  "scope": "Independent native llama.cpp CPU reference for four known date-copy fixtures; same minimal message contents and logical schema, distinct GGUF quantization/template/runtime/sampling implementation. Not browser IM, not production architecture or quality certification.",
+  "probeSHA256": "fe230a4c22dea4feacc1f0f911785705214a80372220549c21a0262c28ba00dd",
+  "model": {
+    "repository": "Qwen/Qwen2.5-3B-Instruct-GGUF",
+    "revision": "7dabda4d13d513e3e842b20f0d435c732f172cbe",
+    "file": "qwen2.5-3b-instruct-q4_k_m.gguf",
+    "bytes": 2104932768,
+    "sha256": "626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d"
+  },
+  "runtime": {
+    "binary": "/opt/homebrew/Cellar/llama.cpp/0.5.0/bin/llama-server",
+    "sha256": "93d4a03c4491bf4c50755ca0bbdc8d725fb25a12e3b8c83d830c5f1e713a66df",
+    "version": "0.00.000.086 I srv  llama_server: initializing ...\nversion: 0.5.0 (build 11146, commit 7fe450e19)\nbuilt with AppleClang 17.0.0.17000604 for Darwin arm64",
+    "args": [
+      "/opt/homebrew/Cellar/llama.cpp/0.5.0/bin/llama-server",
+      "--model",
+      ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "52392",
+      "--ctx-size",
+      "4096",
+      "--parallel",
+      "1",
+      "--threads",
+      "4",
+      "--n-gpu-layers",
+      "0",
+      "--device",
+      "none",
+      "--no-op-offload",
+      "--no-cache-prompt",
+      "--no-webui"
+    ],
+    "props": {
+      "default_generation_settings": {
+        "params": {
+          "seed": 4294967295,
+          "temperature": 0.800000011920929,
+          "dynatemp_range": 0.0,
+          "dynatemp_exponent": 1.0,
+          "top_k": 40,
+          "top_p": 0.949999988079071,
+          "min_p": 0.05000000074505806,
+          "top_n_sigma": -1.0,
+          "xtc_probability": 0.0,
+          "xtc_threshold": 0.10000000149011612,
+          "typical_p": 1.0,
+          "repeat_last_n": 64,
+          "repeat_penalty": 1.0,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "dry_multiplier": 0.0,
+          "dry_base": 1.75,
+          "dry_allowed_length": 2,
+          "dry_penalty_last_n": 64,
+          "mirostat": 0,
+          "mirostat_tau": 5.0,
+          "mirostat_eta": 0.10000000149011612,
+          "adaptive_target": -1.0,
+          "adaptive_decay": 0.8999999761581421,
+          "max_tokens": -1,
+          "n_predict": -1,
+          "n_keep": 0,
+          "n_discard": 0,
+          "ignore_eos": false,
+          "stream": false,
+          "n_probs": 0,
+          "min_keep": 0,
+          "chat_format": "Content-only",
+          "reasoning_format": "none",
+          "reasoning_in_content": false,
+          "generation_prompt": "",
+          "samplers": [
+            "penalties",
+            "dry",
+            "top_n_sigma",
+            "top_k",
+            "typ_p",
+            "top_p",
+            "min_p",
+            "xtc",
+            "temperature"
+          ],
+          "speculative.types": "none",
+          "timings_per_token": false,
+          "post_sampling_probs": false,
+          "backend_sampling": false,
+          "lora": []
+        },
+        "n_ctx": 4096
+      },
+      "total_slots": 1,
+      "model_alias": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+      "model_ftype": "Q4_K - Medium",
+      "model_path": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+      "modalities": {
+        "vision": false,
+        "video": false,
+        "audio": false
+      },
+      "media_marker": "<__media_IgfvJb2zppJXfOck7tGeJsB8Z45EreFk__>",
+      "endpoint_slots": true,
+      "endpoint_props": false,
+      "endpoint_metrics": false,
+      "ui": false,
+      "ui_settings": {},
+      "chat_template": "{%- if tools %}\n    {{- '<|im_start|>system\\n' }}\n    {%- if messages[0]['role'] == 'system' %}\n        {{- messages[0]['content'] }}\n    {%- else %}\n        {{- 'You are Qwen, created by Alibaba Cloud. You are a helpful assistant.' }}\n    {%- endif %}\n    {{- \"\\n\\n# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within <tools></tools> XML tags:\\n<tools>\" }}\n    {%- for tool in tools %}\n        {{- \"\\n\" }}\n        {{- tool | tojson }}\n    {%- endfor %}\n    {{- \"\\n</tools>\\n\\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\\n<tool_call>\\n{{\\\"name\\\": <function-name>, \\\"arguments\\\": <args-json-object>}}\\n</tool_call><|im_end|>\\n\" }}\n{%- else %}\n    {%- if messages[0]['role'] == 'system' %}\n        {{- '<|im_start|>system\\n' + messages[0]['content'] + '<|im_end|>\\n' }}\n    {%- else %}\n        {{- '<|im_start|>system\\nYou are Qwen, created by Alibaba Cloud. You are a helpful assistant.<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) or (message.role == \"assistant\" and not message.tool_calls) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {{- '<|im_start|>' + message.role }}\n        {%- if message.content %}\n            {{- '\\n' + message.content }}\n        {%- endif %}\n        {%- for tool_call in message.tool_calls %}\n            {%- if tool_call.function is defined %}\n                {%- set tool_call = tool_call.function %}\n            {%- endif %}\n            {{- '\\n<tool_call>\\n{\"name\": \"' }}\n            {{- tool_call.name }}\n            {{- '\", \"arguments\": ' }}\n            {{- tool_call.arguments | tojson }}\n            {{- '}\\n</tool_call>' }}\n        {%- endfor %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if (loop.index0 == 0) or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n{%- endif %}",
+      "chat_template_caps": {
+        "supports_object_arguments": true,
+        "supports_parallel_tool_calls": true,
+        "supports_preserve_reasoning": false,
+        "supports_reasoning_effort": false,
+        "supports_string_content": true,
+        "supports_system_role": true,
+        "supports_tool_calls": true,
+        "supports_tools": true,
+        "supports_typed_content": false
+      },
+      "bos_token": "<|endoftext|>",
+      "eos_token": "<|im_end|>",
+      "build_info": "b11146-7fe450e19",
+      "is_sleeping": false,
+      "cors_proxy_enabled": false
+    },
+    "exitCode": 0,
+    "log": "0.00.000.108 I srv  llama_server: initializing ...\n0.00.081.207 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)\n0.00.081.275 I srv  init_listene: The UI is disabled\n0.00.081.276 I srv  init_listene: Use --ui/--no-ui (or deprecated --webui/--no-webui) to enable/disable\n0.00.081.320 W srv  llama_server: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)\n0.00.082.777 I srv    load_model: loading model '.scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf'\n0.00.493.668 W load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden\n0.03.153.499 I cmn          init: llama threadpool init, n_threads = 4\n0.03.774.597 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 4096, kv_unified = 'false'\n0.03.783.242 I srv  llama_server: model loaded\n0.03.783.248 I srv  llama_server: listening on http://127.0.0.1:52392\n0.04.053.963 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1\n0.04.054.205 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0\n0.05.437.171 I slot print_timing: id  0 | task 0 | prompt eval time =     696.62 ms /    49 tokens (   14.22 ms per token,    70.34 tokens per second)\n0.05.437.178 I slot print_timing: id  0 | task 0 |        eval time =     686.10 ms /    19 tokens (   38.12 ms per token,    26.24 tokens per second)\n0.05.437.178 I slot print_timing: id  0 | task 0 |       total time =    1382.72 ms /    68 tokens\n0.05.437.179 I slot print_timing: id  0 | task 0 |    graphs reused =         18\n0.05.437.301 I slot      release: id  0 | task 0 | stop processing: n_tokens = 67, truncated = 0\n0.05.444.881 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 1.000 (> 0.100 thold), f_keep = 0.731\n0.05.445.097 I slot launch_slot_: id  0 | task 20 | processing task, is_child = 0\n0.06.747.203 I slot print_timing: id  0 | task 20 | prompt eval time =     650.72 ms /    49 tokens (   13.28 ms per token,    75.30 tokens per second)\n0.06.747.207 I slot print_timing: id  0 | task 20 |        eval time =     651.36 ms /    19 tokens (   36.19 ms per token,    27.63 tokens per second)\n0.06.747.208 I slot print_timing: id  0 | task 20 |       total time =    1302.09 ms /    68 tokens\n0.06.747.209 I slot print_timing: id  0 | task 20 |    graphs reused =         35\n0.06.747.332 I slot      release: id  0 | task 20 | stop processing: n_tokens = 67, truncated = 0\n0.06.754.273 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.714 (> 0.100 thold), f_keep = 0.522\n0.06.754.513 I slot launch_slot_: id  0 | task 40 | processing task, is_child = 0\n0.08.082.373 I slot print_timing: id  0 | task 40 | prompt eval time =     646.52 ms /    49 tokens (   13.19 ms per token,    75.79 tokens per second)\n0.08.082.376 I slot print_timing: id  0 | task 40 |        eval time =     681.32 ms /    19 tokens (   37.85 ms per token,    26.42 tokens per second)\n0.08.082.377 I slot print_timing: id  0 | task 40 |       total time =    1327.85 ms /    68 tokens\n0.08.082.377 I slot print_timing: id  0 | task 40 |    graphs reused =         52\n0.08.082.421 I slot      release: id  0 | task 40 | stop processing: n_tokens = 67, truncated = 0\n0.08.089.862 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 1.000 (> 0.100 thold), f_keep = 0.731\n0.08.090.100 I slot launch_slot_: id  0 | task 60 | processing task, is_child = 0\n0.09.358.912 I slot print_timing: id  0 | task 60 | prompt eval time =     638.32 ms /    49 tokens (   13.03 ms per token,    76.76 tokens per second)\n0.09.358.916 I slot print_timing: id  0 | task 60 |        eval time =     630.48 ms /    19 tokens (   35.03 ms per token,    28.55 tokens per second)\n0.09.358.917 I slot print_timing: id  0 | task 60 |       total time =    1268.80 ms /    68 tokens\n0.09.358.917 I slot print_timing: id  0 | task 60 |    graphs reused =         69\n0.09.358.937 I slot      release: id  0 | task 60 | stop processing: n_tokens = 67, truncated = 0\n0.09.365.952 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.604 (> 0.100 thold), f_keep = 0.433\n0.09.366.535 I slot launch_slot_: id  0 | task 80 | processing task, is_child = 0\n0.10.666.700 I slot print_timing: id  0 | task 80 | prompt eval time =     618.88 ms /    48 tokens (   12.89 ms per token,    77.56 tokens per second)\n0.10.666.705 I slot print_timing: id  0 | task 80 |        eval time =     681.27 ms /    19 tokens (   37.85 ms per token,    26.42 tokens per second)\n0.10.666.705 I slot print_timing: id  0 | task 80 |       total time =    1300.15 ms /    67 tokens\n0.10.666.706 I slot print_timing: id  0 | task 80 |    graphs reused =         86\n0.10.666.773 I slot      release: id  0 | task 80 | stop processing: n_tokens = 66, truncated = 0\n0.10.673.918 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 1.000 (> 0.100 thold), f_keep = 0.727\n0.10.674.171 I slot launch_slot_: id  0 | task 100 | processing task, is_child = 0\n0.11.927.717 I slot print_timing: id  0 | task 100 | prompt eval time =     618.90 ms /    48 tokens (   12.89 ms per token,    77.56 tokens per second)\n0.11.927.722 I slot print_timing: id  0 | task 100 |        eval time =     634.63 ms /    19 tokens (   35.26 ms per token,    28.36 tokens per second)\n0.11.927.723 I slot print_timing: id  0 | task 100 |       total time =    1253.53 ms /    67 tokens\n0.11.927.723 I slot print_timing: id  0 | task 100 |    graphs reused =        103\n0.11.927.753 I slot      release: id  0 | task 100 | stop processing: n_tokens = 66, truncated = 0\n0.11.935.069 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.569 (> 0.100 thold), f_keep = 0.439\n0.11.935.686 I slot launch_slot_: id  0 | task 120 | processing task, is_child = 0\n0.13.306.942 I slot print_timing: id  0 | task 120 | prompt eval time =     692.09 ms /    51 tokens (   13.57 ms per token,    73.69 tokens per second)\n0.13.306.946 I slot print_timing: id  0 | task 120 |        eval time =     679.15 ms /    19 tokens (   37.73 ms per token,    26.50 tokens per second)\n0.13.306.946 I slot print_timing: id  0 | task 120 |       total time =    1371.24 ms /    70 tokens\n0.13.306.947 I slot print_timing: id  0 | task 120 |    graphs reused =        120\n0.13.307.008 I slot      release: id  0 | task 120 | stop processing: n_tokens = 69, truncated = 0\n0.13.314.182 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 1.000 (> 0.100 thold), f_keep = 0.739\n0.13.314.399 I slot launch_slot_: id  0 | task 140 | processing task, is_child = 0\n0.14.676.809 I slot print_timing: id  0 | task 140 | prompt eval time =     692.74 ms /    51 tokens (   13.58 ms per token,    73.62 tokens per second)\n0.14.676.812 I slot print_timing: id  0 | task 140 |        eval time =     669.65 ms /    19 tokens (   37.20 ms per token,    26.88 tokens per second)\n0.14.676.812 I slot print_timing: id  0 | task 140 |       total time =    1362.40 ms /    70 tokens\n0.14.676.813 I slot print_timing: id  0 | task 140 |    graphs reused =        137\n0.14.676.836 I slot      release: id  0 | task 140 | stop processing: n_tokens = 69, truncated = 0\n0.14.677.521 I srv    operator(): operator(): cleaning up before exit...\n"
+  },
+  "cases": [
+    {
+      "id": "date-22",
+      "source": "ISO date: 2044-09-22.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-22"
+    },
+    {
+      "id": "date-current",
+      "source": "ISO date: 2026-10-04.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2026-10-04"
+    },
+    {
+      "id": "zh-date",
+      "source": "预约日期：2044-09-23。",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    },
+    {
+      "id": "pt-date",
+      "source": "A data da reserva é 2044-09-23.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    }
+  ],
+  "results": [
+    {
+      "id": "date-22",
+      "penalty": 1.05,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "ISO date: 2044-09-22.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.05,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-22\"\n}"
+            }
+          }
+        ],
+        "created": 1791125886,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 49,
+          "total_tokens": 68,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-LSaQZ2S47K6YECWHaNwfpdsMMtdlznG0",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 49,
+          "prompt_ms": 696.618,
+          "prompt_per_token_ms": 14.216693877551021,
+          "prompt_per_second": 70.33984192197157,
+          "predicted_n": 19,
+          "predicted_ms": 686.104,
+          "predicted_per_token_ms": 38.116888888888894,
+          "predicted_per_second": 26.23508972400685
+        }
+      },
+      "expected": "2044-09-22",
+      "source": "ISO date: 2044-09-22.",
+      "responseSeconds": 1.392203375000463,
+      "exact": true
+    },
+    {
+      "id": "date-22",
+      "penalty": 1.0,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "ISO date: 2044-09-22.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.0,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-22\"\n}"
+            }
+          }
+        ],
+        "created": 1791125888,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 49,
+          "total_tokens": 68,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-CBanHOc7Gub8S4PnGL5m9ZqcOllJRSRz",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 49,
+          "prompt_ms": 650.723,
+          "prompt_per_token_ms": 13.280061224489796,
+          "prompt_per_second": 75.30085766140124,
+          "predicted_n": 19,
+          "predicted_ms": 651.363,
+          "predicted_per_token_ms": 36.18683333333334,
+          "predicted_per_second": 27.63436056392518
+        }
+      },
+      "expected": "2044-09-22",
+      "source": "ISO date: 2044-09-22.",
+      "responseSeconds": 1.3095919170009438,
+      "exact": true
+    },
+    {
+      "id": "date-current",
+      "penalty": 1.05,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "ISO date: 2026-10-04.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.05,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2026-10-04\"\n}"
+            }
+          }
+        ],
+        "created": 1791125889,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 49,
+          "total_tokens": 68,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-B26XgNlw69Xkhra8S9OX5ejVMXGNanAk",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 49,
+          "prompt_ms": 646.523,
+          "prompt_per_token_ms": 13.19434693877551,
+          "prompt_per_second": 75.79003376523342,
+          "predicted_n": 19,
+          "predicted_ms": 681.323,
+          "predicted_per_token_ms": 37.851277777777774,
+          "predicted_per_second": 26.419187375150994
+        }
+      },
+      "expected": "2026-10-04",
+      "source": "ISO date: 2026-10-04.",
+      "responseSeconds": 1.3350640409989865,
+      "exact": true
+    },
+    {
+      "id": "date-current",
+      "penalty": 1.0,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "ISO date: 2026-10-04.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.0,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2026-10-04\"\n}"
+            }
+          }
+        ],
+        "created": 1791125890,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 49,
+          "total_tokens": 68,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-psaRa7sxYL0OX0ia2ClLlckP2ROXevD3",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 49,
+          "prompt_ms": 638.315,
+          "prompt_per_token_ms": 13.026836734693878,
+          "prompt_per_second": 76.76460681638375,
+          "predicted_n": 19,
+          "predicted_ms": 630.482,
+          "predicted_per_token_ms": 35.026777777777774,
+          "predicted_per_second": 28.54958587239604
+        }
+      },
+      "expected": "2026-10-04",
+      "source": "ISO date: 2026-10-04.",
+      "responseSeconds": 1.2764248330004193,
+      "exact": true
+    },
+    {
+      "id": "zh-date",
+      "penalty": 1.05,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "预约日期：2044-09-23。\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.05,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-23\"\n}"
+            }
+          }
+        ],
+        "created": 1791125891,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 48,
+          "total_tokens": 67,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-cKq9rgulYi34BQmMlN0wrThMjOHnmxAb",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 48,
+          "prompt_ms": 618.877,
+          "prompt_per_token_ms": 12.893270833333332,
+          "prompt_per_second": 77.55983822310412,
+          "predicted_n": 19,
+          "predicted_ms": 681.274,
+          "predicted_per_token_ms": 37.848555555555556,
+          "predicted_per_second": 26.42108755067711
+        }
+      },
+      "expected": "2044-09-23",
+      "source": "预约日期：2044-09-23。",
+      "responseSeconds": 1.307805250000456,
+      "exact": true
+    },
+    {
+      "id": "zh-date",
+      "penalty": 1.0,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "预约日期：2044-09-23。\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.0,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-23\"\n}"
+            }
+          }
+        ],
+        "created": 1791125893,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 48,
+          "total_tokens": 67,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-14LfSPzdOieFfnPXZqnoboBFSrkqby6T",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 48,
+          "prompt_ms": 618.896,
+          "prompt_per_token_ms": 12.893666666666666,
+          "prompt_per_second": 77.55745714950493,
+          "predicted_n": 19,
+          "predicted_ms": 634.635,
+          "predicted_per_token_ms": 35.2575,
+          "predicted_per_second": 28.36275969651847
+        }
+      },
+      "expected": "2044-09-23",
+      "source": "预约日期：2044-09-23。",
+      "responseSeconds": 1.2609674590003124,
+      "exact": true
+    },
+    {
+      "id": "pt-date",
+      "penalty": 1.05,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "A data da reserva é 2044-09-23.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.05,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-23\"\n}"
+            }
+          }
+        ],
+        "created": 1791125894,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 51,
+          "total_tokens": 70,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-zCwCXHu72WDoPRphZjA4hydYkZLVXA1E",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 51,
+          "prompt_ms": 692.088,
+          "prompt_per_token_ms": 13.57035294117647,
+          "prompt_per_second": 73.69005097617645,
+          "predicted_n": 19,
+          "predicted_ms": 679.154,
+          "predicted_per_token_ms": 37.730777777777774,
+          "predicted_per_second": 26.50356178421978
+        }
+      },
+      "expected": "2044-09-23",
+      "source": "A data da reserva é 2044-09-23.",
+      "responseSeconds": 1.3792048340001202,
+      "exact": true
+    },
+    {
+      "id": "pt-date",
+      "penalty": 1.0,
+      "request": {
+        "model": "qwen2.5-3b-instruct-q4_k_m.gguf",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "A data da reserva é 2044-09-23.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "repeat_penalty": 1.0,
+        "repeat_last_n": 4096,
+        "seed": 42,
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cache_prompt": false,
+        "stream": false
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-23\"\n}"
+            }
+          }
+        ],
+        "created": 1791125896,
+        "model": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+        "system_fingerprint": "b11146-7fe450e19",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 51,
+          "total_tokens": 70,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "chatcmpl-ZX08ucjNEMkqyw2qkzoDP5lUAWMGlZU3",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 51,
+          "prompt_ms": 692.744,
+          "prompt_per_token_ms": 13.58321568627451,
+          "prompt_per_second": 73.62026953679859,
+          "predicted_n": 19,
+          "predicted_ms": 669.652,
+          "predicted_per_token_ms": 37.20288888888889,
+          "predicted_per_second": 26.879633003410728
+        }
+      },
+      "expected": "2044-09-23",
+      "source": "A data da reserva é 2044-09-23.",
+      "responseSeconds": 1.3698517920001905,
+      "exact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

@@ -1,0 +1,120 @@
+diff --git a/src/cache-manager.ts b/src/cache-manager.ts
+index 9796d0c..d3d0420 100644
+--- a/src/cache-manager.ts
++++ b/src/cache-manager.ts
+@@ -122,16 +122,19 @@ export class CacheManager {
+   }
+ 
+   async download(url: string, options: DownloadOptions = {}): Promise<void> {
++    options.signal?.throwIfAborted();
+     const fileKey = await urlToFileName(url, '');
+ 
+     // Fetch sha256 before the GET so we can skip the download entirely if the
+     // file is already in COS (avoids opening a connection just to cancel it).
+-    const sha256 = await getHFFileSHA256(url, options.headers ?? {});
++    const sha256 = await getHFFileSHA256(url, options.headers ?? {}, options.signal);
+     const hint = sha256 ? { sha256 } : undefined;
+ 
+     const cachedSize = await this.sb.getSize(fileKey, hint);
++    options.signal?.throwIfAborted();
+     if (cachedSize !== -1) {
+       const metadata = await this.readMetadata(fileKey);
++      options.signal?.throwIfAborted();
+       if (
+         metadata?.originalURL === url &&
+         metadata.originalSize === cachedSize
+@@ -141,8 +144,10 @@ export class CacheManager {
+       // no metadata, file maybe partial; ask server for the real size
+       const head = await fetch(url, {
+         method: 'HEAD',
++        ...(options.signal ? { signal: options.signal } : {}),
+         ...(options.headers ? { headers: options.headers } : {}),
+       });
++      options.signal?.throwIfAborted();
+       const originalSize = parseInt(
+         head.headers.get('content-length') ?? '0',
+         10
+@@ -159,11 +164,14 @@ export class CacheManager {
+           sha256,
+           ...(options.metadataAdditional ?? {}),
+         });
++        options.signal?.throwIfAborted();
+         return;
+       }
+       // size mismatch, drop the file and download it again
+       await this.sb.delete(fileKey);
++      options.signal?.throwIfAborted();
+       await this.sb.delete(`${PREFIX_METADATA}${fileKey}`);
++      options.signal?.throwIfAborted();
+     }
+ 
+     const response = await fetch(url, {
+@@ -171,6 +179,7 @@ export class CacheManager {
+       ...(options.signal ? { signal: options.signal } : {}),
+     });
+ 
++    options.signal?.throwIfAborted();
+     if (!response.ok || !response.body) {
+       throw new Error(`Failed to fetch ${url}: HTTP ${response.status}`);
+     }
+@@ -218,7 +227,9 @@ export class CacheManager {
+       response.body.pipeThrough(progressStream),
+       hint
+     );
++    options.signal?.throwIfAborted();
+     await this.writeMetadata(fileKey, metadata);
++    options.signal?.throwIfAborted();
+   }
+ 
+   /**
+diff --git a/src/huggingface.ts b/src/huggingface.ts
+index 4329f29..152e6d8 100644
+--- a/src/huggingface.ts
++++ b/src/huggingface.ts
+@@ -137,15 +137,18 @@ export async function getHFModelSource(
+ 
+ export async function getHFFileSHA256(
+   url: string,
+-  headers: Record<string, string>
++  headers: Record<string, string>,
++  signal?: AbortSignal
+ ): Promise<string | undefined> {
++  signal?.throwIfAborted();
+   if (!url.includes('/resolve/')) return undefined;
+   const rawUrl = url.replace('/resolve/', '/raw/');
+   try {
+-    const text = await fetch(rawUrl, { headers }).then((r) => r.text());
++    const text = await fetch(rawUrl, { headers, ...(signal ? { signal } : {}) }).then((r) => r.text());
+     const match = text.match(/^oid sha256:([0-9a-f]{64})$/m);
+     return match ? match[1] : undefined;
+   } catch {
++    signal?.throwIfAborted();
+     return undefined;
+   }
+ }
+diff --git a/src/model-manager.ts b/src/model-manager.ts
+index d408332..65c23e3 100644
+--- a/src/model-manager.ts
++++ b/src/model-manager.ts
+@@ -169,7 +169,7 @@ export class Model {
+     this.modelManager.logger.debug('Downloading model files:', urls);
+     const nParallel =
+       this.modelManager.params.parallelDownloads ?? DEFAULT_PARALLEL_DOWNLOADS;
+-    const totalSize = await this.getTotalDownloadSize(urls);
++    const totalSize = await this.getTotalDownloadSize(urls, options);
+     const loadedSize: number[] = [];
+     const worker = async () => {
+       while (works.length > 0) {
+@@ -231,9 +231,10 @@ export class Model {
+     return allFiles;
+   }
+ 
+-  private async getTotalDownloadSize(urls: string[]): Promise<number> {
++  private async getTotalDownloadSize(urls: string[], options: DownloadOptions = {}): Promise<number> {
++    options.signal?.throwIfAborted();
+     const responses = await Promise.all(
+-      urls.map((url) => fetch(url, { method: 'HEAD' }))
++      urls.map((url) => fetch(url, { method: 'HEAD', ...(options.headers ? { headers: options.headers } : {}), ...(options.signal ? { signal: options.signal } : {}) }))
+     );
+     const sizes = responses.map((res) =>
+       Number(res.headers.get('content-length') || '0')

@@ -1,0 +1,5 @@
+# Same-harness 0.5B post-Stop history contrast
+
+Use the same three native history shapes as the frozen 3B diagnostic: original system/user/user, truthful stopped assistant boundary, and system/current-user only. Only the local model path and asserted model identity change; requests, native SDK/WASM, fresh-engine-per-shape setup, fixed mode order, temperature 0.7/top_p 0.8, max_tokens 32 and nonstream transport stay the same. Commit executable before inference and retain all raw responses/finish reasons and cleanup.
+
+One unfixed-seed sample per shape is a diagnostic, not a statistically controlled size/quality ranking. These observed inputs are development reproduction material, not heldout acceptance. Do not assume model size alone causes any difference, delete history on fresh-only success or promote 3B defaults. The earlier actual UI cancellation/reload runs have different output cap and transport; this run does not replace them or certify prefill Stop/device behavior. No product changes.

@@ -1,15 +1,15 @@
 ---
-title: 不用 LibreOffice 打开 ODT 文件 — 免费、在浏览器中
-description: 在浏览器中打开并编辑 ODT（OpenDocument 文本）文件——无需 LibreOffice、OpenOffice 或账号。可存回 ODT，也可导出 DOCX 或 PDF。文件不会被上传。
+title: '不用 LibreOffice 打开 ODT 文件 — 免费、在浏览器中'
+description: '无需 LibreOffice 或账号，即可在浏览器中打开和编辑 ODT 文件。 本地编辑，无需上传文档.'
 eyebrow: 打开 · .odt
 h1: 不用 LibreOffice 打开 ODT 文件
-lead: 别人发来一个 **.odt** 文件，而你没装 LibreOffice？在浏览器里打开它、编辑它，再存回 ODT——或者存成 DOCX、PDF。无需安装，不上传。
+lead: '无需 LibreOffice 或账号，即可在浏览器中打开和编辑 ODT 文件。 本地编辑，无需上传文档.'
 cta: 打开你的 ODT →
 ctaHref: /zh-CN/
-ogDescription: 不用 LibreOffice，在浏览器中打开并编辑 ODT 文件。可存回 ODT、DOCX 或 PDF，文件不上传。
+ogDescription: '无需 LibreOffice 或账号，即可在浏览器中打开和编辑 ODT 文件。 本地编辑，无需上传文档.'
 breadcrumb: odt
 howTo: 如何在没有 LibreOffice 的情况下打开 ODT 文件
-appDescription: 不用 LibreOffice，在浏览器中打开并编辑 ODT（OpenDocument 文本）文件，无需上传，无需账号。
+appDescription: '无需 LibreOffice 或账号，即可在浏览器中打开和编辑 ODT 文件。 本地编辑，无需上传文档.'
 ---
 
 ## 如何操作
@@ -49,7 +49,7 @@ ODT 即 OpenDocument Text，是 LibreOffice 和 OpenOffice 使用的开放 ISO �
 
 ### 我的文档会被上传吗？
 
-不会。它通过 WebAssembly 在本地浏览器中打开，不会离开你的设备。
+核心的打开、编辑和格式转换在浏览器本地运行，不要求上传文档。 内置 AI 助手尚未完成，不属于已发布的可用功能。 嵌入宿主可以接收导出文件，并按自己的策略上传。
 
 ### 需要账号吗？
 
@@ -57,4 +57,4 @@ ODT 即 OpenDocument Text，是 LibreOffice 和 OpenOffice 使用的开放 ISO �
 
 ### 离线能用吗？
 
-可以。加载一次之后它就是可安装的 PWA，没有网络也能继续使用。
+离线编辑要求浏览器已缓存并保留应用、编辑引擎、转换器及所需字体和格式资源。访问一次或安装 PWA 不保证所有资源可用。 远程文件 URL 需要联网。

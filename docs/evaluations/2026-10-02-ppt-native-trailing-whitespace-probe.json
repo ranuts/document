@@ -1,0 +1,48 @@
+{
+  "scope": "Isolated PPT native text API feasibility, not IM tool implementation",
+  "results": [
+    {
+      "method": "pluginMethod_PasteText",
+      "before": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      },
+      "after": {
+        "texts": [
+          "\r\n",
+          "\r\n",
+          "PPT_NATIVE_TEXT_2026  \r\n"
+        ],
+        "count": 3,
+        "history": 0
+      },
+      "afterSettled": {
+        "texts": [
+          "\r\n",
+          "\r\n",
+          "PPT_NATIVE_TEXT_2026  \r\n"
+        ],
+        "count": 3,
+        "history": 0
+      },
+      "afterUndo": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      }
+    }
+  ],
+  "status": "completed",
+  "input": "PPT_NATIVE_TEXT_2026  \n",
+  "finding": "Native PasteText preserved two trailing spaces but collapsed requested final newline into its usual paragraph terminator. Exact readback must not trim arbitrary whitespace or claim newline fidelity.",
+  "limitations": [
+    "SDK probe only; exact final-newline input cannot be verified by this native API behavior."
+  ]
+}

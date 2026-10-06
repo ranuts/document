@@ -1,0 +1,17 @@
+{
+  "status": "incomplete",
+  "scope": "Manually retained observed stdout from our two live harnesses before explicit termination; not an acceptance report.",
+  "originalProcess": 51765,
+  "saveStateProcess": 53729,
+  "observedSaveState": {
+    "buttonDisabled": false,
+    "documentText": "VENDOR_CSP_docx\r\n",
+    "longAction": false,
+    "canSave": true,
+    "apiLoaded": true,
+    "documentLoaded": true,
+    "stylesheetMedia": "all",
+    "stylesheetOnload": "this.media='all'"
+  },
+  "reason": "Unbounded post-upgrade waits; actual iframe candidate policy not yet established before native operations. Replace this inadequate harness with an early effective-policy checkpoint."
+}

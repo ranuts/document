@@ -1,0 +1,5 @@
+# Native CPU cancellation and prefix recovery: before execution
+
+Use the same packaged CPU 0.5B model and standalone JSPI diagnostic setup. In one fresh engine with omitted cache_prompt, request many repetitions of ALPHA. Abort the actual SDK stream on its first nonempty text callback, await settlement, then request BRAVO once with the same long reference prefix. Record callback chunks, cancellation error/settlement, full ordinary requests, resumed raw completion and native cached-token count. Freeze executable before inference; never fabricate stream chunks or responses.
+
+Distinguish abortSignal set from a genuinely rejected unfinished stream. If the stream already completed or no callback arrived, cancellation acceptance remains unproven. If resumed output differs from the current label, preserve failure. Trailing punctuation is tracked separately from current-label correctness. Capture served SDK identity and close engine/browser in finally. This SDK diagnostic does not certify the product Stop button, in-flight native exit/reload recovery, all cache isolation or physical devices. No product behavior changes.

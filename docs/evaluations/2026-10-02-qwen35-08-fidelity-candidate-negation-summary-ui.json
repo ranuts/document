@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-02T13:12:49.997Z",
+  "scope": "Actual production UI selected-text direct writing path; Chromium Metal GPU selected model. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "negation-en",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Summarize in one short English sentence. Keep Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model returned the original text. Try a clearer instruction or another model.Restore request"
+      ],
+      "responseMs": 2441,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "sourceCharacters": 86,
+      "outputCharacters": 86,
+      "manualReview": "Unchanged source rejected; summary task still failed without modifying document."
+    },
+    {
+      "id": "negation-zh",
+      "task": "summarize",
+      "source": "Alex 提议在 2026-10-08 支付 1,250 EUR。这笔付款尚未获批。",
+      "instruction": "用一句简短中文概括，保留 Alex、1,250 EUR、2026-10-08，以及付款尚未获批的事实。",
+      "selected": "Alex 提议在 2026-10-08 支付 1,250 EUR。这笔付款尚未获批。\r\n",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "output": "Alex 提议在 2026-10-08 支付 1,250 EUR。这笔付款尚未获批。\r\n",
+      "error": [
+        "The model returned the original text. Try a clearer instruction or another model.Restore request"
+      ],
+      "responseMs": 2057,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "sourceCharacters": 42,
+      "outputCharacters": 42,
+      "manualReview": "Unchanged source rejected; summary task still failed without modifying document."
+    }
+  ],
+  "observed": [
+    "writing-fidelity-candidate-v1",
+    "writing-fidelity-candidate-v1"
+  ],
+  "errors": [],
+  "adopted": false,
+  "limitations": [
+    "Single bilingual sample per model; no general reliability or causal guarantee.",
+    "Prompt candidate removed and production rebuilt; rewrite/translation/CPU remain untested."
+  ]
+}

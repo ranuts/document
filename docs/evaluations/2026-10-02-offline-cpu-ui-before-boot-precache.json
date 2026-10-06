@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-02T04:54:13.371Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local CPU model then offline reload and actual inference",
+  "status": "failed",
+  "warmEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "serviceWorker": {
+    "controller": true,
+    "registrations": 1,
+    "caches": [
+      "document-editor-core-1790916809",
+      "document-editor-runtime-68889b4854d8"
+    ]
+  },
+  "error": "TimeoutError: locator.click: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#app iframe').contentFrame().locator('.agent-sidebar-entry')\u001b[22m\n",
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-RWwNoE_D.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-CKtyufO5.css",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-BM9jGp41.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/document-DaDuqQYr.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DM8QBtGN.js",
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "visibleErrors": []
+}

@@ -1,0 +1,152 @@
+{
+  "scope": "Production UI real WASM CPU CPU Qwen3-0.6B GGUF / WebKit planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-BfvKIqU1.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 53202,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "editorModule": "./assets/editor-BfvKIqU1.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A2.",
+      "expected": "13",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":2,\"r1\":2,\"c2\":2,\"r2\":2,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":2,\"col\":2}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":2,\"r1\":2,\"c2\":2,\"r2\":2,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":2,\"col\":2}"
+      },
+      "elapsedMs": 7320,
+      "feedback": [
+        "A1\n12",
+        "A2\n13"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "providerTimings": [
+    {
+      "options": {
+        "stableCapabilityPrefix": true
+      },
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 50320,
+        "decodingDurationMs": 2818.999,
+        "decodeTokensPerSecond": 4.6115660204207245,
+        "responseDurationMs": 53173,
+        "endToEndTokensPerSecond": 0.26329152013239804
+      },
+      "responseText": "{\"tool\":\"get_cell\",\"input\":{\"cell\":\"A1\"}}",
+      "stopReason": "stop"
+    },
+    {
+      "options": {
+        "stableCapabilityPrefix": true
+      },
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 4420,
+        "decodingDurationMs": 2836,
+        "decodeTokensPerSecond": 4.58392101551481,
+        "responseDurationMs": 7287,
+        "endToEndTokensPerSecond": 1.9212295869356388
+      },
+      "responseText": "{\"tool\":\"get_cell\",\"input\":{\"cell\":\"A2\"}}",
+      "stopReason": "stop"
+    }
+  ],
+  "limitations": [
+    "Bounded single requests, not statistical reliability.",
+    "CPU first request failed in the uninstrumented run; exact raw failure was not captured.",
+    "Subsequent instrumented pair passed and confirmed stableCapabilityPrefix true; this does not erase the prior failure.",
+    "Other GPU models, broader CPU requests, offline and physical mobile devices remain unverified for this change."
+  ]
+}

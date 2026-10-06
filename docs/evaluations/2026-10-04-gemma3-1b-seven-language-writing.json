@@ -1,0 +1,609 @@
+{
+  "date": "2026-10-03T21:20:34.409Z",
+  "scope": "Experimental SDK-catalog Gemma 3 1B MLC model, current production writing route, same previously predeclared 21 seven-language rewrite/summary/translation fixtures; not fresh heldout data or identical model-specific prompt tokens. One fixed-order sample each, not general heldout accuracy. Current production temperature0/schema/prompt/guards retained (including unchanged-translation rejection); route-local raw response/input recording. Selected translation target through actual IM control. Native Word Undo/Redo, no preview or product change.",
+  "modelId": "gemma3-1b-it-q4f16_1-MLC",
+  "status": "failed",
+  "probeSHA256": "29f1ac250c87e33b4d1197059a40b0ff42934bcc831fb5c33ef2a1d30ef2bd21",
+  "variants": [
+    "current"
+  ],
+  "repetitions": 1,
+  "cases": [
+    {
+      "id": "summary-zh-CN",
+      "task": "summarize",
+      "language": "zh-CN",
+      "source": "Rika 提议在 2044-09-23 运送价值 430 PLN 的 11 个过滤器，但仅限安全检查通过后。检查尚未完成，发货尚未获准。另一场会议将讨论停车位。",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-zh-CN",
+      "task": "rewrite",
+      "language": "zh-CN",
+      "source": "嘿，Neri 会在 2043-08-17 付给 Alba 230 EUR，修理 5 个阀门的钱哦！Alba 可不会反过来付给 Neri。",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-zh-CN",
+      "task": "translate",
+      "language": "zh-CN",
+      "targetLanguage": "zh-CN",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-en",
+      "task": "summarize",
+      "language": "en",
+      "source": "Rika proposed shipping 11 filters worth 430 PLN on 2044-09-23, only if the safety inspection passes. The inspection is pending and shipping has not been authorized. A separate meeting will discuss parking spaces.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-en",
+      "task": "rewrite",
+      "language": "en",
+      "source": "Hey, Neri is gonna pay Alba 230 EUR on 2043-08-17 for fixing 5 valves, okay? Alba is not gonna pay Neri back.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-en",
+      "task": "translate",
+      "language": "en",
+      "targetLanguage": "en",
+      "source": "Zara 指控 Teo 在 2045-02-11 更换了 9 个传感器。Teo 否认了这一指控，且没有调查证实此事。",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-ja",
+      "task": "summarize",
+      "language": "ja",
+      "source": "Rika は、2044-09-23 に 430 PLN 相当のフィルター 11 個を発送することを提案した。ただし、安全検査に合格した場合に限る。検査は未完了で、発送はまだ承認されていない。別の会議では駐車場所を話し合う。",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-ja",
+      "task": "rewrite",
+      "language": "ja",
+      "source": "ねえ、Neri は 2043-08-17 に、バルブ 5 個の修理代として Alba に 230 EUR を払うんだよ！Alba が Neri に払うわけじゃないよ。",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-ja",
+      "task": "translate",
+      "language": "ja",
+      "targetLanguage": "ja",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-ko",
+      "task": "summarize",
+      "language": "ko",
+      "source": "Rika는 안전 검사를 통과하는 경우에만 2044-09-23에 430 PLN 상당의 필터 11개를 배송하자고 제안했다. 검사는 아직 완료되지 않았고 배송도 승인되지 않았다. 별도 회의에서는 주차 공간을 논의할 예정이다.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-ko",
+      "task": "rewrite",
+      "language": "ko",
+      "source": "있잖아, Neri가 밸브 5개 수리비로 2043-08-17에 Alba에게 230 EUR를 낼 거야! Alba가 Neri에게 돈을 내는 건 아니야.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-ko",
+      "task": "translate",
+      "language": "ko",
+      "targetLanguage": "ko",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-de",
+      "task": "summarize",
+      "language": "de",
+      "source": "Rika schlug vor, am 2044-09-23 11 Filter im Wert von 430 PLN zu versenden, aber nur, wenn die Sicherheitsprüfung bestanden wird. Die Prüfung steht noch aus und der Versand wurde nicht genehmigt. Eine separate Sitzung wird Parkplätze behandeln.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-de",
+      "task": "rewrite",
+      "language": "de",
+      "source": "Hey, Neri wird Alba am 2043-08-17 230 EUR fürs Reparieren von 5 Ventilen zahlen, okay? Alba wird Neri aber nichts zurückzahlen.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-de",
+      "task": "translate",
+      "language": "de",
+      "targetLanguage": "de",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-es",
+      "task": "summarize",
+      "language": "es",
+      "source": "Rika propuso enviar 11 filtros por valor de 430 PLN el 2044-09-23, solo si se supera la inspección de seguridad. La inspección está pendiente y el envío no ha sido autorizado. Otra reunión tratará las plazas de aparcamiento.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-es",
+      "task": "rewrite",
+      "language": "es",
+      "source": "Oye, Neri le va a pagar a Alba 230 EUR el 2043-08-17 por arreglar 5 válvulas, ¿vale? Alba no le va a pagar a Neri.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-es",
+      "task": "translate",
+      "language": "es",
+      "targetLanguage": "es",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-pt",
+      "task": "summarize",
+      "language": "pt",
+      "source": "Rika propôs enviar 11 filtros no valor de 430 PLN em 2044-09-23, apenas se a inspeção de segurança for aprovada. A inspeção está pendente e o envio não foi autorizado. Outra reunião tratará dos lugares de estacionamento.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-pt",
+      "task": "rewrite",
+      "language": "pt",
+      "source": "Olha, Neri vai pagar a Alba 230 EUR em 2043-08-17 para consertar 5 válvulas, tá? Alba não vai pagar a Neri.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-pt",
+      "task": "translate",
+      "language": "pt",
+      "targetLanguage": "pt",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    }
+  ],
+  "bundleHashes": {
+    "plugin": "4b6fdd2f05d258ffd1453bbe34e1a16571504f2c8fa3737725e05f4133303728",
+    "diagnosticPlugin": "51c9d987a1ffa9ba2a80a6193dcbceb7ad5b505fb94c9b1d4eee6048ab4f3527"
+  },
+  "results": [],
+  "errors": [],
+  "externalRequests": [
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/mlc-chat-config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/api/resolve-cache/models/mlc-ai/gemma3-1b-it-q4f16_1-MLC/0f6103ed635931ff91a95db543365f0a77cbfb7d/mlc-chat-config.json?%2Fmlc-ai%2Fgemma3-1b-it-q4f16_1-MLC%2Fresolve%2Fmain%2Fmlc-chat-config.json=&etag=%225c174024a2f3c9d2c4249c85479e4b963cb525cd%22",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/gemma3-1b-it-q4f16_1_cs1k-webgpu.wasm",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/tokenizer.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/c4c7aa84fb94a696d78f2bde62590a25b6741b7365ed842f9310b5dcab71d95d?user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27tokenizer.json%3B+filename%3D%22tokenizer.json%22%3B&response-content-type=application%2Fjson%3B+charset%3Dutf-8&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&Expires=1791066054&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhL2M0YzdhYTg0ZmI5NGE2OTZkNzhmMmJkZTYyNTkwYTI1YjY3NDFiNzM2NWVkODQyZjkzMTBiNWRjYWI3MWQ5NWRcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3dG9rZW5pemVyLmpzb24lM0IrZmlsZW5hbWUlM0QlMjJ0b2tlbml6ZXIuanNvbiUyMiUzQiZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZqc29uJTNCK2NoYXJzZXQlM0R1dGYtOCZ4aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA1NH19fV19&Signature=MEYCIQCDSnIfg%7ER4fB2Q-GZIQLl11GAcsSP-oKMHdIrcnP-PAQIhANaHUlQTfgRbwnbGdzGnn3vDaHkJN1Vd4e7qv5O6jnki&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/tensor-cache.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/api/resolve-cache/models/mlc-ai/gemma3-1b-it-q4f16_1-MLC/0f6103ed635931ff91a95db543365f0a77cbfb7d/tensor-cache.json?%2Fmlc-ai%2Fgemma3-1b-it-q4f16_1-MLC%2Fresolve%2Fmain%2Ftensor-cache.json=&etag=%221f2935a92a763510468ec61341afef1a28847089%22",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_0.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_3.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_6.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_9.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/efe3b38453b4f4a8442ab1fd190a79783a99d7eca078d113f12b2a3832e902bc?user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_3.bin%3B+filename%3D%22params_shard_3.bin%22%3B&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791066062&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhL2VmZTNiMzg0NTNiNGY0YTg0NDJhYjFmZDE5MGE3OTc4M2E5OWQ3ZWNhMDc4ZDExM2YxMmIyYTM4MzJlOTAyYmNcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzMuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzMuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0iLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA2Mn19fV19&Signature=MEUCIHTYxRcgcGnqMjilOHkL-JV1Z%7EXDYj38ebYZkY7RF-PFAiEApFDXcRsKLW8bu2UM2LGxTuzCc2uOp9SVHW1leAqX7-c_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/57ee6c870d8d0d11f3e556dedb052c165fda21c464907ef18a49babb6ba0e2e0?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_9.bin%3B+filename%3D%22params_shard_9.bin%22%3B&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&user_id=public&xip=L8fQLguSjGQ&Expires=1791066062&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzU3ZWU2Yzg3MGQ4ZDBkMTFmM2U1NTZkZWRiMDUyYzE2NWZkYTIxYzQ2NDkwN2VmMThhNDliYWJiNmJhMGUyZTBcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzkuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzkuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA2Mn19fV19&Signature=MEUCIQCN5%7E6yVV7zVWo9sACyrHeHunoXlG0ifO9dxxXcvayldgIgDK%7Eawz4N-cWA5jDpIRAUJt5eTTG4ZEBg0sGwXf6azIk_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/604b745f613625c67a1538f3113234ec0627d539fd3b208388d894678901bad7?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_0.bin%3B+filename%3D%22params_shard_0.bin%22%3B&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791066062&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzYwNGI3NDVmNjEzNjI1YzY3YTE1MzhmMzExMzIzNGVjMDYyN2Q1MzlmZDNiMjA4Mzg4ZDg5NDY3ODkwMWJhZDdcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzAuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzAuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA2Mn19fV19&Signature=MEUCIHnht2xiQ9uMsjIlxnCYAkUezdcSlRvJrGDnEejuN3D8AiEA5zsVcbLyv%7EuyxSes4%7ElhroOGcap24JUKtj-HrUBAPOU_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/1776cd7c0ee86424d7e83ab75c32689bff43013be44dbc20dcf93e2941d6ee09?response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_6.bin%3B+filename%3D%22params_shard_6.bin%22%3B&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&Expires=1791066062&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzE3NzZjZDdjMGVlODY0MjRkN2U4M2FiNzVjMzI2ODliZmY0MzAxM2JlNDRkYmMyMGRjZjkzZTI5NDFkNmVlMDlcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF82LmJpbiUyMiUzQiZ4aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA2Mn19fV19&Signature=MEUCIQDYmgtTIeotpwO5OoYZjyq7C4rMhiralVYhm1UuwU1BYQIgCTq1EAfg9jSamMmCAGCJwVup3gQo8y6J1gykMNel8KE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_10.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_7.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/a7aa6e72ce59569a59defb73dffcd67f4ec7d3bcb9fa56b71c775e2535c56238?response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_10.bin%3B+filename%3D%22params_shard_10.bin%22%3B&X-Xet-Cas-Uid=public&Expires=1791066070&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhL2E3YWE2ZTcyY2U1OTU2OWE1OWRlZmI3M2RmZmNkNjdmNGVjN2QzYmNiOWZhNTZiNzFjNzc1ZTI1MzVjNTYyMzhcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMTAuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzEwLmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY2MDcwfX19XX0_&Signature=MEQCIC2XiqHxHUNCDE6FowkTKS3xmc9yRk75D6vH8Z39roArAiBKtK3%7EgZids8YJjcUyQZc7tjw2JFbzSaqNzzgn%7ElaFKg__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_4.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/62091ef34513faf96d3ca2bb3dea1136590f127d96be32561125424b76247f44?response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_7.bin%3B+filename%3D%22params_shard_7.bin%22%3B&X-Xet-Cas-Uid=public&user_id=public&xip=L8fQLguSjGQ&Expires=1791066070&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzYyMDkxZWYzNDUxM2ZhZjk2ZDNjYTJiYjNkZWExMTM2NTkwZjEyN2Q5NmJlMzI1NjExMjU0MjRiNzYyNDdmNDRcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF83LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF83LmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA3MH19fV19&Signature=MEUCIGsBC1dPGZU5xuFFbjRWDv84iRxQx55bhG4j7mMRtTj7AiEA9gT%7EOYrW5VFA875f90-Z3%7EN8HQbtlva39RrEOGuj6zI_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/bec194f9b2b07d6a9fe873d6a6332c531956363f6f2d63ae02d17b051b577792?response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_4.bin%3B+filename%3D%22params_shard_4.bin%22%3B&Expires=1791066070&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhL2JlYzE5NGY5YjJiMDdkNmE5ZmU4NzNkNmE2MzMyYzUzMTk1NjM2M2Y2ZjJkNjNhZTAyZDE3YjA1MWI1Nzc3OTJcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNC5iaW4lMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA3MH19fV19&Signature=MEUCIEiHuOF9vQASymy3ttHlmxR9j-FUZaG2bhVJyoyuZkIyAiEA7IU80ZkI5Y217wdhexb%7EWFH7y73zByNSmW44VsKgdlc_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_11.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/b8d174cceee603e9a62aea882bc4cf28e233907cf30fa43d1943142027ad7e9c?user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_11.bin%3B+filename%3D%22params_shard_11.bin%22%3B&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791066075&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhL2I4ZDE3NGNjZWVlNjAzZTlhNjJhZWE4ODJiYzRjZjI4ZTIzMzkwN2NmMzBmYTQzZDE5NDMxNDIwMjdhZDdlOWNcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzExLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xMS5iaW4lMjIlM0ImeGlwPUw4ZlFMZ3VTakdRJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY2MDc1fX19XX0_&Signature=MEUCIHnjlSkaEH8B7pnTIZSi5EO5j4ys6zcYfv6TSnYFmOKCAiEA7GtqFdNb09ELMG6WAzhZDlydVKYQnV-UTuiTbmery6o_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_8.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/a7fc17a9f86bf9fa86edfd4151a3b5dbc37d6c527f33d908bc3a0674a6723e86?user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_8.bin%3B+filename%3D%22params_shard_8.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791066076&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhL2E3ZmMxN2E5Zjg2YmY5ZmE4NmVkZmQ0MTUxYTNiNWRiYzM3ZDZjNTI3ZjMzZDkwOGJjM2EwNjc0YTY3MjNlODZcXD91c2VyX2lkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF84LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF84LmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0iLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA3Nn19fV19&Signature=MEYCIQDIcCUgIfRtAxa5uVtvZoh0ou6bm57nJ3LaWhWlBJ8CtQIhAPbEZVDQ%7EI7tIvuhYKWABabOe%7EDkcKUymejnHJ2P-Fu7&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_5.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/49ef4aa7af23b66777ccb7ae97b2f527710f4dee7fff3115b5e8f6745ac76d58?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_5.bin%3B+filename%3D%22params_shard_5.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&user_id=public&Expires=1791066076&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzQ5ZWY0YWE3YWYyM2I2Njc3N2NjYjdhZTk3YjJmNTI3NzEwZjRkZWU3ZmZmMzExNWI1ZThmNjc0NWFjNzZkNThcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzUuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzUuYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ4aXA9TDhmUUxndVNqR1EmdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA3Nn19fV19&Signature=MEUCIQCpB1msS7TyUfvBMELe7qMLWDWmvpbjVIQEaYR24ONSQgIgHS42DI8pHX-3JfI%7EcQX3klBwtNKxV7Ae94itUr6sqvA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_12.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/802145a0388b424ac278c7990b6a91ad5ffce95daf95f0ae7f6a9a2be4012222?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_12.bin%3B+filename%3D%22params_shard_12.bin%22%3B&xip=L8fQLguSjGQ&user_id=public&response-content-type=application%2Foctet-stream&Expires=1791066082&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzgwMjE0NWEwMzg4YjQyNGFjMjc4Yzc5OTBiNmE5MWFkNWZmY2U5NWRhZjk1ZjBhZTdmNmE5YTJiZTQwMTIyMjJcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzEyLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xMi5iaW4lMjIlM0ImeGlwPUw4ZlFMZ3VTakdRJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY2MDgyfX19XX0_&Signature=MEUCIQCi4UUmH4qtxtvdtJMpnlFrgHz09Ayo9awP7p4k6jNmTAIgEVINYA8LP2hdA2BnCS6v7QCHWnYztIMXVaZU-6xAg3c_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_13.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/1c38f37a3e8fad42c38387aba76c3234cad5df53a7c09d10b7c1874416c2f52a?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_13.bin%3B+filename%3D%22params_shard_13.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&Expires=1791066087&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzFjMzhmMzdhM2U4ZmFkNDJjMzgzODdhYmE3NmMzMjM0Y2FkNWRmNTNhN2MwOWQxMGI3YzE4NzQ0MTZjMmY1MmFcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xMy5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTMuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY2MDg3fX19XX0_&Signature=MEUCIFNh5%7EYIgpGHz2JpAyRpGA0tNppJmEMVv3jDjyH%7Etbx-AiEAhA5BrFYqPu81I9bIcRAlK7YvVrIr09kcX9ufJhNzuIo_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_1.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/6dbdf7e942e67da3c6c5f0b05066f5551d3766fafaba3c49e5377848dc03f592?response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_1.bin%3B+filename%3D%22params_shard_1.bin%22%3B&X-Xet-Cas-Uid=public&Expires=1791066087&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzZkYmRmN2U5NDJlNjdkYTNjNmM1ZjBiMDUwNjZmNTU1MWQzNzY2ZmFmYWJhM2M0OWU1Mzc3ODQ4ZGMwM2Y1OTJcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPUw4ZlFMZ3VTakdRJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMS5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA4N319fV19&Signature=MEUCIQCTfJpGsAg7ceXg%7E6o5Eefsg8MqE88FB3dDjACKySA8wwIgE6qdUFdJtTHjiBwbVzqCGz5A-JZjtk2c4mb6JYTHxbo_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_14.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/696ed6caf91cf8a0a544f607c3e168a8ab79dcf192968d914218089ea4d69c61?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_14.bin%3B+filename%3D%22params_shard_14.bin%22%3B&response-content-type=application%2Foctet-stream&Expires=1791066091&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhLzY5NmVkNmNhZjkxY2Y4YTBhNTQ0ZjYwN2MzZTE2OGE4YWI3OWRjZjE5Mjk2OGQ5MTQyMTgwODllYTRkNjljNjFcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xNC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTQuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY2MDkxfX19XX0_&Signature=MEUCIBPoZD%7EOXM6Mr2mksJzyILAguPRLm%7E7vdgMwJFeapDg-AiEA%7Eh7xdC20jOOaZruYGtp3RogAoe1XMBYfN79TsuMzdns_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/params_shard_2.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e92dcde6849bb2b2d8d94a/e8e14ce961d32a94d4466a27422485fe5e261a77970969dc9c1e0c98f3ed482c?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_2.bin%3B+filename%3D%22params_shard_2.bin%22%3B&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&user_id=public&Expires=1791066092&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTJkY2RlNjg0OWJiMmIyZDhkOTRhL2U4ZTE0Y2U5NjFkMzJhOTRkNDQ2NmEyNzQyMjQ4NWZlNWUyNjFhNzc5NzA5NjlkYzljMWUwYzk4ZjNlZDQ4MmNcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzIuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzIuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ4aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NjA5Mn19fV19&Signature=MEUCIEtYMbSod%7E6rQauyOM6koxecZj7qFzfu7S%7ETKogjJCErAiEAw8QjWhRcideqb-k0g2JZPx8wJM2vlS%7EYF%7EjimPKAEHo_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "HEAD",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75?xip=L8fQLguSjGQ&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27Qwen_Qwen3-0.6B-Q4_K_M.gguf%3B+filename%3D%22Qwen_Qwen3-0.6B-Q4_K_M.gguf%22%3B&X-Xet-Cas-Uid=public&Expires=1791066097&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgwZmIzODMyM2Y1MDYzYTU5ZWZkNzgyLzA1NTJiMDk1N2Y2ODNkN2NiNTA3YjRjZTgyYjEzZTc0OWMyNDk1NGNmZjYyNWEwYTZjNmJkZWRmZjhkYjlmNzVcXD94aXA9TDhmUUxndVNqR1EmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN1F3ZW5fUXdlbjMtMC42Qi1RNF9LX00uZ2d1ZiUzQitmaWxlbmFtZSUzRCUyMlF3ZW5fUXdlbjMtMC42Qi1RNF9LX00uZ2d1ZiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY2MDk3fX19XX0_&Signature=MEQCIHWNsWssVkYHUuO4scfkCtTnd1XOzncZAwxzJXzCEdWjAiAwjluwOQ95NfHf-Gs0rtmPlGFbBWhfiiH2RMKrpLPxuw__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "HEAD",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/raw/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27Qwen_Qwen3-0.6B-Q4_K_M.gguf%3B+filename%3D%22Qwen_Qwen3-0.6B-Q4_K_M.gguf%22%3B&xip=L8fQLguSjGQ&user_id=public&X-Xet-Cas-Uid=public&Expires=1791066099&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgwZmIzODMyM2Y1MDYzYTU5ZWZkNzgyLzA1NTJiMDk1N2Y2ODNkN2NiNTA3YjRjZTgyYjEzZTc0OWMyNDk1NGNmZjYyNWEwYTZjNmJkZWRmZjhkYjlmNzVcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3UXdlbl9Rd2VuMy0wLjZCLVE0X0tfTS5nZ3VmJTNCK2ZpbGVuYW1lJTNEJTIyUXdlbl9Rd2VuMy0wLjZCLVE0X0tfTS5nZ3VmJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY2MDk5fX19XX0_&Signature=MEYCIQCLGA6uCg-53gcLWbmzx9Magj7j6maFp6mL0pUWbwkabAIhAIq0thC7N1TD1fAOVzNUVBauELhyL065jDQlKHZeyo07&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    }
+  ],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 0
+  },
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "error": "Error: Unexpected model: CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "bundleBytesUnchanged": true
+}

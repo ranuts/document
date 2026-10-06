@@ -1,6 +1,6 @@
 ---
-title: Sobre — quem faz este editor e por quê
-description: Quem está por trás do edit.chaxus.com, o que ele realmente faz, como é construído e onde fica o código-fonte. Um editor de código aberto (AGPL-3.0) que roda no navegador para arquivos do Word, Excel, PowerPoint, CSV e PDF e nunca envia seus documentos.
+title: 'Sobre — quem faz este editor e por quê'
+description: 'Sobre este editor de código aberto, seus autores, código-fonte e tratamento de dados. Edição local sem envio obrigatório.'
 eyebrow: Sobre
 breadcrumb: Sobre
 h1: Sobre este editor
@@ -11,9 +11,9 @@ lead: Quem faz isto, o que ele realmente faz — e como você pode verificar as 
 
 Um **editor de documentos de escritório dentro do navegador**. Você abre um arquivo do Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV ou PDF e edita direto na aba.
 
-O que mais importa: **seu arquivo nunca sai do seu dispositivo**. Não há etapa de envio, não há conta e não há cópia do seu documento em servidor algum. O motor de edição roda dentro do seu navegador, então o arquivo vai do seu disco para a aba e volta — sem nada no meio.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
-Essa única propriedade orienta quase todas as decisões de projeto daqui: nada de cadastro, nada de armazenamento na nuvem, nada de telemetria que pudesse carregar o conteúdo de um documento, e um modo offline que continua funcionando quando a rede não funciona.
+Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
 
 ## Quem faz
 
@@ -26,8 +26,8 @@ Este site é desenvolvido e mantido por **ranuts**, o mesmo autor por trás da [
 Afirmações sobre privacidade são baratas. Estas são as formas de conferir por conta própria:
 
 - **Leia o código.** Tudo é aberto sob **AGPL-3.0** em [github.com/ranuts/document](https://github.com/ranuts/document). A licença exige que qualquer versão modificada e hospedada também publique seu código.
-- **Olhe a aba de rede.** Abra as ferramentas de desenvolvedor do navegador, carregue um documento, edite e observe as requisições. Você não verá seu arquivo indo a lugar nenhum.
-- **Desligue a rede.** Carregue o site uma vez, fique offline e então abra e edite um arquivo. Continua funcionando — algo só possível porque a edição acontece localmente.
+- Confira no painel de rede a abertura, edição e salvamento de um arquivo local. Teste separadamente a IA opcional, URLs remotas e apps que incorporam o editor; suas requisições não fazem parte da edição básica local.
+- Abra o editor conectado e teste os formatos, fontes e exportações necessários. Depois desconecte e confira o mesmo fluxo antes de depender do modo offline.
 - **Hospede você mesmo.** O repositório traz o necessário para rodar sua própria cópia.
 
 ## Sobre o que é construído
@@ -41,7 +41,7 @@ Construir sobre um motor existente é deliberado. Formatos de documento — sobr
 Uma lista honesta, porque uma página que só lista virtudes não serve para nada:
 
 - **Arquivos grandes dependem do seu aparelho.** Tudo roda no seu navegador, então uma planilha muito grande é limitada pela sua memória e CPU, não por um servidor que você possa pagar para ampliar.
-- **Sem sincronização e sem colaboração.** Nenhum servidor guarda seu documento, o que também significa nada de coedição em tempo real nem sincronia entre dispositivos.
+- Na edição básica local: **Sem sincronização e sem colaboração.** Nenhum servidor guarda seu documento, o que também significa nada de coedição em tempo real nem sincronia entre dispositivos.
 - **A fidelidade é muito boa, não perfeita.** Layouts complexos, fontes incomuns e macros podem diferir de uma suíte de desktop.
 
 Se algum desses pontos importa mais para você do que manter o arquivo local, uma suíte hospedada é a ferramenta melhor — e essa é uma escolha razoável.

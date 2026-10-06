@@ -187,3 +187,6 @@ public/pt/help.html
 public/pt/changelog.html
 public/pt/help/embed-api.html
 public/pt/index.html
+
+# Hash-pinned generated CPU runtime and upstream source patches.
+packages/agent-core/vendor/wllama-count/

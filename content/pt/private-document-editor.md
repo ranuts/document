@@ -1,26 +1,26 @@
 ---
-title: Editor de documentos privado — seus arquivos nunca saem do dispositivo
-description: Um editor de documentos privado que mantém seus arquivos no seu dispositivo. Edite Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV 100% localmente no navegador — nada é enviado. Grátis, de código aberto (AGPL-3.0), funciona offline.
-eyebrow: Privado · 100% no dispositivo
+title: 'Editor de documentos privado — edição local sem envio obrigatório'
+description: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos.'
+eyebrow: 'Edição local'
 h1: Procurando um editor de documentos que mantenha seus arquivos privados?
-lead: Edite arquivos do Word (DOCX), Excel (XLSX), PowerPoint (PPTX) e CSV direto no navegador — onde o arquivo fica no seu próprio dispositivo do começo ao fim. Nada é enviado, e não há conta para criar.
+lead: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento.'
 cta: Abrir o editor →
 ctaHref: /pt/
-ogDescription: Edite DOCX, XLSX, PPTX e CSV 100% localmente no navegador — nada é enviado, sem conta. Grátis e de código aberto.
+ogDescription: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos.'
 breadcrumb: Editor privado
-appDescription: Um editor de documentos privado que roda 100% localmente no navegador. Edite DOCX, XLSX, PPTX e CSV sem que nada seja enviado.
+appDescription: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos.'
 ---
 
-Aqui privacidade é simples e literal: o documento que você abre nunca sai do seu computador. Tudo roda localmente no navegador com WebAssembly, então abrir, editar e baixar acontecem na sua máquina. Não há cópia do arquivo em servidor para se preocupar, nem pasta na nuvem sincronizando para outro lugar.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 Isso serve bem para contratos, planilhas financeiras, anotações médicas, papelada de RH ou qualquer coisa que você prefira não entregar a terceiros. E você tem um editor de fidelidade completa — com o motor do OnlyOffice, então fontes, tabelas, fórmulas e layout são preservados — sem o preço de mandar o arquivo antes.
 
 ## O que dá para fazer
 
-- **Todo arquivo fica no dispositivo** — 100% no cliente; seus documentos nunca saem da sua máquina.
+- Na edição básica local: **Todo arquivo fica no dispositivo** — 100% no cliente; seus documentos nunca saem da sua máquina.
 - **Edite os formatos comuns** — DOCX, XLSX, PPTX e CSV, com a formatação completa preservada.
 - **Sem conta** — sem cadastro, sem login, nada para registrar.
-- **Trabalhe offline** — instalável como PWA e utilizável sem conexão.
+- Recursos de edição em cache funcionam offline; URLs de arquivos remotos precisam de conexão.
 - **Verifique a promessa** — leia o código aberto ou hospede a sua própria cópia.
 
 ## Como funciona
@@ -34,11 +34,11 @@ Isso serve bem para contratos, planilhas financeiras, anotações médicas, pape
 
 ### O que torna este um editor de documentos privado?
 
-Seus arquivos são abertos e editados inteiramente dentro do seu próprio navegador com WebAssembly. O documento nunca é enviado a um servidor, então fica no seu dispositivo o tempo todo.
+Na edição básica local: Seus arquivos são abertos e editados inteiramente dentro do seu próprio navegador com WebAssembly. O documento nunca é enviado a um servidor, então fica no seu dispositivo o tempo todo.
 
 ### Meus arquivos chegam a ser enviados?
 
-Não. Todo o processamento é 100% no cliente. Seu arquivo DOCX, XLSX, PPTX ou CSV é lido e escrito localmente e nunca sai do dispositivo.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Preciso de conta para manter meus arquivos privados?
 
@@ -46,8 +46,16 @@ Sem conta, sem cadastro e sem login. Você abre o editor e trabalha na hora, e n
 
 ### Dá para verificar que nada é enviado?
 
-Sim. O editor inteiro é de código aberto sob a licença AGPL-3.0 — você pode ler o código, observar a aba de rede ou hospedar a sua cópia.
+Confira no painel de rede a abertura, edição e salvamento de um arquivo local. Teste separadamente a IA opcional, URLs remotas e apps que incorporam o editor; suas requisições não fazem parte da edição básica local. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Continua funcionando sem conexão com a internet?
 
-Sim. É um PWA instalável e funciona totalmente offline depois de carregado, o que mantém sua edição contida na sua máquina.
+A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.
+
+### O que fica depois de fechar a aba?
+
+Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
+
+### O assistente de IA integrado está disponível?
+
+O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.

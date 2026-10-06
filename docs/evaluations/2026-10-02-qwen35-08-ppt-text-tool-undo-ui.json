@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-02T13:48:18.568Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local WebGPU model then offline reload, IM pptx operation and native Undo",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790948777"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "before": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "responseMs": 2289,
+  "after": [
+    [
+      "\r\n",
+      "\r\n",
+      "PPT_TEXT_TOOL_2026\r\n"
+    ]
+  ],
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "inserted": true,
+  "afterUndo": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "undoRestored": true,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790948901436.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "limitations": [
+    "One short ASCII text box per model on desktop Chromium; not broad layout/language/mobile evidence.",
+    "Default blank slide only; save/export and selected-text replacement not covered."
+  ]
+}

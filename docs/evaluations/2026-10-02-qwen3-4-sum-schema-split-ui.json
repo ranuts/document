@@ -1,0 +1,100 @@
+{
+  "scope": "Production UI real Metal GPU Qwen3-4B-q4f16_1-MLC planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 4571,
+      "feedback": [
+        "A1\n12A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "Calculate the sum of range A1:A3 and report the result only. Do not write any destination cell.",
+      "expected": "A1:A3: 42",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 4812,
+      "feedback": [],
+      "visibleErrors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": false
+    },
+    {
+      "kind": "pptx",
+      "prompt": "Read the plain text of the current presentation. Do not add or modify anything.",
+      "expected": "No readable text was found.",
+      "before": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "elapsedMs": 3329,
+      "feedback": [
+        "No readable text was found.No readable text was found."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "assessment": "Schema split is implemented, but real sum task still fails; no quality-fix claim. Cell and blank PPT reads pass."
+}

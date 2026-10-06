@@ -1,0 +1,17 @@
+diff --git a/src/utils.ts b/src/utils.ts
+index fe45ec4..584f957 100644
+--- a/src/utils.ts
++++ b/src/utils.ts
+@@ -275,11 +275,7 @@ export const isSupportWebGPU = () => {
+  */
+ export const isSupportMem64 = (): boolean => {
+   try {
+-    new WebAssembly.Memory({
+-      address: 'i64',
+-      initial: 1n, // 1 page (64 KiB)
+-    } as any);
+-    return true;
++    return WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 5, 3, 1, 4, 1]));
+   } catch {
+     return false;
+   }

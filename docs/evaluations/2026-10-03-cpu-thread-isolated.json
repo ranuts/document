@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-03T02:34:52.455Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright Chromium CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Current production writing prompt; only diagnostic raw capture is injected at response validation boundary. Writing is directly applied only in isolated test documents.",
+  "isolated": true,
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 9131,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [
+    {
+      "text": "{\"text\": \"Alex is to be charged 1,250 EUR on October 8, 2026.\"}",
+      "stopReason": "stop",
+      "usage": {
+        "completionTokens": 29,
+        "promptTokens": 447,
+        "promptProcessingDurationMs": 7658.015,
+        "decodingDurationMs": 1412.079,
+        "decodeTokensPerSecond": 19.828918920258708,
+        "responseDurationMs": 9102.265000343323,
+        "endToEndTokensPerSecond": 3.1860201827683734
+      }
+    }
+  ],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 0
+  },
+  "runtime": {
+    "threads": 4,
+    "multithread": true,
+    "isolated": true,
+    "hardwareConcurrency": 10
+  },
+  "errors": [],
+  "probeSource": "probe-cpu-thread-control.mjs",
+  "probeSha256": "14feca3f4bb17a21061a2deaa7d4df0791ce4c888895dc6030b74ae7b04d7d83",
+  "productionHeadersChanged": false,
+  "runnerSource": "run-cpu-thread-control.py",
+  "runnerSha256": "df054fcf8ce9860f7ddbbb84a171ea76b6361c3812c5b2c17347b2b96304fd9e",
+  "limitations": [
+    "Single request per configuration, stochastic output; not a reliability or performance benchmark.",
+    "Cross-origin isolation headers injected on same-origin test responses only.",
+    "Writing response was rejected by factual guard; speed does not establish writing quality."
+  ]
+}

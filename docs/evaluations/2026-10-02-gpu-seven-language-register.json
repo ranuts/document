@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-02T08:15:31.324Z",
+  "scope": "Actual built UI with isolated persistent Playwright Chromium Metal / GPU Qwen3-1.7B, fresh navigation per case; seven language colloquial-to-formal rewrite probes, not full model/language acceptance",
+  "status": "completed",
+  "results": [
+    {
+      "id": "rewrite-en",
+      "locale": "en",
+      "prompt": "Rewrite this sentence in more formal English. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Hey, Alex is going to pay 1,250 EUR on 2026-10-08, okay?",
+      "responseMs": 1916,
+      "stats": "Decode speed: 44.9 token/s · First token: 1.22 s · 29 tokens",
+      "formalRegisterAchieved": false,
+      "manualReview": "Only gonna becomes going to; Hey and okay remain informal."
+    },
+    {
+      "id": "rewrite-zh-CN",
+      "locale": "zh-CN",
+      "prompt": "Rewrite this sentence in more formal Chinese. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: 嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "responseMs": 1853,
+      "stats": "Decode speed: 43.8 token/s · First token: 1.15 s · 29 tokens",
+      "formalRegisterAchieved": false,
+      "manualReview": "Colloquial source repeated unchanged."
+    },
+    {
+      "id": "rewrite-ja",
+      "locale": "ja",
+      "prompt": "Rewrite this sentence in more formal Japanese. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: ねえ、Alexは2026-10-08に1,250 EURを払うんだって。",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "ねえ、Alexは2026-10-08に1,250 EURを払うんだって。",
+      "responseMs": 1796,
+      "stats": "Decode speed: 44.6 token/s · First token: 1.12 s · 28 tokens",
+      "formalRegisterAchieved": false,
+      "manualReview": "Colloquial source repeated unchanged."
+    },
+    {
+      "id": "rewrite-ko",
+      "locale": "ko",
+      "prompt": "Rewrite this sentence in more formal Korean. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: 있잖아, Alex가 2026-10-08에 1,250 EUR를 낼 거야.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "2026년 10월 8일에 1,250 EUR를 낸 것은 Alex의 예상된 결과입니다.",
+      "responseMs": 1906,
+      "stats": "Decode speed: 45.0 token/s · First token: 1.14 s · 32 tokens",
+      "formalRegisterAchieved": false,
+      "manualReview": "Unfaithful formulation about payment made and an expected result replaces the source future-payment statement; also unnatural wording."
+    },
+    {
+      "id": "rewrite-de",
+      "locale": "de",
+      "prompt": "Rewrite this sentence in more formal German. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Hey, Alex zahlt am 2026-10-08 die 1,250 EUR, okay?",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Hey, Alex zahlt am 2026-10-08 die 1,250 EUR, okay?",
+      "responseMs": 1872,
+      "stats": "Decode speed: 44.3 token/s · First token: 1.17 s · 29 tokens",
+      "formalRegisterAchieved": false,
+      "manualReview": "Hey and okay retained; source repeated unchanged."
+    },
+    {
+      "id": "rewrite-es",
+      "locale": "es",
+      "prompt": "Rewrite this sentence in more formal Spanish. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Oye, Alex va a pagar 1,250 EUR el 2026-10-08, ¿vale?",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Oye, Alex va a pagar 1.250 EUR el 8 de octubre de 2026, ¿vale?",
+      "responseMs": 1981,
+      "stats": "Decode speed: 43.1 token/s · First token: 1.22 s · 30 tokens",
+      "formalRegisterAchieved": false,
+      "manualReview": "Date/amount notation changed, but Oye and ¿vale? remain informal."
+    },
+    {
+      "id": "rewrite-pt",
+      "locale": "pt",
+      "prompt": "Rewrite this sentence in more formal Portuguese. Keep the same language. Preserve all facts, name, currency, amount and date. Do not add information. Return only the rewritten sentence: Ei, Alex vai pagar 1,250 EUR em 2026-10-08, tá?",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Ei, Alex vai pagar 1,250 EUR em 2026-10-08, tá?",
+      "responseMs": 1907,
+      "stats": "Decode speed: 40.9 token/s · First token: 1.18 s · 28 tokens",
+      "formalRegisterAchieved": false,
+      "manualReview": "Colloquial source repeated unchanged."
+    }
+  ],
+  "errors": [],
+  "coverage": {
+    "model": "Qwen3-1.7B-q4f16_1-MLC",
+    "device": "Isolated Chromium with explicit Metal WebGPU flags",
+    "fullModelAndLanguageAcceptanceComplete": false
+  },
+  "review": "No output fully meets formal-register instructions. Korean also fails faithful semantic preservation. This evaluates the current product chat prompt path, not the dedicated reviewed-writing pipeline or the intrinsic model in every prompting configuration."
+}

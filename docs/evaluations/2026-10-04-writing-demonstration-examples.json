@@ -1,0 +1,38 @@
+[
+  {
+    "input": {
+      "text": "Hey, Mira will pay Owen 860 CAD on 2027-02-19, okay?",
+      "instruction": "Rewrite in formal English, preserving payer, recipient, amount and date."
+    },
+    "output": {
+      "text": "Mira will pay Owen 860 CAD on 2027-02-19."
+    }
+  },
+  {
+    "input": {
+      "text": "嗯，林溪还没有授权在 2027-02-19 退还 640 GBP 呢。",
+      "instruction": "改为正式书面中文，保留授权主体、授权状态、退款金额和日期。"
+    },
+    "output": {
+      "text": "林溪尚未授权在 2027-02-19 退还 640 GBP。"
+    }
+  },
+  {
+    "input": {
+      "text": "Oye, Inés puede liberar 950 USD solo después de que Pablo confirme la entrega el 2027-02-19, ¿vale?",
+      "instruction": "Redacta en español formal; conserva quién libera, quién confirma y la condición previa."
+    },
+    "output": {
+      "text": "Inés puede liberar 950 USD solo después de que Pablo confirme la entrega el 2027-02-19."
+    }
+  },
+  {
+    "input": {
+      "text": "Bon, Léa propose d’envoyer 27 caisses à Marc le 2027-02-19, tu vois ?",
+      "instruction": "Reformule en français formel sans changer l’auteur, le destinataire ou le statut de la proposition."
+    },
+    "output": {
+      "text": "Léa propose d’envoyer 27 caisses à Marc le 2027-02-19."
+    }
+  }
+]

@@ -1,0 +1,63 @@
+{
+  "runtime": "im-completion-copy",
+  "profile": ".scratch/default-cpu-process-profile-20261005",
+  "errors": [],
+  "failures": [
+    {
+      "url": "http://127.0.0.1:5193/",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "restoredPages": [
+    "about:blank"
+  ],
+  "onlineCaches": [
+    "document-editor-runtime-70cdcd40a53e",
+    "document-editor-runtime-b6864850e7b3",
+    "document-editor-core-1791159648"
+  ],
+  "onlineStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "firstProcessClosed": true,
+  "browserOffline": true,
+  "homeFromSW": true,
+  "explicitAgentOptIn": true,
+  "imported": "WEBKIT_WORD_20261005\r\n",
+  "importedId": "7ffd52ae-b2b2-4c32-a4c0-90702983df54",
+  "restoredShellFromSW": true,
+  "before": "WEBKIT_WORD_20261005\r\n",
+  "restoredId": "7ffd52ae-b2b2-4c32-a4c0-90702983df54",
+  "offlineScripts": [
+    "",
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-CnWzsBae.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "offlineStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "after": "OFFLINE_CHAIN_20261005\r\n",
+  "chatErrors": [],
+  "completionMessages": [],
+  "error": "Error: Unexpected completion copy",
+  "failureNote": "模型已加载，可以开始对话。",
+  "failureStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "closed": true
+}

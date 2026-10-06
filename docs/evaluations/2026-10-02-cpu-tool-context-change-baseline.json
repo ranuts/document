@@ -1,0 +1,147 @@
+{
+  "scope": "Production UI real WASM CPU CPU Qwen3-0.6B GGUF / WebKit planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-BiHmoN8W.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 53185,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "editorModule": "./assets/editor-BiHmoN8W.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A2.",
+      "expected": "13",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":2,\"r1\":2,\"c2\":2,\"r2\":2,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":2,\"col\":2}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":2,\"r1\":2,\"c2\":2,\"r2\":2,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":2,\"col\":2}"
+      },
+      "elapsedMs": 39971,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": false
+    }
+  ],
+  "errors": [],
+  "providerTimings": [
+    {
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 50304,
+        "decodingDurationMs": 2812.999,
+        "decodeTokensPerSecond": 4.6214022827594325,
+        "responseDurationMs": 53150,
+        "endToEndTokensPerSecond": 0.2634054562558796
+      },
+      "responseChars": 41,
+      "stopReason": "stop"
+    },
+    {
+      "usage": {
+        "completionTokens": 15,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 35851,
+        "decodingDurationMs": 4043.999,
+        "decodeTokensPerSecond": 3.461919748249196,
+        "responseDurationMs": 39938,
+        "endToEndTokensPerSecond": 0.37558215233612097
+      },
+      "responseChars": 42,
+      "stopReason": "stop"
+    }
+  ],
+  "limitations": [
+    "One pair per prompt ordering; not a statistical reliability or latency estimate.",
+    "Baseline second request failed; raw response was not logged, so precise parse failure unknown.",
+    "Candidate retained identical capability content, constraints and token count, changing only context/capabilities order.",
+    "GPU cross-model regression and broader CPU tasks remain outstanding."
+  ]
+}

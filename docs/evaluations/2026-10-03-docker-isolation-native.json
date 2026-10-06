@@ -1,0 +1,196 @@
+{
+  "browserVersion": "151.0.7922.34",
+  "scope": "Independent fresh Chromium context per document type, actual configured static-web-server Docker headers forwarded unchanged from first navigation, real app Worker registration, native edit/Save/reopen and offline restart; no AI inference or physical-device coverage.",
+  "vendor": "59e2dc593998",
+  "cold": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:52890/sw.js?isolation=1",
+      "edited": "ISOLATED_COLD_docx\r\n",
+      "nativeSave": {
+        "bytes": 25798,
+        "failure": null
+      },
+      "reopened": {
+        "isolated": true,
+        "iframeIsolated": true,
+        "fullApi": true,
+        "loaded": true,
+        "controller": "http://127.0.0.1:52890/sw.js?isolation=1"
+      },
+      "reopenedText": "ISOLATED_COLD_docx\r\n",
+      "reopenExact": true
+    },
+    {
+      "type": "xlsx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:52890/sw.js?isolation=1",
+      "edited": "ISOLATED_COLD_xlsx",
+      "nativeSave": {
+        "bytes": 8425,
+        "failure": null
+      },
+      "reopened": {
+        "isolated": true,
+        "iframeIsolated": true,
+        "fullApi": true,
+        "loaded": true,
+        "controller": "http://127.0.0.1:52890/sw.js?isolation=1"
+      },
+      "reopenedText": "ISOLATED_COLD_xlsx",
+      "reopenExact": true
+    },
+    {
+      "type": "pptx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:52890/sw.js?isolation=1",
+      "edited": [
+        [
+          "\r\n",
+          "\r\n",
+          "ISOLATED_COLD_pptx\r\n"
+        ]
+      ],
+      "nativeSave": {
+        "bytes": 33965,
+        "failure": null
+      },
+      "reopened": {
+        "isolated": true,
+        "iframeIsolated": true,
+        "fullApi": true,
+        "loaded": true,
+        "controller": "http://127.0.0.1:52890/sw.js?isolation=1"
+      },
+      "reopenedText": [
+        [
+          "\r\n",
+          "\r\n",
+          "ISOLATED_COLD_pptx\r\n"
+        ]
+      ],
+      "reopenExact": true
+    }
+  ],
+  "offline": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:52890/sw.js?isolation=1",
+      "online": false,
+      "networkRejected": true,
+      "upstreamResponses": 0
+    },
+    {
+      "type": "xlsx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:52890/sw.js?isolation=1",
+      "online": false,
+      "networkRejected": true,
+      "upstreamResponses": 0
+    },
+    {
+      "type": "pptx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:52890/sw.js?isolation=1",
+      "online": false,
+      "networkRejected": true,
+      "upstreamResponses": 0
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "spellNetworkRequests": [
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    }
+  ]
+}

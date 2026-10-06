@@ -1,0 +1,24 @@
+{
+  "scope": "Current production WebGPU selected-text summary of a synthetic source within the 8000-character application limit, testing actual Worker context rejection and unchanged document; no broad writing-quality or memory claim.",
+  "sourceLength": 7000,
+  "status": "completed",
+  "consoleErrors": [],
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "responseMs": 355,
+  "visibleErrors": [
+    "The request could not be completed. Try again or check settings.Restore request"
+  ],
+  "workerErrors": [
+    "ContextWindowSizeExceededError: Prompt tokens exceed context window size: number of prompt tokens: 4522; context window size: 4096\nConsider shortening the prompt, or increase `context_window_size`, or using sliding window via `sliding_window_size`."
+  ],
+  "unchanged": true,
+  "previewCount": 0,
+  "restore": {
+    "draft": "请用一句话忠实概括这段中文。",
+    "userCount": 1,
+    "running": false
+  },
+  "nextReply": "hello",
+  "errorCountAfterRecovery": 1
+}

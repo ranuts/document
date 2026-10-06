@@ -1,0 +1,197 @@
+{
+  "status": "completed",
+  "scope": "Actual compiled WllamaProvider with count-capable source SDK and native CPU Worker; injected engine factory, no editor writes or shipping packaging acceptance",
+  "files": {
+    "js": "9708f2b93fa3bc6df5d06c75bc651f32201228532f07423447aa1b912f52f97c",
+    "wasm": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179"
+  },
+  "served": [
+    {
+      "method": "GET",
+      "url": "/provider/llm/wllama-cache-storage.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": "bytes=0-1048575",
+      "requestBytes": 0,
+      "responseBytes": 1048576
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": "bytes=0-67108863",
+      "requestBytes": 0,
+      "responseBytes": 67108864
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": "bytes=0-268435455",
+      "requestBytes": 0,
+      "responseBytes": 268435456
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": "bytes=0-484220319",
+      "requestBytes": 0,
+      "responseBytes": 484220320
+    }
+  ],
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    }
+  ],
+  "clientSHA256": "9485f3e243dff343c27d69db47e5b7a6fd6608cd9262d8e271c1c1e56a0f93f8",
+  "probeSHA256": "3181a607089db698489bf5b89a9714942d7032eb07ffe1c6a071834afbde3993",
+  "patchSHA256": "d6680454b92ba3de45220dded01f966b1f25360a47dd2a3c2d6738f9db077bff",
+  "sdkSHA256": "90b5b57472a3116efff13b8376b84c724dbe22580feeb24843829839ca752414",
+  "routeHits": [],
+  "result": {
+    "initialEstimate": {
+      "quota": 3221225713,
+      "usage": 241,
+      "usageDetails": {
+        "indexedDB": 241
+      }
+    },
+    "results": [
+      {
+        "bytes": 1048576,
+        "state": "saved",
+        "actual": 1048576,
+        "streamedBytes": 1048576,
+        "estimate": {
+          "quota": 3222274406,
+          "usage": 1048934,
+          "usageDetails": {
+            "caches": 1048693,
+            "indexedDB": 241
+          }
+        }
+      },
+      {
+        "bytes": 67108864,
+        "state": "saved",
+        "actual": 67108864,
+        "streamedBytes": 67108864,
+        "estimate": {
+          "quota": 3289383387,
+          "usage": 68157915,
+          "usageDetails": {
+            "caches": 68157674,
+            "indexedDB": 241
+          }
+        }
+      },
+      {
+        "bytes": 268435456,
+        "state": "failed",
+        "name": "UnknownError",
+        "error": "UnknownError: Failed to execute 'put' on 'Cache': Unexpected internal error.",
+        "streamedBytes": 268435456,
+        "estimate": {
+          "quota": 3557294672,
+          "usage": 336069200,
+          "usageDetails": {
+            "caches": 336068959,
+            "indexedDB": 241
+          }
+        }
+      },
+      {
+        "bytes": 484220320,
+        "state": "failed",
+        "name": "UnknownError",
+        "error": "UnknownError: Failed to execute 'put' on 'Cache': Unexpected internal error.",
+        "streamedBytes": 484220320,
+        "estimate": {
+          "quota": 3489136998,
+          "usage": 267911526,
+          "usageDetails": {
+            "caches": 267911285,
+            "indexedDB": 241
+          }
+        }
+      }
+    ],
+    "scope": "Real Chromium Cache API streamed model prefixes; no native inference or full offline acceptance"
+  },
+  "phase": "verified",
+  "partial": {
+    "initialEstimate": {
+      "quota": 3221225713,
+      "usage": 241,
+      "usageDetails": {
+        "indexedDB": 241
+      }
+    },
+    "results": [
+      {
+        "bytes": 1048576,
+        "state": "saved",
+        "actual": 1048576,
+        "streamedBytes": 1048576,
+        "estimate": {
+          "quota": 3222274406,
+          "usage": 1048934,
+          "usageDetails": {
+            "caches": 1048693,
+            "indexedDB": 241
+          }
+        }
+      },
+      {
+        "bytes": 67108864,
+        "state": "saved",
+        "actual": 67108864,
+        "streamedBytes": 67108864,
+        "estimate": {
+          "quota": 3289383387,
+          "usage": 68157915,
+          "usageDetails": {
+            "caches": 68157674,
+            "indexedDB": 241
+          }
+        }
+      },
+      {
+        "bytes": 268435456,
+        "state": "failed",
+        "name": "UnknownError",
+        "error": "UnknownError: Failed to execute 'put' on 'Cache': Unexpected internal error.",
+        "streamedBytes": 268435456,
+        "estimate": {
+          "quota": 3557294672,
+          "usage": 336069200,
+          "usageDetails": {
+            "caches": 336068959,
+            "indexedDB": 241
+          }
+        }
+      },
+      {
+        "bytes": 484220320,
+        "state": "failed",
+        "name": "UnknownError",
+        "error": "UnknownError: Failed to execute 'put' on 'Cache': Unexpected internal error.",
+        "streamedBytes": 484220320,
+        "estimate": {
+          "quota": 3489136998,
+          "usage": 267911526,
+          "usageDetails": {
+            "caches": 267911285,
+            "indexedDB": 241
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "source": {
+    "path": "/private/tmp/document-wllama-count-361/src/utils.ts",
+    "sha256": "eb99c81471cae187c840f6512b21718d4697c94df3bab2587b67432c2c26ccbc",
+    "capabilityFunction": "export const isSupportMem64 = (): boolean => {\n  try {\n    new WebAssembly.Memory({\n      address: 'i64',\n      initial: 1n, // 1 page (64 KiB)\n    } as any);\n    return true;\n  } catch {\n    return false;\n  }\n};"
+  },
+  "installed": {
+    "path": "packages/agent-core/node_modules/@wllama/wllama/esm/index.js",
+    "sha256": "7a7d408a39a40e4478b7e75fca6eba190a0c6cedaceb99414db114e5c4c0ebfc",
+    "capabilityFunction": "var isSupportMem64 = () => {\n  try {\n    // Constructor options can be accepted while actual memory64 modules fail to compile.\n    return WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 5, 3, 1, 4, 1]));\n  } catch (e) {\n    return false;\n  }\n};"
+  },
+  "finding": "Original harness overrides validate(13-byte memory64 module); source probes Memory constructor instead, so compatibility forcing did not apply to source build."
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "heldout-formal-en-negative",
+    "task": "rewrite",
+    "source": "Yo, Lina's gonna send -75 USD on 2030-02-06, right? Niko hasn't okayed it.",
+    "instruction": "Rewrite in formal English, preserving every fact and the lack of approval."
+  },
+  {
+    "id": "heldout-formal-zh-negation",
+    "task": "rewrite",
+    "source": "嘿，Lina 会在 2030-02-06 付 75 USD 哦！Niko 尚未批准这笔款项。",
+    "instruction": "改写为正式书面中文，去掉口语表达，保留所有事实和尚未获批的状态。"
+  },
+  {
+    "id": "heldout-formal-de",
+    "task": "rewrite",
+    "source": "Hey, Lina wird am 2030-02-06 75 USD zahlen, okay?",
+    "instruction": "Formuliere den Text in formellem Deutsch, ohne die Fakten zu ändern."
+  },
+  {
+    "id": "heldout-summary-ja",
+    "task": "summarize",
+    "source": "Lina は 2030-02-06 に 75 USD を支払うことを提案しました。この支払いはまだ承認されておらず、現在も承認待ちです。",
+    "instruction": "日本語で短く要約し、提案された日付、金額、未承認である事実を保持してください。"
+  },
+  {
+    "id": "heldout-formal-ko",
+    "task": "rewrite",
+    "source": "야, Lina 는 2030-02-06 에 75 USD 를 낼 거야, 알겠지?",
+    "instruction": "사실을 유지하면서 격식을 갖춘 한국어 문장으로 고쳐 주세요."
+  },
+  {
+    "id": "heldout-summary-es",
+    "task": "summarize",
+    "source": "Lina propuso pagar 75 USD el 2030-02-06. El pago no ha sido aprobado y sigue pendiente de aprobación.",
+    "instruction": "Resume en español conservando el importe, la fecha propuesta y que no se ha aprobado."
+  },
+  {
+    "id": "heldout-formal-pt",
+    "task": "rewrite",
+    "source": "Ei, Lina vai pagar 75 USD em 2030-02-06, tá bom?",
+    "instruction": "Reescreva em português formal preservando todos os fatos."
+  }
+]

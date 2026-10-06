@@ -1,0 +1,793 @@
+{
+  "status": "completed",
+  "scope": "Production IM local model PPT literal text schema/data guard and native Unicode/tab reading/write/Undo/Redo; not selected-text replacement",
+  "errors": [],
+  "model": "Qwen3-4B-q4f16_1-MLC",
+  "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BdLDQ0VX.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "before": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "read": {
+    "prompt": "Read the plain text of the current presentation. Do not modify anything.",
+    "elapsedMs": 3766,
+    "feedback": [
+      "Slide 1:\nAlex 😀"
+    ],
+    "visibleErrors": [],
+    "previewCount": 0,
+    "matched": true,
+    "unchanged": true
+  },
+  "afterRead": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "literal": "项目 😀\tPayment\n  NOT approved  ",
+  "write": {
+    "prompt": "Add a new text box on the current slide with exactly this text, preserving all line breaks, tabs, spaces and characters: 项目 😀\tPayment\n  NOT approved  ",
+    "elapsedMs": 2965,
+    "feedback": [
+      "Done. Result checked; use Undo if needed."
+    ],
+    "visibleErrors": [],
+    "previewCount": 0,
+    "matched": true,
+    "outsideUnchanged": true
+  },
+  "after": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "undefined_14",
+        "text": "项目  Payment\r\n  NOT approved  \r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 5.715,
+          "r": 230.30333333333334,
+          "b": 23.533237003596724
+        },
+        "paragraphs": [
+          {
+            "alignment": 1,
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 39033
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 30446
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  },
+                  {
+                    "type": 21
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 80
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 121
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 109
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 110
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 116
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "alignment": 1,
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 78
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 79
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 84
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 114
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 111
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 118
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 100
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 1
+  },
+  "afterUndo": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "undoExact": true,
+  "afterRedo": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "undefined_14",
+        "text": "项目  Payment\r\n  NOT approved  \r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 5.715,
+          "r": 230.30333333333334,
+          "b": 23.533237003596724
+        },
+        "paragraphs": [
+          {
+            "alignment": 1,
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 39033
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 30446
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  },
+                  {
+                    "type": 21
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 80
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 121
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 109
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 110
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 116
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "alignment": 1,
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 78
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 79
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 84
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 114
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 111
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 118
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 100
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 1
+  },
+  "redoExact": true,
+  "allPassed": true
+}

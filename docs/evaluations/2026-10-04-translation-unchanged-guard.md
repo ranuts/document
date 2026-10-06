@@ -1,0 +1,9 @@
+# Unchanged translation results
+
+The current writing route previously accepted an unchanged translation, unlike rewrite and summary. Actual Llama 1B Japanese and German target cases returned English without a UI error. The guard now refuses unchanged body text for all three writing operations, using the existing localized original-text guidance. Comparison ignores outer whitespace, including the native Word selection terminator. No prompt, model, preview card or confirmation was added.
+
+A translation already in the target language or composed entirely of names/numbers may legitimately remain unchanged; the route now reports that no changed result was proposed rather than preparing a document edit. This is an explicit no-op policy, not evidence that the output language is wrong. Changed wrong-language text and lost semantic conditions remain unresolved.
+
+Seven target-language regression cases and the localized presentation mapping failed before implementation. After implementation: build passed; 116 test files / 4,232 tests passed. The full test run emitted an asynchronous rejection-handled warning. Default whole-tree lint failed on the earlier untracked `.scratch/ministral-template-audit/sdk-conversation.mjs` vendor copy. Oxlint excluding `.scratch/**`, TypeScript and Docker configuration checks passed; scratch artifacts were preserved.
+
+The new Chromium replay used the rebuilt production bundle, actual Llama engine and native Word selection with the real Japanese and German IM controls. Both raw results again returned English unchanged. Both now displayed the existing original-text error, preserved native text, and showed zero preview cards and page errors. The browser context closed. Run `python3 docs/evaluations/verify-translation-unchanged-guard.py` for captured request, output, UI and bundle checks. No native Save was performed; this replay does not prove general language or semantic accuracy.

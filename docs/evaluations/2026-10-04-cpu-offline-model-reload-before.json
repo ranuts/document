@@ -1,0 +1,46 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "blob:http://127.0.0.1:5193/9447cae7-dc78-4377-a5bf-bb5b55f5c4b7"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "url": "blob:http://127.0.0.1:5193/fbde6710-a258-43d3-bc7a-f6c63b60980a"
+    },
+    {
+      "event": "created",
+      "id": 4,
+      "url": "blob:http://127.0.0.1:5193/d27009af-2ee0-401c-9c12-1e0d8afe7c86"
+    },
+    {
+      "event": "created",
+      "id": 5,
+      "url": "blob:http://127.0.0.1:5193/1c20e1fb-6d8d-4dd2-832c-7a055fe38fe4"
+    },
+    {
+      "event": "created",
+      "id": 6,
+      "url": "blob:http://127.0.0.1:5193/513ee548-9c0c-4a9f-a6cc-0dad8351ec8c"
+    }
+  ],
+  "offlineRequests": [],
+  "probeSHA256": "799dfbd8850f8c5d76c3e18b2473fc09601f203d2cd36e5658211ed339678dbc",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "status": "failed",
+  "error": "Error: locator.selectOption: Error: Element is not a <select> element\nCall log:\n\u001b[2m  - waiting for locator('.agent-panel-provider')\u001b[22m\n\u001b[2m    - locator resolved to <r-select tabindex=\"0\" value=\"webllm\" role=\"combobox\" aria-expanded=\"false\" aria-disabled=\"false\" aria-haspopup=\"listbox\" aria-label=\"AI provider\" class=\"agent-panel-provider\" aria-controls=\"ran-select-listbox-sxi8se2\" aria-activedescendant=\"ran-select-listbox-sxi8se2-option-0\">…</r-select>\u001b[22m\n\u001b[2m  - attempting select option action\u001b[22m\n\u001b[2m    - waiting for element to be visible and enabled\u001b[22m\n"
+}

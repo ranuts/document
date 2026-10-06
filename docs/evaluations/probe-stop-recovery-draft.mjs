@@ -1,0 +1,52 @@
+import {chromium} from '@playwright/test';
+import fs from 'node:fs/promises';
+import crypto from 'node:crypto';
+const sha=v=>crypto.createHash('sha256').update(v).digest('hex');
+const files=(await fs.readdir('dist/assets')).filter(n=>/^agent-plugin-.*\.js$/.test(n));
+if(files.length!==1)throw Error('Ambiguous plugin');
+const report={scope:'Actual CPU stream/Stop/reload with one controlled reload gate and draft preservation. Not natural-fault, quality, offline/PWA or physical-device certification.',probeSHA256:sha(await fs.readFile(new URL(import.meta.url))),plugin:files[0],pluginSHA256:sha(await fs.readFile('dist/assets/'+files[0])),errors:[]};
+const context=await chromium.launchPersistentContext('.scratch/ai-offline/profile',{serviceWorkers:'block',viewport:{width:1280,height:900}});
+await context.addInitScript(()=>Object.defineProperty(navigator,'gpu',{value:undefined,configurable:true}));
+try{
+ const page=context.pages()[0]??await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
+ await page.goto('http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN');
+ await page.frameLocator('#app iframe').locator('.agent-sidebar-entry').click({timeout:90000});
+ await page.waitForFunction(()=>document.querySelector('.agent-panel-note')?.textContent?.includes('模型已加载'),null,{timeout:180000});
+ report.engine=await page.locator('.agent-model-status').textContent();if(!report.engine.includes('CPU'))throw Error('Not CPU');
+ await page.locator('.agent-panel-clear').click();
+ await page.locator('.agent-panel-settings-toggle').click();await page.locator('.agent-generation-options summary').click();
+ await page.locator('[name="maxTokens"]').fill('1024');await page.locator('[name="maxTokens"]').dispatchEvent('change');
+ await page.locator('.agent-panel-settings-toggle').click();
+ report.documentBefore=await page.frameLocator('#app iframe').locator('body').evaluate(()=> (window.editor??window.Asc.editor).WordControl.m_oLogicDocument.GetText());
+ await page.evaluate(async()=>{
+  const {Wllama}=await import('/assets/client-D5_UYdz1.js');
+  const load=Wllama.prototype.loadModelFromUrl,complete=Wllama.prototype.createChatCompletion;
+  window.__draftProbe={loads:0,generations:0};
+  Wllama.prototype.loadModelFromUrl=async function(...args){window.__draftProbe.loads++;await new Promise(resolve=>window.__releaseReload=resolve);return load.apply(this,args);};
+  Wllama.prototype.createChatCompletion=function(...args){window.__draftProbe.generations++;return complete.apply(this,args);};
+ });
+ await page.locator('.cui-input').fill('请写一个较长的原创中文故事，详细描述一位工匠修理旧钟的过程，至少六百字。不要操作文档。');
+ await page.locator('.cui-input').press('Enter');
+ await page.waitForFunction(()=>document.querySelector('.cui-input')?.disabled&&(document.querySelector('.cui-msg-agent')?.textContent?.length??0)>=40,null,{timeout:120000});
+ report.partialText=await page.locator('.cui-msg-agent').last().textContent();
+ await page.locator('.cui-send-stop').click();
+ await page.waitForFunction(()=>typeof window.__releaseReload==='function'&&!document.querySelector('.cui-input').disabled,null,{timeout:30000});
+ const draft='为什么旧钟会走慢？';
+ await page.locator('.cui-input').fill(draft);
+ await page.locator('.cui-input').press('Enter');
+ report.waiting=await page.evaluate(()=>({draft:document.querySelector('.cui-input').value,sendDisabled:document.querySelector('.cui-send').disabled,userMessages:document.querySelectorAll('.cui-msg-user').length,...window.__draftProbe}));
+ if(report.waiting.draft!==draft||!report.waiting.sendDisabled||report.waiting.userMessages!==1||report.waiting.generations!==1)throw Error('Waiting draft mismatch');
+ await page.evaluate(()=>window.__releaseReload());
+ await page.waitForFunction(()=>document.querySelector('.agent-panel-note')?.textContent?.includes('模型已加载'),null,{timeout:180000});
+ report.ready=await page.evaluate(()=>({draft:document.querySelector('.cui-input').value,sendDisabled:document.querySelector('.cui-send').disabled,userMessages:document.querySelectorAll('.cui-msg-user').length,...window.__draftProbe}));
+ if(report.ready.draft!==draft||report.ready.sendDisabled||report.ready.userMessages!==1||report.ready.generations!==1)throw Error('Draft was lost or auto-sent');
+ await page.locator('.cui-input').press('Enter');
+ await page.waitForFunction(()=>!document.querySelector('.cui-input')?.disabled,null,{timeout:90000});
+ report.sent=await page.evaluate(()=>({draft:document.querySelector('.cui-input').value,userMessages:document.querySelectorAll('.cui-msg-user').length,...window.__draftProbe}));
+ if(report.sent.draft!==''||report.sent.userMessages!==2||report.sent.generations!==2)throw Error('Explicit send failed');
+ report.guidance=await page.locator('.cui-msg-error').allTextContents();report.previewCount=await page.locator('.agent-plan-preview').count();
+ report.documentAfter=await page.frameLocator('#app iframe').locator('body').evaluate(()=> (window.editor??window.Asc.editor).WordControl.m_oLogicDocument.GetText());
+ if(report.errors.length||report.guidance.length||report.previewCount||report.documentBefore!==report.documentAfter)throw Error('Incomplete measurement or recovery');
+ report.passed=true;
+}catch(error){report.passed=false;report.error=String(error);process.exitCode=1;}
+finally{await context.close();report.contextClosed=true;await fs.writeFile('docs/evaluations/2026-10-05-stop-recovery-draft.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));}

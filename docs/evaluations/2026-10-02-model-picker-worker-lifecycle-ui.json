@@ -1,0 +1,57 @@
+{
+  "scope": "Production IM picker change from stored custom-ID Qwen3-4B to offered Qwen3.5-0.8B, isolated persistent Chromium Metal",
+  "status": "completed",
+  "errors": [],
+  "beforeRuntime": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+  "beforeWorkerIds": [
+    0
+  ],
+  "selectedPreset": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "remainingOverride": "",
+  "afterRuntime": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "afterSwitchWorkers": [
+    {
+      "id": 0,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "closed": true
+    },
+    {
+      "id": 1,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "closed": false
+    }
+  ],
+  "previousWorkersClosed": true,
+  "runtimeMatchesSelection": true,
+  "reply": "Hello",
+  "generationMs": 552,
+  "replyErrors": [],
+  "afterReloadRuntime": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "afterReloadPreset": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "reloadMatchesSelection": true,
+  "afterReloadWorkers": [
+    {
+      "id": 0,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "closed": true
+    },
+    {
+      "id": 1,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "closed": true
+    },
+    {
+      "id": 2,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "closed": false
+    }
+  ],
+  "liveInferenceWorkers": 1,
+  "limitations": [
+    "One desktop Chromium Metal switch and reload only.",
+    "Model files already cached; not cold-download or actual out-of-memory validation.",
+    "Worker close observations do not prove GPU memory reclamation or long-run absence of leaks.",
+    "No offline or automatic smaller-model fallback claim."
+  ],
+  "replyMeaning": "reply uses assistant row dataset.source, excluding action labels."
+}

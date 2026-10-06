@@ -6,8 +6,10 @@ This product is a derivative work of ONLYOFFICE.
 The site (https://edit.chaxus.com/, https://github.com/ranuts/document) is
 licensed under the GNU Affero General Public License version 3 -- see LICENSE.
 It embeds the ONLYOFFICE document editors, which are distributed under the same
-license with the additional terms permitted by Section 7 of the GNU AGPL. Those
-terms are reproduced verbatim below and apply to this work as well.
+license with the additional terms permitted by Section 7 of the GNU AGPL. The
+received upstream notice is reproduced verbatim below for provenance. Valid
+additional terms remain applicable; the logo-retention term is addressed
+separately below rather than adopted as a downstream requirement.
 
 
 1. ONLYOFFICE editors (sdkjs, web-apps)
@@ -57,17 +59,41 @@ The notice carried by the upstream source files, reproduced in full:
     terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
 
 
-How this work complies with those terms
----------------------------------------
+Neutral presentation and retained legal notices (2026-09-26)
+-----------------------------------------------------------
 
-Section 7(b) -- product logo. The ONLYOFFICE logo is shown in the editor
-header, and the About pane (product logo, version, Ascensio System SIA
-copyright, onlyoffice.com link) is reachable from the left rail. Neither is
-suppressed. lib/onlyoffice/guards/chrome.ts hides only the current-user and
-co-users widgets, which describe a collaboration session this serverless build
-cannot have, and lib/onlyoffice-editor.ts leaves `customization.about` at its
-default. test/unit/branding-notice.test.ts and
-test/e2e/vendor-branding.spec.ts keep both from being "cleaned up" again.
+The interface uses descriptive functional names without project or upstream
+product logos, promotional branding, or ecosystem advertising. The editor's
+About pane stays reachable, retains the upstream version and publisher, and
+adds copyright attribution, a modified-version notice, the warranty disclaimer,
+license and source links. Site footers retain the trademark attribution and
+non-affiliation notice. Source copyright headers are not removed.
+
+The upstream notice reproduced above requires retention of the original product
+logo. In its statement of 15 April 2026, the Free Software Foundation identified
+that requirement as an AGPLv3-incompatible further restriction removable under
+Section 7:
+  https://www.fsf.org/blogs/licensing/agpl-is-not-a-tool-for-taking-freedom-away
+
+This project relies on that interpretation in omitting product-logo displays.
+The quoted upstream notice is kept as a record of the terms received, not an
+assertion that logo retention is a valid obligation for downstream recipients.
+ONLYOFFICE has asserted a different interpretation; its position is available at:
+  https://www.onlyoffice.com/license-faq
+
+The FSF statement is a license interpretation, not a court judgment. This
+branding decision does not claim that the dispute is judicially resolved or
+that removing logos alone satisfies all copyright, source-distribution or
+trademark obligations. Other valid additional terms and third-party licenses
+remain unaffected, including the GUI material's CC BY-SA 4.0 license.
+
+lib/onlyoffice/guards/chrome.ts hides the header and About product marks,
+independently of the legal text. Vendor entry HTML has matching styles to avoid
+showing those marks during startup, neutral titles and no branded favicon.
+lib/onlyoffice-editor.ts keeps About enabled, and
+lib/onlyoffice/guards/about-source.ts provides the legal and source links.
+test/unit/branding-notice.test.ts and test/e2e/vendor-branding.spec.ts verify
+neutral presentation alongside accessible legal attribution.
 
 Section 7(e) -- trademarks. ONLYOFFICE and the ONLYOFFICE logo are trademarks
 of Ascensio System SIA. No rights under trademark law are granted by the
@@ -85,7 +111,9 @@ The changes made to it are:
     well as in the editor frame (it branches on `typeof document` in three
     places), so conversion happens in a realm whose memory can be handed
     back. See docs/changelogs/2026-08-20-issue-144-memory-and-delivery.md and
-    docs/explorations/2026-09-12-x2t-in-a-worker.md.
+    docs/explorations/2026-09-12-x2t-in-a-worker.md. Modified 2026-09-26 to
+    send exported file bytes only to the immediate parent; outer ancestors
+    no longer receive an unsolicited copy.
   * public/sdkjs/common/wasm/x2t/x2t.worker.js -- added by this project. It
     loads the file above and drives it; no vendor code is reimplemented in it.
   * public/sdkjs/common/wasm/x2t/x2t.wasm -- published brotli-compressed only
@@ -103,6 +131,11 @@ The changes made to it are:
     keys returned `undefined` and crashed the tooltip renderer. Values only;
     no key is removed.
   * public/web-apps help content trimmed from the shipped tree.
+  * public/web-apps/apps/{common,*/main}/index*.html -- entry shells with
+    branded titles now use neutral titles and an empty favicon. An inline
+    stylesheet suppresses header and About product marks before the
+    iframe paints. Copyright, publisher and version information remain.
+    Changed 2026-09-26.
   * public/fonts/ -- the font catalog's proprietary font files were replaced
     with redistributable open-source families (see docs/font-licenses.md and
     docs/changelogs/2026-08-22-font-licensing.md).
@@ -112,7 +145,8 @@ The changes made to it are:
     still resolves, and nine families were added for scripts the remaining set
     did not cover.
 
-Nothing else in public/sdkjs/ or public/web-apps/ is edited. The behavioural
+Other than the changes listed above, public/sdkjs/ and public/web-apps/
+are not edited. The behavioural
 patches this site needs are applied at runtime from lib/onlyoffice/guards/,
 which leaves the rest of the vendor files byte-identical to the build they
 came from.
@@ -140,3 +174,19 @@ third-party project https://github.com/cryptpad/onlyoffice-x2t-wasm.
 Other trademarks named in this repository and on the site (Microsoft Word,
 Excel, PowerPoint, and others) are the property of their respective owners and
 are used only to describe the file formats this editor reads and writes.
+
+The application icon is an independently drawn, neutral document illustration.
+It contains no upstream product logo, trademark or project initials.
+
+4. Optional local AI runtime
+----------------------------
+
+wllama 3.6.1 (https://github.com/ngxson/wllama), Copyright (c) 2024
+Xuan Son NGUYEN, is distributed under the MIT license. Its WASM runtime
+includes llama.cpp. License copies are shipped in public/licenses/.
+Model weights are not bundled; their licenses are independent of the runtime.
+The matching optional @wllama/wllama-compat 3.6.1 package is also MIT licensed.
+The local pnpm patch modifies wllama's memory64 capability detection and
+propagates fatal worker errors and explicit termination to pending and
+subsequent tasks; see
+patches/@wllama__wllama@3.6.1.patch.

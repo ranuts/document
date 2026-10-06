@@ -1,0 +1,45 @@
+{
+  "scope": "Actual cached default CPU inference and CSP-respecting eval/data-module controls on the SDK main blob Worker. Current production HTML meta CSP, no injected policy or Worker bytes. Desktop Chromium; no physical-device/all-pthread/security-gate claim.",
+  "status": "failed",
+  "errors": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "shell": {
+    "isolated": true,
+    "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+    "code": [
+      {
+        "url": "blob:http://127.0.0.1:5193/822bb21b-b2ed-45c6-9a28-9e35ef34e3d1",
+        "length": 155266,
+        "mainLlama": false
+      }
+    ]
+  },
+  "targets": [
+    {
+      "targetId": "6FE8A80F54BB089A4C43CBA54137F82A",
+      "url": "blob:http://127.0.0.1:5193/62ae371f-179f-4311-97bf-a1fef4bc217d",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "CF4E770931B14E453A683DECAA3B3206",
+      "url": "blob:http://127.0.0.1:5193/822bb21b-b2ed-45c6-9a28-9e35ef34e3d1",
+      "title": "blob:http://127.0.0.1:5193/822bb21b-b2ed-45c6-9a28-9e35ef34e3d1"
+    },
+    {
+      "targetId": "78C092487BC7DB688BE100DA91CC2AA2",
+      "url": "blob:http://127.0.0.1:5193/13db31bd-23fb-48cc-8739-3d47e5d627bb",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "E4E98FBDD1D2595D70DA633B9919DE4D",
+      "url": "blob:http://127.0.0.1:5193/563f3f01-66b7-4a32-94df-db0a945739a5",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "37948B3865107588AFE00373CE240714",
+      "url": "blob:http://127.0.0.1:5193/48ba8c8e-8bd7-4d6e-92b8-839f6c00473a",
+      "title": "em-pthread"
+    }
+  ],
+  "error": "Error: Actual SDK main blob Worker not identified"
+}

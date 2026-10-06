@@ -1,0 +1,9 @@
+# Native browser navigation: cache return not admitted
+
+Product `77d0fd3`. Actual Chromium navigation opened a new native Word editor and its IM, entered an unsent Chinese draft, navigated to the local home page, then used browser Back. The launch removed the standard back-forward-cache disabling argument; this is an observational navigation probe, not a forced cache restoration. No PageTransitionEvent was injected and no model inference was run.
+
+The page returned through recreation: its random page-instance token changed, pageshow persisted was false, and the draft was empty. `PerformanceNavigationTiming.notRestoredReasons` reported only `masked`. No browser errors occurred and the browser closed. The intended second cycle was not performed because the first did not restore the old page. The post-return entry count was sampled immediately after panel attachment, before editor readiness; its zero is not proof of a missing sidebar on the recreated page.
+
+The actual result is cache-admission failure, not acceptance of the persisted-pageshow path. Earlier synthetic lifecycle regressions remain component evidence only. An empty memory-only draft on page recreation is also distinct from the opt-in saved conversation history already verified by native export/restore. [MDN reason property](https://developer.mozilla.org/en-US/docs/Web/API/NotRestoredReasonDetails/reason) documents masked blocking reasons; this report does not establish the particular iframe/API/engine cause. No editor capability or privacy isolation was removed merely to force admission.
+
+Raw report and the ad-hoc driver are retained. Natural-cache restoration, real loaded-model return and physical devices remain unverified. Further investigation should capture authoritative browser diagnostics rather than infer a blocker from masked alone.

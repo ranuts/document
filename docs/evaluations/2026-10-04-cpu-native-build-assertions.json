@@ -1,0 +1,52 @@
+{
+  "status": "failed",
+  "scope": "Assertion-enabled self-built CPU compatibility diagnostic; standalone SDK, no editor write or production changes",
+  "files": {
+    "js": "45e73e57faa89dd274a9304674947d58e199a9684f6afdb5814ce911d45755d6",
+    "wasm": "a3dbb7546d2b59a8845863ab13a5e704927b54d37f5ef019d1e0d396a62f6879"
+  },
+  "served": [
+    {
+      "method": "GET",
+      "url": "/runtime.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "HEAD",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 484220320
+    }
+  ],
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "debug",
+      "text": "Downloading model files: [http://127.0.0.1:51356/model.gguf]"
+    },
+    {
+      "type": "debug",
+      "text": "Multithread enabled: false, pthreadPoolSize: 0"
+    },
+    {
+      "type": "error",
+      "text": "Stack trace (abort):\n"
+    }
+  ],
+  "error": "Error: page.evaluate: RuntimeError: (ABORT) `Module.mainScriptUrlOrBlob` was supplied but `mainScriptUrlOrBlob` not included in INCOMING_MODULE_JS_API",
+  "phase": "load"
+}

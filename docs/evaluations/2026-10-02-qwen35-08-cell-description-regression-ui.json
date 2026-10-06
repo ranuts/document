@@ -1,0 +1,151 @@
+{
+  "scope": "Production UI real Metal GPU Qwen3.5-0.8B-q4f16_1-MLC planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-DvvEfRDn.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2345,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "editorModule": "./assets/editor-DvvEfRDn.js",
+      "kind": "xlsx",
+      "prompt": "Calculate the sum of range A1:A3 and report the result only. Do not write any destination cell.",
+      "expected": "A1:A3: 42",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2441,
+      "feedback": [
+        "A1:A3: 42"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "editorModule": "./assets/editor-DvvEfRDn.js",
+      "kind": "pptx",
+      "prompt": "Read the plain text of the current presentation. Do not add or modify anything.",
+      "expected": "No readable text was found.",
+      "before": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "elapsedMs": 1948,
+      "feedback": [
+        "No readable text was found."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": null,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "buildEvidence": {
+    "sourceCommit": "385f1bc",
+    "editorAsset": "editor-DvvEfRDn.js",
+    "updatedDescriptionPresent": true,
+    "experimentalMarkerPresent": false
+  },
+  "limitations": [
+    "One sample per model and operation on desktop Chromium Metal WebGPU.",
+    "Excel snapshots cover A1:C4 values and selection, not every worksheet cell or formatting.",
+    "PPT fixture is blank; selection not observed.",
+    "No inference memory stress, CPU backend, offline mode, writing quality or broader languages are covered."
+  ]
+}

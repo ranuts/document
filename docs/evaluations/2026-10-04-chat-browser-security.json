@@ -1,0 +1,350 @@
+{
+  "probeSHA256": "cd52f633a805e60ad15c4de54f00824384aef99a22d6d47a896e8ec7c5545143",
+  "sources": {
+    "packages/chat-ui/src/chat-view.ts": "837bb820c90b60d8c7be145cdbcb2e167c953c693ec8ed59915022091c9547f4",
+    "packages/chat-ui/src/markdown.ts": "2abe61a51b5fc74a8a22e3daff08ce98afd234c36ea2e1f390c07c745464b909"
+  },
+  "results": [
+    {
+      "payload": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](JaVaScRiPt:alert%281%29)",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](JaVaScRiPt:alert%281%29)",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](JaVaScRiPt:alert%281%29)",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](JaVaScRiPt:alert%281%29)",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](vbscript:msgbox%281%29)",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](vbscript:msgbox%281%29)",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](vbscript:msgbox%281%29)",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](vbscript:msgbox%281%29)",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](//attacker.invalid/path)",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](//attacker.invalid/path)",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](//attacker.invalid/path)",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](//attacker.invalid/path)",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](/private/path)",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](/private/path)",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](/private/path)",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "[run](/private/path)",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "![pixel](https://attacker.invalid/pixel)",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "![pixel](https://attacker.invalid/pixel)",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "![pixel](https://attacker.invalid/pixel)",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "![pixel](https://attacker.invalid/pixel)",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "mode": "agent",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "mode": "user",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "mode": "tool",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "payload": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "mode": "stream",
+      "injected": 0,
+      "unsafe": false,
+      "handlers": false
+    }
+  ],
+  "requests": [],
+  "errors": [],
+  "dialogs": [],
+  "scope": "Current source ChatView served by isolated Vite harness, real Chromium, no CSP; not deployed editor integration or model inference.",
+  "passed": true
+}

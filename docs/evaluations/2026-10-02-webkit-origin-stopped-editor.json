@@ -1,0 +1,21 @@
+{
+  "scope": "Production editor shell in fresh isolated WebKit with warmed SW; origin server stopped, no offline emulation flag. Not full network disconnection or model inference.",
+  "status": "completed",
+  "errors": [],
+  "controller": "http://127.0.0.1:65270/sw.js",
+  "cacheNames": [
+    "document-editor-runtime-59e2dc593998",
+    "document-editor-core-1790938749"
+  ],
+  "editorShellCached": true,
+  "originListening": false,
+  "navigationStatus": 200,
+  "navigationFromServiceWorker": true,
+  "editorReadyAfterOriginStopped": true,
+  "limitations": [
+    "Origin stopped while navigator remains online; not identical to complete network disconnection.",
+    "No AI model initialized or inferred.",
+    "Fresh desktop Playwright WebKit, not Safari/iOS hardware.",
+    "Isolated static server MIME handling; deployment-specific headers not exercised."
+  ]
+}

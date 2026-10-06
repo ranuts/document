@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-02T15:48:06.907Z",
+  "scope": "Production auto-layout inherits visible non-placeholder master geometry; actual SDK master fixture occupies full slide, offline 1.7B IM refuses collision and rolls back",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790955976"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "before": {
+    "inherited": {
+      "text": "MASTER LINE 0\r\nMASTER LINE 1\r\nMASTER LINE 2\r\nMASTER LINE 3\r\nMASTER LINE 4\r\nMASTER LINE 5\r\nMASTER LINE 6\r\nMASTER LINE 7\r\nMASTER LINE 8\r\nMASTER LINE 9\r\nMASTER LINE 10\r\nMASTER LINE 11\r\nMASTER LINE 12\r\nMASTER LINE 13\r\nMASTER LINE 14\r\nMASTER LINE 15\r\nMASTER LINE 16\r\nMASTER LINE 17\r\nMASTER LINE 18\r\nMASTER LINE 19\r\nMASTER LINE 20\r\nMASTER LINE 21\r\nMASTER LINE 22\r\nMASTER LINE 23\r\nMASTER LINE 24\r\nMASTER LINE 25\r\nMASTER LINE 26\r\nMASTER LINE 27\r\nMASTER LINE 28\r\nMASTER LINE 29\r\nMASTER LINE 30\r\nMASTER LINE 31\r\nMASTER LINE 32\r\nMASTER LINE 33\r\nMASTER LINE 34\r\nMASTER LINE 35\r\nMASTER LINE 36\r\nMASTER LINE 37\r\nMASTER LINE 38\r\nMASTER LINE 39\r\n",
+      "bounds": {
+        "l": 0,
+        "t": 0,
+        "r": 338.6766666666667,
+        "b": 307.3500000000001,
+        "x": 0,
+        "y": 0,
+        "w": 338.6766666666667,
+        "h": 307.3500000000001
+      }
+    },
+    "history": 1,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      }
+    ]
+  },
+  "responseMs": 2258,
+  "afterFailure": {
+    "inherited": {
+      "text": "MASTER LINE 0\r\nMASTER LINE 1\r\nMASTER LINE 2\r\nMASTER LINE 3\r\nMASTER LINE 4\r\nMASTER LINE 5\r\nMASTER LINE 6\r\nMASTER LINE 7\r\nMASTER LINE 8\r\nMASTER LINE 9\r\nMASTER LINE 10\r\nMASTER LINE 11\r\nMASTER LINE 12\r\nMASTER LINE 13\r\nMASTER LINE 14\r\nMASTER LINE 15\r\nMASTER LINE 16\r\nMASTER LINE 17\r\nMASTER LINE 18\r\nMASTER LINE 19\r\nMASTER LINE 20\r\nMASTER LINE 21\r\nMASTER LINE 22\r\nMASTER LINE 23\r\nMASTER LINE 24\r\nMASTER LINE 25\r\nMASTER LINE 26\r\nMASTER LINE 27\r\nMASTER LINE 28\r\nMASTER LINE 29\r\nMASTER LINE 30\r\nMASTER LINE 31\r\nMASTER LINE 32\r\nMASTER LINE 33\r\nMASTER LINE 34\r\nMASTER LINE 35\r\nMASTER LINE 36\r\nMASTER LINE 37\r\nMASTER LINE 38\r\nMASTER LINE 39\r\n",
+      "bounds": {
+        "l": 0,
+        "t": 0,
+        "r": 338.6766666666667,
+        "b": 307.3500000000001,
+        "x": 0,
+        "y": 0,
+        "w": 338.6766666666667,
+        "h": 307.3500000000001
+      }
+    },
+    "history": 1,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      }
+    ]
+  },
+  "failureEvents": {
+    "groups": {
+      "start": 1,
+      "end": 0,
+      "cancel": 1
+    },
+    "nativePastes": 1,
+    "nativeCompletions": 1
+  },
+  "visibleErrors": [
+    "There is not enough space on this slide. Use less text or another slide.Restore request"
+  ],
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-CMoTK6Rk.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "restoreRequest": 1,
+  "previewCount": 0,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790956089643.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

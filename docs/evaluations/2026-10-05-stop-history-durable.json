@@ -1,0 +1,111 @@
+{
+  "scope": "Actual IM local CPU stream/Stop, opt-in history saving, actual exported data and page reload with explicit restore. No diagnostic history insertion. Not natural-fault, quality, offline/PWA or physical-device certification.",
+  "probeSHA256": "08b8ead9a87516bf197966130f4b2f0b3d8f6f89bd58fa8628722291e3ac96fc",
+  "plugin": "agent-plugin-DrurPOsg.js",
+  "pluginSHA256": "9252e54f6fcac74c8136c4d5d726962ffd1eb73c4f4fca37ae7387308ea3e1da",
+  "errors": [],
+  "engine": "CPU · qwen2.5-0.5b-instruct-q4_k_m.gguf",
+  "documentBefore": "\r\n",
+  "partialText": "在遥远的古代，有一个名叫钟匠的工匠，他拥有一架古老的钟。这架钟已经使用了几写入文档",
+  "interruptedVisible": "在遥远的古代，有一个名叫钟匠的工匠，他拥有一架古老的钟。这架钟已经使用了几",
+  "activeId": "8ce91529-fd6e-4fb6-b4ec-a3bf511d2d75",
+  "beforeReload": "在遥远的古代，有一个名叫钟匠的工匠，他拥有一架古老的钟。这架钟已经使用了几",
+  "exported": {
+    "version": 1,
+    "activeId": "8ce91529-fd6e-4fb6-b4ec-a3bf511d2d75",
+    "sessions": [
+      {
+        "id": "43875793-1dd7-4e16-9523-e5f3fe6ca7da",
+        "title": "",
+        "createdAt": 1791099756186,
+        "updatedAt": 1791099756186,
+        "messages": []
+      },
+      {
+        "id": "478e10ff-1c26-4118-8ee4-db0dccf13356",
+        "title": "读取 A1:B4 的内容，然后将 B2 设置为 99。",
+        "createdAt": 1791099774806,
+        "updatedAt": 1791099774835,
+        "messages": [
+          {
+            "role": "user",
+            "content": "读取 A1:B4 的内容，然后将 B2 设置为 99。"
+          },
+          {
+            "role": "assistant",
+            "content": "A1:B4\nA1: \"Name\"\nB1: \"Value\"\nA2: \"Cora\"\nB2: \"30\"\nA3: \"Davi\"\nB3: \"10\"\nA4: \"Mira\"\nB4: \"20\"",
+            "hostGuidance": "tool"
+          },
+          {
+            "role": "assistant",
+            "content": "Done. Result checked; use Undo if needed.",
+            "hostGuidance": "tool"
+          }
+        ]
+      },
+      {
+        "id": "065b3d55-52d1-44f8-835e-f2d27531e973",
+        "title": "读取 A1:B4 的内容，然后将 B2 设置为 99。",
+        "createdAt": 1791099842715,
+        "updatedAt": 1791099842746,
+        "messages": [
+          {
+            "role": "user",
+            "content": "读取 A1:B4 的内容，然后将 B2 设置为 99。"
+          },
+          {
+            "role": "assistant",
+            "content": "A1:B4\nA1: \"Name\"\nB1: \"Value\"\nA2: \"Cora\"\nB2: \"30\"\nA3: \"Davi\"\nB3: \"10\"\nA4: \"Mira\"\nB4: \"20\"",
+            "hostGuidance": "tool"
+          },
+          {
+            "role": "assistant",
+            "content": "Done. Result checked; use Undo if needed.",
+            "hostGuidance": "tool"
+          }
+        ]
+      },
+      {
+        "id": "47897d5b-876d-4db1-b5e7-f4ff76e04a90",
+        "title": "",
+        "createdAt": 1791099859548,
+        "updatedAt": 1791099859548,
+        "messages": []
+      },
+      {
+        "id": "8ce91529-fd6e-4fb6-b4ec-a3bf511d2d75",
+        "title": "请写一个较长的原创中文故事，详细描述一位工匠修理旧钟的过程，至少六百字。不要操作文档。",
+        "createdAt": 1791141261902,
+        "updatedAt": 1791141268244,
+        "messages": [
+          {
+            "role": "user",
+            "content": "请写一个较长的原创中文故事，详细描述一位工匠修理旧钟的过程，至少六百字。不要操作文档。"
+          },
+          {
+            "role": "assistant",
+            "content": "在遥远的古代，有一个名叫钟匠的工匠，他拥有一架古老的钟。这架钟已经使用了几"
+          },
+          {
+            "role": "assistant",
+            "content": "已停止。",
+            "hostGuidance": "status"
+          }
+        ]
+      }
+    ],
+    "exportedAt": "2026-10-04T19:14:29.476Z"
+  },
+  "afterReload": "在遥远的古代，有一个名叫钟匠的工匠，他拥有一架古老的钟。这架钟已经使用了几",
+  "restoredRows": [
+    "请写一个较长的原创中文故事，详细描述一位工匠修理旧钟的过程，至少六百字。不要操作文档。",
+    "在遥远的古代，有一个名叫钟匠的工匠，他拥有一架古老的钟。这架钟已经使用了几写入文档",
+    "已停止。恢复请求"
+  ],
+  "savingAfterReload": true,
+  "guidance": [],
+  "previewCount": 0,
+  "documentAfter": "\r\n",
+  "passed": true,
+  "contextClosed": true
+}

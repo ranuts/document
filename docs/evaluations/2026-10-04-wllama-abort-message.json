@@ -1,0 +1,25 @@
+{
+  "scope": "Synthetic non-string abort payload sent to installed SDK handler; not the captured payload of a real WASM failure.",
+  "probeSHA256": "76895d3965392a7cf81acd645ec93ef2be960fd75d419692889a6cbfeae000c3",
+  "rows": [
+    {
+      "entry": "index.js",
+      "sdkSHA256": "8d4eb92c97f31ab9268a951f27b94e6c19fef980e6bc34dfc948cc7ac20be67d",
+      "failure": {
+        "name": "TypeError",
+        "message": "message.replace is not a function",
+        "stack": "TypeError: message.replace is not a function\n    at Object.eval (eval at <anonymous> (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:9:14), <anonymous>:281:30)\n    at Generator.next (<anonymous>)\n    at step (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:8:153)\n    at file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:8:280\n    at new Promise (<anonymous>)\n    at asyncHelper (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:8:43)\n    at eval (eval at <anonymous> (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:9:14), <anonymous>:279:14)\n    at Object.onRecvMsg (eval at <anonymous> (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:9:14), <anonymous>:295:10)\n    at file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:12:8"
+      }
+    },
+    {
+      "entry": "index.cjs",
+      "sdkSHA256": "b466c6b0995194c11158b917a652b3060f3b31fd0d447ed9690b0ba2cb4717b9",
+      "failure": {
+        "name": "TypeError",
+        "message": "message.replace is not a function",
+        "stack": "TypeError: message.replace is not a function\n    at Object.eval (eval at <anonymous> (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:9:14), <anonymous>:281:30)\n    at Generator.next (<anonymous>)\n    at step (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:8:153)\n    at file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:8:280\n    at new Promise (<anonymous>)\n    at asyncHelper (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:8:43)\n    at eval (eval at <anonymous> (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:9:14), <anonymous>:279:14)\n    at Object.onRecvMsg (eval at <anonymous> (file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:9:14), <anonymous>:295:10)\n    at file:///workspace/document/docs/evaluations/probe-wllama-abort-message.mjs:12:8"
+      }
+    }
+  ],
+  "status": "reproduced"
+}

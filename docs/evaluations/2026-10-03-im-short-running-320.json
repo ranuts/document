@@ -1,0 +1,779 @@
+{
+  "scope": "Actual production IM viewport geometry in isolated desktop Chromium; narrow and shortened viewport are layout simulations, not physical mobile keyboard tests.",
+  "results": [
+    {
+      "width": 1440,
+      "height": 960,
+      "settings": false,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 1040,
+          "y": 0,
+          "width": 400,
+          "height": 960,
+          "bottom": 960,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1041,
+          "y": 0,
+          "width": 399,
+          "height": 68,
+          "bottom": 68,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false,
+          "scrollWidth": 0,
+          "clientWidth": 0
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1041,
+          "y": 180.4375,
+          "width": 399,
+          "height": 779.5625,
+          "bottom": 960,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1041,
+          "y": 180.4375,
+          "width": 399,
+          "height": 498.5625,
+          "bottom": 679,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1041,
+          "y": 679,
+          "width": 399,
+          "height": 281,
+          "bottom": 960,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".cui-input",
+          "x": 1076,
+          "y": 713,
+          "width": 329,
+          "height": 160,
+          "bottom": 873,
+          "visible": true,
+          "scrollWidth": 329,
+          "clientWidth": 329
+        },
+        {
+          "selector": ".cui-send",
+          "x": 1371,
+          "y": 889,
+          "width": 34,
+          "height": 34,
+          "bottom": 923,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 960,
+      "settings": true,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 1040,
+          "y": 0,
+          "width": 400,
+          "height": 960,
+          "bottom": 960,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1041,
+          "y": 0,
+          "width": 399,
+          "height": 68,
+          "bottom": 68,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 1041,
+          "y": 180.4375,
+          "width": 399,
+          "height": 380.453125,
+          "bottom": 560.890625,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1041,
+          "y": 560.890625,
+          "width": 399,
+          "height": 399.109375,
+          "bottom": 960,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1041,
+          "y": 560.890625,
+          "width": 399,
+          "height": 118.109375,
+          "bottom": 679,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1041,
+          "y": 679,
+          "width": 399,
+          "height": 281,
+          "bottom": 960,
+          "visible": true,
+          "scrollWidth": 399,
+          "clientWidth": 399
+        },
+        {
+          "selector": ".cui-input",
+          "x": 1076,
+          "y": 713,
+          "width": 329,
+          "height": 160,
+          "bottom": 873,
+          "visible": true,
+          "scrollWidth": 329,
+          "clientWidth": 329
+        },
+        {
+          "selector": ".cui-send",
+          "x": 1371,
+          "y": 889,
+          "width": 34,
+          "height": 34,
+          "bottom": 923,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "settings": false,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "bottom": 844,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1,
+          "y": 0,
+          "width": 389,
+          "height": 68,
+          "bottom": 68,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false,
+          "scrollWidth": 0,
+          "clientWidth": 0
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1,
+          "y": 180.4375,
+          "width": 389,
+          "height": 663.5625,
+          "bottom": 844,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1,
+          "y": 180.4375,
+          "width": 389,
+          "height": 386.5625,
+          "bottom": 567,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1,
+          "y": 567,
+          "width": 389,
+          "height": 277,
+          "bottom": 844,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-input",
+          "x": 36,
+          "y": 601,
+          "width": 319,
+          "height": 160,
+          "bottom": 761,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-send",
+          "x": 321,
+          "y": 777,
+          "width": 34,
+          "height": 34,
+          "bottom": 811,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "settings": true,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "bottom": 844,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1,
+          "y": 0,
+          "width": 389,
+          "height": 68,
+          "bottom": 68,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 1,
+          "y": 180.4375,
+          "width": 389,
+          "height": 340.65625,
+          "bottom": 521.09375,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1,
+          "y": 521.09375,
+          "width": 389,
+          "height": 322.90625,
+          "bottom": 844,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1,
+          "y": 521.09375,
+          "width": 389,
+          "height": 48,
+          "bottom": 569.09375,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1,
+          "y": 569.09375,
+          "width": 389,
+          "height": 277,
+          "bottom": 846.09375,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-input",
+          "x": 36,
+          "y": 603.09375,
+          "width": 319,
+          "height": 160,
+          "bottom": 763.09375,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-send",
+          "x": 321,
+          "y": 779.09375,
+          "width": 34,
+          "height": 34,
+          "bottom": 813.09375,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 420,
+      "settings": false,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 420,
+          "bottom": 420,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1,
+          "y": 0,
+          "width": 389,
+          "height": 48,
+          "bottom": 48,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false,
+          "scrollWidth": 0,
+          "clientWidth": 0
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1,
+          "y": 146.4375,
+          "width": 389,
+          "height": 273.5625,
+          "bottom": 420,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1,
+          "y": 146.4375,
+          "width": 389,
+          "height": 152.5625,
+          "bottom": 299,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1,
+          "y": 299,
+          "width": 389,
+          "height": 121,
+          "bottom": 420,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-input",
+          "x": 24,
+          "y": 319,
+          "width": 343,
+          "height": 40,
+          "bottom": 359,
+          "visible": true,
+          "scrollWidth": 343,
+          "clientWidth": 343
+        },
+        {
+          "selector": ".cui-send",
+          "x": 333,
+          "y": 367,
+          "width": 34,
+          "height": 34,
+          "bottom": 401,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 420,
+      "settings": true,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 420,
+          "bottom": 420,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1,
+          "y": 0,
+          "width": 389,
+          "height": 48,
+          "bottom": 48,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 1,
+          "y": 146.4375,
+          "width": 389,
+          "height": 140,
+          "bottom": 286.4375,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1,
+          "y": 286.4375,
+          "width": 389,
+          "height": 133.5625,
+          "bottom": 420,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1,
+          "y": 286.4375,
+          "width": 389,
+          "height": 12.5625,
+          "bottom": 299,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1,
+          "y": 299,
+          "width": 389,
+          "height": 121,
+          "bottom": 420,
+          "visible": true,
+          "scrollWidth": 389,
+          "clientWidth": 389
+        },
+        {
+          "selector": ".cui-input",
+          "x": 24,
+          "y": 319,
+          "width": 343,
+          "height": 40,
+          "bottom": 359,
+          "visible": true,
+          "scrollWidth": 343,
+          "clientWidth": 343
+        },
+        {
+          "selector": ".cui-send",
+          "x": 333,
+          "y": 367,
+          "width": 34,
+          "height": 34,
+          "bottom": 401,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 320,
+      "settings": false,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 320,
+          "bottom": 320,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1,
+          "y": 0,
+          "width": 319,
+          "height": 48,
+          "bottom": 48,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false,
+          "scrollWidth": 0,
+          "clientWidth": 0
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1,
+          "y": 146.4375,
+          "width": 319,
+          "height": 173.5625,
+          "bottom": 320,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1,
+          "y": 146.4375,
+          "width": 319,
+          "height": 52.5625,
+          "bottom": 199,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1,
+          "y": 199,
+          "width": 319,
+          "height": 121,
+          "bottom": 320,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-input",
+          "x": 24,
+          "y": 219,
+          "width": 273,
+          "height": 40,
+          "bottom": 259,
+          "visible": true,
+          "scrollWidth": 273,
+          "clientWidth": 273
+        },
+        {
+          "selector": ".cui-send",
+          "x": 263,
+          "y": 267,
+          "width": 34,
+          "height": 34,
+          "bottom": 301,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 320,
+      "settings": true,
+      "geometry": [
+        {
+          "selector": ".agent-panel",
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 320,
+          "bottom": 320,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".agent-panel-header",
+          "x": 1,
+          "y": 0,
+          "width": 319,
+          "height": 48,
+          "bottom": 48,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "x": 1,
+          "y": 146.4375,
+          "width": 319,
+          "height": 40,
+          "bottom": 186.4375,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-root",
+          "x": 1,
+          "y": 186.4375,
+          "width": 319,
+          "height": 133.5625,
+          "bottom": 320,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-messages",
+          "x": 1,
+          "y": 186.4375,
+          "width": 319,
+          "height": 12.5625,
+          "bottom": 199,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-footer",
+          "x": 1,
+          "y": 199,
+          "width": 319,
+          "height": 121,
+          "bottom": 320,
+          "visible": true,
+          "scrollWidth": 319,
+          "clientWidth": 319
+        },
+        {
+          "selector": ".cui-input",
+          "x": 24,
+          "y": 219,
+          "width": 273,
+          "height": 40,
+          "bottom": 259,
+          "visible": true,
+          "scrollWidth": 273,
+          "clientWidth": 273
+        },
+        {
+          "selector": ".cui-send",
+          "x": 263,
+          "y": 267,
+          "width": 34,
+          "height": 34,
+          "bottom": 301,
+          "visible": true,
+          "scrollWidth": 34,
+          "clientWidth": 34
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stop": {
+    "bottom": 320.234375,
+    "height": 320,
+    "reachable": true,
+    "inputRecovered": true
+  },
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-DiIllZ5n.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "status": "completed",
+  "runningStopPassed": true,
+  "geometryTolerancePx": 1
+}

@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "mode": "worker",
+  "probeSHA256": "3f7e9d6bf4e196916e7a809b31f5e4ab6d6cb735cb07b70374ca46869df87749",
+  "pluginPath": "dist/assets/agent-plugin-BEiUqNt1.js",
+  "pluginSHA256": "46d3b59704073dbafc899f49f598420012dfb2e857700ff915d3edcfa4d261ee",
+  "scope": "Current production automatic local fallback after controlled adapter rejection or GPU Worker script exception; real CPU Qwen3-0.6B chat in independent desktop Playwright WebKit with warm model cache and network available. No physical device, OOM, cold offline or generation replay claim.",
+  "errors": [
+    "Controlled GPU Worker initialization failure"
+  ],
+  "phases": [
+    {
+      "time": "2026-10-03T17:59:49.817Z",
+      "text": "Real automatic CPU model loaded"
+    },
+    {
+      "time": "2026-10-03T17:59:52.899Z",
+      "text": "CPU reply verified"
+    }
+  ],
+  "workerEvents": [
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "time": "2026-10-03T17:59:46.149Z"
+    },
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "time": "2026-10-03T17:59:47.199Z"
+    },
+    {
+      "event": "closed",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "time": "2026-10-03T17:59:47.201Z"
+    },
+    {
+      "event": "created",
+      "url": "blob:http://127.0.0.1:5193/df1a5a7d-86f6-47c2-a38d-cf56b092de0f",
+      "time": "2026-10-03T17:59:47.336Z"
+    }
+  ],
+  "loadMs": 18990,
+  "failedWorkerScripts": 1,
+  "note": "Model loaded — you can start chatting.",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "selectedProvider": "webllm",
+  "adapterDeniedCalls": 2,
+  "before": "\r\n",
+  "responseMs": 2973,
+  "reply": [
+    "Hello.Write to document"
+  ],
+  "visibleErrors": [],
+  "after": "\r\n",
+  "documentUnchanged": true,
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-CBn-a4IG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css"
+  ],
+  "pluginBytesUnchanged": true
+}

@@ -1,0 +1,310 @@
+{
+  "status": "completed",
+  "scope": "Actual production desktop Chromium Metal GPU IM Excel sort; explicit rectangular range, numeric key, header, neighboring cells and native Undo/Redo.",
+  "model": "Qwen3.5-2B-q4f16_1-MLC",
+  "results": [
+    {
+      "prompt": "Sort the complete rows in A1:B4 by numeric column B in ascending order. Row 1 is a header and must stay unchanged. Do not change cells outside A1:B4.",
+      "elapsedMs": 3800,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "sortMatched": true,
+      "headerPreserved": true,
+      "neighborsPreserved": true,
+      "afterUndo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "undoExact": true,
+      "afterRedo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "redoExact": true
+    },
+    {
+      "prompt": "Sort the complete rows in A1:B4 by numeric column B in descending order. Row 1 is a header and must stay unchanged. Do not change cells outside A1:B4.",
+      "elapsedMs": 3385,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [
+        "Done. Result checked; use Undo if needed.",
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "sortMatched": true,
+      "headerPreserved": true,
+      "neighborsPreserved": true,
+      "afterUndo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "undoExact": true,
+      "afterRedo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+  "bundle": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-BM_q-DJb.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "allPassed": true,
+  "productCommit": "f8bef56",
+  "productionBundle": "editor-BM_q-DJb.js",
+  "language": "en",
+  "limitations": [
+    "Warm cached models on one desktop Chromium Metal GPU; network availability not controlled, no offline claim.",
+    "One ascending and one descending case; numeric keys, plain row text, explicit header and range only; no general model reliability claim.",
+    "Snapshots cover A1:D5 values, not formatting/formulas or file persistence. Native Undo/Redo is invoked through the editor API.",
+    "Failed sort cases were not automatically reverted by this diagnostic harness; every case starts from its recorded before snapshot."
+  ],
+  "assessment": "Both sampled directions correct; row correspondence, header, outside values and exact Undo/Redo value snapshots passed."
+}

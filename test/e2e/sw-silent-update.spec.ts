@@ -75,20 +75,9 @@ test.describe('a stale build heals itself @serial', () => {
     await page.reload();
     // No click, no prompt: the page notices the build it is being served is not
     // the one that is installed, and reloads itself into the new one.
-    await page.waitForFunction(
-      async () => {
-        const controller = navigator.serviceWorker.controller;
-        if (!controller) return false;
-        return await new Promise<boolean>((done) => {
-          const channel = new MessageChannel();
-          channel.port1.onmessage = (event) => done(event.data?.vendorVersion === 'e2e-next');
-          setTimeout(() => done(false), 1000);
-          controller.postMessage({ type: 'VERSION' }, [channel.port2]);
-        });
-      },
-      undefined,
-      { timeout: 90_000 },
-    );
+    await expect
+      .poll(() => controllerVendorVersion(page), { timeout: 90_000, intervals: [100, 250, 500] })
+      .toBe('e2e-next');
     await settleEditor(page);
     expect(await controllerVendorVersion(page)).toBe('e2e-next');
     expect(await page.locator('#update-notice').count(), 'nothing was shown to the reader').toBe(0);

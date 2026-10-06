@@ -1,0 +1,5 @@
+# General rewrite instruction diagnostic
+
+Use seven known rewrite fixtures, actual Qwen3-8B-q4f16_1-MLC, one sample each fixed current/candidate order. Candidate replaces only the first task instruction with explicit original-language and relationship/negation/condition/modality preservation. The entire generic candidate prefix is constant across languages; it does not read fixture language labels or supply expected outputs. This is a combined fidelity instruction change, not an ablation isolating the causal contribution of each phrase.
+
+Capture exact outgoing Worker inputs and raw responses, model title/ID, unchanged JSON payload/system/schema/non-thinking/sampling, accepted native outputs/refusals, zero previews and exact Undo/Redo for edits. Compare actual output language, style, payer/receiver/future status, repair service and payment denial without inventing reimbursement. More edits/refusals are not a quality score. No production change until representative cases and regressions support the general change; seven known fixtures do not establish heldout or repeated reliability. Browser model caches are warm, not offline/mobile acceptance.

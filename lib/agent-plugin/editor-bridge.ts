@@ -1,3 +1,5 @@
+import type { RedoHistory } from './native-redo';
+
 /**
  * Same-origin bridge to the OnlyOffice editor's command API.
  *
@@ -32,7 +34,7 @@ export interface EditorApi {
   /** Type plain text at the current cursor (preserves surrounding formatting). */
   pluginMethod_InputText(text: string): void;
   /** Return the currently selected text (empty string when nothing is selected). */
-  pluginMethod_GetSelectedText(): string;
+  pluginMethod_GetSelectedText(options?: { TabSymbol: string; Numbering: boolean }): string;
   /** Return the current selection type, e.g. "none" | "text" | "image". */
   pluginMethod_GetSelectionType(): string;
   /** Replace the current selection with the given lines (one array entry per line). */
@@ -47,6 +49,11 @@ export interface EditorApi {
   asc_addComment(data: CommentData): void;
   /** Toggle track-changes (revision) mode. */
   asc_SetTrackRevisions(value: boolean): void;
+  asc_registerCallback?(event: string, callback: (...args: unknown[]) => void): void;
+  asc_unregisterCallback?(event: string, callback: (...args: unknown[]) => void): void;
+  asc_SetGlobalTrackRevisions?(value: boolean): void;
+  asc_GetGlobalTrackRevisions?(): boolean;
+  asc_SetLocalTrackRevisions?(value: boolean | null): void;
   /** Whether track-changes mode is currently on. */
   asc_IsTrackRevisions(): boolean;
   /** Spreadsheet only: move the selection to a cell by address (e.g. "B2"). */
@@ -65,6 +72,8 @@ export interface CommentData {
 
 /** The editor frame's `Asc` namespace (only the parts we construct are typed). */
 export interface EditorAsc {
+  c_oAscAsyncActionType?: { BlockInteraction: number };
+  c_oAscAsyncAction?: { ApplyChanges: number };
   /** Word comment-data constructor (Word editor only). */
   asc_CCommentDataWord?: new () => CommentData;
   /** Comment-data constructor used by the spreadsheet/presentation editors. */
@@ -73,7 +82,23 @@ export interface EditorAsc {
 }
 
 /** Editor API plus the frame's `Asc` namespace, needed to build SDK objects. */
+export interface EditorCommon {
+  changestype_Document_Settings?: number;
+  IsHiddenObj?(shape: unknown): boolean;
+  c_oAscClipboardDataFormat?: { Text: number };
+  g_specialPasteHelper?: { Api?: EditorApi; Paste_Process_End(): void };
+  History?: RedoHistory & {
+    _getLongPointIndex?(): number;
+    startGroupPoints?(): void;
+    endGroupPoints?(): void;
+    cancelGroupPoints?(): unknown[];
+  };
+  CollaborativeEditing?: { Get_GlobalLock(): boolean };
+}
+
 export interface EditorContext {
+  AscDFH?: { historydescription_GroupPoints: number };
+  AscCommon?: EditorCommon;
   api: EditorApi;
   Asc: EditorAsc;
 }
@@ -85,6 +110,8 @@ export interface EditorContext {
  * from either. `Asc` also carries the namespace used to build SDK objects.
  */
 interface EditorWindow {
+  AscDFH?: EditorContext['AscDFH'];
+  AscCommon?: EditorCommon;
   editor?: unknown;
   Asc?: EditorAsc & { editor?: unknown };
 }
@@ -157,7 +184,14 @@ export function getEditorContext(): EditorContext | null {
   const win = findEditorWindow();
   if (!win || !win.Asc) return null;
   const api = resolveApi(win);
-  return api ? { api, Asc: win.Asc } : null;
+  return api
+    ? {
+        api,
+        Asc: win.Asc,
+        ...(win.AscCommon ? { AscCommon: win.AscCommon } : {}),
+        ...(win.AscDFH ? { AscDFH: win.AscDFH } : {}),
+      }
+    : null;
 }
 
 /** Return the editor context, throwing {@link EditorNotReadyError} if unavailable. */

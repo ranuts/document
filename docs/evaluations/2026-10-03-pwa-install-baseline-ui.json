@@ -1,0 +1,47 @@
+{
+  "status": "completed",
+  "scope": "Fresh isolated desktop WebKit and Chromium editor/IM install-dialog behavior; Chromium installability event controlled, no OS installation.",
+  "results": [
+    {
+      "kind": "webkit",
+      "before": {
+        "manualApple": false,
+        "manualChrome": false,
+        "hidden": false,
+        "available": true,
+        "appleDesktop": true,
+        "storageFlag": null,
+        "shadowText": " Back\n                            \n                        \n                        \n                            Add to Dock\n                            \n                                \n                            \n                        \n                    \n                \n            \n        "
+      },
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css",
+        "http://127.0.0.1:5193/assets/editor-PVYdgt1D.js"
+      ]
+    },
+    {
+      "kind": "chromium",
+      "before": {
+        "manualApple": false,
+        "manualChrome": false,
+        "hidden": false,
+        "available": true,
+        "appleDesktop": false,
+        "storageFlag": null,
+        "shadowText": "ll the App for a better offline experience and quick access.\n                    \n                    \n                        \n                        Install\n                    \n                \n            \n            \n                \n                    \n                \n            \n        "
+      },
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-PVYdgt1D.js",
+        "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+      ]
+    }
+  ],
+  "errors": [],
+  "productionBundle": "editor-PVYdgt1D.js",
+  "assessment": "Both fresh contexts opened the install dialog automatically.",
+  "limitations": [
+    "Fresh desktop Playwright WebKit/Chromium only; Chromium beforeinstallprompt event controlled, not native browser installability certification.",
+    "GGUF requests aborted to isolate UI without downloading models; resulting AI load error is expected test setup, no model inference proof.",
+    "Component manual show/hide API verified, no OS installation or browser-menu installation performed.",
+    "Service workers blocked in these contexts; this test does not establish offline/PWA cache behavior."
+  ]
+}

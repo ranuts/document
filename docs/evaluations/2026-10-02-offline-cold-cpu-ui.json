@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-02T05:53:03.079Z",
+  "scope": "New browser process starts offline using previously warmed isolated profile; no online request allowed",
+  "status": "passed",
+  "policy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+  "controller": "http://127.0.0.1:5193/sw.js",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "text": [
+    "Hello!Write to document"
+  ],
+  "stats": "First text: 21.88 s · Overall response rate: 0.14 token/s · 3 tokens",
+  "responseMs": 22060,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

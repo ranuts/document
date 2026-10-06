@@ -1,0 +1,488 @@
+{
+  "offlineRequests": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-Di1c623a.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-v2Chclg4.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-BebKRNQr.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-LIZb61NB.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/en.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail.png.bin",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-XMlyubPs.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/esm-DlYNP7Qx.js",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/5f810d75-c165-4c50-9879-adf3321c66e5",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/0840a62c-ddd4-414a-94a6-641bf39b5100",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/7bdf21f0-bbbf-437e-b24e-11a22043b3d2",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/db28cc00-e7e6-4295-a30e-3be3ea5effe7",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/3b99b4a8-b359-4b9c-8c5e-a615c9f781a3",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET",
+      "hasBody": false
+    }
+  ],
+  "probeSHA256": "447d75eca18bbbb4489cd3489d54b6da459275fff05d4ed503b2b0e432d3e31f",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "coldState": {
+        "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+        "isolated": true
+      },
+      "browserOnline": false,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 28.2 token/s · First text: 0.98 s · Overall response rate: 14.19 token/s · 26 tokens",
+      "reply": "Dear Editor,Thank you for your time. Please let me know if there is anything else I can assist you with.Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "seedState": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "isolated": true
+  },
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "closedSeedContext": true,
+  "status": "completed"
+}

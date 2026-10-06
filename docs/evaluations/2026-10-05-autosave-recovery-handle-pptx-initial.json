@@ -1,0 +1,1087 @@
+{
+  "scope": "Formal autosave cached-departure fix with delayed actual IndexedDB recovery-file reopen; unsaved document cancellation and accepted departure, populated content across real cached returns; repaired Excel SDK formula pagehide lifecycle; actual browser navigation, native Excel/PPT, no model inference, actual BFCache return then closed-grammar IM edit, Undo/Redo/Save/reopen",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "7d68526f-4b84-4815-a84b-f517102ceef3",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=pptx",
+          "guard": true
+        }
+      ],
+      "documentText": "[[\"\\r\\n\",\"\\r\\n\"],[\"\\r\\n\",\"\\r\\n\"]]"
+    },
+    {
+      "token": "7d68526f-4b84-4815-a84b-f517102ceef3",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=pptx",
+          "guard": true
+        }
+      ],
+      "documentText": "[[\"\\r\\n\",\"\\r\\n\"],[\"\\r\\n\",\"\\r\\n\"]]"
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [],
+  "network": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=pptx&agent=1&locale=zh-CN",
+      "method": "GET",
+      "start": 1791145594670,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594714
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791145594714,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594719
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "length": "910",
+      "end": 1791145594719
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594721
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-B1vjoA6X.js",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594728
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "length": "158",
+      "end": 1791145594721
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594726
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "length": "158",
+      "end": 1791145594723
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-BNZCd_xN.js",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594728
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "length": "417",
+      "end": 1791145594723
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET",
+      "start": 1791145594719,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594724
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-WX2L36k5.js",
+      "method": "GET",
+      "start": 1791145594735,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145594755
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-B8wMDqgv.js",
+      "method": "GET",
+      "start": 1791145594735,
+      "phase": "initial",
+      "status": 200,
+      "length": "37",
+      "end": 1791145594741
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791145594753,
+      "phase": "initial",
+      "status": 200,
+      "length": "697",
+      "end": 1791145594754
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791145594773,
+      "phase": "initial",
+      "status": 200,
+      "length": "69652",
+      "end": 1791145594778
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "start": 1791145595743,
+      "phase": "initial",
+      "status": 200,
+      "length": "663",
+      "end": 1791145595746
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "start": 1791145595747,
+      "phase": "initial",
+      "status": 200,
+      "length": "663",
+      "end": 1791145595750
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791145595760,
+      "phase": "initial",
+      "status": 200,
+      "length": "697",
+      "end": 1791145595761
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "start": 1791145609740,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145609748
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=pptx",
+      "method": "GET",
+      "start": 1791145609911,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145609969
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "start": 1791145609969,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610008
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/css/app.css",
+      "method": "GET",
+      "start": 1791145610008,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610008
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js",
+      "method": "GET",
+      "start": 1791145610008,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610028
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791145610010,
+      "phase": "initial",
+      "status": 200,
+      "length": "697",
+      "end": 1791145610012
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/zh.json",
+      "method": "GET",
+      "start": 1791145610050,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610053
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "start": 1791145610059,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610064
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "start": 1791145610059,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610065
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "start": 1791145610059,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610063
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "start": 1791145610059,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610063
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/slide/sdk-all-min.js",
+      "method": "GET",
+      "start": 1791145610067,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610102
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "start": 1791145610140,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610140
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/slide/sdk-all.js",
+      "method": "GET",
+      "start": 1791145610211,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610428
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "start": 1791145610211,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610213
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "start": 1791145610211,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610215
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "start": 1791145610211,
+      "phase": "initial",
+      "status": 200,
+      "length": "20166",
+      "end": 1791145610211
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/slide/themes//themes.js",
+      "method": "GET",
+      "start": 1791145610211,
+      "phase": "initial",
+      "status": 200,
+      "length": "596",
+      "end": 1791145610215
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "start": 1791145610217,
+      "phase": "initial",
+      "status": 200,
+      "length": "3614021",
+      "end": 1791145610294
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "start": 1791145610278,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610294
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "start": 1791145610279,
+      "phase": "initial",
+      "status": 200,
+      "length": "110751",
+      "end": 1791145610280
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET",
+      "start": 1791145610291,
+      "phase": "initial",
+      "status": 200,
+      "length": "510644",
+      "end": 1791145610294
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "length": "153",
+      "end": 1791145610537
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "length": "227999",
+      "end": 1791145610538
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610813
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610805
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610543
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610544
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610546
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET",
+      "start": 1791145610533,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610545
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610558
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610559
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610560
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610561
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/117",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610583
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/116",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610581
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/050",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610584
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/114",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610584
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/112",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610601
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610592
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610598
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610597
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610603
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET",
+      "start": 1791145610534,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145610606
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "start": 1791145610536,
+      "phase": "initial",
+      "status": 200,
+      "length": "193",
+      "end": 1791145610600
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "start": 1791145610536,
+      "phase": "initial",
+      "status": 200,
+      "length": "313",
+      "end": 1791145610602
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "start": 1791145610536,
+      "phase": "initial",
+      "status": 200,
+      "length": "107",
+      "end": 1791145610602
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "start": 1791145610536,
+      "phase": "initial",
+      "status": 200,
+      "length": "99",
+      "end": 1791145610603
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "start": 1791145610536,
+      "phase": "initial",
+      "status": 200,
+      "length": "115",
+      "end": 1791145610603
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "start": 1791145610536,
+      "phase": "initial",
+      "status": 200,
+      "length": "111",
+      "end": 1791145610604
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "start": 1791145610537,
+      "phase": "initial",
+      "status": 200,
+      "length": "257",
+      "end": 1791145610605
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "start": 1791145610537,
+      "phase": "initial",
+      "status": 200,
+      "length": "165",
+      "end": 1791145610605
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "start": 1791145610537,
+      "phase": "initial",
+      "status": 200,
+      "length": "316",
+      "end": 1791145610605
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "start": 1791145610537,
+      "phase": "initial",
+      "status": 200,
+      "length": "323",
+      "end": 1791145610606
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "start": 1791145611007,
+      "phase": "initial",
+      "status": 200,
+      "length": "326",
+      "end": 1791145611038
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "start": 1791145611007,
+      "phase": "initial",
+      "status": 200,
+      "length": "672",
+      "end": 1791145611039
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET",
+      "start": 1791145611007,
+      "phase": "initial",
+      "status": 200,
+      "length": "22",
+      "end": 1791145611040
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/code.js",
+      "method": "GET",
+      "start": 1791145611037,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145611077
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET",
+      "start": 1791145611074,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145611077
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET",
+      "start": 1791145611074,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145611077
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET",
+      "start": 1791145611074,
+      "phase": "initial",
+      "status": 200,
+      "length": "125",
+      "end": 1791145611077
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET",
+      "start": 1791145611074,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791145611077
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET",
+      "start": 1791145611074,
+      "phase": "initial",
+      "status": 200,
+      "length": "15",
+      "end": 1791145611078
+    },
+    {
+      "url": "http://127.0.0.1:5193/?bfc-probe=1",
+      "method": "GET",
+      "start": 1791145611776,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611789
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145611790
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "length": "910",
+      "end": 1791145611788
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611788
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611789
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611808
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET",
+      "start": 1791145611786,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145611810
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791145611808,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145611808
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "start": 1791145611808,
+      "phase": "leave",
+      "status": 200,
+      "length": "71368",
+      "end": 1791145611814
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791145611892,
+      "phase": "leave"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791145611917,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791145611917
+    },
+    {
+      "url": "http://127.0.0.1:5193/?bfc-probe=1",
+      "method": "GET",
+      "start": 1791145612039,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791145612076
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612076
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612066
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612066
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612067
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612076
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612076
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612077
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612086
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612087
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612087
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612087
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612087
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET",
+      "start": 1791145612066,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791145612087
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791145612077,
+      "phase": "leave",
+      "status": 200,
+      "length": "69652",
+      "end": 1791145612077
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "start": 1791145612077,
+      "phase": "leave",
+      "status": 200,
+      "length": "71368",
+      "end": 1791145612077
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791145612128,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791145612165
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791145612190,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791145612190
+    }
+  ],
+  "networkPhase": "leave",
+  "token": "7d68526f-4b84-4815-a84b-f517102ceef3",
+  "beforeText": "[[\"\\r\\n\",\"\\r\\n\"]]",
+  "editText": "[[\"\\r\\n\",\"\\r\\n\"],[\"\\r\\n\",\"\\r\\n\"]]",
+  "dialogs": [
+    {
+      "type": "beforeunload",
+      "phase": "cancel"
+    },
+    {
+      "type": "beforeunload",
+      "phase": "leave"
+    },
+    {
+      "type": "beforeunload",
+      "phase": "leave"
+    }
+  ],
+  "cancelNavigationError": "Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:5193/?bfc-probe=cancel\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/?bfc-probe=cancel\", waiting until \"load\"\u001b[22m\n",
+  "cancelState": {
+    "token": "7d68526f-4b84-4815-a84b-f517102ceef3",
+    "text": "[[\"\\r\\n\",\"\\r\\n\"],[\"\\r\\n\",\"\\r\\n\"]]",
+    "url": "http://127.0.0.1:5193/editor?new=pptx&agent=1&locale=zh-CN&saved=35e99fb0-9a7c-4d48-a417-9cc6d268c541"
+  },
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=pptx&agent=1&locale=zh-CN&saved=35e99fb0-9a7c-4d48-a417-9cc6d268c541",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=pptx",
+      "registered": [],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),n=Array(i),o=0;o<i;o++)n[o]=arguments[o+e];switch(e){case 0:return t.call(this,n);case 1:return t.call(this,arguments[0],n);case 2:return t.call(this,arguments[0],arguments[1],n)}var s=Array(e+1);for(o=0;o<e;o++)s[o]=arguments[o];return s[e]=n,t.apply(this,s)}"
+    }
+  ],
+  "cached": true,
+  "returnCompleteAt": 1791145612241,
+  "error": "TypeError [ERR_INVALID_ARG_TYPE]: The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received undefined",
+  "contextClosed": true
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "ja-permission-recipient-absent",
+    "task": "rewrite",
+    "source": "ねえ、綾乃は健太から許可をまだ受けていないので、2027-01-16に美咲へ510 EURを返金できないんだよ。",
+    "instruction": "正式な書き言葉に直し、三人の役割、許可をまだ受けていないことと返金できない状態を保ってください。",
+    "rubric": "綾乃 has not received permission from 健太 and cannot refund 美咲; do not turn 綾乃 into authorizer."
+  },
+  {
+    "id": "ja-permission-granted-refund-pending",
+    "task": "rewrite",
+    "source": "ねえ、健太は綾乃が2027-01-16に美咲へ510 EURを返金することを許可したけど、返金はまだ済んでいないんだよ。",
+    "instruction": "正式な書き言葉に直し、許可した人、実行する人、受取人と未実行の返金を保ってください。",
+    "rubric": "健太 granted permission to 綾乃 for refund to 美咲; refund not completed."
+  },
+  {
+    "id": "ko-approval-prerequisite-pending",
+    "task": "rewrite",
+    "source": "있잖아요, 유진은 하린이 검사 결과를 승인한 경우에만 2027-01-16에 서준에게 19상자를 보낼 수 있지만, 아직 승인되지 않았어요.",
+    "instruction": "격식 있는 문어체로 고치되, 세 사람의 역할과 승인이 필요한 조건, 아직 승인되지 않은 상태를 유지하세요.",
+    "rubric": "유진 may send boxes to 서준 only if 하린 approves inspection results; approval absent, permission not commitment."
+  },
+  {
+    "id": "ko-no-approval-shipment-pending",
+    "task": "rewrite",
+    "source": "있잖아요, 유진은 하린이 검사 결과를 승인하지 않아도 2027-01-16에 서준에게 19상자를 보낼 수 있으며, 아직 발송하지 않았어요.",
+    "instruction": "격식 있는 문어체로 고치되, 승인이 필요하지 않다는 조건과 아직 발송하지 않은 상태를 유지하세요.",
+    "rubric": "유진 may send to 서준 without 하린 approval; sending not completed."
+  },
+  {
+    "id": "de-completed-approval-absent",
+    "task": "rewrite",
+    "source": "Naja, Paula hat Viktor am 2027-01-16 620 CHF erstattet, obwohl Niklas die Ausgabe noch nicht genehmigt hat, verstehst du?",
+    "instruction": "Formuliere in formellem Deutsch und bewahre die erfolgte Erstattung, alle Personen und die noch fehlende Genehmigung.",
+    "rubric": "Paula reimbursed Viktor, payment completed, Niklas expense approval absent; do not make reimbursement pending."
+  },
+  {
+    "id": "de-conditional-unpaid",
+    "task": "rewrite",
+    "source": "Naja, Paula darf Viktor am 2027-01-16 620 CHF erstatten, falls Niklas die Ausgabe genehmigt; die Erstattung ist noch nicht erfolgt, verstehst du?",
+    "instruction": "Formuliere in formellem Deutsch und bewahre die Erlaubnis, die Bedingung, alle Personen und die noch nicht erfolgte Erstattung.",
+    "rubric": "Paula may reimburse Viktor if Niklas approves, refund unmade; preserve permission/condition."
+  },
+  {
+    "id": "pt-proposal-not-accepted",
+    "task": "rewrite",
+    "source": "Então, Helena propôs entregar 28 pacotes a Tiago em 2027-01-16, porém Inês ainda não aceitou essa proposta, sabe?",
+    "instruction": "Reescreva em português formal, preservando a proposta passada e ainda não aceita, além de todos os participantes.",
+    "rubric": "Helena proposed delivery to Tiago; Inês has not accepted; no completed delivery."
+  },
+  {
+    "id": "pt-completed-confirmation-absent",
+    "task": "rewrite",
+    "source": "Então, Helena entregou 28 pacotes a Tiago em 2027-01-16, porém Inês ainda não recebeu a confirmação, sabe?",
+    "instruction": "Reescreva em português formal, preservando a entrega concluída, os participantes e a confirmação ainda não recebida.",
+    "rubric": "Helena completed delivery to Tiago; Inês has not received confirmation; do not make delivery proposed/pending."
+  }
+]

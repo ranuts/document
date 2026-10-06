@@ -35,7 +35,7 @@
   'use strict';
 
   /** Absolute, not './sw.js': from /zh-CN/ a relative URL would scope the worker to /zh-CN/. */
-  var SW_URL = '/sw.js';
+  var SW_URL = global.crossOriginIsolated === true ? '/sw.js?isolation=1' : '/sw.js';
   var CLIENT_COUNT_TIMEOUT_MS = 1000;
 
   function createSwUpdater(nav, options) {
@@ -130,6 +130,8 @@
 
     /** Promote a worker that is already waiting, installing, or yet to be found. */
     function wire(registration) {
+      // Browser automation or a restricted environment may return no handle.
+      if (!registration) return;
       void maybePromote(registration);
       // `updatefound` for an update found during registration itself can fire
       // before this listener exists, so pick up an in-flight install too.
@@ -140,9 +142,14 @@
     }
 
     function start() {
-      return nav.serviceWorker.register(SW_URL).then(wire, function () {
-        // Registration is best-effort: the landing page works without it.
-      });
+      return Promise.resolve()
+        .then(function () {
+          return nav.serviceWorker.register(SW_URL);
+        })
+        .then(wire)
+        .catch(function () {
+          // Registration is best-effort: the landing page works without it.
+        });
     }
 
     return { start: start, wire: wire, maybePromote: maybePromote, countClients: countClients };
@@ -150,9 +157,33 @@
 
   global.__createSwUpdater = createSwUpdater;
 
+  var pendingRegistration = null;
+
+  // Home and the editor register the same worker. Departing while Home's
+  // call is pending can strand its install in WebKit. Wait for that call,
+  // not activation or the cache download, and never block opening a file.
+  global.__prepareLocalNavigation = function () {
+    if (!pendingRegistration) return Promise.resolve();
+    var pending = pendingRegistration;
+    return new Promise(function (resolve) {
+      var settled = false;
+      var timer = global.setTimeout(done, 1000);
+      function done() {
+        if (settled) return;
+        settled = true;
+        global.clearTimeout(timer);
+        resolve();
+      }
+      pending.then(done, done);
+    });
+  };
+
   if (global.navigator && 'serviceWorker' in global.navigator) {
     global.addEventListener('load', function () {
-      void createSwUpdater(global.navigator).start();
+      pendingRegistration = createSwUpdater(global.navigator).start();
+      pendingRegistration.then(function () {
+        pendingRegistration = null;
+      });
     });
   }
 })(window);

@@ -1,0 +1,57 @@
+{
+  "scope": "Source-built SDK download cancellation using mocked network/storage, no model download",
+  "bundleSHA256": "9485f3e243dff343c27d69db47e5b7a6fd6608cd9262d8e271c1c1e56a0f93f8",
+  "results": [
+    {
+      "phase": "metadata",
+      "calls": [
+        {
+          "url": "https://huggingface.co/example/model/raw/pinned/model.gguf",
+          "hasSignal": true,
+          "headers": {
+            "X-Test": "marker"
+          }
+        }
+      ],
+      "deletes": 0,
+      "result": {
+        "state": "rejected",
+        "name": "AbortError"
+      }
+    },
+    {
+      "phase": "cache-head",
+      "calls": [
+        {
+          "url": "https://models.example/model.gguf",
+          "hasSignal": true,
+          "headers": {
+            "X-Test": "marker"
+          }
+        }
+      ],
+      "deletes": 0,
+      "result": {
+        "state": "rejected",
+        "name": "AbortError"
+      }
+    },
+    {
+      "phase": "model-head",
+      "calls": [
+        {
+          "url": "https://models.example/model.gguf",
+          "hasSignal": true,
+          "headers": {
+            "X-Test": "marker"
+          }
+        }
+      ],
+      "deletes": 0,
+      "result": {
+        "state": "rejected",
+        "name": "AbortError"
+      }
+    }
+  ]
+}

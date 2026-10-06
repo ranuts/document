@@ -1,0 +1,38 @@
+[
+  {
+    "id": "single-transfer-en",
+    "task": "summarize",
+    "language": "en",
+    "source": "Nora proposed that the publications team distribute the revised handbook only once the compliance team approves the safety appendix. Compliance has not approved the appendix, and publications has not distributed the handbook. The transport team separately discussed shuttle routes.",
+    "instruction": "Produce one shorter sentence in the source language, preserving the proposer, distributing team, approval of the safety appendix as a prerequisite, and both absent approval and non-distribution. Omit shuttle routes.",
+    "rubric": [
+      "English",
+      "one shorter sentence",
+      "Nora proposes",
+      "publications distributes revised handbook",
+      "compliance approval of safety appendix prerequisite",
+      "appendix not approved",
+      "handbook not distributed",
+      "omit shuttle routes",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "single-transfer-ja",
+    "task": "summarize",
+    "language": "ja",
+    "source": "恵は、監査部が検証記録を確認した場合に限り、技術部が更新済みの制御装置を稼働させるよう提案した。監査部はまだ確認しておらず、技術部も稼働させていない。施設部は別件で駐車場の標識を相談した。",
+    "instruction": "原文と同じ言語で、より短い一文に要約してください。提案者、稼働させる部署、検証記録の確認が前提であること、未確認と未稼働の状態を保持し、標識の話は省いてください。",
+    "rubric": [
+      "Japanese",
+      "one shorter sentence",
+      "Megumi proposes",
+      "engineering operates updated controller",
+      "audit verification of validation records prerequisite",
+      "audit has not verified",
+      "engineering has not operated controller",
+      "omit signs",
+      "no unsupported fact"
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "scope": "Controlled native Chromium retirement of product autosave via its bundled public preference API, actual SDK export and IndexedDB; synthetic hidden visibility, no model inference or natural quota/device certification",
+  "asset": "input-DEoPNM0j-CEoLgyYS.js",
+  "assetSHA256": "45da15936cb5ceb9a8ccf1a16f7b9651e44230e4f6a3695806b78184b0dd371c",
+  "cases": [
+    {
+      "mode": "estimate",
+      "errors": [],
+      "apiSource": "function po(e){a(lo,e?`true`:`false`),e||yo()}",
+      "state": {
+        "fault": {
+          "mode": "estimate",
+          "started": true,
+          "done": false
+        },
+        "preference": "false",
+        "stored": {
+          "docExists": false,
+          "blobCount": 0
+        },
+        "value": "7"
+      },
+      "after": "7",
+      "chatErrors": [],
+      "passed": true,
+      "contextClosed": true
+    },
+    {
+      "mode": "write",
+      "errors": [],
+      "apiSource": "function po(e){a(lo,e?`true`:`false`),e||yo()}",
+      "state": {
+        "fault": {
+          "mode": "write",
+          "started": true,
+          "done": true
+        },
+        "preference": "false",
+        "stored": {
+          "docExists": false,
+          "blobCount": 0
+        },
+        "value": "7"
+      },
+      "after": "7",
+      "chatErrors": [],
+      "passed": true,
+      "contextClosed": true
+    }
+  ],
+  "browser": "151.0.7922.34",
+  "browserClosed": true
+}

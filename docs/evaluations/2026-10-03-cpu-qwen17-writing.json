@@ -1,0 +1,191 @@
+{
+  "date": "2026-10-03T06:45:14.617Z",
+  "scope": "Actual browser CPU selected-text writing with current production prompt, schema and fact guards; one loaded model reused for three distinct tasks. Candidate loaded through existing local GGUF file control. WebGPU disabled and Service Workers blocked for diagnostic response/runtime capture. No model default change, broad quality benchmark or mobile claim.",
+  "port": 5194,
+  "file": ".scratch/node_modules/ai-models/Qwen3-1.7B-Q8_0.gguf",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "CPU · Qwen3-1.7B-Q8_0.gguf",
+      "output": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "documentUnchanged": true,
+      "responseMs": 25127,
+      "errors": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{\"text\":\"Alex将于2026年10月8日支付1250欧元。\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 30,
+            "promptTokens": 447,
+            "promptProcessingDurationMs": 22325.615,
+            "decodingDurationMs": 2750.084,
+            "decodeTokensPerSecond": 10.545132439590937,
+            "responseDurationMs": 25105.67999982834,
+            "endToEndTokensPerSecond": 1.1949487128094172
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen3-1.7B-Q8_0.gguf",
+      "output": "Alex is scheduled to pay 1,250 EUR on 2026-10-08, as indicated.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 7285,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{ \"text\": \"Alex is scheduled to pay 1,250 EUR on 2026-10-08, as indicated.\" }",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 35,
+            "promptTokens": 447,
+            "promptProcessingDurationMs": 4074.85,
+            "decodingDurationMs": 3173.611,
+            "decodeTokensPerSecond": 10.713348296309787,
+            "responseDurationMs": 7258.070000171661,
+            "endToEndTokensPerSecond": 4.822218578654134
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · Qwen3-1.7B-Q8_0.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "documentUnchanged": true,
+      "responseMs": 20364,
+      "errors": [
+        "The summary is not shorter than the source. Try again or use another model.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{\"text\":\"Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has not been approved.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 37,
+            "promptTokens": 460,
+            "promptProcessingDurationMs": 16932.091,
+            "decodingDurationMs": 3397.525,
+            "decodeTokensPerSecond": 10.595948521350099,
+            "responseDurationMs": 20344.829999923706,
+            "endToEndTokensPerSecond": 1.8186438520321258
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "formal-negative",
+      "task": "rewrite",
+      "source": "Alex hasn't approved the -1,250 EUR adjustment due on 2026-10-08.",
+      "instruction": "Rewrite in formal English. Preserve the negative amount, date and lack of approval.",
+      "selected": "Alex hasn't approved the -1,250 EUR adjustment due on 2026-10-08.\r\n",
+      "engine": "CPU · Qwen3-1.7B-Q8_0.gguf",
+      "output": "Alex has not approved the -1,250 EUR adjustment due on 2026-10-08.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 7027,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{\"text\":\"Alex has not approved the -1,250 EUR adjustment due on 2026-10-08.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 32,
+            "promptTokens": 447,
+            "promptProcessingDurationMs": 4078.544,
+            "decodingDurationMs": 2905.465,
+            "decodeTokensPerSecond": 10.66954859204981,
+            "responseDurationMs": 7006.945000171661,
+            "endToEndTokensPerSecond": 4.566897556526566
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "translate-en",
+      "task": "translate",
+      "targetLanguage": "en",
+      "source": "Alex 尚未批准 2026-10-08 的 1,250 EUR 付款。",
+      "instruction": "Translate into English, preserving the name, date, amount and lack of approval.",
+      "selected": "Alex 尚未批准 2026-10-08 的 1,250 EUR 付款。\r\n",
+      "engine": "CPU · Qwen3-1.7B-Q8_0.gguf",
+      "output": "Alex has not approved the 1,250 EUR payment on 2026-10-08.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 19296,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{\"text\":\"Alex has not approved the 1,250 EUR payment on 2026-10-08.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 31,
+            "promptTokens": 449,
+            "promptProcessingDurationMs": 16445.365,
+            "decodingDurationMs": 2806.39,
+            "decodeTokensPerSecond": 10.689889858501491,
+            "responseDurationMs": 19273.125,
+            "endToEndTokensPerSecond": 1.6084573726367675
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    }
+  ],
+  "errors": [],
+  "leakage": []
+}

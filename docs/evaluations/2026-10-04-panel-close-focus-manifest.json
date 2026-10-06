@@ -1,0 +1,11 @@
+{
+  "baseRevision": "f4a7438042952956e50b3cd961ca428869f6ef30",
+  "testedProductSourceHashes": {
+    "lib/agent-plugin/ui/panel.ts": "a2679615346cae7252ebf22b8bd986a0fd4c02f021af63bcd5d86c3139bc5623",
+    "lib/agent-plugin/ui/sidebar-entry.ts": "38be0f3018f4220d7b69c704a2b5a7c9ddaa768c8ab7092b2e4634b1e012a46a"
+  },
+  "builtPluginHashes": {
+    "dist/assets/agent-plugin-ByWdK-90.js": "e11eb66654bb0e3b6010b0d571a954d2526e29d00622e63664867cbfccce59dc"
+  },
+  "notes": "Source/build hashes collected after final browser run; driver does not capture served response bytes. Earlier baseline scratch probe report has no intrinsic source hash."
+}

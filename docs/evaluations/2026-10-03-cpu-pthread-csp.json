@@ -1,0 +1,79 @@
+{
+  "scope": "Actual cached default CPU inference with CSP-respecting eval/data-module controls on identified main and observed em-pthread blob Workers. Current production HTML meta CSP, no injected policy or Worker bytes. Desktop Chromium, observed pool only; no physical-device/security-gate claim.",
+  "status": "incomplete",
+  "errors": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "shell": {
+    "isolated": true,
+    "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+    "code": [
+      {
+        "url": "blob:http://127.0.0.1:5193/a994e52d-f1cc-4582-9c59-aa3e16036207",
+        "length": 155266,
+        "mainLlama": true
+      }
+    ]
+  },
+  "targets": [
+    {
+      "targetId": "6F24D24EB856F0E7BA9EC5D74D6566A9",
+      "url": "blob:http://127.0.0.1:5193/315eabd5-506c-4906-b123-c595828a38b6",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "4A3C22E69749F631E914F80D6152C5EE",
+      "url": "blob:http://127.0.0.1:5193/35b8a449-feab-4f60-9d08-cb415f2db194",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "E351D46D0B38F936512827E87EC0E0FC",
+      "url": "blob:http://127.0.0.1:5193/aeed25a9-adcb-46ee-ba72-3772ce2afb14",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "8AEC906B06E432C3231141A95FE7ED07",
+      "url": "blob:http://127.0.0.1:5193/a994e52d-f1cc-4582-9c59-aa3e16036207",
+      "title": "blob:http://127.0.0.1:5193/a994e52d-f1cc-4582-9c59-aa3e16036207"
+    },
+    {
+      "targetId": "8DC1BDB3137285547613CA231338DD6C",
+      "url": "blob:http://127.0.0.1:5193/b1d5aadd-d449-45e3-9006-fbab204103b2",
+      "title": "em-pthread"
+    }
+  ],
+  "mainWorker": {
+    "targetId": "8AEC906B06E432C3231141A95FE7ED07",
+    "url": "blob:http://127.0.0.1:5193/a994e52d-f1cc-4582-9c59-aa3e16036207",
+    "title": "blob:http://127.0.0.1:5193/a994e52d-f1cc-4582-9c59-aa3e16036207"
+  },
+  "evalControl": {
+    "blocked": true,
+    "name": "EvalError",
+    "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='\".\n"
+  },
+  "moduleControl": {
+    "blocked": true,
+    "name": "TypeError",
+    "message": "Failed to fetch dynamically imported module: data:text/javascript,export default 42"
+  },
+  "pthreads": [
+    {
+      "targetId": "6F24D24EB856F0E7BA9EC5D74D6566A9",
+      "url": "blob:http://127.0.0.1:5193/315eabd5-506c-4906-b123-c595828a38b6",
+      "title": "em-pthread",
+      "status": "incomplete",
+      "error": "Error: Worker eval control timeout"
+    }
+  ],
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "baselineMeta": null,
+  "baselineEval": {
+    "blocked": false,
+    "value": 2
+  },
+  "baselineModule": {
+    "blocked": false,
+    "value": 42
+  }
+}

@@ -1,0 +1,236 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import crypto from 'node:crypto';
+
+// Throwaway prompt experiment: route-local instrumentation, never shipped source.
+const origin = 'http://127.0.0.1:5193';
+const modelId = process.env.WRITING_GPU_MODEL || 'Qwen3-1.7B-q4f16_1-MLC';
+const reportPath = process.env.WRITING_EXAMPLES_REPORT || 'docs/evaluations/2026-10-03-gpu-writing-sampling.json';
+const variants = (process.env.WRITING_EXAMPLES_VARIANTS || 'current,sampled').split(',');
+const repetitions = Number(process.env.WRITING_EXAMPLES_REPETITIONS || 2);
+const cases = [
+  {
+    id: 'formal-zh',
+    task: 'rewrite',
+    source: '嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！',
+    instruction: '改写为正式书面中文，去掉口语表达，保留事实。',
+  },
+  {
+    id: 'formal-en',
+    task: 'rewrite',
+    source: 'Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?',
+    instruction: 'Rewrite in formal English. Remove colloquial language, preserving the facts.',
+  },
+  {
+    id: 'negation-summary',
+    task: 'summarize',
+    source: 'Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.',
+    instruction: 'Keep the payment amount, proposed date and the fact that approval has not been granted.',
+  },
+];
+if (process.env.WRITING_EXAMPLES_CASES)
+  cases.splice(0, cases.length, ...JSON.parse(await fs.readFile(process.env.WRITING_EXAMPLES_CASES, 'utf8')));
+const assets = await fs.readdir('dist/assets');
+const plugin = assets.filter((name) => /^agent-plugin-.*\.js$/.test(name));
+if (plugin.length !== 1) throw Error('Ambiguous plugin');
+const pluginOriginal = await fs.readFile(path.join('dist/assets', plugin[0]), 'utf8');
+const writingMarker = 'if(n.throwIfAborted(),a.toolCalls.length';
+const samplingMarker = 'temperature:0,response_format:';
+if (pluginOriginal.split(writingMarker).length !== 2 || pluginOriginal.split(samplingMarker).length !== 2)
+  throw Error('Markers changed');
+const pluginDiagnostic = pluginOriginal
+  .replace(
+    writingMarker,
+    '(window.__writingRaw??=[]).push({text:a.text,stopReason:a.stopReason,usage:a.usage});' + writingMarker,
+  )
+  .replace(samplingMarker, 'temperature:(window.__writingVariant===`sampled`?0.7:0),response_format:');
+const sha = (source) => crypto.createHash('sha256').update(source).digest('hex');
+const context = await chromium.launchPersistentContext('.scratch/ai-csp/gpu-profile', {
+  serviceWorkers: 'block',
+  args: ['--enable-unsafe-webgpu', '--use-angle=metal'],
+  viewport: { width: 1280, height: 900 },
+});
+await context.addInitScript((modelId) => {
+  window.__writingInputs = [];
+  const OriginalWorker = window.Worker;
+  window.Worker = class extends OriginalWorker {
+    postMessage(message, ...rest) {
+      if (message?.kind === 'chatCompletionNonStreaming') window.__writingInputs.push(structuredClone(message.content));
+      return super.postMessage(message, ...rest);
+    }
+  };
+  Object.defineProperty(window, 'showSaveFilePicker', { value: undefined, configurable: true });
+  if (location.origin === 'http://127.0.0.1:5193') localStorage.setItem('agent-panel-provider', 'webllm');
+  if (location.origin === 'http://127.0.0.1:5193') localStorage.setItem('agent-local-model-id', modelId);
+}, modelId);
+await context.route(origin + '/**', async (route) => {
+  const response = await route.fetch();
+  const headers = {
+    ...response.headers(),
+    'cross-origin-opener-policy': 'same-origin',
+    'cross-origin-embedder-policy': 'require-corp',
+  };
+  delete headers['content-length'];
+  const pathname = new URL(route.request().url()).pathname;
+  const body = pathname === '/assets/' + plugin[0] ? pluginDiagnostic : undefined;
+  await route.fulfill({ response, headers, ...(body === undefined ? {} : { body }) });
+});
+const page = context.pages()[0] || (await context.newPage());
+const report = {
+  date: new Date().toISOString(),
+  scope:
+    'Actual cached configured WebGPU model writing: temperature 0 vs 0.7 only. Identical production prompts, schema, top-p, maximum tokens and guards. Route-local instrumentation; native selected-text actions and Undo/Redo; no product/default change or broad quality claim.',
+  modelId,
+  status: 'running',
+  probeSHA256: sha(await fs.readFile(new URL(import.meta.url))),
+  variants,
+  repetitions,
+  cases,
+  bundleHashes: {
+    plugin: sha(pluginOriginal),
+    diagnosticPlugin: sha(pluginDiagnostic),
+  },
+  results: [],
+  errors: [],
+  externalRequests: [],
+};
+page.on('pageerror', (error) => report.errors.push(error.message));
+context.on('request', (request) => {
+  if (new URL(request.url()).protocol.startsWith('http') && new URL(request.url()).origin !== origin)
+    report.externalRequests.push({
+      url: request.url(),
+      method: request.method(),
+      bodyBytes: request.postDataBuffer()?.length ?? 0,
+    });
+});
+const save = () => fs.writeFile(reportPath, JSON.stringify(report, null, 2) + '\n');
+const body = () => page.frameLocator('#app iframe').locator('body');
+const selectedText = () =>
+  body().evaluate(() => {
+    const api = window.editor ?? window.Asc.editor;
+    api.asc_EditSelectAll();
+    return api.pluginMethod_GetSelectedText();
+  });
+try {
+  await page.goto(origin + '/');
+  report.cacheReset = await page.evaluate(async () => {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.map((registration) => registration.unregister()));
+    let removed = 0;
+    for (const name of await caches.keys()) {
+      const cache = await caches.open(name);
+      for (const request of await cache.keys())
+        if (/\/assets\/(?:agent-plugin-|esm-)/.test(new URL(request.url).pathname)) {
+          await cache.delete(request);
+          removed++;
+        }
+    }
+    return { registrations: registrations.length, removed };
+  });
+  await page.goto('about:blank');
+  await page.goto(origin + '/editor?new=docx&agent=1&locale=en');
+  await body().locator('.agent-sidebar-entry').click({ timeout: 90000 });
+  await page.waitForFunction(
+    () => document.querySelector('.agent-panel-note')?.textContent?.includes('Model loaded'),
+    null,
+    { timeout: 240000 },
+  );
+  report.engine = await page.locator('.agent-model-status').textContent();
+  if (!report.engine.includes('WebGPU') || !report.engine.includes(modelId.split('-')[1]))
+    throw Error('Unexpected model: ' + report.engine);
+  for (let repetition = 0; repetition < repetitions; repetition++)
+    for (const sample of cases)
+      for (const variant of repetition % 2 === 0 ? variants : [...variants].reverse()) {
+        await body().evaluate((_el, source) => {
+          const api = window.editor ?? window.Asc.editor;
+          api.asc_EditSelectAll();
+          api.pluginMethod_PasteText(source);
+        }, sample.source);
+        // Native paste can wait for language fonts; do not select a stale document.
+        await page.waitForFunction(
+          (source) => {
+            const frame = document.querySelector('#app iframe');
+            const api = frame?.contentWindow?.editor ?? frame?.contentWindow?.Asc?.editor;
+            return api?.WordControl?.m_oLogicDocument?.GetText().trim() === source;
+          },
+          sample.source,
+          { timeout: 60000 },
+        );
+        const selected = await selectedText();
+        if (selected.replace(/\r\n$/, '') !== sample.source) throw Error('Fixture mismatch');
+        const start = await page.evaluate((variant) => {
+          window.__writingVariant = variant;
+          return { raw: (window.__writingRaw || []).length, inputs: (window.__writingInputs || []).length };
+        }, variant);
+        const errorStart = await page.locator('.cui-msg-error').count();
+        await page.locator('.agent-writing-task').selectOption(sample.task);
+        const input = page.locator('.cui-input');
+        await input.fill(sample.instruction);
+        const began = Date.now();
+        await input.press('Enter');
+        await page.waitForFunction(() => !document.querySelector('.cui-input')?.disabled, null, { timeout: 180000 });
+        const diagnostics = await page.evaluate(
+          (start) => ({
+            raw: (window.__writingRaw || []).slice(start.raw),
+            inputs: (window.__writingInputs || []).slice(start.inputs),
+            isolated: crossOriginIsolated,
+          }),
+          start,
+        );
+        if (diagnostics.raw.length !== 1 || diagnostics.inputs.length !== 1 || !diagnostics.isolated)
+          throw Error('Missing native inference');
+        if (!diagnostics.inputs[0].modelId?.includes(modelId)) throw Error('Worker model mismatch');
+        const actual = diagnostics.inputs[0].request ?? diagnostics.inputs[0];
+        if (actual.temperature !== (variant === 'sampled' ? 0.7 : 0) || !actual.response_format?.schema)
+          throw Error('Sampling/schema mismatch');
+        const after = await selectedText();
+        const row = {
+          ...sample,
+          repetition,
+          variant,
+          selected,
+          output: after,
+          documentUnchanged: after === selected,
+          responseMs: Date.now() - began,
+          errors: (await page.locator('.cui-msg-error').allTextContents()).slice(errorStart),
+          previewCount: await page.locator('.agent-plan-preview').count(),
+          ...diagnostics,
+        };
+        if (row.previewCount) throw Error('Unexpected preview');
+        if (!row.documentUnchanged) {
+          await body().evaluate(() => (window.editor ?? window.Asc.editor).Undo());
+          row.undoText = await selectedText();
+          row.undoExact = row.undoText === selected;
+          await body().evaluate(() => (window.editor ?? window.Asc.editor).Redo());
+          row.redoText = await selectedText();
+          row.redoExact = row.redoText === after;
+          if (!row.undoExact || !row.redoExact) throw Error('Native writing Undo/Redo mismatch');
+        }
+        report.results.push(row);
+        console.log(
+          JSON.stringify({
+            id: row.id,
+            repetition,
+            variant,
+            raw: row.raw[0].text,
+            output: row.output,
+            errors: row.errors,
+            responseMs: row.responseMs,
+            undoExact: row.undoExact,
+            redoExact: row.redoExact,
+          }),
+        );
+        await save();
+      }
+  report.status = 'completed';
+} catch (error) {
+  report.status = 'failed';
+  report.error = String(error);
+  process.exitCode = 1;
+} finally {
+  report.bundleBytesUnchanged = (await fs.readFile(path.join('dist/assets', plugin[0]), 'utf8')) === pluginOriginal;
+  await save();
+  await context.unrouteAll({ behavior: 'wait' });
+  await context.close();
+}

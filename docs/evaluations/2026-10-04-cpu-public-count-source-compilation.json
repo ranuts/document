@@ -1,0 +1,26 @@
+{
+  "scope": "Isolated SDK source typecheck and ESM bundle, not production integration",
+  "typecheck": {
+    "compiler": "TypeScript 5.4.5",
+    "exitCode": 0
+  },
+  "build": {
+    "bundler": "tsup 8.4.0",
+    "typescript": "5.4.5",
+    "exitCode": 0
+  },
+  "sourceHashes": {
+    "src/wllama.ts": "5e081a807c8e90fe9fdf82a564b813548ad437816ad08d6ab49a2f2a72d096a7",
+    "src/glue/messages.ts": "178dedcddc9045ede07ce10ac1365e4db04305c5449f7b624775ac679dc9fc9f",
+    "src/workers-code/generated.ts": "4507c0cc349c7ccaa8f6d7a7fa1d459338bec39a038b5130c4f221da2ec8f465",
+    "tsconfig.build.json": "3f348517616d5ba2f12f67ed0bb85bacc5949b6c456156add1165c0511cdbbca",
+    "tsup.config.ts": "720741dae55efffa5457cca340f21d11b822d174f5865a4484ae3c659bfb8b05"
+  },
+  "bundleSHA256": "017419e0d4bcd5f4e8edf308b7dd674787b956dfc61cea371b5c4a9989f06091",
+  "logs": {
+    "document-count-sdk-typecheck.log": "tsconfig.build.json(7,25): error TS5108: Option 'moduleResolution=node10' has been removed. Please remove it from your configuration.\ntsconfig.build.json(18,5): error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.\ntsconfig.build.json(29,5): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.\n  Use '\"paths\": {\"*\": [\"./*\"]}' instead.\n",
+    "document-count-sdk-typecheck-545.log": "npm warn Unknown user config \"home\". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.\n",
+    "document-count-sdk-source-build.log": "npm warn Unknown user config \"home\". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.\nnpm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions\nError: Cannot find module 'typescript'\nRequire stack:\n- /home/local-user/.npm/_npx/f521d53c48510024/node_modules/tsup/dist/index.js\n- /home/local-user/.npm/_npx/f521d53c48510024/node_modules/tsup/dist/chunk-GZSSIGNC.js\n- /home/local-user/.npm/_npx/f521d53c48510024/node_modules/tsup/dist/cli-default.js\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1591:15)\n    at wrapResolveFilename (node:internal/modules/cjs/loader:1145:27)\n    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1169:10)\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1196:12)\n    at Module._load (node:internal/modules/cjs/loader:1368:5)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\n    at Module.require (node:internal/modules/cjs/loader:1701:12)\n    at require (node:internal/modules/helpers:318:16)\n    at Object.<anonymous> (/home/local-user/.npm/_npx/f521d53c48510024/node_modules/tsup/dist/index.js:1023:19)\n    at Module._compile (node:internal/modules/cjs/loader:1956:14)\n",
+    "document-count-sdk-source-build-pinned.log": "npm warn Unknown user config \"home\". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.\nnpm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions\nCLI Building entry: src/index.ts\nCLI tsup v8.4.0\nCLI Using tsup config: /private/tmp/document-wllama-count-361/tsup.config.ts\nCLI Target: es2015\nCLI Cleaning output folder\nESM Build start\n\n WARN  \u001b[33m\u25b2 \u001b[43;33m[\u001b[43;30mWARNING\u001b[43;33m]\u001b[0m \u001b[1mBig integer literals are not available in the configured target environment (\"es2015\") and may crash at run-time\u001b[0m [bigint]\n\n    src/utils.ts:141:17:\n\u001b[37m      141 \u2502   if (valLen !== \u001b[32m4n\u001b[37m) return false;\n          \u2575                  \u001b[32m~~\u001b[0m\n\n\n\nESM ../document-count-sdk-source-esm/index.js 369.66 KB\nESM \u26a1\ufe0f Build success in 37ms\n"
+  }
+}

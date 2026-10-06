@@ -1,0 +1,77 @@
+{
+  "scope": "Read-only GET of pinned Hugging Face repository metadata and config/tokenizer/tensor manifests; compare owned-profile cached bytes. No model shard downloads or document content sent.",
+  "repositories": [
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC",
+      "revision": "7690aaaa46df36b1be0fe93b9c9abac0497eff6c"
+    },
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+      "revision": "dfa91e859b714acfa489a1464297080656c3460d"
+    }
+  ],
+  "assets": [
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC",
+      "filename": "mlc-chat-config.json",
+      "revision": "7690aaaa46df36b1be0fe93b9c9abac0497eff6c",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC/resolve/7690aaaa46df36b1be0fe93b9c9abac0497eff6c/mlc-chat-config.json",
+      "bytes": 2045,
+      "sha256": "cac458abef34d849d560979d49559bb6d8f38ab7c566938ba117dd2eedb12a02",
+      "cachedSHA256": "cac458abef34d849d560979d49559bb6d8f38ab7c566938ba117dd2eedb12a02",
+      "matchesCached": true
+    },
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC",
+      "filename": "tokenizer.json",
+      "revision": "7690aaaa46df36b1be0fe93b9c9abac0497eff6c",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC/resolve/7690aaaa46df36b1be0fe93b9c9abac0497eff6c/tokenizer.json",
+      "bytes": 7031645,
+      "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "cachedSHA256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "matchesCached": true
+    },
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC",
+      "filename": "tensor-cache.json",
+      "revision": "7690aaaa46df36b1be0fe93b9c9abac0497eff6c",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC/resolve/7690aaaa46df36b1be0fe93b9c9abac0497eff6c/tensor-cache.json",
+      "bytes": 164965,
+      "sha256": "36931207ccd09207ddceeea9e62b07333a0b6b2745e8b1a45f06d8e6b826ab2e",
+      "cachedSHA256": "2cc8ba9bad42fe25c712369627f29d452e8c4ef46babfe5ae1d30ff992dca7a5",
+      "matchesCached": false
+    },
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+      "filename": "mlc-chat-config.json",
+      "revision": "dfa91e859b714acfa489a1464297080656c3460d",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC/resolve/dfa91e859b714acfa489a1464297080656c3460d/mlc-chat-config.json",
+      "bytes": 2045,
+      "sha256": "5924a33c2a5af212f765c617039a76a584ba5a73d926040507458abaa231991e",
+      "cachedSHA256": "5924a33c2a5af212f765c617039a76a584ba5a73d926040507458abaa231991e",
+      "matchesCached": true
+    },
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+      "filename": "tokenizer.json",
+      "revision": "dfa91e859b714acfa489a1464297080656c3460d",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC/resolve/dfa91e859b714acfa489a1464297080656c3460d/tokenizer.json",
+      "bytes": 7031645,
+      "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "cachedSHA256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "matchesCached": true
+    },
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+      "filename": "tensor-cache.json",
+      "revision": "dfa91e859b714acfa489a1464297080656c3460d",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC/resolve/dfa91e859b714acfa489a1464297080656c3460d/tensor-cache.json",
+      "bytes": 164965,
+      "sha256": "fee95d8aa50484c813e909c28081d3cd283a11170354984f4c8dd3f05f99584b",
+      "cachedSHA256": "8dff028231d3cf5eca1132a4681af000e5c13c38c650af68ebc0cb82cef11945",
+      "matchesCached": false
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

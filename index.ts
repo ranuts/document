@@ -1,7 +1,9 @@
+import { getAppWorkerScriptURL } from './lib/offline-worker-control';
 import {
   documentIsExpected,
   healStaleController,
-  isUnseenBuild,
+  askVersionPatiently,
+  isDifferentVendorBuild,
   onWaitingWorker,
   shouldReloadOnControllerChange,
   wireServiceWorkerUpdates,
@@ -116,20 +118,27 @@ const isReadonly = parseReadonly(readonly);
 const agentEnabled = agent === '1' || agent === 'true' || agent === '';
 // Expose the opt-in to the editor iframe (same-origin) so its injected patch only
 // adds the "AI" button when the agent feature is enabled — otherwise the button
-// stays hidden. See public/onlyoffice-v7-iframe-patch.js.
+// stays hidden. The panel mounts its native rail entry only after idle model loading succeeds.
 (window as unknown as { __agentEnabled?: boolean }).__agentEnabled = agentEnabled;
 if (agentEnabled) {
-  void import('./lib/agent-plugin').then(({ createAgentPanel }) => createAgentPanel());
+  void import('./lib/agent-plugin/agent-plugin').then(({ createAgentPanel }) => createAgentPanel({ background: true }));
 }
-// Bridge: the AI button injected into OnlyOffice's left menu lives inside the
+// Bridge: the AI entry in the editor's right rail lives inside the
 // (same-origin) editor iframe. It toggles the panel either by calling this
 // global directly or, as a fallback, by posting `agent:toggle` to this window.
 const toggleAgentPanelLazy = (): void => {
-  void import('./lib/agent-plugin').then(({ toggleAgentPanel }) => toggleAgentPanel());
+  void import('./lib/agent-plugin/agent-plugin').then(({ toggleAgentPanel }) => toggleAgentPanel());
 };
 (window as unknown as { __toggleAgentPanel?: () => void }).__toggleAgentPanel = toggleAgentPanelLazy;
 window.addEventListener('message', (event: MessageEvent) => {
-  if (event.data?.type === 'agent:toggle') toggleAgentPanelLazy();
+  const frame = document.querySelector<HTMLIFrameElement>('#app iframe');
+  if (
+    agentEnabled &&
+    event.origin === location.origin &&
+    event.source === frame?.contentWindow &&
+    event.data?.type === 'agent:toggle'
+  )
+    toggleAgentPanelLazy();
 });
 // Deep-link to a blank document: ?new=docx|xlsx|pptx opens the editor straight
 // into a new file (skipping the landing hero). The localized homepages use it —
@@ -173,12 +182,8 @@ void (async () => {
   // newer than the file on disk or the blank document the other parameters
   // would produce, and it is the copy nobody else has.
   if (savedParam && !isEmbedded) {
-    const [{ getDoc }, { restoreDocument }] = await Promise.all([
-      import('./lib/history/store'),
-      import('./lib/history/recovery'),
-    ]);
-    const doc = await getDoc(savedParam);
-    if (doc && (await restoreDocument(doc))) return;
+    const { restoreSavedDocument } = await import('./lib/history/recovery');
+    if (await restoreSavedDocument(savedParam, { readonly: isReadonly })) return;
     // No snapshot yet (nothing was edited before the reload) or it expired:
     // fall through and open the same document again under the same id.
   }
@@ -233,7 +238,9 @@ void (async () => {
 if ('serviceWorker' in navigator) {
   // Update policy lives in lib/sw-update.ts: a new build's worker waits until
   // no document is open, then takes over and the page reloads once.
-  const hadController = !!navigator.serviceWorker.controller;
+  const controllerAtBoot = navigator.serviceWorker.controller;
+  const hadController = !!controllerAtBoot;
+  const controllerVersionAtBoot = controllerAtBoot ? askVersionPatiently(controllerAtBoot) : Promise.resolve(null);
   let reloadingForUpdate = false;
   // "Is a document open?" is the wrong tense at boot: the store fills in a few
   // hundred milliseconds after register() resolves, so a page opening a
@@ -241,17 +248,14 @@ if ('serviceWorker' in navigator) {
   // into the middle of its own load. The URL already knows.
   const hasOpenDocument = () => Boolean(getDocmentObj().fileName) || documentIsExpected(window.location.search);
 
-  // The runtime caches as they were before anything could have changed them.
-  // Read at boot rather than when a swap happens: by then the incoming worker
-  // has created its own, and the question is which builds this browser was
-  // running BEFORE. Taken from the cache rather than by asking the outgoing
-  // worker, which a swap may already have terminated.
-  const cachesAtBoot = typeof caches === 'undefined' ? Promise.resolve([]) : caches.keys();
-  const bootCacheNames = { keys: () => cachesAtBoot };
+  // Capture the serving version before activation can terminate the old worker.
+  // A waiting worker may already have precached its assets at this point.
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     void (async () => {
-      const isNewBuild = await isUnseenBuild(navigator.serviceWorker.controller, bootCacheNames);
+      const incomingController = navigator.serviceWorker.controller;
+      const [before, after] = await Promise.all([controllerVersionAtBoot, askVersionPatiently(incomingController)]);
+      const isNewBuild = isDifferentVendorBuild(before, after);
       if (
         !shouldReloadOnControllerChange({
           hadController,
@@ -270,46 +274,49 @@ if ('serviceWorker' in navigator) {
   // The script we register, absolute: the vendored editor registers one of its
   // own into this same scope from inside the iframe, and only this URL says
   // which waiting worker is a new build of ours.
-  const ownScriptURL = new URL('./sw.js', window.location.href).href;
+  const ownScriptURLPromise = getAppWorkerScriptURL();
 
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('./sw.js')
-      .then((registration) => {
-        console.log('SW registered: ', registration);
-        wireServiceWorkerUpdates(registration, hasOpenDocument, ownScriptURL);
-        // Promotion above is refused while a document is open, and this page
-        // is usually opened with one (?new=, ?file=, ?saved=). Without an
-        // offer, such a visitor never leaves the build their worker cached --
-        // reloading serves it again. Ask instead of deciding for them: the
-        // reload happens on click, so the mixed-version hazard the waiting
-        // exists to prevent cannot happen either.
-        // A tab whose worker is an older build heals itself, quietly. The
-        // navigation is network-first, so this page and its bundle are already
-        // the new ones; it is the vendored tree underneath that is still being
-        // served from the outgoing build's cache, and a registry that no longer
-        // matches the origin is how a reverted build kept rendering garbled
-        // text long after the revert had shipped. Promote and reload once --
-        // at boot there is nothing typed to lose, and no one has to be told.
-        onWaitingWorker(
-          registration,
-          (waiting) => {
-            void healStaleController({
-              registration,
-              waiting,
-              controller: navigator.serviceWorker.controller,
-              hadController,
-              storage: window.sessionStorage,
-            });
-          },
-          ownScriptURL,
-        );
-        // Check for updates on every page load. Firefox rejects the update
-        // when the registration changed since it was scheduled (a benign race
-        // right after register()); swallow it so it never surfaces as an
-        // unhandled rejection.
-        registration.update().catch(() => {});
-      })
+    ownScriptURLPromise
+      .then((ownScriptURL) =>
+        navigator.serviceWorker.register(ownScriptURL).then((registration) => {
+          console.log('SW registered: ', registration);
+          wireServiceWorkerUpdates(registration, hasOpenDocument, ownScriptURL);
+          // Promotion above is refused while a document is open, and this page
+          // is usually opened with one (?new=, ?file=, ?saved=). Without an
+          // offer, such a visitor never leaves the build their worker cached --
+          // reloading serves it again. Ask instead of deciding for them: the
+          // reload happens on click, so the mixed-version hazard the waiting
+          // exists to prevent cannot happen either.
+          // A tab whose worker is an older build heals itself, quietly. The
+          // navigation is network-first, so this page and its bundle are already
+          // the new ones; it is the vendored tree underneath that is still being
+          // served from the outgoing build's cache, and a registry that no longer
+          // matches the origin is how a reverted build kept rendering garbled
+          // text long after the revert had shipped. Promote and reload once --
+          // at boot there is nothing typed to lose, and no one has to be told.
+          onWaitingWorker(
+            registration,
+            (waiting) => {
+              void healStaleController({
+                registration,
+                waiting,
+                controller: controllerAtBoot,
+                controllerVersion: controllerVersionAtBoot,
+                hasUnsavedChanges,
+                hadController,
+                storage: window.sessionStorage,
+              });
+            },
+            ownScriptURL,
+          );
+          // Check for updates on every page load. Firefox rejects the update
+          // when the registration changed since it was scheduled (a benign race
+          // right after register()); swallow it so it never surfaces as an
+          // unhandled rejection.
+          registration.update().catch(() => {});
+        }),
+      )
       .catch((registrationError) => {
         console.log('SW registration failed: ', registrationError);
       });
@@ -325,6 +332,9 @@ const initPwaInstall = () => {
 
   const builder = View('pwa-install')
     .id('pwa-install')
+    // Installation guidance is opt-in; keep the editor and IM unobstructed.
+    .attr('manual-apple', '')
+    .attr('manual-chrome', '')
     // use-local-storage: avoid showing the prompt too often
     .attr('use-local-storage', '')
     .attr('name', 'Document Editor')

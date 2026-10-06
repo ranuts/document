@@ -1,0 +1,9 @@
+# Ministral template placeholder removal does not restore rewriting
+
+Actual owned-browser Ministral model runs the same six rewrite fixtures. Worker message instrumentation adds only chatOpts.conv_config.system_template=`[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]` to initial reload and every nonstream request. SDK conversation merging accepts this override; the unresolved function placeholder is absent from the replacement template. The repeated request overrides keep worker/model reload comparison consistent. No response substitution, model/prompt/temperature/schema/guard or product changes.
+
+All six outputs are refused and native source remains unchanged. Raw outputs still invent malformed amounts/dates, omit required facts, or produce meta-instructions about rewriting instead of rewriting the source. The candidate therefore does not establish useful writing or justify adoption. Its altered outputs demonstrate a response to changed template state, but this is not direct internal prefill-token capture or proof of every runtime config field.
+
+Verifier compares complete captured request objects to the baseline with only added chatOpts, and checks one initial reload plus six request overrides. Served bundle hashes match. No page errors/previews. Context closes normally. This narrows the diagnosis: the unresolved placeholder is not the sole cause of writing failure. It does not prove that the placeholder is harmless in general or identify the remaining cause. Basic short-copy/simple-instruction generation is a useful next check before further long-prompt tuning or blaming intrinsic model quality.
+
+Known six fixtures, single fixed-order run, warm owned Chromium WebGPU, route-local instrumentation. No measured memory/latency comparison, native Save, physical-device, offline/privacy or deployed acceptance. Current model defaults remain unchanged.

@@ -1,0 +1,27 @@
+{
+  "scope": "Public pinned upstream compiled-library SHA256 compared to saved owned-profile bytes; no inference or document upload.",
+  "repository": "mlc-ai/binary-mlc-llm-libs",
+  "revision": "025bcaf3780fa8254f5e5efd3bfea0a5397248f4",
+  "probeSHA256": "7fb80ab494ea6655fb63ea1a997c2172a0c0969f7547f4cb92ae9904d3bde23e",
+  "assets": [
+    {
+      "cachedURL": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f16_1_cs1k-webgpu.wasm",
+      "pinnedURL": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/025bcaf3780fa8254f5e5efd3bfea0a5397248f4/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f16_1_cs1k-webgpu.wasm",
+      "bytes": 5438957,
+      "sha256": "bae8a6d2718f52e2ed232f069c175b0858e30b90ebfe2b56ca2edcb4bd40305a",
+      "cachedBytes": 5438957,
+      "cachedSHA256": "bae8a6d2718f52e2ed232f069c175b0858e30b90ebfe2b56ca2edcb4bd40305a",
+      "match": true
+    },
+    {
+      "cachedURL": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+      "pinnedURL": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/025bcaf3780fa8254f5e5efd3bfea0a5397248f4/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+      "bytes": 5297311,
+      "sha256": "aae12cd18b5c2823df914e07be5fca45768fdbaf726103781b54d8c055e5818b",
+      "cachedBytes": 5297311,
+      "cachedSHA256": "aae12cd18b5c2823df914e07be5fca45768fdbaf726103781b54d8c055e5818b",
+      "match": true
+    }
+  ],
+  "status": "matched"
+}

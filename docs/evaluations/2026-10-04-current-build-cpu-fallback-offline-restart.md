@@ -1,0 +1,9 @@
+# Current-build automatic CPU fallback offline restart
+
+The owned CPU browser profile contains a previously downloaded Qwen3-0.6B GGUF. The current app was seeded online, then the browser closed normally. A new persistent browser context opened the same profile with offline mode set before navigation. Both phases loaded the current dist plugin filename agent-plugin-C-jPlh6f.js.
+
+In both phases, the selected provider remained webllm (automatic local mode), while navigator.gpu was made unavailable before app initialization. Actual engine status identified CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf. Offline service-worker navigation and local CPU chat produced Hello, with local blob Workers alive, no visible/page errors and no observed external/body-bearing requests. No manual CPU provider selection occurred. Document content stayed unchanged for this chat-only greeting; Undo/Redo equality does not certify a document edit. Zero previews. Browser closed after completion.
+
+The driver retains a WebLLM-only stream input interceptor; its empty inputs array does not mean no inference and does not capture CPU generation arguments. CPU runtime/model label, visible response and Workers are the observed execution evidence here. This test simulates lack of WebGPU, not GPU device-loss/init failure. It covers cached app/model offline browser restart, not first empty-cache use, eviction, physical offline/OS reboot or physical mobile memory limits. Local preview provides COOP/COEP and service-worker isolation; other deployment policies are unverified. No model download, cloud fallback, product/default or UI changes.
+
+Run verify-current-build-cpu-fallback-offline-restart.py to check probe identity, current plugin observations, automatic provider choice, missing GPU, actual CPU status, cached offline chat and non-mutation. Multilingual writing quality remains unaccepted; this greeting is a runtime availability check.

@@ -9,6 +9,10 @@ VITE_MODE_ARGS=""
 
 echo "Starting build process (publicDir: $PUBLIC_DIR, outDir: $DIST_DIR)..."
 
+# Workspace exports resolve to dist, so rebuild them before Vite reads those
+# files. Installation-time prepare alone leaves later source edits stale.
+pnpm --recursive --filter '@ranuts/*' build
+
 # Keep the vendored ranui design-token layer in sync (the landing hero consumes
 # its --ran-* variables via $PUBLIC_DIR/ran-tokens.css). Regenerate on every build
 # so it never drifts from the installed ranui version, prepending a provenance
@@ -66,6 +70,10 @@ node bin/locale-fill.mjs
 
 pnpm vite build $VITE_MODE_ARGS
 
+# Hash exact inline bootstrap bytes after Vite transforms the editor entry.
+# The meta policy travels with the cached shell on every static host.
+node bin/editor-csp.mjs "$DIST_DIR"
+
 # Fingerprint the vendored design tokens.
 #
 # The file's *name* was stable while its *content* changed every deploy — the one combination
@@ -105,6 +113,8 @@ if [ -f "$TOKENS_DIST" ]; then
 else
     echo "Warning: $TOKENS_DIST not found, skipping token fingerprint."
 fi
+
+node ./bin/offline-assets.mjs "$DIST_DIR"
 
 # Inject the version stamps into sw.js.
 #

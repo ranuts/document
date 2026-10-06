@@ -1,0 +1,15 @@
+{
+  "scope": "Actual installed WebKit desktop capability, no model; not physical Safari/iOS acceptance",
+  "version": "26.5",
+  "capability": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+    "secure": true,
+    "isolated": true,
+    "gpu": false,
+    "suspending": "function",
+    "promising": "function",
+    "shared": "function"
+  },
+  "contextClosed": true,
+  "browserClosed": true
+}

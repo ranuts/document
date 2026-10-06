@@ -1,0 +1,112 @@
+{
+  "status": "completed",
+  "groupSHA256": "44156b714b66e35ffe5e51da0ce175bdce10c032e9fc91e17504abc7755620ee",
+  "redoSHA256": "b5fba0a3c1a7d5a7b280bebccc4a8e877c578c904e781ea481ba33e4d4386a58",
+  "formatSHA256": "72cc4293d3e46b4c2477a226495e05a89e6c342df40833f59f4a4eecc172dc64",
+  "adapterSHA256": "a7e0d7696da0922534c431e4afa0c38cd55bef9d08d18d026239622bda967ae4",
+  "pasteSHA256": "e62fdcf91169f55d2317acf08bf711f900129b3badb772520b6c3d2e99ef163b",
+  "sourceSHA256": "bb7e9d2ec04fdd42d489bc0af5aa61f73455851d01ae0dd81f93b1189fe4dd1b",
+  "errors": [],
+  "cases": [
+    {
+      "value": "00123",
+      "originalFormat": "General",
+      "completion": {
+        "historyRestored": {
+          "index": false,
+          "points": false,
+          "depth": true,
+          "oldFuturePresent": false,
+          "groupIndex": -1
+        },
+        "restoredBeforeRelease": "General",
+        "latePreparationReleased": false
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "00123",
+        "format": "General",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      },
+      "oldRedo": {
+        "value": "00123",
+        "format": "General",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      },
+      "undoOldRedo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "newRedo": {
+        "value": "00123",
+        "format": "General",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      }
+    },
+    {
+      "value": "00123",
+      "originalFormat": "0.00",
+      "completion": {
+        "historyRestored": {
+          "index": false,
+          "points": false,
+          "depth": true,
+          "oldFuturePresent": false,
+          "groupIndex": -1
+        },
+        "restoredBeforeRelease": "0.00",
+        "latePreparationReleased": false
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "00123",
+        "format": "0.00",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      },
+      "oldRedo": {
+        "value": "00123",
+        "format": "0.00",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      },
+      "undoOldRedo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "newRedo": {
+        "value": "00123",
+        "format": "0.00",
+        "type": 1,
+        "raw": "00123",
+        "edit": "00123"
+      }
+    }
+  ]
+}

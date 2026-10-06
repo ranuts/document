@@ -1,0 +1,7 @@
+# Native unavailable-origin reopen: online controller precondition timeout
+
+Exploratory fresh WebKit 26.5 context, unchanged f2eb0ed runtime, owned forwarding origin 5194. Home Open successfully loads the exact previous saved DOCX: hash matches c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3, native Word full API/document readiness completes and GetText equals `WEBKIT_WORD_20261005\r\n`.
+
+The following wait for `navigator.serviceWorker.controller` times out after 60 seconds. This occurs before intended page closure, forwarding-server shutdown, or unavailable-origin reopen. No originStopped field or originUnavailable-phase request exists. Therefore this run neither passes nor fails native unavailable-origin document reopen; it fails the online PWA-controller prerequisite. Browser/context and owned server are cleaned up normally. Empty page-error/failure lists do not negate the controller timeout.
+
+Unlike earlier fresh editor-direct probes, this path starts on Home and opens a local file through its actual file chooser. Registrations, worker readiness and current-page controller state were not separately captured, so no product cause is established yet. A worker ready/active and a page controlled are distinct conditions. Preserve this raw attempt and investigate registration/client lifecycle before retrying or changing product code. No product modification, unit suite/build, general offline or semantic acceptance is claimed.

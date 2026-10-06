@@ -143,3 +143,78 @@ describe('accumulateOpenAIStream', () => {
     expect(parsed.toolCalls.map((c) => c.name)).toEqual(['first', 'second']);
   });
 });
+
+it('preserves the final usage-only stream chunk without counting text fragments as tokens', async () => {
+  const completion = await accumulateOpenAIStream(
+    asStream([
+      { choices: [{ delta: { content: 'hello' } }] },
+      { choices: [{ delta: { content: ' world' }, finish_reason: 'stop' }] },
+      {
+        choices: [],
+        usage: {
+          completion_tokens: 7,
+          prompt_tokens: 13,
+          extra: { decode_tokens_per_s: 21.5, time_to_first_token_s: 0.4 },
+        },
+      },
+    ]),
+    () => undefined,
+  );
+  expect(parseOpenAIResponse(completion).usage).toEqual({
+    completionTokens: 7,
+    promptTokens: 13,
+    decodeTokensPerSecond: 21.5,
+    timeToFirstTokenMs: 400,
+  });
+});
+
+it('does not invent usage when the backend omits statistics', () => {
+  expect(parseOpenAIResponse({ choices: [{ message: { content: 'hello' } }] })).not.toHaveProperty('usage');
+});
+
+it('ignores malformed or non-finite backend statistics', () => {
+  expect(
+    parseOpenAIResponse({
+      choices: [{ message: { content: 'hello' } }],
+      usage: {
+        completion_tokens: -1,
+        prompt_tokens: 1.5,
+        extra: { decode_tokens_per_s: Infinity, time_to_first_token_s: NaN },
+      },
+    }),
+  ).not.toHaveProperty('usage');
+});
+
+it('preserves backend prompt and decode timings from a CPU completion', () => {
+  const completion = {
+    choices: [{ message: { content: 'hello' }, finish_reason: 'stop' }],
+    timings: { prompt_ms: 5000, predicted_ms: 300, predicted_per_second: 40 },
+  };
+  expect(parseOpenAIResponse(completion).usage).toMatchObject({
+    promptProcessingDurationMs: 5000,
+    decodingDurationMs: 300,
+    decodeTokensPerSecond: 40,
+  });
+});
+
+it('retains timings in a streamed tail without choices and rejects invalid measurements', async () => {
+  async function* chunks(): AsyncIterable<OpenAIStreamChunk> {
+    yield { choices: [{ delta: { content: 'hello' } }] };
+    yield { timings: { prompt_ms: 0, predicted_ms: 20, predicted_per_second: 50 } };
+  }
+  expect(parseOpenAIResponse(await accumulateOpenAIStream(chunks(), () => {})).usage).toMatchObject({
+    promptProcessingDurationMs: 0,
+    decodingDurationMs: 20,
+    decodeTokensPerSecond: 50,
+  });
+  expect(
+    parseOpenAIResponse({
+      choices: [],
+      timings: {
+        prompt_ms: -1,
+        predicted_ms: Infinity,
+        predicted_per_second: NaN,
+      },
+    }).usage,
+  ).toBeUndefined();
+});

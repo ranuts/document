@@ -1,0 +1,9 @@
+# Context overflow guidance includes custom system instructions
+
+The seven shipped locale strings for agentContextTooLong now suggest shortening selected content or custom system instructions, or splitting the task. This addresses the observed short-message failure caused by a valid-length but token-heavy system prompt. Existing error/Restore controls are reused; no new preview or confirmation UI. It does not implement exact token accounting or truncate user data.
+
+Production build succeeded before tests. All 116 files / 4260 tests passed, source oxlint excluding existing scratch diagnostics passed, TypeScript and Docker configuration passed. Existing handled-rejection warnings remain in the full suite. No implementation-mirroring string test was added for this reversible copy edit.
+
+Actual current-build native Word IM with real cached CPU model rejected the same 1900-character rare-CJK system prompt and short greeting. The visible error included the new custom-system-prompt advice. Then the probe shortened the system prompt, clicked Restore request, observed the exact original draft, and resent. One assistant reply and real usage statistics appeared with no additional error or model reload; the original error remains in transcript. Document stayed unchanged, previews zero, browser closed. An earlier successful guidance-only run is preserved separately before the recovery extension.
+
+The returned greeting was letter-style (Dear Editor / thanking for time), so this proves recovery availability, not response-quality acceptance. GPU initialization failure was injected solely to select CPU. Online/warm cache, not physical failure/offline/device matrix acceptance. Run verify-system-prompt-context-guidance.py to check observed guidance and recovery. Complete provider token/template/system/schema budget and multilingual writing fidelity remain open.

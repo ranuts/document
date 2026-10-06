@@ -1,0 +1,9 @@
+# Cache rejection diagnostics in two Chromium modes
+
+Product remains `77d0fd3`. Both runs used actual native Word IM navigation with no model inference and a delegating CDP observer for `Page.backForwardCacheNotUsed`. The default launch used headless shell; the second selected full Chromium via `channel: chromium`. Both reported Chromium 151.0.7922.34, recreated the page on Back and closed without browser errors. Both raw reports and ad-hoc drivers are retained.
+
+Headless shell reported `BrowsingInstanceNotSwapped`, `BackForwardCacheDisabledForDelegate`, and `UnloadHandlerExistsInSubFrame`. Full Chromium reported the first and third, with no delegate-disabled reason. This separates one harness-mode restriction from the remaining observed blockers; it does not establish that the subframe unload handler is the sole cause or that removing it would suffice. No product handlers, isolation headers or capabilities were removed. Browser command-line retrieval failed because enable-automation was not set, so actual argument inventory is not claimed.
+
+[Playwright browser documentation](https://playwright.dev/docs/browsers) distinguishes the default headless shell from full Chromium/new headless mode. [CDP Page domain](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-backForwardCacheNotUsed) defines the diagnostic event and reasons. The DOM-facing masked report concealed these details; CDP now provides the next source-investigation target.
+
+The app already suppresses the editor's duplicate onbeforeunload prompt through `installSingleUnloadPrompt`. An unload event is different; that guard is not evidence that the subframe unload blocker is addressed. Identify the actual frame/listener and its teardown responsibilities before considering migration. Browsing-instance behavior also remains unresolved. Natural cached restoration, loaded-model cache return, physical devices and offline acceptance remain unproven.

@@ -1,0 +1,127 @@
+{
+  "scope": "Production UI real Metal GPU Qwen3-4B-q4f16_1-MLC planning: Explicit Excel sum-to-B4 and native Undo. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "xlsx",
+      "prompt": "Calculate the sum of A1:A3 and write the result to cell B4.",
+      "expected": "Done. Result checked; use Undo if needed.",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "formulas": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "42",
+          ""
+        ],
+        "formulas": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "SUM(A1:A3)",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":3,\"c2\":1,\"r2\":3,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":3,\"col\":1}"
+      },
+      "elapsedMs": 5093,
+      "feedback": [
+        "Done. Result checked; use Undo if needed.Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": false,
+      "selectionUnchanged": false,
+      "resultMatched": true,
+      "destinationValue": "42",
+      "destinationFormula": "SUM(A1:A3)",
+      "afterUndo": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "formulas": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":3,\"c2\":1,\"r2\":3,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":3,\"col\":1}"
+      },
+      "undoRestoredValues": true
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Qwen3-4B Chromium Metal only; bounded English requests.",
+    "Excel snapshot A1:C4 only.",
+    "Explicit address presence prevents invented SUM destinations, but does not establish all natural-language intent/negation constraints.",
+    "Unsupported address syntax and broader model/device coverage remain unverified."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "runtime": "422b49e",
+  "errors": [],
+  "before": "WEBKIT_WORD_20261005\r\n",
+  "url": "http://127.0.0.1:5193/editor?saved=ebff33c2-225a-41a9-aad4-44dd33a97ebe",
+  "docId": "ebff33c2-225a-41a9-aad4-44dd33a97ebe",
+  "row": null,
+  "after": "http://127.0.0.1:5193/",
+  "hasEditor": 0,
+  "noHistoryRow": true,
+  "redirectedHome": true,
+  "characterized": true,
+  "closed": true
+}

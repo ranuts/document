@@ -1,0 +1,20 @@
+[
+  {
+    "engine": "chromium",
+    "version": "151.0.7922.34",
+    "errors": [],
+    "before": 1,
+    "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "webkit",
+    "version": "26.5",
+    "errors": [],
+    "before": 1,
+    "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+    "contextClosed": true,
+    "browserClosed": true
+  }
+]

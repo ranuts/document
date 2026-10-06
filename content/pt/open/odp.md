@@ -1,15 +1,15 @@
 ---
-title: Abrir um arquivo ODP sem o LibreOffice — grátis, no navegador
-description: Abra e edite um arquivo ODP (apresentação OpenDocument) no navegador — sem LibreOffice, sem conta. Salve de volta como ODP, PPTX ou PDF. Nada é enviado.
+title: 'Abrir um arquivo ODP sem o LibreOffice — grátis, no navegador'
+description: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
 eyebrow: Abrir · .odp
 h1: Abrir um arquivo ODP sem o LibreOffice
-lead: 'Tem uma apresentação **.odp** e não tem o LibreOffice? Abra no navegador, edite os slides e salve de volta como ODP — ou como PPTX ou PDF. Nada para instalar, nada para enviar.'
+lead: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
 cta: Abrir seu ODP →
 ctaHref: /pt/
-ogDescription: Abra e edite ODP no navegador sem o LibreOffice. Salve como ODP, PPTX ou PDF. Nada é enviado.
+ogDescription: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
 breadcrumb: odp
 howTo: Como abrir um arquivo ODP sem o LibreOffice
-appDescription: Abra e edite arquivos ODP (apresentações OpenDocument) no navegador, sem LibreOffice, sem upload e sem conta.
+appDescription: 'Abra e edite arquivos ODP no navegador sem LibreOffice nem conta. Edição local sem envio obrigatório.'
 ---
 
 ## Como funciona
@@ -23,7 +23,7 @@ ODP é o formato OpenDocument Presentation, o que o LibreOffice Impress produz p
 
 Este editor abre o ODP direto com o motor de apresentações do OnlyOffice sobre WebAssembly, então layouts de slide, imagens, formas e texto aparecem intactos. Você pode salvar de volta como ODP, exportar para PPTX para alguém no PowerPoint, ou para PDF para quem só precisa ler.
 
-O arquivo é lido direto do disco para a aba do navegador e nada é enviado. Uma proposta confidencial ou um material interno nunca sai da sua máquina.
+Na edição básica local: O arquivo é lido direto do disco para a aba do navegador e nada é enviado. Uma proposta confidencial ou um material interno nunca sai da sua máquina.
 
 ## Perguntas frequentes
 
@@ -41,7 +41,7 @@ Dá para editar. Ele abre como uma apresentação real, e não como uma prévia 
 
 ### Dá para converter ODP em PowerPoint?
 
-Sim. Abra o ODP e salve como PPTX — a conversão roda no seu dispositivo.
+Na edição básica local: Sim. Abra o ODP e salve como PPTX — a conversão roda no seu dispositivo.
 
 ### Dá para exportar para PDF?
 

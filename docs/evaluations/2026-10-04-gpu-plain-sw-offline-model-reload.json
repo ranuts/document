@@ -1,0 +1,20 @@
+{
+  "workerEvents": [],
+  "offlineRequests": [],
+  "probeSHA256": "09c53c39ec0a10b9a1663c4e8e64f9323a3eb8c20cc12074795b722dae045577",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "initialController": "http://127.0.0.1:5193/sw.js",
+  "plainState": {
+    "controller": "http://127.0.0.1:5193/sw.js",
+    "isolated": true
+  },
+  "status": "failed",
+  "error": "Error: Plain nonisolated SW state not established"
+}

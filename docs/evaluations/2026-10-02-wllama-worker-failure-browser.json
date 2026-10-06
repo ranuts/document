@@ -1,0 +1,9 @@
+{
+  "status": "rejected",
+  "name": "RuntimeError",
+  "message": "Wllama worker failed",
+  "elapsedMs": 21,
+  "terminated": 1,
+  "date": "2026-10-02T07:41:36.766Z",
+  "scope": "Actual isolated WebKit SDK worker syntax failure with tiny diagnostic Blob; no model inference or asset download"
+}

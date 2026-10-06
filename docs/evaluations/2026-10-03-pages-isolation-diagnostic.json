@@ -1,0 +1,21 @@
+{
+  "responses": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5196/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5196&uitheme=theme-classic-light&fileType=docx",
+      "error": {
+        "errorText": "net::ERR_FAILED"
+      }
+    }
+  ],
+  "console": [],
+  "frames": [
+    "http://127.0.0.1:5196/editor?new=docx&locale=en&saved=2efaa45e-c298-47c9-8039-a14bc98c71b9",
+    "chrome-error://chromewebdata/"
+  ],
+  "iframes": [
+    {
+      "src": "http://127.0.0.1:5196/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5196&uitheme=theme-classic-light&fileType=docx"
+    }
+  ]
+}

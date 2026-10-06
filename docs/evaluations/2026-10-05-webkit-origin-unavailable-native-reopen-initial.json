@@ -1,0 +1,426 @@
+{
+  "runtime": "f2eb0ed",
+  "input": {
+    "path": ".scratch/webkit-embedded-font-native-saved.docx",
+    "bytes": 25849,
+    "sha256": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3"
+  },
+  "errors": [],
+  "requests": [
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/manifest.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/theme-presentation.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/fonts.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-tokens.88df51ac.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/home.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/button.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/popover.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/content.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/theme-switch.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/lang-switch.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/open-local.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/landing-prefetch.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/history-recent.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sw-register.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/Geist-Variable.woff2"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/GeistMono-Variable.woff2"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sw.js?isolation=1"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/editor?open=local"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/manifest.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/theme-presentation.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/fonts.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-tokens.88df51ac.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/editor-AEGbDaRC.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/editor-C8c8IKfZ.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/rolldown-runtime-DK3Fl9T5.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/builder-EH76YCFS-BT43qACE.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/input-DEoPNM0j-BDZr6q3i.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/chevron-down-DRUABlJy-DIQ8yRUG.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/pending-open-BKBmFD6R.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/Geist-Variable.woff2"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/manifest.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/icons/document-light.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/api/documents/api.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5194&uitheme=theme-classic-light&fileType=docx"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/vendor/requirejs/require.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/css/app.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/app.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/locale/en.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/AllFonts.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/vendor/xregexp/xregexp-all-min.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/vendor/socketio/socket.io.min.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t_helper.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/word/sdk-all-min.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/cursors/svg.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/word/sdk-all.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/libfont/engine/fonts.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Charts/ChartStyles.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconssmall.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/libfont/engine/fonts.wasm"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "phase": "online",
+      "url": "blob:http://127.0.0.1:5194/51f71e3e-cbf6-48bc-a72d-97c360b53699"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell.wasm"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/icons/anchor.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/toc.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/toc_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/img.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/img_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/signature.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/image.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/image_url.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/table.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/table_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/chart.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/chart_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/audio.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/video.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/smartart.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/smartart_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t.worker.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t_helper.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t.wasm.br"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/fonts_thumbnail.png.bin"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/233"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/058"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/057"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/055"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/056"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/062"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/061"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/059"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/060"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/267"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/268"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/070"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/069"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/067"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/068"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/plugins.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconsbig.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/code.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/themes.json"
+    }
+  ],
+  "failures": [],
+  "version": "26.5",
+  "text": "WEBKIT_WORD_20261005\r\n",
+  "exact": true,
+  "onlineText": "WEBKIT_WORD_20261005\r\n",
+  "error": "TimeoutError: page.waitForFunction: Timeout 60000ms exceeded.",
+  "closed": true
+}

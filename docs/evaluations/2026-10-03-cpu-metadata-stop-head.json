@@ -1,0 +1,54 @@
+{
+  "phase": "head",
+  "scope": "Actual CPU GGUF preflight head request held before response; cache reads deliberately miss without deleting cached model. Existing loading Stop, observed download AbortSignal, controlled late route release, restore cache access, existing Load retry and real CPU inference. Not partial byte-stream or physical network disconnection.",
+  "errors": [],
+  "held": [
+    {
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "HEAD"
+    }
+  ],
+  "remoteRequests": [
+    {
+      "host": "huggingface.co",
+      "path": "/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "HEAD"
+    },
+    {
+      "host": "",
+      "path": "http://127.0.0.1:5193/b8745ce5-cdfa-4315-9419-ace569a95d30",
+      "method": "GET"
+    }
+  ],
+  "before": {
+    "forceMissing": true,
+    "opfsDenied": 1,
+    "cacheMisses": 0,
+    "gets": 1,
+    "signals": 1,
+    "aborts": 0,
+    "lastGET": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+  },
+  "afterStop": {
+    "probe": {
+      "forceMissing": true,
+      "opfsDenied": 1,
+      "cacheMisses": 0,
+      "gets": 1,
+      "signals": 1,
+      "aborts": 1,
+      "lastGET": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    "note": "Stopped.",
+    "loadDisabled": false,
+    "stopHidden": true
+  },
+  "afterLateNote": "Stopped.",
+  "stopErrors": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "passed": true,
+  "probeSource": "probe-cpu-metadata-stop-retry.mjs",
+  "probeSHA256": "856f1984711667f531660b2dce41eebdc2306642b52accd9e6c61558ad2cd8be"
+}

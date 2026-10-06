@@ -1,0 +1,3004 @@
+{
+  "experiment": {
+    "baseline": false,
+    "staticStylesheet": true,
+    "policyBakedIntoArtifacts": true,
+    "skipOldCheckpoint": false,
+    "manualDiagnostic": false,
+    "routingDisabled": false,
+    "cacheInstrumentation": false,
+    "stopOldDiagnostic": false,
+    "controllerTimeoutMs": 20000,
+    "geometryOnly": false,
+    "type": "docx",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    }
+  },
+  "builds": {
+    "sourceCommit": "75b655121283555516b20eddea02b9f4bba3b1ce",
+    "scope": "Local independent builds; shared installed dependencies and workspace symlinks; no deployed edge or product source changes",
+    "root": "/private/tmp/document-two-build-csp",
+    "baseline": {
+      "core": "1791034617",
+      "vendor": "7d29d51909fb",
+      "fullVendorDigest": "7d29d51909fb6d4b26790761f7fa82d551abd9e244913aad0d19f46184cccf68",
+      "vendorFiles": 2542,
+      "vendorBytes": 459382596,
+      "swSha256": "ea096a2051dbe489a911838455ef54ee2d88315cd4cc6835149cdf9eba03ab9f",
+      "headersSha256": "b0b8fef4cbbc4f79bfa8d7e6130c0ee00ea2b1765765ef619176d5372326a635",
+      "entries": [
+        {
+          "path": "web-apps/apps/documenteditor/main/index.html",
+          "bytes": 122834,
+          "sha256": "1b939b57774661af363ff31471c74fd779e7511a9a8c5cc86e53a4f8de75dd71",
+          "policy": null
+        },
+        {
+          "path": "web-apps/apps/spreadsheeteditor/main/index.html",
+          "bytes": 144653,
+          "sha256": "1d808320203ff82b21e9aeb9cde3144713e98e09719708d8694dce19c3cc3f1c",
+          "policy": null
+        },
+        {
+          "path": "web-apps/apps/presentationeditor/main/index.html",
+          "bytes": 120110,
+          "sha256": "6c1defef48fce7e20f93f4efdde245837a43c486eeaad785cfe7f1cbd71eea56",
+          "policy": null
+        }
+      ]
+    },
+    "candidate": {
+      "core": "1791034692",
+      "vendor": "d4218b4014f8",
+      "fullVendorDigest": "d4218b4014f8ecdf7ce4766051a3e4ed012f2c2a52db098a77ca805a9ef0db73",
+      "vendorFiles": 2542,
+      "vendorBytes": 459385224,
+      "swSha256": "8db1f862eb284fc625fca28abcf1d2f51ff2fa8eba2f6cd81dfd9f8210822d2f",
+      "headersSha256": "29a324154539fb0b6c57eb84e0f1662bf9e3d2f907a0cae9b8a84755576e63af",
+      "entries": [
+        {
+          "path": "web-apps/apps/documenteditor/main/index.html",
+          "bytes": 123710,
+          "sha256": "9cb386b46b56c6ad4085b694ece93420dfff86a1b45449c3a74789b2232adf2f",
+          "policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-mlY+ZZlU5oHAgTuFi65xbnujnNnXNWbdrHeC6Tm/hFs=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-RpFgTNbC6VAYRjutrf3WjbppJPR2eqZJeM6dHbcnr2U=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+        },
+        {
+          "path": "web-apps/apps/spreadsheeteditor/main/index.html",
+          "bytes": 145529,
+          "sha256": "4bae117470ecbf4e088de36bd5b4e750e6dd0fdec469bdcd94edbdeae2a92939",
+          "policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-bh6eznDaoKfccEsWKr7TaLe42GxvSzfRx7pInOiRy8k=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-cIOblnwfItklL2WfRBsqa90WABGOFbGdnmWhMiJvTA0=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+        },
+        {
+          "path": "web-apps/apps/presentationeditor/main/index.html",
+          "bytes": 120986,
+          "sha256": "229abf3bb70c4d2c7af5b1d61df30fe7b488d072bff7d3af5f4dd726fcf3746b",
+          "policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-xEhyiZGhboJtDKcTLrCnNQkYPeg5teYGIyeDcAm1AVU=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-SpEnPJLA9lg6DkiCWXDXhWm5bGVpzic51b+yNrhld30=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+        }
+      ]
+    }
+  },
+  "probeSha256": "0e5660d48606d25e2dc76c0020c729a372d3e19eecfe1a26e58bd0626ef5b2b0",
+  "trailingEntry": false,
+  "browserVersion": "151.0.7922.34",
+  "scope": "Two independent pnpm builds from a pinned source archive; baseline unchanged and candidate with three native entry static-style/CSP changes before build, full build-generated vendor stamps; artifact bytes served unmodified on one local origin; native editing and cached same-context offline checks, not deployed edge, AI inference, embeds or physical devices.",
+  "vendor": "7d29d51909fb",
+  "candidateVendor": "d4218b4014f8",
+  "oldCore": "1791034617",
+  "upgrade": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+      "oldEntries": [
+        {
+          "name": "document-editor-runtime-7d29d51909fb",
+          "url": "http://127.0.0.1:62176/web-apps/apps/documenteditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        },
+        {
+          "name": "document-editor-runtime-7d29d51909fb",
+          "url": "http://127.0.0.1:62176/web-apps/apps/spreadsheeteditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        },
+        {
+          "name": "document-editor-runtime-7d29d51909fb",
+          "url": "http://127.0.0.1:62176/web-apps/apps/presentationeditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        }
+      ],
+      "dirtyCheckpoint": {
+        "initialVersion": {
+          "type": "VERSION",
+          "cacheVersion": "1791034617",
+          "vendorVersion": "7d29d51909fb"
+        },
+        "waitingState": "installed",
+        "dirtyVersion": {
+          "type": "VERSION",
+          "cacheVersion": "1791034617",
+          "vendorVersion": "7d29d51909fb"
+        },
+        "dirtyBefore": "OLD_UNSAVED_docx\r\n",
+        "dirtyAfter": "OLD_UNSAVED_docx\r\n",
+        "oldSavedBytes": 25796,
+        "oldSavedSha256": "0be143bd2d8124cbbaddd1c7933ef0a84da132a1bd03dfea512837b2b837cfa7"
+      },
+      "landingUrl": "http://127.0.0.1:62176/",
+      "controllerObservations": [
+        {
+          "time": 1791037124439,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125494,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126560,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127627,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128690,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129761,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130844,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131926,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132991,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134060,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135133,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136206,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137277,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138343,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139398,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140456,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141519,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142592,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143646,
+          "observedVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034617",
+            "vendorVersion": "7d29d51909fb"
+          },
+          "url": "http://127.0.0.1:62176/",
+          "readyState": "complete",
+          "controller": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "active": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waiting": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "waitingState": "installed",
+          "waitingVersion": {
+            "type": "VERSION",
+            "cacheVersion": "1791034692",
+            "vendorVersion": "d4218b4014f8"
+          },
+          "clients": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        }
+      ],
+      "landingLifecycle": [
+        {
+          "time": 1791037124413,
+          "type": "load",
+          "updater": "function"
+        },
+        {
+          "time": 1791037124423,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037124423,
+          "type": "SKIP_WAITING",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1"
+        },
+        {
+          "time": 1791037124438,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037124549,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037124654,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037124759,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037124862,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037124966,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125072,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125176,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125281,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125385,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125494,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125600,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125710,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125817,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037125926,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126030,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126134,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126238,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126345,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126452,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126560,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126667,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126775,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126883,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037126990,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127095,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127200,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127307,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127415,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127520,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127626,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127731,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127836,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037127944,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128052,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128160,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128268,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128376,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128481,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128585,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128689,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128793,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037128901,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129009,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129118,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129226,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129334,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129443,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129551,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129656,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129761,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129866,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037129975,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130083,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130191,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130301,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130409,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130517,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130626,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130738,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130844,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037130951,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131059,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131167,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131275,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131384,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131492,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131604,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131709,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131818,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037131926,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132034,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132140,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132248,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132354,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132460,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132565,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132671,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132778,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132882,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037132991,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133096,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133203,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133310,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133414,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133522,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133631,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133739,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133848,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037133954,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134060,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134168,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134272,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134379,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134485,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134592,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134702,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134809,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037134917,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135025,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135133,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135242,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135350,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135454,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135560,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135669,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135777,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135881,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037135989,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136098,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136206,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136314,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136425,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136533,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136639,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136747,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136853,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037136959,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137063,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137169,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137276,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137385,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137492,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137600,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137707,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137814,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037137924,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138029,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138135,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138239,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138343,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138448,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138552,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138656,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138760,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138864,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037138969,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139076,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139184,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139293,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139398,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139503,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139608,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139712,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139815,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037139919,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140024,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140131,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140239,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140347,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140455,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140562,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140670,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140780,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140889,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037140993,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141097,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141201,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141306,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141412,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141518,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141625,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141736,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141844,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037141958,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142066,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142171,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142274,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142381,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142488,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142592,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142695,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142799,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037142907,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143010,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143113,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143219,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143326,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143433,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143539,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143646,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143752,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143858,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037143963,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037144068,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037144176,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037144278,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        },
+        {
+          "time": 1791037144386,
+          "type": "CLIENT_COUNT",
+          "data": {
+            "type": "CLIENT_COUNT",
+            "count": 1,
+            "editors": 0
+          }
+        }
+      ],
+      "diagnosticRoutingDisabled": false,
+      "pendingServerRequests": [],
+      "workerSnapshots": [
+        {
+          "url": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "clients": [
+            {
+              "url": "http://127.0.0.1:62176/",
+              "type": "window"
+            }
+          ],
+          "active": "activated",
+          "waiting": "installed",
+          "vendorVersion": "7d29d51909fb",
+          "cacheVersion": "1791034617",
+          "skipImplementation": "function skipWaiting() { [native code] }"
+        },
+        {
+          "url": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "clients": [
+            {
+              "url": "http://127.0.0.1:62176/",
+              "type": "window"
+            }
+          ],
+          "active": "activated",
+          "waiting": "installed",
+          "vendorVersion": "d4218b4014f8",
+          "cacheVersion": "1791034692",
+          "skipImplementation": "function skipWaiting() { [native code] }"
+        }
+      ]
+    }
+  ],
+  "cold": [],
+  "offline": [],
+  "errors": [],
+  "workerEvents": [
+    {
+      "versions": []
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "installing",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installing",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installed",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activating",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activating",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": [],
+          "targetId": "E17EA58E2CC67FEB7A43FCC97A532E4D"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037123.187436,
+          "controlledClients": [],
+          "targetId": "E17EA58E2CC67FEB7A43FCC97A532E4D"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "installing",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037123.187436,
+          "controlledClients": [],
+          "targetId": "E17EA58E2CC67FEB7A43FCC97A532E4D"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installing",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037123.187436,
+          "controlledClients": [],
+          "targetId": "E17EA58E2CC67FEB7A43FCC97A532E4D"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installed",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037123.187436,
+          "controlledClients": [],
+          "targetId": "E17EA58E2CC67FEB7A43FCC97A532E4D"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [
+            "05E8FD7D6F0793414BD4E2015172206B"
+          ],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "stopping",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    },
+    {
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:62176/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791037121.421455,
+          "controlledClients": [],
+          "targetId": "E31AFC44146B75D25E4B01B7578D5EB1"
+        }
+      ]
+    }
+  ],
+  "error": "Error: Candidate controlling version did not arrive",
+  "passed": false,
+  "completeMigrationPassed": false,
+  "artifactRequests": [
+    {
+      "path": "/editor?new=docx&locale=en",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/index.html",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/editor",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/editor.html",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw-register.js",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/index.html",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/editor",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/editor.html",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw-register.js",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw-register.js",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    }
+  ],
+  "candidateEntries": [
+    {
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-mlY+ZZlU5oHAgTuFi65xbnujnNnXNWbdrHeC6Tm/hFs=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-RpFgTNbC6VAYRjutrf3WjbppJPR2eqZJeM6dHbcnr2U=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/spreadsheeteditor/main/index.html",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-bh6eznDaoKfccEsWKr7TaLe42GxvSzfRx7pInOiRy8k=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-cIOblnwfItklL2WfRBsqa90WABGOFbGdnmWhMiJvTA0=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/presentationeditor/main/index.html",
+      "artifact": "candidate",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-xEhyiZGhboJtDKcTLrCnNQkYPeg5teYGIyeDcAm1AVU=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-SpEnPJLA9lg6DkiCWXDXhWm5bGVpzic51b+yNrhld30=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    }
+  ],
+  "spellNetworkRequests": [
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "artifact": "baseline",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    }
+  ]
+}

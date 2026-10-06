@@ -1,0 +1,98 @@
+{
+  "scope": "Repaired Excel SDK formula pagehide lifecycle; actual browser navigation, native Excel/PPT, no model inference, actual BFCache return then closed-grammar IM edit, Undo/Redo/Save/reopen",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "da0be297-f63f-46d7-bded-024e48f9a29c",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+          "guard": true
+        }
+      ]
+    },
+    {
+      "token": "da0be297-f63f-46d7-bded-024e48f9a29c",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+          "guard": true
+        }
+      ]
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [],
+  "token": "da0be297-f63f-46d7-bded-024e48f9a29c",
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=3e80fa56-9141-4a5e-9def-6960b6b39c0f",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+      "registered": [],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),o=Array(i),n=0;n<i;n++)o[n]=arguments[n+e];switch(e){case 0:return t.call(this,o);case 1:return t.call(this,arguments[0],o);case 2:return t.call(this,arguments[0],arguments[1],o)}var s=Array(e+1);for(n=0;n<e;n++)s[n]=arguments[n];return s[e]=o,t.apply(this,s)}"
+    }
+  ],
+  "cached": true,
+  "beforeText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "previews": 0,
+  "chatErrors": [],
+  "editText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "undoText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "redoText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "saved": {
+    "path": ".scratch/bfc-native-20261005.xlsx",
+    "bytes": 8033,
+    "sha256": "dc25a8f86e2110e64265ccfc8950c99359e42d7d49f064973dbd202ad9a7a2c7",
+    "failure": null
+  },
+  "reopenedText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "nativeDocumentPassed": true,
+  "contextClosed": true
+}

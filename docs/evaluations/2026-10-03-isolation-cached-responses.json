@@ -1,0 +1,44 @@
+{
+  "browserVersion": "151.0.7922.34",
+  "scope": "Actual Chromium and shipped Service Worker with synthetic same-origin iframe/Worker cache bodies; compare old response metadata with isolation headers added to identical bytes. Not a full editor/model or deployment check.",
+  "seed": {
+    "name": "document-editor-runtime-59e2dc593998"
+  },
+  "before": {
+    "isolated": true,
+    "worker": {
+      "error": true
+    }
+  },
+  "changed": [
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html",
+      "bytes": 25,
+      "unchanged": true
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/isolation-probe-worker.js",
+      "bytes": 44,
+      "unchanged": true
+    }
+  ],
+  "after": {
+    "isolated": true,
+    "frameText": "CACHED_FRAME_BYTES",
+    "worker": {
+      "isolated": true
+    },
+    "online": false,
+    "networkRejected": true
+  },
+  "passed": true,
+  "probeSource": "probe-isolation-cached-responses.mjs",
+  "probeSha256": "e1b3f3f2742471ec3a984e7e6af12a3a031305375fe60e5fab64adedd084e364",
+  "shippedWorkerSha256": "b9439ad789c0e0399730b3f9e58f6d2c2aabfab24959f9e44fdd353592ffe305",
+  "productionConfigurationChanged": false,
+  "limitations": [
+    "Synthetic iframe and Worker bodies under owned same-origin test URLs, not full native editors or model weights.",
+    "No actual deployment header migration, browser HTTP-cache upgrade or physical device coverage.",
+    "This tests Cache API response metadata with the shipped worker; header migration was performed by the test, not implemented in the product."
+  ]
+}

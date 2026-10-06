@@ -1,0 +1,16 @@
+{
+  "origin": "http://127.0.0.1:5193",
+  "headers": {
+    "/editor": {
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp"
+    },
+    "/editor.html": {
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp"
+    }
+  },
+  "viteConfigSHA256": "807783ae0277da38683fff5bc7a9e3eae89b2f4084d778bbc59f44dab1ed53a3"
+}

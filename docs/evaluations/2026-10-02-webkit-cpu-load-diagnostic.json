@@ -1,0 +1,9 @@
+{
+  "status": "failed",
+  "name": "UnknownError",
+  "message": "The operation failed for an unknown transient reason (e.g. out of memory).",
+  "stack": "",
+  "date": "2026-10-02T06:26:40.490Z",
+  "scope": "WebKit direct source-provider diagnostic on isolated Vite dev origin",
+  "logs": []
+}

@@ -1,0 +1,156 @@
+{
+  "scope": "Actual DOM/CSS with synthetic visualViewport geometry, not physical keyboard",
+  "rows": [
+    {
+      "height": 400,
+      "offsetTop": 80,
+      "settings": false,
+      "layoutHeight": 900,
+      "panel": {
+        "x": 0,
+        "y": 80,
+        "width": 390,
+        "height": 400,
+        "top": 80,
+        "right": 390,
+        "bottom": 480,
+        "left": 0
+      },
+      "input": {
+        "x": 24,
+        "y": 369,
+        "width": 343,
+        "height": 40,
+        "top": 369,
+        "right": 367,
+        "bottom": 409,
+        "left": 24
+      },
+      "send": {
+        "x": 323,
+        "y": 417,
+        "width": 44,
+        "height": 44,
+        "top": 417,
+        "right": 367,
+        "bottom": 461,
+        "left": 323
+      },
+      "draft": "中文草稿"
+    },
+    {
+      "height": 300,
+      "offsetTop": 100,
+      "settings": false,
+      "layoutHeight": 900,
+      "panel": {
+        "x": 0,
+        "y": 100,
+        "width": 390,
+        "height": 300,
+        "top": 100,
+        "right": 390,
+        "bottom": 400,
+        "left": 0
+      },
+      "input": {
+        "x": 24,
+        "y": 289,
+        "width": 343,
+        "height": 40,
+        "top": 289,
+        "right": 367,
+        "bottom": 329,
+        "left": 24
+      },
+      "send": {
+        "x": 323,
+        "y": 337,
+        "width": 44,
+        "height": 44,
+        "top": 337,
+        "right": 367,
+        "bottom": 381,
+        "left": 323
+      },
+      "draft": "中文草稿"
+    },
+    {
+      "height": 400,
+      "offsetTop": 80,
+      "settings": true,
+      "layoutHeight": 900,
+      "panel": {
+        "x": 0,
+        "y": 80,
+        "width": 390,
+        "height": 400,
+        "top": 80,
+        "right": 390,
+        "bottom": 480,
+        "left": 0
+      },
+      "input": {
+        "x": 24,
+        "y": 369,
+        "width": 343,
+        "height": 40,
+        "top": 369,
+        "right": 367,
+        "bottom": 409,
+        "left": 24
+      },
+      "send": {
+        "x": 323,
+        "y": 417,
+        "width": 44,
+        "height": 44,
+        "top": 417,
+        "right": 367,
+        "bottom": 461,
+        "left": 323
+      },
+      "draft": "中文草稿"
+    },
+    {
+      "height": 300,
+      "offsetTop": 100,
+      "settings": true,
+      "layoutHeight": 900,
+      "panel": {
+        "x": 0,
+        "y": 100,
+        "width": 390,
+        "height": 300,
+        "top": 100,
+        "right": 390,
+        "bottom": 400,
+        "left": 0
+      },
+      "input": {
+        "x": 24,
+        "y": 296,
+        "width": 343,
+        "height": 40,
+        "top": 296,
+        "right": 367,
+        "bottom": 336,
+        "left": 24
+      },
+      "send": {
+        "x": 323,
+        "y": 344,
+        "width": 44,
+        "height": 44,
+        "top": 344,
+        "right": 367,
+        "bottom": 388,
+        "left": 323
+      },
+      "draft": "中文草稿"
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "contextClosed": true
+}

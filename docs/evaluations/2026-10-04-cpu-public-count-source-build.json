@@ -1,0 +1,98 @@
+{
+  "status": "failed",
+  "scope": "Isolated native count prototype: four actual usage comparisons, repeat counts, overflow and unsupported-input recovery; not production acceptance; standalone SDK, no editor write or production changes",
+  "files": {
+    "js": "9708f2b93fa3bc6df5d06c75bc651f32201228532f07423447aa1b912f52f97c",
+    "wasm": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179"
+  },
+  "served": [
+    {
+      "method": "GET",
+      "url": "/sdk.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "HEAD",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 484220320
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.wasm",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.wasm",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    }
+  ],
+  "errors": [
+    "Aborted(TypeError: WebAssembly.instantiate(): Import #0 \"a\": module is not an object or function). Build with -sASSERTIONS for more info.",
+    "message.replace is not a function"
+  ],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "debug",
+      "text": "Downloading model files: [http://127.0.0.1:55800/model.gguf]"
+    },
+    {
+      "type": "debug",
+      "text": "Multithread enabled: false, pthreadPoolSize: 0"
+    },
+    {
+      "type": "debug",
+      "text": "Loading \"wllama.wasm\" from \"http://127.0.0.1:55800/runtime.wasm\""
+    },
+    {
+      "type": "log",
+      "text": "wasm streaming compile failed: TypeError: WebAssembly.instantiate(): Import #0 \"a\": module is not an object or function"
+    },
+    {
+      "type": "log",
+      "text": "falling back to ArrayBuffer instantiation"
+    },
+    {
+      "type": "log",
+      "text": "failed to asynchronously prepare wasm: TypeError: WebAssembly.instantiate(): Import #0 \"a\": module is not an object or function"
+    },
+    {
+      "type": "log",
+      "text": "Aborted(TypeError: WebAssembly.instantiate(): Import #0 \"a\": module is not an object or function)"
+    }
+  ],
+  "clientSHA256": "017419e0d4bcd5f4e8edf308b7dd674787b956dfc61cea371b5c4a9989f06091",
+  "probeSHA256": "e6140918f460782005bf68944c30834bad12c33e4e5285915a0c9724b782a753",
+  "patchSHA256": "d6680454b92ba3de45220dded01f966b1f25360a47dd2a3c2d6738f9db077bff",
+  "sdkSHA256": "90b5b57472a3116efff13b8376b84c724dbe22580feeb24843829839ca752414",
+  "routeHits": [],
+  "error": "Error: page.evaluate: Target page, context or browser has been closed",
+  "phase": null,
+  "partial": null
+}

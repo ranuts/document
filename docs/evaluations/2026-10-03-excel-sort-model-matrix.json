@@ -1,0 +1,96 @@
+{
+  "scope": "Five text models, Chinese and English exact complete numeric sorting commands, ascending/descending 20 operations; native A1:D5 values, header and outside cells, native Undo/Redo, Save/reopen and XLSX XML sampled values. No general natural-language intent, formula/style fidelity, filters/tables, offline or mobile claim.",
+  "entries": [
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "language": "zh",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-1_7-zh-plan-fixed-save.json",
+      "reportSHA256": "ccb962dfdfd026ea03a94de3c1f11012937a2170d03c73a347d861fb3afb577f",
+      "artifactSHA256": "37035e1edf0f9a295f0d24984273459b1030bd8d846f2df21afdced6939acfa1",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "language": "en",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-1_7-en-plan-fixed-save.json",
+      "reportSHA256": "1a6d41524da329ba5944415cacdcc6ac95c4a6cafdd8d7078f509dabfb726858",
+      "artifactSHA256": "1ef7d64b32a3a9ca493ed9b66264aa9cbe335dcdbbd875a2d6cbd72cadfc837d",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "language": "zh",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-0_8-zh-plan-fixed-save.json",
+      "reportSHA256": "f27ac4540b6ab214a31d6c0c479c209e07dd40e4da4598179fd440998f98111f",
+      "artifactSHA256": "1e2ac9309b807f594eee078d4e7ac58825898156e8b59b2afc5055e3cd3ecc47",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "language": "en",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-0_8-en-plan-fixed-save.json",
+      "reportSHA256": "c6e711dc7d0bc577a3085911e36a3b346ece38758b63ec2393872ab0b3dec838",
+      "artifactSHA256": "2048b2447e160daa9ae8fa82fc16990fce767ced5b8fd0db26779fa0fbd868bd",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "language": "zh",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-2b-zh-plan-fixed-save.json",
+      "reportSHA256": "e0a2c22863d7dec09de18b30a65e39796eb52740d0bbc22e54d56b9c5279c16b",
+      "artifactSHA256": "2720f473cbd9ce237307fb2e1ba34efd57af090c36aa4fb041d1b1147006c360",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "language": "en",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-2b-en-plan-fixed-save.json",
+      "reportSHA256": "736d305f081afa956d4fd4175a813dc77eca5a7ea6601e28d93e13f1746613b6",
+      "artifactSHA256": "d18e8560ef086dbff9e58117d856b8f33d837744da42f7e66080f9f4dad02380",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "language": "zh",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-4b-zh-plan-fixed-save.json",
+      "reportSHA256": "9f3a3543a6b075870791e67dc70b0157e6614feb7ebe8b31044c99066c80e516",
+      "artifactSHA256": "1f20fcc36b07a2f6056cbdf25934273978933e15698cb7bbafb9a91eef978a58",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "language": "en",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-4b-en-plan-fixed-save.json",
+      "reportSHA256": "44afd221a735c75ce09a410b9a419b9d740ab82a9e1b44d11fce571ef7627c78",
+      "artifactSHA256": "0422a6c54768ebc0061699a9619345a96768b6877c62f9af33f277a8b9b81519",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-0.6B-GGUF-CPU",
+      "language": "zh",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-cpu-zh-plan-fixed-save.json",
+      "reportSHA256": "394f50464b1a30643945a9fb367bb770720ceb8cc1d655034fa74e9f242e2b79",
+      "artifactSHA256": "95f52b3f3690b0565e70ca8c3e63f4edf4335d4f15bf89559770972a981dcd00",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-0.6B-GGUF-CPU",
+      "language": "en",
+      "directions": 2,
+      "report": "docs/evaluations/2026-10-03-excel-sort-cpu-en-plan-fixed-save.json",
+      "reportSHA256": "dce41eeb2da13adf6cc503ed6fe85ff60b50a68367828fb1c59e465dba0fac9b",
+      "artifactSHA256": "4234225680610f9fc1cad0b7b6bc78e8247cc0e9d5ee9db6b07e8929031a3df1",
+      "passed": true
+    }
+  ],
+  "allPassed": true
+}

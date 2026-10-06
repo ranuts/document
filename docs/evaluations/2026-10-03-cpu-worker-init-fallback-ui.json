@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "mode": "worker",
+  "scope": "Actual automatic provider after controlled GPU Worker startup failure; fake nonnull adapter advertising shader-f16, real CPU fallback and chat in isolated desktop Playwright WebKit.",
+  "errors": [
+    "Controlled GPU Worker initialization failure"
+  ],
+  "phases": [
+    {
+      "time": "2026-10-02T19:12:12.064Z",
+      "text": "Real automatic CPU model loaded"
+    },
+    {
+      "time": "2026-10-02T19:12:23.316Z",
+      "text": "CPU reply verified"
+    }
+  ],
+  "workerEvents": [
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "time": "2026-10-02T19:12:08.601Z"
+    },
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "time": "2026-10-02T19:12:09.612Z"
+    },
+    {
+      "event": "closed",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "time": "2026-10-02T19:12:09.613Z"
+    },
+    {
+      "event": "created",
+      "url": "blob:http://127.0.0.1:5193/8dab3f88-edf2-4653-9937-108dfbdf2820",
+      "time": "2026-10-02T19:12:09.742Z"
+    }
+  ],
+  "loadMs": 4165,
+  "failedWorkerScripts": 1,
+  "note": "Model loaded — you can start chatting.",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "selectedProvider": "webllm",
+  "before": "\r\n",
+  "responseMs": 11148,
+  "reply": [
+    "Hello.Write to document"
+  ],
+  "visibleErrors": [],
+  "after": "\r\n",
+  "documentUnchanged": true,
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-PVYdgt1D.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "adapterRequestCalls": 2,
+  "productionBundle": "editor-PVYdgt1D.js",
+  "limitations": [
+    "Desktop Playwright WebKit controlled failure with warm CPU cache and network available; no physical Safari/iOS/Android or offline proof.",
+    "Initialization fallback only; no generation replay, OOM/VRAM reclamation, smaller-model recovery or GPU device-loss claim.",
+    "One short CPU chat sample; no multilingual writing quality or document tool reliability claim."
+  ],
+  "assessment": "Automatic provider loaded real CPU Qwen3-0.6B and answered Hello without mutating the Word document.",
+  "unexpectedErrors": [],
+  "gpuWorkerClosedBeforeCPUWorkerStarted": true
+}

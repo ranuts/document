@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-02T06:59:15.444Z",
+  "scope": "Fresh patched SDK resource selection, cache-busted dev module; no model loaded or asset compiled",
+  "rows": [
+    {
+      "name": "Chromium",
+      "compat": false,
+      "wasmPath": "http://127.0.0.1:5192/native.wasm",
+      "customWorker": false
+    },
+    {
+      "name": "WebKit",
+      "compat": true,
+      "wasmPath": "http://127.0.0.1:5192/compat.wasm",
+      "customWorker": true
+    }
+  ]
+}

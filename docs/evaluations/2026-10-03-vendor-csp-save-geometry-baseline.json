@@ -1,0 +1,79 @@
+{
+  "hostPort": 5193,
+  "trailingEntry": false,
+  "browserVersion": "151.0.7922.34",
+  "scope": "Independent fresh Chromium context per document type, actual configured static host isolation headers preserved, response-local candidate CSP added only to native entry HTML, real app Worker registration, native edit/Undo/Redo/Save/reopen and same-context offline navigation; no IM dispatch, AI inference or physical-device coverage.",
+  "vendor": "59e2dc593998",
+  "cold": [
+    {
+      "type": "xlsx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:64350/sw.js?isolation=1",
+      "edited": "VENDOR_CSP_xlsx",
+      "undone": "",
+      "redone": "VENDOR_CSP_xlsx",
+      "saveGeometry": {
+        "button": {
+          "x": 0,
+          "y": 0,
+          "width": 40,
+          "height": 28
+        },
+        "hits": [
+          {
+            "tag": "I",
+            "id": "",
+            "class": "icon toolbar__icon icon--inverse btn-save"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "asc-gen913",
+            "class": "btn btn-header canfocused"
+          },
+          {
+            "tag": "DIV",
+            "id": "slot-btn-dt-save",
+            "class": "btn-slot"
+          },
+          {
+            "tag": "DIV",
+            "id": "",
+            "class": "hedset"
+          },
+          {
+            "tag": "SECTION",
+            "id": "box-document-title",
+            "class": ""
+          },
+          {
+            "tag": "SECTION",
+            "id": "app-title",
+            "class": "layout-item"
+          }
+        ],
+        "violations": []
+      }
+    }
+  ],
+  "offline": [],
+  "errors": [],
+  "passed": true,
+  "candidateEntries": [],
+  "spellNetworkRequests": [
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    }
+  ]
+}

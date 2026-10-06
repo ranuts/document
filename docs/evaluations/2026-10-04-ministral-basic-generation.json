@@ -1,0 +1,507 @@
+{
+  "date": "2026-10-03T20:50:30.543Z",
+  "scope": "Experimental custom Ministral 3 3B MLC model with current production rewrite route; six predeclared fresh paired fixtures for payer/recipient, approval negation and confirmation prerequisite. One fixed-order sample each, not general heldout accuracy. Diagnostic shortest prompts, max64, no response_format; system template placeholder removed; production validation unchanged; not a single-variable ablation or writing acceptance; route-local raw response/input recording. Selected translation target through actual IM control. Native Word Undo/Redo, no preview or product change.",
+  "modelId": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+  "status": "completed",
+  "probeSHA256": "8f5a6b9ea62d422ff050a8bb44237387582b560052160fb04cb81ce557301927",
+  "variants": [
+    "current"
+  ],
+  "repetitions": 1,
+  "cases": [
+    {
+      "id": "copy-ascii",
+      "source": "ABC",
+      "prompt": "Copy exactly ABC.",
+      "expected": "ABC",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "copy-amount",
+      "source": "640 EUR",
+      "prompt": "Copy exactly 640 EUR.",
+      "expected": "640 EUR",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "copy-date",
+      "source": "2026-10-12",
+      "prompt": "Copy exactly 2026-10-12.",
+      "expected": "2026-10-12",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "copy-chinese",
+      "source": "尚未批准",
+      "prompt": "逐字复制：尚未批准",
+      "expected": "尚未批准",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "arithmetic",
+      "source": "2 + 2",
+      "prompt": "What is 2 + 2? Give only the answer.",
+      "expected": "4",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "formal-english",
+      "source": "Hey, Alex is gonna pay Morgan 640 EUR.",
+      "prompt": "Rewrite in formal English: Hey, Alex is gonna pay Morgan 640 EUR.",
+      "expected": "Alex will pay Morgan 640 EUR.",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    }
+  ],
+  "bundleHashes": {
+    "plugin": "92d3ea86ea763f4193f4158c370c9da115ee4e588b23a5509dbdad1eebf5383a",
+    "diagnosticPlugin": "248a3651499a3ecc955624c4fc08fb53db017e8421e930674e2473ff670d63e2"
+  },
+  "results": [
+    {
+      "id": "copy-ascii",
+      "source": "ABC",
+      "prompt": "Copy exactly ABC.",
+      "expected": "ABC",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "ABC\r\n",
+      "output": "ABC\r\n",
+      "documentUnchanged": true,
+      "responseMs": 992,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"instruction\": \"Copy exactly\"\n}\n```",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 15,
+            "promptTokens": 21,
+            "decodeTokensPerSecond": 38.06575221322722,
+            "timeToFirstTokenMs": 530.7150001525879
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Copy exactly ABC."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "copy-amount",
+      "source": "640 EUR",
+      "prompt": "Copy exactly 640 EUR.",
+      "expected": "640 EUR",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "640 EUR\r\n",
+      "output": "640 EUR\r\n",
+      "documentUnchanged": true,
+      "responseMs": 577,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"amount\": \"640.000\"\n}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 18,
+            "promptTokens": 25,
+            "decodeTokensPerSecond": 43.313481291242056,
+            "timeToFirstTokenMs": 142.58500003814697
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Copy exactly 640 EUR."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "copy-date",
+      "source": "2026-10-12",
+      "prompt": "Copy exactly 2026-10-12.",
+      "expected": "2026-10-12",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "2026-10-12\r\n",
+      "output": "2026-10-12\r\n",
+      "documentUnchanged": true,
+      "responseMs": 1623,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"instruction\": \"Copy exactly two six text fields\"\n} ```json\n{\n  \"instruction\": \"The user requested exactly two text fields. Here are the fields: 'field1', 'field1': 'Returning', 'field2': 'two'\n}\n```",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 62,
+            "promptTokens": 31,
+            "decodeTokensPerSecond": 42.83602094480911,
+            "timeToFirstTokenMs": 146.25
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Copy exactly 2026-10-12."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "copy-chinese",
+      "source": "尚未批准",
+      "prompt": "逐字复制：尚未批准",
+      "expected": "尚未批准",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "尚未批准\r\n",
+      "output": "尚未批准\r\n",
+      "documentUnchanged": true,
+      "responseMs": 492,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"result\": \"未批准\"\n}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 14,
+            "promptTokens": 26,
+            "decodeTokensPerSecond": 43.23189277981327,
+            "timeToFirstTokenMs": 145.83500003814697
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "逐字复制：尚未批准"
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "arithmetic",
+      "source": "2 + 2",
+      "prompt": "What is 2 + 2? Give only the answer.",
+      "expected": "4",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "2 + 2\r\n",
+      "output": "2 + 2\r\n",
+      "documentUnchanged": true,
+      "responseMs": 419,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\"answer\": \"4\"}\n```",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 10,
+            "promptTokens": 30,
+            "decodeTokensPerSecond": 39.33214020234884,
+            "timeToFirstTokenMs": 146.05000019073486
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "What is 2 + 2? Give only the answer."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "formal-english",
+      "source": "Hey, Alex is gonna pay Morgan 640 EUR.",
+      "prompt": "Rewrite in formal English: Hey, Alex is gonna pay Morgan 640 EUR.",
+      "expected": "Alex will pay Morgan 640 EUR.",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "Hey, Alex is gonna pay Morgan 640 EUR.\r\n",
+      "output": "Hey, Alex is gonna pay Morgan 640 EUR.\r\n",
+      "documentUnchanged": true,
+      "responseMs": 889,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"formal_request\": \"Alex will transfer 640.00 euros to Morgan.\"\n}\n```",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 27,
+            "promptTokens": 35,
+            "decodeTokensPerSecond": 42.992261394254975,
+            "timeToFirstTokenMs": 240.42999982833862
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Rewrite in formal English: Hey, Alex is gonna pay Morgan 640 EUR."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 0
+  },
+  "engine": "WebGPU · Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+  "templateOverrides": [
+    {
+      "kind": "reload",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    }
+  ],
+  "bundleBytesUnchanged": true
+}

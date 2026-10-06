@@ -1,0 +1,65 @@
+{
+  "experiment": {
+    "baseline": false,
+    "staticStylesheet": true,
+    "geometryOnly": false,
+    "type": "all",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    }
+  },
+  "hostPort": 5193,
+  "trailingEntry": false,
+  "browserVersion": "151.0.7922.34",
+  "scope": "Independent fresh Chromium context per document type, actual configured static host isolation headers preserved, response-local candidate CSP added only to native entry HTML, real app Worker registration, native edit/Undo/Redo/Save/reopen and same-context offline navigation; no IM dispatch, AI inference or physical-device coverage.",
+  "vendor": "59e2dc593998",
+  "candidateVendor": "04e83e8ca8eb",
+  "oldCore": "1791017387",
+  "upgrade": [],
+  "cold": [],
+  "offline": [],
+  "errors": [],
+  "error": "Error: Runtime cache migration did not complete",
+  "passed": false,
+  "candidateEntries": [
+    {
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-mlY+ZZlU5oHAgTuFi65xbnujnNnXNWbdrHeC6Tm/hFs=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-RpFgTNbC6VAYRjutrf3WjbppJPR2eqZJeM6dHbcnr2U=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/spreadsheeteditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-bh6eznDaoKfccEsWKr7TaLe42GxvSzfRx7pInOiRy8k=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-cIOblnwfItklL2WfRBsqa90WABGOFbGdnmWhMiJvTA0=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/presentationeditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-xEhyiZGhboJtDKcTLrCnNQkYPeg5teYGIyeDcAm1AVU=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-SpEnPJLA9lg6DkiCWXDXhWm5bGVpzic51b+yNrhld30=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    }
+  ],
+  "spellNetworkRequests": [
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-02T07:51:57.878Z",
+  "scope": "Actual built DOCX UI, isolated persistent Playwright WebKit; online warmup then offline refresh/inference, not fresh-process cold launch or iOS",
+  "status": "failed",
+  "onlineLoadMs": 64526,
+  "controllerBefore": "http://127.0.0.1:5193/sw.js",
+  "cacheNames": [
+    "document-editor-runtime-59e2dc593998",
+    "document-editor-core-1790927251"
+  ],
+  "error": "Error: page.reload: WebKit encountered an internal error\nCall log:\n\u001b[2m  - waiting for navigation until \"load\"\u001b[22m\n",
+  "errors": [],
+  "failed": [
+    {
+      "phase": "offline",
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en&saved=cc20dd88-313d-4582-835b-2302398d6ecf",
+      "error": "WebKit encountered an internal error"
+    }
+  ],
+  "phases": [
+    {
+      "date": "2026-10-02T07:53:05.136Z",
+      "message": "online model loaded 64526"
+    },
+    {
+      "date": "2026-10-02T07:53:05.139Z",
+      "message": "offline refresh"
+    }
+  ],
+  "notes": [
+    "Model loaded — you can start chatting.",
+    "Review local suggestions before applying them."
+  ],
+  "visibleErrors": []
+}

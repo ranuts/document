@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-02T04:27:10.796Z",
+  "status": "passed",
+  "scope": "Real editor UI, synthetic legacy history, model downloads intentionally blocked; no inference quality claim",
+  "checks": {
+    "memoryDefault": true,
+    "legacyImport": true,
+    "explicitIndexedDBSaving": true,
+    "reloadRestore": true,
+    "exportedJSON": true,
+    "noSystemPromptPersistence": true,
+    "saveOff": true,
+    "confirmedDeletion": true,
+    "noConversationRequests": true,
+    "narrowNoOverflow": {
+      "width": 355,
+      "scrollWidth": 355
+    }
+  },
+  "errors": []
+}

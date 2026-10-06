@@ -1,0 +1,282 @@
+{
+  "probeSHA256": "90cc79fb3a8d9af08cd476ee0819fe99780a4a4e4fe48f4ad267ad4c4e2f7b07",
+  "markers": {
+    "docx": "IM_WORD_四季_日本_ä_2026",
+    "xlsx": "IM_CELL_四季_日本_ä_2026",
+    "pptx": "IM_PPT_四季_日本_ä_2026"
+  },
+  "scope": "Current preview isolation headers, warm Chromium GPU model. Real Excel IM B2 write with seeded 3x3 neighbors including formulas, native Undo/Redo, Save and actual file chooser reopen. No header injection; no complete workbook or physical device certification.",
+  "results": [
+    {
+      "type": "xlsx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": ""
+          },
+          {
+            "value": "17",
+            "formula": ""
+          },
+          {
+            "value": "34",
+            "formula": "B1*2"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": ""
+          },
+          {
+            "value": "Original target",
+            "formula": ""
+          },
+          {
+            "value": "Keep right",
+            "formula": ""
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": ""
+          },
+          {
+            "value": "92",
+            "formula": "A3+1"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": ""
+          }
+        ]
+      ],
+      "after": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": ""
+          },
+          {
+            "value": "17",
+            "formula": ""
+          },
+          {
+            "value": "34",
+            "formula": "B1*2"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": ""
+          },
+          {
+            "value": "IM_CELL_四季_日本_ä_2026",
+            "formula": ""
+          },
+          {
+            "value": "Keep right",
+            "formula": ""
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": ""
+          },
+          {
+            "value": "92",
+            "formula": "A3+1"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": ""
+          }
+        ]
+      ],
+      "neighborsExact": true,
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": ""
+          },
+          {
+            "value": "17",
+            "formula": ""
+          },
+          {
+            "value": "34",
+            "formula": "B1*2"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": ""
+          },
+          {
+            "value": "Original target",
+            "formula": ""
+          },
+          {
+            "value": "Keep right",
+            "formula": ""
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": ""
+          },
+          {
+            "value": "92",
+            "formula": "A3+1"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": ""
+          }
+        ]
+      ],
+      "afterRedo": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": ""
+          },
+          {
+            "value": "17",
+            "formula": ""
+          },
+          {
+            "value": "34",
+            "formula": "B1*2"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": ""
+          },
+          {
+            "value": "IM_CELL_四季_日本_ä_2026",
+            "formula": ""
+          },
+          {
+            "value": "Keep right",
+            "formula": ""
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": ""
+          },
+          {
+            "value": "92",
+            "formula": "A3+1"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": ""
+          }
+        ]
+      ],
+      "undoExact": true,
+      "redoExact": true,
+      "saveButtonBefore": {
+        "disabled": false,
+        "title": "",
+        "text": " ",
+        "html": "<button type=\"button\" class=\"btn btn-header canfocused\" id=\"asc-gen913\" style=\"\" data-hint=\"0\" data-hint-direction=\"left\" data-hint-offset=\"10, 10\" data-hint-title=\"S\" ratio=\"ratio\" aria-label=\"Save (⌘+S)\"><i class=\"icon toolbar__icon icon--inverse btn-save\">&nbsp;</i><span class=\"caption\"></span></button>"
+      },
+      "saveUI": {
+        "dialogs": [],
+        "active": "<textarea id=\"area_id\" style=\"left:-100px;top:-50px;color:transparent;caret-color:transparent;background:transparent;font-size:8px;border:none;position:absolute;text-shadow:0 0 0 #000;outline:none;width:200px;height:50px;overflow:hidden;padding:0px;margin:0px;font-family:arial;resize:none;font-weight:normal;box-sizing:content-box;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;touch-action: none;-webkit-touch-callout: none;\" spellcheck=\"false\" autocapitalize=\"none\" autocomplete=\"extremely_off\" autocorrect=\"off\"></textarea>"
+      },
+      "parentSaveUI": "AI Assistant\nWebGPU · Qwen3-1.7B-q4f16_1-MLC\nSet cell B2 to the exact text IM_CELL_四季_日本_ä_2026.\nExcel · B2\nSet cell B2 to the exact text IM_CELL_四季_日本_ä_2026.\nDone. Result checked; use Undo if needed.\nAsk\nOperate document\nRewrite selection\nSummarize selection\nTranslate selection",
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/excel-neighbor-save-diagnostic-saved.xlsx",
+        "sha256": "277ff7ba5e787407769dad58cc4499f418af0c0d164e4cd3acddc9eed010fb3a",
+        "bytes": 8586,
+        "failure": null
+      },
+      "reopened": [
+        [
+          {
+            "value": "邻居 四季",
+            "formula": ""
+          },
+          {
+            "value": "17",
+            "formula": ""
+          },
+          {
+            "value": "34",
+            "formula": "B1*2"
+          }
+        ],
+        [
+          {
+            "value": "日本 ä",
+            "formula": ""
+          },
+          {
+            "value": "IM_CELL_四季_日本_ä_2026",
+            "formula": ""
+          },
+          {
+            "value": "Keep right",
+            "formula": ""
+          }
+        ],
+        [
+          {
+            "value": "91",
+            "formula": ""
+          },
+          {
+            "value": "92",
+            "formula": "A3+1"
+          },
+          {
+            "value": "Unchanged END",
+            "formula": ""
+          }
+        ]
+      ],
+      "reopenExact": true
+    }
+  ],
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    }
+  ],
+  "dialogs": [],
+  "passed": true,
+  "saveEvents": []
+}

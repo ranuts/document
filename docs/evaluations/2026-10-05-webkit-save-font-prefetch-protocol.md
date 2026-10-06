@@ -1,0 +1,5 @@
+# Controlled font prefetch diagnostic
+
+Repeat the fresh-context WebKit unavailable-origin native Word write/Undo/Redo/Save protocol b6c3606 against unchanged runtime d71a1e8. The sole intended diagnostic intervention is an online page fetch of `/fonts/100` after default CPU readiness and production service-worker control. Require HTTP 200, 6,868 bytes and actual Cache API entry before closing the original page and forwarding server. No direct cache insertion, all-font prefetch or product modification.
+
+Then restore native Word/default CPU, execute the identical literal tools instruction, native Undo/Redo and Save. Retain all errors and request failures. Hypothesis: the prior font-100 request/page error disappears after its actual cached response exists; compare separately from successful Save artifact generation. Independently inspect resulting DOCX ZIP/XML. This deliberately seeded diagnostic is not proof ordinary first-use offline Save is fixed, global offline/privacy acceptance, physical Safari/iOS, native reopen, or general model quality. Preserve adverse results and cleanup.

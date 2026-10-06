@@ -1,0 +1,107 @@
+{
+  "probeSHA256": "7552da996fb818dd5eb370031557b0e95ee46800f0108e53f2df2b14601fdfd6",
+  "markers": {
+    "docx": "IM_WORD_四季_日本_ä_2026",
+    "xlsx": "IM_CELL_四季_日本_ä_2026",
+    "pptx": "IM_PPT_四季_日本_ä_2026"
+  },
+  "scope": "Experimental COOP same-origin and COEP require-corp on same-origin responses. Real GPU inference, IM edits and native Undo/Redo, Save and actual homepage file-chooser reopen in isolated new Word, Excel and PPT documents. No production header change yet.",
+  "results": [
+    {
+      "type": "docx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "\r\n",
+      "after": "IM_WORD_四季_日本_ä_2026\r\n",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "\r\n",
+      "afterRedo": "IM_WORD_四季_日本_ä_2026\r\n",
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/unicode-im-saved.docx",
+        "sha256": "91e837c3eee40d89b1adb93e450c899b7447be45088af335de56b64ab76fb136",
+        "bytes": 25874,
+        "failure": null
+      },
+      "reopened": "IM_WORD_四季_日本_ä_2026\r\n",
+      "reopenExact": true
+    },
+    {
+      "type": "xlsx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "",
+      "after": "IM_CELL_四季_日本_ä_2026",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "",
+      "afterRedo": "IM_CELL_四季_日本_ä_2026",
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/unicode-im-saved.xlsx",
+        "sha256": "eb03561e8f70f0feb77cb67307e8d48b5eae3e366e2074f45c6ea97e60d31ce3",
+        "bytes": 8450,
+        "failure": null
+      },
+      "reopened": "IM_CELL_四季_日本_ä_2026",
+      "reopenExact": true
+    },
+    {
+      "type": "pptx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "after": [
+        [
+          "\r\n",
+          "\r\n",
+          "IM_PPT_四季_日本_ä_2026\r\n"
+        ]
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "afterRedo": [
+        [
+          "\r\n",
+          "\r\n",
+          "IM_PPT_四季_日本_ä_2026\r\n"
+        ]
+      ],
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/unicode-im-saved.pptx",
+        "sha256": "cbf0873339d191e602a4169fdb05a5f7ae88a245a20c46f48f4b6d5ad7a826fd",
+        "bytes": 33990,
+        "failure": null
+      },
+      "reopened": [
+        [
+          "\r\n",
+          "\r\n",
+          "IM_PPT_四季_日本_ä_2026\r\n"
+        ]
+      ],
+      "reopenExact": true
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

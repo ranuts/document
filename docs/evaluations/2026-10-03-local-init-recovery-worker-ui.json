@@ -1,0 +1,46 @@
+{
+  "scope": "Controlled WebLLM worker construction failure; actual cached CPU runtime inference, plus controlled CPU worker construction failure then visible Load retry. No physical OOM or device loss claim.",
+  "results": [
+    {
+      "failCPU": false,
+      "errors": [],
+      "wasmFailures": 0,
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "gpuInitFailures": 1,
+      "cpuInitFailures": 0,
+      "reply": "Hello.",
+      "newErrorCount": 0,
+      "previewCount": 0,
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-CFQ18jr4.js",
+        "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+      ],
+      "passed": true
+    },
+    {
+      "failCPU": true,
+      "errors": [],
+      "wasmFailures": 0,
+      "failureErrors": [
+        "Model loading failed. Retry loading or choose another model."
+      ],
+      "failureInputDisabled": false,
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "gpuInitFailures": 2,
+      "cpuInitFailures": 1,
+      "reply": "Hello.",
+      "newErrorCount": 0,
+      "previewCount": 0,
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-CFQ18jr4.js",
+        "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+      ],
+      "passed": true
+    }
+  ],
+  "allPassed": true,
+  "probe": {
+    "path": "docs/evaluations/probe-local-init-recovery-worker-ui.mjs",
+    "sha256": "ea3855966ebd8eb62cff22d4a7ea05f962d5879d5a02d222d496a50b66e3379d"
+  }
+}

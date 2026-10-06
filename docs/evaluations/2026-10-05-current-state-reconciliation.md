@@ -1,0 +1,17 @@
+# Current-state reconciliation, 2026-10-05
+
+The [original requirement audit](2026-10-04-local-assistant-requirements-delta.md) is a historical snapshot. Its statements about missing CPU token counting and twelve model reports no longer describe the current source. This reconciliation changes the next work priorities; it does not certify the full goal or rerun archived browser experiments.
+
+| Area | Current evidence | Remaining acceptance |
+| --- | --- | --- |
+| CPU context budgeting | `wllama.ts` constructs the final SDK request, counts its templated messages, reserves `max_tokens + 1`, and uses whole-turn token budgeting before completion. The [product integration](2026-10-04-cpu-count-product-build.md) and [CPU restart reports](2026-10-04-cpu-count-process-restart-offline.md) supersede earlier prototype-only findings. | Long-document factual quality, all models/custom runtimes and GPU counting parity remain unproven. Custom engines without the count interface do not gain this guarantee. |
+| Model choice | The [decision index](2026-10-04-writing-model-decision-index.md) binds sixteen writing reports and six subsequent diagnostics. Its current configuration verification passes. None is marked quality accepted. | Fresh-source evaluation of roles, negation, modality, language, grammar, concise output and usable latency. Availability, literal guards, edit counts and date-copy success are insufficient. |
+| Runtime switching | Current panel waits for previous disposal before replacement load, blocks after failed disposal and rejects superseded successful waits. Its unit regressions cover deferred exit, failed exit, repeated selection and retained refresh guidance. CPU provider retains failed initialization teardown. | Real native teardown failures, GPU loss/OOM and device stress remain untested by these controlled faults. |
+| Offline | [Archived desktop CPU process restart](2026-10-04-cpu-count-process-restart-offline.md) covers actual warm-cache chat and Word/Excel/PPT edits with native Undo/Redo. | Latest UI build has not repeated this browser probe. Actual installed PWA launch, fresh installation, storage eviction and physical mobile remain unaccepted. |
+| Privacy/security | [Chat network observations](2026-10-04-chat-network-content-audit.md), [fresh self-hosted CPU download](2026-10-04-cold-selfhost-cpu-fresh.md), and [persisted-history rendering](2026-10-04-history-browser-security.md) cover distinct concrete routes. | Complete content-egress coverage and deployed parent/iframe/Worker policy. Broad HTTP/HTTPS permission does not prove privacy. |
+
+The companion JSON binds current source and archived evidence hashes separately. Archived reports certify their captured builds only. The verifier checks those bindings and the decision-index acceptance flags; it cannot prove semantic quality, physical devices or installed PWA behavior.
+
+The immediate model priority is semantic fidelity on unused sources, not another known-date copy, weight hash rerun or byte-budget prototype. Preserve the requested writing and document-operation capabilities: replacing them with extractive-only output or refusal heuristics would not satisfy the goal. GPU malformed-date root cause still needs an isolating runtime/compiler comparison; existing CPU/GPU contrasts change multiple variables.
+
+A fresh broader completion audit must still cover every original requirement. This reconciliation is not that audit. Optional speech, vision, RAG and browser control remain deferred by the original text-first boundary.

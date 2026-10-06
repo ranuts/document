@@ -1,0 +1,74 @@
+{
+  "scope": "Saved sample package/XML and literal structure only; not rendered appearance, all metadata or universal format compatibility.",
+  "sourceReportSHA256": "8795c539ed7e1b44a1f94bbbdc435ff7c216342f54efd2c09e0fc2f355b721d2",
+  "auditSHA256": "1335b929f143312a34d01f4ddc7a5a6fc979ce8ccb772bb7e818eff6a4b7ad1e",
+  "results": [
+    {
+      "type": "docx",
+      "artifactSHA256": "91e837c3eee40d89b1adb93e450c899b7447be45088af335de56b64ab76fb136",
+      "parsedXMLParts": 16,
+      "textRunCount": 1,
+      "directRunFonts": [
+        {
+          "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}ascii": "Arial",
+          "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}hAnsi": "Arial",
+          "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}eastAsia": "Arial",
+          "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}cs": "Arial"
+        }
+      ],
+      "literalExact": true,
+      "zipCRCPassed": true
+    },
+    {
+      "type": "xlsx",
+      "artifactSHA256": "eb03561e8f70f0feb77cb67307e8d48b5eae3e366e2074f45c6ea97e60d31ce3",
+      "parsedXMLParts": 11,
+      "target": "B2",
+      "formulaCount": 0,
+      "literalExact": true,
+      "zipCRCPassed": true
+    },
+    {
+      "type": "pptx",
+      "artifactSHA256": "cbf0873339d191e602a4169fdb05a5f7ae88a245a20c46f48f4b6d5ad7a826fd",
+      "parsedXMLParts": 43,
+      "boxEMU": [
+        365760,
+        205740,
+        7925160,
+        366120
+      ],
+      "slideEMU": [
+        12192000,
+        6858000
+      ],
+      "bodyProperties": {
+        "vertOverflow": "overflow",
+        "horzOverflow": "overflow",
+        "vert": "horz",
+        "wrap": "square",
+        "lIns": "91440",
+        "tIns": "45720",
+        "rIns": "91440",
+        "bIns": "45720",
+        "numCol": "1",
+        "spcCol": "0",
+        "rtlCol": "0",
+        "fromWordArt": "0",
+        "anchor": "t",
+        "anchorCtr": "0",
+        "forceAA": "0",
+        "upright": "0",
+        "compatLnSpc": "0"
+      },
+      "autoFit": [
+        "spAutoFit"
+      ],
+      "directFontSizes": [],
+      "fontSizeInherited": true,
+      "literalExact": true,
+      "zipCRCPassed": true
+    }
+  ],
+  "passed": true
+}

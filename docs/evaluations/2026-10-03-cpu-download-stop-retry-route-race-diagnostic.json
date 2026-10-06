@@ -1,0 +1,18 @@
+{
+  "scope": "Actual CPU GGUF download GET held before response; cache reads deliberately miss without deleting cached model. Existing loading Stop, observed download AbortSignal, controlled late route release, restore cache access, existing Load retry and real CPU inference. Not partial byte-stream or physical network disconnection.",
+  "errors": [],
+  "held": [],
+  "passed": false,
+  "error": "Error: Actual download route not held",
+  "probe": {
+    "forceMissing": true,
+    "opfsDenied": 1,
+    "cacheMisses": 1,
+    "gets": 1,
+    "signals": 1,
+    "aborts": 0
+  },
+  "notes": [
+    "Preparing AI…"
+  ]
+}

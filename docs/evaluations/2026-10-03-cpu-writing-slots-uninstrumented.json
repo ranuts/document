@@ -1,0 +1,127 @@
+{
+  "experiment": "numeric-placeholder representation; input transformed and output restored before unchanged production validators",
+  "date": "2026-10-03T06:54:34.054Z",
+  "scope": "Actual browser CPU selected-text writing with current production prompt, schema and fact guards; one loaded model reused for three distinct tasks. Candidate loaded through existing local GGUF file control. WebGPU disabled and Service Workers blocked for diagnostic response/runtime capture. No model default change, broad quality benchmark or mobile claim.",
+  "port": 5193,
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "\u563f\uff0cAlex \u4f1a\u5728 2026-10-08 \u4ed8 1,250 EUR \u54e6\uff01",
+      "instruction": "\u6539\u5199\u4e3a\u6b63\u5f0f\u4e66\u9762\u4e2d\u6587\uff0c\u53bb\u6389\u53e3\u8bed\u8868\u8fbe\uff0c\u4fdd\u7559\u4e8b\u5b9e\u3002",
+      "selected": "\u563f\uff0cAlex \u4f1a\u5728 2026-10-08 \u4ed8 1,250 EUR \u54e6\uff01\r\n",
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "\u563f\uff0cAlex \u4f1a\u5728 2026-10-08 \u4ed8 1,250 EUR \u54e6\uff01\r\n",
+      "documentUnchanged": true,
+      "responseMs": 9237,
+      "errors": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "maskedText": "{\"text\": \"2026\u5e7410\u67088\u65e5\uff0cAlex\u5c06\u652f\u4ed81,250\u6b27\u5143\u3002\"}",
+          "text": "{\"text\": \"2026\u5e7410\u67088\u65e5\uff0cAlex\u5c06\u652f\u4ed81,250\u6b27\u5143\u3002\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 27,
+            "promptTokens": 447,
+            "promptProcessingDurationMs": 7865.61,
+            "decodingDurationMs": 1318.576,
+            "decodeTokensPerSecond": 19.71824149688755,
+            "responseDurationMs": 9217.424999713898,
+            "endToEndTokensPerSecond": 2.9292345748230186
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "documentUnchanged": true,
+      "responseMs": 3518,
+      "errors": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "maskedText": "{\"text\": \"Alex is expected to pay 1,250 EUR on October 8, 2026.\"}",
+          "text": "{\"text\": \"Alex is expected to pay 1,250 EUR on October 8, 2026.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 29,
+            "promptTokens": 447,
+            "promptProcessingDurationMs": 2048.82,
+            "decodingDurationMs": 1444.431,
+            "decodeTokensPerSecond": 19.384795812330253,
+            "responseDurationMs": 3504.2850003242493,
+            "endToEndTokensPerSecond": 8.275582607384003
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a 1,250 EUR payment on 2026-10-08, which has not been approved.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 7188,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "maskedText": "{\"text\": \"Alex proposed a 1,250 EUR payment on 2026-10-08, which has not been approved.\"}",
+          "text": "{\"text\": \"Alex proposed a 1,250 EUR payment on 2026-10-08, which has not been approved.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 36,
+            "promptTokens": 460,
+            "promptProcessingDurationMs": 5340.156,
+            "decodingDurationMs": 1801.699,
+            "decodeTokensPerSecond": 19.426108356612286,
+            "responseDurationMs": 7160.445000171661,
+            "endToEndTokensPerSecond": 5.027620489946777
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    }
+  ],
+  "errors": [],
+  "leakage": [],
+  "assessment": {
+    "validExperiment": false,
+    "reason": "No numeric slots captured; input transformation was not established. Do not assess placeholder quality from this run."
+  }
+}

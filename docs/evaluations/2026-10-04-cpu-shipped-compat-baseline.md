@@ -1,0 +1,7 @@
+# Shipped compatibility runtime control
+
+The same standalone SDK harness completed successfully with the installed `@wllama/wllama-compat` 3.6.1 JS/WASM instead of the self-built pair. It loaded the same Qwen3-0.6B model, reached `generated`, and returned `Hello! How can I assist you today?` with stop finish reason. Usage reports 16 prompt tokens and 10 completion tokens. This establishes a working comparison for the self-built baseline abort; it does not establish general answer quality or count-only preflight.
+
+The SDK import, compatibility capability override, model download, context 2048, one thread, zero GPU layers, reasoning disabled, user message and sampling/output settings were retained. Runtime file hashes are captured separately. The changed pair includes all build/distribution differences; this is not an ablation identifying a specific compiler flag. A transient environmental explanation is not mathematically excluded by one successful control, but the harness and model can operate under the observed setup.
+
+Evidence: [raw control](2026-10-04-cpu-shipped-compat-baseline.json), [driver](probe-cpu-shipped-compat-baseline.mjs), [self-built loading failure](2026-10-04-cpu-native-build-logs.md). Both browser and file server closed normally. No editor write, Save, production dependency or IM change. Continue with the already running assertion-enabled self-built relink before changing functional build settings.

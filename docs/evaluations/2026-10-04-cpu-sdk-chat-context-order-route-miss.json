@@ -1,0 +1,58 @@
+{
+  "status": "failed",
+  "cases": [
+    {
+      "id": "greeting-en",
+      "text": "Say hello in one short sentence."
+    },
+    {
+      "id": "greeting-zh",
+      "text": "请用中文说一句简短的问候。"
+    },
+    {
+      "id": "arithmetic-en",
+      "text": "What is 7 plus 8? Reply with only the number."
+    },
+    {
+      "id": "negation-zh",
+      "text": "只回答以下句子中谁没有付款：Mira 没有向 Oren 付款。"
+    }
+  ],
+  "results": [],
+  "errors": [],
+  "plugin": "agent-plugin-DPWKbEZ4.js",
+  "pluginSHA256": "467c0460aab3ac0ee321054070b1a8a0ea88a8d1446e403b615e36b2009ba385",
+  "probeSHA256": "2b37ed3dc2db1a5d4568ba041880436d0c966f2268f11ecbbc1a0328d76ff91f",
+  "scope": "Known fresh diagnostic cases, one sample per variant, fixed current/request-first order. Only SDK chat messages user content order changes in route-served diagnostic SDK; actual CPU fallback model. No production adoption.",
+  "sdk": "esm-BmP3Hx_J.js",
+  "sdkSHA256": "90b5b57472a3116efff13b8376b84c724dbe22580feeb24843829839ca752414",
+  "routeHits": [],
+  "resources": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/ran-fonts/fonts.css",
+    "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+    "http://127.0.0.1:5193/assets/editor-DvVHlQiR.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/input-DEoPNM0j-CYJn2sbW.js",
+    "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+    "http://127.0.0.1:5193/assets/agent-plugin-DPWKbEZ4.js",
+    "http://127.0.0.1:5193/assets/input-B0MAkvvr.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+    "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+    "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+    "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/icons/document-light.svg",
+    "http://127.0.0.1:5193/assets/wllama-XMlyubPs.js",
+    "http://127.0.0.1:5193/assets/esm-BmP3Hx_J.js"
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "modelId": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "actualCapture": [],
+  "error": "Error: CPU capture missing or duplicate",
+  "bundleUnchanged": true
+}

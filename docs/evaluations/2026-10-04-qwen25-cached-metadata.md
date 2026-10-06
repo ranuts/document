@@ -1,0 +1,13 @@
+# Owned-browser cached model metadata provenance
+
+The inspected config/tokenizer/manifest content matches pinned public model repositories. This does not verify actual weight shard bytes, remote compiled-library identity or numerical correctness, and does not resolve malformed generation.
+
+Read-only audits enumerate existing Cache API/IndexedDB entries in the owned diagnostic GPU profile; no inference, cache deletion or user document writes. Driver `ae5eb12` records eight entries across Qwen2.5 3B q4f16/q4f32: two configs, two tokenizers, two tensor manifests, two compiled libraries. Follow-up `466d6bb` adds parsed-content hashes; full manifest export enables structural comparison. Entry URL/byte hashes remain stable across all three reads.
+
+Both tokenizer.json files are 7,031,645 bytes with SHA256 c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539. Cached configs differ only in quantization, share qwen2 architecture/template and repetition_penalty 1.05. Base BPE vocabulary contains individual digit tokens 2/3; absence of a single 23 token is not itself corruption. Distinct compiled-library bytes/hashes are recorded at their catalog URLs, not checked against pinned remote libraries.
+
+Public GETs only, without document content, compare model config/tokenizer/manifests against fixed Hugging Face revisions: q4f16 `7690aaaa46df36b1be0fe93b9c9abac0497eff6c`, q4f32 `dfa91e859b714acfa489a1464297080656c3460d`. Config/tokenizer hashes and sizes match exactly. Remote manifests are 164,965 bytes while cached serialized manifests are 66,810; byte hashes differ. A Python-versus-browser canonical-hash attempt also differs and is preserved as inconclusive evidence. Full parsed structural comparison finds zero differences in both complete manifests, including all nested records. Do not mistake serialization/hash-format differences for corrupted weights.
+
+`python3 docs/evaluations/verify-qwen25-cached-metadata.py` checks driver hashes, stable eight-entry snapshots, tokenizer equality, config relationship/default penalty, pinned byte comparisons and full-manifest structural results. `compare-qwen25-pinned-manifest-structure.py` reruns pinned public GETs for the structural comparison. Existing manifest records carry md5sum for weight files; those files have not been hashed by this audit. No claim of full asset integrity, offline/privacy, inference quality or mobile support follows.
+
+The metadata reveals an inherited repetition penalty not specified in app requests, motivating the separate controlled native IM penalty diagnostic. Keep generation/weights/runtime hypotheses distinct; no production defaults are changed.

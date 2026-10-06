@@ -1,0 +1,401 @@
+{
+  "scope": "Read-only owned GPU profile Cache API/IndexedDB metadata audit; no inference, deletion or model weight-shard hashing.",
+  "probeSHA256": "1758ad3886de19a45a8acdb13921fe7e82ae2153ad7ccafbe28702eff14fc8f7",
+  "assets": [],
+  "errors": [],
+  "observed": {
+    "cacheNames": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1791084020"
+    ],
+    "databases": [
+      {
+        "name": "document-ai-conversations",
+        "version": 1
+      },
+      {
+        "name": "document-handoff",
+        "version": 1
+      },
+      {
+        "name": "document-history",
+        "version": 2
+      },
+      {
+        "name": "webllm/config",
+        "version": 1
+      },
+      {
+        "name": "webllm/model",
+        "version": 1
+      },
+      {
+        "name": "webllm/wasm",
+        "version": 1
+      }
+    ],
+    "assets": [
+      {
+        "storage": "idb:webllm/config",
+        "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC/resolve/main/mlc-chat-config.json",
+        "bytes": 2045,
+        "sha256": "cac458abef34d849d560979d49559bb6d8f38ab7c566938ba117dd2eedb12a02",
+        "semanticSHA256": "3caad70c72b499f9453b934abc03f2c4ef07cd50653d69fdf3f0970a4c794d80",
+        "config": {
+          "version": "0.1.0",
+          "model_type": "qwen2",
+          "quantization": "q4f16_1",
+          "model_config": {
+            "hidden_act": "silu",
+            "hidden_size": 2048,
+            "intermediate_size": 11008,
+            "num_attention_heads": 16,
+            "num_hidden_layers": 36,
+            "num_key_value_heads": 2,
+            "rms_norm_eps": 0.000001,
+            "rope_theta": 1000000,
+            "vocab_size": 151936,
+            "tie_word_embeddings": true,
+            "context_window_size": 32768,
+            "prefill_chunk_size": 2048,
+            "tensor_parallel_shards": 1,
+            "head_dim": 128,
+            "dtype": "float32",
+            "max_batch_size": 80
+          },
+          "vocab_size": 151936,
+          "context_window_size": 32768,
+          "sliding_window_size": -1,
+          "prefill_chunk_size": 2048,
+          "attention_sink_size": -1,
+          "tensor_parallel_shards": 1,
+          "pipeline_parallel_stages": 1,
+          "temperature": 0.7,
+          "presence_penalty": 0,
+          "frequency_penalty": 0,
+          "repetition_penalty": 1.05,
+          "top_p": 0.8,
+          "tokenizer_files": [
+            "tokenizer.json",
+            "vocab.json",
+            "merges.txt",
+            "tokenizer_config.json"
+          ],
+          "tokenizer_info": {
+            "token_postproc_method": "byte_level",
+            "prepend_space_in_encode": false,
+            "strip_space_in_decode": false
+          },
+          "conv_template": {
+            "name": "qwen2",
+            "system_template": "<|im_start|>system\n{system_message}<|im_end|>\n",
+            "system_message": "You are a helpful assistant.",
+            "system_prefix_token_ids": null,
+            "add_role_after_system_message": true,
+            "roles": {
+              "user": "<|im_start|>user",
+              "assistant": "<|im_start|>assistant"
+            },
+            "role_templates": {
+              "user": "{user_message}",
+              "assistant": "{assistant_message}",
+              "tool": "{tool_message}"
+            },
+            "messages": [],
+            "seps": [
+              "<|im_end|>\n"
+            ],
+            "role_content_sep": "\n",
+            "role_empty_sep": "\n",
+            "stop_str": [
+              "<|endoftext|>",
+              "<|im_end|>"
+            ],
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "function_string": "",
+            "use_function_calling": false
+          },
+          "pad_token_id": 151643,
+          "bos_token_id": 151643,
+          "eos_token_id": [
+            151645,
+            151643
+          ]
+        }
+      },
+      {
+        "storage": "idb:webllm/config",
+        "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC/resolve/main/mlc-chat-config.json",
+        "bytes": 2045,
+        "sha256": "5924a33c2a5af212f765c617039a76a584ba5a73d926040507458abaa231991e",
+        "semanticSHA256": "148de0a1fe7da8811dda545e1e03b45a93c93e083b7b59fbdcdd62740faee4f0",
+        "config": {
+          "version": "0.1.0",
+          "model_type": "qwen2",
+          "quantization": "q4f32_1",
+          "model_config": {
+            "hidden_act": "silu",
+            "hidden_size": 2048,
+            "intermediate_size": 11008,
+            "num_attention_heads": 16,
+            "num_hidden_layers": 36,
+            "num_key_value_heads": 2,
+            "rms_norm_eps": 0.000001,
+            "rope_theta": 1000000,
+            "vocab_size": 151936,
+            "tie_word_embeddings": true,
+            "context_window_size": 32768,
+            "prefill_chunk_size": 2048,
+            "tensor_parallel_shards": 1,
+            "head_dim": 128,
+            "dtype": "float32",
+            "max_batch_size": 80
+          },
+          "vocab_size": 151936,
+          "context_window_size": 32768,
+          "sliding_window_size": -1,
+          "prefill_chunk_size": 2048,
+          "attention_sink_size": -1,
+          "tensor_parallel_shards": 1,
+          "pipeline_parallel_stages": 1,
+          "temperature": 0.7,
+          "presence_penalty": 0,
+          "frequency_penalty": 0,
+          "repetition_penalty": 1.05,
+          "top_p": 0.8,
+          "tokenizer_files": [
+            "tokenizer.json",
+            "vocab.json",
+            "merges.txt",
+            "tokenizer_config.json"
+          ],
+          "tokenizer_info": {
+            "token_postproc_method": "byte_level",
+            "prepend_space_in_encode": false,
+            "strip_space_in_decode": false
+          },
+          "conv_template": {
+            "name": "qwen2",
+            "system_template": "<|im_start|>system\n{system_message}<|im_end|>\n",
+            "system_message": "You are a helpful assistant.",
+            "system_prefix_token_ids": null,
+            "add_role_after_system_message": true,
+            "roles": {
+              "user": "<|im_start|>user",
+              "assistant": "<|im_start|>assistant"
+            },
+            "role_templates": {
+              "user": "{user_message}",
+              "assistant": "{assistant_message}",
+              "tool": "{tool_message}"
+            },
+            "messages": [],
+            "seps": [
+              "<|im_end|>\n"
+            ],
+            "role_content_sep": "\n",
+            "role_empty_sep": "\n",
+            "stop_str": [
+              "<|endoftext|>",
+              "<|im_end|>"
+            ],
+            "stop_token_ids": [
+              151643,
+              151645
+            ],
+            "function_string": "",
+            "use_function_calling": false
+          },
+          "pad_token_id": 151643,
+          "bos_token_id": 151643,
+          "eos_token_id": [
+            151645,
+            151643
+          ]
+        }
+      },
+      {
+        "storage": "idb:webllm/model",
+        "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC/resolve/main/tensor-cache.json",
+        "bytes": 66810,
+        "sha256": "2cc8ba9bad42fe25c712369627f29d452e8c4ef46babfe5ae1d30ff992dca7a5",
+        "semanticSHA256": "591bef5b5f821b34f231f825d2a12cee0a4f9a2651e3d3ad22ee99758d63a089",
+        "tensorCache": {
+          "metadata": {
+            "ParamSize": 399,
+            "ParamBytes": 1736187904,
+            "BitsPerParam": 4.500900580433049
+          },
+          "recordCount": 62,
+          "declaredBytes": 1736187904,
+          "firstRecord": {
+            "dataPath": "params_shard_0.bin",
+            "format": "raw-shard",
+            "nbytes": 155582464,
+            "records": [
+              {
+                "name": "model.embed_tokens.q_weight",
+                "shape": [
+                  151936,
+                  256
+                ],
+                "dtype": "uint32",
+                "format": "f32-to-bf16",
+                "nbytes": 155582464,
+                "byteOffset": 0
+              }
+            ],
+            "md5sum": "6287072f47d913f5f880b82d6e647b4d"
+          }
+        }
+      },
+      {
+        "storage": "idb:webllm/model",
+        "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC/resolve/main/tokenizer.json",
+        "bytes": 7031645,
+        "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+        "semanticSHA256": "0d1df37a548d443479d14912a7a5f5ac9a5ae7762dbec5524666c76e3a26b567",
+        "tokenizer": {
+          "type": "BPE",
+          "vocabCount": 151643,
+          "normalizer": {
+            "type": "NFC"
+          },
+          "preTokenizer": {
+            "type": "Sequence",
+            "pretokenizers": [
+              {
+                "type": "Split",
+                "pattern": {
+                  "Regex": "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+|\\p{N}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+"
+                },
+                "behavior": "Isolated",
+                "invert": false
+              },
+              {
+                "type": "ByteLevel",
+                "add_prefix_space": false,
+                "trim_offsets": false,
+                "use_regex": false
+              }
+            ]
+          },
+          "decoder": {
+            "type": "ByteLevel",
+            "add_prefix_space": false,
+            "trim_offsets": false,
+            "use_regex": false
+          },
+          "probes": {
+            "2": 17,
+            "3": 18,
+            "23": null,
+            "erves": 13280,
+            "ferences": 4901,
+            "思路": null,
+            "觇": null
+          }
+        }
+      },
+      {
+        "storage": "idb:webllm/model",
+        "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC/resolve/main/tensor-cache.json",
+        "bytes": 66810,
+        "sha256": "8dff028231d3cf5eca1132a4681af000e5c13c38c650af68ebc0cb82cef11945",
+        "semanticSHA256": "107dd6879b61a1406a1aa7546df6b7a74d0adaa89f34a6853c350255455c3d8d",
+        "tensorCache": {
+          "metadata": {
+            "ParamSize": 399,
+            "ParamBytes": 1929527296,
+            "BitsPerParam": 5.002114406234114
+          },
+          "recordCount": 62,
+          "declaredBytes": 1736187904,
+          "firstRecord": {
+            "dataPath": "params_shard_0.bin",
+            "format": "raw-shard",
+            "nbytes": 155582464,
+            "records": [
+              {
+                "name": "model.embed_tokens.q_weight",
+                "shape": [
+                  151936,
+                  256
+                ],
+                "dtype": "uint32",
+                "format": "f32-to-bf16",
+                "nbytes": 155582464,
+                "byteOffset": 0
+              }
+            ],
+            "md5sum": "b4b3aa0293e794582df5200974950158"
+          }
+        }
+      },
+      {
+        "storage": "idb:webllm/model",
+        "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC/resolve/main/tokenizer.json",
+        "bytes": 7031645,
+        "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+        "semanticSHA256": "0d1df37a548d443479d14912a7a5f5ac9a5ae7762dbec5524666c76e3a26b567",
+        "tokenizer": {
+          "type": "BPE",
+          "vocabCount": 151643,
+          "normalizer": {
+            "type": "NFC"
+          },
+          "preTokenizer": {
+            "type": "Sequence",
+            "pretokenizers": [
+              {
+                "type": "Split",
+                "pattern": {
+                  "Regex": "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+|\\p{N}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+"
+                },
+                "behavior": "Isolated",
+                "invert": false
+              },
+              {
+                "type": "ByteLevel",
+                "add_prefix_space": false,
+                "trim_offsets": false,
+                "use_regex": false
+              }
+            ]
+          },
+          "decoder": {
+            "type": "ByteLevel",
+            "add_prefix_space": false,
+            "trim_offsets": false,
+            "use_regex": false
+          },
+          "probes": {
+            "2": 17,
+            "3": 18,
+            "23": null,
+            "erves": 13280,
+            "ferences": 4901,
+            "思路": null,
+            "觇": null
+          }
+        }
+      },
+      {
+        "storage": "idb:webllm/wasm",
+        "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f16_1_cs1k-webgpu.wasm",
+        "bytes": 5438957,
+        "sha256": "bae8a6d2718f52e2ed232f069c175b0858e30b90ebfe2b56ca2edcb4bd40305a"
+      },
+      {
+        "storage": "idb:webllm/wasm",
+        "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "bytes": 5297311,
+        "sha256": "aae12cd18b5c2823df914e07be5fca45768fdbaf726103781b54d8c055e5818b"
+      }
+    ]
+  },
+  "status": "completed"
+}

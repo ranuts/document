@@ -1,0 +1,13 @@
+{
+  "bytes": 25849,
+  "sha256": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3",
+  "zipIntegrity": "pass",
+  "documentTextRuns": [
+    "WEBKIT_WORD_20261005"
+  ],
+  "documentXmlSha256": "636bf4b339cad6d7e70a14d1ed40f0eb3993751c8570543a55fb1fa88bb6caaf",
+  "sourceHashes": {
+    "lib/onlyoffice/guards/x2t-worker.ts": "3a81788ad9f5cdad6d2e3f0233a4fc8ded8d7a44cfc673272738708c11fe26fb",
+    "public/sdkjs/common/wasm/x2t/x2t_helper.js": "f6def6228ba2e3738eda379f89c189236ab08d6f34f689c090dd4cf2ade556b2"
+  }
+}

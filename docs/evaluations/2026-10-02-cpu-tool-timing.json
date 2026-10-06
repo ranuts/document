@@ -1,0 +1,78 @@
+{
+  "scope": "Production UI real WASM CPU CPU Qwen3-0.6B GGUF / WebKit planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-5W8LHo0g.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 57928,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "providerTimings": [
+    {
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "responseDurationMs": 57885,
+        "endToEndTokensPerSecond": 0.2418588580806772
+      },
+      "responseChars": 41,
+      "stopReason": "stop"
+    }
+  ],
+  "providerShareOfRequest": 0.9992576992128159,
+  "limitations": [
+    "Single instrumented online CPU request in desktop Playwright WebKit.",
+    "Provider timing includes prompt processing and completion; phase split is not measured.",
+    "End-to-end token rate includes prefill and is not decode speed.",
+    "Temporary console instrumentation restored and production rebuilt after test."
+  ]
+}

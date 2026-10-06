@@ -1,0 +1,1798 @@
+{
+  "status": "completed",
+  "scope": "Actual production local-model IM Word replacement with native track revisions enabled; exact raw text and character review types, unchanged neighbor, native Undo/Redo and visible error checks. No preview card.",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "language": "zh",
+  "replacement": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+  "results": [
+    {
+      "kind": "tracked",
+      "prompt": "将当前选中的文字替换为下面的完整文本，保留每一个字符，不修改选区以外的文字：项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+      "before": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "l",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "p",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "y",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 2
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "i",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "u",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "c",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 0
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 0
+              }
+            ]
+          }
+        ]
+      },
+      "after": {
+        "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\nNeighbor unchanged\r\n",
+        "selected": "",
+        "paragraphs": [
+          {
+            "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "项",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "目",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "付",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "款",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "/",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "P",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "y",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "m",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "A",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "l",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "x",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "1",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": ",",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "2",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "5",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "E",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "U",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "R",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "2",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "2",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "6",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "-",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "1",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "-",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "8",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "N",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "O",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "T",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "p",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "p",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "v",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "y",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 2
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "i",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "u",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "c",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 0
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 0
+              }
+            ]
+          }
+        ]
+      },
+      "elapsedMs": 1781,
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "revisionRuns": [
+        [
+          {
+            "text": "",
+            "reviewType": 2,
+            "reviewInfo": 2
+          },
+          {
+            "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+            "reviewType": 2,
+            "reviewInfo": 2
+          },
+          {
+            "text": " target body",
+            "reviewType": 2,
+            "reviewInfo": 2
+          },
+          {
+            "text": "\r\n",
+            "reviewType": 2,
+            "reviewInfo": 2
+          }
+        ],
+        [
+          {
+            "text": "Neighbor unchanged",
+            "reviewType": 2,
+            "reviewInfo": 2
+          },
+          {
+            "text": "",
+            "reviewType": 2,
+            "reviewInfo": 2
+          },
+          {
+            "text": "",
+            "reviewType": 0,
+            "reviewInfo": null
+          },
+          {
+            "text": "",
+            "reviewType": 0,
+            "reviewInfo": null
+          },
+          {
+            "text": "",
+            "reviewType": 0,
+            "reviewInfo": null
+          },
+          {
+            "text": "\r\n",
+            "reviewType": 0,
+            "reviewInfo": null
+          }
+        ]
+      ],
+      "neighborUnchanged": true,
+      "matched": true,
+      "outsideTextPreserved": true,
+      "screenshot": ".scratch/ai-csp/word-replace-Qwen3_1_7B_q4f16_1_MLC-zh-tracked.png",
+      "afterUndo": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "l",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "p",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "y",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 2
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "i",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "u",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "c",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 0
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 0
+              }
+            ]
+          }
+        ]
+      },
+      "undoExact": true,
+      "afterRedo": {
+        "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\nNeighbor unchanged\r\n",
+        "selected": "",
+        "paragraphs": [
+          {
+            "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "项",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "目",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "付",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "款",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "/",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "P",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "y",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "m",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "A",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "l",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "x",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "1",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": ",",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "2",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "5",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "E",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "U",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "R",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "2",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "2",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "6",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "-",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "1",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "-",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "0",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "8",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "·",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "N",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "O",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "T",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "p",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "p",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "v",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "t",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "y",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 2
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "i",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "b",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "o",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "r",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": " ",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "u",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "c",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "h",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "a",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "n",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "g",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "e",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "d",
+                "bold": false,
+                "reviewType": 2
+              },
+              {
+                "c": "\r",
+                "bold": false,
+                "reviewType": 0
+              },
+              {
+                "c": "\n",
+                "bold": false,
+                "reviewType": 0
+              }
+            ]
+          }
+        ]
+      },
+      "redoExact": true,
+      "documentUnchanged": false
+    }
+  ],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-Cebli51C.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "setup": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "l",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "p",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "y",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "\r",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "\n",
+            "bold": false,
+            "reviewType": 2
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "i",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "u",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "c",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 2
+          },
+          {
+            "c": "\r",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      }
+    ]
+  },
+  "reviewEnabled": true,
+  "nativeStructure": [
+    [
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "Alpha target body",
+        "type": 2
+      },
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "\r\n",
+        "type": 2
+      }
+    ],
+    [
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "Neighbor unchanged",
+        "type": 2
+      },
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "",
+        "type": 2
+      },
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "",
+        "type": 0
+      },
+      {
+        "nativeType": 71,
+        "constructorName": "CParagraphBookmark",
+        "getText": "undefined",
+        "reviewGetter": "undefined"
+      },
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "",
+        "type": 0
+      },
+      {
+        "nativeType": 71,
+        "constructorName": "CParagraphBookmark",
+        "getText": "undefined",
+        "reviewGetter": "undefined"
+      },
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "",
+        "type": 0
+      },
+      {
+        "nativeType": 39,
+        "constructorName": "ParaRun",
+        "getText": "function",
+        "reviewGetter": "function",
+        "text": "\r\n",
+        "type": 0
+      }
+    ]
+  ],
+  "allPassed": true
+}

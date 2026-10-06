@@ -1,0 +1,51 @@
+{
+  "probeSHA256": "1ec4ebc5b4cf01bfeb87e67ae703105437a646eeab8b791c9e0260880aa19d30",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "invalidFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "true"
+      },
+      "correctedFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "false"
+      },
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previews": 0,
+      "stats": "",
+      "reply": [],
+      "failureState": {
+        "armed": false,
+        "injected": 1,
+        "terminated": 1
+      },
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true,
+      "recoveryReply": "Hello!Write to document",
+      "recoveryDocument": "\r\n"
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

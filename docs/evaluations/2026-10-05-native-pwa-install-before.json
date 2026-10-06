@@ -1,0 +1,53 @@
+{
+  "scope": "Native Chromium PWA install and standalone launch in a fresh owned profile; no model inference or physical offline certification.",
+  "steps": [
+    {
+      "phase": "seed",
+      "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "caches": [
+        "document-editor-runtime-59e2dc593998",
+        "document-editor-core-1791134366"
+      ]
+    },
+    {
+      "phase": "launch",
+      "url": "http://127.0.0.1:5193/",
+      "state": {
+        "standalone": false,
+        "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+        "online": true,
+        "title": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor"
+      }
+    },
+    {
+      "phase": "launch",
+      "url": "http://127.0.0.1:5193/",
+      "state": {
+        "standalone": false,
+        "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+        "online": true,
+        "title": "Open DOCX, XLSX & PPTX in Your Browser — Free Document Viewer & Editor"
+      }
+    }
+  ],
+  "errors": [],
+  "probeSHA256": "a498920f95944107bfa44f0ff223d69e50e1ba06d7d56c0b9c9aeb9a699d3ab2",
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/151.0.7922.34",
+    "revision": "@782af9cb30a53f54487e5d2e44738645a8ec457c",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+    "jsVersion": "15.1.206.8"
+  },
+  "install": {},
+  "osState": {
+    "badgeCount": 0,
+    "fileHandlers": []
+  },
+  "launch": {
+    "targetId": "C36388E26D19B8232F54DD228093FBAE"
+  },
+  "status": "completed",
+  "uninstalled": true,
+  "contextClosed": true
+}

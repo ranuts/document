@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-02T12:43:37.766Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright WebKit CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 150878,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [],
+  "errors": [],
+  "candidateSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "text"
+    ],
+    "properties": {
+      "text": {
+        "type": "string",
+        "pattern": "^.*2026-10-08.*$"
+      }
+    }
+  },
+  "assessment": {
+    "adopted": false,
+    "requestSucceeded": false,
+    "elapsedMs": 150878,
+    "rawCompletionCaptured": false,
+    "rootCauseEstablished": false
+  },
+  "limitations": [
+    "Single temporary fixture-specific pattern probe, not generic date-preservation implementation.",
+    "Diagnostic was placed after provider completion; no response or pre-request marker was observed, so actual dispatched schema was not captured.",
+    "Generic UI error does not establish grammar compilation failure, output limit, repetition, or engine exception details.",
+    "No product constraint was retained; next investigation must trace request dispatch and engine failure before further pattern changes."
+  ]
+}

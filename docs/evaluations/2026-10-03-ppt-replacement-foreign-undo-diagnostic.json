@@ -1,0 +1,1870 @@
+{
+  "scope": "Actual native PPT replacement writer; source bundle in isolated production editor, no IM/model claim",
+  "results": [
+    {
+      "fixture": {
+        "text": "Alex 😀\tPayment",
+        "stop": false
+      },
+      "before": [
+        {
+          "text": "Alpha Alpha\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "text": "Alpha Alex 😀\tPayment\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      120
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      128512
+                    ],
+                    [
+                      21,
+                      null
+                    ],
+                    [
+                      1,
+                      80
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      1,
+                      121
+                    ],
+                    [
+                      1,
+                      109
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      110
+                    ],
+                    [
+                      1,
+                      116
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Bidi\":2052,\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "groupClosed": true,
+      "undone": [
+        {
+          "text": "Alpha Alpha\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "redone": [
+        {
+          "text": "Alpha Alex 😀\tPayment\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      120
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      128512
+                    ],
+                    [
+                      21,
+                      null
+                    ],
+                    [
+                      1,
+                      80
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      1,
+                      121
+                    ],
+                    [
+                      1,
+                      109
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      110
+                    ],
+                    [
+                      1,
+                      116
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Bidi\":2052,\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output": {
+        "page": 1,
+        "verified": true
+      },
+      "entered": false,
+      "historyRestored": false,
+      "busy": false,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "第一行\n  第二行  ",
+        "stop": false
+      },
+      "before": [
+        {
+          "text": "Alpha Alpha\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "text": "Alpha 第一行\n  第二行  \n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": [
+                    [
+                      1,
+                      31532
+                    ],
+                    [
+                      1,
+                      19968
+                    ],
+                    [
+                      1,
+                      34892
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Bidi\":2052,\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": [
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      31532
+                    ],
+                    [
+                      1,
+                      20108
+                    ],
+                    [
+                      1,
+                      34892
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      2,
+                      32
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "groupClosed": true,
+      "undone": [
+        {
+          "text": "Alpha Alpha\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "redone": [
+        {
+          "text": "Alpha 第一行\n  第二行  \n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": [
+                    [
+                      1,
+                      31532
+                    ],
+                    [
+                      1,
+                      19968
+                    ],
+                    [
+                      1,
+                      34892
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Bidi\":2052,\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": [
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      31532
+                    ],
+                    [
+                      1,
+                      20108
+                    ],
+                    [
+                      1,
+                      34892
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      2,
+                      32
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"Bold\":false,\"Italic\":false,\"Strikeout\":false,\"Underline\":false,\"FontSize\":60,\"VertAlign\":0,\"HighLight\":-1,\"Spacing\":0,\"DStrikeout\":false,\"Caps\":false,\"SmallCaps\":false,\"Position\":0,\"RFonts\":{\"Ascii\":{\"Name\":\"等线 Light\",\"Index\":-1},\"EastAsia\":{\"Name\":\"等线 Light\",\"Index\":-1},\"HAnsi\":{\"Name\":\"等线 Light\",\"Index\":-1},\"CS\":{\"Name\":\"等线 Light\",\"Index\":-1}},\"BoldCS\":false,\"ItalicCS\":false,\"FontSizeCS\":60,\"Lang\":{\"Val\":2052},\"Unifill\":{\"fill\":{\"type\":3,\"color\":{\"color\":{\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255,\"needRecalc\":true},\"Mods\":null,\"id\":15},\"Mods\":{\"Mods\":[]},\"RGBA\":{\"R\":0,\"G\":0,\"B\":0,\"A\":255}}},\"transparent\":null},\"Ligatures\":0}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "output": {
+        "page": 1,
+        "verified": true
+      },
+      "entered": false,
+      "historyRestored": false,
+      "busy": false,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "Cancelled",
+        "stop": true
+      },
+      "before": [
+        {
+          "text": "Alpha Alpha\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "text": "Alpha Alpha\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "groupClosed": true,
+      "redone": [
+        {
+          "text": "Alpha AlphaPrevious\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      1,
+                      80
+                    ],
+                    [
+                      1,
+                      114
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      118
+                    ],
+                    [
+                      1,
+                      105
+                    ],
+                    [
+                      1,
+                      111
+                    ],
+                    [
+                      1,
+                      117
+                    ],
+                    [
+                      1,
+                      115
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "error": "AbortError: signal is aborted without reason",
+      "entered": true,
+      "historyRestored": true,
+      "lateUnchanged": true,
+      "busy": false,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "Expired",
+        "stop": true,
+        "foreign": true
+      },
+      "before": [
+        {
+          "text": "Alpha Alpha\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "text": "Alpha Foreign\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      70
+                    ],
+                    [
+                      1,
+                      111
+                    ],
+                    [
+                      1,
+                      114
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      105
+                    ],
+                    [
+                      1,
+                      103
+                    ],
+                    [
+                      1,
+                      110
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "foreignSnapshot": [
+        {
+          "text": "Alpha Foreign\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      70
+                    ],
+                    [
+                      1,
+                      111
+                    ],
+                    [
+                      1,
+                      114
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      105
+                    ],
+                    [
+                      1,
+                      103
+                    ],
+                    [
+                      1,
+                      110
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "foreignHistoryPreserved": true,
+      "groupClosed": true,
+      "undone": [
+        {
+          "text": "Alpha \n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "redone": [
+        {
+          "text": "Alpha Foreign\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":31.17675,\"r\":296.33333333333337,\"b\":97.49897222222222,\"x\":42.33333333333334,\"y\":31.17675,\"w\":254.00000000000003,\"h\":66.32222222222222}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      1,
+                      65
+                    ],
+                    [
+                      1,
+                      108
+                    ],
+                    [
+                      1,
+                      112
+                    ],
+                    [
+                      1,
+                      104
+                    ],
+                    [
+                      1,
+                      97
+                    ],
+                    [
+                      2,
+                      32
+                    ],
+                    [
+                      1,
+                      70
+                    ],
+                    [
+                      1,
+                      111
+                    ],
+                    [
+                      1,
+                      114
+                    ],
+                    [
+                      1,
+                      101
+                    ],
+                    [
+                      1,
+                      105
+                    ],
+                    [
+                      1,
+                      103
+                    ],
+                    [
+                      1,
+                      110
+                    ]
+                  ]
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "\n",
+          "bounds": "{\"l\":42.33333333333334,\"t\":100.05661111111111,\"r\":296.33333333333337,\"b\":146.05,\"x\":42.33333333333334,\"y\":100.05661111111111,\"w\":254.00000000000003,\"h\":45.9933888888889}",
+          "paragraphs": [
+            {
+              "paragraph": "{\"Ind\":{},\"Spacing\":{},\"Brd\":{}}",
+              "runs": [
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": []
+                },
+                {
+                  "properties": "{\"RFonts\":{},\"Lang\":{\"Val\":2052}}",
+                  "items": [
+                    [
+                      4,
+                      null
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "error": "Error: Paste target has expired",
+      "entered": true,
+      "historyRestored": false,
+      "busy": false,
+      "exact": false
+    }
+  ],
+  "errors": [],
+  "allPassed": false
+}

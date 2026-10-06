@@ -1,0 +1,82 @@
+{
+  "scope": "Existing cached-model desktop Chromium profile warms current production shell and then closes all browser processes. New process starts offline with dead proxy; actual native default GPU inference, cached Worker CSP/body and explicit CDP CSP-respecting eval control. Not physical reboot, Safari, eviction or broad writing quality.",
+  "worker": "webllm.worker-CMk6FPDh.js",
+  "expectedSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+  "status": "completed",
+  "errors": [],
+  "before": [
+    {
+      "cache": "document-editor-runtime-59e2dc593998",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "csp": null,
+      "sha256": "1248840615c89e1bedc0ad3fbcb0b78fa7963defdc5c14e0e65733a5a030dfe5"
+    },
+    {
+      "cache": "document-editor-runtime-59e2dc593998",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    },
+    {
+      "cache": "document-editor-core-1791017387",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  ],
+  "warm": [
+    {
+      "cache": "document-editor-runtime-59e2dc593998",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "csp": null,
+      "sha256": "1248840615c89e1bedc0ad3fbcb0b78fa7963defdc5c14e0e65733a5a030dfe5"
+    },
+    {
+      "cache": "document-editor-runtime-59e2dc593998",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    },
+    {
+      "cache": "document-editor-core-1791017387",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  ],
+  "network": {
+    "rejected": true,
+    "online": false,
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1"
+  },
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "actualWorker": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+  "fingerprint": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+  "evalControl": {
+    "blocked": true,
+    "name": "EvalError",
+    "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval'\".\n"
+  },
+  "cold": [
+    {
+      "cache": "document-editor-runtime-59e2dc593998",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "csp": null,
+      "sha256": "1248840615c89e1bedc0ad3fbcb0b78fa7963defdc5c14e0e65733a5a030dfe5"
+    },
+    {
+      "cache": "document-editor-runtime-59e2dc593998",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    },
+    {
+      "cache": "document-editor-core-1791017387",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  ],
+  "reply": "Hello.",
+  "visibleErrors": []
+}

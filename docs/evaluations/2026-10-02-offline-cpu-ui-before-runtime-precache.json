@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-02T05:00:34.586Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local CPU model then offline reload and actual inference",
+  "status": "failed",
+  "warmEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "serviceWorker": {
+    "controller": true,
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-68889b4854d8",
+      "document-editor-core-1790917216"
+    ]
+  },
+  "error": "TimeoutError: locator.click: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#app iframe').contentFrame().locator('.agent-sidebar-entry')\u001b[22m\n",
+  "errors": [
+    "Failed to fetch dynamically imported module: http://127.0.0.1:5193/assets/agent-plugin-BusDc03l.js",
+    "Failed to fetch dynamically imported module: http://127.0.0.1:5193/assets/recovery-DfLFaApR.js"
+  ],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-BusDc03l.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-BBWgvsIp.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/recovery-DfLFaApR.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    }
+  ],
+  "visibleErrors": []
+}

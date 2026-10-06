@@ -37,9 +37,9 @@ quem visita, por isso os documentos nunca são enviados para lado nenhum e não 
 
 - 🔒 **Nada é enviado** — cada conversão, edição e exportação acontece dentro do separador
 - 📝 **Edição a sério, não pré-visualização** — DOCX, XLSX, PPTX e CSV, além de ODF, RTF, TXT e os antigos formatos binários; os PDF abrem e podem ser anotados
-- 🕓 **Nada se perde ao fechar o separador** — o que edita é guardado no seu próprio navegador, mantido 7 dias e apagável a qualquer momento ([pormenores](#-os-seus-dados-ficam-no-seu-dispositivo))
-- 📴 **Funciona sem ligação** — instalável como PWA; depois da primeira visita não precisa de rede
-- 🌍 **Multilingue** — 8 idiomas de interface para o site e 45 para o editor
+- 🕓 **Nada se perde ao fechar o separador** — o que edita é guardado no seu próprio navegador, mantido 7 dias e apagável a qualquer momento ([pormenores](#-edição-local-e-tratamento-de-dados))
+- 📴 **Funciona sem ligação** — instalável como PWA; os recursos do editor em cache podem ser reutilizados offline; recursos não guardados e ficheiros remotos precisam de rede
+- 🌍 **Multilingue** — 7 idiomas de interface para o site e 45 para o editor
 - 🧩 **Incorporável** — API completa de postMessage para integração em iframe
 - 🤖 **Pronto para agentes** — expõe ferramentas WebMCP para que um agente de IA do navegador abra, converta e leia documentos
 - 🚀 **Implanta-se em qualquer lado** — uma compilação estática; uma pasta de ficheiros atrás de qualquer servidor web
@@ -104,9 +104,9 @@ Parâmetros de `/editor`:
 
 ---
 
-## 🔐 Os seus dados ficam no seu dispositivo
+## 🔐 Edição local e tratamento de dados
 
-Os documentos não são enviados para lugar nenhum. Só ficam duas coisas guardadas localmente,
+A edição e a conversão são realizadas localmente. Só ficam duas coisas guardadas localmente,
 e ambas pode remover:
 
 - **Cópias daquilo que editou.** Enquanto trabalha, o editor guarda o documento neste
@@ -121,6 +121,8 @@ e ambas pode remover:
 eliminar em cada linha, um para eliminar tudo e um interruptor para desligar por completo a
 gravação automática. Eliminar ali tem efeito imediato. Num computador partilhado, é a página
 a visitar.
+
+O assistente de IA integrado ainda não está concluído e não é uma função publicada. Os módulos de IA no repositório são experimentais e não significam que o assistente esteja pronto. Testes de desenvolvimento com um provedor na nuvem podem transmitir instruções e resultados das ferramentas. No modo incorporado, o app anfitrião recebe os arquivos exportados e controla seus envios posteriores.
 
 ---
 
@@ -267,12 +269,21 @@ desenvolvimento, comportamento do Cloudflare Pages e imagem Docker de produção
 
 [AGPL-3.0](LICENSE).
 
-Este projeto é uma obra derivada do ONLYOFFICE (sdkjs e web-apps, (c) Ascensio System
-SIA). O original é distribuído sob a AGPL com termos adicionais da sua Seção 7: o
-logotipo original do produto deve ser mantido e nenhum direito de marca é concedido. Por
-isso o logotipo do ONLYOFFICE no cabeçalho do editor e o painel Sobre continuam
-intactos. O texto completo, a versão do vendor e todas as alterações que fizemos nele
-estão em [NOTICE](NOTICE).
+Este projeto é uma versão modificada dos editores ONLYOFFICE (sdkjs e web-apps,
+copyright de Ascensio System SIA). A interface usa nomes funcionais neutros, sem
+logótipos de produtos ou promoção de marcas. Os avisos de copyright, licenças,
+modificações e ligações ao código-fonte permanecem no painel Sobre e em
+[NOTICE](NOTICE). Os recursos GUI e as fontes de terceiros mantêm as suas licenças.
 
-ONLYOFFICE é uma marca da Ascensio System SIA. Este projeto não é um produto oficial do
-ONLYOFFICE nem tem afiliação ou endosso da Ascensio System SIA.
+A decisão de não apresentar logótipos segue a interpretação publicada pela FSF
+da secção 7 da AGPLv3. Não é apresentada como uma decisão judicial nem como uma
+garantia de conformidade legal. A posição do projeto original e os fundamentos
+da decisão estão documentados em NOTICE.
+
+ONLYOFFICE é uma marca da Ascensio System SIA. Este projeto não é um produto
+oficial e não tem afiliação, patrocínio ou aprovação dessa empresa. Os nomes nos
+avisos legais e nas referências ao código identificam a tecnologia original,
+não a marca deste projeto.
+
+A instalação PWA e as abas do navegador usam um ícone de documento neutro desenhado
+de forma independente, sem logótipos, marcas ou iniciais do projeto.

@@ -1,0 +1,138 @@
+{
+  "scope": "Native PPT text box geometry API probe, isolated default slide; not shipped layout behavior",
+  "result": {
+    "before": {
+      "history": -1,
+      "shapes": [
+        {
+          "text": "\r\n",
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        },
+        {
+          "text": "\r\n",
+          "x": 0,
+          "y": 0,
+          "w": 0,
+          "h": 0
+        }
+      ]
+    },
+    "slideSize": {
+      "width": 338.6666666666667,
+      "height": 190.5
+    },
+    "afterPaste": {
+      "history": 0,
+      "shapes": [
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 31.17675,
+          "w": 254,
+          "h": 66.32222222222222
+        },
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 100.05661111111111,
+          "w": 254,
+          "h": 45.99338888888889
+        },
+        {
+          "text": "Readable content\r\nAlex · 1,250 EUR · 2026-10-08\r\nNOT approved\r\n",
+          "x": 129.18581990559898,
+          "y": 82.55,
+          "w": 80.29502685546876,
+          "h": 25.4
+        }
+      ]
+    },
+    "available": {
+      "ImgApply": "function",
+      "group": "function"
+    }
+  },
+  "layout": {
+    "after": {
+      "history": 1,
+      "shapes": [
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 31.17675,
+          "w": 254,
+          "h": 66.32222222222222
+        },
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 100.05661111111111,
+          "w": 254,
+          "h": 45.99338888888889
+        },
+        {
+          "text": "Readable content\r\nAlex · 1,250 EUR · 2026-10-08\r\nNOT approved\r\n",
+          "x": 20,
+          "y": 110,
+          "w": 220.01,
+          "h": 33.03
+        }
+      ]
+    },
+    "afterUndo": {
+      "history": 0,
+      "shapes": [
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 31.17675,
+          "w": 254,
+          "h": 66.32222222222222
+        },
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 100.05661111111111,
+          "w": 254,
+          "h": 45.99338888888889
+        },
+        {
+          "text": "Readable content\r\nAlex · 1,250 EUR · 2026-10-08\r\nNOT approved\r\n",
+          "x": 129.18581990559898,
+          "y": 82.55,
+          "w": 80.29502685546876,
+          "h": 25.4
+        }
+      ]
+    },
+    "afterSecondUndo": {
+      "history": -1,
+      "shapes": [
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 31.17675,
+          "w": 254,
+          "h": 66.32222222222222
+        },
+        {
+          "text": "\r\n",
+          "x": 42.333333333333336,
+          "y": 100.05661111111111,
+          "w": 254,
+          "h": 45.99338888888889
+        }
+      ]
+    }
+  },
+  "status": "completed",
+  "limitations": [
+    "Native SDK feasibility on default desktop slide, not shipped IM layout.",
+    "Height is auto-adjusted; actual bounds must be read back.",
+    "Hardcoded probe position is not a general placement policy.",
+    "Async multilingual paste and grouped history behavior still need verification."
+  ]
+}

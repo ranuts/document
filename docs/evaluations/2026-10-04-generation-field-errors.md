@@ -1,0 +1,9 @@
+# Field-specific generation setting errors
+
+Previously any invalid setting marked every generation field aria-invalid=true, including valid system prompts. Each field now uses the same generation-option normalizer independently to compute its accessibility error state. Whole-form validation still prevents committing a partially invalid draft and retains the last good configuration. There is no added confirmation or UI step.
+
+A regression test first failed because a valid prompt was marked invalid. The corrected test covers two simultaneous invalid values, correcting just one, retaining the previous configuration until all values are valid, and accepting temperature 0.35 (request-valid despite the HTML step hint). Build, 116 test files / 4200 tests, and lint passed. Independent review found no Important issue.
+
+Actual browser IM settings validation with local WebGPU Qwen3-1.7B shows maxTokens=99999 sets only that field's aria-invalid=true. Correcting settings clears all field errors. A subsequent real streaming request contains the configured system prompt, temperature 0.4, top_p 0.85 and max_tokens 96; the model replies Hello and visible generation statistics are present. Native document text stays empty. The verifier checks exact validity maps, outgoing request parameters and driver SHA-256.
+
+Scope: accessibility attributes and form recovery, not a new visual error style or screen-reader certification. Multiple simultaneous errors and last-good retention have unit coverage; this browser sample covers a single invalid token field followed by correction. One warm owned Chromium GPU profile, English UI, service workers blocked and network available. CPU, other locales, offline/privacy/physical-device acceptance are not established. Inherited empty-document Undo/Redo snapshots provide no meaningful history evidence and are not used.

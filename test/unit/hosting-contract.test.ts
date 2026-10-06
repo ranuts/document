@@ -38,6 +38,19 @@ describe('public/_headers', () => {
   const rules = parseHeaders(read('public/_headers'));
   const cc = (path: string) => rules[path]?.['cache-control'];
 
+  it('restricts executable code only on the WebLLM Worker response', () => {
+    expect(rules['/assets/webllm.worker-*.js']?.['content-security-policy']).toBe(
+      "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+    );
+    for (const path of ['/*', '/assets/*', '/web-apps/*', '/sdkjs/*'])
+      expect(rules[path]?.['content-security-policy']).toBeUndefined();
+  });
+
+  it('enables local WASM multithreading on every static response', () => {
+    expect(rules['/*']?.['cross-origin-opener-policy']).toBe('same-origin');
+    expect(rules['/*']?.['cross-origin-embedder-policy']).toBe('require-corp');
+  });
+
   it('keeps deploy-coupled files uncacheable (a stale one breaks the shell)', () => {
     const deployCoupled = [
       '/sw.js',
@@ -123,6 +136,24 @@ describe('sws.toml (self-hosted Docker)', () => {
       return { source, headers };
     });
   const cc = (source: string) => rules.find((rule) => rule.source === source)?.headers['cache-control'];
+
+  it('restricts only the WebLLM Worker in the Docker host', () => {
+    const policyRules = rules.filter((rule) => rule.headers['content-security-policy']);
+    expect(policyRules).toEqual([
+      {
+        source: '/assets/webllm.worker-*.js',
+        headers: {
+          'content-security-policy':
+            "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+        },
+      },
+    ]);
+  });
+
+  it('enables the same isolation policy in the self-hosted image', () => {
+    expect(rules[0]?.headers['cross-origin-opener-policy']).toBe('same-origin');
+    expect(rules[0]?.headers['cross-origin-embedder-policy']).toBe('require-corp');
+  });
 
   it('defaults every path to revalidation, so a new image is actually served', () => {
     expect(rules[0]?.source).toBe('**');

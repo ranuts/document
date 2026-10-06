@@ -1,0 +1,947 @@
+{
+  "scope": "Actual dedicated module Worker fastText Wasm classification in isolated Chromium; route-local experiment, warmed initialized worker tested offline. Not shipped hosting/CSP, reload/cold-offline or calibrated acceptance.",
+  "driverSHA256": "52b9477478f278ace5aedaa9b2d2caec8ec404d14d4967558c67abcfdc1cdc22",
+  "bindingSHA256": "a65d76ac58c5d917ea92d39b1365fa79836ac4e1b877fe592ac5f6b017f1ed49",
+  "artifacts": {
+    "": {
+      "bytes": 75,
+      "sha256": "450088ba743605703aa9f36c5b1cab77cdfae0f255e2745c94554ccdef676c1f"
+    },
+    "worker.js": {
+      "bytes": 666,
+      "sha256": "36cbd5a2debfab59cb554efe391d2bc2da839a0a0a461fbfb8a6c13d96ae2163"
+    },
+    "language_probe.js": {
+      "bytes": 104146,
+      "sha256": "eb86e599062d80db1b8100aa4a06bbdd402cbbb2705199f237147516bc421426"
+    },
+    "language_probe.wasm": {
+      "bytes": 238930,
+      "sha256": "d6b5b57a39ffb358145d2dad3068c36e587c2f568670524ceaa7e93f2338269d"
+    },
+    "lid.176.ftz": {
+      "bytes": 938013,
+      "sha256": "8f3472cfe8738a7b6099e8e999c3cbfae0dcd15696aac7d7738a8039db603e83"
+    }
+  },
+  "errors": [],
+  "requests": [
+    "http://127.0.0.1:5193/language-probe/",
+    "http://127.0.0.1:5193/language-probe/worker.js",
+    "http://127.0.0.1:5193/language-probe/language_probe.js",
+    "http://127.0.0.1:5193/language-probe/language_probe.wasm",
+    "http://127.0.0.1:5193/language-probe/lid.176.ftz"
+  ],
+  "nativeReportSHA256": "f89d9851a235639b1855750632f64844df6a9ca1fe310eae1f0ea05d4c36e935",
+  "ready": {
+    "ready": true,
+    "initMs": 72.5,
+    "linearMemoryBytes": null
+  },
+  "offline": true,
+  "result": {
+    "predictions": [
+      [
+        {
+          "language": "zh",
+          "score": 0.9997144937515259
+        },
+        {
+          "language": "sr",
+          "score": 0.00010428662790218368
+        },
+        {
+          "language": "wuu",
+          "score": 0.00007878554606577381
+        }
+      ],
+      [
+        {
+          "language": "da",
+          "score": 0.3886198401451111
+        },
+        {
+          "language": "nn",
+          "score": 0.10629990696907043
+        },
+        {
+          "language": "sv",
+          "score": 0.1002315804362297
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9951045513153076
+        },
+        {
+          "language": "ja",
+          "score": 0.0019236222142353654
+        },
+        {
+          "language": "wuu",
+          "score": 0.0018412003992125392
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9549662470817566
+        },
+        {
+          "language": "ml",
+          "score": 0.0033066689502447844
+        },
+        {
+          "language": "kn",
+          "score": 0.0030406545847654343
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9513354897499084
+        },
+        {
+          "language": "ru",
+          "score": 0.002415162744000554
+        },
+        {
+          "language": "es",
+          "score": 0.0021626504603773355
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9974430203437805
+        },
+        {
+          "language": "wuu",
+          "score": 0.0012491133529692888
+        },
+        {
+          "language": "ja",
+          "score": 0.001097117317840457
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9951045513153076
+        },
+        {
+          "language": "ja",
+          "score": 0.0019236222142353654
+        },
+        {
+          "language": "wuu",
+          "score": 0.0018412003992125392
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.8815329074859619
+        },
+        {
+          "language": "wuu",
+          "score": 0.10195997357368469
+        },
+        {
+          "language": "yue",
+          "score": 0.011409014463424683
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9513354897499084
+        },
+        {
+          "language": "ru",
+          "score": 0.002415162744000554
+        },
+        {
+          "language": "es",
+          "score": 0.0021626504603773355
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9529567360877991
+        },
+        {
+          "language": "hi",
+          "score": 0.003028170671314001
+        },
+        {
+          "language": "kn",
+          "score": 0.0027819012757390738
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9942148327827454
+        },
+        {
+          "language": "ja",
+          "score": 0.003097075503319502
+        },
+        {
+          "language": "ko",
+          "score": 0.0011050046887248755
+        }
+      ],
+      [
+        {
+          "language": "ja",
+          "score": 0.4401163160800934
+        },
+        {
+          "language": "zh",
+          "score": 0.14167557656764984
+        },
+        {
+          "language": "en",
+          "score": 0.04568077623844147
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9962083101272583
+        },
+        {
+          "language": "ja",
+          "score": 0.002490678336471319
+        },
+        {
+          "language": "en",
+          "score": 0.00033684319350868464
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9251198172569275
+        },
+        {
+          "language": "de",
+          "score": 0.0109444884583354
+        },
+        {
+          "language": "zh",
+          "score": 0.007531788200139999
+        }
+      ],
+      [
+        {
+          "language": "ja",
+          "score": 0.9997869729995728
+        },
+        {
+          "language": "es",
+          "score": 0.00017731871048454195
+        },
+        {
+          "language": "uk",
+          "score": 0.000038532882172148675
+        }
+      ],
+      [
+        {
+          "language": "ja",
+          "score": 0.5912192463874817
+        },
+        {
+          "language": "zh",
+          "score": 0.4084232449531555
+        },
+        {
+          "language": "wuu",
+          "score": 0.0002442929253447801
+        }
+      ],
+      [
+        {
+          "language": "ko",
+          "score": 1.0000697374343872
+        },
+        {
+          "language": "tr",
+          "score": 0.000010000403563026339
+        },
+        {
+          "language": "en",
+          "score": 0.000010000098882301245
+        }
+      ],
+      [
+        {
+          "language": "ko",
+          "score": 1.0000696182250977
+        },
+        {
+          "language": "tr",
+          "score": 0.000010000403563026339
+        },
+        {
+          "language": "en",
+          "score": 0.000010000098882301245
+        }
+      ],
+      [
+        {
+          "language": "de",
+          "score": 0.9973013997077942
+        },
+        {
+          "language": "fr",
+          "score": 0.0005706838564947248
+        },
+        {
+          "language": "en",
+          "score": 0.0005390855949372053
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9529567360877991
+        },
+        {
+          "language": "hi",
+          "score": 0.003028170671314001
+        },
+        {
+          "language": "kn",
+          "score": 0.0027819012757390738
+        }
+      ],
+      [
+        {
+          "language": "es",
+          "score": 0.9875695705413818
+        },
+        {
+          "language": "pt",
+          "score": 0.002160771284252405
+        },
+        {
+          "language": "gl",
+          "score": 0.0018659052439033985
+        }
+      ],
+      [
+        {
+          "language": "pt",
+          "score": 0.9992921948432922
+        },
+        {
+          "language": "en",
+          "score": 0.0006123562925495207
+        },
+        {
+          "language": "mk",
+          "score": 0.0000585451525694225
+        }
+      ],
+      [
+        {
+          "language": "pt",
+          "score": 0.9993304014205933
+        },
+        {
+          "language": "en",
+          "score": 0.0005319462507031858
+        },
+        {
+          "language": "mk",
+          "score": 0.00008531252387911081
+        }
+      ],
+      [
+        {
+          "language": "pt",
+          "score": 0.9989876747131348
+        },
+        {
+          "language": "en",
+          "score": 0.0008527962490916252
+        },
+        {
+          "language": "mk",
+          "score": 0.000056221946579171345
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.952070951461792
+        },
+        {
+          "language": "hi",
+          "score": 0.0026900507509708405
+        },
+        {
+          "language": "es",
+          "score": 0.002558738924562931
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9709617495536804
+        },
+        {
+          "language": "de",
+          "score": 0.002963686129078269
+        },
+        {
+          "language": "th",
+          "score": 0.0016228234162554145
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.952070951461792
+        },
+        {
+          "language": "hi",
+          "score": 0.0026900507509708405
+        },
+        {
+          "language": "es",
+          "score": 0.002558738924562931
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9362332820892334
+        },
+        {
+          "language": "de",
+          "score": 0.007666311226785183
+        },
+        {
+          "language": "ru",
+          "score": 0.0035174007061868906
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9998102784156799
+        },
+        {
+          "language": "ja",
+          "score": 0.0001769435330061242
+        },
+        {
+          "language": "en",
+          "score": 0.00002536899955885019
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9985321760177612
+        },
+        {
+          "language": "wuu",
+          "score": 0.00040201019146479666
+        },
+        {
+          "language": "ko",
+          "score": 0.00034986541140824556
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9998102784156799
+        },
+        {
+          "language": "ja",
+          "score": 0.0001769435330061242
+        },
+        {
+          "language": "en",
+          "score": 0.00002536899955885019
+        }
+      ],
+      [
+        {
+          "language": "da",
+          "score": 0.8793919086456299
+        },
+        {
+          "language": "no",
+          "score": 0.07104682922363281
+        },
+        {
+          "language": "de",
+          "score": 0.008290468715131283
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.88994961977005
+        },
+        {
+          "language": "it",
+          "score": 0.016043124720454216
+        },
+        {
+          "language": "pt",
+          "score": 0.013127363286912441
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9321421384811401
+        },
+        {
+          "language": "fr",
+          "score": 0.0061182426288723946
+        },
+        {
+          "language": "de",
+          "score": 0.003682709764689207
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.88994961977005
+        },
+        {
+          "language": "it",
+          "score": 0.016043124720454216
+        },
+        {
+          "language": "pt",
+          "score": 0.013127363286912441
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9321421384811401
+        },
+        {
+          "language": "fr",
+          "score": 0.0061182426288723946
+        },
+        {
+          "language": "de",
+          "score": 0.003682709764689207
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9272930026054382
+        },
+        {
+          "language": "id",
+          "score": 0.004044383764266968
+        },
+        {
+          "language": "de",
+          "score": 0.003958789631724358
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.8567960858345032
+        },
+        {
+          "language": "de",
+          "score": 0.010192681103944778
+        },
+        {
+          "language": "nl",
+          "score": 0.008132240734994411
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9272930026054382
+        },
+        {
+          "language": "id",
+          "score": 0.004044383764266968
+        },
+        {
+          "language": "de",
+          "score": 0.003958789631724358
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.7977977991104126
+        },
+        {
+          "language": "de",
+          "score": 0.018028689548373222
+        },
+        {
+          "language": "nl",
+          "score": 0.012959616258740425
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9844814538955688
+        },
+        {
+          "language": "ja",
+          "score": 0.0153362937271595
+        },
+        {
+          "language": "en",
+          "score": 0.00005910000982112251
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9999702572822571
+        },
+        {
+          "language": "en",
+          "score": 0.00003938486406696029
+        },
+        {
+          "language": "ja",
+          "score": 0.000027264375603408553
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9844814538955688
+        },
+        {
+          "language": "ja",
+          "score": 0.0153362937271595
+        },
+        {
+          "language": "en",
+          "score": 0.00005910000982112251
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9918874502182007
+        },
+        {
+          "language": "ja",
+          "score": 0.007201911881566048
+        },
+        {
+          "language": "wuu",
+          "score": 0.0004337432619649917
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9813228845596313
+        },
+        {
+          "language": "hi",
+          "score": 0.0014451568713411689
+        },
+        {
+          "language": "kn",
+          "score": 0.0008442051475867629
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.858343780040741
+        },
+        {
+          "language": "hi",
+          "score": 0.009102649986743927
+        },
+        {
+          "language": "es",
+          "score": 0.007304962258785963
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9813228845596313
+        },
+        {
+          "language": "hi",
+          "score": 0.0014451568713411689
+        },
+        {
+          "language": "kn",
+          "score": 0.0008442051475867629
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.8476176261901855
+        },
+        {
+          "language": "fr",
+          "score": 0.014381252229213715
+        },
+        {
+          "language": "hi",
+          "score": 0.009808994829654694
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.6169840693473816
+        },
+        {
+          "language": "en",
+          "score": 0.19567754864692688
+        },
+        {
+          "language": "ko",
+          "score": 0.05913151428103447
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9251198172569275
+        },
+        {
+          "language": "de",
+          "score": 0.0109444884583354
+        },
+        {
+          "language": "zh",
+          "score": 0.007531788200139999
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.6169840693473816
+        },
+        {
+          "language": "en",
+          "score": 0.19567754864692688
+        },
+        {
+          "language": "ko",
+          "score": 0.05913151428103447
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9220798015594482
+        },
+        {
+          "language": "id",
+          "score": 0.009073848836123943
+        },
+        {
+          "language": "de",
+          "score": 0.0056803226470947266
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.6169840693473816
+        },
+        {
+          "language": "en",
+          "score": 0.19567754864692688
+        },
+        {
+          "language": "ko",
+          "score": 0.05913151428103447
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.8904138803482056
+        },
+        {
+          "language": "es",
+          "score": 0.010607914067804813
+        },
+        {
+          "language": "zh",
+          "score": 0.007861577905714512
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.97022545337677
+        },
+        {
+          "language": "wuu",
+          "score": 0.00950685515999794
+        },
+        {
+          "language": "en",
+          "score": 0.0046087950468063354
+        }
+      ],
+      [
+        {
+          "language": "ja",
+          "score": 0.7084055542945862
+        },
+        {
+          "language": "zh",
+          "score": 0.26155343651771545
+        },
+        {
+          "language": "es",
+          "score": 0.00918446946889162
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9909687638282776
+        },
+        {
+          "language": "ja",
+          "score": 0.006270307116210461
+        },
+        {
+          "language": "wuu",
+          "score": 0.0006620999192818999
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.45778077840805054
+        },
+        {
+          "language": "it",
+          "score": 0.06805206835269928
+        },
+        {
+          "language": "fr",
+          "score": 0.05026296153664589
+        }
+      ],
+      [
+        {
+          "language": "es",
+          "score": 0.9766849279403687
+        },
+        {
+          "language": "pt",
+          "score": 0.009170307777822018
+        },
+        {
+          "language": "gl",
+          "score": 0.0028237635269761086
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.9911859035491943
+        },
+        {
+          "language": "kn",
+          "score": 0.000685140723362565
+        },
+        {
+          "language": "ru",
+          "score": 0.0006703512626700103
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 1.0000089406967163
+        },
+        {
+          "language": "sr",
+          "score": 0.00002868224328267388
+        },
+        {
+          "language": "wuu",
+          "score": 0.00001796529431885574
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.729376494884491
+        },
+        {
+          "language": "de",
+          "score": 0.05564899742603302
+        },
+        {
+          "language": "hu",
+          "score": 0.021523023024201393
+        }
+      ],
+      [
+        {
+          "language": "zh",
+          "score": 0.9729512929916382
+        },
+        {
+          "language": "ja",
+          "score": 0.014954307116568089
+        },
+        {
+          "language": "en",
+          "score": 0.005252918228507042
+        }
+      ],
+      [
+        {
+          "language": "en",
+          "score": 0.8888503313064575
+        },
+        {
+          "language": "de",
+          "score": 0.024628281593322754
+        },
+        {
+          "language": "nl",
+          "score": 0.010101842693984509
+        }
+      ]
+    ],
+    "inferenceMs": 6.099999904632568,
+    "linearMemoryBytes": null
+  },
+  "requestsAfterOffline": [],
+  "nativeParity": true,
+  "passed": true
+}

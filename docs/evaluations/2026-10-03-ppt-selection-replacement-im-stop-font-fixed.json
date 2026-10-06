@@ -1,0 +1,797 @@
+{
+  "status": "completed",
+  "scope": "Production IM local model PPT selected-text replacement, exact Unicode/tabs/line breaks and native Undo/Redo",
+  "errors": [],
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BiUnm7sH.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "before": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alpha Alpha\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "literal": "项目 😀\tPayment\n  NOT approved  ",
+  "pending": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alpha \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 2
+  },
+  "afterStop": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alpha Alpha\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "feedback": [
+    "Stopped.Restore request"
+  ],
+  "afterLate": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alpha Alpha\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "native": {
+    "preserved": true,
+    "busy": false,
+    "pasteStart": false
+  },
+  "redone": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alpha AlphaPrevious\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 80
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 114
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 118
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 105
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 111
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 117
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 115
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 1
+  },
+  "next": {
+    "prompt": "Replace the selected text with exactly the following text:Next",
+    "elapsedMs": 887,
+    "feedback": [
+      "Done. Result checked; use Undo if needed."
+    ],
+    "visibleErrors": [],
+    "previewCount": 0
+  },
+  "afterNext": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alpha Next\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 78
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 116
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 1
+  },
+  "nextUndo": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alpha Alpha\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 112
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 104
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "allPassed": true
+}

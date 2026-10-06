@@ -1,0 +1,55 @@
+{
+  "scope": "Actual cached CPU Qwen 0.6B Stop, controlled hold of native Worker reinitialization messages, editable draft with disabled model-dependent Send/Enter, native-direct exemption, resume real initialization, manual next inference. No download stall, partial response, or physical mobile claim.",
+  "errors": [],
+  "loading": {
+    "draft": "Please reply with only hello.",
+    "inputDisabled": false,
+    "sendDisabled": true,
+    "userCount": 1,
+    "status": "Preparing AI\u2026 \u00b7 CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+    "settingsExpanded": "false",
+    "held": 2,
+    "constructed": 2,
+    "terminated": 1
+  },
+  "afterEnter": {
+    "draft": "Please reply with only hello.",
+    "inputDisabled": false,
+    "sendDisabled": true,
+    "userCount": 1,
+    "status": "Preparing AI\u2026 \u00b7 CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+    "settingsExpanded": "false",
+    "held": 2,
+    "constructed": 2,
+    "terminated": 1
+  },
+  "directAvailability": {
+    "draft": "\u5199\u5230\u5f53\u524d\u7684\u6587\u6863\u4e0a",
+    "inputDisabled": false,
+    "sendDisabled": false,
+    "userCount": 1,
+    "status": "Preparing AI\u2026 \u00b7 CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+    "settingsExpanded": "false",
+    "held": 2,
+    "constructed": 2,
+    "terminated": 1
+  },
+  "ready": {
+    "draft": "Please reply with only hello.",
+    "inputDisabled": false,
+    "sendDisabled": false,
+    "userCount": 1,
+    "status": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+    "settingsExpanded": "false",
+    "held": 2,
+    "constructed": 2,
+    "terminated": 1
+  },
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "previewCount": 0,
+  "passed": true,
+  "probeSource": "probe-im-loading-send-readiness-initial.mjs",
+  "probeSHA256": "8c56881fa68f94718d114f0b9af5d6d65c348076a00cce61caccf85bc70b8791",
+  "scopeNote": "Initial instrumentation can hold existing-generation messages as well as new initialization; the stricter subsequent probe holds only later Worker instances."
+}

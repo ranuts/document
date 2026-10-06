@@ -1,41 +1,41 @@
 ---
-title: Editor de documentos sin conexión — edita DOCX, XLSX y PPTX sin internet
-description: Un editor de documentos que funciona sin internet: ideal en un Chromebook, un portátil o Android. Edita DOCX, XLSX, PPTX y CSV en local, en tu navegador. Gratis, de código abierto, instalable, no se sube nada.
+title: 'Editor de documentos sin conexión — edita DOCX, XLSX y PPTX sin internet'
+description: 'Edita DOCX, XLSX, PPTX y CSV sin conexión con la aplicación, motor y fuentes previamente almacenados.'
 eyebrow: Sin conexión · PWA
 h1: Un editor de documentos que funciona sin internet
-lead: Edita archivos de Word, Excel y PowerPoint sin conexión: en un Chromebook, en un portátil dentro de un avión o en una tableta Android. Instálalo una vez y seguirá funcionando sin conexión, por completo en tu dispositivo.
+lead: 'Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.'
 cta: Abrir el editor →
 ctaHref: /es/
-ogDescription: Editor de documentos sin conexión para Chromebook, portátil y Android. Edita DOCX, XLSX y PPTX en local. Código abierto, nada se sube.
+ogDescription: 'Edita DOCX, XLSX, PPTX y CSV sin conexión con la aplicación, motor y fuentes previamente almacenados.'
 breadcrumb: Editor sin conexión
 howTo: Cómo usar el editor de documentos sin conexión
-appDescription: Un editor de documentos sin conexión que funciona en el navegador: edita DOCX, XLSX, PPTX y CSV sin internet.
+appDescription: 'Edita DOCX, XLSX, PPTX y CSV sin conexión con la aplicación, motor y fuentes previamente almacenados.'
 ---
 
-Como toda la edición se ejecuta en local, en tu navegador, con WebAssembly — no hay servidor —, no necesita internet para funcionar. Cárgalo una vez, instálalo como aplicación (PWA) y podrás abrir y editar documentos en cualquier parte, incluso completamente sin conexión. Tus archivos nunca salen de tu dispositivo.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento.
 
-La primera vez que cargas la página, un service worker guarda en tu dispositivo el armazón de la aplicación y el motor de OnlyOffice. A partir de ahí el editor arranca directamente desde esa caché, así que abre al instante y sigue funcionando sin conexión: en un avión, en el metro o donde el wifi va a trompicones. Los archivos se abren desde tu propio dispositivo y se guardan en él, y puedes editar DOCX, XLSX, PPTX y CSV y exportar a PDF, TXT, HTML o CSV, todo sin red.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
 
 ## Cómo funciona
 
-1. Abre el editor una vez con conexión, para que la aplicación y el motor queden en tu dispositivo.
-2. Instálalo como aplicación (PWA): usa la opción de instalar del navegador, o «Añadir a la pantalla de inicio» en el móvil.
-3. Sin conexión, abre la aplicación instalada como cualquier otra.
-4. Abre un DOCX, XLSX, PPTX o CSV, edítalo y vuelve a descargarlo: todo sin conexión.
+1. Abre el editor con conexión y prueba los formatos, fuentes y exportaciones necesarios. Después desconecta y verifica el mismo flujo antes de depender del modo sin conexión.
+2. Instalar la PWA es opcional: usa la opción del navegador o Añadir a pantalla de inicio. La instalación no garantiza que todos los recursos estén en caché.
+3. Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
+4. En Chrome, Edge y otros navegadores con File System Access API, el primer guardado permite elegir un archivo y los siguientes escriben en él. Otros navegadores descargan una copia. Exporta otros formatos desde Archivo → Descargar como. Las copias de recuperación del navegador son independientes del archivo guardado.
 
 ## Por qué funciona sin conexión
 
-- **Sin servidor**: el editor entero se ejecuta en tu dispositivo, así que no hace falta conexión
+- Los recursos de edición en caché funcionan sin conexión; las URL de archivos remotos necesitan red.
 - **PWA instalable**: añádelo a la pantalla de inicio o al escritorio y ábrelo como una aplicación
 - **Funciona en todas partes**: Chromebook, Windows, macOS, Linux, Android; cualquier navegador moderno
 - Edita DOCX, XLSX, PPTX y CSV
-- Sin subidas, sin cuenta, sin registro
+- En la edición básica local: Sin subidas, sin cuenta, sin registro
 
 ## Preguntas frecuentes
 
 ### ¿De verdad funciona sin conexión?
 
-Sí. Una vez cargada es una PWA instalable y sigue funcionando sin internet: toda la edición se ejecuta en local.
+La edición sin conexión requiere que el navegador conserve en caché la aplicación, el motor, el conversor y las fuentes y recursos de formato necesarios. Una visita o la instalación de la PWA no lo garantiza. Las URL de archivos remotos necesitan conexión.
 
 ### ¿Funciona en un Chromebook?
 
@@ -43,7 +43,7 @@ Sí. Funciona en cualquier navegador moderno: Chromebook, portátil, Windows, ma
 
 ### ¿Se suben mis archivos?
 
-No. No hay servidor; los archivos se quedan en tu dispositivo y nunca se suben.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Qué formatos puedo editar?
 
@@ -55,8 +55,16 @@ Usa el icono de instalar de la barra de direcciones de Chrome o Edge, o «Añadi
 
 ### ¿Necesito estar en línea la primera vez?
 
-Sí. Cárgalo una vez con conexión para que la aplicación y el motor queden en caché; después funciona sin conexión.
+Abre el editor con conexión y prueba los formatos, fuentes y exportaciones necesarios. Después desconecta y verifica el mismo flujo antes de depender del modo sin conexión.
 
 ### ¿Dónde se guardan mis archivos sin conexión?
 
-Los archivos se abren desde tu propio dispositivo y se guardan en él: no interviene ningún servidor.
+En Chrome, Edge y otros navegadores con File System Access API, el primer guardado permite elegir un archivo y los siguientes escriben en él. Otros navegadores descargan una copia. Exporta otros formatos desde Archivo → Descargar como. Las copias de recuperación del navegador son independientes del archivo guardado. Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
+
+### ¿Qué queda después de cerrar la pestaña?
+
+Con el guardado automático activado, las copias de recuperación permanecen en la IndexedDB de este navegador durante 7 días desde la última edición o apertura. Cerrar la pestaña no las elimina. En /history puedes borrar copias o desactivar el guardado automático. El navegador puede borrar o desalojar su almacenamiento y perder cambios aún no guardados; la recuperación no sustituye guardar el archivo.
+
+### ¿Está disponible un asistente de IA integrado?
+
+El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

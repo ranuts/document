@@ -1,0 +1,236 @@
+{
+  "status": "failed",
+  "scope": "Actual production local-model IM Word replacement with native track revisions enabled; exact canonical native-item text and character review types, unchanged neighbor, native Undo/Redo and visible error checks. Native Save/download and homepage reopen, no preview card; no external Word/OS overwrite claim.",
+  "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "language": "zh",
+  "replacement": "项目 😀 Payment · NOT approved",
+  "results": [],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BqZXDFtf.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "setup": {
+    "text": "A😀pha\t target body\r\nNeighbor unchanged\r\n",
+    "nativeText": "Apha  target body\r\nNeighbor unchanged\r\n",
+    "selected": "A😀pha\t",
+    "paragraphs": [
+      {
+        "text": "A😀pha\t target body\r\n",
+        "nativeText": "Apha  target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "😀",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "p",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "y",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\r\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "nativeText": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "i",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "u",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "c",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\r\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      }
+    ]
+  },
+  "requestedMode": true,
+  "modeRequest": {
+    "prompt": "启用当前文档的修订模式",
+    "feedback": [],
+    "errors": [
+      "No executable operation was selected. Clarify the request or try another model.Restore request"
+    ],
+    "previewCount": 0
+  },
+  "error": "Error: IM mode request did not complete"
+}

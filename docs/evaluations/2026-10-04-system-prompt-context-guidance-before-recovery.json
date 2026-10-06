@@ -1,0 +1,82 @@
+{
+  "currentPlugin": "agent-plugin-DPWKbEZ4.js",
+  "scope": "Current dist real CPU model: valid 1900-character system prompt plus short greeting; test whether user-message byte budget accounts for actual system/template tokens. GPU reload failure is injected to select CPU.",
+  "offlineRequests": [],
+  "probeSHA256": "8ca5365e14f4a3d3bb58fa3ae390f80c3cc461c16fc343573e65d68ba2041dc2",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "selectedProvider": "webllm",
+      "gpuPresent": true,
+      "failedGpuLoads": 1,
+      "gpuTerminations": 2,
+      "coldState": {
+        "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+        "isolated": true
+      },
+      "browserOnline": true,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "modelWorkers": [
+        "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+        "blob:http://127.0.0.1:5193/4836ab61-bb1b-43c2-9c6a-8710e157be8b",
+        "blob:http://127.0.0.1:5193/2b105633-2e85-4ce1-9827-38af707a89e0",
+        "blob:http://127.0.0.1:5193/e45ff105-cced-4569-8f8e-364a633e2aa4",
+        "blob:http://127.0.0.1:5193/055fdb77-b5b2-4419-8789-2914e8b6521d",
+        "blob:http://127.0.0.1:5193/c02aa105-9c2f-4077-8fc6-23dc269837bc"
+      ],
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [
+        "This request is too long. Shorten the selected passage or your custom system prompt, or split the task.Restore request"
+      ],
+      "previews": 0,
+      "stats": "",
+      "replies": [],
+      "systemPromptCharacters": 1900,
+      "systemPromptUtf8Bytes": 5700,
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "seedResources": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/ran-fonts/fonts.css",
+    "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+    "http://127.0.0.1:5193/assets/editor-DvVHlQiR.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/input-DEoPNM0j-CYJn2sbW.js",
+    "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+    "http://127.0.0.1:5193/assets/agent-plugin-DPWKbEZ4.js",
+    "http://127.0.0.1:5193/assets/input-B0MAkvvr.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+    "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+    "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+    "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/icons/document-light.svg",
+    "http://127.0.0.1:5193/assets/wllama-XMlyubPs.js",
+    "http://127.0.0.1:5193/assets/esm-BmP3Hx_J.js"
+  ],
+  "seedState": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "isolated": true
+  },
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "status": "completed"
+}

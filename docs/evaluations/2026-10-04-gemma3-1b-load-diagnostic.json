@@ -1,0 +1,405 @@
+{
+  "date": "2026-10-03T21:23:22.446Z",
+  "scope": "Experimental SDK-catalog Gemma 3 1B MLC model, current production writing route, same previously predeclared 21 seven-language rewrite/summary/translation fixtures; not fresh heldout data or identical model-specific prompt tokens. One fixed-order sample each, not general heldout accuracy. Current production temperature0/schema/prompt/guards retained (including unchanged-translation rejection); route-local raw response/input recording. Selected translation target through actual IM control. Native Word Undo/Redo, no preview or product change.",
+  "modelId": "gemma3-1b-it-q4f16_1-MLC",
+  "status": "failed",
+  "probeSHA256": "4545dd6399ac4c20b5f6e1470ba1c2cbfdefbf1e2f4be9b4f90db3c340f10e93",
+  "variants": [
+    "current"
+  ],
+  "repetitions": 1,
+  "cases": [
+    {
+      "id": "summary-zh-CN",
+      "task": "summarize",
+      "language": "zh-CN",
+      "source": "Rika 提议在 2044-09-23 运送价值 430 PLN 的 11 个过滤器，但仅限安全检查通过后。检查尚未完成，发货尚未获准。另一场会议将讨论停车位。",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-zh-CN",
+      "task": "rewrite",
+      "language": "zh-CN",
+      "source": "嘿，Neri 会在 2043-08-17 付给 Alba 230 EUR，修理 5 个阀门的钱哦！Alba 可不会反过来付给 Neri。",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-zh-CN",
+      "task": "translate",
+      "language": "zh-CN",
+      "targetLanguage": "zh-CN",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-en",
+      "task": "summarize",
+      "language": "en",
+      "source": "Rika proposed shipping 11 filters worth 430 PLN on 2044-09-23, only if the safety inspection passes. The inspection is pending and shipping has not been authorized. A separate meeting will discuss parking spaces.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-en",
+      "task": "rewrite",
+      "language": "en",
+      "source": "Hey, Neri is gonna pay Alba 230 EUR on 2043-08-17 for fixing 5 valves, okay? Alba is not gonna pay Neri back.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-en",
+      "task": "translate",
+      "language": "en",
+      "targetLanguage": "en",
+      "source": "Zara 指控 Teo 在 2045-02-11 更换了 9 个传感器。Teo 否认了这一指控，且没有调查证实此事。",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-ja",
+      "task": "summarize",
+      "language": "ja",
+      "source": "Rika は、2044-09-23 に 430 PLN 相当のフィルター 11 個を発送することを提案した。ただし、安全検査に合格した場合に限る。検査は未完了で、発送はまだ承認されていない。別の会議では駐車場所を話し合う。",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-ja",
+      "task": "rewrite",
+      "language": "ja",
+      "source": "ねえ、Neri は 2043-08-17 に、バルブ 5 個の修理代として Alba に 230 EUR を払うんだよ！Alba が Neri に払うわけじゃないよ。",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-ja",
+      "task": "translate",
+      "language": "ja",
+      "targetLanguage": "ja",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-ko",
+      "task": "summarize",
+      "language": "ko",
+      "source": "Rika는 안전 검사를 통과하는 경우에만 2044-09-23에 430 PLN 상당의 필터 11개를 배송하자고 제안했다. 검사는 아직 완료되지 않았고 배송도 승인되지 않았다. 별도 회의에서는 주차 공간을 논의할 예정이다.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-ko",
+      "task": "rewrite",
+      "language": "ko",
+      "source": "있잖아, Neri가 밸브 5개 수리비로 2043-08-17에 Alba에게 230 EUR를 낼 거야! Alba가 Neri에게 돈을 내는 건 아니야.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-ko",
+      "task": "translate",
+      "language": "ko",
+      "targetLanguage": "ko",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-de",
+      "task": "summarize",
+      "language": "de",
+      "source": "Rika schlug vor, am 2044-09-23 11 Filter im Wert von 430 PLN zu versenden, aber nur, wenn die Sicherheitsprüfung bestanden wird. Die Prüfung steht noch aus und der Versand wurde nicht genehmigt. Eine separate Sitzung wird Parkplätze behandeln.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-de",
+      "task": "rewrite",
+      "language": "de",
+      "source": "Hey, Neri wird Alba am 2043-08-17 230 EUR fürs Reparieren von 5 Ventilen zahlen, okay? Alba wird Neri aber nichts zurückzahlen.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-de",
+      "task": "translate",
+      "language": "de",
+      "targetLanguage": "de",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-es",
+      "task": "summarize",
+      "language": "es",
+      "source": "Rika propuso enviar 11 filtros por valor de 430 PLN el 2044-09-23, solo si se supera la inspección de seguridad. La inspección está pendiente y el envío no ha sido autorizado. Otra reunión tratará las plazas de aparcamiento.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-es",
+      "task": "rewrite",
+      "language": "es",
+      "source": "Oye, Neri le va a pagar a Alba 230 EUR el 2043-08-17 por arreglar 5 válvulas, ¿vale? Alba no le va a pagar a Neri.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-es",
+      "task": "translate",
+      "language": "es",
+      "targetLanguage": "es",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    },
+    {
+      "id": "summary-pt",
+      "task": "summarize",
+      "language": "pt",
+      "source": "Rika propôs enviar 11 filtros no valor de 430 PLN em 2044-09-23, apenas se a inspeção de segurança for aprovada. A inspeção está pendente e o envio não foi autorizado. Outra reunião tratará dos lugares de estacionamento.",
+      "instruction": "Produce one shorter sentence in the source language. Retain Rika as proposer, proposed shipping date, filter count and value, the requirement that inspection must pass, pending inspection and unauthorized shipping. Omit the parking meeting.",
+      "rubric": [
+        "source language",
+        "one shorter sentence",
+        "Rika proposer, action remains proposed",
+        "11 filters valued 430 PLN",
+        "2044-09-23 proposed date",
+        "inspection must pass prerequisite",
+        "inspection currently pending",
+        "shipping currently unauthorized",
+        "parking omitted",
+        "no added claims/gender"
+      ]
+    },
+    {
+      "id": "rewrite-pt",
+      "task": "rewrite",
+      "language": "pt",
+      "source": "Olha, Neri vai pagar a Alba 230 EUR em 2043-08-17 para consertar 5 válvulas, tá? Alba não vai pagar a Neri.",
+      "instruction": "Rewrite in formal written language, preserving the source language and all facts. Remove greetings, conversational fillers and casual endings. Keep payer and recipient direction, denial of reverse payment, service, numbers and date.",
+      "rubric": [
+        "formal source-language prose",
+        "Neri pays Alba, not inverse",
+        "Alba does not pay Neri",
+        "230 EUR for repair of 5 valves",
+        "2043-08-17",
+        "no greetings/fillers/casual endings",
+        "no added facts"
+      ]
+    },
+    {
+      "id": "translate-pt",
+      "task": "translate",
+      "language": "pt",
+      "targetLanguage": "pt",
+      "source": "Zara alleged that Teo replaced 9 sensors on 2045-02-11. Teo denied the allegation, and no investigation has confirmed it.",
+      "instruction": "Translate faithfully into the selected target language. Preserve who alleged and who denied, the unconfirmed status, original personal name spellings and exact numeric/date literals. Do not infer anyone's gender.",
+      "rubric": [
+        "selected target language",
+        "Zara alleges, not confirmed fact",
+        "Teo denies",
+        "no investigation has confirmed",
+        "9 sensors replaced, not removed",
+        "2045-02-11 exactly",
+        "Zara/Teo original spelling",
+        "no inferred personal gender"
+      ]
+    }
+  ],
+  "bundleHashes": {
+    "plugin": "4b6fdd2f05d258ffd1453bbe34e1a16571504f2c8fa3737725e05f4133303728",
+    "diagnosticPlugin": "51c9d987a1ffa9ba2a80a6193dcbceb7ad5b505fb94c9b1d4eee6048ab4f3527"
+  },
+  "results": [],
+  "errors": [],
+  "externalRequests": [],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 0
+  },
+  "workerFailures": [
+    {
+      "kind": "throw",
+      "uuid": "1d3b9f53-d25e-4ec4-b1c4-d7624bad2956",
+      "content": "WindowSizeConfigurationError: Only one of context_window_size and sliding_window_size can be positive. Got: context_window_size: 4096, sliding_window_size: 512\nConsider modifying ModelRecord.overrides to set one of them to -1."
+    }
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "error": "Error: Unexpected model: CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "bundleBytesUnchanged": true
+}

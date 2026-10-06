@@ -1,0 +1,68 @@
+{
+  "scope": "Actual IM planning with cached Qwen3-1.7B Metal GPU, response-local vendor CSP and static stylesheet edit, native Undo/Redo/Save/reopen. Service workers blocked; no offline or deployed-policy claim.",
+  "rows": [
+    {
+      "kind": "docx",
+      "prompt": "Insert exactly the text Hello tools at the current cursor.",
+      "before": "\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "after": "Hello tools\r\n",
+      "visibleErrors": [],
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "previewCount": 0,
+      "afterUndo": "\r\n",
+      "afterRedo": "Hello tools\r\n",
+      "nativeSave": {
+        "bytes": 25838,
+        "failure": null
+      },
+      "reopened": "Hello tools\r\n",
+      "status": "completed"
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "Write the plain value Hello tools to cell A1.",
+      "before": "",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "after": "Hello tools",
+      "visibleErrors": [],
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "previewCount": 0,
+      "afterUndo": "",
+      "afterRedo": "Hello tools",
+      "nativeSave": {
+        "bytes": 8425,
+        "failure": null
+      },
+      "reopened": "Hello tools",
+      "status": "completed"
+    },
+    {
+      "kind": "pptx",
+      "prompt": "Add one new slide using the current layout.",
+      "before": 1,
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "after": 2,
+      "visibleErrors": [],
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "previewCount": 0,
+      "afterUndo": 1,
+      "afterRedo": 2,
+      "nativeSave": {
+        "bytes": 36217,
+        "failure": null
+      },
+      "reopened": 2,
+      "status": "completed"
+    }
+  ],
+  "entries": [],
+  "errors": [],
+  "passed": true
+}

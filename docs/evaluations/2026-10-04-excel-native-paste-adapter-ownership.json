@@ -1,0 +1,91 @@
+{
+  "status": "completed",
+  "adapterSHA256": "93dd3ea36236f34adf2640cb8be0c42b8fb3d2c268bb83e98fb3d5d4baecb0ae",
+  "pasteSHA256": "7aaa4ea61cc215e2214a1bffd76fff8717207382973a7068f2be5d60200f65b7",
+  "sourceSHA256": "bb7e9d2ec04fdd42d489bc0af5aa61f73455851d01ae0dd81f93b1189fe4dd1b",
+  "errors": [],
+  "cases": [
+    {
+      "value": "00123",
+      "originalFormat": "General",
+      "completion": {
+        "failure": {
+          "name": "Error",
+          "message": "Paste ownership has expired"
+        },
+        "restoredBeforeRelease": "General",
+        "latePreparationReleased": true,
+        "foreignFormat": "0%"
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      }
+    },
+    {
+      "value": "00123",
+      "originalFormat": "0.00",
+      "completion": {
+        "failure": {
+          "name": "Error",
+          "message": "Paste ownership has expired"
+        },
+        "restoredBeforeRelease": "0.00",
+        "latePreparationReleased": true,
+        "foreignFormat": "0.00"
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      }
+    }
+  ]
+}

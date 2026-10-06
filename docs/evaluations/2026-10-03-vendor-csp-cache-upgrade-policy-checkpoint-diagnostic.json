@@ -1,0 +1,151 @@
+{
+  "experiment": {
+    "baseline": false,
+    "staticStylesheet": true,
+    "geometryOnly": false,
+    "type": "docx",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    }
+  },
+  "hostPort": 5193,
+  "trailingEntry": false,
+  "browserVersion": "151.0.7922.34",
+  "scope": "Controlled synthetic vendor/core version transition using real SW algorithm; early effective iframe response and inline-script controls only, no native mutation/Save/offline/IM or deployed build claim.",
+  "vendor": "59e2dc593998",
+  "candidateVendor": "04e83e8ca8eb",
+  "oldCore": "1791017387",
+  "upgrade": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:50384/sw.js?isolation=1",
+      "oldEntries": [
+        {
+          "name": "document-editor-runtime-59e2dc593998",
+          "url": "http://127.0.0.1:50384/web-apps/apps/documenteditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        },
+        {
+          "name": "document-editor-runtime-59e2dc593998",
+          "url": "http://127.0.0.1:50384/web-apps/apps/spreadsheeteditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        },
+        {
+          "name": "document-editor-runtime-59e2dc593998",
+          "url": "http://127.0.0.1:50384/web-apps/apps/presentationeditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        }
+      ],
+      "newCaches": [
+        "document-editor-runtime-59e2dc593998",
+        "document-editor-core-1791017387",
+        "document-editor-runtime-04e83e8ca8eb",
+        "document-editor-core-1791017387-vendor-csp-probe"
+      ],
+      "oldRuntimeRetained": true
+    }
+  ],
+  "cold": [],
+  "offline": [],
+  "errors": [],
+  "pendingBaseline": {
+    "type": "docx",
+    "isolated": true,
+    "iframeIsolated": true,
+    "fullApi": true,
+    "loaded": true,
+    "controller": "http://127.0.0.1:50384/sw.js?isolation=1",
+    "oldEntries": [
+      {
+        "name": "document-editor-runtime-59e2dc593998",
+        "url": "http://127.0.0.1:50384/web-apps/apps/documenteditor/main/index.html",
+        "policy": null,
+        "asyncStyle": true
+      },
+      {
+        "name": "document-editor-runtime-59e2dc593998",
+        "url": "http://127.0.0.1:50384/web-apps/apps/spreadsheeteditor/main/index.html",
+        "policy": null,
+        "asyncStyle": true
+      },
+      {
+        "name": "document-editor-runtime-59e2dc593998",
+        "url": "http://127.0.0.1:50384/web-apps/apps/presentationeditor/main/index.html",
+        "policy": null,
+        "asyncStyle": true
+      }
+    ],
+    "newCaches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1791017387",
+      "document-editor-runtime-04e83e8ca8eb",
+      "document-editor-core-1791017387-vendor-csp-probe"
+    ],
+    "oldRuntimeRetained": true
+  },
+  "checkpoints": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:50384/sw.js?isolation=1",
+      "responses": [
+        {
+          "url": "http://127.0.0.1:50384/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:50384&uitheme=theme-classic-light&fileType=docx",
+          "fromServiceWorker": true,
+          "policy": null
+        }
+      ],
+      "controls": {
+        "inlineExecuted": true,
+        "iframeUrl": "http://127.0.0.1:50384/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:50384&uitheme=theme-classic-light&fileType=docx",
+        "controller": "http://127.0.0.1:50384/sw.js?isolation=1",
+        "stylesheets": [
+          {
+            "href": "http://127.0.0.1:50384/web-apps/apps/documenteditor/main/resources/css/app.css",
+            "media": "all",
+            "onload": "this.media='all'"
+          }
+        ]
+      }
+    }
+  ],
+  "passed": false,
+  "error": "Error: Effective post-upgrade iframe policy checkpoint failed",
+  "candidateEntries": [
+    {
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-mlY+ZZlU5oHAgTuFi65xbnujnNnXNWbdrHeC6Tm/hFs=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-RpFgTNbC6VAYRjutrf3WjbppJPR2eqZJeM6dHbcnr2U=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/spreadsheeteditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-bh6eznDaoKfccEsWKr7TaLe42GxvSzfRx7pInOiRy8k=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-cIOblnwfItklL2WfRBsqa90WABGOFbGdnmWhMiJvTA0=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/presentationeditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-xEhyiZGhboJtDKcTLrCnNQkYPeg5teYGIyeDcAm1AVU=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-SpEnPJLA9lg6DkiCWXDXhWm5bGVpzic51b+yNrhld30=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    }
+  ]
+}

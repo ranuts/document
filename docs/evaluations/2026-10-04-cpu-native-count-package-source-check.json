@@ -1,0 +1,49 @@
+{
+  "scope": "Clean source patch application and glue regeneration; no second full WASM build or bitwise reproducibility claim",
+  "sdkCommit": "e3972797f9d508887440e9d3fa87dc296f2dec44",
+  "llamaCommit": "83d855c5a6d70487121edbf4020b25c96b7a04e7",
+  "patchSHA256": "d6680454b92ba3de45220dded01f966b1f25360a47dd2a3c2d6738f9db077bff",
+  "cleanDirectory": "/private/tmp/document-count-package-ohfm_z41",
+  "sources": {
+    "cpp/glue.hpp": "53b79323e3c0d7ba83f4615dc0ecaba085ee6769bc7b89d4fda4074ecbf3996c",
+    "cpp/wllama.cpp": "a9ed4309f1b87496f573d04ea2c58421b2a2e68e7cc4104bca36e7d8d1bf7a5d",
+    "cpp/wllama-context.h": "4afdbe238620dffecef39d379d939fdfab6976aea0a6ae22537db5d4a7933a47",
+    "src/glue/messages.ts": "178dedcddc9045ede07ce10ac1365e4db04305c5449f7b624775ac679dc9fc9f"
+  },
+  "artifacts": {
+    "js": {
+      "sha256": "9708f2b93fa3bc6df5d06c75bc651f32201228532f07423447aa1b912f52f97c",
+      "bytes": 127982
+    },
+    "wasm": {
+      "sha256": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179",
+      "bytes": 12995286
+    }
+  },
+  "completedArtifactEvidence": [
+    "structured-rejection",
+    "tools-schema",
+    "boundary",
+    "app-request",
+    "history-trim",
+    "retirement"
+  ],
+  "package": {
+    "path": "/private/tmp/document-cpu-native-count-prototype.zip",
+    "sha256": "201bd6bd46f549150b6ea52fa4b625324e58a7dbbb7311d4177cecc40b9b3aaa",
+    "bytes": 13211620,
+    "entries": [
+      "README.txt",
+      "licenses/llama.cpp.txt",
+      "licenses/wllama.txt",
+      "manifest.json",
+      "native.patch",
+      "runtime/wllama.js",
+      "runtime/wllama.wasm",
+      "source/cpp/glue.hpp",
+      "source/cpp/wllama-context.h",
+      "source/cpp/wllama.cpp",
+      "source/src/glue/messages.ts"
+    ]
+  }
+}

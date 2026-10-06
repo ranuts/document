@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-02T07:33:19.056Z",
+  "scope": "Actual Playwright WebKit editor and CPU inference, fresh isolated context; not iOS hardware",
+  "status": "passed",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+  "loadMs": 69189,
+  "notes": [
+    "Model loaded — you can start chatting.",
+    "Review local suggestions before applying them."
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "responseMs": 28448,
+  "reply": [
+    "Hello.Write to document"
+  ],
+  "stats": "First text: 28.25 s · Overall response rate: 0.11 token/s · 3 tokens",
+  "errors": [],
+  "failed": [],
+  "visibleErrors": []
+}

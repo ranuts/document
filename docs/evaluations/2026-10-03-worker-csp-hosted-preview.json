@@ -1,0 +1,39 @@
+{
+  "scope": "Actual cached selected WebGPU initialization/chat under injected Worker response CSP, with normal-execution Worker eval and foreign module controls. No shipped policy, CPU/iframe, fresh download, offline or general security claim.",
+  "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+  "modelId": "Qwen3-1.7B-q4f16_1-MLC",
+  "hostedPort": "5198",
+  "workerResponses": [
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "upstreamPolicy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "originalSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "diagnosticSHA256": "1f47e245fc9ca1b05d298527f42641813d721ba093cc3c209ad6ae9b56ea76eb"
+    }
+  ],
+  "baseline": false,
+  "foreignModuleRequests": 0,
+  "status": "completed",
+  "consoleErrors": [],
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "workerControls": {
+    "eval": {
+      "blocked": true,
+      "name": "EvalError",
+      "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval'\".\n"
+    },
+    "foreign": {
+      "blocked": true,
+      "name": "TypeError",
+      "message": "Failed to fetch dynamically imported module: https://worker-csp-probe.invalid/probe.js"
+    },
+    "isolated": true,
+    "policyFingerprint": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:"
+  },
+  "nextReply": "Hello.",
+  "errorCountAfterRecovery": 0,
+  "probeSHA256": "6df5b09d91cfd264c10fb4b351d5db76e1270061c1aebda01c530fbcff652833",
+  "workerBytesUnchanged": true
+}

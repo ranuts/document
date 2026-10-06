@@ -1,0 +1,14 @@
+{
+  "runtime": "f2eb0ed",
+  "input": {
+    "path": ".scratch/webkit-embedded-font-native-saved.docx",
+    "bytes": 25849,
+    "sha256": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3"
+  },
+  "errors": [],
+  "version": "26.5",
+  "text": "WEBKIT_WORD_20261005\r\n",
+  "exact": true,
+  "finished": true,
+  "closed": true
+}

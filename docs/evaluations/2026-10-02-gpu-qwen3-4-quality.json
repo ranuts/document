@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-02T08:28:22.258Z",
+  "scope": "Actual built UI with isolated persistent Playwright Chromium Metal / GPU Qwen3-4B, fresh navigation per case; three bounded quality probes, not full model/language acceptance",
+  "status": "completed",
+  "results": [
+    {
+      "id": "zh-facts",
+      "locale": "zh-CN",
+      "prompt": "请用中文将这句话改写得更正式，保留所有事实、金额、币种、姓名和日期，只输出改写后的句子：Alex 将于 2026-10-08 支付 1,250 EUR。",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex 将于 2026 年 10 月 8 日支付 1,250 欧元。",
+      "responseMs": 4917,
+      "stats": "Decode speed: 20.3 token/s · First token: 3.33 s · 31 tokens",
+      "literalFactsPreserved": false,
+      "manualReview": "Name, date and amount preserved with date/currency localization."
+    },
+    {
+      "id": "en-negation",
+      "locale": "en",
+      "prompt": "Summarize in one English sentence without adding facts: Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved. Do not claim that the payment is approved or scheduled.",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved. Do not claim that the payment is approved or scheduled.",
+      "responseMs": 4263,
+      "stats": "Decode speed: 25.2 token/s · First token: 2.51 s · 43 tokens",
+      "manualReview": "FAIL summary/instruction separation: copies source plus instruction, does not produce the requested one-sentence summary. Explicit negation is retained.",
+      "criticalNegationRetained": true,
+      "summaryTaskAchieved": false
+    },
+    {
+      "id": "strict-json",
+      "locale": "en",
+      "prompt": "Return exactly this JSON object and nothing else, without markdown fences: {\"answer\":\"hello\"}",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "{\"answer\":\"hello\"}",
+      "responseMs": 2455,
+      "stats": "Decode speed: 24.8 token/s · First token: 2.22 s · 5 tokens",
+      "jsonStructureExact": true,
+      "manualReview": "Correct requested JSON object without surrounding prose."
+    }
+  ],
+  "errors": [],
+  "limitations": "Three chat-path probes only; successful execution is not model quality acceptance."
+}

@@ -12,6 +12,7 @@ RUN corepack enable && \
 # Scripts are skipped here because the packages' prepare (tsc) builds need
 # their sources, which are only copied in the next layer.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY patches/ ./patches/
 COPY packages/shared/package.json ./packages/shared/
 COPY packages/converter/package.json ./packages/converter/
 COPY packages/agent-core/package.json ./packages/agent-core/

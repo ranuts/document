@@ -1,0 +1,183 @@
+{
+  "status": "completed",
+  "scope": "Actual production desktop Chromium Metal GPU IM Excel sort; explicit rectangular range, numeric key, header, neighboring cells and native Undo/Redo.",
+  "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "language": "zh",
+  "results": [
+    {
+      "prompt": "请将 A1:B4 区域按 B 列数字升序排序，整行一起移动。第 1 行是表头，保持不变，不要修改 A1:B4 以外的单元格。",
+      "elapsedMs": 2278,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [],
+      "visibleErrors": [
+        "No executable operation was selected. Clarify the request or try another model.Restore request"
+      ],
+      "previewCount": 0,
+      "sortMatched": false,
+      "headerPreserved": true,
+      "neighborsPreserved": true
+    },
+    {
+      "prompt": "请将 A1:B4 区域按 B 列数字降序排序，整行一起移动。第 1 行是表头，保持不变，不要修改 A1:B4 以外的单元格。",
+      "elapsedMs": 1864,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [],
+      "visibleErrors": [
+        "No executable operation was selected. Clarify the request or try another model.Restore request",
+        "No executable operation was selected. Clarify the request or try another model.Restore request"
+      ],
+      "previewCount": 0,
+      "sortMatched": false,
+      "headerPreserved": true,
+      "neighborsPreserved": true
+    }
+  ],
+  "errors": [],
+  "diagnostics": [
+    "sort-planner-probe {\"text\":\"<think>\\n\\n</think>\\n\\n{\\n  \\\"tool\\\": \\\"unsupported\\\",\\n  \\\"input\\\": {}\\n}\",\"stopReason\":\"stop\"}",
+    "sort-planner-probe {\"text\":\"<think>\\n\\n</think>\\n\\n{\\n  \\\"tool\\\": \\\"unsupported\\\",\\n  \\\"input\\\": {}\\n}\",\"stopReason\":\"stop\"}"
+  ],
+  "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "bundle": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-ChZdhN3d.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "allPassed": false,
+  "promptVariant": "Added clarification that preserving headers/outside cells are one-sort constraints, and requests may use other languages.",
+  "parentProductCommit": "1b86a2d",
+  "assessment": "Both observed raw responses selected unsupported. Recorded A1:D5 values unchanged; candidate does not improve sampled Chinese sorting.",
+  "adopted": false,
+  "limitations": [
+    "One ascending and one descending Chinese request per variant on warm-cache desktop Chromium Metal GPU; no statistical reliability claim.",
+    "Temporary instrumentation observed twice per variant; only raw returned response/stop reason captured, not hidden model reasoning.",
+    "Does not isolate model weights, template, schema, capability wording or request complexity as the root cause.",
+    "No native writes occurred in these samples; no Undo/Redo, save, offline or device portability proof."
+  ]
+}

@@ -1,0 +1,103 @@
+# Browser writing model decision evidence
+
+No tested candidate in this index has established acceptable seven-language factual writing quality. Keep the existing default provisional; successful document application is not an accuracy metric. This table covers known 21-case fixtures, one sample each, not heldout general accuracy. Loading failures and partial runs are explicitly retained.
+
+| Model/report | Run status | Recorded | Refused | Edited | Accepted unchanged |
+| --- | --- | ---: | ---: | ---: | ---: |
+| [Qwen3-1.7B-q4f16_1-MLC](2026-10-04-seven-language-writing-current.json) | completed | 21 | 9 | 12 | 0 |
+| [Qwen3.5-2B-q4f16_1-MLC](2026-10-04-seven-language-writing-qwen35-2b.json) | completed | 21 | 13 | 8 | 0 |
+| [Qwen3-4B-q4f16_1-MLC](2026-10-04-seven-language-writing-qwen3-4b.json) | completed | 21 | 7 | 14 | 0 |
+| [Llama-3.2-1B-Instruct-q4f16_1-MLC](2026-10-04-llama32-1b-seven-language-writing.json) | completed | 21 | 14 | 5 | 2 |
+| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-seven-language-writing.json) | failed | 0 | 0 | 0 | 0 |
+| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-sliding-window-writing.json) | failed | 15 | 11 | 4 | 0 |
+| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-full-context-writing.json) | completed | 21 | 20 | 1 | 0 |
+| [Llama-3.1-8B-Instruct-q4f16_1-MLC](2026-10-04-llama31-8b-seven-language-writing.json) | failed | 0 | 0 | 0 | 0 |
+| [Llama-3.1-8B-Instruct-q4f16_1-MLC](2026-10-04-llama31-8b-seven-language-writing-retry.json) | completed | 21 | 10 | 11 | 0 |
+| [Llama-3.2-3B-Instruct-q4f16_1-MLC](2026-10-04-llama32-3b-seven-language-writing.json) | completed | 21 | 11 | 10 | 0 |
+| [Qwen3.5-4B-q4f16_1-MLC](2026-10-04-qwen35-4b-seven-language-writing.json) | completed | 21 | 5 | 16 | 0 |
+| [Phi-4-mini-instruct-q4f16_1-MLC](2026-10-04-phi4-mini-seven-language-writing.json) | completed | 21 | 12 | 9 | 0 |
+| [Qwen3-8B-q4f16_1-MLC](2026-10-04-qwen3-8b-seven-language-writing.json) | completed | 21 | 3 | 18 | 0 |
+| [Qwen2.5-1.5B-Instruct-q4f16_1-MLC](2026-10-04-qwen25-15b-seven-language-writing.json) | completed | 21 | 17 | 4 | 0 |
+| [Qwen2.5-3B-Instruct-q4f16_1-MLC](2026-10-04-qwen25-3b-seven-language-writing.json) | completed | 21 | 20 | 1 | 0 |
+| [Qwen2.5-3B-Instruct-q4f32_1-MLC](2026-10-04-qwen25-3b-f32-seven-language-writing.json) | completed | 21 | 17 | 4 | 0 |
+
+These rows are not a controlled ranking: Qwen uses model-specific thinking controls; later code rejects unchanged translations; Gemma diagnostics override incompatible window settings. Qwen failures include changed roles/negation/conditions, while Llama 1B includes untranslated output and lost conditions. Gemma's first catalog run fell back to CPU and executed zero cases, its short-window run stopped after 15 cases, and full-context results showed repeated/length-limited output. Use each report's companion analysis for actual output examples and limitations. Refused outputs preserved source text; this is protective behavior, not task completion.
+
+The machine-readable index binds exact raw report hashes and derives counts from captured rows. Llama 3.1 8B initial shard-fetch failure and completed cached retry are both retained; the completed retry still has wrong-language and semantic failures. Model names and SDK memory estimates alone are not quality or physical-device compatibility evidence. Native Word history checks in these suites do not certify universal Save, formatting preservation, mobile memory or cold offline startup.
+
+Llama 3.2 3B now has a completed 21-case run in this index, rather than relying only on its earlier six-summary diagnostic. Its ten native edits and eleven refusals do not meet the requested quality: wrong-language rewrites, omitted inspection conditions/status and Korean repetition remain. See [its analysis](2026-10-04-llama32-3b-seven-language-writing.md).
+
+These historical reports are not reruns of the latest product. In particular, the later explicit-renminbi-label fix changes one refusal in a separate eight-case default-model regression, whose [analysis](2026-10-04-cny-unit-writing-regression.md) proves identical inputs/raw output and the changed guard outcome. That eight-case run and prompt diagnostics are outside this seven-language baseline index. Historical counts remain unchanged; the fix does not establish overall factual-writing quality.
+
+Qwen3.5 4B completed all 21 cases, with 16 edits and five refusals. Its [analysis](2026-10-04-qwen35-4b-seven-language-writing.md) still documents wrong-language output, altered quantity meaning, omitted status and unclear payment subjects. More native edits are not stronger quality evidence. Phi-4 mini also completed all 21 cases, with nine edits and twelve refusals. Its [analysis](2026-10-04-phi4-mini-seven-language-writing.md) records a wrong year, changed payment direction, wrong-language summaries and unsupported investigation/parking claims. It is not adopted as default.
+
+Qwen3-8B completed all 21 cases, with 18 edits and three refusals. Its [analysis](2026-10-04-qwen3-8b-seven-language-writing.md) shows some faithful condition/attribution outputs but wrong-language rewrites and unsupported investigation/causality claims. It is not adopted. The separate four-case screen is outside this baseline index.
+
+The [payment-fixture correction](2026-10-04-repayment-fixture-correction.md) withdraws categorical English/German repayment-wording failure claims where the source already says pay back/zurückzahlen. Historical raw hashes/counts and no-adoption decisions remain unchanged; language/condition/investigation failures still require resolution.
+
+## Later role and modality diagnostics (outside baseline counts)
+
+The [four-language role contrast](2026-10-04-writing-role-holdout.md) tested eight preregistered paired fixtures with the production and minimal prompts. The minimal prompt reduced refusals but omitted a payment recipient, strengthened Spanish permission to future action, and added an unsupported French planning claim. The [explicit role-constraint follow-up](2026-10-04-writing-role-constraints.md) reused those fixtures as development data: it repaired the observed Spanish modality changes but retained casual tags and returned unchanged English/French source more often. Neither prompt is adopted; execution counts are not semantic accuracy.
+
+These results challenge the assumption that a longer preservation prompt alone solves factual rewriting. The [schema-pressure diagnostic](2026-10-04-writing-schema-pressure.md) keeps the minimal system/user messages and sampling fixed and compares JSON-schema decoding against unconstrained decoding. Its completed run shows six identical paired responses, persistent Spanish/French semantic failures, and two extra-field responses without schema; schema removal is not adopted. This separates decoding pressure from prompt changes but cannot establish general quality on these already-seen development cases. Any eventual change still requires new heldout role/condition fixtures and broader language validation.
+
+The [input-envelope contrast](2026-10-04-writing-input-envelope.md) retains identical minimal system prompt, source, instruction, schema and sampling, removing only user task/targetLanguage fields. It preserves Spanish modality in both known cases and removes one French planning claim, but leaves casual tags and unchanged English source. It shows framing sensitivity without proving a general fix; full/body application counts are not quality scores. No production change is adopted.
+
+The [four-example development contrast](2026-10-04-writing-demonstrations.md) produces faithful formal text on all eight known short cases in manual review, with longer input/latency. Its [frozen multi-clause transfer screen](2026-10-04-writing-demonstrations-transfer.md), preregistered after freezing the candidate, preserves examined roles/negation/modality/status but retains informal wording in two of eight new sources. It also avoids a baseline unpaid→unapproved error. This is a promising targeted candidate, not production acceptance or general quality proof; broader language/operation/device validation is still needed.
+
+The [frozen additional-language transfer](2026-10-04-writing-demonstrations-language-transfer.md) contradicts global adoption of the four examples: Japanese switches to French and copies demonstration names/date; Korean loses sender/roles; Portuguese keeps informal wording. German permissions improve, but that does not offset other failures. Some literal-changing outputs are refused, while role/obligation changes can still apply. Candidate remains diagnostic only; earlier narrow positive evidence is not general multilingual acceptance.
+
+The [example-pair order contrast](2026-10-04-writing-demonstrations-order.md) changes Japanese French output into English/Spanish and also produces English Korean rewrites with changed roles. Reversing examples is not adopted. Eight applications in the reverse variant include wrong-language outputs, demonstrating the existing rewrite script-guard gap separately from prompt quality.
+
+The [current-build rewrite script-guard regression](2026-10-04-writing-rewrite-script-guard.md) reruns identical actual requests/raw outputs from the order experiment. Three formerly applied complete Latin/CJK switches are now refused with source preserved; all other observed outcomes remain unchanged. This is protective validation, not factual-writing acceptance or adoption of the example candidate.
+
+The [same-language demonstration development screen](2026-10-04-writing-matched-language.md) repairs observed Japanese language switches and Korean sender loss, while removing Portuguese filler on eight known sources. Same-language sets are selected from oracle fixture labels and differ in localized phrasing, so this is not production language routing or pure language-causality evidence. The candidate remains unadopted pending unused-source transfer, broader style/operation/device validation and routing quality.
+
+The [frozen matched-language unused-source screen](2026-10-04-writing-matched-language-transfer.md) prevents several prior role/style failures but changes Japanese “permission not yet received” into affirmative receipt wording while retaining names/literals. That applied negation error rules out broad adoption of the candidate; the eight applications are not eight correct outputs. The new sources are now observed, so subsequent tuning requires other unused validation inputs.
+
+Installed-catalog Qwen2.5 [1.5B](2026-10-04-qwen25-15b-seven-language-writing.md) and [3B](2026-10-04-qwen25-3b-seven-language-writing.md) each complete 21 current-production-route tasks without becoming suitable defaults. 1.5B changes dates/currency and binds 11 filters to 11 o’clock in an applied German summary. 3B produces repeated malformed ISO-date fragments containing unrelated characters; the cause is unisolated and calls for a precision/runtime contrast. Literal guards retain source on refusals; neither native edit count nor larger parameter count establishes semantic quality.
+
+The [Qwen2.5 3B q4f32 catalog contrast](2026-10-04-qwen25-3b-f32-seven-language-writing.md) preserves exactly the q4f16 request bodies but still generates malformed date fragments in four summary languages. Its [schema-removal diagnostic](2026-10-04-qwen25-3b-f32-summary-schema.md) yields seven identical paired outputs, including those malformed dates without schema. Neither switching this variant nor deleting schema resolves the failure. Model assets/compiled libraries differ across precision variants, and root cause remains unisolated.
+
+The [Qwen2.5 thinking-hint contrast](2026-10-04-qwen25-3b-thinking-hint.md) removes only the JSON path’s system /no_think suffix. Engine prompt counts decrease by four tokens, but malformed dates persist and previously correct English date becomes malformed. Hint removal is not adopted as a repair; cached model/tokenizer provenance and lower-level decoding remain unverified root-cause factors.
+
+The [cached metadata audit](2026-10-04-qwen25-cached-metadata.md) matches config/tokenizer bytes and complete parsed tensor manifests to fixed model revisions; at that stage actual weight shards remained unverified. Later checks below close that specific gap. The [inherited repetition-penalty screen](2026-10-04-qwen25-3b-repetition-penalty.md) neutralizes 1.05 to 1.0, but date corruption persists and an applied Spanish output adds an unsupported per-item value. This setting is not adopted as a semantic or malformed-date repair.
+
+## Follow-up evidence reconciled on 2026-10-05
+
+The original sixteen-report outcome table remains a historical subset, not a
+complete model ranking. Six subsequent reports are now separately hash-bound
+in the index JSON. Their differing protocols do not justify adding their
+application counts to that table or interpreting them as quality scores.
+
+| Question | Later evidence | Remaining limit |
+| --- | --- | --- |
+| Corrupted cached weights? | [124 weight shards](2026-10-04-qwen25-cached-weight-shards.md) match declared size/MD5, totaling 3,472,375,808 bytes | No detected accidental corruption in the audited profile; not adversarial authenticity |
+| Different compiled library? | [Both WASM libraries](2026-10-04-qwen25-pinned-libraries.md) match fixed upstream artifacts by size/SHA-256 | Does not prove ABI, compiler or GPU arithmetic correctness |
+| App parsing changes dates? | [24 repeated token-boundary calls](2026-10-04-qwen25-3b-date-tokens.md) show the malformed addresses already generated inside the engine | Model/compiler/browser root cause remains unisolated; logprobs are not confidence estimates |
+| Can an independent CPU runtime copy these dates? | [Native llama.cpp](2026-10-04-qwen25-3b-llamacpp-reference.md) copies four known sources correctly under both tested penalties | Different quantization, template, sampler and arithmetic confound GPU comparison |
+| Can browser CPU copy the same dates? | [Shipped browser CPU SDK](2026-10-04-qwen25-3b-browser-cpu-reference.md) copies the four known sources correctly | Direct SDK test, not the full native IM writing route |
+| Is CPU 3B a suitable document-writing default? | [Seven native IM summaries](2026-10-04-qwen25-3b-cpu-im-summary.md) reveal language, grammar, sentence-count and valuation issues; observed latency 17.3–56.8 s | Six applied summaries are not six accepted summaries; no promotion |
+
+The current source configuration remains Qwen3-1.7B for GPU and revision-pinned
+Qwen3-0.6B GGUF for automatic CPU availability fallback. The GPU selector also
+offers Qwen3.5-2B, Qwen3.5-0.8B and Qwen3-4B. These are provisional candidates;
+runtime availability and native Undo/Redo do not establish semantic acceptance.
+The index snapshot binds the two configuration source files and checks these
+identities separately from historical result hashes.
+
+Next model work must address factual relations, negation, modality, language
+and usable latency with previously unused sources. Do not repeat weight/library
+identity checks or treat known date-copy success as summary acceptance. The
+specific GPU malformed-date cause still needs an isolating runtime/compiler
+experiment. No production prompt, sampling, model or default is changed by
+this reconciliation. Historical inference reports bind older bundles; later
+UI builds require fresh runtime validation before claims about current behavior.
+
+## Later conditional-summary evidence
+
+The [supplementary decision index](2026-10-05-summary-decision-index.json) binds four later completed native CPU Qwen2.5 3B runs to exact report/review hashes: production conditional summaries (3 outputs), explicit-status transfer (6), final-user single-sentence transfer (4), and five further-language transfer (10). These are separate diagnostic comparisons, not additional independent benchmark cases to pool into a model score.
+
+Their human reviews still reject global candidate/default promotion. Successful native application and exact Undo/Redo establish document mechanics, not semantic fidelity. Local improvements coexist with missing actors/current states, ambiguous approval objects, an unsupported causal connector and sentence-form failures. Every source in these runs is now observed; none is eligible as untouched transfer evidence after further tuning. The earlier index remains historical rather than an exhaustive statement of current quality validation.
+
+Reproduce the supplement with `python3 docs/evaluations/audit-summary-decision.py`. This checks report completion, absence of preview cards, native history evidence for applied rows and file identities. It does not independently validate the language judgments or certify any model. The next semantic gate requires a frozen general candidate evaluated on other unused sources and operations; no product prompt or default is changed by this reconciliation.

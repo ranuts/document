@@ -1,0 +1,60 @@
+{
+  "scope": "Actual browser navigation, blank native Word editor, no model inference; inspect natural BFCache admission",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "3d19c456-91f9-456f-a37b-ecbe6e2984ca",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=f99c8586-cd0e-4846-9a0c-630429b7b0a7",
+          "calls": 0
+        }
+      ]
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [],
+  "token": "3d19c456-91f9-456f-a37b-ecbe6e2984ca",
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=f99c8586-cd0e-4846-9a0c-630429b7b0a7",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+      "registered": [],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),n=Array(i),o=0;o<i;o++)n[o]=arguments[o+e];switch(e){case 0:return t.call(this,n);case 1:return t.call(this,arguments[0],n);case 2:return t.call(this,arguments[0],arguments[1],n)}var s=Array(e+1);for(o=0;o<e;o++)s[o]=arguments[o];return s[e]=n,t.apply(this,s)}"
+    }
+  ],
+  "migrations": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=f99c8586-cd0e-4846-9a0c-630429b7b0a7",
+      "migrated": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+      "migrated": true
+    }
+  ],
+  "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#app iframe').contentFrame().locator('.agent-sidebar-entry')\u001b[22m\n",
+  "contextClosed": true
+}

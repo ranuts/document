@@ -1,0 +1,228 @@
+{
+  "scope": "Actual production IM accessibility-tree snapshots with settings closed/open, plus real keyboard Space review-mode toggle and native Word API state verification. Isolated desktop Chromium; not a full accessibility compliance audit or screen-reader test.",
+  "results": [],
+  "errors": [],
+  "closedSnapshot": "- text: AI Assistant\n- button \"Settings\":\n  - img\n- button \"Close assistant\":\n  - img\n- status: WebGPU \u00b7 Qwen3-1.7B-q4f16_1-MLC\n- combobox \"Conversations\":\n  - option \"New conversation\" [selected]\n- button \"New conversation\":\n  - img\n- note: DOCX\n- text: How can I help with your document?\n- button \"Rewrite selection\"\n- button \"Summarize selection\"\n- button \"Translate selection\"\n- button \"Set up AI\"\n- button \"Scroll to latest\":\n  - img\n- textbox \"Ask about your document\u2026\"\n- combobox \"Writing task\":\n  - option \"Ask\" [selected]\n  - option \"Operate document\"\n  - option \"Rewrite selection\"\n  - option \"Summarize selection\"\n  - option \"Translate selection\"\n- button \"Quote selection\":\n  - img\n- button \"Send\" [disabled]:\n  - img",
+  "openSnapshot": "- text: AI Assistant\n- button \"Settings\" [expanded]:\n  - img\n- button \"Close assistant\":\n  - img\n- status: WebGPU \u00b7 Qwen3-1.7B-q4f16_1-MLC\n- combobox \"Conversations\":\n  - option \"New conversation\" [selected]\n- button \"New conversation\":\n  - img\n- note: DOCX\n- combobox \"AI provider\"\n- combobox \"Local model\"\n- text: Load model\n- checkbox \"Review mode\"\n- text: Review mode\n- status: Model loaded \u2014 you can start chatting.\n- group: Response settings\n- group \"Conversations\":\n  - text: Conversations\n  - checkbox \"Save chat history on this device\"\n  - text: Save chat history on this device\n  - status: New conversations stay in this page until saving is enabled.\n  - button \"Restore saved history\"\n  - button \"Import previous chat history\"\n  - button \"Export conversations\"\n  - button \"Delete this conversation\"\n  - button \"Delete all chat history\"\n- text: How can I help with your document?\n- button \"Rewrite selection\"\n- button \"Summarize selection\"\n- button \"Translate selection\"\n- button \"Set up AI\"\n- button \"Scroll to latest\":\n  - img\n- textbox \"Ask about your document\u2026\"\n- combobox \"Writing task\":\n  - option \"Ask\" [selected]\n  - option \"Operate document\"\n  - option \"Rewrite selection\"\n  - option \"Summarize selection\"\n  - option \"Translate selection\"\n- button \"Quote selection\":\n  - img\n- button \"Send\" [disabled]:\n  - img",
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "className": "agent-panel-settings-toggle",
+      "label": "Settings",
+      "title": "Settings",
+      "placeholder": null,
+      "labels": [],
+      "text": ""
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-panel-close",
+      "label": "Close assistant",
+      "title": "Close assistant",
+      "placeholder": null,
+      "labels": [],
+      "text": ""
+    },
+    {
+      "tag": "SELECT",
+      "className": "agent-session-select",
+      "label": "Conversations",
+      "title": "Conversations",
+      "placeholder": null,
+      "labels": [],
+      "text": null
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-panel-clear",
+      "label": "New conversation",
+      "title": "New conversation",
+      "placeholder": null,
+      "labels": [],
+      "text": ""
+    },
+    {
+      "tag": "INPUT",
+      "className": "",
+      "label": null,
+      "title": "",
+      "placeholder": "",
+      "labels": [
+        "Creativity (temperature)"
+      ],
+      "text": null
+    },
+    {
+      "tag": "INPUT",
+      "className": "",
+      "label": null,
+      "title": "",
+      "placeholder": "",
+      "labels": [
+        "Sampling (top_p)"
+      ],
+      "text": null
+    },
+    {
+      "tag": "INPUT",
+      "className": "",
+      "label": null,
+      "title": "",
+      "placeholder": "",
+      "labels": [
+        "Maximum response tokens"
+      ],
+      "text": null
+    },
+    {
+      "tag": "INPUT",
+      "className": "agent-history-save",
+      "label": null,
+      "title": "",
+      "placeholder": "",
+      "labels": [
+        "Save chat history on this device"
+      ],
+      "text": null
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-history-restore",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Restore saved history"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-history-import",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Import previous chat history"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-history-export",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Export conversations"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-history-delete-current",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Delete this conversation"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-history-delete-all",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Delete all chat history"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Rewrite selection"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Summarize selection"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Translate selection"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-configure",
+      "label": null,
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": "Set up AI"
+    },
+    {
+      "tag": "BUTTON",
+      "className": "cui-scroll-bottom cui-hidden",
+      "label": "Scroll to latest",
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": ""
+    },
+    {
+      "tag": "TEXTAREA",
+      "className": "cui-input",
+      "label": "Ask about your document\u2026",
+      "title": "",
+      "placeholder": "Ask about your document\u2026",
+      "labels": [],
+      "text": null
+    },
+    {
+      "tag": "SELECT",
+      "className": "agent-writing-task",
+      "label": "Writing task",
+      "title": "",
+      "placeholder": null,
+      "labels": [],
+      "text": null
+    },
+    {
+      "tag": "BUTTON",
+      "className": "agent-panel-quote",
+      "label": "Quote selection",
+      "title": "Quote the text currently selected in the document/spreadsheet/slide into the input",
+      "placeholder": null,
+      "labels": [],
+      "text": ""
+    },
+    {
+      "tag": "BUTTON",
+      "className": "cui-send",
+      "label": "Send",
+      "title": "Send",
+      "placeholder": null,
+      "labels": [],
+      "text": ""
+    }
+  ],
+  "status": "completed",
+  "keyboardReview": {
+    "before": false,
+    "after": true,
+    "ariaChecked": "true",
+    "toggled": true,
+    "restored": true
+  },
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BWqxJUB-.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "reviewLabelAndKeyboardPassed": true
+}

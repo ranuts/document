@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-02T08:09:49.363Z",
+  "scope": "Actual built UI with isolated persistent Playwright WebKit / CPU Qwen3-0.6B, fresh navigation per case; three bounded quality probes, not full model/language acceptance",
+  "status": "completed",
+  "results": [
+    {
+      "id": "zh-facts",
+      "locale": "zh-CN",
+      "prompt": "请用中文将这句话改写得更正式，保留所有事实、金额、币种、姓名和日期，只输出改写后的句子：Alex 将于 2026-10-08 支付 1,250 EUR。",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex将于2026年10月8日支付1,250欧元。",
+      "responseMs": 36930,
+      "stats": "First text: 33.25 s · Overall response rate: 0.57 token/s · 21 tokens",
+      "literalFactsPreserved": false,
+      "manualReview": {
+        "factsPreserved": true,
+        "note": "Alex, 1250 EUR and 2026-10-08 retain their meanings. The date and currency were localized, so literal matching fails without a semantic fact error. This is not a broad fluency/style score."
+      }
+    },
+    {
+      "id": "en-negation",
+      "locale": "en",
+      "prompt": "Summarize in one English sentence without adding facts: Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved. Do not claim that the payment is approved or scheduled.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08, but the payment has not been approved.",
+      "responseMs": 39374,
+      "stats": "First text: 33.09 s · Overall response rate: 0.86 token/s · 34 tokens",
+      "manualReview": {
+        "negationPreserved": true,
+        "factsPreserved": true,
+        "note": "Proposal remains a proposal; payment explicitly remains unapproved. No scheduled or approved payment is asserted."
+      }
+    },
+    {
+      "id": "strict-json",
+      "locale": "en",
+      "prompt": "Return exactly this JSON object and nothing else, without markdown fences: {\"answer\":\"hello\"}",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "{\"answer\": \"hello\"}",
+      "responseMs": 30176,
+      "stats": "First text: 29.24 s · Overall response rate: 0.23 token/s · 7 tokens",
+      "jsonStructureExact": true,
+      "manualReview": {
+        "jsonOnly": true,
+        "note": "Only the requested object is emitted; JSON whitespace differs. Structure/value equality does not establish byte-for-byte output equality."
+      }
+    }
+  ],
+  "errors": [],
+  "coverage": {
+    "model": "CPU Qwen3-0.6B Q4_K_M",
+    "languages": [
+      "zh-CN",
+      "en"
+    ],
+    "cases": 3,
+    "fullModelAndLanguageMatrixComplete": false
+  }
+}

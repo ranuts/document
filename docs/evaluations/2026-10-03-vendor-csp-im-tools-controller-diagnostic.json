@@ -1,0 +1,16 @@
+{
+  "scope": "Actual IM planning with cached Qwen3-1.7B Metal GPU, response-local vendor CSP and static stylesheet edit, native Undo/Redo/Save/reopen. Service workers blocked; no offline or deployed-policy claim.",
+  "rows": [
+    {
+      "kind": "docx",
+      "prompt": "Insert exactly the text Hello tools at the current cursor.",
+      "before": "\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "frameUrl": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx"
+    }
+  ],
+  "entries": [],
+  "errors": [],
+  "passed": false,
+  "error": "Error: Missing actual vendor CSP interception"
+}

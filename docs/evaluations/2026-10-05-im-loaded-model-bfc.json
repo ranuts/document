@@ -1,0 +1,76 @@
+{
+  "scope": "Actual browser navigation, native Word with local CPU model loaded before actual cached departure, delegated exit observation, explicit reload and local reply afterward",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "9d33a016-e184-4f8a-9b5a-abdeef9c9977",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+          "guard": true
+        }
+      ],
+      "modelState": {
+        "note": "GGUF 模型网址；CPU 模式可能较慢。也可选择本地 GGUF 文件。",
+        "status": "",
+        "exit": [
+          {
+            "called": true,
+            "done": true
+          }
+        ]
+      }
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [],
+  "initialEngine": "CPU · qwen2.5-0.5b-instruct-q4_k_m.gguf",
+  "token": "9d33a016-e184-4f8a-9b5a-abdeef9c9977",
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=48e0e015-43f1-41d1-bbe7-c1b697ca9fbb",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+      "registered": [],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),n=Array(i),o=0;o<i;o++)n[o]=arguments[o+e];switch(e){case 0:return t.call(this,n);case 1:return t.call(this,arguments[0],n);case 2:return t.call(this,arguments[0],arguments[1],n)}var s=Array(e+1);for(o=0;o<e;o++)s[o]=arguments[o];return s[e]=n,t.apply(this,s)}"
+    }
+  ],
+  "cached": true,
+  "returnState": {
+    "note": "GGUF 模型网址；CPU 模式可能较慢。也可选择本地 GGUF 文件。",
+    "status": "",
+    "exit": [
+      {
+        "called": true,
+        "done": true
+      }
+    ],
+    "draft": "未发送的中文草稿"
+  },
+  "reply": "BRAVO写入文档",
+  "chatErrors": [],
+  "reloadedEngine": "CPU · qwen2.5-0.5b-instruct-q4_k_m.gguf",
+  "finished": true,
+  "contextClosed": true
+}

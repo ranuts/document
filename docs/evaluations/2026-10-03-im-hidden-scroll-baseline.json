@@ -1,0 +1,19 @@
+{
+  "scope": "Actual production IM keyboard navigation in isolated Chromium with GPU disabled. Empty-state and completed CPU reply; no user browser.",
+  "errors": [],
+  "empty": {
+    "focused": "cui-scroll-bottom cui-hidden",
+    "opacity": "0",
+    "visibility": "visible"
+  },
+  "reply": "Hello.",
+  "completed": {
+    "focused": "cui-scroll-bottom cui-hidden",
+    "opacity": "0",
+    "visibility": "visible"
+  },
+  "reproduced": true,
+  "probeSource": "probe-im-hidden-scroll-baseline.mjs",
+  "probeSHA256": "5050c4e21a21c381ed7f4578e4744cd6453984977b58778d74707ba3028d00db",
+  "fieldNote": "The historical empty field records navigation before the current CPU reply; the probe did not assert that restored conversation history was empty."
+}

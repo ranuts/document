@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "mode": "adapter",
+  "probeSHA256": "3f7e9d6bf4e196916e7a809b31f5e4ab6d6cb735cb07b70374ca46869df87749",
+  "pluginPath": "dist/assets/agent-plugin-BEiUqNt1.js",
+  "pluginSHA256": "46d3b59704073dbafc899f49f598420012dfb2e857700ff915d3edcfa4d261ee",
+  "scope": "Current production automatic local fallback after controlled adapter rejection or GPU Worker script exception; real CPU Qwen3-0.6B chat in independent desktop Playwright WebKit with warm model cache and network available. No physical device, OOM, cold offline or generation replay claim.",
+  "errors": [],
+  "phases": [
+    {
+      "time": "2026-10-03T17:59:05.427Z",
+      "text": "Real automatic CPU model loaded"
+    },
+    {
+      "time": "2026-10-03T17:59:08.563Z",
+      "text": "CPU reply verified"
+    }
+  ],
+  "workerEvents": [
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "time": "2026-10-03T17:59:01.337Z"
+    },
+    {
+      "event": "created",
+      "url": "blob:http://127.0.0.1:5193/6fce5958-d151-4078-9024-a99ace9b7014",
+      "time": "2026-10-03T17:59:02.645Z"
+    }
+  ],
+  "loadMs": 20253,
+  "failedWorkerScripts": 0,
+  "note": "Model loaded — you can start chatting.",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "selectedProvider": "webllm",
+  "adapterDeniedCalls": 1,
+  "before": "\r\n",
+  "responseMs": 3026,
+  "reply": [
+    "Hello.Write to document"
+  ],
+  "visibleErrors": [],
+  "after": "\r\n",
+  "documentUnchanged": true,
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-CBn-a4IG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css"
+  ],
+  "pluginBytesUnchanged": true
+}

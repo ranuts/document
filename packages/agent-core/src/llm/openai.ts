@@ -37,7 +37,7 @@ export class OpenAIProvider implements LLMProvider {
     this.apiKey = options.apiKey ?? getApiKey('openai');
     this.model = options.model ?? DEFAULT_MODEL;
     this.systemPrompt = options.systemPrompt ?? DEFAULT_SYSTEM_PROMPT;
-    this.baseURL = options.baseURL ?? DEFAULT_BASE_URL;
+    this.baseURL = (options.baseURL ?? DEFAULT_BASE_URL).replace(/\/+$/, '');
     this.fetchImpl = options.fetchImpl;
   }
 

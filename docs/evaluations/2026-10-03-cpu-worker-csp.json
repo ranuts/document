@@ -1,0 +1,70 @@
+{
+  "scope": "Actual cached default CPU inference and CSP-respecting eval/data-module controls on the SDK main blob Worker. Current production HTML meta CSP, no injected policy or Worker bytes. Desktop Chromium; no physical-device/all-pthread/security-gate claim.",
+  "status": "completed",
+  "errors": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "shell": {
+    "isolated": true,
+    "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+    "code": [
+      {
+        "url": "blob:http://127.0.0.1:5193/8e35e5c5-5bda-4897-8d8a-ef6e6d65591d",
+        "length": 155266,
+        "mainLlama": true
+      }
+    ]
+  },
+  "targets": [
+    {
+      "targetId": "7F3B37702BDF9B72EC1FB148E9A588B4",
+      "url": "blob:http://127.0.0.1:5193/e831a57c-d507-4fa1-a39c-d93d48a14dcf",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "165AE24765BE449B9CF43CD31C448E6A",
+      "url": "blob:http://127.0.0.1:5193/641915ae-e8a7-4b9f-b9eb-08c43aac55c5",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "11BFD955A5173320A6CB4D4F6ECFDA78",
+      "url": "blob:http://127.0.0.1:5193/8e35e5c5-5bda-4897-8d8a-ef6e6d65591d",
+      "title": "blob:http://127.0.0.1:5193/8e35e5c5-5bda-4897-8d8a-ef6e6d65591d"
+    },
+    {
+      "targetId": "6B1C3EE38E595BF970E54D000CE3F8CD",
+      "url": "blob:http://127.0.0.1:5193/b932facd-1c77-4b31-8e48-c7c3c50fca0e",
+      "title": "em-pthread"
+    },
+    {
+      "targetId": "C8EFC30F9109CE841A345EAC41504424",
+      "url": "blob:http://127.0.0.1:5193/c7ea22df-f75b-438c-8032-c3e519ec2611",
+      "title": "em-pthread"
+    }
+  ],
+  "mainWorker": {
+    "targetId": "11BFD955A5173320A6CB4D4F6ECFDA78",
+    "url": "blob:http://127.0.0.1:5193/8e35e5c5-5bda-4897-8d8a-ef6e6d65591d",
+    "title": "blob:http://127.0.0.1:5193/8e35e5c5-5bda-4897-8d8a-ef6e6d65591d"
+  },
+  "evalControl": {
+    "blocked": true,
+    "name": "EvalError",
+    "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='\".\n"
+  },
+  "moduleControl": {
+    "blocked": true,
+    "name": "TypeError",
+    "message": "Failed to fetch dynamically imported module: data:text/javascript,export default 42"
+  },
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "baselineMeta": null,
+  "baselineEval": {
+    "blocked": false,
+    "value": 2
+  },
+  "baselineModule": {
+    "blocked": false,
+    "value": 42
+  }
+}

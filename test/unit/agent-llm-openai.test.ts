@@ -7,6 +7,22 @@ const okResponse = (body: unknown): Response => ({ ok: true, json: async () => b
 describe('OpenAIProvider', () => {
   afterEach(() => clearApiKey('openai'));
 
+  it('uses a compatible endpoint, custom model and bearer key', async () => {
+    const fetchImpl = vi.fn(async (_url: string, _init: RequestInit) =>
+      okResponse({ choices: [{ message: { content: 'ok' } }] }),
+    );
+    await new OpenAIProvider({
+      apiKey: 'custom-key',
+      model: 'custom-model',
+      baseURL: 'https://inference.example/v1/',
+      fetchImpl,
+    }).chat([{ role: 'user', content: 'hello' }], []);
+    const [url, init] = fetchImpl.mock.calls[0];
+    expect(url).toBe('https://inference.example/v1/chat/completions');
+    expect(JSON.parse(init.body as string).model).toBe('custom-model');
+    expect((init.headers as Record<string, string>).Authorization).toBe('Bearer custom-key');
+  });
+
   it('is not ready without a key', () => {
     expect(new OpenAIProvider({ apiKey: undefined }).isReady()).toBe(false);
   });

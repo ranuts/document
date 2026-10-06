@@ -22,6 +22,7 @@
     "prepare": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "marked": "16.4.2",
     "ranui": "0.5.0-alpha.6",
     "ranuts": "0.4.1-alpha.2"
   },

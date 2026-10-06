@@ -1,0 +1,146 @@
+{
+  "scope": "Actual native PPT selected-text reader only; no model or IM replacement claim",
+  "results": [
+    {
+      "fixture": {
+        "text": "Alpha target body",
+        "begin": 0,
+        "count": 5,
+        "expected": {
+          "text": "Alpha target body\n",
+          "selectedText": "Alpha",
+          "start": 0,
+          "end": 5
+        }
+      },
+      "result": {
+        "text": "Alpha target body\n",
+        "selectedText": "Alpha",
+        "start": 0,
+        "end": 5
+      },
+      "selectedNative": "Alpha",
+      "selectionUnchanged": true,
+      "historyUnchanged": true,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "Alpha Alpha",
+        "begin": 6,
+        "count": 5,
+        "expected": {
+          "text": "Alpha Alpha\n",
+          "selectedText": "Alpha",
+          "start": 6,
+          "end": 11
+        }
+      },
+      "result": {
+        "text": "Alpha Alpha\n",
+        "selectedText": "Alpha",
+        "start": 6,
+        "end": 11
+      },
+      "selectedNative": "Alpha",
+      "selectionUnchanged": true,
+      "historyUnchanged": true,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "😀\t 😀",
+        "begin": 0,
+        "count": 2,
+        "expected": {
+          "text": "😀\t 😀\n",
+          "selectedText": "😀\t",
+          "start": 0,
+          "end": 3
+        }
+      },
+      "result": {
+        "text": "😀\t 😀\n",
+        "selectedText": "😀\t",
+        "start": 0,
+        "end": 3
+      },
+      "selectedNative": "😀\t",
+      "selectionUnchanged": true,
+      "historyUnchanged": true,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "😀\t 😀",
+        "begin": 3,
+        "count": 1,
+        "expected": {
+          "text": "😀\t 😀\n",
+          "selectedText": "😀",
+          "start": 4,
+          "end": 6
+        }
+      },
+      "result": {
+        "text": "😀\t 😀\n",
+        "selectedText": "😀",
+        "start": 4,
+        "end": 6
+      },
+      "selectedNative": "😀",
+      "selectionUnchanged": true,
+      "historyUnchanged": true,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "Alpha target body",
+        "begin": 1,
+        "count": 3,
+        "backwards": true,
+        "expected": {
+          "text": "Alpha target body\n",
+          "selectedText": "lph",
+          "start": 1,
+          "end": 4
+        }
+      },
+      "result": {
+        "text": "Alpha target body\n",
+        "selectedText": "lph",
+        "start": 1,
+        "end": 4
+      },
+      "selectedNative": "lph",
+      "selectionUnchanged": true,
+      "historyUnchanged": true,
+      "exact": true
+    },
+    {
+      "fixture": {
+        "text": "Alpha\nBeta",
+        "begin": 3,
+        "count": 5,
+        "expected": {
+          "text": "Alpha\nBeta\n",
+          "selectedText": "ha\nBe",
+          "start": 3,
+          "end": 8
+        }
+      },
+      "result": {
+        "text": "Alpha\nBeta\n",
+        "selectedText": "ha\nBe",
+        "start": 3,
+        "end": 8
+      },
+      "selectedNative": "ha\r\nBe",
+      "selectionUnchanged": true,
+      "historyUnchanged": true,
+      "exact": true
+    }
+  ],
+  "errors": [],
+  "allPassed": true
+}

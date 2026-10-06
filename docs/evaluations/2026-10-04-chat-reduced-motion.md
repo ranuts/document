@@ -1,0 +1,9 @@
+# Jump-to-latest respects reduced motion
+
+The latest-reply button previously requested smooth scrolling regardless of the user's system preference. It now reads `prefers-reduced-motion: reduce` at each click and requests automatic positioning when enabled, retaining smooth scrolling otherwise. No UI setting or card was added. Automatic streaming/final-layout positioning continues to use auto behavior; the streaming dot is static in current styles.
+
+Both preference branches were added to the existing ChatView regression suite and failed before implementation. After implementation: product build passed; 116 files / 4,246 tests passed; source Oxlint excluding preserved `.scratch/**` artifacts, TypeScript, Docker configuration and diff checks passed. The full suite emitted an asynchronous rejection-handled warning. These tests stub media-query results and inspect the requested scroll behavior, not physical OS preferences or browser animation frames. A browser media-emulation check remains needed. Earlier source-hash-bound browser reports refer to their historical source revision and will naturally stop matching the changed ChatView hash; do not reinterpret them as current-source certification.
+
+## Browser media-emulation check
+
+A real Chromium source harness switched reduced motion from reduce to no-preference and back to reduce on the same mounted view. Actual visible jump-button clicks requested auto, smooth and auto respectively. The browser's native scrollTo was retained beneath a recording wrapper; actual scrolling reached the bottom within two pixels each time. No page errors occurred and browser/server closed. Exact probe/source hashes and request counts are checked by `python3 docs/evaluations/verify-chat-reduced-motion-browser.py`. This covers browser media emulation and actual scrolling, not physical OS preference changes, assistive technology, native editor integration or every browser.

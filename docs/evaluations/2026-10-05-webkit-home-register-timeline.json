@@ -1,0 +1,1578 @@
+{
+  "runtime": "f2eb0ed",
+  "input": {
+    "path": ".scratch/webkit-embedded-font-native-saved.docx",
+    "bytes": 25849,
+    "sha256": "c04e1bb1b80379ab00a2c301de927453647bed51be9974db3e547a6f228b45a3"
+  },
+  "errors": [],
+  "requests": [
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/manifest.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/theme-presentation.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/fonts.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-tokens.88df51ac.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/home.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/button.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/popover.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/content.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ranui-iife/theme-switch.iife.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/lang-switch.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/open-local.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/landing-prefetch.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/history-recent.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sw-register.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/Geist-Variable.woff2"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/GeistMono-Variable.woff2"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sw.js?isolation=1"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/editor?open=local"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/manifest.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/theme-presentation.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/fonts.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-tokens.88df51ac.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/editor-AEGbDaRC.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/editor-C8c8IKfZ.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/rolldown-runtime-DK3Fl9T5.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/builder-EH76YCFS-BT43qACE.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/input-DEoPNM0j-BDZr6q3i.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/chevron-down-DRUABlJy-DIQ8yRUG.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/assets/pending-open-BKBmFD6R.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/ran-fonts/Geist-Variable.woff2"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/manifest.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/icons/document-light.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/api/documents/api.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5194&uitheme=theme-classic-light&fileType=docx"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/vendor/requirejs/require.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/css/app.css"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/app.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/locale/en.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/AllFonts.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/vendor/xregexp/xregexp-all-min.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/vendor/socketio/socket.io.min.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t_helper.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/word/sdk-all-min.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/cursors/svg.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/word/sdk-all.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/libfont/engine/fonts.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Charts/ChartStyles.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconssmall.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/libfont/engine/fonts.wasm"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "phase": "online",
+      "url": "blob:http://127.0.0.1:5194/526498b7-e065-4238-b5c9-2343be0ae739"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell.wasm"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/icons/anchor.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/toc.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/toc_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/img.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/img_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/content_controls/signature.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/image.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/image_url.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/table.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/table_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/chart.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/chart_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/audio.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/video.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/smartart.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/placeholders/smartart_active.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t.worker.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t_helper.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/wasm/x2t/x2t.wasm.br"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/sdkjs/common/Images/fonts_thumbnail.png.bin"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/233"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/058"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/057"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/055"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/056"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/062"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/061"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/059"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/060"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/267"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/268"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/070"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/069"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/067"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/fonts/068"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/plugins.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconsbig.png"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/code.js"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg"
+    },
+    {
+      "phase": "online",
+      "url": "http://127.0.0.1:5194/themes.json"
+    }
+  ],
+  "failures": [],
+  "registrationEvents": [
+    {
+      "kind": "register-start",
+      "href": "http://127.0.0.1:5194/",
+      "at": 1791153687226,
+      "script": "/sw.js?isolation=1"
+    },
+    {
+      "kind": "pagehide",
+      "href": "http://127.0.0.1:5194/",
+      "at": 1791153687313
+    },
+    {
+      "kind": "register-start",
+      "href": "http://127.0.0.1:5194/editor?open=local",
+      "at": 1791153687347,
+      "script": "http://127.0.0.1:5194/sw.js?isolation=1"
+    }
+  ],
+  "version": "26.5",
+  "text": "WEBKIT_WORD_20261005\r\n",
+  "exact": true,
+  "onlineText": "WEBKIT_WORD_20261005\r\n",
+  "beforeControl": {
+    "href": "http://127.0.0.1:5194/editor?saved=5b21610a-d797-457d-8f78-eafcb89bdd18",
+    "isolated": true,
+    "controller": null,
+    "registrations": [
+      {
+        "scope": "http://127.0.0.1:5194/",
+        "installing": "installing"
+      }
+    ],
+    "caches": []
+  },
+  "controllerWait": "TimeoutError: page.waitForFunction: Timeout 15000ms exceeded.",
+  "afterControl": {
+    "href": "http://127.0.0.1:5194/editor?saved=5b21610a-d797-457d-8f78-eafcb89bdd18",
+    "controller": null,
+    "registrations": [
+      {
+        "scope": "http://127.0.0.1:5194/",
+        "installing": "installing"
+      }
+    ],
+    "caches": []
+  },
+  "finished": true,
+  "closed": true,
+  "serverRequests": [
+    {
+      "url": "/",
+      "method": "GET",
+      "started": 1791153686990,
+      "bytes": 6084,
+      "status": 200,
+      "contentType": "text/html",
+      "upstreamEnded": 1791153686994,
+      "finished": 1791153686995,
+      "closed": 1791153686995
+    },
+    {
+      "url": "/manifest.json",
+      "method": "GET",
+      "started": 1791153687156,
+      "bytes": 663,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153687158,
+      "finished": 1791153687158,
+      "closed": 1791153687158
+    },
+    {
+      "url": "/theme-presentation.js",
+      "method": "GET",
+      "started": 1791153687158,
+      "bytes": 830,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687160,
+      "finished": 1791153687160,
+      "closed": 1791153687160
+    },
+    {
+      "url": "/ran-fonts/fonts.css",
+      "method": "GET",
+      "started": 1791153687159,
+      "bytes": 910,
+      "status": 200,
+      "contentType": "text/css",
+      "upstreamEnded": 1791153687161,
+      "finished": 1791153687161,
+      "closed": 1791153687161
+    },
+    {
+      "url": "/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "started": 1791153687159,
+      "bytes": 2286,
+      "status": 200,
+      "contentType": "text/css",
+      "upstreamEnded": 1791153687162,
+      "finished": 1791153687162,
+      "closed": 1791153687162
+    },
+    {
+      "url": "/home.css",
+      "method": "GET",
+      "started": 1791153687159,
+      "bytes": 10380,
+      "status": 200,
+      "contentType": "text/css",
+      "upstreamEnded": 1791153687163,
+      "finished": 1791153687163,
+      "closed": 1791153687163
+    },
+    {
+      "url": "/ranui-iife/popover.iife.js",
+      "method": "GET",
+      "started": 1791153687159,
+      "bytes": 14640,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687162,
+      "finished": 1791153687163,
+      "closed": 1791153687163
+    },
+    {
+      "url": "/ranui-iife/button.iife.js",
+      "method": "GET",
+      "started": 1791153687160,
+      "bytes": 11734,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687163,
+      "finished": 1791153687163,
+      "closed": 1791153687163
+    },
+    {
+      "url": "/ranui-iife/content.iife.js",
+      "method": "GET",
+      "started": 1791153687161,
+      "bytes": 8985,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687163,
+      "finished": 1791153687163,
+      "closed": 1791153687163
+    },
+    {
+      "url": "/ranui-iife/theme-switch.iife.js",
+      "method": "GET",
+      "started": 1791153687161,
+      "bytes": 10976,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687163,
+      "finished": 1791153687163,
+      "closed": 1791153687163
+    },
+    {
+      "url": "/lang-switch.js",
+      "method": "GET",
+      "started": 1791153687162,
+      "bytes": 951,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687164,
+      "finished": 1791153687164,
+      "closed": 1791153687164
+    },
+    {
+      "url": "/open-local.js",
+      "method": "GET",
+      "started": 1791153687163,
+      "bytes": 2336,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687165,
+      "finished": 1791153687165,
+      "closed": 1791153687165
+    },
+    {
+      "url": "/landing-prefetch.js",
+      "method": "GET",
+      "started": 1791153687164,
+      "bytes": 5906,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687165,
+      "finished": 1791153687165,
+      "closed": 1791153687165
+    },
+    {
+      "url": "/history-recent.js",
+      "method": "GET",
+      "started": 1791153687164,
+      "bytes": 1418,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687165,
+      "finished": 1791153687165,
+      "closed": 1791153687165
+    },
+    {
+      "url": "/sw-register.js",
+      "method": "GET",
+      "started": 1791153687164,
+      "bytes": 2783,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687165,
+      "finished": 1791153687165,
+      "closed": 1791153687165
+    },
+    {
+      "url": "/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "started": 1791153687180,
+      "bytes": 69652,
+      "status": 200,
+      "contentType": "font/woff2",
+      "upstreamEnded": 1791153687181,
+      "finished": 1791153687181,
+      "closed": 1791153687181
+    },
+    {
+      "url": "/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "started": 1791153687204,
+      "bytes": 71368,
+      "status": 200,
+      "contentType": "font/woff2",
+      "upstreamEnded": 1791153687205,
+      "finished": 1791153687205,
+      "closed": 1791153687205
+    },
+    {
+      "url": "/sw.js?isolation=1",
+      "method": "GET",
+      "started": 1791153687238,
+      "bytes": 12390,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687240,
+      "finished": 1791153687240,
+      "closed": 1791153687240
+    },
+    {
+      "url": "/editor?open=local",
+      "method": "GET",
+      "started": 1791153687311,
+      "bytes": 1558,
+      "status": 200,
+      "contentType": "text/html;charset=utf-8",
+      "upstreamEnded": 1791153687312,
+      "finished": 1791153687312,
+      "closed": 1791153687312
+    },
+    {
+      "url": "/manifest.json",
+      "method": "GET",
+      "started": 1791153687317,
+      "bytes": 663,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153687319,
+      "finished": 1791153687319,
+      "closed": 1791153687319
+    },
+    {
+      "url": "/theme-presentation.js",
+      "method": "GET",
+      "started": 1791153687317,
+      "bytes": 0,
+      "status": 304,
+      "upstreamEnded": 1791153687318,
+      "finished": 1791153687318,
+      "closed": 1791153687318
+    },
+    {
+      "url": "/ran-fonts/fonts.css",
+      "method": "GET",
+      "started": 1791153687317,
+      "bytes": 0,
+      "status": 304,
+      "upstreamEnded": 1791153687318,
+      "finished": 1791153687318,
+      "closed": 1791153687318
+    },
+    {
+      "url": "/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "started": 1791153687317,
+      "bytes": 0,
+      "status": 304,
+      "upstreamEnded": 1791153687318,
+      "finished": 1791153687318,
+      "closed": 1791153687318
+    },
+    {
+      "url": "/assets/editor-AEGbDaRC.js",
+      "method": "GET",
+      "started": 1791153687318,
+      "bytes": 67085,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687324,
+      "finished": 1791153687324,
+      "closed": 1791153687324
+    },
+    {
+      "url": "/assets/editor-C8c8IKfZ.css",
+      "method": "GET",
+      "started": 1791153687318,
+      "bytes": 3478,
+      "status": 200,
+      "contentType": "text/css",
+      "upstreamEnded": 1791153687320,
+      "finished": 1791153687320,
+      "closed": 1791153687320
+    },
+    {
+      "url": "/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "started": 1791153687319,
+      "bytes": 158,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687321,
+      "finished": 1791153687321,
+      "closed": 1791153687321
+    },
+    {
+      "url": "/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "started": 1791153687320,
+      "bytes": 20991,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687323,
+      "finished": 1791153687323,
+      "closed": 1791153687323
+    },
+    {
+      "url": "/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "started": 1791153687321,
+      "bytes": 158,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687322,
+      "finished": 1791153687322,
+      "closed": 1791153687322
+    },
+    {
+      "url": "/assets/input-DEoPNM0j-BDZr6q3i.js",
+      "method": "GET",
+      "started": 1791153687321,
+      "bytes": 69707,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687326,
+      "finished": 1791153687326,
+      "closed": 1791153687326
+    },
+    {
+      "url": "/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "started": 1791153687321,
+      "bytes": 417,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687322,
+      "finished": 1791153687322,
+      "closed": 1791153687322
+    },
+    {
+      "url": "/assets/pending-open-BKBmFD6R.js",
+      "method": "GET",
+      "started": 1791153687345,
+      "bytes": 722,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153687347,
+      "finished": 1791153687347,
+      "closed": 1791153687347
+    },
+    {
+      "url": "/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "started": 1791153687346,
+      "bytes": 0,
+      "status": 304,
+      "upstreamEnded": 1791153687347,
+      "finished": 1791153687347,
+      "closed": 1791153687347
+    },
+    {
+      "url": "/manifest.json",
+      "method": "GET",
+      "started": 1791153688367,
+      "bytes": 663,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153688368,
+      "finished": 1791153688368,
+      "closed": 1791153688368
+    },
+    {
+      "url": "/icons/document-light.svg",
+      "method": "GET",
+      "started": 1791153688372,
+      "bytes": 697,
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "upstreamEnded": 1791153688373,
+      "finished": 1791153688373,
+      "closed": 1791153688373
+    },
+    {
+      "url": "/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "started": 1791153702360,
+      "bytes": 14902,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702367,
+      "finished": 1791153702367,
+      "closed": 1791153702367
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5194&uitheme=theme-classic-light&fileType=docx",
+      "method": "GET",
+      "started": 1791153702541,
+      "bytes": 38978,
+      "status": 200,
+      "contentType": "text/html;charset=utf-8",
+      "upstreamEnded": 1791153702548,
+      "finished": 1791153702548,
+      "closed": 1791153702548
+    },
+    {
+      "url": "/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "started": 1791153702836,
+      "bytes": 6753,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702839,
+      "finished": 1791153702839,
+      "closed": 1791153702839
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET",
+      "started": 1791153702845,
+      "bytes": 86665,
+      "status": 200,
+      "contentType": "text/css",
+      "upstreamEnded": 1791153702857,
+      "finished": 1791153702857,
+      "closed": 1791153702857
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET",
+      "started": 1791153702851,
+      "bytes": 494235,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702893,
+      "finished": 1791153702893,
+      "closed": 1791153702893
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/locale/en.json",
+      "method": "GET",
+      "started": 1791153702918,
+      "bytes": 53697,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153702924,
+      "finished": 1791153702924,
+      "closed": 1791153702924
+    },
+    {
+      "url": "/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "started": 1791153702932,
+      "bytes": 32867,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702936,
+      "finished": 1791153702936,
+      "closed": 1791153702936
+    },
+    {
+      "url": "/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "started": 1791153702932,
+      "bytes": 35350,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702936,
+      "finished": 1791153702936,
+      "closed": 1791153702936
+    },
+    {
+      "url": "/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "started": 1791153702932,
+      "bytes": 13078,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702934,
+      "finished": 1791153702934,
+      "closed": 1791153702934
+    },
+    {
+      "url": "/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "started": 1791153702932,
+      "bytes": 13559,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702934,
+      "finished": 1791153702934,
+      "closed": 1791153702934
+    },
+    {
+      "url": "/sdkjs/word/sdk-all-min.js",
+      "method": "GET",
+      "started": 1791153702943,
+      "bytes": 444482,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153702974,
+      "finished": 1791153702974,
+      "closed": 1791153702974
+    },
+    {
+      "url": "/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "started": 1791153702998,
+      "bytes": 5978,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153702999,
+      "finished": 1791153702999,
+      "closed": 1791153702999
+    },
+    {
+      "url": "/sdkjs/word/sdk-all.js",
+      "method": "GET",
+      "started": 1791153703051,
+      "bytes": 2955638,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153703285,
+      "finished": 1791153703285,
+      "closed": 1791153703285
+    },
+    {
+      "url": "/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "started": 1791153703051,
+      "bytes": 13263,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153703053,
+      "finished": 1791153703053,
+      "closed": 1791153703053
+    },
+    {
+      "url": "/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "started": 1791153703051,
+      "bytes": 92840,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153703066,
+      "finished": 1791153703066,
+      "closed": 1791153703066
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "started": 1791153703068,
+      "bytes": 20444,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703069,
+      "finished": 1791153703069,
+      "closed": 1791153703069
+    },
+    {
+      "url": "/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "started": 1791153703093,
+      "bytes": 3614021,
+      "status": 200,
+      "contentType": "application/wasm",
+      "upstreamEnded": 1791153703102,
+      "finished": 1791153703102,
+      "closed": 1791153703102
+    },
+    {
+      "url": "/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "started": 1791153703206,
+      "bytes": 9288,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153703207,
+      "finished": 1791153703207,
+      "closed": 1791153703207
+    },
+    {
+      "url": "/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET",
+      "started": 1791153703229,
+      "bytes": 510644,
+      "status": 200,
+      "contentType": "application/wasm",
+      "upstreamEnded": 1791153703231,
+      "finished": 1791153703231,
+      "closed": 1791153703231
+    },
+    {
+      "url": "/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "started": 1791153703512,
+      "bytes": 153,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703513,
+      "finished": 1791153703513,
+      "closed": 1791153703513
+    },
+    {
+      "url": "/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET",
+      "started": 1791153703553,
+      "bytes": 213,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703555,
+      "finished": 1791153703555,
+      "closed": 1791153703555
+    },
+    {
+      "url": "/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET",
+      "started": 1791153703553,
+      "bytes": 186,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703555,
+      "finished": 1791153703555,
+      "closed": 1791153703555
+    },
+    {
+      "url": "/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET",
+      "started": 1791153703553,
+      "bytes": 165,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703555,
+      "finished": 1791153703555,
+      "closed": 1791153703555
+    },
+    {
+      "url": "/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET",
+      "started": 1791153703553,
+      "bytes": 147,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703555,
+      "finished": 1791153703555,
+      "closed": 1791153703555
+    },
+    {
+      "url": "/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET",
+      "started": 1791153703553,
+      "bytes": 403,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703555,
+      "finished": 1791153703555,
+      "closed": 1791153703555
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "started": 1791153703559,
+      "bytes": 313,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703560,
+      "finished": 1791153703560,
+      "closed": 1791153703560
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "started": 1791153703560,
+      "bytes": 107,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703561,
+      "finished": 1791153703561,
+      "closed": 1791153703561
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "started": 1791153703560,
+      "bytes": 99,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703561,
+      "finished": 1791153703561,
+      "closed": 1791153703561
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "started": 1791153703560,
+      "bytes": 115,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703561,
+      "finished": 1791153703561,
+      "closed": 1791153703561
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "started": 1791153703560,
+      "bytes": 193,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703562,
+      "finished": 1791153703562,
+      "closed": 1791153703562
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "started": 1791153703560,
+      "bytes": 111,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703562,
+      "finished": 1791153703562,
+      "closed": 1791153703562
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "started": 1791153703560,
+      "bytes": 257,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703562,
+      "finished": 1791153703562,
+      "closed": 1791153703562
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "started": 1791153703561,
+      "bytes": 165,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703563,
+      "finished": 1791153703563,
+      "closed": 1791153703563
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "started": 1791153703562,
+      "bytes": 316,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703563,
+      "finished": 1791153703563,
+      "closed": 1791153703563
+    },
+    {
+      "url": "/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "started": 1791153703562,
+      "bytes": 323,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153703563,
+      "finished": 1791153703563,
+      "closed": 1791153703563
+    },
+    {
+      "url": "/sdkjs/common/wasm/x2t/x2t.worker.js",
+      "method": "GET",
+      "started": 1791153703577,
+      "bytes": 1781,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153703578,
+      "finished": 1791153703578,
+      "closed": 1791153703578
+    },
+    {
+      "url": "/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "started": 1791153703581,
+      "bytes": 13559,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153703583,
+      "finished": 1791153703583,
+      "closed": 1791153703583
+    },
+    {
+      "url": "/sdkjs/common/wasm/x2t/x2t.js",
+      "method": "GET",
+      "started": 1791153703586,
+      "bytes": 48497,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153703590,
+      "finished": 1791153703590,
+      "closed": 1791153703590
+    },
+    {
+      "url": "/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "method": "GET",
+      "started": 1791153703595,
+      "bytes": 6898179,
+      "status": 200,
+      "contentType": "application/wasm",
+      "upstreamEnded": 1791153703684,
+      "finished": 1791153703684,
+      "closed": 1791153703684
+    },
+    {
+      "url": "/sdkjs/common/Images/fonts_thumbnail.png.bin",
+      "method": "GET",
+      "started": 1791153704124,
+      "bytes": 230701,
+      "status": 200,
+      "contentType": "application/octet-stream",
+      "upstreamEnded": 1791153704126,
+      "finished": 1791153704126,
+      "closed": 1791153704126
+    },
+    {
+      "url": "/fonts/233",
+      "method": "GET",
+      "started": 1791153704126,
+      "bytes": 123576,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704135,
+      "finished": 1791153704135,
+      "closed": 1791153704135
+    },
+    {
+      "url": "/fonts/058",
+      "method": "GET",
+      "started": 1791153704126,
+      "bytes": 180721,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704139,
+      "finished": 1791153704139,
+      "closed": 1791153704139
+    },
+    {
+      "url": "/fonts/057",
+      "method": "GET",
+      "started": 1791153704126,
+      "bytes": 165905,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704138,
+      "finished": 1791153704138,
+      "closed": 1791153704138
+    },
+    {
+      "url": "/fonts/055",
+      "method": "GET",
+      "started": 1791153704126,
+      "bytes": 175960,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704138,
+      "finished": 1791153704138,
+      "closed": 1791153704138
+    },
+    {
+      "url": "/fonts/056",
+      "method": "GET",
+      "started": 1791153704126,
+      "bytes": 168172,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704140,
+      "finished": 1791153704140,
+      "closed": 1791153704140
+    },
+    {
+      "url": "/fonts/062",
+      "method": "GET",
+      "started": 1791153704126,
+      "bytes": 213500,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704143,
+      "finished": 1791153704143,
+      "closed": 1791153704143
+    },
+    {
+      "url": "/fonts/061",
+      "method": "GET",
+      "started": 1791153704135,
+      "bytes": 219989,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704150,
+      "finished": 1791153704150,
+      "closed": 1791153704150
+    },
+    {
+      "url": "/fonts/059",
+      "method": "GET",
+      "started": 1791153704139,
+      "bytes": 214889,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704153,
+      "finished": 1791153704153,
+      "closed": 1791153704153
+    },
+    {
+      "url": "/fonts/060",
+      "method": "GET",
+      "started": 1791153704139,
+      "bytes": 216656,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704153,
+      "finished": 1791153704153,
+      "closed": 1791153704153
+    },
+    {
+      "url": "/fonts/267",
+      "method": "GET",
+      "started": 1791153704139,
+      "bytes": 6220434,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704400,
+      "finished": 1791153704400,
+      "closed": 1791153704400
+    },
+    {
+      "url": "/fonts/268",
+      "method": "GET",
+      "started": 1791153704140,
+      "bytes": 6299580,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704396,
+      "finished": 1791153704396,
+      "closed": 1791153704396
+    },
+    {
+      "url": "/fonts/070",
+      "method": "GET",
+      "started": 1791153704143,
+      "bytes": 214219,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704157,
+      "finished": 1791153704157,
+      "closed": 1791153704157
+    },
+    {
+      "url": "/fonts/069",
+      "method": "GET",
+      "started": 1791153704150,
+      "bytes": 212784,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704162,
+      "finished": 1791153704162,
+      "closed": 1791153704162
+    },
+    {
+      "url": "/fonts/067",
+      "method": "GET",
+      "started": 1791153704154,
+      "bytes": 204111,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704167,
+      "finished": 1791153704167,
+      "closed": 1791153704167
+    },
+    {
+      "url": "/fonts/068",
+      "method": "GET",
+      "started": 1791153704154,
+      "bytes": 214247,
+      "status": 200,
+      "contentType": "",
+      "upstreamEnded": 1791153704167,
+      "finished": 1791153704167,
+      "closed": 1791153704167
+    },
+    {
+      "url": "/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "started": 1791153704453,
+      "bytes": 326,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153704455,
+      "finished": 1791153704455,
+      "closed": 1791153704455
+    },
+    {
+      "url": "/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "started": 1791153704454,
+      "bytes": 672,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153704455,
+      "finished": 1791153704455,
+      "closed": 1791153704455
+    },
+    {
+      "url": "/plugins.json",
+      "method": "GET",
+      "started": 1791153704470,
+      "bytes": 22,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153704470,
+      "finished": 1791153704471,
+      "closed": 1791153704471
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "started": 1791153704489,
+      "bytes": 17260,
+      "status": 200,
+      "contentType": "image/png",
+      "upstreamEnded": 1791153704490,
+      "finished": 1791153704490,
+      "closed": 1791153704490
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET",
+      "started": 1791153704648,
+      "bytes": 231992,
+      "status": 200,
+      "contentType": "text/javascript",
+      "upstreamEnded": 1791153704667,
+      "finished": 1791153704667,
+      "closed": 1791153704667
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET",
+      "started": 1791153704665,
+      "bytes": 482,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153704666,
+      "finished": 1791153704666,
+      "closed": 1791153704666
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET",
+      "started": 1791153704666,
+      "bytes": 745,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153704667,
+      "finished": 1791153704667,
+      "closed": 1791153704667
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET",
+      "started": 1791153704669,
+      "bytes": 25031,
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "upstreamEnded": 1791153704672,
+      "finished": 1791153704672,
+      "closed": 1791153704672
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET",
+      "started": 1791153704669,
+      "bytes": 15797,
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "upstreamEnded": 1791153704671,
+      "finished": 1791153704671,
+      "closed": 1791153704671
+    },
+    {
+      "url": "/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET",
+      "started": 1791153704669,
+      "bytes": 2087,
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "upstreamEnded": 1791153704671,
+      "finished": 1791153704671,
+      "closed": 1791153704671
+    },
+    {
+      "url": "/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET",
+      "started": 1791153704669,
+      "bytes": 5859,
+      "status": 200,
+      "contentType": "image/svg+xml",
+      "upstreamEnded": 1791153704671,
+      "finished": 1791153704671,
+      "closed": 1791153704671
+    },
+    {
+      "url": "/themes.json",
+      "method": "GET",
+      "started": 1791153704679,
+      "bytes": 15,
+      "status": 200,
+      "contentType": "application/json",
+      "upstreamEnded": 1791153704680,
+      "finished": 1791153704680,
+      "closed": 1791153704680
+    }
+  ]
+}

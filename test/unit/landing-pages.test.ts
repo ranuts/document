@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { MAX_AGE_MS } from '../../lib/history/types';
 import { LOCALES, MENU_ORDER, generate } from '../../bin/build-pages.mjs';
 
 /**
@@ -332,14 +333,20 @@ describe('landing pages', () => {
    * cannot handle, a workflow it does not support -- so the boundaries are part
    * of the contract, not an afterthought.
    */
-  it('both homepages answer what happens to unsaved edits, and name the retention window', () => {
+  it('every homepage describes recovery using the actual retention window', () => {
+    const retentionDays = MAX_AGE_MS / (24 * 60 * 60 * 1000);
     // The single highest-value question this site can answer for a search engine
     // or an assistant ("I closed the tab -- did I lose my work?"), and the one
     // place the seven-day promise has to be machine-readable. Losing it to a
     // copy edit would cost the answer, not just the wording.
     for (const [rel, ask, days] of [
-      ['index.html', /tab|refresh/i, '7 days'],
-      ['zh-CN/index.html', /标签页|刷新/, '7 天'],
+      ['index.html', /tab|refresh/i, `${retentionDays} days`],
+      ['zh-CN/index.html', /标签页|刷新/, `${retentionDays} 天`],
+      ['ja/index.html', /タブ|再読み込み/, `${retentionDays} 日間`],
+      ['de/index.html', /Tab|neu lade/i, `${retentionDays} Tage`],
+      ['es/index.html', /pestaña|recargo/i, `${retentionDays} días`],
+      ['ko/index.html', /탭|새로고침/, `${retentionDays}일`],
+      ['pt/index.html', /aba|recarreg/i, `${retentionDays} dias`],
     ] as Array<[string, RegExp, string]>) {
       const html = generated(rel);
       const faqs = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
@@ -354,6 +361,8 @@ describe('landing pages', () => {
       const answer = questions.find((q) => ask.test(q.name))?.acceptedAnswer.text;
       expect(answer, `${rel} has no question about closing the tab`).toBeTruthy();
       expect(answer).toContain(days);
+      expect(answer).toContain('IndexedDB');
+      expect(answer).toContain('/history');
     }
   });
 
@@ -388,7 +397,16 @@ describe('landing pages', () => {
   it('llms.txt states the limitations, not just the features', () => {
     const llms = readFileSync(resolve(PUBLIC, 'llms.txt'), 'utf8');
     expect(llms).toMatch(/^## Limitations/m);
-    for (const boundary of [/memory/i, /collaborat/i, /does not\s+rewrite|NOT rewrite/i]) {
+    for (const boundary of [
+      /memory/i,
+      /collaborat/i,
+      /does not\s+rewrite|NOT rewrite/i,
+      /built-in AI assistant is unfinished/i,
+      /not a released feature/i,
+      /embedding host/i,
+      /browser agents/i,
+      /cached/i,
+    ]) {
       expect(llms, `llms.txt limitations must mention ${boundary}`).toMatch(boundary);
     }
   });

@@ -1,0 +1,40 @@
+{
+  "status": "failed",
+  "scope": "Isolated self-built CPU compatibility baseline; standalone SDK, no editor write or production changes",
+  "files": {
+    "js": "c1795e6e35718e985d2a58bef7f648d3eb180811925c3f11e58b052ff99a09e5",
+    "wasm": "3e035cd29e6848c8bc37167032d0fb8f5f564a4c829dc22bb09b653960aed4b5"
+  },
+  "served": [
+    {
+      "method": "GET",
+      "url": "/runtime.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "HEAD",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 484220320
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.wasm",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    }
+  ],
+  "errors": [],
+  "error": "Error: page.evaluate: RuntimeError: (ABORT) \n    at http://127.0.0.1:50632/runtime.wasm:wasm-function[1276]:0xfd3fa\n    at http://127.0.0.1:50632/runtime.wasm:wasm-function[7877]:0x971f02\n    at http://127.0.0.1:50632/runtime.wasm:wasm-function[815]:0x98cba\n    at http://127.0.0.1:50632/runtime.wasm:wasm-function[805]:0x97485\n    at wrapper (b403dce4-2ae5-4362-ba59-7d42dd90cb14:22:85349)\n    at ___cxa_throw (b403dce4-2ae5-4362-ba59-7d42dd90cb14:22:18929)"
+}

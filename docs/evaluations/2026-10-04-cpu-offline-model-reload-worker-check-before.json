@@ -1,0 +1,66 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "blob:http://127.0.0.1:5193/6c077d88-9791-4a1d-9fb0-7ef474ae33b9"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "url": "blob:http://127.0.0.1:5193/08a378b7-c611-4eab-af99-80d9d9fc0ff0"
+    },
+    {
+      "event": "created",
+      "id": 4,
+      "url": "blob:http://127.0.0.1:5193/c4561239-6cbc-436a-a367-14002fcf3fec"
+    },
+    {
+      "event": "created",
+      "id": 5,
+      "url": "blob:http://127.0.0.1:5193/affe8acd-ec9f-4c2e-8646-079796f128ab"
+    },
+    {
+      "event": "created",
+      "id": 6,
+      "url": "blob:http://127.0.0.1:5193/7e2c6dfe-229d-419b-9cc2-9a7fd028e685"
+    },
+    {
+      "event": "closed",
+      "id": 3
+    },
+    {
+      "event": "closed",
+      "id": 4
+    },
+    {
+      "event": "closed",
+      "id": 5
+    },
+    {
+      "event": "closed",
+      "id": 6
+    },
+    {
+      "event": "closed",
+      "id": 2
+    }
+  ],
+  "offlineRequests": [],
+  "probeSHA256": "e2d3ff3274d3be0f4bc3e9a275998abaf014a216e4c2bd6faeed4b03ca7213ef",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "status": "failed",
+  "error": "Error: Initial Workers did not close"
+}

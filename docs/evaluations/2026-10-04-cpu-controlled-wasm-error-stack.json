@@ -1,0 +1,123 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "blob:http://127.0.0.1:5193/1cc26f46-e52a-461f-99da-d5a8f4b1cb94"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "url": "blob:http://127.0.0.1:5193/184da70d-82ac-44a4-a477-553cfbbedc7c"
+    },
+    {
+      "event": "created",
+      "id": 4,
+      "url": "blob:http://127.0.0.1:5193/058ecfea-cea5-4b3b-8815-85cfd587c396"
+    },
+    {
+      "event": "created",
+      "id": 5,
+      "url": "blob:http://127.0.0.1:5193/86eb3cee-95f1-4f86-8d1a-cce339499d26"
+    },
+    {
+      "event": "created",
+      "id": 6,
+      "url": "blob:http://127.0.0.1:5193/1c061114-7ddd-4518-8ebe-ba9cecbaf37b"
+    },
+    {
+      "event": "closed",
+      "id": 3
+    },
+    {
+      "event": "closed",
+      "id": 4
+    },
+    {
+      "event": "closed",
+      "id": 5
+    },
+    {
+      "event": "closed",
+      "id": 6
+    },
+    {
+      "event": "closed",
+      "id": 2
+    },
+    {
+      "event": "created",
+      "id": 7,
+      "url": "blob:http://127.0.0.1:5193/e6628eb1-3713-4d80-b27e-51a56c92c085"
+    },
+    {
+      "event": "created",
+      "id": 8,
+      "url": "blob:http://127.0.0.1:5193/a426b1f4-b2b7-4317-bd05-eec73a2b8175"
+    },
+    {
+      "event": "created",
+      "id": 9,
+      "url": "blob:http://127.0.0.1:5193/160d1d8c-3c1d-4294-b730-f99eec186fd1"
+    },
+    {
+      "event": "created",
+      "id": 10,
+      "url": "blob:http://127.0.0.1:5193/413b6adc-26be-4baa-8dca-0eb69bc75252"
+    },
+    {
+      "event": "created",
+      "id": 11,
+      "url": "blob:http://127.0.0.1:5193/38cda390-dd66-4879-9238-c947611cd74f"
+    }
+  ],
+  "offlineRequests": [
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET",
+      "hasBody": false
+    }
+  ],
+  "probeSHA256": "3fba60761db1d38dfaf5ec32e929c0d6699dab88e12d1857812d8dd87f66a737",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "initialWorkerIds": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "selectedProvider": "webllm",
+      "browserOnline": false,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 36.6 token/s · First text: 0.92 s · Overall response rate: 3.16 token/s · 3 tokens",
+      "reply": "Hello!Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

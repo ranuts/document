@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-03T02:19:36.159Z",
+  "scope": "Actual isolated Chromium CPU Qwen3-0.6B selected-text formal rewrite. Diagnostic response capture injected into generated application bundle; native inference and all result validation remain real. Current production request prompt.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 33895,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [
+    {
+      "text": "{\"text\": \"Alex is to pay 1,250 EUR on October 8, 2026.\"}",
+      "stopReason": "stop",
+      "usage": {
+        "completionTokens": 28,
+        "promptTokens": 447,
+        "promptProcessingDurationMs": 29042.499,
+        "decodingDurationMs": 4789.201,
+        "decodeTokensPerSecond": 5.637683613613211,
+        "responseDurationMs": 33862.300000190735,
+        "endToEndTokensPerSecond": 0.8268782687484987
+      }
+    }
+  ],
+  "scriptRequests": [],
+  "cacheReset": {
+    "registrations": 1,
+    "removed": 9
+  },
+  "errors": [],
+  "probeSource": "probe-cpu-rewrite-raw-baseline.mjs",
+  "probeSha256": "f62ea375d21ee56c41a949ceecfa1e2893c157f5230d845b4924e89b15c26e2a",
+  "runnerSource": "run-cpu-rewrite-diagnostic.py",
+  "runnerSha256": "9d529074d4072a7530e79d154203ae532b886766c3419783ca7f14256e87b0ac",
+  "baselineBundleSha256": "4bfd809b14bef2039fe798570cc06bc451b16c8b17730012d7213ab3ab7d9908",
+  "variant": "baseline",
+  "assessment": {
+    "writingTaskAchieved": false,
+    "documentPreserved": true,
+    "numericDateGuardRejected": true,
+    "rawResponseCaptured": true,
+    "adopted": false
+  },
+  "limitations": [
+    "Single sample per prompt; stochastic default generation, no seed or reliability estimate.",
+    "Not a model quality pass or a latency benchmark.",
+    "Only generated assets were temporarily instrumented; original bundle was restored exactly."
+  ]
+}

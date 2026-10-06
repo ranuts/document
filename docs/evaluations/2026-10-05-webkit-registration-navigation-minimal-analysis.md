@@ -1,0 +1,9 @@
+# Minimal registration/navigation timing probes
+
+Independent owned loopback pages/workers, desktop WebKit 26.5. No editor/model/product cache code. A simple worker emits owned bootstrap/install/activate markers, caches one tiny document, skips waiting and claims clients. Each case gets a fresh context/server; all cleanups complete.
+
+First probe awaits the register promise, then either immediately navigates or waits for controller before navigating. Both cases receive all three markers, activate the worker, establish the tiny cache and control the destination. Thus immediate navigation after registration returns does not by itself reproduce the product installing/no-cache stall.
+
+Second probe initiates register without awaiting it, then either immediately navigates or waits for controller. Immediate navigation yields no markers, registrations or caches and its five-second controller wait expires. The controlled case receives all markers and activates/controls with its cache. This establishes an app-independent navigation/startup sensitivity before register settles, but not the exact product failure: the product showed a registration/installing state and a bootstrap marker, whereas this tiny case loses registration entirely. Both outcomes and differences remain authoritative; do not overstate them as identical reproductions.
+
+Source inspection finds Home starts registration from a load listener and does not coordinate Open navigation with its settlement. Earlier actual-product Home waiting succeeds, but a blocking user delay or retry is not yet a justified remedy. Next tracing should capture actual register promise resolution/rejection relative to file-navigation lifecycle, without delaying Open, and identify whether editor registration recovers the interrupted startup. No product modification, full offline/Safari/mobile, semantic-quality acceptance, or new product suite/build is claimed.

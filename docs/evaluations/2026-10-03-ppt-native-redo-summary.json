@@ -1,0 +1,39 @@
+{
+  "scope": "PPT IM native history recovery after prior Undo; broader local-first assistant goal remains active",
+  "baseline": "2026-10-02-ppt-failed-layout-prior-redo-baseline-ui.json",
+  "implementation": [
+    "Native SaveRedoPoints/PopRedoPoints, exact current editor/history and owned backup/reference checks",
+    "Failure restores prior redo points and native saved/selection/current-point metadata",
+    "Successful new edit discards old redo normally and releases backup without restoring it",
+    "Group-open failure before/after empty point creation restores history and original exception",
+    "No new preview, confirmation or UI step"
+  ],
+  "verification": {
+    "unitSuites": 108,
+    "unitTests": 3885,
+    "lintTypecheck": "passed",
+    "productionBuild": "passed",
+    "codeReview": "Group-open cleanup issue fixed; final ownership guard reviewed with no important findings",
+    "productionBundle": "editor-BB26vwDY.js",
+    "productionReports": [
+      "2026-10-03-ppt-failed-layout-saved-prior-redo-ui.json",
+      "2026-10-03-ppt-successful-write-prior-redo-ui.json",
+      "2026-10-03-ppt-group-open-failure-prior-redo-ui.json",
+      "2026-10-03-ppt-failed-layout-toolbar-redo-ui.json"
+    ],
+    "offline": "Cached 1.7B WebGPU in isolated Chromium, offline reload with failed uncached fetch control",
+    "actualToolbarRedo": "Visible header button enabled and clicked; saved undone edit restored"
+  },
+  "limits": [
+    "Saved markers were exercised through native History.Reset_SavedIndex; actual file save/export remains a separate requirement",
+    "Controlled group-open exceptions are fault injection, not spontaneous SDK crash evidence",
+    "Paste timeout with prior redo covered by unit delayed-preparation fixture; no new actual font/network timeout claim",
+    "Not full seven-language/model/device quality acceptance; arbitrary concurrent external API writers remain outside these verified fixtures"
+  ],
+  "remainingBroaderGoal": [
+    "Small-model exact-text/fact fidelity and CPU native schema reliability/performance",
+    "Offered-model regression coverage and physical device/browser/offline coverage",
+    "Word/Excel/PPT broader operations and actual saved artifact verification",
+    "Long-chat/mobile interaction and remaining privacy/network/resource-budget audit"
+  ]
+}

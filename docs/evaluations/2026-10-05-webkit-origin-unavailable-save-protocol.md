@@ -1,0 +1,5 @@
+# WebKit unavailable origin: native Save after IM write
+
+Fresh desktop WebKit context, unchanged production d71a1e8. Repeat the frozen direct Word write/Undo/Redo protocol ae21a2a through owned forwarding origin 5194, naturally loading default CPU online before closing page and forwarding server. Browser remains online; no full-disconnection claim. Preserve native document checks and request/error ledger.
+
+After exact native write/Undo/Redo, invoke the existing native Save toolbar button and await its actual download for at most 90 seconds. Save into an owned scratch DOCX path; record bytes, SHA-256 and download.failure. Require nonempty download without failure, then independently inspect the ZIP/document XML for exact inserted literal. No converter/network/cache seeding beyond ordinary initial page/model load. Retain failure phases and close browser/server. This probe checks actual Save artifact generation, not native reopen, OS picker, all formats/documents, physical Safari/iOS or global offline acceptance. Prior controlled-offline navigation and model semantic failures remain unresolved.

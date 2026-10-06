@@ -1,15 +1,15 @@
 ---
-title: LibreOffice 없이 ODP 파일 열기 — 무료, 브라우저에서
-description: LibreOffice도 계정도 없이 브라우저에서 ODP(OpenDocument 프레젠테이션) 파일을 열고 편집하세요. ODP, PPTX, PDF로 다시 저장할 수 있습니다. 아무것도 업로드되지 않습니다.
+title: 'LibreOffice 없이 ODP 파일 열기 — 무료, 브라우저에서'
+description: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 eyebrow: 열기 · .odp
 h1: LibreOffice 없이 ODP 파일 열기
-lead: '**.odp** 프레젠테이션이 있는데 LibreOffice가 없나요? 브라우저에서 열어 슬라이드를 편집하고 ODP 그대로 — 또는 PPTX나 PDF로 다시 저장하세요. 설치할 것도, 업로드할 것도 없습니다.'
+lead: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 cta: ODP 열기 →
 ctaHref: /ko/
-ogDescription: LibreOffice 없이 브라우저에서 ODP를 열고 편집하세요. ODP, PPTX, PDF로 저장. 업로드 없음.
+ogDescription: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 breadcrumb: odp
 howTo: LibreOffice 없이 ODP 파일을 여는 방법
-appDescription: LibreOffice 없이, 계정 없이, 업로드 없이 브라우저에서 ODP(OpenDocument 프레젠테이션) 파일을 열고 편집합니다.
+appDescription: 'LibreOffice나 계정 없이 브라우저에서 ODP 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 ---
 
 ## 사용 방법
@@ -23,7 +23,7 @@ ODP는 OpenDocument 프레젠테이션 형식으로, LibreOffice Impress가 기�
 
 이 편집기는 WebAssembly 위의 OnlyOffice 프레젠테이션 엔진으로 ODP를 바로 열기 때문에 슬라이드 레이아웃, 이미지, 도형, 텍스트가 그대로 렌더링됩니다. ODP로 다시 저장할 수도, PowerPoint를 쓰는 사람을 위해 PPTX로, 읽기만 할 사람을 위해 PDF로 내보낼 수도 있습니다.
 
-파일은 디스크에서 브라우저 탭으로 곧바로 읽히며 아무것도 업로드되지 않습니다. 대외비 제안서나 내부 자료가 기기를 벗어나지 않습니다.
+기본 로컬 편집의 경우: 파일은 디스크에서 브라우저 탭으로 곧바로 읽히며 아무것도 업로드되지 않습니다. 대외비 제안서나 내부 자료가 기기를 벗어나지 않습니다.
 
 ## 자주 묻는 질문
 

@@ -1,0 +1,96 @@
+{
+  "scope": "Actual cached local-model Word literal replacement of A😀pha\\t; plain and tracked modes, exact native characters/revision types and native Undo/Redo. Desktop browsers only.",
+  "cases": [
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "mode": "tracked",
+      "report": "2026-10-03-word-im-tracked-tab-selection-fixed.json",
+      "reportSHA256": "d617b559e44fd50ef355a55e86f38c370d8e202d692c0325f057e667272022b1",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "mode": "plain",
+      "report": "2026-10-03-word-im-plain-tab-selection-fixed.json",
+      "reportSHA256": "5840e1bda7c01747d612ba665015491072a8c483d8e20c76f120f4c62cfcc6a6",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "mode": "tracked",
+      "report": "2026-10-03-word-im-tracked-tab-0_8.json",
+      "reportSHA256": "2282d7b14630e2e744dae68a58f751e8e7336f4a0d7545db2d30e5bc8ec50784",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "mode": "plain",
+      "report": "2026-10-03-word-im-plain-tab-0_8.json",
+      "reportSHA256": "324614a067567be6fef18efc978aba0b6fc9083e7ed38a084bdda14481403c0b",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "mode": "tracked",
+      "report": "2026-10-03-word-im-tracked-tab-2b.json",
+      "reportSHA256": "ba51b51d51e4ba6138a480e2fa17aaaeed4d61b6045a721382a7208ce98caab7",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "mode": "plain",
+      "report": "2026-10-03-word-im-plain-tab-2b.json",
+      "reportSHA256": "92320ce8b92f5ccb81ac9012939524bbccb54283b2705f2e7fc6ebc65fc884f5",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "mode": "tracked",
+      "report": "2026-10-03-word-im-tracked-tab-4b.json",
+      "reportSHA256": "82b01ddf3c305cfbc2c4bdfcdce4e7395be5612388ded229b3e7a8271e7bbf93",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "mode": "plain",
+      "report": "2026-10-03-word-im-plain-tab-4b.json",
+      "reportSHA256": "be3ca2ff4a5a860c2ab0e6b09a5c5b71af61408461ffb988b8c0598d8f0ca294",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3-0.6B GGUF CPU",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "mode": "tracked",
+      "report": "2026-10-03-word-im-tracked-tab-cpu.json",
+      "reportSHA256": "293cf64b36da77d2f4c36e2d3b9b30c825653216d2a408a28a013ef6e17f8579",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    },
+    {
+      "model": "Qwen3-0.6B GGUF CPU",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "mode": "plain",
+      "report": "2026-10-03-word-im-plain-tab-cpu.json",
+      "reportSHA256": "e9db6f357229bd028b3c1577e053a1134d226fd0a8b6b19a76c3a53b868975e6",
+      "exactRevisionSequence": true,
+      "allPassed": true
+    }
+  ],
+  "allPassed": true
+}

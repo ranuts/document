@@ -1,0 +1,67 @@
+{
+  "date": "2026-09-27",
+  "browser": "Chrome 153 macOS",
+  "provider": "webllm",
+  "model": "Qwen3-0.6B-q4f16_1-MLC",
+  "systemPrompt": "WRITING_SYSTEM_PROMPT",
+  "runsPerLocale": 1,
+  "scope": "rewrite smoke checks; no human language-quality scores",
+  "results": [
+    {
+      "locale": "zh-CN",
+      "text": "项目预算为 1,250 EUR。请在 2026-10-08 前提交报告。负责人为 Alex。",
+      "output": "<think>\n\n{\"task\":\"rewrite\",\"targetLanguage\":\"source\",\"text\":\"预算金额为 1,250 EUR。请在 2026-10-08 前提交报告。负责人是 Alex。\"}",
+      "firstMs": 873.7999997138977,
+      "totalMs": 1890.5999999046326,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "en",
+      "text": "The project budget is 1,250 EUR. Submit the report by 2026-10-08. Alex is responsible.",
+      "output": "<think>\n\n{\"task\":\"rewrite\",\"targetLanguage\":\"source\",\"text\":\"Budget: 1250 EUR. Report: 2026-10-08. Alex is responsible.\"}",
+      "firstMs": 189.40000009536743,
+      "totalMs": 836.2000002861023,
+      "literalsPreserved": false
+    },
+    {
+      "locale": "ja",
+      "text": "予算は 1,250 EUR です。2026-10-08 までに報告書を提出してください。担当者は Alex です。",
+      "output": "<think>\n\n{\"task\":\"rewrite\",\"targetLanguage\":\"source\",\"text\":\"The budget is 1,250 EUR. The report should be submitted by October 8, 2026. The person in charge is Alex.\"}",
+      "firstMs": 190.5,
+      "totalMs": 1200.2999997138977,
+      "literalsPreserved": false
+    },
+    {
+      "locale": "ko",
+      "text": "예산은 1,250 EUR입니다. 2026-10-08까지 보고서를 제출해 주세요. 담당자는 Alex입니다.",
+      "output": "<think>\n\n{\"task\":\"none\",\"text\":\"예산 1,250 EUR입니다. 2026-10-08까지 보고서 제출을 위한 알림입니다. 담당자 Alex입니다.\"}",
+      "firstMs": 200.59999990463257,
+      "totalMs": 1117.3000001907349,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "de",
+      "text": "Das Budget beträgt 1,250 EUR. Bitte reichen Sie den Bericht bis 2026-10-08 ein. Alex ist verantwortlich.",
+      "output": "<think>\n\n{\"task\":\"none\",\"text\":\"Das Budget beträgt 1,250 EUR.Bitte reichen Sie den Bericht bis 2026-10-08 ein. Alex ist verantwortlich.\"}",
+      "firstMs": 196.7999997138977,
+      "totalMs": 1214.6999998092651,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "es",
+      "text": "El presupuesto es de 1,250 EUR. Entrega el informe antes del 2026-10-08. Alex es responsable.",
+      "output": "<think>\n\n{\"task\":\"translate\",\"targetLanguage\":\"source\",\"text\":\"El presupuesto es de 1,250 EUR. La entrega del informe se realizará antes del 2026-10-08. Alex es responsable.\"}",
+      "firstMs": 200.40000009536743,
+      "totalMs": 1110.9000000953674,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "pt",
+      "text": "O orçamento é de 1,250 EUR. Entregue o relatório até 2026-10-08. Alex é o responsável.",
+      "output": "<think>\n\n{\"task\":\"none\",\"text\":\"O orçamento é de 1,250 EUR. Entregue o relatório até 2026-10-08. Alex é o responsável.\"}",
+      "firstMs": 183.90000009536743,
+      "totalMs": 906.5999999046326,
+      "literalsPreserved": true
+    }
+  ]
+}

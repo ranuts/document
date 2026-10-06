@@ -17,7 +17,7 @@ test.describe('image insert + save: xlsx / pptx (real editor)', () => {
     await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });
   });
 
-  // Installed into the page once per test: insert /img/64.png through the
+  // Installed into the page once per test: insert /icons/document-192.png through the
   // editor API and save; returns the saved bytes as base64.
   const installHelper = (page: import('@playwright/test').Page) =>
     page.evaluate(() => {
@@ -33,7 +33,7 @@ test.describe('image insert + save: xlsx / pptx (real editor)', () => {
           api = findApi();
         }
         if (!api) return { error: 'no api' };
-        const url = location.origin + '/img/64.png';
+        const url = location.origin + '/icons/document-192.png';
         if (kind === 'pptx') api.AddImageUrlAction(url);
         else api.asc_addImageDrawingObject([url]);
         await new Promise((r) => setTimeout(r, 6000));

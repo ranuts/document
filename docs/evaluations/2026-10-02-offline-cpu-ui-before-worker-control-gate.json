@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-02T05:25:08.052Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local CPU model then offline reload and actual inference",
+  "status": "failed",
+  "warmEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-68889b4854d8",
+      "document-editor-core-1790918702"
+    ]
+  },
+  "offlineController": "http://127.0.0.1:5193/sw.js",
+  "error": "TimeoutError: locator.click: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#app iframe').contentFrame().locator('.agent-sidebar-entry')\u001b[22m\n",
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/slide/sdk-all.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "visibleErrors": []
+}

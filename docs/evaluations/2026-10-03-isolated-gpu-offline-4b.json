@@ -1,0 +1,41 @@
+{
+  "model": "Qwen3-4B-q4f16_1-MLC",
+  "cpu": false,
+  "status": "passed",
+  "scope": "New Chromium process starts offline under cached COOP/COEP policy and actual isolation-mode Service Worker with previously cached model; current app shell warmed online in a separate process and closed first. Dead local HTTP proxy with loopback bypass disabled plus browser offline emulation from launch through navigation and actual inference. Not physical network removal, OS reboot, eviction, or mobile.",
+  "network": {
+    "online": true,
+    "fetchRejected": true,
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1"
+  },
+  "isolation": {
+    "main": true,
+    "iframe": true
+  },
+  "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+  "responseMs": 1613,
+  "newReplies": [
+    "Hello."
+  ],
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-6ORXjRiR.js",
+    "http://127.0.0.1:5193/assets/editor-Ci0XLiSK.css"
+  ],
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__cold_offline_control_1791005793025",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

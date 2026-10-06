@@ -1,0 +1,150 @@
+{
+  "scope": "Four request phrasings for real 0.8B Excel get_cell planning, candidate get_cell description only; unchanged schema and planner instructions. Isolated fixtures; tool mode.",
+  "status": "completed",
+  "results": [
+    {
+      "candidateMarkerObserved": true,
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2345,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "candidateMarkerObserved": true,
+      "kind": "xlsx",
+      "prompt": "Read cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2322,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "candidateMarkerObserved": true,
+      "kind": "xlsx",
+      "prompt": "读取 A1 单元格的值。",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2328,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "candidateMarkerObserved": true,
+      "kind": "xlsx",
+      "prompt": "Use get_cell to read A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2339,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "candidateDescription": "Spreadsheet (Excel) only. Read the text or numeric value stored in one cell, using its explicit address (e.g. \"B2\"). Reading a text value is supported. Does not move the selection or modify cells.",
+  "limitations": [
+    "One sample per phrasing, not a reliability estimate.",
+    "Snapshots cover A1:A3 values and selection/active cell, not the whole worksheet.",
+    "Initial routing attempts lacked runtime markers and were excluded; this report contains only the rebuilt, marker-confirmed candidate run.",
+    "Other models and broader operations still require regression evaluation."
+  ]
+}

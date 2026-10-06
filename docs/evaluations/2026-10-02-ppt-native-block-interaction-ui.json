@@ -1,0 +1,71 @@
+{
+  "scope": "Actual Chromium keyboard and pointer attempts during native PPT BlockInteraction action; no IM integration",
+  "before": {
+    "page": 0,
+    "history": 0,
+    "slides": [
+      [
+        "\r\n",
+        "\r\n"
+      ],
+      [
+        "\r\n",
+        "\r\n"
+      ]
+    ],
+    "busy": false
+  },
+  "overlays": [
+    {
+      "id": "",
+      "class": "asc-loadmask",
+      "text": ""
+    }
+  ],
+  "blocked": {
+    "page": 0,
+    "history": 0,
+    "slides": [
+      [
+        "\r\n",
+        "\r\n"
+      ],
+      [
+        "\r\n",
+        "\r\n"
+      ]
+    ],
+    "busy": true
+  },
+  "released": {
+    "page": 0,
+    "history": 0,
+    "slides": [
+      [
+        "\r\n",
+        "\r\n"
+      ],
+      [
+        "\r\n",
+        "\r\n"
+      ]
+    ],
+    "busy": false
+  },
+  "unblockedControl": {
+    "page": 1,
+    "history": 0,
+    "slides": [
+      [
+        "\r\n",
+        "\r\n"
+      ],
+      [
+        "\r\n",
+        "\r\n"
+      ]
+    ],
+    "busy": false
+  },
+  "status": "passed"
+}

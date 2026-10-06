@@ -1,0 +1,43 @@
+{
+  "scope": "Production UI real Metal GPU Qwen3-1.7B planning: Two-slide English/Chinese PPT shape text read. Fixture text injected into an isolated title placeholder using SDK paragraph/run objects; not a test of IM writing.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "pptx",
+      "prompt": "Read the plain text of the current presentation. Do not add or modify anything.",
+      "expected": "Alex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "before": {
+        "slides": 2,
+        "text": [
+          "Alex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n\n\r\n",
+          "项目负责人：林晓。预算 2,500 CNY；截止日期 2026-11-09。尚未批准。\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "slides": 2,
+        "text": [
+          "Alex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n\n\r\n",
+          "项目负责人：林晓。预算 2,500 CNY；截止日期 2026-11-09。尚未批准。\r\n\n\r\n"
+        ]
+      },
+      "elapsedMs": 1586,
+      "feedback": [
+        "Slide 1:\nAlex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.\n\nSlide 2:\n项目负责人：林晓。预算 2,500 CNY；截止日期 2026-11-09。尚未批准。Slide 1:\nAlex proposed 1,250 EUR on 2026-10-08. The payment has NOT been approved.\n\nSlide 2:\n项目负责人：林晓。预算 2,500 CNY；截止日期 2026-11-09。尚未批准。"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "resultMatched": true,
+      "chineseSecondSlideMatched": true
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Chromium Metal Qwen3-1.7B only; no cross-model/device claim.",
+    "Fixture text uses actual SDK paragraph/run objects in isolated title placeholders. This validates IM reading, not IM slide text writing.",
+    "Only ordinary text placeholders covered; group text, tables, charts, images and speaker notes not verified.",
+    "Selection state not captured for PPT; no selection-preservation claim.",
+    "Activity DOM textContent includes summary and details; repeated text is not duplicate tool execution."
+  ]
+}

@@ -1,0 +1,356 @@
+{
+  "before": {
+    "quota": 3221225472,
+    "usage": 0,
+    "usageDetails": {}
+  },
+  "cachedBefore": false,
+  "status": "tested",
+  "started": 1790502918415,
+  "results": [
+    {
+      "repeat": 1,
+      "editor": "word",
+      "instruction": "Insert exactly this text: Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two."
+        }
+      },
+      "elapsedMs": 2485
+    },
+    {
+      "repeat": 1,
+      "editor": "word",
+      "instruction": "插入原文，不要翻译：预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。"
+        }
+      },
+      "elapsedMs": 2082
+    },
+    {
+      "repeat": 1,
+      "editor": "word",
+      "instruction": "Rewrite the selected text more politely, preserving the meaning.",
+      "selection": "We will process your request as soon as possible.",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"We will process your request as soon as possible.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "We will process your request as soon as possible."
+        }
+      },
+      "elapsedMs": 1559
+    },
+    {
+      "repeat": 1,
+      "editor": "cell",
+      "instruction": "Write plain value 1250 to cell B2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"1250\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "1250"
+        }
+      },
+      "elapsedMs": 1549
+    },
+    {
+      "repeat": 1,
+      "editor": "cell",
+      "instruction": "在 C3 写入文本“Alex 未批准第二阶段”。",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"requested value\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "requested value"
+        }
+      },
+      "elapsedMs": 1519
+    },
+    {
+      "repeat": 1,
+      "editor": "cell",
+      "instruction": "Write 1250 to B2 and 2026-10-08 to C2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"requested value\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "requested value"
+        }
+      },
+      "elapsedMs": 1526
+    },
+    {
+      "repeat": 1,
+      "editor": "word",
+      "instruction": "Delete all content in this document.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"Delete all content in this document.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "Delete all content in this document."
+        }
+      },
+      "elapsedMs": 1424
+    },
+    {
+      "repeat": 1,
+      "editor": "cell",
+      "instruction": "Put formula =SUM(A1:A3) in B2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"=SUM(A1:A3)\"}}",
+      "error": "Error: Formula proposals are not supported by the plain-value operation",
+      "elapsedMs": 1642
+    },
+    {
+      "repeat": 2,
+      "editor": "word",
+      "instruction": "Insert exactly this text: Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two."
+        }
+      },
+      "elapsedMs": 2082
+    },
+    {
+      "repeat": 2,
+      "editor": "word",
+      "instruction": "插入原文，不要翻译：预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。"
+        }
+      },
+      "elapsedMs": 2073
+    },
+    {
+      "repeat": 2,
+      "editor": "word",
+      "instruction": "Rewrite the selected text more politely, preserving the meaning.",
+      "selection": "We will process your request as soon as possible.",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"We will process your request as soon as possible.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "We will process your request as soon as possible."
+        }
+      },
+      "elapsedMs": 1567
+    },
+    {
+      "repeat": 2,
+      "editor": "cell",
+      "instruction": "Write plain value 1250 to cell B2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"1250\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "1250"
+        }
+      },
+      "elapsedMs": 1574
+    },
+    {
+      "repeat": 2,
+      "editor": "cell",
+      "instruction": "在 C3 写入文本“Alex 未批准第二阶段”。",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"requested value\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "requested value"
+        }
+      },
+      "elapsedMs": 1550
+    },
+    {
+      "repeat": 2,
+      "editor": "cell",
+      "instruction": "Write 1250 to B2 and 2026-10-08 to C2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"requested value\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "requested value"
+        }
+      },
+      "elapsedMs": 1514
+    },
+    {
+      "repeat": 2,
+      "editor": "word",
+      "instruction": "Delete all content in this document.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"Delete all content in this document.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "Delete all content in this document."
+        }
+      },
+      "elapsedMs": 1419
+    },
+    {
+      "repeat": 2,
+      "editor": "cell",
+      "instruction": "Put formula =SUM(A1:A3) in B2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"=SUM(A1:A3)\"}}",
+      "error": "Error: Formula proposals are not supported by the plain-value operation",
+      "elapsedMs": 1668
+    },
+    {
+      "repeat": 3,
+      "editor": "word",
+      "instruction": "Insert exactly this text: Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two."
+        }
+      },
+      "elapsedMs": 2043
+    },
+    {
+      "repeat": 3,
+      "editor": "word",
+      "instruction": "插入原文，不要翻译：预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "预算为 1,250 EUR，期限为 2026-10-08，Alex 未批准第二阶段。"
+        }
+      },
+      "elapsedMs": 2110
+    },
+    {
+      "repeat": 3,
+      "editor": "word",
+      "instruction": "Rewrite the selected text more politely, preserving the meaning.",
+      "selection": "We will process your request as soon as possible.",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"We will process your request as soon as possible.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "We will process your request as soon as possible."
+        }
+      },
+      "elapsedMs": 1578
+    },
+    {
+      "repeat": 3,
+      "editor": "cell",
+      "instruction": "Write plain value 1250 to cell B2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"1250\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "1250"
+        }
+      },
+      "elapsedMs": 1554
+    },
+    {
+      "repeat": 3,
+      "editor": "cell",
+      "instruction": "在 C3 写入文本“Alex 未批准第二阶段”。",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"requested value\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "requested value"
+        }
+      },
+      "elapsedMs": 1509
+    },
+    {
+      "repeat": 3,
+      "editor": "cell",
+      "instruction": "Write 1250 to B2 and 2026-10-08 to C2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"requested value\"}}",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "B2",
+          "value": "requested value"
+        }
+      },
+      "elapsedMs": 1525
+    },
+    {
+      "repeat": 3,
+      "editor": "word",
+      "instruction": "Delete all content in this document.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"insert_text\",\"input\":{\"text\":\"Delete all content in this document.\"}}",
+      "plan": {
+        "tool": "insert_text",
+        "input": {
+          "text": "Delete all content in this document."
+        }
+      },
+      "elapsedMs": 1423
+    },
+    {
+      "repeat": 3,
+      "editor": "cell",
+      "instruction": "Put formula =SUM(A1:A3) in B2.",
+      "selection": "",
+      "raw": "<think>\n\n</think>\n\n{\"tool\":\"set_cell\",\"input\":{\"cell\":\"B2\",\"value\":\"=SUM(A1:A3)\"}}",
+      "error": "Error: Formula proposals are not supported by the plain-value operation",
+      "elapsedMs": 1664
+    }
+  ],
+  "largeShardRecord": {
+    "exists": true,
+    "blob": true,
+    "size": 155582464
+  },
+  "cachedAfter": true,
+  "after": {
+    "quota": 3389407232,
+    "usage": 168181760,
+    "usageDetails": {
+      "indexedDB": 168181760
+    }
+  },
+  "elapsedMs": 72882
+}

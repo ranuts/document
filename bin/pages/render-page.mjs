@@ -5,7 +5,7 @@
 import { ORIGIN, REPO } from './constants.mjs';
 import { ID, appEntity, appStub, siteEntities, sourceEntity } from './entities.mjs';
 import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
-import { GH_MARK, langMenu, routeFor } from './chrome.mjs';
+import { langMenu, routeFor } from './chrome.mjs';
 import { escapeHtml, renderInline } from './markdown.mjs';
 import { UI } from './ui.mjs';
 
@@ -147,9 +147,10 @@ ${related}
 <html lang="${L.lang}" dir="${L.dir}">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icons/document.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/document-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/document-180.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/img/64.png" rel="shortcut icon" />
-    <link rel="icon" type="image/png" href="/img/64.png" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
@@ -167,11 +168,9 @@ ${ogAlternates}
     <meta property="og:title" content="${escapeHtml(title)}" />
     <meta property="og:description" content="${escapeHtml(cardDescription)}" />
     <meta property="og:url" content="${url}" />
-    <meta property="og:image" content="${ORIGIN}/img/pwa-512.png" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="${escapeHtml(title)}" />
     <meta name="twitter:description" content="${escapeHtml(cardDescription)}" />
-    <meta name="twitter:image" content="${ORIGIN}/img/pwa-512.png" />
 
     <script type="application/ld+json">
 ${jsonLd}
@@ -186,6 +185,7 @@ ${jsonLd}
         }
       } catch (e) {}
     </script>
+    <script src="/theme-presentation.js"></script>
     <link rel="stylesheet" href="/ran-fonts/fonts.css" />
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/landing.css" />
@@ -197,15 +197,12 @@ ${jsonLd}
   </head>
 
   <body>
-    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
-      <symbol id="gh-mark" viewBox="0 0 16 16"><path d="${GH_MARK}" /></symbol>
-    </svg>
 
     <header class="bar">
-      <a class="brand" href="${L.home}"><span class="logo">D</span><span class="wordmark">${ui.siteName}</span></a>
+      <a class="brand" href="${L.home}"><span class="wordmark">${ui.siteName}</span></a>
       <nav>
         <a href="${REPO}" rel="noopener" target="_blank">
-          <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+          GitHub
         </a>
 ${langMenu(locale, translations, ui, (l) => routeFor(l, page.slug))}
       </nav>

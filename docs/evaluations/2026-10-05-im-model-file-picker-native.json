@@ -1,0 +1,50 @@
+{
+  "browser": "151.0.7922.34",
+  "errors": [],
+  "blockedExternal": [],
+  "views": [
+    {
+      "width": 1280,
+      "panel": {
+        "x": 880,
+        "y": 0,
+        "width": 400,
+        "height": 900,
+        "top": 0,
+        "right": 1280,
+        "bottom": 900,
+        "left": 880
+      },
+      "overflow": false,
+      "text": "AI 助手\n新建会话\n想如何处理这份文档？\n改写选中文本\n摘要选中文本\n翻译选中文本\n配置 AI\n问答\n操作文档\n改写选中文本\n摘要选中文本\n翻译选中文本"
+    },
+    {
+      "width": 390,
+      "panel": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 900,
+        "top": 0,
+        "right": 390,
+        "bottom": 900,
+        "left": 0
+      },
+      "overflow": false,
+      "text": "AI 助手\n新建会话\n想如何处理这份文档？\n改写选中文本\n摘要选中文本\n翻译选中文本\n配置 AI\n问答\n操作文档\n改写选中文本\n摘要选中文本\n翻译选中文本"
+    },
+    {
+      "settings": true,
+      "width": 390,
+      "text": "AI 助手\n新建会话\n选择模型文件\n CPU\n加载模型\n修订模式\nGGUF 模型网址；CPU 模式可能较慢。也可选择本地 GGUF 文件。\n回答设置\n历史会话\n在此设备保存聊天记录\n\n新对话仅保留在当前页面，开启保存后才会写入设备。\n\n恢复已保存的记录\n导入旧版聊天记录\n导出对话\n删除当前对话\n删除全部聊天记录\n想如何处理这份文档？\n改写选中文本\n摘要选中文本\n翻译选中文本\n配置 AI\n问答\n操作文档\n改写选中文本\n摘要选中文本\n翻译选中文本",
+      "scrollWidth": 389,
+      "clientWidth": 389
+    }
+  ],
+  "keyboardPicker": true,
+  "nativeFileCount": 2,
+  "selectedOverflow": false,
+  "urlClearsFiles": true,
+  "contextClosed": true,
+  "browserClosed": true
+}

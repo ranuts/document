@@ -1,0 +1,67 @@
+{
+  "status": "completed",
+  "sourceSHA256": "5aedb3ee752621a6f5fa515d44e6d75d8c8a9362d412047612478f05c3bf1bd8",
+  "errors": [],
+  "cases": [
+    {
+      "name": "normal",
+      "error": null,
+      "before": {
+        "value": "30",
+        "format": "General",
+        "index": 0,
+        "points": 1,
+        "protected": false,
+        "merged": false
+      },
+      "after": {
+        "value": "30",
+        "format": "General",
+        "index": 0,
+        "points": 1,
+        "protected": false,
+        "merged": false
+      }
+    },
+    {
+      "name": "merged",
+      "error": "officeMergedTarget",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "index": 1,
+        "points": 2,
+        "protected": false,
+        "merged": true
+      },
+      "after": {
+        "value": "30",
+        "format": "General",
+        "index": 1,
+        "points": 2,
+        "protected": false,
+        "merged": true
+      }
+    },
+    {
+      "name": "protected",
+      "error": "officeProtectedRange",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "index": 1,
+        "points": 2,
+        "protected": true,
+        "merged": false
+      },
+      "after": {
+        "value": "30",
+        "format": "General",
+        "index": 1,
+        "points": 2,
+        "protected": true,
+        "merged": false
+      }
+    }
+  ]
+}

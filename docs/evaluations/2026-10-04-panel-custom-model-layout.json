@@ -1,0 +1,3731 @@
+{
+  "scope": "Isolated Chromium layout and keyboard audit; model initialization held where possible; not model inference or physical mobile verification. Current uncommitted custom-model disclosure change after HEAD 1bf8d3f; appearance only, not custom-source loading/inference acceptance.",
+  "errors": [],
+  "samples": [
+    {
+      "width": 1280,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 1280,
+            "bottom": 800,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 916,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 1245,
+            "bottom": 713,
+            "left": 916
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1196,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1226,
+            "bottom": 48.5,
+            "left": 1196
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1230,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1260,
+            "bottom": 48.5,
+            "left": 1230
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light"
+    },
+    {
+      "width": 1280,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 1280,
+            "bottom": 800,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 881,
+            "y": 195.390625,
+            "width": 399,
+            "height": 298.203125,
+            "top": 195.390625,
+            "right": 1280,
+            "bottom": 493.59375,
+            "left": 881
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 916,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 1245,
+            "bottom": 713,
+            "left": 916
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1196,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1226,
+            "bottom": 48.5,
+            "left": 1196
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1230,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1260,
+            "bottom": 48.5,
+            "left": 1230
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 768,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 768,
+            "bottom": 800,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 404,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 733,
+            "bottom": 713,
+            "left": 404
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 684,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 714,
+            "bottom": 48.5,
+            "left": 684
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 718,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 748,
+            "bottom": 48.5,
+            "left": 718
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light"
+    },
+    {
+      "width": 768,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 768,
+            "bottom": 800,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 369,
+            "y": 195.390625,
+            "width": 399,
+            "height": 298.203125,
+            "top": 195.390625,
+            "right": 768,
+            "bottom": 493.59375,
+            "left": 369
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 404,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 733,
+            "bottom": 713,
+            "left": 404
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 684,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 714,
+            "bottom": 48.5,
+            "left": 684
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 718,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 748,
+            "bottom": 48.5,
+            "left": 718
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 480,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 480,
+            "bottom": 800,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 116,
+            "y": 661,
+            "width": 329,
+            "height": 56,
+            "top": 661,
+            "right": 445,
+            "bottom": 717,
+            "left": 116
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 396,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 426,
+            "bottom": 48.5,
+            "left": 396
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 430,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 460,
+            "bottom": 48.5,
+            "left": 430
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light"
+    },
+    {
+      "width": 480,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 480,
+            "bottom": 800,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 81,
+            "y": 195.390625,
+            "width": 399,
+            "height": 301.515625,
+            "top": 195.390625,
+            "right": 480,
+            "bottom": 496.90625,
+            "left": 81
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 116,
+            "y": 661,
+            "width": 329,
+            "height": 56,
+            "top": 661,
+            "right": 445,
+            "bottom": 717,
+            "left": 116
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 396,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 426,
+            "bottom": 48.5,
+            "left": 396
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 430,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 460,
+            "bottom": 48.5,
+            "left": 430
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 375,
+      "settings": "false",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 800,
+            "top": 0,
+            "right": 375,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 304,
+            "height": 56,
+            "top": 661,
+            "right": 340,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 304,
+          "scroll": 304,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 291,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 321,
+            "bottom": 48.5,
+            "left": 291
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 325,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 355,
+            "bottom": 48.5,
+            "left": 325
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light"
+    },
+    {
+      "width": 375,
+      "settings": "true",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 800,
+            "top": 0,
+            "right": 375,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 208.484375,
+            "width": 374,
+            "height": 307.203125,
+            "top": 208.484375,
+            "right": 375,
+            "bottom": 515.6875,
+            "left": 1
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 304,
+            "height": 56,
+            "top": 661,
+            "right": 340,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 304,
+          "scroll": 304,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 291,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 321,
+            "bottom": 48.5,
+            "left": 291
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 325,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 355,
+            "bottom": 48.5,
+            "left": 325
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 320,
+      "settings": "false",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 800,
+            "top": 0,
+            "right": 320,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 249,
+            "height": 56,
+            "top": 661,
+            "right": 285,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 249,
+          "scroll": 249,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 236,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 266,
+            "bottom": 48.5,
+            "left": 236
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 270,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 300,
+            "bottom": 48.5,
+            "left": 270
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light"
+    },
+    {
+      "width": 320,
+      "settings": "true",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 800,
+            "top": 0,
+            "right": 320,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 208.484375,
+            "width": 319,
+            "height": 318.125,
+            "top": 208.484375,
+            "right": 320,
+            "bottom": 526.609375,
+            "left": 1
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 249,
+            "height": 56,
+            "top": 661,
+            "right": 285,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 249,
+          "scroll": 249,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 236,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 266,
+            "bottom": 48.5,
+            "left": 236
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 270,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 300,
+            "bottom": 48.5,
+            "left": 270
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 1280,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 1280,
+            "bottom": 400,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 904,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 1257,
+            "bottom": 339,
+            "left": 904
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1200,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1230,
+            "bottom": 38.5,
+            "left": 1200
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1234,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1264,
+            "bottom": 38.5,
+            "left": 1234
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light"
+    },
+    {
+      "width": 1280,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 1280,
+            "bottom": 400,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 881,
+            "y": 161.390625,
+            "width": 399,
+            "height": 114.609375,
+            "top": 161.390625,
+            "right": 1280,
+            "bottom": 276,
+            "left": 881
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 904,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 1257,
+            "bottom": 339,
+            "left": 904
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1200,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1230,
+            "bottom": 38.5,
+            "left": 1200
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1234,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1264,
+            "bottom": 38.5,
+            "left": 1234
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 768,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 768,
+            "bottom": 400,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 392,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 745,
+            "bottom": 339,
+            "left": 392
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 688,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 718,
+            "bottom": 38.5,
+            "left": 688
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 722,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 752,
+            "bottom": 38.5,
+            "left": 722
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light"
+    },
+    {
+      "width": 768,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 768,
+            "bottom": 400,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 369,
+            "y": 161.390625,
+            "width": 399,
+            "height": 114.609375,
+            "top": 161.390625,
+            "right": 768,
+            "bottom": 276,
+            "left": 369
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 392,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 745,
+            "bottom": 339,
+            "left": 392
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 688,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 718,
+            "bottom": 38.5,
+            "left": 688
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 722,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 752,
+            "bottom": 38.5,
+            "left": 722
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 480,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 480,
+            "bottom": 400,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 104,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 457,
+            "bottom": 339,
+            "left": 104
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 400,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 430,
+            "bottom": 38.5,
+            "left": 400
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 434,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 464,
+            "bottom": 38.5,
+            "left": 434
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light"
+    },
+    {
+      "width": 480,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 480,
+            "bottom": 400,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 81,
+            "y": 161.390625,
+            "width": 399,
+            "height": 114.609375,
+            "top": 161.390625,
+            "right": 480,
+            "bottom": 276,
+            "left": 81
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 104,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 457,
+            "bottom": 339,
+            "left": 104
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 400,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 430,
+            "bottom": 38.5,
+            "left": 400
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 434,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 464,
+            "bottom": 38.5,
+            "left": 434
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 375,
+      "settings": "false",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 400,
+            "top": 0,
+            "right": 375,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 328,
+            "height": 40,
+            "top": 299,
+            "right": 352,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 328,
+          "scroll": 328,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 295,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 325,
+            "bottom": 38.5,
+            "left": 295
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 329,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 359,
+            "bottom": 38.5,
+            "left": 329
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light"
+    },
+    {
+      "width": 375,
+      "settings": "true",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 400,
+            "top": 0,
+            "right": 375,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 174.484375,
+            "width": 374,
+            "height": 101.515625,
+            "top": 174.484375,
+            "right": 375,
+            "bottom": 276,
+            "left": 1
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 328,
+            "height": 40,
+            "top": 299,
+            "right": 352,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 328,
+          "scroll": 328,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 295,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 325,
+            "bottom": 38.5,
+            "left": 295
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 329,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 359,
+            "bottom": 38.5,
+            "left": 329
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 320,
+      "settings": "false",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 400,
+            "top": 0,
+            "right": 320,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 273,
+            "height": 40,
+            "top": 299,
+            "right": 297,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 273,
+          "scroll": 273,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 240,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 270,
+            "bottom": 38.5,
+            "left": 240
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 274,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 304,
+            "bottom": 38.5,
+            "left": 274
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light"
+    },
+    {
+      "width": 320,
+      "settings": "true",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 400,
+            "top": 0,
+            "right": 320,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 174.484375,
+            "width": 319,
+            "height": 101.515625,
+            "top": 174.484375,
+            "right": 320,
+            "bottom": 276,
+            "left": 1
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 273,
+            "height": 40,
+            "top": 299,
+            "right": 297,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 273,
+          "scroll": 273,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 240,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 270,
+            "bottom": 38.5,
+            "left": 240
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 274,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 304,
+            "bottom": 38.5,
+            "left": 274
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "light",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 1280,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 1280,
+            "bottom": 800,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 916,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 1245,
+            "bottom": 713,
+            "left": 916
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1196,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1226,
+            "bottom": 48.5,
+            "left": 1196
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1230,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1260,
+            "bottom": 48.5,
+            "left": 1230
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 1280,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 1280,
+            "bottom": 800,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 881,
+            "y": 195.390625,
+            "width": 399,
+            "height": 298.203125,
+            "top": 195.390625,
+            "right": 1280,
+            "bottom": 493.59375,
+            "left": 881
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 916,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 1245,
+            "bottom": 713,
+            "left": 916
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1196,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1226,
+            "bottom": 48.5,
+            "left": 1196
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1230,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 1260,
+            "bottom": 48.5,
+            "left": 1230
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 768,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 768,
+            "bottom": 800,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 404,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 733,
+            "bottom": 713,
+            "left": 404
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 684,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 714,
+            "bottom": 48.5,
+            "left": 684
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 718,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 748,
+            "bottom": 48.5,
+            "left": 718
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 768,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 768,
+            "bottom": 800,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 369,
+            "y": 195.390625,
+            "width": 399,
+            "height": 298.203125,
+            "top": 195.390625,
+            "right": 768,
+            "bottom": 493.59375,
+            "left": 369
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 404,
+            "y": 657,
+            "width": 329,
+            "height": 56,
+            "top": 657,
+            "right": 733,
+            "bottom": 713,
+            "left": 404
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 684,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 714,
+            "bottom": 48.5,
+            "left": 684
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 718,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 748,
+            "bottom": 48.5,
+            "left": 718
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 480,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 480,
+            "bottom": 800,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 116,
+            "y": 661,
+            "width": 329,
+            "height": 56,
+            "top": 661,
+            "right": 445,
+            "bottom": 717,
+            "left": 116
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 396,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 426,
+            "bottom": 48.5,
+            "left": 396
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 430,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 460,
+            "bottom": 48.5,
+            "left": 430
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 480,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 800,
+            "top": 0,
+            "right": 480,
+            "bottom": 800,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 81,
+            "y": 195.390625,
+            "width": 399,
+            "height": 301.515625,
+            "top": 195.390625,
+            "right": 480,
+            "bottom": 496.90625,
+            "left": 81
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 116,
+            "y": 661,
+            "width": 329,
+            "height": 56,
+            "top": 661,
+            "right": 445,
+            "bottom": 717,
+            "left": 116
+          },
+          "client": 329,
+          "scroll": 329,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 396,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 426,
+            "bottom": 48.5,
+            "left": 396
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 430,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 460,
+            "bottom": 48.5,
+            "left": 430
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 375,
+      "settings": "false",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 800,
+            "top": 0,
+            "right": 375,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 304,
+            "height": 56,
+            "top": 661,
+            "right": 340,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 304,
+          "scroll": 304,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 291,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 321,
+            "bottom": 48.5,
+            "left": 291
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 325,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 355,
+            "bottom": 48.5,
+            "left": 325
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 375,
+      "settings": "true",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 800,
+            "top": 0,
+            "right": 375,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 208.484375,
+            "width": 374,
+            "height": 307.203125,
+            "top": 208.484375,
+            "right": 375,
+            "bottom": 515.6875,
+            "left": 1
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 304,
+            "height": 56,
+            "top": 661,
+            "right": 340,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 304,
+          "scroll": 304,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 291,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 321,
+            "bottom": 48.5,
+            "left": 291
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 325,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 355,
+            "bottom": 48.5,
+            "left": 325
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 320,
+      "settings": "false",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 800,
+            "top": 0,
+            "right": 320,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 249,
+            "height": 56,
+            "top": 661,
+            "right": 285,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 249,
+          "scroll": 249,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 236,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 266,
+            "bottom": 48.5,
+            "left": 236
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 270,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 300,
+            "bottom": 48.5,
+            "left": 270
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 320,
+      "settings": "true",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 800,
+            "top": 0,
+            "right": 320,
+            "bottom": 800,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 208.484375,
+            "width": 319,
+            "height": 318.125,
+            "top": 208.484375,
+            "right": 320,
+            "bottom": 526.609375,
+            "left": 1
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 36,
+            "y": 661,
+            "width": 249,
+            "height": 56,
+            "top": 661,
+            "right": 285,
+            "bottom": 717,
+            "left": 36
+          },
+          "client": 249,
+          "scroll": 249,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 236,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 266,
+            "bottom": 48.5,
+            "left": 236
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 270,
+            "y": 18.5,
+            "width": 30,
+            "height": 30,
+            "top": 18.5,
+            "right": 300,
+            "bottom": 48.5,
+            "left": 270
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 800,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 1280,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 1280,
+            "bottom": 400,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 904,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 1257,
+            "bottom": 339,
+            "left": 904
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1200,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1230,
+            "bottom": 38.5,
+            "left": 1200
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1234,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1264,
+            "bottom": 38.5,
+            "left": 1234
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 1280,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 1280,
+      "rootScroll": 1280,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 880,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 1280,
+            "bottom": 400,
+            "left": 880
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 881,
+            "y": 161.390625,
+            "width": 399,
+            "height": 114.609375,
+            "top": 161.390625,
+            "right": 1280,
+            "bottom": 276,
+            "left": 881
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 904,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 1257,
+            "bottom": 339,
+            "left": 904
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 1200,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1230,
+            "bottom": 38.5,
+            "left": 1200
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 1234,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 1264,
+            "bottom": 38.5,
+            "left": 1234
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 768,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 768,
+            "bottom": 400,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 392,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 745,
+            "bottom": 339,
+            "left": 392
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 688,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 718,
+            "bottom": 38.5,
+            "left": 688
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 722,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 752,
+            "bottom": 38.5,
+            "left": 722
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 768,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 768,
+      "rootScroll": 768,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 368,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 768,
+            "bottom": 400,
+            "left": 368
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 369,
+            "y": 161.390625,
+            "width": 399,
+            "height": 114.609375,
+            "top": 161.390625,
+            "right": 768,
+            "bottom": 276,
+            "left": 369
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 392,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 745,
+            "bottom": 339,
+            "left": 392
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 688,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 718,
+            "bottom": 38.5,
+            "left": 688
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 722,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 752,
+            "bottom": 38.5,
+            "left": 722
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 480,
+      "settings": "false",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 480,
+            "bottom": 400,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 104,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 457,
+            "bottom": 339,
+            "left": 104
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 400,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 430,
+            "bottom": 38.5,
+            "left": 400
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 434,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 464,
+            "bottom": 38.5,
+            "left": 434
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 480,
+      "settings": "true",
+      "panelClient": 399,
+      "panelScroll": 399,
+      "rootClient": 480,
+      "rootScroll": 480,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 80,
+            "y": 0,
+            "width": 400,
+            "height": 400,
+            "top": 0,
+            "right": 480,
+            "bottom": 400,
+            "left": 80
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 81,
+            "y": 161.390625,
+            "width": 399,
+            "height": 114.609375,
+            "top": 161.390625,
+            "right": 480,
+            "bottom": 276,
+            "left": 81
+          },
+          "client": 399,
+          "scroll": 399,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 104,
+            "y": 299,
+            "width": 353,
+            "height": 40,
+            "top": 299,
+            "right": 457,
+            "bottom": 339,
+            "left": 104
+          },
+          "client": 353,
+          "scroll": 353,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 400,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 430,
+            "bottom": 38.5,
+            "left": 400
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 434,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 464,
+            "bottom": 38.5,
+            "left": 434
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 375,
+      "settings": "false",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 400,
+            "top": 0,
+            "right": 375,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 328,
+            "height": 40,
+            "top": 299,
+            "right": 352,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 328,
+          "scroll": 328,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 295,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 325,
+            "bottom": 38.5,
+            "left": 295
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 329,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 359,
+            "bottom": 38.5,
+            "left": 329
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 375,
+      "settings": "true",
+      "panelClient": 374,
+      "panelScroll": 374,
+      "rootClient": 375,
+      "rootScroll": 375,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 375,
+            "height": 400,
+            "top": 0,
+            "right": 375,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 174.484375,
+            "width": 374,
+            "height": 101.515625,
+            "top": 174.484375,
+            "right": 375,
+            "bottom": 276,
+            "left": 1
+          },
+          "client": 374,
+          "scroll": 374,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 328,
+            "height": 40,
+            "top": 299,
+            "right": 352,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 328,
+          "scroll": 328,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 295,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 325,
+            "bottom": 38.5,
+            "left": 295
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 329,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 359,
+            "bottom": 38.5,
+            "left": 329
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    },
+    {
+      "width": 320,
+      "settings": "false",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 400,
+            "top": 0,
+            "right": 320,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "client": 0,
+          "scroll": 0,
+          "display": "none"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 273,
+            "height": 40,
+            "top": 299,
+            "right": 297,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 273,
+          "scroll": 273,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 240,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 270,
+            "bottom": 38.5,
+            "left": 240
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 274,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 304,
+            "bottom": 38.5,
+            "left": 274
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark"
+    },
+    {
+      "width": 320,
+      "settings": "true",
+      "panelClient": 319,
+      "panelScroll": 319,
+      "rootClient": 320,
+      "rootScroll": 320,
+      "elements": [
+        {
+          "selector": ".agent-panel",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 400,
+            "top": 0,
+            "right": 320,
+            "bottom": 400,
+            "left": 0
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-settings",
+          "rect": {
+            "x": 1,
+            "y": 174.484375,
+            "width": 319,
+            "height": 101.515625,
+            "top": 174.484375,
+            "right": 320,
+            "bottom": 276,
+            "left": 1
+          },
+          "client": 319,
+          "scroll": 319,
+          "display": "flex"
+        },
+        {
+          "selector": ".cui-input",
+          "rect": {
+            "x": 24,
+            "y": 299,
+            "width": 273,
+            "height": 40,
+            "top": 299,
+            "right": 297,
+            "bottom": 339,
+            "left": 24
+          },
+          "client": 273,
+          "scroll": 273,
+          "display": "block"
+        },
+        {
+          "selector": ".agent-panel-settings-toggle",
+          "rect": {
+            "x": 240,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 270,
+            "bottom": 38.5,
+            "left": 240
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        },
+        {
+          "selector": ".agent-panel-close",
+          "rect": {
+            "x": 274,
+            "y": 8.5,
+            "width": 30,
+            "height": 30,
+            "top": 8.5,
+            "right": 304,
+            "bottom": 38.5,
+            "left": 274
+          },
+          "client": 30,
+          "scroll": 30,
+          "display": "flex"
+        }
+      ],
+      "height": 400,
+      "colorScheme": "dark",
+      "escapeCollapsed": true,
+      "focusReturned": true
+    }
+  ],
+  "status": "completed",
+  "pluginHashes": {
+    "dist/assets/agent-plugin-DFiACKAA.js": "c1b852a73b320fc9f9fd0a18896f77973e9a531797db85ef892894328949a029"
+  },
+  "productDiffSHA256": "a85bd44d24acb76d7dd419c57087e70cf2ceac4eb059abd7ee836e72c0857667"
+}

@@ -1,0 +1,146 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+const profile = '.scratch/default-cpu-process-profile-20261005',
+  origin = 'http://127.0.0.1:5193';
+const r = { runtime: 'active-source-integration', profile, errors: [], failures: [] };
+let c, p;
+const launch = async () => {
+  const context = await chromium.launchPersistentContext(profile, {
+    channel: 'chromium',
+    serviceWorkers: 'allow',
+    viewport: { width: 1280, height: 900 },
+  });
+  context.on('page', (page) => page.on('pageerror', (error) => r.errors.push(error.message)));
+  context.on('requestfailed', (req) => r.failures.push({ url: req.url(), error: req.failure()?.errorText }));
+  return context;
+};
+const text = () =>
+  p.evaluate(() =>
+    document.querySelector('#app iframe').contentWindow.Asc.editor.WordControl.m_oLogicDocument.GetText(),
+  );
+try {
+  c = await launch();
+  r.restoredPages = c.pages().map((page) => page.url());
+  for (const page of c.pages()) await page.close();
+  p = await c.newPage();
+  await p.goto(origin + '/');
+  const deadline = Date.now() + 60000;
+  do {
+    r.onlineCaches = await p.evaluate(() => caches.keys());
+    if (
+      r.onlineCaches.includes('document-editor-core-1791157664') &&
+      !r.onlineCaches.some(
+        (name) => name.startsWith('document-editor-core-') && name !== 'document-editor-core-1791157664',
+      )
+    )
+      break;
+    await p.waitForTimeout(250);
+  } while (Date.now() < deadline);
+  if (
+    !r.onlineCaches.includes('document-editor-core-1791157664') ||
+    r.onlineCaches.some(
+      (name) => name.startsWith('document-editor-core-') && name !== 'document-editor-core-1791157664',
+    )
+  )
+    throw Error('Current core not installed');
+  await p.reload();
+  await p.goto(origin + '/editor?new=docx&agent=1&locale=zh-CN');
+  await p.frameLocator('#app iframe').locator('.agent-sidebar-entry').click({ timeout: 90000 });
+  await p.waitForFunction(
+    () => /模型已加载|Model loaded/.test(document.querySelector('.agent-panel-note')?.textContent ?? ''),
+    null,
+    { timeout: 180000 },
+  );
+  r.onlineStatus = await p.locator('.agent-model-status').textContent();
+  await c.close();
+  c = undefined;
+  r.firstProcessClosed = true;
+  c = await launch();
+  for (const page of c.pages()) await page.close();
+  await c.setOffline(true);
+  r.browserOffline = true;
+  p = await c.newPage();
+  const response = await p.goto(origin + '/');
+  r.homeFromSW = response.fromServiceWorker();
+  await p.locator('#hero-open').evaluate((btn) => btn.setAttribute('data-open-local', '/editor?open=local&agent=1'));
+  r.explicitAgentOptIn = true;
+  const chooser = p.waitForEvent('filechooser');
+  await p.locator('#hero-open').click();
+  await (await chooser).setFiles('.scratch/webkit-embedded-font-native-saved.docx');
+  await p.waitForFunction(
+    () => {
+      const a = document.querySelector('#app iframe')?.contentWindow?.Asc?.editor;
+      return a?.isDocumentLoadComplete && a?.isLoadFullApi;
+    },
+    null,
+    { timeout: 90000 },
+  );
+  await p.waitForFunction(() => new URL(location.href).searchParams.has('saved'));
+  r.imported = await text();
+  r.importedId = new URL(p.url()).searchParams.get('saved');
+  const restored = await p.reload();
+  r.restoredShellFromSW = restored.fromServiceWorker();
+  await p.waitForFunction(
+    () => {
+      const a = document.querySelector('#app iframe')?.contentWindow?.Asc?.editor;
+      return a?.isDocumentLoadComplete && a?.isLoadFullApi;
+    },
+    null,
+    { timeout: 90000 },
+  );
+  r.before = await text();
+  r.restoredId = new URL(p.url()).searchParams.get('saved');
+  if (r.before !== r.imported || r.restoredId !== r.importedId || !r.restoredShellFromSW)
+    throw Error('Source reload mismatch');
+  r.offlineScripts = await p.evaluate(() => Array.from(document.scripts, (s) => s.src));
+  await p.screenshot({ path: '.scratch/source-recovery-im-chain-open.png' });
+  await p.frameLocator('#app iframe').locator('.agent-sidebar-entry').click();
+  await p.waitForFunction(
+    () => /模型已加载|Model loaded/.test(document.querySelector('.agent-panel-note')?.textContent ?? ''),
+    null,
+    { timeout: 180000 },
+  );
+  r.offlineStatus = await p.locator('.agent-model-status').textContent();
+  if (r.offlineStatus !== 'CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf') throw Error('Wrong engine');
+  await p.evaluate(() => {
+    const a = document.querySelector('#app iframe').contentWindow.Asc.editor;
+    a.asc_EditSelectAll();
+  });
+  await p.locator('.agent-writing-task').selectOption('tools');
+  await p.locator('.cui-input').fill('Replace the selected text with the exact text OFFLINE_CHAIN_20261005.');
+  await p.locator('.cui-input').press('Enter');
+  await p.waitForFunction(() => !document.querySelector('.cui-input').disabled, null, { timeout: 180000 });
+  r.after = await text();
+  r.chatErrors = await p.locator('.cui-msg-error').allTextContents();
+  if (r.after !== 'OFFLINE_CHAIN_20261005\r\n') throw Error('Native edit mismatch');
+  await p.evaluate(() => document.querySelector('#app iframe').contentWindow.Asc.editor.Undo());
+  r.undo = await text();
+  await p.evaluate(() => document.querySelector('#app iframe').contentWindow.Asc.editor.Redo());
+  r.redo = await text();
+  if (r.undo !== r.before || r.redo !== r.after) throw Error('Native history mismatch');
+  await p.evaluate(() => {
+    window.showSaveFilePicker = undefined;
+  });
+  const download = p.waitForEvent('download', { timeout: 90000 });
+  download.catch(() => {});
+  await p.evaluate(() =>
+    document.querySelector('#app iframe').contentDocument.querySelector('#slot-btn-dt-save button').click(),
+  );
+  await (await download).saveAs('.scratch/source-recovery-im-chain.docx');
+  r.saved = true;
+  if (r.errors.length || r.chatErrors.length || !r.homeFromSW) throw Error('Errors or shell not from SW');
+  r.passed = true;
+} catch (error) {
+  r.error = String(error);
+  if (p)
+    try {
+      r.failureNote = await p.locator('.agent-panel-note').textContent({ timeout: 2000 });
+      r.failureStatus = await p.locator('.agent-model-status').textContent({ timeout: 2000 });
+    } catch {}
+} finally {
+  if (c) await c.close();
+  r.closed = true;
+  await fs.writeFile('.scratch/source-recovery-im-chain.json', JSON.stringify(r, null, 2));
+  console.log(JSON.stringify(r));
+}
+if (!r.passed) process.exitCode = 1;

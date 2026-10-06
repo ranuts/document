@@ -1,0 +1,15 @@
+# Blank-layout long-text IM comparison — 2026-10-04
+
+Both prior long-text cases produce one text box on a genuinely blank native layout, whereas both were refused on the default title/subtitle layout. Blank setup is independently checked: native GetAllLayouts finds AscFormat.nSldLtTBlank, changeLayout([0], index) applies it, resulting layout type=0 and zero shapes before IM input. This isolates a useful layout constraint, not general text correctness.
+
+Actual Qwen3 1.7B IM requests reuse the same six-line source and 35-times unbroken Extraordinary source. The driver sends a natural-language instruction plus JSON.stringify(text), not the product's explicitly recognized “with exactly this JSON string decoded as plain text” command. Therefore these requests do not enter that closed literal-enum path. No raw generated plan/request bytes were captured. The long-token result contains 40 repetitions rather than 35, with no visible error: observed literal-copy failure. Do not count it as exact writing success or change the source to match the output.
+
+Multiline getText returns null in the diagnostic's simple native snapshot even though the screenshot visibly shows six lines and the actual product uses a more complete slide text reader. Its literalExact=false is an insufficient diagnostic extraction, not proof of missing model text. Full multiline character equality is unverified. Native Undo/Redo matches the recorded geometry/simple-text/content-height snapshots; this does not verify full multiline text history, metadata or native object identity.
+
+Both box rectangles remain within the 338.6667×190.5mm slide. Six-line box: x10.16/y5.715, 220.1433×48.27mm, summary content height45.72mm. Long-token box: same x/y/width, height78.75mm, content height60.96mm. Visual inspection shows six readable mixed-language lines and the long token wrapping across lines, with suffix visible and no obvious clipping. That does not fix the added repetitions or prove all width/font/physical-device behavior. Report's inherited literalExact booleans remain raw evidence, not overridden assertions.
+
+Warm independent Chromium profile, service workers blocked, network available, existing dark theme, no experimental headers. No network/privacy/forced-offline/cold/physical-device/OOM claim. No Save/reopen. Driver/source/screenshot hashes and scoped verifier pass with the negative literal result explicitly required. Owned process exited0 and context closed. The report filename retains an accidental duplicated blank segment from driver derivation; it does not affect actual layout/model evidence.
+
+Independent read-only review inspected both screenshots and found no Critical/Important evidence or scope issue.
+
+Next use the explicit JSON-literal command and complete native text extraction on the unchanged sources. Keep the default-layout negative result; do not silently replace/remove user's placeholders to make a new box fit. No product change is justified until the precise command and extraction controls distinguish model-copy behavior from placement.

@@ -1,0 +1,42 @@
+{
+  "probeSHA256": "9037b56bb30e2bc91ab87b8a7b3610b2671b4c6e83f656983d609b7a2623f09c",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "invalidFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "true"
+      },
+      "correctedFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "false"
+      },
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 37.7 token/s · First text: 0.92 s · Overall response rate: 10.72 token/s · 13 tokens",
+      "reply": "Hello! Let me know if there's anything you need.Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "en-conditional-unpaid",
+    "task": "rewrite",
+    "source": "Well, on 2026-12-21, Priya may reimburse Hugo 275 AUD only if Marta signs the receipt; no payment has been made, okay?",
+    "instruction": "Rewrite in formal English, preserving all participants, permission, condition and unpaid status.",
+    "rubric": "Priya may reimburse Hugo; Marta signing is necessary; payment remains unmade. Date and amount retained."
+  },
+  {
+    "id": "en-paid-not-approved",
+    "task": "rewrite",
+    "source": "Hey, Hugo has reimbursed Priya 275 AUD on 2026-12-21, but Marta has not approved the expense, you know?",
+    "instruction": "Rewrite in formal English, preserving payment direction, completed payment and absent expense approval.",
+    "rubric": "Hugo already reimbursed Priya; Marta approval absent. Do not make payment conditional or pending."
+  },
+  {
+    "id": "zh-recipient-not-authorized",
+    "task": "rewrite",
+    "source": "那个，周岚尚未收到许宁的授权，因此不能在 2026-12-21 向顾禾退还 680 CAD 呢。",
+    "instruction": "改为正式书面中文，保留三人的角色、尚未收到授权和不能退款的状态。",
+    "rubric": "许宁是未授予授权者；周岚尚未收到授权且不能退款；顾禾是退款接收者。"
+  },
+  {
+    "id": "zh-actor-authorized-pending",
+    "task": "rewrite",
+    "source": "嗯，许宁已授权周岚在 2026-12-21 向顾禾退还 680 CAD，但退款还没执行呢。",
+    "instruction": "改为正式书面中文，保留授权者、执行者、收款者，以及已授权但未退款的区别。",
+    "rubric": "许宁已授权；周岚将执行；顾禾接收；退款未执行。"
+  },
+  {
+    "id": "es-negative-permission",
+    "task": "rewrite",
+    "source": "A ver, Tomás no puede entregar 32 cajas a Lucía el 2026-12-21 sin que Irene firme el acta, ¿entiendes?",
+    "instruction": "Redacta en español formal conservando los participantes, la prohibición y la firma necesaria.",
+    "rubric": "Tomás cannot deliver to Lucía without Irene signing; permission negative and signature prerequisite, not completed."
+  },
+  {
+    "id": "es-positive-without-signature",
+    "task": "rewrite",
+    "source": "A ver, Tomás puede entregar 32 cajas a Lucía el 2026-12-21 sin que Irene firme el acta, ¿entiendes?",
+    "instruction": "Redacta en español formal conservando los participantes y que no se necesita la firma.",
+    "rubric": "Tomás may deliver to Lucía without Irene signing; do not require signature or turn permission into commitment."
+  },
+  {
+    "id": "fr-offer-not-accepted",
+    "task": "rewrite",
+    "source": "Écoute, Salomé a proposé à Nadir de transmettre 46 dossiers à Maëlle le 2026-12-21, mais Nadir n’a pas encore accepté, d’accord ?",
+    "instruction": "Reformule en français formel en conservant les trois personnes, la proposition et son absence d’acceptation.",
+    "rubric": "Salomé offered Nadir a transfer to Maëlle; Nadir acceptance still absent, transfer not completed."
+  },
+  {
+    "id": "fr-completed-not-received",
+    "task": "rewrite",
+    "source": "Écoute, Nadir a transmis 46 dossiers à Maëlle le 2026-12-21, mais Salomé n’a pas encore reçu la confirmation, d’accord ?",
+    "instruction": "Reformule en français formel en conservant l’envoi effectué et la confirmation non reçue.",
+    "rubric": "Nadir completed transfer to Maëlle; Salomé has not received confirmation. Do not turn completed transfer into pending/proposed."
+  }
+]

@@ -1,0 +1,5 @@
+# Native Clipboard API and blocked writes
+
+Real Chromium source harness: a visible copy-button click wrote exact Markdown source, Chinese/Emoji, newline and literal backslash-n to the native browser Clipboard API, then showed Copied and restored the button. A separate context with Permissions-Policy clipboard-write=() rejected writing a different candidate, showed Could not copy and restored the button; native readText confirmed the previous clipboard contents remained unchanged. No page errors occurred, and contexts/browser/server closed. Permissions for read/write were granted to the harness; the policy provided the actual denial. This does not prove permission prompts, every OS/browser, physical clipboard integration or screen-reader announcements. No product code changed.
+
+The initial run used identical candidate text in both contexts and could not distinguish preservation from an overwrite. Its driver/raw report are retained as limited evidence. The separate distinct-candidate run resolves that gap. Run `python3 docs/evaluations/verify-chat-clipboard-browser.py` for exact candidate, clipboard contents, labels, button state and bound source/probe hashes.

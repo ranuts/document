@@ -1,0 +1,150 @@
+{
+  "scope": "Native PPT recalculated bounds, unrotated and rotated text shape; no product mutation",
+  "result": {
+    "before": {
+      "x": 136.83407430013023,
+      "y": 90.17,
+      "width": 64.99851806640625,
+      "height": 10.16,
+      "bounds": {
+        "l": 136.83407430013023,
+        "t": 90.17,
+        "r": 201.83259236653646,
+        "b": 100.33,
+        "x": 136.83407430013023,
+        "y": 90.17,
+        "w": 64.99851806640623,
+        "h": 10.159999999999997
+      },
+      "rotation": 0,
+      "transform": {
+        "sx": 1,
+        "shx": 0,
+        "shy": 0,
+        "sy": 1,
+        "tx": 136.83407430013023,
+        "ty": 90.17
+      }
+    },
+    "rotated": {
+      "x": 136.83407430013023,
+      "y": 90.17,
+      "width": 64.99851806640625,
+      "height": 10.16,
+      "bounds": {
+        "l": 142.7607844389896,
+        "t": 68.67745110565625,
+        "r": 195.9058822276771,
+        "b": 121.82254889434374,
+        "x": 142.7607844389896,
+        "y": 68.67745110565625,
+        "w": 53.14509778868751,
+        "h": 53.145097788687494
+      },
+      "rotation": 0.7853981633974483,
+      "transform": {
+        "sx": 0.7071067811865476,
+        "shx": -0.7071067811865475,
+        "shy": 0.7071067811865475,
+        "sy": 0.7071067811865476,
+        "tx": 149.94498933584492,
+        "ty": 68.67745110565625
+      }
+    },
+    "grouped": {
+      "bounds": {
+        "l": 142.7607844389896,
+        "t": 62.75074096679688,
+        "r": 303.9330883789063,
+        "b": 150.16,
+        "x": 142.7607844389896,
+        "y": 62.75074096679688,
+        "w": 161.1723039399167,
+        "h": 87.40925903320311
+      },
+      "children": [
+        {
+          "bounds": {
+            "l": 142.7607844389896,
+            "t": 68.67745110565626,
+            "r": 195.9058822276771,
+            "b": 121.82254889434375,
+            "x": 142.7607844389896,
+            "y": 68.67745110565626,
+            "w": 53.14509778868751,
+            "h": 53.145097788687494
+          },
+          "rotation": 0.7853981633974483
+        },
+        {
+          "bounds": {
+            "l": 230,
+            "t": 140,
+            "r": 303.9330883789063,
+            "b": 150.16,
+            "x": 230,
+            "y": 140,
+            "w": 73.93308837890629,
+            "h": 10.159999999999997
+          },
+          "rotation": 0
+        }
+      ]
+    },
+    "lockApi": {
+      "get": "function(){return 0===this.m_bGlobalLock?!1:!0}",
+      "set": "function(g){g?this.m_bGlobalLock++:this.m_bGlobalLock=Math.max(0,this.m_bGlobalLock-1)}",
+      "counter": 0,
+      "block": {
+        "Information": 0,
+        "BlockInteraction": 1,
+        "Empty": 2
+      },
+      "actions": {
+        "Open": 0,
+        "Save": 1,
+        "LoadDocumentFonts": 2,
+        "LoadDocumentImages": 3,
+        "LoadFont": 4,
+        "LoadImage": 5,
+        "DownloadAs": 6,
+        "Print": 7,
+        "UploadImage": 8,
+        "ApplyChanges": 9,
+        "SlowOperation": 11,
+        "LoadTheme": 12,
+        "MailMergeLoadFile": 13,
+        "DownloadMerge": 14,
+        "SendMailMerge": 15,
+        "ForceSaveButton": 16,
+        "ForceSaveTimeout": 17,
+        "Waiting": 18,
+        "Submit": 19,
+        "Disconnect": 20,
+        "RefreshFile": 21,
+        "SolverLookingSolution": 22,
+        "BackgroundOpen": 23
+      }
+    },
+    "capabilities": {
+      "group": "undefined",
+      "group2": "function",
+      "recalc": "function"
+    }
+  },
+  "adapter": {
+    "rotated": {
+      "x": 142.7607844389896,
+      "y": 68.67745110565625,
+      "width": 53.14509778868751,
+      "height": 53.145097788687494
+    },
+    "grouped": {
+      "x": 142.7607844389896,
+      "y": 62.75074096679688,
+      "width": 161.1723039399167,
+      "height": 87.40925903320311
+    }
+  },
+  "status": "passed"
+}

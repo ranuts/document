@@ -1,0 +1,73 @@
+{
+  "scope": "Derived native-code-point verification of the captured production selected-text paste matrix. Uses actual run item types/code points; no model or IM implementation. Raw SDK GetText mismatches are retained in the source report.",
+  "source": "2026-10-03-ppt-selected-text-native-paste-ready-matrix.json",
+  "cases": [
+    {
+      "literal": "Alex",
+      "rawSdkMatched": true,
+      "nativeText": "Alex target body\n",
+      "nativeTextMatched": true,
+      "undoExact": true,
+      "redoExact": true,
+      "neighborUnchanged": true,
+      "shapeCountUnchanged": true,
+      "paragraphCount": 1
+    },
+    {
+      "literal": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+      "rawSdkMatched": true,
+      "nativeText": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\n",
+      "nativeTextMatched": true,
+      "undoExact": true,
+      "redoExact": true,
+      "neighborUnchanged": true,
+      "shapeCountUnchanged": true,
+      "paragraphCount": 1
+    },
+    {
+      "literal": "第一行 Alex\n  第二行 NOT approved  ",
+      "rawSdkMatched": true,
+      "nativeText": "第一行 Alex\n  第二行 NOT approved   target body\n",
+      "nativeTextMatched": true,
+      "undoExact": true,
+      "redoExact": true,
+      "neighborUnchanged": true,
+      "shapeCountUnchanged": true,
+      "paragraphCount": 2
+    },
+    {
+      "literal": "  Alex  ",
+      "rawSdkMatched": true,
+      "nativeText": "  Alex   target body\n",
+      "nativeTextMatched": true,
+      "undoExact": true,
+      "redoExact": true,
+      "neighborUnchanged": true,
+      "shapeCountUnchanged": true,
+      "paragraphCount": 1
+    },
+    {
+      "literal": "Alex\tPayment",
+      "rawSdkMatched": false,
+      "nativeText": "Alex\tPayment target body\n",
+      "nativeTextMatched": true,
+      "undoExact": true,
+      "redoExact": true,
+      "neighborUnchanged": true,
+      "shapeCountUnchanged": true,
+      "paragraphCount": 1
+    },
+    {
+      "literal": "Alex 😀",
+      "rawSdkMatched": false,
+      "nativeText": "Alex 😀 target body\n",
+      "nativeTextMatched": true,
+      "undoExact": true,
+      "redoExact": true,
+      "neighborUnchanged": true,
+      "shapeCountUnchanged": true,
+      "paragraphCount": 1
+    }
+  ],
+  "nativeCasesPassed": true
+}

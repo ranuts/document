@@ -1,0 +1,109 @@
+{
+  "events": [
+    {
+      "type": "response",
+      "phase": "import",
+      "url": "http://127.0.0.1:5195/sdkjs/common/spell/spell/spell.js",
+      "status": 200,
+      "headers": {
+        "content-type": "text/javascript",
+        "keep-alive": "timeout=5",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "content-encoding": "gzip",
+        "transfer-encoding": "Identity",
+        "cache-control": "no-cache",
+        "date": "Sun, 04 Oct 2026 23:54:06 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "connection": "keep-alive",
+        "etag": "W/\"33552-1791157661971\"",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "response",
+      "phase": "import",
+      "url": "http://127.0.0.1:5195/sdkjs/common/spell/spell/spell.wasm",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/wasm",
+        "content-length": "510644",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin",
+        "date": "Sun, 04 Oct 2026 23:54:06 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "keep-alive": "timeout=5",
+        "cache-control": "no-cache",
+        "etag": "W/\"510644-1791157661973\""
+      }
+    },
+    {
+      "type": "response",
+      "phase": "reload1",
+      "url": "http://127.0.0.1:5195/sdkjs/common/spell/spell/spell.js",
+      "status": 304,
+      "headers": {
+        "cross-origin-embedder-policy": "require-corp",
+        "keep-alive": "timeout=5",
+        "cross-origin-opener-policy": "same-origin",
+        "vary": "Origin",
+        "connection": "keep-alive",
+        "date": "Sun, 04 Oct 2026 23:54:10 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "phase": "reload1",
+      "url": "http://127.0.0.1:5195/sdkjs/common/spell/spell/spell.wasm",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/wasm",
+        "content-length": "510644",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin",
+        "date": "Sun, 04 Oct 2026 23:54:10 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "keep-alive": "timeout=5",
+        "cache-control": "no-cache",
+        "etag": "W/\"510644-1791157661973\""
+      }
+    },
+    {
+      "type": "response",
+      "phase": "reload2",
+      "url": "http://127.0.0.1:5195/sdkjs/common/spell/spell/spell.js",
+      "status": 304,
+      "headers": {
+        "cross-origin-embedder-policy": "require-corp",
+        "keep-alive": "timeout=5",
+        "cross-origin-opener-policy": "same-origin",
+        "vary": "Origin",
+        "connection": "keep-alive",
+        "date": "Sun, 04 Oct 2026 23:54:16 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "phase": "reload2",
+      "url": "http://127.0.0.1:5195/sdkjs/common/spell/spell/spell.wasm",
+      "status": 200,
+      "headers": {
+        "connection": "keep-alive",
+        "content-type": "application/wasm",
+        "content-length": "510644",
+        "last-modified": "Sun, 04 Oct 2026 23:47:41 GMT",
+        "cross-origin-embedder-policy": "require-corp",
+        "vary": "Origin",
+        "date": "Sun, 04 Oct 2026 23:54:16 GMT",
+        "cross-origin-opener-policy": "same-origin",
+        "keep-alive": "timeout=5",
+        "cache-control": "no-cache",
+        "etag": "W/\"510644-1791157661973\""
+      }
+    }
+  ]
+}

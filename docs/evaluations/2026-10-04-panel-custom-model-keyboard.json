@@ -1,0 +1,10 @@
+{
+  "scope": "Native disclosure keyboard behavior in fresh isolated Chromium, actual model initialization held; not inference.",
+  "errors": [],
+  "initialCollapsed": true,
+  "keyboardExpanded": true,
+  "visibleFields": 3,
+  "keyboardCollapsed": true,
+  "escapeFocus": true,
+  "passed": true
+}

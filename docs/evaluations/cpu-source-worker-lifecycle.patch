@@ -1,0 +1,127 @@
+diff --git a/src/worker.ts b/src/worker.ts
+index 3cdc7c9..e11e702 100644
+--- a/src/worker.ts
++++ b/src/worker.ts
+@@ -13,7 +13,6 @@
+ 
+ import { glueDeserialize, glueSerialize } from './glue/glue';
+ import type { GlueMsg } from './glue/messages';
+-import { Debug } from './debug';
+ import {
+   canUseAsyncFileRead,
+   createWorker,
+@@ -94,6 +93,7 @@ export class ProxyToWorker {
+   taskQueue: Task[] = [];
+   taskId: number = 1;
+   resultQueue: Task[] = [];
++  private failure?: WllamaRuntimeError;
+   busy = false; // is the work loop is running?
+   worker?: Worker | undefined;
+   multiThread: boolean;
+@@ -161,7 +161,12 @@ export class ProxyToWorker {
+     ].join(';\n\n');
+     this.worker = createWorker(completeCode);
+     this.worker.onmessage = this.onRecvMsg.bind(this);
+-    this.worker.onerror = this.logger.error;
++    this.worker.onerror = (event) => {
++      const message = typeof event.message === 'string' && event.message ? event.message : 'Wllama worker failed';
++      this.worker?.terminate();
++      this.worker = undefined;
++      this.abort(message, '');
++    };
+ 
+     const res = await this.pushTask({
+       verb: 'module.init',
+@@ -225,17 +230,9 @@ export class ProxyToWorker {
+   }
+ 
+   async wllamaExit(): Promise<void> {
+-    if (this.worker) {
+-      // we don't actually need to send exit
+-      // terminating the worker is faster and resources will be cleaned up by the browser
+-      // const result = await this.pushTask({
+-      //   verb: 'wllama.exit',
+-      //   args: [],
+-      //   callbackId: this.taskId++,
+-      // });
+-      // this.parseResult(result); // only check for exceptions
+-      this.worker.terminate();
+-    }
++    this.worker?.terminate();
++    this.worker = undefined;
++    this.abort('Wllama worker terminated', '');
+   }
+ 
+   async wllamaDebug(): Promise<any> {
+@@ -331,6 +328,7 @@ export class ProxyToWorker {
+    * Push a new task to taskQueue
+    */
+   private pushTask(param: TaskParam, buffers?: ArrayBuffer[]) {
++    if (this.failure) return Promise.reject(this.failure);
+     return new Promise<any>((resolve, reject) => {
+       this.taskQueue.push({ resolve, reject, param, buffers });
+       this.runTaskLoop();
+@@ -368,7 +366,6 @@ export class ProxyToWorker {
+   private onRecvMsg(e: MessageEvent<any>) {
+     if (!e.data) return; // ignore
+     const { verb, args } = e.data;
+-    const isCompatBuild = this.resources.compat;
+     if (verb && verb.startsWith('console.')) {
+       if (this.suppressNativeLog) {
+         return;
+@@ -381,29 +378,26 @@ export class ProxyToWorker {
+     } else if (verb === 'signal.abort') {
+       const [signalType, message, rawStack, originalErr] = args as [
+         string,
+-        string,
+-        string,
++        any,
++        any,
+         any,
+       ];
+-      if (originalErr) {
+-        this.logger.error(originalErr);
++      const rawMessage = typeof message === 'string' ? message : typeof message?.message === 'string' ? message.message : 'Wllama runtime aborted';
++      let newMsg = rawMessage.replace('Build with -sASSERTIONS for more info.', '');
++      let stack = typeof rawStack === 'string' ? rawStack : '';
++      if (signalType === 'abort') {
++        newMsg = `(ABORT) ${newMsg}`;
++        stack = stack.replace(/\|/g, '\n');
++      }
++      this.worker?.terminate();
++      this.worker = undefined;
++      this.abort(newMsg, stack);
++      try {
++        if (originalErr) this.logger.error(originalErr);
++        this.logger.error(`Stack trace (${signalType}):\n` + stack);
++      } catch {
++        // Logging must not prevent task rejection.
+       }
+-      (async () => {
+-        let stack = '';
+-        let newMsg = message.replace(
+-          'Build with -sASSERTIONS for more info.',
+-          ''
+-        );
+-        if (signalType === 'abort') {
+-          newMsg = `(ABORT) ${newMsg}`;
+-          stack = rawStack.replace(/\|/g, '\n');
+-        } else if (signalType === 'exception') {
+-          stack = rawStack;
+-        }
+-        const decoded = await Debug.decodeStackTrace(stack, isCompatBuild);
+-        this.logger.error(`Stack trace (${signalType}):\n` + decoded);
+-        this.abort(newMsg, decoded);
+-      })();
+       return;
+     }
+ 
+@@ -437,6 +431,8 @@ export class ProxyToWorker {
+       text.length == 0 ? '(unknown error)' : text,
+       stack
+     );
++    this.failure = error;
++    this.busy = false;
+     while (this.resultQueue.length > 0) {
+       const waitingTask = this.resultQueue.pop();
+       if (!waitingTask) break;

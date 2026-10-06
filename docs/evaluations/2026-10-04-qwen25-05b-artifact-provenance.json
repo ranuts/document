@@ -1,0 +1,11 @@
+{
+  "publisherModelCard": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct",
+  "quantizationRepository": "bartowski/Qwen2.5-0.5B-Instruct-GGUF",
+  "revision": "41ba88dbac95fed2528c92514c131d73eb5a174b",
+  "file": "Qwen2.5-0.5B-Instruct-Q4_K_M.gguf",
+  "expectedLfsSHA256": "6eb923e7d26e9cea28811e1a8e852009b21242fb157b26149d3b188f3a8c8653",
+  "actualSHA256": "6eb923e7d26e9cea28811e1a8e852009b21242fb157b26149d3b188f3a8c8653",
+  "bytes": 397808192,
+  "url": "https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/resolve/41ba88dbac95fed2528c92514c131d73eb5a174b/Qwen2.5-0.5B-Instruct-Q4_K_M.gguf",
+  "scope": "Third-party GGUF pinned to immutable repository revision; byte/hash match verifies downloaded artifact identity, not publisher endorsement or model quality."
+}

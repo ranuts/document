@@ -1,0 +1,1211 @@
+{
+  "status": "completed",
+  "scope": "Actual compiled WllamaProvider with count-capable source SDK and native CPU Worker; injected engine factory, no editor writes or shipping packaging acceptance",
+  "files": {
+    "js": "9708f2b93fa3bc6df5d06c75bc651f32201228532f07423447aa1b912f52f97c",
+    "wasm": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179"
+  },
+  "served": [
+    {
+      "method": "GET",
+      "url": "/sdk.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "HEAD",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 484220320
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.wasm",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/provider/llm/wllama.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/provider/llm/openai-format",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/provider/context-budget",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/provider/llm/prompt",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/provider/llm/generation",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/provider/llm/wllama-cache-storage",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/provider/llm/wllama-compat-assets",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    }
+  ],
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "log",
+      "text": "DIAGNOSTIC_RESOURCES {\"compat\":true,\"wasmPath\":\"http://127.0.0.1:57681/runtime.wasm\",\"hasInlineWorker\":true}"
+    },
+    {
+      "type": "debug",
+      "text": "Downloading model files: [http://127.0.0.1:57681/model.gguf]"
+    },
+    {
+      "type": "debug",
+      "text": "Multithread enabled: false, pthreadPoolSize: 0"
+    },
+    {
+      "type": "debug",
+      "text": "Loading \"wllama.wasm\" from \"http://127.0.0.1:57681/runtime.wasm\""
+    },
+    {
+      "type": "debug",
+      "text": "Calling wllamaStart..."
+    },
+    {
+      "type": "debug",
+      "text": "Using async file read"
+    },
+    {
+      "type": "debug",
+      "text": "Loading model..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: loaded meta data with 31 key-value pairs and 311 tensors from models/model-00001-of-00001.gguf (version GGUF V3 (latest))"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   0:                       general.architecture str              = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   1:                               general.type str              = model"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   2:                               general.name str              = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   3:                           general.basename str              = Qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   4:                         general.size_label str              = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   5:                          qwen3.block_count u32              = 28"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   6:                       qwen3.context_length u32              = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   7:                     qwen3.embedding_length u32              = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   8:                  qwen3.feed_forward_length u32              = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   9:                 qwen3.attention.head_count u32              = 16"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  10:              qwen3.attention.head_count_kv u32              = 8"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  11:                       qwen3.rope.freq_base f32              = 1000000.000000"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  12:     qwen3.attention.layer_norm_rms_epsilon f32              = 0.000001"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  13:                 qwen3.attention.key_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  14:               qwen3.attention.value_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  15:                       tokenizer.ggml.model str              = gpt2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  16:                         tokenizer.ggml.pre str              = qwen2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  17:                      tokenizer.ggml.tokens arr[str,151936]  = [\"!\", \"\\\"\", \"#\", \"$\", \"%\", \"&\", \"'\", ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  18:                  tokenizer.ggml.token_type arr[i32,151936]  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  19:                      tokenizer.ggml.merges arr[str,151387]  = [\"Ġ Ġ\", \"ĠĠ ĠĠ\", \"i n\", \"Ġ t\",..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  20:                tokenizer.ggml.eos_token_id u32              = 151645"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  21:            tokenizer.ggml.padding_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  22:                tokenizer.ggml.bos_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  23:               tokenizer.ggml.add_bos_token bool             = false"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  24:                    tokenizer.chat_template str              = {%- if tools %}\\n    {{- '<|im_start|>..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  25:               general.quantization_version u32              = 2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  26:                          general.file_type u32              = 15"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  27:                      quantize.imatrix.file str              = /models_out/Qwen3-0.6B-GGUF/Qwen_Qwen..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  28:                   quantize.imatrix.dataset str              = /training_dir/calibration_datav3.txt"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  29:             quantize.imatrix.entries_count i32              = 196"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  30:              quantize.imatrix.chunks_count i32              = 137"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type  f32:  113 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q4_K:  169 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q6_K:   29 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file format = GGUF V3 (latest)"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file type   = Q4_K - Medium"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file size   = 456.11 MiB (5.09 BPW) "
+    },
+    {
+      "type": "debug",
+      "text": "load: 0 unused tokens"
+    },
+    {
+      "type": "warning",
+      "text": "load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden"
+    },
+    {
+      "type": "debug",
+      "text": "load: printing all EOG tokens:"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 128247 ('</s>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151643 ('<|endoftext|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151645 ('<|im_end|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151662 ('<|fim_pad|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151663 ('<|repo_name|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151664 ('<|file_sep|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load: special tokens cache size = 27"
+    },
+    {
+      "type": "debug",
+      "text": "load: token to piece cache size = 0.9311 MB"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: arch                  = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab_only            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: no_alloc              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_train           = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_inp            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd                = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_out            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer               = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer_all           = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head                = 16"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head_kv             = 8"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_rot                 = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_swa                 = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: is_swa_any            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_k         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_v         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_gqa                 = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_k_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_v_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_eps            = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_rms_eps        = 1.0e-06"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_clamp_kqv           = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_max_alibi_bias      = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_logit_scale         = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_scale          = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_value_scale    = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ff                  = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_used         = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_groups       = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_group_used          = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: causal attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: pooling type          = -1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope type             = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope scaling          = linear"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_base_train       = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_scale_train      = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_orig_yarn       = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_yarn_log_mul     = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_finetuned        = unknown"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model type            = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model params          = 751.63 M"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: general.name          = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab type            = BPE"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_vocab               = 151936"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_merges              = 151387"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: BOS token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOS token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOT token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: PAD token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: LF token              = 198 'Ċ'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PRE token         = 151659 '<|fim_prefix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SUF token         = 151661 '<|fim_suffix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM MID token         = 151660 '<|fim_middle|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PAD token         = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM REP token         = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SEP token         = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 128247 '</s>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: max token length      = 256"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors: loading model tensors, this can take a while... (load_mode = none)"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors:          CPU model buffer size =   456.11 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: constructing llama_context"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_seq_max             = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx                 = 256"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq             = 256"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_batch               = 256"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ubatch              = 256"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: causal_attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: flash_attn            = auto"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: kv_unified            = true"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_base             = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_scale            = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_rs_seq              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max         = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max_per_seq = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq (256) < n_ctx_train (32768) -- the full capacity of the model will not be utilized"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context:        CPU  output buffer size =     2.32 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache:        CPU KV buffer size =    28.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: size =   28.00 MiB (   256 cells,  28 layers,  4/1 seqs), K (f16):   14.00 MiB, V (f16):   14.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_k = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_v = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserving ..."
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Flash Attention enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Gated Delta Net support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (autoregressive) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (chunked) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Lightning Indexer support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Lightning Indexer enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused DeepSeek V4 HC support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC pre enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC comb enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC post enabled"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve:        CPU compute buffer size =    13.13 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph nodes  = 986"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph splits = 1"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserve took 16.20 ms, sched copies = 1"
+    },
+    {
+      "type": "debug",
+      "text": "{loadedCtxInfo: Object}"
+    },
+    {
+      "type": "warning",
+      "text": "slot   operator(): id  3 | task 11 | need to evaluate at least 1 token for each active slot (n_past = 24, task.n_tokens() = 24)"
+    },
+    {
+      "type": "warning",
+      "text": "slot   operator(): id  3 | task 11 | n_past was set to 23"
+    }
+  ],
+  "clientSHA256": "602231dcbb36f210a11e9ddcf5d8c57025d890001bcb989c803598026d8df1ff",
+  "probeSHA256": "7724242c257d905641af046bc669ddc6769e468e5aab033fa945e856dbec6411",
+  "patchSHA256": "d6680454b92ba3de45220dded01f966b1f25360a47dd2a3c2d6738f9db077bff",
+  "sdkSHA256": "90b5b57472a3116efff13b8376b84c724dbe22580feeb24843829839ca752414",
+  "routeHits": [],
+  "result": {
+    "info": {
+      "_name": "load_res",
+      "success": true,
+      "n_ctx": 256,
+      "n_batch": 256,
+      "n_ubatch": 256,
+      "n_vocab": 151936,
+      "n_ctx_train": 32768,
+      "n_embd": 1024,
+      "n_layer": 28,
+      "metadata_key": [
+        "quantize.imatrix.entries_count",
+        "quantize.imatrix.dataset",
+        "general.file_type",
+        "tokenizer.chat_template",
+        "qwen3.embedding_length",
+        "tokenizer.ggml.eos_token_id",
+        "general.type",
+        "qwen3.feed_forward_length",
+        "tokenizer.ggml.add_bos_token",
+        "qwen3.attention.key_length",
+        "tokenizer.ggml.model",
+        "quantize.imatrix.chunks_count",
+        "quantize.imatrix.file",
+        "qwen3.attention.layer_norm_rms_epsilon",
+        "general.size_label",
+        "tokenizer.ggml.padding_token_id",
+        "qwen3.attention.value_length",
+        "qwen3.context_length",
+        "qwen3.attention.head_count_kv",
+        "general.name",
+        "qwen3.attention.head_count",
+        "general.quantization_version",
+        "tokenizer.ggml.bos_token_id",
+        "general.basename",
+        "tokenizer.ggml.pre",
+        "qwen3.rope.freq_base",
+        "qwen3.block_count",
+        "general.architecture"
+      ],
+      "metadata_val": [
+        "196",
+        "/training_dir/calibration_datav3.txt",
+        "15",
+        "{%- if tools %}\n    {{- '<|im_start|>system\\n' }}\n    {%- if messages[0].role == 'system' %}\n        {{- messages[0].content + '\\n\\n' }}\n    {%- endif %}\n    {{- \"# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within <tools></tools> XML tags:\\n<tools>\" }}\n    {%- for tool in tools %}\n        {{- \"\\n\" }}\n        {{- tool | tojson }}\n    {%- endfor %}\n    {{- \"\\n</tools>\\n\\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\\n<tool_call>\\n{\\\"name\\\": <function-name>, \\\"arguments\\\": <args-json-object>}\\n</tool_call><|im_end|>\\n\" }}\n{%- else %}\n    {%- if messages[0].role == 'system' %}\n        {{- '<|im_start|>system\\n' + messages[0].content + '<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- set ns = namespace(multi_step_tool=true, last_query_index=messages|length - 1) %}\n{%- for message in messages[::-1] %}\n    {%- set index = (messages|length - 1) - loop.index0 %}\n    {%- set tool_start = \"<tool_response>\" %}\n    {%- set tool_start_length = tool_start|length %}\n    {%- set start_of_message = message.content[:tool_start_length] %}\n    {%- set tool_end = \"</tool_response>\" %}\n    {%- set tool_end_length = tool_end|length %}\n    {%- set start_pos = (message.content|length) - tool_end_length %}\n    {%- if start_pos < 0 %}\n        {%- set start_pos = 0 %}\n    {%- endif %}\n    {%- set end_of_message = message.content[start_pos:] %}\n    {%- if ns.multi_step_tool and message.role == \"user\" and not(start_of_message == tool_start and end_of_message == tool_end) %}\n        {%- set ns.multi_step_tool = false %}\n        {%- set ns.last_query_index = index %}\n    {%- endif %}\n{%- endfor %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {%- set content = message.content %}\n        {%- set reasoning_content = '' %}\n        {%- if message.reasoning_content is defined and message.reasoning_content is not none %}\n            {%- set reasoning_content = message.reasoning_content %}\n        {%- else %}\n            {%- if '</think>' in message.content %}\n                {%- set content = (message.content.split('</think>')|last).lstrip('\\n') %}\n        {%- set reasoning_content = (message.content.split('</think>')|first).rstrip('\\n') %}\n        {%- set reasoning_content = (reasoning_content.split('<think>')|last).lstrip('\\n') %}\n            {%- endif %}\n        {%- endif %}\n        {%- if loop.index0 > ns.last_query_index %}\n            {%- if loop.last or (not loop.last and reasoning_content) %}\n                {{- '<|im_start|>' + message.role + '\\n<think>\\n' + reasoning_content.strip('\\n') + '\\n</think>\\n\\n' + content.lstrip('\\n') }}\n            {%- else %}\n                {{- '<|im_start|>' + message.role + '\\n' + content }}\n            {%- endif %}\n        {%- else %}\n            {{- '<|im_start|>' + message.role + '\\n' + content }}\n        {%- endif %}\n        {%- if message.tool_calls %}\n            {%- for tool_call in message.tool_calls %}\n                {%- if (loop.first and content) or (not loop.first) %}\n                    {{- '\\n' }}\n                {%- endif %}\n                {%- if tool_call.function %}\n                    {%- set tool_call = tool_call.function %}\n                {%- endif %}\n                {{- '<tool_call>\\n{\"name\": \"' }}\n                {{- tool_call.name }}\n                {{- '\", \"arguments\": ' }}\n                {%- if tool_call.arguments is string %}\n                    {{- tool_call.arguments }}\n                {%- else %}\n                    {{- tool_call.arguments | tojson }}\n                {%- endif %}\n                {{- '}\\n</tool_call>' }}\n            {%- endfor %}\n        {%- endif %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if loop.first or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n    {%- if enable_thinking is defined and enable_thinking is false %}\n        {{- '<think>\\n\\n</think>\\n\\n' }}\n    {%- endif %}\n{%- endif %}",
+        "1024",
+        "151645",
+        "model",
+        "3072",
+        "false",
+        "128",
+        "gpt2",
+        "137",
+        "/models_out/Qwen3-0.6B-GGUF/Qwen_Qwen3-0.6B.imatrix",
+        "0.000001",
+        "0.6B",
+        "151643",
+        "128",
+        "32768",
+        "8",
+        "Qwen3 0.6B",
+        "16",
+        "2",
+        "151643",
+        "Qwen3",
+        "qwen2",
+        "1000000.000000",
+        "28",
+        "qwen3"
+      ],
+      "token_bos": 151643,
+      "token_eos": 151645,
+      "token_eot": 151643,
+      "list_tokens_eog": [
+        128247,
+        151643,
+        151645,
+        151662,
+        151663,
+        151664
+      ],
+      "add_bos_token": false,
+      "add_eos_token": false,
+      "has_encoder": false,
+      "token_decoder_start": -1,
+      "media_marker": "<__media_tUsGrov8FVS77X2KQgXLApKthBWcjABM__>",
+      "has_image_input": false,
+      "has_audio_input": false,
+      "metadata": {
+        "quantize.imatrix.entries_count": "196",
+        "quantize.imatrix.dataset": "/training_dir/calibration_datav3.txt",
+        "general.file_type": "15",
+        "tokenizer.chat_template": "{%- if tools %}\n    {{- '<|im_start|>system\\n' }}\n    {%- if messages[0].role == 'system' %}\n        {{- messages[0].content + '\\n\\n' }}\n    {%- endif %}\n    {{- \"# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within <tools></tools> XML tags:\\n<tools>\" }}\n    {%- for tool in tools %}\n        {{- \"\\n\" }}\n        {{- tool | tojson }}\n    {%- endfor %}\n    {{- \"\\n</tools>\\n\\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\\n<tool_call>\\n{\\\"name\\\": <function-name>, \\\"arguments\\\": <args-json-object>}\\n</tool_call><|im_end|>\\n\" }}\n{%- else %}\n    {%- if messages[0].role == 'system' %}\n        {{- '<|im_start|>system\\n' + messages[0].content + '<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- set ns = namespace(multi_step_tool=true, last_query_index=messages|length - 1) %}\n{%- for message in messages[::-1] %}\n    {%- set index = (messages|length - 1) - loop.index0 %}\n    {%- set tool_start = \"<tool_response>\" %}\n    {%- set tool_start_length = tool_start|length %}\n    {%- set start_of_message = message.content[:tool_start_length] %}\n    {%- set tool_end = \"</tool_response>\" %}\n    {%- set tool_end_length = tool_end|length %}\n    {%- set start_pos = (message.content|length) - tool_end_length %}\n    {%- if start_pos < 0 %}\n        {%- set start_pos = 0 %}\n    {%- endif %}\n    {%- set end_of_message = message.content[start_pos:] %}\n    {%- if ns.multi_step_tool and message.role == \"user\" and not(start_of_message == tool_start and end_of_message == tool_end) %}\n        {%- set ns.multi_step_tool = false %}\n        {%- set ns.last_query_index = index %}\n    {%- endif %}\n{%- endfor %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {%- set content = message.content %}\n        {%- set reasoning_content = '' %}\n        {%- if message.reasoning_content is defined and message.reasoning_content is not none %}\n            {%- set reasoning_content = message.reasoning_content %}\n        {%- else %}\n            {%- if '</think>' in message.content %}\n                {%- set content = (message.content.split('</think>')|last).lstrip('\\n') %}\n        {%- set reasoning_content = (message.content.split('</think>')|first).rstrip('\\n') %}\n        {%- set reasoning_content = (reasoning_content.split('<think>')|last).lstrip('\\n') %}\n            {%- endif %}\n        {%- endif %}\n        {%- if loop.index0 > ns.last_query_index %}\n            {%- if loop.last or (not loop.last and reasoning_content) %}\n                {{- '<|im_start|>' + message.role + '\\n<think>\\n' + reasoning_content.strip('\\n') + '\\n</think>\\n\\n' + content.lstrip('\\n') }}\n            {%- else %}\n                {{- '<|im_start|>' + message.role + '\\n' + content }}\n            {%- endif %}\n        {%- else %}\n            {{- '<|im_start|>' + message.role + '\\n' + content }}\n        {%- endif %}\n        {%- if message.tool_calls %}\n            {%- for tool_call in message.tool_calls %}\n                {%- if (loop.first and content) or (not loop.first) %}\n                    {{- '\\n' }}\n                {%- endif %}\n                {%- if tool_call.function %}\n                    {%- set tool_call = tool_call.function %}\n                {%- endif %}\n                {{- '<tool_call>\\n{\"name\": \"' }}\n                {{- tool_call.name }}\n                {{- '\", \"arguments\": ' }}\n                {%- if tool_call.arguments is string %}\n                    {{- tool_call.arguments }}\n                {%- else %}\n                    {{- tool_call.arguments | tojson }}\n                {%- endif %}\n                {{- '}\\n</tool_call>' }}\n            {%- endfor %}\n        {%- endif %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if loop.first or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n    {%- if enable_thinking is defined and enable_thinking is false %}\n        {{- '<think>\\n\\n</think>\\n\\n' }}\n    {%- endif %}\n{%- endif %}",
+        "qwen3.embedding_length": "1024",
+        "tokenizer.ggml.eos_token_id": "151645",
+        "general.type": "model",
+        "qwen3.feed_forward_length": "3072",
+        "tokenizer.ggml.add_bos_token": "false",
+        "qwen3.attention.key_length": "128",
+        "tokenizer.ggml.model": "gpt2",
+        "quantize.imatrix.chunks_count": "137",
+        "quantize.imatrix.file": "/models_out/Qwen3-0.6B-GGUF/Qwen_Qwen3-0.6B.imatrix",
+        "qwen3.attention.layer_norm_rms_epsilon": "0.000001",
+        "general.size_label": "0.6B",
+        "tokenizer.ggml.padding_token_id": "151643",
+        "qwen3.attention.value_length": "128",
+        "qwen3.context_length": "32768",
+        "qwen3.attention.head_count_kv": "8",
+        "general.name": "Qwen3 0.6B",
+        "qwen3.attention.head_count": "16",
+        "general.quantization_version": "2",
+        "tokenizer.ggml.bos_token_id": "151643",
+        "general.basename": "Qwen3",
+        "tokenizer.ggml.pre": "qwen2",
+        "qwen3.rope.freq_base": "1000000.000000",
+        "qwen3.block_count": "28",
+        "general.architecture": "qwen3"
+      }
+    },
+    "reply": {
+      "usage": {
+        "completionTokens": 10,
+        "promptTokens": 24,
+        "promptProcessingDurationMs": 1442.435,
+        "decodingDurationMs": 770.821,
+        "decodeTokensPerSecond": 11.675862489475508,
+        "responseDurationMs": 2331.505000114441,
+        "endToEndTokensPerSecond": 4.289075082193327
+      },
+      "text": "Hello! How can I assist you today?",
+      "toolCalls": [],
+      "stopReason": "stop",
+      "assistant": {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Hello! How can I assist you today?"
+          }
+        ]
+      },
+      "contextTrimmed": true
+    },
+    "counts": [
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Reply briefly."
+            },
+            {
+              "role": "user",
+              "content": "龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘"
+            },
+            {
+              "role": "assistant",
+              "content": "old answer"
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 436,
+          "contextTokens": 256
+        }
+      },
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Reply briefly."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 24,
+          "contextTokens": 256
+        }
+      },
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘"
+            },
+            {
+              "role": "user",
+              "content": "Hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 419,
+          "contextTokens": 256
+        }
+      },
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Reply briefly."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 24,
+          "contextTokens": 256
+        }
+      }
+    ],
+    "generations": [
+      {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Reply briefly."
+          },
+          {
+            "role": "user",
+            "content": "Reply with hello."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 32,
+        "stream": false
+      },
+      {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Reply briefly."
+          },
+          {
+            "role": "user",
+            "content": "Reply with hello."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 32,
+        "stream": false
+      }
+    ],
+    "overflowError": "Error: agentContextTooLong",
+    "recovered": {
+      "usage": {
+        "completionTokens": 10,
+        "promptTokens": 24,
+        "promptProcessingDurationMs": 84.435,
+        "decodingDurationMs": 772.595,
+        "decodeTokensPerSecond": 11.64905286728493,
+        "responseDurationMs": 913.8550000190735,
+        "endToEndTokensPerSecond": 10.942655016158236
+      },
+      "text": "Hello! How can I assist you today?",
+      "toolCalls": [],
+      "stopReason": "stop",
+      "assistant": {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Hello! How can I assist you today?"
+          }
+        ]
+      }
+    },
+    "archiveUnchanged": true
+  },
+  "phase": "verified",
+  "partial": {
+    "counts": [
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Reply briefly."
+            },
+            {
+              "role": "user",
+              "content": "龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘"
+            },
+            {
+              "role": "assistant",
+              "content": "old answer"
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 436,
+          "contextTokens": 256
+        }
+      },
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Reply briefly."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 24,
+          "contextTokens": 256
+        }
+      },
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘"
+            },
+            {
+              "role": "user",
+              "content": "Hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 419,
+          "contextTokens": 256
+        }
+      },
+      {
+        "request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Reply briefly."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 32,
+          "stream": false
+        },
+        "count": {
+          "promptTokens": 24,
+          "contextTokens": 256
+        }
+      }
+    ],
+    "generations": [
+      {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Reply briefly."
+          },
+          {
+            "role": "user",
+            "content": "Reply with hello."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 32,
+        "stream": false
+      },
+      {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Reply briefly."
+          },
+          {
+            "role": "user",
+            "content": "Reply with hello."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 32,
+        "stream": false
+      }
+    ],
+    "reply": {
+      "usage": {
+        "completionTokens": 10,
+        "promptTokens": 24,
+        "promptProcessingDurationMs": 1442.435,
+        "decodingDurationMs": 770.821,
+        "decodeTokensPerSecond": 11.675862489475508,
+        "responseDurationMs": 2331.505000114441,
+        "endToEndTokensPerSecond": 4.289075082193327
+      },
+      "text": "Hello! How can I assist you today?",
+      "toolCalls": [],
+      "stopReason": "stop",
+      "assistant": {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Hello! How can I assist you today?"
+          }
+        ]
+      },
+      "contextTrimmed": true
+    }
+  }
+}
