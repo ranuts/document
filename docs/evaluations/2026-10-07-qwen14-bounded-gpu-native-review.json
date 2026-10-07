@@ -1,0 +1,117 @@
+{
+  "scope": "Native Word 21 known writing tasks with diagnostic compiled-library context/prefill override 2048/1024; product source and writing requests unchanged; no untouched-source or all-device acceptance",
+  "receipt_sha256": "6ed1aacd6f9eda608328068a843f565da51e7c6e942c81c512701d5430cb0312",
+  "counts": {
+    "narrow-pass": 7,
+    "fail": 12,
+    "uncertain": 2
+  },
+  "decisions": [
+    {
+      "id": "zh-CN-rewrite",
+      "verdict": "fail",
+      "reason": "Raw output changes ISO date to Chinese format; current editor rejects write and retains source."
+    },
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "fail",
+      "reason": "Applied summary omits delivery team as the actor permitted to ship; condition and current unsigned status retained."
+    },
+    {
+      "id": "zh-CN-translate",
+      "verdict": "narrow-pass",
+      "reason": "English translation preserves names, ISO date, count, proposal approval status, delivery-team actor, only-after signature condition, unsigned report and printed labels."
+    },
+    {
+      "id": "de-summarize",
+      "verdict": "fail",
+      "reason": "Checked essential facts, names, ISO date, quantity, signature prerequisite and current unsigned status retained; two sentences violate explicit one-sentence instruction."
+    },
+    {
+      "id": "de-translate",
+      "verdict": "fail",
+      "reason": "Leaves German document heading Bestellprotokoll untranslated despite full Spanish translation instruction. Checked body retains people, ISO date, quantity, pending approval, ordering actor, signature prerequisite, unsigned status and product-list availability."
+    },
+    {
+      "id": "en-rewrite",
+      "verdict": "uncertain",
+      "reason": "The output changes payment receipt not yet confirmed to no confirmation received; this may describe communication state instead of verification state. Do not count as passing."
+    },
+    {
+      "id": "en-summarize",
+      "verdict": "narrow-pass",
+      "reason": "Preserves all three people, ISO date, count, unapproved proposal, shipping actor, payment confirmation condition and current unconfirmed status; permitted catalogue omission."
+    },
+    {
+      "id": "en-translate",
+      "verdict": "narrow-pass",
+      "reason": "Japanese translation preserves all source facts, people, ISO date, count, negative statuses and permission prerequisite."
+    },
+    {
+      "id": "ja-rewrite",
+      "verdict": "fail",
+      "reason": "Raw output changes ISO date to Japanese date format; editor rejects it and retains original."
+    },
+    {
+      "id": "ja-summarize",
+      "verdict": "fail",
+      "reason": "Essential facts and actor retained, but output contains three sentences despite explicit one-sentence instruction."
+    },
+    {
+      "id": "ja-translate",
+      "verdict": "narrow-pass",
+      "reason": "Korean translation retains operating-team actor, prerequisite verification, current negative statuses, people, ISO date, quantity and printed labels."
+    },
+    {
+      "id": "ko-rewrite",
+      "verdict": "fail",
+      "reason": "Raw output changes ISO date to Korean date format; editor rejects it and retains original."
+    },
+    {
+      "id": "ko-summarize",
+      "verdict": "fail",
+      "reason": "Applied summary omits rental team as actor permitted to deliver cameras."
+    },
+    {
+      "id": "es-summarize",
+      "verdict": "uncertain",
+      "reason": "Date, count, people, booking actor, authorization condition and current unauthorized trip retained; implicit feminine subject in a\u00fan no est\u00e1 aprobada leaves approval object less explicit than source proposal. Do not count as passing."
+    },
+    {
+      "id": "es-translate",
+      "verdict": "fail",
+      "reason": "Portuguese translation leaves Spanish viaje twice instead of viagem; full target-language translation fails despite checked facts and actors retained."
+    },
+    {
+      "id": "es-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Spanish wording changes while preserving Carla Vega proposal, ISO date, 12 places, unapproved proposal, Omar Mendez booking actor, Luz Ibarra travel authorization prerequisite, currently unauthorized trip and prepared itinerary. Bounded manual sample, no native-speaker certification."
+    },
+    {
+      "id": "ko-translate",
+      "verdict": "fail",
+      "reason": "German output uses malformed Kamera(a)s and changes printed notice to Hinweistafel (notice board); deposit is rendered inconsistently as Anzahlungsdepot/Depot. Names, ISO date, count and prerequisite actor remain, but fluent faithful translation is not established."
+    },
+    {
+      "id": "de-rewrite",
+      "verdict": "fail",
+      "reason": "Introduces German grammar errors: vorschlug and Die Produktliste ist bereits vorliegen. Formal clarity/grammar improvement fails despite retained names, ISO date, count, negative status and signature condition."
+    },
+    {
+      "id": "pt-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Portuguese wording changes while retaining date, count, Rui Costa proposal, unapproved state, archive-team actor, Ana Lima backup-validation prerequisite, current unvalidated copy and printed labels."
+    },
+    {
+      "id": "pt-summarize",
+      "verdict": "fail",
+      "reason": "Omits archive-team actor and unapproved proposal; only permitted removal becomes future removal (ser\u00e3o removidos), weakening permission versus commitment distinction."
+    },
+    {
+      "id": "pt-translate",
+      "verdict": "narrow-pass",
+      "reason": "Chinese translation retains both names, ISO date, 64 records, unapproved proposal, archive-team actor, only-after backup-validation condition, current unvalidated copy and printed labels."
+    }
+  ],
+  "candidate_promoted": false
+}
