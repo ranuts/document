@@ -4467,6 +4467,18 @@
       "sha256": "ccd170a017c08d261bb92c831d13740bc23531b44485492f135e595d54b3b37b"
     },
     {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-office-text-type-fixed-native.json",
+      "sha256": "ce0883f6be5173b8b438d97667bdad56c1361ca1b012fb6a6a07bc4403124123"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-office-text-type-fixed-native.mjs",
+      "sha256": "5e8b9f15381698ad89879959c0d9c601536871491be8bb8d17f494ab844627ac"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-office-text-type-fixed-protocol.json",
+      "sha256": "17ecfcc9073a83989bff3711454b0245b332187830c75e53d5c6ab5d33fa46d2"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-webkit-offline-process-restart.mjs",
       "sha256": "bf435a08bd2116e03870e87a767cebb51954672f724aad8da919b8e63823dbab"
     },
