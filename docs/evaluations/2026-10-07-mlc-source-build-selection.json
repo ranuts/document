@@ -3,11 +3,110 @@
   "source_repository": "https://github.com/mlc-ai/mlc-llm",
   "mlc_revision": "8978ea9aec626d64096aaa92fbc89bda2e3ea802",
   "tvm_gitlink_revision": "201fa0001c81431ccce05419b442c47779ea917c",
-  "source_submodule_checkout": "in progress at observation",
+  "source_submodule_checkout": "completed, clone exit 0",
   "installed_wheel_skip_native_probe_exit": 1,
   "installed_wheel_skip_native_failure": "Cannot find object type index for mlc.serve.Data",
-  "llvm_config_available": false,
+  "llvm_config_available": true,
   "compiler_built": false,
   "model_library_compiled": false,
-  "existing_product_sdk_changed": false
+  "existing_product_sdk_changed": false,
+  "submodules": [
+    {
+      "revision": "557948f1236db9e27089959de837cc23de6c6bbd",
+      "path": "3rdparty/argparse",
+      "aligned": true
+    },
+    {
+      "revision": "45804691223635953f311cf31a10c632553bbfc3",
+      "path": "3rdparty/googletest",
+      "aligned": true
+    },
+    {
+      "revision": "ae721c50eaf761660b4f90cc590453cdb0c2acd0",
+      "path": "3rdparty/stb",
+      "aligned": true
+    },
+    {
+      "revision": "34885cfd7b9ef27b859c28a41e71413dd31926f5",
+      "path": "3rdparty/tokenizers-cpp",
+      "aligned": true
+    },
+    {
+      "revision": "092bc69b6e815980bce7808595c914dd3a29f905",
+      "path": "3rdparty/tokenizers-cpp/msgpack",
+      "aligned": true
+    },
+    {
+      "revision": "11051e3b73b3a6222a52acd720e39805dc7545ab",
+      "path": "3rdparty/tokenizers-cpp/sentencepiece",
+      "aligned": true
+    },
+    {
+      "revision": "201fa0001c81431ccce05419b442c47779ea917c",
+      "path": "3rdparty/tvm",
+      "aligned": true
+    },
+    {
+      "revision": "b590a6bfe034ea3a418b7b523e3490956bcb367a",
+      "path": "3rdparty/tvm/3rdparty/OpenCL-Headers",
+      "aligned": true
+    },
+    {
+      "revision": "b2dd65dc864e09688245b316ac46c4a6cd07e15c",
+      "path": "3rdparty/tvm/3rdparty/cutlass",
+      "aligned": true
+    },
+    {
+      "revision": "96b48221df9d010c2d5b7f65d1664f198c664d28",
+      "path": "3rdparty/tvm/3rdparty/cutlass_fpA_intB_gemm",
+      "aligned": true
+    },
+    {
+      "revision": "cc85b64cf676c45f98a17e3a47c0aafcf817f088",
+      "path": "3rdparty/tvm/3rdparty/cutlass_fpA_intB_gemm/cutlass",
+      "aligned": true
+    },
+    {
+      "revision": "07ba35bae96900e51b4d63ef3487ba24850da870",
+      "path": "3rdparty/tvm/3rdparty/libflash_attn",
+      "aligned": true
+    },
+    {
+      "revision": "e0aaa3c3b38db9a89c31f04fef91e92123ad5e2e",
+      "path": "3rdparty/tvm/3rdparty/libflash_attn/cutlass",
+      "aligned": true
+    },
+    {
+      "revision": "df463f9bd269867fc7f4d578d62d80cc2a11d004",
+      "path": "3rdparty/tvm/3rdparty/tvm-ffi",
+      "aligned": true
+    },
+    {
+      "revision": "84d107bf416c6bab9ae68ad285876600d230490d",
+      "path": "3rdparty/tvm/3rdparty/tvm-ffi/3rdparty/dlpack",
+      "aligned": true
+    },
+    {
+      "revision": "793921876c981ce49759114d7bb89bb89b2d3a2d",
+      "path": "3rdparty/tvm/3rdparty/tvm-ffi/3rdparty/libbacktrace",
+      "aligned": true
+    },
+    {
+      "revision": "d4f57c440f3da8e7330a1e5d50bba9c31f9433ea",
+      "path": "3rdparty/xgrammar",
+      "aligned": true
+    },
+    {
+      "revision": "bbd2f4d32427e548797929af08cfe2a9cbb3cf12",
+      "path": "3rdparty/xgrammar/3rdparty/dlpack",
+      "aligned": true
+    }
+  ],
+  "llvm_candidate": {
+    "version": "19.1.7",
+    "bottle_sha256": "7c5f193a831e4296a73ae06d611be2bcbab357510bfb1110c2a124a7da2f9ff4",
+    "download_state": "download completed; SHA256 verified; unpacked in ignored local directory; llvm-config returned 19.1.7"
+  },
+  "tvm_cmake_configure_exit": 0,
+  "tvm_build": "started, no completion claim"
 }
