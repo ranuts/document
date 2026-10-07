@@ -1,0 +1,10 @@
+{
+  "scope": "Ignored diagnostic compiler checkout only",
+  "source_file": "python/tvm/support/emcc.py",
+  "before_sha256": "4ff0f3eedeee6fb20389a70ff0d87be35966884e88fd26ea2ab070c3262e61b2",
+  "after_sha256": "f6544a2669e82c989d3c4de0edcf10ec2a1c8ea24300770c512c6604b2ef8764",
+  "change": "create_tvmjs_wasm default C++ linking driver emcc -> em++",
+  "basis": "Runtime bitcode C++ standard-library link failed with emcc and succeeded with em++",
+  "model_library_compiled": false,
+  "product_modified": false
+}
