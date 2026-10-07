@@ -1,5 +1,5 @@
 {
-  "scope": "First eight completed known-source rewrite outputs only; inference remains active; no full language, native or device acceptance",
+  "scope": "First twelve completed known-source rewrite outputs only; inference remains active; no full language, native or device acceptance",
   "rows": [
     {
       "id": "zh-CN-rewrite",
@@ -56,6 +56,34 @@
       "verdict": "fail",
       "basis": "Reformats ISO date, drops operating-team actor, and changes conditional permission into future deletion assertion.",
       "completionSHA256": "ae3483a99ddc645ca034f8ffdbc413002f07c83a60df6ac6a9da4e839e8d5491"
+    },
+    {
+      "id": "ja-rewrite",
+      "variant": "examples",
+      "verdict": "fail",
+      "basis": "ISO date restored, but operating-team actor is omitted; deletion is recast as an action constrained by verification rather than preserving the named actor permission.",
+      "completionSHA256": "56c087510c983306d3e5f2bfd97f6e3161c96fe51610475ed6100273e9c1b398"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "basis": "Korean source becomes English, ISO date is reformatted, and Hana Lee is invented as camera recipient.",
+      "completionSHA256": "d0046b0d160cc7d50f3f29fe50bb08f310e68b6d0f17fa4a411b1ab015987d30"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "minimal",
+      "verdict": "fail",
+      "basis": "Source language and actors restored but exact ISO date reformatted to 2045년 12월 3일.",
+      "completionSHA256": "84f53b036a4e30277590b62152a41a61e18151b7bf7605d3b32c960c3471832e"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Korean, exact ISO date, names, 27 cameras, rental-team only-after permission, pending proposal/deposit and printed notice.",
+      "completionSHA256": "e1934ee9cd69d6423984b83fbed8c94dcc7e536e11b5de5d24d1793ad550498d"
     }
   ]
 }
