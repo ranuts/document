@@ -1,0 +1,17 @@
+{
+  "processExitCode": 0,
+  "initialBindings": {
+    "sha256": {
+      "docs/evaluations/2026-10-07-native-gpu-idle-loss.mjs": "0a908693813deb4dfccb8a419fd6478478a540e43cdf3315d388b18d191eb20e",
+      "dist/sw.js": "bb9f61986d4a24c11d0ebe04a765d7dcd1454ad0922742617ff81e8a478441d5",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "dist/assets/editor-BRhW6Vt0.js": "8e8967aaef2f79ee1e74ea72980ca0abbbc269d7623f6c07707e6317a0bd7b9d",
+      "lib/agent-plugin/ui/panel.ts": "548b869382a002562246c77f358ccfcc83457ba7963b3ed3b9294e6a5b102378",
+      "packages/agent-core/src/llm/webllm.ts": "39629fb3ca14f1181598e0aee26897f7103852c05732d3fdfff830a848e3fb38"
+    }
+  },
+  "evidenceSHA256": {
+    "2026-10-07-native-gpu-idle-loss.mjs": "0a908693813deb4dfccb8a419fd6478478a540e43cdf3315d388b18d191eb20e",
+    "2026-10-07-native-gpu-idle-loss.json": "e9d574bd59a0376255ddea041310cbdae4ba6dc5d0b0743659c2d7a8d1e66925"
+  }
+}

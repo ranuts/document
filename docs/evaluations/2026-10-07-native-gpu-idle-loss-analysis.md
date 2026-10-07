@@ -1,0 +1,5 @@
+# Native idle GPU loss
+
+Current production editor-BRhW6Vt0.js loads the pinned Qwen2.5-7B model. The diagnostic Worker captures and destroys one actual GPUDevice while no chat is active. The panel clears the runtime status and shows Load model without a request-finalization event. There are zero captured WebLLM stream requests and no chat errors. All top-frame Worker construction is captured: the sole original WebLLM Worker remains the entire construction list before explicit retry; no CPU Worker or other replacement is created in that interval. Native document text remains unchanged.
+
+Only explicit user-style reload creates a second WebLLM Worker. One new greeting request then completes without error. Process exits 0, browser context closes, no page errors occur, and all prelaunch-bound source/runtime files remain unchanged. This independently exercises idle invalidation, complementing the streaming-loss receipt. It does not prove spontaneous hardware loss, every fallback route, physical Windows/mobile behavior or seven-language accuracy.
