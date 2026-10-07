@@ -1,0 +1,58 @@
+{
+  "scope": "Explicit validated HTTP ranges after terminal incomplete first attempt; final full hash mandatory",
+  "ranges": [
+    {
+      "start": 841791698,
+      "end": 1110227153,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 1110227154,
+      "end": 1378662609,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 1378662610,
+      "end": 1647098065,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 1647098066,
+      "end": 1915533521,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 1915533522,
+      "end": 2183968977,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 2183968978,
+      "end": 2452404433,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 2452404434,
+      "end": 2720839889,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 2720839890,
+      "end": 2989275345,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 2989275346,
+      "end": 3257710801,
+      "receivedBytes": 268435456
+    },
+    {
+      "start": 3257710802,
+      "end": 3306260927,
+      "receivedBytes": 48550126
+    }
+  ],
+  "verified": true,
+  "bytes": 3306260928,
+  "sha256": "a106607decc709a2269d1d7b1d30c8e574cc5a1669d20ce36f8f5d7a3885c575"
+}
