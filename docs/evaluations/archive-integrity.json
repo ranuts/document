@@ -4019,6 +4019,18 @@
       "sha256": "d0cb114e294cb59eeb3be098bfbf191701c79324ab2fd6fb240a2b2f0e78164d"
     },
     {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-control-single-thread-native.json",
+      "sha256": "2292555a1dc2b06357a716271271f6e0f3ced42db13135a715e3ca909308caea"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-control-single-thread-native.mjs",
+      "sha256": "3e691cef10dccc5eb30df7e37498eba5cc93de8e3b1ef8503a1d4c55351551b0"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-control-single-thread-protocol.json",
+      "sha256": "909415472c0407d0ed6abceb9450eecc8aa5985179ca31e7266e2191ed1a733d"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-hymt2-cpu-translation-native.json",
       "sha256": "6ce244160a4a5fdf58ab461fbb5b2890f511c649f8f1891a0f6b6966824d2653"
     },
