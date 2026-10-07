@@ -1,0 +1,12 @@
+{
+  "scope": "Four known-failure SDK policy-placement pairs; no product modification, native application or unused-source acceptance",
+  "request_file": "2026-10-07-qwen14-policy-placement-requests.json",
+  "request_sha256": "3cbdc283630245d8f5fbc6f34958b009614ffd52f70ab26d4bf4fe7a3026a2eb",
+  "baseline_receipt": "2026-10-07-qwen14-bounded-gpu-native.json",
+  "baseline_sha256": "6ed1aacd6f9eda608328068a843f565da51e7c6e942c81c512701d5430cb0312",
+  "context_window_size": 2048,
+  "prefill_chunk_size": 1024,
+  "cache_backend": "indexeddb",
+  "transformation": "Move the existing user preamble verbatim after the existing system message; retain task JSON verbatim as user content. All non-message request fields remain identical.",
+  "gate": "Require terminal process and completed eight requests before final screen claims. Compare baseline raw text with prior native raw text; preserve discrepancies rather than pooling results. Review every candidate independently; no adoption based solely on these known sources."
+}
