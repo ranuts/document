@@ -76,7 +76,19 @@ test.describe('a stale build heals itself @serial', () => {
     // No click, no prompt: the page notices the build it is being served is not
     // the one that is installed, and reloads itself into the new one.
     await expect
-      .poll(() => controllerVendorVersion(page), { timeout: 90_000, intervals: [100, 250, 500] })
+      .poll(
+        async () => {
+          try {
+            return await controllerVendorVersion(page);
+          } catch (error) {
+            // The behavior under test deliberately reloads the page. A VERSION
+            // request can race that navigation; observe the next controller.
+            if (error instanceof Error && error.message.includes('Execution context was destroyed')) return null;
+            throw error;
+          }
+        },
+        { timeout: 90_000, intervals: [100, 250, 500] },
+      )
       .toBe('e2e-next');
     await settleEditor(page);
     expect(await controllerVendorVersion(page)).toBe('e2e-next');
