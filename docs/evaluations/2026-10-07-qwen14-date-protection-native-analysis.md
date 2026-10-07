@@ -1,0 +1,9 @@
+# Protected ISO dates: literal repair with a semantic regression
+
+Nine requests completed with stop, parseable JSON, process exit 0 and closed context. All three original product raw contents exactly reproduce the earlier 14B native screen. Each case contrasts original request, marker instruction alone, and that same instruction with only the source ISO date replaced by one opaque marker. Original task, remaining source, schema, sampling settings, budget and diagnostic model overrides remain unchanged.
+
+Original and instruction-only variants still reformat ISO dates. All three protected outputs preserve the marker exactly once, allowing exact restoration of the source date. Chinese and Japanese retain the examined factual relations in bounded manual review, although both turn the record date into a separate heading sentence and native-speaker style certification is absent. Korean loses the rental-team actor from conditional permission to hand over the cameras; that actor was present in both controls. Literal protection therefore changes other generated content and cannot be treated as an isolated harmless postprocessing repair.
+
+Known-source final review: two narrow passes and one failure; literal restoration 3/3 does not establish semantic fidelity. No product prompt/model or date-protection implementation is adopted. The same 14B diagnostic context/prefill overrides and warmed configured library are used, without exact cached-library consumption certification.
+
+No untouched multi-date event-binding, other numeric/currency protection, summary/translation, native application, seven-language/device/offline acceptance or general reliability claim. Further work must preserve actor/condition relations and test distinct event-date binding, rather than reward exact dates while tolerating missing participants.
