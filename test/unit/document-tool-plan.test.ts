@@ -928,3 +928,59 @@ it.each(['读取 A1:B2 和 A3:B4 的内容。', 'Read A1:B2 and A3:B4. Do not ch
     });
   },
 );
+
+it.each([
+  { cell: 'B2', value: '00123' },
+  { cell: 'B2', value: '00123', valueType: 'auto' },
+  { cell: 'B2', value: '123', valueType: 'text' },
+  { cell: 'C3', value: '00123', valueType: 'text' },
+])('rejects a quoted cell assignment plan that changes literal semantics: %j', async (input) => {
+  const provider: LLMProvider = {
+    name: 'probe',
+    isReady: () => true,
+    chat: async () => response(json('set_cell', input)),
+  };
+  await expect(
+    generateDocumentToolPlan(provider, 'Set B2 to "00123".', { kind: 'cell' }, new AbortController().signal),
+  ).rejects.toThrow();
+});
+it.each(['Set B2 to "00123".', '请将 B2 设置为 "00123"。'])(
+  'constrains a quoted cell literal and preserves leading zeros: %s',
+  async (request) => {
+    let schema: Record<string, unknown> = {};
+    const provider: LLMProvider = {
+      name: 'probe',
+      isReady: () => true,
+      chat: async () => {
+        throw Error('unexpected');
+      },
+      generateJSON: async (_, format) => {
+        schema = format;
+        return response(json('set_cell', { cell: 'B2', value: '00123', valueType: 'text' }));
+      },
+    };
+    const plan = await generateDocumentToolPlan(provider, request, { kind: 'cell' }, new AbortController().signal);
+    expect(plan.input).toEqual({ cell: 'B2', value: '00123', valueType: 'text' });
+    const choices = schema.anyOf as Array<{
+      properties: {
+        tool: { enum: string[] };
+        input: { required: string[]; properties: Record<string, { enum: unknown[] }> };
+      };
+    }>;
+    const write = choices.find((c) => c.properties.tool.enum[0] === 'set_cell')!;
+    expect(write.properties.input.required).toContain('valueType');
+    expect(write.properties.input.properties.value.enum).toEqual(['00123']);
+    expect(write.properties.input.properties.cell.enum).toEqual(['B2']);
+    expect(write.properties.input.properties.valueType.enum).toEqual(['text']);
+  },
+);
+it('retains native numeric entry for an unquoted cell assignment', async () => {
+  const provider: LLMProvider = {
+    name: 'probe',
+    isReady: () => true,
+    chat: async () => response(json('set_cell', { cell: 'B2', value: '123' })),
+  };
+  expect(
+    (await generateDocumentToolPlan(provider, 'Set B2 to 123.', { kind: 'cell' }, new AbortController().signal)).input,
+  ).toEqual({ cell: 'B2', value: '123' });
+});

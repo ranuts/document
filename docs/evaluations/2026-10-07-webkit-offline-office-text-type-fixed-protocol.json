@@ -1,0 +1,28 @@
+{
+  "scope": "Desktop WebKit 27 diagnostic: online warm-up, browser process closure/relaunch, offline before first navigation, default CPU inference, exact Excel/PPT operations, undo/redo, native Save and reopen. Not physical Safari/mobile, installed-PWA, cold-cache isolation, arbitrary instructions, multilingual writing accuracy or full font/layout acceptance. Same-origin model OPFS cache may be inherited across diagnostic profile directories. Post-fix production build; new origin requires online model warm-up, not a general cold-cache acceptance claim.",
+  "runner": "1.65.0-alpha-2026-10-07",
+  "coreVersion": "1791382105",
+  "vendorVersion": "b6864850e7b3",
+  "profile": ".scratch/webkit27-offline-office-text-type-fixed-20261007",
+  "origin": "http://127.0.0.1:5194",
+  "cpuClient": "/assets/client-De9uuIvK.js",
+  "expectedModel": "CPU \u00b7 Qwen3 \u00b7 0.6B",
+  "chatPrompt": "Reply briefly with a greeting in English.",
+  "cases": [
+    {
+      "kind": "xlsx",
+      "commands": ["Set B2 to \"00123\"."],
+      "expectedLiteral": "00123",
+      "historySteps": 1
+    },
+    {
+      "kind": "pptx",
+      "commands": [
+        "Add a slide",
+        "Add a new text box on the current slide with the exact text WEBKIT_PPTX_OFFLINE_20261007."
+      ],
+      "expectedLiteral": "WEBKIT_PPTX_OFFLINE_20261007",
+      "historySteps": 2
+    }
+  ]
+}
