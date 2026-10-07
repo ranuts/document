@@ -1,0 +1,7 @@
+# Official Qwen2.5 7B known-failure development screen
+
+Verify both official Q4_K_M shards against the pinned revision/LFS SHA256 before any browser load. The matched default CPU runtime is memory64; this permits considering the larger artifact but does not prove memory fit, load success, usable latency or mobile suitability. This is a higher-resource desktop diagnostic, not the lightweight fallback.
+
+Use unchanged original production messages/schema in fresh native Word contexts for four previously observed failures: zh-CN-summarize, es-rewrite, ja-translate and de-rewrite from the frozen Instruct-2507 cases. Temperature0.7, top_p0.8, top_k20, seed42, max512, n_ctx2048 and requested/actual four CPU threads stay fixed and counting/completion must match. This changes model family/size together, not isolated capacity causality. Preserve raw outputs, document/history and failures; stop after an initial setup failure rather than repeated load attempts. Do not tune/retry after seeing outputs.
+
+Check source/target language, names, exact ISO dates and quantities, proposal nonapproval, explicit prerequisite actor/action/only-after permission/current negative state, requested single sentence and grammar improvement. This is a known-source diagnostic, not untouched transfer or seven-language acceptance. Any promising result must be followed by separately frozen unused seven-language/injection/mixed-source/native lifecycle/device verification. No product default/model/prompt change follows from loading or guard refusal.
