@@ -1,0 +1,46 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+const r={scope:'warmed desktop Chromium, browser offline emulation',errors:[],failures:[]};let c;
+try {
+ c=await chromium.launchPersistentContext('.scratch/default-cpu-process-profile-20261005',{channel:'chromium',serviceWorkers:'allow',viewport:{width:1280,height:900}});
+ for(const p of c.pages())await p.close();
+ const seed=await c.newPage();await seed.goto('http://127.0.0.1:5193/');await seed.evaluate(async()=>{await navigator.serviceWorker.ready;});
+ await seed.goto('http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=en');
+ await seed.waitForFunction(()=>{const a=document.querySelector('#app iframe')?.contentWindow?.Asc?.editor;return a?.isDocumentLoadComplete&&a?.isLoadFullApi;},null,{timeout:90000});
+ await seed.frameLocator('#app iframe').locator('.agent-sidebar-entry').click();
+ await seed.waitForFunction(()=>/Model loaded/.test(document.querySelector('.agent-panel-note')?.textContent??''),null,{timeout:180000});
+ r.seedEngine=await seed.locator('.agent-model-status').textContent();await c.close();r.seedProcessClosed=true;
+ c=await chromium.launchPersistentContext('.scratch/default-cpu-process-profile-20261005',{channel:'chromium',serviceWorkers:'allow',viewport:{width:1280,height:900}});
+ for(const p of c.pages())await p.close();await c.setOffline(true);r.offline=true;
+ const p=await c.newPage();p.on('pageerror',e=>r.errors.push(e.message));p.on('requestfailed',q=>r.failures.push({url:q.url(),error:q.failure()?.errorText}));
+ const response=await p.goto('http://127.0.0.1:5193/');r.homeFromSW=response.fromServiceWorker();
+ await p.goto('http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=en');
+ await p.waitForFunction(()=>{const a=document.querySelector('#app iframe')?.contentWindow?.Asc?.editor;return a?.isDocumentLoadComplete&&a?.isLoadFullApi;},null,{timeout:90000});
+ r.scripts=await p.evaluate(()=>Array.from(document.scripts,s=>s.src));if(!r.scripts.some(s=>s.endsWith('/assets/editor-a29E5U4S.js')))throw Error('Current editor build mismatch');
+ await p.evaluate(()=>{const a=document.querySelector('#app iframe').contentWindow.Asc.editor; for(const [cell,value] of [['A1','Item'],['B1','Amount'],['A2','Sensor'],['B2','18'],['A3','Camera'],['B3','7'],['A4','Monitor'],['B4','12'],['C1','KEEP_OUTSIDE']]){a.asc_findCell(cell);a.pluginMethod_PasteText(value);}});
+ const snapshot=()=>p.evaluate(()=>{const m=document.querySelector('#app iframe').contentWindow.Asc.editor.wb.getWorksheet().model;return [0,1,2,3].map(r=>[0,1,2,3].map(c=>m.getRange3(r,c,r,c).getValue()));});
+ r.before=await snapshot();
+ await p.frameLocator('#app iframe').locator('.agent-sidebar-entry').click();
+ await p.waitForFunction(()=>/Model loaded/.test(document.querySelector('.agent-panel-note')?.textContent??''),null,{timeout:180000});
+ r.engine=await p.locator('.agent-model-status').textContent();
+
+ await p.locator('.cui-input').fill('Sort A1:B4 by B ascending with header.');await p.locator('.cui-input').press('Enter');
+ await p.waitForFunction(()=>!document.querySelector('.cui-input').disabled,null,{timeout:180000});
+ r.request='Sort A1:B4 by B ascending with header.';r.activities=await p.locator('.cui-activity').allTextContents();r.replies=await p.locator('.cui-msg-agent').allTextContents();r.previewCount=await p.locator('.agent-plan-preview').count();r.after=await snapshot();r.chatErrors=await p.locator('.cui-msg-error').allTextContents();
+ const expected=[['Item','Amount','KEEP_OUTSIDE',''],['Camera','7','',''],['Monitor','12','',''],['Sensor','18','','']];
+ if(JSON.stringify(r.after)!==JSON.stringify(expected)||r.chatErrors.length)throw Error('Sort result mismatch');
+ await p.evaluate(()=>document.querySelector('#app iframe').contentWindow.Asc.editor.asc_Undo());r.sortUndo=await snapshot();
+ await p.evaluate(()=>document.querySelector('#app iframe').contentWindow.Asc.editor.asc_Redo());r.sortRedo=await snapshot();
+ if(JSON.stringify(r.sortUndo)!==JSON.stringify(r.before)||JSON.stringify(r.sortRedo)!==JSON.stringify(expected))throw Error('Sort history mismatch');
+ r.sumRequest='Sum B2:B4 into D2.';await p.locator('.cui-input').fill(r.sumRequest);await p.locator('.cui-input').press('Enter');
+ await p.waitForFunction(()=>!document.querySelector('.cui-input').disabled,null,{timeout:180000});r.afterSum=await snapshot();r.sumErrors=await p.locator('.cui-msg-error').allTextContents();
+ const expectedSum=structuredClone(expected);expectedSum[1][3]='37';
+ if(JSON.stringify(r.afterSum)!==JSON.stringify(expectedSum)||r.sumErrors.length)throw Error('Sum result mismatch');
+ await p.evaluate(()=>document.querySelector('#app iframe').contentWindow.Asc.editor.asc_Undo());r.sumUndo=await snapshot();
+ await p.evaluate(()=>document.querySelector('#app iframe').contentWindow.Asc.editor.asc_Redo());r.sumRedo=await snapshot();
+ r.passed=r.homeFromSW&&!r.errors.length&&r.previewCount===0&&JSON.stringify(r.sumUndo)===JSON.stringify(expected)&&JSON.stringify(r.sumRedo)===JSON.stringify(expectedSum);
+ await p.evaluate(()=>window.showSaveFilePicker=undefined);const download=p.waitForEvent('download',{timeout:90000});download.catch(()=>{});
+ await p.evaluate(()=>document.querySelector('#app iframe').contentDocument.querySelector('#slot-btn-dt-save button').click());await(await download).saveAs('.scratch/2026-10-07-current-offline-xlsx-sort-sum-history.xlsx');r.saved=true;
+ r.scope='Two separate explicit direct commands in warmed Chromium browser offline emulation; not a compound planner or full device acceptance';
+
+}catch(e){r.error=String(e);r.passed=false;}finally{if(c)await c.close();r.closed=true;await fs.writeFile('.scratch/2026-10-07-current-offline-xlsx-sort-sum-history.json',JSON.stringify(r,null,2));console.log(JSON.stringify(r));}if(!r.passed)process.exitCode=1;

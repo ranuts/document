@@ -1,0 +1,13 @@
+{
+  "scope": "After-run evidence hashes; no prelaunch binding",
+  "sha256": {
+    "2026-10-07-current-offline-xlsx-sort-sum-reopen.mjs": "0e1d092fb2f561b757c071cbb6ee2bcd827151d225dacb9c22d0dc6e79a16843",
+    "2026-10-07-current-offline-xlsx-sort-sum-history.mjs": "a90798fbc91c24cd61d6f0d5b24dc4688b83a4ee1fd15893e597a3fa0f9ab2aa",
+    "2026-10-07-current-offline-xlsx-sort-sum-saved-inspection.json": "26bcc27b9ef1f3e0bcf9760dca848384a17f7a9f6018ab602c2b0a51334d80eb",
+    "2026-10-07-current-offline-xlsx-sort-sum-reopen.json": "a7b0a5b36ca5f42a761f740c69caa0e1926712eac00c0e069ec5690ccd5cb224",
+    "2026-10-07-current-offline-xlsx-sort-sum-analysis.md": "0fbeecce306e094be7929d00ab5dc2daf6197af2662bf0d01ac403caa83190df",
+    "2026-10-07-current-offline-xlsx-sort-sum-history.json": "819e115fb2a4a05b69ece35f2ff4bfcd9be440a5ba1dcd99b367355546d5606c",
+    "2026-10-07-cached-worker-update-probe.json": "3ab93f4679a575023cc1fee9cce241bca7324b024f587da8171bccdc58c1cb7a",
+    "2026-10-07-cached-worker-update-probe.mjs": "18aeb714ae1cb79f5c855c75cd6c348ef60997db2512d11c14d83431e11dc2c7"
+  }
+}
