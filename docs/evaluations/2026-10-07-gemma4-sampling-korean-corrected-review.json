@@ -1,0 +1,23 @@
+{
+  "scope": "Manual narrow factual review; no native-speaker certification or model acceptance",
+  "reviews": [
+    {
+      "id": "ko-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "All checked actors, Tuesday, scanner, permission condition, both current negatives and printed labels are retained; wording changes.",
+      "rowCanonicalSHA256": "caf47b00bf9ddcd8631bcf55cc99c8bfeb4a3f9a5d1f145f4997f5896c04f053"
+    },
+    {
+      "id": "ko-summarize",
+      "verdict": "fail",
+      "reason": "Fails the explicit summary instruction: Mei Tan and the technical team are omitted. Both current negatives and Tuesday remain; labels are omitted as requested.",
+      "rowCanonicalSHA256": "7988565d7710d03da804bfe4c1454d12adcd65a37b5eafd00fce640e13ab7fdb"
+    },
+    {
+      "id": "ko-translate",
+      "verdict": "narrow-pass",
+      "reason": "All checked facts and actors are retained in English.",
+      "rowCanonicalSHA256": "04c2cf236ffd13b9fdad8c5f16a317fa58399b4d814e647483cf2ceff962f105"
+    }
+  ]
+}
