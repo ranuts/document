@@ -1,0 +1,52 @@
+{
+  "scope": "Natural default URL CPU load stage diagnostic in isolated WebKit27; no offline or semantic acceptance",
+  "errors": [
+    {
+      "message": "ttp://127.0.0.1:5193/b3018c4d-719f-4753-aec6-8fe7e4716e7d.",
+      "stack": ""
+    }
+  ],
+  "console": [
+    "Service Worker registration blocked by Playwright",
+    "load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden",
+    "Failed to load resource: Too much data buffered while waiting for the previous multipart part to be handled",
+    "fileReadResponse failed, terminating worker: NotReadableError: The I/O read operation failed."
+  ],
+  "version": "27.2",
+  "probe": {
+    "calls": [
+      {
+        "method": "loadModelFromUrl",
+        "started": 1791371232636,
+        "error": {
+          "name": "RuntimeError",
+          "message": "File read failed: NotReadableError: The I/O read operation failed.",
+          "text": "RuntimeError: File read failed: NotReadableError: The I/O read operation failed.",
+          "stack": ""
+        },
+        "ended": 1791371290007
+      },
+      {
+        "method": "loadModel",
+        "started": 1791371289163,
+        "error": {
+          "name": "RuntimeError",
+          "message": "File read failed: NotReadableError: The I/O read operation failed.",
+          "text": "RuntimeError: File read failed: NotReadableError: The I/O read operation failed.",
+          "stack": ""
+        },
+        "ended": 1791371290007
+      },
+      {
+        "method": "exit",
+        "started": 1791371290007,
+        "finished": true,
+        "ended": 1791371290007
+      }
+    ]
+  },
+  "note": "模型加载失败。请重试或选择其他模型。",
+  "status": "",
+  "finished": true,
+  "closed": true
+}
