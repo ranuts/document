@@ -1,0 +1,11 @@
+{
+  "scope": "Single-byte range preflight after terminal truncated download; no model inference",
+  "status": 206,
+  "headers": {
+    "content-length": "1",
+    "content-range": "bytes 841791698-841791698/3306260928",
+    "accept-ranges": "bytes",
+    "content-type": "application/octet-stream"
+  },
+  "byteCount": 1
+}

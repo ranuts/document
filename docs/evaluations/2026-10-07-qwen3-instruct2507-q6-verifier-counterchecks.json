@@ -1,0 +1,17 @@
+[
+  {
+    "countercheck": "synthetic mechanics",
+    "exitCode": 0,
+    "scope": "Synthetic verifier data copied from prior Q4 receipt; no Q6 load or inference occurred."
+  },
+  {
+    "countercheck": "wrong Q6 hash",
+    "exitCode": 1,
+    "scope": "Synthetic verifier data copied from prior Q4 receipt; no Q6 load or inference occurred."
+  },
+  {
+    "countercheck": "wrong redo document",
+    "exitCode": 1,
+    "scope": "Synthetic verifier data copied from prior Q4 receipt; no Q6 load or inference occurred."
+  }
+]
