@@ -1,0 +1,16 @@
+{
+  "receipt_sha256": "bff65631aacb04ef09ee5f2d875157b5b1fef189b6748b2fd373a51c3c81d2d9",
+  "candidate_promoted": false,
+  "decisions": [
+    {
+      "id": "es-summarize",
+      "verdict": "uncertain",
+      "reason": "Date, count, people, booking actor, authorization condition and current unauthorized trip retained; implicit feminine subject in a\u00fan no est\u00e1 aprobada leaves approval object less explicit than source proposal. Do not count as passing."
+    },
+    {
+      "id": "es-translate",
+      "verdict": "fail",
+      "reason": "Portuguese translation leaves Spanish viaje twice instead of viagem; full target-language translation fails despite checked facts and actors retained."
+    }
+  ]
+}
