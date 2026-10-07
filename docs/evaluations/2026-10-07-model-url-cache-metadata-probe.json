@@ -1,0 +1,40 @@
+{
+  "scope": "Fresh isolated SDK download-cache metadata observation; synthetic 32-byte payload, no model load/inference or real credential",
+  "requests": [
+    "http://127.0.0.1:5193/__synthetic_url_cache__/model.gguf?token=PUBLIC_SYNTHETIC_CACHE_AUTH_20261007",
+    "http://127.0.0.1:5193/__synthetic_url_cache__/model.gguf?token=PUBLIC_SYNTHETIC_CACHE_AUTH_20261007"
+  ],
+  "errors": [],
+  "source": "http://127.0.0.1:5193/__synthetic_url_cache__/model.gguf?token=PUBLIC_SYNTHETIC_CACHE_AUTH_20261007",
+  "firstPage": {
+    "loaded": false,
+    "entries": [
+      {
+        "name": "a527fde6102ed1408bfe2a8111b4d92654e8c6e3_model.gguf?token=PUBLIC_SYNTHETIC_CACHE_AUTH_20261007",
+        "size": 32,
+        "metadata": {
+          "originalURL": "http://127.0.0.1:5193/__synthetic_url_cache__/model.gguf?token=PUBLIC_SYNTHETIC_CACHE_AUTH_20261007",
+          "originalSize": 32,
+          "etag": "synthetic"
+        }
+      }
+    ]
+  },
+  "secondPage": {
+    "loaded": false,
+    "entries": [
+      {
+        "name": "a527fde6102ed1408bfe2a8111b4d92654e8c6e3_model.gguf?token=PUBLIC_SYNTHETIC_CACHE_AUTH_20261007",
+        "size": 32,
+        "metadata": {
+          "originalURL": "http://127.0.0.1:5193/__synthetic_url_cache__/model.gguf?token=PUBLIC_SYNTHETIC_CACHE_AUTH_20261007",
+          "originalSize": 32,
+          "etag": "synthetic"
+        }
+      }
+    ]
+  },
+  "persisted": true,
+  "observationPassed": false,
+  "closed": true
+}
