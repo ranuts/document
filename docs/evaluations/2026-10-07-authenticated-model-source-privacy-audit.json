@@ -49,5 +49,23 @@
     "Do not treat not writing localStorage as eliminating SDK artifact persistence.",
     "Do not silently strip authentication query parameters.",
     "Do not implement the pending authenticated-source behavior choice before it is resolved."
-  ]
+  ],
+  "sdk_implementation_sha256": "ea4dcbc184039e045f6b1c3dfd7511e739945ee0bcf91166f68cbfb6daf7af25",
+  "sdk_cache_paths": {
+    "grade": "code facts from installed SDK implementation",
+    "config": "createArtifactCache(webllm/config, getCacheOptions(appConfig)); new URL(mlc-chat-config.json, modelUrl)",
+    "wasm": "createArtifactCache(webllm/wasm, getCacheOptions(appConfig)); fetchWithCache(modelRecord.model_lib) for ordinary absolute HTTP URLs",
+    "model_and_tokenizer": "webllm/model scope and getTensorCacheAccessOptions",
+    "app_options_forwarded": [
+      "cacheType",
+      "opfsAccessMode"
+    ],
+    "custom_artifact_cache_forwarded": false,
+    "limit": "Internal cache factory supports an artifactCache object, but WebLLM getCacheOptions does not expose/forward it from AppConfig. Requires an explicit SDK integration change and runtime verification, not an undocumented AppConfig flag."
+  },
+  "authenticated_directory_compatibility": {
+    "grade": "code fact",
+    "finding": "cleanModelUrl appends string suffixes; configuration is resolved as a relative child URL. Base query is not automatically inherited by child URL resolution. No propagation of authentication query to every model artifact is established.",
+    "risk": "Session-only loading still requires a valid authentication transport for every artifact; simply retaining query in settings does not establish load support."
+  }
 }
