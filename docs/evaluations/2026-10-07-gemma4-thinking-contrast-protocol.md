@@ -1,0 +1,7 @@
+# Frozen thinking-mode feasibility contrast
+
+Use the previously failed Korean summary only, baseline then thinking, fresh native context each. This is a known-source diagnostic, not a quality acceptance screen or retry policy. Preserve original product messages, JSON schema, instruction, pinned Gemma weights and frozen application build. Both runs use temperature 1, top_p .95, top_k 64, seed 42 and max_tokens 512. Wait for exact native source before selection and inference.
+
+The baseline explicitly disables enable_thinking and native reasoning. The candidate enables both the GGUF chat-template enable_thinking flag and native reasoning parsing. This changes template conditioning and parser behavior together: it does not isolate either one. Token budget stays unchanged; truncation or parse/schema failures are retained, not retried or hidden. Count and completion receive identical explicit template kwargs. Record actual loaded threads alongside each run. SDK internals add default template kwargs to native requests.
+
+Check final output for all required actors, Tuesday, scanner, only-after permission, Mei Tan signing the safety report, both current negatives, source language, shorter single sentence and omission of labels. Preserve raw completion/reasoning, guard refusal, native writes and exact Undo/Redo. Even a pass cannot promote the candidate: independent seven-language sources, translation directions and full device/lifecycle acceptance remain outstanding. No production behavior changes.
