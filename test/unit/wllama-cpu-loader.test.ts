@@ -88,8 +88,8 @@ it('loads the paired CPU runtime through normal preload and measures before gene
     expect.objectContaining({ n_ctx: 2048, n_gpu_layers: 0, signal: expect.any(AbortSignal) }),
   );
   expect((await provider.chat([{ role: 'user', content: 'Hello' }], [])).text).toBe('Hello');
-  expect(state.count).toHaveBeenCalledOnce();
-  expect(state.complete.mock.calls[0]).toEqual(state.count.mock.calls[0]);
+  expect(state.count).toHaveBeenCalledTimes(2);
+  expect(state.complete.mock.calls[0]).toEqual(state.count.mock.calls[1]);
   await provider.dispose();
   expect(state.exit).toHaveBeenCalledOnce();
 });
@@ -115,4 +115,26 @@ it('keeps selected local files authoritative over an unused invalid model URL', 
   expect(state.loadFiles).toHaveBeenCalledWith(files, expect.any(Object));
   expect(state.load).not.toHaveBeenCalled();
   await provider.dispose();
+});
+
+it('rejects a resolved SDK load when the native loaded-model preflight fails and releases its worker', async () => {
+  vi.stubGlobal('navigator', {
+    hardwareConcurrency: 4,
+    storage: { getDirectory: async () => ({ getDirectoryHandle: async () => ({}) }) },
+  });
+  vi.stubGlobal('location', { origin: 'https://editor.example' });
+  const initialization = new Error('count_chat requires a loaded text-only chat model');
+  state.count.mockRejectedValueOnce(initialization);
+  const provider = new WllamaProvider({ cpuOnly: true, modelUrl: 'https://models.example/model.gguf' });
+  try {
+    await expect(provider.preload()).rejects.toBe(initialization);
+    expect(provider.isReady()).toBe(false);
+    expect(state.complete).not.toHaveBeenCalled();
+    expect(state.exit).toHaveBeenCalledOnce();
+    await provider.dispose();
+    expect(state.exit).toHaveBeenCalledOnce();
+  } finally {
+    state.count.mockReset().mockResolvedValue({ promptTokens: 24, contextTokens: 2048 });
+    await provider.dispose();
+  }
 });

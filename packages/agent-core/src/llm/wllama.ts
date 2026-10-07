@@ -117,6 +117,23 @@ export class WllamaProvider implements LocalLLMProvider {
         if (this.options.modelFiles?.length) await runtime.loadModel(this.options.modelFiles, params);
         else if (modelUrl) await runtime.loadModelFromUrl(modelUrl, params);
         else throw new Error('Choose a GGUF model URL or local files');
+        // A resolved SDK load and metadata can outlive a failed native allocation.
+        // Confirm the loaded tokenizer/context without evaluating or generating text.
+        if (engine.countChatTokens) {
+          const measured = await engine.countChatTokens({
+            messages: [{ role: 'user', content: 'Ready.' }],
+            max_tokens: 1,
+            stream: false,
+            abortSignal: this.lifetime.signal,
+          });
+          if (
+            !Number.isSafeInteger(measured.promptTokens) ||
+            measured.promptTokens < 0 ||
+            !Number.isSafeInteger(measured.contextTokens) ||
+            measured.contextTokens <= 0
+          )
+            throw new Error('Local model initialization did not provide a valid context');
+        }
       }
       this.lifetime.signal.throwIfAborted();
       this.engine = engine;
