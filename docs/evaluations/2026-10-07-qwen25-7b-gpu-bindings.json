@@ -1,0 +1,35 @@
+{
+  "processExitCode": 0,
+  "initialBindings": {
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen25-7b-gpu-screen.mjs": "f569e612604153987b47fcee6299546adb9632ecca9b87517e46e9fcae9c10bb",
+      "docs/evaluations/2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a",
+      "docs/evaluations/2026-10-07-qwen25-7b-gpu-requests.json": "402bc00e8b39a1b798ef49710501b52d88ce1f35c8d2d54426a4d92294819204",
+      "dist/sw.js": "0e8241d93a83e8ee45f562623f9c00e4f42bb2d131baff106c3829ca165b3be9",
+      "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  },
+  "afterSHA256": {
+    "docs/evaluations/2026-10-07-qwen25-7b-gpu-screen.mjs": "f569e612604153987b47fcee6299546adb9632ecca9b87517e46e9fcae9c10bb",
+    "docs/evaluations/2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a",
+    "docs/evaluations/2026-10-07-qwen25-7b-gpu-requests.json": "402bc00e8b39a1b798ef49710501b52d88ce1f35c8d2d54426a4d92294819204",
+    "dist/sw.js": "0e8241d93a83e8ee45f562623f9c00e4f42bb2d131baff106c3829ca165b3be9",
+    "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+    "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen25-7b-gpu-analysis.md": "7933db87a8782813a51648dba8a2abbced7b6c76aaebe5069cd347dabadb430f",
+    "2026-10-07-qwen25-7b-gpu-review.json": "004e51823aeaa023f06e1f95c8744cbd7e8d1c6924badd23e231a9509b3506fb",
+    "2026-10-07-qwen25-7b-gpu-capability.mjs": "166ea3212684d4d9e3bf7bd9d58ef733f804b192f488a16a309bea06d156eb93",
+    "2026-10-07-qwen25-7b-gpu-screen.mjs": "f569e612604153987b47fcee6299546adb9632ecca9b87517e46e9fcae9c10bb",
+    "2026-10-07-qwen25-7b-gpu-requests.json": "402bc00e8b39a1b798ef49710501b52d88ce1f35c8d2d54426a4d92294819204",
+    "2026-10-07-qwen25-7b-gpu-feasibility.md": "4d61a6631ed163ed432c04dccdadece3ba9ae8e75eb1f24ecb960d23ef677f84",
+    "2026-10-07-qwen25-7b-gpu-screen.json": "c2ded5086f8a8bae704a7d8559d70e1112302c58f563ed4ef6cf5d6298509c49",
+    "2026-10-07-qwen25-7b-gpu-capability.json": "a1c31802e02d7dfaf4d46bbf768e3f2c5c9e84746c181874ef0448be04d21772",
+    "2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a",
+    "verify-qwen25-7b-gpu-screen.py": "2a5af4680999c32f22e0e6f1c066694972b0d7049a932e3c7428163762c191a6",
+    "2026-10-07-qwen3-instruct2507-q6-native.json": "c585ddddf398ba4bc4c078b8fd2de08909e57eb6032030f704aeee77b7fce6ad",
+    "2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801"
+  }
+}

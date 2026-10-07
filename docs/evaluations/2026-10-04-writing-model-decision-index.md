@@ -125,3 +125,8 @@ The [original-policy placement contrast](2026-10-07-qwen3-instruct2507-policy-pl
 ### Completed Q4/Q6 known-source contrast (2026-10-07)
 
 Eight native CPU inference rows completed with verified artifacts and unchanged before/after runtime hashes. Q4 failed all four selected known failures; Q6 narrowly passed the German rewrite but still failed Chinese summary, Japanese-to-Korean actor/name retention and Spanish source-language rewrite. No candidate adoption or seven-language acceptance follows. See [analysis](2026-10-07-qwen3-instruct2507-q6-analysis.md), [semantic review](2026-10-07-qwen3-instruct2507-q6-review.json), [raw receipt](2026-10-07-qwen3-instruct2507-q6-native.json) and [bindings](2026-10-07-qwen3-instruct2507-q6-bindings.json).
+
+
+### Completed larger GPU known-source screen (2026-10-07)
+
+Pinned Qwen2.5-7B MLC loaded on the actual Apple GPU and completed four frozen SDK writing requests. Bounded manual checks narrowly pass Japanese-to-Korean translation, German rewrite and Spanish rewrite; Chinese summary preserves examined facts but fails the one-sentence instruction. These are selected known sources with no native application, unused-source transfer or seven-language acceptance. See [analysis](2026-10-07-qwen25-7b-gpu-analysis.md), [review](2026-10-07-qwen25-7b-gpu-review.json), [raw receipt](2026-10-07-qwen25-7b-gpu-screen.json) and [bindings](2026-10-07-qwen25-7b-gpu-bindings.json). No default is promoted.

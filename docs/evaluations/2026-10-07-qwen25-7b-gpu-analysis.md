@@ -1,0 +1,7 @@
+# Larger GPU known-source writing screen
+
+Pinned Qwen2.5-7B-Instruct-q4f16_1-MLC loaded successfully on the actual non-fallback Apple Metal adapter in 200.615 seconds according to SDK progress. Four frozen SDK requests completed; process exit was 0 and context closed. The exact pinned WASM response was observed once. Requests reuse complete original task user instructions with the current WebLLM structured JSON system message, temperature 0, top_p 0.8 and max_tokens 512. This is a different model/backend/request framing than the Q4/Q6 CPU contrast, not a pure model-size causal test.
+
+Bounded manual checks narrowly pass Japanese-to-Korean translation, German rewrite and Spanish rewrite. Chinese summary preserves the examined facts and source language but returns two sentences rather than the requested one and therefore fails. No four-row/full-quality success is claimed. The result makes this GPU path worth a broader original-product native screen; it does not justify default promotion.
+
+No native document application/history, seven-language coverage, unused-source transfer, injection/mixed-language robustness, physical Windows/mobile, available memory budget or offline lifecycle was verified. A shipped VRAM estimate is not an actual usage measurement. Model URLs are revision-pinned, but tensor bytes were loaded by SDK from that revision and not independently rehashed here. Manifest MD5 values remain upstream assertions. Before/after runtime/request/driver hashes match. Browser profile and library bytes remain local and excluded from Git.
