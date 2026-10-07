@@ -1,0 +1,12 @@
+[
+  {
+    "countercheck": "synthetic mapping",
+    "exitCode": 0,
+    "scope": "Synthetic mapping check using copied earlier receipt; no candidate inference occurred."
+  },
+  {
+    "countercheck": "changed original policy",
+    "exitCode": 1,
+    "scope": "Synthetic mapping check using copied earlier receipt; no candidate inference occurred."
+  }
+]
