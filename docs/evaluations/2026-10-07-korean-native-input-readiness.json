@@ -1,0 +1,95 @@
+{
+  "scope": "Native input readiness only; no model inference",
+  "source": "장비 기록: Arin Cole은 화요일에 스캐너를 다시 가동하자고 제안했지만, 그 제안은 아직 승인되지 않았다. Mei Tan이 안전 보고서에 서명한 후에만 기술팀이 스캐너를 다시 가동할 수 있다. 보고서는 아직 서명되지 않았다. 창고 라벨은 이미 인쇄되었다.",
+  "errors": [],
+  "failures": [],
+  "fonts": [
+    {
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/184",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/183",
+      "status": 200
+    }
+  ],
+  "samples": [
+    {
+      "phase": "immediate",
+      "text": "\r\n",
+      "selection": "\r\n"
+    },
+    {
+      "phase": "after insertion wait",
+      "text": "장비 기록: Arin Cole은 화요일에 스캐너를 다시 가동하자고 제안했지만, 그 제안은 아직 승인되지 않았다. Mei Tan이 안전 보고서에 서명한 후에만 기술팀이 스캐너를 다시 가동할 수 있다. 보고서는 아직 서명되지 않았다. 창고 라벨은 이미 인쇄되었다.\r\n",
+      "selection": ""
+    },
+    {
+      "phase": "reselect",
+      "text": "장비 기록: Arin Cole은 화요일에 스캐너를 다시 가동하자고 제안했지만, 그 제안은 아직 승인되지 않았다. Mei Tan이 안전 보고서에 서명한 후에만 기술팀이 스캐너를 다시 가동할 수 있다. 보고서는 아직 서명되지 않았다. 창고 라벨은 이미 인쇄되었다.\r\n",
+      "selection": "장비 기록: Arin Cole은 화요일에 스캐너를 다시 가동하자고 제안했지만, 그 제안은 아직 승인되지 않았다. Mei Tan이 안전 보고서에 서명한 후에만 기술팀이 스캐너를 다시 가동할 수 있다. 보고서는 아직 서명되지 않았다. 창고 라벨은 이미 인쇄되었다.\r\n"
+    }
+  ],
+  "inserted": true,
+  "closed": true
+}

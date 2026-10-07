@@ -1,0 +1,9 @@
+{
+  "scope": "Native-only asynchronous input diagnostic; no semantic/model acceptance",
+  "evidenceSHA256": {
+    "2026-10-07-korean-native-input-readiness.mjs": "4ecaf0eac2b1837efed2b3973f076c4a876ea64797d3520cf337a6aad1049555",
+    "2026-10-07-korean-native-input-readiness.json": "f6b9d66d3ce2158cd06dbfd7b0da63236c530414d20752334edb4a408dd08561"
+  },
+  "fixtureSHA256": "65e4ffe4ea447ad0c83f24f11bcb49513301aac8eed35d4098a99527df488095",
+  "processExitCode": 0
+}
