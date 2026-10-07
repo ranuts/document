@@ -86,6 +86,8 @@ export async function isModelCached(modelId: string, source: ModelSource = {}): 
 }
 
 export interface WebLLMProviderOptions extends ModelSource {
+  /** Notify hosts when an initialized engine becomes unavailable, including while idle. */
+  onUnavailable?: () => void;
   generation?: GenerationOptions;
   model?: string;
   systemPrompt?: string;
@@ -117,6 +119,8 @@ export class WebLLMProvider implements LocalLLMProvider {
   private readonly lifetime = new AbortController();
   private queue: Promise<unknown> = Promise.resolve();
   private disposed = false;
+  private readonly onUnavailable?: () => void;
+  private clearFailureListener?: () => void;
 
   constructor(options: WebLLMProviderOptions = {}) {
     this.model = options.model ?? DEFAULT_WEBLLM_MODEL;
@@ -132,9 +136,24 @@ export class WebLLMProvider implements LocalLLMProvider {
     // and is not a guarantee that all model output is reasoning-free.
     this.systemPrompt = this.chatOnly && this.model.startsWith('Qwen3-') ? `${prompt}\n/no_think` : prompt;
     this.onProgress = options.onProgress;
+    this.onUnavailable = options.onUnavailable;
     this.engine = options.engine;
+    if (this.engine) this.observeFailure(this.engine);
     this.engineFactory =
       options.engineFactory ?? ((model, progress, signal) => createWorkerEngine(model, progress, signal, options));
+  }
+
+  private observeFailure(engine: WebLLMEngine): void {
+    this.clearFailureListener?.();
+    this.clearFailureListener = undefined;
+    const signal = engine.failureSignal;
+    if (!signal) return;
+    const unavailable = () => {
+      if (!this.disposed && this.engine === engine) this.onUnavailable?.();
+    };
+    signal.addEventListener('abort', unavailable, { once: true });
+    this.clearFailureListener = () => signal.removeEventListener('abort', unavailable);
+    if (signal.aborted) unavailable();
   }
 
   isReady(): boolean {
@@ -155,6 +174,8 @@ export class WebLLMProvider implements LocalLLMProvider {
   private async getEngine(): Promise<WebLLMEngine> {
     if (this.disposed) throw new Error('Local model provider is disposed');
     if (this.engine?.failureSignal?.aborted) {
+      this.clearFailureListener?.();
+      this.clearFailureListener = undefined;
       await this.engine.unload?.();
       this.engine = undefined;
       this.enginePromise = undefined;
@@ -168,6 +189,7 @@ export class WebLLMProvider implements LocalLLMProvider {
             throw new Error('Local model provider is disposed');
           }
           this.engine = engine;
+          this.observeFailure(engine);
           return engine;
         })
         .catch((error) => {
@@ -182,6 +204,8 @@ export class WebLLMProvider implements LocalLLMProvider {
   async dispose(): Promise<void> {
     if (this.disposed) return;
     this.disposed = true;
+    this.clearFailureListener?.();
+    this.clearFailureListener = undefined;
     const engine = this.engine;
     this.engine = undefined;
     this.lifetime.abort();

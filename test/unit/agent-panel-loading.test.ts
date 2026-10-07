@@ -8,6 +8,7 @@ const state = vi.hoisted(() => ({
   preload: vi.fn(),
   dispose: vi.fn().mockResolvedValue(undefined),
   progress: [] as Array<(value: { text: string; progress?: number }) => void>,
+  unavailable: undefined as undefined | (() => void),
   ready: false,
   activeBackend: undefined as 'webllm' | 'wllama' | undefined,
   stalled: false,
@@ -53,11 +54,12 @@ vi.mock('@ranuts/agent-core/llm/local', async (original) => ({
       return state.activeBackend;
     }
     constructor(options: {
-      webllm: { onProgress: (value: { text: string }) => void };
+      webllm: { onProgress: (value: { text: string }) => void; onUnavailable?: () => void };
       onBackend?: (backend: 'webllm' | 'wllama') => void;
       wllama?: { onProgress: (value: { loaded: number; total: number }) => void };
     }) {
       state.progress.push(options.webllm.onProgress);
+      state.unavailable = options.webllm.onUnavailable;
       state.backend = options.onBackend;
       state.cpuProgress = options.wllama?.onProgress;
     }
@@ -134,6 +136,7 @@ afterEach(() => {
   state.dispose.mockClear();
   state.progress.length = 0;
   state.ready = false;
+  state.unavailable = undefined;
   state.activeBackend = undefined;
   state.stalled = false;
   state.generate.mockReset();
@@ -1048,4 +1051,44 @@ it('shows preparation and allows stopping while the previous runtime is exiting'
   expect(stop.hidden).toBe(true);
   load.click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(2));
+});
+
+it('clears loaded feedback when the engine becomes unavailable after chat has finished', async () => {
+  state.ready = true;
+  state.preload.mockImplementation(async () => state.backend?.('webllm'));
+  const panel = createAgentPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
+  const configure = panel.querySelector<HTMLButtonElement>('.agent-configure')!;
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Explain rain formation';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('answer'));
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(panel.querySelector('.agent-model-status')?.textContent).toContain('WebGPU');
+  state.ready = false;
+  state.unavailable?.();
+  expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentLoadModel'));
+  expect(panel.querySelector('.agent-model-status')?.textContent).toBe('');
+  expect(configure.hidden).toBe(false);
+  expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('answer');
+});
+
+it('ignores an unavailable notification from a replaced model', async () => {
+  state.ready = true;
+  state.preload.mockImplementation(async () => state.backend?.('webllm'));
+  const panel = createAgentPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
+  const previous = state.unavailable;
+  expect(previous).toBeTypeOf('function');
+  const model = panel.querySelector<HTMLSelectElement>('.agent-panel-model')!;
+  model.value = 'Qwen3-4B-q4f16_1-MLC';
+  model.dispatchEvent(new Event('change'));
+  await vi.waitFor(() => expect(panel.querySelector<HTMLButtonElement>('.agent-panel-load')!.disabled).toBe(false));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-load')!.click();
+  await vi.waitFor(() => expect(state.unavailable).not.toBe(previous));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
+  const status = panel.querySelector('.agent-model-status')?.textContent;
+  previous?.();
+  expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded'));
+  expect(panel.querySelector('.agent-model-status')?.textContent).toBe(status);
 });

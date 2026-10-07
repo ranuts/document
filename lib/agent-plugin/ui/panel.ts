@@ -795,6 +795,12 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
               model: selectedLocalModel(),
               ...localSource(),
               chatOnly: true,
+              onUnavailable: () => {
+                if (generation !== controllerGeneration || modelLoading) return;
+                syncRuntimeStatus();
+                note.textContent = t('agentLoadModel');
+                syncSidebar();
+              },
               onProgress: (p) => {
                 if (
                   generation === controllerGeneration &&

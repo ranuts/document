@@ -402,3 +402,40 @@ it('keeps untyped look-alike errors and cancellation reasons unchanged', async (
   await expect(provider.chat([{ role: 'user', content: 'Request' }], [], abort.signal)).rejects.toBe(reason);
   await provider.dispose();
 });
+
+it('notifies readiness loss even when no request is waiting', async () => {
+  const failure = new AbortController();
+  const unavailable = vi.fn();
+  const provider = new WebLLMProvider({
+    onUnavailable: unavailable,
+    engineFactory: async () => ({ failureSignal: failure.signal, chat: { completions: { create: vi.fn() } } }),
+  });
+  await provider.preload();
+  expect(provider.isReady()).toBe(true);
+  failure.abort(new Error('GPU resources lost'));
+  expect(provider.isReady()).toBe(false);
+  expect(unavailable).toHaveBeenCalledOnce();
+});
+
+it('does not notify readiness loss from a disposed engine', async () => {
+  const failure = new AbortController();
+  const unavailable = vi.fn();
+  const provider = new WebLLMProvider({
+    onUnavailable: unavailable,
+    engine: { failureSignal: failure.signal, chat: { completions: { create: vi.fn() } } },
+  });
+  await provider.dispose();
+  failure.abort(new Error('late unload'));
+  expect(unavailable).not.toHaveBeenCalled();
+});
+
+it('keeps readiness and does not notify for an ordinary request failure', async () => {
+  const unavailable = vi.fn();
+  const provider = new WebLLMProvider({
+    onUnavailable: unavailable,
+    engine: { chat: { completions: { create: vi.fn().mockRejectedValue(new Error('request failed')) } } },
+  });
+  await expect(provider.chat([], [])).rejects.toThrow('request failed');
+  expect(provider.isReady()).toBe(true);
+  expect(unavailable).not.toHaveBeenCalled();
+});
