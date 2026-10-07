@@ -1,0 +1,13 @@
+{
+  "scope": "Driver/runtime identities recorded immediately after launch",
+  "sha256": {
+    "docs/evaluations/2026-10-07-native-gpu-device-loss-corrected.mjs": "16ec2d57999c51dc372592baf1e8ae41578e2a553cb7780daacbb1892dbe82e3",
+    "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+    "docs/evaluations/2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a"
+  },
+  "processExitCode": 0,
+  "evidenceSHA256": {
+    "2026-10-07-native-gpu-device-loss-corrected.mjs": "16ec2d57999c51dc372592baf1e8ae41578e2a553cb7780daacbb1892dbe82e3",
+    "2026-10-07-native-gpu-device-loss-corrected.json": "d7a4a92be55b2a580f102663d2edc8dce0cfff20408c66b14162a6433a698a7c"
+  }
+}

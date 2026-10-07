@@ -1,0 +1,7 @@
+# Actual device loss and explicit retry
+
+The instrumented production Worker captured one actual GPUDevice and destroyed it after native-panel streaming began. The process exits 0 and closes its context. One WebLLM stream request is captured before explicit reload; no duplicate WebLLM stream is observed. Partial text Rain remains and loses the document-write action after interruption. Input unlocks, an error is shown and the blank native document is unchanged. Explicit reload creates a second model Worker; a second, distinct greeting request completes without an additional error. No page errors were captured.
+
+A product defect remains: immediately after loss the status still reads WebGPU with the model id, and the note still says Model loaded — you can start chatting. This is not clean recovery acceptance. Panel source updates readiness in the request finally block, whereas asynchronous Worker unload invalidates the provider through a separate signal; a later invalidation can miss that refresh. The timing explanation requires a separately instrumented lifecycle trace or behavioral regression, not just the observed stale label.
+
+The first streaming textContent snapshot includes the English Write to document action label; the verifier removes that exact known suffix solely to compare the preserved body. It does not treat UI labels as model output. This is deliberate GPUDevice destruction in Chromium with a diagnostic Worker, not spontaneous physical GPU failure, CPU-fallback replay certification, broad editor operation or device-matrix acceptance.
