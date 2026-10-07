@@ -1,0 +1,7 @@
+# Same-model WebGPU backend date diagnostic
+
+Primary Chromium source documents Metal as the default Apple WebGPU backend and SwiftShader as a Vulkan software adapter enabled with --enable-unsafe-webgpu and --use-webgpu-adapter=swiftshader: https://chromium.googlesource.com/chromium/src/+/main/gpu/command_buffer/service/webgpu_decoder_impl.cc . Actual preflight identified Apple metal-3 and Google swiftshader, both created devices.
+
+Run default then SwiftShader, same Chromium version, same persistent cache profile, shipped WebWorkerMLCEngine and emitted worker, same Qwen2.5-3B-Instruct-q4f32_1-MLC model record and chat options. Freeze two prior minimal ISO-date-copy requests (23 then 22) including original messages/schema/temperature0/top_p.8/max512. No prompt tuning, CPU fallback or output substitution. This shorter fixed sequence differs from the original interleaved eight-source experiment, so reproduction and backend causality remain conditional on observed results. Require actual adapter identity and actual WebLLM engine completion. Record failures and close both contexts; bounded model initialization 600 seconds and per-request 300 seconds.
+
+No native document edits are made. Date copying is diagnostic only, not summary/translation/rewrite acceptance, physical device coverage or a proposed prompt repair. Preserve model/lib record and raw outputs/timing/errors. Software GPU may be slow or unable to load; retain that outcome without silently selecting another runtime. No model promotion follows.
