@@ -1,0 +1,28 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-gemma4-sampling-native.mjs": "184acc3ba889d820e449781885de1542d146bb3646ee529a71ab73732b6b1657",
+    "2026-10-07-gemma4-sampling-protocol.md": "58da46b050b366ca4089b5e3a2bd03586e5cbc68c46e89b4338792163a6d9118",
+    "2026-10-07-gemma4-sampling-native.json": "528858939229631c64e9bcf3c1cc1937b9b92eb7e5590fd03fce460661f28648"
+  },
+  "setupSnapshot": {
+    "scope": "Snapshot after process launch, during setup; not prelaunch certification",
+    "sha256": {
+      "docs/evaluations/2026-10-07-gemma4-sampling-native.mjs": "184acc3ba889d820e449781885de1542d146bb3646ee529a71ab73732b6b1657",
+      "docs/evaluations/2026-10-07-gemma4-sampling-protocol.md": "58da46b050b366ca4089b5e3a2bd03586e5cbc68c46e89b4338792163a6d9118",
+      "docs/evaluations/2026-10-05-summary-concise-cases.json": "35ab45beb2f1d802db7107e7b2052942ea434f39d0a0e5484b9e82943638dc61",
+      "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+      "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    },
+    "unchangedAfterRun": {
+      "docs/evaluations/2026-10-07-gemma4-sampling-native.mjs": true,
+      "docs/evaluations/2026-10-07-gemma4-sampling-protocol.md": true,
+      "docs/evaluations/2026-10-05-summary-concise-cases.json": true,
+      "dist/sw.js": true,
+      "dist/assets/editor-C3APg_Fa.js": true,
+      "dist/assets/client-D5_UYdz1.js": true
+    }
+  },
+  "processExitCode": 0,
+  "adopted": false
+}
