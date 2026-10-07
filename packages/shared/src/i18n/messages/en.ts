@@ -171,8 +171,7 @@ export const en: I18nMessages = {
   agentScrollLatest: 'Scroll to latest',
   agentModelSourceInvalid: 'Use an HTTP/HTTPS model address or choose local GGUF files.',
   agentModelCleanupFailed: 'The previous model could not exit. Refresh the page before loading another model.',
-  agentModelLoadFailed:
-    'Model loading failed. The first model download needs internet access. Retry or choose another model.',
+  agentModelLoadFailed: 'Model loading failed. Retry or choose another model.',
   agentModelQuota: 'Browser model storage is full. Free site storage or choose a smaller model, then retry.',
   agentStopped: 'Stopped.',
   agentMaxSteps: 'Reached the maximum number of steps; stopped.',

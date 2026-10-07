@@ -165,7 +165,7 @@ export const zhCN: I18nMessages = {
   agentScrollLatest: '回到最新消息',
   agentModelSourceInvalid: '请使用 HTTP/HTTPS 模型地址，或选择本地 GGUF 文件。',
   agentModelCleanupFailed: '旧模型未能正常退出，请刷新页面后重新加载。',
-  agentModelLoadFailed: '模型加载失败。首次下载模型需要联网，请重试或选择其他模型。',
+  agentModelLoadFailed: '模型加载失败。请重试或选择其他模型。',
   agentModelQuota: '浏览器模型存储空间不足。请释放站点存储或选择更小的模型后重试。',
   agentStopped: '已停止。',
   agentMaxSteps: '已达到最大执行步数，已停止。',

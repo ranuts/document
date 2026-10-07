@@ -188,8 +188,7 @@ export const de: Partial<I18nMessages> = {
   agentModelSourceInvalid: 'Verwenden Sie eine HTTP/HTTPS-Modelladresse oder wählen Sie lokale GGUF-Dateien.',
   agentModelCleanupFailed:
     'Das vorherige Modell konnte nicht beendet werden. Laden Sie die Seite neu, bevor Sie ein anderes Modell laden.',
-  agentModelLoadFailed:
-    'Modell konnte nicht geladen werden. Der erste Modelldownload benötigt Internetzugang. Erneut versuchen oder anderes Modell wählen.',
+  agentModelLoadFailed: 'Modell konnte nicht geladen werden. Erneut versuchen oder anderes Modell wählen.',
   agentModelQuota:
     'Browserspeicher für Modelle ist voll. Website-Speicher freigeben oder kleineres Modell wählen und erneut versuchen.',
   agentStopped: 'Angehalten.',

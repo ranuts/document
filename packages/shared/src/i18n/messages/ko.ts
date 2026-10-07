@@ -172,8 +172,7 @@ export const ko: Partial<I18nMessages> = {
   agentScrollLatest: '최신 메시지로 이동',
   agentModelSourceInvalid: 'HTTP/HTTPS 모델 주소를 입력하거나 로컬 GGUF 파일을 선택하세요.',
   agentModelCleanupFailed: '이전 모델을 종료하지 못했습니다. 페이지를 새로고침한 후 모델을 다시 로드하세요.',
-  agentModelLoadFailed:
-    '모델을 불러오지 못했습니다. 첫 모델 다운로드에는 인터넷 연결이 필요합니다. 다시 시도하거나 다른 모델을 선택하세요.',
+  agentModelLoadFailed: '모델을 불러오지 못했습니다. 다시 시도하거나 다른 모델을 선택하세요.',
   agentModelQuota:
     '브라우저 모델 저장 공간이 부족합니다. 사이트 저장 공간을 확보하거나 더 작은 모델을 선택한 후 다시 시도하세요.',
   agentStopped: '중지했습니다.',

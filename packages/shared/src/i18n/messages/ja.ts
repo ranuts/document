@@ -176,8 +176,7 @@ export const ja: Partial<I18nMessages> = {
   agentScrollLatest: '最新のメッセージへ',
   agentModelSourceInvalid: 'HTTP/HTTPS のモデル URL を入力するか、ローカルの GGUF ファイルを選択してください。',
   agentModelCleanupFailed: '前のモデルを終了できませんでした。ページを更新してから再読み込みしてください。',
-  agentModelLoadFailed:
-    'モデルの読み込みに失敗しました。初回のモデルダウンロードにはインターネット接続が必要です。再試行するか別のモデルを選択してください。',
+  agentModelLoadFailed: 'モデルの読み込みに失敗しました。再試行するか別のモデルを選択してください。',
   agentModelQuota:
     'ブラウザーのモデル保存領域が不足しています。サイトの保存領域を空けるか小さいモデルを選び、再試行してください。',
   agentStopped: '停止しました。',

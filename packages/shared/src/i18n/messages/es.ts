@@ -179,8 +179,7 @@ export const es: Partial<I18nMessages> = {
   agentScrollLatest: 'Ir al último mensaje',
   agentModelSourceInvalid: 'Usa una dirección HTTP/HTTPS del modelo o selecciona archivos GGUF locales.',
   agentModelCleanupFailed: 'No se pudo cerrar el modelo anterior. Actualiza la página antes de cargar otro modelo.',
-  agentModelLoadFailed:
-    'No se pudo cargar el modelo. La primera descarga requiere conexión a internet. Reintenta o elige otro modelo.',
+  agentModelLoadFailed: 'No se pudo cargar el modelo. Reintenta o elige otro modelo.',
   agentModelQuota:
     'El almacenamiento del navegador está lleno. Libera almacenamiento del sitio o elige un modelo más pequeño y reintenta.',
   agentStopped: 'Detenido.',
