@@ -198,7 +198,7 @@ try {
           }),
         );
       }
-      if (!row.modelStatus) throw Error('Initial model setup failed; stop duplicate loading attempts');
+      if (!row.modelStatus || !row.modelNote?.includes('模型已加载')) throw Error('Initial native readiness failed; stop duplicate loading attempts');
     }
 } finally {
   await browser.close();
