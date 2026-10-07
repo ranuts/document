@@ -6,7 +6,9 @@ from pathlib import Path
 
 root = Path(__file__).parent
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--partial', action='store_true', help='Check only captured rows; cannot certify completion')
+mode = parser.add_mutually_exclusive_group()
+mode.add_argument('--partial', action='store_true', help='Check only captured rows; cannot certify completion')
+mode.add_argument('--finished-attempt', action='store_true', help='Verify terminal failed attempt, preserving zero-inference setup failures')
 parser.add_argument('--receipt', type=Path, help='Partial receipt override for diagnostic counterchecks')
 args = parser.parse_args()
 fixtures = json.loads((root / '2026-10-07-gemma4-sampling-seven-language-cases.json').read_text())
@@ -26,13 +28,14 @@ else:
         assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
     report = json.loads((root / '2026-10-07-gemma4-sampling-seven-language-native.json').read_text())
     assert len(report['cases']) == 21
-    assert report['browserClosed'] and bindings['processExitCode'] == 0
+    assert report['browserClosed']
+    assert bindings['processExitCode'] == (1 if args.finished_attempt else 0)
 assert report['modelSHA256'] == '8e30dff3ac4c8434c49a7036fa15564bdbb6044e42bf04550bf1a096ad7e6a52'
 verified = 0
 setup_failures = 0
 for fixture, row in zip(fixtures, report['cases']):
     assert row['prompt'] == fixture and row['variant'] == 'recommended'
-    if args.partial and not row.get('finished'):
+    if (args.partial or args.finished_attempt) and not row.get('finished'):
         assert row['contextClosed'] and not row['crashed'] and not row['errors']
         assert row['selected'] == row['documentBefore'] == row['documentAfter'] == '\r\n'
         assert row['documentUnchanged'] and row['sdk'] == [] and row['counts'] == []
@@ -64,5 +67,14 @@ for fixture, row in zip(fixtures, report['cases']):
         assert json.loads(raw)['text'] + '\r\n' == row['documentAfter']
 if args.partial:
     print(f"PARTIAL ONLY: {len(report['cases'])}/21 recorded rows: {verified} inference requests/mechanics checked, {setup_failures} empty-source setup failures (zero inference). No completion or semantic acceptance.")
+elif args.finished_attempt:
+    assert setup_failures == bindings['emptySourceSetupFailures'] == 3
+    assert verified == bindings['validInferenceRows'] == 18
+    reviews = json.loads((root / '2026-10-07-gemma4-sampling-seven-language-review.json').read_text())['reviews']
+    assert len(reviews) == 21
+    for row, review in zip(report['cases'], sorted(reviews, key=lambda r: next(i for i, f in enumerate(fixtures) if f['id'] == r['id']))):
+        assert review['id'] == row['prompt']['id']
+        assert hashlib.sha256(json.dumps(row, sort_keys=True, ensure_ascii=False).encode()).hexdigest() == review['rowCanonicalSHA256']
+    print('Finished FAILED attempt: 18 inference requests/mechanics verified; 3 empty-source setup failures retained. No semantic acceptance.')
 else:
     print('Frozen 21 task requests and native application/history checked; refusals and semantics require separate review.')

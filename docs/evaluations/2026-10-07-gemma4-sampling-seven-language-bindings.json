@@ -1,0 +1,34 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-gemma4-sampling-seven-language-native.json": "afc2a41762a7564a27de5a5b6cfebb19c4c3898713ddb8ac7ba093b2e7275ae8",
+    "2026-10-07-gemma4-sampling-seven-language-review.json": "3c59bd4106a4209783cb7707448e130f118edbdb70580c8bccf24a1086d36a5f",
+    "2026-10-07-gemma4-sampling-seven-language-native.mjs": "bc70ed5dcd08bc09716a887452d1c1be49f40674f6adf8dc1626b87bc4b3cabc",
+    "2026-10-07-gemma4-sampling-seven-language-cases.json": "65e4ffe4ea447ad0c83f24f11bcb49513301aac8eed35d4098a99527df488095",
+    "2026-10-07-gemma4-sampling-seven-language-protocol.md": "ab2ad9e66b4d1bf89f0e2111687d7d09811cc3d4457c2c41fbecb3e4c2cce4a2"
+  },
+  "initialSnapshot": {
+    "scope": "before process launch",
+    "sha256": {
+      "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-native.mjs": "bc70ed5dcd08bc09716a887452d1c1be49f40674f6adf8dc1626b87bc4b3cabc",
+      "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-protocol.md": "ab2ad9e66b4d1bf89f0e2111687d7d09811cc3d4457c2c41fbecb3e4c2cce4a2",
+      "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-cases.json": "65e4ffe4ea447ad0c83f24f11bcb49513301aac8eed35d4098a99527df488095",
+      "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+      "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    }
+  },
+  "unchangedAfterRun": {
+    "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-native.mjs": true,
+    "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-protocol.md": true,
+    "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-cases.json": true,
+    "dist/sw.js": true,
+    "dist/assets/editor-C3APg_Fa.js": true,
+    "dist/assets/client-D5_UYdz1.js": true
+  },
+  "processExitCode": 1,
+  "recorded": 21,
+  "validInferenceRows": 18,
+  "emptySourceSetupFailures": 3,
+  "adopted": false,
+  "scope": "Final original failed attempt; corrected Korean inference remains separate and pending"
+}

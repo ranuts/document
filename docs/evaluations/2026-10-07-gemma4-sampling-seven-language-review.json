@@ -1,0 +1,191 @@
+{
+  "scope": "Manual source/output assessments of final original attempt, no native-speaker certification",
+  "adopted": false,
+  "reviews": [
+    {
+      "id": "zh-CN-rewrite",
+      "rowCanonicalSHA256": "84f71515d766fbd29670a95a61d7b48ebbbd4f69d32e57ad900b02dc7b9a9ec7",
+      "verdict": "narrow pass",
+      "reasons": [
+        "Changed wording; retained proposer, proposed day, technical-team only-after permission, prerequisite signer/report and both current negatives; printed labels retained."
+      ]
+    },
+    {
+      "id": "zh-CN-summarize",
+      "rowCanonicalSHA256": "4520bd61e7387270ea41d49a5155567bd01cd1c392dab1fe28e407fba0a6298a",
+      "verdict": "fail",
+      "reasons": [
+        "Unsupported causal connection: source does not say unsigned report caused nonapproval.",
+        "Mei Tan signing the report and explicit only-after permission are omitted."
+      ]
+    },
+    {
+      "id": "zh-CN-translate",
+      "rowCanonicalSHA256": "b8e8b1fac5e165df3cf504d393a9d8e1964f65ac4da7dabc2db2fabb6aea887d",
+      "verdict": "narrow pass",
+      "reasons": [
+        "All source sentences translated into English; proposer/day/object, team permission, prerequisite signer/report and both negative states retained; printed labels preserved."
+      ]
+    },
+    {
+      "id": "en-rewrite",
+      "rowCanonicalSHA256": "af8cbf5a27a3c5e943e6c4f43b9c9213f56d3ab1ef7649c95f14cb55d6a8cca4",
+      "verdict": "narrow pass",
+      "reasons": [
+        "Changed formal wording; all source facts retained, including technical-team permission only after Mei Tan signs the safety report, currently unsigned report, unapproved proposal and printed labels."
+      ]
+    },
+    {
+      "id": "en-summarize",
+      "rowCanonicalSHA256": "4764bc1ba4c55bc557283b351b755586433144d87ccc6d3c67afce645e0ef6a3",
+      "verdict": "narrow pass",
+      "reasons": [
+        "One shorter English sentence; proposer/day/scanner, technical-team only-after permission, Mei Tan signing safety report, currently unsigned report and unapproved proposal retained; labels omitted; no observed new causal relationship."
+      ]
+    },
+    {
+      "id": "en-translate",
+      "rowCanonicalSHA256": "ee72b97cf4e75f001b97b039e134cbaa8c7830e07e929e66b08423375405db42",
+      "verdict": "narrow pass",
+      "reasons": [
+        "All source sentences translated into Chinese; proposer/day/scanner, team only-after permission, prerequisite signer/report, both negative states and printed labels retained."
+      ]
+    },
+    {
+      "id": "ja-rewrite",
+      "rowCanonicalSHA256": "f20d358ff96c5a5ca7f5f776228be219a33b7ca3ef72d2846a0ac798ac85136f",
+      "verdict": "not fully verified",
+      "reasons": [
+        "Observed names, Tuesday, proposal nonapproval, report unsigned and printed labels retained; changed Japanese wording.",
+        "Only-after permission is recast as signing being necessary for team reactivation. Temporal/permission equivalence is not conclusively graded; no categorical reversed-fact claim."
+      ]
+    },
+    {
+      "id": "ja-summarize",
+      "rowCanonicalSHA256": "8a9b106022065418b23d7b6c5e10d1e5c681f1a184074c7bac226a8585b94027",
+      "verdict": "fail",
+      "reasons": [
+        "Requested explicit currently unsigned safety report omitted. Future signature prerequisite does not explicitly retain current unsigned status.",
+        "Proposer/day/scanner, signer and proposal nonapproval retained; no categorical additional opposite-fact claim."
+      ]
+    },
+    {
+      "id": "ja-translate",
+      "rowCanonicalSHA256": "0ed2942a56ab00f70516191d498c130cc4377761d80f31b6e07b8bbf2ca7889f",
+      "verdict": "narrow pass",
+      "reasons": [
+        "All source sentences translated into English; proposer/day/scanner, technical-team only-after permission, Mei Tan signing, currently unsigned report, unapproved proposal and printed labels retained."
+      ]
+    },
+    {
+      "id": "ko-rewrite",
+      "rowCanonicalSHA256": "228b9fed90ebf8d66151443a94008c211213d216cbeb4f694a8da3e704967dfa",
+      "verdict": "setup failure, zero inference",
+      "reasons": [
+        "Native source/selection empty; no SDK count or completion call. Do not grade as semantic failure."
+      ]
+    },
+    {
+      "id": "ko-summarize",
+      "rowCanonicalSHA256": "43403ac8c7dac123d9dd0e1964af70d68ed1412ad9c368b064fdede4e8d2c3de",
+      "verdict": "setup failure, zero inference",
+      "reasons": [
+        "Native source/selection empty; no SDK count or completion call. Do not grade as semantic failure."
+      ]
+    },
+    {
+      "id": "ko-translate",
+      "rowCanonicalSHA256": "da74025a6088284a1974cb903dad5ec9d561d5cfc67664d2bc65dacf9e3d6719",
+      "verdict": "setup failure, zero inference",
+      "reasons": [
+        "Native source/selection empty; no SDK count or completion call. Do not grade as semantic failure."
+      ]
+    },
+    {
+      "id": "de-rewrite",
+      "rowCanonicalSHA256": "10a48c8c5db435ef43856ad6aea141acf4467a84d38af6c3fab1737b59256a18",
+      "verdict": "narrow pass",
+      "reasons": [
+        "German wording changes while retaining proposer/day/scanner, team permission only after Mei Tan signature, currently unsigned report, unapproved proposal and printed labels."
+      ]
+    },
+    {
+      "id": "de-summarize",
+      "rowCanonicalSHA256": "b939bbbf73cbe52379d4a7a1efa9d4d72c501a0e186afb28fa9644f104124c94",
+      "verdict": "fail",
+      "reasons": [
+        "Explicit currently unapproved proposal omitted.",
+        "Opening clause Arin Cole vorgeschlagen lacks a finite verb/auxiliary; not a complete grammatical sentence.",
+        "Currently unsigned report and signer/prerequisite retained; no categorical opposite-fact or new-causality claim assigned."
+      ]
+    },
+    {
+      "id": "de-translate",
+      "rowCanonicalSHA256": "b0ef15e6bdcc92658df536a52f96b5eaa2a94351b8a24cf3561def05404632ce",
+      "verdict": "not fully verified",
+      "reasons": [
+        "All sentences in English; observed proposer/day/team permission, signer, current unsigned report and unapproved proposal retained.",
+        "Sicherheitsbericht rendered security report and Lageretiketten inventory labels; lexical equivalence to these German source terms is not conclusively graded. No categorical reversed-fact claim assigned."
+      ]
+    },
+    {
+      "id": "es-rewrite",
+      "rowCanonicalSHA256": "1eaac03dc35c42efadf2afab5a8c9c9474b07f4de7c1390e0b0fadc8da9545d0",
+      "verdict": "not fully verified",
+      "reasons": [
+        "Observed proposer/day/scanner, signer, proposal nonapproval, currently unsigned report and printed labels retained.",
+        "Present solo puede becomes future solo podrá while only-after constraint remains; permission/temporal equivalence not conclusively graded, no categorical definite-action claim assigned."
+      ]
+    },
+    {
+      "id": "es-summarize",
+      "rowCanonicalSHA256": "d155598ec56c8bf820e496efa8e29552fc3db174bb2d5e8d8627fecb2a7a7272",
+      "verdict": "fail",
+      "reasons": [
+        "Entire summary is English despite explicit shorter-Spanish-sentence instruction and Spanish source. It was applied with no chat error.",
+        "Observed proposer/day/scanner, technical-team until-signature constraint, signer, unsigned report and proposal nonapproval retained; labels omitted. Language failure alone rejects this task."
+      ]
+    },
+    {
+      "id": "es-translate",
+      "rowCanonicalSHA256": "7a5b52eb5773c7b2434aa1d43e567a548c128d5227bb5220f4e81529c57e4b0a",
+      "verdict": "narrow pass",
+      "reasons": [
+        "All sentences in English; proposer/day/scanner, technical-team only-after constraint, Mei Tan signing report, currently unsigned report, unapproved proposal and printed warehouse labels retained."
+      ]
+    },
+    {
+      "id": "pt-rewrite",
+      "rowCanonicalSHA256": "8760cbd9afccd70344809c27593fce036f08a32dbadb567737420bfe1c3539ed",
+      "verdict": "not fully verified",
+      "reasons": [
+        "Observed proposer/day/scanner, signer, currently unapproved proposal, unsigned report and printed labels retained.",
+        "Present só pode becomes future só poderá while after-signature constraint remains; permission/temporal equivalence not conclusively graded, no categorical definite-action claim assigned."
+      ]
+    },
+    {
+      "id": "pt-summarize",
+      "rowCanonicalSHA256": "3aeb9418187387e7583ddbee6a66fc40461bdaaa593078a2720e188772f15f13",
+      "verdict": "fail",
+      "reasons": [
+        "Technical team acting/permission relationship omitted despite explicit preservation instruction.",
+        "Printed warehouse labels retained despite explicit omission instruction.",
+        "Proposal nonapproval and unsigned report stated; pronoun attachment is not assigned a categorical opposite-fact claim."
+      ]
+    },
+    {
+      "id": "pt-translate",
+      "rowCanonicalSHA256": "77cb08a024d2b1b3993b7c7179bd608bb5978de12e21ba23e03fe8ddf79c0739",
+      "verdict": "narrow pass",
+      "reasons": [
+        "All source sentences in English; proposer/day/scanner, technical-team only-after permission, Mei Tan signing report, unsigned report, unapproved proposal and printed warehouse labels retained."
+      ]
+    }
+  ],
+  "runtimeAudit": {
+    "inferredFromSource": "Provider requests at most four threads if crossOriginIsolated; SDK can fall back to one if threading support fails.",
+    "notMeasured": "Actual runtime thread count not captured in this frozen screen; no single-thread root-cause claim.",
+    "latencyScope": "Some formatting tests/typecheck ran concurrently on the host after early rows; this is not an isolated performance benchmark."
+  },
+  "originalProcessExitCode": 1
+}
