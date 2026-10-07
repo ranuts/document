@@ -1,0 +1,14 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-webgpu-backend-date-native.json": "c61700376f20ea9be5af750e660da9ec085b837a96caedeab8919b47082003ca",
+    "2026-10-07-webgpu-backend-date-requests.json": "2f97514202d2122871f44f58508f19b0b3246bd1c048f1d652b7a69154429d3d",
+    "2026-10-07-webgpu-backend-date-native.mjs": "75dc9370137e581774ab7907fa158c211554b6701d29dfc10b28664e78387d70",
+    "2026-10-07-webgpu-backend-date-protocol.md": "a9f176854408203bf9c444852154c4afe439be854e0e8de6998bb485b6a93b47",
+    "2026-10-07-webgpu-backend-date-analysis.md": "9cf28bca6e629932bb7bea6f7451a01ce317b616368f99d6d69ce88776bf2aeb",
+    "2026-10-07-webgpu-backend-preflight.json": "c67ee1cb452c8a31f7f6ea7eb253b75389ceda804e3a5d88c2bd10efe2fa07e4",
+    "2026-10-07-webgpu-backend-preflight.mjs": "bdc86e34c31ca40b2d71f84575132577006f7c908b0b360ad39282f333fd0958"
+  },
+  "processExitCode": 1,
+  "adopted": false,
+  "scope": "Metal known failure reproduced; SwiftShader first completion timeout, no output comparison"
+}

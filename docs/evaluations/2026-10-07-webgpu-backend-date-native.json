@@ -1,0 +1,209 @@
+{
+  "scope": "Same-model WebGPU backend date diagnostic only",
+  "modelId": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+  "runs": [
+    {
+      "variant": "default",
+      "args": [],
+      "requests": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-23.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-22.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        }
+      ],
+      "errors": [],
+      "outputs": [
+        {
+          "completion": {
+            "id": "d84d3867-e893-4bef-b098-53d3549d5bc2",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"2044-09-23\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791352812,
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 49,
+              "total_tokens": 67,
+              "extra": {
+                "e2e_latency_s": 2.122,
+                "prefill_tokens_per_s": 38.255696390622234,
+                "decode_tokens_per_s": 21.500367298890392,
+                "time_to_first_token_s": 1.280854999989271,
+                "time_per_output_token_s": 0.04651083333128029,
+                "grammar_init_s": 0.2858449999988079,
+                "grammar_per_token_s": 0.00012722222010294593
+              }
+            }
+          },
+          "error": null
+        },
+        {
+          "completion": {
+            "id": "382fd794-39c8-4dbf-ab62-022d522a1f18",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"204 Walsh Avenue, Dublin, Ireland\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791352813,
+            "usage": {
+              "completion_tokens": 17,
+              "prompt_tokens": 49,
+              "total_tokens": 66,
+              "extra": {
+                "e2e_latency_s": 0.857,
+                "prefill_tokens_per_s": 166.81986857596488,
+                "decode_tokens_per_s": 30.295739884856456,
+                "time_to_first_token_s": 0.2937300000190735,
+                "time_per_output_token_s": 0.0330079411759096,
+                "grammar_init_s": 0.00007500001788139344,
+                "grammar_per_token_s": 0.00007205881616648504
+              }
+            }
+          },
+          "error": null
+        }
+      ],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "modelRecord": {
+        "model": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_id": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "low_resource_required": true,
+        "vram_required_MB": 2893.64,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "loadError": null,
+      "finished": true,
+      "contextClosed": true
+    },
+    {
+      "variant": "swiftshader",
+      "args": [
+        "--enable-unsafe-webgpu",
+        "--use-webgpu-adapter=swiftshader"
+      ],
+      "requests": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-23.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-22.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        }
+      ],
+      "errors": [],
+      "outputs": [],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "isFallbackAdapter": true
+      },
+      "modelRecord": {
+        "model": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_id": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "low_resource_required": true,
+        "vram_required_MB": 2893.64,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "loadError": null,
+      "error": "TimeoutError: page.waitForFunction: Timeout 300000ms exceeded.",
+      "contextClosed": true
+    }
+  ],
+  "closed": true
+}
