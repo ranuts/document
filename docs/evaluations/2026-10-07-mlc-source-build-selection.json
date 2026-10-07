@@ -108,7 +108,7 @@
     "download_state": "download completed; SHA256 verified; unpacked in ignored local directory; llvm-config returned 19.1.7"
   },
   "tvm_cmake_configure_exit": 0,
-  "tvm_build": "started, no completion claim",
+  "tvm_build": "completed exit 0",
   "wasm_runtime_prep_exit": 2,
   "wasm_runtime_prep_failure": "Final tvmjs_runtime.wasm link failed with undefined C++ standard-library symbols under emcc 6.0.10; compiler suggested em++ or DEFAULT_TO_CXX",
   "partial_bitcode_outputs": [
@@ -174,5 +174,12 @@
     "retry_exit": 1,
     "retry_failure": "installed TVM lacks tvm.script.s_tir expected by pinned MLC source",
     "next_action": "Use pinned paired TVM source and its in-progress native compiler build"
-  }
+  },
+  "built_tvm_compiler": {
+    "bytes": 103576080,
+    "sha256": "731ad67f11cd09da89c4fa568a3d2aa12c86de9d095ffaf4cee8820d65b375fd",
+    "local_bottle_relocation": "LLVM dependency placeholder replaced with ignored toolchain location; LLVM zstd dependency mapped to installed Homebrew zstd; changed libraries signed locally"
+  },
+  "paired_compile_help_exit": 0,
+  "qwen7_compile": "started; model export and graph optimizations observed; no completion claim"
 }
