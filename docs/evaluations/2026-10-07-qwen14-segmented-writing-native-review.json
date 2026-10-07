@@ -1,0 +1,29 @@
+{
+  "receiptSha256": "df8bfda9774dda366b13480503d52a21965d1cc0aca3984cd82bbb7ad2fbd1e4",
+  "baselineChecks": [
+    {
+      "id": "ko-rewrite",
+      "baselineExact": true
+    },
+    {
+      "id": "pt-summarize",
+      "baselineExact": true
+    }
+  ],
+  "scope": "Two known-source pipeline contrasts, limited manual review, no native application or adoption",
+  "rows": [
+    {
+      "id": "ko-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Actor retained in permission clause, marker exactly once and restored date; names, quantity, pending approval/current deposit nonconfirmation and printed notice retained with formal rewritten language."
+    },
+    {
+      "id": "pt-summarize",
+      "verdict": "fail",
+      "semanticRetention": "narrow-pass",
+      "sourceNonWhitespaceLength": 231,
+      "outputNonWhitespaceLength": 187,
+      "reason": "Assembled output contains duplicate semicolons because model added final punctuation despite instruction. Actor/status/modality retained, but two slots almost copy their entire source sentence; no general abstractive-summary quality established."
+    }
+  ]
+}
