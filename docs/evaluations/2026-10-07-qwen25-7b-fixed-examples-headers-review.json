@@ -1,5 +1,5 @@
 {
-  "scope": "First seventeen completed known-source rewrite outputs only; inference remains active; no full language, native or device acceptance",
+  "scope": "Completed 21 SDK replies for seven known-source rewrites across three variants; no unseen-source, summary, translation, native application or full device acceptance",
   "rows": [
     {
       "id": "zh-CN-rewrite",
@@ -119,6 +119,34 @@
       "verdict": "narrow-pass",
       "basis": "Preserves Spanish, ISO date, 12 places, proposal actor/pending approval, Omar only-after reservation, Luz authorization/current unauthorized status and prepared itinerary.",
       "completionSHA256": "bed12ba73628516dde808b99a06faeb624201cdd66465461b68a6c5c8d91291b"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Spanish, exact date/quantity, proposal status, Omar permission after Luz authorization, current unauthorized status and prepared itinerary.",
+      "completionSHA256": "a94235e7e457aaa7fca983cf4d70ace6ab2ab5ab8ce23c1bf29bed7cd831afb8"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "product",
+      "verdict": "uncertain",
+      "basis": "Bounded facts retained, but formal Portuguese quality is not certified; retains the questionable phrase após que from the prior native run.",
+      "completionSHA256": "9407ca364c13a006bd7bbd0be6972cedc01ed8fa33551e79de5f5fa5bc3f5fe4"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "minimal",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Portuguese, exact date, 64 records, proposal/pending approval, archive-team only-after permission, Ana validation, current incomplete validation and printed labels; avoids prior após que construction.",
+      "completionSHA256": "3164baec0980d01b23ac33ecc76974e4c15618d80d1aef1a9c7565a8c52f88d5"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Portuguese, exact date, 64 records, proposal/pending approval, archive-team only-after permission, Ana validation, currently unvalidated backup and printed labels.",
+      "completionSHA256": "684390c1a75a5854624fc7f2b3f26884e5707a1157cbb73b6f8460e48bd09b45"
     }
   ]
 }

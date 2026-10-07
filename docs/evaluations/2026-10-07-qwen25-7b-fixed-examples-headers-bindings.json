@@ -1,0 +1,20 @@
+{
+  "processExitCode": 0,
+  "initialBindings": {
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen25-7b-fixed-examples-headers-native.mjs": "2872a39f64acba123eee636fab21ee56045d2bf01ad083bb9461f5b0c5f0aec6",
+      "docs/evaluations/2026-10-07-qwen25-7b-fixed-examples-headers-protocol.md": "33a4a2c0fa5bfd2243daed29ccf8488744bed58e66c5e9a5e79068a4d6081124",
+      "docs/evaluations/2026-10-07-qwen25-7b-fixed-examples-requests.json": "fbb0f902cd899d6fa4c9e4a9a60846432e9a070bf0d9a522fe6adde1f598d817",
+      "dist/sw.js": "c8d5ecf60bc37ce13561e652ec626967143a70d9df14ba9b8b5a319be6425bd9",
+      "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen25-7b-fixed-examples-headers-native.json": "23f4cc6fa79319eb2a60bdc14d93529e8b0bd960d2ddbfabafe61c7610efdb82",
+    "2026-10-07-qwen25-7b-fixed-examples-headers-review.json": "2118fc8e1020f77c6a4cdc692cbea9fd6540cd0771745064c57018727880c6e4",
+    "2026-10-07-qwen25-7b-fixed-examples-headers-native.mjs": "2872a39f64acba123eee636fab21ee56045d2bf01ad083bb9461f5b0c5f0aec6",
+    "2026-10-07-qwen25-7b-fixed-examples-headers-protocol.md": "33a4a2c0fa5bfd2243daed29ccf8488744bed58e66c5e9a5e79068a4d6081124",
+    "2026-10-07-qwen25-7b-fixed-examples-requests.json": "fbb0f902cd899d6fa4c9e4a9a60846432e9a070bf0d9a522fe6adde1f598d817"
+  }
+}
