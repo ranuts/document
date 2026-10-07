@@ -38,7 +38,7 @@ export interface AgentRunOptions {
   onToolExchange?: (messages: LLMMessage[]) => void;
   /** Progress callback. */
   onEvent?: (event: AgentEvent) => void;
-  /** Abort the loop between iterations (the in-flight chat still finishes). */
+  /** Cancel inference, cooperative tools and subsequent loop iterations. */
   signal?: AbortSignal;
 }
 
@@ -139,7 +139,7 @@ export async function runAgent(
       }
       toolCallCount++;
       options.onEvent?.({ type: 'tool_call', name: call.name, input: call.input });
-      const { content, isError } = await executeToolCall(tools, call.name, call.input);
+      const { content, isError } = await executeToolCall(tools, call.name, call.input, options.signal);
       options.onEvent?.({ type: 'tool_result', name: call.name, content, isError });
       results.push({ type: 'tool_result', toolUseId: call.id, content, isError });
     }
@@ -155,13 +155,14 @@ async function executeToolCall(
   tools: Record<string, AgentTool>,
   name: string,
   input: Record<string, unknown>,
+  signal?: AbortSignal,
 ): Promise<{ content: string; isError: boolean }> {
   const tool = tools[name];
   if (!tool) {
     return { content: `Unknown tool: ${name}`, isError: true };
   }
   try {
-    const output = await tool.execute(input);
+    const output = await (signal ? tool.execute(input, signal) : tool.execute(input));
     return { content: JSON.stringify(output ?? null), isError: false };
   } catch (error) {
     return { content: error instanceof Error ? error.message : String(error), isError: true };

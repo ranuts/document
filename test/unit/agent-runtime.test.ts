@@ -71,6 +71,43 @@ it('checks cancellation between tools and preserves result pairing for cancelled
     expect.arrayContaining([expect.objectContaining({ toolUseId: 'two', isError: true })]),
   );
 });
+it.each([1, 8])('cancels a delayed tool write with an iteration limit of %i', async (maxIterations) => {
+  const abort = new AbortController();
+  let start!: () => void;
+  const started = new Promise<void>((resolve) => {
+    start = resolve;
+  });
+  let release!: () => void;
+  const ready = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const writes: string[] = [];
+  const { provider, chat } = scripted([toolResponse('write', 'insert_text', { text: 'unwanted' })]);
+  const pending = runAgent(provider, 'write', {
+    maxIterations,
+    signal: abort.signal,
+    tools: {
+      insert_text: makeTool('insert_text', async (input, signal) => {
+        start();
+        await ready;
+        signal?.throwIfAborted();
+        writes.push(String(input.text));
+        return { inserted: true };
+      }),
+    },
+  });
+  await started;
+  abort.abort(new Error('Stopped by user'));
+  release();
+  const result = await pending;
+  expect(writes).toEqual([]);
+  expect(result.aborted).toBe(true);
+  expect(result.stoppedOnLimit).toBe(false);
+  expect(chat).toHaveBeenCalledTimes(1);
+  expect(result.messages.at(-1)?.content).toEqual([
+    { type: 'tool_result', toolUseId: 'write', content: 'Stopped by user', isError: true },
+  ]);
+});
 it('supplies fresh scope only in model requests without contaminating saved or displayed text', async () => {
   const chat = vi.fn().mockResolvedValue(textResponse('answer'));
   const result = await runAgent({ name: 'test', isReady: () => true, chat }, 'question', {
