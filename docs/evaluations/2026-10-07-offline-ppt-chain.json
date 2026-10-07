@@ -1,0 +1,47 @@
+{
+  "scope": "warmed desktop Chromium, browser offline emulation",
+  "errors": [],
+  "failures": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "offline": true,
+  "homeFromSW": true,
+  "before": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "after": [
+    [
+      "\r\n",
+      "\r\n",
+      "OFFLINE_PPT_20261007\r\n"
+    ]
+  ],
+  "chatErrors": [],
+  "undo": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "redo": [
+    [
+      "\r\n",
+      "\r\n",
+      "OFFLINE_PPT_20261007\r\n"
+    ]
+  ],
+  "saved": true,
+  "passed": true,
+  "closed": true
+}
