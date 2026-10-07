@@ -1,1 +1,1 @@
-trigger 1 2026-10-07T08:38:10Z
+trigger 2026-10-07T08:40:27Z round=all
