@@ -108,5 +108,29 @@
     "download_state": "download completed; SHA256 verified; unpacked in ignored local directory; llvm-config returned 19.1.7"
   },
   "tvm_cmake_configure_exit": 0,
-  "tvm_build": "started, no completion claim"
+  "tvm_build": "started, no completion claim",
+  "wasm_runtime_prep_exit": 2,
+  "wasm_runtime_prep_failure": "Final tvmjs_runtime.wasm link failed with undefined C++ standard-library symbols under emcc 6.0.10; compiler suggested em++ or DEFAULT_TO_CXX",
+  "partial_bitcode_outputs": [
+    {
+      "name": "mlc_wasm_runtime.bc",
+      "bytes": 2424,
+      "sha256": "4db6ec142ba8949cf55cd46b1dba683fe92f8efb2d8cacdbac6024341e412b44"
+    },
+    {
+      "name": "tvmjs_support.bc",
+      "bytes": 185732,
+      "sha256": "89bdabf655c86c11f428ea84099f7cf0f2e94a809c04f5138854d1db02fd215c"
+    },
+    {
+      "name": "wasm_runtime.bc",
+      "bytes": 11684424,
+      "sha256": "49efe199edd19ea1b1c75c53aea63ebf20acfe132e72426b24010b9b7aa21c0f"
+    },
+    {
+      "name": "webgpu_runtime.bc",
+      "bytes": 305992,
+      "sha256": "a6aab4f3383319fd5fc2ca1c14d773cd4866db1fe6f25d9250246626886907c0"
+    }
+  ]
 }
