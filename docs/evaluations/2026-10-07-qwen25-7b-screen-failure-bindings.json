@@ -1,0 +1,34 @@
+{
+  "processExitCode": 1,
+  "zeroCompletionRequests": true,
+  "scope": "Terminal setup failures, not successful-inference acceptance",
+  "initial": {
+    "scope": "Before first browser load or inference of verified official model; original four cases and served artifacts frozen",
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen25-7b-artifact.json": "f7bda4811cbbc814880448616448ca0ffca6b7f16f1afb01ceada627355e37cf",
+      "docs/evaluations/2026-10-07-qwen25-7b-download.json": "53dc4c9d4a316509267c1ffcf53320375028a494014f10eba2785e8d0b56ea64",
+      "docs/evaluations/2026-10-07-qwen25-7b-screen-native.mjs": "a135355763a56f7acccda00202668ef69129c146c23f04e7d4022f3ae315e68f",
+      "docs/evaluations/2026-10-07-qwen25-7b-screen-protocol.md": "732282d08834e698aea930f6d4e2279462d85d3f5e33989a075a81dac36178b5",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+      "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+      "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    }
+  },
+  "afterSHA256": {
+    "docs/evaluations/2026-10-07-qwen25-7b-artifact.json": "f7bda4811cbbc814880448616448ca0ffca6b7f16f1afb01ceada627355e37cf",
+    "docs/evaluations/2026-10-07-qwen25-7b-download.json": "53dc4c9d4a316509267c1ffcf53320375028a494014f10eba2785e8d0b56ea64",
+    "docs/evaluations/2026-10-07-qwen25-7b-screen-native.mjs": "a135355763a56f7acccda00202668ef69129c146c23f04e7d4022f3ae315e68f",
+    "docs/evaluations/2026-10-07-qwen25-7b-screen-protocol.md": "732282d08834e698aea930f6d4e2279462d85d3f5e33989a075a81dac36178b5",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+    "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+    "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen25-7b-screen-native.json": "67b67df2634a493b2f391518636f0e10bef42c11575e19bd6b95a54c3f55922c",
+    "2026-10-07-qwen25-7b-screen-analysis.md": "5e13ce28b4071863cd95eacc835af0760ccdc4b9495f7f986a06b2cdec46f722",
+    "2026-10-07-qwen25-7b-screen-native.mjs": "a135355763a56f7acccda00202668ef69129c146c23f04e7d4022f3ae315e68f",
+    "2026-10-07-qwen25-7b-screen-protocol.md": "732282d08834e698aea930f6d4e2279462d85d3f5e33989a075a81dac36178b5"
+  }
+}
