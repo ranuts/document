@@ -1,0 +1,12 @@
+{
+  "scope": "Independent saved OOXML CRC/shared-string reference inspection",
+  "bytes": 8497,
+  "sha256": "52662afc5a3254a3e0a1db90faa246b3d9e0a560ceaf46ed69f1a12018baadf5",
+  "sharedStringCells": {
+    "A1": "Item",
+    "B1": "Amount",
+    "C1": "KEEP_OUTSIDE",
+    "A2": "Sensor",
+    "B2": "COMPOUND_XLSX_20261007"
+  }
+}
