@@ -1,0 +1,37 @@
+{
+  "processExitCode": 1,
+  "expectedFailure": "Pinned library fetch not observed",
+  "initialBindings": {
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen25-7b-policy-placement-native.mjs": "c4a37babec95f76e63f7808abc7763b4c39f56248c38b8315c59a27589b0506c",
+      "docs/evaluations/2026-10-07-qwen25-7b-policy-placement-requests.json": "00a19424e81e5814437bc9d441f5fbe950c928451910696ecd27902f73835290",
+      "docs/evaluations/2026-10-07-qwen25-7b-policy-placement-protocol.md": "ef82bb85c953f9d0e741b2b1895e2f3e6c6a58428526409a722540e95cc79a59",
+      "docs/evaluations/2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a",
+      "docs/evaluations/2026-10-07-qwen25-7b-gpu-native.json": "a325a928b9d9de406956b39d70dac8762d66a8afaa654c2d15108d50e19e4cf0",
+      "dist/sw.js": "c8d5ecf60bc37ce13561e652ec626967143a70d9df14ba9b8b5a319be6425bd9",
+      "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  },
+  "afterSHA256": {
+    "docs/evaluations/2026-10-07-qwen25-7b-policy-placement-native.mjs": "c4a37babec95f76e63f7808abc7763b4c39f56248c38b8315c59a27589b0506c",
+    "docs/evaluations/2026-10-07-qwen25-7b-policy-placement-requests.json": "00a19424e81e5814437bc9d441f5fbe950c928451910696ecd27902f73835290",
+    "docs/evaluations/2026-10-07-qwen25-7b-policy-placement-protocol.md": "ef82bb85c953f9d0e741b2b1895e2f3e6c6a58428526409a722540e95cc79a59",
+    "docs/evaluations/2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a",
+    "docs/evaluations/2026-10-07-qwen25-7b-gpu-native.json": "a325a928b9d9de406956b39d70dac8762d66a8afaa654c2d15108d50e19e4cf0",
+    "dist/sw.js": "c8d5ecf60bc37ce13561e652ec626967143a70d9df14ba9b8b5a319be6425bd9",
+    "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+    "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen25-7b-policy-placement-native.json": "db1bd87025337ad87a3b6bc0b578f3eb6a2f27a338e083f9e455d462b8577413",
+    "2026-10-07-qwen25-7b-policy-placement-requests.json": "00a19424e81e5814437bc9d441f5fbe950c928451910696ecd27902f73835290",
+    "2026-10-07-qwen25-7b-policy-placement-analysis.md": "dd2f78ae9cfe50d0417e39a8db3321cb5cee1d69248cecbe9ea60fb9958390dd",
+    "2026-10-07-qwen25-7b-policy-placement-native.mjs": "c4a37babec95f76e63f7808abc7763b4c39f56248c38b8315c59a27589b0506c",
+    "2026-10-07-qwen25-7b-policy-placement-protocol.md": "ef82bb85c953f9d0e741b2b1895e2f3e6c6a58428526409a722540e95cc79a59",
+    "2026-10-07-qwen25-7b-policy-placement-review.json": "35678777021c06f83a8f11c605e4e4613351542200e011b4eaeca1a8c0a29644",
+    "verify-qwen25-7b-policy-placement.py": "01924626b5639a4be94ebb59c60d6733c60c0cc3e29e21b4a52538322addc0d9",
+    "2026-10-07-qwen25-7b-library-cache-probe.mjs": "51fbfd3ad08b7042276a1f77917fd33c0aa3c2667efe8c6007d71c07815d0aba",
+    "2026-10-07-qwen25-7b-library-cache-probe.json": "f411ec0f72380fbf8740ccd9dfc6eda63d4ad423466928ac22df4562ec7cb074"
+  }
+}

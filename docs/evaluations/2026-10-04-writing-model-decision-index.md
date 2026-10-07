@@ -135,3 +135,8 @@ Pinned Qwen2.5-7B MLC loaded on the actual Apple GPU and completed four frozen S
 ### Completed native larger GPU development screen (2026-10-07)
 
 Qwen2.5-7B completed all 21 known-source original-product Word writing tasks. Bounded manual review yields 9 narrow passes, 11 failures and 1 uncertain result; exact native write/history and actual Apple GPU/runtime checks pass independently. Missing actors/current status, changed recipients/actions/objects, wrong language/date format and target-language issues prevent adoption. See [analysis](2026-10-07-qwen25-7b-gpu-native-analysis.md), [review](2026-10-07-qwen25-7b-gpu-native-review.json), [raw receipt](2026-10-07-qwen25-7b-gpu-native.json) and [bindings](2026-10-07-qwen25-7b-gpu-native-bindings.json). This screen is not unused-source transfer, native-speaker or full device/offline acceptance.
+
+
+### Larger GPU original-policy placement follow-up (2026-10-07)
+
+Twelve SDK replies completed across six frozen known-source pairs, but the overall process exited 1 because no fresh pinned-library network fetch was observed; the successful-screen verifier correctly rejects that receipt. A separate post-run cache probe found the declared exact WASM bytes at the pinned URL. All six product raw bodies reproduce the prior native screen. All six policy-system candidates still fail bounded task checks; Korean language/recipient improvements coexist with changed date formatting. This is no prompt adoption or untouched/native acceptance. See [analysis](2026-10-07-qwen25-7b-policy-placement-analysis.md), [review](2026-10-07-qwen25-7b-policy-placement-review.json) and [failed-gate bindings](2026-10-07-qwen25-7b-policy-placement-bindings.json).

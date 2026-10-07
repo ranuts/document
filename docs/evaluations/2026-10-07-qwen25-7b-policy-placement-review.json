@@ -1,0 +1,95 @@
+{
+  "scope": "Twelve actual SDK replies on six selected known failures; terminal overall harness gate failed. All candidate rows fail bounded task review; no native/transfer/full acceptance.",
+  "reviews": [
+    {
+      "id": "zh-CN-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Summary still consists of two Chinese sentences; examined facts remain, but one-sentence instruction fails.",
+      "outputCanonicalSHA256": "24cf08155f4bd953cd7aec6eba93db4745f151955a72f9c1a6278fa5435a69b3",
+      "rawContentMatchesPriorNative": true
+    },
+    {
+      "id": "zh-CN-summarize",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Summary still consists of two Chinese sentences; examined facts remain, but one-sentence instruction fails.",
+      "outputCanonicalSHA256": "e317dc3dfdd17c68fdf2dd4111d4377ddcd557417a72d2dad16807026fbc2f5e"
+    },
+    {
+      "id": "zh-CN-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Exact ISO date still reformatted as March 12, 2049; exact-literal instruction fails.",
+      "outputCanonicalSHA256": "a00168707cd7af085fdb7f925e9909df6aa9e7206a5a18e943e967923d438347",
+      "rawContentMatchesPriorNative": true
+    },
+    {
+      "id": "zh-CN-translate",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Exact ISO date still reformatted as March 12, 2049; exact-literal instruction fails.",
+      "outputCanonicalSHA256": "438099866e26ef428c216939d0748f53963253c15669a1ec6a0f206f920983f6"
+    },
+    {
+      "id": "en-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Japanese still adds Uma-only actor exclusivity and makes Oliver the payment recipient, changing only-after and confirmation roles.",
+      "outputCanonicalSHA256": "9afc5c02cc5646b4bcdb21c38eb6530f26a2bd7486f5b19dda8cbe544a8defb3",
+      "rawContentMatchesPriorNative": true
+    },
+    {
+      "id": "en-translate",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Japanese still adds Uma-only actor exclusivity and makes Oliver the payment recipient, changing only-after and confirmation roles.",
+      "outputCanonicalSHA256": "b4ab624742d47b4ca126adecbe20b6adba922fa7318fb96db3f9ea4dffa9c4c4"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Product output is English with reformatted date and unsupported delivery-to-Hana; policy-system returns Korean without that added recipient, but still reformats ISO date as 2045년 12월 3일 and fails exact-format requirement.",
+      "outputCanonicalSHA256": "8ad18f4cd73f58d55d2f6a915d04f6002802cd568f7960970976f37ab80e7436",
+      "rawContentMatchesPriorNative": true
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Product output is English with reformatted date and unsupported delivery-to-Hana; policy-system returns Korean without that added recipient, but still reformats ISO date as 2045년 12월 3일 and fails exact-format requirement.",
+      "outputCanonicalSHA256": "f3601c708bedca43f375155a2fcc79ea08f48a9b2923868ff1a9e9ef2057efcd"
+    },
+    {
+      "id": "ko-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Deposit remains Kautionserlass (deposit waiver), with Mietvertrag contract heading rather than record; no object/condition repair.",
+      "outputCanonicalSHA256": "1b1bec5ddf60dae4b892947d9ea06d45d07811726260f315f870f1b88b2a2c35",
+      "rawContentMatchesPriorNative": true
+    },
+    {
+      "id": "ko-translate",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Deposit remains Kautionserlass (deposit waiver), with Mietvertrag contract heading rather than record; no object/condition repair.",
+      "outputCanonicalSHA256": "e758a089cb934e19c28eaa121c11ed8c11e82a1e5c833faa6a903b43551eca89"
+    },
+    {
+      "id": "de-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Keyboards remain keyboard-type keys and placing order remains cancelling order; German heading is untranslated.",
+      "outputCanonicalSHA256": "7c3a25d5cac29269b921755543deaee7633df744bda0d869bc77b4e8b93c5886",
+      "rawContentMatchesPriorNative": true
+    },
+    {
+      "id": "de-translate",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Keyboards remain keyboard-type keys and placing order remains cancelling order; German heading is untranslated.",
+      "outputCanonicalSHA256": "812c1e8e373d81d0f83921eb4653f0d8c9fa30b6228425d1583aed2d548a7e67"
+    }
+  ]
+}
