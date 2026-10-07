@@ -1,0 +1,11 @@
+{
+  "scope": "Synthetic authenticated-directory request diagnostic; configuration request deliberately rejected, no weights/inference or full privacy acceptance",
+  "requests": [
+    "https://example.invalid/models/resolve/main/mlc-chat-config.json"
+  ],
+  "result": {
+    "error": "Error: Failed to store https://example.invalid/models/resolve/main/mlc-chat-config.json with error: Error: Network response was not ok"
+  },
+  "finished": true,
+  "browserClosed": true
+}
