@@ -1,0 +1,8 @@
+{
+  "scope": "Failed diagnostic launch; no inference or semantic verdict",
+  "process_exit_code": 1,
+  "driver_sha256": "9de66e878bcc5cd20c24cadb94ac97887d3a0bb124deb671668c4893798ecdb9",
+  "snapshot_present": false,
+  "log_bytes": 0,
+  "cause": "Undetermined; process and browser no longer present. No runtime snapshot was persisted."
+}
