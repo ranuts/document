@@ -1,0 +1,30 @@
+{
+  "scope": "Default GPU idle loss, no automatic fallback, explicit retry with navigator.gpu hidden and real default CPU inference; simulated capability loss, not physical device acceptance",
+  "workerBaseSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+  "workerDiagnosticSHA256": "64412fd9f4ba2b80770fb6fb424183d9c4ddfe981445b637ba77e97cce12be40",
+  "errors": [],
+  "editorScripts": [
+    "",
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-BRhW6Vt0.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "currentEditor": "editor-BRhW6Vt0.js",
+  "loadedNote": "Model loaded — you can start chatting.",
+  "loadedStatus": "WebGPU · Qwen3 · 1.7B",
+  "documentBefore": "\r\n",
+  "workersBeforeLoss": [
+    "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+  ],
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded.",
+  "failureSnapshot": {
+    "fault": {
+      "messages": [],
+      "requests": []
+    },
+    "note": "Model loaded — you can start chatting.",
+    "status": "WebGPU · Qwen3 · 1.7B",
+    "messages": []
+  },
+  "contextClosed": true
+}
