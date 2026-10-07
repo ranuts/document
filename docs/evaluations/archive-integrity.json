@@ -3783,6 +3783,14 @@
       "sha256": "43b723ef357702f4ed96fb2f050976c619159963f928ba4be85282d34ad91a23"
     },
     {
+      "path": "docs/evaluations/2026-10-07-cpu-memory-capacity-build-protocol.json",
+      "sha256": "4a887d12fe86349959a09f7a11d25638ea5f6fc2853fec78486c3a3683cf9229"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-cpu-memory-capacity-build.mjs",
+      "sha256": "3d601fd98e970c86e767325bc8929fde762dbace95e510e74991201d0c0d5436"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-cpu-offline-word-chain.json",
       "sha256": "503be632afb58b02fdba46547fd1516fb1c52d80d66b254e6f7ebee2599c00e7"
     },
@@ -3997,6 +4005,18 @@
     {
       "path": "docs/evaluations/2026-10-07-hymt2-7b-cpu-translation-protocol.json",
       "sha256": "453a806e154ff9fdf675f238061a2d67534079daef5acd46dad30565b9ac2798"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-control-native.json",
+      "sha256": "f7218d780ff1a3348374fa21490d42f3582b406344adb95a14bf7f209a1ac31d"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-control-native.mjs",
+      "sha256": "708e717e77d7496b92c9710c6b33be8997b7e201f49aa9c65ffa151d0994e84a"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-control-protocol.json",
+      "sha256": "d0cb114e294cb59eeb3be098bfbf191701c79324ab2fd6fb240a2b2f0e78164d"
     },
     {
       "path": "docs/evaluations/2026-10-07-hymt2-cpu-translation-native.json",
