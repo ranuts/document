@@ -1,0 +1,23 @@
+{
+  "scope": "Read-only OPFS cache metadata before model load in a distinct persistent profile",
+  "profile": ".scratch/webkit27-opfs-observation-profile-20261007",
+  "profileExistedBefore": false,
+  "version": "27.2",
+  "beforeModel": {
+    "cacheAvailable": true,
+    "files": [
+      {
+        "nameSha256": "aeb363d0ea5c5b2078a436a1f86afa3d50d3018ca1acd21f87a801c04291029c",
+        "bytes": 323,
+        "lastModified": 1790927581000
+      },
+      {
+        "nameSha256": "27b865bf9766272116851d4828713f769ce1b548f2e09bc4005245a2c4f9fa3c",
+        "bytes": 484220320,
+        "lastModified": 1790927581000
+      }
+    ]
+  },
+  "finished": true,
+  "closed": true
+}
