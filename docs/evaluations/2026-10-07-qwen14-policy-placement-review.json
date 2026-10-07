@@ -1,0 +1,33 @@
+{
+  "receipt_sha256": "fbbf800f3a9382b7aa347b4205aa82f59321b21102d58235b31d88eaee5e502d",
+  "candidate_promoted": false,
+  "decisions": [
+    {
+      "id": "zh-CN-summarize",
+      "product": "fail",
+      "policy-system": "fail",
+      "reason": "Identical output omits delivery-team permission actor."
+    },
+    {
+      "id": "ja-rewrite",
+      "product": "fail",
+      "policy-system": "fail",
+      "reason": "Identical output changes ISO date to Japanese format."
+    },
+    {
+      "id": "es-translate",
+      "product": "fail",
+      "policy-system": "narrow-pass",
+      "reason": "System-policy output fixes two Spanish viaje occurrences to Portuguese viagem while preserving checked names, ISO date, quantity, proposal negative, booking actor, authorization prerequisite, current unauthorized trip and prepared itinerary. Known-source local improvement only."
+    },
+    {
+      "id": "pt-summarize",
+      "product": "fail",
+      "policy-system": "fail",
+      "reason": "Both omit archive-team actor and unapproved proposal and assert future removal rather than conditional permission. Candidate also phrases backup validation as not performed rather than explicitly unvalidated copy."
+    }
+  ],
+  "four_baselines_exact": true,
+  "process_exit_code": 1,
+  "library_fetch_gate_passed": false
+}

@@ -162,3 +162,8 @@ This is an interim development result, not a completed seven-language screen, un
 ### Completed bounded 14B native screen (2026-10-07)
 
 The above interim counts are historical. The [completed screen analysis](2026-10-07-qwen14-bounded-gpu-native-analysis.md) and [hash-bound review](2026-10-07-qwen14-bounded-gpu-native-review.json) cover all 21 tasks: 7 narrow passes, 12 failures and 2 uncertain outputs. Process exit 0 and closed context are confirmed; document history checks pass separately. No candidate/default is adopted, and unused-source, broader editor/device/offline acceptance remains open.
+
+
+### 14B original-policy placement contrast (2026-10-07)
+
+[Eight completed SDK replies](2026-10-07-qwen14-policy-placement-analysis.md) reproduce all four native product baseline raw bodies exactly. System placement fixes one Portuguese translation locally but retains Chinese actor loss, Japanese date-format changes and Portuguese summary omissions/modality change. Candidate outcomes are one narrow pass and three failures. Process exit 1 reflects the unobserved pinned-library fetch gate; no overall successful-runtime or candidate-adoption claim follows.
