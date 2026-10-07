@@ -1,0 +1,74 @@
+{
+  "scope": "Exploratory warmed Chromium offline compound read-sort-sum request; passed means observation completed, not requested workflow acceptance",
+  "errors": [],
+  "failures": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "seedProcessClosed": true,
+  "offline": true,
+  "homeFromSW": true,
+  "before": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE"
+    ],
+    [
+      "Sensor",
+      "18",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      ""
+    ],
+    [
+      "Monitor",
+      "12",
+      ""
+    ]
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "request": "Read A1:B4, then sort A1:B4 by column B ascending while preserving the header, then sum B2:B4 into D2.",
+  "activities": [],
+  "replies": [],
+  "previewCount": 0,
+  "after": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE"
+    ],
+    [
+      "Sensor",
+      "18",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      ""
+    ],
+    [
+      "Monitor",
+      "12",
+      ""
+    ]
+  ],
+  "chatErrors": [
+    "No executable operation was selected. Clarify the request or try another model.Restore request"
+  ],
+  "completedRequestedSequence": false,
+  "documentUnchanged": true,
+  "passed": true,
+  "closed": true
+}

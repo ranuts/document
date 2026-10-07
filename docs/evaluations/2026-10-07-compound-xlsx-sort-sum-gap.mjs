@@ -1,0 +1,34 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+const r={scope:'warmed desktop Chromium, browser offline emulation',errors:[],failures:[]};let c;
+try {
+ c=await chromium.launchPersistentContext('.scratch/default-cpu-process-profile-20261005',{channel:'chromium',serviceWorkers:'allow',viewport:{width:1280,height:900}});
+ for(const p of c.pages())await p.close();
+ const seed=await c.newPage();await seed.goto('http://127.0.0.1:5193/');await seed.evaluate(async()=>{await navigator.serviceWorker.ready;});
+ await seed.goto('http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=en');
+ await seed.waitForFunction(()=>{const a=document.querySelector('#app iframe')?.contentWindow?.Asc?.editor;return a?.isDocumentLoadComplete&&a?.isLoadFullApi;},null,{timeout:90000});
+ await seed.frameLocator('#app iframe').locator('.agent-sidebar-entry').click();
+ await seed.waitForFunction(()=>/Model loaded/.test(document.querySelector('.agent-panel-note')?.textContent??''),null,{timeout:180000});
+ r.seedEngine=await seed.locator('.agent-model-status').textContent();await c.close();r.seedProcessClosed=true;
+ c=await chromium.launchPersistentContext('.scratch/default-cpu-process-profile-20261005',{channel:'chromium',serviceWorkers:'allow',viewport:{width:1280,height:900}});
+ for(const p of c.pages())await p.close();await c.setOffline(true);r.offline=true;
+ const p=await c.newPage();p.on('pageerror',e=>r.errors.push(e.message));p.on('requestfailed',q=>r.failures.push({url:q.url(),error:q.failure()?.errorText}));
+ const response=await p.goto('http://127.0.0.1:5193/');r.homeFromSW=response.fromServiceWorker();
+ await p.goto('http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=en');
+ await p.waitForFunction(()=>{const a=document.querySelector('#app iframe')?.contentWindow?.Asc?.editor;return a?.isDocumentLoadComplete&&a?.isLoadFullApi;},null,{timeout:90000});
+ await p.evaluate(()=>{const a=document.querySelector('#app iframe').contentWindow.Asc.editor; for(const [cell,value] of [['A1','Item'],['B1','Amount'],['A2','Sensor'],['B2','18'],['A3','Camera'],['B3','7'],['A4','Monitor'],['B4','12'],['C1','KEEP_OUTSIDE']]){a.asc_findCell(cell);a.pluginMethod_PasteText(value);}});
+ const snapshot=()=>p.evaluate(()=>{const m=document.querySelector('#app iframe').contentWindow.Asc.editor.wb.getWorksheet().model;return [0,1,2,3].map(r=>[0,1,2].map(c=>m.getRange3(r,c,r,c).getValue()));});
+ r.before=await snapshot();
+ await p.frameLocator('#app iframe').locator('.agent-sidebar-entry').click();
+ await p.waitForFunction(()=>/Model loaded/.test(document.querySelector('.agent-panel-note')?.textContent??''),null,{timeout:180000});
+ r.engine=await p.locator('.agent-model-status').textContent();
+ await p.locator('.agent-writing-task').selectOption('tools');
+ await p.locator('.cui-input').fill('Read A1:B4, then sort A1:B4 by column B ascending while preserving the header, then sum B2:B4 into D2.');await p.locator('.cui-input').press('Enter');
+ await p.waitForFunction(()=>!document.querySelector('.cui-input').disabled,null,{timeout:180000});
+ r.request='Read A1:B4, then sort A1:B4 by column B ascending while preserving the header, then sum B2:B4 into D2.';r.activities=await p.locator('.cui-activity').allTextContents();r.replies=await p.locator('.cui-msg-agent').allTextContents();r.previewCount=await p.locator('.agent-plan-preview').count();r.after=await snapshot();r.chatErrors=await p.locator('.cui-msg-error').allTextContents();
+ r.completedRequestedSequence=r.after[1][0]==='Camera'&&r.after[1][1]==='7'&&r.after[2][0]==='Monitor'&&r.after[3][0]==='Sensor';
+ r.documentUnchanged=JSON.stringify(r.before)===JSON.stringify(r.after);
+ r.passed=r.homeFromSW&&!r.errors.length&&r.previewCount===0;
+ r.scope='Exploratory warmed Chromium offline compound read-sort-sum request; passed means observation completed, not requested workflow acceptance';
+
+}catch(e){r.error=String(e);r.passed=false;}finally{if(c)await c.close();r.closed=true;await fs.writeFile('.scratch/2026-10-07-compound-xlsx-sort-sum-gap.json',JSON.stringify(r,null,2));console.log(JSON.stringify(r));}if(!r.passed)process.exitCode=1;
