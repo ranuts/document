@@ -132,5 +132,28 @@
       "bytes": 305992,
       "sha256": "a6aab4f3383319fd5fc2ca1c14d773cd4866db1fe6f25d9250246626886907c0"
     }
+  ],
+  "mlc_native_cmake_configure_exit": 0,
+  "mlc_native_build": "started, no completion claim",
+  "wasm_link_retry": "make EMCC=em++; still running at observation",
+  "wasm_link_retry_warnings": [
+    "undefined symbol: TVMFFIWasmFunctionDeleter",
+    "undefined symbol: TVMFFIWasmSafeCall"
+  ],
+  "pinned_model_configs": [
+    {
+      "model": "Qwen2.5-7B-Instruct-q4f16_1-MLC",
+      "revision": "691c5f2512745eeae9607266e7df43e67339f403",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-7B-Instruct-q4f16_1-MLC/resolve/691c5f2512745eeae9607266e7df43e67339f403/mlc-chat-config.json",
+      "sha256": "5970017bb74d1edb6b5c014813f0c172033c999b628751c4c22e8f17f8cc84c0",
+      "bytes": 2046
+    },
+    {
+      "model": "Qwen2.5-14B-Instruct-q4f16_1-MLC",
+      "revision": "5afd9575d32a566251616015e4ddfccf8bfd0366",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-14B-Instruct-q4f16_1-MLC/resolve/5afd9575d32a566251616015e4ddfccf8bfd0366/mlc-chat-config.json",
+      "sha256": "f8bae949cf112afebb91c9f911b0722c0973a04e9962bc656c05e565775b59a2",
+      "bytes": 2046
+    }
   ]
 }
