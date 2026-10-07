@@ -1,0 +1,107 @@
+{
+  "scope": "Partial manual review of 17 observed rows; no native-speaker certification or overall model acceptance",
+  "reviews": [
+    {
+      "id": "zh-CN-rewrite",
+      "verdict": "fail",
+      "reason": "The ISO date is reformatted into Chinese year/month/day notation; source remains unchanged after numeric/date guard rejection. Other checked facts remain, but the fixed date-format requirement is not met.",
+      "rowCanonicalSHA256": "2f5065a0f92f81b6f5c222c85e4cbcbba3e00828cc8483b54e3a9c1b135d52d0"
+    },
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "fail",
+      "reason": "English output violates the requested source language and omits the delivery team actor. The application rejects it as not shorter; preservation by refusal is not task completion.",
+      "rowCanonicalSHA256": "605b782f009a91212c415bff43c31b80a9680d785b182ab943550b4cc4c6f556"
+    },
+    {
+      "id": "zh-CN-translate",
+      "verdict": "narrow-pass",
+      "reason": "English translation retains checked names, ISO date, quantity, proposal nonapproval, delivery-team only-after permission, Pavel Novak signing inspection report, current unsigned report and printed labels.",
+      "rowCanonicalSHA256": "78335780ef9a4753daf0aa0e52182bd9172bbf87d0e26009b30235404381b20c"
+    },
+    {
+      "id": "en-rewrite",
+      "verdict": "fail",
+      "reason": "The ISO date contains a duplicate hyphen (2047-11--08). The application rejects it and retains the original source.",
+      "rowCanonicalSHA256": "1c90c72c52a7d6ffc7d952eb09be0616521ad2da191daada84bad43f429db92c"
+    },
+    {
+      "id": "en-summarize",
+      "verdict": "narrow-pass",
+      "reason": "One shorter English sentence retains all three names, ISO date, quantity, unapproved proposal, Uma Rao shipping only after Oliver Zhou confirms receipt of payment and current nonconfirmation; omits catalogue as requested.",
+      "rowCanonicalSHA256": "504469f6793a54ac052e1174795a10810716c0dfd0ff4762a647027323c4d0b9"
+    },
+    {
+      "id": "en-translate",
+      "verdict": "fail",
+      "reason": "Japanese output changes all person-name spellings into katakana despite the explicit unchanged-name instruction. It is applied by the application, but native application/history is not semantic acceptance.",
+      "rowCanonicalSHA256": "05c8ae78e2d2e5fa6f88262a6b631e322c5ec0438a94e53ecb0af0fc2d485919"
+    },
+    {
+      "id": "ja-rewrite",
+      "verdict": "fail",
+      "reason": "Japanese rewrite changes the required ISO date format and repeats the backup prerequisite phrasing. The numeric/date guard refuses it; the original source remains unchanged. No opposite factual claim is inferred from the redundant clause.",
+      "rowCanonicalSHA256": "d1ccc446c7e3137ccd959dd84f6cf2b49c5f0b0e22ff73596ca5599cb849c230"
+    },
+    {
+      "id": "ja-summarize",
+      "verdict": "fail",
+      "reason": "Japanese summary retains the checked names, ISO date, quantity, unapproved proposal, operating-team permission after Ken Sato validates backup and current unvalidated backup. It omits labels as requested but uses three sentences rather than the explicitly requested single sentence. Native application/history does not satisfy that task constraint.",
+      "rowCanonicalSHA256": "c1bc6fc98df6cc365939227fc963e09ac3d0605520663da3351004763e4c9933"
+    },
+    {
+      "id": "ja-translate",
+      "verdict": "fail",
+      "reason": "Korean translation changes ISO date to 2046-04--19 and omits Ken Sato, the required prerequisite actor. Date guard refuses the output and preserves source. No opposite actor assignment is inferred solely from the missing name.",
+      "rowCanonicalSHA256": "175a851f64b352a95c7a25b342e9d4d728bd542673718f3ef07f118ea1009e64"
+    },
+    {
+      "id": "ko-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Korean rewrite changes wording while retaining checked names, ISO date, quantity, unapproved proposal, rental-team delivery permission only after Hana Lee confirms deposit, current unconfirmed deposit and printed notices. Native output/history checks pass; no native-speaker certification is claimed.",
+      "rowCanonicalSHA256": "bc01409bd41e8c735c47c7187486c4b5253e9f7fd06650938932afc7f473c9a0"
+    },
+    {
+      "id": "ko-summarize",
+      "verdict": "fail",
+      "reason": "English output uses two sentences despite the requested single shorter Korean sentence. Checked actors, date, quantity and negative prerequisites remain; the length guard refuses it. Refusal is not completion.",
+      "rowCanonicalSHA256": "5b22157fab498ca9be1d3bd0ea50d73747654959008d3836c416155dea52dcd0"
+    },
+    {
+      "id": "ko-translate",
+      "verdict": "fail",
+      "reason": "German translation reformats the ISO date to 03.12.2045. The numeric/date guard rejects it and leaves the source unchanged; other checked facts do not repair this fixed-format failure.",
+      "rowCanonicalSHA256": "b53651516a7e3a67ba4fb7790eafb27e577f75cd78b6a1af1076c8fa1e40674a"
+    },
+    {
+      "id": "de-rewrite",
+      "verdict": "fail",
+      "reason": "Applied German rewrite introduces the ungrammatical main-clause verb vorschlug in place of schlug ... vor. Checked facts remain, but improving grammar is not achieved.",
+      "rowCanonicalSHA256": "6f5f45d680fa1d7b95f083988f230a9dad6d33e6a574d315db98f27a25a5026d"
+    },
+    {
+      "id": "de-summarize",
+      "verdict": "fail",
+      "reason": "Applied shorter German summary retains checked names, ISO date, quantity, proposal nonapproval, ordering only after Mila Ortiz signs and current unsigned status. It uses two sentences instead of the requested one.",
+      "rowCanonicalSHA256": "62e3b8e492408ac0a7791161b48aa892f23b5c62afa0d17d1bd34875ed637d15"
+    },
+    {
+      "id": "de-translate",
+      "verdict": "fail",
+      "reason": "Spanish output reformats the ISO date and changes placing an order to delivering the order (entregar el pedido). The numeric/date guard rejects it; source preservation is not translation completion.",
+      "rowCanonicalSHA256": "8e11b8e5953b97d3e3a47f7cb4096be42353c4dd825efdfa4020d27638a81ff0"
+    },
+    {
+      "id": "es-rewrite",
+      "verdict": "fail",
+      "reason": "Applied rewrite switches Spanish source to English despite source-language requirement. Checked factual fields remain, but the application history passing does not establish writing-task correctness.",
+      "rowCanonicalSHA256": "6f4d19b4d4f06b076b3445513ab4e7f9f4189dfc76da28ea55273a4ce4382738"
+    },
+    {
+      "id": "es-summarize",
+      "verdict": "narrow-pass",
+      "reason": "One shorter Spanish sentence retains all checked names, ISO date, quantity, proposal nonapproval, Omar Mendez booking only after Luz Ibarra authorizes travel and current unauthorized status; omits itinerary as requested. Native application/history checks pass. No native-speaker certification or general accuracy claim.",
+      "rowCanonicalSHA256": "8253c361accb24ff233cbdb3a2b902683bd74230135693707778022fca4a189f"
+    }
+  ]
+}
