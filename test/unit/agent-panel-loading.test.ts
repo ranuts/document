@@ -306,9 +306,6 @@ it('offers cancellation for WebLLM loading and rejects old progress and late com
 it('requires selection before starting a writing task', async () => {
   state.ready = true;
   const panel = createAgentPanel();
-  const editTask = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
-  editTask.value = 'edit';
-  editTask.dispatchEvent(new Event('change'));
   const task = panel.querySelector('.agent-writing-task') as HTMLElement & { value: string };
   task.value = 'rewrite';
   task.dispatchEvent(new Event('change'));
@@ -325,9 +322,6 @@ it('routes translation with the captured source and explicit language', async ()
   state.source = 'Budget 1250 EUR';
   state.writing.mockResolvedValue('预算 1250 EUR');
   const panel = createAgentPanel();
-  const editTask = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
-  editTask.value = 'edit';
-  editTask.dispatchEvent(new Event('change'));
   const task = panel.querySelector('.agent-writing-task') as HTMLElement & { value: string };
   task.value = 'translate';
   task.dispatchEvent(new Event('change'));
@@ -1091,4 +1085,32 @@ it('ignores an unavailable notification from a replaced model', async () => {
   previous?.();
   expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded'));
   expect(panel.querySelector('.agent-model-status')?.textContent).toBe(status);
+});
+
+it('ignores old loading progress after switching to a different task model', async () => {
+  localStorage.clear();
+  localStorage.setItem(
+    'agent-task-models',
+    JSON.stringify({ version: 1, tasks: { rewrite: { backend: 'webllm', model: 'Qwen3-4B-q4f16_1-MLC' } } }),
+  );
+  let complete: () => void = () => {};
+  state.preload.mockImplementationOnce(
+    () =>
+      new Promise<void>((resolve) => {
+        complete = resolve;
+      }),
+  );
+  const panel = createAgentPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-load')?.hasAttribute('disabled')).toBe(true));
+  const oldProgress = state.progress[0];
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  oldProgress({ text: 'Stale model progress', progress: 0.9 });
+  complete();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(panel.querySelector('.agent-panel-note')?.textContent).not.toBe('Stale model progress');
+  expect(panel.querySelector('.agent-panel-note')?.textContent).not.toBe(t('agentModelLoaded'));
+  expect(panel.querySelector('.agent-panel-load')?.hasAttribute('disabled')).toBe(false);
+  localStorage.removeItem('agent-task-models');
 });

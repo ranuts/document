@@ -33,3 +33,11 @@ export { GeminiProvider, type GeminiProviderOptions } from './gemini';
 export { WllamaProvider, type WllamaProviderOptions } from './wllama';
 export { normalizeGenerationOptions, type GenerationOptions, type GenerationSettings } from './generation';
 export { LocalInferenceProvider, detectGPUAdapter, DEFAULT_CPU_MODEL_URL, type LocalInferenceOptions } from './local';
+export {
+  resolveTaskModel,
+  type ModelTask,
+  type TaskModelBinding,
+  type TaskModelRequest,
+  type TaskModelPreferences,
+  type ResolvedTaskModel,
+} from './task-model';

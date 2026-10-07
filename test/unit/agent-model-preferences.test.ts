@@ -1,6 +1,6 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { createAgentPanel } from '../../lib/agent-plugin/ui/panel';
-const state = vi.hoisted(() => ({ cpu: vi.fn(), source: '', auto: vi.fn() }));
+const state = vi.hoisted(() => ({ cpu: vi.fn(), source: '', model: '', auto: vi.fn() }));
 vi.mock('@ranuts/agent-core/llm/wllama', () => ({
   WllamaProvider: class {
     constructor(options: { modelUrl: string }) {
@@ -14,6 +14,9 @@ vi.mock('@ranuts/agent-core/llm/wllama', () => ({
 vi.mock('@ranuts/agent-core/llm/local', () => ({
   DEFAULT_CPU_MODEL_URL: '/default.gguf',
   LocalInferenceProvider: class {
+    constructor(options: { webllm: { model: string } }) {
+      state.model = options.webllm.model;
+    }
     preload = state.auto;
     dispose = async () => {};
     isReady = () => false;
@@ -70,4 +73,55 @@ it('keeps invalid remembered CPU URLs from starting a model load', () => {
   expect((panel.querySelector('.agent-panel-gguf-url') as HTMLElement & { value: string }).value).toBe('');
   expect(state.cpu).not.toHaveBeenCalled();
   expect(state.auto).not.toHaveBeenCalled();
+});
+
+it('persists a task preset without overwriting the global preset', () => {
+  localStorage.setItem('agent-local-preset', 'Qwen3-1.7B-q4f16_1-MLC');
+  const panel = createAgentPanel();
+  const task = panel.querySelector('.agent-writing-task') as HTMLSelectElement;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  const selected = panel.querySelector('.agent-task-model') as HTMLSelectElement;
+  expect(selected).not.toBeNull();
+  selected.value = 'Qwen3-4B-q4f16_1-MLC';
+  selected.dispatchEvent(new Event('change'));
+  expect(JSON.parse(localStorage.getItem('agent-task-models')!).tasks.rewrite).toEqual({
+    backend: 'webllm',
+    model: 'Qwen3-4B-q4f16_1-MLC',
+  });
+  expect(localStorage.getItem('agent-local-preset')).toBe('Qwen3-1.7B-q4f16_1-MLC');
+  task.value = 'chat';
+  task.dispatchEvent(new Event('change'));
+  expect(selected.value).toBe('');
+});
+it('loads the configured writing model and restores the default for chat', async () => {
+  localStorage.setItem(
+    'agent-task-models',
+    JSON.stringify({ version: 1, tasks: { rewrite: { backend: 'webllm', model: 'Qwen3-4B-q4f16_1-MLC' } } }),
+  );
+  const panel = createAgentPanel();
+  await vi.waitFor(() => expect(state.model).toBe('Qwen3-1.7B-q4f16_1-MLC'));
+  const task = panel.querySelector('.agent-writing-task') as HTMLSelectElement;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  panel.querySelector('.agent-panel-load')!.dispatchEvent(new Event('click'));
+  await vi.waitFor(() => expect(state.model).toBe('Qwen3-4B-q4f16_1-MLC'));
+  task.value = 'chat';
+  task.dispatchEvent(new Event('change'));
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  panel.querySelector('.agent-panel-load')!.dispatchEvent(new Event('click'));
+  await vi.waitFor(() => expect(state.model).toBe('Qwen3-1.7B-q4f16_1-MLC'));
+});
+
+it('keeps the global engine choice when a task-specific GPU model is selected', () => {
+  localStorage.setItem(
+    'agent-task-models',
+    JSON.stringify({ version: 1, tasks: { chat: { backend: 'webllm', model: 'Qwen3-4B-q4f16_1-MLC' } } }),
+  );
+  const panel = createAgentPanel();
+  const provider = panel.querySelector('.agent-panel-provider') as HTMLElement & { value: string };
+  provider.value = 'wllama';
+  provider.dispatchEvent(new Event('change'));
+  expect(localStorage.getItem('agent-panel-provider')).toBe('wllama');
 });

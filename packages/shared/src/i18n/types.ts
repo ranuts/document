@@ -107,6 +107,9 @@ export interface I18nMessages {
   agentTaskRewrite: string;
   agentTaskSummarize: string;
   agentTaskTranslate: string;
+  agentTaskModelLabel: string;
+  agentTaskModelInherit: string;
+  agentTaskModelExperimental: string;
   agentTaskLabel: string;
   agentTaskLanguage: string;
   agentPlanTitle: string;

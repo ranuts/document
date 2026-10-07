@@ -27,6 +27,8 @@ import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-cor
 import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
 import { resolveModelArtifactUrl } from '@ranuts/agent-core/llm/model-source';
+import { resolveTaskModel, type ModelTask } from '@ranuts/agent-core/llm/task-model';
+import { readTaskModelPreferences, writeTaskModelPreference } from './task-model-preferences';
 import { WllamaProvider } from '@ranuts/agent-core/llm/wllama';
 import {
   generateWriting,
@@ -303,11 +305,14 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   modelSourcesLabel.textContent = t('agentCustomModel');
   modelSources.append(modelSourcesLabel, localModelId, localModelUrl, localModelLib);
   modelSources.open = [localModelId, localModelUrl, localModelLib].some((input) => !!input.value.trim());
-  const localSource = () => ({
-    modelUrl: localModelUrl.value.trim() || undefined,
-    modelLibUrl: localModelLib.value.trim() || undefined,
-  });
-  const selectedLocalModel = () => localModelId.value.trim() || modelSelect.value;
+  const localSource = () =>
+    activeTaskModel().source !== 'default'
+      ? {}
+      : {
+          modelUrl: localModelUrl.value.trim() || undefined,
+          modelLibUrl: localModelLib.value.trim() || undefined,
+        };
+  const selectedLocalModel = () => activeTaskModel().binding.model;
 
   // Local: model picker + load button
   const modelSelect = ranSelect(
@@ -318,6 +323,8 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     })),
     DEFAULT_WEBLLM_MODEL,
   );
+  const presetIds = WEBLLM_MODELS.map((model) => model.id);
+  let taskPreferences = readTaskModelPreferences(localStorageGetItem('agent-task-models'), presetIds);
   const savedPreset = localStorageGetItem('agent-local-preset');
   if (WEBLLM_MODELS.some((model) => model.id === savedPreset)) modelSelect.value = savedPreset!;
   modelSelect.setAttribute('aria-label', t('agentModelLabel'));
@@ -454,6 +461,41 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   );
   languageSelect.setAttribute('aria-label', t('agentTaskLanguage'));
   languageSelect.hidden = true;
+  const taskRequest = () => ({
+    task: writingSelect.value as ModelTask,
+    ...(writingSelect.value === 'translate' ? { targetLanguage: languageSelect.value as WritingLanguage } : {}),
+  });
+  const activeTaskModel = () =>
+    resolveTaskModel(taskRequest(), taskPreferences, {
+      backend: 'webllm',
+      model: localModelId.value.trim() || modelSelect.value,
+    });
+  const taskModelLabel = document.createElement('label');
+  const taskModelTitle = document.createElement('span');
+  const taskModelPicker = compactSelect(
+    'agent-task-model',
+    [
+      { value: '', label: t('agentTaskModelInherit') },
+      ...WEBLLM_MODELS.map((model) => ({ value: model.id, label: model.label })),
+    ],
+    '',
+  );
+  const taskModelStatus = document.createElement('span');
+  taskModelStatus.setAttribute('role', 'status');
+  taskModelLabel.append(taskModelTitle, taskModelPicker, taskModelStatus);
+  settings.append(taskModelLabel);
+  const syncTaskModelPicker = () => {
+    const request = taskRequest();
+    taskModelPicker.value =
+      request.task === 'translate'
+        ? (taskPreferences.translations?.[request.targetLanguage!]?.model ?? '')
+        : (taskPreferences.tasks?.[request.task]?.model ?? '');
+    taskModelTitle.textContent = t('agentTaskModelLabel');
+    taskModelPicker.setAttribute('aria-label', t('agentTaskModelLabel'));
+    taskModelPicker.options[0].textContent = t('agentTaskModelInherit');
+    taskModelStatus.textContent = t('agentTaskModelExperimental');
+  };
+  syncTaskModelPicker();
   chat.actionsEl.append(writingSelect, languageSelect, quoteBtn);
   writingSelect.addEventListener('change', () => {
     proposalMode = writingSelect.value !== 'chat';
@@ -548,7 +590,8 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   for (const turn of historyToTurns(historyStorage.load())) chat.append(turn);
 
   // ── Controller wiring ───────────────────────────────────────────────────
-  const currentProvider = (): 'webllm' | 'wllama' => (providerSelect.value === 'wllama' ? 'wllama' : 'webllm');
+  const currentProvider = (): 'webllm' | 'wllama' =>
+    activeTaskModel().source !== 'default' ? 'webllm' : providerSelect.value === 'wllama' ? 'wllama' : 'webllm';
 
   let controller: AgentChatController | null = null;
   let controllerKind = '';
@@ -719,7 +762,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     }
   };
   providerSelect.addEventListener('change', () => {
-    localStorageSetItem('agent-panel-provider', currentProvider());
+    localStorageSetItem('agent-panel-provider', providerSelect.value === 'wllama' ? 'wllama' : 'webllm');
     resetController();
     syncProviderUi();
   });
@@ -733,6 +776,23 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     void updateLocalHint();
   });
   syncProviderUi();
+
+  const routeKey = () => JSON.stringify([currentProvider(), selectedLocalModel(), localSource()]);
+  let previousRoute = routeKey();
+  const taskRouteChanged = () => {
+    syncTaskModelPicker();
+    const next = routeKey();
+    if (next !== previousRoute) resetController();
+    previousRoute = next;
+    syncProviderUi();
+  };
+  writingSelect.addEventListener('change', taskRouteChanged);
+  languageSelect.addEventListener('change', taskRouteChanged);
+  taskModelPicker.addEventListener('change', () => {
+    taskPreferences = writeTaskModelPreference(taskPreferences, taskRequest(), taskModelPicker.value, presetIds);
+    localStorageSetItem('agent-task-models', JSON.stringify({ version: 1, ...taskPreferences }));
+    taskRouteChanged();
+  });
 
   const buildController = (): AgentChatController | null => {
     if (runtimeCleanup) return null;
@@ -1342,6 +1402,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     } as const;
     for (const option of writingSelect.querySelectorAll('option'))
       option.textContent = t(keys[option.getAttribute('value') as keyof typeof keys]);
+    syncTaskModelPicker();
     writingSelect.setAttribute('aria-label', t('agentTaskLabel'));
     languageSelect.setAttribute('aria-label', t('agentTaskLanguage'));
     chat.setLabels(chatLabels()); // Send/Stop/placeholder/empty + role chips
