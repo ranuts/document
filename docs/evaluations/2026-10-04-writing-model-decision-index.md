@@ -146,3 +146,14 @@ Twelve SDK replies completed across six frozen known-source pairs, but the overa
 - 2026-10-07: Post-inference Qwen2.5-7B owned-cache audit matches all 88 pinned tensor shard sizes/MD5s (4,284,263,424 bytes), process exit 0. This closes current-cache mismatch evidence only, not exact earlier consumption or seven-language quality. See `2026-10-07-qwen25-7b-cached-weight-shards-analysis.md`.
 
 - 2026-10-07: Read-only Qwen2.5-14B feasibility inventory finds 194 pinned shards/8,309,352,448 bytes but no matching Qwen 14B library in the fixed official WebGPU runtime tree and no shipped SDK 14B catalog entry. No weights download, inference, quality verdict or default adoption. See `2026-10-07-qwen14-runtime-inventory-analysis.md`.
+
+
+### Locally compiled Qwen2.5-14B follow-up (2026-10-07; screen ongoing)
+
+The earlier feasibility inventory is historical. Matched locally compiled 7B and 14B WebGPU libraries now load on the observed Apple Metal adapter; [14B native load receipt](2026-10-07-local-qwen14-library-native.json) records actual inference. Static tensor-contract agreement does not establish cached shard integrity or semantic quality.
+
+The original minimal model record timed out on the structured writing request. An otherwise matched explicit 2048-token context completed that request; see [context control](2026-10-07-qwen14-context-control.json). Exact allocation/kernel cause is not measured. The ongoing Word screen uses diagnostic model-record overrides (context 2048, prefill 1024), unchanged product writing messages/schema and existing known sources. Product defaults remain unchanged.
+
+Fourteen completed tasks have been reviewed so far: four narrow passes, nine failures and one uncertain output. Failures include changed ISO date format (correctly rejected by the editor), omitted permission actors, introduced German grammar/translation issues and sentence-count violations. Applied documents and Undo/Redo do not convert these failures into semantic passes. See [Chinese review](2026-10-07-qwen14-chinese-interim-review.json), [English/Japanese/Korean review](2026-10-07-qwen14-en-ja-ko-interim-review.json), [Korean/German review](2026-10-07-qwen14-ko-de-interim-review.json) and [German summary review](2026-10-07-qwen14-de-summary-interim-review.json); each binds its completed-case snapshot by SHA-256.
+
+This is an interim development result, not a completed seven-language screen, unused-source transfer, native-speaker certification or full editor/device/offline acceptance. No candidate is promoted.

@@ -1,0 +1,11 @@
+{
+  "receipt_sha256": "5b06ac3b4678401a8f4fa33013bc458bc4e81509bc85e8d01e5a997148a85cf3",
+  "candidate_promoted": false,
+  "decisions": [
+    {
+      "id": "de-summarize",
+      "verdict": "fail",
+      "reason": "Checked essential facts, names, ISO date, quantity, signature prerequisite and current unsigned status retained; two sentences violate explicit one-sentence instruction."
+    }
+  ]
+}
