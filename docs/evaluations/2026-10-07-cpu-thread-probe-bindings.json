@@ -1,0 +1,9 @@
+{
+  "sha256": {
+    "2026-10-07-cpu-thread-probe.json": "54a4d78c08de1425c3d4779be1aabf66c443791584431bdfd58a613eda9ce75c",
+    "2026-10-07-cpu-thread-probe.mjs": "6552db335f8d675a54373fef7037b92b934d32b6116f7029f03131c1759c433d",
+    "2026-10-07-cpu-thread-probe.md": "9807d51b5fde6be7a9ec8def6c3b6252b62b1bce3d4f5b0f29dd64346d700302"
+  },
+  "scope": "Current load observation only; no inference or prior-run certification",
+  "build": "core1791345713/vendorb6864850e7b3"
+}
