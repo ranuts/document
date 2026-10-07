@@ -3995,6 +3995,18 @@
       "sha256": "8fd0e16071d6af04d6d4bec29373ca988994ed6e3914f6cf1701575c04b6203b"
     },
     {
+      "path": "docs/evaluations/2026-10-07-hymt2-typed-numeric-protection-native.json",
+      "sha256": "1a6f69aec16600dabd18d463aac98f7e57716aa676ac501850519a0009fa4d3b"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-typed-numeric-protection-native.mjs",
+      "sha256": "89814ff5939397db628db716d07d9b89c38e4a863c2de87c0879ea6cef7442f9"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-typed-numeric-protection-protocol.json",
+      "sha256": "4939509227e642c446c3d122afd8aa5ee6af98b45fb8de4391ac5412b46214bc"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-korean-native-input-readiness.json",
       "sha256": "f6b9d66d3ce2158cd06dbfd7b0da63236c530414d20752334edb4a408dd08561"
     },
