@@ -1,0 +1,386 @@
+{
+  "scope": "Successful dependency dry-run for isolated compiler environment; no compiler execution, custom Wasm library or SDK compatibility evidence",
+  "processExitCode": 0,
+  "packages": [
+    {
+      "name": "mlc-llm-nightly-cpu",
+      "version": "0.20.dev162",
+      "sha256": "7c3ce0094e1a9debe77811c21980eab18c8a16b00ba42247bbc897c3c0641740"
+    },
+    {
+      "name": "mlc-ai-nightly-cpu",
+      "version": "0.26.dev203",
+      "sha256": "1f9b493519b0a286fbae05f82ea93c659e121935eb904402a3ddea6a6e40f0fe"
+    },
+    {
+      "name": "apache-tvm-ffi",
+      "version": "0.1.14.post1",
+      "sha256": "f5b755c835168c145ce762fa60c135beb414f6f031fa3254c8cac111617f7c11"
+    },
+    {
+      "name": "ml_dtypes",
+      "version": "0.6.0",
+      "sha256": "84fa136b8602c8c39e3b6cb24918960cd6f36cade7a70376f56770729cd56510"
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.3",
+      "sha256": "adc1ada2662f8a5f960b8a10d9986897e7499ef07e06d4cfe7197f8cce923c07"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    },
+    {
+      "name": "datasets",
+      "version": "5.1.0",
+      "sha256": "86fd08b280485aab82894d2c81842c4151d93b575efea0054315104cb7bc3cec"
+    },
+    {
+      "name": "dill",
+      "version": "0.4.1",
+      "sha256": "1e1ce33e978ae97fcfcff5638477032b801c46c7c65cf717f95fbc2248f79a9d"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.7.0",
+      "sha256": "b57ddbafedfaef7018c1ecab32aa200a9d7ca26b77965f64e48b70061249d279"
+    },
+    {
+      "name": "click",
+      "version": "8.5.0",
+      "sha256": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360"
+    },
+    {
+      "name": "hf-xet",
+      "version": "1.7.0",
+      "sha256": "59fba37039233c7fcbe196817d6cdcf1b40dfb17b410f229d85b0cf0a1848da4"
+    },
+    {
+      "name": "httpx2",
+      "version": "2.13.1",
+      "sha256": "6dff50fabc270ee5fd25d845d0b078ed20564579744d6d962850975996d2f9a4"
+    },
+    {
+      "name": "httpcore2",
+      "version": "2.13.1",
+      "sha256": "e1e05d4f25f7d7d496bfb96748f6f4b67657b03da069b3a68c36069f3db73d0a"
+    },
+    {
+      "name": "multiprocess",
+      "version": "0.70.19",
+      "sha256": "e8cc7fbdff15c0613f0a1f1f8744bef961b0a164c0ca29bdff53e9d2d93c5e5f"
+    },
+    {
+      "name": "aiohttp",
+      "version": "3.14.4",
+      "sha256": "3c4dcf611b095e7983421f49d01ffbed7ed574891533d606ea115fc23e7c4e90"
+    },
+    {
+      "name": "multidict",
+      "version": "6.9.1",
+      "sha256": "854fd2f1bc6e8a56b89910b5cd7261a8b40f13ebb31572da985ce59c7da0886d"
+    },
+    {
+      "name": "yarl",
+      "version": "1.25.1",
+      "sha256": "7a5c3115595995779ee21f2567035793911c3802a43c74f3fbb0314929ec67ac"
+    },
+    {
+      "name": "aiohappyeyeballs",
+      "version": "2.7.1",
+      "sha256": "9243213661e29250eb41368e5daa826fc017156c3b8a11440826b2e3ed376472"
+    },
+    {
+      "name": "aiosignal",
+      "version": "1.4.0",
+      "sha256": "053243f8b92b990551949e63930a839ff0cf0b0ebbe0597b0f3fb19e1a0fe82e"
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1",
+      "sha256": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0",
+      "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
+    },
+    {
+      "name": "filelock",
+      "version": "4.0.12",
+      "sha256": "5f17ee83ecee8a6f3e389c75822fb70a1c2f0506b99438a6dffa1d56793588c8"
+    },
+    {
+      "name": "frozenlist",
+      "version": "1.8.0",
+      "sha256": "4970ece02dbc8c3a92fcc5228e36a3e933a01a999f7094ff7c23fbd2beeaa67c"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86"
+    },
+    {
+      "name": "idna",
+      "version": "3.20",
+      "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
+    },
+    {
+      "name": "propcache",
+      "version": "0.5.4",
+      "sha256": "1d759d05634f1b038fb625a66662a8c85e5a8fec912da381b5149ddac107482b"
+    },
+    {
+      "name": "pyarrow",
+      "version": "25.0.1",
+      "sha256": "bf0b672390cdcb640d7288f96b826d71ff4e9abb254a86c89890baf51a29cee6"
+    },
+    {
+      "name": "PyYAML",
+      "version": "6.0.3",
+      "sha256": "34d5fcd24b8445fadc33f9cf348c1047101756fd760b4dacb5c3e99755703310"
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.1",
+      "sha256": "c293e525e6fef9c20e8728fd4612df02a0aa31bb5fe91ecd93e123b1b7bffa73"
+    },
+    {
+      "name": "truststore",
+      "version": "0.10.4",
+      "sha256": "adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.142.2",
+      "sha256": "bd5f4d81f1e93a88bcd77caf4dfe3c2dbffc3805407a0007e9a114c18b3a670b"
+    },
+    {
+      "name": "annotated-doc",
+      "version": "0.0.5",
+      "sha256": "117bac03a25ede5df5440e855b32d556049ca169ead221505badf432fed4b101"
+    },
+    {
+      "name": "opentelemetry-api",
+      "version": "1.45.1",
+      "sha256": "b31553efa588ae44bc306f863c785c5333a9ecc091248c6ee68b4b6c87fdedfb"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.14.0b2",
+      "sha256": "4556c932fb3dbb7e9ac773bee241b2eb7058a2f9ff1d850d45d7d11cb6e54b68"
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.49.0",
+      "sha256": "7cab96cc03d0bdb31b4d1130f65004f496558b267073df3fe65d4981276819a3"
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0"
+    },
+    {
+      "name": "starlette",
+      "version": "1.7.0",
+      "sha256": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147"
+    },
+    {
+      "name": "openai",
+      "version": "3.26.0",
+      "sha256": "050597ff71ff4025177405a41fa4019d4f9feae5826645b63b8e35b6e9a3c88b"
+    },
+    {
+      "name": "jiter",
+      "version": "0.17.0",
+      "sha256": "0619d806e260ecf0c2a64521942c94af5d547c9ec99b55ae4f51b538b5576a76"
+    },
+    {
+      "name": "pandas",
+      "version": "3.1.0rc0",
+      "sha256": "6180f6fcc40f1fefc278dfba1db522b9e7d02ba8d319e460f658e66b37ae7d9d"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "sha256": "a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "sha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+    },
+    {
+      "name": "prompt_toolkit",
+      "version": "3.0.53",
+      "sha256": "01c0891d7f9237d5e339f7d3e42cdae80b7534abb1c7c0e3352efba6231492f2"
+    },
+    {
+      "name": "wcwidth",
+      "version": "0.9.2",
+      "sha256": "ae0800c5339423cc53d33a266ad264b42ba8aaa16d4464f6e6b1bee607f50b17"
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2",
+      "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.2",
+      "sha256": "fcff63213e8e6e47770541a4607175404f47cbb3ebea7b6058cc82d524a0e424"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0",
+      "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22",
+      "sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775"
+    },
+    {
+      "name": "safetensors",
+      "version": "0.9.0rc1",
+      "sha256": "06fa8e9833e5643793c309af157dd6c3be6212a549275f75966f124485e3fe08"
+    },
+    {
+      "name": "sentencepiece",
+      "version": "0.2.2",
+      "sha256": "79bac5a251f23a7341e28fda9ce0d5319edf45328239ce037c0682936f137906"
+    },
+    {
+      "name": "shortuuid",
+      "version": "1.0.13",
+      "sha256": "a482a497300b49b4953e15108a7913244e1bb0d41f9d332f5e9925dba33a3c5a"
+    },
+    {
+      "name": "sniffio",
+      "version": "1.3.1",
+      "sha256": "2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"
+    },
+    {
+      "name": "tiktoken",
+      "version": "0.14.0",
+      "sha256": "f2af4a336ea56d6c14f27741a0e1d8294a35dd0b038bcf990d232ebb54eb994b"
+    },
+    {
+      "name": "regex",
+      "version": "2026.9.29",
+      "sha256": "0166844493626c5015c6088ee15c9ca2fd060ca15b7641d1657da6a58432ae33"
+    },
+    {
+      "name": "torch",
+      "version": "2.14.1",
+      "sha256": "cee091caf2a6229e248daf41d18ceebf590ba02d9179205610062c64ee5fef03"
+    },
+    {
+      "name": "networkx",
+      "version": "3.7",
+      "sha256": "e3fd2c13a7814cee3746340d8d7f8598a67f16a58bf47fb7f8793fab6efca1b0"
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "sha256": "51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0",
+      "sha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0",
+      "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c"
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6",
+      "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "3.0.4",
+      "sha256": "52704c5d36eb6dda8866493decd61111fff86244c9b1ad225ca01b9e91e5970f"
+    },
+    {
+      "name": "transformers",
+      "version": "5.19.0",
+      "sha256": "afcd2dd5f603ed28c1e1fcb00a338ccbb4ef5f878ed289635df8b58187afb518"
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.23.2",
+      "sha256": "986670e43691469dcee610ea0f846f91a8f84e91fc6f7a48d4c064414c0ec2bf"
+    },
+    {
+      "name": "huggingface_hub",
+      "version": "1.33.0",
+      "sha256": "04e434b06e100eddbce9a6e817d72693a7884b10a79bd67ab48080d5c07eb899"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1",
+      "sha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9",
+      "sha256": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55"
+    },
+    {
+      "name": "typer",
+      "version": "0.27.3",
+      "sha256": "e50022f28b82a86313e54501317a1db64bf8f8d036ff8cfe5ca7e47675454aff"
+    },
+    {
+      "name": "rich",
+      "version": "15.0.0",
+      "sha256": "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0",
+      "sha256": "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9"
+    },
+    {
+      "name": "markdown-it-py",
+      "version": "4.2.0",
+      "sha256": "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a"
+    },
+    {
+      "name": "mdurl",
+      "version": "0.1.2",
+      "sha256": "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"
+    },
+    {
+      "name": "shellingham",
+      "version": "1.5.4",
+      "sha256": "7ecfff8f2fd72616f7481040475a65b2bf8af90a56c89140852d1120324e8686"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.54.0",
+      "sha256": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+    },
+    {
+      "name": "xxhash",
+      "version": "4.0.1",
+      "sha256": "d9f3848ffaf010bdbabdbf4c25641fa258b6227ff27bc74a4d06edef521a4873"
+    }
+  ]
+}

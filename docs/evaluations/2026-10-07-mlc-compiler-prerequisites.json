@@ -1,0 +1,14 @@
+{
+  "pythonVersion": "3.14.8",
+  "machine": "arm64",
+  "tools": {
+    "emcc": {
+      "exitCode": 0,
+      "versionLine": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.10-git"
+    },
+    "cmake": {
+      "exitCode": 0,
+      "versionLine": "cmake version 4.4.4"
+    }
+  }
+}
