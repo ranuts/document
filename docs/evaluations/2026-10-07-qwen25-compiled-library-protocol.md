@@ -1,0 +1,7 @@
+# Frozen compiled-library contrast
+
+Compare upstream v0_2_84 base and sg32 Qwen2.5-3B q4f32 libraries pinned to commit025bcaf3780fa8254f5e5efd3bfea0a5397248f4, both downloaded before launch and validated as WASM with recorded SHA256. Upstream compile_wasm.py uses enable_subgroups=false/true for these directories. Keep actual default Apple Metal, same shipped WebLLM client/Worker, model URL/weight cache, context2048, two original date requests23 then22, messages/schema/temp0/top_p.8/max512. Fresh browser/engine per variant. Record Worker vendor, actual model record and library fetch count.
+
+Fulfill only the pinned library URL with its exact locally verified WASM bytes, not generated text or editor output. Do not alter production assets. Each group must observe at least one fetch of those bytes; otherwise retain a setup failure. Preserve raw results and failure snapshots before closing contexts. Init limit600seconds, completion300seconds. This changes compiled library kernels/optimization together and is not a single-operation mathematical proof. Weight binaries are not independently rehashed here, so configuration equality is narrower than full binary identity.
+
+These known date-copy sources diagnose a runtime/compiler path, not writing quality or native editor acceptance. A corrected date cannot promote a model or establish seven-language factual reliability; independent writing tests and full device/lifecycle coverage remain required. Do not silently retry failures or ship new model settings based on this screen alone.
