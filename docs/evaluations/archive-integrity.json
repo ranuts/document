@@ -3971,6 +3971,18 @@
       "sha256": "5e3bfbd4c7ef93dd66e29a6f9c4b3f73dd1cba00cb73be1dc7e149888e198848"
     },
     {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-cpu-translation-native.json",
+      "sha256": "f81b2459e4cbe784f48e88959df12b61acdde5f69d150827a02e51f94136874b"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-cpu-translation-native.mjs",
+      "sha256": "b5a5ce7c4db3690b61dbbb6fe45439236f03381c4d788c48c4ecda620df5e1b7"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-cpu-translation-protocol.json",
+      "sha256": "453a806e154ff9fdf675f238061a2d67534079daef5acd46dad30565b9ac2798"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-hymt2-cpu-translation-native.json",
       "sha256": "6ce244160a4a5fdf58ab461fbb5b2890f511c649f8f1891a0f6b6966824d2653"
     },
