@@ -2,24 +2,24 @@
 
 No tested candidate in this index has established acceptable seven-language factual writing quality. Keep the existing default provisional; successful document application is not an accuracy metric. This table covers known 21-case fixtures, one sample each, not heldout general accuracy. Loading failures and partial runs are explicitly retained.
 
-| Model/report | Run status | Recorded | Refused | Edited | Accepted unchanged |
-| --- | --- | ---: | ---: | ---: | ---: |
-| [Qwen3-1.7B-q4f16_1-MLC](2026-10-04-seven-language-writing-current.json) | completed | 21 | 9 | 12 | 0 |
-| [Qwen3.5-2B-q4f16_1-MLC](2026-10-04-seven-language-writing-qwen35-2b.json) | completed | 21 | 13 | 8 | 0 |
-| [Qwen3-4B-q4f16_1-MLC](2026-10-04-seven-language-writing-qwen3-4b.json) | completed | 21 | 7 | 14 | 0 |
-| [Llama-3.2-1B-Instruct-q4f16_1-MLC](2026-10-04-llama32-1b-seven-language-writing.json) | completed | 21 | 14 | 5 | 2 |
-| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-seven-language-writing.json) | failed | 0 | 0 | 0 | 0 |
-| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-sliding-window-writing.json) | failed | 15 | 11 | 4 | 0 |
-| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-full-context-writing.json) | completed | 21 | 20 | 1 | 0 |
-| [Llama-3.1-8B-Instruct-q4f16_1-MLC](2026-10-04-llama31-8b-seven-language-writing.json) | failed | 0 | 0 | 0 | 0 |
-| [Llama-3.1-8B-Instruct-q4f16_1-MLC](2026-10-04-llama31-8b-seven-language-writing-retry.json) | completed | 21 | 10 | 11 | 0 |
-| [Llama-3.2-3B-Instruct-q4f16_1-MLC](2026-10-04-llama32-3b-seven-language-writing.json) | completed | 21 | 11 | 10 | 0 |
-| [Qwen3.5-4B-q4f16_1-MLC](2026-10-04-qwen35-4b-seven-language-writing.json) | completed | 21 | 5 | 16 | 0 |
-| [Phi-4-mini-instruct-q4f16_1-MLC](2026-10-04-phi4-mini-seven-language-writing.json) | completed | 21 | 12 | 9 | 0 |
-| [Qwen3-8B-q4f16_1-MLC](2026-10-04-qwen3-8b-seven-language-writing.json) | completed | 21 | 3 | 18 | 0 |
-| [Qwen2.5-1.5B-Instruct-q4f16_1-MLC](2026-10-04-qwen25-15b-seven-language-writing.json) | completed | 21 | 17 | 4 | 0 |
-| [Qwen2.5-3B-Instruct-q4f16_1-MLC](2026-10-04-qwen25-3b-seven-language-writing.json) | completed | 21 | 20 | 1 | 0 |
-| [Qwen2.5-3B-Instruct-q4f32_1-MLC](2026-10-04-qwen25-3b-f32-seven-language-writing.json) | completed | 21 | 17 | 4 | 0 |
+| Model/report                                                                                 | Run status | Recorded | Refused | Edited | Accepted unchanged |
+| -------------------------------------------------------------------------------------------- | ---------- | -------: | ------: | -----: | -----------------: |
+| [Qwen3-1.7B-q4f16_1-MLC](2026-10-04-seven-language-writing-current.json)                     | completed  |       21 |       9 |     12 |                  0 |
+| [Qwen3.5-2B-q4f16_1-MLC](2026-10-04-seven-language-writing-qwen35-2b.json)                   | completed  |       21 |      13 |      8 |                  0 |
+| [Qwen3-4B-q4f16_1-MLC](2026-10-04-seven-language-writing-qwen3-4b.json)                      | completed  |       21 |       7 |     14 |                  0 |
+| [Llama-3.2-1B-Instruct-q4f16_1-MLC](2026-10-04-llama32-1b-seven-language-writing.json)       | completed  |       21 |      14 |      5 |                  2 |
+| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-seven-language-writing.json)                 | failed     |        0 |       0 |      0 |                  0 |
+| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-sliding-window-writing.json)                 | failed     |       15 |      11 |      4 |                  0 |
+| [gemma3-1b-it-q4f16_1-MLC](2026-10-04-gemma3-1b-full-context-writing.json)                   | completed  |       21 |      20 |      1 |                  0 |
+| [Llama-3.1-8B-Instruct-q4f16_1-MLC](2026-10-04-llama31-8b-seven-language-writing.json)       | failed     |        0 |       0 |      0 |                  0 |
+| [Llama-3.1-8B-Instruct-q4f16_1-MLC](2026-10-04-llama31-8b-seven-language-writing-retry.json) | completed  |       21 |      10 |     11 |                  0 |
+| [Llama-3.2-3B-Instruct-q4f16_1-MLC](2026-10-04-llama32-3b-seven-language-writing.json)       | completed  |       21 |      11 |     10 |                  0 |
+| [Qwen3.5-4B-q4f16_1-MLC](2026-10-04-qwen35-4b-seven-language-writing.json)                   | completed  |       21 |       5 |     16 |                  0 |
+| [Phi-4-mini-instruct-q4f16_1-MLC](2026-10-04-phi4-mini-seven-language-writing.json)          | completed  |       21 |      12 |      9 |                  0 |
+| [Qwen3-8B-q4f16_1-MLC](2026-10-04-qwen3-8b-seven-language-writing.json)                      | completed  |       21 |       3 |     18 |                  0 |
+| [Qwen2.5-1.5B-Instruct-q4f16_1-MLC](2026-10-04-qwen25-15b-seven-language-writing.json)       | completed  |       21 |      17 |      4 |                  0 |
+| [Qwen2.5-3B-Instruct-q4f16_1-MLC](2026-10-04-qwen25-3b-seven-language-writing.json)          | completed  |       21 |      20 |      1 |                  0 |
+| [Qwen2.5-3B-Instruct-q4f32_1-MLC](2026-10-04-qwen25-3b-f32-seven-language-writing.json)      | completed  |       21 |      17 |      4 |                  0 |
 
 These rows are not a controlled ranking: Qwen uses model-specific thinking controls; later code rejects unchanged translations; Gemma diagnostics override incompatible window settings. Qwen failures include changed roles/negation/conditions, while Llama 1B includes untranslated output and lost conditions. Gemma's first catalog run fell back to CPU and executed zero cases, its short-window run stopped after 15 cases, and full-context results showed repeated/length-limited output. Use each report's companion analysis for actual output examples and limitations. Refused outputs preserved source text; this is protective behavior, not task completion.
 
@@ -70,14 +70,14 @@ complete model ranking. Six subsequent reports are now separately hash-bound
 in the index JSON. Their differing protocols do not justify adding their
 application counts to that table or interpreting them as quality scores.
 
-| Question | Later evidence | Remaining limit |
-| --- | --- | --- |
-| Corrupted cached weights? | [124 weight shards](2026-10-04-qwen25-cached-weight-shards.md) match declared size/MD5, totaling 3,472,375,808 bytes | No detected accidental corruption in the audited profile; not adversarial authenticity |
-| Different compiled library? | [Both WASM libraries](2026-10-04-qwen25-pinned-libraries.md) match fixed upstream artifacts by size/SHA-256 | Does not prove ABI, compiler or GPU arithmetic correctness |
-| App parsing changes dates? | [24 repeated token-boundary calls](2026-10-04-qwen25-3b-date-tokens.md) show the malformed addresses already generated inside the engine | Model/compiler/browser root cause remains unisolated; logprobs are not confidence estimates |
-| Can an independent CPU runtime copy these dates? | [Native llama.cpp](2026-10-04-qwen25-3b-llamacpp-reference.md) copies four known sources correctly under both tested penalties | Different quantization, template, sampler and arithmetic confound GPU comparison |
-| Can browser CPU copy the same dates? | [Shipped browser CPU SDK](2026-10-04-qwen25-3b-browser-cpu-reference.md) copies the four known sources correctly | Direct SDK test, not the full native IM writing route |
-| Is CPU 3B a suitable document-writing default? | [Seven native IM summaries](2026-10-04-qwen25-3b-cpu-im-summary.md) reveal language, grammar, sentence-count and valuation issues; observed latency 17.3–56.8 s | Six applied summaries are not six accepted summaries; no promotion |
+| Question                                         | Later evidence                                                                                                                                                  | Remaining limit                                                                             |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Corrupted cached weights?                        | [124 weight shards](2026-10-04-qwen25-cached-weight-shards.md) match declared size/MD5, totaling 3,472,375,808 bytes                                            | No detected accidental corruption in the audited profile; not adversarial authenticity      |
+| Different compiled library?                      | [Both WASM libraries](2026-10-04-qwen25-pinned-libraries.md) match fixed upstream artifacts by size/SHA-256                                                     | Does not prove ABI, compiler or GPU arithmetic correctness                                  |
+| App parsing changes dates?                       | [24 repeated token-boundary calls](2026-10-04-qwen25-3b-date-tokens.md) show the malformed addresses already generated inside the engine                        | Model/compiler/browser root cause remains unisolated; logprobs are not confidence estimates |
+| Can an independent CPU runtime copy these dates? | [Native llama.cpp](2026-10-04-qwen25-3b-llamacpp-reference.md) copies four known sources correctly under both tested penalties                                  | Different quantization, template, sampler and arithmetic confound GPU comparison            |
+| Can browser CPU copy the same dates?             | [Shipped browser CPU SDK](2026-10-04-qwen25-3b-browser-cpu-reference.md) copies the four known sources correctly                                                | Direct SDK test, not the full native IM writing route                                       |
+| Is CPU 3B a suitable document-writing default?   | [Seven native IM summaries](2026-10-04-qwen25-3b-cpu-im-summary.md) reveal language, grammar, sentence-count and valuation issues; observed latency 17.3–56.8 s | Six applied summaries are not six accepted summaries; no promotion                          |
 
 The current source configuration remains Qwen3-1.7B for GPU and revision-pinned
 Qwen3-0.6B GGUF for automatic CPU availability fallback. The GPU selector also
@@ -110,7 +110,6 @@ The [model-recommended sampling contrast](2026-10-07-gemma4-sampling-analysis.md
 
 The [frozen transfer protocol](2026-10-07-gemma4-sampling-seven-language-protocol.md) starts seven source-language versions across rewrite, summary and translation with the unchanged recommended sampling candidate. Sources are correlated and shared across three tasks; 21 task executions do not mean 21 independent sources. Translation directions cover English/Chinese targets only. At this index update the process is in progress, with no completed-screen acceptance claim. Native-speaker review, broader language directions, usable latency and full device/editor/offline lifecycle requirements remain open. The original sixteen-report table and its byte-bound outcome counts are unchanged.
 
-
 ### Completed Korean readiness correction (October 7)
 
 The separately frozen corrected Korean run completed three real inference requests after exact native source readiness. Rewrite and translation retain the checked facts; summary omits Mei Tan and the technical team. Together with the original 18 valid requests, coverage is 21 valid task executions, with the original three zero-inference setup failures preserved separately. Manual narrow reviews total 11 passes, six failures and four uncertain results; six of seven summaries fail. Seven translated versions of one source are correlated and cannot establish independent accuracy. No candidate is adopted. See `2026-10-07-gemma4-sampling-korean-corrected-analysis.md` and its hash-bound receipts.
@@ -121,21 +120,17 @@ The [pinned Qwen3-4B-Instruct-2507 CPU screen](2026-10-07-qwen3-instruct2507-sev
 
 The [original-policy placement contrast](2026-10-07-qwen3-instruct2507-policy-placement-analysis.md) completes six known-source rows. All product baselines exactly reproduce prior requests and raw choices. Moving the original preamble verbatim into system and keeping task JSON verbatim improves English-to-Japanese name preservation, but Chinese summary remains English with a missing actor and Japanese-to-Korean still omits Ken Sato and corrupts its ISO date. This is not a general repair or untouched transfer. Production behavior is unchanged; seven-language factual writing and the broader device/editor/offline/privacy gates remain outstanding.
 
-
 ### Completed Q4/Q6 known-source contrast (2026-10-07)
 
 Eight native CPU inference rows completed with verified artifacts and unchanged before/after runtime hashes. Q4 failed all four selected known failures; Q6 narrowly passed the German rewrite but still failed Chinese summary, Japanese-to-Korean actor/name retention and Spanish source-language rewrite. No candidate adoption or seven-language acceptance follows. See [analysis](2026-10-07-qwen3-instruct2507-q6-analysis.md), [semantic review](2026-10-07-qwen3-instruct2507-q6-review.json), [raw receipt](2026-10-07-qwen3-instruct2507-q6-native.json) and [bindings](2026-10-07-qwen3-instruct2507-q6-bindings.json).
-
 
 ### Completed larger GPU known-source screen (2026-10-07)
 
 Pinned Qwen2.5-7B MLC loaded on the actual Apple GPU and completed four frozen SDK writing requests. Bounded manual checks narrowly pass Japanese-to-Korean translation, German rewrite and Spanish rewrite; Chinese summary preserves examined facts but fails the one-sentence instruction. These are selected known sources with no native application, unused-source transfer or seven-language acceptance. See [analysis](2026-10-07-qwen25-7b-gpu-analysis.md), [review](2026-10-07-qwen25-7b-gpu-review.json), [raw receipt](2026-10-07-qwen25-7b-gpu-screen.json) and [bindings](2026-10-07-qwen25-7b-gpu-bindings.json). No default is promoted.
 
-
 ### Completed native larger GPU development screen (2026-10-07)
 
 Qwen2.5-7B completed all 21 known-source original-product Word writing tasks. Bounded manual review yields 9 narrow passes, 11 failures and 1 uncertain result; exact native write/history and actual Apple GPU/runtime checks pass independently. Missing actors/current status, changed recipients/actions/objects, wrong language/date format and target-language issues prevent adoption. See [analysis](2026-10-07-qwen25-7b-gpu-native-analysis.md), [review](2026-10-07-qwen25-7b-gpu-native-review.json), [raw receipt](2026-10-07-qwen25-7b-gpu-native.json) and [bindings](2026-10-07-qwen25-7b-gpu-native-bindings.json). This screen is not unused-source transfer, native-speaker or full device/offline acceptance.
-
 
 ### Larger GPU original-policy placement follow-up (2026-10-07)
 
@@ -147,7 +142,6 @@ Twelve SDK replies completed across six frozen known-source pairs, but the overa
 
 - 2026-10-07: Read-only Qwen2.5-14B feasibility inventory finds 194 pinned shards/8,309,352,448 bytes but no matching Qwen 14B library in the fixed official WebGPU runtime tree and no shipped SDK 14B catalog entry. No weights download, inference, quality verdict or default adoption. See `2026-10-07-qwen14-runtime-inventory-analysis.md`.
 
-
 ### Locally compiled Qwen2.5-14B follow-up (2026-10-07; screen ongoing)
 
 The earlier feasibility inventory is historical. Matched locally compiled 7B and 14B WebGPU libraries now load on the observed Apple Metal adapter; [14B native load receipt](2026-10-07-local-qwen14-library-native.json) records actual inference. Static tensor-contract agreement does not establish cached shard integrity or semantic quality.
@@ -158,16 +152,13 @@ Eighteen completed tasks have been reviewed so far: five narrow passes, eleven f
 
 This is an interim development result, not a completed seven-language screen, unused-source transfer, native-speaker certification or full editor/device/offline acceptance. No candidate is promoted.
 
-
 ### Completed bounded 14B native screen (2026-10-07)
 
 The above interim counts are historical. The [completed screen analysis](2026-10-07-qwen14-bounded-gpu-native-analysis.md) and [hash-bound review](2026-10-07-qwen14-bounded-gpu-native-review.json) cover all 21 tasks: 7 narrow passes, 12 failures and 2 uncertain outputs. Process exit 0 and closed context are confirmed; document history checks pass separately. No candidate/default is adopted, and unused-source, broader editor/device/offline acceptance remains open.
 
-
 ### 14B original-policy placement contrast (2026-10-07)
 
 [Eight completed SDK replies](2026-10-07-qwen14-policy-placement-analysis.md) reproduce all four native product baseline raw bodies exactly. System placement fixes one Portuguese translation locally but retains Chinese actor loss, Japanese date-format changes and Portuguese summary omissions/modality change. Candidate outcomes are one narrow pass and three failures. Process exit 1 reflects the unobserved pinned-library fetch gate; no overall successful-runtime or candidate-adoption claim follows.
-
 
 The [two-stage fact-ledger diagnostic](2026-10-07-qwen14-fact-ledger-native-analysis.md) completes twelve SDK requests on four selected known failures. All four original product raw contents reproduce the prior baseline. Bounded manual final-output review gives two narrow passes and two failures: Chinese actor retention and Spanish-to-Portuguese improve, while Japanese ISO-date reformatting and Portuguese missing actor/approval plus changed modality persist. Extraction is itself incomplete; even correct intermediate fields do not guarantee final fidelity. The extra rendition prompt is a confound until compared alone. No product/model adoption, seven-language acceptance or exact cached-library consumption claim follows.
 

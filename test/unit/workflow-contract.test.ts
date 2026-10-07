@@ -413,7 +413,16 @@ describe('.github/workflows/nightly-corpus.yml', () => {
     const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')) as {
       scripts: Record<string, string>;
     };
-    expect(pkg.scripts['lint:ts']).toMatch(/oxlint --deny-warnings/);
+    expect(pkg.scripts['lint:ts']).toBe('node bin/archive-quality.mjs lint && tsc --noEmit');
+    const archiveGate = readFileSync(resolve(ROOT, 'bin/archive-quality.mjs'), 'utf8');
+    expect(archiveGate).toContain("'oxlint'");
+    expect(archiveGate).toContain("'--deny-warnings'");
+    expect(archiveGate).toContain('verifyArchive(root, manifest)');
+    const archive = JSON.parse(readFileSync(resolve(ROOT, 'docs/evaluations/archive-integrity.json'), 'utf8')) as {
+      files: { path: string }[];
+    };
+    expect(archive.files.length).toBeGreaterThan(0);
+    for (const { path } of archive.files) expect(path).toMatch(/^docs\/evaluations\/[\w.-]+\.(json|mjs|md)$/);
 
     // public/ used to be ignored wholesale, which took our own deploy-coupled
     // scripts out of the lint along with the vendored trees: sw.js alone is
