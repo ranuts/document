@@ -134,7 +134,7 @@
     }
   ],
   "mlc_native_cmake_configure_exit": 0,
-  "mlc_native_build": "started, no completion claim",
+  "mlc_native_build": "completed exit 0",
   "wasm_link_retry": "make EMCC=em++; completed exit 0",
   "wasm_link_retry_warnings": [
     "undefined symbol: TVMFFIWasmFunctionDeleter",
@@ -162,5 +162,17 @@
     "webassembly_module_parse": "passed in Node",
     "model_library": false,
     "browser_load_verified": false
+  },
+  "built_mlc_native_module": {
+    "bytes": 13088216,
+    "sha256": "b6bb7510d4765d87e454a0a9d62401addd0f38aede6f469f55487a8f3b2228f6"
+  },
+  "mlc_source_import_with_installed_tvm": {
+    "first_exit": 1,
+    "first_failure": "missing psutil",
+    "psutil_installed_version": "7.2.2",
+    "retry_exit": 1,
+    "retry_failure": "installed TVM lacks tvm.script.s_tir expected by pinned MLC source",
+    "next_action": "Use pinned paired TVM source and its in-progress native compiler build"
   }
 }
