@@ -11,3 +11,5 @@ After resource cleanup, the ordinary CI-build native update test still failed wi
 The subsequent remote run for `7fc66989` (GitHub Actions run `37628484738`) completed successfully across lint, ordinary E2E, Docker E2E and Pages-semantics E2E. That commit predates the resource cleanup. This demonstrates a successful complete CI run, but does not erase the preceding native failures or establish that the timing-sensitive activation issue is repaired.
 
 The current resource-cleanup tree also passed the production build and the native silent-update test against that fully stamped build (1 test, 16.2 seconds). This contrasts with the unstamped Vite-build failure and narrows the next comparison, but does not establish a causal activation repair.
+
+An isolated diagnostic variant changed only the unstamped worker fallback cache version from a per-evaluation timestamp to a stable `dev` value. Its ordinary update test also failed with received `dev` after 90 seconds. The built diagnostic file was restored after the process exited; no source change was adopted. Cache-version stability alone is therefore insufficient in this observed comparison.
