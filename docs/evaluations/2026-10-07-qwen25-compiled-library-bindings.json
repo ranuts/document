@@ -1,0 +1,31 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-qwen25-compiled-library-native.json": "8f53beb8123ce2eb53e7452ca9173de988304da8ba9c066f5573e0ce1d716114",
+    "2026-10-07-qwen25-compiled-library-native.mjs": "4760fce6b1022bfabf0a6cb7140262a1414c407201ebf5baafbced2254239dc3",
+    "2026-10-07-qwen25-compiled-library-protocol.md": "5b35e91b78031ca923da051943fc8fdbe27a6cbd223d9025ef80b8b79f111315",
+    "2026-10-07-qwen25-compiled-library-artifacts.json": "44a0977e14879b0824b0da1f62cf4d6e0f96b89596614e5d93fac790dbff2e60",
+    "2026-10-07-qwen25-compiled-library-analysis.md": "c8a2336dc80fb69ee5f0117c2dee4943343443f4bd7a474d894f72c37e7bf4bc",
+    "2026-10-07-webgpu-backend-date-requests.json": "2f97514202d2122871f44f58508f19b0b3246bd1c048f1d652b7a69154429d3d"
+  },
+  "initialSnapshot": {
+    "scope": "Before process launch",
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen25-compiled-library-native.mjs": "4760fce6b1022bfabf0a6cb7140262a1414c407201ebf5baafbced2254239dc3",
+      "docs/evaluations/2026-10-07-qwen25-compiled-library-protocol.md": "5b35e91b78031ca923da051943fc8fdbe27a6cbd223d9025ef80b8b79f111315",
+      "docs/evaluations/2026-10-07-qwen25-compiled-library-artifacts.json": "44a0977e14879b0824b0da1f62cf4d6e0f96b89596614e5d93fac790dbff2e60",
+      "docs/evaluations/2026-10-07-webgpu-backend-date-requests.json": "2f97514202d2122871f44f58508f19b0b3246bd1c048f1d652b7a69154429d3d",
+      "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  },
+  "unchangedAfterRun": {
+    "docs/evaluations/2026-10-07-qwen25-compiled-library-native.mjs": true,
+    "docs/evaluations/2026-10-07-qwen25-compiled-library-protocol.md": true,
+    "docs/evaluations/2026-10-07-qwen25-compiled-library-artifacts.json": true,
+    "docs/evaluations/2026-10-07-webgpu-backend-date-requests.json": true,
+    "dist/assets/lib-CSLy4uO1.js": true,
+    "dist/assets/webllm.worker-CMk6FPDh.js": true
+  },
+  "processExitCode": 0,
+  "adopted": false
+}
