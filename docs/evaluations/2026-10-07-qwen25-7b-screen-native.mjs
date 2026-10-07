@@ -70,6 +70,7 @@ try {
           { timeout: 180000 },
         );
         row.loads = await page.evaluate(()=>window.__loads);
+        row.runtimeEnvironment=await page.evaluate(()=>({crossOriginIsolated,hardwareConcurrency:navigator.hardwareConcurrency,sharedArrayBuffer:typeof SharedArrayBuffer,runtimeResources:performance.getEntriesByType('resource').map(e=>e.name).filter(n=>/wllama|wasm|client-D5_UYdz1/.test(n))}));
         row.modelNote = await page.locator('.agent-panel-note').textContent();
         row.modelStatus = await page.locator('.agent-model-status').textContent();
         await page.locator('.agent-panel-settings-toggle').click();
@@ -168,6 +169,7 @@ try {
         row.error = String(e);
         const page = context.pages()[0];
         if (page && !page.isClosed()) {
+          row.failureSnapshot=await page.evaluate(()=>({loads:window.__loads,sdk:window.__streamProbe,counts:window.__counts,documentText:document.querySelector('#app iframe')?.contentWindow?.Asc?.editor?.WordControl?.m_oLogicDocument?.GetText?.(),chatErrors:[...document.querySelectorAll('.cui-msg-error')].map(e=>e.textContent)})).catch(e=>({error:String(e)}));
           row.failureSnapshot = await page.evaluate(()=>({loads:window.__loads,sdk:window.__streamProbe,counts:window.__counts,documentText:document.querySelector('#app iframe')?.contentWindow?.Asc?.editor?.WordControl?.m_oLogicDocument?.GetText?.(),chatErrors:[...document.querySelectorAll('.cui-msg-error')].map(e=>e.textContent)})).catch(e=>({error:String(e)}));
           row.failureNote = await page
             .locator('.agent-panel-note')

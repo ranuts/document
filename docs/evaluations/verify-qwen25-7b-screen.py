@@ -36,6 +36,9 @@ verified = 0
 for fixture, row in zip(fixtures, report['cases']):
     assert row['prompt'] == fixture and row['variant'] == 'candidate'
     assert row['finished'] and row['contextClosed'] and not row.get('error')
+    assert 'qwen2.5-7b' in row['modelStatus'].lower()
+    assert row['runtimeEnvironment']['crossOriginIsolated']
+    assert row['runtimeEnvironment']['sharedArrayBuffer'] == 'function'
     load = row['loads'][0]
     assert load['requested'] == {'n_threads': 4, 'n_ctx': 2048, 'n_gpu_layers': 0, 'reasoning': False}
     assert load['actualThreads'] == 4 and load['multithread']
