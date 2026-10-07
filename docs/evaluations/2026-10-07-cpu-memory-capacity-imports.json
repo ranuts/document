@@ -1,0 +1,31 @@
+{
+  "scope": "Actual imported memory type from each fresh WASM binary. No browser compatibility/quality claim.",
+  "variants": {
+    "control": {
+      "sha256": "bd55b44ff0df5067e9f335251b48d064a6259d10b1b51d31a5a48422f263621f",
+      "memoryImports": [
+        {
+          "module": "env",
+          "name": "memory",
+          "flags": 7,
+          "initialPages": 2048,
+          "maximumPages": 65536,
+          "maximumBytes": 4294967296
+        }
+      ]
+    },
+    "candidate": {
+      "sha256": "bf77ec9011cd7cbddc5d324e15e317d6d9d7f6c7af9804f678a9b730d8ed50a2",
+      "memoryImports": [
+        {
+          "module": "env",
+          "name": "memory",
+          "flags": 7,
+          "initialPages": 2048,
+          "maximumPages": 131072,
+          "maximumBytes": 8589934592
+        }
+      ]
+    }
+  }
+}
