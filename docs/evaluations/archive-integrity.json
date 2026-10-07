@@ -4007,6 +4007,14 @@
       "sha256": "453a806e154ff9fdf675f238061a2d67534079daef5acd46dad30565b9ac2798"
     },
     {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-candidate-single-thread-native.mjs",
+      "sha256": "92fd517ba22b8ea72f39e7613ad9336b40ae91d365417506ebfc21080ccee7a6"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-candidate-single-thread-protocol.json",
+      "sha256": "d4d338b007382cfb6fde272870650df3f6a2e7aa836b9b07029ce5fe9851cb06"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-hymt2-7b-memory-control-native.json",
       "sha256": "f7218d780ff1a3348374fa21490d42f3582b406344adb95a14bf7f209a1ac31d"
     },
