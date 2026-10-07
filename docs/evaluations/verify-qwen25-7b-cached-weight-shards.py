@@ -20,6 +20,10 @@ for observed, expected in zip(report['assets'], artifact['tensorShards']):
     assert observed['expectedMD5'] == observed['md5'] == expected['md5sum']
     assert observed['match'] and not observed.get('missing')
 if not args.partial:
+    binding = json.loads((root / (prefix + '-bindings.json')).read_text())
+    assert binding['processExitCode'] == 0
+    for name, expected_hash in binding['evidenceSHA256'].items():
+        assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected_hash, name
     assert report['status'] == 'matched' and report['contextClosed'] and not report['errors']
     assert len(report['assets']) == 88
     assert sum(row['bytes'] for row in report['assets']) == artifact['totalShardBytes']
