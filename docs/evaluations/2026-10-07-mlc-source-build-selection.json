@@ -1,0 +1,13 @@
+{
+  "purpose": "Build a matched diagnostic compiler for browser model quality evaluation",
+  "source_repository": "https://github.com/mlc-ai/mlc-llm",
+  "mlc_revision": "8978ea9aec626d64096aaa92fbc89bda2e3ea802",
+  "tvm_gitlink_revision": "201fa0001c81431ccce05419b442c47779ea917c",
+  "source_submodule_checkout": "in progress at observation",
+  "installed_wheel_skip_native_probe_exit": 1,
+  "installed_wheel_skip_native_failure": "Cannot find object type index for mlc.serve.Data",
+  "llvm_config_available": false,
+  "compiler_built": false,
+  "model_library_compiled": false,
+  "existing_product_sdk_changed": false
+}
