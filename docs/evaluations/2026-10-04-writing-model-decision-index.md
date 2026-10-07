@@ -144,3 +144,5 @@ Twelve SDK replies completed across six frozen known-source pairs, but the overa
 - 2026-10-07: Completed header-preserving Qwen2.5-7B fixed-example rewrite contrast: product 4 narrow pass/2 fail/1 uncertain, minimal policy 3/4/0, fixed examples 5/2/0. Examples cause English-to-Chinese output and retain Japanese actor loss; no variant or product adoption passes seven-language acceptance. See `2026-10-07-qwen25-7b-fixed-examples-headers-analysis.md`.
 
 - 2026-10-07: Post-inference Qwen2.5-7B owned-cache audit matches all 88 pinned tensor shard sizes/MD5s (4,284,263,424 bytes), process exit 0. This closes current-cache mismatch evidence only, not exact earlier consumption or seven-language quality. See `2026-10-07-qwen25-7b-cached-weight-shards-analysis.md`.
+
+- 2026-10-07: Read-only Qwen2.5-14B feasibility inventory finds 194 pinned shards/8,309,352,448 bytes but no matching Qwen 14B library in the fixed official WebGPU runtime tree and no shipped SDK 14B catalog entry. No weights download, inference, quality verdict or default adoption. See `2026-10-07-qwen14-runtime-inventory-analysis.md`.
