@@ -135,7 +135,7 @@
   ],
   "mlc_native_cmake_configure_exit": 0,
   "mlc_native_build": "started, no completion claim",
-  "wasm_link_retry": "make EMCC=em++; still running at observation",
+  "wasm_link_retry": "make EMCC=em++; completed exit 0",
   "wasm_link_retry_warnings": [
     "undefined symbol: TVMFFIWasmFunctionDeleter",
     "undefined symbol: TVMFFIWasmSafeCall"
@@ -155,5 +155,12 @@
       "sha256": "f8bae949cf112afebb91c9f911b0722c0973a04e9962bc656c05e565775b59a2",
       "bytes": 2046
     }
-  ]
+  ],
+  "built_tvm_runtime": {
+    "bytes": 5895018,
+    "sha256": "25c831d24b5e82ac526aa8019f21639778bc0499bcb82819ee1fc591e7887a82",
+    "webassembly_module_parse": "passed in Node",
+    "model_library": false,
+    "browser_load_verified": false
+  }
 }
