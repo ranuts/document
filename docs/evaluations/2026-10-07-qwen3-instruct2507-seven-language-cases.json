@@ -1,0 +1,170 @@
+[
+  {
+    "id": "zh-CN-rewrite",
+    "language": "zh-CN",
+    "targetLanguage": "zh-CN",
+    "task": "rewrite",
+    "source": "发货记录：2049-03-12，Zoe Ishikawa 提议发出18台传感器，但该提议尚未获批。配送团队只有在 Pavel Novak 签署检验报告后才可以发货。检验报告目前尚未签署。包装标签已经打印。",
+    "instruction": "Rewrite in clear formal language in the source language. Change the wording while retaining every fact, name, date, quantity, explicit negative status and only-after permission condition. Add no claims."
+  },
+  {
+    "id": "zh-CN-summarize",
+    "language": "zh-CN",
+    "targetLanguage": "zh-CN",
+    "task": "summarize",
+    "source": "发货记录：2049-03-12，Zoe Ishikawa 提议发出18台传感器，但该提议尚未获批。配送团队只有在 Pavel Novak 签署检验报告后才可以发货。检验报告目前尚未签署。包装标签已经打印。",
+    "instruction": "Summarize in one sentence shorter than the source, in the source language. Retain all names, the date and quantity, the unapproved proposal, who may do what only after whose prerequisite action, and the explicit current incomplete prerequisite status. Omit only the final sentence about labels, catalogue, product list or itinerary. Add no claims."
+  },
+  {
+    "id": "zh-CN-translate",
+    "language": "zh-CN",
+    "targetLanguage": "en",
+    "task": "translate",
+    "source": "发货记录：2049-03-12，Zoe Ishikawa 提议发出18台传感器，但该提议尚未获批。配送团队只有在 Pavel Novak 签署检验报告后才可以发货。检验报告目前尚未签署。包装标签已经打印。",
+    "instruction": "Translate every sentence into en. Keep all person names, ISO dates and quantities unchanged. Preserve roles, explicit negative statuses and only-after permission conditions. Add no claims."
+  },
+  {
+    "id": "en-rewrite",
+    "language": "en",
+    "targetLanguage": "en",
+    "task": "rewrite",
+    "source": "Purchase record: On 2047-11-08, Lina Ford proposed buying 15 monitors, but the proposal has not been approved. Uma Rao may ship the monitors only after Oliver Zhou confirms receipt of payment. Receipt of payment has not yet been confirmed. The supplier catalogue is already available.",
+    "instruction": "Rewrite in clear formal language in the source language. Change the wording while retaining every fact, name, date, quantity, explicit negative status and only-after permission condition. Add no claims."
+  },
+  {
+    "id": "en-summarize",
+    "language": "en",
+    "targetLanguage": "en",
+    "task": "summarize",
+    "source": "Purchase record: On 2047-11-08, Lina Ford proposed buying 15 monitors, but the proposal has not been approved. Uma Rao may ship the monitors only after Oliver Zhou confirms receipt of payment. Receipt of payment has not yet been confirmed. The supplier catalogue is already available.",
+    "instruction": "Summarize in one sentence shorter than the source, in the source language. Retain all names, the date and quantity, the unapproved proposal, who may do what only after whose prerequisite action, and the explicit current incomplete prerequisite status. Omit only the final sentence about labels, catalogue, product list or itinerary. Add no claims."
+  },
+  {
+    "id": "en-translate",
+    "language": "en",
+    "targetLanguage": "ja",
+    "task": "translate",
+    "source": "Purchase record: On 2047-11-08, Lina Ford proposed buying 15 monitors, but the proposal has not been approved. Uma Rao may ship the monitors only after Oliver Zhou confirms receipt of payment. Receipt of payment has not yet been confirmed. The supplier catalogue is already available.",
+    "instruction": "Translate every sentence into ja. Keep all person names, ISO dates and quantities unchanged. Preserve roles, explicit negative statuses and only-after permission conditions. Add no claims."
+  },
+  {
+    "id": "ja-rewrite",
+    "language": "ja",
+    "targetLanguage": "ja",
+    "task": "rewrite",
+    "source": "バックアップ記録：2046-04-19、Yui Moriは32個のファイルの削除を提案したが、その提案はまだ承認されていない。運用チームはKen Satoがバックアップを検証した後にのみファイルを削除できる。バックアップは現在まだ検証されていない。作業用ラベルは印刷済みである。",
+    "instruction": "Rewrite in clear formal language in the source language. Change the wording while retaining every fact, name, date, quantity, explicit negative status and only-after permission condition. Add no claims."
+  },
+  {
+    "id": "ja-summarize",
+    "language": "ja",
+    "targetLanguage": "ja",
+    "task": "summarize",
+    "source": "バックアップ記録：2046-04-19、Yui Moriは32個のファイルの削除を提案したが、その提案はまだ承認されていない。運用チームはKen Satoがバックアップを検証した後にのみファイルを削除できる。バックアップは現在まだ検証されていない。作業用ラベルは印刷済みである。",
+    "instruction": "Summarize in one sentence shorter than the source, in the source language. Retain all names, the date and quantity, the unapproved proposal, who may do what only after whose prerequisite action, and the explicit current incomplete prerequisite status. Omit only the final sentence about labels, catalogue, product list or itinerary. Add no claims."
+  },
+  {
+    "id": "ja-translate",
+    "language": "ja",
+    "targetLanguage": "ko",
+    "task": "translate",
+    "source": "バックアップ記録：2046-04-19、Yui Moriは32個のファイルの削除を提案したが、その提案はまだ承認されていない。運用チームはKen Satoがバックアップを検証した後にのみファイルを削除できる。バックアップは現在まだ検証されていない。作業用ラベルは印刷済みである。",
+    "instruction": "Translate every sentence into ko. Keep all person names, ISO dates and quantities unchanged. Preserve roles, explicit negative statuses and only-after permission conditions. Add no claims."
+  },
+  {
+    "id": "ko-rewrite",
+    "language": "ko",
+    "targetLanguage": "ko",
+    "task": "rewrite",
+    "source": "대여 기록: 2045-12-03에 Min Park가 카메라 27대의 대여를 제안했지만 그 제안은 아직 승인되지 않았다. 대여팀은 Hana Lee가 보증금을 확인한 후에만 카메라를 인도할 수 있다. 보증금은 현재 아직 확인되지 않았다. 안내문은 이미 인쇄되었다.",
+    "instruction": "Rewrite in clear formal language in the source language. Change the wording while retaining every fact, name, date, quantity, explicit negative status and only-after permission condition. Add no claims."
+  },
+  {
+    "id": "ko-summarize",
+    "language": "ko",
+    "targetLanguage": "ko",
+    "task": "summarize",
+    "source": "대여 기록: 2045-12-03에 Min Park가 카메라 27대의 대여를 제안했지만 그 제안은 아직 승인되지 않았다. 대여팀은 Hana Lee가 보증금을 확인한 후에만 카메라를 인도할 수 있다. 보증금은 현재 아직 확인되지 않았다. 안내문은 이미 인쇄되었다.",
+    "instruction": "Summarize in one sentence shorter than the source, in the source language. Retain all names, the date and quantity, the unapproved proposal, who may do what only after whose prerequisite action, and the explicit current incomplete prerequisite status. Omit only the final sentence about labels, catalogue, product list or itinerary. Add no claims."
+  },
+  {
+    "id": "ko-translate",
+    "language": "ko",
+    "targetLanguage": "de",
+    "task": "translate",
+    "source": "대여 기록: 2045-12-03에 Min Park가 카메라 27대의 대여를 제안했지만 그 제안은 아직 승인되지 않았다. 대여팀은 Hana Lee가 보증금을 확인한 후에만 카메라를 인도할 수 있다. 보증금은 현재 아직 확인되지 않았다. 안내문은 이미 인쇄되었다.",
+    "instruction": "Translate every sentence into de. Keep all person names, ISO dates and quantities unchanged. Preserve roles, explicit negative statuses and only-after permission conditions. Add no claims."
+  },
+  {
+    "id": "de-rewrite",
+    "language": "de",
+    "targetLanguage": "de",
+    "task": "rewrite",
+    "source": "Bestellprotokoll: Am 2048-09-14 schlug Nora Berg den Kauf von 46 Tastaturen vor, doch der Vorschlag wurde noch nicht genehmigt. Kai Weber darf die Bestellung erst aufgeben, nachdem Mila Ortiz das Formular unterschrieben hat. Das Formular ist derzeit noch nicht unterschrieben. Die Produktliste liegt bereits vor.",
+    "instruction": "Rewrite in clear formal language in the source language. Change the wording while retaining every fact, name, date, quantity, explicit negative status and only-after permission condition. Add no claims."
+  },
+  {
+    "id": "de-summarize",
+    "language": "de",
+    "targetLanguage": "de",
+    "task": "summarize",
+    "source": "Bestellprotokoll: Am 2048-09-14 schlug Nora Berg den Kauf von 46 Tastaturen vor, doch der Vorschlag wurde noch nicht genehmigt. Kai Weber darf die Bestellung erst aufgeben, nachdem Mila Ortiz das Formular unterschrieben hat. Das Formular ist derzeit noch nicht unterschrieben. Die Produktliste liegt bereits vor.",
+    "instruction": "Summarize in one sentence shorter than the source, in the source language. Retain all names, the date and quantity, the unapproved proposal, who may do what only after whose prerequisite action, and the explicit current incomplete prerequisite status. Omit only the final sentence about labels, catalogue, product list or itinerary. Add no claims."
+  },
+  {
+    "id": "de-translate",
+    "language": "de",
+    "targetLanguage": "es",
+    "task": "translate",
+    "source": "Bestellprotokoll: Am 2048-09-14 schlug Nora Berg den Kauf von 46 Tastaturen vor, doch der Vorschlag wurde noch nicht genehmigt. Kai Weber darf die Bestellung erst aufgeben, nachdem Mila Ortiz das Formular unterschrieben hat. Das Formular ist derzeit noch nicht unterschrieben. Die Produktliste liegt bereits vor.",
+    "instruction": "Translate every sentence into es. Keep all person names, ISO dates and quantities unchanged. Preserve roles, explicit negative statuses and only-after permission conditions. Add no claims."
+  },
+  {
+    "id": "es-rewrite",
+    "language": "es",
+    "targetLanguage": "es",
+    "task": "rewrite",
+    "source": "Registro de viaje: El 2050-06-21, Carla Vega propuso reservar 12 plazas, pero la propuesta aún no ha sido aprobada. Omar Mendez solo puede reservarlas después de que Luz Ibarra autorice el viaje. El viaje todavía no ha sido autorizado. El itinerario ya está preparado.",
+    "instruction": "Rewrite in clear formal language in the source language. Change the wording while retaining every fact, name, date, quantity, explicit negative status and only-after permission condition. Add no claims."
+  },
+  {
+    "id": "es-summarize",
+    "language": "es",
+    "targetLanguage": "es",
+    "task": "summarize",
+    "source": "Registro de viaje: El 2050-06-21, Carla Vega propuso reservar 12 plazas, pero la propuesta aún no ha sido aprobada. Omar Mendez solo puede reservarlas después de que Luz Ibarra autorice el viaje. El viaje todavía no ha sido autorizado. El itinerario ya está preparado.",
+    "instruction": "Summarize in one sentence shorter than the source, in the source language. Retain all names, the date and quantity, the unapproved proposal, who may do what only after whose prerequisite action, and the explicit current incomplete prerequisite status. Omit only the final sentence about labels, catalogue, product list or itinerary. Add no claims."
+  },
+  {
+    "id": "es-translate",
+    "language": "es",
+    "targetLanguage": "pt",
+    "task": "translate",
+    "source": "Registro de viaje: El 2050-06-21, Carla Vega propuso reservar 12 plazas, pero la propuesta aún no ha sido aprobada. Omar Mendez solo puede reservarlas después de que Luz Ibarra autorice el viaje. El viaje todavía no ha sido autorizado. El itinerario ya está preparado.",
+    "instruction": "Translate every sentence into pt. Keep all person names, ISO dates and quantities unchanged. Preserve roles, explicit negative statuses and only-after permission conditions. Add no claims."
+  },
+  {
+    "id": "pt-rewrite",
+    "language": "pt",
+    "targetLanguage": "pt",
+    "task": "rewrite",
+    "source": "Registro de arquivo: Em 2051-02-17, Rui Costa propôs remover 64 registros, mas a proposta ainda não foi aprovada. A equipe de arquivo só pode remover os registros depois que Ana Lima validar a cópia de segurança. A cópia ainda não foi validada. As etiquetas já foram impressas.",
+    "instruction": "Rewrite in clear formal language in the source language. Change the wording while retaining every fact, name, date, quantity, explicit negative status and only-after permission condition. Add no claims."
+  },
+  {
+    "id": "pt-summarize",
+    "language": "pt",
+    "targetLanguage": "pt",
+    "task": "summarize",
+    "source": "Registro de arquivo: Em 2051-02-17, Rui Costa propôs remover 64 registros, mas a proposta ainda não foi aprovada. A equipe de arquivo só pode remover os registros depois que Ana Lima validar a cópia de segurança. A cópia ainda não foi validada. As etiquetas já foram impressas.",
+    "instruction": "Summarize in one sentence shorter than the source, in the source language. Retain all names, the date and quantity, the unapproved proposal, who may do what only after whose prerequisite action, and the explicit current incomplete prerequisite status. Omit only the final sentence about labels, catalogue, product list or itinerary. Add no claims."
+  },
+  {
+    "id": "pt-translate",
+    "language": "pt",
+    "targetLanguage": "zh-CN",
+    "task": "translate",
+    "source": "Registro de arquivo: Em 2051-02-17, Rui Costa propôs remover 64 registros, mas a proposta ainda não foi aprovada. A equipe de arquivo só pode remover os registros depois que Ana Lima validar a cópia de segurança. A cópia ainda não foi validada. As etiquetas já foram impressas.",
+    "instruction": "Translate every sentence into zh-CN. Keep all person names, ISO dates and quantities unchanged. Preserve roles, explicit negative statuses and only-after permission conditions. Add no claims."
+  }
+]

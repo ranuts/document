@@ -1,0 +1,13 @@
+{
+  "scope": "Candidate acquisition only; no quality or runtime acceptance",
+  "upstreamModel": "Qwen/Qwen3-4B-Instruct-2507",
+  "upstreamRevision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "ggufRepository": "lmstudio-community/Qwen3-4B-Instruct-2507-GGUF",
+  "revision": "4edb920b6f14e3b9284d4502a6485103d72cde05",
+  "file": "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+  "expectedBytes": 2497280448,
+  "expectedSHA256": "8cdb57cbb880d313736a9bc4e3d3d2485f145b5e19cf33783746e753e82641fc",
+  "metadataSource": "https://huggingface.co/api/models/lmstudio-community/Qwen3-4B-Instruct-2507-GGUF/tree/4edb920b6f14e3b9284d4502a6485103d72cde05?recursive=true&expand=false",
+  "modelCard": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507",
+  "adopted": false
+}
