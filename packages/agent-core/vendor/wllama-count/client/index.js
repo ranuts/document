@@ -1480,7 +1480,21 @@ var ProxyToWorker = class {
           throw new Error(`blob not found for name="${name}"`);
         }
         const chunk = blob.slice(offset, offset + size);
-        const buffer = yield chunk.arrayBuffer();
+        // WebKit can reject large backing Blob reads even when the bytes are cached.
+        // Keep the worker response intact while limiting each storage read to 8 MiB.
+        const readLimit = 8 * 1024 * 1024;
+        let buffer;
+        if (chunk.size <= readLimit) {
+          buffer = yield chunk.arrayBuffer();
+        } else {
+          const bytes = new Uint8Array(chunk.size);
+          for (let position = 0; position < chunk.size; position += readLimit) {
+            const part = chunk.slice(position, Math.min(position + readLimit, chunk.size));
+            const data = yield part.arrayBuffer();
+            bytes.set(new Uint8Array(data), position);
+          }
+          buffer = bytes.buffer;
+        }
         this.worker.postMessage(
           { verb: "fs.read_res", args: [buffer] },
           { transfer: [buffer] }

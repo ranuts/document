@@ -1,7 +1,7 @@
 {
   "scope": "Paired CPU default/compat count candidate; isolated verification, no production activation",
   "entries": {
-    "client/index.js": "4a87c46f0595ccbb716e2ca70a1d5ec2223d3d179f2fb4e24cb53fd5b65e6006",
+    "client/index.js": "d522958c39df2fcf77a05e9de526326b58c9a20e76f4517450732c4ae2eaaaf6",
     "native/default/wllama.js": "9ef654633a98495e82dd3eb862923eb17205eb6aa1cbfac1fb61715b8e31cbbf",
     "native/default/wllama.wasm": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6",
     "native/compat/wllama.js": "9708f2b93fa3bc6df5d06c75bc651f32201228532f07423447aa1b912f52f97c",
@@ -11,6 +11,7 @@
     "source/prepare-cpu-default-count-client.mjs": "177125657a183a9962aec458613eb4ec6275379b9dd182527eb13f6158986a1d",
     "licenses/wllama-LICENCE": "5866e3bd7e3cbd3f7c8bea6efd8a1e7fa7cc8de68c30f428aff7c6584a0fb720",
     "licenses/llama.cpp-LICENSE": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
-    "README.txt": "dced8a3d3f47408e880028326d9188f2293ac31a7e54645f65d6d82ca2d3546a"
+    "README.txt": "dced8a3d3f47408e880028326d9188f2293ac31a7e54645f65d6d82ca2d3546a",
+    "source/cpu-bounded-blob-read.patch": "2f5f5e969e6a62bac25299ce87bad2321d444a31eda86f8d427dd045af6ca7b5"
   }
 }

@@ -1,0 +1,7 @@
+# Bounded model-file read: actual product WebKit offline page
+
+The rebuilt product uses the patched vendored client without a browser-side read override. Isolated WebKit 27.2 naturally selects CPU Qwen3 0.6B, loads online in 58,412 ms, and has the production service-worker controller. After the entire page closes and context.setOffline(true), a new Word page restores the cached model in 3,865 ms and completes a reply in 4,731 ms. Exact data-source is WEBKIT_OFFLINE_OK, blank document remains unchanged, page/chat errors are empty, and context/browser close. Process exits 0.
+
+The SDK now assembles each requested worker buffer from sequential backing reads of at most 8 MiB. It retains exact requested bytes and terminates/aborts on a failed subread rather than sending partial data. Regression tests cover complete byte identity by SHA-256 and failure cleanup. Ten related Wllama files / 65 tests pass; TypeScript, changed-test lint/format and production build pass. Patch reversal recovers the original accepted client SHA while native artifact pairs retain original hashes.
+
+The request ledger retains failed offline service-worker update and two spelling-script requests. This is a narrow successful editor/model/page-close lifecycle, not all auxiliary features or global-network certification. Browser-process/OS restart, physical Safari/mobile, save/reopen, Excel/PPT and seven-language semantic writing remain unverified. Project Playwright dependencies remain unchanged; the fixed runner lives only in ignored scratch.
