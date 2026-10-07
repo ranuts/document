@@ -1,0 +1,21 @@
+{
+  "timing": "Captured after process launch; not a prelaunch protocol binding",
+  "sha256": {
+    "docs/evaluations/2026-10-07-webkit-startup-preflight-native.mjs": "dd1ea13abe357db299ceb1a90d2ced79c894ea24431728f10ccdd432a5a1cbf2",
+    "dist/sw.js": "0e8241d93a83e8ee45f562623f9c00e4f42bb2d131baff106c3829ca165b3be9",
+    "dist/assets/editor-a29E5U4S.js": "eb408e146eb499d39f3d59aefa6d18ce79f8684896bc8f4a46c1106ca716f9ce",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  },
+  "afterSHA256": {
+    "docs/evaluations/2026-10-07-webkit-startup-preflight-native.mjs": "dd1ea13abe357db299ceb1a90d2ced79c894ea24431728f10ccdd432a5a1cbf2",
+    "dist/sw.js": "0e8241d93a83e8ee45f562623f9c00e4f42bb2d131baff106c3829ca165b3be9",
+    "dist/assets/editor-a29E5U4S.js": "eb408e146eb499d39f3d59aefa6d18ce79f8684896bc8f4a46c1106ca716f9ce",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  },
+  "processExitCode": 0,
+  "evidenceSHA256": {
+    "2026-10-07-webkit-startup-preflight-native.mjs": "dd1ea13abe357db299ceb1a90d2ced79c894ea24431728f10ccdd432a5a1cbf2",
+    "2026-10-07-webkit-startup-preflight-native.json": "3a5c1fd51c47e67e365140ee45a1fde74977df62953e18dc6325cfb7d89a4aad",
+    "2026-10-07-webkit-startup-preflight-analysis.md": "894dd48afb30c90cccbc49c42d76b6cf89e20c4909de5805f4632d1527b454a4"
+  }
+}
