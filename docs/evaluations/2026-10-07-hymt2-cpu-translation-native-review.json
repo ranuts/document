@@ -1,0 +1,54 @@
+{
+  "scope": "Bounded manual known-source development judgments; not native-speaker certification, product acceptance, heldout accuracy or all language directions. Uncertain means unproven.",
+  "receiptSha256": "6ce244160a4a5fdf58ab461fbb5b2890f511c649f8f1891a0f6b6966824d2653",
+  "protocolSha256": "6d9a21f8683856dad5cea215c912c9887b502fc04909e2966da259a63137deb4",
+  "counts": {
+    "uncertain": 2,
+    "fail": 4,
+    "narrow-pass": 1
+  },
+  "rows": [
+    {
+      "id": "zh-CN-translate",
+      "verdict": "uncertain",
+      "reason": "Roles, dates, statuses and conditions appear retained; masking check is less specific than source de-identification and requires terminology review.",
+      "outputContentSha256": "358e854784073782277bc461af7dcc9439850502027ebaf90aff8e60cbbe7561"
+    },
+    {
+      "id": "en-translate",
+      "verdict": "fail",
+      "reason": "Both ISO dates reformatted despite preservation instruction; parts terminology is also awkward.",
+      "outputContentSha256": "698d94a599e9957a2a72fda4aa5fd796dc225058efb952de31140df711bf3107"
+    },
+    {
+      "id": "ja-translate",
+      "verdict": "fail",
+      "reason": "Personal names transliterated despite required original spellings; Ken Arai becomes inconsistent Korean spellings.",
+      "outputContentSha256": "71ffdf23b9870033df77b5076cb46e42aafd0ce9340277d7c3af082074da2580"
+    },
+    {
+      "id": "ko-translate",
+      "verdict": "fail",
+      "reason": "German team article error, unsupported identity pronoun/signing ownership, and checklist becomes an inspection report.",
+      "outputContentSha256": "6bfb63a6f67c1265f81d938b4986ac4d16d272f7669f6bd6183f8086288a8652"
+    },
+    {
+      "id": "de-translate",
+      "verdict": "narrow-pass",
+      "reason": "Examined actors, dates, digit 6, dual prerequisites/current states and prior activity/nonpermission retained in Spanish.",
+      "outputContentSha256": "1743bcea2295d3e9606be73b6119f7e99669be2c7e175dc71dd5033202fd0d71"
+    },
+    {
+      "id": "es-translate",
+      "verdict": "uncertain",
+      "reason": "Examined factual relations appear retained, but Portuguese subordinate verbs mix forms after depois que; idiomatic grammar needs review.",
+      "outputContentSha256": "4d268a0b9c28d45b31e4454e9e4a6d7ce57830a5edb1cfb912284b59925c6a79"
+    },
+    {
+      "id": "pt-translate",
+      "verdict": "fail",
+      "reason": "Both ISO dates reformatted; examined Chinese inventory-taking terminology is improved but does not satisfy literal date requirement.",
+      "outputContentSha256": "3aa3c163bb348e0b66d2377dbe5d1acfcebc615b796e018a276ea370ef8764b5"
+    }
+  ]
+}

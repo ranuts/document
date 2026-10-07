@@ -3971,6 +3971,18 @@
       "sha256": "5e3bfbd4c7ef93dd66e29a6f9c4b3f73dd1cba00cb73be1dc7e149888e198848"
     },
     {
+      "path": "docs/evaluations/2026-10-07-hymt2-cpu-translation-native.json",
+      "sha256": "6ce244160a4a5fdf58ab461fbb5b2890f511c649f8f1891a0f6b6966824d2653"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-cpu-translation-native.mjs",
+      "sha256": "c7c17b5c2c5ac1a7162e9054a609e7baff7f656821bf40bbee558f961062acd4"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-cpu-translation-protocol.json",
+      "sha256": "6d9a21f8683856dad5cea215c912c9887b502fc04909e2966da259a63137deb4"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-korean-native-input-readiness.json",
       "sha256": "f6b9d66d3ce2158cd06dbfd7b0da63236c530414d20752334edb4a408dd08561"
     },
@@ -4169,6 +4181,18 @@
     {
       "path": "docs/evaluations/2026-10-07-qwen14-fact-ledger-native.mjs",
       "sha256": "9f115f5bece40ee67be6bdd40ee56733c83d7fc00ea4165398b120793102e697"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-qwen14-independent-revision-native.json",
+      "sha256": "9f0f61e5beacb08fedea53923599f857ac124478fe633a7ec5a6949f42474960"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-qwen14-independent-revision-native.mjs",
+      "sha256": "62f91373bcb6de40a7088a9c1f2dbb8d123dea68ea8421aa9732c265959966be"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-qwen14-independent-revision-protocol.json",
+      "sha256": "4b1ae5b808dbb6d04aeb53859377b853045c7a060701c4e536913cf2496de3bc"
     },
     {
       "path": "docs/evaluations/2026-10-07-qwen14-ko-de-interim-native.json",

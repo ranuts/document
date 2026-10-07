@@ -1,0 +1,9 @@
+# Independent writing revision screen
+
+All 21 revision requests completed with stop and parseable JSON; the process exited 0 and closed its context. The frozen protocol binds the preceding 42-request receipt. Each prior draft is the exact product-baseline output from that receipt; each baseline request was checked against its original fixture before protocol creation. Baselines were not regenerated. No human correction or gold answer was supplied.
+
+Bounded manual review: 2 narrow passes and 19 failures. The two examined passing tasks, Spanish-to-Portuguese translation and Portuguese rewrite, already passed their earlier baseline. The revision fixes one Japanese only-after/cannot-pay construction, but drops the payment-for-3-parts relation. It does not establish a broadly useful correction workflow.
+
+The model retains Chinese declassification instead of de-identification, Japanese/Korean calibration mistranslation, German article errors and invented actor ownership. Dates are still reformatted in Chinese/Japanese rewriting; required 3/6 digits still become words, including a previously digit-preserving German-to-Spanish translation. Every summary omits required core information from these explicit diagnostic instructions. There is no universal claim that summaries must preserve all source background: these fixtures allow dropping only the final duplicate-log background while requiring the remaining facts.
+
+This is a known-source development comparison, not a candidate-isolated holdout, native-speaker certification or general accuracy estimate. The previously configured local Qwen2.5-14B diagnostic uses context 2048/prefill 1024 and a warmed SDK cache. Exact cached-library consumption is not independently established. No browser editor application, product pipeline/default adoption, physical device or offline acceptance follows from this SDK completion.

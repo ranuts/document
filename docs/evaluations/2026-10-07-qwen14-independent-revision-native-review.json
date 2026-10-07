@@ -1,0 +1,137 @@
+{
+  "scope": "Bounded manual known-source development judgments; not native-speaker certification, product acceptance, heldout accuracy or all language directions. Uncertain means unproven.",
+  "receiptSha256": "9f0f61e5beacb08fedea53923599f857ac124478fe633a7ec5a6949f42474960",
+  "protocolSha256": "4b1ae5b808dbb6d04aeb53859377b853045c7a060701c4e536913cf2496de3bc",
+  "counts": {
+    "fail": 19,
+    "narrow-pass": 2
+  },
+  "rows": [
+    {
+      "id": "zh-CN-rewrite",
+      "verdict": "fail",
+      "reason": "ISO dates reformatted; passed check becomes completed; duplicate log becomes one entry.",
+      "outputContentSha256": "bc91304906f3068e523c3f1073b93b72f5ba2d8391d6650eaed4c206811065b0"
+    },
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "fail",
+      "reason": "Summary omits required sending actor/recipient, explicit dual prerequisites and proposal nonapproval.",
+      "outputContentSha256": "b0db678f001e78d67bcbdbdb4a127351fe09fe602a98ed969916681697792897"
+    },
+    {
+      "id": "zh-CN-translate",
+      "verdict": "fail",
+      "reason": "De-identification remains declassification.",
+      "outputContentSha256": "2badddc4b0d7f71e00608ede24f6952a1ba78ee2f4e793ca9ba8342422fb6889"
+    },
+    {
+      "id": "en-rewrite",
+      "verdict": "fail",
+      "reason": "Required digit 3 remains three.",
+      "outputContentSha256": "66b5d7537ba8ed73a6cffa2ce42c7f46214828c0f8d3ef5c6b8cc6f24fa464c7"
+    },
+    {
+      "id": "en-summarize",
+      "verdict": "fail",
+      "reason": "Summary omits finance actor, proposal nonapproval and unpaid invoice binding; prior invoice date becomes date of invoice rather than sending event.",
+      "outputContentSha256": "e2785e1b04e5a56208dded0f02f2ee33c3da618114b91e516a5aae5a459c8244"
+    },
+    {
+      "id": "en-translate",
+      "verdict": "fail",
+      "reason": "Only-after/cannot-pay condition repaired, but payment for 3 parts omitted entirely.",
+      "outputContentSha256": "ae0ff944c95a10b377c5293030f2abed245c1c0a2b1be7923b6e9d0152c4175f"
+    },
+    {
+      "id": "ja-rewrite",
+      "verdict": "fail",
+      "reason": "ISO dates reformatted and inspection-team recipient omitted.",
+      "outputContentSha256": "aeec01c95d294a659c931dc79e5d2af25597f36c1b0d97d411a1e4bca466bdd0"
+    },
+    {
+      "id": "ja-summarize",
+      "verdict": "fail",
+      "reason": "Second date, storage-team activity and dual prerequisites omitted; invents not-yet-sent status.",
+      "outputContentSha256": "f4770d60265999a8833f8f4b1b3bdbe4e216d96907cab795cb5d7a77475903ed"
+    },
+    {
+      "id": "ja-translate",
+      "verdict": "fail",
+      "reason": "Calibration remains general verification in Korean.",
+      "outputContentSha256": "93ad5834c22673353ff55c0fa92c25eac54305e08fd108a63b4f30876de968b0"
+    },
+    {
+      "id": "ko-rewrite",
+      "verdict": "fail",
+      "reason": "Assigns contract signing and pending signature to Min Han, although source names Min Han for identity verification and leaves contract signing actor unspecified.",
+      "outputContentSha256": "6c88d882b12b356aaaba3939e1432f1da1c6ea775db9155a7f0e6d41b14e668f"
+    },
+    {
+      "id": "ko-summarize",
+      "verdict": "fail",
+      "reason": "Summary adds causality from unsigned contract to proposal nonapproval and omits required earlier date/activity and equipment/customer actors.",
+      "outputContentSha256": "21bcd95b5e0cd93c57a428043b6de91cce6606cc662fdf2f129e59eeeafa9979"
+    },
+    {
+      "id": "ko-translate",
+      "verdict": "fail",
+      "reason": "German article/agreement errors persist; adds own identity and assigns contract signing to Min Han.",
+      "outputContentSha256": "93ee399601adfcab73cdef28d656471fb7ee21695d2acb2d77d7c37679c4cdc2"
+    },
+    {
+      "id": "de-rewrite",
+      "verdict": "fail",
+      "reason": "6 becomes sechs; refund assigned to Max Wolf and same-day log timestamp invented.",
+      "outputContentSha256": "4d1c57c07bdf69e18237c38e08debd6e50dc8367d4adc5a43a18dfbd7f9caec6"
+    },
+    {
+      "id": "de-summarize",
+      "verdict": "fail",
+      "reason": "Summary omits proposal nonapproval, customer-team actor, earlier date/activity and misstates customer consent as general confirmation.",
+      "outputContentSha256": "1e7944e33dba201ea71b0e731581060a5faecedf9c8e8d2472a7476ff665e573"
+    },
+    {
+      "id": "de-translate",
+      "verdict": "fail",
+      "reason": "Previously digit-preserving baseline becomes seis; source requires numeric tokens unchanged.",
+      "outputContentSha256": "9e7a644f4c1f185a90098681a25ecca4726ae81203ae1a746069b971c77999b5"
+    },
+    {
+      "id": "es-rewrite",
+      "verdict": "fail",
+      "reason": "Conditional Ivan review prerequisite removed from return rule; review of return becomes review of request.",
+      "outputContentSha256": "56419c416634094b114478235105deafbb62552be01832e4317887ea32bf42e1"
+    },
+    {
+      "id": "es-summarize",
+      "verdict": "fail",
+      "reason": "Summary omits support actor, dual prerequisite rule, proposal nonapproval and earlier date/activity.",
+      "outputContentSha256": "0d8f54b5f682e843f242e96da5626528e99ed6f131be268e32c3f2ab591a85e8"
+    },
+    {
+      "id": "es-translate",
+      "verdict": "narrow-pass",
+      "reason": "Examined roles, dual prerequisites/current states, dates, digits and earlier activity/nonpermission retained in Portuguese.",
+      "outputContentSha256": "3de4fb266c52cae31c0f1ebd407e9f8cac8e71b06d4593a1716caf986bb64128"
+    },
+    {
+      "id": "pt-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Examined original facts, actors, dates, digits, states and nonpermission retained with changed wording.",
+      "outputContentSha256": "f46a4e8e32e5c581198130dff547ad3c451c643a896e0bf9eb7ff4c4442b40ed"
+    },
+    {
+      "id": "pt-summarize",
+      "verdict": "fail",
+      "reason": "Summary omits archive-team actor, dual prerequisite rule, proposal nonapproval and earlier date/activity.",
+      "outputContentSha256": "58422afb26e1ceb09523379d44a2b073bdf460f17287913b6cb7cd06a65fb233"
+    },
+    {
+      "id": "pt-translate",
+      "verdict": "fail",
+      "reason": "Chinese inventory-taking action remains awkward/incomplete as completing inventory stock, failing requested fluency/terminology.",
+      "outputContentSha256": "6cffe599778d380562613f38c6143b91666b22438b64a274babdb6c6b291cac3"
+    }
+  ]
+}
