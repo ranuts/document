@@ -130,3 +130,8 @@ Eight native CPU inference rows completed with verified artifacts and unchanged 
 ### Completed larger GPU known-source screen (2026-10-07)
 
 Pinned Qwen2.5-7B MLC loaded on the actual Apple GPU and completed four frozen SDK writing requests. Bounded manual checks narrowly pass Japanese-to-Korean translation, German rewrite and Spanish rewrite; Chinese summary preserves examined facts but fails the one-sentence instruction. These are selected known sources with no native application, unused-source transfer or seven-language acceptance. See [analysis](2026-10-07-qwen25-7b-gpu-analysis.md), [review](2026-10-07-qwen25-7b-gpu-review.json), [raw receipt](2026-10-07-qwen25-7b-gpu-screen.json) and [bindings](2026-10-07-qwen25-7b-gpu-bindings.json). No default is promoted.
+
+
+### Completed native larger GPU development screen (2026-10-07)
+
+Qwen2.5-7B completed all 21 known-source original-product Word writing tasks. Bounded manual review yields 9 narrow passes, 11 failures and 1 uncertain result; exact native write/history and actual Apple GPU/runtime checks pass independently. Missing actors/current status, changed recipients/actions/objects, wrong language/date format and target-language issues prevent adoption. See [analysis](2026-10-07-qwen25-7b-gpu-native-analysis.md), [review](2026-10-07-qwen25-7b-gpu-native-review.json), [raw receipt](2026-10-07-qwen25-7b-gpu-native.json) and [bindings](2026-10-07-qwen25-7b-gpu-native-bindings.json). This screen is not unused-source transfer, native-speaker or full device/offline acceptance.

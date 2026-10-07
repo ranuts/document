@@ -1,0 +1,140 @@
+{
+  "scope": "Completed 21 known development tasks across seven distinct topics and seven translation directions. Bounded manual review; no native-speaker certification, unused-source transfer or full acceptance.",
+  "reviews": [
+    {
+      "id": "zh-CN-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Chinese rewrite changes wording and retains checked names/date/quantity, unapproved proposal, delivery-team only-after Pavel signing prerequisite, current unsigned report and printed labels; native application/history match.",
+      "rowCanonicalSHA256": "6659e4e5605251e740813e78727d344a0bcd37961a30a32eb62fa3a618eff019"
+    },
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "fail",
+      "reason": "Checked Chinese facts and actors remain and incidental labels omitted, but summary uses two sentences rather than requested one; native application/history does not establish task acceptance.",
+      "rowCanonicalSHA256": "8193005cf37a3158ab66249982a891a48b6008dccd6aa78b54fe208c467a327b"
+    },
+    {
+      "id": "zh-CN-translate",
+      "verdict": "fail",
+      "reason": "Translation changes exact ISO date 2049-03-12 into March 12, 2049. Product numeric/date guard refuses and leaves source unchanged; semantically equivalent calendar wording does not meet exact-format requirement.",
+      "rowCanonicalSHA256": "98cf823f5fdce7d1ccc41dd6392204d9dd0c6d3458b58762f9af2720bd3446c1"
+    },
+    {
+      "id": "en-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "English rewrite changes wording and retains Lina/date/15 monitors, unapproved proposal, Uma shipping permission only after Oliver confirms receipt of payment, current incomplete confirmation and available catalogue. Applied output and full native history match; bounded manual fact check only.",
+      "rowCanonicalSHA256": "09fffb47c3adb0d838947453ff13fbd5a69fb44050a5ffce579fb9a3b5918f6e"
+    },
+    {
+      "id": "en-summarize",
+      "verdict": "narrow-pass",
+      "reason": "One shorter English sentence retains Lina/date/15 monitors, nonapproval of proposed purchase, Uma shipping permission only after Oliver confirms receipt of payment and current unconfirmed status; catalogue omitted. Applied native history matches. Pronoun it refers back to the proposal context; no native-speaker/general acceptance follows.",
+      "rowCanonicalSHA256": "f7d03c326b16e1e409fb4a6a7a6d57c2a9146d141c2369929709a4f1fc93a569"
+    },
+    {
+      "id": "en-translate",
+      "verdict": "fail",
+      "reason": "Japanese output shifts only from the temporal prerequisite to Uma Rao exclusivity (Uma Raoのみ), adding an unsupported only-actor restriction. Oliver Zhouが支払いを受け取った also makes Oliver the payment recipient, whereas the source identifies Oliver as confirming receipt without naming the recipient. Names/date/quantity and current unconfirmed status survive and native history passes, but these relation changes fail factual fidelity.",
+      "rowCanonicalSHA256": "e997aae17c7d7f5fb3cca5ea6b32077dadd1e5a96ed685ad6ed35f7b5b1dd7bb"
+    },
+    {
+      "id": "ja-rewrite",
+      "verdict": "fail",
+      "reason": "Japanese rewrite changes exact ISO date 2046-04-19 to 2046年4月19日; numeric/date guard refuses and source remains unchanged. This fails the explicit exact-date-format requirement even though the calendar date corresponds.",
+      "rowCanonicalSHA256": "74ea165e9620767e3a7a7f73272722d136cafe8049d4c4b1549484616ad6a829"
+    },
+    {
+      "id": "ja-summarize",
+      "verdict": "fail",
+      "reason": "Japanese summary omits operating-team actor and returns two sentences instead of one. Names/date/quantity, unapproved proposal, Ken backup-validation prerequisite and current unvalidated backup remain, but applied native output/history does not meet actor/task requirements.",
+      "rowCanonicalSHA256": "cbe886853288bdaef1474fbf09aae9b205c8829e1dc5239b7fc80954068f628d"
+    },
+    {
+      "id": "ja-translate",
+      "verdict": "narrow-pass",
+      "reason": "Korean translation matches the previous bounded SDK result and retains exact names/ISO date/quantity, proposal nonapproval, operating team only-after Ken validates backup, current unvalidated status and printed labels. Native application/history match. No native-speaker/general quality certification.",
+      "rowCanonicalSHA256": "28c8e688af97788a4f98865d56e210035cccbe69495f526682d48b8544d3095a"
+    },
+    {
+      "id": "ko-rewrite",
+      "verdict": "fail",
+      "reason": "Korean rewrite instead outputs English, changes ISO date to December 3, 2045, and adds unsupported delivery-to-Hana relation: source identifies Hana as confirming deposit, not recipient of cameras. Product date guard refuses and source remains unchanged.",
+      "rowCanonicalSHA256": "1cce8b1a440626a4c5903cb76d86007264575a70e3eea3e4ebe6bd93f784f884"
+    },
+    {
+      "id": "ko-summarize",
+      "verdict": "narrow-pass",
+      "reason": "One shorter Korean sentence retains Min/date/27 cameras, unapproved rental proposal, rental-team delivery permission only after Hana confirms deposit and current unconfirmed deposit, omitting printed notices. Native application/history match. Bounded manual fact check only, not native-speaker review.",
+      "rowCanonicalSHA256": "f1bf9c29867c3a36275b1be5c09ff2f00635d0e3318573c729989b25887dfb37"
+    },
+    {
+      "id": "ko-translate",
+      "verdict": "fail",
+      "reason": "German translation changes deposit to Kautionserlass (waiver/remission of deposit), introducing a different prerequisite/current status. Mietvertrag also changes a rental record heading into a contract. Exact names/date/quantity and native application/history survive, but factual relation/object requirements fail.",
+      "rowCanonicalSHA256": "98fa902342683c19d83c8297d0e6797f6383da75b7f117168887e842b07b6aef"
+    },
+    {
+      "id": "de-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "German rewrite exactly reproduces the bounded SDK result: changed wording with grammatical schlug ... vor and all checked names/date/46 keyboards, unapproved proposal, Kai ordering only after Mila signs form, currently unsigned form and available list. Native write/Undo/Redo match; no broad quality or native-speaker certification.",
+      "rowCanonicalSHA256": "3fc575d427597a70b6cb6cc6f282091e1b87c3fbff52eb0ddae46730c13ac6c8"
+    },
+    {
+      "id": "de-summarize",
+      "verdict": "narrow-pass",
+      "reason": "One shorter German sentence retains Nora/date/46 keyboards, unapproved purchase proposal, Kai ordering only after Mila signs form, and currently unsigned form, omitting list. Dense comma-linked clauses remain; bounded fact/task review only, no expert style certification. Native history matches.",
+      "rowCanonicalSHA256": "84f943c03974fa586b03e70996daa6763e5ed4c0833a264d5250fdec26dfe784"
+    },
+    {
+      "id": "de-translate",
+      "verdict": "fail",
+      "reason": "Spanish translation changes 46 keyboards into teclas de tipo de teclado (keyboard-type keys), and Kai ordering only after signing into Kai no puede cancelar la orden hasta (cannot cancel order until), changing action from ordering to cancellation. The German heading Bestellprotokoll remains untranslated. Names/date/native history survive but factual/task fidelity fails.",
+      "rowCanonicalSHA256": "15f46fbfd375303396d73f46ebdafa0e3e9a28cf0b6bb2af4793401f47573071"
+    },
+    {
+      "id": "es-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Spanish rewrite exactly reproduces bounded SDK output, stays Spanish and changes wording while retaining Carla/date/12 seats, unapproved proposal, Omar reservations only after Luz authorizes travel, current unauthorized travel and prepared itinerary. Native write/history match; no broad/native-speaker certification.",
+      "rowCanonicalSHA256": "fde17b0cda59edfcae0092af52b3239655a2ade157f4454445ec8f6c5ea41711"
+    },
+    {
+      "id": "es-summarize",
+      "verdict": "fail",
+      "reason": "One shorter Spanish sentence retains names/date/12 seats, proposal nonapproval and Omar reservation permission after Luz authorizes travel, but omits explicit current unauthorized travel status. Unapproved reservation proposal is distinct from travel authorization; the prerequisite alone does not state its current status. Applied native history does not repair this omission.",
+      "rowCanonicalSHA256": "b2ab6675eb594eb6f0914d6b620c4000a0cccd0625c688b4fdf01f9e49785def"
+    },
+    {
+      "id": "es-translate",
+      "verdict": "fail",
+      "reason": "Portuguese output preserves checked names/date/quantity, nonapproval, permission prerequisite/current unauthorized travel and itinerary, but twice uses o viajem with masculine agreement for the feminine travel noun viagem. This fails target-language grammar/spelling quality despite successful native history. Priberam distinguishes feminine noun viagem from verbal form viajem.",
+      "rowCanonicalSHA256": "6c6b9d03d8626286428840f467aab4531253827ef3ac8a710bb06d194b05e9da",
+      "lexicalSources": [
+        "https://dicionario.priberam.org/viagem",
+        "https://dicionario.priberam.org/viajem"
+      ]
+    },
+    {
+      "id": "pt-rewrite",
+      "verdict": "uncertain",
+      "reason": "Checked names/date/64 records, unapproved proposal, archive-team removal only after Ana validates backup, incomplete current validation and labels remain. Wording changes but após que Ana Lima valide is awkward; formal grammar/style improvement is not certified without qualified Portuguese review. Native history passes; not counted as acceptance.",
+      "rowCanonicalSHA256": "1d11e9ee0b02201cbebac6ee39107a11bfb9f6705c62a4faf07fc88a5893bfa3"
+    },
+    {
+      "id": "pt-summarize",
+      "verdict": "fail",
+      "reason": "One shorter Portuguese sentence retains names/date/64 records, proposal nonapproval and archive-team permission only after Ana validates backup, but omits explicit current unvalidated backup status. Proposal nonapproval is a different current state. Applied native history does not repair omission.",
+      "rowCanonicalSHA256": "2cdc52521c2eb4d17dec97c98760ee993d6f7f7905cb4a56a3458fe5e26fbf95"
+    },
+    {
+      "id": "pt-translate",
+      "verdict": "narrow-pass",
+      "reason": "Chinese translation retains Rui/date/64 records, unapproved proposal, team removal only after Ana validates backup, current unvalidated backup and printed labels. 文件团队 is a broad lexical rendering of equipe de arquivo rather than the preferred 档案团队; checked actor/action relation remains. Native history passes; bounded fact check only, no broad/native-speaker certification.",
+      "rowCanonicalSHA256": "612cea4c059a26d8e1a0d35da6d1d0c7dbb6918d790f035e46635fba644efd5a"
+    }
+  ],
+  "counts": {
+    "narrow-pass": 9,
+    "fail": 11,
+    "uncertain": 1
+  }
+}
