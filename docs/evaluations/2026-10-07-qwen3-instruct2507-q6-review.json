@@ -1,0 +1,61 @@
+{
+  "scope": "Eight frozen known-source Q4/Q6 rows; one Q6 German narrow pass, seven failures. No seven-language acceptance or native-speaker certification.",
+  "reviews": [
+    {
+      "id": "zh-CN-summarize",
+      "variant": "Q4_K_M",
+      "verdict": "fail",
+      "reason": "Exact original request and raw choice reproduce English summary of Chinese source with omitted delivery-team actor; refused by length guard. Startup readiness repair does not alter this generation outcome.",
+      "rowCanonicalSHA256": "126f5806359d2ed713fe50da1871a8944f541c6d252ba992d63609c6ef8e0347"
+    },
+    {
+      "id": "zh-CN-summarize",
+      "variant": "Q6_K",
+      "verdict": "fail",
+      "reason": "Q6 summary still outputs English instead of Chinese and omits the delivery-team actor. Checked names/date/quantity, proposal nonapproval, signing prerequisite and current unsigned status remain, but the length guard refuses. Changed wording is not a semantic/task repair.",
+      "rowCanonicalSHA256": "9f320d37aeed1a531bf4386695b94df8c2b4039f1c4e847a688abd17addb55a4"
+    },
+    {
+      "id": "ja-translate",
+      "variant": "Q4_K_M",
+      "verdict": "fail",
+      "reason": "Original request and raw choice exactly reproduce malformed date 2046-04--19 and missing prerequisite actor Ken Sato in Korean translation. Date guard refuses; source unchanged.",
+      "rowCanonicalSHA256": "0f74c6e602ca0509f8cd102677c6e66def695d79b9933b0ecf0b13daaffd9917"
+    },
+    {
+      "id": "ja-translate",
+      "variant": "Q6_K",
+      "verdict": "fail",
+      "reason": "Korean Q6 translation retains exact ISO date unlike Q4, but changes Yui Mori to Korean spelling and omits prerequisite actor Ken Sato. Checked proposal nonapproval, operating-team permission after backup validation and current unvalidated backup remain. Applied native output/history does not satisfy original-name and actor requirements.",
+      "rowCanonicalSHA256": "85fe04e32298bb496f0bff1213ad552e01dc6d88be32515db504bd5a75daf0e4"
+    },
+    {
+      "id": "de-rewrite",
+      "variant": "Q4_K_M",
+      "verdict": "fail",
+      "reason": "Exact original request/raw choice repeat the introduced German main-clause grammar error vorschlug instead of schlug ... vor. Checked facts remain and history passes, but grammar improvement is not achieved.",
+      "rowCanonicalSHA256": "9d6e0d961128b5734c024ad90275bd4c50137d7418b1167d5b8b40536aab1692"
+    },
+    {
+      "id": "de-rewrite",
+      "variant": "Q6_K",
+      "verdict": "narrow-pass",
+      "reason": "German Q6 output keeps grammatical schlug ... vor instead of Q4 vorschlug, with a small wording change from der to dieser Vorschlag. Checked names, ISO date, quantity, proposal nonapproval, Kai ordering only after Mila signs form, current unsigned form and available list remain. Native history passes. This is one known source, not native-speaker certification or general style/quality acceptance.",
+      "rowCanonicalSHA256": "8c5c8cc86b1d2c6f819f17bd97a0e6dbb2fe34527d132caaa32473746f9045f9"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "Q4_K_M",
+      "verdict": "fail",
+      "reason": "Spanish rewrite is English. Checked original names, ISO date, quantity, proposal nonapproval, Omar permission only after Luz authorizes travel, current unauthorized travel and prepared itinerary remain. Native application, Undo and Redo succeed but source-language requirement fails.",
+      "rowCanonicalSHA256": "ea5a46f352ae9cb0ee503eb27848fcfa6d7db8d130bfe6183ccabdbb2bf14a73"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "Q6_K",
+      "verdict": "fail",
+      "reason": "Spanish rewrite is English. Checked original names, ISO date, quantity, proposal nonapproval, Omar permission only after Luz authorizes travel, current unauthorized travel and prepared itinerary remain. Native application, Undo and Redo succeed but source-language requirement fails.",
+      "rowCanonicalSHA256": "61c3b0d150e26eab0b571919b98871a6824c31bf188267f6d83bd21697f391a2"
+    }
+  ]
+}
