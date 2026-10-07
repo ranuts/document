@@ -130,3 +130,39 @@ it('precaches local file-open controls from the offline homepage', async () => {
   expect(stored.has('https://editor.example/home.css')).toBe(true);
   expect(stored.has('https://editor.example/private/unsupported.js')).toBe(false);
 });
+
+it('installs font menu sprites before their first offline use at any locale or density', async () => {
+  const listeners = new Map<string, (event: any) => void>();
+  const stored = new Set<string>();
+  const cache = {
+    addAll: async (urls: string[]) => {
+      for (const url of urls) stored.add(url);
+    },
+    match: async () => ({ text: async () => '<html></html>' }),
+  };
+  runInNewContext(readFileSync('public/sw.js', 'utf8'), {
+    URL,
+    Promise,
+    Date,
+    Set,
+    self: {
+      location: { origin: 'https://editor.example' },
+      addEventListener: (name: string, callback: (event: any) => void) => listeners.set(name, callback),
+      skipWaiting: () => {},
+    },
+    caches: { open: async () => cache, keys: async () => [] },
+  });
+  let installed!: Promise<unknown>;
+  listeners.get('install')!({
+    waitUntil: (promise: Promise<unknown>) => {
+      installed = promise;
+    },
+  });
+  await installed;
+  for (const locale of ['', '_ea']) {
+    for (const density of ['', '@1.25x', '@1.5x', '@1.75x', '@2x']) {
+      expect(stored.has(`/sdkjs/common/Images/fonts_thumbnail${locale}${density}.png.bin`)).toBe(true);
+    }
+  }
+  expect([...stored].some((url) => url.startsWith('/fonts/'))).toBe(false);
+});

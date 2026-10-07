@@ -241,6 +241,13 @@ self.addEventListener('install', (event) => {
         await cache.addAll([
           '/web-apps/apps/api/documents/api.js',
           '/sdkjs/common/AllFonts.js',
+          // Font menus load these lazily, including when reopening a saved file.
+          // Cache every locale/density variant so first use also works offline.
+          ...['', '_ea'].flatMap((locale) =>
+            ['', '@1.25x', '@1.5x', '@1.75x', '@2x'].map(
+              (density) => `/sdkjs/common/Images/fonts_thumbnail${locale}${density}.png.bin`,
+            ),
+          ),
           '/web-apps/vendor/xregexp/xregexp-all-min.js',
           '/web-apps/vendor/socketio/socket.io.min.js',
           '/sdkjs/common/wasm/x2t/x2t_helper.js',
