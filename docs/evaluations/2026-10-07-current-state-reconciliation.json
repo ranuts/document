@@ -1,0 +1,32 @@
+{
+  "scope": "Current source and completed narrow evidence only; ongoing transfer excluded; not full goal acceptance",
+  "head": "78457e9d037584ab815e07a81f04774711da4cb6",
+  "sourceHashes": {
+    "packages/agent-core/src/llm/wllama.ts": "a9414c19a06176d6397504e7cb99caaa6992970163647b894cafff89e3d74f1a",
+    "packages/agent-core/src/context-budget.ts": "fd84a5b1a984c2cc661c8f78a5ca76df6a5dd43c63e1a6934ba5a027ae952785",
+    "packages/agent-core/src/llm/local.ts": "a036738064f3cc02f542f69b430aee660987e86dd71eb8258d51c52b50e548b9",
+    "packages/agent-core/src/llm/webllm.ts": "64edc4b16cb7f1e40f175a8d74b4a3e9984cafddb4fab12c4a02cfdd9a8f32aa",
+    "lib/agent-plugin/ui/panel.ts": "ca94c9a11d3911adb8d5bcfa81b925b3312896911b5e251e71b971d5960ba2db",
+    "test/unit/agent-panel-loading.test.ts": "01772bdf1e73a48571de667b130795360b9acbb9e15d96a93628c2c3854c2c3d",
+    "test/unit/wllama-cpu-loader.test.ts": "96aa81273bccc77b2521f22a121e837a7fe5e75d72f30927764e5316a92a4a89",
+    "packages/agent-core/src/runtime.ts": "0b9d4d970b8b36c80cbbb39e42106b49bf434fba46fed803cdfdffe38211a0e8",
+    "test/unit/agent-runtime.test.ts": "d17450b12b2385622ba65605b719474fe812782ae43ff376ca627e1ce50ff8eb"
+  },
+  "evidenceHashes": {
+    "2026-10-07-runtime-tool-cancellation.md": "fbc66f78d682a020bd36610749c745eb5c4151e23d3b3263eac740a1a04a3e8c",
+    "2026-10-07-gemma4-summary-analysis.md": "1a387fa16c4246911be45330c2f361c27e7376d5b7f68a42404bd6dbe5d36082",
+    "2026-10-07-gemma4-consistent-analysis.md": "7fe7a167de6d6d6ce18a61b1bd02340f625a979e108b025ef82743bc548739df",
+    "2026-10-07-gemma4-sampling-analysis.md": "639188355cd58db77aa8132c847a93f69940455782f72be2e9085c4b82aa571f",
+    "2026-10-07-cpu-offline-word-bindings.json": "bf82208730124eaed58143b1f20ce743739c78318fcaf52127c05fdb4a2f50a7",
+    "2026-10-07-offline-ppt-bindings.json": "a30de436cddcca5778a1aec06678b4daf0dd86eb789092b7f3bda7ecb32ba0af",
+    "2026-10-04-writing-model-decision-index.json": "bf576d590ccdfc8e8d6f3917f72511fd0a227cee57b51809c6794b7610142217"
+  },
+  "qualityAccepted": false,
+  "fullDeviceMatrixAccepted": false,
+  "oldSourceDrift": [
+    "packages/agent-core/src/llm/wllama.ts",
+    "lib/agent-plugin/ui/panel.ts",
+    "test/unit/agent-panel-loading.test.ts",
+    "test/unit/wllama-cpu-loader.test.ts"
+  ]
+}
