@@ -4443,6 +4443,18 @@
       "sha256": "24977425e826336b797eaf677b4387751e2212a884311fde8b74ee07d55e9cc3"
     },
     {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-cell-plan-native.json",
+      "sha256": "7d1ff339b3d7dcd5d0c9371ab0eeca2b45b87317e1b756aa395331f9b9510706"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-cell-plan-native.mjs",
+      "sha256": "7b3bc58e3257347ebd3c142adc37773d13699805e24e154057a26b18cdc950ff"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-cell-plan-protocol.json",
+      "sha256": "74c0f7f0e134b275af872083fb52fff43a7df7c97740810780c304593b90f43d"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-webkit-offline-office-native.json",
       "sha256": "3489c08ba7352e7d8a4b03fb041e3eb974f7413810b2d9d969db2bf556b44e67"
     },
