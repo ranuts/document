@@ -3983,6 +3983,18 @@
       "sha256": "6d9a21f8683856dad5cea215c912c9887b502fc04909e2966da259a63137deb4"
     },
     {
+      "path": "docs/evaluations/2026-10-07-hymt2-literal-protection-native.json",
+      "sha256": "5a184b34e7ace74f4785503200e35b7bdb0b1e184e93aa9ea3cd302be8aa2be4"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-literal-protection-native.mjs",
+      "sha256": "7b54604207c19b8d57beb44428e275c56dc3c8eaf92daa2a3a820e56557a5e49"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-hymt2-literal-protection-protocol.json",
+      "sha256": "8fd0e16071d6af04d6d4bec29373ca988994ed6e3914f6cf1701575c04b6203b"
+    },
+    {
       "path": "docs/evaluations/2026-10-07-korean-native-input-readiness.json",
       "sha256": "f6b9d66d3ce2158cd06dbfd7b0da63236c530414d20752334edb4a408dd08561"
     },
@@ -4429,6 +4441,18 @@
     {
       "path": "docs/evaluations/2026-10-07-webkit-fixed-offline-page.mjs",
       "sha256": "24977425e826336b797eaf677b4387751e2212a884311fde8b74ee07d55e9cc3"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-office-native.json",
+      "sha256": "3489c08ba7352e7d8a4b03fb041e3eb974f7413810b2d9d969db2bf556b44e67"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-office-native.mjs",
+      "sha256": "916d9bbc9019cdb6caca7c4bdb016f16b2bd04d266834df18b834cf6c57bbfcf"
+    },
+    {
+      "path": "docs/evaluations/2026-10-07-webkit-offline-office-protocol.json",
+      "sha256": "ccd170a017c08d261bb92c831d13740bc23531b44485492f135e595d54b3b37b"
     },
     {
       "path": "docs/evaluations/2026-10-07-webkit-offline-process-restart.mjs",
