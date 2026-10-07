@@ -1,0 +1,22 @@
+{
+  "scope": "Actual product Word/sidebar natural CPU startup followed by online-page closure, context offline and new-page cached model chat; not physical Safari/mobile, browser-process restart, save/reopen or semantic-writing acceptance",
+  "runner": "1.65.0-alpha-2026-10-07",
+  "webkit_revision": "2370",
+  "webkit_version": "27.2",
+  "source_protocol": "2026-10-05-webkit-offline-page-protocol.md",
+  "source_protocol_sha256": "ee7905e81be53f5861c5f451d8ad3b7f7fa7799972f5650a832246d8e901c9cb",
+  "driver_sha256": "24977425e826336b797eaf677b4387751e2212a884311fde8b74ee07d55e9cc3",
+  "binding_time": "Captured after process launch; not immutable prelaunch runtime binding",
+  "changes": [
+    "Isolated fixed runner and matched WebKit; project dependencies unchanged.",
+    "Current runtime label; periodic phase snapshots; concise terminal output.",
+    "Preserve actual capability observations; WebKit 27.2 memory64 support differs from old 26.5. No capability override."
+  ],
+  "acceptance": [
+    "Production /sw.js controller before online-page closure.",
+    "Natural actual CPU 0.6B model ready online, no custom source/model override.",
+    "New editor page navigates and actual cached CPU model initializes with context.setOffline(true).",
+    "One requested local chat completes, no document mutation; exact-format result reported separately.",
+    "Terminal outcome and context/browser closure confirmed."
+  ]
+}
