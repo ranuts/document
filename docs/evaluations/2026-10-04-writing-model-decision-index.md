@@ -167,3 +167,6 @@ The above interim counts are historical. The [completed screen analysis](2026-10
 ### 14B original-policy placement contrast (2026-10-07)
 
 [Eight completed SDK replies](2026-10-07-qwen14-policy-placement-analysis.md) reproduce all four native product baseline raw bodies exactly. System placement fixes one Portuguese translation locally but retains Chinese actor loss, Japanese date-format changes and Portuguese summary omissions/modality change. Candidate outcomes are one narrow pass and three failures. Process exit 1 reflects the unobserved pinned-library fetch gate; no overall successful-runtime or candidate-adoption claim follows.
+
+
+The [two-stage fact-ledger diagnostic](2026-10-07-qwen14-fact-ledger-native-analysis.md) completes twelve SDK requests on four selected known failures. All four original product raw contents reproduce the prior baseline. Bounded manual final-output review gives two narrow passes and two failures: Chinese actor retention and Spanish-to-Portuguese improve, while Japanese ISO-date reformatting and Portuguese missing actor/approval plus changed modality persist. Extraction is itself incomplete; even correct intermediate fields do not guarantee final fidelity. The extra rendition prompt is a confound until compared alone. No product/model adoption, seven-language acceptance or exact cached-library consumption claim follows.
