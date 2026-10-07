@@ -58,7 +58,14 @@ for (const theme of ['light', 'dark'] as const) {
       .poll(
         async () => {
           const frame = page.frames().find((frame) => /documenteditor\/main\//.test(frame.url()));
-          return frame?.evaluate(() => (window as any).Common?.UI?.Themes?.currentThemeId()) ?? null;
+          return (
+            frame?.evaluate(() => {
+              const themes = (window as any).Common?.UI?.Themes;
+              // The namespace appears before the vendor registers its API.
+              // Keep polling until the API can report the actual applied theme.
+              return typeof themes?.currentThemeId === 'function' ? themes.currentThemeId() : null;
+            }) ?? null
+          );
         },
         { timeout: 60_000 },
       )
