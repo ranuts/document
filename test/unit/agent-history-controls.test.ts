@@ -15,11 +15,16 @@ afterEach(() => document.body.replaceChildren());
 
 it('does not offer cancellation after confirmed deletion has started', async () => {
   let finish!: () => void;
-  const store = createConversationStore(undefined, { repository: {
-    load: async () => null,
-    save: async () => 1,
-    clear: () => new Promise<number>((resolve) => { finish = () => resolve(1); }),
-  } });
+  const store = createConversationStore(undefined, {
+    repository: {
+      load: async () => null,
+      save: async () => 1,
+      clear: () =>
+        new Promise<number>((resolve) => {
+          finish = () => resolve(1);
+        }),
+    },
+  });
   const controls = createHistoryControls({ store, onRestore: vi.fn() });
   document.body.append(controls.el);
   controls.el.querySelector<HTMLButtonElement>('.agent-history-delete-all')!.click();
@@ -30,7 +35,9 @@ it('does not offer cancellation after confirmed deletion has started', async () 
   cancel.click();
   expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(false);
   finish();
-  await vi.waitFor(() => expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true));
+  await vi.waitFor(() =>
+    expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
+  );
   expect(cancel.disabled).toBe(false);
 });
 
@@ -141,18 +148,25 @@ it.each(['.agent-history-delete-current', '.agent-history-delete-all'])(
     const confirm = controls.el.querySelector<HTMLButtonElement>('.agent-history-confirm')!;
     confirm.focus();
     confirm.click();
-    await vi.waitFor(() => expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true));
+    await vi.waitFor(() =>
+      expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
+    );
     await vi.waitFor(() => expect(document.activeElement).toBe(trigger));
   },
 );
 
 it('keeps focus where the user moved it while deletion was pending', async () => {
   let finish!: () => void;
-  const store = createConversationStore(undefined, { repository: {
-    load: async () => null,
-    save: async () => 1,
-    clear: () => new Promise<number>((resolve) => { finish = () => resolve(1); }),
-  } });
+  const store = createConversationStore(undefined, {
+    repository: {
+      load: async () => null,
+      save: async () => 1,
+      clear: () =>
+        new Promise<number>((resolve) => {
+          finish = () => resolve(1);
+        }),
+    },
+  });
   const controls = createHistoryControls({ store, onRestore: vi.fn() });
   const elsewhere = document.createElement('button');
   document.body.append(controls.el, elsewhere);
@@ -163,16 +177,22 @@ it('keeps focus where the user moved it while deletion was pending', async () =>
   await vi.waitFor(() => expect(finish).toBeDefined());
   elsewhere.focus();
   finish();
-  await vi.waitFor(() => expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true));
+  await vi.waitFor(() =>
+    expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(true),
+  );
   expect(document.activeElement).toBe(elsewhere);
 });
 
 it('keeps keyboard focus on retry when deleting all history fails', async () => {
-  const store = createConversationStore(undefined, { repository: {
-    load: async () => null,
-    save: async () => 1,
-    clear: async () => { throw new DOMException('Unavailable', 'UnknownError'); },
-  } });
+  const store = createConversationStore(undefined, {
+    repository: {
+      load: async () => null,
+      save: async () => 1,
+      clear: async () => {
+        throw new DOMException('Unavailable', 'UnknownError');
+      },
+    },
+  });
   store.history().save([{ role: 'user', content: 'preserve on failure' }]);
   const controls = createHistoryControls({ store, onRestore: vi.fn() });
   document.body.append(controls.el);
@@ -180,7 +200,9 @@ it('keeps keyboard focus on retry when deleting all history fails', async () => 
   const confirm = controls.el.querySelector<HTMLButtonElement>('.agent-history-confirm')!;
   confirm.focus();
   confirm.click();
-  await vi.waitFor(() => expect(controls.el.querySelector('.agent-history-status')?.textContent).toBe(t('agentHistorySaveFailed')));
+  await vi.waitFor(() =>
+    expect(controls.el.querySelector('.agent-history-status')?.textContent).toBe(t('agentHistorySaveFailed')),
+  );
   expect(controls.el.querySelector<HTMLElement>('.agent-history-confirmation')!.hidden).toBe(false);
   expect(confirm.disabled).toBe(false);
   expect(document.activeElement).toBe(confirm);

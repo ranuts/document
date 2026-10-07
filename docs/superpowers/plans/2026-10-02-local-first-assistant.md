@@ -177,26 +177,21 @@ Files: `ui/sessions.ts`、`ui/storage.ts`、独立 IndexedDB 存储模块、设�
 - WebKit离线导航根因进一步分离：检索上游Playwright issue42775（2026-09-18、1.63.0、仍open），独立本地1.62.1/macOS最小literal-SW复现无应用/模型/Cache依赖。WebKit26.5 controlled页面setOffline导航internal error，停止origin但不设offline flag则literalSW200成功；Chromium151两种均200成功。offline-sw-navigation-control.json包含4条与版本/上游链接。该控制证明当前WebKit offline emulation问题不能直接当产品缓存故障。
 - 真实production shell独立static server、fresh WebKit warm DOCX，SW控制且editor.html缓存存在；仅停止该自有originserver，refresh200/fromServiceWorker，OnlyOffice API isDocumentLoadComplete/isLoadFullApi均true、零页面错误。webkit-origin-stopped-editor.json。没有改/停止常驻5193预览；没有模型下载/初始化/推理，也非全断网或iOS实机，不能宣称完整离线目标通过。只隔离原导航失败，不绕过要求；后续需要真实网络断开或可覆盖模型网络的故障注入验收。JSON/whitespace通过，无产品改动、不重复全量回归。完整目标继续。
 
-
 ### 2026-10-04: remove redundant CPU byte budgeting
 
 Ready providers with exact final-request token budgeting bypass the default runtime byte budget; explicit byte limits remain. 71 targeted tests, TypeScript, lint and production build passed. Actual CPU IM accepted 10,018 bytes, rejected oversized custom system context before generation and recovered, with no preview cards. Evidence: `docs/evaluations/2026-10-04-cpu-count-im-long-input.md`. Broader model fidelity, tool execution and device/offline acceptance remain open.
-
 
 ### 2026-10-04: actual CPU document operation path verified
 
 The IM structured document-operation path is available on CPU despite ordinary chat rejecting native tool calls. Actual Word insertion, Excel B2 assignment and PPT text-box addition with multilingual literals passed native Undo/Redo, Save and homepage reopen with identical content snapshots and zero preview cards. See `docs/evaluations/2026-10-04-cpu-count-im-three-editors.md`. Arbitrary instruction/tool accuracy and full offline/device acceptance remain open.
 
-
 ### 2026-10-04: current CPU IM offline browser restart
 
 Current hashed plugin, service worker, native CPU runtime and warmed model cache restored after browser close/relaunch with offline mode set before navigation. Actual chat and Word operation succeeded; native Undo/Redo matched snapshots. See `docs/evaluations/2026-10-04-cpu-count-process-restart-offline.md`. This is warmed desktop Chromium/Word acceptance, not all device/editor/PWA launch certification.
 
-
 ### 2026-10-04: extend offline restart acceptance to Excel and PPT
 
 Separate warmed-profile browser restart runs in offline mode passed actual Excel B2 writing and PPT new text-box creation, plus native Undo/Redo. The shared verifier now checks four actual reports (chat, Word, Excel, PPT), driver hashes, native counting/generation and snapshots. Evidence remains scoped to desktop Chromium warmed caches and these exact operations; arbitrary instructions, mobile and installed PWA launch remain unverified.
-
 
 ### 2026-10-04: Chinese CPU IM operation acceptance
 

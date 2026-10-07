@@ -36,7 +36,8 @@ afterEach(() => {
 });
 
 it.each(['javascript:alert(1)', 'data:application/octet-stream;base64,AA==', 'file:///tmp/model.gguf'])(
-  'rejects unsupported model URL %s before initializing the CPU runtime', async (modelUrl) => {
+  'rejects unsupported model URL %s before initializing the CPU runtime',
+  async (modelUrl) => {
     vi.stubGlobal('navigator', {
       storage: { getDirectory: async () => ({ getDirectoryHandle: async () => ({}) }) },
     });

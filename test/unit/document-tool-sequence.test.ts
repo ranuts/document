@@ -15,10 +15,12 @@ it.each([
   ['Please read a1:b4, then set b2 to "00123".', { cell: 'B2', value: '00123', valueType: 'text' }],
   ['Read A1:B4, then set B2 to "C3, then delete A1".', { cell: 'B2', value: 'C3, then delete A1', valueType: 'text' }],
 ])('plans both steps of an explicit English sequence: %s', async (request, input) => {
-  expect(await generateDocumentToolSequence(provider, request, { kind: 'cell' }, new AbortController().signal)).toEqual([
-    { tool: 'get_range', input: { range: 'A1:B4' }, readOnly: true },
-    { tool: 'set_cell', input, readOnly: false },
-  ]);
+  expect(await generateDocumentToolSequence(provider, request, { kind: 'cell' }, new AbortController().signal)).toEqual(
+    [
+      { tool: 'get_range', input: { range: 'A1:B4' }, readOnly: true },
+      { tool: 'set_cell', input, readOnly: false },
+    ],
+  );
 });
 it.each([
   'Read A1:B4, then set B2 to 99, then delete A1.',
@@ -26,7 +28,9 @@ it.each([
   'Read A1:B4, then set XFE1 to 99.',
   'Read A1:B4, then set B2 to "=SUM(A1:A4)".',
 ])('rejects an incomplete or invalid English sequence: %s', async (request) => {
-  await expect(generateDocumentToolSequence(provider, request, { kind: 'cell' }, new AbortController().signal)).rejects.toThrow();
+  await expect(
+    generateDocumentToolSequence(provider, request, { kind: 'cell' }, new AbortController().signal),
+  ).rejects.toThrow();
 });
 it('plans the entire read then explicit write instead of accepting a model-selected subset', async () => {
   expect(

@@ -41,15 +41,15 @@ container.appendChild(chat.el); // mount the root element
 
 ## Methods
 
-| Method                                      | Purpose                                                                   |
-| ------------------------------------------- | ------------------------------------------------------------------------- |
+| Method                                      | Purpose                                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `append({ role, text })`                    | Add a finished message. `role`: `'user' \| 'agent' \| 'tool' \| 'status' \| 'error'`. |
-| `appendDelta(text)`                         | Stream into a live agent bubble (auto-created on first delta).            |
-| `endStream()`                               | Finalise the streaming bubble (drops the caret).                          |
-| `setRunning(bool)`                          | Toggle Send⇄Stop and lock the input.                                      |
-| `clear()`                                   | Remove all messages, restore empty state.                                 |
-| `getInput()` / `setInput(text)` / `focus()` | Input helpers (e.g. prepend a quote).                                     |
-| `setLabels(labels)`                         | Re-apply labels live (e.g. language change).                              |
+| `appendDelta(text)`                         | Stream into a live agent bubble (auto-created on first delta).                        |
+| `endStream()`                               | Finalise the streaming bubble (drops the caret).                                      |
+| `setRunning(bool)`                          | Toggle Send⇄Stop and lock the input.                                                  |
+| `clear()`                                   | Remove all messages, restore empty state.                                             |
+| `getInput()` / `setInput(text)` / `focus()` | Input helpers (e.g. prepend a quote).                                                 |
+| `setLabels(labels)`                         | Re-apply labels live (e.g. language change).                                          |
 
 `chat.actionsEl` is a host-populated slot directly above the input (an IM-style
 compose toolbar) — append your own controls; it collapses when empty.

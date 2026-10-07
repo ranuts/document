@@ -45,7 +45,8 @@ export function createGenerationControls(onChange: (settings: GenerationSettings
   const sync = () => {
     summary.textContent = t('agentGenerationSettings');
     for (const field of fields)
-      field.label.textContent = t(field.key) + (field.key === 'agentMaxTokens' ? ` (${maxTokens.min}–${maxTokens.max})` : '');
+      field.label.textContent =
+        t(field.key) + (field.key === 'agentMaxTokens' ? ` (${maxTokens.min}–${maxTokens.max})` : '');
     prompt.placeholder = t('agentSystemPromptDefault');
     status.textContent = t(invalid ? 'agentGenerationInvalid' : 'agentGenerationLocal');
     for (const input of [prompt, temperature, topP, maxTokens])

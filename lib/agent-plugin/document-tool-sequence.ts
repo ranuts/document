@@ -48,7 +48,8 @@ export async function generateDocumentToolSequence(
     if (
       /^(?:请)?读取[\s\S]*[，,]然后/.test(request.trim()) ||
       /^(?:please\s+)?read\b[\s\S]*,\s*then\b/i.test(request.trim())
-    ) throw new Error('agentToolNotChosen');
+    )
+      throw new Error('agentToolNotChosen');
   }
   return Object.freeze([await generateDocumentToolPlan(provider, request, context, signal, options)]);
 }

@@ -40,8 +40,7 @@ Files: lib/agent-plugin/ui/panel.ts, existing document-tool-action tests and age
 - [ ] Replace the tools-mode single-plan call with generateDocumentToolSequence. Validate sequence shape before applying any action:
 
 ```ts
-if (plans.length < 1 || plans.length > 4 ||
-    plans.slice(0, -1).some(plan => !plan.readOnly))
+if (plans.length < 1 || plans.length > 4 || plans.slice(0, -1).some((plan) => !plan.readOnly))
   throw new Error('agentToolNotChosen');
 ```
 
@@ -60,11 +59,9 @@ if (plans.length < 1 || plans.length > 4 ||
 
 Quoted values containing instructions; cancellation after the read; editor/worksheet changes between steps; verification failure after a native write; history ownership after conversation switch. Each is assigned to the tests above. General multi-write transaction support remains explicitly outside this first sequence implementation and open in the broader goal.
 
-
 ## Implementation progress
 
 First literal sequence planner and panel loop implemented; actual read-before-write/Undo/Redo verified in `docs/evaluations/2026-10-04-cpu-count-im-read-write-sequence.md`. Full suite 119 files/4300 tests passed. Sequence-specific cancellation, stale-target, conversation-switch and persistent-history checks remain required; the plan is not marked fully complete.
-
 
 Cancellation progress: actual immediate-read/Stop race reproduced and fixed by yielding between operations. Stop, new conversation, session switch and changed C1→D1 selection now prevent the subsequent write; uninterrupted execution still succeeds. See `docs/evaluations/2026-10-04-cpu-count-im-sequence-interruption-after-read.md`. Earlier completed-history save/reload/session-switch and oversized-read failure checks also have actual browser evidence. General verification-failure and worksheet/document replacement checks remain; do not mark the full plan complete.
 

@@ -27,7 +27,10 @@ type Prefetch = {
 
 let prefetch: Prefetch;
 
-const okResponse = () => ({ body: null as ReadableStream<Uint8Array> | null, arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)) });
+const okResponse = () => ({
+  body: null as ReadableStream<Uint8Array> | null,
+  arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
+});
 
 /** The RequestInit `warm()` passed on call `n`. */
 const initOf = (mock: { mock: { calls: unknown[][] } }, n = 0): RequestInit => mock.mock.calls[n][1] as RequestInit;
@@ -128,7 +131,11 @@ describe('landing warm-up during a worker upgrade', () => {
     const workers = Object.assign(new EventTarget(), { ready: Promise.resolve(registration) });
     const fetchMock = vi.fn((_url: string, _init?: RequestInit) => Promise.resolve(okResponse()));
     new Function('window', 'document', 'navigator', 'fetch', 'AbortController', src)(
-      win, doc, { serviceWorker: workers, connection: { effectiveType } }, fetchMock, AbortController,
+      win,
+      doc,
+      { serviceWorker: workers, connection: { effectiveType } },
+      fetchMock,
+      AbortController,
     );
     return { win, doc, cta, registration, workers, fetchMock, hook: win.__landingPrefetch! };
   }
@@ -177,7 +184,8 @@ describe('landing warm-up during a worker upgrade', () => {
   it('does not hold warming for the native editor stub worker that the updater will not promote', async () => {
     const { registration, hook, fetchMock } = setup();
     registration.waiting = Object.assign(new EventTarget(), {
-      state: 'installed', scriptURL: 'https://example.test/document_editor_service_worker.js',
+      state: 'installed',
+      scriptURL: 'https://example.test/document_editor_service_worker.js',
     });
     await hook.warm('/foreign-waiting-worker.js');
     expect(fetchMock.mock.calls.some(([url]) => url === '/foreign-waiting-worker.js')).toBe(true);
@@ -188,11 +196,13 @@ describe('landing warm-up during a worker upgrade', () => {
     registration.waiting = Object.assign(new EventTarget(), { state: 'installed' });
     doc.dispatchEvent(new Event('DOMContentLoaded'));
     cta.dispatchEvent(new Event('pointerenter'));
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(fetchMock).not.toHaveBeenCalled();
     registration.waiting = null;
     workers.dispatchEvent(new Event('controllerchange'));
-    await vi.waitFor(() => expect(fetchMock.mock.calls.some(([url]) => url === '/web-apps/apps/api/documents/api.js')).toBe(true));
+    await vi.waitFor(() =>
+      expect(fetchMock.mock.calls.some(([url]) => url === '/web-apps/apps/api/documents/api.js')).toBe(true),
+    );
     expect(fetchMock.mock.calls.some(([url]) => url.includes('x2t.wasm'))).toBe(false);
   });
 
@@ -209,14 +219,16 @@ describe('landing warm-up during a worker upgrade', () => {
 
   it('retries an intent whose response stream is cancelled by an upgrade', async () => {
     const { doc, cta, registration, workers, fetchMock } = setup('3g');
-    fetchMock.mockImplementationOnce((_url, init) => Promise.resolve({
-      body: new ReadableStream<Uint8Array>({
-        start(controller) {
-          init?.signal?.addEventListener('abort', () => controller.error(new Error('upgrade aborted warming')));
-        },
+    fetchMock.mockImplementationOnce((_url, init) =>
+      Promise.resolve({
+        body: new ReadableStream<Uint8Array>({
+          start(controller) {
+            init?.signal?.addEventListener('abort', () => controller.error(new Error('upgrade aborted warming')));
+          },
+        }),
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
       }),
-      arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-    }));
+    );
     doc.dispatchEvent(new Event('DOMContentLoaded'));
     cta.dispatchEvent(new Event('pointerenter'));
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
@@ -224,7 +236,7 @@ describe('landing warm-up during a worker upgrade', () => {
     registration.installing = installing;
     registration.dispatchEvent(new Event('updatefound'));
     expect(initOf(fetchMock).signal!.aborted).toBe(true);
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(fetchMock).toHaveBeenCalledTimes(1);
     registration.installing = null;
     workers.dispatchEvent(new Event('controllerchange'));
@@ -237,11 +249,11 @@ describe('landing warm-up during a worker upgrade', () => {
     registration.waiting = Object.assign(new EventTarget(), { state: 'installed' });
     doc.dispatchEvent(new Event('DOMContentLoaded'));
     cta.dispatchEvent(new Event('pointerenter'));
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     win.dispatchEvent(new Event('beforeunload'));
     registration.waiting = null;
     workers.dispatchEvent(new Event('controllerchange'));
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(fetchMock).not.toHaveBeenCalled();
     const restored = new Event('pageshow');
     Object.defineProperty(restored, 'persisted', { value: true });

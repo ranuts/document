@@ -79,8 +79,12 @@ it('does not steal parent composer focus when moving an inactive remembered rail
   let compact = false;
   iframe.contentWindow!.matchMedia = vi.fn(() => ({ matches: compact }) as MediaQueryList);
   const doc = iframe.contentDocument!;
-  doc.body.innerHTML = '<div id="right-menu"><div class="tool-menu-btns"></div></div><div id="left-menu"><div class="tool-menu-btns"></div></div>';
-  const entry = createSidebarEntry(() => {}, () => 'AI');
+  doc.body.innerHTML =
+    '<div id="right-menu"><div class="tool-menu-btns"></div></div><div id="left-menu"><div class="tool-menu-btns"></div></div>';
+  const entry = createSidebarEntry(
+    () => {},
+    () => 'AI',
+  );
   entry.update(true, true);
   const button = doc.querySelector<HTMLButtonElement>('.agent-sidebar-entry')!;
   button.focus();

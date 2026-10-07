@@ -379,10 +379,13 @@ async function isolationPolicyEnabled() {
   // from this build's core cache, never another provider's cached response.
   if (!cachedShellPolicy) {
     cachedShellPolicy = Promise.resolve()
-      .then(() => caches.match(new URL('/editor.html', self.location.origin).href, { cacheName: CORE_CACHE, ignoreVary: true }))
-      .then((shell) =>
-        shell?.headers?.get?.('cross-origin-opener-policy') === 'same-origin' &&
-        shell?.headers?.get?.('cross-origin-embedder-policy') === 'require-corp',
+      .then(() =>
+        caches.match(new URL('/editor.html', self.location.origin).href, { cacheName: CORE_CACHE, ignoreVary: true }),
+      )
+      .then(
+        (shell) =>
+          shell?.headers?.get?.('cross-origin-opener-policy') === 'same-origin' &&
+          shell?.headers?.get?.('cross-origin-embedder-policy') === 'require-corp',
       )
       .catch(() => false)
       .then((enabled) => {
@@ -399,7 +402,8 @@ async function withIsolationHeaders(response) {
   if (
     response.headers.get('cross-origin-opener-policy') === 'same-origin' &&
     response.headers.get('cross-origin-embedder-policy') === 'require-corp'
-  ) return response;
+  )
+    return response;
   const headers = new Headers(response.headers);
   headers.set('cross-origin-opener-policy', 'same-origin');
   headers.set('cross-origin-embedder-policy', 'require-corp');
@@ -412,16 +416,26 @@ async function withIsolationHeaders(response) {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  const respondWith = (response) => event.respondWith(Promise.resolve(response).then((resolved) => {
-    // Pages canonicalizes application HTML. A cached followed redirect cannot
-    // answer redirect:manual navigation; preserve our same-origin shell bytes.
-    if (resolved?.redirected && event.request.mode === 'navigate' &&
-        (EDITOR_BOOTSTRAP_HTML.includes(url.pathname) || EDITOR_ROUTE.test(url.pathname)) &&
-        new URL(resolved.url).origin === self.location.origin) {
-      resolved = new Response(resolved.body, { status: resolved.status, statusText: resolved.statusText, headers: resolved.headers });
-    }
-    return withIsolationHeaders(resolved);
-  }));
+  const respondWith = (response) =>
+    event.respondWith(
+      Promise.resolve(response).then((resolved) => {
+        // Pages canonicalizes application HTML. A cached followed redirect cannot
+        // answer redirect:manual navigation; preserve our same-origin shell bytes.
+        if (
+          resolved?.redirected &&
+          event.request.mode === 'navigate' &&
+          (EDITOR_BOOTSTRAP_HTML.includes(url.pathname) || EDITOR_ROUTE.test(url.pathname)) &&
+          new URL(resolved.url).origin === self.location.origin
+        ) {
+          resolved = new Response(resolved.body, {
+            status: resolved.status,
+            statusText: resolved.statusText,
+            headers: resolved.headers,
+          });
+        }
+        return withIsolationHeaders(resolved);
+      }),
+    );
 
   // 1. Only handle GET requests
   if (event.request.method !== 'GET') return;

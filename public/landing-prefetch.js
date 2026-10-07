@@ -281,7 +281,10 @@
       flushIntents();
       return;
     }
-    navigator.serviceWorker.ready.then(watchRegistration).then(flushIntents).catch(function () {});
+    navigator.serviceWorker.ready
+      .then(watchRegistration)
+      .then(flushIntents)
+      .catch(function () {});
   }
 
   function flushIntents() {
