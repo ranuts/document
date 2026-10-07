@@ -1,0 +1,17 @@
+{
+  "bytes": 8592,
+  "sha256": "4f476084cd91c7b2cd767ef0def2eb6b2a44e1f76d73067b6ad44cbcc22deb86",
+  "zipCRCValid": true,
+  "cells": {
+    "A1": "Item",
+    "B1": "Amount",
+    "C1": "KEEP_OUTSIDE",
+    "A2": "Camera",
+    "B2": "7",
+    "D2": "37",
+    "A3": "Monitor",
+    "B3": "12",
+    "A4": "Sensor",
+    "B4": "18"
+  }
+}
