@@ -1,0 +1,20 @@
+{
+  "scope": "Remaining three Gemma 4 development cases on current locally built browser application; not heldout acceptance",
+  "head": "e5bf81c93bcc30cbb5849cca91cdaf14361c9a3a",
+  "hashes": {
+    "packages/agent-core/src/llm/wllama.ts": "a9414c19a06176d6397504e7cb99caaa6992970163647b894cafff89e3d74f1a",
+    "packages/agent-core/src/llm/local.ts": "a036738064f3cc02f542f69b430aee660987e86dd71eb8258d51c52b50e548b9",
+    "lib/agent-plugin/ui/panel.ts": "ca94c9a11d3911adb8d5bcfa81b925b3312896911b5e251e71b971d5960ba2db",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745",
+    "dist/assets/editor-B7NLm1x8.js": "88760144ae750e986130fa5a3a577da855b3b5650670ec35fba2a343fa334807",
+    "dist/sw.js": "600d8aebee21b6aa7638aae750fa586859d9e441c304ab41cf7e7153ca33e9b5",
+    "docs/evaluations/2026-10-07-gemma4-summary-remaining-native.mjs": "56a2946b1b7f9bfff196d2bda0ce40244b165418ec6e41e39b4f443b73c6c6ca"
+  },
+  "priorReceiptSHA256": "afa51c05ed89f0315f7a75abb68ccdc12e6cefab888b679f8ed6524104d7bc03",
+  "existingCompletedCases": 1,
+  "remainingCases": 3,
+  "qualityAccepted": false,
+  "receiptSHA256": "e6d4f5fb566dbf45785d8372183aff574318fcec67783d032fe139ae1e0e2698",
+  "processExitCode": 0,
+  "semanticAccepted": false
+}
