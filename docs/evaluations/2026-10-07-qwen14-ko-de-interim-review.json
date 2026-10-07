@@ -1,0 +1,16 @@
+{
+  "receipt_sha256": "7387b53ed1f7b71f68dc5e568bca58d59ebaabae2c87a0cf6cea72e0b0dba23b",
+  "candidate_promoted": false,
+  "decisions": [
+    {
+      "id": "ko-translate",
+      "verdict": "fail",
+      "reason": "German output uses malformed Kamera(a)s and changes printed notice to Hinweistafel (notice board); deposit is rendered inconsistently as Anzahlungsdepot/Depot. Names, ISO date, count and prerequisite actor remain, but fluent faithful translation is not established."
+    },
+    {
+      "id": "de-rewrite",
+      "verdict": "fail",
+      "reason": "Introduces German grammar errors: vorschlug and Die Produktliste ist bereits vorliegen. Formal clarity/grammar improvement fails despite retained names, ISO date, count, negative status and signature condition."
+    }
+  ]
+}
