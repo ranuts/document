@@ -20,8 +20,7 @@ export function secureEditorHtml(html) {
     "frame-src 'self' blob:",
     // The editor supports user-supplied remote document and artifact URLs.
     // Fetch permission does not grant those hosts permission to execute scripts.
-    // Embedded editor images are read with fetch(data:) before decoding.
-    "connect-src 'self' https: http: blob: data:",
+    "connect-src 'self' https: http: blob:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

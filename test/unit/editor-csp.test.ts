@@ -21,3 +21,17 @@ it('does not silently create intersecting policies', () => {
 it('rejects documents without an early policy insertion point', () => {
   expect(() => secureEditorHtml('<script>alert(1)</script>')).toThrow(/head/);
 });
+
+it('allows embedded-image byte reads without allowing data scripts or workers', () => {
+  const html = secureEditorHtml('<html><head><script src="/app.js"></script></head></html>');
+  const policy = html.match(/content="([^"]+)"/)![1];
+  const directives = new Map(
+    policy.split(';').map((part) => {
+      const [name, ...sources] = part.trim().split(/\s+/);
+      return [name, sources];
+    }),
+  );
+  expect(directives.get('connect-src')).toContain('data:');
+  expect(directives.get('script-src')).not.toContain('data:');
+  expect(directives.get('worker-src')).not.toContain('data:');
+});
