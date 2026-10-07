@@ -1,0 +1,505 @@
+{
+  "scope": "Locally compiled 7B library actual SDK load and generation control; not multilingual quality acceptance",
+  "library": {
+    "url": "http://127.0.0.1:5193/diagnostic-qwen7-9cedac983ac28e2a7556c22b37de71db03c37ac2e39eccc71ee5fe439ee732ca.wasm",
+    "sha256": "9cedac983ac28e2a7556c22b37de71db03c37ac2e39eccc71ee5fe439ee732ca",
+    "bytes": 6151746
+  },
+  "libraryServed": 1,
+  "errors": [],
+  "progress": [
+    {
+      "progress": 0,
+      "timeElapsed": 0,
+      "text": "Start to fetch params"
+    },
+    {
+      "progress": 0.06360455953139822,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[1/88]: 260MB loaded. 6% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.071555129472823,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[2/88]: 293MB loaded. 7% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.07947892981848541,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[3/88]: 325MB loaded. 7% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.08740273016414782,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[4/88]: 358MB loaded. 8% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.10325033085547262,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[5/88]: 422MB loaded. 10% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.11117413120113503,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[6/88]: 455MB loaded. 11% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.11899802359118429,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[7/88]: 487MB loaded. 11% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.1348456242825091,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[8/88]: 551MB loaded. 13% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.14276942462817152,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[9/88]: 584MB loaded. 14% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.1586170253194963,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[10/88]: 649MB loaded. 15% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.16643924460981044,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[11/88]: 681MB loaded. 16% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.17436304495547283,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[12/88]: 713MB loaded. 17% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.19021064564679765,
+      "timeElapsed": 1,
+      "text": "Loading model from cache[13/88]: 778MB loaded. 19% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 0.19704238989390396,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[14/88]: 806MB loaded. 19% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.20496619023956636,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[15/88]: 838MB loaded. 20% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.22081379093089118,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[16/88]: 903MB loaded. 22% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.2276455351779975,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[17/88]: 931MB loaded. 22% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.2912500947093957,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[18/88]: 1190MB loaded. 29% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.2992006646508205,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[19/88]: 1223MB loaded. 29% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.3071244649964829,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[20/88]: 1255MB loaded. 30% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.32297206568780773,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[21/88]: 1320MB loaded. 32% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.3298054830346492,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[22/88]: 1348MB loaded. 32% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.3377292833803116,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[23/88]: 1380MB loaded. 33% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.3535768840716364,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[24/88]: 1445MB loaded. 35% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.3604086283187427,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[25/88]: 1473MB loaded. 36% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.36833242866440513,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[26/88]: 1505MB loaded. 36% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.3841800293557299,
+      "timeElapsed": 2,
+      "text": "Loading model from cache[27/88]: 1570MB loaded. 38% completed, 2 secs elapsed."
+    },
+    {
+      "progress": 0.39101177360283623,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[28/88]: 1598MB loaded. 39% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.39893557394849866,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[29/88]: 1630MB loaded. 39% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.41478317463982345,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[30/88]: 1695MB loaded. 41% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.42161491888692976,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[31/88]: 1723MB loaded. 42% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.4295387192325922,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[32/88]: 1756MB loaded. 42% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.445386319923917,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[33/88]: 1820MB loaded. 44% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.4522180641710233,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[34/88]: 1848MB loaded. 45% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.4601418645166857,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[35/88]: 1881MB loaded. 46% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.4759894652080105,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[36/88]: 1945MB loaded. 47% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.4828212094551168,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[37/88]: 1973MB loaded. 48% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.4905937137818723,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[38/88]: 2005MB loaded. 49% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.49851751412753464,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[39/88]: 2037MB loaded. 49% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5143651148188595,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[40/88]: 2102MB loaded. 51% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5214377854278271,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[41/88]: 2131MB loaded. 52% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5293615857734896,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[42/88]: 2163MB loaded. 52% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5452091864648143,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[43/88]: 2228MB loaded. 54% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5520409307119206,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[44/88]: 2256MB loaded. 55% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.559964731057583,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[45/88]: 2288MB loaded. 55% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5758123317489079,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[46/88]: 2353MB loaded. 57% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5826440759960142,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[47/88]: 2381MB loaded. 58% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.5905678763416766,
+      "timeElapsed": 3,
+      "text": "Loading model from cache[48/88]: 2413MB loaded. 59% completed, 3 secs elapsed."
+    },
+    {
+      "progress": 0.6064154770330014,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[49/88]: 2478MB loaded. 60% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.6132472212801078,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[50/88]: 2506MB loaded. 61% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.6290948219714325,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[51/88]: 2571MB loaded. 62% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.6370186223170949,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[52/88]: 2603MB loaded. 63% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.644546376054023,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[53/88]: 2634MB loaded. 64% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.6603939767453477,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[54/88]: 2699MB loaded. 66% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.6683177770910101,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[55/88]: 2731MB loaded. 66% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.684165377782335,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[56/88]: 2796MB loaded. 68% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.690113725369283,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[57/88]: 2820MB loaded. 69% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.6980375257149454,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[58/88]: 2853MB loaded. 69% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7138851264062702,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[59/88]: 2917MB loaded. 71% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7207168706533765,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[60/88]: 2945MB loaded. 72% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.728640670999039,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[61/88]: 2978MB loaded. 72% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7444882716903637,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[62/88]: 3042MB loaded. 74% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.75132001593747,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[63/88]: 3070MB loaded. 75% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7592438162831324,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[64/88]: 3103MB loaded. 75% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7671676166287948,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[65/88]: 3135MB loaded. 76% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7830152173201197,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[66/88]: 3200MB loaded. 78% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7908374366104338,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[67/88]: 3232MB loaded. 79% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.7987612369560962,
+      "timeElapsed": 4,
+      "text": "Loading model from cache[68/88]: 3264MB loaded. 79% completed, 4 secs elapsed."
+    },
+    {
+      "progress": 0.814608837647421,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[69/88]: 3329MB loaded. 81% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.8214405818945273,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[70/88]: 3357MB loaded. 82% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.8293643822401897,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[71/88]: 3389MB loaded. 82% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.8452119829315146,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[72/88]: 3454MB loaded. 84% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.8520437271786209,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[73/88]: 3482MB loaded. 85% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.8599675275242833,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[74/88]: 3514MB loaded. 85% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.875815128215608,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[75/88]: 3579MB loaded. 87% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.8826468724627143,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[76/88]: 3607MB loaded. 88% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.8905706728083768,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[77/88]: 3639MB loaded. 89% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9064182734997016,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[78/88]: 3704MB loaded. 90% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9132500177468079,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[79/88]: 3732MB loaded. 91% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9211738180924703,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[80/88]: 3764MB loaded. 92% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9370214187837951,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[81/88]: 3829MB loaded. 93% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9438531630309014,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[82/88]: 3857MB loaded. 94% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9517769633765638,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[83/88]: 3889MB loaded. 95% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9676245640678887,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[84/88]: 3954MB loaded. 96% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.974456308314995,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[85/88]: 3982MB loaded. 97% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9903039090063198,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[86/88]: 4047MB loaded. 99% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 0.9980725891051091,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[87/88]: 4078MB loaded. 99% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 1,
+      "timeElapsed": 5,
+      "text": "Loading model from cache[88/88]: 4086MB loaded. 100% completed, 5 secs elapsed."
+    },
+    {
+      "progress": 1,
+      "timeElapsed": 1,
+      "text": "Loading GPU shader modules[4/4]: 100% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 1,
+      "timeElapsed": 5.880504999995232,
+      "text": "Finish loading on WebGPU - apple"
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "workerErrors": [],
+  "loaded": true,
+  "adapter": {
+    "vendor": "apple",
+    "architecture": "metal-3"
+  },
+  "reply": {
+    "id": "119a5921-9760-44bb-8f70-bbd17e14da5d",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "Hello!",
+          "role": "assistant"
+        }
+      }
+    ],
+    "model": "Qwen2.5-7B-Instruct-q4f16_1-MLC",
+    "object": "chat.completion",
+    "created": 1791367333,
+    "usage": {
+      "completion_tokens": 2,
+      "prompt_tokens": 28,
+      "total_tokens": 30,
+      "extra": {
+        "e2e_latency_s": 3.969,
+        "prefill_tokens_per_s": 8.12542168763512,
+        "decode_tokens_per_s": 3.8400245765000647,
+        "time_to_first_token_s": 3.4459749999940397,
+        "time_per_output_token_s": 0.2604149999767542
+      }
+    }
+  },
+  "completed": true,
+  "browserClosed": true
+}
