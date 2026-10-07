@@ -1,0 +1,12 @@
+[
+  {
+    "source": "Museum logistics: Iris Vale suggested shipping the display cases on Friday. The collections team may ship them only after Omar Singh signs the damage report. The report remains unsigned, and the proposed shipment has not been authorized. Catering menus are already printed.",
+    "instruction": "Summarize in one shorter English sentence. Preserve Iris Vale as proposer, Friday as the proposed shipment day, the collections team as the acting team, Omar Singh signing the damage report as a prerequisite, the report still being unsigned, and the proposed shipment still being unauthorized. Omit catering menus.",
+    "scope": "unused at protocol freeze"
+  },
+  {
+    "source": "游泳馆记录：苏沐建议周六重新开放训练池；只有陶宁完成水质报告验收后，运营团队才可开放。验收尚未完成，重新开放方案也未获批准。更衣柜编号已张贴。",
+    "instruction": "用一句较短的中文摘要，保留苏沐建议周六重新开放训练池、运营团队执行、陶宁完成水质报告验收是前提、验收未完成和重新开放未获批准；省略更衣柜编号。",
+    "scope": "unused at protocol freeze"
+  }
+]
