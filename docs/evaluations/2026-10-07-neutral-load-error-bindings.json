@@ -1,0 +1,14 @@
+{
+  "scope": "After-run hashes; no prelaunch binding",
+  "processExitCode": 0,
+  "evidenceSHA256": {
+    "2026-10-07-neutral-load-error-native.mjs": "8c7982a5b948203eebb679086e4211b3768c52fd3ab9c848c58cf8271c84db2d",
+    "2026-10-07-neutral-load-error-native.json": "a52c53bc3d84f1406afb9d2791bbc43137f8563fb15e87518e9d9dcf20fa69d0",
+    "2026-10-07-neutral-load-error-analysis.md": "c806d7229d441d0cab6491a375218d6d35522f2da32af761aaf367c746240728"
+  },
+  "runtimeSHA256": {
+    "dist/sw.js": "c8d5ecf60bc37ce13561e652ec626967143a70d9df14ba9b8b5a319be6425bd9",
+    "dist/assets/editor-sJYHaThB.js": "7e37186352bb637218b87346ef1fff57e22bda5a098f3bac888c45c16c885b2d",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  }
+}
