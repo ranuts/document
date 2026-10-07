@@ -27,5 +27,27 @@
     "Synthetic-credential URL must not appear in localStorage, IndexedDB, Cache Storage, OPFS, history or user-visible logs.",
     "Chosen authenticated-source behavior must be verified through actual load and restart; ordinary public offline caches continue to work.",
     "Do not claim complete privacy acceptance solely from source inspection."
+  ],
+  "sdk_cache_feasibility": {
+    "sdk": "@mlc-ai/web-llm 0.2.85",
+    "config_declaration_sha256": "bf017ee4bc42489e667650ee726639ada2fce14f20558ed184430ef8d34cf770",
+    "grade": "code fact from installed public type declaration",
+    "supported_backends": [
+      "cache",
+      "indexeddb",
+      "cross-origin",
+      "opfs"
+    ],
+    "default": "cache",
+    "public_no_cache_option": false,
+    "limit": "This declaration does not prove there is no internal adapter route. Session-only behavior needs further SDK implementation inspection and actual persistent-store verification."
+  },
+  "runtime_receipt": "2026-10-07-model-source-persistence-native.json",
+  "runtime_receipt_sha256": "65358a5027a87c53db9ede18199cee62a9e45cb7002194382c3b2905d8efb7cf",
+  "implementation_constraints": [
+    "Preserve ordinary public model offline caches.",
+    "Do not treat not writing localStorage as eliminating SDK artifact persistence.",
+    "Do not silently strip authentication query parameters.",
+    "Do not implement the pending authenticated-source behavior choice before it is resolved."
   ]
 }
