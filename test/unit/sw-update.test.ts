@@ -8,6 +8,7 @@ import {
   healStaleController,
   isUnseenBuild,
   askVersionPatiently,
+  askVersion,
   ASK_VERSION_ATTEMPTS,
   ASK_VERSION_TIMEOUT_MS,
   onWaitingWorker,
@@ -16,6 +17,40 @@ import {
   shouldReloadOnControllerChange,
   wireServiceWorkerUpdates,
 } from '../../lib/sw-update';
+
+describe('version request cleanup', () => {
+  it.each(['reply', 'timeout', 'send-error'])('releases ports and its timer after %s', async (outcome) => {
+    vi.useFakeTimers();
+    const port1 = { close: vi.fn(), onmessage: null as ((event: { data: unknown }) => void) | null };
+    const port2 = { close: vi.fn() };
+    vi.stubGlobal(
+      'MessageChannel',
+      class {
+        port1 = port1;
+        port2 = port2;
+      },
+    );
+    try {
+      const target = {
+        state: 'activated',
+        addEventListener: () => {},
+        postMessage: () => {
+          if (outcome === 'send-error') throw new Error('worker stopped');
+        },
+      };
+      const result = askVersion(target, 100);
+      if (outcome === 'reply') port1.onmessage!({ data: { vendorVersion: 'v2' } });
+      if (outcome === 'timeout') await vi.advanceTimersByTimeAsync(100);
+      await expect(result).resolves.toEqual(outcome === 'reply' ? { vendorVersion: 'v2' } : null);
+      expect(port1.close).toHaveBeenCalledOnce();
+      expect(port2.close).toHaveBeenCalledOnce();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.unstubAllGlobals();
+      vi.useRealTimers();
+    }
+  });
+});
 
 /**
  * Deploy-while-editing safety (matrix section C, "SW 缓存旧构建 -> 升级").

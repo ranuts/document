@@ -302,10 +302,13 @@ export function askVersion(worker: SwLike | null, timeoutMs = 1000): Promise<Wor
     const done = (value: WorkerVersion | null): void => {
       if (settled) return;
       settled = true;
+      clearTimeout(timer);
+      channel.port1.close();
+      channel.port2.close();
       resolve(value);
     };
     channel.port1.onmessage = (event: MessageEvent) => done((event.data ?? null) as WorkerVersion | null);
-    setTimeout(() => done(null), timeoutMs);
+    const timer = setTimeout(() => done(null), timeoutMs);
     try {
       // Two-argument postMessage, which the narrow SwLike shape does not model.
       (worker as unknown as { postMessage(msg: unknown, transfer: MessagePort[]): void }).postMessage(

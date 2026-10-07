@@ -37,10 +37,19 @@ const controllerVendorVersion = (page: import('@playwright/test').Page) =>
   page.evaluate(async () => {
     const controller = navigator.serviceWorker.controller;
     if (!controller) return null;
-    return await new Promise<string | null>((done) => {
+    return await new Promise<string | null>((resolve) => {
       const channel = new MessageChannel();
+      let settled = false;
+      const done = (value: string | null) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        channel.port1.close();
+        channel.port2.close();
+        resolve(value);
+      };
+      const timer = setTimeout(() => done(null), 3000);
       channel.port1.onmessage = (event) => done((event.data?.vendorVersion as string) ?? null);
-      setTimeout(() => done(null), 3000);
       controller.postMessage({ type: 'VERSION' }, [channel.port2]);
     });
   });
