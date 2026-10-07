@@ -14,6 +14,9 @@ requests=json.loads((root/(prefix+'-requests.json')).read_text())
 fixtures=json.loads((root/'2026-10-07-qwen3-instruct2507-seven-language-cases.json').read_text())
 fixtures=[f for f in fixtures if f['id'] in ['zh-CN-summarize','ja-translate','de-rewrite','es-rewrite']]
 assert [r['id'] for r in requests]==[f['id'] for f in fixtures]
+original=json.loads((root/'2026-10-07-qwen3-instruct2507-q6-native.json').read_text())
+original={r['prompt']['id']:r['sdk'][0]['request']['messages'][1] for r in original['cases'] if r['variant']=='Q4_K_M'}
+for r in requests:assert r['request']['messages'][1]==original[r['id']], 'Original writing instructions changed'
 for row,f in zip(requests,fixtures):
  q=row['request'];assert q['temperature']==0 and q['top_p']==.8 and q['max_tokens']==512
  assert q['messages'][0]=={'role':'system','content':'Return only JSON matching the supplied schema. Follow the bounded task instructions. /no_think'}
