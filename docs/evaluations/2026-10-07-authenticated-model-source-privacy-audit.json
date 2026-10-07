@@ -1,0 +1,31 @@
+{
+  "scope": "Read-only current-source privacy audit; no real credential supplied and no persistent-storage runtime claim",
+  "source_sha256": {
+    "lib/agent-plugin/ui/panel.ts": "548b869382a002562246c77f358ccfcc83457ba7963b3ed3b9294e6a5b102378",
+    "packages/agent-core/src/llm/model-source.ts": "9e8001391c2ca51c51aa7c0bcbc38d115523c05b1fb69bc9b7580a6a97475c7a",
+    "packages/agent-core/src/llm/wllama.ts": "b5cfb713b3e32f83ad0486666b634811f11cd43b1870ce64c84acd802fec8c2d"
+  },
+  "findings": [
+    {
+      "source": "lib/agent-plugin/ui/panel.ts:277",
+      "grade": "code fact",
+      "finding": "sourceInput initializes from localStorage and writes the full trimmed value on change for custom GPU model directory and WASM URLs; no credential-query filtering occurs here."
+    },
+    {
+      "source": "packages/agent-core/src/llm/model-source.ts:16",
+      "grade": "code fact",
+      "finding": "URL policy restricts scheme to HTTP/HTTPS but returns full href, preserving URL userinfo, query and fragment."
+    },
+    {
+      "source": "packages/agent-core/src/llm/model-source.ts:33",
+      "grade": "code fact",
+      "finding": "GPU resolution forces IndexedDB cache for ordinary and overridden records; no session-only authenticated-source path exists."
+    }
+  ],
+  "open_decision": "Authenticated URL handling: session-only source with nonpersistent model cache, or explicit rejection. Do not strip query parameters and silently change resource identity.",
+  "acceptance_needed": [
+    "Synthetic-credential URL must not appear in localStorage, IndexedDB, Cache Storage, OPFS, history or user-visible logs.",
+    "Chosen authenticated-source behavior must be verified through actual load and restart; ordinary public offline caches continue to work.",
+    "Do not claim complete privacy acceptance solely from source inspection."
+  ]
+}
