@@ -25,7 +25,7 @@ export const ko: Partial<I18nMessages> = {
   agentSpeechUnsupported: '이 브라우저는 음성 입력을 지원하지 않습니다.',
   agentDownloadIncomplete: '다운로드 미완료',
   agentModelInUse: '사용 중',
-  agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',
+  agentCacheDeleteFailed: '다운로드를 삭제하지 못했습니다. 브라우저 저장소 권한을 확인한 후 다시 시도하세요.',
   agentResizePanel: 'AI 패널 너비 조절',
   agentModelId: '모델 ID',
   agentModelUrl: '모델 디렉터리 URL',

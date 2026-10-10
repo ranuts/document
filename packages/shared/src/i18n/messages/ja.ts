@@ -25,7 +25,8 @@ export const ja: Partial<I18nMessages> = {
   agentSpeechUnsupported: 'このブラウザーでは音声入力を利用できません。',
   agentDownloadIncomplete: 'ダウンロード未完了',
   agentModelInUse: '使用中',
-  agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',
+  agentCacheDeleteFailed:
+    'ダウンロードを削除できませんでした。ブラウザーのストレージ権限を確認して再試行してください。',
   agentResizePanel: 'AI パネルの幅を調整',
   agentModelId: 'モデル ID',
   agentModelUrl: 'モデルディレクトリ URL',

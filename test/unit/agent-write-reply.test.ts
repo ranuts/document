@@ -30,6 +30,9 @@ vi.mock('../../lib/agent-plugin/reviewed-action', async (original) => ({
   ...(await original<typeof import('../../lib/agent-plugin/reviewed-action')>()),
   captureActionTarget: state.capture,
 }));
+vi.mock('../../lib/agent-plugin/editor-bridge', () => ({
+  getEditorApi: () => ({ isDocumentLoadComplete: true, isLoadFullApi: true, pluginMethod_GetSelectedText: () => '' }),
+}));
 HTMLElement.prototype.scrollTo = vi.fn();
 afterEach(() => {
   window.dispatchEvent(new Event('pagehide'));

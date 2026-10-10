@@ -77,24 +77,17 @@ it('keeps invalid remembered CPU URLs from starting a model load', () => {
   expect(state.auto).not.toHaveBeenCalled();
 });
 
-it('persists a task preset without overwriting the global preset', () => {
+it('retains remembered task preferences without exposing a duplicate task selector', () => {
+  const preference = JSON.stringify({
+    version: 1,
+    tasks: { rewrite: { backend: 'webllm', model: 'Qwen3-4B-q4f16_1-MLC' } },
+  });
+  localStorage.setItem('agent-task-models', preference);
   localStorage.setItem('agent-local-preset', 'Qwen3-1.7B-q4f16_1-MLC');
   const panel = createAgentPanel();
-  const task = panel.querySelector('.agent-writing-task') as HTMLSelectElement;
-  task.value = 'rewrite';
-  task.dispatchEvent(new Event('change'));
-  const selected = panel.querySelector('.agent-task-model') as HTMLSelectElement;
-  expect(selected).not.toBeNull();
-  selected.value = 'Qwen3-4B-q4f16_1-MLC';
-  selected.dispatchEvent(new Event('change'));
-  expect(JSON.parse(localStorage.getItem('agent-task-models')!).tasks.rewrite).toEqual({
-    backend: 'webllm',
-    model: 'Qwen3-4B-q4f16_1-MLC',
-  });
+  expect(panel.querySelector('.agent-task-model')).toBeNull();
+  expect(localStorage.getItem('agent-task-models')).toBe(preference);
   expect(localStorage.getItem('agent-local-preset')).toBe('Qwen3-1.7B-q4f16_1-MLC');
-  task.value = 'chat';
-  task.dispatchEvent(new Event('change'));
-  expect(selected.value).toBe('');
 });
 it('loads the configured writing model and restores the default for chat', async () => {
   localStorage.setItem(

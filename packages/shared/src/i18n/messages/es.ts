@@ -25,7 +25,8 @@ export const es: Partial<I18nMessages> = {
   agentSpeechUnsupported: 'Este navegador no admite entrada de voz.',
   agentDownloadIncomplete: 'Descarga incompleta',
   agentModelInUse: 'En uso',
-  agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',
+  agentCacheDeleteFailed:
+    'No se pudo eliminar la descarga. Comprueba los permisos de almacenamiento del navegador e inténtalo de nuevo.',
   agentResizePanel: 'Cambiar ancho del panel de IA',
   agentModelId: 'ID del modelo',
   agentModelUrl: 'URL del directorio del modelo',
