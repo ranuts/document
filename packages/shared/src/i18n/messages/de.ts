@@ -10,6 +10,19 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const de: Partial<I18nMessages> = {
+  agentSpeechInput: 'Spracheingabe',
+  agentSpeechStop: 'Diktat stoppen',
+  agentSpeechLanguage: 'Erkennungssprache',
+  agentSpeechPrivacy:
+    'Der Browser kann Audio an einen Online-Dienst senden. Der Text bleibt vor dem Senden bearbeitbar.',
+  agentSpeechStart: 'Diktat starten',
+  agentSpeechCancel: 'Abbrechen',
+  agentSpeechStarting: 'Mikrofon wird angefordert…',
+  agentSpeechListening: 'Aufnahme läuft…',
+  agentSpeechDenied: 'Mikrofonzugriff verweigert. Bitte in den Browsereinstellungen erlauben.',
+  agentSpeechFailed: 'Erkennung fehlgeschlagen. Mikrofon, Sprache und Verbindung prüfen.',
+  agentSpeechFinishing: 'Erkennung wird beendet…',
+  agentSpeechUnsupported: 'Spracheingabe ist in diesem Browser nicht verfügbar.',
   agentDownloadIncomplete: 'Download unvollständig',
   agentModelInUse: 'Wird verwendet',
   agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',

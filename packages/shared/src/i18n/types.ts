@@ -6,6 +6,19 @@
  * different languages no longer touch the same lines.
  */
 export interface I18nMessages {
+  agentSpeechInput: string;
+  agentSpeechStop: string;
+  agentSpeechLanguage: string;
+  agentSpeechPrivacy: string;
+  agentSpeechStart: string;
+  agentSpeechCancel: string;
+  agentSpeechStarting: string;
+  agentSpeechListening: string;
+  agentSpeechDenied: string;
+  agentSpeechFailed: string;
+  agentSpeechFinishing: string;
+  agentSpeechUnsupported: string;
+
   agentDownloadIncomplete: string;
   agentModelInUse: string;
   agentCacheDeleteFailed: string;

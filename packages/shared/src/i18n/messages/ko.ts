@@ -10,6 +10,19 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const ko: Partial<I18nMessages> = {
+  agentSpeechInput: '음성 입력',
+  agentSpeechStop: '받아쓰기 중지',
+  agentSpeechLanguage: '인식 언어',
+  agentSpeechPrivacy:
+    '브라우저가 온라인 인식 서비스로 오디오를 보낼 수 있습니다. 전송 전에 텍스트를 편집할 수 있습니다.',
+  agentSpeechStart: '받아쓰기 시작',
+  agentSpeechCancel: '취소',
+  agentSpeechStarting: '마이크 요청 중…',
+  agentSpeechListening: '듣는 중…',
+  agentSpeechDenied: '마이크 권한이 거부되었습니다. 브라우저 설정에서 허용하세요.',
+  agentSpeechFailed: '음성 인식 실패. 마이크, 언어 및 연결을 확인하세요.',
+  agentSpeechFinishing: '인식 완료 중…',
+  agentSpeechUnsupported: '이 브라우저는 음성 입력을 지원하지 않습니다.',
   agentDownloadIncomplete: '다운로드 미완료',
   agentModelInUse: '사용 중',
   agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',
