@@ -15,7 +15,7 @@ export type {
   LLMToolDef,
 } from './types';
 export { createProvider, defaultProviderId, type ProviderId, type ProviderOptions } from './factory';
-export { getApiKey, setApiKey } from './keys';
+export { getApiKey, setApiKey, getEndpointKey, setEndpointKey, clearEndpointKey } from './keys';
 export { DEFAULT_SYSTEM_PROMPT } from './prompt';
 export {
   DEFAULT_WEBLLM_MODEL,
@@ -43,3 +43,14 @@ export {
   type ResolvedTaskModel,
 } from './task-model';
 export { resolveWritingRoute, type WritingRoute, type WritingRouteInput } from './writing-route';
+export {
+  CLOUD_ENDPOINT_KINDS,
+  DEFAULT_LOOPBACK_ENDPOINT,
+  createEndpointProvider,
+  isLoopbackHost,
+  validateRemoteEndpointUrl,
+  validateWritingEndpoint,
+  writingEndpointDataPath,
+  type WritingEndpoint,
+  type WritingEndpointKind,
+} from './endpoint';

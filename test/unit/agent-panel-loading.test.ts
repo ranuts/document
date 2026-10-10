@@ -130,7 +130,7 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
 afterEach(() => {
   localStorage.removeItem('agent-panel-provider');
   localStorage.removeItem('agent-panel-gguf-url');
-  localStorage.removeItem('agent-loopback');
+  localStorage.removeItem('agent-writing-endpoint');
   window.dispatchEvent(new Event('pagehide'));
   document.body.replaceChildren();
   state.preload.mockReset();
@@ -156,10 +156,20 @@ afterEach(() => {
 /**
  * Browser-local writing is opt-in: the engines never passed seven-language
  * quality acceptance, so a document write needs the explicit consent that the
- * loopback settings block persists. Writing cases call this before mounting.
+ * writing-destination settings block persists. Writing cases call this first.
  */
 function allowBrowserLocalWriting(): void {
-  localStorage.setItem('agent-loopback', JSON.stringify({ version: 1, url: '', model: '', localWritingConsent: true }));
+  localStorage.setItem(
+    'agent-writing-endpoint',
+    JSON.stringify({
+      version: 1,
+      kind: 'loopback',
+      baseUrl: '',
+      model: '',
+      preference: 'device-first',
+      localWritingConsent: true,
+    }),
+  );
 }
 it('starts hidden and waits for the editor and idle time before background loading', async () => {
   vi.useFakeTimers();
@@ -345,10 +355,10 @@ it('refuses browser-local writing until a service is connected or consent is giv
   expect(state.apply).not.toHaveBeenCalled();
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
 });
-it('persists the loopback origin, model and browser-local writing consent from the settings block', () => {
+it('persists the writing destination, model and browser-local writing consent', () => {
   const panel = createAgentPanel();
-  const url = panel.querySelector<HTMLInputElement>('.agent-panel-loopback-url')!;
-  const model = panel.querySelector<HTMLInputElement>('.agent-panel-loopback-model')!;
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
   const consent = panel.querySelector<HTMLInputElement>('.agent-panel-local-writing')!;
   url.value = 'http://127.0.0.1:11434/';
   url.dispatchEvent(new Event('change'));
@@ -356,19 +366,49 @@ it('persists the loopback origin, model and browser-local writing consent from t
   model.dispatchEvent(new Event('change'));
   consent.checked = true;
   consent.dispatchEvent(new Event('change'));
-  expect(JSON.parse(localStorage.getItem('agent-loopback')!)).toEqual({
+  expect(JSON.parse(localStorage.getItem('agent-writing-endpoint')!)).toEqual({
     version: 1,
-    url: 'http://127.0.0.1:11434',
+    kind: 'loopback',
+    baseUrl: 'http://127.0.0.1:11434/',
     model: 'qwen3:8b',
+    preference: 'device-first',
     localWritingConsent: true,
   });
 });
-it('never persists a non-loopback service origin', () => {
+it('never persists a plain-http remote endpoint, which would leak the key and the text', () => {
   const panel = createAgentPanel();
-  const url = panel.querySelector<HTMLInputElement>('.agent-panel-loopback-url')!;
-  url.value = 'https://example.com';
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  url.value = 'http://api.example.com/v1';
   url.dispatchEvent(new Event('change'));
-  expect(localStorage.getItem('agent-loopback')).toBeNull();
+  expect(localStorage.getItem('agent-writing-endpoint')).toBeNull();
+});
+it('shows where the writing will actually go, and says when it leaves the device', () => {
+  const panel = createAgentPanel();
+  const destination = panel.querySelector('.agent-panel-write-destination')!;
+  expect(destination.textContent).toContain(t('agentWriteNeedsDestination'));
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+  return vi.waitFor(() => {
+    expect(destination.textContent).toContain(t('agentWriteDestinationRemote'));
+    expect(destination.textContent).toContain('gpt-4o-mini');
+  });
 });
 it('routes translation with the captured source and explicit language', async () => {
   state.ready = true;

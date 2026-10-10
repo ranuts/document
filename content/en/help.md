@@ -91,11 +91,11 @@ The site updates itself on the next visit. If a page seems stuck on an old build
 
 ### Are my documents uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The writing assistant only sends text where you point it: a service on your own machine keeps it on the device, while a cloud endpoint you configure with your own API key receives the selected text and your instruction. An embedding host can receive exported files and upload them according to its own policy.
 
 ### What does the page load from the network?
 
-The page loads application code, editor resources, fonts and a Cloudflare Web Analytics beacon. Remote file URLs can make additional requests. Embedding hosts and external browser agents determine their own data handling.
+The page loads application code, editor resources, fonts and a Cloudflare Web Analytics beacon. Remote file URLs can make additional requests. If you configure a writing destination, a writing request also goes to the address shown in the assistant's settings. Embedding hosts and external browser agents determine their own data handling.
 
 ## Errors
 

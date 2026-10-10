@@ -16,6 +16,13 @@
 - Export DOCX, XLSX, PPTX, ODT, ODS and ODP to PDF locally.
 - Open and view PDF files in the browser (dedicated PDF editor, no upload).
 - Core file opening, editing and conversion run client-side without a required upload.
+- The writing assistant (rewrite / summarize / translate a selection) sends text
+  only to the destination the user configures: a loopback service on the user's
+  own machine keeps it on the device, while a cloud endpoint the user configures
+  with their own API key receives the selected text and the instruction. With no
+  destination configured, the browser-local models are used only after an explicit
+  opt-in, because they did not pass the project's seven-language writing quality
+  acceptance.
 - No account, no sign-up, and no server required.
 - Open a document from a URL via the `?src=` or `?file=` query parameter.
 - Installable as a PWA; previously cached editing resources can work offline.

@@ -91,11 +91,11 @@ El sitio se actualiza solo en la siguiente visita. Si una página parece atascad
 
 ### ¿Mis documentos se suben a algún sitio?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de escritura solo envía texto al destino que elijas: un servicio en tu propio equipo lo mantiene en el dispositivo, mientras que un endpoint en la nube configurado con tu propia clave de API recibe el texto seleccionado y tu instrucción. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Qué carga la página desde la red?
 
-La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas pueden generar solicitudes adicionales. Las aplicaciones anfitrionas y los agentes externos del navegador tienen sus propias políticas de datos.
+La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas pueden generar solicitudes adicionales. Si configuras un destino de escritura, la solicitud de escritura también va a la dirección que muestra la configuración del asistente. Las aplicaciones anfitrionas y los agentes externos del navegador tienen sus propias políticas de datos.
 
 ## Errores
 

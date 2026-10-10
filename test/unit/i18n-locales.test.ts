@@ -50,9 +50,10 @@ const CORE_KEYS: Array<keyof I18nMessages> = [
  * same word, not a missing translation. Anything else matching English fails.
  */
 const SAME_AS_ENGLISH: Partial<Record<string, Array<keyof I18nMessages>>> = {
-  de: ['themeSystem'],
-  es: ['themeSystem', 'agentRoleError'],
-  pt: ['themeSystem'],
+  // Vendor product names stay as-is; the surrounding sentence is translated.
+  de: ['themeSystem', 'agentEndpointAnthropic', 'agentEndpointGemini'],
+  es: ['themeSystem', 'agentRoleError', 'agentEndpointAnthropic', 'agentEndpointGemini'],
+  pt: ['themeSystem', 'agentEndpointAnthropic', 'agentEndpointGemini'],
 };
 
 /** The product name, which reads the same in every language. */

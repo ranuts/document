@@ -91,11 +91,11 @@ Die Seite aktualisiert sich beim nächsten Besuch selbst. Wenn eine Seite auf ei
 
 ### Werden meine Dokumente irgendwohin hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der Schreibassistent sendet Text nur an das von Ihnen gewählte Ziel: ein Dienst auf Ihrem eigenen Rechner lässt ihn auf dem Gerät, ein mit eigenem API-Schlüssel konfigurierter Cloud-Endpunkt erhält den markierten Text und Ihre Anweisung. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Was lädt die Seite aus dem Netz?
 
-Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs können weitere Anfragen auslösen. Einbettende Anwendungen und externe Browser-Agenten bestimmen ihre eigene Datenverarbeitung.
+Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs können weitere Anfragen auslösen. Ist ein Schreibziel konfiguriert, geht die Schreibanfrage zusätzlich an die in den Assistenten-Einstellungen angezeigte Adresse. Einbettende Anwendungen und externe Browser-Agenten bestimmen ihre eigene Datenverarbeitung.
 
 ## Fehler
 

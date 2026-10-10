@@ -51,13 +51,20 @@ notes. Entries describe what users experience, not internal refactors.
   negations straight across the seven interface languages -- and a rewrite that
   quietly turns "not approved" into "approved" is worse than no rewrite. So the
   assistant now talks to a model service you run yourself (Ollama on
-  `http://localhost:11434` by default, set up under Settings -> Local service);
-  your file still never leaves the device, because only a loopback address is
-  accepted. Chat, the structured edit commands and offline use are unchanged.
+  `http://localhost:11434` by default, set up under Settings -> Writing
+  destination); your file still never leaves the device, because a local service
+  is only reachable on your own machine.
+- **Or point it at a cloud model with your own API key.** Settings -> Writing
+  destination also accepts an OpenAI-compatible endpoint (OpenAI, DeepSeek, Groq,
+  OpenRouter, a local vLLM/LM Studio server, ...), Claude or Gemini. A remote
+  address must be HTTPS. The panel always states where the writing will go, and
+  when it goes to a third party it says so plainly, because that text leaves your
+  device. Which destination wins when you have configured both is your choice
+  (this device first, or the cloud endpoint first).
 - **Browser-local writing is still available, but you have to ask for it.** With
-  no local service connected, asking for a rewrite tells you so instead of
-  silently using the in-browser model. Tick "Allow browser-local model writing"
-  in Settings to use it anyway; it is marked experimental, because it is.
+  no destination connected, asking for a rewrite tells you so instead of silently
+  using the in-browser model. Tick "Allow browser-local model writing" in Settings
+  to use it anyway; it is marked experimental, because it is.
 
 - **The editor gives its memory back while you work.** Converting a document
   used to reserve a few hundred megabytes and hold them for as long as the tab

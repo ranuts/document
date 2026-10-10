@@ -91,11 +91,11 @@ O site se atualiza sozinho na próxima visita. Se uma página parecer presa numa
 
 ### Meus documentos são enviados para algum lugar?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de escrita só envia texto para o destino que escolher: um serviço no seu próprio computador mantém-no no dispositivo, enquanto um endpoint na nuvem configurado com a sua própria chave de API recebe o texto selecionado e a sua instrução. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### O que a página carrega da rede?
 
-A página carrega código, recursos do editor, fontes e uma requisição do Cloudflare Web Analytics. URLs remotas podem gerar requisições adicionais. Apps anfitriões e agentes externos do navegador definem suas próprias políticas de dados.
+A página carrega código, recursos do editor, fontes e uma requisição do Cloudflare Web Analytics. URLs remotas podem gerar requisições adicionais. Se configurar um destino de escrita, o pedido de escrita vai também para o endereço mostrado nas configurações do assistente. Apps anfitriões e agentes externos do navegador definem suas próprias políticas de dados.
 
 ## Erros
 

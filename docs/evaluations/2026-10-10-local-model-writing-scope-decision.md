@@ -99,8 +99,58 @@
 
 ```bash
 pnpm --filter @ranuts/agent-core build      # src 改动需要重建包（见"操作注意"）
-pnpm exec vitest run test/unit/agent-writing-route.test.ts \
-  test/unit/agent-loopback.test.ts test/unit/agent-loopback-settings.test.ts \
-  test/unit/agent-panel-loading.test.ts
+pnpm exec vitest run test/unit/agent-endpoint.test.ts \
+  test/unit/agent-endpoint-settings.test.ts test/unit/agent-writing-route.test.ts \
+  test/unit/agent-loopback.test.ts test/unit/agent-panel-loading.test.ts
 pnpm run lint:ts && pnpm run format:check && pnpm run test && pnpm build
 ```
+
+## 追加（同日）：写作终点从 loopback-only 扩展为可配置端点
+
+用户提出"加 baseUrl 和 key 更好，本机 loopback 也可以保留，不冲突"。评估结论：**技术上确实是加法**
+（`OpenAIProvider` 早有 `baseURL`/`apiKey`，`OllamaProvider` 早有 `ollamaBaseURL`，
+`PROVIDER_LABEL_KEY` 里 Claude/OpenAI/Gemini 的标签一直都在），但**与站点对外承诺有冲突**：
+loopback 与浏览器内推理守得住"文件不出设备"，自带 Key 的云端端点守不住。用户确认接受该冲突并
+把隐私口径改成两种，于是实施。
+
+### 决策（用户确认）
+
+1. **接受云端写作**，并把帮助中心与 `llms.txt` 的隐私表述改成两种口径
+   （本机 = 不上传；云端端点 = 会发出选中的文本与指令）。
+2. **优先级**：loopback 优先，但界面显式显示"写作发往哪里"并允许切换（`device-first` / `remote-first`）。
+3. **端点范围**：OpenAI 兼容端点 + 放出库里已有的 Claude / Gemini 原生 provider。
+
+### 实现
+
+- `packages/agent-core/src/llm/endpoint.ts`（新增）— `WritingEndpoint` 类型、URL 策略、provider 构造。
+  远程端点**强制 https**（明文会把 Key 与文档一起暴露），拒绝 URL 内嵌凭据/查询/片段；
+  loopback 允许 `http:` 且仅接受 origin（原生 API 路径由 provider 固定）。
+- `keys.ts` — 新增按 **origin** 分槽的端点 Key（`agent_endpoint_key_<encoded origin>`）。
+  既有的 `agent_api_key_<provider>` 无法容纳两个 OpenAI 兼容服务，第二个会覆盖第一个；
+  旧函数保持原样不动。
+- `writing-route.ts` — 从"loopback 或本地"改为端点模型：按 `preference` 依次尝试
+  loopback / remote，都没有才考虑 consent 下的浏览器本地，否则 `blocked`；
+  结果带 `dataPath: 'device' | 'remote'`，界面据此明说数据去哪。
+- `lib/agent-plugin/ui/endpoint-settings.ts`（新增，取代 loopback-only 版本）— 终点类型、
+  地址、模型、优先级、consent 的读写；Key **不进这份记录**，只进按 origin 的槽。
+- 面板 — 终点类型选择（本机服务 / OpenAI 兼容 / Claude / Gemini）、地址（厂商端点隐藏）、
+  模型、API Key（仅云端）、连接/断开、状态、优先级、以及"写作发往：…"的显式提示。
+  云端端点标注为**"已配置（未验证连通性）"**——就绪不等于可达，不假装验证过。
+- i18n — 23 个新词条 × 7 语言；厂商产品名在 de/es/pt 与英文相同，登记进
+  `test/unit/i18n-locales.test.ts` 的 `SAME_AS_ENGLISH` 白名单（本就是产品名，不该硬造翻译）。
+- 隐私文案 — 7 个语言的 `content/*/help.md` 两节改口径 + `public/llms.txt` 增加写作终点说明。
+  落地页的主张限定在"核心本地编辑/转换器"，仍然准确，未改动。
+
+### 安全边界（必须保持）
+
+- 非 loopback 一律 https；URL 不得内嵌凭据、查询或片段。
+- 永不自动连接任何端点；必须用户显式点击。
+- 默认仍浏览器本地优先；不自动启用云端、不自动云端降级。
+- Key 只进按 origin 的槽，不写入全局 store；无效端点永不入库。
+
+### 未验证（延续上一节，且新增）
+
+- **云端端点的真实调用**：没有用真实 Key 发过请求。云端"已配置"只表示配置完整、Key 存在，
+  不表示端点可达、Key 有效或模型可用——这一点在界面上已如实标注。
+- 真实本机服务连通性、真机浏览器写作流程：仍未验证（同上一节）。
+- 长文档分段（原计划 Task 5）仍未做。

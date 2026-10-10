@@ -21,23 +21,29 @@ import { getEditorApi, type EditorApi } from '../editor-bridge';
 import { agentTools } from '../tools';
 import { parseDirectDocumentIntent } from '../direct-intent';
 import { captureDocumentContext, resolveContextCommand } from '../document-context';
-import type { LLMMessage, LLMResponse } from '@ranuts/agent-core/llm/types';
+import type { LLMMessage, LLMProvider, LLMResponse } from '@ranuts/agent-core/llm/types';
 import type { ProviderId } from '@ranuts/agent-core/llm/factory';
 import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
 import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
 import { resolveModelArtifactUrl } from '@ranuts/agent-core/llm/model-source';
 import { resolveTaskModel, type ModelTask } from '@ranuts/agent-core/llm/task-model';
-import { resolveWritingRoute } from '@ranuts/agent-core/llm/writing-route';
-import { LoopbackProvider } from '@ranuts/agent-core/llm/loopback';
+import { resolveWritingRoute, type WritingRoute } from '@ranuts/agent-core/llm/writing-route';
+import {
+  DEFAULT_LOOPBACK_ENDPOINT,
+  createEndpointProvider,
+  type WritingEndpointKind,
+} from '@ranuts/agent-core/llm/endpoint';
+import { getEndpointKey, setEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { readTaskModelPreferences, writeTaskModelPreference } from './task-model-preferences';
 import {
-  DEFAULT_LOOPBACK_URL,
-  loopbackBinding,
-  readLoopbackSettings,
-  writeLoopbackSettings,
-  type LoopbackSettings,
-} from './loopback-settings';
+  ENDPOINT_SETTINGS_KEY,
+  configuredEndpoint,
+  isCloudEndpointKind,
+  readEndpointSettings,
+  writeEndpointSettings,
+  type EndpointSettings,
+} from './endpoint-settings';
 import { WllamaProvider } from '@ranuts/agent-core/llm/wllama';
 import {
   generateWriting,
@@ -103,8 +109,6 @@ const PROVIDER_LABEL_KEY: Record<ProviderId, keyof I18nMessages> = {
 // The loopback service is not a browser engine: it has its own settings block
 // rather than a slot in the provider dropdown.
 const PROVIDER_IDS: ProviderId[] = ['webllm', 'wllama'];
-/** Persisted loopback origin + model + browser-local writing consent. */
-const LOOPBACK_SETTINGS_KEY = 'agent-loopback';
 
 /** An r-button (ranui builder) with a label and class. */
 const ranButton = (text: string, className: string): HTMLElement =>
@@ -359,38 +363,69 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   const note = Div().class('agent-panel-note').build();
   note.setAttribute('role', 'status');
 
-  // ── Optional native loopback service ─────────────────────────────────────
+  // ── Writing destination ──────────────────────────────────────────────────
   // Writing into a document is high-stakes, and the browser-local engines never
-  // reached seven-language quality acceptance. A service the user runs on their
-  // own machine is therefore the preferred writing backend: it keeps the same
-  // "the file never leaves the device" property because only a loopback origin
-  // is accepted, while the model can be far larger than the page could host.
-  let loopbackSettings: LoopbackSettings = readLoopbackSettings(localStorageGetItem(LOOPBACK_SETTINGS_KEY));
-  const loopbackUrl = ranInput('agent-panel-loopback-url', 'text');
-  loopbackUrl.value = loopbackSettings.url || DEFAULT_LOOPBACK_URL;
-  loopbackUrl.placeholder = DEFAULT_LOOPBACK_URL;
-  loopbackUrl.setAttribute('aria-label', t('agentLoopbackUrl'));
-  const loopbackModel = ranInput('agent-panel-loopback-model', 'text');
-  loopbackModel.value = loopbackSettings.model;
-  loopbackModel.placeholder = 'qwen3:8b';
-  loopbackModel.setAttribute('aria-label', t('agentLoopbackModel'));
-  const loopbackConnect = ranButton(t('agentLoopbackConnect'), 'agent-panel-loopback-connect');
-  const loopbackStatus = Span().class('agent-panel-loopback-status').attr('role', 'status').build();
+  // reached seven-language quality acceptance. The user may instead point the
+  // assistant at a model server: a loopback service on this machine (the text
+  // stays on the device) or a cloud endpoint with their own key (the selected
+  // text is sent there). The resolved destination is always shown, because the
+  // two are not equivalent and the choice belongs to the user.
+  let endpointSettings: EndpointSettings = readEndpointSettings(localStorageGetItem(ENDPOINT_SETTINGS_KEY));
+  const endpointKind = compactSelect(
+    'agent-endpoint-kind',
+    [
+      { value: 'loopback', label: t('agentEndpointLoopback') },
+      { value: 'openai-compatible', label: t('agentEndpointOpenAICompatible') },
+      { value: 'anthropic', label: t('agentEndpointAnthropic') },
+      { value: 'gemini', label: t('agentEndpointGemini') },
+    ],
+    endpointSettings.kind,
+  );
+  endpointKind.setAttribute('aria-label', t('agentEndpointKind'));
+  const endpointBaseUrl = ranInput('agent-panel-endpoint-url', 'text');
+  endpointBaseUrl.value =
+    endpointSettings.baseUrl || (endpointSettings.kind === 'loopback' ? DEFAULT_LOOPBACK_ENDPOINT : '');
+  endpointBaseUrl.placeholder =
+    endpointSettings.kind === 'loopback' ? DEFAULT_LOOPBACK_ENDPOINT : 'https://api.example.com/v1';
+  endpointBaseUrl.setAttribute('aria-label', t('agentEndpointUrl'));
+  const endpointModel = ranInput('agent-panel-endpoint-model', 'text');
+  endpointModel.value = endpointSettings.model;
+  endpointModel.placeholder = 'qwen3:8b';
+  endpointModel.setAttribute('aria-label', t('agentEndpointModel'));
+  const endpointKey = ranInput('agent-panel-endpoint-key', 'password');
+  endpointKey.placeholder = t('agentEndpointKey');
+  endpointKey.setAttribute('aria-label', t('agentEndpointKey'));
+  const endpointConnect = ranButton(t('agentEndpointConnect'), 'agent-panel-endpoint-connect');
+  const endpointStatus = Span().class('agent-panel-endpoint-status').attr('role', 'status').build();
+  const writeDestination = Span().class('agent-panel-write-destination').attr('role', 'status').build();
+  const writePreference = compactSelect(
+    'agent-write-preference',
+    [
+      { value: 'device-first', label: t('agentWritePreferDevice') },
+      { value: 'remote-first', label: t('agentWritePreferRemote') },
+    ],
+    endpointSettings.preference,
+  );
+  writePreference.setAttribute('aria-label', t('agentWritePreference'));
   const localWritingConsent = document.createElement('input');
   localWritingConsent.type = 'checkbox';
   localWritingConsent.className = 'agent-panel-local-writing';
-  localWritingConsent.checked = loopbackSettings.localWritingConsent;
+  localWritingConsent.checked = endpointSettings.localWritingConsent;
   const consentLabel = document.createElement('label');
   consentLabel.className = 'agent-panel-local-writing-label';
   consentLabel.append(localWritingConsent, t('agentLocalWritingConsent'));
-  const loopbackRow = Div()
-    .class('agent-panel-loopback')
+  const endpointRow = Div()
+    .class('agent-panel-endpoint')
     .children(
-      Span().class('agent-panel-loopback-title').text(t('agentProviderLoopback')).build(),
-      loopbackUrl,
-      loopbackModel,
-      loopbackConnect,
-      loopbackStatus,
+      Span().class('agent-panel-endpoint-title').text(t('agentWriteDestinationTitle')).build(),
+      endpointKind,
+      endpointBaseUrl,
+      endpointModel,
+      endpointKey,
+      endpointConnect,
+      endpointStatus,
+      writePreference,
+      writeDestination,
       consentLabel,
     )
     .build();
@@ -398,7 +433,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   const settings = Div()
     .class('agent-panel-settings agent-panel-settings-hidden')
     .id('agent-settings')
-    .children(providerSelect, modelRow, modelSources, ggufRow, loopbackRow)
+    .children(providerSelect, modelRow, modelSources, ggufRow, endpointRow)
     .build();
   settings.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || event.isComposing || event.keyCode === 229) return;
@@ -650,64 +685,125 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   let loadAttempt = 0;
   let webllmProvider: LocalLLMProvider | null = null;
   // Independent of the browser-local lifecycle: switching or unloading a browser
-  // model must not disconnect a service the user deliberately connected.
-  let loopbackProvider: LoopbackProvider | null = null;
-  const rememberLoopback = (): void => {
-    const next: LoopbackSettings = {
-      url: loopbackUrl.value.trim(),
-      model: loopbackModel.value.trim(),
+  // model must not disconnect a writing endpoint the user deliberately connected.
+  let endpointProvider: LLMProvider | null = null;
+  const endpointKindValue = (): WritingEndpointKind => endpointKind.value as WritingEndpointKind;
+  const endpointKeySlot = (kind: WritingEndpointKind): string =>
+    kind === 'openai-compatible' ? endpointBaseUrl.value.trim() : kind;
+  const rememberEndpoint = (): void => {
+    const next: EndpointSettings = {
+      kind: endpointKindValue(),
+      baseUrl: endpointBaseUrl.value.trim(),
+      model: endpointModel.value.trim(),
+      preference: writePreference.value === 'remote-first' ? 'remote-first' : 'device-first',
       localWritingConsent: localWritingConsent.checked,
     };
-    loopbackSettings = next;
+    endpointSettings = next;
     try {
-      localStorageSetItem(LOOPBACK_SETTINGS_KEY, writeLoopbackSettings(next));
+      localStorageSetItem(ENDPOINT_SETTINGS_KEY, writeEndpointSettings(next));
     } catch {
-      // A non-loopback origin is refused when connecting; it is never persisted.
+      // An endpoint the route would refuse is never persisted.
+    }
+    if (isCloudEndpointKind(next.kind) && endpointKey.value.trim()) {
+      const slot = endpointKeySlot(next.kind);
+      // No address yet means no slot to address; the key is simply not stored.
+      if (slot) setEndpointKey(slot, endpointKey.value.trim());
     }
   };
-  const syncLoopbackStatus = (): void => {
-    loopbackStatus.textContent = loopbackProvider?.isReady() ? t('agentLoopbackConnected') : '';
-    loopbackConnect.textContent = loopbackProvider ? t('agentLoopbackDisconnect') : t('agentLoopbackConnect');
+  const resolveRoute = (): WritingRoute => {
+    const endpoint = endpointProvider?.isReady() ? configuredEndpoint(endpointSettings) : null;
+    return resolveWritingRoute({
+      loopback: endpoint?.kind === 'loopback' ? endpoint : null,
+      remote: endpoint && endpoint.kind !== 'loopback' ? endpoint : null,
+      preference: endpointSettings.preference,
+      localWritingConsent: localWritingConsent.checked,
+      local: { backend: currentProvider(), model: selectedLocalModel() },
+    });
   };
-  const disconnectLoopback = (): void => {
-    const previous = loopbackProvider;
-    loopbackProvider = null;
-    if (previous) void previous.dispose();
-    syncLoopbackStatus();
-  };
-  const connectLoopback = async (): Promise<void> => {
-    if (loopbackProvider) {
-      disconnectLoopback();
+  const syncWriteDestination = (): void => {
+    let route: WritingRoute | null = null;
+    try {
+      route = resolveRoute();
+    } catch {
+      route = null;
+    }
+    const title = t('agentWriteDestinationTitle');
+    if (!route || route.kind === 'blocked') {
+      writeDestination.textContent = `${title}: ${t('agentWriteNeedsDestination')}`;
       return;
     }
-    if (!loopbackModel.value.trim()) {
-      loopbackStatus.textContent = t('agentLoopbackModelRequired');
+    const where = route.dataPath === 'device' ? t('agentWriteDestinationDevice') : t('agentWriteDestinationRemote');
+    const name = route.kind === 'local' ? route.binding.model : route.endpoint.model;
+    writeDestination.textContent = `${title}: ${where} · ${name}`;
+  };
+  const syncEndpointForm = (): void => {
+    const kind = endpointKindValue();
+    const cloud = isCloudEndpointKind(kind);
+    endpointBaseUrl.hidden = kind === 'anthropic' || kind === 'gemini';
+    endpointKey.hidden = !cloud;
+    if (cloud) {
+      const slot = endpointKeySlot(kind);
+      endpointKey.value = slot ? (getEndpointKey(slot) ?? '') : '';
+    }
+    endpointStatus.textContent = endpointProvider?.isReady()
+      ? t(cloud ? 'agentEndpointConfigured' : 'agentEndpointConnected')
+      : '';
+    endpointConnect.textContent = endpointProvider ? t('agentEndpointDisconnect') : t('agentEndpointConnect');
+    syncWriteDestination();
+  };
+  const disconnectEndpoint = (): void => {
+    const previous = endpointProvider;
+    endpointProvider = null;
+    if (previous && 'dispose' in previous && typeof previous.dispose === 'function') void previous.dispose();
+    syncEndpointForm();
+  };
+  const connectEndpoint = async (): Promise<void> => {
+    if (endpointProvider) {
+      disconnectEndpoint();
       return;
     }
-    loopbackStatus.textContent = t('agentLoopbackConnecting');
-    try {
-      rememberLoopback();
-      const provider = new LoopbackProvider({
-        model: loopbackModel.value.trim(),
-        baseUrl: loopbackUrl.value.trim() || DEFAULT_LOOPBACK_URL,
-      });
-      await provider.preload();
-      loopbackProvider = provider;
-    } catch {
-      loopbackProvider = null;
-      loopbackStatus.textContent = t('agentLoopbackFailed');
-      note.textContent = t('agentLoopbackFailed');
+    const kind = endpointKindValue();
+    if (!endpointModel.value.trim()) {
+      endpointStatus.textContent = t('agentEndpointModelRequired');
+      return;
     }
-    syncLoopbackStatus();
+    if (kind === 'openai-compatible' && !endpointBaseUrl.value.trim()) {
+      endpointStatus.textContent = t('agentEndpointUrlRequired');
+      return;
+    }
+    endpointStatus.textContent = t('agentEndpointConnecting');
+    try {
+      rememberEndpoint();
+      const endpoint = configuredEndpoint(endpointSettings);
+      if (!endpoint) throw new Error('Incomplete writing endpoint');
+      const stored = isCloudEndpointKind(kind) ? getEndpointKey(endpointKeySlot(kind)) : undefined;
+      const provider = createEndpointProvider(endpoint, endpointKey.value.trim() || stored);
+      // Only the loopback service has a real connection check; a cloud endpoint
+      // reports "configured" because readiness is not reachability.
+      if ('preload' in provider && typeof provider.preload === 'function') await provider.preload();
+      if (!provider.isReady()) throw new Error('Writing endpoint is not ready');
+      endpointProvider = provider;
+    } catch {
+      endpointProvider = null;
+      endpointStatus.textContent = t('agentEndpointFailed');
+      note.textContent = t('agentEndpointFailed');
+    }
+    syncEndpointForm();
   };
-  loopbackConnect.addEventListener('click', () => void connectLoopback());
-  loopbackModel.addEventListener('change', () => {
-    rememberLoopback();
-    syncLoopbackStatus();
+  endpointConnect.addEventListener('click', () => void connectEndpoint());
+  for (const input of [endpointBaseUrl, endpointModel, endpointKey, localWritingConsent, writePreference])
+    input.addEventListener('change', () => {
+      rememberEndpoint();
+      syncEndpointForm();
+    });
+  endpointKind.addEventListener('change', () => {
+    // A different kind is a different destination: never keep the old provider.
+    disconnectEndpoint();
+    endpointBaseUrl.value = endpointKindValue() === 'loopback' ? DEFAULT_LOOPBACK_ENDPOINT : '';
+    rememberEndpoint();
+    syncEndpointForm();
   });
-  loopbackUrl.addEventListener('change', rememberLoopback);
-  localWritingConsent.addEventListener('change', rememberLoopback);
-  syncLoopbackStatus();
+  syncEndpointForm();
   let runtimeDescription = '';
   let latestUsage: LLMResponse['usage'];
   const syncGenerationStats = (): void => {
@@ -812,7 +908,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     }
   };
   window.addEventListener('pagehide', resetController);
-  window.addEventListener('pagehide', disconnectLoopback);
+  window.addEventListener('pagehide', disconnectEndpoint);
   window.addEventListener('pagehide', () => sidebar.dispose());
   window.addEventListener('document:content-ready', invalidatePlans);
   ggufUrl.addEventListener('change', () => {
@@ -1294,16 +1390,18 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
         planning = abort;
         appendTurn({ role: 'user', text: trimmed });
         if (target.editor !== 'word' || !target.selectedText.trim()) throw new Error(t('agentNoSelection'));
-        // A connected loopback service serves writing; the browser-local engines
-        // only do so with an explicit opt-in, because they never passed quality
+        // The writing destination: a connected endpoint (loopback keeps the text on
+        // this machine, a cloud endpoint sends it there), otherwise the browser-local
+        // engines only with an explicit opt-in, because they never passed quality
         // acceptance and a document write is high-stakes.
-        const route = resolveWritingRoute({
-          loopback: loopbackProvider?.isReady() ? loopbackBinding(loopbackSettings) : null,
-          localWritingConsent: localWritingConsent.checked,
-          local: { backend: currentProvider(), model: selectedLocalModel() },
-        });
-        if (route.kind === 'blocked') throw new Error('agentWritingNeedsLocalService');
-        const writingProvider = route.kind === 'loopback' ? loopbackProvider : webllmProvider;
+        let route: WritingRoute | null = null;
+        try {
+          route = resolveRoute();
+        } catch {
+          route = null;
+        }
+        if (!route || route.kind === 'blocked') throw new Error('agentWritingNeedsLocalService');
+        const writingProvider = route.kind === 'endpoint' ? endpointProvider : webllmProvider;
         if (!writingProvider) throw new Error('agentWritingNeedsLocalService');
         const body = await generateWriting(
           writingProvider,
