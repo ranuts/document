@@ -7,6 +7,18 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const zhCN: I18nMessages = {
+  agentSpeechInput: '语音输入',
+  agentSpeechStop: '停止听写',
+  agentSpeechLanguage: '识别语言',
+  agentSpeechPrivacy: '浏览器可能将音频发送给在线识别服务。文字可编辑，确认后再发送。',
+  agentSpeechStart: '开始听写',
+  agentSpeechCancel: '取消',
+  agentSpeechStarting: '正在请求麦克风…',
+  agentSpeechListening: '正在听写…',
+  agentSpeechDenied: '麦克风权限被拒绝，请在浏览器设置中允许访问。',
+  agentSpeechFailed: '语音识别失败，请检查麦克风、语言和网络后重试。',
+  agentSpeechFinishing: '正在完成识别…',
+  agentSpeechUnsupported: '当前浏览器不支持语音输入。',
   agentDownloadIncomplete: '下载未完成',
   agentModelInUse: '正在使用',
   agentCacheDeleteFailed: '无法删除下载文件，请检查浏览器存储权限后重试。',

@@ -10,6 +10,19 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const ja: Partial<I18nMessages> = {
+  agentSpeechInput: '音声入力',
+  agentSpeechStop: '音声入力を停止',
+  agentSpeechLanguage: '認識言語',
+  agentSpeechPrivacy:
+    'ブラウザーは音声をオンライン認識サービスに送信する場合があります。送信前にテキストを編集できます。',
+  agentSpeechStart: '音声入力を開始',
+  agentSpeechCancel: 'キャンセル',
+  agentSpeechStarting: 'マイクを要求中…',
+  agentSpeechListening: '音声認識中…',
+  agentSpeechDenied: 'マイクの許可が拒否されました。ブラウザー設定で許可してください。',
+  agentSpeechFailed: '認識に失敗しました。マイク、言語、接続を確認してください。',
+  agentSpeechFinishing: '認識を終了中…',
+  agentSpeechUnsupported: 'このブラウザーでは音声入力を利用できません。',
   agentDownloadIncomplete: 'ダウンロード未完了',
   agentModelInUse: '使用中',
   agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',

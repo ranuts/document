@@ -1,3 +1,4 @@
+import { mountSpeechInput } from './speech-input';
 /**
  * Agent sidebar panel — a thin DOM view over {@link AgentChatController}.
  *
@@ -210,7 +211,9 @@ export function createAgentPanel(
   let sidebar = mountSidebar();
   // Configuration, loading progress and retry remain reachable even without a ready model.
   const syncSidebar = (): void => sidebar.update(panel.isConnected, open);
+  let speech: ReturnType<typeof mountSpeechInput> | undefined;
   const setOpen = (next: boolean): void => {
+    if (!next) speech?.close();
     const returnToDocument = !next && panel.contains(document.activeElement);
     open = next;
     panel.classList.toggle('agent-panel-hidden', !next);
@@ -547,7 +550,7 @@ export function createAgentPanel(
   };
   const chat = new ChatView({
     canSend: (text) => {
-      if (!enabled || runtimeCleanup || cacheBusy) return false;
+      if (!enabled || runtimeCleanup || cacheBusy || speech?.isBusy()) return false;
       if (parseDirectDocumentIntent(resolveContextCommand(text.trim(), captureDocumentContext()))) return true;
       const request = classifyRequest(text);
       if (['rewrite', 'summarize', 'translate'].includes(request.task)) return true;
@@ -634,6 +637,7 @@ export function createAgentPanel(
     chat.setLabels(chatLabels());
   });
   languageSelect.addEventListener('change', () => invalidatePlans());
+  speech = mountSpeechInput(chat, () => enabled && !planning && !controller?.isRunning() && !replyAbort);
   const welcomeHint = document.createElement('p');
   welcomeHint.className = 'agent-welcome-hint';
   welcomeHint.textContent = t('agentWelcomeHint');
@@ -1746,8 +1750,14 @@ export function createAgentPanel(
     renderSessions();
     if (focus) chat.focus();
   };
-  clearBtn.addEventListener('click', () => switchConversation(conversations.create().id));
-  sessionSelect.addEventListener('change', () => switchConversation(sessionSelect.value));
+  clearBtn.addEventListener('click', () => {
+    speech?.close();
+    switchConversation(conversations.create().id);
+  });
+  sessionSelect.addEventListener('change', () => {
+    speech?.close();
+    switchConversation(sessionSelect.value);
+  });
   historyControls = createHistoryControls({
     store: conversations,
     onBeforeRestore: () => {
@@ -2173,6 +2183,7 @@ export function createAgentPanel(
 
   chat.el.append(writeDestination);
   function showView(view: 'chat' | 'settings' | 'history'): void {
+    speech?.close();
     panel.dataset.view = view;
     if (view === 'settings') settings.insertBefore(runtimeRow, note);
     else panel.insertBefore(runtimeRow, settings);

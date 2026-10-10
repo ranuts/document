@@ -7,6 +7,19 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const en: I18nMessages = {
+  agentSpeechInput: 'Voice input',
+  agentSpeechStop: 'Stop dictation',
+  agentSpeechLanguage: 'Recognition language',
+  agentSpeechPrivacy:
+    'Your browser may send audio to an online recognition service. Text stays editable before sending.',
+  agentSpeechStart: 'Start dictation',
+  agentSpeechCancel: 'Cancel',
+  agentSpeechStarting: 'Requesting microphone…',
+  agentSpeechListening: 'Listening…',
+  agentSpeechDenied: 'Microphone permission denied. Allow access in browser settings.',
+  agentSpeechFailed: 'Speech recognition failed. Check your microphone, language and connection, then retry.',
+  agentSpeechFinishing: 'Finishing…',
+  agentSpeechUnsupported: 'Voice input is unavailable in this browser.',
   agentDownloadIncomplete: 'Incomplete download',
   agentModelInUse: 'In use',
   agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',
