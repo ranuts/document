@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-02T12:41:30.069Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright WebKit CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 37186,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [
+    {
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "enum": [
+              "SCHEMA_CONTROL_2026-10-08_1250"
+            ]
+          }
+        }
+      },
+      "text": "{\"text\": \"SCHEMA_CONTROL_2026-10-08_1250\"}",
+      "usage": {
+        "completionTokens": 29,
+        "promptTokens": 447,
+        "promptProcessingDurationMs": 31855.001,
+        "decodingDurationMs": 5221.999,
+        "decodeTokensPerSecond": 5.3619313217026665,
+        "responseDurationMs": 37127,
+        "endToEndTokensPerSecond": 0.7811027015379642
+      },
+      "stopReason": "stop"
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Synthetic single-fixture CPU schema experiment, not a product feature or full schema coverage.",
+    "Pattern candidate applied only to the known fixture date and was removed; not a generic date-preservation implementation.",
+    "Pattern failure does not prove all regex patterns are unsupported; backend warnings/grammar compilation were not captured."
+  ],
+  "assessment": "Enum supplied only via schema was honored; confirms actual native constraint path, without establishing pattern support or semantic quality."
+}

@@ -1,18 +1,18 @@
 ---
-title: 내 사이트에 문서 편집기 임베드하기 — iframe + postMessage API
-description: iframe 하나와 postMessage API로 DOCX·XLSX·PPTX·CSV 편집기를 내 웹 앱에 넣으세요. 인증과 파일은 내 앱에 남고, 편집기는 토큰을 보지 않습니다. 오픈 소스(AGPL-3.0), 자체 호스팅 가능, 화이트라벨.
+title: '내 사이트에 문서 편집기 임베드하기 — iframe + postMessage API'
+description: 'iframe과 postMessage로 편집기를 임베드하고 호스트가 파일 접근과 업로드를 관리합니다.'
 eyebrow: 개발자 · 임베드
 h1: 내 웹 앱에 문서 편집기 임베드하기
 lead: 'iframe 하나와 **postMessage** API만으로 **DOCX·XLSX·PPTX·CSV** 편집기를 제품에 추가하세요. 인증, 파일 접근, 업로드는 내 앱이 계속 담당하고 편집기는 편집만 합니다 — 사용자의 토큰을 보지 않습니다.'
 cta: 라이브 데모 열기 →
 ctaHref: /embed-demo.html
-ogDescription: iframe 하나로 DOCX/XLSX/PPTX/CSV 편집기를 앱에 넣으세요. 인증은 앱에 남고 편집기는 토큰을 보지 않습니다. 오픈 소스이며 자체 호스팅 가능.
+ogDescription: 'iframe과 postMessage로 편집기를 임베드하고 호스트가 파일 접근과 업로드를 관리합니다.'
 breadcrumb: Embed Document Editor
 howTo: 내 사이트에 문서 편집기를 임베드하는 방법
-appDescription: iframe과 postMessage API로 내 웹 앱에 임베드할 수 있는, 브라우저에서 동작하는 문서 편집기.
+appDescription: 'iframe과 postMessage로 편집기를 임베드하고 호스트가 파일 접근과 업로드를 관리합니다.'
 ---
 
-편집기는 OnlyOffice의 WebAssembly 엔진으로 브라우저 안에서만 동작하므로 문서는 클라이언트에서 렌더링되고 편집됩니다 — 문서 서버를 세울 필요가 없습니다. 권장 구성은 경계를 깔끔하게 유지합니다: **부모 앱이 인증·가져오기·저장을 담당하고, iframe은 편집만 담당합니다.** 토큰, 쿠키, 업무 API는 내 앱 안에 남습니다.
+기본 로컬 편집의 경우: 편집기는 OnlyOffice의 WebAssembly 엔진으로 브라우저 안에서만 동작하므로 문서는 클라이언트에서 렌더링되고 편집됩니다 — 문서 서버를 세울 필요가 없습니다. 권장 구성은 경계를 깔끔하게 유지합니다: **부모 앱이 인증·가져오기·저장을 담당하고, iframe은 편집만 담당합니다.** 토큰, 쿠키, 업무 API는 내 앱 안에 남습니다.
 
 ## iframe 하나로 추가하기
 
@@ -44,7 +44,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 - 내 앱이 자체 자격 증명으로 가져온 **URL·File·ArrayBuffer**에서 열기
 - **XLSX·DOCX·PPTX·CSV**로 저장하고 `File`로 돌려받아 내 앱이 업로드
 - 읽기 전용 모드, 메시지 단위 오리진 제한(`embedOrigin`), 상태 조회
-- 운영할 문서 서버 없음 — 편집은 100% 클라이언트의 WebAssembly
+- 기본 로컬 편집의 경우: 운영할 문서 서버 없음 — 편집은 100% 클라이언트의 WebAssembly
 - 오픈 소스(AGPL-3.0)이며 자체 호스팅 가능 — 내 도메인 아래에 임베드
 
 ## 동작 방식
@@ -72,7 +72,7 @@ send('document:set-readonly', { readonly: false });
 
 ### 편집기가 사용자의 인증 토큰을 보나요?
 
-아니요. 인증, 파일 가져오기, 업로드는 내 앱에 남습니다 — 내 앱이 자체 자격 증명으로 파일을 가져와 바이트를 편집기에 넘기므로 토큰과 쿠키는 iframe에 들어가지 않습니다.
+기본 로컬 편집의 경우: 아니요. 인증, 파일 가져오기, 업로드는 내 앱에 남습니다 — 내 앱이 자체 자격 증명으로 파일을 가져와 바이트를 편집기에 넘기므로 토큰과 쿠키는 iframe에 들어가지 않습니다.
 
 ### 임베드된 편집기는 어떤 형식을 다루나요?
 

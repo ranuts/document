@@ -1,0 +1,28 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-webgpu-cache-date-native.json": "f93ae9965371bc9176e7336af176f421cc4a5063ac9ea7981e8a198241fa05b1",
+    "2026-10-07-webgpu-cache-date-analysis.md": "56ab3878f44be173d51d8fddb482a77e8a71155bf2d017342d99f99ca8f6c12a",
+    "2026-10-07-webgpu-cache-date-native.mjs": "678f64420ce7092f76ddf046026705bb000eed5d6df5dd789210bfbc9957ee46",
+    "2026-10-07-webgpu-cache-date-protocol.md": "13cce8e1c62478717920d5fd604cfad3decd7ca201155757b258c94aa1320c1a",
+    "2026-10-07-webgpu-backend-date-requests.json": "2f97514202d2122871f44f58508f19b0b3246bd1c048f1d652b7a69154429d3d"
+  },
+  "initialSnapshot": {
+    "scope": "Before process launch",
+    "sha256": {
+      "docs/evaluations/2026-10-07-webgpu-cache-date-native.mjs": "678f64420ce7092f76ddf046026705bb000eed5d6df5dd789210bfbc9957ee46",
+      "docs/evaluations/2026-10-07-webgpu-cache-date-protocol.md": "13cce8e1c62478717920d5fd604cfad3decd7ca201155757b258c94aa1320c1a",
+      "docs/evaluations/2026-10-07-webgpu-backend-date-requests.json": "2f97514202d2122871f44f58508f19b0b3246bd1c048f1d652b7a69154429d3d",
+      "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  },
+  "unchangedAfterRun": {
+    "docs/evaluations/2026-10-07-webgpu-cache-date-native.mjs": true,
+    "docs/evaluations/2026-10-07-webgpu-cache-date-protocol.md": true,
+    "docs/evaluations/2026-10-07-webgpu-backend-date-requests.json": true,
+    "dist/assets/lib-CSLy4uO1.js": true,
+    "dist/assets/webllm.worker-CMk6FPDh.js": true
+  },
+  "processExitCode": 0,
+  "adopted": false
+}

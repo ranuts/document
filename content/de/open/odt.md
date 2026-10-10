@@ -1,15 +1,15 @@
 ---
-title: Eine ODT-Datei ohne LibreOffice öffnen — kostenlos, im Browser
-description: Eine ODT-Datei (OpenDocument Text) im Browser öffnen und bearbeiten — ohne LibreOffice, ohne OpenOffice, ohne Konto. Als ODT, DOCX oder PDF zurückspeichern. Nichts wird hochgeladen.
+title: 'Eine ODT-Datei ohne LibreOffice öffnen — kostenlos, im Browser'
+description: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
 eyebrow: Öffnen · .odt
 h1: Eine ODT-Datei ohne LibreOffice öffnen
-lead: 'Jemand hat Ihnen eine **.odt**-Datei geschickt und Sie haben kein LibreOffice? Öffnen Sie sie im Browser, bearbeiten Sie sie und speichern Sie sie als ODT zurück — oder als DOCX oder PDF. Nichts zu installieren, nichts wird hochgeladen.'
+lead: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
 cta: ODT öffnen →
 ctaHref: /de/
-ogDescription: ODT-Dateien im Browser ohne LibreOffice öffnen und bearbeiten. Als ODT, DOCX oder PDF speichern. Nichts wird hochgeladen.
+ogDescription: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
 breadcrumb: odt
 howTo: Eine ODT-Datei ohne LibreOffice öffnen
-appDescription: ODT-Dateien (OpenDocument Text) im Browser öffnen und bearbeiten — ohne LibreOffice, ohne Upload, ohne Konto.
+appDescription: 'ODT-Dateien ohne LibreOffice oder Konto im Browser öffnen und bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
 ---
 
 ## So funktioniert es
@@ -23,7 +23,7 @@ ODT ist das Format OpenDocument Text — das, was LibreOffice, OpenOffice und vi
 
 Dieser Editor öffnet ODT direkt mit der nach WebAssembly kompilierten OnlyOffice-Engine, sodass Absätze, Formatvorlagen, Tabellen, Bilder und Listen als echtes Dokument erscheinen statt als abgespeckte Textansicht. Sie können es bearbeiten und als ODT zurückspeichern, also im offenen Format behalten — oder als DOCX für eine Kollegin mit Word exportieren, oder als PDF für jemanden, der es nur lesen soll.
 
-Nichts wird hochgeladen: Die Datei wird direkt von der Festplatte in Ihren Browser-Tab gelesen. Das zählt bei genau den Dokumenten, die ODT oft transportiert — Behördenformulare, wissenschaftliche Entwürfe, alles aus einer Organisation, die sich bewusst für ein offenes Format entschieden hat und es lieber nicht durch eine kommerzielle Cloud schickt.
+Bei der lokalen Kernbearbeitung: Nichts wird hochgeladen: Die Datei wird direkt von der Festplatte in Ihren Browser-Tab gelesen. Das zählt bei genau den Dokumenten, die ODT oft transportiert — Behördenformulare, wissenschaftliche Entwürfe, alles aus einer Organisation, die sich bewusst für ein offenes Format entschieden hat und es lieber nicht durch eine kommerzielle Cloud schickt.
 
 ## Häufige Fragen
 
@@ -45,4 +45,4 @@ Ja. Sie können im selben offenen Format zurückspeichern oder als DOCX oder PDF
 
 ### Kann ich ODT in Word umwandeln?
 
-Ja. Öffnen Sie die ODT und speichern Sie sie als DOCX — die Umwandlung läuft auf Ihrem Gerät.
+Bei der lokalen Kernbearbeitung: Ja. Öffnen Sie die ODT und speichern Sie sie als DOCX — die Umwandlung läuft auf Ihrem Gerät.

@@ -1,0 +1,166 @@
+{
+  "scope": "Independent native llama.cpp CPU reference for four known date-copy fixtures; same minimal message contents and logical schema, distinct GGUF quantization/template/runtime/sampling implementation. Not browser IM, not production architecture or quality certification.",
+  "probeSHA256": "fae82f200fb219a8d7d2fb124d68176557616df56caa87c275ba97afd71596e7",
+  "model": {
+    "repository": "Qwen/Qwen2.5-3B-Instruct-GGUF",
+    "revision": "7dabda4d13d513e3e842b20f0d435c732f172cbe",
+    "file": "qwen2.5-3b-instruct-q4_k_m.gguf",
+    "bytes": 2104932768,
+    "sha256": "626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d"
+  },
+  "runtime": {
+    "binary": "/opt/homebrew/Cellar/llama.cpp/0.5.0/bin/llama-server",
+    "sha256": "93d4a03c4491bf4c50755ca0bbdc8d725fb25a12e3b8c83d830c5f1e713a66df",
+    "version": "0.00.000.610 I srv  llama_server: initializing ...\nversion: 0.5.0 (build 11146, commit 7fe450e19)\nbuilt with AppleClang 17.0.0.17000604 for Darwin arm64",
+    "args": [
+      "/opt/homebrew/Cellar/llama.cpp/0.5.0/bin/llama-server",
+      "--model",
+      ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "52207",
+      "--ctx-size",
+      "4096",
+      "--parallel",
+      "1",
+      "--threads",
+      "4",
+      "--n-gpu-layers",
+      "0",
+      "--device",
+      "none",
+      "--no-op-offload",
+      "--no-cache-prompt",
+      "--no-webui"
+    ],
+    "props": {
+      "default_generation_settings": {
+        "params": {
+          "seed": 4294967295,
+          "temperature": 0.800000011920929,
+          "dynatemp_range": 0.0,
+          "dynatemp_exponent": 1.0,
+          "top_k": 40,
+          "top_p": 0.949999988079071,
+          "min_p": 0.05000000074505806,
+          "top_n_sigma": -1.0,
+          "xtc_probability": 0.0,
+          "xtc_threshold": 0.10000000149011612,
+          "typical_p": 1.0,
+          "repeat_last_n": 64,
+          "repeat_penalty": 1.0,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "dry_multiplier": 0.0,
+          "dry_base": 1.75,
+          "dry_allowed_length": 2,
+          "dry_penalty_last_n": 64,
+          "mirostat": 0,
+          "mirostat_tau": 5.0,
+          "mirostat_eta": 0.10000000149011612,
+          "adaptive_target": -1.0,
+          "adaptive_decay": 0.8999999761581421,
+          "max_tokens": -1,
+          "n_predict": -1,
+          "n_keep": 0,
+          "n_discard": 0,
+          "ignore_eos": false,
+          "stream": false,
+          "n_probs": 0,
+          "min_keep": 0,
+          "chat_format": "Content-only",
+          "reasoning_format": "none",
+          "reasoning_in_content": false,
+          "generation_prompt": "",
+          "samplers": [
+            "penalties",
+            "dry",
+            "top_n_sigma",
+            "top_k",
+            "typ_p",
+            "top_p",
+            "min_p",
+            "xtc",
+            "temperature"
+          ],
+          "speculative.types": "none",
+          "timings_per_token": false,
+          "post_sampling_probs": false,
+          "backend_sampling": false,
+          "lora": []
+        },
+        "n_ctx": 4096
+      },
+      "total_slots": 1,
+      "model_alias": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+      "model_ftype": "Q4_K - Medium",
+      "model_path": ".scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf",
+      "modalities": {
+        "vision": false,
+        "video": false,
+        "audio": false
+      },
+      "media_marker": "<__media_VEaVQZW6ZDq37bxN8tabHQOfx1PMa14i__>",
+      "endpoint_slots": true,
+      "endpoint_props": false,
+      "endpoint_metrics": false,
+      "ui": false,
+      "ui_settings": {},
+      "chat_template": "{%- if tools %}\n    {{- '<|im_start|>system\\n' }}\n    {%- if messages[0]['role'] == 'system' %}\n        {{- messages[0]['content'] }}\n    {%- else %}\n        {{- 'You are Qwen, created by Alibaba Cloud. You are a helpful assistant.' }}\n    {%- endif %}\n    {{- \"\\n\\n# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within <tools></tools> XML tags:\\n<tools>\" }}\n    {%- for tool in tools %}\n        {{- \"\\n\" }}\n        {{- tool | tojson }}\n    {%- endfor %}\n    {{- \"\\n</tools>\\n\\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\\n<tool_call>\\n{{\\\"name\\\": <function-name>, \\\"arguments\\\": <args-json-object>}}\\n</tool_call><|im_end|>\\n\" }}\n{%- else %}\n    {%- if messages[0]['role'] == 'system' %}\n        {{- '<|im_start|>system\\n' + messages[0]['content'] + '<|im_end|>\\n' }}\n    {%- else %}\n        {{- '<|im_start|>system\\nYou are Qwen, created by Alibaba Cloud. You are a helpful assistant.<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) or (message.role == \"assistant\" and not message.tool_calls) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {{- '<|im_start|>' + message.role }}\n        {%- if message.content %}\n            {{- '\\n' + message.content }}\n        {%- endif %}\n        {%- for tool_call in message.tool_calls %}\n            {%- if tool_call.function is defined %}\n                {%- set tool_call = tool_call.function %}\n            {%- endif %}\n            {{- '\\n<tool_call>\\n{\"name\": \"' }}\n            {{- tool_call.name }}\n            {{- '\", \"arguments\": ' }}\n            {{- tool_call.arguments | tojson }}\n            {{- '}\\n</tool_call>' }}\n        {%- endfor %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if (loop.index0 == 0) or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n{%- endif %}",
+      "chat_template_caps": {
+        "supports_object_arguments": true,
+        "supports_parallel_tool_calls": true,
+        "supports_preserve_reasoning": false,
+        "supports_reasoning_effort": false,
+        "supports_string_content": true,
+        "supports_system_role": true,
+        "supports_tool_calls": true,
+        "supports_tools": true,
+        "supports_typed_content": false
+      },
+      "bos_token": "<|endoftext|>",
+      "eos_token": "<|im_end|>",
+      "build_info": "b11146-7fe450e19",
+      "is_sleeping": false,
+      "cors_proxy_enabled": false
+    },
+    "exitCode": 0,
+    "log": "0.00.000.140 I srv  llama_server: initializing ...\n0.00.105.661 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)\n0.00.107.239 I srv  init_listene: The UI is disabled\n0.00.107.241 I srv  init_listene: Use --ui/--no-ui (or deprecated --webui/--no-webui) to enable/disable\n0.00.107.316 W srv  llama_server: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)\n0.00.109.599 I srv    load_model: loading model '.scratch/node_modules/ai-models/qwen2.5-3b-instruct-q4_k_m.gguf'\n0.00.481.182 W load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden\n0.09.650.505 I cmn          init: llama threadpool init, n_threads = 4\n0.10.269.592 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 4096, kv_unified = 'false'\n0.10.281.488 I srv  llama_server: model loaded\n0.10.281.495 I srv  llama_server: listening on http://127.0.0.1:52207\n0.10.602.877 I srv    operator(): operator(): cleaning up before exit...\n"
+  },
+  "cases": [
+    {
+      "id": "date-22",
+      "source": "ISO date: 2044-09-22.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-22"
+    },
+    {
+      "id": "date-current",
+      "source": "ISO date: 2026-10-04.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2026-10-04"
+    },
+    {
+      "id": "zh-date",
+      "source": "预约日期：2044-09-23。",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    },
+    {
+      "id": "pt-date",
+      "source": "A data da reserva é 2044-09-23.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    }
+  ],
+  "results": [],
+  "errors": [
+    "HTTP Error 400: Bad Request"
+  ],
+  "status": "failed"
+}

@@ -1,0 +1,47 @@
+{
+  "scope": "Snapshot of eight completed known-source development cases from an ongoing 21-case diagnostic screen; explicit context 2048 and prefill 1024; not full acceptance",
+  "receipt_sha256": "3482a910b3113c0e65f8708b3a03b9096ee0d4b0b78945b2d168bde982db037c",
+  "decisions": [
+    {
+      "id": "en-rewrite",
+      "verdict": "uncertain",
+      "reason": "The output changes payment receipt not yet confirmed to no confirmation received; this may describe communication state instead of verification state. Do not count as passing."
+    },
+    {
+      "id": "en-summarize",
+      "verdict": "narrow-pass",
+      "reason": "Preserves all three people, ISO date, count, unapproved proposal, shipping actor, payment confirmation condition and current unconfirmed status; permitted catalogue omission."
+    },
+    {
+      "id": "en-translate",
+      "verdict": "narrow-pass",
+      "reason": "Japanese translation preserves all source facts, people, ISO date, count, negative statuses and permission prerequisite."
+    },
+    {
+      "id": "ja-rewrite",
+      "verdict": "fail",
+      "reason": "Raw output changes ISO date to Japanese date format; editor rejects it and retains original."
+    },
+    {
+      "id": "ja-summarize",
+      "verdict": "fail",
+      "reason": "Essential facts and actor retained, but output contains three sentences despite explicit one-sentence instruction."
+    },
+    {
+      "id": "ja-translate",
+      "verdict": "narrow-pass",
+      "reason": "Korean translation retains operating-team actor, prerequisite verification, current negative statuses, people, ISO date, quantity and printed labels."
+    },
+    {
+      "id": "ko-rewrite",
+      "verdict": "fail",
+      "reason": "Raw output changes ISO date to Korean date format; editor rejects it and retains original."
+    },
+    {
+      "id": "ko-summarize",
+      "verdict": "fail",
+      "reason": "Applied summary omits rental team as actor permitted to deliver cameras."
+    }
+  ],
+  "candidate_promoted": false
+}

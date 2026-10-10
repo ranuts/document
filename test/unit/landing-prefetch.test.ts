@@ -27,7 +27,10 @@ type Prefetch = {
 
 let prefetch: Prefetch;
 
-const okResponse = () => ({ body: null, arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)) });
+const okResponse = () => ({
+  body: null as ReadableStream<Uint8Array> | null,
+  arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
+});
 
 /** The RequestInit `warm()` passed on call `n`. */
 const initOf = (mock: { mock: { calls: unknown[][] } }, n = 0): RequestInit => mock.mock.calls[n][1] as RequestInit;
@@ -109,5 +112,152 @@ describe('landing page warm-up', () => {
     // or the bytes land in the HTTP cache only and the second visit is not free.
     for (const url of prefetch.CORE) expect(url).toMatch(/^\/(?:sdkjs|web-apps|fonts)\//);
     expect(prefetch.ENGINES).toEqual(['docx', 'xlsx', 'pptx']);
+  });
+});
+
+describe('landing warm-up during a worker upgrade', () => {
+  function setup(effectiveType?: string) {
+    const src = readFileSync(resolve(__dirname, '../../public/landing-prefetch.js'), 'utf8');
+    const win = Object.assign(new EventTarget(), {
+      requestIdleCallback: (callback: () => void) => callback(),
+      __landingPrefetch: undefined as Prefetch | undefined,
+    });
+    const cta = new EventTarget();
+    const doc = Object.assign(new EventTarget(), { getElementById: () => cta, querySelectorAll: () => [] });
+    const registration = Object.assign(new EventTarget(), {
+      waiting: null as (EventTarget & { state: string; scriptURL?: string }) | null,
+      installing: null as (EventTarget & { state: string }) | null,
+    });
+    const workers = Object.assign(new EventTarget(), { ready: Promise.resolve(registration) });
+    const fetchMock = vi.fn((_url: string, _init?: RequestInit) => Promise.resolve(okResponse()));
+    new Function('window', 'document', 'navigator', 'fetch', 'AbortController', src)(
+      win,
+      doc,
+      { serviceWorker: workers, connection: { effectiveType } },
+      fetchMock,
+      AbortController,
+    );
+    return { win, doc, cta, registration, workers, fetchMock, hook: win.__landingPrefetch! };
+  }
+
+  it('holds a waiting upgrade without poisoning URLs, then warms after controllerchange', async () => {
+    const { registration, workers, win, hook, fetchMock } = setup();
+    registration.waiting = Object.assign(new EventTarget(), { state: 'installed' });
+    await hook.warm('/waiting-upgrade.js');
+    win.dispatchEvent(new Event('pointerdown'));
+    await hook.warm('/waiting-upgrade.js');
+    expect(fetchMock).not.toHaveBeenCalled();
+    registration.waiting = null;
+    workers.dispatchEvent(new Event('controllerchange'));
+    await hook.warm('/waiting-upgrade.js');
+    expect(fetchMock.mock.calls.some(([url]) => url === '/waiting-upgrade.js')).toBe(true);
+  });
+
+  it('cancels current warming on updatefound and holds queued requests', async () => {
+    const { registration, hook, fetchMock } = setup();
+    await hook.warm('/before-install.js');
+    const signal = initOf(fetchMock).signal!;
+    registration.installing = Object.assign(new EventTarget(), { state: 'installing' });
+    registration.dispatchEvent(new Event('updatefound'));
+    expect(signal.aborted).toBe(true);
+    await hook.warmSerially(['/during-install-a.js', '/during-install-b.js']);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(hook.isLeaving()).toBe(false);
+  });
+
+  it('recovers from a failed install but does not resume a page that is leaving', async () => {
+    const { registration, win, hook, fetchMock } = setup();
+    const installing = Object.assign(new EventTarget(), { state: 'installing' });
+    registration.installing = installing;
+    await hook.warm('/failed-install.js');
+    expect(fetchMock).not.toHaveBeenCalled();
+    installing.state = 'redundant';
+    installing.dispatchEvent(new Event('statechange'));
+    await hook.warm('/failed-install.js');
+    expect(fetchMock.mock.calls.some(([url]) => url === '/failed-install.js')).toBe(true);
+    win.dispatchEvent(new Event('beforeunload'));
+    fetchMock.mockClear();
+    await hook.warm('/leaving-upgrade.js');
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not hold warming for the native editor stub worker that the updater will not promote', async () => {
+    const { registration, hook, fetchMock } = setup();
+    registration.waiting = Object.assign(new EventTarget(), {
+      state: 'installed',
+      scriptURL: 'https://example.test/document_editor_service_worker.js',
+    });
+    await hook.warm('/foreign-waiting-worker.js');
+    expect(fetchMock.mock.calls.some(([url]) => url === '/foreign-waiting-worker.js')).toBe(true);
+  });
+
+  it('restores a paused hover intent on 3G, where background warming is disabled', async () => {
+    const { doc, cta, registration, workers, fetchMock } = setup('3g');
+    registration.waiting = Object.assign(new EventTarget(), { state: 'installed' });
+    doc.dispatchEvent(new Event('DOMContentLoaded'));
+    cta.dispatchEvent(new Event('pointerenter'));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(fetchMock).not.toHaveBeenCalled();
+    registration.waiting = null;
+    workers.dispatchEvent(new Event('controllerchange'));
+    await vi.waitFor(() =>
+      expect(fetchMock.mock.calls.some(([url]) => url === '/web-apps/apps/api/documents/api.js')).toBe(true),
+    );
+    expect(fetchMock.mock.calls.some(([url]) => url.includes('x2t.wasm'))).toBe(false);
+  });
+
+  it('automatically recovers when the initially waiting worker becomes redundant', async () => {
+    const { registration, hook, fetchMock } = setup();
+    const waiting = Object.assign(new EventTarget(), { state: 'installed' });
+    registration.waiting = waiting;
+    await hook.warm('/initially-waiting.js');
+    expect(fetchMock).not.toHaveBeenCalled();
+    waiting.state = 'redundant';
+    waiting.dispatchEvent(new Event('statechange'));
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled());
+  });
+
+  it('retries an intent whose response stream is cancelled by an upgrade', async () => {
+    const { doc, cta, registration, workers, fetchMock } = setup('3g');
+    fetchMock.mockImplementationOnce((_url, init) =>
+      Promise.resolve({
+        body: new ReadableStream<Uint8Array>({
+          start(controller) {
+            init?.signal?.addEventListener('abort', () => controller.error(new Error('upgrade aborted warming')));
+          },
+        }),
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
+      }),
+    );
+    doc.dispatchEvent(new Event('DOMContentLoaded'));
+    cta.dispatchEvent(new Event('pointerenter'));
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const installing = Object.assign(new EventTarget(), { state: 'installing' });
+    registration.installing = installing;
+    registration.dispatchEvent(new Event('updatefound'));
+    expect(initOf(fetchMock).signal!.aborted).toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    registration.installing = null;
+    workers.dispatchEvent(new Event('controllerchange'));
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    expect(initOf(fetchMock, 1).signal!.aborted).toBe(false);
+  });
+
+  it('does not restart a retained intent when controllerchange follows beforeunload', async () => {
+    const { doc, cta, registration, workers, win, fetchMock } = setup('3g');
+    registration.waiting = Object.assign(new EventTarget(), { state: 'installed' });
+    doc.dispatchEvent(new Event('DOMContentLoaded'));
+    cta.dispatchEvent(new Event('pointerenter'));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    win.dispatchEvent(new Event('beforeunload'));
+    registration.waiting = null;
+    workers.dispatchEvent(new Event('controllerchange'));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(fetchMock).not.toHaveBeenCalled();
+    const restored = new Event('pageshow');
+    Object.defineProperty(restored, 'persisted', { value: true });
+    win.dispatchEvent(restored);
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
   });
 });

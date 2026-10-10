@@ -1,0 +1,3 @@
+# Default fault probe remained controlled by an existing Service Worker
+
+The instrumented retry again exited 1 at its 30000 ms hook-start gate, with no observed response interception or diagnostic packet. A separate read-only probe of the same owned profile confirms active controller sw.js?isolation=1 and a live registration even with serviceWorkers:block. Thus that option did not remove this existing controller. No fault or CPU retry is certified. The next diagnostic unregisters only this owned test profile registration, closes that client, then uses a new page; model caches are retained. Any later offline test must seed/register its current shell again.

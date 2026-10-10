@@ -1,0 +1,21 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-offline-xlsx-chain.json": "80d715939180f79933a498c456352d28c5a7407028ffd7eb69455a823e844d5b",
+    "2026-10-07-offline-xlsx-reopen.json": "00a4daab38f20cf1fc5a4f9cb4017f6bd32adb41fab6a097667acfe7bf7d91a1",
+    "2026-10-07-offline-xlsx-chain.mjs": "cb7ddba63e0e6146834d392e2ef9c253a8a33af89cb023d208a14a36e28216a6",
+    "2026-10-07-offline-xlsx-reopen.mjs": "51f4141b417c8c128e176025f66a795cf4ade20f961ae12c1598829b256e2e0e",
+    "2026-10-07-offline-xlsx-protocol.md": "8b49cbfc0fe925badea772259c733f7315a4018ec0cbcdb0f0cc6d7136e17c92",
+    "2026-10-07-offline-xlsx-analysis.md": "3251eca0ff159f5c49017289787e5a6d0d350af772ce8a1cf4fc66049ae82cda"
+  },
+  "assetSHA256AfterRun": {
+    "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+    "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  },
+  "savedXLSXBytes": 8430,
+  "savedXLSXSHA256": "cac58a89471fe5a8ada2c002b612179a698f23c5a613204b872f3b3b3b668928",
+  "savedCellXMLVerified": "sheet1!B2 shared-string exact marker",
+  "chainProcessExitCode": 0,
+  "reopenProcessExitCode": 0,
+  "qualityAccepted": false
+}

@@ -1,0 +1,9 @@
+# Ministral FP32 short-instruction comparison: no recovery
+
+Actual q4f32_1 model loads in the owned Chromium WebGPU profile and runs the six shortest fixtures from the q4f16 case. Captured complete Worker requests differ only in model ID; short system/user messages, temperature, max64/no grammar and resolved system-template override remain equal. Model IDs are verified from visible engine and outgoing requests. Repository/compiled metadata differences mean this is an artifact comparison, not pure precision causality.
+
+All six outputs again fail strict parsing, leaving documents unchanged. ASCII copying omits ABC, amount copying gives 640.00 without EUR, date copying turns into instructions about fields, Chinese copying gives 未批准 instead of 尚未批准. Arithmetic body correctly returns 4 under the wrong answer field. Formal rewrite spells out `six hundred and forty euros (EUR)` under formal_request, changing numeric literal preservation. Every raw output starts Markdown JSON fences, some unclosed. No page errors/previews; browser closes normally.
+
+Conclusion: switching to this FP32 compiled artifact does not restore short-copy or response-format adherence. Do not claim pure FP16 hardware computation caused—or was ruled out as a contributor to—the prior problem. Neither artifact is accepted. This new result suggests continued tracing of the actual generation/prompt/template or upstream artifact, rather than adopting a precision change as a fix.
+
+Independent verifier binds driver/bundle identity, fixture equality and full requests, raw observations and native source preservation. One fixed-order run per artifact; no model ranking, writing acceptance, measured performance/VRAM budget, Save, physical-device/offline/privacy certification. The metadata comparison document retains separate configuration limits.

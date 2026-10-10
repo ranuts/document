@@ -1,0 +1,4 @@
+{
+  "systemSuffix": "When summarizing, retain the proposer or requester and the team responsible for acting. Keep the prerequisite and the current state as separate facts: a conditional approval requirement does not convey that approval is still absent. Explicitly retain each stated not-yet-approved, not-completed, not-sent or not-started status. Preserve what the approval or certificate applies to. Combine these facts into one shorter sentence in the source language; remove only the unrelated topic. Do not infer that a condition has been met or an action has occurred.",
+  "scope": "Frozen diagnostic candidate, no production adoption"
+}

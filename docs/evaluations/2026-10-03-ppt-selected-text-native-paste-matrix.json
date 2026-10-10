@@ -1,0 +1,7 @@
+{
+  "scope": "Isolated production PPT selected-text native feasibility; not an IM implementation or model validation",
+  "results": [],
+  "errors": [],
+  "status": "failed",
+  "error": "Error: locator.evaluate: TypeError: Cannot read properties of null (reading 'm_pFaceInfo')\n    at e.FlushWord (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:1352:196)\n    at b.HandleRun (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:19161:43)\n    at http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:19159:375\n    at ParaRun.CheckRunContent (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:19647:307)\n    at g (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:21884:149)\n    at Paragraph.CheckRunContent (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:21884:336)\n    at b.Shape (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:19159:341)\n    at Paragraph.ShapeText (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:22178:383)\n    at Paragraph.Recalculate_Page (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:22113:93)\n    at CDocumentContent.Recalculate_Page (http://127.0.0.1:5193/sdkjs/slide/sdk-all.js:23740:222)"
+}

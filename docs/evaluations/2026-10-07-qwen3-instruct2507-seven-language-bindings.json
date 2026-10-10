@@ -1,0 +1,35 @@
+{
+  "processExitCode": 0,
+  "scope": "Terminal original process; initial and after hashes identical. Mechanics are separate from semantic judgments.",
+  "initial": {
+    "scope": "Before process launch and before any candidate inference",
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-protocol.md": "978ddf33dda087f2ec74d0319e479f500d3799f392983d84eaa9466ea402e821",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-artifact.json": "d42bb02b4b4ef1e8b460eff2cb0a85dc950aca31d6d8fbd00bfc8efa85f03c9b",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-download.json": "09927f5f803eb3b07e60f008acc98884fb366b356a5e5f385782d774db6ba0c0",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-native.mjs": "00c373990ca526de40f3477d878704219b4e896a1b70d57ecea3786f0c9f5ef3",
+      "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+      "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    }
+  },
+  "afterSHA256": {
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-protocol.md": "978ddf33dda087f2ec74d0319e479f500d3799f392983d84eaa9466ea402e821",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-artifact.json": "d42bb02b4b4ef1e8b460eff2cb0a85dc950aca31d6d8fbd00bfc8efa85f03c9b",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-download.json": "09927f5f803eb3b07e60f008acc98884fb366b356a5e5f385782d774db6ba0c0",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-native.mjs": "00c373990ca526de40f3477d878704219b4e896a1b70d57ecea3786f0c9f5ef3",
+    "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+    "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen3-instruct2507-seven-language-native.json": "6d79b103c6b171009fc205b1ee10028a8629b743db6bf53fa56ab4d155d81d8f",
+    "2026-10-07-qwen3-instruct2507-seven-language-review.json": "78b9514fb208a348d5ffe73c639ae58b85cdd26f46736b8ea41683cc02916489",
+    "2026-10-07-qwen3-instruct2507-seven-language-analysis.md": "671f2161323081bebce4ece30892abc067d48a957284e3ba86befd11b78d1674",
+    "2026-10-07-qwen3-instruct2507-seven-language-protocol.md": "978ddf33dda087f2ec74d0319e479f500d3799f392983d84eaa9466ea402e821",
+    "2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+    "2026-10-07-qwen3-instruct2507-seven-language-native.mjs": "00c373990ca526de40f3477d878704219b4e896a1b70d57ecea3786f0c9f5ef3"
+  }
+}

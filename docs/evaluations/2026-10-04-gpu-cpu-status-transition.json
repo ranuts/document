@@ -1,0 +1,105 @@
+{
+  "currentPlugin": "agent-plugin-Du88OJyO.js",
+  "scope": "Current dist native Word IM: actual GPU adapter detection, injected reload Worker error, real cached CPU model and chat stream. Not physical GPU failure or offline acceptance.",
+  "offlineRequests": [],
+  "probeSHA256": "e6591c191210c88ed33c91d7bfc698ada157c7e1a268373d6b199b890f56b2df",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "selectedProvider": "webllm",
+      "backendStates": [
+        {
+          "text": "",
+          "title": "",
+          "progress": null
+        },
+        {
+          "text": "Preparing AI…",
+          "title": "",
+          "progress": null
+        },
+        {
+          "text": "Preparing AI… · WebGPU · Qwen3 · 1.7B",
+          "title": "Qwen3-1.7B-q4f16_1-MLC",
+          "progress": null
+        },
+        {
+          "text": "Preparing AI… · CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+          "title": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+          "progress": null
+        },
+        {
+          "text": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+          "title": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+          "progress": null
+        }
+      ],
+      "gpuPresent": true,
+      "failedGpuLoads": 1,
+      "gpuTerminations": 2,
+      "coldState": {
+        "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+        "isolated": true
+      },
+      "browserOnline": true,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "modelWorkers": [
+        "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+        "blob:http://127.0.0.1:5193/ad793a53-8ae4-4f12-a609-f937effcef32",
+        "blob:http://127.0.0.1:5193/9522c096-77ce-44fd-a553-a016a9362091",
+        "blob:http://127.0.0.1:5193/525163e2-4a93-4d9e-9209-5a3f1f257eb1",
+        "blob:http://127.0.0.1:5193/2d7f0836-be36-4bac-bd1d-b9a34930c14f",
+        "blob:http://127.0.0.1:5193/dc4224d3-3f01-4ff6-82ad-ee8f42bbdbf5"
+      ],
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 37.5 token/s · First text: 0.92 s · Overall response rate: 10.72 token/s · 13 tokens",
+      "reply": "Hello! Let me know if there's anything you need.Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "seedResources": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/ran-fonts/fonts.css",
+    "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+    "http://127.0.0.1:5193/assets/editor-BBgH_qQ1.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/input-DEoPNM0j-DVH4R4CQ.js",
+    "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+    "http://127.0.0.1:5193/assets/agent-plugin-Du88OJyO.js",
+    "http://127.0.0.1:5193/assets/input-vkdavjDC.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+    "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+    "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+    "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/icons/document-light.svg",
+    "http://127.0.0.1:5193/assets/wllama-XMlyubPs.js",
+    "http://127.0.0.1:5193/assets/esm-BmP3Hx_J.js"
+  ],
+  "seedState": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "isolated": true
+  },
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "status": "completed"
+}

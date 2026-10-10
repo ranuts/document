@@ -1,0 +1,221 @@
+{
+  "date": "2026-10-03T20:38:01.357Z",
+  "probeSHA256": "ab23fcb30a27aaaa8078ead16ef2405256a8f9814889f7336b11e19eaa6dbe8c",
+  "repositories": [
+    {
+      "repo": "mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+      "revision": "eebad8da4ac64947d8dc9507007fc0279bf52454",
+      "name": "mlc"
+    },
+    {
+      "repo": "mistralai/Ministral-3-3B-Instruct-2512-BF16",
+      "revision": "b6d637bef2393152b3da2b2fde72eecdee30557e",
+      "name": "official"
+    }
+  ],
+  "files": [
+    {
+      "name": "mlc",
+      "file": "tokenizer.json",
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC/resolve/eebad8da4ac64947d8dc9507007fc0279bf52454/tokenizer.json",
+      "bytes": 17078110,
+      "sha256": "577575622324b2e099e2648be26bdeb5e5815ffe66d7004e9e3ddbf421db6bf1",
+      "artifact": ".scratch/ministral-tokenizer-audit/mlc-tokenizer.json"
+    },
+    {
+      "name": "mlc",
+      "file": "tokenizer_config.json",
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC/resolve/eebad8da4ac64947d8dc9507007fc0279bf52454/tokenizer_config.json",
+      "bytes": 198076,
+      "sha256": "f3a437d1214f6b61c8eae19d1256b0ebbf567793f6dcc1f63f4a30b829f85235",
+      "artifact": ".scratch/ministral-tokenizer-audit/mlc-tokenizer_config.json"
+    },
+    {
+      "name": "official",
+      "file": "tokenizer.json",
+      "url": "https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512-BF16/resolve/b6d637bef2393152b3da2b2fde72eecdee30557e/tokenizer.json",
+      "bytes": 17078128,
+      "sha256": "d5f6046775b112f0e2d456ee9dba450684ab964fe5c4e231599bdc6773028135",
+      "artifact": ".scratch/ministral-tokenizer-audit/official-tokenizer.json"
+    },
+    {
+      "name": "official",
+      "file": "tokenizer_config.json",
+      "url": "https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512-BF16/resolve/b6d637bef2393152b3da2b2fde72eecdee30557e/tokenizer_config.json",
+      "bytes": 198094,
+      "sha256": "f59f7294e4f26383d0ea93840fe21cf197784be0842a8301a0343e8c34ed0d6d",
+      "artifact": ".scratch/ministral-tokenizer-audit/official-tokenizer_config.json"
+    }
+  ],
+  "scope": "Pinned tokenizer/config artifact comparison; not actual browser tokenizer execution, weight integrity or runtime correctness.",
+  "tokenizerBytesIdentical": false,
+  "tokenizerConfigBytesIdentical": false,
+  "details": {
+    "mlc": {
+      "modelType": "BPE",
+      "vocabEntries": 131072,
+      "specialTokens": [
+        {
+          "id": 1,
+          "content": "<s>",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 2,
+          "content": "</s>",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 3,
+          "content": "[INST]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 4,
+          "content": "[/INST]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 17,
+          "content": "[SYSTEM_PROMPT]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 18,
+          "content": "[/SYSTEM_PROMPT]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        }
+      ],
+      "normalizer": null,
+      "preTokenizer": {
+        "type": "Sequence",
+        "pretokenizers": [
+          {
+            "type": "Split",
+            "pattern": {
+              "Regex": "[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]*[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]+|[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]+[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]*|\\p{N}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n/]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+"
+            },
+            "behavior": "Isolated",
+            "invert": false
+          },
+          {
+            "type": "ByteLevel",
+            "add_prefix_space": false,
+            "trim_offsets": true,
+            "use_regex": false
+          }
+        ]
+      },
+      "bosToken": "<s>",
+      "eosToken": "</s>",
+      "tokenizerClass": "LlamaTokenizerFast"
+    },
+    "official": {
+      "modelType": "BPE",
+      "vocabEntries": 131072,
+      "specialTokens": [
+        {
+          "id": 1,
+          "content": "<s>",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 2,
+          "content": "</s>",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 3,
+          "content": "[INST]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 4,
+          "content": "[/INST]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 17,
+          "content": "[SYSTEM_PROMPT]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        },
+        {
+          "id": 18,
+          "content": "[/SYSTEM_PROMPT]",
+          "single_word": false,
+          "lstrip": false,
+          "rstrip": false,
+          "normalized": false,
+          "special": true
+        }
+      ],
+      "normalizer": null,
+      "preTokenizer": {
+        "type": "Sequence",
+        "pretokenizers": [
+          {
+            "type": "Split",
+            "pattern": {
+              "Regex": "[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]*[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]+|[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]+[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]*|\\p{N}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n/]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+"
+            },
+            "behavior": "Isolated",
+            "invert": false
+          },
+          {
+            "type": "ByteLevel",
+            "add_prefix_space": false,
+            "trim_offsets": true,
+            "use_regex": false
+          }
+        ]
+      },
+      "bosToken": "<s>",
+      "eosToken": "</s>",
+      "tokenizerClass": "LlamaTokenizerFast"
+    }
+  }
+}

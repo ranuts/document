@@ -1,0 +1,9 @@
+{
+  "scope": "Fresh persistent profile, default product CPU load online, awaited persistent-context close with browser disconnected/isConnected checks, same profile launched anew, context offline before first navigation, native chat/insertion/history/save/reopen. No physical Safari/mobile or overall offline certification.",
+  "build": "1791372911",
+  "vendor": "b6864850e7b3",
+  "driverSha256": "bf435a08bd2116e03870e87a767cebb51954672f724aad8da919b8e63823dbab",
+  "expectedToolMode": "tools",
+  "expectedNativeText": "WEBKIT_OFFLINE_WRITE_20261007\r\n",
+  "originalSource": "2026-10-07-webkit-offline-save-reopen-fixed.mjs"
+}

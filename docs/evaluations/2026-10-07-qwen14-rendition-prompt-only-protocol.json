@@ -1,0 +1,6 @@
+{
+  "scope": "Remove only extraction and MODEL-EXTRACTED FACT LEDGER line from the prior two-stage final request; retain rendition prompt, original task/source, decoding settings and model overrides. One sample per known case. No native application or adoption.",
+  "previousReceiptSha256": "a6b6b196af104cd632771d571fb11fb43a6397ae96fa6fc89d782d8706717f2c",
+  "driverSha256": "b9c44824a614ec06cac14effce752317b74cc883fccb4fe0fe0be9b5370e5704",
+  "originalProtocolSha256": "10c6c9652adecf65492bc466c78907fba365ebc40b24443b2253042bb29f7030"
+}

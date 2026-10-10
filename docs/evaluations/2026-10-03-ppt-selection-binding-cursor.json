@@ -1,0 +1,296 @@
+{
+  "status": "completed",
+  "scope": "Production IM local Qwen3 1.7B PPT pending IM planning selection-binding preflight. Change selected shape or text cursor via native APIs without document/history edits. Expect expiry before writing; not selected-text replacement.",
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-W2iVlOOp.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "before": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "read": {
+    "prompt": "Read the plain text of the current presentation. Do not modify anything.",
+    "elapsedMs": 1523,
+    "feedback": [
+      "Slide 1:\nAlex 😀"
+    ],
+    "visibleErrors": [],
+    "previewCount": 0,
+    "matched": true,
+    "unchanged": true
+  },
+  "afterRead": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "literal": "项目 😀\tPayment\n  NOT approved  ",
+  "changedWhileRunning": true,
+  "write": {
+    "prompt": "Add a new text box on the current slide with exactly this text: 项目 😀\tPayment\n  NOT approved  ",
+    "elapsedMs": 1067,
+    "feedback": [],
+    "visibleErrors": [
+      "This proposal expired. Generate a new one.Restore request"
+    ],
+    "previewCount": 0,
+    "matched": false,
+    "outsideUnchanged": true
+  },
+  "after": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex \r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "documentUnchanged": true,
+  "historyUnchanged": true,
+  "staleRejectionPassed": true,
+  "allPassed": false
+}

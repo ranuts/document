@@ -22,5 +22,5 @@ export interface AgentTool<P = Record<string, unknown>, R = unknown> {
    */
   readOnlyHint: boolean;
   /** Execute the tool. Throws on invalid input or when the editor isn't ready. */
-  execute: (params: P) => Promise<R>;
+  execute: (params: P, signal?: AbortSignal) => Promise<R>;
 }

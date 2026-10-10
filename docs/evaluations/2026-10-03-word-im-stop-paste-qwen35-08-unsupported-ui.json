@@ -1,0 +1,380 @@
+{
+  "status": "failed",
+  "scope": "Actual isolated Chromium/WebGPU Qwen3.5-0.8B prior-redo replacement request; planner produced no accepted executable operation, so controlled cancellation was not reached. Raw model response not instrumented.",
+  "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "language": "zh",
+  "replacement": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+  "results": [],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-C2N-hO8C.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "setup": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "priorRedo": true,
+  "insertMode": false,
+  "error": "Error: locator.evaluate: Error: Native pre_Paste was not observed\n    at eval (eval at evaluate (:311:30), <anonymous>:1:188)",
+  "failureFeedback": {
+    "errors": [
+      "No executable operation was selected. Clarify the request or try another model.Restore request"
+    ],
+    "activity": [],
+    "inputDisabled": false,
+    "document": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "paragraphs": [
+        {
+          "text": "Alpha target body\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "A",
+              "bold": false
+            },
+            {
+              "c": "l",
+              "bold": false
+            },
+            {
+              "c": "p",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "y",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        },
+        {
+          "text": "Neighbor unchanged\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "N",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "i",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "u",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "c",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        }
+      ]
+    },
+    "preparation": {
+      "prepared": 0,
+      "resumed": 0
+    }
+  },
+  "outcome": "No accepted executable operation; native cancellation scenario not reached",
+  "nativeCancellationValidated": false,
+  "documentTextUnchanged": true
+}

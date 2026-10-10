@@ -1,0 +1,44 @@
+{
+  "receiptSha256": "d101f2feec4f383372af95c5b58b908b3cba5b06d0a58007d7e8b8c215471884",
+  "requestChecks": [
+    {
+      "id": "zh-CN-summarize",
+      "onlyLedgerLineRemoved": true
+    },
+    {
+      "id": "ja-rewrite",
+      "onlyLedgerLineRemoved": true
+    },
+    {
+      "id": "es-translate",
+      "onlyLedgerLineRemoved": true
+    },
+    {
+      "id": "pt-summarize",
+      "onlyLedgerLineRemoved": true
+    }
+  ],
+  "scope": "Known-source bounded manual review; no native application or semantic certification",
+  "rows": [
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "narrow-pass",
+      "reason": "Delivery team, proposal nonapproval and unsigned prerequisite retained; same narrow improvement occurs without fact extraction."
+    },
+    {
+      "id": "ja-rewrite",
+      "verdict": "fail",
+      "reason": "ISO date still reformatted as 2046年4月19日."
+    },
+    {
+      "id": "es-translate",
+      "verdict": "narrow-pass",
+      "reason": "Portuguese heading/prose retain examined source roles and statuses, without intermediate extraction."
+    },
+    {
+      "id": "pt-summarize",
+      "verdict": "fail",
+      "reason": "Archive team omitted, permission becomes future execution, and current unvalidated backup changes to a backup not yet made."
+    }
+  ]
+}

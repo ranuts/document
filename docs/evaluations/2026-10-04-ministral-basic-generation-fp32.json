@@ -1,0 +1,1173 @@
+{
+  "date": "2026-10-03T20:52:30.031Z",
+  "scope": "Experimental custom Ministral 3 3B q4f32 MLC runtime diagnostic, compared with earlier q4f16 short-case run; different compiled artifact/precision, not pure hardware ablation; six predeclared fresh paired fixtures for payer/recipient, approval negation and confirmation prerequisite. One fixed-order sample each, not general heldout accuracy. Diagnostic shortest prompts, max64, no response_format; system template placeholder removed; production validation unchanged; not a single-variable ablation or writing acceptance; route-local raw response/input recording. Selected translation target through actual IM control. Native Word Undo/Redo, no preview or product change.",
+  "modelId": "Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC",
+  "status": "completed",
+  "probeSHA256": "0ace26fd859f7d2ed2af7e70a157cb2763bb72eb110cced2fc2f1287c1ebeb35",
+  "variants": [
+    "current"
+  ],
+  "repetitions": 1,
+  "cases": [
+    {
+      "id": "copy-ascii",
+      "source": "ABC",
+      "prompt": "Copy exactly ABC.",
+      "expected": "ABC",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "copy-amount",
+      "source": "640 EUR",
+      "prompt": "Copy exactly 640 EUR.",
+      "expected": "640 EUR",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "copy-date",
+      "source": "2026-10-12",
+      "prompt": "Copy exactly 2026-10-12.",
+      "expected": "2026-10-12",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "copy-chinese",
+      "source": "尚未批准",
+      "prompt": "逐字复制：尚未批准",
+      "expected": "尚未批准",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "arithmetic",
+      "source": "2 + 2",
+      "prompt": "What is 2 + 2? Give only the answer.",
+      "expected": "4",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    },
+    {
+      "id": "formal-english",
+      "source": "Hey, Alex is gonna pay Morgan 640 EUR.",
+      "prompt": "Rewrite in formal English: Hey, Alex is gonna pay Morgan 640 EUR.",
+      "expected": "Alex will pay Morgan 640 EUR.",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction"
+    }
+  ],
+  "bundleHashes": {
+    "plugin": "92d3ea86ea763f4193f4158c370c9da115ee4e588b23a5509dbdad1eebf5383a",
+    "diagnosticPlugin": "248a3651499a3ecc955624c4fc08fb53db017e8421e930674e2473ff670d63e2"
+  },
+  "results": [
+    {
+      "id": "copy-ascii",
+      "source": "ABC",
+      "prompt": "Copy exactly ABC.",
+      "expected": "ABC",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "ABC\r\n",
+      "output": "ABC\r\n",
+      "documentUnchanged": true,
+      "responseMs": 2564,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"instruction\": \"Copy exactly\"\n}```",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 15,
+            "promptTokens": 21,
+            "decodeTokensPerSecond": 19.579305960344165,
+            "timeToFirstTokenMs": 1760.2800002098083
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Copy exactly ABC."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "copy-amount",
+      "source": "640 EUR",
+      "prompt": "Copy exactly 640 EUR.",
+      "expected": "640 EUR",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "640 EUR\r\n",
+      "output": "640 EUR\r\n",
+      "documentUnchanged": true,
+      "responseMs": 813,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"amount\": \"640.00\"\n}\n```",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 18,
+            "promptTokens": 25,
+            "decodeTokensPerSecond": 29.594067986144115,
+            "timeToFirstTokenMs": 178.32499980926514
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Copy exactly 640 EUR."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "copy-date",
+      "source": "2026-10-12",
+      "prompt": "Copy exactly 2026-10-12.",
+      "expected": "2026-10-12",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "2026-10-12\r\n",
+      "output": "2026-10-12\r\n",
+      "documentUnchanged": true,
+      "responseMs": 1054,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"instruction\": \"Copy exactly 2026-1112\"\n}```",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 25,
+            "promptTokens": 31,
+            "decodeTokensPerSecond": 29.40934272107546,
+            "timeToFirstTokenMs": 180.1050000190735
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Copy exactly 2026-10-12."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "copy-chinese",
+      "source": "尚未批准",
+      "prompt": "逐字复制：尚未批准",
+      "expected": "尚未批准",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "尚未批准\r\n",
+      "output": "尚未批准\r\n",
+      "documentUnchanged": true,
+      "responseMs": 670,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"response\": \"未批准\"\n}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 14,
+            "promptTokens": 26,
+            "decodeTokensPerSecond": 29.600498970290236,
+            "timeToFirstTokenMs": 179.49000024795532
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "逐字复制：尚未批准"
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "arithmetic",
+      "source": "2 + 2",
+      "prompt": "What is 2 + 2? Give only the answer.",
+      "expected": "4",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "2 + 2\r\n",
+      "output": "2 + 2\r\n",
+      "documentUnchanged": true,
+      "responseMs": 505,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\"answer\": \"4\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 9,
+            "promptTokens": 30,
+            "decodeTokensPerSecond": 29.654524844014137,
+            "timeToFirstTokenMs": 181.85999965667725
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "What is 2 + 2? Give only the answer."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    },
+    {
+      "id": "formal-english",
+      "source": "Hey, Alex is gonna pay Morgan 640 EUR.",
+      "prompt": "Rewrite in formal English: Hey, Alex is gonna pay Morgan 640 EUR.",
+      "expected": "Alex will pay Morgan 640 EUR.",
+      "task": "rewrite",
+      "instruction": "Diagnostic shortest instruction",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "Hey, Alex is gonna pay Morgan 640 EUR.\r\n",
+      "output": "Hey, Alex is gonna pay Morgan 640 EUR.\r\n",
+      "documentUnchanged": true,
+      "responseMs": 1353,
+      "errors": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "```json\n{\n  \"formal_request\": \"Alex will transfer a total of six hundred and forty euros (EUR) to Morgan.\"\n}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 30,
+            "promptTokens": 35,
+            "decodeTokensPerSecond": 29.252453527235694,
+            "timeToFirstTokenMs": 304.3600001335144
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Follow the user instruction. Return only JSON with one text field."
+              },
+              {
+                "role": "user",
+                "content": "Rewrite in formal English: Hey, Alex is gonna pay Morgan 640 EUR."
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 64
+          },
+          "modelId": [
+            "Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC"
+          ],
+          "chatOpts": [
+            {
+              "conv_config": {
+                "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+              }
+            }
+          ]
+        }
+      ],
+      "isolated": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/mlc-chat-config.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/api/resolve-cache/models/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/37ac6cfe41d24aff036c6b3fe37e1469272c4cb4/mlc-chat-config.json?%2Fmlc-ai%2FMinistral-3-3B-Instruct-2512-BF16-q4f32_1-MLC%2Fresolve%2Fmain%2Fmlc-chat-config.json=&etag=%22961cf3226c5f51c05234b816843193ea07f46677%22",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Ministral-3-3B-Instruct-2512-BF16-q4f32_1_cs1k-webgpu.wasm",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/tokenizer.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/187c8f6cc6fd217e11ecc3dfbc82048b314c6d4608b6b6eb42769e12728cd987?xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27tokenizer.json%3B+filename%3D%22tokenizer.json%22%3B&response-content-type=application%2Fjson%3B+charset%3Dutf-8&X-Xet-Cas-Uid=public&user_id=public&Expires=1791064369&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzE4N2M4ZjZjYzZmZDIxN2UxMWVjYzNkZmJjODIwNDhiMzE0YzZkNDYwOGI2YjZlYjQyNzY5ZTEyNzI4Y2Q5ODdcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3Rva2VuaXplci5qc29uJTNCK2ZpbGVuYW1lJTNEJTIydG9rZW5pemVyLmpzb24lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGanNvbiUzQitjaGFyc2V0JTNEdXRmLTgmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDM2OX19fV19&Signature=MEUCIAcPYSzgOd7A%7EtZ0OmKDs%7EdTfQEx%7Ew%7Exnf%7EV0Y1mPvBDAiEA2tpq2uiL%7E0WlJvwBge2iatFZtj23SVo1ZocI%7EzDWTCo_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/tensor-cache.json",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/api/resolve-cache/models/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/37ac6cfe41d24aff036c6b3fe37e1469272c4cb4/tensor-cache.json?%2Fmlc-ai%2FMinistral-3-3B-Instruct-2512-BF16-q4f32_1-MLC%2Fresolve%2Fmain%2Ftensor-cache.json=&etag=%22a762d3ca934efda8ed4435c66c0cc8df507283fa%22",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_0.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_15.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_30.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_45.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/1b95fcd4047f69ac568e57062c9202153e90ad497f2dfcccebbdfe7ecfec32c2?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_15.bin%3B+filename%3D%22params_shard_15.bin%22%3B&xip=zzmc1Er8t5Y&user_id=public&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791064374&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzFiOTVmY2Q0MDQ3ZjY5YWM1NjhlNTcwNjJjOTIwMjE1M2U5MGFkNDk3ZjJkZmNjY2ViYmRmZTdlY2ZlYzMyYzJcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzE1LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xNS5iaW4lMjIlM0ImeGlwPXp6bWMxRXI4dDVZJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0Mzc0fX19XX0_&Signature=MEUCIQDUy00IktYhn%7EYKGRa-iYtgoxtzzkC9WWqpvqH539OuVQIgAqxesPjPqJkHAl86EoflBrctmMwsGJdiGBfY4rvTxyA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/f5626cdb321559accb3e64b88d48636ce426518d84150e4704e03e4fe908141f?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_30.bin%3B+filename%3D%22params_shard_30.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064374&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2Y1NjI2Y2RiMzIxNTU5YWNjYjNlNjRiODhkNDg2MzZjZTQyNjUxOGQ4NDE1MGU0NzA0ZTAzZTRmZTkwODE0MWZcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzMwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zMC5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0Mzc0fX19XX0_&Signature=MEUCIQDt-XopLSu6CUUYmI6lH5mtIx90zjDlqg8eZ1EdusT8hAIgMRpy6rNgVSET530AT5XR0YE3CAqpOw%7EQgwb6OFBWJfw_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/acec78df077cba5ef6f0cd27c2fa5c04bc64319508a9bccddbb92481e103b654?user_id=public&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_45.bin%3B+filename%3D%22params_shard_45.bin%22%3B&response-content-type=application%2Foctet-stream&Expires=1791064374&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2FjZWM3OGRmMDc3Y2JhNWVmNmYwY2QyN2MyZmE1YzA0YmM2NDMxOTUwOGE5YmNjZGRiYjkyNDgxZTEwM2I2NTRcXD91c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF80NS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNDUuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0Mzc0fX19XX0_&Signature=MEQCIH5LvSiEYoo%7EtbwDmbzfqSt0Pq75%7ECP%7EnQAk9cKSzfjcAiBsjPGKXhSphioUuG-81DKS8CDbuTjbDyurIYBXC984zQ__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/1d968b2985734954e1395063317b5ab19cdedfa37a98848521bb4b84bbb92d30?user_id=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_0.bin%3B+filename%3D%22params_shard_0.bin%22%3B&Expires=1791064374&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzFkOTY4YjI5ODU3MzQ5NTRlMTM5NTA2MzMxN2I1YWIxOWNkZWRmYTM3YTk4ODQ4NTIxYmI0Yjg0YmJiOTJkMzBcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPXp6bWMxRXI4dDVZJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMC5iaW4lMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDM3NH19fV19&Signature=MEYCIQCEaLdcpkuU4LNsFhUqP-p-qTqz3aPsWKk3Zf3OCz5lmAIhAPqTAldc8LjhYUAccBm7EQp79EccJMELpXHmQLEWQeDp&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_31.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/3c1cdeab7dede80a6e4389d8543bb071aa34592c8edf9c74a39be9674555f15f?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_31.bin%3B+filename%3D%22params_shard_31.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064382&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzNjMWNkZWFiN2RlZGU4MGE2ZTQzODlkODU0M2JiMDcxYWEzNDU5MmM4ZWRmOWM3NGEzOWJlOTY3NDU1NWYxNWZcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzMxLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zMS5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0MzgyfX19XX0_&Signature=MEUCIEjUgInGuY2COo1vM8RsICY-w0rz%7Etbp-JCe56bBwlhWAiEA0pmHpuvQhGERHBe3LafESln4lB8mZOQxJ21LvlPqUcE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_46.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/a2c107ee58b196255056f1268336412d136676e6acf2c7b8957c57e534822dbb?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_46.bin%3B+filename%3D%22params_shard_46.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064383&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2EyYzEwN2VlNThiMTk2MjU1MDU2ZjEyNjgzMzY0MTJkMTM2Njc2ZTZhY2YyYzdiODk1N2M1N2U1MzQ4MjJkYmJcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF80Ni5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNDYuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0MzgzfX19XX0_&Signature=MEUCIFaSWd%7Ez-KUu3uUw1J%7ErbAvZRWDO%7ECRt5L%7Ey4Hzv%7Es6lAiEAvOnfPkG7vemyuinmHoLi4KSAtjhE53jb2pLLsbOWv2M_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_16.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/f08373e04340700e7e45f8d980cdc1cf71861fc8aa000b77437821432fbc6100?xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_16.bin%3B+filename%3D%22params_shard_16.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791064384&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2YwODM3M2UwNDM0MDcwMGU3ZTQ1ZjhkOTgwY2RjMWNmNzE4NjFmYzhhYTAwMGI3NzQzNzgyMTQzMmZiYzYxMDBcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xNi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTYuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0Mzg0fX19XX0_&Signature=MEUCIQCogXi991gO1pZs3ObHtqKay1omjsUq2wW6aoPzPzXt9QIgMDmJx0M3UOMB0Y%7EeQfLBJp%7EL9fFs-%7EEjDxblFECDPPs_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_32.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/516e25921b7e3cc2a36e10854ed8492371dda208d45d23d248ea81062b4ef1b8?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_32.bin%3B+filename%3D%22params_shard_32.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064389&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzUxNmUyNTkyMWI3ZTNjYzJhMzZlMTA4NTRlZDg0OTIzNzFkZGEyMDhkNDVkMjNkMjQ4ZWE4MTA2MmI0ZWYxYjhcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8zMi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMzIuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0Mzg5fX19XX0_&Signature=MEYCIQCLRjBQ-Ni4m76QXP5BoSpTA8wZnmjbkhlj8pqQTakCjQIhAKjwosco0aCxcRwozvtjmp1JYeBa6m%7EBmnaV1AVyWaGq&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_47.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/5a706b50039a68f370a7c9be649c871d7cfd49e23c99eb49f207d4ac65ce0251?response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_47.bin%3B+filename%3D%22params_shard_47.bin%22%3B&xip=zzmc1Er8t5Y&user_id=public&Expires=1791064390&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzVhNzA2YjUwMDM5YTY4ZjM3MGE3YzliZTY0OWM4NzFkN2NmZDQ5ZTIzYzk5ZWI0OWYyMDdkNGFjNjVjZTAyNTFcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF80Ny5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNDcuYmluJTIyJTNCJnhpcD16em1jMUVyOHQ1WSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0MzkwfX19XX0_&Signature=MEYCIQDBRrycj68afIi8xmTscnnbfTfgRr65Ug0eCjS4i7wzAgIhAKpaafbe1B2x3OKxUpKwWo-P0yXTVpEhcC78rtK1aHTB&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_17.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/0447bde537f2d98ec957929304dc0d7684d6fcdb0398660f7d61fd0fcf19ce9b?xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_17.bin%3B+filename%3D%22params_shard_17.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791064392&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzA0NDdiZGU1MzdmMmQ5OGVjOTU3OTI5MzA0ZGMwZDc2ODRkNmZjZGIwMzk4NjYwZjdkNjFmZDBmY2YxOWNlOWJcXD94aXA9enptYzFFcjh0NVkmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xNy5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTcuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0MzkyfX19XX0_&Signature=MEUCIDoialKjO-Yb1X6pa9icwlm5V2fz5jTYks789DjnyfGgAiEA1bqlvImtLspIuhDa%7E7Beu0T9CR2uQUtYODCDvr5xGtU_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_48.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/0268ea9d7c16863336325ec2a129cedd9e995c71dd335e32f543605f9aa52ab9?xip=zzmc1Er8t5Y&user_id=public&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_48.bin%3B+filename%3D%22params_shard_48.bin%22%3B&Expires=1791064396&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzAyNjhlYTlkN2MxNjg2MzMzNjMyNWVjMmExMjljZWRkOWU5OTVjNzFkZDMzNWUzMmY1NDM2MDVmOWFhNTJhYjlcXD94aXA9enptYzFFcjh0NVkmdXNlcl9pZD1wdWJsaWMmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNDguYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzQ4LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0Mzk2fX19XX0_&Signature=MEUCIQCuW0bmzzOwbpfIUjsKPH5vliaZwmIyg-EWJlcyXyDAEgIgNS4aFSfCwUBU%7EbGCdmAP1QdCJe2BqJESaMyjN%7EIo0Dg_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_33.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/0a87e262839101ce0f3d39fc0ddfe403801b0dc743dfdfa4ae3e64f2b06bc3f5?xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_33.bin%3B+filename%3D%22params_shard_33.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791064397&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzBhODdlMjYyODM5MTAxY2UwZjNkMzlmYzBkZGZlNDAzODAxYjBkYzc0M2RmZGZhNGFlM2U2NGYyYjA2YmMzZjVcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8zMy5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMzMuYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0Mzk3fX19XX0_&Signature=MEYCIQCMLLr8JbNDcLcc4XpFPqY05i5xDZlQYdxPl9mo2gXPUQIhAO8a1kM0eNCKtB6-567pilwfpqZeUtrkdMZdkgwPmsB1&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_18.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/b602d8ade51ef7dc51c996018dfd4ed1599ce41126e36a98aeb9a66ed460ba2b?xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_18.bin%3B+filename%3D%22params_shard_18.bin%22%3B&X-Xet-Cas-Uid=public&user_id=public&response-content-type=application%2Foctet-stream&Expires=1791064400&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2I2MDJkOGFkZTUxZWY3ZGM1MWM5OTYwMThkZmQ0ZWQxNTk5Y2U0MTEyNmUzNmE5OGFlYjlhNjZlZDQ2MGJhMmJcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xOC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTguYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDAwfX19XX0_&Signature=MEQCIAU0N0XBXVm217EOxLRgg1NXtKDlQCktxBcLbf4pvKU4AiBLMTvdG-f3VskpGegzBKjHnPRuzbv6NGhs%7ELg1FYZ6ew__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_34.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_49.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/c78f3a558ce6df63d83c02ce1d156cbce01aadea22f8d7047912eeef6eeab9d9?user_id=public&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_34.bin%3B+filename%3D%22params_shard_34.bin%22%3B&Expires=1791064405&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2M3OGYzYTU1OGNlNmRmNjNkODNjMDJjZTFkMTU2Y2JjZTAxYWFkZWEyMmY4ZDcwNDc5MTJlZWVmNmVlYWI5ZDlcXD91c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzQuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzM0LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDA1fX19XX0_&Signature=MEUCIQCfepYRGdQCZg5E5i9CM5I89gNgY1iQFHmMQysf5qM6WwIgfXePmUrjokww5f00UUZCyQDqLxcjKMTxmMJLOL0eN0k_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/1082ab0fefdb5e158cd446b2dfc22d2be0b9e46620204fd5c3c9bbc85783795b?response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_49.bin%3B+filename%3D%22params_shard_49.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064405&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzEwODJhYjBmZWZkYjVlMTU4Y2Q0NDZiMmRmYzIyZDJiZTBiOWU0NjYyMDIwNGZkNWMzYzliYmM4NTc4Mzc5NWJcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF80OS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNDkuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDA1fX19XX0_&Signature=MEUCIDjY1UkYx8j%7EYvZaA-VObZ3xei5hP68QDwidE2samwQYAiEAwhb-ftrkHzfe0CSNrwHPNlfo9OxzhQIPYqxnues2TEs_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_19.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/42a5d0b58d178b19510bcc32c6f608a1a11507c67fdfca459e8cb0f25a9fa547?response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_19.bin%3B+filename%3D%22params_shard_19.bin%22%3B&xip=zzmc1Er8t5Y&user_id=public&X-Xet-Cas-Uid=public&Expires=1791064408&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzQyYTVkMGI1OGQxNzhiMTk1MTBiY2MzMmM2ZjYwOGExYTExNTA3YzY3ZmRmY2E0NTllOGNiMGYyNWE5ZmE1NDdcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xOS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTkuYmluJTIyJTNCJnhpcD16em1jMUVyOHQ1WSZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDA4fX19XX0_&Signature=MEUCIADLwyBsa50yJgzcrXcIHMeMgDCF89weP5fsRSFsU16fAiEAzzIJFfMwveGo44ia6c1Mh6YIjQKfHTaezMeqbvbsM5Y_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_35.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/e9e4374b699d748806bb02c1c6d4df97348704872ef0fbaf472a4846badfd98f?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_35.bin%3B+filename%3D%22params_shard_35.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&Expires=1791064411&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2U5ZTQzNzRiNjk5ZDc0ODgwNmJiMDJjMWM2ZDRkZjk3MzQ4NzA0ODcyZWYwZmJhZjQ3MmE0ODQ2YmFkZmQ5OGZcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzM1LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zNS5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDExfX19XX0_&Signature=MEYCIQD8SUHl90gkjWqMTov-wT2heEOZUAeXtrs11pYIrrBYygIhAPDbf1lQaBj4d2qBNgkDuxBWUovVJyXsPCVT7VWAJs1C&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_50.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/f3db25e653ebbfaadaa4dd84229a2d2f694dd26456cee0152ef816ed9f51735a?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_50.bin%3B+filename%3D%22params_shard_50.bin%22%3B&X-Xet-Cas-Uid=public&user_id=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&Expires=1791064412&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2YzZGIyNWU2NTNlYmJmYWFkYWE0ZGQ4NDIyOWEyZDJmNjk0ZGQyNjQ1NmNlZTAxNTJlZjgxNmVkOWY1MTczNWFcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzUwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81MC5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDEyfX19XX0_&Signature=MEUCIFqBPEzhpLPmVq7JxzjPxKO85cf14VMJw4VgRgTtVVVlAiEAg0L%7EODHYuiJ6jxOJFLJBTRc3fVNfJlBqKedew7j7mB4_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_20.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/e218f4961e4a305a7860609a89ebba6c3bc9726a1ddc4e61b95b323c6b35902e?user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_20.bin%3B+filename%3D%22params_shard_20.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&Expires=1791064415&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2UyMThmNDk2MWU0YTMwNWE3ODYwNjA5YTg5ZWJiYTZjM2JjOTcyNmExZGRjNGU2MWI5NWIzMjNjNmIzNTkwMmVcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzIwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8yMC5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDE1fX19XX0_&Signature=MEQCICYHX0j3OJn%7EO1Og6UYPit4O-bYa0qC9NjIOHq35jG2LAiAoimoezedKe9Rs39nsmda9fieSRMbevF9K8kSg-RSOSA__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_1.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/2f6f086b92b24383896711bd9efc5f52709d091d23036a656894155a0d25203c?xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_1.bin%3B+filename%3D%22params_shard_1.bin%22%3B&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&user_id=public&Expires=1791064416&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzJmNmYwODZiOTJiMjQzODM4OTY3MTFiZDllZmM1ZjUyNzA5ZDA5MWQyMzAzNmE2NTY4OTQxNTVhMGQyNTIwM2NcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xLmJpbiUyMiUzQiZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQxNn19fV19&Signature=MEUCIQCeB7BBMGNd-cpMayJVNe-JuucA1ZkwxjXRnNcgLAgsegIgBw-RWtwVQCuq40U-SBxiTWRUMnXzs5yn2fW1kYQn4rk_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_36.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/1d57afb10479c00cb2564febf3050a4caab24992d39d3db8d539d96f8ca3e2f4?X-Xet-Cas-Uid=public&user_id=public&xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_36.bin%3B+filename%3D%22params_shard_36.bin%22%3B&Expires=1791064417&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzFkNTdhZmIxMDQ3OWMwMGNiMjU2NGZlYmYzMDUwYTRjYWFiMjQ5OTJkMzlkM2RiOGQ1MzlkOTZmOGNhM2UyZjRcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzYuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzM2LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDE3fX19XX0_&Signature=MEQCIEHHzxuA7lPTnpvI8AxZktOARstYNMq-eLHRmP5aHwDlAiBPTs77q5yyLanE28WW-lTkt4h9A%7E7z0DjtCFBCG2q7qQ__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_51.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/bf21e999dabb74fb4686e350ee20fdef888c5417ff327931705707bbcf4b9971?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_51.bin%3B+filename%3D%22params_shard_51.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064417&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2JmMjFlOTk5ZGFiYjc0ZmI0Njg2ZTM1MGVlMjBmZGVmODg4YzU0MTdmZjMyNzkzMTcwNTcwN2JiY2Y0Yjk5NzFcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81MS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNTEuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDE3fX19XX0_&Signature=MEUCIQCb3TlGbSE45-9REI8BCx1-WH0GUSObbZ4j8iZw6O16ywIgFAQEbl6Exm4sAN7BO4OdamcGZu-Mirz13OiCO%7EBJOGk_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_21.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/b99b46426e922124696627a53b892b9e132834c4ac9e743dc2850587a5279bbc?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_21.bin%3B+filename%3D%22params_shard_21.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064420&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2I5OWI0NjQyNmU5MjIxMjQ2OTY2MjdhNTNiODkyYjllMTMyODM0YzRhYzllNzQzZGMyODUwNTg3YTUyNzliYmNcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzIxLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8yMS5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDIwfX19XX0_&Signature=MEUCIAp6LDLLrFlrXPR-Xt-8Lz4FupjGfDFdq4VLLNSZMRU9AiEAvGrd-blW6FeZayiUfn-zw4N3laT%7Ez%7Eh9vTd%7EGnvUZmY_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_37.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/879b393dddd9e39f1acf1b4e35e5f065fc75d9fbebe339748b121fa36993d349?response-content-type=application%2Foctet-stream&user_id=public&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_37.bin%3B+filename%3D%22params_shard_37.bin%22%3B&xip=zzmc1Er8t5Y&Expires=1791064422&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzg3OWIzOTNkZGRkOWUzOWYxYWNmMWI0ZTM1ZTVmMDY1ZmM3NWQ5ZmJlYmUzMzk3NDhiMTIxZmEzNjk5M2QzNDlcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8zNy5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMzcuYmluJTIyJTNCJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDIyfX19XX0_&Signature=MEUCIQC2eUYOIdAAWV7DIt4GQBqJqvFeB2uYSE2FkT9n%7Eb5q0gIgSZHl9lZvyY4NwzN1JswTuaDvbxYYNMzyQkdISB%7EiEDY_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_2.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/9b7d607ee807b4e2afb3d3036b262fc62bbc24e7d490de9d1be84a449876c592?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_2.bin%3B+filename%3D%22params_shard_2.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791064423&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzliN2Q2MDdlZTgwN2I0ZTJhZmIzZDMwMzZiMjYyZmM2MmJiYzI0ZTdkNDkwZGU5ZDFiZTg0YTQ0OTg3NmM1OTJcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzIuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzIuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0iLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQyM319fV19&Signature=MEYCIQCcjLkXtJB5guUqsoB4dDhS06V-b2cpXaeJqnrpEdNhawIhAPlH0uoMRjc7aw8AGNnS8LbUo9rzfffhQI4-4VGleYdF&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_52.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_22.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/b8d02acb4988b34b8416e8d614451f3048722c471036b1e8fb4e4d283ed6d233?response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_52.bin%3B+filename%3D%22params_shard_52.bin%22%3B&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&user_id=public&Expires=1791064424&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2I4ZDAyYWNiNDk4OGIzNGI4NDE2ZThkNjE0NDUxZjMwNDg3MjJjNDcxMDM2YjFlOGZiNGU0ZDI4M2VkNmQyMzNcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81Mi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNTIuYmluJTIyJTNCJnhpcD16em1jMUVyOHQ1WSZYLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDI0fX19XX0_&Signature=MEUCIEfQS4SVAXly7LFO3gIjRZPYZ%7EpAZlY%7El8nuInvCgOpTAiEAnyE26Slvxg-yqYtVehTJ93HqwBcNYpB5nGEKad4Kaz0_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/9bd646da116898847dc4a9cd65bccde9b82a20649817f2b358e332adc09d0508?user_id=public&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_22.bin%3B+filename%3D%22params_shard_22.bin%22%3B&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&Expires=1791064424&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzliZDY0NmRhMTE2ODk4ODQ3ZGM0YTljZDY1YmNjZGU5YjgyYTIwNjQ5ODE3ZjJiMzU4ZTMzMmFkYzA5ZDA1MDhcXD91c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzIyLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8yMi5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDI0fX19XX0_&Signature=MEUCID5w4LeLitoDFL%7E74LRTIzlp8fLBR8TQeCETV6C6f1eGAiEAgwO861AHhR6XXwcnJuV5-fCIuRZZ%7ERV3gvpgzBWoaIQ_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_38.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/19f64874af4c58d7321d13e0cd42c6ed4d3cc0b852f045664be650518fba512a?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_38.bin%3B+filename%3D%22params_shard_38.bin%22%3B&xip=zzmc1Er8t5Y&user_id=public&Expires=1791064426&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzE5ZjY0ODc0YWY0YzU4ZDczMjFkMTNlMGNkNDJjNmVkNGQzY2MwYjg1MmYwNDU2NjRiZTY1MDUxOGZiYTUxMmFcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8zOC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMzguYmluJTIyJTNCJnhpcD16em1jMUVyOHQ1WSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDI2fX19XX0_&Signature=MEUCIHfhcw7vOT%7EY7WPVDq3eqyeHVW5VbdfdJLCJBve9tM9BAiEA5Br0sU4X8KEdSFJZde3y%7EhssGksmJz2bIJEgqOabzfQ_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_3.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/54b1dacddbe364c379cbc64053c871465d0d2a5db4d378d8af1cf5c5a509979e?response-content-type=application%2Foctet-stream&user_id=public&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_3.bin%3B+filename%3D%22params_shard_3.bin%22%3B&xip=zzmc1Er8t5Y&Expires=1791064430&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzU0YjFkYWNkZGJlMzY0YzM3OWNiYzY0MDUzYzg3MTQ2NWQwZDJhNWRiNGQzNzhkOGFmMWNmNWM1YTUwOTk3OWVcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8zLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zLmJpbiUyMiUzQiZ4aXA9enptYzFFcjh0NVkiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQzMH19fV19&Signature=MEQCIBIomUUJ5F%7E39DUHtDS%7ETv-r19Ut6xUxjjWlZ2H8hgaqAiAkkO5Y6cX9M3ETZJFjgnZO3kq9k6oeCjdKYZuxdZkv6w__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_53.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/0e571ce63683e47bf410a0ef46d7d3f18e601073c8bdd4dbe6b6f1f1e713589f?X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_53.bin%3B+filename%3D%22params_shard_53.bin%22%3B&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&Expires=1791064431&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzBlNTcxY2U2MzY4M2U0N2JmNDEwYTBlZjQ2ZDdkM2YxOGU2MDEwNzNjOGJkZDRkYmU2YjZmMWYxZTcxMzU4OWZcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzUzLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81My5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDMxfX19XX0_&Signature=MEQCICK9LWzByUMZ7aXJXdwBLdX5PxSFGW%7EDg8J6uQ-2FjTXAiA2Ef6BQR6KjFB5zrqzcJuV3dPpedWb3j17op8oOBU9gg__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_23.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_39.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/9f14bf7eb66dc56cdc518de5cb34e8f307f7d49c423ad72482c1b7602673d5d0?response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_23.bin%3B+filename%3D%22params_shard_23.bin%22%3B&Expires=1791064434&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzlmMTRiZjdlYjY2ZGM1NmNkYzUxOGRlNWNiMzRlOGYzMDdmN2Q0OWM0MjNhZDcyNDgyYzFiNzYwMjY3M2Q1ZDBcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPXp6bWMxRXI4dDVZJlgtWGV0LUNhcy1VaWQ9cHVibGljJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjMuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzIzLmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDM0fX19XX0_&Signature=MEUCIBNqgqmKPDxf07%7EBATDu3hS65GcV1lyuOhAHFrt6R3e2AiEA8hNXDXLaJiSXgxjIvJFkDfNz0q3Y4IR1%7EB0qOdzIv%7EE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/744d7e53935f4d8aa8e1e1d05b56b104ff15aa064cddcf03e3d883954351a271?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_39.bin%3B+filename%3D%22params_shard_39.bin%22%3B&user_id=public&Expires=1791064434&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzc0NGQ3ZTUzOTM1ZjRkOGFhOGUxZTFkMDViNTZiMTA0ZmYxNWFhMDY0Y2RkY2YwM2UzZDg4Mzk1NDM1MWEyNzFcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPXp6bWMxRXI4dDVZJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzkuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzM5LmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDM0fX19XX0_&Signature=MEYCIQCbg3LkHBmaJKVDgWdO%7EoJSLLDXcf5JNXVzkIBavGaQdgIhAJMsBriBkL3Iqqdn7D95yHrQgPv7NuWdHTbNTDgKZP19&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_4.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/6466fe120ac018ac526f50f51b318b814bfe3a484cad73af4cbb61533ff83d70?xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_4.bin%3B+filename%3D%22params_shard_4.bin%22%3B&Expires=1791064438&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzY0NjZmZTEyMGFjMDE4YWM1MjZmNTBmNTFiMzE4YjgxNGJmZTNhNDg0Y2FkNzNhZjRjYmI2MTUzM2ZmODNkNzBcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNC5iaW4lMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQzOH19fV19&Signature=MEUCIHyHv9QYGJubPYo-cB3DQ-HiHTNVjSSf7Ngiaih21N4RAiEAp65Z6MkQ2VBqP%7E7X%7EDAvp-f01AQiMl%7EGfOWVbRezeCU_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_54.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/ab058d1e20482f8e657761602a69cedb85f77c3efc5e897b5fd18c3e3d526da4?user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_54.bin%3B+filename%3D%22params_shard_54.bin%22%3B&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&Expires=1791064439&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2FiMDU4ZDFlMjA0ODJmOGU2NTc3NjE2MDJhNjljZWRiODVmNzdjM2VmYzVlODk3YjVmZDE4YzNlM2Q1MjZkYTRcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzU0LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81NC5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDM5fX19XX0_&Signature=MEQCIHWbzrrnFbyj-%7EWwnAvswVKZ9qm%7ECSSNh0U-hceffhrcAiAHOClrYrt0pJmlw6RtzkT7fUbsOrgWqbuEylpCHpGrQA__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_24.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_40.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/03ea70e1809d750392842d6d770974d8d69a100562df4b6e9dc96a2959fec1dc?user_id=public&xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_24.bin%3B+filename%3D%22params_shard_24.bin%22%3B&Expires=1791064441&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzAzZWE3MGUxODA5ZDc1MDM5Mjg0MmQ2ZDc3MDk3NGQ4ZDY5YTEwMDU2MmRmNGI2ZTlkYzk2YTI5NTlmZWMxZGNcXD91c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjQuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzI0LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDQxfX19XX0_&Signature=MEYCIQCIGWUGGXoOy44NTrRrLKdTw%7ElVxYfshwjShfOPSRuMPQIhAItpQBxccQdh02wR5x6A1YbVxnlRG-MgpV2SYOFyc5JN&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/c19a207c442803afbe051f9b9b0163b2059bb02f020c490c4baac83362a76308?X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_40.bin%3B+filename%3D%22params_shard_40.bin%22%3B&xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&Expires=1791064441&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2MxOWEyMDdjNDQyODAzYWZiZTA1MWY5YjliMDE2M2IyMDU5YmIwMmYwMjBjNDkwYzRiYWFjODMzNjJhNzYzMDhcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80MC5iaW4lMjIlM0ImeGlwPXp6bWMxRXI4dDVZJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDQxfX19XX0_&Signature=MEYCIQDuXMwQz%7EDnCHezJvqS%7EhyRdRlDK4MBNMRt1m7vxJV%7EmwIhAKrJzfL-u-c5JEtwLM6yD-kJrwHIoZnU4BfCeH4OMpK0&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_5.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/050b5a725aea2a2ebd3b6edd191677d3eb81712324005c373bb40dd8b0d0a9e8?response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_5.bin%3B+filename%3D%22params_shard_5.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064444&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzA1MGI1YTcyNWFlYTJhMmViZDNiNmVkZDE5MTY3N2QzZWI4MTcxMjMyNDAwNWMzNzNiYjQwZGQ4YjBkMGE5ZThcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81LmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQ0NH19fV19&Signature=MEUCIH32lSkYFCEcNFNBzowOD0X3bjRZ8fD%7E2o50LsK%7Eo%7EuhAiEAoD3L1%7EfISIloDg46lQfcne%7EFv20Ixi0veqnllqaCbf4_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_55.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/c32050e7405903c247d2c119575483474c527d3c9597744bee0080423e03175c?X-Xet-Cas-Uid=public&user_id=public&xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_55.bin%3B+filename%3D%22params_shard_55.bin%22%3B&response-content-type=application%2Foctet-stream&Expires=1791064446&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2MzMjA1MGU3NDA1OTAzYzI0N2QyYzExOTU3NTQ4MzQ3NGM1MjdkM2M5NTk3NzQ0YmVlMDA4MDQyM2UwMzE3NWNcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81NS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNTUuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDQ2fX19XX0_&Signature=MEUCIEJZU3-xquUMHK1FW70OEN-xsvL3Y4lPlA%7EpQGsUIVvEAiEA7E2kpL5edMDj4QkqZyA9iumGTyix5inlYJbTV%7E%7EhmwE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_25.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/e0e6a1bff494a51712f4df6d19269a9444c3f4f5d8d7590685d8a133ff39b316?xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_25.bin%3B+filename%3D%22params_shard_25.bin%22%3B&user_id=public&Expires=1791064448&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2UwZTZhMWJmZjQ5NGE1MTcxMmY0ZGY2ZDE5MjY5YTk0NDRjM2Y0ZjVkOGQ3NTkwNjg1ZDhhMTMzZmYzOWIzMTZcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjUuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzI1LmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDQ4fX19XX0_&Signature=MEYCIQDW2RJNFTu0h624lO8t6EeKmsBOQzqYHvAt0FiJ1Eu4IgIhAPIbKmxdMpETmoLVUWqtzJVXcv8FlUS%7Ek1m6NNBKcqvQ&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_41.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/4da733d1ac239fc47612adc2d2e63c5646d3c66484c07e493b7c6b795d05e9b8?response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_41.bin%3B+filename%3D%22params_shard_41.bin%22%3B&X-Xet-Cas-Uid=public&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064449&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzRkYTczM2QxYWMyMzlmYzQ3NjEyYWRjMmQyZTYzYzU2NDZkM2M2NjQ4NGMwN2U0OTNiN2M2Yjc5NWQwNWU5YjhcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF80MS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNDEuYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDQ5fX19XX0_&Signature=MEUCIQDgbb7lWNT1jAewWQlxEaflE8DP4G3KQdu438SODTPiWQIgHYBLsqMkJ9RgzWHgWQEdin7H-swCHmz-LioG9DyH%7EKY_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_6.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/c272304e827fd167a58bdcd4f19337a3f5e65d0f3755180b0179d1c10d26fd93?response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_6.bin%3B+filename%3D%22params_shard_6.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064451&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2MyNzIzMDRlODI3ZmQxNjdhNThiZGNkNGYxOTMzN2EzZjVlNjVkMGYzNzU1MTgwYjAxNzlkMWMxMGQyNmZkOTNcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF82LmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQ1MX19fV19&Signature=MEYCIQCjKlS3V8GmFAFTkSnvDuk1p7lby6z0pXLrOaO0T8lG4gIhAN5F8kz0tt1SACikQUDvq1Yfe048Hx9bI9eFhrC2neLP&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_56.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/83778a9d2495aa7248e623712a533857a7b3c549e688f52f743274ff5e7863d8?response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_56.bin%3B+filename%3D%22params_shard_56.bin%22%3B&X-Xet-Cas-Uid=public&xip=zzmc1Er8t5Y&Expires=1791064454&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzgzNzc4YTlkMjQ5NWFhNzI0OGU2MjM3MTJhNTMzODU3YTdiM2M1NDllNjg4ZjUyZjc0MzI3NGZmNWU3ODYzZDhcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81Ni5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNTYuYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDU0fX19XX0_&Signature=MEUCIB7k0mtEGePlGmRYy%7EBAel8qSUP4C42FxVMHbaq1T%7EPkAiEAiMKdvEoXb1eTSphtUqdMordQ8-lYTICYXFoDcmgJY40_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_42.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_26.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/80d7983c1940654f8aa1da5d316454b255ac3580877fc399aff1b33cc4507472?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_26.bin%3B+filename%3D%22params_shard_26.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791064457&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzgwZDc5ODNjMTk0MDY1NGY4YWExZGE1ZDMxNjQ1NGIyNTVhYzM1ODA4NzdmYzM5OWFmZjFiMzNjYzQ1MDc0NzJcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzI2LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8yNi5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPXp6bWMxRXI4dDVZJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDU3fX19XX0_&Signature=MEYCIQDfHWJnQBwLX5mouzmktvbWfG-fL4czhYXzHNyFKLU86gIhAOrN2qAyP6wS7CZyvNs8IilamyRAiUuV4VTEsKXcgaPn&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/54593ac1df92b8ccda535118e1800897a42cc464408ffa0060a93e193fcea0fd?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_42.bin%3B+filename%3D%22params_shard_42.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064457&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzU0NTkzYWMxZGY5MmI4Y2NkYTUzNTExOGUxODAwODk3YTQyY2M0NjQ0MDhmZmEwMDYwYTkzZTE5M2ZjZWEwZmRcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQyLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80Mi5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDU3fX19XX0_&Signature=MEQCID1hKHUCgjvVmGJuM1RuXaa9QYSgwgqOnsF6Y%7Eg0D075AiBx5FXYxaoKsBmo5TKlsfRUJRG-qdnlFQiL7keuxMGRlA__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_7.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/d467f89ae02bbf01471c23ec06f89eed422ab3a1130c4e6c1d7953a9790e59c2?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_7.bin%3B+filename%3D%22params_shard_7.bin%22%3B&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&user_id=public&Expires=1791064458&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2Q0NjdmODlhZTAyYmJmMDE0NzFjMjNlYzA2Zjg5ZWVkNDIyYWIzYTExMzBjNGU2YzFkNzk1M2E5NzkwZTU5YzJcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzcuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzcuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ4aXA9enptYzFFcjh0NVkmdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQ1OH19fV19&Signature=MEUCIQC5Y75RTnx0ldIiq2ZaJrpNKWcSz0K7vJpfcoODSgiWswIgN5JlXuQ48IFcvNEsToYBlapMcP-2pOT4uWAJzaOzJbM_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_57.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/ca7707a2a9e058e5b6d1c5167dec52b74a46e937c4d63ce33b22fac2a644a35c?user_id=public&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_57.bin%3B+filename%3D%22params_shard_57.bin%22%3B&Expires=1791064459&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2NhNzcwN2EyYTllMDU4ZTViNmQxYzUxNjdkZWM1MmI3NGE0NmU5MzdjNGQ2M2NlMzNiMjJmYWMyYTY0NGEzNWNcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmeGlwPXp6bWMxRXI4dDVZJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNTcuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzU3LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDU5fX19XX0_&Signature=MEUCIQDrJM5mLNm4vUqmJ3-qAzE8IoOZaJrJwYFm7fKL2jmacgIgHUszNEJVc4P93RPcxMP3Jwpmbscgj0OIxLknqVFWTjc_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_43.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/1f59dd8baddf8b9ca7e50cd7ff2b084cbe2b645d967d7e02426ddcb440a44aca?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_43.bin%3B+filename%3D%22params_shard_43.bin%22%3B&user_id=public&xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&Expires=1791064463&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzFmNTlkZDhiYWRkZjhiOWNhN2U1MGNkN2ZmMmIwODRjYmUyYjY0NWQ5NjdkN2UwMjQyNmRkY2I0NDBhNDRhY2FcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQzLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80My5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPXp6bWMxRXI4dDVZJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDYzfX19XX0_&Signature=MEQCIEHGpw1YUIwcBAlDftPQ8N%7EfGaOFpuPUHrudRExfsNjOAiB3pMbiBDSAipJSL-ZNgIb9OgCiJ9ZIqmUchtqAGqtsFA__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_27.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/53a64c730bdcf17781bfd8bc47ee54ab0eb9b133e59aea5c501759f4bfc25cdb?X-Xet-Cas-Uid=public&xip=zzmc1Er8t5Y&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_27.bin%3B+filename%3D%22params_shard_27.bin%22%3B&response-content-type=application%2Foctet-stream&Expires=1791064463&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzUzYTY0YzczMGJkY2YxNzc4MWJmZDhiYzQ3ZWU1NGFiMGViOWIxMzNlNTlhZWE1YzUwMTc1OWY0YmZjMjVjZGJcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8yNy5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMjcuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDYzfX19XX0_&Signature=MEUCIQC-QTvmze3vR9l3UOucgLb4vf8Z99SETYd7YxUZZmb4lAIgG%7Ex1G9HHzxlPsJkhmyBrTAr1VOD5v1XP3Hp1U1-K7Wg_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_58.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/42f17d71ba7a0e0e589264019ed67b1a0786bb392eb86b2a32ec3edc0e1f4fb9?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_58.bin%3B+filename%3D%22params_shard_58.bin%22%3B&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&user_id=public&Expires=1791064464&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzQyZjE3ZDcxYmE3YTBlMGU1ODkyNjQwMTllZDY3YjFhMDc4NmJiMzkyZWI4NmIyYTMyZWMzZWRjMGUxZjRmYjlcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzU4LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81OC5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDY0fX19XX0_&Signature=MEQCIEs1YXc05aQt%7EEq0xcZe00bynP6JhQMxjUIR04TmddWlAiBw8F9ZWNsAAwWxs16ZgGGDOXJ6uFSnMFvuYZYz7KQ7RQ__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_8.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/b206e4c2fc3dcec8f28d679752bc32a30dfdff76bef8837eeef4909962a4ffbf?xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_8.bin%3B+filename%3D%22params_shard_8.bin%22%3B&user_id=public&Expires=1791064465&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2IyMDZlNGMyZmMzZGNlYzhmMjhkNjc5NzUyYmMzMmEzMGRmZGZmNzZiZWY4ODM3ZWVlZjQ5MDk5NjJhNGZmYmZcXD94aXA9enptYzFFcjh0NVkmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfOC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfOC5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQ2NX19fV19&Signature=MEYCIQDW4Hh3UH8OuTpC%7EdCzBR2%7ElS3YPJOfVER519Gp0-pXVgIhAK9PwAwLlwifbIAGIUbEqZFDYK3-TFLYWlZUz2mE0DH7&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_44.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/f15cb3705f2d46f972fd1115b3e3ab3a08ee11f304577bc01b6422046efaa28a?response-content-type=application%2Foctet-stream&user_id=public&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_44.bin%3B+filename%3D%22params_shard_44.bin%22%3B&Expires=1791064466&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2YxNWNiMzcwNWYyZDQ2Zjk3MmZkMTExNWIzZTNhYjNhMDhlZTExZjMwNDU3N2JjMDFiNjQyMjA0NmVmYWEyOGFcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmeGlwPXp6bWMxRXI4dDVZJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNDQuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzQ0LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDY2fX19XX0_&Signature=MEQCIGfOPAg7VL73S6M4-xx0U2a7wLTTo9tsXF6d8S75g7yVAiBfQJCJASXU32Mlzzdkyblo7lxAtyhs5ue04dhZi1sVkg__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_28.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_59.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/e7ff4285b3d9611852de1d31e166346ef3c14200c098a2110eba6415ed3d0e60?X-Xet-Cas-Uid=public&xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_28.bin%3B+filename%3D%22params_shard_28.bin%22%3B&Expires=1791064469&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2U3ZmY0Mjg1YjNkOTYxMTg1MmRlMWQzMWUxNjYzNDZlZjNjMTQyMDBjMDk4YTIxMTBlYmE2NDE1ZWQzZDBlNjBcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjguYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzI4LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDY5fX19XX0_&Signature=MEUCIE5dpOKYWc5bZKe-OrvON9KneVIOunr3yfDQ30-Dq3ddAiEAp%7EkIoZJUFt4jGTX5Em6i3ue4D3vsjzslifvhv18Gz1A_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/f812f8c4beadaef54d93bf036f63b740afc705d16cf603fd60ebd772d6d14841?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_59.bin%3B+filename%3D%22params_shard_59.bin%22%3B&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791064469&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2Y4MTJmOGM0YmVhZGFlZjU0ZDkzYmYwMzZmNjNiNzQwYWZjNzA1ZDE2Y2Y2MDNmZDYwZWJkNzcyZDZkMTQ4NDFcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzU5LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81OS5iaW4lMjIlM0ImeGlwPXp6bWMxRXI4dDVZJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDY5fX19XX0_&Signature=MEUCIAxfqYIUaUhL9Milrb9vd7aFJefYoALq2SW7O2lLERm8AiEAi5TxJFGwpFOOGhl9sMeqIYO%7E-DlWzPkT3euDd3OaIC0_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_9.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/1d21dc90ec5beb06c68ae6183f0b2a4e4c4e8f3c7e25f001b1a3c358567361ea?user_id=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_9.bin%3B+filename%3D%22params_shard_9.bin%22%3B&X-Xet-Cas-Uid=public&Expires=1791064469&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzFkMjFkYzkwZWM1YmViMDZjNjhhZTYxODNmMGIyYTRlNGM0ZThmM2M3ZTI1ZjAwMWIxYTNjMzU4NTY3MzYxZWFcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPXp6bWMxRXI4dDVZJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfOS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfOS5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTA2NDQ2OX19fV19&Signature=MEYCIQCkNhozOZ4mhvT7szmpc060eYLZQKTCl26zidPr9DWUQgIhAPSXEREEy6WVHUg%7EV5LcstHn24-EcRMAsXGD0wmnl6fW&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_29.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_60.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/481a283f9ac4678bb65e483c1ad4f075f73faf7fe3acdb7156c182c321fd16ad?X-Xet-Cas-Uid=public&user_id=public&xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_29.bin%3B+filename%3D%22params_shard_29.bin%22%3B&Expires=1791064474&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzQ4MWEyODNmOWFjNDY3OGJiNjVlNDgzYzFhZDRmMDc1ZjczZmFmN2ZlM2FjZGI3MTU2YzE4MmMzMjFmZDE2YWRcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjkuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzI5LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDc0fX19XX0_&Signature=MEUCIQDpy6YXg43uLwyLb7Ro4zyJamT4c18IF44uYLbyi688uAIgY0rYGKCmLu89ITC7SGizdtAVBft3%7E0MGIndOjjtR6hQ_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/aac178471c0bae9dd0df23d8b878c5bf72d951c7a3bdb5416dea46a6f1c0263f?xip=zzmc1Er8t5Y&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_60.bin%3B+filename%3D%22params_shard_60.bin%22%3B&user_id=public&Expires=1791064474&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2FhYzE3ODQ3MWMwYmFlOWRkMGRmMjNkOGI4NzhjNWJmNzJkOTUxYzdhM2JkYjU0MTZkZWE0NmE2ZjFjMDI2M2ZcXD94aXA9enptYzFFcjh0NVkmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNjAuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzYwLmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDc0fX19XX0_&Signature=MEYCIQDqlaJ%7Er7CLyqF9V-qAegdXJEAGLi1sC2pssxqd-PRzDQIhAK1QblM6kBByb7x7wPaKs3YThsVaP8d6qhKfYKfq-iWb&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_10.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/ceff4195019c4a1d27a170ad970f815fb4066015c1d4c088e8762d657d9735ae?user_id=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_10.bin%3B+filename%3D%22params_shard_10.bin%22%3B&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&Expires=1791064476&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2NlZmY0MTk1MDE5YzRhMWQyN2ExNzBhZDk3MGY4MTVmYjQwNjYwMTVjMWQ0YzA4OGU4NzYyZDY1N2Q5NzM1YWVcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xMC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTAuYmluJTIyJTNCJnhpcD16em1jMUVyOHQ1WSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDc2fX19XX0_&Signature=MEYCIQDpOeuERRF%7EPauDptgeg4r9dIK6VSmnNREYz%7EOFLDIwZgIhAKWmTOtQ6M5RJL0EJvQZ5HqKbtuAWIAqZ%7ELOgvwEgeO4&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_61.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/b2ba210d99303cdb83db2fee70cf7a1d1ded2788c3a14d2e28aab91e7b6a707a?user_id=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_61.bin%3B+filename%3D%22params_shard_61.bin%22%3B&X-Xet-Cas-Uid=public&Expires=1791064479&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2IyYmEyMTBkOTkzMDNjZGI4M2RiMmZlZTcwY2Y3YTFkMWRlZDI3ODhjM2ExNGQyZTI4YWFiOTFlN2I2YTcwN2FcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPXp6bWMxRXI4dDVZJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNjEuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzYxLmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDc5fX19XX0_&Signature=MEUCICttWam%7EjNeeknraNelJ4IXbajn2jnx1b6rGPYOCQh0oAiEAgtAH1keT-gtr6faeEO0qlp-e6esWlnoLa8H-edrw8sA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_11.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/18b5357c22206ba182a1db51caabf452bc37a9fa7200893fa8d17f512721778c?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_11.bin%3B+filename%3D%22params_shard_11.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=zzmc1Er8t5Y&Expires=1791064481&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzE4YjUzNTdjMjIyMDZiYTE4MmExZGI1MWNhYWJmNDUyYmMzN2E5ZmE3MjAwODkzZmE4ZDE3ZjUxMjcyMTc3OGNcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzExLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xMS5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDgxfX19XX0_&Signature=MEUCIA1eOKU9mP2%7EtSPF8tR4ntQUSwgtPbe6OzMM3uW0NONBAiEA6BxvBsSlTimRN-2cAMnRKRT055CPRAEip5LcT0BdLM4_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_62.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/1e00c60fcaa627a21a7400dc3f69471f280a8447a57f9a5a91519caada2ce51b?user_id=public&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_62.bin%3B+filename%3D%22params_shard_62.bin%22%3B&response-content-type=application%2Foctet-stream&Expires=1791064483&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzFlMDBjNjBmY2FhNjI3YTIxYTc0MDBkYzNmNjk0NzFmMjgwYTg0NDdhNTdmOWE1YTkxNTE5Y2FhZGEyY2U1MWJcXD91c2VyX2lkPXB1YmxpYyZ4aXA9enptYzFFcjh0NVkmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82Mi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNjIuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDgzfX19XX0_&Signature=MEUCIAGoFO7BNmFQ9w%7EwZqATbNVsmG1ToyFlPGQfiFTrUppqAiEA4mpKrjpvMwYNkkaG5cADZEHCW-s3e2m13fqAVlmkaa0_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_12.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/64cc535ce132148a8abf32628e4a0d4ca21ce3827be2bf9756ef5847ef1efac0?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_12.bin%3B+filename%3D%22params_shard_12.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&Expires=1791064486&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzY0Y2M1MzVjZTEzMjE0OGE4YWJmMzI2MjhlNGEwZDRjYTIxY2UzODI3YmUyYmY5NzU2ZWY1ODQ3ZWYxZWZhYzBcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzEyLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xMi5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD16em1jMUVyOHQ1WSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDg2fX19XX0_&Signature=MEYCIQDCAC-iJkd0xm0jQTmLcQWkMFZsr%7EtcHgFC8%7EGX%7EOx%7ERAIhAM8gD67pufLN8tUOZTK9D-vvIkN-VydgSa3TfedZaLqs&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_13.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/4ed4c099c70a57ef5796a8a3bb1c464e8a761d4a0fb578e772340041d947aebf?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_13.bin%3B+filename%3D%22params_shard_13.bin%22%3B&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&xip=zzmc1Er8t5Y&user_id=public&Expires=1791064489&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjLzRlZDRjMDk5YzcwYTU3ZWY1Nzk2YThhM2JiMWM0NjRlOGE3NjFkNGEwZmI1NzhlNzcyMzQwMDQxZDk0N2FlYmZcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzEzLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xMy5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnhpcD16em1jMUVyOHQ1WSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDg5fX19XX0_&Signature=MEUCIH5S5zTbMbTpAYQ3Y5HX9181hRYqWNmbcyfi8%7EiHHxwtAiEA%7EUrNdX5w3l4cRkVveIHwzzg-On-HWWC3Q5dhhdfFsWQ_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC/resolve/main/params_shard_14.bin",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/69e91c88c2663cf856fa05ec/cc00053ec6836a3878b248f237cd73f1842aa52e90a5b721a5b2caf34f10954d?user_id=public&response-content-type=application%2Foctet-stream&xip=zzmc1Er8t5Y&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_14.bin%3B+filename%3D%22params_shard_14.bin%22%3B&Expires=1791064494&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjllOTFjODhjMjY2M2NmODU2ZmEwNWVjL2NjMDAwNTNlYzY4MzZhMzg3OGIyNDhmMjM3Y2Q3M2YxODQyYWE1MmU5MGE1YjcyMWE1YjJjYWYzNGYxMDk1NGRcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPXp6bWMxRXI4dDVZJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMTQuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzE0LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMDY0NDk0fX19XX0_&Signature=MEQCIGLQjYR2Epx-dWuDkcELYW1U89GLYTUftemKcgdKqGpxAiAfZxtgRvUg6eA8WcNiL0gKZn09G-wHvPiZwYPL9sFhMQ__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET",
+      "bodyBytes": 0
+    }
+  ],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 0
+  },
+  "engine": "WebGPU · Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC",
+  "templateOverrides": [
+    {
+      "kind": "reload",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "chatCompletionNonStreaming",
+      "after": [
+        {
+          "conv_config": {
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]"
+          }
+        }
+      ]
+    }
+  ],
+  "bundleBytesUnchanged": true
+}

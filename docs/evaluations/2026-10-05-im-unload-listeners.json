@@ -1,0 +1,73 @@
+{
+  "scope": "Actual browser navigation, blank native Word editor, no model inference; inspect natural BFCache admission",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "9495c0a7-4ff4-4eb0-b8e6-d2359158e04c",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        }
+      ],
+      "draft": "",
+      "handles": 1,
+      "entries": 0,
+      "notRestoredReasons": {
+        "src": null,
+        "id": null,
+        "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=b91566bb-239f-4203-b838-dafaa11a5e70",
+        "name": null,
+        "reasons": [
+          {
+            "reason": "masked"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [
+    {
+      "loaderId": "5178F5693A0867F04F4E63926FBDD759",
+      "frameId": "66B73DF813C8064BB92AAA2234372D5C",
+      "notRestoredExplanations": [
+        {
+          "type": "Circumstantial",
+          "reason": "BrowsingInstanceNotSwapped"
+        },
+        {
+          "type": "PageSupportNeeded",
+          "reason": "UnloadHandlerExistsInSubFrame"
+        }
+      ],
+      "notRestoredExplanationsTree": {
+        "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=b91566bb-239f-4203-b838-dafaa11a5e70",
+        "explanations": [
+          {
+            "type": "Circumstantial",
+            "reason": "BrowsingInstanceNotSwapped"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "token": "2bc385fd-81cb-4ab3-b8fb-9a3c980bc71a",
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=b91566bb-239f-4203-b838-dafaa11a5e70",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+      "registered": [],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),n=Array(i),o=0;o<i;o++)n[o]=arguments[o+e];switch(e){case 0:return t.call(this,n);case 1:return t.call(this,arguments[0],n);case 2:return t.call(this,arguments[0],arguments[1],n)}var s=Array(e+1);for(o=0;o<e;o++)s[o]=arguments[o];return s[e]=n,t.apply(this,s)}"
+    }
+  ],
+  "cached": false,
+  "contextClosed": true
+}

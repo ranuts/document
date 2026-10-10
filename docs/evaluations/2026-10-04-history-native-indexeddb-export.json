@@ -1,0 +1,77 @@
+{
+  "status": "completed",
+  "probeSHA256": "536b5e51f35a3fe6439338dddd337f19e88a50d7e52eb56dffaea1e9b225f9af",
+  "errors": [],
+  "scope": "Actual Chromium IndexedDB, reload restoration and native JSON download in isolated source harness; no model/editor integration or OS persistence certification.",
+  "sourceHashes": {
+    "lib/agent-plugin/ui/sessions.ts": "22bb810133fd9e1bb239a1478b834e8cd8dcbd659e5d19f7d7412c2c68be836d",
+    "lib/agent-plugin/ui/conversation-db.ts": "94cc763ca2360588f5ca419f8f1b82f55585467e53e23e7cd134b16b8b9a93d3",
+    "lib/agent-plugin/ui/history-controls.ts": "4bf0c561750b2c7c9489839b2fee56ad21ee0a13f5157477a654b0a89189261e"
+  },
+  "initial": {
+    "saving": false,
+    "history": []
+  },
+  "beforeReload": {
+    "id": "59c7059e-b6ea-4411-8143-7f6ef563690f",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "restored": {
+    "saving": true,
+    "id": "59c7059e-b6ea-4411-8143-7f6ef563690f",
+    "messages": [
+      {
+        "role": "user",
+        "content": "中文🧾\n640 EUR\nLiteral \\n"
+      },
+      {
+        "role": "assistant",
+        "content": "**原文** <script>data</script>"
+      }
+    ]
+  },
+  "downloadName": "conversations-2026-10-04.json",
+  "downloadError": null,
+  "export": {
+    "version": 1,
+    "activeId": "59c7059e-b6ea-4411-8143-7f6ef563690f",
+    "sessions": [
+      {
+        "id": "59c7059e-b6ea-4411-8143-7f6ef563690f",
+        "title": "中文🧾 640 EUR Literal \\n",
+        "createdAt": 1791078520856,
+        "updatedAt": 1791078520877,
+        "messages": [
+          {
+            "role": "user",
+            "content": "中文🧾\n640 EUR\nLiteral \\n"
+          },
+          {
+            "role": "assistant",
+            "content": "**原文** <script>data</script>"
+          }
+        ]
+      }
+    ],
+    "exportedAt": "2026-10-04T01:48:41.003Z"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": "中文🧾\n640 EUR\nLiteral \\n"
+    },
+    {
+      "role": "assistant",
+      "content": "**原文** <script>data</script>"
+    }
+  ]
+}

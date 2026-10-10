@@ -1,0 +1,24 @@
+{
+  "nativeBlobDownload": true,
+  "scope": "Isolated bare SW positive control, no product/cache/editor workflow",
+  "browserVersion": "151.0.7922.34",
+  "probeSha256": "d8ff19a03ac81b8eb85e247b7c10df842af4589420864ab307aee4836d98320a",
+  "initial": {
+    "version": "old"
+  },
+  "download": {
+    "failure": null,
+    "text": "SW_BLOB_CONTROL"
+  },
+  "waiting": {
+    "version": "new"
+  },
+  "delivery": {
+    "received": true,
+    "version": "new"
+  },
+  "final": {
+    "version": "new"
+  },
+  "passed": true
+}

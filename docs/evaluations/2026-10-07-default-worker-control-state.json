@@ -1,0 +1,89 @@
+{
+  "requests": [
+    {
+      "url": "http://127.0.0.1:5193/",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "serviceWorker": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-192.png",
+      "serviceWorker": false
+    }
+  ],
+  "workers": [],
+  "homeFromServiceWorker": true,
+  "state": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "registrations": [
+      {
+        "scope": "http://127.0.0.1:5193/",
+        "active": "http://127.0.0.1:5193/sw.js?isolation=1"
+      }
+    ],
+    "isolated": true
+  },
+  "closed": true
+}

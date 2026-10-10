@@ -1,0 +1,1701 @@
+{
+  "scope": "Diagnostic intervention: autosave preference disabled, not default-product acceptance; unsaved document cancellation and accepted departure, populated content across real cached returns; repaired Excel SDK formula pagehide lifecycle; actual browser navigation, native Excel/PPT, no model inference, actual BFCache return then closed-grammar IM edit, Undo/Redo/Save/reopen",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "7b30ff0c-72f3-49b6-9889-66bf7d58c67e",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+          "guard": true
+        }
+      ],
+      "documentText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]"
+    },
+    {
+      "token": "7b30ff0c-72f3-49b6-9889-66bf7d58c67e",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+          "guard": true
+        }
+      ],
+      "documentText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]"
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [],
+  "network": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN",
+      "method": "GET",
+      "start": 1791144888126,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888171
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791144888171,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888175
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "length": "910",
+      "end": 1791144888177
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888179
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-HxjL4WEf.js",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888185
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "length": "158",
+      "end": 1791144888178
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888183
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "length": "158",
+      "end": 1791144888180
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-BE57lPsU.js",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888186
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "length": "417",
+      "end": 1791144888181
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET",
+      "start": 1791144888176,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888180
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-0mx7LXHZ.js",
+      "method": "GET",
+      "start": 1791144888194,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144888215
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-BYeDEoGf.js",
+      "method": "GET",
+      "start": 1791144888194,
+      "phase": "initial",
+      "status": 200,
+      "length": "37",
+      "end": 1791144888200
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144888213,
+      "phase": "initial",
+      "status": 200,
+      "length": "697",
+      "end": 1791144888213
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791144888233,
+      "phase": "initial",
+      "status": 200,
+      "length": "69652",
+      "end": 1791144888239
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "start": 1791144889202,
+      "phase": "initial",
+      "status": 200,
+      "length": "663",
+      "end": 1791144889206
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "start": 1791144889207,
+      "phase": "initial",
+      "status": 200,
+      "length": "663",
+      "end": 1791144889210
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144889220,
+      "phase": "initial",
+      "status": 200,
+      "length": "697",
+      "end": 1791144889221
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "start": 1791144903203,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903209
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+      "method": "GET",
+      "start": 1791144903373,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903428
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/cell/css/main.css",
+      "method": "GET",
+      "start": 1791144903428,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903428
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "start": 1791144903428,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903467
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/css/app.css",
+      "method": "GET",
+      "start": 1791144903467,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903467
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js",
+      "method": "GET",
+      "start": 1791144903467,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903489
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144903468,
+      "phase": "initial",
+      "status": 200,
+      "length": "697",
+      "end": 1791144903470
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/zh.json",
+      "method": "GET",
+      "start": 1791144903512,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903518
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "start": 1791144903523,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903528
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "start": 1791144903523,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903528
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "start": 1791144903523,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903526
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "start": 1791144903523,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903526
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js",
+      "method": "GET",
+      "start": 1791144903530,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903565
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "start": 1791144903605,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903605
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "start": 1791144903682,
+      "phase": "initial",
+      "status": 200,
+      "length": "33071",
+      "end": 1791144903682
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/cell/sdk-all.js",
+      "method": "GET",
+      "start": 1791144903682,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903931
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "start": 1791144903682,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903684
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "start": 1791144903682,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903686
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "start": 1791144903688,
+      "phase": "initial",
+      "status": 200,
+      "length": "3614021",
+      "end": 1791144903781
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "start": 1791144903762,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903780
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/formula-lang/zh.json",
+      "method": "GET",
+      "start": 1791144903763,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144903774
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "start": 1791144903763,
+      "phase": "initial",
+      "status": 200,
+      "length": "15174",
+      "end": 1791144903766
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET",
+      "start": 1791144903777,
+      "phase": "initial",
+      "status": 200,
+      "length": "510644",
+      "end": 1791144903780
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "length": "153",
+      "end": 1791144904032
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "length": "227999",
+      "end": 1791144904038
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/112",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904040
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904282
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET",
+      "start": 1791144904029,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904274
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "193",
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "313",
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "107",
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "99",
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "115",
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "111",
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "257",
+      "end": 1791144904033
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "165",
+      "end": 1791144904034
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "316",
+      "end": 1791144904034
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "start": 1791144904032,
+      "phase": "initial",
+      "status": 200,
+      "length": "323",
+      "end": 1791144904034
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "start": 1791144904467,
+      "phase": "initial",
+      "status": 200,
+      "length": "326",
+      "end": 1791144904475
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "start": 1791144904467,
+      "phase": "initial",
+      "status": 200,
+      "length": "672",
+      "end": 1791144904475
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET",
+      "start": 1791144904467,
+      "phase": "initial",
+      "status": 200,
+      "length": "22",
+      "end": 1791144904475
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/code.js",
+      "method": "GET",
+      "start": 1791144904473,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904497
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET",
+      "start": 1791144904536,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904539
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET",
+      "start": 1791144904537,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904539
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET",
+      "start": 1791144904537,
+      "phase": "initial",
+      "status": 200,
+      "length": "128",
+      "end": 1791144904539
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET",
+      "start": 1791144904537,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904539
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/formula-lang/zh_desc.json",
+      "method": "GET",
+      "start": 1791144904537,
+      "phase": "initial",
+      "status": 200,
+      "end": 1791144904542
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET",
+      "start": 1791144904537,
+      "phase": "initial",
+      "status": 200,
+      "length": "15",
+      "end": 1791144904539
+    },
+    {
+      "url": "http://127.0.0.1:5193/?bfc-probe=1",
+      "method": "GET",
+      "start": 1791144905312,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905330
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905329
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "length": "910",
+      "end": 1791144905324
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905324
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905328
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905351
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905352
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905356
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905357
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905356
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905356
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905356
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905356
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET",
+      "start": 1791144905324,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905358
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791144905350,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905351
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "start": 1791144905350,
+      "phase": "leave",
+      "status": 200,
+      "length": "71368",
+      "end": 1791144905356
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144905434,
+      "phase": "leave"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144905459,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144905459
+    },
+    {
+      "url": "http://127.0.0.1:5193/?bfc-probe=1",
+      "method": "GET",
+      "start": 1791144905560,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144905575
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905575
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905574
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905575
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905575
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905579
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905591
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905592
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905592
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905593
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905593
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905593
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905593
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET",
+      "start": 1791144905574,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144905593
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791144905590,
+      "phase": "leave",
+      "status": 200,
+      "length": "69652",
+      "end": 1791144905591
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "start": 1791144905591,
+      "phase": "leave",
+      "status": 200,
+      "length": "71368",
+      "end": 1791144905591
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144905634,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144905670
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144905694,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144905694
+    },
+    {
+      "url": "http://127.0.0.1:5193/",
+      "method": "GET",
+      "start": 1791144906138,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144906156
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791144906153,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906155
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791144906153,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906154
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906154
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906154
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906156
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906157
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906167
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906167
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906168
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906168
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906168
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906168
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET",
+      "start": 1791144906154,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906168
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791144906159,
+      "phase": "leave",
+      "status": 200,
+      "length": "69652",
+      "end": 1791144906160
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "start": 1791144906160,
+      "phase": "leave",
+      "status": 200,
+      "length": "71368",
+      "end": 1791144906160
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144906172,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144906173
+    },
+    {
+      "url": "http://127.0.0.1:5193/editor?open=local",
+      "method": "GET",
+      "start": 1791144906206,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144906256
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "start": 1791144906255,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906257
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "start": 1791144906257,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906258
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "start": 1791144906257,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144906258
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-HxjL4WEf.js",
+      "method": "GET",
+      "start": 1791144906257,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144906262
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "start": 1791144906257,
+      "phase": "leave",
+      "status": 200,
+      "length": "158",
+      "end": 1791144906260
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "start": 1791144906257,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144906261
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "start": 1791144906257,
+      "phase": "leave",
+      "status": 200,
+      "length": "158",
+      "end": 1791144906260
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-BE57lPsU.js",
+      "method": "GET",
+      "start": 1791144906257,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144906263
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "start": 1791144906258,
+      "phase": "leave",
+      "status": 200,
+      "length": "417",
+      "end": 1791144906260
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET",
+      "start": 1791144906258,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144906260
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "start": 1791144906261,
+      "phase": "leave",
+      "status": 200,
+      "length": "69652",
+      "end": 1791144906261
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "start": 1791144906261,
+      "phase": "leave",
+      "status": 200,
+      "length": "71368",
+      "end": 1791144906261
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/pending-open-BKBmFD6R.js",
+      "method": "GET",
+      "start": 1791144906266,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144906268
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144906268,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144906307
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144906308,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144906310
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "start": 1791144907268,
+      "phase": "leave",
+      "status": 200,
+      "length": "663",
+      "end": 1791144907274
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "start": 1791144907275,
+      "phase": "leave",
+      "status": 200,
+      "length": "663",
+      "end": 1791144907277
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144907283,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144907284
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "start": 1791144921308,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921313
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+      "method": "GET",
+      "start": 1791144921473,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921528
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/cell/css/main.css",
+      "method": "GET",
+      "start": 1791144921528,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921529
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "start": 1791144921528,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144921566
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/css/app.css",
+      "method": "GET",
+      "start": 1791144921567,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921567
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js",
+      "method": "GET",
+      "start": 1791144921567,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921588
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "start": 1791144921568,
+      "phase": "leave",
+      "status": 200,
+      "length": "697",
+      "end": 1791144921570
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/en.json",
+      "method": "GET",
+      "start": 1791144921592,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921598
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "start": 1791144921601,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921603
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "start": 1791144921601,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921607
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "start": 1791144921601,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921607
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "start": 1791144921601,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921608
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js",
+      "method": "GET",
+      "start": 1791144921608,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921629
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "start": 1791144921651,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921651
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "start": 1791144921685,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144921685
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/cell/sdk-all.js",
+      "method": "GET",
+      "start": 1791144921685,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921834
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "start": 1791144921685,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921686
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "start": 1791144921685,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921686
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "start": 1791144921688,
+      "phase": "leave",
+      "status": 200,
+      "length": "3614021",
+      "end": 1791144921754
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "start": 1791144921742,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144921758
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "start": 1791144921742,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144921744
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/73b4594a-fef7-47b0-9cae-f5922ab656a2",
+      "method": "GET",
+      "start": 1791144921744,
+      "phase": "leave",
+      "status": 200,
+      "length": "8033",
+      "end": 1791144921751
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET",
+      "start": 1791144921754,
+      "phase": "leave",
+      "status": 200,
+      "length": "510644",
+      "end": 1791144921758
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "start": 1791144922121,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922124
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.worker.js",
+      "method": "GET",
+      "start": 1791144922125,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922129
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "start": 1791144922128,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922129
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.js",
+      "method": "GET",
+      "start": 1791144922130,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922136
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "method": "GET",
+      "start": 1791144922136,
+      "phase": "leave",
+      "status": 200,
+      "length": "6898179",
+      "end": 1791144922233
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 304,
+      "end": 1791144922290
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail.png.bin",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 200,
+      "length": "230701",
+      "end": 1791144922298
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922292
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922299
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922298
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922299
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/112",
+      "method": "GET",
+      "start": 1791144922290,
+      "phase": "leave",
+      "status": 200,
+      "end": 1791144922300
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "start": 1791144922462,
+      "phase": "leave",
+      "status": 200,
+      "length": "326",
+      "end": 1791144922468
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "start": 1791144922462,
+      "phase": "leave",
+      "status": 200,
+      "length": "672",
+      "end": 1791144922468
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET",
+      "start": 1791144922462,
+      "phase": "leave",
+      "status": 200,
+      "length": "22",
+      "end": 1791144922468
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/code.js",
+      "method": "GET",
+      "start": 1791144922467,
+      "phase": "leave"
+    }
+  ],
+  "networkPhase": "leave",
+  "token": "7b30ff0c-72f3-49b6-9889-66bf7d58c67e",
+  "beforeText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "editText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "dialogs": [
+    {
+      "type": "beforeunload",
+      "phase": "cancel"
+    },
+    {
+      "type": "beforeunload",
+      "phase": "leave"
+    },
+    {
+      "type": "beforeunload",
+      "phase": "leave"
+    }
+  ],
+  "cancelNavigationError": "Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:5193/?bfc-probe=cancel\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/?bfc-probe=cancel\", waiting until \"load\"\u001b[22m\n",
+  "cancelState": {
+    "token": "7b30ff0c-72f3-49b6-9889-66bf7d58c67e",
+    "text": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+    "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=dd6720cb-99b4-4650-ac0e-042f4555c168"
+  },
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=dd6720cb-99b4-4650-ac0e-042f4555c168",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+      "registered": [],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),o=Array(i),n=0;n<i;n++)o[n]=arguments[n+e];switch(e){case 0:return t.call(this,o);case 1:return t.call(this,arguments[0],o);case 2:return t.call(this,arguments[0],arguments[1],o)}var s=Array(e+1);for(n=0;n<e;n++)s[n]=arguments[n];return s[e]=o,t.apply(this,s)}"
+    }
+  ],
+  "cached": true,
+  "previews": 0,
+  "chatErrors": [],
+  "undoText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "redoText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "saved": {
+    "path": ".scratch/bfc-unsaved-20261005.xlsx",
+    "bytes": 8033,
+    "sha256": "d4a4f43384e2bd97e1354cec93f86d6e28795dce01a09d0a01323580f45cdf6b",
+    "failure": null
+  },
+  "savedNavigationPrompt": false,
+  "reopenedText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "nativeDocumentPassed": true,
+  "contextClosed": true
+}

@@ -1,0 +1,180 @@
+{
+  "version": "explicit task instruction, exact numeric/date/name preservation, unchanged summary rejection",
+  "context": "default Chrome browser context, warm cache, sequential engines",
+  "results": [
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "rewrite",
+        "text": "We will process your request as soon as possible.",
+        "instruction": "Make it more polite and concise."
+      },
+      "error": "Error: No rewrite was proposed",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"We will process your request as soon as possible.\"}",
+      "ms": 2570.4000000953674
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "summarize",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two. The team will wait for approval before starting."
+      },
+      "output": "Budget: 1250 EUR. Due: 2026-10-08. Phase two approval pending. Team will wait for approval before starting.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Budget: 1250 EUR. Due: 2026-10-08. Phase two approval pending. Team will wait for approval before starting.\"}",
+      "ms": 3525.0999999046326
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "zh-CN"
+      },
+      "output": "预算：1250欧元。截止日期：2026-10-08。Alex尚未批准第二阶段。",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"预算：1250欧元。截止日期：2026-10-08。Alex尚未批准第二阶段。\"}",
+      "ms": 2990.9000000953674
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "ja"
+      },
+      "error": "Error: Writing changed or omitted source numbers; review the request",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"予算: 1250 EUR。期限: 2026-10-08。アレックスがフェーズ2を承認していない。\"}",
+      "ms": 3274.5
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "ko"
+      },
+      "output": "예산: 1250 EUR. 납부일: 2026-10-08. 알렉스가 두 번째 단계를 승인하지 않았습니다.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"예산: 1250 EUR. 납부일: 2026-10-08. 알렉스가 두 번째 단계를 승인하지 않았습니다.\"}",
+      "ms": 3568.5
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "de"
+      },
+      "output": "Budget: 1250 EUR. Due: 2026-10-08. Alex hat Phase zwei nicht genehmigt.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Budget: 1250 EUR. Due: 2026-10-08. Alex hat Phase zwei nicht genehmigt.\"}",
+      "ms": 3121.199999809265
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "es"
+      },
+      "output": "Presupuesto: 1250 EUR. Vencimiento: 2026-10-08. Alex no ha aprobado la fase dos.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Presupuesto: 1250 EUR. Vencimiento: 2026-10-08. Alex no ha aprobado la fase dos.\"}",
+      "ms": 3312.0999999046326
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "pt"
+      },
+      "output": "Orçamento: 1250 EUR. Vencimento: 2026-10-08. Alex não aprovou a fase dois.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Orçamento: 1250 EUR. Vencimento: 2026-10-08. Alex não aprovou a fase dois.\"}",
+      "ms": 3294.5
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "rewrite",
+        "text": "We will process your request as soon as possible.",
+        "instruction": "Make it more polite and concise."
+      },
+      "error": "Error: No rewrite was proposed",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"We will process your request as soon as possible.\"}",
+      "ms": 1186.1000003814697
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "summarize",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two. The team will wait for approval before starting."
+      },
+      "error": "Error: No summary was proposed",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two. The team will wait for approval before starting.\"}",
+      "ms": 1646.8999996185303
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "zh-CN"
+      },
+      "error": "Error: Writing changed or omitted source numbers; review the request",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"预算：1250欧元。截止日期：2026年10月8日。亚历克斯未批准第二阶段。\"}",
+      "ms": 1387.3000001907349
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "ja"
+      },
+      "error": "Error: Writing changed or omitted source numbers; review the request",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"予算：1250 EUR。期限：2026年10月8日。アレックスがフェーズ2を承認していません。\"}",
+      "ms": 1492.5
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "ko"
+      },
+      "output": "예산: 1250 EUR. 마감: 2026-10-08. 암스는 두 번째 단계를 승인하지 않았습니다.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"예산: 1250 EUR. 마감: 2026-10-08. 암스는 두 번째 단계를 승인하지 않았습니다.\"}",
+      "ms": 1653.3000001907349
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "de"
+      },
+      "output": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.\"}",
+      "ms": 1381.6999998092651
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "es"
+      },
+      "output": "Presupuesto: 1250 EUR. Vencimiento: 2026-10-08. Alex no ha aprobado la fase dos.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Presupuesto: 1250 EUR. Vencimiento: 2026-10-08. Alex no ha aprobado la fase dos.\"}",
+      "ms": 1544
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "request": {
+        "task": "translate",
+        "text": "Budget: 1250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+        "targetLanguage": "pt"
+      },
+      "output": "Orçamento: 1250 EUR. Ainda a ser entregue: 2026-10-08. Alex não aprovou o fase dois.",
+      "raw": "<think>\n\n</think>\n\n{\"text\":\"Orçamento: 1250 EUR. Ainda a ser entregue: 2026-10-08. Alex não aprovou o fase dois.\"}",
+      "ms": 1625.3000001907349
+    }
+  ]
+}

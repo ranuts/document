@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-02T13:02:36.073Z",
+  "scope": "Same-page CPU native RuntimeError recovery in isolated Playwright WebKit desktop context. Temporary fixture-only JSON Schema date pattern triggered the observed error; instrumentation removed afterward. Model cache retained. PWA installation prompt removed only from the isolated test page to permit real settings/load clicks. No page refresh during recovery.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 150203,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [
+    {
+      "phase": "dispatch",
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "pattern": "^.*2026-10-08.*$"
+          }
+        }
+      }
+    },
+    {
+      "phase": "provider-error",
+      "name": "RuntimeError",
+      "message": "Length out of range of buffer",
+      "ready": false
+    }
+  ],
+  "afterFailure": {
+    "note": "Load model",
+    "engine": ""
+  },
+  "reloadMs": 2268,
+  "recovery": {
+    "reply": "Only hello.",
+    "elapsedMs": 14308,
+    "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+    "documentText": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n"
+  },
+  "errors": [],
+  "limitations": [
+    "Single desktop WebKit sample; not physical Safari/iOS or broad model reliability evidence.",
+    "Reply was Only hello., so exact instruction-following is not demonstrated.",
+    "No native buffer root cause established; temporary date pattern is not shipped."
+  ]
+}

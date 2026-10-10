@@ -1,0 +1,94 @@
+[
+  {
+    "engine": "chromium",
+    "locale": "zh-CN",
+    "version": "151.0.7922.34",
+    "errors": [],
+    "before": "\r\n",
+    "lastKeys": [
+      {
+        "key": "Enter",
+        "code": 13,
+        "composing": false,
+        "target": "cui-input"
+      }
+    ],
+    "missingAnswer": "请先生成一条完整回答，再写入文档。\n恢复请求",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "请取消选区后对齐当前段落，或明确要求对齐选区。\n恢复请求",
+    "actions": [],
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "chromium",
+    "locale": "en",
+    "version": "151.0.7922.34",
+    "errors": [],
+    "before": "\r\n",
+    "lastKeys": [
+      {
+        "key": "Enter",
+        "code": 13,
+        "composing": false,
+        "target": "cui-input"
+      }
+    ],
+    "missingAnswer": "Generate a complete answer before writing it to the document.\nRestore request",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "Clear the selection to align the current paragraph, or ask to align the selection.\nRestore request",
+    "actions": [],
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "webkit",
+    "locale": "zh-CN",
+    "version": "26.5",
+    "errors": [],
+    "before": "\r\n",
+    "lastKeys": [
+      {
+        "key": "Enter",
+        "code": 13,
+        "composing": false,
+        "target": "cui-input"
+      }
+    ],
+    "missingAnswer": "请先生成一条完整回答，再写入文档。\n恢复请求",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "请取消选区后对齐当前段落，或明确要求对齐选区。\n恢复请求",
+    "actions": [],
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  },
+  {
+    "engine": "webkit",
+    "locale": "en",
+    "version": "26.5",
+    "errors": [],
+    "before": "\r\n",
+    "lastKeys": [
+      {
+        "key": "Enter",
+        "code": 13,
+        "composing": false,
+        "target": "cui-input"
+      }
+    ],
+    "missingAnswer": "Generate a complete answer before writing it to the document.\nRestore request",
+    "selected": "GUIDANCE_SELECTION\r\n",
+    "beforeAlignment": "GUIDANCE_SELECTION\r\n",
+    "conflict": "Clear the selection to align the current paragraph, or ask to align the selection.\nRestore request",
+    "actions": [],
+    "pass": true,
+    "contextClosed": true,
+    "browserClosed": true
+  }
+]

@@ -1,0 +1,7 @@
+# Base and subgroup compilation reproduce the same known date failure
+
+Both actual Apple Metal Worker runs completed with process exit0 and closed contexts. The pinned base and sg32 WASM files passed size/SHA256 checks before initialization, and each was observed served through its exact pinned library URL. Both date23 results were correct; both date22 results were the identical unrelated address “204 Walsh Avenue, Dublin, Ireland”. Original request messages/schema/sampling and model records match except the compiled library URL.
+
+This rejects switching to the upstream sg32 library as a sufficient repair for this known error. The upstream build script enables subgroups for sg32; differences between binaries include compiled kernels and optimization, so this is not proof that every subgroup operation is harmless. It does not isolate the general compiler, conversion, model or driver cause. No production model library or default setting is changed.
+
+Driver/protocol/artifacts/request fixtures and served WebLLM client/Worker bytes match the prelaunch snapshot after completion. Model weight cache bytes were not independently rehashed; configuration equality does not imply a fully pinned weight/runtime comparison. Date copying remains a known-source diagnostic, not seven-language rewrite/summary/translation, native editing, offline or physical-device acceptance. Those requirements remain open. Further tests should change a substantively different model/runtime representation rather than repeat these known libraries or weaken factual guards.

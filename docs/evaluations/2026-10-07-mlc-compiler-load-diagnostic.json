@@ -1,0 +1,75 @@
+{
+  "scope": "Isolated diagnostic compiler environment; product SDK unchanged",
+  "initial_compile_help_exit": 137,
+  "tvm_import_only_exit": 137,
+  "local_adhoc_signature_repair": [
+    {
+      "library": "libtvm_runtime_extra.dylib",
+      "before_sha256": "5db17258ea2376c5ddab2b7d889970bc2a796928d020c72504e3f9aa4eb3a988",
+      "before_verify_exit": 1,
+      "after_verify_exit": 0,
+      "after_sha256": "0162fcb935f73479ac1e4263c13c7e42c3a405bb331ae0dacc7f18365ed7674d"
+    },
+    {
+      "library": "libtvm_compiler.dylib",
+      "before_sha256": "16af83055faeb1fa39ef156c76826cb0035dd0b7a136c6bebde207e425862f7f",
+      "before_verify_exit": 1,
+      "after_verify_exit": 0,
+      "after_sha256": "e40ad6fc5a3e423023dcd67d0ea3d406bbb67a1c2003a1136bf5f3e6ec6c9e57"
+    },
+    {
+      "library": "libtvm_runtime_metal.dylib",
+      "before_sha256": "8526cc3aef78972f9395ad6d02c91e7e209b7889f26684f2e4313772077015ba",
+      "before_verify_exit": 1,
+      "after_verify_exit": 0,
+      "after_sha256": "c1cc630e9b232e77d14545aba3f3ffe1203c22f5c1a592e67228333e8f27c0c9"
+    },
+    {
+      "library": "libtvm_runtime.dylib",
+      "before_sha256": "586b5f4ad92d5c8e472396bf8af2e34c21a4e63087eeab02a255070381a28be9",
+      "before_verify_exit": 1,
+      "after_verify_exit": 0,
+      "after_sha256": "37937b5f50f016edf07358a9864b15198ac864e4d58dad7e76b6b7a43f0e412d"
+    },
+    {
+      "library": "libmlc_llm.dylib",
+      "before_sha256": "5f1c5826974dcc8131855308556e6917902dfb70ca4117002b9179850f6a8e82",
+      "before_verify_exit": 0,
+      "after_verify_exit": 0,
+      "after_sha256": "5f1c5826974dcc8131855308556e6917902dfb70ca4117002b9179850f6a8e82"
+    },
+    {
+      "library": "libmlc_llm_module.dylib",
+      "before_sha256": "8a48d42da47d9b7b129dace48c1287ac0d270dac19657f50f1be94bea66a8ec5",
+      "before_verify_exit": 0,
+      "after_verify_exit": 0,
+      "after_sha256": "8a48d42da47d9b7b129dace48c1287ac0d270dac19657f50f1be94bea66a8ec5"
+    },
+    {
+      "library": "libtvm_runtime.dylib",
+      "before_sha256": "2ba571ed9373884837f6c913411e2dc0488b24913a9dab258d5a272c3cbc4cc7",
+      "before_verify_exit": 0,
+      "after_verify_exit": 0,
+      "after_sha256": "2ba571ed9373884837f6c913411e2dc0488b24913a9dab258d5a272c3cbc4cc7"
+    },
+    {
+      "library": "libmlc_llm.dylib",
+      "before_sha256": "5f1c5826974dcc8131855308556e6917902dfb70ca4117002b9179850f6a8e82",
+      "before_verify_exit": 0,
+      "after_verify_exit": 0,
+      "after_sha256": "5f1c5826974dcc8131855308556e6917902dfb70ca4117002b9179850f6a8e82"
+    },
+    {
+      "library": "libmlc_llm_module.dylib",
+      "before_sha256": "8a48d42da47d9b7b129dace48c1287ac0d270dac19657f50f1be94bea66a8ec5",
+      "before_verify_exit": 0,
+      "after_verify_exit": 0,
+      "after_sha256": "8a48d42da47d9b7b129dace48c1287ac0d270dac19657f50f1be94bea66a8ec5"
+    }
+  ],
+  "after_signature_compile_help_exit": 1,
+  "after_signature_failure": "MLC native module requires @rpath/libtvm.dylib, absent from resolved TVM package",
+  "model_library_compiled": false,
+  "browser_compatibility_verified": false,
+  "next_gate": "Resolve a mutually compatible MLC/TVM source revision or package pair before preparing Wasm dependencies and testing a cached 7B control"
+}

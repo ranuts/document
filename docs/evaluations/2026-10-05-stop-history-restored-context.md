@@ -1,0 +1,9 @@
+# Restored interrupted context: factual follow-up
+
+Product `ecdaee2`, frozen driver/protocol `90c833d`. Native opt-in saving, fresh CPU 0.5B streamed story, Stop, export, page reload and explicit restore all completed. The native recovery action placed the exact original story request back in the composer. The model was then explicitly loaded from the selected local file. A delegating SDK observer recorded zero requests before the explicit follow-up send and one completed generation after it. The observer was attached after loading; its zero count alone does not cover activity before attachment. Source inspection confirms the recovery action sets and focuses the draft without submitting.
+
+The new question asked which item the preceding request required repairing, requesting only the item name and no document operation. The native SDK received system, original user request, exact restored visible assistant partial, truthful stopped state and the contextualized new user request. Messages and outputs were not adjusted.
+
+Raw and displayed output were exactly `钟表`. This names the clock/timepiece category concisely, but is broader than the original `旧钟` and omits its age qualifier. It supports narrow contextual category recall after saving/reopening, not precise detail preservation or general memory quality. This is a development observation with unfixed sampling; no model promotion follows from it.
+
+Document contents were unchanged; errors, guidance and previews were zero, and the browser context closed. `python3 docs/evaluations/verify-stop-history-restored-context.py` checks frozen source/current asset binding, native export, restored rows, draft identity, actual next-request history and raw outcome. The case does not prove offline/PWA or OS reboot recovery, physical mobile support or arbitrary multi-turn factual reliability.

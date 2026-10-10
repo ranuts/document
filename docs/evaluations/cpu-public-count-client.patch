@@ -1,0 +1,37 @@
+diff --git a/src/wllama.ts b/src/wllama.ts
+index c04abf2..77ff372 100644
+--- a/src/wllama.ts
++++ b/src/wllama.ts
+@@ -16,6 +16,7 @@ import {
+ import CacheManager, { type DownloadOptions } from './cache-manager';
+ import { ModelManager, Model, type ModelSource } from './model-manager';
+ import type {
++  GlueMsgCountChatRes,
+   GlueMsgCancelRes,
+   GlueMsgCompletionRes,
+   GlueMsgEmbeddingRes,
+@@ -728,6 +729,24 @@ export class Wllama {
+    * @param options OAI-compatible chat completion options
+    * @returns OAI-compatible chat completion response (only the final result when stream=false) or an async iterator of completion chunks (when stream=true)
+    */
++  async countChatTokens(options: ChatCompletionParams & { abortSignal?: AbortSignal }): Promise<{ promptTokens: number; contextTokens: number }> {
++    options.abortSignal?.throwIfAborted();
++    this.checkModelLoaded();
++    if (Object.keys(this.chatTemplateKwargs).length > 0) {
++      options = { ...options, chat_template_kwargs: { ...this.chatTemplateKwargs, ...(options.chat_template_kwargs ?? {}) } };
++    }
++    const { abortSignal, ...request } = options;
++    const result = await this.proxy.wllamaAction<GlueMsgCountChatRes>('count_chat', {
++      _name: 'cmpl_req', is_chat: true, data_json: JSON.stringify(request), files: [],
++    });
++    abortSignal?.throwIfAborted();
++    if (!result.success) throw new WllamaError(result.error, 'inference_error');
++    if (!Number.isSafeInteger(result.prompt_tokens) || result.prompt_tokens < 0 || !Number.isSafeInteger(result.context_tokens) || result.context_tokens < 1) {
++      throw new WllamaError('Invalid count response', 'inference_error');
++    }
++    return { promptTokens: result.prompt_tokens, contextTokens: result.context_tokens };
++  }
++
+   async createChatCompletion(
+     options: ChatCompletionParams & { stream?: false }
+   ): Promise<ChatCompletionResponse>;

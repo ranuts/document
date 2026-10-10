@@ -1,0 +1,40 @@
+[
+  {
+    "messages": [
+      {
+        "role": "system",
+        "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+      },
+      {
+        "role": "user",
+        "content": "ISO date: 2044-09-23.\n"
+      }
+    ],
+    "temperature": 0,
+    "top_p": 0.8,
+    "max_tokens": 512,
+    "response_format": {
+      "type": "json_object",
+      "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+    }
+  },
+  {
+    "messages": [
+      {
+        "role": "system",
+        "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+      },
+      {
+        "role": "user",
+        "content": "ISO date: 2044-09-22.\n"
+      }
+    ],
+    "temperature": 0,
+    "top_p": 0.8,
+    "max_tokens": 512,
+    "response_format": {
+      "type": "json_object",
+      "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+    }
+  }
+]

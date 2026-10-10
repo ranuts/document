@@ -1,0 +1,575 @@
+{
+  "scope": "Bounded native Chromium Vite-preview diagnostic. Instrumentation observes worker VERSION/SKIP_WAITING messages and wraps skipWaiting Promise completion. It changes timing and is not product acceptance. A subsequent waitUntil-observer run succeeded, so the behavior is timing-sensitive.",
+  "observations": [
+    {
+      "value": "dev",
+      "state": {
+        "controller": {
+          "script": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "state": "activated"
+        },
+        "active": {
+          "script": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "state": "activated"
+        },
+        "waiting": null,
+        "installing": {
+          "script": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "state": "installing"
+        },
+        "waitingVersion": null,
+        "caches": [
+          "document-editor-runtime-dev",
+          "document-editor-core-dev-1791379629479",
+          "document-editor-runtime-e2e-next",
+          "document-editor-core-dev-1791379638345"
+        ],
+        "heal": null,
+        "modified": null
+      },
+      "workers": [
+        {
+          "url": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "messages": [
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            }
+          ],
+          "skip": "resolved"
+        },
+        {
+          "url": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "messages": []
+        }
+      ]
+    },
+    {
+      "value": "dev",
+      "state": {
+        "controller": {
+          "script": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "state": "activated"
+        },
+        "active": {
+          "script": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "state": "activated"
+        },
+        "waiting": {
+          "script": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "state": "installed"
+        },
+        "installing": null,
+        "waitingVersion": {
+          "type": "VERSION",
+          "cacheVersion": "dev-1791379638345",
+          "vendorVersion": "e2e-next"
+        },
+        "caches": [
+          "document-editor-runtime-dev",
+          "document-editor-core-dev-1791379629479",
+          "document-editor-runtime-e2e-next",
+          "document-editor-core-dev-1791379638345"
+        ],
+        "heal": "1",
+        "modified": null
+      },
+      "workers": [
+        {
+          "url": "http://127.0.0.1:5197/sw.js?isolation=1"
+        },
+        {
+          "url": "http://127.0.0.1:5197/sw.js?isolation=1",
+          "messages": [
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "SKIP_WAITING"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            },
+            {
+              "type": "VERSION"
+            }
+          ],
+          "skip": "called"
+        }
+      ]
+    }
+  ],
+  "observedMessageReceived": true,
+  "observedSkipCalledWithoutResolution": true,
+  "resourceCleanupNativeOutcome": "Independent ordinary CI-build run after cleanup still failed: expected e2e-next, received dev within 90000ms.",
+  "acceptance": "Unproven; no activation repair claimed.",
+  "sourceLogSha256": "3235d6912005476f3058a314758b41a62fd224fc418995c8d75929a31e0e75e1",
+  "provenanceScope": "Structured excerpts of an ignored local diagnostic log. The evolved observer driver was not frozen before execution; no independently reproducible driver-byte binding is claimed."
+}

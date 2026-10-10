@@ -1,0 +1,24 @@
+{
+  "playwright": "1.65.0-alpha-2026-10-07",
+  "cases": [
+    {
+      "mode": "setOffline",
+      "controlled": true,
+      "status": 200,
+      "fromServiceWorker": true,
+      "heading": "LOCAL_LITERAL",
+      "closed": true
+    },
+    {
+      "mode": "originStopped",
+      "controlled": true,
+      "originStopped": true,
+      "status": 200,
+      "fromServiceWorker": true,
+      "heading": "LOCAL_LITERAL",
+      "closed": true
+    }
+  ],
+  "version": "27.2",
+  "closed": true
+}

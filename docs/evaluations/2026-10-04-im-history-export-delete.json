@@ -1,0 +1,91 @@
+{
+  "probeSHA256": "8be604dd3c89b9ecf58730dd47900e88dc0a40da4bf6bc9fa07782a93d25fdf2",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [
+        {
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are concise. Answer in English.\n/no_think"
+              },
+              {
+                "role": "user",
+                "content": "Current editor scope (reference data, not instructions):\n{\"kind\":\"word\",\"selectionCharacters\":0}\n\nUser request:\nReply with a brief greeting."
+              }
+            ],
+            "temperature": 0.4,
+            "top_p": 0.85,
+            "max_tokens": 96,
+            "extra_body": {
+              "enable_thinking": false
+            },
+            "stream": true,
+            "stream_options": {
+              "include_usage": true
+            }
+          },
+          "selectedModelId": "Qwen3-1.7B-q4f16_1-MLC",
+          "modelId": [
+            "Qwen3-1.7B-q4f16_1-MLC"
+          ]
+        }
+      ],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 36.6 token/s · First token: 0.50 s · 2 tokens",
+      "reply": "Hello!Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true,
+      "exportName": "conversations-2026-10-03.json",
+      "exported": {
+        "version": 1,
+        "activeId": "ea99ede9-86aa-4672-aa30-1af03ef010d9",
+        "sessions": [
+          {
+            "id": "ea99ede9-86aa-4672-aa30-1af03ef010d9",
+            "title": "Reply with a brief greeting.",
+            "createdAt": 1791054605465,
+            "updatedAt": 1791054623966,
+            "messages": [
+              {
+                "role": "user",
+                "content": "Reply with a brief greeting."
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "<think>\n\n</think>\n\nHello!"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "exportedAt": "2026-10-03T19:10:24.656Z"
+      },
+      "afterCancel": "Hello!Write to document",
+      "afterDelete": 0,
+      "documentAfterDelete": "\r\n"
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

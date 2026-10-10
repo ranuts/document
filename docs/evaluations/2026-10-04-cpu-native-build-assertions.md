@@ -1,0 +1,9 @@
+# Assertion-enabled native baseline diagnostic
+
+The diagnostic relink completed with exit code 0. Its first browser test failed earlier than the baseline: generated JS rejected the SDK-supplied `Module.mainScriptUrlOrBlob` because it was absent from `INCOMING_MODULE_JS_API`. This is a diagnostic/toolchain integration mismatch, not proof of the original native abort cause.
+
+A separate single-thread test removed that input property at the generated JS initialization boundary, retaining the same diagnostic WASM and model/loading options. It reached the same context/graph reservation stage as the original baseline, then terminated through libc++abi with `native code called abort()`. Assertion and exception stack flags did not reveal an originating exception message. The original fault remains unresolved; removal of the property is not a production fix and is not validated for pthread startup.
+
+Both terminal failures are preserved separately: [initial diagnostic capture](2026-10-04-cpu-native-build-assertions.json), [module-input diagnostic capture](2026-10-04-cpu-native-build-assertions-module-api.json), [initial driver](probe-cpu-native-build-assertions.mjs), [module-input driver](probe-cpu-native-build-assertions-module-api.mjs). Each browser and local server closed. No model generation or editor operation was reached.
+
+Before these tests, byte hashes confirmed installed `cpp/wllama-context.h`, `cpp/wllama.cpp`, `cpp/glue.hpp` and `CMakeLists.txt` match the isolated SDK tag. The baseline compiler still differs from the upstream pinned 4.0.20 toolchain. The next useful controlled comparison is a build using that exact toolchain, rather than guessing at functional native changes. Native count implementation remains pending a usable self-built baseline; current product uses the working distributed runtime.

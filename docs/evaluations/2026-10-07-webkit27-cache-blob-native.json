@@ -1,0 +1,71 @@
+{
+  "scope": "Natural default URL CPU load stage diagnostic in isolated WebKit27; no offline or semantic acceptance",
+  "errors": [
+    {
+      "message": "ttp://127.0.0.1:5193/7c33fe36-f4e9-4e3d-8ac5-d4087d1ada86.",
+      "stack": ""
+    }
+  ],
+  "console": [
+    "Service Worker registration blocked by Playwright",
+    "load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden",
+    "Failed to load resource: Too much data buffered while waiting for the previous multipart part to be handled",
+    "fileReadResponse failed, terminating worker: NotReadableError: The I/O read operation failed."
+  ],
+  "version": "27.2",
+  "probe": {
+    "calls": [
+      {
+        "method": "loadModelFromUrl",
+        "started": 1791371392235,
+        "error": {
+          "name": "RuntimeError",
+          "message": "File read failed: NotReadableError: The I/O read operation failed.",
+          "text": "RuntimeError: File read failed: NotReadableError: The I/O read operation failed.",
+          "stack": ""
+        },
+        "ended": 1791371449449
+      },
+      {
+        "method": "loadModel",
+        "started": 1791371448745,
+        "error": {
+          "name": "RuntimeError",
+          "message": "File read failed: NotReadableError: The I/O read operation failed.",
+          "text": "RuntimeError: File read failed: NotReadableError: The I/O read operation failed.",
+          "stack": ""
+        },
+        "ended": 1791371449448
+      },
+      {
+        "method": "exit",
+        "started": 1791371449449,
+        "finished": true,
+        "ended": 1791371449449
+      }
+    ],
+    "opens": [
+      {
+        "backend": "Le",
+        "blobType": "Blob",
+        "bytes": 484220320
+      }
+    ],
+    "readErrors": [
+      {
+        "backend": "Le",
+        "blobType": "Blob",
+        "bytes": 484220320,
+        "start": 5951904,
+        "end": 133578144,
+        "partBytes": 127626240,
+        "name": "NotReadableError",
+        "message": "The I/O read operation failed."
+      }
+    ]
+  },
+  "note": "模型加载失败。请重试或选择其他模型。",
+  "status": "",
+  "finished": true,
+  "closed": true
+}

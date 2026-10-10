@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-02T08:25:13.857Z",
+  "scope": "Actual built UI with isolated persistent Playwright Chromium Metal / GPU Qwen3.5-2B, fresh navigation per case; three bounded quality probes, not full model/language acceptance",
+  "status": "completed",
+  "results": [
+    {
+      "id": "zh-facts",
+      "locale": "zh-CN",
+      "prompt": "请用中文将这句话改写得更正式，保留所有事实、金额、币种、姓名和日期，只输出改写后的句子：Alex 将于 2026-10-08 支付 1,250 EUR。",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "output": "Alex 将于 2026年10月8日支付1,250欧元。",
+      "responseMs": 3407,
+      "stats": "Decode speed: 18.6 token/s · First token: 2.18 s · 22 tokens",
+      "literalFactsPreserved": false,
+      "manualReview": "Facts preserved: Alex, 1250 EUR and 2026-10-08. Date and currency localized, so literal=false is not factual failure."
+    },
+    {
+      "id": "en-negation",
+      "locale": "en",
+      "prompt": "Summarize in one English sentence without adding facts: Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved. Do not claim that the payment is approved or scheduled.",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08, but it has not yet been approved.",
+      "responseMs": 2719,
+      "stats": "Decode speed: 30.6 token/s · First token: 1.60 s · 33 tokens",
+      "manualReview": "Proposed payment, amount, date and explicit not-yet-approved status all retained.",
+      "criticalNegationRetained": true
+    },
+    {
+      "id": "strict-json",
+      "locale": "en",
+      "prompt": "Return exactly this JSON object and nothing else, without markdown fences: {\"answer\":\"hello\"}",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "output": "{\"answer\":\"hello\"}",
+      "responseMs": 1721,
+      "stats": "Decode speed: 21.8 token/s · First token: 1.46 s · 5 tokens",
+      "jsonStructureExact": true,
+      "manualReview": "Correct requested JSON structure and value without surrounding prose."
+    }
+  ],
+  "errors": [],
+  "limitations": "Three chat-path samples on isolated desktop Chromium; no seven-language, reviewed-writing, real-device or comprehensive quality acceptance."
+}

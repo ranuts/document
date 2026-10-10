@@ -1,0 +1,9 @@
+# Current production GPU-loss feedback repair
+
+The late-invalidation behavior test failed before implementation: readiness became false while the panel retained its loaded note. The provider now observes its existing engine failure signal and forwards an optional unavailable callback; the panel refreshes feedback under its controller-generation ownership guard. Listeners are removed on disposal/replacement. Ordinary request failure retains readiness. No prompt, model default, CPU fallback, cache format or document-operation policy changes.
+
+Full unit suite: 141 files / 4538 tests pass. Related tests include idle invalidation, ordinary failure, disposed-engine notification and replaced-model notification. TypeScript, changed-file lint, formatting and production build pass. Existing PromiseRejectionHandledWarnings remain; whole-repository lint is not claimed green.
+
+Actual production editor-BRhW6Vt0.js, core 1791364456: an instrumented Worker captures and destroys one actual GPUDevice after native streaming begins. The partial body Rain is retained and interrupted, input unlocks, status clears and the note becomes Load model. Only one WebLLM stream request exists before explicit reload. The native blank document is unchanged. Explicit reload creates the second Worker; a distinct greeting request completes with no additional error. No page errors, process exit 0 and browser closure; prelaunch-bound source/runtime hashes remain unchanged.
+
+Run verify-native-gpu-device-loss-fixed.py for evidence integrity and bounded DOM/request checks. This is deliberate destruction in a diagnostic Worker on desktop Chromium, not spontaneous physical GPU loss, independently monitored CPU-replay coverage, other-device acceptance or seven-language writing quality. The original selector timeout and pre-fix stale-feedback receipt remain preserved.

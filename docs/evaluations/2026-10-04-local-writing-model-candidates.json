@@ -1,0 +1,378 @@
+{
+  "date": "2026-10-03T20:27:58.287Z",
+  "probeSHA256": "db3d616e7a27fbd77236ce217921eb961302e11d91ce2ecfdc4f93f9524fe061",
+  "sdk": "0.2.85",
+  "scope": "Installed prebuilt model catalog and direct official MLC repository config fetches only; no inference, weight downloads or resource measurements.",
+  "candidates": [
+    {
+      "id": "Llama-3.2-1B-Instruct-q4f16_1-MLC",
+      "catalogEntry": {
+        "model": "https://huggingface.co/mlc-ai/Llama-3.2-1B-Instruct-q4f16_1-MLC",
+        "model_id": "Llama-3.2-1B-Instruct-q4f16_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Llama-3.2-1B-Instruct-q4f16_1_cs1k-webgpu.wasm",
+        "vram_required_MB": 879.04,
+        "low_resource_required": true,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "config": {
+        "url": "https://huggingface.co/mlc-ai/Llama-3.2-1B-Instruct-q4f16_1-MLC/resolve/main/mlc-chat-config.json",
+        "resolvedURL": "https://huggingface.co/api/resolve-cache/models/mlc-ai/Llama-3.2-1B-Instruct-q4f16_1-MLC/2a37b0a5ecb622d51ddc2fac74de0b95872affd7/mlc-chat-config.json?%2Fmlc-ai%2FLlama-3.2-1B-Instruct-q4f16_1-MLC%2Fresolve%2Fmain%2Fmlc-chat-config.json=&etag=%228d9ffe829f2787c0b809ab20d4d93cd00c4385a0%22",
+        "status": 200,
+        "bytes": 2329,
+        "sha256": "0ec513b54b419ad471006430686bdcffaae7102b41f7b0246fbfcde2517acc7f",
+        "data": {
+          "version": "0.1.0",
+          "model_type": "llama",
+          "quantization": "q4f16_1",
+          "model_config": {
+            "hidden_size": 2048,
+            "intermediate_size": 8192,
+            "num_attention_heads": 32,
+            "num_hidden_layers": 16,
+            "rms_norm_eps": 0.00001,
+            "vocab_size": 128256,
+            "tie_word_embeddings": true,
+            "position_embedding_base": 500000,
+            "rope_scaling": {
+              "factor": 32,
+              "high_freq_factor": 4,
+              "low_freq_factor": 1,
+              "original_max_position_embeddings": 8192,
+              "rope_type": "llama3"
+            },
+            "context_window_size": 131072,
+            "prefill_chunk_size": 8192,
+            "num_key_value_heads": 8,
+            "head_dim": 64,
+            "tensor_parallel_shards": 1,
+            "pipeline_parallel_stages": 1,
+            "max_batch_size": 128
+          },
+          "vocab_size": 128256,
+          "context_window_size": 131072,
+          "sliding_window_size": -1,
+          "prefill_chunk_size": 8192,
+          "attention_sink_size": -1,
+          "tensor_parallel_shards": 1,
+          "pipeline_parallel_stages": 1,
+          "temperature": 0.6,
+          "presence_penalty": 0,
+          "frequency_penalty": 0,
+          "repetition_penalty": 1,
+          "top_p": 0.9,
+          "tokenizer_files": [
+            "tokenizer.json",
+            "tokenizer_config.json"
+          ],
+          "tokenizer_info": {
+            "token_postproc_method": "byte_level",
+            "prepend_space_in_encode": false,
+            "strip_space_in_decode": false
+          },
+          "conv_template": {
+            "name": "llama-3_1",
+            "system_template": "<|start_header_id|>system<|end_header_id|>\n\n{system_message}<|eot_id|>",
+            "system_message": "You are a helpful, respectful and honest assistant.",
+            "system_prefix_token_ids": [
+              128000
+            ],
+            "add_role_after_system_message": true,
+            "roles": {
+              "user": "<|start_header_id|>user",
+              "assistant": "<|start_header_id|>assistant",
+              "tool": "<|start_header_id|>ipython"
+            },
+            "role_templates": {
+              "user": "{user_message}",
+              "assistant": "{assistant_message}",
+              "tool": "{tool_message}"
+            },
+            "messages": [],
+            "seps": [
+              "<|eot_id|>"
+            ],
+            "role_content_sep": "<|end_header_id|>\n\n",
+            "role_empty_sep": "<|end_header_id|>\n\n",
+            "stop_str": [],
+            "stop_token_ids": [
+              128001,
+              128008,
+              128009
+            ],
+            "function_string": "",
+            "use_function_calling": false
+          },
+          "pad_token_id": 0,
+          "bos_token_id": 128000,
+          "eos_token_id": [
+            128001,
+            128008,
+            128009
+          ]
+        }
+      }
+    },
+    {
+      "id": "gemma3-1b-it-q4f16_1-MLC",
+      "catalogEntry": {
+        "model": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC",
+        "model_id": "gemma3-1b-it-q4f16_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/gemma3-1b-it-q4f16_1_cs1k-webgpu.wasm",
+        "vram_required_MB": 711.07,
+        "low_resource_required": true,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "config": {
+        "url": "https://huggingface.co/mlc-ai/gemma3-1b-it-q4f16_1-MLC/resolve/main/mlc-chat-config.json",
+        "resolvedURL": "https://huggingface.co/api/resolve-cache/models/mlc-ai/gemma3-1b-it-q4f16_1-MLC/0f6103ed635931ff91a95db543365f0a77cbfb7d/mlc-chat-config.json?%2Fmlc-ai%2Fgemma3-1b-it-q4f16_1-MLC%2Fresolve%2Fmain%2Fmlc-chat-config.json=&etag=%225c174024a2f3c9d2c4249c85479e4b963cb525cd%22",
+        "status": 200,
+        "bytes": 3042,
+        "sha256": "02fb5180f7b400c65aa95d6375730b571d3bdc8b8ff58901084cb9c8da18b7a2",
+        "data": {
+          "version": "0.1.0",
+          "model_type": "gemma3",
+          "quantization": "q4f16_1",
+          "model_config": {
+            "text_config": {
+              "hidden_size": 1152,
+              "intermediate_size": 6912,
+              "num_hidden_layers": 26,
+              "attention_bias": false,
+              "num_attention_heads": 4,
+              "num_key_value_heads": 1,
+              "head_dim": 256,
+              "rms_norm_eps": 0.000001,
+              "hidden_activation": "gelu_pytorch_tanh",
+              "position_embedding_base": 1000000,
+              "rope_scaling": null,
+              "context_window_size": 8192,
+              "prefill_chunk_size": 8192,
+              "query_pre_attn_scalar": 256,
+              "sliding_window_size": 512,
+              "kwargs": {
+                "architectures": [
+                  "Gemma3ForCausalLM"
+                ],
+                "attention_dropout": 0,
+                "attn_logit_softcapping": null,
+                "bos_token_id": 2,
+                "cache_implementation": "hybrid",
+                "eos_token_id": [
+                  1,
+                  106
+                ],
+                "final_logit_softcapping": null,
+                "initializer_range": 0.02,
+                "max_position_embeddings": 32768,
+                "model_type": "gemma3_text",
+                "pad_token_id": 0,
+                "rope_local_base_freq": 10000,
+                "sliding_window": 512,
+                "sliding_window_pattern": 6,
+                "torch_dtype": "bfloat16",
+                "transformers_version": "4.50.0.dev0",
+                "use_cache": true
+              }
+            },
+            "vocab_size": 262144,
+            "tensor_parallel_shards": 1,
+            "max_batch_size": 128,
+            "context_window_size": 8192,
+            "sliding_window_size": 512,
+            "prefill_chunk_size": 8192,
+            "is_text_model": true
+          },
+          "vocab_size": 262144,
+          "context_window_size": 8192,
+          "sliding_window_size": 512,
+          "prefill_chunk_size": 8192,
+          "attention_sink_size": -1,
+          "tensor_parallel_shards": 1,
+          "pipeline_parallel_stages": 1,
+          "active_vocab_size": 262145,
+          "temperature": 1,
+          "presence_penalty": 0,
+          "frequency_penalty": 0,
+          "repetition_penalty": 1,
+          "top_p": 0.95,
+          "tokenizer_files": [
+            "tokenizer.model",
+            "tokenizer.json",
+            "added_tokens.json",
+            "tokenizer_config.json"
+          ],
+          "tokenizer_info": {
+            "token_postproc_method": "byte_fallback",
+            "prepend_space_in_encode": false,
+            "strip_space_in_decode": false
+          },
+          "conv_template": {
+            "name": "gemma3_instruction",
+            "system_template": "{system_message}",
+            "system_message": "",
+            "system_prefix_token_ids": [
+              2
+            ],
+            "add_role_after_system_message": true,
+            "roles": {
+              "user": "<start_of_turn>user",
+              "assistant": "<start_of_turn>model"
+            },
+            "role_templates": {
+              "user": "{user_message}",
+              "assistant": "{assistant_message}",
+              "tool": "{tool_message}"
+            },
+            "messages": [],
+            "seps": [
+              "<end_of_turn>\n"
+            ],
+            "role_content_sep": "\n",
+            "role_empty_sep": "\n",
+            "stop_str": [
+              "<end_of_turn>"
+            ],
+            "stop_token_ids": [
+              1,
+              106
+            ],
+            "function_string": "",
+            "use_function_calling": false
+          },
+          "pad_token_id": 0,
+          "bos_token_id": 2,
+          "eos_token_id": [
+            1,
+            106
+          ],
+          "model_task": "chat",
+          "embedding_metadata": null
+        }
+      }
+    },
+    {
+      "id": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+      "catalogEntry": {
+        "model": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+        "model_id": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Ministral-3-3B-Instruct-2512-BF16-q4f16_1_cs1k-webgpu.wasm",
+        "vram_required_MB": 2863.69,
+        "low_resource_required": true,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "config": {
+        "url": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC/resolve/main/mlc-chat-config.json",
+        "resolvedURL": "https://huggingface.co/api/resolve-cache/models/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC/eebad8da4ac64947d8dc9507007fc0279bf52454/mlc-chat-config.json?%2Fmlc-ai%2FMinistral-3-3B-Instruct-2512-BF16-q4f16_1-MLC%2Fresolve%2Fmain%2Fmlc-chat-config.json=&etag=%22e1f8c259b6c3e091232ab03e652d3ba789e0620b%22",
+        "status": 200,
+        "bytes": 4845,
+        "sha256": "d7cdda2381efc5246f1ac8889c32df4a68e6fc4567df0eb4e75f5f99fc0231a4",
+        "data": {
+          "version": "0.1.0",
+          "model_type": "ministral3",
+          "quantization": "q4f16_1",
+          "model_config": {
+            "hidden_size": 3072,
+            "intermediate_size": 9216,
+            "num_attention_heads": 32,
+            "num_hidden_layers": 26,
+            "rms_norm_eps": 0.00001,
+            "vocab_size": 131072,
+            "attention_sink_size": 0,
+            "context_window_size": 262144,
+            "dtype": "bfloat16",
+            "head_dim": 128,
+            "hidden_act": "silu",
+            "max_batch_size": 128,
+            "num_key_value_heads": 8,
+            "position_embedding_base": 1000000,
+            "prefill_chunk_size": 1024,
+            "rope_parameters": {
+              "beta_fast": 32,
+              "beta_slow": 1,
+              "factor": 16,
+              "llama_4_scaling_beta": 0.1,
+              "mscale": 1,
+              "mscale_all_dim": 1,
+              "original_max_position_embeddings": 16384,
+              "rope_type": "yarn",
+              "type": "yarn"
+            },
+            "sliding_window_size": -1,
+            "tensor_parallel_shards": 1,
+            "tie_word_embeddings": true,
+            "weight_block_size": null,
+            "modules_to_not_convert": []
+          },
+          "vocab_size": 131072,
+          "context_window_size": 262144,
+          "sliding_window_size": -1,
+          "prefill_chunk_size": 1024,
+          "attention_sink_size": 0,
+          "tensor_parallel_shards": 1,
+          "pipeline_parallel_stages": 1,
+          "active_vocab_size": 131072,
+          "temperature": 1,
+          "presence_penalty": 0,
+          "frequency_penalty": 0,
+          "repetition_penalty": 1,
+          "top_p": 1,
+          "tokenizer_files": [
+            "tokenizer.json",
+            "tokenizer_config.json"
+          ],
+          "tokenizer_info": {
+            "token_postproc_method": "byte_level",
+            "prepend_space_in_encode": false,
+            "strip_space_in_decode": false
+          },
+          "conv_template": {
+            "name": "ministral3",
+            "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]{function_string}",
+            "system_message": "You are Ministral-3-3B-Instruct-2512, a Large Language Model (LLM) created by Mistral AI, a French startup headquartered in Paris.\nYou power an AI assistant called Le Chat.\nYour knowledge base was last updated on 2023-10-01.\nThe current date is {today}.\n\nWhen you're not sure about some information or when the user's request requires up-to-date or specific data, you must use the available tools to fetch the information. Do not hesitate to use tools whenever they can provide a more accurate or complete response. If no relevant tools are available, then clearly state that you don't have the information and avoid making up anything.\nIf the user's question is not clear, ambiguous, or does not provide enough context for you to accurately answer the question, you do not try to answer it right away and you rather ask the user to clarify their request (e.g. \"What are some good restaurants around me?\" => \"Where are you?\" or \"When is the next flight to Tokyo\" => \"Where do you travel from?\").\nYou are always very attentive to dates, in particular you try to resolve dates (e.g. \"yesterday\" is {yesterday}) and when asked about information at specific dates, you discard information that is at another date.\nYou follow these instructions in all languages, and always respond to the user in the language they use or request.\nNext sections describe the capabilities that you have.\n\n# WEB BROWSING INSTRUCTIONS\n\nYou cannot perform any web search or access internet to open URLs, links etc. If it seems like the user is expecting you to do so, you clarify the situation and ask the user to copy paste the text directly in the chat.\n\n# MULTI-MODAL INSTRUCTIONS\n\nYou have the ability to read images, but you cannot generate images. You also cannot transcribe audio files or videos.\nYou cannot read nor transcribe audio files or videos.\n\n# TOOL CALLING INSTRUCTIONS\n\nYou may have access to tools that you can use to fetch information or perform actions. You must use these tools in the following situations:\n\n1. When the request requires up-to-date information.\n2. When the request requires specific data that you do not have in your knowledge base.\n3. When the request involves actions that you cannot perform without tools.\n\nAlways prioritize using tools to provide the most accurate and helpful response. If tools are not available, inform the user that you cannot perform the requested action at the moment.",
+            "system_prefix_token_ids": [
+              1
+            ],
+            "add_role_after_system_message": true,
+            "roles": {
+              "user": "",
+              "assistant": "",
+              "tool": ""
+            },
+            "role_templates": {
+              "user": "[INST]{user_message}[/INST]",
+              "assistant": "{assistant_message}</s>",
+              "tool": "[TOOL_RESULTS]{tool_message}[/TOOL_RESULTS]"
+            },
+            "messages": [],
+            "seps": [
+              ""
+            ],
+            "role_content_sep": "",
+            "role_empty_sep": "",
+            "stop_str": [
+              "</s>"
+            ],
+            "stop_token_ids": [
+              2
+            ],
+            "function_string": "",
+            "use_function_calling": false
+          },
+          "pad_token_id": 11,
+          "bos_token_id": 1,
+          "eos_token_id": 2
+        }
+      }
+    },
+    {
+      "id": "Qwen3-4B-Instruct-2507-q4f16_1-MLC",
+      "catalogEntry": null
+    }
+  ]
+}

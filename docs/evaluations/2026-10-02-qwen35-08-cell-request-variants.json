@@ -1,0 +1,145 @@
+{
+  "scope": "Four request phrasings for real 0.8B Excel get_cell planning, unchanged production prompt/schema. Isolated fixtures; tool mode.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2390,
+      "feedback": [],
+      "visibleErrors": [
+        "No executable operation was selected. Clarify the request or try another model.Restore request"
+      ],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": false
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "Read cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2479,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "读取 A1 单元格的值。",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2357,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "Use get_cell to read A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "13",
+          "17"
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 2355,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "One sample per phrasing; not a reliability estimate or full multilingual validation.",
+    "Snapshots cover A1:A3 values and selection/active cell, not the entire worksheet.",
+    "No production prompt or schema was modified; this evidence isolates request wording sensitivity.",
+    "Tool-name phrasing is diagnostic and is not intended as a product requirement."
+  ]
+}

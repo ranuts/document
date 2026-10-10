@@ -1,0 +1,234 @@
+{
+  "scope": "Existing seven-language browser writing runs only. Mechanical outcomes are not quality scores; partial and failed runs remain explicit. Reports differ by model-specific prompts and guard/runtime versions. No global ranking.",
+  "rows": [
+    {
+      "report": "2026-10-04-seven-language-writing-current.json",
+      "sha256": "267fb35486933ef28e6fa5969869ec07812c561e84da949b814397452f4c8454",
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 9,
+      "edited": 12,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-seven-language-writing-qwen35-2b.json",
+      "sha256": "bdbd5048731e482e1fdd7049649c3c49d8182e90e0119b0a78f7c21183ff8682",
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 13,
+      "edited": 8,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-seven-language-writing-qwen3-4b.json",
+      "sha256": "96e20e5636a0164d9f7b44b4d05c9b4b5d96317ca139d998fa1371e4a4dbbc4f",
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 7,
+      "edited": 14,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-llama32-1b-seven-language-writing.json",
+      "sha256": "2ea5bb5c773160aac4b094d2c1f5689fb2a90153ac5f3ee74eccf31ddbda9fdd",
+      "model": "Llama-3.2-1B-Instruct-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 14,
+      "edited": 5,
+      "acceptedUnchanged": 2,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-gemma3-1b-seven-language-writing.json",
+      "sha256": "6a42767cc6c76c53fa141e0c8db79c34611cceb24587713fca10a5e6fbd213c2",
+      "model": "gemma3-1b-it-q4f16_1-MLC",
+      "status": "failed",
+      "recorded": 0,
+      "refused": 0,
+      "edited": 0,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-gemma3-1b-sliding-window-writing.json",
+      "sha256": "b09d45ef88061db52ce74d040b519fa48cb772b696db5535736f4a8c6ff61806",
+      "model": "gemma3-1b-it-q4f16_1-MLC",
+      "status": "failed",
+      "recorded": 15,
+      "refused": 11,
+      "edited": 4,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-gemma3-1b-full-context-writing.json",
+      "sha256": "d9427c5f68361693dc4b9a74e9eef34a00412dda98fa4d57b15ea9c7e8c80347",
+      "model": "gemma3-1b-it-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 20,
+      "edited": 1,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-llama31-8b-seven-language-writing.json",
+      "sha256": "2e27d34121698d62cf15637911618e814cb29303e54027e34909f0c20e2858e3",
+      "model": "Llama-3.1-8B-Instruct-q4f16_1-MLC",
+      "status": "failed",
+      "recorded": 0,
+      "refused": 0,
+      "edited": 0,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-llama31-8b-seven-language-writing-retry.json",
+      "sha256": "6cfdcfcf8e39b86c6e3822a4e5a2fd5b1cb4d3e306a3222c40785d4e40801570",
+      "model": "Llama-3.1-8B-Instruct-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 10,
+      "edited": 11,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-llama32-3b-seven-language-writing.json",
+      "sha256": "72906196f0636d00517ce96662398f26184e3a18a5edbc24f71446a44ac260b3",
+      "model": "Llama-3.2-3B-Instruct-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 11,
+      "edited": 10,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen35-4b-seven-language-writing.json",
+      "sha256": "694a1231556e265310cd893497d5db235f2eb1a4fd8417596d83fafecefa2a77",
+      "model": "Qwen3.5-4B-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 5,
+      "edited": 16,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-phi4-mini-seven-language-writing.json",
+      "sha256": "1b4ccb2cf8bc450f22319d42db616afd6e91b64856acf91c5ce4235bfba2be38",
+      "model": "Phi-4-mini-instruct-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 12,
+      "edited": 9,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen3-8b-seven-language-writing.json",
+      "sha256": "79f4641e175467a293eaa286314131ddffd8def4a6ecee9d505a5bcb4b798c9e",
+      "model": "Qwen3-8B-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 3,
+      "edited": 18,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-15b-seven-language-writing.json",
+      "sha256": "e192e3d6528b451d5399cb1191c17d0b48dd63c04fe14e66c4ea27dadb44e017",
+      "model": "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 17,
+      "edited": 4,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-3b-seven-language-writing.json",
+      "sha256": "a8e7978f022b56a17e1aa858e80f53ba5ad08646c6dbfb6ee6f99de94fe136be",
+      "model": "Qwen2.5-3B-Instruct-q4f16_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 20,
+      "edited": 1,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-3b-f32-seven-language-writing.json",
+      "sha256": "9a6eafefb95d39f780e15d979c4f6a7feb0b484e545fffb6d4fc32b6fb368d45",
+      "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+      "status": "completed",
+      "recorded": 21,
+      "refused": 17,
+      "edited": 4,
+      "acceptedUnchanged": 0,
+      "qualityAccepted": false
+    }
+  ],
+  "followups": [
+    {
+      "report": "2026-10-04-qwen25-cached-weight-shards.json",
+      "sha256": "2cf7c2bde71d12e96d82d7ea4e41a5292ba01b6b14ff5b4096cc74ec60a24dab",
+      "status": "matched",
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-pinned-libraries.json",
+      "sha256": "c408681e638282093129f1c9d16817bf20ec5c536a2d3292a7931dfb17c0c087",
+      "status": "matched",
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-3b-date-tokens.json",
+      "sha256": "0cdfd6b5109f75bd229b35d301fc0a5a19accd6a9be0bc12e9a3328e9db57d66",
+      "status": "completed",
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-3b-llamacpp-reference.json",
+      "sha256": "8c2787a0eb288d58f90a4c9917e880bef7658b6bcc8175f216495731e5f6daf5",
+      "status": "completed",
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-3b-browser-cpu-reference.json",
+      "sha256": "65b26e39fd76a0bd5e8683c827354768715649207a155a4472209edb1395e38e",
+      "status": "completed",
+      "qualityAccepted": false
+    },
+    {
+      "report": "2026-10-04-qwen25-3b-cpu-im-summary.json",
+      "sha256": "203a344dc1461389634ff614736078c48f68cef5fc31a846cb612efa5ad0d114",
+      "status": "completed",
+      "qualityAccepted": false
+    }
+  ],
+  "configurationSnapshot": {
+    "updated": "2026-10-05",
+    "defaultGPU": "Qwen3-1.7B-q4f16_1-MLC",
+    "defaultCPU": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+    "gpuCandidates": [
+      "Qwen3-1.7B-q4f16_1-MLC",
+      "Qwen3.5-2B-q4f16_1-MLC",
+      "Qwen3.5-0.8B-q4f16_1-MLC",
+      "Qwen3-4B-q4f16_1-MLC"
+    ],
+    "sourceHashes": {
+      "packages/agent-core/src/llm/webllm.ts": "64edc4b16cb7f1e40f175a8d74b4a3e9984cafddb4fab12c4a02cfdd9a8f32aa",
+      "packages/agent-core/src/llm/local.ts": "a036738064f3cc02f542f69b430aee660987e86dd71eb8258d51c52b50e548b9"
+    }
+  }
+}

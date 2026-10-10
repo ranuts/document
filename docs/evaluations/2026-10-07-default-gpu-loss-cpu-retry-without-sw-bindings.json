@@ -1,0 +1,16 @@
+{
+  "processExitCode": 0,
+  "initialBindings": {
+    "sha256": {
+      "docs/evaluations/2026-10-07-default-gpu-loss-cpu-retry-without-sw.mjs": "bad901b685d7aa787b66e921bff9ae171190e34bc5c29f74e7b5c40505bd8caa",
+      "dist/sw.js": "bb9f61986d4a24c11d0ebe04a765d7dcd1454ad0922742617ff81e8a478441d5",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745",
+      "dist/assets/editor-BRhW6Vt0.js": "8e8967aaef2f79ee1e74ea72980ca0abbbc269d7623f6c07707e6317a0bd7b9d"
+    }
+  },
+  "evidenceSHA256": {
+    "2026-10-07-default-gpu-loss-cpu-retry-without-sw.json": "fbd66dee980350948643c8086a93e7e558f2482527c3768c5d0babde5ef56c60",
+    "2026-10-07-default-gpu-loss-cpu-retry-without-sw.mjs": "bad901b685d7aa787b66e921bff9ae171190e34bc5c29f74e7b5c40505bd8caa"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "scope": "Production UI real WASM CPU CPU Qwen3-0.6B GGUF / WebKit planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-BiHmoN8W.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 53299,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "providerTimings": [
+    {
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 50418.999,
+        "decodingDurationMs": 2805.001,
+        "decodeTokensPerSecond": 4.634579452912851,
+        "responseDurationMs": 53258,
+        "endToEndTokensPerSecond": 0.26287130571932854
+      },
+      "responseChars": 41,
+      "stopReason": "stop"
+    }
+  ],
+  "promptProcessingShareOfProviderTime": 0.9466934357279658,
+  "limitations": [
+    "Single online CPU sample in desktop Playwright WebKit, not device-wide performance statistics.",
+    "Backend phase measurements and provider wall clock use different measurement boundaries.",
+    "Temporary diagnostic logging is removed after experiment; no new UI fields.",
+    "Prompt compression or cache reuse gains are not yet verified."
+  ]
+}

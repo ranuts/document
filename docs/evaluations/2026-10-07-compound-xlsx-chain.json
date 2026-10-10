@@ -1,0 +1,77 @@
+{
+  "scope": "warmed desktop Chromium, browser offline emulation",
+  "errors": [],
+  "failures": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "seedProcessClosed": true,
+  "offline": true,
+  "homeFromSW": true,
+  "before": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE"
+    ],
+    [
+      "Sensor",
+      "18",
+      ""
+    ]
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "request": "Read A1:B2, then set B2 to \"COMPOUND_XLSX_20261007\".",
+  "activities": [
+    "Done. You can undo this change.A1:B2\nA1: \"Item\"\nB1: \"Amount\"\nA2: \"Sensor\"\nB2: \"18\""
+  ],
+  "replies": [],
+  "previewCount": 0,
+  "after": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE"
+    ],
+    [
+      "Sensor",
+      "COMPOUND_XLSX_20261007",
+      ""
+    ]
+  ],
+  "chatErrors": [],
+  "undo": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE"
+    ],
+    [
+      "Sensor",
+      "18",
+      ""
+    ]
+  ],
+  "redo": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE"
+    ],
+    [
+      "Sensor",
+      "COMPOUND_XLSX_20261007",
+      ""
+    ]
+  ],
+  "saved": true,
+  "passed": true,
+  "closed": true
+}

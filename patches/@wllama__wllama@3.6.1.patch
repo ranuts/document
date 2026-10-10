@@ -1,0 +1,572 @@
+diff --git a/esm/huggingface.d.ts b/esm/huggingface.d.ts
+index 74b84bea0b12eec684891bef4cecacb52d1ab7c9..b1329abde08861e4aac57522da7fff052b6d2022 100644
+--- a/esm/huggingface.d.ts
++++ b/esm/huggingface.d.ts
+@@ -28,4 +28,4 @@ export interface HuggingFaceParams {
+     hfToken?: string;
+ }
+ export declare function getHFModelSource(config: HuggingFaceParams): Promise<ModelSource>;
+-export declare function getHFFileSHA256(url: string, headers: Record<string, string>): Promise<string | undefined>;
++export declare function getHFFileSHA256(url: string, headers: Record<string, string>, signal?: AbortSignal): Promise<string | undefined>;
+diff --git a/esm/index.cjs b/esm/index.cjs
+index 67111315191e00b90e8e3eb077ace5e9cb21fea9..ac680eff544c649a2233bbfede5fb262e2baa570 100644
+--- a/esm/index.cjs
++++ b/esm/index.cjs
+@@ -1276,12 +1276,8 @@ var isSupportWebGPU = () => {
+ };
+ var isSupportMem64 = () => {
+   try {
+-    new WebAssembly.Memory({
+-      address: "i64",
+-      initial: /* @__PURE__ */ BigInt("1")
+-      // 1 page (64 KiB)
+-    });
+-    return true;
++    // Constructor options can be accepted while actual memory64 modules fail to compile.
++    return WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 5, 3, 1, 4, 1]));
+   } catch (e) {
+     return false;
+   }
+@@ -1443,7 +1439,12 @@ var ProxyToWorker = class {
+       ].join(";\n\n");
+       this.worker = createWorker(completeCode);
+       this.worker.onmessage = this.onRecvMsg.bind(this);
+-      this.worker.onerror = this.logger.error;
++      this.worker.onerror = (event) => {
++        const message = typeof event.message === "string" && event.message ? event.message : "Wllama worker failed";
++        this.worker?.terminate();
++        this.worker = void 0;
++        this.abort(message, "");
++      };
+       const res = yield this.pushTask({
+         verb: "module.init",
+         args: [
+@@ -1502,7 +1503,9 @@ var ProxyToWorker = class {
+     return __async(this, null, function* () {
+       if (this.worker) {
+         this.worker.terminate();
++        this.worker = void 0;
+       }
++      this.abort("Wllama worker terminated", "");
+     });
+   }
+   wllamaDebug() {
+@@ -1593,6 +1596,7 @@ var ProxyToWorker = class {
+    * Push a new task to taskQueue
+    */
+   pushTask(param, buffers) {
++    if (this.failure) return Promise.reject(this.failure);
+     return new Promise((resolve, reject) => {
+       this.taskQueue.push({ resolve, reject, param, buffers });
+       this.runTaskLoop();
+@@ -1640,26 +1644,23 @@ var ProxyToWorker = class {
+       return;
+     } else if (verb === "signal.abort") {
+       const [signalType, message, rawStack, originalErr] = args;
+-      if (originalErr) {
+-        this.logger.error(originalErr);
++      // Native abort messages can be Error objects; settle tasks before diagnostics.
++      const rawMessage = typeof message === "string" ? message : typeof message?.message === "string" ? message.message : "Wllama runtime aborted";
++      let newMsg = rawMessage.replace("Build with -sASSERTIONS for more info.", "");
++      let stack = typeof rawStack === "string" ? rawStack : "";
++      if (signalType === "abort") {
++        newMsg = `(ABORT) ${newMsg}`;
++        stack = stack.replace(/\|/g, "\n");
++      }
++      this.worker?.terminate();
++      this.worker = void 0;
++      this.abort(newMsg, stack);
++      try {
++        if (originalErr) this.logger.error(originalErr);
++        this.logger.error(`Stack trace (${signalType}):\n` + stack);
++      } catch {
++        // Optional logging must not interfere with task rejection.
+       }
+-      (() => __async(this, null, function* () {
+-        let stack = "";
+-        let newMsg = message.replace(
+-          "Build with -sASSERTIONS for more info.",
+-          ""
+-        );
+-        if (signalType === "abort") {
+-          newMsg = `(ABORT) ${newMsg}`;
+-          stack = rawStack.replace(/\|/g, "\n");
+-        } else if (signalType === "exception") {
+-          stack = rawStack;
+-        }
+-        const decoded = yield Debug.decodeStackTrace(stack, isCompatBuild);
+-        this.logger.error(`Stack trace (${signalType}):
+-` + decoded);
+-        this.abort(newMsg, decoded);
+-      }))();
+       return;
+     }
+     if (verb === FILE_READ_REQ_EVENT) {
+@@ -1689,6 +1690,8 @@ var ProxyToWorker = class {
+       text.length == 0 ? "(unknown error)" : text,
+       stack
+     );
++    this.failure = error;
++    this.busy = false;
+     while (this.resultQueue.length > 0) {
+       const waitingTask = this.resultQueue.pop();
+       if (!waitingTask) break;
+@@ -1778,15 +1781,17 @@ function getHFModelSource(config) {
+     return source;
+   });
+ }
+-function getHFFileSHA256(url, headers) {
++function getHFFileSHA256(url, headers, signal) {
+   return __async(this, null, function* () {
++    signal?.throwIfAborted();
+     if (!url.includes("/resolve/")) return void 0;
+     const rawUrl = url.replace("/resolve/", "/raw/");
+     try {
+-      const text = yield fetch(rawUrl, { headers }).then((r) => r.text());
++      const text = yield fetch(rawUrl, { headers, signal }).then((r) => r.text());
+       const match = text.match(/^oid sha256:([0-9a-f]{64})$/m);
+       return match ? match[1] : void 0;
+     } catch (e) {
++      signal?.throwIfAborted();
+       return void 0;
+     }
+   });
+@@ -2074,18 +2079,22 @@ var CacheManager = class {
+   download(_0) {
+     return __async(this, arguments, function* (url, options = {}) {
+       var _a, _b, _c, _d;
++      options.signal?.throwIfAborted();
+       const fileKey = yield urlToFileName(url, "");
+-      const sha256 = yield getHFFileSHA256(url, (_a = options.headers) != null ? _a : {});
++      const sha256 = yield getHFFileSHA256(url, (_a = options.headers) != null ? _a : {}, options.signal);
+       const hint = sha256 ? { sha256 } : void 0;
+       const cachedSize = yield this.sb.getSize(fileKey, hint);
++      options.signal?.throwIfAborted();
+       if (cachedSize !== -1) {
+         const metadata2 = yield this.readMetadata(fileKey);
++        options.signal?.throwIfAborted();
+         if ((metadata2 == null ? void 0 : metadata2.originalURL) === url && metadata2.originalSize === cachedSize) {
+           return;
+         }
+         const head = yield fetch(url, __spreadValues({
+-          method: "HEAD"
++          method: "HEAD", signal: options.signal
+         }, options.headers ? { headers: options.headers } : {}));
++        options.signal?.throwIfAborted();
+         const originalSize = parseInt(
+           (_b = head.headers.get("content-length")) != null ? _b : "0",
+           10
+@@ -2101,12 +2110,16 @@ var CacheManager = class {
+             etag: etag2,
+             sha256
+           }, (_c = options.metadataAdditional) != null ? _c : {}));
++          options.signal?.throwIfAborted();
+           return;
+         }
+         yield this.sb.delete(fileKey);
++        options.signal?.throwIfAborted();
+         yield this.sb.delete(`${PREFIX_METADATA}${fileKey}`);
++        options.signal?.throwIfAborted();
+       }
+       const response = yield fetch(url, __spreadValues(__spreadValues({}, options.headers ? { headers: options.headers } : {}), options.signal ? { signal: options.signal } : {}));
++      options.signal?.throwIfAborted();
+       if (!response.ok || !response.body) {
+         throw new Error(`Failed to fetch ${url}: HTTP ${response.status}`);
+       }
+@@ -2148,7 +2161,9 @@ var CacheManager = class {
+         response.body.pipeThrough(progressStream),
+         hint
+       );
++      options.signal?.throwIfAborted();
+       yield this.writeMetadata(fileKey, metadata);
++      options.signal?.throwIfAborted();
+     });
+   }
+   /**
+@@ -2418,7 +2433,7 @@ var Model = class {
+       }));
+       this.modelManager.logger.debug("Downloading model files:", urls);
+       const nParallel = (_a = this.modelManager.params.parallelDownloads) != null ? _a : DEFAULT_PARALLEL_DOWNLOADS;
+-      const totalSize = yield this.getTotalDownloadSize(urls);
++      const totalSize = yield this.getTotalDownloadSize(urls, options);
+       const loadedSize = [];
+       const worker = () => __async(this, null, function* () {
+         while (works.length > 0) {
+@@ -2480,10 +2495,11 @@ var Model = class {
+     );
+     return allFiles;
+   }
+-  getTotalDownloadSize(urls) {
++  getTotalDownloadSize(urls, options = {}) {
+     return __async(this, null, function* () {
++      options.signal?.throwIfAborted();
+       const responses = yield Promise.all(
+-        urls.map((url) => fetch(url, { method: "HEAD" }))
++        urls.map((url) => fetch(url, { method: "HEAD", headers: options.headers, signal: options.signal }))
+       );
+       const sizes = responses.map(
+         (res) => Number(res.headers.get("content-length") || "0")
+diff --git a/esm/index.js b/esm/index.js
+index 17d611fd17a71ef2dfe1fb9d0d3ef2ec4a94dbaa..6f63351ea7e148bc7e2e798a934a2d135787e628 100644
+--- a/esm/index.js
++++ b/esm/index.js
+@@ -1241,12 +1241,8 @@ var isSupportWebGPU = () => {
+ };
+ var isSupportMem64 = () => {
+   try {
+-    new WebAssembly.Memory({
+-      address: "i64",
+-      initial: /* @__PURE__ */ BigInt("1")
+-      // 1 page (64 KiB)
+-    });
+-    return true;
++    // Constructor options can be accepted while actual memory64 modules fail to compile.
++    return WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 5, 3, 1, 4, 1]));
+   } catch (e) {
+     return false;
+   }
+@@ -1408,7 +1404,12 @@ var ProxyToWorker = class {
+       ].join(";\n\n");
+       this.worker = createWorker(completeCode);
+       this.worker.onmessage = this.onRecvMsg.bind(this);
+-      this.worker.onerror = this.logger.error;
++      this.worker.onerror = (event) => {
++        const message = typeof event.message === "string" && event.message ? event.message : "Wllama worker failed";
++        this.worker?.terminate();
++        this.worker = void 0;
++        this.abort(message, "");
++      };
+       const res = yield this.pushTask({
+         verb: "module.init",
+         args: [
+@@ -1467,7 +1468,9 @@ var ProxyToWorker = class {
+     return __async(this, null, function* () {
+       if (this.worker) {
+         this.worker.terminate();
++        this.worker = void 0;
+       }
++      this.abort("Wllama worker terminated", "");
+     });
+   }
+   wllamaDebug() {
+@@ -1558,6 +1561,7 @@ var ProxyToWorker = class {
+    * Push a new task to taskQueue
+    */
+   pushTask(param, buffers) {
++    if (this.failure) return Promise.reject(this.failure);
+     return new Promise((resolve, reject) => {
+       this.taskQueue.push({ resolve, reject, param, buffers });
+       this.runTaskLoop();
+@@ -1605,26 +1609,23 @@ var ProxyToWorker = class {
+       return;
+     } else if (verb === "signal.abort") {
+       const [signalType, message, rawStack, originalErr] = args;
+-      if (originalErr) {
+-        this.logger.error(originalErr);
++      // Native abort messages can be Error objects; settle tasks before diagnostics.
++      const rawMessage = typeof message === "string" ? message : typeof message?.message === "string" ? message.message : "Wllama runtime aborted";
++      let newMsg = rawMessage.replace("Build with -sASSERTIONS for more info.", "");
++      let stack = typeof rawStack === "string" ? rawStack : "";
++      if (signalType === "abort") {
++        newMsg = `(ABORT) ${newMsg}`;
++        stack = stack.replace(/\|/g, "\n");
++      }
++      this.worker?.terminate();
++      this.worker = void 0;
++      this.abort(newMsg, stack);
++      try {
++        if (originalErr) this.logger.error(originalErr);
++        this.logger.error(`Stack trace (${signalType}):\n` + stack);
++      } catch {
++        // Optional logging must not interfere with task rejection.
+       }
+-      (() => __async(this, null, function* () {
+-        let stack = "";
+-        let newMsg = message.replace(
+-          "Build with -sASSERTIONS for more info.",
+-          ""
+-        );
+-        if (signalType === "abort") {
+-          newMsg = `(ABORT) ${newMsg}`;
+-          stack = rawStack.replace(/\|/g, "\n");
+-        } else if (signalType === "exception") {
+-          stack = rawStack;
+-        }
+-        const decoded = yield Debug.decodeStackTrace(stack, isCompatBuild);
+-        this.logger.error(`Stack trace (${signalType}):
+-` + decoded);
+-        this.abort(newMsg, decoded);
+-      }))();
+       return;
+     }
+     if (verb === FILE_READ_REQ_EVENT) {
+@@ -1654,6 +1655,8 @@ var ProxyToWorker = class {
+       text.length == 0 ? "(unknown error)" : text,
+       stack
+     );
++    this.failure = error;
++    this.busy = false;
+     while (this.resultQueue.length > 0) {
+       const waitingTask = this.resultQueue.pop();
+       if (!waitingTask) break;
+@@ -1743,15 +1746,17 @@ function getHFModelSource(config) {
+     return source;
+   });
+ }
+-function getHFFileSHA256(url, headers) {
++function getHFFileSHA256(url, headers, signal) {
+   return __async(this, null, function* () {
++    signal?.throwIfAborted();
+     if (!url.includes("/resolve/")) return void 0;
+     const rawUrl = url.replace("/resolve/", "/raw/");
+     try {
+-      const text = yield fetch(rawUrl, { headers }).then((r) => r.text());
++      const text = yield fetch(rawUrl, { headers, signal }).then((r) => r.text());
+       const match = text.match(/^oid sha256:([0-9a-f]{64})$/m);
+       return match ? match[1] : void 0;
+     } catch (e) {
++      signal?.throwIfAborted();
+       return void 0;
+     }
+   });
+@@ -2039,18 +2044,22 @@ var CacheManager = class {
+   download(_0) {
+     return __async(this, arguments, function* (url, options = {}) {
+       var _a, _b, _c, _d;
++      options.signal?.throwIfAborted();
+       const fileKey = yield urlToFileName(url, "");
+-      const sha256 = yield getHFFileSHA256(url, (_a = options.headers) != null ? _a : {});
++      const sha256 = yield getHFFileSHA256(url, (_a = options.headers) != null ? _a : {}, options.signal);
+       const hint = sha256 ? { sha256 } : void 0;
+       const cachedSize = yield this.sb.getSize(fileKey, hint);
++      options.signal?.throwIfAborted();
+       if (cachedSize !== -1) {
+         const metadata2 = yield this.readMetadata(fileKey);
++        options.signal?.throwIfAborted();
+         if ((metadata2 == null ? void 0 : metadata2.originalURL) === url && metadata2.originalSize === cachedSize) {
+           return;
+         }
+         const head = yield fetch(url, __spreadValues({
+-          method: "HEAD"
++          method: "HEAD", signal: options.signal
+         }, options.headers ? { headers: options.headers } : {}));
++        options.signal?.throwIfAborted();
+         const originalSize = parseInt(
+           (_b = head.headers.get("content-length")) != null ? _b : "0",
+           10
+@@ -2066,12 +2075,16 @@ var CacheManager = class {
+             etag: etag2,
+             sha256
+           }, (_c = options.metadataAdditional) != null ? _c : {}));
++          options.signal?.throwIfAborted();
+           return;
+         }
+         yield this.sb.delete(fileKey);
++        options.signal?.throwIfAborted();
+         yield this.sb.delete(`${PREFIX_METADATA}${fileKey}`);
++        options.signal?.throwIfAborted();
+       }
+       const response = yield fetch(url, __spreadValues(__spreadValues({}, options.headers ? { headers: options.headers } : {}), options.signal ? { signal: options.signal } : {}));
++      options.signal?.throwIfAborted();
+       if (!response.ok || !response.body) {
+         throw new Error(`Failed to fetch ${url}: HTTP ${response.status}`);
+       }
+@@ -2113,7 +2126,9 @@ var CacheManager = class {
+         response.body.pipeThrough(progressStream),
+         hint
+       );
++      options.signal?.throwIfAborted();
+       yield this.writeMetadata(fileKey, metadata);
++      options.signal?.throwIfAborted();
+     });
+   }
+   /**
+@@ -2383,7 +2398,7 @@ var Model = class {
+       }));
+       this.modelManager.logger.debug("Downloading model files:", urls);
+       const nParallel = (_a = this.modelManager.params.parallelDownloads) != null ? _a : DEFAULT_PARALLEL_DOWNLOADS;
+-      const totalSize = yield this.getTotalDownloadSize(urls);
++      const totalSize = yield this.getTotalDownloadSize(urls, options);
+       const loadedSize = [];
+       const worker = () => __async(this, null, function* () {
+         while (works.length > 0) {
+@@ -2445,10 +2460,11 @@ var Model = class {
+     );
+     return allFiles;
+   }
+-  getTotalDownloadSize(urls) {
++  getTotalDownloadSize(urls, options = {}) {
+     return __async(this, null, function* () {
++      options.signal?.throwIfAborted();
+       const responses = yield Promise.all(
+-        urls.map((url) => fetch(url, { method: "HEAD" }))
++        urls.map((url) => fetch(url, { method: "HEAD", headers: options.headers, signal: options.signal }))
+       );
+       const sizes = responses.map(
+         (res) => Number(res.headers.get("content-length") || "0")
+diff --git a/src/cache-manager.ts b/src/cache-manager.ts
+index 9796d0c27d186c1222bd67dae067ca25173a1ed6..5315ab7b87bcb719a964ca2c446d5911b8766886 100644
+--- a/src/cache-manager.ts
++++ b/src/cache-manager.ts
+@@ -122,16 +122,19 @@ export class CacheManager {
+   }
+ 
+   async download(url: string, options: DownloadOptions = {}): Promise<void> {
++    options.signal?.throwIfAborted();
+     const fileKey = await urlToFileName(url, '');
+ 
+     // Fetch sha256 before the GET so we can skip the download entirely if the
+     // file is already in COS (avoids opening a connection just to cancel it).
+-    const sha256 = await getHFFileSHA256(url, options.headers ?? {});
++    const sha256 = await getHFFileSHA256(url, options.headers ?? {}, options.signal);
+     const hint = sha256 ? { sha256 } : undefined;
+ 
+     const cachedSize = await this.sb.getSize(fileKey, hint);
++    options.signal?.throwIfAborted();
+     if (cachedSize !== -1) {
+       const metadata = await this.readMetadata(fileKey);
++      options.signal?.throwIfAborted();
+       if (
+         metadata?.originalURL === url &&
+         metadata.originalSize === cachedSize
+@@ -141,8 +144,10 @@ export class CacheManager {
+       // no metadata, file maybe partial; ask server for the real size
+       const head = await fetch(url, {
+         method: 'HEAD',
++        signal: options.signal,
+         ...(options.headers ? { headers: options.headers } : {}),
+       });
++      options.signal?.throwIfAborted();
+       const originalSize = parseInt(
+         head.headers.get('content-length') ?? '0',
+         10
+@@ -159,11 +164,14 @@ export class CacheManager {
+           sha256,
+           ...(options.metadataAdditional ?? {}),
+         });
++        options.signal?.throwIfAborted();
+         return;
+       }
+       // size mismatch, drop the file and download it again
+       await this.sb.delete(fileKey);
++      options.signal?.throwIfAborted();
+       await this.sb.delete(`${PREFIX_METADATA}${fileKey}`);
++      options.signal?.throwIfAborted();
+     }
+ 
+     const response = await fetch(url, {
+@@ -171,6 +179,7 @@ export class CacheManager {
+       ...(options.signal ? { signal: options.signal } : {}),
+     });
+ 
++    options.signal?.throwIfAborted();
+     if (!response.ok || !response.body) {
+       throw new Error(`Failed to fetch ${url}: HTTP ${response.status}`);
+     }
+@@ -218,7 +227,9 @@ export class CacheManager {
+       response.body.pipeThrough(progressStream),
+       hint
+     );
++    options.signal?.throwIfAborted();
+     await this.writeMetadata(fileKey, metadata);
++    options.signal?.throwIfAborted();
+   }
+ 
+   /**
+diff --git a/src/huggingface.ts b/src/huggingface.ts
+index 4329f29c4840d56a5d871469ac008951ce08f15d..ad2c8cc310152fb5b7842c7eab1f5eb3c20905d5 100644
+--- a/src/huggingface.ts
++++ b/src/huggingface.ts
+@@ -137,15 +137,18 @@ export async function getHFModelSource(
+ 
+ export async function getHFFileSHA256(
+   url: string,
+-  headers: Record<string, string>
++  headers: Record<string, string>,
++  signal?: AbortSignal
+ ): Promise<string | undefined> {
++  signal?.throwIfAborted();
+   if (!url.includes('/resolve/')) return undefined;
+   const rawUrl = url.replace('/resolve/', '/raw/');
+   try {
+-    const text = await fetch(rawUrl, { headers }).then((r) => r.text());
++    const text = await fetch(rawUrl, { headers, signal }).then((r) => r.text());
+     const match = text.match(/^oid sha256:([0-9a-f]{64})$/m);
+     return match ? match[1] : undefined;
+   } catch {
++    signal?.throwIfAborted();
+     return undefined;
+   }
+ }
+diff --git a/src/model-manager.ts b/src/model-manager.ts
+index d408332812ba9b373cdb80de9a46a37f0bfde205..e49b20e65bad1413e3954ffaacf24b7f36732fe4 100644
+--- a/src/model-manager.ts
++++ b/src/model-manager.ts
+@@ -169,7 +169,7 @@ export class Model {
+     this.modelManager.logger.debug('Downloading model files:', urls);
+     const nParallel =
+       this.modelManager.params.parallelDownloads ?? DEFAULT_PARALLEL_DOWNLOADS;
+-    const totalSize = await this.getTotalDownloadSize(urls);
++    const totalSize = await this.getTotalDownloadSize(urls, options);
+     const loadedSize: number[] = [];
+     const worker = async () => {
+       while (works.length > 0) {
+@@ -231,9 +231,10 @@ export class Model {
+     return allFiles;
+   }
+ 
+-  private async getTotalDownloadSize(urls: string[]): Promise<number> {
++  private async getTotalDownloadSize(urls: string[], options: DownloadOptions = {}): Promise<number> {
++    options.signal?.throwIfAborted();
+     const responses = await Promise.all(
+-      urls.map((url) => fetch(url, { method: 'HEAD' }))
++      urls.map((url) => fetch(url, { method: 'HEAD', headers: options.headers, signal: options.signal }))
+     );
+     const sizes = responses.map((res) =>
+       Number(res.headers.get('content-length') || '0')
+diff --git a/src/worker.ts b/src/worker.ts
+index 3cdc7c9aacf47a51292b3f10191f8267662cedc7..0b2d04f45d4a557a7d88bf2899df3d8b9f10d06c 100644
+--- a/src/worker.ts
++++ b/src/worker.ts
+@@ -385,25 +385,23 @@ export class ProxyToWorker {
+         string,
+         any,
+       ];
+-      if (originalErr) {
+-        this.logger.error(originalErr);
++      // Native abort messages can be Error objects; settle tasks before diagnostics.
++      const rawMessage = typeof message === 'string' ? message : typeof (message as any)?.message === 'string' ? (message as any).message : 'Wllama runtime aborted';
++      let newMsg = rawMessage.replace('Build with -sASSERTIONS for more info.', '');
++      let stack = typeof rawStack === 'string' ? rawStack : '';
++      if (signalType === 'abort') {
++        newMsg = `(ABORT) ${newMsg}`;
++        stack = stack.replace(/\|/g, '\n');
++      }
++      this.worker?.terminate();
++      this.worker = undefined;
++      this.abort(newMsg, stack);
++      try {
++        if (originalErr) this.logger.error(originalErr);
++        this.logger.error(`Stack trace (${signalType}):\n` + stack);
++      } catch {
++        // Optional logging must not interfere with task rejection.
+       }
+-      (async () => {
+-        let stack = '';
+-        let newMsg = message.replace(
+-          'Build with -sASSERTIONS for more info.',
+-          ''
+-        );
+-        if (signalType === 'abort') {
+-          newMsg = `(ABORT) ${newMsg}`;
+-          stack = rawStack.replace(/\|/g, '\n');
+-        } else if (signalType === 'exception') {
+-          stack = rawStack;
+-        }
+-        const decoded = await Debug.decodeStackTrace(stack, isCompatBuild);
+-        this.logger.error(`Stack trace (${signalType}):\n` + decoded);
+-        this.abort(newMsg, decoded);
+-      })();
+       return;
+     }
+ 

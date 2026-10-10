@@ -1,0 +1,9 @@
+# Metal reproduction; SwiftShader generation timeout
+
+The process exited 1 and closed both browser contexts. Default Chromium identified Apple metal-3. With the frozen two-request sequence, Qwen2.5-3B q4f32 copied 2044-09-23 correctly, then replaced 2044-09-22 with the unrelated address “204 Walsh Avenue, Dublin, Ireland”. This reproduces the earlier minimal-request error, outside the editor guards and native document operations.
+
+The software backend identified Google swiftshader. It loaded the same model record/library with no reported initialization error, but the first completion did not resolve within 300 seconds. No final completion was captured before context closure. The failure path did not retain intermediate Worker tokens, detailed native adapter identity inside the Worker, or generation progress. Browser adapter identity alone is not a per-Worker adapter trace. The contrast does not establish whether SwiftShader corrects the date error or isolate Metal as its cause. Do not retry silently or present an absent answer as an incorrect one.
+
+Requests, model record, shipped Worker and chat options are held constant between the two variants; no separate prelaunch weight/bundle hash snapshot was recorded, so immutable artifact equivalence is not certified. This is a date diagnostic, not generative writing acceptance. No default model, production source or native document behavior changes. Full seven-language quality and physical-device/lifecycle acceptance remain open.
+
+A more targeted next diagnostic is to compare cold date-22 with date-22 after date-23, with and without explicit engine chat reset. The observed failure on the second related request makes cache state a testable hypothesis, not an established cause. Freeze the sequences and capture failure snapshots before any further inference.

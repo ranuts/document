@@ -1,0 +1,409 @@
+{
+  "date": "2026-10-02T17:51:52.754Z",
+  "scope": "Production native Save after IM exact multilingual text write; isolated Chromium, offline WebGPU IM multilingual PPT write/read with native bounds, unchanged originals and single Undo/Redo",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790963460"
+    ]
+  },
+  "converterCacheBeforeOffline": [
+    {
+      "path": "/sdkjs/common/wasm/x2t/x2t.js",
+      "cached": true
+    },
+    {
+      "path": "/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "cached": true
+    },
+    {
+      "path": "/sdkjs/common/wasm/x2t/x2t.worker.js",
+      "cached": true
+    }
+  ],
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "geometryBefore": {
+    "history": -1,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      }
+    ]
+  },
+  "before": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "userRequest": "Add a new text box on the current slide with exactly this text, preserving all line breaks and characters: \n项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved",
+  "responseMs": 2259,
+  "blocking": {
+    "events": [
+      {
+        "name": "sync_StartAction",
+        "args": [
+          1,
+          9
+        ]
+      },
+      {
+        "name": "sync_EndAction",
+        "args": [
+          1,
+          9
+        ]
+      }
+    ],
+    "groups": {
+      "start": 1,
+      "end": 1,
+      "cancel": 0
+    },
+    "nativePastes": 1,
+    "nativeCompletions": 1,
+    "pluginPastes": 0,
+    "busy": false
+  },
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BrS_hCZ0.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "after": [
+    [
+      "\r\n",
+      "\r\n",
+      "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+    ]
+  ],
+  "geometryAfter": {
+    "history": 0,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 149.86,
+          "r": 230.30333333333334,
+          "b": 175.27,
+          "x": 10.159999999999997,
+          "y": 149.86,
+          "w": 220.14333333333335,
+          "h": 25.409999999999997
+        }
+      }
+    ]
+  },
+  "layoutValid": true,
+  "originalBoundsUnchanged": true,
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "requestedText": "项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved",
+  "inserted": true,
+  "readMs": 1266,
+  "readFeedback": [
+    "Done. Result checked; use Undo if needed.",
+    "Slide 1:\n项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved"
+  ],
+  "readMatched": true,
+  "readErrors": [],
+  "afterRead": [
+    [
+      "\r\n",
+      "\r\n",
+      "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+    ]
+  ],
+  "readUnchanged": true,
+  "geometryUndo": {
+    "history": -1,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      }
+    ]
+  },
+  "geometryRedo": {
+    "history": 0,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 149.86,
+          "r": 230.30333333333334,
+          "b": 175.27,
+          "x": 10.159999999999997,
+          "y": 149.86,
+          "w": 220.14333333333335,
+          "h": 25.409999999999997
+        }
+      }
+    ]
+  },
+  "saveState": {
+    "platform": "MacIntel",
+    "index": 0,
+    "savedIndex": null,
+    "userSavedIndex": null,
+    "canSave": true,
+    "saveDisabled": false,
+    "saveClass": "btn btn-header canfocused"
+  },
+  "nativeSave": {
+    "suggestedFilename": "New_Document.pptx",
+    "artifactPath": ".scratch/ai-csp/im-native-save.pptx",
+    "bytes": 34037,
+    "downloadFailure": null,
+    "ooxmlProof": {
+      "zipValid": true,
+      "sha256": "828904f15aa18c684bde2ba85053286d6cb505814105ff52fa0a93f20703cd5a",
+      "slide1ShapeCount": 3,
+      "exactMultilineTextMatches": 1,
+      "savedText": "项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved",
+      "geometryMM": {
+        "x": 10.16,
+        "y": 149.86,
+        "width": 220.14333333333335,
+        "height": 25.41
+      },
+      "deltaFromNativeBoundsMM": {
+        "x": 3.552713678800501e-15,
+        "y": 0,
+        "width": 0,
+        "height": 3.552713678800501e-15
+      },
+      "geometryWithinTolerance": true,
+      "toleranceMM": 0.02,
+      "scope": "Visible native header Save button anchor-download output inspected as OOXML. Not a reopen/render or OS overwrite test."
+    }
+  },
+  "afterUndo": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "undoRestored": true,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790963516238.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/100",
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "reopen": {
+    "status": "passed",
+    "scope": "Actual offline homepage file-open of saved downloaded PPTX; no model generation during reopen.",
+    "networkControl": {
+      "reachable": false,
+      "error": "TypeError: Failed to fetch"
+    },
+    "openScriptCached": true,
+    "fileInputCount": 1,
+    "snapshot": {
+      "slides": 1,
+      "width": 338.6666666666667,
+      "height": 190.5,
+      "shapes": [
+        {
+          "text": "\r\n",
+          "bounds": {
+            "l": 42.33333333333334,
+            "t": 31.17675,
+            "r": 296.33333333333337,
+            "b": 97.49897222222222,
+            "x": 42.33333333333334,
+            "y": 31.17675,
+            "w": 254.00000000000003,
+            "h": 66.32222222222222
+          }
+        },
+        {
+          "text": "\r\n",
+          "bounds": {
+            "l": 42.33333333333334,
+            "t": 100.05661111111111,
+            "r": 296.33333333333337,
+            "b": 146.05,
+            "x": 42.33333333333334,
+            "y": 100.05661111111111,
+            "w": 254.00000000000003,
+            "h": 45.9933888888889
+          }
+        },
+        {
+          "text": "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n",
+          "bounds": {
+            "l": 10.159999999999997,
+            "t": 149.86,
+            "r": 230.30333333333334,
+            "b": 175.27,
+            "x": 10.159999999999997,
+            "y": 149.86,
+            "w": 220.14333333333335,
+            "h": 25.409999999999997
+          }
+        }
+      ]
+    },
+    "boundsDeltaMM": {
+      "l": 0,
+      "t": 0,
+      "r": 0,
+      "b": 0
+    },
+    "exactText": true,
+    "geometryRestored": true,
+    "errors": []
+  },
+  "assessment": {
+    "bundle": "editor-BrS_hCZ0.js",
+    "fixScope": "Service worker precaches native conversion runtime and known static homepage dependencies; product UI and IM remain unchanged.",
+    "saveTrigger": "Actual visible #slot-btn-dt-save button; file picker API disabled to exercise ordinary download fallback.",
+    "firstOfflineExportCheckpoint": "2026-10-03-ppt-im-offline-export-checkpoint.json records successful converter-cache fix before homepage fix. This final rerun uses an already warmed isolated profile.",
+    "reopenNetworkControl": "Worker started from online editor route, then context switched offline before homepage/file-open. Uncached .txt fetch rejected. No online homepage or manual asset injection during reopen test.",
+    "visualQA": "Reopened saved slide screenshot inspected: exact three-line bilingual content below unchanged title/subtitle placeholders, no overlap."
+  },
+  "limitations": [
+    "One Qwen3-1.7B desktop Chromium test document; not all models or Word/Excel save validation.",
+    "Download fallback validated; original-file File System Access overwrite and physical browser-start offline remain unverified.",
+    "Offline support requires successful service-worker installation and cached editor/fonts/model resources.",
+    "Runtime precaching adds approximately 7.1 MB compressed/script bytes to installation; no model files added to installation cache."
+  ]
+}

@@ -1,0 +1,11 @@
+# CPU 1.7B selected-text summary development comparison
+
+Frozen protocol 586eb7e, same two source fixtures/instructions/production native summarize route as default CPU run 3261efa. Only model changed to existing Qwen3-1.7B-Q8_0.gguf, 1,834,426,016 bytes, SHA256 061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a. Actual outgoing messages/schema/temperature/top_p/max_tokens match default CPU run exactly. Full Chromium 151.0.7922.34, fresh context per case, delegated unchanged nonstream SDK completion. Actual native automatic replacement and Undo/Redo verified, errors empty, contexts/browser close.
+
+A (26,624 ms): `周宁已收到实验报告，但尚未批准上线。上线审批由许岚负责，预计周四完成。` Shorter and retains declared roles/status/time; two sentences instead of one. Full frozen case gate **fails** instruction format.
+
+B (28,879 ms): `宋远建议周五交付样机，但未获批准；采购零件需待韩岚确认预算，目前预算仍待确认；采购条件未满足，周五交付非已确定承诺。` Shorter, one sentence; Friday remains proposed delivery date, unapproved/tentative state and procurement condition/pending budget preserved. **Passes this individual developer case.** SDK finishes normally with 28/45 tokens and stop, not truncation.
+
+Compared with the immediately preceding 0.6B development outputs, this candidate avoids the B date-binding error, produces less redundant A text, and follows one-sentence format for B. Two cases with unchanged but stochastic defaults do not establish reproducible superiority, held-out accuracy, or a general remedy. Measured turn durations approximately 27–29 seconds versus default 11 seconds, with native reported prefill ~24 seconds versus 8.5 seconds. These are individual runs with observer overhead, not representative latency benchmarks. Q8 model alone is ~1.83GB versus ~484MB default file; no physical mobile budget suitability follows. This CPU Q8 file is not the default WebLLM GPU Q4 binary and cannot certify its behavior.
+
+No source/model default/prompt/budget/output normalization change; no preview or confirmation flow introduced. Default CPU summary failure remains unresolved. This comparison informs the next candidate/prompt/held-out evaluation and resource work; it does not promote either model or shrink acceptance to the passing case. No new unit/build claim for documentation-only evidence.

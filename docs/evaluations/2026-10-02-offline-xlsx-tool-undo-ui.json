@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-02T13:32:31.098Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local WebGPU model then offline reload, IM xlsx operation and native Undo",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790947643"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "before": "",
+  "responseMs": 2083,
+  "after": "OFFLINE_CELL_2026",
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "inserted": true,
+  "afterUndo": "",
+  "undoRestored": true,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790947953556.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "limitations": [
+    "Single isolated desktop Chromium Metal Qwen3-1.7B sample; not all models/browsers/devices.",
+    "Native Undo verified via actual editor API; save/export not tested.",
+    "Network fetch control failed despite navigator.onLine true. SDK spelling helper requests aborted.",
+    "Excel verification covers B2 only; PPT verification covers slide count only, not complete content/selection."
+  ]
+}

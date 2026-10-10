@@ -1,0 +1,15 @@
+import {chromium} from '@playwright/test';
+import fs from 'node:fs/promises';
+const browser=await chromium.launch({channel:'chromium'});
+const page=await browser.newPage();
+const report={console:[],pageErrors:[],workerErrors:[],messages:[]};
+page.on('console',m=>report.console.push({type:m.type(),text:m.text()}));
+page.on('pageerror',e=>report.pageErrors.push(String(e)));
+await page.route('**/assets/webllm.worker-CMk6FPDh.js',async r=>r.fulfill({body:await fs.readFile('.scratch/fixed-examples-worker-check.mjs'),contentType:'application/javascript',headers:{'cross-origin-embedder-policy':'require-corp','cross-origin-opener-policy':'same-origin','content-security-policy':"default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:"}}));
+await page.goto('http://127.0.0.1:5193/');
+await page.evaluate(()=>{window.__probe={errors:[],messages:[]};window.__probeWorker=new Worker('/assets/webllm.worker-CMk6FPDh.js',{type:'module'});window.__probeWorker.addEventListener('error',e=>window.__probe.errors.push({message:e.message,filename:e.filename,line:e.lineno}));window.__probeWorker.addEventListener('message',e=>window.__probe.messages.push(e.data));window.__probeWorker.postMessage({kind:'diagnostic-unknown'});});
+await page.waitForTimeout(3000);
+report.workerState=await page.evaluate(()=>window.__probe);
+await browser.close();
+await fs.writeFile('.scratch/fixed-examples-worker-startup-headers.json',JSON.stringify(report,null,2));
+console.log(JSON.stringify(report));

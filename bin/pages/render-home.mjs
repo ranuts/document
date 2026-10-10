@@ -8,7 +8,7 @@
 import { ORIGIN, REPO } from './constants.mjs';
 import { ID, appEntity, siteEntities, sourceEntity } from './entities.mjs';
 import { DEFAULT_LOCALE, LOCALES } from './locales.mjs';
-import { GH_MARK, langMenu } from './chrome.mjs';
+import { langMenu } from './chrome.mjs';
 import { escapeHtml } from './markdown.mjs';
 import { UI } from './ui.mjs';
 
@@ -50,9 +50,6 @@ export function renderHome({ locale, data, locales }) {
     appEntity({
       description: data.description,
       ...(data.featureList ? { featureList: data.featureList } : {}),
-      ...(data.ecosystem
-        ? { isPartOf: [{ '@id': ID.site }, { '@type': 'SoftwareApplication', ...data.ecosystem }] }
-        : {}),
     }),
     // This page: one homepage per language, each pointing at the same app.
     {
@@ -64,7 +61,6 @@ export function renderHome({ locale, data, locales }) {
       inLanguage: L.lang,
       isPartOf: { '@id': ID.site },
       about: { '@id': ID.app },
-      primaryImageOfPage: `${ORIGIN}/img/pwa-512.png`,
     },
     {
       '@type': 'FAQPage',
@@ -129,9 +125,10 @@ export function renderHome({ locale, data, locales }) {
 <html lang="${L.lang}" dir="${L.dir}">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icons/document.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/document-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/document-180.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/img/64.png" rel="shortcut icon" />
-    <link rel="icon" type="image/png" href="/img/64.png" />
     <link rel="manifest" href="/manifest.json" />
     <!-- Route split: this is a static landing page, /editor hosts the app. Deep
          links that used to target it (?file= ?src= ?new= ?open=local ?embed=
@@ -171,6 +168,7 @@ ${alternates}
         }
       } catch (e) {}
     </script>
+    <script src="/theme-presentation.js"></script>
     <link rel="stylesheet" href="/ran-fonts/fonts.css" />
     <link rel="stylesheet" href="/ran-tokens.css" />
     <link rel="stylesheet" href="/home.css" />
@@ -182,11 +180,9 @@ ${ogAlternates}
     <meta property="og:title" content="${e(data.title)}" />
     <meta property="og:description" content="${e(data.ogDescription || data.description)}" />
     <meta property="og:url" content="${url}" />
-    <meta property="og:image" content="${ORIGIN}/img/pwa-512.png" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="${e(data.title)}" />
     <meta name="twitter:description" content="${e(data.ogDescription || data.description)}" />
-    <meta name="twitter:image" content="${ORIGIN}/img/pwa-512.png" />
 
     <script type="application/ld+json">
 ${jsonLd}
@@ -203,19 +199,14 @@ ${jsonLd}
   </head>
 
   <body>
-    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
-      <symbol id="gh-mark" viewBox="0 0 16 16">
-        <path d="${GH_MARK}" />
-      </symbol>
-    </svg>
     <section id="landing-hero">
       <header class="bar">
         <div class="wrap">
-          <a class="brand" href="${home}"><span class="logo">D</span><span class="wordmark">${e(ui.siteName)}</span></a>
+          <a class="brand" href="${home}"><span class="wordmark">${e(ui.siteName)}</span></a>
           <nav>
 ${nav}
             <a class="navlink gh" href="${REPO}" rel="noopener" target="_blank">
-              <svg class="ghmark" aria-hidden="true"><use href="#gh-mark"></use></svg> GitHub
+              GitHub
             </a>
 ${langMenu(locale, locales, ui, (l) => LOCALES[l].home)}
           </nav>
@@ -318,21 +309,6 @@ ${steps}
           <div class="qa">
 ${faq}
           </div>
-        </div>
-      </div>
-
-      <div class="eco">
-        <div class="wrap">
-          <span class="eco-label">
-            <svg class="gitmark" aria-hidden="true"><use href="#gh-mark"></use></svg>
-            ${e(data.eco.label)}
-          </span>
-          <nav>
-            <span class="here"><b>${e(data.eco.here.name)}</b> <small>${e(data.eco.here.role)}</small></span>
-            <a href="${e(data.eco.other.href)}" rel="noopener" target="_blank">
-              <b>${e(data.eco.other.name)}</b> <small>${e(data.eco.other.role)}</small>
-            </a>
-          </nav>
         </div>
       </div>
 

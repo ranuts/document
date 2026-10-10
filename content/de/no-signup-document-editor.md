@@ -1,34 +1,34 @@
 ---
-title: Dokumenteneditor — ohne Anmeldung, ohne Upload · kostenlos und quelloffen
-description: Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV im Browser bearbeiten — ohne Anmeldung, ohne Login, ohne Upload. Kostenlos, quelloffen (AGPL-3.0) und offlinefähig — Ihre Dateien verlassen Ihr Gerät nie.
+title: 'Dokumenteneditor — ohne Anmeldung, ohne Upload · kostenlos und quelloffen'
+description: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
 eyebrow: Kein Konto · keine Anmeldung
 h1: Kostenloser Online-Dokumenteneditor — ohne Anmeldung, ohne Upload
-lead: Bearbeiten Sie Word- (DOCX), Excel- (XLSX), PowerPoint- (PPTX) und CSV-Dateien direkt im Browser. Kein Konto, kein Login, kein Abo — und Ihre Dateien werden nirgendwohin hochgeladen.
+lead: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload.'
 cta: Editor öffnen →
 ctaHref: /de/
-ogDescription: DOCX, XLSX, PPTX und CSV im Browser bearbeiten — ohne Anmeldung, ohne Upload, offlinefähig. Kostenlos und quelloffen.
+ogDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
 breadcrumb: Editor ohne Anmeldung
 howTo: Ein Dokument ohne Anmeldung bearbeiten
-appDescription: DOCX, XLSX, PPTX und CSV im Browser bearbeiten — ohne Anmeldung, ohne Login, ohne Upload.
+appDescription: 'DOCX, XLSX, PPTX und CSV ohne Anmeldung oder Konto bearbeiten. Lokal bearbeiten ohne erforderlichen Upload.'
 ---
 
-Die meisten „kostenlosen“ Online-Editoren verlangen zuerst ein Konto und laden Ihr Dokument dann stillschweigend auf ihre Server. Dieser tut beides nicht. Alles läuft lokal im Browser mit WebAssembly, Ihre Dateien bleiben also auf Ihrem Gerät. Schließen Sie den Tab, und es bleibt nichts zurück.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload.
 
-Der ganze Editor ist die nach WebAssembly kompilierte OnlyOffice-Engine, die in der Seite läuft. Es gibt also keinen Server, der arbeitet, und keine Warteschlange — Sie öffnen eine Datei und sie ist da. Er beherrscht die alltäglichen Office-Formate (DOCX, XLSX, PPTX) sowie CSV und exportiert nach PDF, TXT, HTML oder CSV. Da es eine installierbare PWA ist, können Sie sie auf den Startbildschirm legen und ganz ohne Verbindung weiterarbeiten.
+DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab. Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 
 ## So funktioniert es
 
 1. Klicken Sie auf **Editor öffnen** — kein Registrieren, kein Login, kein Konto-Schritt.
 2. Ziehen Sie eine DOCX, XLSX, PPTX oder CSV von Ihrem Gerät hinein oder beginnen Sie leer.
-3. Bearbeiten Sie sie im Browser mit der OnlyOffice-Engine — nichts wird hochgeladen.
+3. Bei der lokalen Kernbearbeitung: Bearbeiten Sie sie im Browser mit der OnlyOffice-Engine — nichts wird hochgeladen.
 4. Laden Sie die Datei im Originalformat herunter oder exportieren Sie sie nach PDF, TXT, HTML oder CSV.
 
 ## Warum Leute ihn nutzen
 
 - **Keine Anmeldung, kein Login, kein Abo** — Seite öffnen und loslegen.
-- **Kein Upload** — 100% clientseitig; Ihre Dokumente verlassen Ihr Gerät nie.
+- Bei der lokalen Kernbearbeitung: **Kein Upload** — 100% clientseitig; Ihre Dokumente verlassen Ihr Gerät nie.
 - **Alle gängigen Formate** — DOCX, XLSX, PPTX und CSV, mit OnlyOffice.
-- **Funktioniert offline** — als PWA installierbar und ohne Verbindung nutzbar.
+- Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung.
 - **Quelloffen** — prüfen Sie ihn selbst oder betreiben Sie eine eigene Kopie.
 
 ## Häufige Fragen
@@ -39,7 +39,7 @@ Nein. Es gibt keine Anmeldung, kein Login und kein Konto irgendeiner Art. Öffne
 
 ### Werden meine Dateien auf einen Server hochgeladen?
 
-Nein. Das Bearbeiten passiert vollständig lokal im Browser mit WebAssembly. Ihre Dokumente verlassen Ihr Gerät nie.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Ist es wirklich kostenlos?
 
@@ -47,7 +47,7 @@ Ja. Kostenlos und quelloffen unter der AGPL-3.0. Sie können ihn auch selbst bet
 
 ### Kann ich ihn offline nutzen?
 
-Ja. Es ist eine installierbare PWA und funktioniert nach dem ersten Laden vollständig offline.
+Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung.
 
 ### Welche Dateiformate kann ich bearbeiten?
 
@@ -60,3 +60,11 @@ Nein. Es ist tatsächlich kostenlos und quelloffen unter AGPL-3.0, ohne Paywall 
 ### Kann ich ihn auf dem Handy nutzen?
 
 Ja. Er läuft in jedem modernen mobilen Browser, Sie können also auf Handy oder Tablet bearbeiten, ohne eine App zu installieren.
+
+### Was bleibt nach dem Schließen des Tabs?
+
+Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht.
+
+### Ist ein integrierter KI-Assistent verfügbar?
+
+Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

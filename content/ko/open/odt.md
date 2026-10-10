@@ -1,15 +1,15 @@
 ---
-title: LibreOffice 없이 ODT 파일 열기 — 무료, 브라우저에서
-description: LibreOffice도 OpenOffice도 계정도 없이 브라우저에서 ODT(OpenDocument 텍스트) 파일을 열고 편집하세요. ODT, DOCX, PDF로 다시 저장할 수 있습니다. 아무것도 업로드되지 않습니다.
+title: 'LibreOffice 없이 ODT 파일 열기 — 무료, 브라우저에서'
+description: 'LibreOffice나 계정 없이 브라우저에서 ODT 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 eyebrow: 열기 · .odt
 h1: LibreOffice 없이 ODT 파일 열기
-lead: '**.odt** 파일을 받았는데 LibreOffice가 없나요? 브라우저에서 열어 편집하고 ODT 그대로 — 또는 DOCX나 PDF로 다시 저장하세요. 설치할 것도, 업로드할 것도 없습니다.'
+lead: 'LibreOffice나 계정 없이 브라우저에서 ODT 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 cta: ODT 열기 →
 ctaHref: /ko/
-ogDescription: LibreOffice 없이 브라우저에서 ODT를 열고 편집하세요. ODT, DOCX, PDF로 저장. 업로드 없음.
+ogDescription: 'LibreOffice나 계정 없이 브라우저에서 ODT 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 breadcrumb: odt
 howTo: LibreOffice 없이 ODT 파일을 여는 방법
-appDescription: LibreOffice 없이, 계정 없이, 업로드 없이 브라우저에서 ODT(OpenDocument 텍스트) 파일을 열고 편집합니다.
+appDescription: 'LibreOffice나 계정 없이 브라우저에서 ODT 파일을 열고 편집하세요. 필수 업로드 없는 로컬 편집.'
 ---
 
 ## 사용 방법
@@ -23,7 +23,7 @@ ODT는 OpenDocument 텍스트 형식으로, LibreOffice와 OpenOffice, 그리고
 
 이 편집기는 WebAssembly로 컴파일된 OnlyOffice 엔진으로 ODT를 바로 엽니다. 그래서 문단, 스타일, 표, 이미지, 목록이 축약된 텍스트 보기가 아니라 진짜 문서로 렌더링됩니다. 편집한 뒤 ODT로 다시 저장해 개방형 형식을 유지할 수도 있고, Word를 쓰는 동료를 위해 DOCX로, 읽기만 할 사람을 위해 PDF로 내보낼 수도 있습니다.
 
-아무것도 업로드되지 않습니다. 파일은 디스크에서 브라우저 탭으로 곧바로 읽힙니다. 이는 ODT가 담고 다니는 종류의 문서 — 행정 서식, 학술 초안, 의도적으로 개방형 형식을 고른 조직의 문서 — 에서 특히 중요합니다. 그런 문서일수록 상용 클라우드를 거치지 않는 편이 낫습니다.
+기본 로컬 편집의 경우: 아무것도 업로드되지 않습니다. 파일은 디스크에서 브라우저 탭으로 곧바로 읽힙니다. 이는 ODT가 담고 다니는 종류의 문서 — 행정 서식, 학술 초안, 의도적으로 개방형 형식을 고른 조직의 문서 — 에서 특히 중요합니다. 그런 문서일수록 상용 클라우드를 거치지 않는 편이 낫습니다.
 
 ## 자주 묻는 질문
 

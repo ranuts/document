@@ -1,0 +1,7 @@
+# Automatic fallback: observed model status transitions
+
+An actual Chromium DOM MutationObserver captured current built plugin agent-plugin-Du88OJyO.js during the same injected GPU reload failure / real cached CPU fallback workflow. The UI progressed from Preparing AI, to Preparing AI · WebGPU · Qwen3 · 1.7B, to Preparing AI · CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf, and finally CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf. The GPU title was the full MLC ID; both CPU states had the correct GGUF basename. The final ready state contained no stale GPU label.
+
+One reload failure and termination calls on that Worker were observed. CPU chat completed with no visible errors, preview or document mutation. Browser closed. No product change was needed for this status behavior. Run verify-gpu-cpu-status-transition.py for captured ordering, identity and native mechanics.
+
+MutationObserver snapshots establish DOM state order, not how long a human saw each frame, announcement by assistive technology or rendering on every device. Warm caches did not emit numeric download progress, so this run cannot certify progress-percentage reset after a partially downloaded GPU model. The observed progress field is null and is not evidence about the actual progress element's selector or layout. Failure injection is not physical GPU loss/OOM, and this online run is not offline acceptance or broad response-quality acceptance.

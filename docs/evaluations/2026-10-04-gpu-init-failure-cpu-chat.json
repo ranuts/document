@@ -1,0 +1,78 @@
+{
+  "currentPlugin": "agent-plugin-Du88OJyO.js",
+  "scope": "Current dist native Word IM: actual GPU adapter detection, injected reload Worker error, real cached CPU model and chat stream. Not physical GPU failure or offline acceptance.",
+  "offlineRequests": [],
+  "probeSHA256": "af10c3972f0c4df13a1a8363f1c99d48a9577d4cc3bedcceaa27a1d867658ec4",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "selectedProvider": "webllm",
+      "gpuPresent": true,
+      "failedGpuLoads": 1,
+      "gpuTerminations": 2,
+      "coldState": {
+        "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+        "isolated": true
+      },
+      "browserOnline": true,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "modelWorkers": [
+        "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+        "blob:http://127.0.0.1:5193/0fa0ea01-4aa8-4980-8c40-f1fa08657ded",
+        "blob:http://127.0.0.1:5193/f7ab77da-9023-42b4-8644-aa483ee20af4",
+        "blob:http://127.0.0.1:5193/7766d34b-362f-4edf-a7b6-bb1c8867e8f5",
+        "blob:http://127.0.0.1:5193/f0cf96ff-e1a1-4ba9-8dab-cc0e84e2e2ef",
+        "blob:http://127.0.0.1:5193/26f3205a-8c3d-4f44-93d2-489958943131"
+      ],
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 37.6 token/s · First text: 0.96 s · Overall response rate: 10.36 token/s · 13 tokens",
+      "reply": "Hello! Let me know if there's anything you need.Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "seedResources": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/ran-fonts/fonts.css",
+    "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+    "http://127.0.0.1:5193/assets/editor-BBgH_qQ1.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/input-DEoPNM0j-DVH4R4CQ.js",
+    "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+    "http://127.0.0.1:5193/assets/agent-plugin-Du88OJyO.js",
+    "http://127.0.0.1:5193/assets/input-vkdavjDC.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+    "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+    "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+    "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=docx",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/icons/document-light.svg",
+    "http://127.0.0.1:5193/assets/wllama-XMlyubPs.js",
+    "http://127.0.0.1:5193/assets/esm-BmP3Hx_J.js"
+  ],
+  "seedState": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "isolated": true
+  },
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "status": "completed"
+}

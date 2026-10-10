@@ -1,0 +1,38 @@
+{
+  "receiptSha256": "579cb4f43b7a8b2cba501ca0319732d3e0a628c414a3fb9422ba518c669446f8",
+  "baselineChecks": [
+    {
+      "id": "zh-CN-rewrite",
+      "baselineExact": true
+    },
+    {
+      "id": "ja-rewrite",
+      "baselineExact": true
+    },
+    {
+      "id": "ko-rewrite",
+      "baselineExact": true
+    }
+  ],
+  "scope": "Known-source manual review; literal restoration alone is not semantic fidelity",
+  "protectedRows": [
+    {
+      "id": "zh-CN-rewrite",
+      "literalRestoration": "pass",
+      "verdict": "narrow-pass",
+      "reason": "ISO date restored; examined quantity, proposer, delivery team, permission prerequisite and negative status retained. Date becomes a separate record heading sentence."
+    },
+    {
+      "id": "ja-rewrite",
+      "literalRestoration": "pass",
+      "verdict": "narrow-pass",
+      "reason": "ISO date restored; examined actors, quantity, proposal status, prerequisite and labels retained. Native-speaker style certification absent; date is a separate record heading sentence."
+    },
+    {
+      "id": "ko-rewrite",
+      "literalRestoration": "pass",
+      "verdict": "fail",
+      "reason": "ISO date restored but rental-team actor disappears from the conditional camera handover permission. Original/instruction-only output retained that team."
+    }
+  ]
+}

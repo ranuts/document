@@ -1,0 +1,11 @@
+# Gemma 4 remaining development cases, 2026-10-07
+
+Continue the unresolved desktop model investigation from the [October 5 protocol](2026-10-05-gemma4-summary-protocol.md). An ignored local checkpoint contains exactly one completed first-case result from the old build; its browser-close field is absent and no process remains. It is historical partial evidence, not a completed run. Do not replay that known first case as fresh acceptance.
+
+This continuation runs only cases 2–4 from the frozen concise-summary fixture, once each in separate Chromium contexts with actual Word editing. The preview is an independently started local Vite preview on port 5193. The application bundle is core1791295582/vendorb6864850e7b3, produced before the separate runtime cancellation fix. Source HEAD e5bf81c does not alone identify built bytes; bind the served editor/client/worker assets separately. Record model size and SHA256, final counted/completed requests, raw output, native document text, Undo/Redo and context/browser cleanup. Preserve unsuccessful rows.
+
+Keep the original task messages, JSON schema, temperature 0, top_p 0.8 and output limit 512. Use the existing CPU provider and matched token-count runtime. No model defaults, production prompts, dependencies or application assets change during inference. Model weights remain ignored and are not committed. The official model card recommends different sampling; this run tests the existing product configuration, not optimal candidate tuning.
+
+Every required actor, object, prerequisite, pending status and negation must survive. Require one shorter sentence in the requested source language, no distractor and no invented claim. Mechanical application is evaluated independently. These three sources were already observed in earlier model experiments; even a perfect result would justify a fresh seven-language screen, not certify general quality, mobile resources, offline behavior or arbitrary tools.
+
+A row that fails setup is an availability result, not a summary-quality score. Stop duplicate load attempts if setup fails. Any semantic failure keeps the candidate unaccepted under this protocol. Combining the historical first row with this run must retain different build identities and incomplete historical cleanup status.

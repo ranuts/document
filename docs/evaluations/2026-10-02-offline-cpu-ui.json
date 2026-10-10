@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-02T06:17:20.848Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local CPU model then offline reload and actual inference",
+  "status": "passed",
+  "warmEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790921811"
+    ]
+  },
+  "offlineController": "http://127.0.0.1:5193/sw.js",
+  "offlineEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "responseMs": 24425,
+  "text": [
+    "Hello.Write to document"
+  ],
+  "stats": "First text: 23.96 s · Overall response rate: 0.12 token/s · 3 tokens",
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

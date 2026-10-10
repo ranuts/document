@@ -1,0 +1,7 @@
+# Ministral FP32 artifact prerequisites and comparison limits
+
+Installed WebLLM catalog includes `Ministral-3-3B-Instruct-2512-BF16-q4f32_1-MLC`, with estimated required VRAM 3532.37 MB and context override 4096. These are catalog values, not measurements. The pinned MLC config at revision `37ac6cfe41d24aff036c6b3fe37e1469272c4cb4` was fetched successfully; URL, reported response hash and parsed config are retained. No artifact weights or actual browser cache revision are verified by this metadata.
+
+Compared with the recorded q4f16 config, top-level differing fields are quantization, prefill_chunk_size, model_task and model_config. Within model_config only prefill_chunk_size differs: 1024 versus 8192. Conversation template and tokenizer file names are equal. This means the proposed browser comparison is between compiled artifact variants, not a pure floating-point precision intervention. SDK LLMChatPipeline takes its effective prefillChunkSize from runtime metadata, so repository config differences alone do not prove effective runtime chunk size. Capture metadata before making that attribution.
+
+The browser driver `probe-ministral-basic-generation-fp32.mjs` runs the same predeclared shortest fixtures and diagnostic prompts/max64/no grammar/resolved system template as the FP16 case. Its intended outcome is to determine whether the alternate artifact behaves differently, not validate writing quality, change product defaults or rank devices. Actual results must be reviewed separately once the owned process is terminal.

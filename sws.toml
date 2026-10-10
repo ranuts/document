@@ -25,6 +25,8 @@
 source = "**"
 [advanced.headers.headers]
 Cache-Control = "no-cache"
+Cross-Origin-Opener-Policy = "same-origin"
+Cross-Origin-Embedder-Policy = "require-corp"
 
 # Keep the vendored editor trees out of search indexes (mirrors _headers).
 [[advanced.headers]]
@@ -78,3 +80,9 @@ source = "/sdkjs/common/wasm/x2t/x2t.wasm.br"
 [advanced.headers.headers]
 Content-Encoding = "br"
 Cache-Control = "public, max-age=31536000, immutable"
+
+# Same narrow model-Worker policy as Pages and Vite.
+[[advanced.headers]]
+source = "/assets/webllm.worker-*.js"
+[advanced.headers.headers]
+Content-Security-Policy = "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:"

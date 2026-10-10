@@ -1,0 +1,25 @@
+{
+  "scope": "Gemma native CPU load thread observation only; no inference; cannot retroactively certify prior runs",
+  "errors": [],
+  "browserVersion": "151.0.7922.34",
+  "environment": {
+    "crossOriginIsolated": true,
+    "hardwareConcurrency": 10,
+    "sharedArrayBuffer": "function"
+  },
+  "loads": [
+    {
+      "requested": {
+        "n_threads": 4,
+        "n_ctx": 2048,
+        "n_gpu_layers": 0,
+        "reasoning": false
+      },
+      "actualThreads": 4,
+      "multithread": true,
+      "loaded": true
+    }
+  ],
+  "note": "模型已加载，可以开始对话。",
+  "closed": true
+}

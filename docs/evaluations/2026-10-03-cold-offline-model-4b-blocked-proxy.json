@@ -1,0 +1,34 @@
+{
+  "model": "Qwen3-4B-q4f16_1-MLC",
+  "cpu": false,
+  "status": "passed",
+  "scope": "New isolated browser process starts offline with previously cached model; current app shell warmed online in a separate process and closed first. Dead local HTTP proxy with loopback bypass disabled plus browser offline emulation from launch through navigation and actual inference. Not physical network removal, OS reboot, eviction, or mobile.",
+  "network": {
+    "online": true,
+    "fetchRejected": true,
+    "controller": "http://127.0.0.1:5193/sw.js"
+  },
+  "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+  "responseMs": 1204,
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-DPk94L3L.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__cold_offline_control_1790987395566",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

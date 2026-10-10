@@ -1,0 +1,13 @@
+{
+  "scope": "Driver and pinned manifest identities recorded immediately after launch; not prelaunch browser/cache snapshot",
+  "sha256": {
+    "docs/evaluations/2026-10-07-qwen25-7b-cached-weight-shards.mjs": "289b1e201be59ec92e7ed60892e7d8216f17ff7f4fc516e061b1e86d84bf47aa",
+    "docs/evaluations/2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a"
+  },
+  "processExitCode": 0,
+  "evidenceSHA256": {
+    "2026-10-07-qwen25-7b-cached-weight-shards.mjs": "289b1e201be59ec92e7ed60892e7d8216f17ff7f4fc516e061b1e86d84bf47aa",
+    "2026-10-07-qwen25-7b-cached-weight-shards.json": "d0cb9a66ad940c59432b5746807ba73845e8bbaaf90ffa845a054c85ea45e529",
+    "2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a"
+  }
+}

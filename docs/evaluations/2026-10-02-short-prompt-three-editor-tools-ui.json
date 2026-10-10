@@ -1,0 +1,58 @@
+{
+  "scope": "Production UI, real Qwen3-1.7B Metal GPU planning, document API and editor Undo on isolated new Word/Excel/PPT documents",
+  "results": [
+    {
+      "kind": "docx",
+      "prompt": "Insert exactly the text Hello tools at the current cursor.",
+      "before": "\r\n",
+      "after": "Hello tools\r\n",
+      "elapsedMs": 2336,
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "visibleErrors": [],
+      "feedback": [
+        "Done. Result checked; use Undo if needed.Done. Result checked; use Undo if needed."
+      ],
+      "previewCount": 0,
+      "operationPassed": true,
+      "undoMethod": "Undo",
+      "afterUndo": "\r\n",
+      "undoPassed": true
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "Write the plain value Hello tools to cell A1.",
+      "before": "",
+      "after": "Hello tools",
+      "elapsedMs": 1836,
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "visibleErrors": [],
+      "feedback": [
+        "Done. Result checked; use Undo if needed.Done. Result checked; use Undo if needed."
+      ],
+      "previewCount": 0,
+      "operationPassed": true,
+      "undoMethod": "asc_Undo",
+      "afterUndo": "",
+      "undoPassed": true
+    },
+    {
+      "kind": "pptx",
+      "prompt": "Add one new slide using the current layout.",
+      "before": 1,
+      "after": 2,
+      "elapsedMs": 1321,
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "visibleErrors": [],
+      "feedback": [
+        "Done. Result checked; use Undo if needed.Done. Result checked; use Undo if needed."
+      ],
+      "previewCount": 0,
+      "operationPassed": true,
+      "undoMethod": "Undo",
+      "afterUndo": 1,
+      "undoPassed": true
+    }
+  ],
+  "errors": [],
+  "limitations": "Three basic operations with Qwen3-1.7B after default prompt change; not all tools, models or devices."
+}

@@ -1,0 +1,135 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "blob:http://127.0.0.1:5193/6ca1deec-db97-4ce3-a92f-748c6f7bfa0a"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "url": "blob:http://127.0.0.1:5193/2706745d-ab49-479c-801d-5a560c1c67b9"
+    },
+    {
+      "event": "created",
+      "id": 4,
+      "url": "blob:http://127.0.0.1:5193/95e68cd6-5595-41ce-9bcd-419fd9637b96"
+    },
+    {
+      "event": "created",
+      "id": 5,
+      "url": "blob:http://127.0.0.1:5193/888949ab-3439-4cd4-84c7-8ac41e50613b"
+    },
+    {
+      "event": "created",
+      "id": 6,
+      "url": "blob:http://127.0.0.1:5193/ead7584d-53b5-4b2d-b1b5-07cf12ee70fe"
+    },
+    {
+      "event": "closed",
+      "id": 3
+    },
+    {
+      "event": "closed",
+      "id": 5
+    },
+    {
+      "event": "closed",
+      "id": 6
+    },
+    {
+      "event": "closed",
+      "id": 4
+    },
+    {
+      "event": "closed",
+      "id": 2
+    },
+    {
+      "event": "created",
+      "id": 7,
+      "url": "blob:http://127.0.0.1:5193/21d6b3ef-1071-45c4-8fa2-6b3aec53474b"
+    },
+    {
+      "event": "created",
+      "id": 8,
+      "url": "blob:http://127.0.0.1:5193/e2e7b6c1-ba86-472f-aa11-c0d84c018555"
+    },
+    {
+      "event": "created",
+      "id": 9,
+      "url": "blob:http://127.0.0.1:5193/b1ab2ccb-9287-4a73-8bbf-8417a7b2a448"
+    },
+    {
+      "event": "created",
+      "id": 10,
+      "url": "blob:http://127.0.0.1:5193/2f1fa54b-bd10-41b6-865c-17ede8c69a04"
+    },
+    {
+      "event": "created",
+      "id": 11,
+      "url": "blob:http://127.0.0.1:5193/90b4a3a9-e562-4ada-adfc-e9e47cf6d5e4"
+    }
+  ],
+  "offlineRequests": [
+    {
+      "url": "blob:http://127.0.0.1:5193/21d6b3ef-1071-45c4-8fa2-6b3aec53474b",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/e2e7b6c1-ba86-472f-aa11-c0d84c018555",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/b1ab2ccb-9287-4a73-8bbf-8417a7b2a448",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/2f1fa54b-bd10-41b6-865c-17ede8c69a04",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/90b4a3a9-e562-4ada-adfc-e9e47cf6d5e4",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET",
+      "hasBody": false
+    }
+  ],
+  "probeSHA256": "1ce2b56dd702ac184e1e0330b96812ebaf8d58d24b4f9dfc4b2cbecabed3eaa6",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [
+    "t.replace is not a function",
+    "Aborted(NetworkError: Failed to execute 'send' on 'XMLHttpRequest': Failed to load 'http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm'.). Build with -sASSERTIONS for more info."
+  ],
+  "status": "failed",
+  "error": "TimeoutError: page.waitForFunction: Timeout 180000ms exceeded."
+}

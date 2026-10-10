@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-02T05:53:56.054Z",
+  "scope": "Built editor meta CSP, no injected header; real Metal WebGPU inference and script injection defense",
+  "status": "passed",
+  "adapter": {
+    "vendor": "apple",
+    "architecture": "metal-3"
+  },
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "text": [
+    "Hello.Write to document"
+  ],
+  "functionalViolations": [],
+  "policy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+  "injected": false,
+  "errors": [],
+  "violations": [
+    {
+      "directive": "script-src-elem",
+      "blocked": "inline",
+      "source": "",
+      "line": 1
+    },
+    {
+      "directive": "script-src-attr",
+      "blocked": "inline",
+      "source": "",
+      "line": 1
+    }
+  ]
+}

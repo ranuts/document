@@ -1,0 +1,13 @@
+# WebGPU context overflow guidance
+
+The CPU correction exposed a matching gap in the WebGPU path. An actual cached Qwen3-1.7B selected-text summary in desktop Chromium used a 7,000-character synthetic Chinese fixture, within the application's 8,000-character bound. The model Worker measured 4,522 prompt tokens against a 4,096-token context and rejected it. Before correction, the UI displayed generic failure; exact source selection remained unchanged.
+
+The pinned WebLLM SDK creates ContextWindowSizeExceededError, but its Worker serializes errors with toString() and rejects the resulting string. Handling only Error objects would miss the production Worker path. The provider now recognizes the observed complete SDK message in both forms and maps it to existing localized agentContextTooLong guidance. It preserves other errors and cancellation reasons and checks request/provider cancellation before classification. Model, schema, generation settings, source length bounds and native editor actions remain unchanged; no source truncation or UI steps were added.
+
+After building, the real Worker again measured 4,522/4,096 and the UI displayed “This request is too long. Select a shorter passage or split the task.” Original document text remained exact. Restore filled the original instruction without another user turn or submission. After manually shortening the isolated fixture, a manually submitted chat returned Hello. without another visible error. No page error or preview card was observed. Separate baseline/fixed reports preserve the actual Worker rejection strings.
+
+Two focused tests failed before implementation. Final 29 focused tests passed, including SDK Error/Worker-string failures for JSON and streaming, usable engine/queue after rejection, untyped look-alike errors and unchanged cancellation reason. Build, root lint and 116 test files / 4,159 tests passed. Existing converter PromiseRejectionHandledWarnings remain. Read-only review found no Important/Critical issue.
+
+This proves rejection guidance, exact source retention and subsequent request recovery for this desktop GPU/model fixture. It is not general writing quality, native Save/reopen, physical mobile/memory coverage or a latency benchmark. The matcher covers the pinned SDK's observed format; other formats are intentionally not guessed. The historical 5193 host has injected same-origin isolation headers, Service Workers are blocked, and only an isolated profile/synthetic document is used.
+
+Reproduce after building with `GPU_CONTEXT_FIXED=1 node docs/evaluations/probe-gpu-long-writing.mjs`. Do not run another process using the probe's GPU profile concurrently. Baseline mode (without that variable) expects the pre-correction UI and is for an earlier checkout only.

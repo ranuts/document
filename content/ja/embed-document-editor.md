@@ -1,18 +1,18 @@
 ---
-title: 自分のサイトにドキュメントエディタを埋め込む — iframe + postMessage API
-description: iframe 1 つと postMessage API で、DOCX・XLSX・PPTX・CSV のエディタを自分の Web アプリに組み込めます。認証もファイルもあなたのアプリ側に残り、エディタがトークンを見ることはありません。オープンソース（AGPL-3.0）、セルフホスト可能、ホワイトラベル対応。
+title: '自分のサイトにドキュメントエディタを埋め込む — iframe + postMessage API'
+description: 'iframe と postMessage でエディタを埋め込み、ファイルのアクセスやアップロードは埋め込み先が管理します。'
 eyebrow: 開発者向け · 埋め込み
 h1: 自分の Web アプリにドキュメントエディタを埋め込む
 lead: '**DOCX・XLSX・PPTX・CSV** のエディタを、iframe 1 つと **postMessage** API だけでプロダクトに追加できます。認証・ファイル取得・アップロードはあなたのアプリが持ち続け、エディタは編集だけを担当します——ユーザーのトークンを見ることはありません。'
 cta: ライブデモを開く →
 ctaHref: /embed-demo.html
-ogDescription: iframe 1 つで DOCX/XLSX/PPTX/CSV エディタをアプリに組み込み。認証はアプリ側のまま、エディタはトークンを見ません。オープンソースでセルフホスト可能。
+ogDescription: 'iframe と postMessage でエディタを埋め込み、ファイルのアクセスやアップロードは埋め込み先が管理します。'
 breadcrumb: Embed Document Editor
 howTo: 自分のサイトにドキュメントエディタを埋め込む方法
-appDescription: iframe と postMessage API で自分の Web アプリに埋め込める、ブラウザ内で動作するドキュメントエディタ。
+appDescription: 'iframe と postMessage でエディタを埋め込み、ファイルのアクセスやアップロードは埋め込み先が管理します。'
 ---
 
-エディタは OnlyOffice の WebAssembly エンジンでブラウザ内だけで動作するため、ドキュメントはクライアント側で描画・編集されます——ドキュメントサーバーを立てる必要はありません。推奨する構成は境界をきれいに保ちます: **親アプリが認証・取得・保存を担当し、iframe は編集だけを担当する。** トークンも Cookie も業務 API も、あなたのアプリの中に留まります。
+基本のローカル編集では：エディタは OnlyOffice の WebAssembly エンジンでブラウザ内だけで動作するため、ドキュメントはクライアント側で描画・編集されます——ドキュメントサーバーを立てる必要はありません。推奨する構成は境界をきれいに保ちます: **親アプリが認証・取得・保存を担当し、iframe は編集だけを担当する。** トークンも Cookie も業務 API も、あなたのアプリの中に留まります。
 
 ## 一つの iframe で追加する
 
@@ -44,7 +44,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 - **URL・File・ArrayBuffer** から開けます（あなたのアプリが自分の資格情報で取得したバイト列でも可）
 - **XLSX・DOCX・PPTX・CSV** として保存し、`File` として返却——アップロードはあなたのアプリが行います
 - 読み取り専用モード、メッセージ単位のオリジン制限（`embedOrigin`）、状態の問い合わせ
-- 動かすドキュメントサーバーは不要——編集は 100% クライアントサイドの WebAssembly です
+- 基本のローカル編集では：動かすドキュメントサーバーは不要——編集は 100% クライアントサイドの WebAssembly です
 - オープンソース（AGPL-3.0）でセルフホスト可能——自分のドメインの下に埋め込めます
 
 ## 仕組み

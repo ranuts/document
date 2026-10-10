@@ -1,0 +1,7 @@
+# Exact insertion with an existing Word selection
+
+On product commit `450116b`, an owned Chromium WebGPU session loaded Qwen3-1.7B-q4f16_1-MLC and sent an English exact cursor-insertion request through the visible IM tools mode. The new Word document contained `Selected original text 四季`; the native editor selected all its text before the request. This is the editor's documented insertion behavior: a nonempty selection is replaced.
+
+The selected source and native document snapshot are exactly equal, including the terminal CRLF. The resulting document is exactly `Replacement 四季 日本 ä` plus terminal CRLF. Native Undo restores the complete original text; Redo restores the complete replacement. The outgoing Worker request records selectionCharacters=27 and a closed schema with insert_text/unsupported only; the sole insert_text value is the requested source. No page errors, visible message errors or preview cards were recorded.
+
+The driver and unmodified raw report are bound by SHA-256 in `verify-word-selected-insertion.py`. This is one selected-main-body sample, not acceptance of arbitrary selections, paragraph structures, tables, comments, tracked revisions, nonempty text surrounding a partial selection, Save/reopen or layout preservation. The profile is warm, service workers are blocked, and network is available; no cold offline or network privacy claim follows. No product code or model default changed in this follow-up.

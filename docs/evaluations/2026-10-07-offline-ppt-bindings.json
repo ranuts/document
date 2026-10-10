@@ -1,0 +1,21 @@
+{
+  "checkpoint": "a824cbc61831f2431103dc86494ab374985a87b3",
+  "evidenceSHA256": {
+    "2026-10-07-offline-ppt-chain.mjs": "6e09b4e5698cb13e624cfa3a1dd3f3fa88842f4b7410ad64e6030164ab06384a",
+    "2026-10-07-offline-ppt-chain.json": "490128be8b1fd4e06dd01fa9ab2d1c4d10d60c29b97d8037dbf129cabda8356c",
+    "2026-10-07-offline-ppt-reopen.mjs": "969d44a065c7c0f348f00d7d8c4343a935ac15d0cad3a4075ff6e4e4c7f4dbea",
+    "2026-10-07-offline-ppt-reopen.json": "3722f2726ace2735ae44eac02f736858760538c2358537641b51d57b9841b102"
+  },
+  "savedFile": {
+    "path": ".scratch/2026-10-07-offline-ppt-chain.pptx",
+    "bytes": 33969,
+    "sha256": "a392853fda25a12b5b08589a982b4c99600612b7b88200428400347bad3c2bf9",
+    "slide1Text": [
+      "OFFLINE_PPT_20261007"
+    ]
+  },
+  "afterRunAssetsSHA256": {
+    "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+    "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7"
+  }
+}

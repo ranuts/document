@@ -1,0 +1,932 @@
+{
+  "status": "completed",
+  "scope": "Actual built IM CPU fallback, action observation only; no request rewriting or editor writes",
+  "plugin": "agent-plugin-C_6sZOol.js",
+  "pluginSHA256": "a4fe20671fae9203f46fcc2084563781d0f822f988a85ebe64a1801d794e63d6",
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "log",
+      "text": "SW registered:  undefined"
+    },
+    {
+      "type": "log",
+      "text": "SW registration failed:  TypeError: Cannot read properties of undefined (reading 'waiting')\n    at Ne (http://127.0.0.1:5193/assets/editor-DhzzvbuA.js:2:889)\n    at r (http://127.0.0.1:5193/assets/editor-DhzzvbuA.js:2:986)\n    at Pe (http://127.0.0.1:5193/assets/editor-DhzzvbuA.js:2:997)\n    at http://127.0.0.1:5193/assets/editor-DhzzvbuA.js:206:11409"
+    },
+    {
+      "type": "log",
+      "text": "Creating new editor instance for: New_Document.xlsx type: xlsx"
+    },
+    {
+      "type": "log",
+      "text": "[OO] SharedWorker shadowed in editor iframe (spellchecker uses a dedicated worker)"
+    },
+    {
+      "type": "log",
+      "text": "[OO] AscCommon.fetchFonts now waits for the font system before converting"
+    },
+    {
+      "type": "log",
+      "text": "[OO] serverless image pipeline installed (sendImgUrls, media registry, convertFromBin medias)"
+    },
+    {
+      "type": "log",
+      "text": "[OO] serverless save semantics installed (autosave loop off, Save/Ctrl+S -> download stream)"
+    },
+    {
+      "type": "log",
+      "text": "[OO] long-action counter leak guard installed (frame-editor entry points)"
+    },
+    {
+      "type": "log",
+      "text": "[OO] whole-sheet series-settings guard installed"
+    },
+    {
+      "type": "log",
+      "text": "[OO] comment bulk-action guard installed (no-op without a cell selection)"
+    },
+    {
+      "type": "log",
+      "text": "{type: auth, docid: doc-1791098190188-754379, documentCallbackUrl: undefined, token: fghhfgsjdgfjs, user: Object}"
+    },
+    {
+      "type": "log",
+      "text": "[OO] font-load acceleration installed (no default-font preload, parallel prefetch of queued faces)"
+    },
+    {
+      "type": "log",
+      "text": "Document loaded: New_Document.xlsx"
+    },
+    {
+      "type": "debug",
+      "text": "Multithread enabled: true, pthreadPoolSize: 4"
+    },
+    {
+      "type": "debug",
+      "text": "Loading \"wllama.wasm\" from \"http://127.0.0.1:5193/assets/wllama-BITawafS.wasm\""
+    },
+    {
+      "type": "debug",
+      "text": "Calling wllamaStart..."
+    },
+    {
+      "type": "debug",
+      "text": "Using async file read"
+    },
+    {
+      "type": "debug",
+      "text": "Loading model..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: loaded meta data with 31 key-value pairs and 311 tensors from models/model-00001-of-00001.gguf (version GGUF V3 (latest))"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   0:                       general.architecture str              = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   1:                               general.type str              = model"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   2:                               general.name str              = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   3:                           general.basename str              = Qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   4:                         general.size_label str              = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   5:                          qwen3.block_count u32              = 28"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   6:                       qwen3.context_length u32              = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   7:                     qwen3.embedding_length u32              = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   8:                  qwen3.feed_forward_length u32              = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   9:                 qwen3.attention.head_count u32              = 16"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  10:              qwen3.attention.head_count_kv u32              = 8"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  11:                       qwen3.rope.freq_base f32              = 1000000.000000"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  12:     qwen3.attention.layer_norm_rms_epsilon f32              = 0.000001"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  13:                 qwen3.attention.key_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  14:               qwen3.attention.value_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  15:                       tokenizer.ggml.model str              = gpt2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  16:                         tokenizer.ggml.pre str              = qwen2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  17:                      tokenizer.ggml.tokens arr[str,151936]  = [\"!\", \"\\\"\", \"#\", \"$\", \"%\", \"&\", \"'\", ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  18:                  tokenizer.ggml.token_type arr[i32,151936]  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  19:                      tokenizer.ggml.merges arr[str,151387]  = [\"Ġ Ġ\", \"ĠĠ ĠĠ\", \"i n\", \"Ġ t\",..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  20:                tokenizer.ggml.eos_token_id u32              = 151645"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  21:            tokenizer.ggml.padding_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  22:                tokenizer.ggml.bos_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  23:               tokenizer.ggml.add_bos_token bool             = false"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  24:                    tokenizer.chat_template str              = {%- if tools %}\\n    {{- '<|im_start|>..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  25:               general.quantization_version u32              = 2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  26:                          general.file_type u32              = 15"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  27:                      quantize.imatrix.file str              = /models_out/Qwen3-0.6B-GGUF/Qwen_Qwen..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  28:                   quantize.imatrix.dataset str              = /training_dir/calibration_datav3.txt"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  29:             quantize.imatrix.entries_count i32              = 196"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  30:              quantize.imatrix.chunks_count i32              = 137"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type  f32:  113 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q4_K:  169 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q6_K:   29 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file format = GGUF V3 (latest)"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file type   = Q4_K - Medium"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file size   = 456.11 MiB (5.09 BPW) "
+    },
+    {
+      "type": "debug",
+      "text": "load: 0 unused tokens"
+    },
+    {
+      "type": "warning",
+      "text": "load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden"
+    },
+    {
+      "type": "debug",
+      "text": "load: printing all EOG tokens:"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 128247 ('</s>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151643 ('<|endoftext|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151645 ('<|im_end|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151662 ('<|fim_pad|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151663 ('<|repo_name|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151664 ('<|file_sep|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load: special tokens cache size = 27"
+    },
+    {
+      "type": "debug",
+      "text": "load: token to piece cache size = 0.9311 MB"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: arch                  = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab_only            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: no_alloc              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_train           = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_inp            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd                = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_out            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer               = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer_all           = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head                = 16"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head_kv             = 8"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_rot                 = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_swa                 = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: is_swa_any            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_k         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_v         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_gqa                 = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_k_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_v_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_eps            = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_rms_eps        = 1.0e-06"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_clamp_kqv           = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_max_alibi_bias      = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_logit_scale         = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_scale          = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_value_scale    = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ff                  = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_used         = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_groups       = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_group_used          = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: causal attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: pooling type          = -1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope type             = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope scaling          = linear"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_base_train       = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_scale_train      = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_orig_yarn       = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_yarn_log_mul     = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_finetuned        = unknown"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model type            = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model params          = 751.63 M"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: general.name          = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab type            = BPE"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_vocab               = 151936"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_merges              = 151387"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: BOS token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOS token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOT token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: PAD token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: LF token              = 198 'Ċ'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PRE token         = 151659 '<|fim_prefix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SUF token         = 151661 '<|fim_suffix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM MID token         = 151660 '<|fim_middle|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PAD token         = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM REP token         = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SEP token         = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 128247 '</s>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: max token length      = 256"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors: loading model tensors, this can take a while... (load_mode = none)"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors:          CPU model buffer size =   456.11 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: constructing llama_context"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_seq_max             = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx                 = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq             = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_batch               = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ubatch              = 512"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: causal_attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: flash_attn            = auto"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: kv_unified            = true"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_base             = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_scale            = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_rs_seq              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max         = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max_per_seq = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq (2048) < n_ctx_train (32768) -- the full capacity of the model will not be utilized"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context:        CPU  output buffer size =     2.32 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache:        CPU KV buffer size =   224.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: size =  224.00 MiB (  2048 cells,  28 layers,  4/1 seqs), K (f16):  112.00 MiB, V (f16):  112.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_k = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_v = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserving ..."
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Flash Attention enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Gated Delta Net support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (autoregressive) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (chunked) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Lightning Indexer support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Lightning Indexer enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused DeepSeek V4 HC support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC pre enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC comb enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC post enabled"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve:        CPU compute buffer size =    28.01 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph nodes  = 986"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph splits = 1"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserve took 4.59 ms, sched copies = 1"
+    },
+    {
+      "type": "debug",
+      "text": "{loadedCtxInfo: Object}"
+    }
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "before": [
+    [
+      "Name",
+      "Value",
+      "OUTSIDE"
+    ],
+    [
+      "Cora",
+      "30",
+      ""
+    ],
+    [
+      "Davi",
+      "10",
+      ""
+    ],
+    [
+      "Mira",
+      "20",
+      ""
+    ]
+  ],
+  "cases": [
+    {
+      "actions": [
+        "count_chat",
+        "completion",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result"
+      ],
+      "replies": [],
+      "errors": [],
+      "previews": 0,
+      "request": "读取 A1:B4 的内容。",
+      "after": [
+        [
+          "Name",
+          "Value",
+          "OUTSIDE"
+        ],
+        [
+          "Cora",
+          "30",
+          ""
+        ],
+        [
+          "Davi",
+          "10",
+          ""
+        ],
+        [
+          "Mira",
+          "20",
+          ""
+        ]
+      ],
+      "messages": "AI Assistant\nCPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf\n读取 A1:B4 的内容。\nNew conversation\nExcel · C1\n读取 A1:B4 的内容。\nA1\nName\nAsk\nOperate document\nRewrite selection\nSummarize selection\nTranslate selection"
+    },
+    {
+      "actions": [
+        "count_chat",
+        "completion",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result"
+      ],
+      "replies": [],
+      "errors": [],
+      "previews": 0,
+      "request": "Show the values in A1:B4.",
+      "after": [
+        [
+          "Name",
+          "Value",
+          "OUTSIDE"
+        ],
+        [
+          "Cora",
+          "30",
+          ""
+        ],
+        [
+          "Davi",
+          "10",
+          ""
+        ],
+        [
+          "Mira",
+          "20",
+          ""
+        ]
+      ],
+      "messages": "AI Assistant\nCPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf\nShow the values in A1:B4.\n读取 A1:B4 的内容。\nNew conversation\nExcel · C1\nShow the values in A1:B4.\nA1:B4\nA1: \"Name\"\nB1: \"Value\"\nA2: \"Cora\"\nB2: \"30\"\nA3: \"Davi\"\nB3: \"10\"\nA4: \"Mira\"\nB4: \"20\"\nAsk\nOperate document\nRewrite selection\nSummarize selection\nTranslate selection"
+    },
+    {
+      "actions": [
+        "count_chat",
+        "completion",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result",
+        "get_result"
+      ],
+      "replies": [],
+      "errors": [],
+      "previews": 0,
+      "request": "请读取 a1:b4，不要修改任何单元格。",
+      "after": [
+        [
+          "Name",
+          "Value",
+          "OUTSIDE"
+        ],
+        [
+          "Cora",
+          "30",
+          ""
+        ],
+        [
+          "Davi",
+          "10",
+          ""
+        ],
+        [
+          "Mira",
+          "20",
+          ""
+        ]
+      ],
+      "messages": "AI Assistant\nCPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf\n请读取 a1:b4，不要修改任何单元格。\nShow the values in A1:B4.\n读取 A1:B4 的内容。\nNew conversation\nExcel · C1\n请读取 a1:b4，不要修改任何单元格。\nA1:B4\nA1: \"Name\"\nB1: \"Value\"\nA2: \"Cora\"\nB2: \"30\"\nA3: \"Davi\"\nB3: \"10\"\nA4: \"Mira\"\nB4: \"20\"\nAsk\nOperate document\nRewrite selection\nSummarize selection\nTranslate selection"
+    }
+  ],
+  "undo": [
+    [
+      "Name",
+      "Value",
+      ""
+    ],
+    [
+      "Cora",
+      "30",
+      ""
+    ],
+    [
+      "Davi",
+      "10",
+      ""
+    ],
+    [
+      "Mira",
+      "20",
+      ""
+    ]
+  ],
+  "redo": [
+    [
+      "Name",
+      "Value",
+      "OUTSIDE"
+    ],
+    [
+      "Cora",
+      "30",
+      ""
+    ],
+    [
+      "Davi",
+      "10",
+      ""
+    ],
+    [
+      "Mira",
+      "20",
+      ""
+    ]
+  ],
+  "resources": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/ran-fonts/fonts.css",
+    "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+    "http://127.0.0.1:5193/assets/editor-DhzzvbuA.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+    "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+    "http://127.0.0.1:5193/assets/input-DEoPNM0j-CYJn2sbW.js",
+    "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+    "http://127.0.0.1:5193/assets/editor-D3f0yoDO.css",
+    "http://127.0.0.1:5193/assets/agent-plugin-C_6sZOol.js",
+    "http://127.0.0.1:5193/assets/input-B0MAkvvr.js",
+    "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+    "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/manifest.json",
+    "http://127.0.0.1:5193/icons/document-light.svg",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+    "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-dark&fileType=xlsx",
+    "http://127.0.0.1:5193/assets/wllama-cpu-runtime-yz7urXe-.js",
+    "http://127.0.0.1:5193/assets/client-D5_UYdz1.js",
+    "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js"
+  ],
+  "bundleUnchanged": true
+}

@@ -1,0 +1,122 @@
+{
+  "scope": "Owned warmed Chromium profile; ordinary registration update, no forced activation or cache deletion",
+  "errors": [],
+  "snapshots": [
+    {
+      "label": "online-home-before-explicit-update",
+      "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "versions": [
+        {
+          "scope": "http://127.0.0.1:5193/",
+          "active": {
+            "scriptURL": "http://127.0.0.1:5193/sw.js?isolation=1",
+            "state": "activated"
+          },
+          "waiting": null,
+          "installing": null,
+          "version": {
+            "type": "VERSION",
+            "cacheVersion": "1791345713",
+            "vendorVersion": "b6864850e7b3"
+          }
+        }
+      ],
+      "caches": [
+        {
+          "name": "document-editor-runtime-70cdcd40a53e",
+          "entries": 121,
+          "editorScripts": []
+        },
+        {
+          "name": "document-editor-runtime-b6864850e7b3",
+          "entries": 158,
+          "editorScripts": []
+        },
+        {
+          "name": "document-editor-core-1791345713",
+          "entries": 138,
+          "editorScripts": [
+            "/assets/editor-C3APg_Fa.js",
+            "/assets/editor-BsnCvO7O.css"
+          ]
+        }
+      ],
+      "scripts": [
+        "",
+        "",
+        "http://127.0.0.1:5193/theme-presentation.js",
+        "",
+        "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+        "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+        "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+        "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+        "http://127.0.0.1:5193/lang-switch.js",
+        "http://127.0.0.1:5193/open-local.js",
+        "http://127.0.0.1:5193/landing-prefetch.js",
+        "http://127.0.0.1:5193/history-recent.js",
+        "http://127.0.0.1:5193/sw-register.js"
+      ]
+    },
+    {
+      "label": "online-home-after-update-15s",
+      "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "versions": [
+        {
+          "scope": "http://127.0.0.1:5193/",
+          "active": {
+            "scriptURL": "http://127.0.0.1:5193/sw.js?isolation=1",
+            "state": "activated"
+          },
+          "waiting": null,
+          "installing": null,
+          "version": {
+            "type": "VERSION",
+            "cacheVersion": "1791357432",
+            "vendorVersion": "a048b43b3e2b"
+          }
+        }
+      ],
+      "caches": [
+        {
+          "name": "document-editor-runtime-70cdcd40a53e",
+          "entries": 121,
+          "editorScripts": []
+        },
+        {
+          "name": "document-editor-runtime-b6864850e7b3",
+          "entries": 158,
+          "editorScripts": []
+        },
+        {
+          "name": "document-editor-runtime-a048b43b3e2b",
+          "entries": 54,
+          "editorScripts": []
+        },
+        {
+          "name": "document-editor-core-1791357432",
+          "entries": 133,
+          "editorScripts": [
+            "/assets/editor-a29E5U4S.js",
+            "/assets/editor-BsnCvO7O.css"
+          ]
+        }
+      ],
+      "scripts": [
+        "",
+        "",
+        "http://127.0.0.1:5193/theme-presentation.js",
+        "",
+        "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+        "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+        "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+        "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+        "http://127.0.0.1:5193/lang-switch.js",
+        "http://127.0.0.1:5193/open-local.js",
+        "http://127.0.0.1:5193/landing-prefetch.js",
+        "http://127.0.0.1:5193/history-recent.js",
+        "http://127.0.0.1:5193/sw-register.js"
+      ]
+    }
+  ],
+  "closed": true
+}

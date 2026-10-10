@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "scope": "Fresh isolated Chromium native editor first-open feature tips; no stored dismissals.",
+  "results": [
+    {
+      "kind": "xlsx",
+      "featureTipsEnabled": true,
+      "featureTipText": []
+    },
+    {
+      "kind": "docx",
+      "featureTipsEnabled": true,
+      "featureTipText": []
+    },
+    {
+      "kind": "pptx",
+      "featureTipsEnabled": true,
+      "featureTipText": []
+    }
+  ],
+  "bundle": "editor-BrS_hCZ0.js",
+  "limitations": [
+    "Baseline confirms enabled runtime configuration but did not observe a visible promotional balloon in this fresh run.",
+    "Disables native new-feature tips only; ordinary tooltips and paste-options controls remain.",
+    "Desktop isolated Chromium only; no model inference or save regression in this check."
+  ]
+}

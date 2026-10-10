@@ -1,0 +1,1496 @@
+{
+  "scope": "Isolated production PPT selected-text native feasibility; not an IM implementation or model validation",
+  "results": [
+    {
+      "method": "asc_enterText",
+      "literal": "Alex 😀",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "Alex  target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex  target body\r\n",
+            "runs": [
+              {
+                "text": "Alex  target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 128512,
+                    "codePoint": 128512,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "Alex  target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex  target body\r\n",
+            "runs": [
+              {
+                "text": "Alex  target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 128512,
+                    "codePoint": 128512,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "Alex  target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex  target body\r\n",
+            "runs": [
+              {
+                "text": "Alex  target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 128512,
+                    "codePoint": 128512,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": false,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    },
+    {
+      "method": "asc_enterText",
+      "literal": "第一行 Alex\n第二行",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "第一行 Alex\n第二行 target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "第一行 Alex\n第二行 target body\r\n",
+            "runs": [
+              {
+                "text": "第一行 Alex\n第二行 target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 19968,
+                    "codePoint": 19968,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 10,
+                    "codePoint": 10,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20108,
+                    "codePoint": 20108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "第一行 Alex\n第二行 target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "第一行 Alex\n第二行 target body\r\n",
+            "runs": [
+              {
+                "text": "第一行 Alex\n第二行 target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 19968,
+                    "codePoint": 19968,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 10,
+                    "codePoint": 10,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20108,
+                    "codePoint": 20108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "第一行 Alex\n第二行 target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "第一行 Alex\n第二行 target body\r\n",
+            "runs": [
+              {
+                "text": "第一行 Alex\n第二行 target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 19968,
+                    "codePoint": 19968,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 10,
+                    "codePoint": 10,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20108,
+                    "codePoint": 20108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": true,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed",
+  "allPassed": false
+}

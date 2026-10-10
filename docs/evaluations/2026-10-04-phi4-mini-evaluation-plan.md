@@ -1,0 +1,7 @@
+# Phi-4 mini evaluation plan
+
+Installed WebLLM 0.2.85 catalog supports Phi-4-mini-instruct-q4f16_1-MLC with compatible cs1k model library and context_window_size 4096. SDK vram_required_MB 3437.58 is an estimate, not actual device allocation/download size. The [publisher card](https://huggingface.co/microsoft/Phi-4-mini-instruct) describes broad multilingual intended uses for the original model; it does not certify this MLC artifact or app-specific writing quality.
+
+Commit the driver before inference. Test all 21 existing known seven-language cases in fixed order once, unchanged production prompts/temperature 0/schema/512-token limit/guards. Phi uses the existing provider route; Qwen-specific API thinking flags should not be added. Provider system prompt may still carry the existing generic /no_think suffix, so this is app compatibility evaluation, not ideal publisher prompting or a controlled multi-model ranking.
+
+Verify exact title and actual Worker model ID, capture full inputs/raw outputs and Worker throw packets, exact native Undo/Redo, preserved refused source, zero previews and unchanged bundle. First model preload allows ten minutes for network download; use the same process while live. Preserve failed/partial evidence. Application counts are not semantic scores; manually inspect predeclared rubric facts/style/language before any adoption. No product/default change or cloud inference.

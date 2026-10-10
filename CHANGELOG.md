@@ -45,6 +45,40 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- **Writing help now goes to a model on your own machine by default.** Rewrite,
+  summarize and translate used to run on the small model inside the browser tab.
+  We tested sixteen of those models and none of them kept dates, names, roles or
+  negations straight across the seven interface languages -- and a rewrite that
+  quietly turns "not approved" into "approved" is worse than no rewrite. So the
+  assistant now talks to a model service you run yourself (Ollama on
+  `http://localhost:11434` by default, set up under Settings -> Writing
+  destination); your file still never leaves the device, because a local service
+  is only reachable on your own machine.
+- **Or point it at a cloud model with your own API key.** Settings -> Writing
+  destination also accepts an OpenAI-compatible endpoint (OpenAI, DeepSeek, Groq,
+  OpenRouter, a local vLLM/LM Studio server, ...), Claude or Gemini. A remote
+  address must be HTTPS. The panel always states where the writing will go, and
+  when it goes to a third party it says so plainly, because that text leaves your
+  device. Which destination wins when you have configured both is your choice
+  (this device first, or the cloud endpoint first).
+- **Browser-local writing is still available, but you have to ask for it.** With
+  no destination connected, asking for a rewrite tells you so instead of silently
+  using the in-browser model. Tick "Allow browser-local model writing" in Settings
+  to use it anyway; it is marked experimental, because it is.
+- **Offline, only a destination on this device can work.** A cloud endpoint is not
+  attempted without a connection -- the panel says so (next to the destination it
+  would use) instead of failing with a network error. A local service and the
+  in-browser model both keep working offline, and the choice between them is still
+  yours rather than an automatic substitution.
+- **The assistant no longer asks you to download a model you are not going to use.**
+  With a cloud endpoint connected, writing goes there even if no in-browser model
+  is loaded; previously that combination quietly did nothing but tell you to load
+  one. A fixed spreadsheet command such as "read A1:A5, then set B1 to `done`"
+  likewise runs without any model loaded, because choosing the operation is not
+  something it needs help with. Changing the address, model or key now also disconnects the endpoint (and
+  does not carry the key to a different address) instead of leaving the panel
+  showing one destination while requests went to another.
+
 - **The editor gives its memory back while you work.** Converting a document
   used to reserve a few hundred megabytes and hold them for as long as the tab
   was open; that work now happens off to one side and is released once it is
@@ -70,14 +104,31 @@ notes. Entries describe what users experience, not internal refactors.
   the session on them, so a laptop keeps a recovery point about every 30
   seconds while a phone under load backs off instead of competing with the
   document you are editing.
-- **The ONLYOFFICE logo is back in the editor header, and the About pane with
-  it.** Both had been switched off as interface clutter. They are not: this
-  editor is a modified version of ONLYOFFICE, and the license it is published
-  under requires the product logo to stay. The About pane now also says that
-  this build is not an official ONLYOFFICE product and links to the source it
-  was built from. Every page of the site carries the same trademark notice in
-  its footer, and the repository has a NOTICE file with the full terms and the
-  list of changes made to the vendor build.
+- **Neutral presentation with legal attribution retained.** Product logos
+  and ecosystem promotion are removed. A neutral document icon supplies PWA and browser icons. The editor's About pane stays
+  available with the upstream copyright and version, a modified-version notice,
+  license and source links. NOTICE explains the logo decision with reference to
+  the FSF's interpretation of AGPLv3; it does not claim a court ruling. Offline caching remains available.
+
+### Fixed
+
+- Browser icons, theme-color and native controls now follow the effective light
+  or dark theme, including manual choices opposite to the OS preference.
+  Universal PWA / touch icons remain stable. The editor's existing theme
+  follow behavior is covered by light/dark browser tests.
+
+- Save messages are accepted only from the same-origin editor frame. Embedded
+  commands are accepted only from the direct parent, with a fixed origin.
+  Exported document bytes no longer bypass the host API by going straight to
+  the top-level ancestor.
+- Service Worker cache eviction stays within its `waitUntil` lifetime, removes
+  excess entries in a batch and tolerates storage failures.
+- Editor title updates preserve the filename and unsaved marker without
+  restoring a product-name suffix. Language controls include the visible
+  language in their accessible names.
+- Image-export tests use the current neutral icon. All README translations
+  distinguish local editing from optional cloud AI, qualify offline resource
+  availability and state the seven supported site languages.
 
 ### Known issues
 

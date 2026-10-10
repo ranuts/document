@@ -1,0 +1,7 @@
+# Qwen2.5-14B runtime feasibility inventory
+
+Read-only official metadata investigation; no weights downloaded, no inference and no product change. The complete shipped SDK 0.2.85 catalog contains 163 model_id records and no 14B record. The complete recursive library tree at pinned commit 025bcaf3780fa8254f5e5efd3bfea0a5397248f4 is not truncated and contains no Qwen 14B library path. This is a limitation of the inspected runtime inventory, not proof that compiling a custom runtime or another version is impossible.
+
+The official model repository currently resolves to 5afd9575d32a566251616015e4ddfccf8bfd0366. Its pinned tensor manifest has 194 shards totaling 8,309,352,448 bytes; largest shard 389,283,840 bytes. These are download bytes, not measured GPU memory. Model config and manifest URLs, byte lengths and hashes are in the receipt. A compatible compiled WebGPU library and successful actual allocation remain missing; a 7B library is not established as a substitute.
+
+Do not download 8.31 GB or claim seven-language feasibility on the basis of this inventory. A future candidate needs a matched library, fixed source/runtime provenance, actual memory/load evidence, then unchanged-product writing tasks and unused-source validation. The existing quality failures remain unresolved. Official sources: https://huggingface.co/mlc-ai/Qwen2.5-14B-Instruct-q4f16_1-MLC and the exact library tree URL in the receipt.

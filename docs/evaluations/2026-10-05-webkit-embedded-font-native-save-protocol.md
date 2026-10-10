@@ -1,0 +1,5 @@
+# Product embedded-font native Save regression
+
+Rebuilt working tree after 4ff5083, vendor fingerprint b6864850e7b3, app SW version 1791152686. Source changes reuse bounded decoded ASCW3 stream bytes and let conversion consume them without fetch/XOR. Full tests 134/4457, tsc, changed lint and production build pass. No model/prompt/budget change.
+
+Repeat the original unseeded native WebKit unavailable-origin Save protocol b6c3606: fresh context, actual default CPU online load, production service-worker controller, close original page and forwarding server, restore native Word/default CPU, exact IM write, native Undo/Redo and native Save artifact. No font prefetch or cache insertion. Require absence of the prior Save-phase /fonts/100 failure and page TypeError, plus independent DOCX ZIP/XML literal checks. Retain all unrelated errors/failures. This is product regression at unavailable application origin, not complete disconnection, physical Safari/iOS, native reopen/layout or general semantic acceptance.

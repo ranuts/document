@@ -1,0 +1,71 @@
+{
+  "scope": "Actual cross-origin nonisolated parent embedding isolated-policy editor after warming old nonisolated vendor caches. Native startup after product cache-policy fallback; no manual cache repair. Not all third-party storage partitions or model inference.",
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:52001/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:52001&uitheme=theme-classic-light&fileType=docx",
+      "error": "net::ERR_BLOCKED_BY_RESPONSE"
+    }
+  ],
+  "console": [
+    "SW registered:  ServiceWorkerRegistration",
+    "SW registered:  ServiceWorkerRegistration",
+    "SW registered:  ServiceWorkerRegistration"
+  ],
+  "warm": {
+    "isolated": false,
+    "policy": null,
+    "controller": "http://127.0.0.1:52001/sw.js"
+  },
+  "controlMessages": [
+    {
+      "type": "document:ready",
+      "payload": {}
+    },
+    {
+      "type": "document:opened",
+      "payload": {
+        "readonly": false
+      }
+    }
+  ],
+  "controlLoaded": true,
+  "embedded": {
+    "isolated": false,
+    "framePresent": true,
+    "fullApi": false,
+    "loaded": false,
+    "controller": "http://127.0.0.1:52001/sw.js",
+    "frameError": "SecurityError: Failed to read a named property 'editor' from 'Window': Blocked a frame with origin \"http://127.0.0.1:52001\" from accessing a cross-origin frame."
+  },
+  "isolatedMessages": [
+    {
+      "type": "document:ready",
+      "payload": {}
+    },
+    {
+      "type": "document:opened",
+      "payload": {
+        "readonly": false
+      }
+    }
+  ],
+  "parentIsolated": false,
+  "compatible": false,
+  "policy": {
+    "coreEntries": [],
+    "cacheNames": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1791007136",
+      "document-editor-core-[object HTMLBodyElement]"
+    ],
+    "registrations": [
+      {
+        "active": "activated"
+      }
+    ],
+    "nativeStoredCoep": "require-corp",
+    "workerVersion": "1791007136"
+  },
+  "passed": false
+}

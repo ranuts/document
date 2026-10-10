@@ -1,0 +1,362 @@
+{
+  "status": "completed",
+  "scope": "Production IM local Qwen3 1.7B PPT native Unicode/tab/multiline read-only verification; native paste seeds the document, no IM writing or selected-text replacement",
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BuWhEpZf.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "before": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex  Payment\r\nNext\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  },
+                  {
+                    "type": 21
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 80
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 121
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 109
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 110
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 116
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 78
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 116
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "read": {
+    "prompt": "Read the plain text of the current presentation. Do not modify anything.",
+    "elapsedMs": 1566,
+    "feedback": [
+      "Slide 1:\nAlex 😀\tPayment\nNext"
+    ],
+    "visibleErrors": [],
+    "previewCount": 0,
+    "matched": true,
+    "unchanged": true
+  },
+  "afterRead": {
+    "shapes": [
+      {
+        "id": "1430",
+        "text": "Alex  Payment\r\nNext\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 65
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 108
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 2,
+                    "codePoint": 32
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 128512
+                  },
+                  {
+                    "type": 21
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 80
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 97
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 121
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 109
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 110
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 116
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 1,
+                    "codePoint": 78
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 101
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 120
+                  },
+                  {
+                    "type": 1,
+                    "codePoint": 116
+                  }
+                ]
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1446",
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05
+        },
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": 39,
+                "items": []
+              },
+              {
+                "type": 39,
+                "items": [
+                  {
+                    "type": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "historyIndex": 0
+  },
+  "allPassed": true
+}

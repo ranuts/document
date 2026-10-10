@@ -4,6 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@mlc-ai/web-llm@0.2.85': ab39c67b61b734014dc299766a9bffabb2e077b70bed48c7c4dec0af56af0599
+  '@wllama/wllama@3.6.1': 5eaac29afca7fbc57011df1f0d69005d9e590da3dd1e5ad74155e4f0525a1702
+
 importers:
 
   .:
@@ -70,8 +74,14 @@ importers:
         specifier: ^0.106.0
         version: 0.106.0
       '@mlc-ai/web-llm':
-        specifier: ^0.2.84
-        version: 0.2.84
+        specifier: 0.2.85
+        version: 0.2.85(patch_hash=ab39c67b61b734014dc299766a9bffabb2e077b70bed48c7c4dec0af56af0599)
+      '@wllama/wllama':
+        specifier: 3.6.1
+        version: 3.6.1(patch_hash=5eaac29afca7fbc57011df1f0d69005d9e590da3dd1e5ad74155e4f0525a1702)
+      '@wllama/wllama-compat':
+        specifier: 3.6.1
+        version: 3.6.1
     devDependencies:
       typescript:
         specifier: ^6.0.3
@@ -79,6 +89,9 @@ importers:
 
   packages/chat-ui:
     dependencies:
+      marked:
+        specifier: 16.4.2
+        version: 16.4.2
       ranui:
         specifier: 0.5.0-alpha.6
         version: 0.5.0-alpha.6(@svta/cml-cta@1.0.6(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0))(@svta/cml-structured-field-values@1.1.3(@svta/cml-utils@1.5.0))(@svta/cml-utils@1.5.0)
@@ -256,8 +269,8 @@ packages:
   '@mermaid-js/parser@1.2.0':
     resolution: {integrity: sha512-oYPyv8A4As1yH5Bx+04iQEQxXuIQDe0GKCNSRgao6z8AM9jixXIfP0vsppRLvGf+nKIOb9/LdpWA4YuJiVvESA==}
 
-  '@mlc-ai/web-llm@0.2.84':
-    resolution: {integrity: sha512-hrOWzK4/nGNmgoRKT8pgVmZZ2oEPpbblIWQOwpqNyvK2dysHw3KVB1gNJOuRcQfKOPhucEhX1NJzXzgMDnwSCQ==}
+  '@mlc-ai/web-llm@0.2.85':
+    resolution: {integrity: sha512-CwUiSAvDCYnmAZlpPMkurPHDfBLq6fvdRB3vRgoA894hRG/V/BSeY9bmMm6iIIU5VpjJxfb/dLPpJX2at0L9rw==}
 
   '@oxc-project/types@0.144.0':
     resolution: {integrity: sha512-nuhZIOLuI6TFQ32I/WnUx+SCPY7SdSKwgnFHydAuoS1+Z4BRcaP+RRJmGzl9lw+0OFF7UmaESf7KQRXaNLHypg==}
@@ -873,6 +886,12 @@ packages:
 
   '@vitest/utils@4.1.11':
     resolution: {integrity: sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ==}
+
+  '@wllama/wllama-compat@3.6.1':
+    resolution: {integrity: sha512-1zSCrZEsb+mIZAofC8RW0Z9HTbLldMOVXLkbBgBt+Ca9FxT9K8VQnEtVTw/kXCu5LBiUkpzfxP7resZCnhY6Eg==}
+
+  '@wllama/wllama@3.6.1':
+    resolution: {integrity: sha512-v6cA0w6sHuaTLmUo9nSU37Sln+5YqZy/OGWp2dXWaR3ts26yLiMnKHGGbjdzQolPSPydPSKUlHHSKZgXK5Prkw==}
 
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
@@ -1907,7 +1926,7 @@ snapshots:
     dependencies:
       '@chevrotain/types': 11.1.2
 
-  '@mlc-ai/web-llm@0.2.84':
+  '@mlc-ai/web-llm@0.2.85(patch_hash=ab39c67b61b734014dc299766a9bffabb2e077b70bed48c7c4dec0af56af0599)':
     dependencies:
       loglevel: 1.9.2
 
@@ -2377,6 +2396,10 @@ snapshots:
       '@vitest/pretty-format': 4.1.11
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.1
+
+  '@wllama/wllama-compat@3.6.1': {}
+
+  '@wllama/wllama@3.6.1(patch_hash=5eaac29afca7fbc57011df1f0d69005d9e590da3dd1e5ad74155e4f0525a1702)': {}
 
   assertion-error@2.0.1: {}
 

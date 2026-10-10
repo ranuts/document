@@ -1,0 +1,17 @@
+import fs from 'node:fs/promises';
+import crypto from 'node:crypto';
+const source='/private/tmp/document-wllama-count-361/src';
+const destination='/private/tmp/document-wllama-count-default-client';
+const runtime='/private/tmp/document-wllama-count-default-4020/wllama.js';
+const code=await fs.readFile(runtime,'utf8');
+await fs.mkdir(destination,{recursive:true});
+await fs.cp(source,destination+'/src',{recursive:true});
+await fs.writeFile(destination+'/package.json','{"type":"module"}\n');
+const generated=destination+'/src/workers-code/generated.ts';
+let content=await fs.readFile(generated,'utf8');
+const marker=/export const WLLAMA_EMSCRIPTEN_CODE = .*;\n/;
+if(content.match(new RegExp(marker.source,'g'))?.length!==1)throw Error('Expected one embedded runtime declaration');
+content=content.replace(marker,()=>`export const WLLAMA_EMSCRIPTEN_CODE = ${JSON.stringify(code)};\n`);
+await fs.writeFile(generated,content);
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+await fs.writeFile('docs/evaluations/2026-10-04-cpu-default-count-client-binding.json',JSON.stringify({scope:'Isolated source copy with newly compiled default CPU JS embedded; no product activation',source,destination,runtime,runtimeSHA256:sha(code),generatedSHA256:sha(content),wasmSHA256:sha(await fs.readFile('/private/tmp/document-wllama-count-default-4020/wllama.wasm'))},null,2)+'\n');

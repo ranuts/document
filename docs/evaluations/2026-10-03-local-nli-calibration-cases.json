@@ -1,0 +1,42 @@
+{
+  "scope": "Explicit identity/contradiction/unrelated diagnostic controls; no remapping or threshold adjustment.",
+  "decision": {
+    "supportedLabel": "entailment",
+    "minimumProbability": 0.8,
+    "policy": "Unchanged predeclared rule."
+  },
+  "cases": [
+    {
+      "id": "identity",
+      "premise": "Mira did not approve the shipment.",
+      "hypothesis": "Mira did not approve the shipment.",
+      "expectedSupport": true,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "affirmative-identity",
+      "premise": "The dog is running.",
+      "hypothesis": "The dog is running.",
+      "expectedSupport": true,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "direct-contradiction",
+      "premise": "The dog is running.",
+      "hypothesis": "The dog is not running.",
+      "expectedSupport": false,
+      "language": "en",
+      "category": "calibration"
+    },
+    {
+      "id": "unrelated",
+      "premise": "The dog is running.",
+      "hypothesis": "The stock market closed lower.",
+      "expectedSupport": false,
+      "language": "en",
+      "category": "calibration"
+    }
+  ]
+}

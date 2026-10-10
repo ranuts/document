@@ -1,0 +1,31 @@
+import hashlib
+import json
+from pathlib import Path
+
+p = Path(__file__).parent
+r = json.loads((p / '2026-10-04-cpu-public-count-lifecycle-browser.json').read_text())
+assert r['status'] == 'completed' and r['phase'] == 'verified' and not r['errors']
+assert any(x['url'] == '/sdk.js' for x in r['served'])
+for key, name in [('probeSHA256', 'probe-cpu-public-count-lifecycle-browser.mjs'), ('patchSHA256', 'cpu-native-count-structured-rejection.patch')]:
+    assert r[key] == hashlib.sha256((p / name).read_bytes()).hexdigest()
+old = json.loads((p / '2026-10-04-cpu-public-count-source-build.json').read_text())
+assert r['clientSHA256'] != old['clientSHA256'] and r['files'] == old['files']
+resource = next(x['text'] for x in r['console'] if x['text'].startswith('DIAGNOSTIC_RESOURCES '))
+assert json.loads(resource.split(' ', 1)[1])['compat'] is True
+assert not r.get('diagnosticDeadline')
+z = r['result']
+assert [x['id'] for x in z['results']] == ['ascii', 'chinese', 'mixed', 'multi-turn']
+for x in z['results']:
+    assert x['first'] == x['second'] and x['first']['success'] and x['first']['error'] == ''
+    assert x['first']['context_tokens'] == 2048
+    assert x['first']['prompt_tokens'] == x['reply']['usage']['prompt_tokens']
+    assert x['countActions'] == ['count_chat', 'count_chat']
+assert z['oversized']['success'] and z['oversized']['prompt_tokens'] > z['oversized']['context_tokens']
+assert 'does not support content parts' in z['unsupportedError']
+assert z['recovery']['success'] and z['recovery']['prompt_tokens'] == 16
+assert z['reply']['choices'][0]['message']['content'] == z['results'][0]['reply']['choices'][0]['message']['content']
+assert len(r['partial']['counts']) == 10
+assert z['actions'].count('count_chat') == 14
+assert all(x['status'] == 'rejected' and 'worker terminated' in x['error'] for x in z['retired'])
+assert len(z['retired']) == 2 and 'worker terminated' in z['lateError']
+print('Public client: four exact usage comparisons, repeated counts, overflow detection and rejection recovery verified')

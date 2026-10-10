@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-02T17:14:52.877Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright WebKit CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Unmodified current production bundle; three current writing cases. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex 于 2026-10-08 付 1,250 EUR\r\n",
+      "error": [],
+      "responseMs": 41461,
+      "documentUnchanged": false,
+      "previewCount": 0
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 40266,
+      "documentUnchanged": true,
+      "previewCount": 0
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model returned the original text. Try a clearer instruction or another model.Restore request"
+      ],
+      "responseMs": 44097,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "errors": [],
+  "assessment": {
+    "productionCommit": "f1d4e49",
+    "availableProductionBundle": "editor-BB26vwDY.js",
+    "schema": "object with required text string; no date pattern",
+    "formalChinese": "Applied; numeric/date literals preserved. Future modality 会 is absent in output, leaving temporal meaning less explicit. Do not count as fully faithful writing.",
+    "formalEnglish": "Rejected by numeric/date guard; original document unchanged. Raw completion not captured, so exact mutation is unknown.",
+    "negationSummary": "Rejected as unchanged source; original document unchanged. Earlier successful summary is not consistently reproduced.",
+    "latencyMs": [
+      41461,
+      40266,
+      44097
+    ],
+    "nativeFailureObserved": false,
+    "previewCards": 0
+  },
+  "limitations": [
+    "Three single-run desktop Playwright WebKit cases, not physical Safari/iOS or broad reliability.",
+    "No raw provider completion or token/prefill timing captured in this unmodified production run.",
+    "No proof of reliable name, negation, modality or unit preservation from numeric checks.",
+    "Historical 150-second native runtime error used an unadopted experimental date-pattern schema; it is not reproduced here."
+  ]
+}

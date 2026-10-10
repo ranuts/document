@@ -1,0 +1,977 @@
+{
+  "experiment": {
+    "baseline": false,
+    "staticStylesheet": true,
+    "geometryOnly": false,
+    "type": "docx",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    }
+  },
+  "hostPort": 5193,
+  "trailingEntry": false,
+  "browserVersion": "151.0.7922.34",
+  "scope": "Controlled synthetic vendor/core version transition using real SW algorithm; early effective iframe response and inline-script controls only, no native mutation/Save/offline/IM or deployed build claim.",
+  "vendor": "59e2dc593998",
+  "candidateVendor": "04e83e8ca8eb",
+  "oldCore": "1791017387",
+  "upgrade": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "oldEntries": [
+        {
+          "name": "document-editor-runtime-59e2dc593998",
+          "url": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        },
+        {
+          "name": "document-editor-runtime-59e2dc593998",
+          "url": "http://127.0.0.1:51077/web-apps/apps/spreadsheeteditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        },
+        {
+          "name": "document-editor-runtime-59e2dc593998",
+          "url": "http://127.0.0.1:51077/web-apps/apps/presentationeditor/main/index.html",
+          "policy": null,
+          "asyncStyle": true
+        }
+      ],
+      "newControllerVersion": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387-vendor-csp-probe",
+        "vendorVersion": "04e83e8ca8eb"
+      },
+      "newCaches": [
+        "document-editor-runtime-59e2dc593998",
+        "document-editor-core-1791017387",
+        "document-editor-runtime-04e83e8ca8eb",
+        "document-editor-core-1791017387-vendor-csp-probe"
+      ],
+      "oldRuntimeRetained": true
+    }
+  ],
+  "cold": [],
+  "offline": [],
+  "errors": [],
+  "pendingBaseline": {
+    "type": "docx",
+    "isolated": true,
+    "iframeIsolated": true,
+    "fullApi": true,
+    "loaded": true,
+    "controller": "http://127.0.0.1:51077/sw.js?isolation=1",
+    "oldEntries": [
+      {
+        "name": "document-editor-runtime-59e2dc593998",
+        "url": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/index.html",
+        "policy": null,
+        "asyncStyle": true
+      },
+      {
+        "name": "document-editor-runtime-59e2dc593998",
+        "url": "http://127.0.0.1:51077/web-apps/apps/spreadsheeteditor/main/index.html",
+        "policy": null,
+        "asyncStyle": true
+      },
+      {
+        "name": "document-editor-runtime-59e2dc593998",
+        "url": "http://127.0.0.1:51077/web-apps/apps/presentationeditor/main/index.html",
+        "policy": null,
+        "asyncStyle": true
+      }
+    ],
+    "newControllerVersion": {
+      "type": "VERSION",
+      "cacheVersion": "1791017387-vendor-csp-probe",
+      "vendorVersion": "04e83e8ca8eb"
+    },
+    "newCaches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1791017387",
+      "document-editor-runtime-04e83e8ca8eb",
+      "document-editor-core-1791017387-vendor-csp-probe"
+    ],
+    "oldRuntimeRetained": true
+  },
+  "revalidatedPrecache": false,
+  "checkpoints": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "responses": [
+        {
+          "url": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:51077&uitheme=theme-classic-light&fileType=docx",
+          "fromServiceWorker": true,
+          "policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-mlY+ZZlU5oHAgTuFi65xbnujnNnXNWbdrHeC6Tm/hFs=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-RpFgTNbC6VAYRjutrf3WjbppJPR2eqZJeM6dHbcnr2U=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+        }
+      ],
+      "currentVersion": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387-vendor-csp-probe",
+        "vendorVersion": "04e83e8ca8eb"
+      },
+      "candidateCachedEntries": [
+        {
+          "url": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/index.html",
+          "policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-mlY+ZZlU5oHAgTuFi65xbnujnNnXNWbdrHeC6Tm/hFs=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-RpFgTNbC6VAYRjutrf3WjbppJPR2eqZJeM6dHbcnr2U=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'",
+          "asyncStyle": false
+        },
+        {
+          "url": "http://127.0.0.1:51077/web-apps/apps/spreadsheeteditor/main/index.html",
+          "policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-bh6eznDaoKfccEsWKr7TaLe42GxvSzfRx7pInOiRy8k=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-cIOblnwfItklL2WfRBsqa90WABGOFbGdnmWhMiJvTA0=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'",
+          "asyncStyle": false
+        },
+        {
+          "url": "http://127.0.0.1:51077/web-apps/apps/presentationeditor/main/index.html",
+          "policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-xEhyiZGhboJtDKcTLrCnNQkYPeg5teYGIyeDcAm1AVU=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-SpEnPJLA9lg6DkiCWXDXhWm5bGVpzic51b+yNrhld30=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'",
+          "asyncStyle": false
+        }
+      ],
+      "controls": {
+        "inlineExecuted": false,
+        "iframeUrl": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:51077&uitheme=theme-classic-light&fileType=docx",
+        "controller": "http://127.0.0.1:51077/sw.js?isolation=1",
+        "stylesheets": [
+          {
+            "href": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/resources/css/app.css",
+            "media": "all",
+            "onload": null
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "registrationTrace": [
+    {
+      "time": 1791023687237,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "register",
+      "url": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "stack": "    at ServiceWorkerContainer.register (<anonymous>:9:132)\n    at http://127.0.0.1:51077/assets/editor-D4x2h9CF.js:205:11355"
+    },
+    {
+      "time": 1791023687259,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "registered",
+      "installing": "http://127.0.0.1:51077/sw.js?isolation=1"
+    },
+    {
+      "time": 1791023687262,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "updatefound",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1"
+    },
+    {
+      "time": 1791023688006,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "worker-state",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "state": "installed"
+    },
+    {
+      "time": 1791023688006,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "worker-state",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "state": "activating"
+    },
+    {
+      "time": 1791023688008,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "controllerchange",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1"
+    },
+    {
+      "time": 1791023688008,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "worker-state",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "state": "activated"
+    },
+    {
+      "time": 1791023688009,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "version",
+      "label": "controllerchange",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387",
+        "vendorVersion": "59e2dc593998"
+      }
+    },
+    {
+      "time": 1791023688182,
+      "frame": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:51077&uitheme=theme-classic-light&fileType=docx",
+      "kind": "version",
+      "label": "initial-controller",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387",
+        "vendorVersion": "59e2dc593998"
+      }
+    },
+    {
+      "time": 1791023689067,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "version",
+      "label": "initial-controller",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387",
+        "vendorVersion": "59e2dc593998"
+      }
+    },
+    {
+      "time": 1791023689106,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "register",
+      "url": "/sw.js?isolation=1",
+      "stack": "    at ServiceWorkerContainer.register (<anonymous>:9:132)\n    at http://127.0.0.1:51077/sw-register.js:147:36"
+    },
+    {
+      "time": 1791023689119,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "registered",
+      "active": "http://127.0.0.1:51077/sw.js?isolation=1"
+    },
+    {
+      "time": 1791023689119,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "version",
+      "label": "registered-active",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387",
+        "vendorVersion": "59e2dc593998"
+      }
+    },
+    {
+      "time": 1791023689135,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "updatefound",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1"
+    },
+    {
+      "time": 1791023689936,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "worker-state",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "state": "installed"
+    },
+    {
+      "time": 1791023689950,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "worker-state",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "state": "activating"
+    },
+    {
+      "time": 1791023689950,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "controllerchange",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1"
+    },
+    {
+      "time": 1791023689950,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "version",
+      "label": "controllerchange",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387-vendor-csp-probe",
+        "vendorVersion": "04e83e8ca8eb"
+      }
+    },
+    {
+      "time": 1791023690956,
+      "frame": "http://127.0.0.1:51077/",
+      "kind": "worker-state",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "state": "activated"
+    },
+    {
+      "time": 1791023690963,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "version",
+      "label": "initial-controller",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387-vendor-csp-probe",
+        "vendorVersion": "04e83e8ca8eb"
+      }
+    },
+    {
+      "time": 1791023690979,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "register",
+      "url": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "stack": "    at ServiceWorkerContainer.register (<anonymous>:9:132)\n    at http://127.0.0.1:51077/assets/editor-D4x2h9CF.js:205:11355"
+    },
+    {
+      "time": 1791023690981,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "registered",
+      "active": "http://127.0.0.1:51077/sw.js?isolation=1"
+    },
+    {
+      "time": 1791023690982,
+      "frame": "http://127.0.0.1:51077/editor?new=docx&locale=en",
+      "kind": "version",
+      "label": "registered-active",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387-vendor-csp-probe",
+        "vendorVersion": "04e83e8ca8eb"
+      }
+    },
+    {
+      "time": 1791023691136,
+      "frame": "http://127.0.0.1:51077/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=en&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:51077&uitheme=theme-classic-light&fileType=docx",
+      "kind": "version",
+      "label": "initial-controller",
+      "script": "http://127.0.0.1:51077/sw.js?isolation=1",
+      "data": {
+        "type": "VERSION",
+        "cacheVersion": "1791017387-vendor-csp-probe",
+        "vendorVersion": "04e83e8ca8eb"
+      }
+    }
+  ],
+  "workerVersions": [
+    {
+      "time": 1791023687126,
+      "versions": []
+    },
+    {
+      "time": 1791023687245,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "time": 1791023687250,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "new",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "time": 1791023687251,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "time": 1791023687251,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023687258,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "installing",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023687258,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installing",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023688006,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installed",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023688006,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activating",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023688008,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activating",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023688008,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023688169,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023688462,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023689053,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023689058,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023689059,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023689061,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023689132,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "time": 1791023689132,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "time": 1791023689132,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 0,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023689134,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "new",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023689135,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "starting",
+          "status": "installing",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023689135,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installing",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023689936,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "installed",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023689937,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "stopping",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": [],
+          "targetId": "081E0F28D4E69B3EB3566FC04457F7D6"
+        }
+      ]
+    },
+    {
+      "time": 1791023689950,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "activated",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "time": 1791023689950,
+      "versions": [
+        {
+          "versionId": "0",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "stopped",
+          "status": "redundant",
+          "scriptLastModified": 1791017389,
+          "scriptResponseTime": 1791023687.247619,
+          "controlledClients": []
+        }
+      ]
+    },
+    {
+      "time": 1791023689950,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activating",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023689950,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activating",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023690956,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023690956,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [
+            "C8D1C0026F487B1E11022D00B37E9510"
+          ],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023690959,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023691132,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    },
+    {
+      "time": 1791023691295,
+      "versions": [
+        {
+          "versionId": "1",
+          "registrationId": "0",
+          "scriptURL": "http://127.0.0.1:51077/sw.js?isolation=1",
+          "runningStatus": "running",
+          "status": "activated",
+          "scriptLastModified": 0,
+          "scriptResponseTime": 1791023689.131256,
+          "controlledClients": [],
+          "targetId": "F0AE206C6E8EA4DE6651DB656E459692"
+        }
+      ]
+    }
+  ],
+  "swRequests": [
+    {
+      "path": "/sw.js?isolation=1",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePhase": false,
+      "time": 1791023687247
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "status": 304,
+      "candidatePhase": false,
+      "time": 1791023688007
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePhase": true,
+      "time": 1791023689130,
+      "servedVendor": "04e83e8ca8eb",
+      "servedCore": "1791017387-vendor-csp-probe",
+      "sourceSha256": "1d34a6caebe2ced67a49b2f4b40b7c131c54da4c379384ca8f01016da621e7b3"
+    },
+    {
+      "path": "/sw.js?isolation=1",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePhase": true,
+      "time": 1791023690981,
+      "servedVendor": "04e83e8ca8eb",
+      "servedCore": "1791017387-vendor-csp-probe",
+      "sourceSha256": "1d34a6caebe2ced67a49b2f4b40b7c131c54da4c379384ca8f01016da621e7b3"
+    }
+  ],
+  "candidateEntries": [
+    {
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePhase": true,
+      "time": 1791023689149,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-mlY+ZZlU5oHAgTuFi65xbnujnNnXNWbdrHeC6Tm/hFs=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-RpFgTNbC6VAYRjutrf3WjbppJPR2eqZJeM6dHbcnr2U=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/spreadsheeteditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePhase": true,
+      "time": 1791023689155,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-bh6eznDaoKfccEsWKr7TaLe42GxvSzfRx7pInOiRy8k=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-cIOblnwfItklL2WfRBsqa90WABGOFbGdnmWhMiJvTA0=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    },
+    {
+      "path": "/web-apps/apps/presentationeditor/main/index.html",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200,
+      "candidatePhase": true,
+      "time": 1791023689156,
+      "stylesheetHandlerRemoved": true,
+      "candidatePolicy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval' 'sha256-xEhyiZGhboJtDKcTLrCnNQkYPeg5teYGIyeDcAm1AVU=' 'sha256-mqk4m1ZhFQijBIK1hCCJGZ5CLZL1mpqH9WxgZxWo9gQ=' 'sha256-xJ0jb716vJJvnkrc6Wubc9+gljaNAeXGHWf4q5obRYo=' 'sha256-u3V9du8Z1z9bttH2476I7s2ROsrCVmlHVtMtBYE19d8=' 'sha256-6AdXMgtuZDIqNl2J5qWnDRh/Sb+q4y7oVmFCiPB9vOM=' 'sha256-SpEnPJLA9lg6DkiCWXDXhWm5bGVpzic51b+yNrhld30=' 'sha256-+ac8khtNoT0aNZRgSgtufqMcKat1zoMcy2QKOy1king=' 'sha256-t8vvSOQ2KkT9MfKX0atY7sruJ6XaEoqqptb3tfTc/Vw=' 'sha256-Ax9FlC3ANJfMAGItnIrcfDd6cP+k0d7cwBBmPdx5jp4=' 'sha256-9+YMEg87EitiUAB4qEcBOX5CxFMWckUSXygvg23OoMg='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'"
+    }
+  ]
+}

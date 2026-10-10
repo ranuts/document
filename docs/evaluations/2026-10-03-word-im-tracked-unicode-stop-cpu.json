@@ -1,0 +1,449 @@
+{
+  "status": "failed",
+  "scope": "Actual production IM Word tracked replacement with controlled native pre_Paste delay; Stop then resume callback to detect late document mutation; optional prior redo and subsequent IM write recovery.",
+  "model": "Qwen3-0.6B-GGUF-CPU",
+  "language": "zh",
+  "replacement": "项目 😀 Payment · NOT approved",
+  "results": [],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-DPk94L3L.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "setup": {
+    "text": "A😀pha\t target body\r\nNeighbor unchanged\r\n",
+    "nativeText": "Apha  target body\r\nNeighbor unchanged\r\n",
+    "selected": "A😀pha\t",
+    "paragraphs": [
+      {
+        "text": "A😀pha\t target body\r\n",
+        "nativeText": "Apha  target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "😀",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "p",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "y",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\r\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "nativeText": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "i",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "u",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "c",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\r\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      }
+    ]
+  },
+  "priorRedo": true,
+  "insertMode": false,
+  "error": "Error: locator.evaluate: Error: Native pre_Paste was not observed",
+  "failureFeedback": {
+    "errors": [],
+    "activity": [],
+    "inputDisabled": true,
+    "document": {
+      "text": "A😀pha\t target body\r\nNeighbor unchanged\r\n",
+      "nativeText": "Apha  target body\r\nNeighbor unchanged\r\n",
+      "selected": "A😀pha\t",
+      "paragraphs": [
+        {
+          "text": "A😀pha\t target body\r\n",
+          "nativeText": "Apha  target body\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "A",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "😀",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "p",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "h",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "a",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "\t",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": " ",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "t",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "a",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "r",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "g",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "e",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "t",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": " ",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "b",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "o",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "d",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "y",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "\r\n",
+              "bold": false,
+              "reviewType": 0
+            }
+          ]
+        },
+        {
+          "text": "Neighbor unchanged\r\n",
+          "nativeText": "Neighbor unchanged\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "N",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "e",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "i",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "g",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "h",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "b",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "o",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "r",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": " ",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "u",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "n",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "c",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "h",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "a",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "n",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "g",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "e",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "d",
+              "bold": false,
+              "reviewType": 0
+            },
+            {
+              "c": "\r\n",
+              "bold": false,
+              "reviewType": 0
+            }
+          ]
+        }
+      ]
+    },
+    "preparation": {
+      "prepared": 0,
+      "resumed": 0
+    }
+  }
+}

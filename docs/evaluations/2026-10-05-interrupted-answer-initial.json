@@ -1,0 +1,17 @@
+{
+  "version": "151.0.7922.34",
+  "errors": [],
+  "model": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "before": "\r\n",
+  "request": "写一篇约600字的关于海边灯塔的短篇故事。",
+  "partial": "海边灯塔的灯光为过往的船只指引方向，也成为了人们心中",
+  "applyCount": 0,
+  "copyCount": 1,
+  "afterStop": "\r\n",
+  "requestRestored": true,
+  "directWriteMessages": "写一篇约600字的关于海边灯塔的短篇故事。\n\n海边灯塔的灯光为过往的船只指引方向，也成为了人们心中\n\n已停止。\n恢复请求\n写到当前的文档上\n未能完成请求。请重试或检查设置。\n恢复请求",
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.directWriteMessages.includes('没有可写入的上一条回答'))\n",
+  "chat": "写一篇约600字的关于海边灯塔的短篇故事。\n\n海边灯塔的灯光为过往的船只指引方向，也成为了人们心中\n\n已停止。\n恢复请求\n写到当前的文档上\n未能完成请求。请重试或检查设置。\n恢复请求",
+  "contextClosed": true,
+  "browserClosed": true
+}

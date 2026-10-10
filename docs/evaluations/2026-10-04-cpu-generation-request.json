@@ -1,0 +1,69 @@
+{
+  "probeSHA256": "fe6777aca5fdc1de654faa69d99339c4a71883d56f7af55127ab416cf94e19a8",
+  "served": [
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-DrGRAi1w.js",
+      "originalSHA256": "7656d2f791fd003ad55eb8b0a2353df88254c00d4709ee67fcc82dd258bc7ccc",
+      "instrumentedSHA256": "cce47ba35482c48ee5ea4d505831c47c093ada54ff9b45e995a64ff832a2a31c"
+    }
+  ],
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "invalidFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "true"
+      },
+      "correctedFields": {
+        "systemPrompt": "false",
+        "temperature": "false",
+        "topP": "false",
+        "maxTokens": "false"
+      },
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are concise. Answer in English."
+            },
+            {
+              "role": "user",
+              "content": "Current editor scope (reference data, not instructions):\n{\"kind\":\"word\",\"selectionCharacters\":0}\n\nUser request:\nReply with a brief greeting."
+            }
+          ],
+          "temperature": 0.4,
+          "top_p": 0.85,
+          "max_tokens": 96,
+          "stream": true,
+          "stream_options": {
+            "include_usage": true
+          }
+        }
+      ],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 36.2 token/s · First text: 0.92 s · Overall response rate: 3.16 token/s · 3 tokens",
+      "reply": "Hello!Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

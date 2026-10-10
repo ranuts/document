@@ -1,0 +1,187 @@
+{
+  "scope": "Standalone browser CPU Worker using shipped count-capable wllama resources and exact verified official Qwen 3B GGUF; no native server or external inference. Same minimal messages/schema and requested sampling, different GGUF/runtime/template/sampler from MLC. Not native IM or quality acceptance; no production edits.",
+  "probeSHA256": "a20f18cc46eb77804a85dc27f8dee52b724cb4e2628048a6070a4ca2ca5799aa",
+  "modelSHA256": "626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d",
+  "modelBytes": 2104932768,
+  "assetHashes": {
+    "client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745",
+    "wllama-BIOZ48O-.js": "b65183da008a366ec8136cbf4273bfa5f39563a1637994259adc9dda8b425690",
+    "wllama-BITawafS.wasm": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6",
+    "wllama-BcotrvZo.js": "1ef23c6430172113ae1e2abde9f35f539d16428fe40c555753079109e6720a06",
+    "wllama-CaONujPU.js": "334f21dd6d33ed3aa9c87464336d80658b0c327f1417683b7d0a2ff83ae6571d",
+    "wllama-CmLUJC6F.wasm": "6ca9fdd1b6c03206cd3a04e359b52c8f539896d6c5fb5d36243dded4a689f0ad",
+    "wllama-D0WL0fvJ.js": "9be038cc047c3b28b3d3f5cafd6796c747e356e75dfb8cf74bab252ff6077232",
+    "wllama-DCn7BVDp.js": "cf3e565d4ad2df41b992f68a6f8a733dfb8a906a0eaf4e039a7acbc1f1da4ff2",
+    "wllama-J6krg_E0.wasm": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179",
+    "wllama-XMlyubPs.js": "22d945e5e38b15bf70e365c125a3bc16238e2641c351988abf6ef97947567dce",
+    "wllama-cpu-runtime-DuOKOCDd.js": "e04c2fd293cfc5486119ad2b739ab13beae7a67bfe2f027c5d55d3c66fbeeaf2",
+    "wllama-xnr7mLRC.wasm": "3c447fe82f5376b1202f909a414348421fe196ae069e1504010f55c0454f85f4"
+  },
+  "results": [],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:5193/",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-cpu-runtime-DuOKOCDd.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CYJn2sbW.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-DIcQ36pS.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-6AKBu3ka.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-B0MAkvvr.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/",
+      "method": "GET",
+      "bodyBytes": 0
+    }
+  ],
+  "cases": [
+    {
+      "id": "date-22",
+      "source": "ISO date: 2044-09-22.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-22"
+    },
+    {
+      "id": "date-current",
+      "source": "ISO date: 2026-10-04.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2026-10-04"
+    },
+    {
+      "id": "zh-date",
+      "source": "预约日期：2044-09-23。",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    },
+    {
+      "id": "pt-date",
+      "source": "A data da reserva é 2044-09-23.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    }
+  ],
+  "status": "failed",
+  "error": "Error: page.evaluate: Execution context was destroyed, most likely because of a navigation.",
+  "phase": null
+}

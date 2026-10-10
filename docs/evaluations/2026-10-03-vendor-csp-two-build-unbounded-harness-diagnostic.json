@@ -1,0 +1,6 @@
+{
+  "status": "terminated-owned-harness",
+  "probeSha256": "3893db28f0dcd75d48e8e7d456da2160bd5c81bc2e58ce378e1921e6af5b682c",
+  "observedLog": "stage old-dirty-retained-and-saved docx\n{\"passed\":false,\"error\":\"Error: worker.evaluate: Target page, context or browser has been closed\",\"cold\":0,\"offline\":0}\n",
+  "reason": "Diagnostic introduced an unbounded Worker.evaluate awaiting skipWaiting. Owned Node PID 93037 was still live after more than two minutes; terminated explicitly to add a bounded operation. No complete report was produced; this is not product acceptance or proof of a particular runtime cause."
+}

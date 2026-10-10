@@ -1,0 +1,227 @@
+{
+  "status": "failed",
+  "scope": "Actual production local-model IM Word replacement with native track revisions enabled; exact canonical native-item text and character review types, unchanged neighbor, native Undo/Redo and visible error checks. Native Save/download and homepage reopen, no preview card; no external Word/OS overwrite claim.",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "language": "zh",
+  "replacement": "项目 😀 Payment · NOT approved",
+  "results": [],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BtkBmrL3.js",
+    "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+  ],
+  "setup": {
+    "text": "A😀pha\t target body\r\nNeighbor unchanged\r\n",
+    "nativeText": "Apha  target body\r\nNeighbor unchanged\r\n",
+    "selected": "A😀pha\t",
+    "paragraphs": [
+      {
+        "text": "A😀pha\t target body\r\n",
+        "nativeText": "Apha  target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "😀",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "p",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "t",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "y",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\r\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "nativeText": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "i",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "b",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "o",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "r",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": " ",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "u",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "c",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "h",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "a",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "n",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "g",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "e",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "d",
+            "bold": false,
+            "reviewType": 0
+          },
+          {
+            "c": "\r\n",
+            "bold": false,
+            "reviewType": 0
+          }
+        ]
+      }
+    ]
+  },
+  "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.agent-panel-review r-checkbox')\u001b[22m\n\u001b[2m    - locator resolved to <r-checkbox tabindex=\"0\" value=\"false\" role=\"checkbox\" checked=\"false\" aria-checked=\"false\" aria-label=\"Review mode\"></r-checkbox>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+}

@@ -1,0 +1,9 @@
+{
+  "scope": "Isolated source copy with newly compiled default CPU JS embedded; no product activation",
+  "source": "/private/tmp/document-wllama-count-361/src",
+  "destination": "/private/tmp/document-wllama-count-default-client",
+  "runtime": "/private/tmp/document-wllama-count-default-4020/wllama.js",
+  "runtimeSHA256": "9ef654633a98495e82dd3eb862923eb17205eb6aa1cbfac1fb61715b8e31cbbf",
+  "generatedSHA256": "2ab325216bd0a5ed349adbbcc822c831c59f54cbb9de11e797b3dbf9797df281",
+  "wasmSHA256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6"
+}

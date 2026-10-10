@@ -1,0 +1,121 @@
+{
+  "runtime": "d71a1e8",
+  "version": "26.5",
+  "errors": [],
+  "font": {
+    "embedded": {
+      "bytes": 6868,
+      "sha256": "35ff902a3b9c9254ce3c57d610dad9e57008b8a3351691c463bee775644c1e18",
+      "prefix": [
+        0,
+        1,
+        0,
+        0
+      ]
+    },
+    "info": {
+      "Name": "ASCW3",
+      "indexR": 282,
+      "NeedStyles": 15
+    },
+    "methods": [
+      "constructor",
+      "GetMaxLoadingCount",
+      "CheckLoaded",
+      "SetStreamIndex",
+      "LoadFontFromData",
+      "LoadFontNative",
+      "LoadFontArrayBuffer",
+      "LoadFontAsync",
+      "GetID",
+      "GetStatus",
+      "GetStreamIndex"
+    ],
+    "primitiveFields": {
+      "LoadingCounter": 0,
+      "Id": "100",
+      "Status": 0,
+      "stream_index": 0,
+      "callback": null
+    },
+    "streamCount": 16,
+    "streams": [
+      {
+        "i": 0,
+        "size": 6868
+      },
+      {
+        "i": 1,
+        "size": 207400
+      },
+      {
+        "i": 2,
+        "size": 281608
+      },
+      {
+        "i": 3,
+        "size": 308068
+      },
+      {
+        "i": 4,
+        "size": 319624
+      },
+      {
+        "i": 5,
+        "size": 284184
+      },
+      {
+        "i": 6,
+        "len": 410820,
+        "marker": true
+      },
+      {
+        "i": 7,
+        "len": 415920,
+        "marker": true
+      },
+      {
+        "i": 8,
+        "size": 414568
+      },
+      {
+        "i": 9,
+        "size": 409108
+      },
+      {
+        "i": 10,
+        "len": 393692,
+        "marker": true
+      },
+      {
+        "i": 11,
+        "len": 375760,
+        "marker": true
+      },
+      {
+        "i": 12,
+        "size": 370196
+      },
+      {
+        "i": 13,
+        "size": 376892
+      },
+      {
+        "i": 14,
+        "size": 10413124
+      },
+      {
+        "i": 15,
+        "len": 10423464,
+        "marker": true
+      }
+    ]
+  },
+  "decodedDisk": {
+    "bytes": 6868,
+    "sha256": "35ff902a3b9c9254ce3c57d610dad9e57008b8a3351691c463bee775644c1e18"
+  },
+  "embeddedEqualsDisk": true,
+  "finished": true,
+  "closed": true
+}

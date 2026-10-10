@@ -1,4 +1,5 @@
 import 'ranui/message';
+import { waitForAppWorkerControl } from './offline-worker-control';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
 import { DOCUMENT_TYPE_MAP } from '@ranuts/shared/document-utils';
 import { prepareEditorIframe } from './onlyoffice/iframe-guards';
@@ -217,16 +218,13 @@ function createPersonalEditorInstance(config: {
       },
       customization: {
         help: false,
-        // `about` stays at its default (true). The About pane is where the
-        // ONLYOFFICE product logo, version and Ascensio System SIA copyright
-        // live, and Section 7(b) of the vendor's AGPL-3.0 headers requires a
-        // derivative work to keep the product logo. Switching it off is also
-        // what the vendor's own `canBrandingExt` check exists to prevent --
-        // this offline build just happens not to enforce it. See NOTICE.
+        // Keep About reachable for copyright, version, license and source
+        // information. Product marks are hidden separately; see NOTICE.
         hideRightMenu: true,
         uiTheme: resolveUiTheme(),
         ...(isCompactViewport() ? compactViewportCustomization() : {}),
         features: {
+          featuresTips: false,
           // Spellcheck is fully disabled (mode:false turns it off, not just
           // locks the toggle): its engine is imported inside a worker on
           // first document load and that request has been observed to hang
@@ -271,6 +269,7 @@ function createPersonalEditorInstance(config: {
       },
       onDocumentReady: () => {
         markDocumentContentReady();
+        window.dispatchEvent(new Event('document:content-ready'));
         // The open succeeded, so the retry budget is spent and the bytes kept
         // for it are dead weight -- the editor holds the document itself, and
         // the blob it was mounted from is a second copy already. Keeping a
@@ -437,7 +436,8 @@ export function createEditorInstance(config: {
   });
 }
 
-export function loadEditorApi(): Promise<void> {
+export async function loadEditorApi(): Promise<void> {
+  if (!window.DocsAPI && /^\/editor(?:\.html)?\/?$/.test(location.pathname)) await waitForAppWorkerControl();
   return new Promise((resolve, reject) => {
     // Check if already loaded
     if (window.DocsAPI) {

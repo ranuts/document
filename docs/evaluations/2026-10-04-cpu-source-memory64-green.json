@@ -1,0 +1,50 @@
+{
+  "scope": "Exact capability function extracted from TypeScript source; mocked constructor/module validation",
+  "sourceSHA256": "901e04c08e44a5454427d8df72463e6c19cd916296eeed63ee4734e73acb9945",
+  "tests": [
+    {
+      "acceptsModule": false,
+      "actual": false,
+      "constructorCalls": 0,
+      "validated": [
+        [
+          0,
+          97,
+          115,
+          109,
+          1,
+          0,
+          0,
+          0,
+          5,
+          3,
+          1,
+          4,
+          1
+        ]
+      ]
+    },
+    {
+      "acceptsModule": true,
+      "actual": true,
+      "constructorCalls": 0,
+      "validated": [
+        [
+          0,
+          97,
+          115,
+          109,
+          1,
+          0,
+          0,
+          0,
+          5,
+          3,
+          1,
+          4,
+          1
+        ]
+      ]
+    }
+  ]
+}

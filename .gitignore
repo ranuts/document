@@ -17,20 +17,26 @@ dist
 # test artifacts
 coverage/
 playwright-report/
-playwright-report-docker/
+playwright-report-*/
 test-results/
 public/fonts/__fallback__/
+
+# Local AI/browser probes: downloaded documents, profiles, logs and audit artifacts.
+# Keep reproducible probe scripts and evaluation reports in docs/evaluations/.
+/.scratch/
+
+# Default Emscripten outputs from local compilation experiments.
+/a.out.js
+/a.out.wasm
+
+# Python bytecode caches generated when running evaluation and verification scripts.
+__pycache__/
 
 # Nightly public corpus checkout (never committed)
 corpus/
 corpus-src/
 dist-e2e-*/
 test-results-*/
-playwright-report-browsers/
-test-results-prod/
-playwright-report-prod/
-test-results-pages/
-playwright-report-pages/
 .wrangler/
 
 # Pages rendered from markdown at build/dev time by bin/build-pages.mjs (vite
@@ -220,3 +226,13 @@ public/pt/help.html
 public/pt/changelog.html
 public/pt/help/embed-api.html
 public/pt/index.html
+
+# Generated copies of the root legal notices for static hosting.
+/public/LICENSE
+/public/NOTICE
+
+# Locally mirrored model artifacts (deploy separately, keep out of Git).
+/public/models/
+
+# Temporary ignore lists used by archive-aware quality checks.
+/.archive-quality-*.ignore

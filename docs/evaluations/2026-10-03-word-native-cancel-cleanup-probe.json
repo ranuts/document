@@ -1,0 +1,69 @@
+{
+  "status": "completed",
+  "scope": "Native Word HTML paste cleanup experiment with controlled preparation delay; no production cancellation fix.",
+  "result": {
+    "before": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "index": 0,
+      "points": 1,
+      "group": -1,
+      "busy": false,
+      "html": false,
+      "paste": false,
+      "canUndo": true,
+      "canRedo": false
+    },
+    "pending": {
+      "text": " target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "index": 1,
+      "points": 2,
+      "group": -1,
+      "busy": true,
+      "html": true,
+      "paste": true,
+      "canUndo": true,
+      "canRedo": false
+    },
+    "afterEnd": {
+      "text": " target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "index": 1,
+      "points": 2,
+      "group": -1,
+      "busy": true,
+      "html": true,
+      "paste": false,
+      "canUndo": true,
+      "canRedo": false
+    },
+    "afterUndo": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "index": 0,
+      "points": 2,
+      "group": -1,
+      "busy": true,
+      "html": true,
+      "paste": false,
+      "canUndo": true,
+      "canRedo": true
+    },
+    "afterLate": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "index": 0,
+      "points": 2,
+      "group": -1,
+      "busy": true,
+      "html": true,
+      "paste": false,
+      "canUndo": true,
+      "canRedo": true
+    },
+    "prepared": 1,
+    "completed": 0,
+    "restored": true
+  }
+}

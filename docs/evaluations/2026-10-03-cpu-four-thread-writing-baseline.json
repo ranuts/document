@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-03T06:38:15.348Z",
+  "scope": "Actual browser CPU selected-text writing with current production prompt, schema and fact guards; one loaded model reused for three distinct tasks. Candidate loaded through existing local GGUF file control. WebGPU disabled and Service Workers blocked for diagnostic response/runtime capture. No model default change, broad quality benchmark or mobile claim.",
+  "port": 5193,
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "documentUnchanged": true,
+      "responseMs": 9201,
+      "errors": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{\"text\": \"Alex 于 2026年10月8日支付 1,250 EUR\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 28,
+            "promptTokens": 447,
+            "promptProcessingDurationMs": 7764.235,
+            "decodingDurationMs": 1357.254,
+            "decodeTokensPerSecond": 19.893107701285096,
+            "responseDurationMs": 9155.555000305176,
+            "endToEndTokensPerSecond": 3.0582526126561085
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "documentUnchanged": true,
+      "responseMs": 3568,
+      "errors": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{\"text\": \"Hey, Alex is expected to pay 1,250 EUR on October 8, 2026.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 31,
+            "promptTokens": 447,
+            "promptProcessingDurationMs": 2046.469,
+            "decodingDurationMs": 1498.27,
+            "decodeTokensPerSecond": 20.023093300940417,
+            "responseDurationMs": 3555.465000152588,
+            "endToEndTokensPerSecond": 8.7189720609455
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08, but it has not been approved.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 7173,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "{\"text\": \"Alex proposed a payment of 1,250 EUR on 2026-10-08, but it has not been approved.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 38,
+            "promptTokens": 460,
+            "promptProcessingDurationMs": 5278.74,
+            "decodingDurationMs": 1850.914,
+            "decodeTokensPerSecond": 19.99012379829641,
+            "responseDurationMs": 7147.89999961853,
+            "endToEndTokensPerSecond": 5.316246730092473
+          }
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    }
+  ],
+  "errors": [],
+  "leakage": []
+}

@@ -1,0 +1,9 @@
+{
+  "scope": "Observation correction; first process exited 1 but its result was not inspected at the correct path",
+  "process_exit_code": 1,
+  "driver_sha256": "9de66e878bcc5cd20c24cadb94ac97887d3a0bb124deb671668c4893798ecdb9",
+  "snapshot_present": null,
+  "log_bytes": 0,
+  "cause": "Unknown. Observer checked the wrong output filename. The date-prefixed receipt was overwritten by the checkpointed retry before inspection. No first-run inference or failure-cause claim is supported.",
+  "observation_error": "Driver writes .scratch/2026-10-07-qwen14-policy-placement-native.json; observer checked a filename without the date prefix."
+}

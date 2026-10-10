@@ -1,0 +1,22 @@
+{
+  "scope": "Fresh WebKit27 product offline page-close lifecycle with chat plus literal native Word insert/Undo/Redo; no save/reopen, unseen generative writing or physical device acceptance",
+  "driver_sha256": "d085fc726b633c185de1e57bb5f60742fa84b0d1aa02c46da57303dd4b30a398",
+  "binding_time": "After process launch; not immutable prelaunch binding",
+  "product_client_sha256": "d522958c39df2fcf77a05e9de526326b58c9a20e76f4517450732c4ae2eaaaf6",
+  "build_core": "1791371772",
+  "runner": "1.65.0-alpha-2026-10-07",
+  "webkit": "27.2",
+  "acceptance": [
+    "Natural default CPU online load and actual production service-worker controller.",
+    "Close online page, set context offline, open new actual Word page, restore cached CPU model.",
+    "Complete requested chat with unchanged blank document.",
+    "Insert exact literal through panel; check native text and absence of preview/errors.",
+    "Undo equals original blank text; Redo equals exact inserted text.",
+    "Record auxiliary offline request failures and terminal cleanup."
+  ],
+  "limits": [
+    "Literal operation may use deterministic tools routing; this does not establish generative factual fidelity.",
+    "Same browser/context page closure, not browser-process or OS restart.",
+    "Network query strings must be omitted from archived ledger; raw ignored receipt hash retained."
+  ]
+}

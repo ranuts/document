@@ -1,0 +1,161 @@
+{
+  "experiment": "numeric-placeholder representation; input transformed and output restored before unchanged production validators",
+  "date": "2026-10-03T06:56:47.979Z",
+  "scope": "Experimental masked numeric/date source representation in actual four-thread CPU writing; generated SDK input modified, markers restored before unchanged production validators and native application. Current production prompt augmented with copy-marker instruction. Service Workers unregistered and relevant generated script cache entries removed in an isolated profile; model caches retained. Not a product change or reliability benchmark.",
+  "port": 5193,
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "\u563f\uff0cAlex \u4f1a\u5728 2026-10-08 \u4ed8 1,250 EUR \u54e6\uff01",
+      "instruction": "\u6539\u5199\u4e3a\u6b63\u5f0f\u4e66\u9762\u4e2d\u6587\uff0c\u53bb\u6389\u53e3\u8bed\u8868\u8fbe\uff0c\u4fdd\u7559\u4e8b\u5b9e\u3002",
+      "selected": "\u563f\uff0cAlex \u4f1a\u5728 2026-10-08 \u4ed8 1,250 EUR \u54e6\uff01\r\n",
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex \u4e8e 2026-10-08 \u4ed8 1,250 \u5143\u3002\r\n",
+      "documentUnchanged": false,
+      "responseMs": 9372,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "maskedText": "{\"text\": \"Alex \u4e8e [[DATE_A]] \u4ed8 [[NUMBER_B]] \u5143\u3002\"}",
+          "text": "{\"text\":\"Alex \u4e8e 2026-10-08 \u4ed8 1,250 \u5143\u3002\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 22,
+            "promptTokens": 455,
+            "promptProcessingDurationMs": 8202.619,
+            "decodingDurationMs": 1102.631,
+            "decodeTokensPerSecond": 19.045356062000796,
+            "responseDurationMs": 9338.425000190735,
+            "endToEndTokensPerSecond": 2.3558576526074426
+          },
+          "slots": [
+            {
+              "marker": "[[DATE_A]]",
+              "literal": "2026-10-08"
+            },
+            {
+              "marker": "[[NUMBER_B]]",
+              "literal": "1,250"
+            }
+          ]
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex will pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "documentUnchanged": false,
+      "responseMs": 2904,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "maskedText": "{\"text\": \"Hey, Alex will pay [[NUMBER_A]] EUR on [[DATE_B]], okay?\"}",
+          "text": "{\"text\":\"Hey, Alex will pay 1,250 EUR on 2026-10-08, okay?\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 23,
+            "promptTokens": 454,
+            "promptProcessingDurationMs": 1707.444,
+            "decodingDurationMs": 1164.27,
+            "decodeTokensPerSecond": 18.89596055897687,
+            "responseDurationMs": 2882.7250003814697,
+            "endToEndTokensPerSecond": 7.9785619498760445
+          },
+          "slots": [
+            {
+              "marker": "[[NUMBER_A]]",
+              "literal": "1,250"
+            },
+            {
+              "marker": "[[DATE_B]]",
+              "literal": "2026-10-08"
+            }
+          ]
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU \u00b7 Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. Approval has not been granted.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 6787,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "maskedText": "{\"text\": \"Alex proposed a payment of [[NUMBER_A]] EUR on [[DATE_B]]. Approval has not been granted.\"}",
+          "text": "{\"text\":\"Alex proposed a payment of 1,250 EUR on 2026-10-08. Approval has not been granted.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 27,
+            "promptTokens": 467,
+            "promptProcessingDurationMs": 5434.205,
+            "decodingDurationMs": 1312.914,
+            "decodeTokensPerSecond": 19.803277290058602,
+            "responseDurationMs": 6765.610000133514,
+            "endToEndTokensPerSecond": 3.9907709725312537
+          },
+          "slots": [
+            {
+              "marker": "[[NUMBER_A]]",
+              "literal": "1,250"
+            },
+            {
+              "marker": "[[DATE_B]]",
+              "literal": "2026-10-08"
+            }
+          ]
+        }
+      ],
+      "runtime": {
+        "threads": 4,
+        "multithread": true,
+        "isolated": true,
+        "hardwareConcurrency": 10
+      },
+      "isolated": true
+    }
+  ],
+  "errors": [],
+  "leakage": [],
+  "cacheReset": {
+    "registrations": 1,
+    "removed": 5
+  },
+  "assessment": {
+    "adopted": false,
+    "numericFormatting": "All three marker sets copied once and restored to exact source date/amount literals.",
+    "formalChinese": "Failed semantic fidelity: EUR was replaced by \u5143, despite numeric validation accepting the result.",
+    "formalEnglish": "Failed requested formal style: Hey and okay remained.",
+    "summary": "Single result retains proposal, payment literals and lack of approval and is shorter. No reliability claim.",
+    "firstRun": "Missing slot capture invalidated the first run, preserved separately; do not infer experimental quality from its output."
+  }
+}

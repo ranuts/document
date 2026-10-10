@@ -1,0 +1,7 @@
+# Generic loading failure copy and same-panel recovery
+
+Production build completed with exit 0 (core 1791361242/vendor b6864850e7b3). The seven translations now state loading failed with retry/choose-another-model recovery, without implying a first-network-download context. Related loading/presentation tests passed 78/78 and TypeScript passed before this build.
+
+Actual Chromium CPU regression reproduced the pinned 7B single-buffer allocation failure: 4677120000 bytes, loaded context vocabulary/context zero, native count rejected, no completion attempted, runtime exit once, UI status empty and the new exact Chinese failure message displayed. In the same panel/page, selecting the existing 0.6B model then loaded successfully with 14 preflight prompt tokens and 2048 context tokens. One greeting completion succeeded; the retained original error remained in history and no new chat error appeared. A separate fresh-context small-model control also loaded and completed once. Both contexts/browser closed; process exited 0 and page errors were absent.
+
+The recorded reply text contains the localized write-to-document action label, so it is not an exact raw model-output receipt. This regression establishes the observed Chinese native failure/recovery path, not every translation's native rendering, every load-failure cause, offline recovery, document editing, other devices or seven-language writing. The WASM linear-memory limit remains unchanged; no larger CPU support is claimed. Hashes below were captured after execution, not as a prelaunch protocol binding.

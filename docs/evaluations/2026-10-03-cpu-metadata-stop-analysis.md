@@ -1,0 +1,11 @@
+# CPU model loading cancellation
+
+The pinned wllama 3.6.1 SDK previously omitted the loading AbortSignal from Hugging Face SHA metadata GET and model-size HEAD requests. Its metadata fallback also swallowed cancellation. The existing patch now propagates cancellation through those requests and checks cancellation after asynchronous cache operations, preventing subsequent requests, cache operations, or successful returns. The previous native Worker and Memory64 fixes remain included. TypeScript and both distributed JavaScript builds match.
+
+Nine tests exercise the installed SDK: the three preflight requests, deletion and write boundaries, ordinary offline metadata fallback with a valid cache, and an already-canceled download. The three preflight regressions were observed failing before the fix. Three write-boundary regressions were independently observed returning unexpected success with their guards removed; these tests use Node Blob because jsdom Blob lacks stream(). Independent review found no remaining Critical or Important issue after the boundary guards were added.
+
+Production Chromium IM probes held the actual total-size HEAD, SHA GET, and model-file GET separately. Each observed one AbortSignal and one abort after the existing Stop button, retained “Stopped.” after delayed route release, and exposed the existing Load button for retry. Restoring access to the existing cached model allowed real CPU Qwen 0.6B inference to answer “Hello.” All three reports contain no page or visible errors. The HEAD and SHA reports contain no model-file GET. Exact executed probe sources and SHA-256 hashes accompany the reports.
+
+Already-started cache operations can finish; this change does not roll their writes back. These probes do not cover cancellation after partial response bytes, physical memory exhaustion, GPU shard downloads, or physical mobile browsers. Earlier WebKit route interception attempts remain diagnostic rather than successful cancellation evidence. Existing converter asynchronous-rejection warnings are unrelated and predate this change.
+
+Validation: production build passed; 115 test files / 4076 tests passed. After a test-only Blob typing correction, all nine SDK tests and root lint passed again. The correction constructs the globally stubbed Blob with DOM typing; runtime behavior is unchanged.

@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-02T13:14:33.806Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright WebKit CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 41742,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "manualReview": "Numeric/date guard rejected generated response; original document unchanged. Candidate did not solve formal rewrite."
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model returned the original text. Try a clearer instruction or another model.Restore request"
+      ],
+      "responseMs": 44428,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "manualReview": "Unchanged source guard rejected copied summary; original document unchanged. Previous baseline summary had succeeded, so possible regression requires more evidence."
+    }
+  ],
+  "observed": [
+    "writing-fidelity-candidate-v1",
+    "writing-fidelity-candidate-v1"
+  ],
+  "errors": [],
+  "adopted": false,
+  "limitations": [
+    "Two single CPU WebKit desktop samples; not broad reliability evidence.",
+    "Raw model output not captured, so date-format rejection cannot establish exact generated wording.",
+    "Candidate removed and production rebuilt."
+  ]
+}

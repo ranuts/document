@@ -1,0 +1,24 @@
+{
+  "scope": "Isolated capacity build diagnostic, no product activation. Same pinned sources and compiler for 4 GiB control and 8 GiB candidate; compiler differs from existing product runtime, so a direct before/after compiler-equivalence claim is invalid.",
+  "sdkRevision": "e3972797f9d508887440e9d3fa87dc296f2dec44",
+  "llamaRevision": "83d855c5a6d70487121edbf4020b25c96b7a04e7",
+  "compiler": "Emscripten 6.0.10-git",
+  "variants": [
+    {
+      "label": "control",
+      "maximumMemory": "4096MB"
+    },
+    {
+      "label": "candidate",
+      "maximumMemory": "8192MB"
+    }
+  ],
+  "patches": {
+    "cpu-native-count-structured-rejection.patch": "d6680454b92ba3de45220dded01f966b1f25360a47dd2a3c2d6738f9db077bff",
+    "cpu-count-combined-client-source.patch": "0cfd633fda03d746bafeed82bf001381eb6d7d4ce5f8041a3e2b652d249ff078"
+  },
+  "boundedBlobRead": "Existing generated client already contains this patch. It targets compiled client/index.js, not SDK source. A candidate wrapper must preserve this behavior and bind new embedded JS/WASM bytes before browser use.",
+  "sourceDirectory": ".scratch/wllama-memory-probe-source",
+  "buildDirectory": ".scratch/wllama-memory-probe-build",
+  "outputDirectory": ".scratch/wllama-memory-capacity-artifacts"
+}

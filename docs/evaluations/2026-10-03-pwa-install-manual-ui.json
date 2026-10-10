@@ -1,0 +1,83 @@
+{
+  "status": "completed",
+  "scope": "Fresh isolated desktop WebKit and Chromium editor/IM install-dialog behavior; Chromium installability event controlled, no OS installation.",
+  "results": [
+    {
+      "kind": "webkit",
+      "before": {
+        "manualApple": true,
+        "manualChrome": true,
+        "hidden": true,
+        "available": true,
+        "appleDesktop": true,
+        "storageFlag": "true",
+        "shadowText": " Back\n                            \n                        \n                        \n                            Add to Dock\n                            \n                                \n                            \n                        \n                    \n                \n            \n        "
+      },
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css",
+        "http://127.0.0.1:5193/assets/editor-C8H41aL8.js"
+      ],
+      "afterManual": {
+        "manualApple": true,
+        "manualChrome": true,
+        "hidden": false,
+        "available": true,
+        "appleDesktop": true,
+        "storageFlag": "false",
+        "shadowText": " Back\n                            \n                        \n                        \n                            Add to Dock\n                            \n                                \n                            \n                        \n                    \n                \n            \n        "
+      },
+      "afterHide": {
+        "manualApple": true,
+        "manualChrome": true,
+        "hidden": true,
+        "available": true,
+        "appleDesktop": true,
+        "storageFlag": "true",
+        "shadowText": " Back\n                            \n                        \n                        \n                            Add to Dock\n                            \n                                \n                            \n                        \n                    \n                \n            \n        "
+      }
+    },
+    {
+      "kind": "chromium",
+      "before": {
+        "manualApple": true,
+        "manualChrome": true,
+        "hidden": true,
+        "available": true,
+        "appleDesktop": false,
+        "storageFlag": "true",
+        "shadowText": "ll the App for a better offline experience and quick access.\n                    \n                    \n                        \n                        Install\n                    \n                \n            \n            \n                \n                    \n                \n            \n        "
+      },
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-C8H41aL8.js",
+        "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+      ],
+      "afterManual": {
+        "manualApple": true,
+        "manualChrome": true,
+        "hidden": false,
+        "available": true,
+        "appleDesktop": false,
+        "storageFlag": "false",
+        "shadowText": "ll the App for a better offline experience and quick access.\n                    \n                    \n                        \n                        Install\n                    \n                \n            \n            \n                \n                    \n                \n            \n        "
+      },
+      "afterHide": {
+        "manualApple": true,
+        "manualChrome": true,
+        "hidden": true,
+        "available": true,
+        "appleDesktop": false,
+        "storageFlag": "true",
+        "shadowText": "ll the App for a better offline experience and quick access.\n                    \n                    \n                        \n                        Install\n                    \n                \n            \n            \n                \n                    \n                \n            \n        "
+      }
+    }
+  ],
+  "errors": [],
+  "productionBundle": "editor-C8H41aL8.js",
+  "assessment": "Both fresh contexts stayed quiet while install instructions remained available via explicit showDialog/hideDialog.",
+  "limitations": [
+    "Fresh desktop Playwright WebKit/Chromium only; Chromium beforeinstallprompt event controlled, not native browser installability certification.",
+    "GGUF requests aborted to isolate UI without downloading models; resulting AI load error is expected test setup, no model inference proof.",
+    "Component manual show/hide API verified, no OS installation or browser-menu installation performed.",
+    "Service workers blocked in these contexts; this test does not establish offline/PWA cache behavior."
+  ]
+}

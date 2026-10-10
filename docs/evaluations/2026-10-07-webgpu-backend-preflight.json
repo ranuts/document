@@ -1,0 +1,102 @@
+{
+  "scope": "Actual WebGPU adapter preflight only; no inference or device-matrix certification",
+  "source": "https://chromium.googlesource.com/chromium/src/+/main/gpu/command_buffer/service/webgpu_decoder_impl.cc",
+  "runs": [
+    {
+      "variant": "default",
+      "args": [],
+      "errors": [],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "available": true,
+        "adapter": true,
+        "info": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": "",
+          "description": "",
+          "isFallbackAdapter": false
+        },
+        "limits": {
+          "maxBufferSize": 4294967292,
+          "maxStorageBufferBindingSize": 4294967292
+        },
+        "features": [
+          "depth32float-stencil8",
+          "rg11b10ufloat-renderable",
+          "bgra8unorm-storage",
+          "texture-formats-tier1",
+          "texture-compression-bc",
+          "dual-source-blending",
+          "core-features-and-limits",
+          "float32-filterable",
+          "indirect-first-instance",
+          "texture-compression-astc-sliced-3d",
+          "float32-blendable",
+          "texture-compression-astc",
+          "texture-compression-etc2",
+          "depth-clip-control",
+          "texture-compression-bc-sliced-3d",
+          "timestamp-query",
+          "clip-distances",
+          "texture-formats-tier2",
+          "shader-f16",
+          "primitive-index",
+          "texture-component-swizzle",
+          "subgroups"
+        ],
+        "deviceCreated": true
+      },
+      "contextClosed": true,
+      "browserClosed": true
+    },
+    {
+      "variant": "swiftshader",
+      "args": [
+        "--enable-unsafe-webgpu",
+        "--use-webgpu-adapter=swiftshader"
+      ],
+      "errors": [],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "available": true,
+        "adapter": true,
+        "info": {
+          "vendor": "google",
+          "architecture": "swiftshader",
+          "device": "",
+          "description": "",
+          "isFallbackAdapter": true
+        },
+        "limits": {
+          "maxBufferSize": 1073741824,
+          "maxStorageBufferBindingSize": 1073741824
+        },
+        "features": [
+          "depth32float-stencil8",
+          "rg11b10ufloat-renderable",
+          "bgra8unorm-storage",
+          "texture-compression-bc",
+          "core-features-and-limits",
+          "chromium-experimental-timestamp-query-inside-passes",
+          "float32-filterable",
+          "indirect-first-instance",
+          "texture-compression-astc-sliced-3d",
+          "float32-blendable",
+          "subgroup-size-control",
+          "texture-compression-astc",
+          "texture-compression-etc2",
+          "depth-clip-control",
+          "texture-compression-bc-sliced-3d",
+          "timestamp-query",
+          "clip-distances",
+          "texture-component-swizzle",
+          "subgroups"
+        ],
+        "deviceCreated": true
+      },
+      "contextClosed": true,
+      "browserClosed": true
+    }
+  ]
+}

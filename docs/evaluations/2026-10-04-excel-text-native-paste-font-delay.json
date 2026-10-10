@@ -1,0 +1,88 @@
+{
+  "status": "completed",
+  "pasteSHA256": "b4580641b2f94a5f906368484dea281c37d66b12afdfecc848f6dfd831f8ab81",
+  "sourceSHA256": "bb7e9d2ec04fdd42d489bc0af5aa61f73455851d01ae0dd81f93b1189fe4dd1b",
+  "errors": [],
+  "cases": [
+    {
+      "value": "00123",
+      "originalFormat": "General",
+      "completion": {
+        "failure": {
+          "name": "Error",
+          "message": "Native paste was rejected"
+        },
+        "restoredBeforeRelease": "General",
+        "latePreparationReleased": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "123",
+        "format": "General",
+        "type": 0,
+        "raw": "123",
+        "edit": "123"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "123",
+        "format": "General",
+        "type": 0,
+        "raw": "123",
+        "edit": "123"
+      }
+    },
+    {
+      "value": "00123",
+      "originalFormat": "0.00",
+      "completion": {
+        "failure": {
+          "name": "Error",
+          "message": "Native paste was rejected"
+        },
+        "restoredBeforeRelease": "0.00",
+        "latePreparationReleased": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "123",
+        "format": "0.00",
+        "type": 0,
+        "raw": "123",
+        "edit": "123"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "123",
+        "format": "0.00",
+        "type": 0,
+        "raw": "123",
+        "edit": "123"
+      }
+    }
+  ]
+}

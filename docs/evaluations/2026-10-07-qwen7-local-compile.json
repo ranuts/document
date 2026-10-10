@@ -1,0 +1,7 @@
+{
+  "model": "Qwen2.5-7B-Instruct-q4f16_1-MLC",
+  "compile_exit": 0,
+  "browser_load_verified": false,
+  "bytes": 6151746,
+  "sha256": "9cedac983ac28e2a7556c22b37de71db03c37ac2e39eccc71ee5fe439ee732ca"
+}

@@ -3,6 +3,11 @@
 # The failure mode being prevented: a stale HTML referencing hashed assets
 # that no longer exist after a deploy ("Refused to apply style… text/html").
 
+# Local WASM threads require an isolated document and matching iframe/Worker responses.
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
 # Hashed build outputs: the filename changes every deploy → cache forever.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
@@ -35,6 +40,8 @@
 /landing-prefetch.js
   Cache-Control: no-cache
 /history-recent.js
+  Cache-Control: no-cache
+/theme-presentation.js
   Cache-Control: no-cache
 /ranui-iife/*
   Cache-Control: no-cache
@@ -119,3 +126,7 @@
   X-Robots-Tag: noindex
 /sdkjs/*
   X-Robots-Tag: noindex
+
+# Executable code restrictions belong to the model Worker, not vendor iframe HTML.
+/assets/webllm.worker-*.js
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:

@@ -1,0 +1,2005 @@
+{
+  "scope": "Locally compiled 14B library actual SDK load and generation control; not multilingual quality acceptance",
+  "library": {
+    "url": "http://127.0.0.1:5193/diagnostic-qwen14-e91575c4f2d9c878a875e55dfd35a5ed2253eb0e760dceeecbd58c8cfd9f4bf7.wasm",
+    "sha256": "e91575c4f2d9c878a875e55dfd35a5ed2253eb0e760dceeecbd58c8cfd9f4bf7",
+    "bytes": 6635060
+  },
+  "libraryServed": 1,
+  "errors": [],
+  "progress": [
+    {
+      "progress": 0,
+      "timeElapsed": 0,
+      "text": "Start to fetch params"
+    },
+    {
+      "progress": 0.002208364624660581,
+      "timeElapsed": 6,
+      "text": "Fetching param cache[1/194]: 18MB fetched. 0% completed, 6 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.004416729249321162,
+      "timeElapsed": 7,
+      "text": "Fetching param cache[2/194]: 35MB fetched. 0% completed, 7 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.012934707087297688,
+      "timeElapsed": 10,
+      "text": "Fetching param cache[3/194]: 103MB fetched. 1% completed, 10 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.016586642203770437,
+      "timeElapsed": 11,
+      "text": "Fetching param cache[4/194]: 132MB fetched. 1% completed, 11 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.018795006828431018,
+      "timeElapsed": 14,
+      "text": "Fetching param cache[5/194]: 149MB fetched. 1% completed, 14 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.02272298752298634,
+      "timeElapsed": 15,
+      "text": "Fetching param cache[6/194]: 181MB fetched. 2% completed, 15 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.026981976441974604,
+      "timeElapsed": 16,
+      "text": "Fetching param cache[7/194]: 214MB fetched. 2% completed, 16 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.03063391155844735,
+      "timeElapsed": 19,
+      "text": "Fetching param cache[8/194]: 243MB fetched. 3% completed, 19 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.034892900477435616,
+      "timeElapsed": 21,
+      "text": "Fetching param cache[9/194]: 277MB fetched. 3% completed, 21 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.03915188939642388,
+      "timeElapsed": 22,
+      "text": "Fetching param cache[10/194]: 311MB fetched. 3% completed, 22 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.04341087831541214,
+      "timeElapsed": 24,
+      "text": "Fetching param cache[11/194]: 345MB fetched. 4% completed, 24 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.05192885615338867,
+      "timeElapsed": 31,
+      "text": "Fetching param cache[12/194]: 412MB fetched. 5% completed, 31 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.0604468339913652,
+      "timeElapsed": 33,
+      "text": "Fetching param cache[13/194]: 480MB fetched. 6% completed, 33 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.06896481182934172,
+      "timeElapsed": 35,
+      "text": "Fetching param cache[14/194]: 547MB fetched. 6% completed, 35 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.0711731764540023,
+      "timeElapsed": 35,
+      "text": "Fetching param cache[15/194]: 565MB fetched. 7% completed, 35 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.07338154107866289,
+      "timeElapsed": 37,
+      "text": "Fetching param cache[16/194]: 582MB fetched. 7% completed, 37 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.07703347619513563,
+      "timeElapsed": 39,
+      "text": "Fetching param cache[17/194]: 611MB fetched. 7% completed, 39 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.07924184081979621,
+      "timeElapsed": 40,
+      "text": "Fetching param cache[18/194]: 628MB fetched. 7% completed, 40 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.1260907189286671,
+      "timeElapsed": 42,
+      "text": "Fetching param cache[19/194]: 1000MB fetched. 12% completed, 42 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.1299989820819308,
+      "timeElapsed": 42,
+      "text": "Fetching param cache[20/194]: 1031MB fetched. 12% completed, 42 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.13425797100091907,
+      "timeElapsed": 44,
+      "text": "Fetching param cache[21/194]: 1064MB fetched. 13% completed, 44 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.13790990611739185,
+      "timeElapsed": 44,
+      "text": "Fetching param cache[22/194]: 1093MB fetched. 13% completed, 44 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.14216889503638008,
+      "timeElapsed": 46,
+      "text": "Fetching param cache[23/194]: 1127MB fetched. 14% completed, 46 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.14802500479998895,
+      "timeElapsed": 49,
+      "text": "Fetching param cache[24/194]: 1174MB fetched. 14% completed, 49 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.15228399371897722,
+      "timeElapsed": 49,
+      "text": "Fetching param cache[25/194]: 1207MB fetched. 15% completed, 49 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.16080197155695375,
+      "timeElapsed": 52,
+      "text": "Fetching param cache[26/194]: 1275MB fetched. 16% completed, 52 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.16506096047594201,
+      "timeElapsed": 54,
+      "text": "Fetching param cache[27/194]: 1309MB fetched. 16% completed, 54 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.1672693251006026,
+      "timeElapsed": 56,
+      "text": "Fetching param cache[28/194]: 1326MB fetched. 16% completed, 56 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.1757873029385791,
+      "timeElapsed": 57,
+      "text": "Fetching param cache[29/194]: 1394MB fetched. 17% completed, 57 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.18430528077655564,
+      "timeElapsed": 58,
+      "text": "Fetching param cache[30/194]: 1461MB fetched. 18% completed, 58 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.18651364540121623,
+      "timeElapsed": 59,
+      "text": "Fetching param cache[31/194]: 1479MB fetched. 18% completed, 59 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.19016558051768898,
+      "timeElapsed": 62,
+      "text": "Fetching param cache[32/194]: 1507MB fetched. 19% completed, 62 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.19237394514234957,
+      "timeElapsed": 63,
+      "text": "Fetching param cache[33/194]: 1525MB fetched. 19% completed, 63 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.19630192583690487,
+      "timeElapsed": 67,
+      "text": "Fetching param cache[34/194]: 1556MB fetched. 19% completed, 67 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.19995386095337764,
+      "timeElapsed": 68,
+      "text": "Fetching param cache[35/194]: 1585MB fetched. 19% completed, 68 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.2042128498723659,
+      "timeElapsed": 68,
+      "text": "Fetching param cache[36/194]: 1619MB fetched. 20% completed, 68 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.20847183879135414,
+      "timeElapsed": 72,
+      "text": "Fetching param cache[37/194]: 1653MB fetched. 20% completed, 72 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.2127308277103424,
+      "timeElapsed": 74,
+      "text": "Fetching param cache[38/194]: 1686MB fetched. 21% completed, 74 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.22124880554831894,
+      "timeElapsed": 79,
+      "text": "Fetching param cache[39/194]: 1754MB fetched. 22% completed, 79 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.22976678338629547,
+      "timeElapsed": 84,
+      "text": "Fetching param cache[40/194]: 1821MB fetched. 22% completed, 84 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.23197514801095606,
+      "timeElapsed": 84,
+      "text": "Fetching param cache[41/194]: 1839MB fetched. 23% completed, 84 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.24049312584893257,
+      "timeElapsed": 84,
+      "text": "Fetching param cache[42/194]: 1906MB fetched. 24% completed, 84 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.24270149047359316,
+      "timeElapsed": 86,
+      "text": "Fetching param cache[43/194]: 1924MB fetched. 24% completed, 86 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.24490985509825375,
+      "timeElapsed": 87,
+      "text": "Fetching param cache[44/194]: 1941MB fetched. 24% completed, 87 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.2485617902147265,
+      "timeElapsed": 90,
+      "text": "Fetching param cache[45/194]: 1970MB fetched. 24% completed, 90 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.25221372533119923,
+      "timeElapsed": 91,
+      "text": "Fetching param cache[46/194]: 1999MB fetched. 25% completed, 91 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.255865660447672,
+      "timeElapsed": 93,
+      "text": "Fetching param cache[47/194]: 2028MB fetched. 25% completed, 93 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.3027145385565429,
+      "timeElapsed": 95,
+      "text": "Fetching param cache[48/194]: 2399MB fetched. 30% completed, 95 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.30697352747553114,
+      "timeElapsed": 95,
+      "text": "Fetching param cache[49/194]: 2433MB fetched. 30% completed, 95 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.31123251639451943,
+      "timeElapsed": 98,
+      "text": "Fetching param cache[50/194]: 2467MB fetched. 31% completed, 98 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.31549150531350767,
+      "timeElapsed": 99,
+      "text": "Fetching param cache[51/194]: 2501MB fetched. 31% completed, 99 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.3213476150771165,
+      "timeElapsed": 101,
+      "text": "Fetching param cache[52/194]: 2547MB fetched. 32% completed, 101 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.32986559291509304,
+      "timeElapsed": 105,
+      "text": "Fetching param cache[53/194]: 2614MB fetched. 32% completed, 105 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.33412458183408134,
+      "timeElapsed": 107,
+      "text": "Fetching param cache[54/194]: 2648MB fetched. 33% completed, 107 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.34264255967205787,
+      "timeElapsed": 107,
+      "text": "Fetching param cache[55/194]: 2716MB fetched. 34% completed, 107 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.34485092429671843,
+      "timeElapsed": 108,
+      "text": "Fetching param cache[56/194]: 2733MB fetched. 34% completed, 108 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.35336890213469496,
+      "timeElapsed": 108,
+      "text": "Fetching param cache[57/194]: 2801MB fetched. 35% completed, 108 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.3555772667593555,
+      "timeElapsed": 111,
+      "text": "Fetching param cache[58/194]: 2818MB fetched. 35% completed, 111 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.35778563138401615,
+      "timeElapsed": 112,
+      "text": "Fetching param cache[59/194]: 2836MB fetched. 35% completed, 112 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.36143756650048886,
+      "timeElapsed": 113,
+      "text": "Fetching param cache[60/194]: 2865MB fetched. 36% completed, 113 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.36508950161696163,
+      "timeElapsed": 116,
+      "text": "Fetching param cache[61/194]: 2894MB fetched. 36% completed, 116 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.37360747945493816,
+      "timeElapsed": 116,
+      "text": "Fetching param cache[62/194]: 2961MB fetched. 37% completed, 116 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.3772594145714109,
+      "timeElapsed": 117,
+      "text": "Fetching param cache[63/194]: 2990MB fetched. 37% completed, 117 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.3794677791960715,
+      "timeElapsed": 120,
+      "text": "Fetching param cache[64/194]: 3008MB fetched. 37% completed, 120 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.38798575703404803,
+      "timeElapsed": 121,
+      "text": "Fetching param cache[65/194]: 3075MB fetched. 38% completed, 121 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.39224474595303627,
+      "timeElapsed": 122,
+      "text": "Fetching param cache[66/194]: 3109MB fetched. 39% completed, 122 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.3965037348720245,
+      "timeElapsed": 123,
+      "text": "Fetching param cache[67/194]: 3143MB fetched. 39% completed, 123 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.3987120994966851,
+      "timeElapsed": 125,
+      "text": "Fetching param cache[68/194]: 3160MB fetched. 39% completed, 125 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.402700465161446,
+      "timeElapsed": 126,
+      "text": "Fetching param cache[69/194]: 3192MB fetched. 40% completed, 126 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.40582002666304523,
+      "timeElapsed": 130,
+      "text": "Fetching param cache[70/194]: 3216MB fetched. 40% completed, 130 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.41433800450102176,
+      "timeElapsed": 132,
+      "text": "Fetching param cache[71/194]: 3284MB fetched. 41% completed, 132 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.41859699342001,
+      "timeElapsed": 132,
+      "text": "Fetching param cache[72/194]: 3318MB fetched. 41% completed, 132 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.42711497125798653,
+      "timeElapsed": 132,
+      "text": "Fetching param cache[73/194]: 3385MB fetched. 42% completed, 132 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.4293233358826471,
+      "timeElapsed": 135,
+      "text": "Fetching param cache[74/194]: 3403MB fetched. 42% completed, 135 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.4315317005073077,
+      "timeElapsed": 136,
+      "text": "Fetching param cache[75/194]: 3420MB fetched. 43% completed, 136 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.43579068942629595,
+      "timeElapsed": 136,
+      "text": "Fetching param cache[76/194]: 3454MB fetched. 43% completed, 136 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.4394426245427687,
+      "timeElapsed": 141,
+      "text": "Fetching param cache[77/194]: 3483MB fetched. 43% completed, 141 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.44309455965924144,
+      "timeElapsed": 141,
+      "text": "Fetching param cache[78/194]: 3512MB fetched. 44% completed, 141 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.45161253749721797,
+      "timeElapsed": 141,
+      "text": "Fetching param cache[79/194]: 3579MB fetched. 45% completed, 141 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.45587152641620626,
+      "timeElapsed": 142,
+      "text": "Fetching param cache[80/194]: 3613MB fetched. 45% completed, 142 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.4601305153351945,
+      "timeElapsed": 146,
+      "text": "Fetching param cache[81/194]: 3647MB fetched. 46% completed, 146 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.4643895042541828,
+      "timeElapsed": 148,
+      "text": "Fetching param cache[82/194]: 3681MB fetched. 46% completed, 148 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.46839635511390454,
+      "timeElapsed": 149,
+      "text": "Fetching param cache[83/194]: 3712MB fetched. 46% completed, 149 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.47691433295188107,
+      "timeElapsed": 151,
+      "text": "Fetching param cache[84/194]: 3780MB fetched. 47% completed, 151 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.4854323107898576,
+      "timeElapsed": 154,
+      "text": "Fetching param cache[85/194]: 3847MB fetched. 48% completed, 154 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.48969129970884584,
+      "timeElapsed": 154,
+      "text": "Fetching param cache[86/194]: 3881MB fetched. 48% completed, 154 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.49189966433350646,
+      "timeElapsed": 155,
+      "text": "Fetching param cache[87/194]: 3899MB fetched. 49% completed, 155 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.494108028958167,
+      "timeElapsed": 157,
+      "text": "Fetching param cache[88/194]: 3916MB fetched. 49% completed, 157 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5026260067961436,
+      "timeElapsed": 157,
+      "text": "Fetching param cache[89/194]: 3984MB fetched. 50% completed, 157 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5065342699494072,
+      "timeElapsed": 160,
+      "text": "Fetching param cache[90/194]: 4014MB fetched. 50% completed, 160 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5087426345740679,
+      "timeElapsed": 161,
+      "text": "Fetching param cache[91/194]: 4032MB fetched. 50% completed, 161 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5172606124120444,
+      "timeElapsed": 164,
+      "text": "Fetching param cache[92/194]: 4099MB fetched. 51% completed, 164 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5209125475285171,
+      "timeElapsed": 164,
+      "text": "Fetching param cache[93/194]: 4128MB fetched. 52% completed, 164 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5251715364475054,
+      "timeElapsed": 165,
+      "text": "Fetching param cache[94/194]: 4162MB fetched. 52% completed, 165 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5288234715639781,
+      "timeElapsed": 166,
+      "text": "Fetching param cache[95/194]: 4191MB fetched. 52% completed, 166 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5310318361886387,
+      "timeElapsed": 167,
+      "text": "Fetching param cache[96/194]: 4209MB fetched. 53% completed, 167 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5352908251076269,
+      "timeElapsed": 171,
+      "text": "Fetching param cache[97/194]: 4242MB fetched. 53% completed, 171 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5438088029456035,
+      "timeElapsed": 172,
+      "text": "Fetching param cache[98/194]: 4310MB fetched. 54% completed, 172 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5477367836401588,
+      "timeElapsed": 173,
+      "text": "Fetching param cache[99/194]: 4341MB fetched. 54% completed, 173 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5562547614781354,
+      "timeElapsed": 174,
+      "text": "Fetching param cache[100/194]: 4408MB fetched. 55% completed, 174 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5584631261027959,
+      "timeElapsed": 178,
+      "text": "Fetching param cache[101/194]: 4426MB fetched. 55% completed, 178 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5606714907274565,
+      "timeElapsed": 178,
+      "text": "Fetching param cache[102/194]: 4443MB fetched. 56% completed, 178 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5649304796464447,
+      "timeElapsed": 179,
+      "text": "Fetching param cache[103/194]: 4477MB fetched. 56% completed, 179 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5734484574844213,
+      "timeElapsed": 180,
+      "text": "Fetching param cache[104/194]: 4545MB fetched. 57% completed, 180 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5765680189860205,
+      "timeElapsed": 182,
+      "text": "Fetching param cache[105/194]: 4569MB fetched. 57% completed, 182 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5787763836106811,
+      "timeElapsed": 183,
+      "text": "Fetching param cache[106/194]: 4587MB fetched. 57% completed, 183 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5827043643052364,
+      "timeElapsed": 184,
+      "text": "Fetching param cache[107/194]: 4618MB fetched. 58% completed, 184 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5869633532242247,
+      "timeElapsed": 187,
+      "text": "Fetching param cache[108/194]: 4652MB fetched. 58% completed, 187 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5954813310622012,
+      "timeElapsed": 187,
+      "text": "Fetching param cache[109/194]: 4719MB fetched. 59% completed, 187 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.5991332661786739,
+      "timeElapsed": 187,
+      "text": "Fetching param cache[110/194]: 4748MB fetched. 59% completed, 187 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6033922550976623,
+      "timeElapsed": 190,
+      "text": "Fetching param cache[111/194]: 4782MB fetched. 60% completed, 190 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6056006197223228,
+      "timeElapsed": 190,
+      "text": "Fetching param cache[112/194]: 4800MB fetched. 60% completed, 190 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6098596086413111,
+      "timeElapsed": 192,
+      "text": "Fetching param cache[113/194]: 4833MB fetched. 60% completed, 192 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6141185975602993,
+      "timeElapsed": 192,
+      "text": "Fetching param cache[114/194]: 4867MB fetched. 61% completed, 192 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6177705326767721,
+      "timeElapsed": 197,
+      "text": "Fetching param cache[115/194]: 4896MB fetched. 61% completed, 197 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6262885105147487,
+      "timeElapsed": 201,
+      "text": "Fetching param cache[116/194]: 4963MB fetched. 62% completed, 201 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6348064883527251,
+      "timeElapsed": 202,
+      "text": "Fetching param cache[117/194]: 5031MB fetched. 63% completed, 202 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6387936216711553,
+      "timeElapsed": 203,
+      "text": "Fetching param cache[118/194]: 5063MB fetched. 63% completed, 203 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6473115995091319,
+      "timeElapsed": 204,
+      "text": "Fetching param cache[119/194]: 5130MB fetched. 64% completed, 204 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6495199641337924,
+      "timeElapsed": 204,
+      "text": "Fetching param cache[120/194]: 5148MB fetched. 64% completed, 204 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.651728328758453,
+      "timeElapsed": 205,
+      "text": "Fetching param cache[121/194]: 5165MB fetched. 65% completed, 205 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6559873176774412,
+      "timeElapsed": 207,
+      "text": "Fetching param cache[122/194]: 5199MB fetched. 65% completed, 207 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.659639252793914,
+      "timeElapsed": 209,
+      "text": "Fetching param cache[123/194]: 5228MB fetched. 65% completed, 209 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6618476174185746,
+      "timeElapsed": 209,
+      "text": "Fetching param cache[124/194]: 5245MB fetched. 66% completed, 209 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6657558805718383,
+      "timeElapsed": 211,
+      "text": "Fetching param cache[125/194]: 5276MB fetched. 66% completed, 211 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.669407815688311,
+      "timeElapsed": 214,
+      "text": "Fetching param cache[126/194]: 5305MB fetched. 66% completed, 214 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6736668046072993,
+      "timeElapsed": 214,
+      "text": "Fetching param cache[127/194]: 5339MB fetched. 67% completed, 214 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6821847824452758,
+      "timeElapsed": 215,
+      "text": "Fetching param cache[128/194]: 5406MB fetched. 68% completed, 215 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.686443771364264,
+      "timeElapsed": 216,
+      "text": "Fetching param cache[129/194]: 5440MB fetched. 68% completed, 216 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6886521359889246,
+      "timeElapsed": 218,
+      "text": "Fetching param cache[130/194]: 5458MB fetched. 68% completed, 218 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.692911124907913,
+      "timeElapsed": 220,
+      "text": "Fetching param cache[131/194]: 5491MB fetched. 69% completed, 220 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.6968391056024682,
+      "timeElapsed": 224,
+      "text": "Fetching param cache[132/194]: 5523MB fetched. 69% completed, 224 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7053570834404448,
+      "timeElapsed": 224,
+      "text": "Fetching param cache[133/194]: 5590MB fetched. 70% completed, 224 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7138750612784213,
+      "timeElapsed": 226,
+      "text": "Fetching param cache[134/194]: 5658MB fetched. 71% completed, 226 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7160834259030818,
+      "timeElapsed": 228,
+      "text": "Fetching param cache[135/194]: 5675MB fetched. 71% completed, 228 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7246014037410584,
+      "timeElapsed": 229,
+      "text": "Fetching param cache[136/194]: 5743MB fetched. 72% completed, 229 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.726809768365719,
+      "timeElapsed": 229,
+      "text": "Fetching param cache[137/194]: 5760MB fetched. 72% completed, 229 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7353277462036956,
+      "timeElapsed": 233,
+      "text": "Fetching param cache[138/194]: 5828MB fetched. 73% completed, 233 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7389796813201682,
+      "timeElapsed": 233,
+      "text": "Fetching param cache[139/194]: 5856MB fetched. 73% completed, 233 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7411880459448288,
+      "timeElapsed": 234,
+      "text": "Fetching param cache[140/194]: 5874MB fetched. 74% completed, 234 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7451160266393841,
+      "timeElapsed": 235,
+      "text": "Fetching param cache[141/194]: 5905MB fetched. 74% completed, 235 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7473243912640447,
+      "timeElapsed": 236,
+      "text": "Fetching param cache[142/194]: 5923MB fetched. 74% completed, 236 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7509763263805175,
+      "timeElapsed": 238,
+      "text": "Fetching param cache[143/194]: 5952MB fetched. 75% completed, 238 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7552353152995057,
+      "timeElapsed": 238,
+      "text": "Fetching param cache[144/194]: 5985MB fetched. 75% completed, 238 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7583548768011049,
+      "timeElapsed": 240,
+      "text": "Fetching param cache[145/194]: 6010MB fetched. 75% completed, 240 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7626138657200933,
+      "timeElapsed": 241,
+      "text": "Fetching param cache[146/194]: 6044MB fetched. 76% completed, 241 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7666009990385234,
+      "timeElapsed": 242,
+      "text": "Fetching param cache[147/194]: 6075MB fetched. 76% completed, 242 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7708599879575116,
+      "timeElapsed": 246,
+      "text": "Fetching param cache[148/194]: 6109MB fetched. 77% completed, 246 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7751189768764999,
+      "timeElapsed": 248,
+      "text": "Fetching param cache[149/194]: 6143MB fetched. 77% completed, 248 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7836369547144765,
+      "timeElapsed": 248,
+      "text": "Fetching param cache[150/194]: 6210MB fetched. 78% completed, 248 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.792154932552453,
+      "timeElapsed": 250,
+      "text": "Fetching param cache[151/194]: 6278MB fetched. 79% completed, 250 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7943632971771135,
+      "timeElapsed": 252,
+      "text": "Fetching param cache[152/194]: 6295MB fetched. 79% completed, 252 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.7965716618017742,
+      "timeElapsed": 254,
+      "text": "Fetching param cache[153/194]: 6313MB fetched. 79% completed, 254 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8050896396397507,
+      "timeElapsed": 255,
+      "text": "Fetching param cache[154/194]: 6380MB fetched. 80% completed, 255 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8136076174777271,
+      "timeElapsed": 257,
+      "text": "Fetching param cache[155/194]: 6448MB fetched. 81% completed, 257 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8172595525941999,
+      "timeElapsed": 257,
+      "text": "Fetching param cache[156/194]: 6477MB fetched. 81% completed, 257 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8209114877106727,
+      "timeElapsed": 258,
+      "text": "Fetching param cache[157/194]: 6506MB fetched. 82% completed, 258 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8251704766296609,
+      "timeElapsed": 260,
+      "text": "Fetching param cache[158/194]: 6539MB fetched. 82% completed, 260 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8294294655486492,
+      "timeElapsed": 262,
+      "text": "Fetching param cache[159/194]: 6573MB fetched. 82% completed, 262 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8336884544676375,
+      "timeElapsed": 262,
+      "text": "Fetching param cache[160/194]: 6607MB fetched. 83% completed, 262 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8379474433866257,
+      "timeElapsed": 263,
+      "text": "Fetching param cache[161/194]: 6641MB fetched. 83% completed, 263 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8415964208719048,
+      "timeElapsed": 267,
+      "text": "Fetching param cache[162/194]: 6670MB fetched. 84% completed, 267 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8501143987098813,
+      "timeElapsed": 270,
+      "text": "Fetching param cache[163/194]: 6737MB fetched. 85% completed, 270 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8586323765478578,
+      "timeElapsed": 272,
+      "text": "Fetching param cache[164/194]: 6805MB fetched. 85% completed, 272 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8671503543858343,
+      "timeElapsed": 273,
+      "text": "Fetching param cache[165/194]: 6872MB fetched. 86% completed, 273 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8693587190104949,
+      "timeElapsed": 276,
+      "text": "Fetching param cache[166/194]: 6890MB fetched. 86% completed, 276 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8732640245325649,
+      "timeElapsed": 276,
+      "text": "Fetching param cache[167/194]: 6921MB fetched. 87% completed, 276 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8817820023705414,
+      "timeElapsed": 277,
+      "text": "Fetching param cache[168/194]: 6988MB fetched. 88% completed, 277 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.883990366995202,
+      "timeElapsed": 277,
+      "text": "Fetching param cache[169/194]: 7006MB fetched. 88% completed, 277 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.887542482058886,
+      "timeElapsed": 282,
+      "text": "Fetching param cache[170/194]: 7034MB fetched. 88% completed, 282 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8911944171753587,
+      "timeElapsed": 282,
+      "text": "Fetching param cache[171/194]: 7063MB fetched. 89% completed, 282 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8948463522918314,
+      "timeElapsed": 282,
+      "text": "Fetching param cache[172/194]: 7092MB fetched. 89% completed, 282 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.8986547953923064,
+      "timeElapsed": 284,
+      "text": "Fetching param cache[173/194]: 7122MB fetched. 89% completed, 284 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9029137843112947,
+      "timeElapsed": 289,
+      "text": "Fetching param cache[174/194]: 7156MB fetched. 90% completed, 289 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9071727732302829,
+      "timeElapsed": 290,
+      "text": "Fetching param cache[175/194]: 7189MB fetched. 90% completed, 290 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9114317621492711,
+      "timeElapsed": 290,
+      "text": "Fetching param cache[176/194]: 7223MB fetched. 91% completed, 290 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9199497399872477,
+      "timeElapsed": 292,
+      "text": "Fetching param cache[177/194]: 7291MB fetched. 91% completed, 292 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9221581046119083,
+      "timeElapsed": 296,
+      "text": "Fetching param cache[178/194]: 7308MB fetched. 92% completed, 296 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9306760824498848,
+      "timeElapsed": 296,
+      "text": "Fetching param cache[179/194]: 7376MB fetched. 93% completed, 296 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9391940602878613,
+      "timeElapsed": 298,
+      "text": "Fetching param cache[180/194]: 7443MB fetched. 93% completed, 298 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9423136217894605,
+      "timeElapsed": 299,
+      "text": "Fetching param cache[181/194]: 7468MB fetched. 94% completed, 299 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9440882005057056,
+      "timeElapsed": 302,
+      "text": "Fetching param cache[182/194]: 7482MB fetched. 94% completed, 302 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9462965651303662,
+      "timeElapsed": 302,
+      "text": "Fetching param cache[183/194]: 7499MB fetched. 94% completed, 302 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.949948500246839,
+      "timeElapsed": 306,
+      "text": "Fetching param cache[184/194]: 7528MB fetched. 94% completed, 306 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9542074891658272,
+      "timeElapsed": 310,
+      "text": "Fetching param cache[185/194]: 7562MB fetched. 95% completed, 310 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9627254670038038,
+      "timeElapsed": 318,
+      "text": "Fetching param cache[186/194]: 7630MB fetched. 96% completed, 318 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9649338316284644,
+      "timeElapsed": 323,
+      "text": "Fetching param cache[187/194]: 7647MB fetched. 96% completed, 323 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9685857667449371,
+      "timeElapsed": 327,
+      "text": "Fetching param cache[188/194]: 7676MB fetched. 96% completed, 327 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9728447556639254,
+      "timeElapsed": 331,
+      "text": "Fetching param cache[189/194]: 7710MB fetched. 97% completed, 331 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9813627335019018,
+      "timeElapsed": 340,
+      "text": "Fetching param cache[190/194]: 7777MB fetched. 98% completed, 340 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9835710981265625,
+      "timeElapsed": 343,
+      "text": "Fetching param cache[191/194]: 7795MB fetched. 98% completed, 343 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9872230332430352,
+      "timeElapsed": 347,
+      "text": "Fetching param cache[192/194]: 7824MB fetched. 98% completed, 347 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.9914820221620235,
+      "timeElapsed": 351,
+      "text": "Fetching param cache[193/194]: 7857MB fetched. 99% completed, 351 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 1,
+      "timeElapsed": 360,
+      "text": "Fetching param cache[194/194]: 7925MB fetched. 100% completed, 360 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+      "progress": 0.046848878108870895,
+      "timeElapsed": 360,
+      "text": "Loading model from cache[1/194]: 372MB loaded. 4% completed, 360 secs elapsed."
+    },
+    {
+      "progress": 0.05270498787247976,
+      "timeElapsed": 360,
+      "text": "Loading model from cache[2/194]: 418MB loaded. 5% completed, 360 secs elapsed."
+    },
+    {
+      "progress": 0.05696397679146802,
+      "timeElapsed": 360,
+      "text": "Loading model from cache[3/194]: 452MB loaded. 5% completed, 360 secs elapsed."
+    },
+    {
+      "progress": 0.10381285490033892,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[4/194]: 823MB loaded. 10% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.10966896466394778,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[5/194]: 870MB loaded. 10% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.11392795358293605,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[6/194]: 903MB loaded. 11% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.12244593142091258,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[7/194]: 971MB loaded. 12% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.12465429604557315,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[8/194]: 988MB loaded. 12% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.12864266171033403,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[9/194]: 1020MB loaded. 12% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.1329016506293223,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[10/194]: 1054MB loaded. 13% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.14141962846729883,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[11/194]: 1121MB loaded. 14% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.1454264793270206,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[12/194]: 1153MB loaded. 14% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.14968546824600887,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[13/194]: 1187MB loaded. 14% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.1582034460839854,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[14/194]: 1254MB loaded. 15% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.16041181070864596,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[15/194]: 1272MB loaded. 16% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.1643397914032013,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[16/194]: 1303MB loaded. 16% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.16859878032218956,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[17/194]: 1337MB loaded. 16% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.1771167581601661,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[18/194]: 1404MB loaded. 17% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.17932512278482665,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[19/194]: 1422MB loaded. 17% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.18297705790129942,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[20/194]: 1450MB loaded. 18% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.18696419121972957,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[21/194]: 1482MB loaded. 18% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.19122318013871784,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[22/194]: 1516MB loaded. 19% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.19974115797669437,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[23/194]: 1583MB loaded. 19% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.20194952260135493,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[24/194]: 1601MB loaded. 20% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.20587750329591026,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[25/194]: 1632MB loaded. 20% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.2143954811338868,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[26/194]: 1699MB loaded. 21% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.21660384575854738,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[27/194]: 1717MB loaded. 21% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.21972340726014658,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[28/194]: 1742MB loaded. 21% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.22398239617913485,
+      "timeElapsed": 361,
+      "text": "Loading model from cache[29/194]: 1775MB loaded. 22% completed, 361 secs elapsed."
+    },
+    {
+      "progress": 0.23250037401711138,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[30/194]: 1843MB loaded. 23% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.23675936293609964,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[31/194]: 1877MB loaded. 23% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.24527734077407617,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[32/194]: 1944MB loaded. 24% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.24918264629614614,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[33/194]: 1975MB loaded. 24% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2527347613598301,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[34/194]: 2003MB loaded. 25% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2569937502788184,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[35/194]: 2037MB loaded. 25% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2655117281167949,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[36/194]: 2105MB loaded. 26% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2677200927414555,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[37/194]: 2122MB loaded. 26% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2713720278579282,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[38/194]: 2151MB loaded. 27% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2756310167769165,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[39/194]: 2185MB loaded. 27% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.284148994614893,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[40/194]: 2252MB loaded. 28% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2863573592395536,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[41/194]: 2270MB loaded. 28% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.29000929435602635,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[42/194]: 2299MB loaded. 29% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.2942682832750146,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[43/194]: 2332MB loaded. 29% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.3027862611129911,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[44/194]: 2400MB loaded. 30% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.3049946257376517,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[45/194]: 2417MB loaded. 30% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.30864656085412445,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[46/194]: 2446MB loaded. 30% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.3129055497731127,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[47/194]: 2480MB loaded. 31% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.3214235276110892,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[48/194]: 2548MB loaded. 32% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.32363189223574984,
+      "timeElapsed": 362,
+      "text": "Loading model from cache[49/194]: 2565MB loaded. 32% completed, 362 secs elapsed."
+    },
+    {
+      "progress": 0.32728382735222256,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[50/194]: 2594MB loaded. 32% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.33154281627121085,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[51/194]: 2628MB loaded. 33% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.3358018051901991,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[52/194]: 2662MB loaded. 33% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.3443197830281756,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[53/194]: 2729MB loaded. 34% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.3465281476528362,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[54/194]: 2747MB loaded. 34% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.35043641080609994,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[55/194]: 2778MB loaded. 35% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.3546953997250882,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[56/194]: 2811MB loaded. 35% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.3632133775630647,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[57/194]: 2879MB loaded. 36% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.3654217421877253,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[58/194]: 2896MB loaded. 36% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.36934972288228063,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[59/194]: 2927MB loaded. 36% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.37360871180126887,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[60/194]: 2961MB loaded. 37% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.3821266896392454,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[61/194]: 3029MB loaded. 38% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.38433505426390596,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[62/194]: 3046MB loaded. 38% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.38798698938037873,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[63/194]: 3075MB loaded. 38% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.39224597829936697,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[64/194]: 3109MB loaded. 39% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.4007639561373435,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[65/194]: 3176MB loaded. 40% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.4029723207620041,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[66/194]: 3194MB loaded. 40% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.40662425587847684,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[67/194]: 3223MB loaded. 40% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.41088324479746513,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[68/194]: 3257MB loaded. 41% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.41940122263544166,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[69/194]: 3324MB loaded. 41% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.4216095872601022,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[70/194]: 3342MB loaded. 42% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.425261522376575,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[71/194]: 3370MB loaded. 42% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.42952051129556323,
+      "timeElapsed": 363,
+      "text": "Loading model from cache[72/194]: 3404MB loaded. 42% completed, 363 secs elapsed."
+    },
+    {
+      "progress": 0.43803848913353977,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[73/194]: 3472MB loaded. 43% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.44024685375820033,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[74/194]: 3489MB loaded. 44% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.4438987888746731,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[75/194]: 3518MB loaded. 44% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.45241676671264963,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[76/194]: 3586MB loaded. 45% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.4546251313373102,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[77/194]: 3603MB loaded. 45% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.4577446928389094,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[78/194]: 3628MB loaded. 45% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.4620036817578977,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[79/194]: 3662MB loaded. 46% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.4662626706768859,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[80/194]: 3695MB loaded. 46% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.47478064851486246,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[81/194]: 3763MB loaded. 47% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.476989013139523,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[82/194]: 3780MB loaded. 47% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.4808972762927868,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[83/194]: 3811MB loaded. 48% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.485156265211775,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[84/194]: 3845MB loaded. 48% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.49367424304975155,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[85/194]: 3913MB loaded. 49% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.4958826076744121,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[86/194]: 3930MB loaded. 49% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.49981058836896747,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[87/194]: 3961MB loaded. 49% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.5040695772879558,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[88/194]: 3995MB loaded. 50% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.5125875551259322,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[89/194]: 4062MB loaded. 51% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.5147959197505928,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[90/194]: 4080MB loaded. 51% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.5184478548670656,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[91/194]: 4109MB loaded. 51% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.5227068437860538,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[92/194]: 4143MB loaded. 52% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.5312248216240304,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[93/194]: 4210MB loaded. 53% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.533433186248691,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[94/194]: 4228MB loaded. 53% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.5370851213651637,
+      "timeElapsed": 364,
+      "text": "Loading model from cache[95/194]: 4257MB loaded. 53% completed, 364 secs elapsed."
+    },
+    {
+      "progress": 0.541344110284152,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[96/194]: 4290MB loaded. 54% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5498620881221284,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[97/194]: 4358MB loaded. 54% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.552070452746789,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[98/194]: 4375MB loaded. 55% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5557223878632618,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[99/194]: 4404MB loaded. 55% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.55998137678225,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[100/194]: 4438MB loaded. 55% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5684993546202266,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[101/194]: 4506MB loaded. 56% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5707077192448872,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[102/194]: 4523MB loaded. 57% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5743596543613599,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[103/194]: 4552MB loaded. 57% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5786186432803482,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[104/194]: 4586MB loaded. 57% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5871366211183248,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[105/194]: 4653MB loaded. 58% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5893449857429853,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[106/194]: 4671MB loaded. 58% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5929969208594581,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[107/194]: 4700MB loaded. 59% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.5972559097784463,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[108/194]: 4733MB loaded. 59% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6057738876164228,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[109/194]: 4801MB loaded. 60% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6079822522410834,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[110/194]: 4818MB loaded. 60% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6116341873575561,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[111/194]: 4847MB loaded. 61% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6158931762765444,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[112/194]: 4881MB loaded. 61% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.624411154114521,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[113/194]: 4949MB loaded. 62% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6266195187391815,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[114/194]: 4966MB loaded. 62% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6302714538556543,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[115/194]: 4995MB loaded. 63% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6345304427746425,
+      "timeElapsed": 365,
+      "text": "Loading model from cache[116/194]: 5029MB loaded. 63% completed, 365 secs elapsed."
+    },
+    {
+      "progress": 0.6430484206126191,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[117/194]: 5096MB loaded. 64% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6452567852372797,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[118/194]: 5114MB loaded. 64% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6489087203537524,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[119/194]: 5143MB loaded. 64% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6531677092727407,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[120/194]: 5176MB loaded. 65% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6616856871107172,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[121/194]: 5244MB loaded. 66% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6638940517353777,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[122/194]: 5261MB loaded. 66% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6675459868518505,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[123/194]: 5290MB loaded. 66% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6718049757708388,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[124/194]: 5324MB loaded. 67% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6803229536088153,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[125/194]: 5392MB loaded. 68% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6825313182334759,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[126/194]: 5409MB loaded. 68% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6861832533499487,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[127/194]: 5438MB loaded. 68% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6904422422689369,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[128/194]: 5472MB loaded. 69% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.6989602201069134,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[129/194]: 5539MB loaded. 69% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7011685847315741,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[130/194]: 5557MB loaded. 70% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7048205198480467,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[131/194]: 5586MB loaded. 70% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7090795087670351,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[132/194]: 5620MB loaded. 70% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7175974866050115,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[133/194]: 5687MB loaded. 71% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7198058512296721,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[134/194]: 5705MB loaded. 71% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7234577863461449,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[135/194]: 5733MB loaded. 72% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.727444919664575,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[136/194]: 5765MB loaded. 72% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7317039085835633,
+      "timeElapsed": 366,
+      "text": "Loading model from cache[137/194]: 5799MB loaded. 73% completed, 366 secs elapsed."
+    },
+    {
+      "progress": 0.7402218864215399,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[138/194]: 5866MB loaded. 74% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7444808753405281,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[139/194]: 5900MB loaded. 74% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7481298528258071,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[140/194]: 5929MB loaded. 74% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7566478306637836,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[141/194]: 5996MB loaded. 75% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7604562737642585,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[142/194]: 6027MB loaded. 76% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7647152626832469,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[143/194]: 6060MB loaded. 76% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7732332405212233,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[144/194]: 6128MB loaded. 77% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7754416051458839,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[145/194]: 6145MB loaded. 77% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7793695858404392,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[146/194]: 6177MB loaded. 77% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7836285747594275,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[147/194]: 6210MB loaded. 78% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7921465525974041,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[148/194]: 6278MB loaded. 79% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7943549172220646,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[149/194]: 6295MB loaded. 79% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.7980068523385374,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[150/194]: 6324MB loaded. 79% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.8022658412575256,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[151/194]: 6358MB loaded. 80% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.8107838190955021,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[152/194]: 6425MB loaded. 81% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.8129921837201627,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[153/194]: 6443MB loaded. 81% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.8166441188366355,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[154/194]: 6472MB loaded. 81% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.8209031077556237,
+      "timeElapsed": 367,
+      "text": "Loading model from cache[155/194]: 6506MB loaded. 82% completed, 367 secs elapsed."
+    },
+    {
+      "progress": 0.8294210855936003,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[156/194]: 6573MB loaded. 82% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8316294502182608,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[157/194]: 6591MB loaded. 83% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8352813853347336,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[158/194]: 6620MB loaded. 83% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8395403742537219,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[159/194]: 6653MB loaded. 83% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8480583520916984,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[160/194]: 6721MB loaded. 84% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.850266716716359,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[161/194]: 6738MB loaded. 85% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8539186518328318,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[162/194]: 6767MB loaded. 85% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8624366296708083,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[163/194]: 6835MB loaded. 86% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8646449942954688,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[164/194]: 6852MB loaded. 86% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.867764555797068,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[165/194]: 6877MB loaded. 86% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8720235447160564,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[166/194]: 6911MB loaded. 87% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8762825336350446,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[167/194]: 6945MB loaded. 87% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8848005114730211,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[168/194]: 7012MB loaded. 88% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8870088760976816,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[169/194]: 7030MB loaded. 88% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8909171392509454,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[170/194]: 7060MB loaded. 89% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.8951761281699336,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[171/194]: 7094MB loaded. 89% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.9036941060079102,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[172/194]: 7162MB loaded. 90% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.9059024706325708,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[173/194]: 7179MB loaded. 90% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.909830451327126,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[174/194]: 7210MB loaded. 90% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.9140894402461144,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[175/194]: 7244MB loaded. 91% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.9226074180840909,
+      "timeElapsed": 368,
+      "text": "Loading model from cache[176/194]: 7312MB loaded. 92% completed, 368 secs elapsed."
+    },
+    {
+      "progress": 0.9248157827087514,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[177/194]: 7329MB loaded. 92% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9284677178252242,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[178/194]: 7358MB loaded. 92% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9327267067442124,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[179/194]: 7392MB loaded. 93% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.941244684582189,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[180/194]: 7459MB loaded. 94% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9434530492068496,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[181/194]: 7477MB loaded. 94% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9471049843233224,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[182/194]: 7506MB loaded. 94% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9513639732423106,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[183/194]: 7540MB loaded. 95% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9598819510802871,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[184/194]: 7607MB loaded. 95% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9620903157049477,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[185/194]: 7625MB loaded. 96% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9657422508214204,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[186/194]: 7653MB loaded. 96% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9700012397404087,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[187/194]: 7687MB loaded. 97% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9785192175783852,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[188/194]: 7755MB loaded. 97% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9807275822030458,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[189/194]: 7772MB loaded. 98% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9843795173195186,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[190/194]: 7801MB loaded. 98% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9928974951574951,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[191/194]: 7869MB loaded. 99% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9951058597821557,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[192/194]: 7886MB loaded. 99% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 0.9982254212837549,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[193/194]: 7911MB loaded. 99% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 1,
+      "timeElapsed": 369,
+      "text": "Loading model from cache[194/194]: 7925MB loaded. 100% completed, 369 secs elapsed."
+    },
+    {
+      "progress": 1,
+      "timeElapsed": 1,
+      "text": "Loading GPU shader modules[4/4]: 100% completed, 1 secs elapsed."
+    },
+    {
+      "progress": 1,
+      "timeElapsed": 373.60168500000236,
+      "text": "Finish loading on WebGPU - apple"
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "workerErrors": [],
+  "loaded": true,
+  "adapter": {
+    "vendor": "apple",
+    "architecture": "metal-3"
+  },
+  "reply": {
+    "id": "044f91f7-cf48-453e-859e-922228882a2c",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "Hello there!",
+          "role": "assistant"
+        }
+      }
+    ],
+    "model": "Qwen2.5-14B-Instruct-q4f16_1-MLC",
+    "object": "chat.completion",
+    "created": 1791367832,
+    "usage": {
+      "completion_tokens": 3,
+      "prompt_tokens": 28,
+      "total_tokens": 31,
+      "extra": {
+        "e2e_latency_s": 9.853,
+        "prefill_tokens_per_s": 4.433013602223927,
+        "decode_tokens_per_s": 0.8497644736168402,
+        "time_to_first_token_s": 6.316245000004768,
+        "time_per_output_token_s": 1.1767966666618983
+      }
+    }
+  },
+  "completed": true,
+  "browserClosed": true
+}

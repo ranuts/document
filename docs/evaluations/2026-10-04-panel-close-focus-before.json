@@ -1,0 +1,16 @@
+{
+  "samples": [
+    {
+      "active": "opening-document",
+      "hidden": true,
+      "activeInsidePanel": false
+    },
+    {
+      "afterTab": "opening-document",
+      "activeInsidePanel": false
+    }
+  ],
+  "errors": [],
+  "frameActive": "theme-classic-light safari theme-type-light",
+  "status": "completed"
+}

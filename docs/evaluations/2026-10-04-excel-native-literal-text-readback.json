@@ -1,0 +1,223 @@
+{
+  "status": "completed",
+  "errors": [],
+  "cases": [
+    {
+      "value": "00123",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'00123",
+        "format": "General",
+        "type": 1,
+        "raw": "'00123",
+        "edit": "'00123"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'00123",
+        "format": "General",
+        "type": 1,
+        "raw": "'00123",
+        "edit": "'00123"
+      }
+    },
+    {
+      "value": "1e3",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'1e3",
+        "format": "General",
+        "type": 1,
+        "raw": "'1e3",
+        "edit": "'1e3"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'1e3",
+        "format": "General",
+        "type": 1,
+        "raw": "'1e3",
+        "edit": "'1e3"
+      }
+    },
+    {
+      "value": "2026-10-04",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'2026-10-04",
+        "format": "General",
+        "type": 1,
+        "raw": "'2026-10-04",
+        "edit": "'2026-10-04"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'2026-10-04",
+        "format": "General",
+        "type": 1,
+        "raw": "'2026-10-04",
+        "edit": "'2026-10-04"
+      }
+    },
+    {
+      "value": "99",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'99",
+        "format": "General",
+        "type": 1,
+        "raw": "'99",
+        "edit": "'99"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'99",
+        "format": "General",
+        "type": 1,
+        "raw": "'99",
+        "edit": "'99"
+      }
+    },
+    {
+      "value": "'quoted",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "''quoted",
+        "format": "General",
+        "type": 1,
+        "raw": "''quoted",
+        "edit": "''quoted"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "''quoted",
+        "format": "General",
+        "type": 1,
+        "raw": "''quoted",
+        "edit": "''quoted"
+      }
+    },
+    {
+      "value": "text",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'text",
+        "format": "General",
+        "type": 1,
+        "raw": "'text",
+        "edit": "'text"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'text",
+        "format": "General",
+        "type": 1,
+        "raw": "'text",
+        "edit": "'text"
+      }
+    },
+    {
+      "value": "12345678901234567890",
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "'12345678901234567890",
+        "format": "General",
+        "type": 1,
+        "raw": "'12345678901234567890",
+        "edit": "'12345678901234567890"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "'12345678901234567890",
+        "format": "General",
+        "type": 1,
+        "raw": "'12345678901234567890",
+        "edit": "'12345678901234567890"
+      }
+    }
+  ]
+}

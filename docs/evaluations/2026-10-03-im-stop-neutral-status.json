@@ -1,0 +1,27 @@
+{
+  "scope": "Actual production GPU Qwen 1.7B generation interrupted using visible Stop; plain status, restore request without resending, preserve new draft, and next real inference. Desktop Chromium; no native document mutation or physical mobile coverage.",
+  "errors": [],
+  "stopped": {
+    "status": "Stopped.Restore request",
+    "statusCount": 1,
+    "errorCount": 0,
+    "statusApplyCount": 0,
+    "partial": "Sure, here is a detailed essay with 20 paragraphs about the history of mathematics:\n\n**1. The Birth of Mathematics**  \nMathematics",
+    "borderWidth": "0px",
+    "background": "rgba(0, 0, 0, 0)",
+    "inputEnabled": true,
+    "userCount": 1
+  },
+  "restored": {
+    "draft": "Write a detailed essay with 20 paragraphs about the history of mathematics.",
+    "userCount": 1,
+    "running": false
+  },
+  "newDraftProtected": true,
+  "nextReply": "Hello.",
+  "visibleErrors": [],
+  "previewCount": 0,
+  "passed": true,
+  "probeSource": "probe-im-stop-neutral-status.mjs",
+  "probeSHA256": "cd4517a092e9ea8f6d6cf5b3978a0aa18728d86d75723a1900b45a016542f6d0"
+}

@@ -1,0 +1,111 @@
+{
+  "probeSHA256": "9c939b78c02956585afd6db9f9be74dfb8e60d1f30dfc015357d3b553f099a11",
+  "markers": {
+    "docx": "IM_WORD_四季_日本_ä_2026",
+    "xlsx": "IM_CELL_四季_日本_ä_2026",
+    "pptx": "IM_PPT_四季_日本_ä_2026"
+  },
+  "scope": "Experimental COOP same-origin and COEP require-corp on same-origin responses. Real CPU inference, IM edits and native Undo/Redo, Save and actual homepage file-chooser reopen in isolated new Word, Excel and PPT documents. No production header change yet.",
+  "results": [
+    {
+      "type": "docx",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "\r\n",
+      "after": "IM_WORD_四季_日本_ä_2026\r\n",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "\r\n",
+      "afterRedo": "IM_WORD_四季_日本_ä_2026\r\n",
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/unicode-im-saved.docx",
+        "sha256": "bf608ef2527c4acfd9432ea4d7e9d4b61cacfa9c5015a425dabfebee0a9d84a9",
+        "bytes": 25874,
+        "failure": null,
+        "preservedArtifactPath": ".scratch/ai-offline/cpu-count-im-saved.docx"
+      },
+      "reopened": "IM_WORD_四季_日本_ä_2026\r\n",
+      "reopenExact": true
+    },
+    {
+      "type": "xlsx",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "",
+      "after": "IM_CELL_四季_日本_ä_2026",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "",
+      "afterRedo": "IM_CELL_四季_日本_ä_2026",
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/unicode-im-saved.xlsx",
+        "sha256": "9d3a8e92800f89148104e9d4fefa092aeb5af9d6d692c62afed02dfd51fc9672",
+        "bytes": 8451,
+        "failure": null,
+        "preservedArtifactPath": ".scratch/ai-offline/cpu-count-im-saved.xlsx"
+      },
+      "reopened": "IM_CELL_四季_日本_ä_2026",
+      "reopenExact": true
+    },
+    {
+      "type": "pptx",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "after": [
+        [
+          "\r\n",
+          "\r\n",
+          "IM_PPT_四季_日本_ä_2026\r\n"
+        ]
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "afterRedo": [
+        [
+          "\r\n",
+          "\r\n",
+          "IM_PPT_四季_日本_ä_2026\r\n"
+        ]
+      ],
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/unicode-im-saved.pptx",
+        "sha256": "4ae85f62e86787f7756716b1b9de567e71c711f2b84b840faeda7572d6fae3ef",
+        "bytes": 33990,
+        "failure": null,
+        "preservedArtifactPath": ".scratch/ai-offline/cpu-count-im-saved.pptx"
+      },
+      "reopened": [
+        [
+          "\r\n",
+          "\r\n",
+          "IM_PPT_四季_日本_ä_2026\r\n"
+        ]
+      ],
+      "reopenExact": true
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "artifactPreservation": "After browser completion, CPU saves were copied to preservedArtifactPath and pre-existing scratch artifacts restored. The executed driver matches probeSHA256; the runnable driver uses separate CPU artifact paths."
+}

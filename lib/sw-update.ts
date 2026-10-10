@@ -155,8 +155,9 @@ export function onWaitingWorker(
  * the browser activates it by itself at the next navigation -- same build,
  * same caches, nothing to tell anyone. Reloading on every swap is a reload on
  * every second page view (measured: 80ms into the load, on a plain reload of
- * a fresh profile). The evidence for "different" is the runtime cache, named
- * after the vendor tree's content: see isUnseenBuild.
+ * a fresh profile). The evidence for "different" is confirmed VERSION replies from
+ * the outgoing and incoming controllers. An installed cache is not evidence
+ * that its worker has served the page.
  *
  * **And it must not throw away unsaved work.** Nothing else is a reason to
  * refuse. It used to be "not while a document is open", which sounds careful
@@ -198,6 +199,8 @@ export type HealInput = {
   hadController: boolean;
   storage?: Pick<Storage, 'getItem' | 'setItem'>;
   cacheStorage?: Pick<CacheStorage, 'keys'>;
+  controllerVersion?: Promise<WorkerVersion | null>;
+  hasUnsavedChanges?: () => boolean;
   ownScriptURL?: string;
 };
 
@@ -225,7 +228,14 @@ export async function healStaleController(input: HealInput): Promise<boolean> {
   if (!hadController || !controller) return false;
   if (!isOwnWorker(registration, waiting, ownScriptURL)) return false;
   if (storage?.getItem(HEAL_STORAGE_KEY)) return false;
-  if (!(await isUnseenBuild(waiting, input.cacheStorage))) return false;
+  if (input.hasUnsavedChanges?.()) return false;
+  const [before, after] = await Promise.all([
+    input.controllerVersion ?? askVersionPatiently(controller),
+    askVersionPatiently(waiting),
+  ]);
+  if (!isDifferentVendorBuild(before, after)) return false;
+  if ((await askEditorCount(controller)) !== 1) return false;
+  if (input.hasUnsavedChanges?.() || storage?.getItem(HEAL_STORAGE_KEY)) return false;
   storage?.setItem(HEAL_STORAGE_KEY, '1');
   waiting.postMessage(SKIP_WAITING_MESSAGE);
   return true;
@@ -233,6 +243,52 @@ export async function healStaleController(input: HealInput): Promise<boolean> {
 
 /** What a worker answers `VERSION` with (public/sw.js). */
 export type WorkerVersion = { cacheVersion?: string; vendorVersion?: string };
+
+/** Precached assets do not establish which build has controlled the page. */
+export function isDifferentVendorBuild(before: WorkerVersion | null, after: WorkerVersion | null): boolean {
+  return (
+    typeof before?.vendorVersion === 'string' &&
+    before.vendorVersion.trim().length > 0 &&
+    typeof after?.vendorVersion === 'string' &&
+    after.vendorVersion.trim().length > 0 &&
+    before.vendorVersion !== after.vendorVersion
+  );
+}
+
+/** Other editor windows may contain unsaved work; only a confirmed sole editor may heal. */
+function askEditorCount(worker: SwLike): Promise<number | null> {
+  return new Promise((resolve) => {
+    if (typeof MessageChannel === 'undefined') {
+      resolve(null);
+      return;
+    }
+    const channel = new MessageChannel();
+    let settled = false;
+    const done = (count: number | null): void => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      channel.port1.close();
+      channel.port2.close();
+      resolve(count);
+    };
+    const timer = setTimeout(() => done(null), ASK_VERSION_TIMEOUT_MS);
+    channel.port1.onmessage = (event: MessageEvent) => {
+      const value = event.data;
+      done(
+        value?.type === 'CLIENT_COUNT' && Number.isInteger(value.editors) && value.editors >= 0 ? value.editors : null,
+      );
+    };
+    try {
+      (worker as unknown as { postMessage(msg: unknown, transfer: MessagePort[]): void }).postMessage(
+        { type: 'CLIENT_COUNT' },
+        [channel.port2],
+      );
+    } catch {
+      done(null);
+    }
+  });
+}
 
 /** Ask one worker which build it is. Resolves null when it does not answer. */
 export function askVersion(worker: SwLike | null, timeoutMs = 1000): Promise<WorkerVersion | null> {
@@ -246,10 +302,13 @@ export function askVersion(worker: SwLike | null, timeoutMs = 1000): Promise<Wor
     const done = (value: WorkerVersion | null): void => {
       if (settled) return;
       settled = true;
+      clearTimeout(timer);
+      channel.port1.close();
+      channel.port2.close();
       resolve(value);
     };
     channel.port1.onmessage = (event: MessageEvent) => done((event.data ?? null) as WorkerVersion | null);
-    setTimeout(() => done(null), timeoutMs);
+    const timer = setTimeout(() => done(null), timeoutMs);
     try {
       // Two-argument postMessage, which the narrow SwLike shape does not model.
       (worker as unknown as { postMessage(msg: unknown, transfer: MessagePort[]): void }).postMessage(

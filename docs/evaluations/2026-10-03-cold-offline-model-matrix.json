@@ -1,0 +1,50 @@
+{
+  "scope": "Fresh isolated Chromium process per model, cached app/model, unreachable proxy with loopback bypass disabled, browser offline setting, actual uncached request fails, SW-controlled editor and actual hello inference. CPU disables navigator.gpu. Not WebKit cold pass, physical network removal, cache eviction, device reboot or mobile.",
+  "probe": {
+    "path": "docs/evaluations/probe-cold-offline-model-matrix.mjs",
+    "sha256": "282dde58704494ada53ffa3224bd76f5bb5d8d3d0a42bb1c31e9587fefaa6f65"
+  },
+  "entries": [
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "browser": "isolated Playwright Chromium",
+      "report": "docs/evaluations/2026-10-03-cold-offline-model-1_7-blocked-proxy.json",
+      "sha256": "501212a1e2a282f62b5c13641fe95ea99d3676724a88b3734b5ecefa91f74b98",
+      "reply": "Hello.",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "browser": "isolated Playwright Chromium",
+      "report": "docs/evaluations/2026-10-03-cold-offline-model-0_8-blocked-proxy.json",
+      "sha256": "4aa06de30be381829d35e251a1845fc0f1b4def69e47c9241028d8b9c4b6578d",
+      "reply": "hello",
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "browser": "isolated Playwright Chromium",
+      "report": "docs/evaluations/2026-10-03-cold-offline-model-2b-blocked-proxy.json",
+      "sha256": "31671c50b97d1f3084b292f5d7202ef5eee3b0a613b4d89b93fc31592048ce49",
+      "reply": "hello",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "browser": "isolated Playwright Chromium",
+      "report": "docs/evaluations/2026-10-03-cold-offline-model-4b-blocked-proxy.json",
+      "sha256": "13f87f34e6b4bf889e7ac7a21d753c314f26e1a042788d269e02545e9cb9aba5",
+      "reply": "Hello.",
+      "passed": true
+    },
+    {
+      "model": "Qwen3-0.6B-GGUF-CPU",
+      "browser": "isolated Playwright Chromium",
+      "report": "docs/evaluations/2026-10-03-cold-offline-model-cpu-blocked-proxy.json",
+      "sha256": "71d0c18afe36d71c30d1087d4889baa7ee6dff66c340e63208d4d89f03bc83b0",
+      "reply": "Hello.",
+      "passed": true
+    }
+  ],
+  "allPassed": true
+}

@@ -240,6 +240,16 @@ describe('wire', () => {
 });
 
 describe('start', () => {
+  it('settles when a blocked registration resolves without a registration', async () => {
+    await expect(createSwUpdater(navWith(null)).start()).resolves.toBeUndefined();
+  });
+  it('settles when the browser throws synchronously during registration', async () => {
+    const register = () => {
+      throw new Error('Registration disabled');
+    };
+    await expect(createSwUpdater(navWith(null, register)).start()).resolves.toBeUndefined();
+  });
+
   it('registers an absolute /sw.js so /zh-CN/ does not scope the worker to itself', async () => {
     const register = vi.fn().mockResolvedValue(fakeRegistration(null));
     await createSwUpdater(navWith(fakeController(1), register)).start();
@@ -299,4 +309,17 @@ describe('a worker from the vendored editor, waiting in the same scope', () => {
     await expect(updater.maybePromote(fakeRegistration(vendor))).resolves.toBe(false);
     expect(vendor.posted).toEqual([]);
   });
+});
+
+it('registers and promotes only the worker matching the landing isolation mode', async () => {
+  const src = readFileSync(resolve(__dirname, '../../public/sw-register.js'), 'utf8');
+  const host = { crossOriginIsolated: true, setTimeout } as unknown as { __createSwUpdater: CreateUpdater };
+  new Function('window', src)(host);
+  const register = vi.fn().mockResolvedValue(undefined);
+  const updater = host.__createSwUpdater(navWith(fakeController(1), register));
+  await updater.start();
+  expect(register).toHaveBeenCalledWith('/sw.js?isolation=1');
+  const isolated = fakeWorker('https://edit.example/sw.js?isolation=1');
+  expect(await updater.maybePromote(fakeRegistration(isolated))).toBe(true);
+  expect(await updater.maybePromote(fakeRegistration(fakeWorker()))).toBe(false);
 });

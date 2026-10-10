@@ -1,0 +1,31 @@
+# Tracked Word replacement verification failure
+
+[Actual production diagnostic](2026-10-03-word-im-replacement-tracked-probe.json) reproduces a user-facing verification error with native track revisions enabled, real local Qwen3 1.7B planning and a plain two-paragraph Word document. The IM command supplies an exact literal replacement of the selected `Alpha`.
+
+The native SDK retains `Alpha` in a run with review type 1 and inserts the exact supplied text in a run with review type 2. The unselected suffix and neighboring paragraph remain unchanged. `GetText()` returns both the old tracked text and the new text. The application displays “The change could not be verified” even though the native tracked replacement has occurred.
+
+The root mismatch is in `captureDocumentToolTarget().verify` in `lib/agent-plugin/document-tool-action.ts`: it compares the raw `GetText()` result using `matchesTextEdit`, whose invariant assumes the selected text disappears. That invariant is appropriate for ordinary text replacement but does not model retained revision runs. Merely relaxing the length check or stripping all old revisions would risk accepting unrelated changes or losing existing revision information.
+
+The diagnostic additionally verifies native Undo restores the original paragraph/character snapshots and Redo restores the tracked result, including character review types. The neighboring paragraph remains exact. The overall report deliberately retains its failed status and visible application error; native Undo/Redo success is not a claim that the IM flow passed. No application source was changed in this investigation.
+
+The next implementation must capture and validate structured revision/text state, preserve pre-existing review runs, bind selection/document identity, and cover incorrect insertion, unrelated changes, ordinary-mode behavior and cancellation. The same verification issue should be checked in the writing/previous-answer action path before choosing a shared solution. Existing revision acceptance/rejection, saved DOCX revision markup, complex selections and other models remain unverified.
+
+## Structured verifier correction
+
+The shared verifier now captures native main-body character review types, actual run selection bounds, paragraph terminators and zero-width bookmark identities. It models retained ordinary text becoming deletion (type 1), removal of previously inserted text (type 2), exact newly added text (type 2) and unchanged surrounding character/revision state. Both document-tool and writing/previous-answer targets use the shared implementation. Ordinary-mode matching is unchanged. Native `CParagraphBookmark` elements (type 71) lack text/review getters; preserving their marker identities prevents a false mismatch.
+
+Execution preflight checks the captured **actual selection**, rather than finding identical text elsewhere in the document. Unsupported structures and selected paragraph boundaries are declined before calling the write API, with brief localized guidance. Unknown review structures and invalid native run selection bounds are conservatively declined. Soft breaks are supported; only the final paragraph terminator is excluded. Both target types expire if revision tracking is toggled while the model is planning. No preview card or extra confirmation is added.
+
+The matcher binds nonempty edits to the captured selected tokens. Common prefix/suffix bounds limit insertion candidates and an unchanged document is rejected early when different text was requested. Regression tests cover duplicate selected text, wrong inserted text, untracked insertion, missing deletion, changed prior review state/bookmark identity, mixed soft breaks and paragraph endings, native index bounds, both directions of mode toggling, and long-document repeated comparisons. Final verification: 110 test files / 3983 tests, production build and lint pass. Independent review found no remaining important issue within this implementation scope.
+
+### Actual production evidence
+
+- [Single-line replacement](2026-10-03-word-im-replacement-tracked-fixed.json): exact supplied tracked text, no visible verification error, unchanged neighboring text/review types, exact native Undo/Redo.
+- [Pre-existing neighboring insertion](2026-10-03-word-im-replacement-tracked-prior-fixed.json): neighboring added revision is preserved through replacement and Undo/Redo.
+- [Multiline inserted data](2026-10-03-word-tracked-multiline-fixed.json): native soft-break CR encoding matches the supplied line breaks and leading/trailing spaces after CR/LF normalization; Undo/Redo and neighboring review state remain exact. The [earlier failed diagnostic](2026-10-03-word-tracked-multiline-diagnostic.json) is retained separately.
+- [Selection in a previous insertion](2026-10-03-word-tracked-existing-insertion.json): original selected type-2 text is removed rather than inventing a deletion revision, and native Undo/Redo restores the respective snapshots.
+- [Cross-paragraph preflight](2026-10-03-word-tracked-paragraph-preflight.json): the selected `Alpha target body\r\nN` is declined before mutation; document text, neighboring snapshot, history index, point references and item references remain unchanged. `preflightPassed` describes this refusal check; replacement `allPassed` stays false.
+
+- [Revision-mode toggle during actual planning](2026-10-03-word-tracked-mode-toggle.json): tracking is turned off while the IM input is disabled for generation; the operation expires, exact paragraph snapshots and native history references remain unchanged. `staleRejectionPassed` records the expected refusal.
+
+These are local Qwen3 1.7B and desktop Chromium native-SDK cases, not evidence for all models or devices. The snapshots compare text, review types and the reported simple character formatting; they do not prove every revision property or formatting attribute. Paragraph-boundary replacements, review author/date metadata, native accept/reject, revision markup save/reopen, complex document structures, other models and tracked cancellation still need separate implementation or verification. This correction does not complete the broader document-tool or local-AI goal.

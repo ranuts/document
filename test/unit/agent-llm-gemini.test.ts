@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { GeminiProvider, parseGeminiResponse, toGeminiContents, toGeminiTools } from '@ranuts/agent-core/llm/gemini';
-import { clearApiKey, setApiKey } from '@ranuts/agent-core/llm/keys';
+import {
+  GeminiProvider,
+  parseGeminiResponse,
+  toGeminiContents,
+  toGeminiTools,
+} from '../../packages/agent-core/src/llm/gemini';
+import { clearApiKey, setApiKey } from '../../packages/agent-core/src/llm/keys';
 import type { LLMMessage } from '@ranuts/agent-core/llm/types';
 
 const okResponse = (body: unknown): Response => ({ ok: true, json: async () => body }) as unknown as Response;
@@ -117,4 +122,57 @@ describe('GeminiProvider', () => {
     const provider = new GeminiProvider({ apiKey: 'AIza-bad', fetchImpl });
     await expect(provider.chat([{ role: 'user', content: 'x' }], [])).rejects.toThrow('403');
   });
+});
+
+it('cancels a pending cloud request when Stop aborts its signal', async () => {
+  const abort = new AbortController();
+  const provider = new GeminiProvider({
+    apiKey: 'test',
+    fetchImpl: async (_url, init) => {
+      expect(init.signal).toBe(abort.signal);
+      return new Promise((_resolve, reject) => {
+        init.signal!.addEventListener('abort', () => reject(init.signal!.reason), { once: true });
+      });
+    },
+  });
+  const pending = (provider as import('@ranuts/agent-core/llm/types').LLMProvider).chat([], [], abort.signal);
+  abort.abort();
+  await expect(pending).rejects.toMatchObject({ name: 'AbortError' });
+});
+
+it('does not send an already cancelled cloud request', async () => {
+  const fetchImpl = vi.fn(async () => okResponse({ candidates: [] }));
+  const abort = new AbortController();
+  abort.abort();
+  const provider = new GeminiProvider({ apiKey: 'test', fetchImpl });
+  await expect(
+    (provider as import('@ranuts/agent-core/llm/types').LLMProvider).chat([], [], abort.signal),
+  ).rejects.toMatchObject({ name: 'AbortError' });
+  expect(fetchImpl).not.toHaveBeenCalled();
+});
+
+it('rejects a token-limited Gemini result before writing it into the document', async () => {
+  const { generateWriting } = await import('../../packages/agent-core/src/llm/writing-task');
+  const provider = new GeminiProvider({
+    apiKey: 'test',
+    fetchImpl: async () =>
+      okResponse({
+        candidates: [
+          {
+            content: { parts: [{ text: '{"text":"The committee will review the plan."}' }] },
+            finishReason: 'MAX_TOKENS',
+          },
+        ],
+      }),
+  });
+  await expect(
+    generateWriting(
+      provider,
+      {
+        task: 'rewrite',
+        text: 'The committee plans to review the proposal tomorrow.',
+      },
+      new AbortController().signal,
+    ),
+  ).rejects.toThrow('Incomplete writing response');
 });

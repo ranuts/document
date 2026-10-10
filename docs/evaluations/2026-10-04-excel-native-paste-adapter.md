@@ -1,0 +1,11 @@
+# Excel native paste completion adapter
+
+Added pasteExcelText to combine the Excel callback guard with native completion, AbortSignal and a bounded timeout. Failed completion, cancellation, timeout and synchronous API failure close the guard and call the caller-bound paste cleanup after native paste has started. Successful completion closes the guard and leaves normal SDK completion cleanup to the SDK. Timers/listeners are removed on settlement. A second abort check after preflight/listener registration prevents starting a paste if cancellation occurred during preflight; native cleanup is not called for that unstarted request.
+
+The caller still owns a blocking action, target/cell/history identity and paste-state ownership. This adapter does not roll back an insertion that has already completed, restore original formats or preserve old Redo itself. Those belong to the native writing layer. It is not yet used by set_cell.
+
+Six unit tests cover completion/restored methods, Stop/late callback, timeout/late callback, rejected completion, pre-cancelled and cancellation-during-preflight requests. Tests failed before implementation; the preflight race failed before the second abort check.
+
+Three current-source native probes compile the adapter, guard and format scope and record source hashes. Normal General/0.00 writes preserve text 00123, original format and one-step Undo/Redo. Controlled delayed native font callbacks released after Stop or timeout do not insert anything; complete before/after cell snapshots remain numeric 30 with the original format. No page errors occurred. These six component cases do not establish actual IM Stop, arbitrary lock/protection branches, ownership under document switching, rollback after an already-started insertion, or existing Redo preservation.
+
+Full suite: 122 files / 4,331 tests passed. TypeScript, scoped lint and whitespace checks passed; existing asynchronous PromiseRejectionHandledWarning messages remain. No UI integration or production-build acceptance is claimed for these unused modules. Next: compose a bound native writer with blocking action, target preflight and history/Redo recovery, then connect validated explicit text-mode plans and verify IM/save/reopen.

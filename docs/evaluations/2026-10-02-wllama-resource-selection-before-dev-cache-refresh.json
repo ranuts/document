@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-02T06:57:28.293Z",
+  "scope": "Patched SDK resource selection only; no model loaded or WASM asset compiled",
+  "rows": [
+    {
+      "name": "Chromium",
+      "compat": false,
+      "wasmPath": "http://127.0.0.1:5192/native.wasm",
+      "customWorker": false
+    },
+    {
+      "name": "WebKit",
+      "compat": false,
+      "wasmPath": "http://127.0.0.1:5192/native.wasm",
+      "customWorker": false
+    }
+  ]
+}

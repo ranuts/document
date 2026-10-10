@@ -1,0 +1,82 @@
+{
+  "browserVersion": "151.0.7922.34",
+  "scope": "Real HTTP proxy (no Playwright resource routes): warm native editor caches with old nonisolated worker; change host policy; actual app registration migrates to isolated worker; native startup and offline reopening. No AI inference or physical-device coverage.",
+  "vendor": "59e2dc593998",
+  "warm": [
+    {
+      "type": "docx",
+      "isolated": false,
+      "iframeIsolated": false,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:62820/sw.js"
+    },
+    {
+      "type": "xlsx",
+      "isolated": false,
+      "iframeIsolated": false,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:62820/sw.js"
+    },
+    {
+      "type": "pptx",
+      "isolated": false,
+      "iframeIsolated": false,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:62820/sw.js"
+    }
+  ],
+  "upgraded": [],
+  "offline": [],
+  "errors": [],
+  "oldCachedPolicy": {
+    "name": "document-editor-runtime-59e2dc593998",
+    "policy": null
+  },
+  "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#app iframe').contentFrame().locator('#slot-btn-dt-save button')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" data-hint=\"0\" ratio=\"ratio\" id=\"asc-gen599\" data-hint-title=\"S\" disabled=\"disabled\" aria-label=\"Save (⌘+S)\" data-hint-offset=\"10, 10\" data-hint-direction=\"left\" class=\"btn btn-header canfocused disabled\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+  "passed": false,
+  "spellNetworkRequests": [
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": false,
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": false,
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": false,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "isolated": true,
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "isolated": true,
+      "status": 304
+    }
+  ]
+}

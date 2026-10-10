@@ -1,0 +1,13 @@
+{
+  "scope": "Current native Word IM with real CPU model, one controlled SDK exit delay, actual exit/reload/inference. Not physical teardown-fault, model-quality, offline or PWA certification.",
+  "probeSHA256": "d31b8a0028531653eb8ca0adccd955aeedf84bbc3ab8c2a7a29b65f6a947f301",
+  "plugin": "agent-plugin-CUmvDCn1.js",
+  "pluginSHA256": "3ac395dd08d5567785f8c0a2c5d95f521b4dafa3a9792baead16c6255c19fd38",
+  "errors": [],
+  "engine": "CPU · Qwen3 · 0.6B",
+  "documentBefore": "\r\n",
+  "passed": false,
+  "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.agent-panel-gguf-load')\u001b[22m\n\u001b[2m    - locator resolved to <r-button class=\"agent-panel-gguf-load\">加载模型</r-button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+  "contextClosed": true,
+  "bundleBytesUnchanged": true
+}

@@ -1,0 +1,1213 @@
+{
+  "runtime": "1791371772",
+  "diagnosticRunner": "1.65.0-alpha-2026-10-07",
+  "protocol": "2026-10-05-webkit-offline-page-protocol.md",
+  "requests": [
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/editor",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-DAMvwKtS.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/editor-BsnCvO7O.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CQ_cUb18.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-B7LZiYZX.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/input-BcbMPFwq.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sw.js",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sw.js",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/zh.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "open",
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "http://127.0.0.1:5193/assets/wllama-cpu-runtime-Ep3CyTxn.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "http://127.0.0.1:5193/assets/client-De9uuIvK.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "HEAD",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75",
+      "method": "HEAD",
+      "queryOmitted": true
+    },
+    {
+      "phase": "loading",
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/raw/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/680fb38323f5063a59efd782/0552b0957f683d7cb507b4ce82b13e749c24954cff625a0a6c6bdedff8db9f75",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "loading",
+      "url": "blob:http://127.0.0.1:5193/33815d4d-9cef-409e-913a-0b926c6ae523",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "blob:http://127.0.0.1:5193/572c0e97-c9e9-4842-adc6-77a9b88eec63",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "blob:http://127.0.0.1:5193/02a9c852-6f71-46f0-acef-d4f5d6dfe3b9",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "blob:http://127.0.0.1:5193/f492d06e-eb8e-497d-b254-0802f737d498",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "blob:http://127.0.0.1:5193/ef81f156-ecf8-498c-a635-22c0cb6b75f4",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "blob:http://127.0.0.1:5193/fe4e884a-af1f-4df0-aaf1-51e67110ebca",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "blob:http://127.0.0.1:5193/78795fad-723e-46d4-b249-729234042769",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "loading",
+      "url": "http://127.0.0.1:5193/assets/wllama-BITawafS.wasm",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/editor",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/editor-DAMvwKtS.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/editor-BsnCvO7O.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CQ_cUb18.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-B7LZiYZX.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/input-BcbMPFwq.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sw.js",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html",
+      "method": "GET",
+      "queryOmitted": true
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/zh.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/wllama-cpu-runtime-Ep3CyTxn.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/client-De9uuIvK.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "blob:http://127.0.0.1:5193/3aae0efe-382b-4376-8468-d6628dc322a0",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "blob:http://127.0.0.1:5193/edada25c-1591-4f27-b661-be595bb24967",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "blob:http://127.0.0.1:5193/c811a09c-e72a-4382-834a-16e9c472524d",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "blob:http://127.0.0.1:5193/fa17057a-2744-4301-822b-9227b1123fbf",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "blob:http://127.0.0.1:5193/8c590a8c-9ddb-48aa-98cb-eda54b2eac57",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "blob:http://127.0.0.1:5193/ca1a9e68-9605-4d01-92f8-3e372cfb20dc",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "blob:http://127.0.0.1:5193/5d6f8437-d403-4451-965a-3b79855c8b68",
+      "method": "GET",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/assets/wllama-BITawafS.wasm",
+      "method": "GET",
+      "queryOmitted": false
+    }
+  ],
+  "failures": [
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sw.js",
+      "error": "WebKit encountered an internal error",
+      "queryOmitted": true
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "WebKit encountered an internal error",
+      "queryOmitted": false
+    },
+    {
+      "phase": "offlineOpen",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "WebKit encountered an internal error",
+      "queryOmitted": false
+    }
+  ],
+  "errors": [],
+  "version": "27.2",
+  "capability": {
+    "gpu": false,
+    "isolated": true,
+    "suspending": "function",
+    "promising": "function",
+    "memory64": true
+  },
+  "loadMs": 58412,
+  "status": "CPU · Qwen3 · 0.6B",
+  "note": "模型已加载，可以开始对话。",
+  "onlineController": "http://127.0.0.1:5193/sw.js?isolation=1",
+  "onlinePageClosed": true,
+  "offlineNavigationMs": 201,
+  "offlineReadyMs": 3865,
+  "offlineStatus": "CPU · Qwen3 · 0.6B",
+  "offlineCapability": {
+    "isolated": true,
+    "memory64": true,
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1"
+  },
+  "documentBefore": "\r\n",
+  "inferenceMs": 4731,
+  "source": "WEBKIT_OFFLINE_OK",
+  "exactFormat": true,
+  "chatErrors": [],
+  "documentAfter": "\r\n",
+  "documentUnchanged": true,
+  "finished": true,
+  "contextClosed": true,
+  "browserClosed": true,
+  "raw_receipt_sha256": "974e1bb9ca5a69729625f8480c32f60534c14688215b26f6231db5e3dfe8e002",
+  "archiveScope": "Request query strings omitted to exclude temporary upstream signatures; raw receipt remains ignored."
+}

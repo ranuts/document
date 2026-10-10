@@ -1,0 +1,9 @@
+# WebKit cached-model offline browser-process restart
+
+The owned persistent context was closed, the first browser emitted disconnected and reported isConnected false, then a new browser launched with the same configured directory. Offline emulation was set before the test's first app navigation. The editor response came from the service worker; default CPU model restoration took 3,506 ms. Exact offline chat, native tools-mode insertion, Undo/Redo, Save and saved-file reopening passed. The 25,859-byte DOCX passes ZIP CRC and has exact XML/native text. Page errors were empty and final context/browser closed.
+
+The first load took only 2,368 ms. A separate read-only probe with profileExistedBefore false found an existing same-origin OPFS cache containing a 484,220,320-byte file and 323-byte metadata file before any model initialization. File timestamps predate this run. The model cache is therefore not isolated merely by choosing a new persistent directory in this observed WebKit runner. This receipt proves restoration of already-cached model data across browser process closure, not a cold-cache first download or a separate model-cache namespace. No existing cache was erased to force the result. File names are hashed in the probe receipt.
+
+This probe does not establish why WebKit shares that storage, cross-origin leakage, or physical Safari profile behavior. The earlier temporary-context page-lifecycle receipts and their longer online loads remain unchanged. Sprite precache records include actual successful byte sizes for all ten variants. Service-worker update/spelling-script offline failures remain retained in the request ledger.
+
+No physical Windows/mobile/Safari, PWA install lifecycle, all fonts/layout, complete device matrix, authenticated URL privacy or multilingual generative quality certification. No new product source change or broad test claim in this diagnostic commit.

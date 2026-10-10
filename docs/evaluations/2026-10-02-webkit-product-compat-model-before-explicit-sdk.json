@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-02T07:25:05.197Z",
+  "scope": "Actual Playwright WebKit editor and CPU inference, fresh isolated context; not iOS hardware",
+  "status": "failed",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+  "error": "TimeoutError: page.waitForFunction: Timeout 240000ms exceeded.",
+  "errors": [
+    "TypeError: t.replace is not a function. (In 't.replace(`Build with -sASSERTIONS for more info.`,``)', 't.replace' is undefined)"
+  ],
+  "failed": [],
+  "visibleErrors": [],
+  "notes": [
+    "484.2 / 484.2 MB",
+    "Review local suggestions before applying them."
+  ]
+}

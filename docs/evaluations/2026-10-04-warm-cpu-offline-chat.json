@@ -1,0 +1,32 @@
+{
+  "offlineRequests": [],
+  "probeSHA256": "ea5524bc4bb6571c75e768e9f4576937c4030c43b11e4230908341966e32b66b",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "browserOnline": false,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 37.4 token/s · First text: 0.94 s · Overall response rate: 12.21 token/s · 16 tokens",
+      "reply": "Hello! Let me know if there's anything I can assist you with.Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

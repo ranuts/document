@@ -1,0 +1,38 @@
+{
+  "scope": "Actual GPU qwen35-08 blank-PPT read regression after add_slide_text registration; isolated Chromium Metal production editor.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-CdyIt6Y2.js",
+      "kind": "pptx",
+      "prompt": "Read the plain text of the current presentation. Do not add or modify anything.",
+      "expected": "No readable text was found.",
+      "before": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "elapsedMs": 1970,
+      "feedback": [
+        "No readable text was found."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": null,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "One blank slide fixture; nonempty presentation reading/selection and broader language quality not covered."
+  ]
+}

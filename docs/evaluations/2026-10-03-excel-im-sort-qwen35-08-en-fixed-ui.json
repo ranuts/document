@@ -1,0 +1,308 @@
+{
+  "status": "completed",
+  "scope": "Actual production desktop Chromium Metal GPU IM Excel sort; explicit rectangular range, numeric key, header, neighboring cells and native Undo/Redo.",
+  "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "language": "en",
+  "results": [
+    {
+      "prompt": "Sort the complete rows in A1:B4 by numeric column B in ascending order. Row 1 is a header and must stay unchanged. Do not change cells outside A1:B4.",
+      "elapsedMs": 3009,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "sortMatched": true,
+      "headerPreserved": true,
+      "neighborsPreserved": true,
+      "afterUndo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "undoExact": true,
+      "afterRedo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "redoExact": true
+    },
+    {
+      "prompt": "Sort the complete rows in A1:B4 by numeric column B in descending order. Row 1 is a header and must stay unchanged. Do not change cells outside A1:B4.",
+      "elapsedMs": 2653,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [
+        "Done. Result checked; use Undo if needed.",
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "sortMatched": true,
+      "headerPreserved": true,
+      "neighborsPreserved": true,
+      "afterUndo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "undoExact": true,
+      "afterRedo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "bundle": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-CLOkS6k0.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "allPassed": true,
+  "productionBundle": "editor-CLOkS6k0.js",
+  "limitations": [
+    "One ascending/descending sample per model/language on warm-cache desktop Chromium Metal GPU; no offline or physical-device claim.",
+    "Native A1:D5 value snapshots verify sampled rows, header and outside sentinels; formatting, formulas and saved-file persistence not tested.",
+    "Direction validation recognizes explicit English/Chinese cues and bounded same-sentence negation; quoted data, other languages and complex semantics are not established."
+  ],
+  "assessment": "Both requested directions and native Undo/Redo passed."
+}

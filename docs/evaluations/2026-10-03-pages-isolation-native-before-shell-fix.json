@@ -1,0 +1,60 @@
+{
+  "hostPort": 5196,
+  "browserVersion": "151.0.7922.34",
+  "scope": "Independent fresh Chromium context per document type, actual configured static host headers forwarded unchanged from first navigation, real app Worker registration, native edit/Save/reopen and offline restart; no AI inference or physical-device coverage.",
+  "vendor": "59e2dc593998",
+  "cold": [
+    {
+      "type": "docx",
+      "isolated": true,
+      "iframeIsolated": true,
+      "fullApi": true,
+      "loaded": true,
+      "controller": "http://127.0.0.1:53311/sw.js?isolation=1",
+      "edited": "ISOLATED_COLD_docx\r\n",
+      "nativeSave": {
+        "bytes": 25798,
+        "failure": null
+      },
+      "reopened": {
+        "isolated": true,
+        "iframeIsolated": true,
+        "fullApi": true,
+        "loaded": true,
+        "controller": "http://127.0.0.1:53311/sw.js?isolation=1"
+      },
+      "reopenedText": "ISOLATED_COLD_docx\r\n",
+      "reopenExact": true
+    }
+  ],
+  "offline": [],
+  "errors": [],
+  "error": "Error: page.goto: net::ERR_FAILED at http://127.0.0.1:53311/editor?new=docx&locale=en\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:53311/editor?new=docx&locale=en\", waiting until \"load\"\u001b[22m\n",
+  "passed": false,
+  "spellNetworkRequests": [
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 200
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    },
+    {
+      "path": "/sdkjs/common/spell/spell/spell.wasm",
+      "coep": "require-corp",
+      "coop": "same-origin",
+      "status": 304
+    }
+  ]
+}

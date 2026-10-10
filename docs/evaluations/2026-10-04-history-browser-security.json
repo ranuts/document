@@ -1,0 +1,307 @@
+{
+  "probeSHA256": "935ee4d527509d4ecf6120a10eb3ae2ce45d70fcee14fb24b919627fe75729f8",
+  "sources": {
+    "packages/chat-ui/src/chat-view.ts": "5f194e59adfdf4ee91d94201a47afeb98d0107d664a85f858e5b3023ca7ab038",
+    "packages/chat-ui/src/markdown.ts": "2abe61a51b5fc74a8a22e3daff08ce98afd234c36ea2e1f390c07c745464b909",
+    "lib/agent-plugin/ui/sessions.ts": "22bb810133fd9e1bb239a1478b834e8cd8dcbd659e5d19f7d7412c2c68be836d",
+    "lib/agent-plugin/ui/storage.ts": "002cfdb0559e4e2b52350b8c42bf8859393f70571ac9745faa5c3e13d53c253c",
+    "lib/agent-plugin/ui/conversation-db.ts": "94cc763ca2360588f5ca419f8f1b82f55585467e53e23e7cd134b16b8b9a93d3"
+  },
+  "results": [
+    {
+      "role": "user",
+      "text": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "<svg onload=\"window.__injected=1\"><a href=\"javascript:alert(1)\">x</a></svg>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "<iframe srcdoc=\"<script>parent.__injected=1</script>\"></iframe>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "<form action=\"https://attacker.invalid\"><input autofocus onfocus=\"window.__injected=1\"></form>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "<style>body{background:url(https://attacker.invalid/pixel)}</style>",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "[run](JaVaScRiPt:alert%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "[run](JaVaScRiPt:alert%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "[run](JaVaScRiPt:alert%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "[run](JaVaScRiPt:alert%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "[run](data:text/html;base64,PHNjcmlwdD4=)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "[run](vbscript:msgbox%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "[run](vbscript:msgbox%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "[run](vbscript:msgbox%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "[run](vbscript:msgbox%281%29)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "[run](//attacker.invalid/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "[run](//attacker.invalid/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "[run](//attacker.invalid/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "[run](//attacker.invalid/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "[run](/private/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "[run](/private/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "[run](/private/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "[run](/private/path)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "![pixel](https://attacker.invalid/pixel)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "![pixel](https://attacker.invalid/pixel)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "![pixel](https://attacker.invalid/pixel)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "![pixel](https://attacker.invalid/pixel)",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "| Payload |\n| --- |\n| <img src=https://attacker.invalid/pixel onerror=\"window.__injected=1\"> |",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "user",
+      "text": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "agent",
+      "text": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "tool",
+      "text": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "unsafe": false,
+      "handlers": false
+    },
+    {
+      "role": "error",
+      "text": "> **[run](javascript:alert%281%29)**\n\n- <video src=https://attacker.invalid/video onerror=\"window.__injected=1\">",
+      "unsafe": false,
+      "handlers": false
+    }
+  ],
+  "requests": [],
+  "errors": [],
+  "dialogs": [],
+  "scope": "Current source IndexedDB conversation store persisted and restored after real Chromium page reload, then production historyToTurns and ChatView, no CSP; not deployed editor integration or model inference.",
+  "restoredExactly": true,
+  "injected": 0,
+  "passed": true
+}

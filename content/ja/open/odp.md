@@ -1,15 +1,15 @@
 ---
-title: LibreOffice なしで ODP ファイルを開く — 無料・ブラウザ内
-description: LibreOffice も OpenOffice もアカウントもなしで、ブラウザ内で ODP（OpenDocument プレゼンテーション）ファイルを開いて編集できます。ODP・PPTX・PDF として保存し直せます。何もアップロードされません。
+title: 'LibreOffice なしで ODP ファイルを開く — 無料・ブラウザ内'
+description: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 eyebrow: 開く · .odp
 h1: LibreOffice なしで ODP ファイルを開く
-lead: '**.odp** のプレゼンテーションがあるのに LibreOffice がない？ ブラウザで開いてスライドを編集し、ODP のまま——あるいは PPTX や PDF として保存し直せます。インストール不要、アップロードなし。'
+lead: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 cta: ODP を開く →
 ctaHref: /ja/
-ogDescription: LibreOffice なしでブラウザ内で ODP を開いて編集。ODP・PPTX・PDF で保存。アップロードなし。
+ogDescription: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 breadcrumb: odp
 howTo: LibreOffice なしで ODP ファイルを開く方法
-appDescription: LibreOffice なし・アカウントなし・アップロードなしで、ブラウザ内で ODP（OpenDocument プレゼンテーション）ファイルを開いて編集します。
+appDescription: 'LibreOffice やアカウントなしで、ブラウザで ODP ファイルを開いて編集できます。 アップロード不要のローカル編集.'
 ---
 
 ## 使い方

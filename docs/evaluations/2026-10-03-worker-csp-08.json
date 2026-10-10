@@ -1,0 +1,36 @@
+{
+  "scope": "Actual cached selected WebGPU initialization/chat under injected Worker response CSP, with normal-execution Worker eval and foreign module controls. No shipped policy, CPU/iframe, fresh download, offline or general security claim.",
+  "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+  "modelId": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "workerResponses": [
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-BX0TIRUM.js",
+      "policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "originalSHA256": "1248840615c89e1bedc0ad3fbcb0b78fa7963defdc5c14e0e65733a5a030dfe5",
+      "diagnosticSHA256": "0948274d9424339440ce555d4451214325c18e8550cdb6790842d722b017d82c"
+    }
+  ],
+  "baseline": false,
+  "foreignModuleRequests": 0,
+  "status": "completed",
+  "consoleErrors": [],
+  "errors": [],
+  "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "workerControls": {
+    "eval": {
+      "blocked": true,
+      "name": "EvalError",
+      "message": "Evaluating a string as JavaScript violates the following Content Security Policy directive because 'unsafe-eval' is not an allowed source of script: script-src 'self' 'wasm-unsafe-eval'\".\n"
+    },
+    "foreign": {
+      "blocked": true,
+      "name": "TypeError",
+      "message": "Failed to fetch dynamically imported module: https://worker-csp-probe.invalid/probe.js"
+    },
+    "isolated": true
+  },
+  "nextReply": "Hello",
+  "errorCountAfterRecovery": 0,
+  "probeSHA256": "f7a7b55b015a14913f121282da5a54d3a0ffd41f3bbf00864198b1c4889a515a",
+  "workerBytesUnchanged": true
+}

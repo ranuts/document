@@ -1,0 +1,148 @@
+{
+  "scope": "Production UI real WASM CPU CPU Qwen3-0.6B GGUF / WebKit planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-DVH4vU0n.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 53174,
+      "feedback": [
+        "A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "editorModule": "./assets/editor-DVH4vU0n.js",
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A2.",
+      "expected": "13",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":2,\"r1\":2,\"c2\":2,\"r2\":2,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":2,\"col\":2}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":2,\"r1\":2,\"c2\":2,\"r2\":2,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":2,\"col\":2}"
+      },
+      "elapsedMs": 7282,
+      "feedback": [
+        "A1\n12",
+        "A2\n13"
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "providerTimings": [
+    {
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 50278.999,
+        "decodingDurationMs": 2828.001,
+        "decodeTokensPerSecond": 4.596886634764273,
+        "responseDurationMs": 53139,
+        "endToEndTokensPerSecond": 0.26345998231054407
+      },
+      "responseText": "{\"tool\":\"get_cell\",\"input\":{\"cell\":\"A1\"}}",
+      "responseChars": 41,
+      "stopReason": "stop"
+    },
+    {
+      "usage": {
+        "completionTokens": 14,
+        "promptTokens": 643,
+        "promptProcessingDurationMs": 4429.001,
+        "decodingDurationMs": 2805,
+        "decodeTokensPerSecond": 4.634581105169341,
+        "responseDurationMs": 7266,
+        "endToEndTokensPerSecond": 1.9267822736030829
+      },
+      "responseText": "{\"tool\":\"get_cell\",\"input\":{\"cell\":\"A2\"}}",
+      "responseChars": 41,
+      "stopReason": "stop"
+    }
+  ],
+  "limitations": [
+    "One pair per prompt ordering; not a statistical reliability or latency estimate.",
+    "Baseline second request failed; raw response was not logged, so precise parse failure unknown.",
+    "Candidate retained identical capability content, constraints and token count, changing only context/capabilities order.",
+    "GPU cross-model regression and broader CPU tasks remain outstanding."
+  ]
+}

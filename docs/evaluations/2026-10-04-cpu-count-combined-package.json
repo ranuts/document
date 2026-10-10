@@ -1,0 +1,18 @@
+{
+  "scope": "Combined source-built CPU compatibility SDK candidate; no production activation",
+  "entries": {
+    "client/index.js": "9485f3e243dff343c27d69db47e5b7a6fd6608cd9262d8e271c1c1e56a0f93f8",
+    "native/wllama.js": "9708f2b93fa3bc6df5d06c75bc651f32201228532f07423447aa1b912f52f97c",
+    "native/wllama.wasm": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179",
+    "patches/client.patch": "0cfd633fda03d746bafeed82bf001381eb6d7d4ce5f8041a3e2b652d249ff078",
+    "patches/native.patch": "d6680454b92ba3de45220dded01f966b1f25360a47dd2a3c2d6738f9db077bff",
+    "licenses/wllama-LICENCE": "5866e3bd7e3cbd3f7c8bea6efd8a1e7fa7cc8de68c30f428aff7c6584a0fb720",
+    "licenses/llama.cpp-LICENSE": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+    "README.txt": "bdbf843fb6812e4e9a551443d90245b6a0286e17664dc895715a847ba64f9ec2"
+  },
+  "sdkRevision": "e3972797f9d508887440e9d3fa87dc296f2dec44",
+  "llamaRevision": "83d855c5a6d70487121edbf4020b25c96b7a04e7",
+  "archivePath": "/private/tmp/document-cpu-count-combined-candidate.zip",
+  "archiveBytes": 13407596,
+  "archiveSHA256": "31eb407abcfadbc7611fed85c9138c4ba6288e1496b969747d26afec4ef9225d"
+}

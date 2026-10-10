@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-02T06:21:17.558Z",
+  "scope": "Offline cold CPU process: cancel two consecutive prefills, restore both workers, then perform another real inference",
+  "status": "passed",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "policy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+  "cycles": [
+    {
+      "attempt": 1,
+      "visibleBeforeStop": [],
+      "stopMs": 17,
+      "messagesAfterStop": [
+        "Write a detailed essay about astronomy.",
+        "Stopped.Restore request"
+      ],
+      "restoringStatus": "Preparing AI… · CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "restoreMs": 1736
+    },
+    {
+      "attempt": 2,
+      "visibleBeforeStop": [],
+      "stopMs": 22,
+      "messagesAfterStop": [
+        "Write a detailed essay about astronomy.",
+        "Stopped.Restore request",
+        "Write a detailed essay about astronomy.",
+        "Stopped.Restore request"
+      ],
+      "restoringStatus": "Preparing AI… · CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "restoreMs": 1452
+    }
+  ],
+  "nextMs": 23942,
+  "reply": [
+    "Hello.Write to document"
+  ],
+  "errors": []
+}

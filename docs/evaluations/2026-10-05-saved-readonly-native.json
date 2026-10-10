@@ -1,0 +1,184 @@
+{
+  "runs": [
+    {
+      "name": "chromium",
+      "errors": [],
+      "version": "151.0.7922.34",
+      "openText": "WEBKIT_WORD_20261005\r\n",
+      "open": {
+        "id": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+        "sources": [
+          {
+            "docId": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+            "key": "6168538a-24f4-40a7-ac40-9eded7a37447"
+          }
+        ],
+        "pointer": "{\"docId\":\"09719ae7-74b1-40e8-a35c-91a4ef54e0eb\",\"key\":\"6168538a-24f4-40a7-ac40-9eded7a37447\"}"
+      },
+      "reloadText": "WEBKIT_WORD_20261005\r\n",
+      "reload": {
+        "id": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+        "sources": [
+          {
+            "docId": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+            "key": "4bade8e5-59e0-49fc-91a9-2ecdfe25cc3e"
+          }
+        ],
+        "pointer": "{\"docId\":\"09719ae7-74b1-40e8-a35c-91a4ef54e0eb\",\"key\":\"4bade8e5-59e0-49fc-91a9-2ecdfe25cc3e\"}"
+      },
+      "sourceReadonly": {
+        "restrictions": 128,
+        "text": "WEBKIT_WORD_20261005\r\n"
+      },
+      "editText": "LATEST_SNAPSHOT_chromium_20261005\r\n",
+      "snapshot": {
+        "id": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+        "doc": {
+          "id": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25966,
+          "totalBytes": 25966,
+          "createdAt": 1791158555917,
+          "updatedAt": 1791158555917,
+          "lastOpenedAt": 1791158555917,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+            "key": "17f1a798-ddde-45f5-85a8-f8d85a09468a"
+          }
+        ],
+        "pointer": "{\"docId\":\"09719ae7-74b1-40e8-a35c-91a4ef54e0eb\",\"key\":\"17f1a798-ddde-45f5-85a8-f8d85a09468a\"}"
+      },
+      "autosaveWaitMs": 60080,
+      "latestText": "LATEST_SNAPSHOT_chromium_20261005\r\n",
+      "latest": {
+        "id": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+        "doc": {
+          "id": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25966,
+          "totalBytes": 25966,
+          "createdAt": 1791158555917,
+          "updatedAt": 1791158555917,
+          "lastOpenedAt": 1791158556561,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "09719ae7-74b1-40e8-a35c-91a4ef54e0eb",
+            "key": "72e7424f-2fdc-4915-aada-fe45fc9177b3"
+          }
+        ],
+        "pointer": "{\"docId\":\"09719ae7-74b1-40e8-a35c-91a4ef54e0eb\",\"key\":\"72e7424f-2fdc-4915-aada-fe45fc9177b3\"}"
+      },
+      "snapshotReadonly": {
+        "restrictions": 128,
+        "text": "LATEST_SNAPSHOT_chromium_20261005\r\n"
+      },
+      "ordinaryRestrictions": 0,
+      "ordinaryText": "EDITABLE_AGAINWEBKIT_WORD_20261005\r\n",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "webkit",
+      "errors": [],
+      "version": "26.5",
+      "openText": "WEBKIT_WORD_20261005\r\n",
+      "open": {
+        "id": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+        "sources": [
+          {
+            "docId": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+            "key": "603260c5-18de-418d-95f4-2abb15d5d102"
+          }
+        ],
+        "pointer": "{\"docId\":\"97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a\",\"key\":\"603260c5-18de-418d-95f4-2abb15d5d102\"}"
+      },
+      "reloadText": "WEBKIT_WORD_20261005\r\n",
+      "reload": {
+        "id": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+        "sources": [
+          {
+            "docId": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+            "key": "9fbd8bb5-69ff-45cc-aee2-202947e871fe"
+          }
+        ],
+        "pointer": "{\"docId\":\"97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a\",\"key\":\"9fbd8bb5-69ff-45cc-aee2-202947e871fe\"}"
+      },
+      "sourceReadonly": {
+        "restrictions": 128,
+        "text": "WEBKIT_WORD_20261005\r\n"
+      },
+      "editText": "LATEST_SNAPSHOT_webkit_20261005\r\n",
+      "snapshot": {
+        "id": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+        "doc": {
+          "id": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25965,
+          "totalBytes": 25965,
+          "createdAt": 1791158628391,
+          "updatedAt": 1791158628391,
+          "lastOpenedAt": 1791158628391,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+            "key": "05fc099f-466c-401e-9002-ba1a814257c9"
+          }
+        ],
+        "pointer": "{\"docId\":\"97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a\",\"key\":\"05fc099f-466c-401e-9002-ba1a814257c9\"}"
+      },
+      "autosaveWaitMs": 65183,
+      "latestText": "LATEST_SNAPSHOT_webkit_20261005\r\n",
+      "latest": {
+        "id": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+        "doc": {
+          "id": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25965,
+          "totalBytes": 25965,
+          "createdAt": 1791158628391,
+          "updatedAt": 1791158628391,
+          "lastOpenedAt": 1791158633401,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a",
+            "key": "b604e6a9-922b-4c2a-abbe-e15ea5a1d073"
+          }
+        ],
+        "pointer": "{\"docId\":\"97b049c5-18c3-4b0c-ac14-9a4b3e0cc19a\",\"key\":\"b604e6a9-922b-4c2a-abbe-e15ea5a1d073\"}"
+      },
+      "snapshotReadonly": {
+        "restrictions": 128,
+        "text": "LATEST_SNAPSHOT_webkit_20261005\r\n"
+      },
+      "ordinaryRestrictions": 0,
+      "ordinaryText": "EDITABLE_AGAINWEBKIT_WORD_20261005\r\n",
+      "passed": true,
+      "closed": true
+    }
+  ]
+}

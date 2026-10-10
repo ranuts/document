@@ -43,8 +43,8 @@ export interface AnthropicStream {
 /** The slice of the Anthropic client this provider uses (eases test mocking). */
 export interface AnthropicLike {
   messages: {
-    create(body: Record<string, unknown>): Promise<AnthropicResponse>;
-    stream?(body: Record<string, unknown>): AnthropicStream;
+    create(body: Record<string, unknown>, options?: { signal?: AbortSignal }): Promise<AnthropicResponse>;
+    stream?(body: Record<string, unknown>, options?: { signal?: AbortSignal }): AnthropicStream;
   };
 }
 
@@ -148,8 +148,15 @@ export class AnthropicProvider implements LLMProvider {
     };
   }
 
-  async chat(messages: LLMMessage[], tools: LLMToolDef[]): Promise<LLMResponse> {
-    const response = await this.getClient().messages.create(this.requestBody(messages, tools));
+  async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+    signal?.throwIfAborted();
+    const response = await this.getClient()
+      .messages.create(this.requestBody(messages, tools), signal ? { signal } : undefined)
+      .catch((error: unknown) => {
+        signal?.throwIfAborted();
+        throw error;
+      });
+    signal?.throwIfAborted();
     return parseAnthropicResponse(response);
   }
 
@@ -157,15 +164,24 @@ export class AnthropicProvider implements LLMProvider {
     messages: LLMMessage[],
     tools: LLMToolDef[],
     onDelta: (textDelta: string) => void,
+    signal?: AbortSignal,
   ): Promise<LLMResponse> {
+    signal?.throwIfAborted();
     const client = this.getClient();
     // The SDK's messages.stream() emits incremental "text" events and resolves
     // the full message via finalMessage(), which parses exactly like create().
     if (!client.messages.stream) {
-      return this.chat(messages, tools);
+      return this.chat(messages, tools, signal);
     }
-    const stream = client.messages.stream(this.requestBody(messages, tools));
-    stream.on('text', (delta) => onDelta(delta));
-    return parseAnthropicResponse(await stream.finalMessage());
+    const stream = client.messages.stream(this.requestBody(messages, tools), signal ? { signal } : undefined);
+    stream.on('text', (delta) => {
+      if (!signal?.aborted) onDelta(delta);
+    });
+    const response = await stream.finalMessage().catch((error: unknown) => {
+      signal?.throwIfAborted();
+      throw error;
+    });
+    signal?.throwIfAborted();
+    return parseAnthropicResponse(response);
   }
 }

@@ -1,0 +1,41 @@
+{
+  "scope": "WASM import/defined linear-memory limits read from exact matched artifacts; not physical device capacity or browser allocation certification",
+  "artifacts": [
+    {
+      "runtime": "default",
+      "sha256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6",
+      "bytes": 6570369,
+      "memories": [
+        {
+          "location": "import",
+          "module": "env",
+          "name": "memory",
+          "flags": 7,
+          "memory64": true,
+          "shared": true,
+          "initialPages": 2048,
+          "maximumPages": 65536,
+          "maximumBytes": 4294967296
+        }
+      ]
+    },
+    {
+      "runtime": "compat",
+      "sha256": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179",
+      "bytes": 12995286,
+      "memories": [
+        {
+          "location": "import",
+          "module": "a",
+          "name": "a",
+          "flags": 3,
+          "memory64": false,
+          "shared": true,
+          "initialPages": 2048,
+          "maximumPages": 65536,
+          "maximumBytes": 4294967296
+        }
+      ]
+    }
+  ]
+}

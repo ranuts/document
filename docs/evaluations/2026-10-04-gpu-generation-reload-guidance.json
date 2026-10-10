@@ -1,0 +1,67 @@
+{
+  "scope": "Controlled uncaught exception inside a real loaded GPU Worker during streaming; not physical device loss or OOM. Warm profile, network available, native Word chat only.",
+  "probeSHA256": "d68737abd24505dd2f7a74e247906e8b458e7d7f8e0256f975704d95c9f33e72",
+  "status": "passed",
+  "errors": [],
+  "workerEvents": [
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+    },
+    {
+      "event": "closed",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+    },
+    {
+      "event": "created",
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+    }
+  ],
+  "workerSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+  "injectedWorkerSHA256": "538c69b6064d95a86183c225b2229f31b2806599a77981cd63fa1b4e0cbaf48e",
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "before": "\r\n",
+  "beforeFailure": {
+    "constructed": 1,
+    "terminated": 0,
+    "cpu": 0,
+    "requests": [
+      "chatCompletionStreamInit"
+    ]
+  },
+  "afterFailure": {
+    "constructed": 1,
+    "terminated": 1,
+    "cpu": 0,
+    "requests": [
+      "chatCompletionStreamInit"
+    ]
+  },
+  "visibleErrors": [
+    "Reload the model in settings, then try your request again.Restore request"
+  ],
+  "afterWait": {
+    "constructed": 1,
+    "terminated": 1,
+    "cpu": 0,
+    "requests": [
+      "chatCompletionStreamInit"
+    ]
+  },
+  "after": "\r\n",
+  "reply": "Hello.",
+  "afterRetry": {
+    "constructed": 2,
+    "terminated": 3,
+    "cpu": 0,
+    "requests": [
+      "chatCompletionStreamInit",
+      "chatCompletionStreamInit"
+    ]
+  },
+  "retryDocument": "\r\n"
+}

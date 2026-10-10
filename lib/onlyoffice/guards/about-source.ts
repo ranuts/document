@@ -1,21 +1,15 @@
 /**
- * Guard 12: the source offer and the "not an official product" line, added to
- * the editor's own About pane.
- *
- * The vendor's About pane already carries what Section 7(b) of the ONLYOFFICE
- * AGPL terms asks for -- product logo, version, Ascensio System SIA copyright.
- * What it cannot carry is the two things that are true of THIS build and not of
- * theirs: that it is a modified version, and where its corresponding source is.
- * AGPL-3.0 Section 13 asks a network-interactive modified version to offer that
- * source to the people using it, and Section 7(e) is the reason to say plainly
- * that the mark on the pane above is not ours.
+ * Guard 12: legal attribution for the modified editor, independent of product marks.
+ * The vendor's copyright and version remain; this adds the modified-version
+ * notice, warranty disclaimer, license and source links. See NOTICE for the
+ * decision to omit product branding.
  *
  * The pane is populated lazily -- `#about-menu-panel` exists from boot but is
  * empty until the user opens it -- so this watches for the content to arrive
  * instead of writing once. Appending inside the observed node re-enters the
  * callback; the id check is what stops that after one pass.
  *
- * Additive only: nothing the vendor renders is moved, restyled or removed.
+ * Legal text is additive; guards/chrome.ts hides only product branding.
  */
 const NOTICE_ID = 'oo-source-notice';
 const SOURCE_URL = 'https://github.com/ranuts/document';
@@ -33,7 +27,10 @@ function renderNotice(doc: Document, panel: HTMLElement): void {
   const line = doc.createElement('div');
   line.textContent =
     'This is a modified version of the ONLYOFFICE editors, not an official ONLYOFFICE product. ' +
-    'ONLYOFFICE is a trademark of Ascensio System SIA.';
+    'Copyright: Ascensio System SIA (upstream editors). ' +
+    'ONLYOFFICE is a trademark of Ascensio System SIA. ' +
+    'This modified version is distributed under AGPL-3.0, WITHOUT ANY WARRANTY; ' +
+    'you may redistribute it under the applicable license terms.';
   box.appendChild(line);
 
   const source = doc.createElement('div');
@@ -45,6 +42,21 @@ function renderNotice(doc: Document, panel: HTMLElement): void {
   link.textContent = SOURCE_URL;
   source.appendChild(link);
   box.appendChild(source);
+
+  const legal = doc.createElement('div');
+  for (const [label, href] of [
+    ['License (AGPL-3.0)', '/LICENSE'],
+    ['Copyright and modification notices', '/NOTICE'],
+  ]) {
+    if (legal.children.length) legal.appendChild(doc.createTextNode(' · '));
+    const legalLink = doc.createElement('a');
+    legalLink.href = href;
+    legalLink.target = '_blank';
+    legalLink.rel = 'noopener noreferrer';
+    legalLink.textContent = label;
+    legal.appendChild(legalLink);
+  }
+  box.appendChild(legal);
 
   panel.appendChild(box);
 }

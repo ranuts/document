@@ -1,0 +1,1732 @@
+{
+  "status": "completed",
+  "scope": "Isolated native count prototype: four actual usage comparisons, repeat counts, overflow and unsupported-input recovery; not production acceptance; standalone SDK, no editor write or production changes",
+  "files": {
+    "js": "9ef654633a98495e82dd3eb862923eb17205eb6aa1cbfac1fb61715b8e31cbbf",
+    "wasm": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6"
+  },
+  "served": [
+    {
+      "method": "GET",
+      "url": "/sdk.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.js",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "HEAD",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    },
+    {
+      "method": "GET",
+      "url": "/model.gguf",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 484220320
+    },
+    {
+      "method": "GET",
+      "url": "/runtime.wasm",
+      "range": null,
+      "requestBytes": 0,
+      "responseBytes": 0
+    }
+  ],
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "Service Worker registration blocked by Playwright"
+    },
+    {
+      "type": "log",
+      "text": "DIAGNOSTIC_RESOURCES {\"compat\":false,\"wasmPath\":\"http://127.0.0.1:60262/runtime.wasm\",\"hasInlineWorker\":false}"
+    },
+    {
+      "type": "debug",
+      "text": "Downloading model files: [http://127.0.0.1:60262/model.gguf]"
+    },
+    {
+      "type": "debug",
+      "text": "Multithread enabled: false, pthreadPoolSize: 0"
+    },
+    {
+      "type": "debug",
+      "text": "Loading \"wllama.wasm\" from \"http://127.0.0.1:60262/runtime.wasm\""
+    },
+    {
+      "type": "debug",
+      "text": "Calling wllamaStart..."
+    },
+    {
+      "type": "debug",
+      "text": "Using async file read"
+    },
+    {
+      "type": "debug",
+      "text": "Loading model..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: loaded meta data with 31 key-value pairs and 311 tensors from models/model-00001-of-00001.gguf (version GGUF V3 (latest))"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   0:                       general.architecture str              = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   1:                               general.type str              = model"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   2:                               general.name str              = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   3:                           general.basename str              = Qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   4:                         general.size_label str              = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   5:                          qwen3.block_count u32              = 28"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   6:                       qwen3.context_length u32              = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   7:                     qwen3.embedding_length u32              = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   8:                  qwen3.feed_forward_length u32              = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv   9:                 qwen3.attention.head_count u32              = 16"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  10:              qwen3.attention.head_count_kv u32              = 8"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  11:                       qwen3.rope.freq_base f32              = 1000000.000000"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  12:     qwen3.attention.layer_norm_rms_epsilon f32              = 0.000001"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  13:                 qwen3.attention.key_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  14:               qwen3.attention.value_length u32              = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  15:                       tokenizer.ggml.model str              = gpt2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  16:                         tokenizer.ggml.pre str              = qwen2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  17:                      tokenizer.ggml.tokens arr[str,151936]  = [\"!\", \"\\\"\", \"#\", \"$\", \"%\", \"&\", \"'\", ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  18:                  tokenizer.ggml.token_type arr[i32,151936]  = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  19:                      tokenizer.ggml.merges arr[str,151387]  = [\"Ġ Ġ\", \"ĠĠ ĠĠ\", \"i n\", \"Ġ t\",..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  20:                tokenizer.ggml.eos_token_id u32              = 151645"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  21:            tokenizer.ggml.padding_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  22:                tokenizer.ggml.bos_token_id u32              = 151643"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  23:               tokenizer.ggml.add_bos_token bool             = false"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  24:                    tokenizer.chat_template str              = {%- if tools %}\\n    {{- '<|im_start|>..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  25:               general.quantization_version u32              = 2"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  26:                          general.file_type u32              = 15"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  27:                      quantize.imatrix.file str              = /models_out/Qwen3-0.6B-GGUF/Qwen_Qwen..."
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  28:                   quantize.imatrix.dataset str              = /training_dir/calibration_datav3.txt"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  29:             quantize.imatrix.entries_count i32              = 196"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - kv  30:              quantize.imatrix.chunks_count i32              = 137"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type  f32:  113 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q4_K:  169 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "llama_model_loader: - type q6_K:   29 tensors"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file format = GGUF V3 (latest)"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file type   = Q4_K - Medium"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: file size   = 456.11 MiB (5.09 BPW) "
+    },
+    {
+      "type": "debug",
+      "text": "load: 0 unused tokens"
+    },
+    {
+      "type": "warning",
+      "text": "load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden"
+    },
+    {
+      "type": "debug",
+      "text": "load: printing all EOG tokens:"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 128247 ('</s>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151643 ('<|endoftext|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151645 ('<|im_end|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151662 ('<|fim_pad|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151663 ('<|repo_name|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load:   - 151664 ('<|file_sep|>')"
+    },
+    {
+      "type": "debug",
+      "text": "load: special tokens cache size = 27"
+    },
+    {
+      "type": "debug",
+      "text": "load: token to piece cache size = 0.9311 MB"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: arch                  = qwen3"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab_only            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: no_alloc              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_train           = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_inp            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd                = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_out            = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer               = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_layer_all           = 28"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head                = 16"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_head_kv             = 8"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_rot                 = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_swa                 = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: is_swa_any            = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_k         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_head_v         = 128"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_gqa                 = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_k_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_embd_v_gqa          = 1024"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_eps            = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_norm_rms_eps        = 1.0e-06"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_clamp_kqv           = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_max_alibi_bias      = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_logit_scale         = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_scale          = 0.0e+00"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: f_attn_value_scale    = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ff                  = 3072"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_used         = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_expert_groups       = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_group_used          = 0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: causal attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: pooling type          = -1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope type             = 2"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope scaling          = linear"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_base_train       = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: freq_scale_train      = 1"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_ctx_orig_yarn       = 32768"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_yarn_log_mul     = 0.0000"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: rope_finetuned        = unknown"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model type            = 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: model params          = 751.63 M"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: general.name          = Qwen3 0.6B"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: vocab type            = BPE"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_vocab               = 151936"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: n_merges              = 151387"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: BOS token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOS token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOT token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: PAD token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: LF token              = 198 'Ċ'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PRE token         = 151659 '<|fim_prefix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SUF token         = 151661 '<|fim_suffix|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM MID token         = 151660 '<|fim_middle|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM PAD token         = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM REP token         = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: FIM SEP token         = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 128247 '</s>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151643 '<|endoftext|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151645 '<|im_end|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151662 '<|fim_pad|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151663 '<|repo_name|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: EOG token             = 151664 '<|file_sep|>'"
+    },
+    {
+      "type": "debug",
+      "text": "print_info: max token length      = 256"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors: loading model tensors, this can take a while... (load_mode = none)"
+    },
+    {
+      "type": "debug",
+      "text": "load_tensors:          CPU model buffer size =   456.11 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: constructing llama_context"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_seq_max             = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx                 = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq             = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_batch               = 2048"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ubatch              = 512"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: causal_attn           = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: flash_attn            = auto"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: kv_unified            = true"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_base             = 1000000.0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: freq_scale            = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_rs_seq              = 0"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max         = 4"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_outputs_max_per_seq = 1"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context: n_ctx_seq (2048) < n_ctx_train (32768) -- the full capacity of the model will not be utilized"
+    },
+    {
+      "type": "debug",
+      "text": "llama_context:        CPU  output buffer size =     2.32 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache:        CPU KV buffer size =   224.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: size =  224.00 MiB (  2048 cells,  28 layers,  4/1 seqs), K (f16):  112.00 MiB, V (f16):  112.00 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_k = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "llama_kv_cache: attn_rot_v = 0, n_embd_head_k_all = 128"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserving ..."
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Flash Attention enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Gated Delta Net support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (autoregressive) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused Gated Delta Net (chunked) enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused Lightning Indexer support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: Lightning Indexer enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: resolving fused DeepSeek V4 HC support:"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC pre enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC comb enabled"
+    },
+    {
+      "type": "debug",
+      "text": "resolve_fused_ops: fused DeepSeek V4 HC post enabled"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve:        CPU compute buffer size =    28.01 MiB"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph nodes  = 986"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: graph splits = 1"
+    },
+    {
+      "type": "debug",
+      "text": "sched_reserve: reserve took 9.61 ms, sched copies = 1"
+    },
+    {
+      "type": "debug",
+      "text": "{loadedCtxInfo: Object}"
+    },
+    {
+      "type": "warning",
+      "text": "slot   operator(): id  0 | task 43 | need to evaluate at least 1 token for each active slot (n_past = 16, task.n_tokens() = 16)"
+    },
+    {
+      "type": "warning",
+      "text": "slot   operator(): id  0 | task 43 | n_past was set to 15"
+    }
+  ],
+  "clientSHA256": "4a87c46f0595ccbb716e2ca70a1d5ec2223d3d179f2fb4e24cb53fd5b65e6006",
+  "probeSHA256": "3bf50b990504329adcd35ec40f409513ebdee19fb6dcdb3799d83a6cfe1b3201",
+  "patchSHA256": "d6680454b92ba3de45220dded01f966b1f25360a47dd2a3c2d6738f9db077bff",
+  "sdkSHA256": "90b5b57472a3116efff13b8376b84c724dbe22580feeb24843829839ca752414",
+  "routeHits": [],
+  "result": {
+    "info": {
+      "_name": "load_res",
+      "success": true,
+      "n_ctx": 2048,
+      "n_batch": 2048,
+      "n_ubatch": 512,
+      "n_vocab": 151936,
+      "n_ctx_train": 32768,
+      "n_embd": 1024,
+      "n_layer": 28,
+      "metadata_key": [
+        "quantize.imatrix.entries_count",
+        "quantize.imatrix.file",
+        "general.file_type",
+        "general.quantization_version",
+        "tokenizer.ggml.padding_token_id",
+        "qwen3.context_length",
+        "tokenizer.ggml.eos_token_id",
+        "tokenizer.ggml.pre",
+        "tokenizer.ggml.model",
+        "tokenizer.ggml.add_bos_token",
+        "quantize.imatrix.dataset",
+        "general.name",
+        "qwen3.attention.value_length",
+        "qwen3.attention.key_length",
+        "qwen3.attention.layer_norm_rms_epsilon",
+        "quantize.imatrix.chunks_count",
+        "tokenizer.chat_template",
+        "qwen3.embedding_length",
+        "qwen3.attention.head_count",
+        "qwen3.feed_forward_length",
+        "qwen3.rope.freq_base",
+        "general.architecture",
+        "qwen3.attention.head_count_kv",
+        "general.type",
+        "tokenizer.ggml.bos_token_id",
+        "general.basename",
+        "qwen3.block_count",
+        "general.size_label"
+      ],
+      "metadata_val": [
+        "196",
+        "/models_out/Qwen3-0.6B-GGUF/Qwen_Qwen3-0.6B.imatrix",
+        "15",
+        "2",
+        "151643",
+        "32768",
+        "151645",
+        "qwen2",
+        "gpt2",
+        "false",
+        "/training_dir/calibration_datav3.txt",
+        "Qwen3 0.6B",
+        "128",
+        "128",
+        "0.000001",
+        "137",
+        "{%- if tools %}\n    {{- '<|im_start|>system\\n' }}\n    {%- if messages[0].role == 'system' %}\n        {{- messages[0].content + '\\n\\n' }}\n    {%- endif %}\n    {{- \"# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within <tools></tools> XML tags:\\n<tools>\" }}\n    {%- for tool in tools %}\n        {{- \"\\n\" }}\n        {{- tool | tojson }}\n    {%- endfor %}\n    {{- \"\\n</tools>\\n\\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\\n<tool_call>\\n{\\\"name\\\": <function-name>, \\\"arguments\\\": <args-json-object>}\\n</tool_call><|im_end|>\\n\" }}\n{%- else %}\n    {%- if messages[0].role == 'system' %}\n        {{- '<|im_start|>system\\n' + messages[0].content + '<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- set ns = namespace(multi_step_tool=true, last_query_index=messages|length - 1) %}\n{%- for message in messages[::-1] %}\n    {%- set index = (messages|length - 1) - loop.index0 %}\n    {%- set tool_start = \"<tool_response>\" %}\n    {%- set tool_start_length = tool_start|length %}\n    {%- set start_of_message = message.content[:tool_start_length] %}\n    {%- set tool_end = \"</tool_response>\" %}\n    {%- set tool_end_length = tool_end|length %}\n    {%- set start_pos = (message.content|length) - tool_end_length %}\n    {%- if start_pos < 0 %}\n        {%- set start_pos = 0 %}\n    {%- endif %}\n    {%- set end_of_message = message.content[start_pos:] %}\n    {%- if ns.multi_step_tool and message.role == \"user\" and not(start_of_message == tool_start and end_of_message == tool_end) %}\n        {%- set ns.multi_step_tool = false %}\n        {%- set ns.last_query_index = index %}\n    {%- endif %}\n{%- endfor %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {%- set content = message.content %}\n        {%- set reasoning_content = '' %}\n        {%- if message.reasoning_content is defined and message.reasoning_content is not none %}\n            {%- set reasoning_content = message.reasoning_content %}\n        {%- else %}\n            {%- if '</think>' in message.content %}\n                {%- set content = (message.content.split('</think>')|last).lstrip('\\n') %}\n        {%- set reasoning_content = (message.content.split('</think>')|first).rstrip('\\n') %}\n        {%- set reasoning_content = (reasoning_content.split('<think>')|last).lstrip('\\n') %}\n            {%- endif %}\n        {%- endif %}\n        {%- if loop.index0 > ns.last_query_index %}\n            {%- if loop.last or (not loop.last and reasoning_content) %}\n                {{- '<|im_start|>' + message.role + '\\n<think>\\n' + reasoning_content.strip('\\n') + '\\n</think>\\n\\n' + content.lstrip('\\n') }}\n            {%- else %}\n                {{- '<|im_start|>' + message.role + '\\n' + content }}\n            {%- endif %}\n        {%- else %}\n            {{- '<|im_start|>' + message.role + '\\n' + content }}\n        {%- endif %}\n        {%- if message.tool_calls %}\n            {%- for tool_call in message.tool_calls %}\n                {%- if (loop.first and content) or (not loop.first) %}\n                    {{- '\\n' }}\n                {%- endif %}\n                {%- if tool_call.function %}\n                    {%- set tool_call = tool_call.function %}\n                {%- endif %}\n                {{- '<tool_call>\\n{\"name\": \"' }}\n                {{- tool_call.name }}\n                {{- '\", \"arguments\": ' }}\n                {%- if tool_call.arguments is string %}\n                    {{- tool_call.arguments }}\n                {%- else %}\n                    {{- tool_call.arguments | tojson }}\n                {%- endif %}\n                {{- '}\\n</tool_call>' }}\n            {%- endfor %}\n        {%- endif %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if loop.first or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n    {%- if enable_thinking is defined and enable_thinking is false %}\n        {{- '<think>\\n\\n</think>\\n\\n' }}\n    {%- endif %}\n{%- endif %}",
+        "1024",
+        "16",
+        "3072",
+        "1000000.000000",
+        "qwen3",
+        "8",
+        "model",
+        "151643",
+        "Qwen3",
+        "28",
+        "0.6B"
+      ],
+      "token_bos": 151643,
+      "token_eos": 151645,
+      "token_eot": 151645,
+      "list_tokens_eog": [
+        128247,
+        151643,
+        151645,
+        151662,
+        151663,
+        151664
+      ],
+      "add_bos_token": false,
+      "add_eos_token": false,
+      "has_encoder": false,
+      "token_decoder_start": -1,
+      "media_marker": "<__media_zASUDAafsP8MrLYKKDrHjAO1yQ5drcSn__>",
+      "has_image_input": false,
+      "has_audio_input": false,
+      "metadata": {
+        "quantize.imatrix.entries_count": "196",
+        "quantize.imatrix.file": "/models_out/Qwen3-0.6B-GGUF/Qwen_Qwen3-0.6B.imatrix",
+        "general.file_type": "15",
+        "general.quantization_version": "2",
+        "tokenizer.ggml.padding_token_id": "151643",
+        "qwen3.context_length": "32768",
+        "tokenizer.ggml.eos_token_id": "151645",
+        "tokenizer.ggml.pre": "qwen2",
+        "tokenizer.ggml.model": "gpt2",
+        "tokenizer.ggml.add_bos_token": "false",
+        "quantize.imatrix.dataset": "/training_dir/calibration_datav3.txt",
+        "general.name": "Qwen3 0.6B",
+        "qwen3.attention.value_length": "128",
+        "qwen3.attention.key_length": "128",
+        "qwen3.attention.layer_norm_rms_epsilon": "0.000001",
+        "quantize.imatrix.chunks_count": "137",
+        "tokenizer.chat_template": "{%- if tools %}\n    {{- '<|im_start|>system\\n' }}\n    {%- if messages[0].role == 'system' %}\n        {{- messages[0].content + '\\n\\n' }}\n    {%- endif %}\n    {{- \"# Tools\\n\\nYou may call one or more functions to assist with the user query.\\n\\nYou are provided with function signatures within <tools></tools> XML tags:\\n<tools>\" }}\n    {%- for tool in tools %}\n        {{- \"\\n\" }}\n        {{- tool | tojson }}\n    {%- endfor %}\n    {{- \"\\n</tools>\\n\\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\\n<tool_call>\\n{\\\"name\\\": <function-name>, \\\"arguments\\\": <args-json-object>}\\n</tool_call><|im_end|>\\n\" }}\n{%- else %}\n    {%- if messages[0].role == 'system' %}\n        {{- '<|im_start|>system\\n' + messages[0].content + '<|im_end|>\\n' }}\n    {%- endif %}\n{%- endif %}\n{%- set ns = namespace(multi_step_tool=true, last_query_index=messages|length - 1) %}\n{%- for message in messages[::-1] %}\n    {%- set index = (messages|length - 1) - loop.index0 %}\n    {%- set tool_start = \"<tool_response>\" %}\n    {%- set tool_start_length = tool_start|length %}\n    {%- set start_of_message = message.content[:tool_start_length] %}\n    {%- set tool_end = \"</tool_response>\" %}\n    {%- set tool_end_length = tool_end|length %}\n    {%- set start_pos = (message.content|length) - tool_end_length %}\n    {%- if start_pos < 0 %}\n        {%- set start_pos = 0 %}\n    {%- endif %}\n    {%- set end_of_message = message.content[start_pos:] %}\n    {%- if ns.multi_step_tool and message.role == \"user\" and not(start_of_message == tool_start and end_of_message == tool_end) %}\n        {%- set ns.multi_step_tool = false %}\n        {%- set ns.last_query_index = index %}\n    {%- endif %}\n{%- endfor %}\n{%- for message in messages %}\n    {%- if (message.role == \"user\") or (message.role == \"system\" and not loop.first) %}\n        {{- '<|im_start|>' + message.role + '\\n' + message.content + '<|im_end|>' + '\\n' }}\n    {%- elif message.role == \"assistant\" %}\n        {%- set content = message.content %}\n        {%- set reasoning_content = '' %}\n        {%- if message.reasoning_content is defined and message.reasoning_content is not none %}\n            {%- set reasoning_content = message.reasoning_content %}\n        {%- else %}\n            {%- if '</think>' in message.content %}\n                {%- set content = (message.content.split('</think>')|last).lstrip('\\n') %}\n        {%- set reasoning_content = (message.content.split('</think>')|first).rstrip('\\n') %}\n        {%- set reasoning_content = (reasoning_content.split('<think>')|last).lstrip('\\n') %}\n            {%- endif %}\n        {%- endif %}\n        {%- if loop.index0 > ns.last_query_index %}\n            {%- if loop.last or (not loop.last and reasoning_content) %}\n                {{- '<|im_start|>' + message.role + '\\n<think>\\n' + reasoning_content.strip('\\n') + '\\n</think>\\n\\n' + content.lstrip('\\n') }}\n            {%- else %}\n                {{- '<|im_start|>' + message.role + '\\n' + content }}\n            {%- endif %}\n        {%- else %}\n            {{- '<|im_start|>' + message.role + '\\n' + content }}\n        {%- endif %}\n        {%- if message.tool_calls %}\n            {%- for tool_call in message.tool_calls %}\n                {%- if (loop.first and content) or (not loop.first) %}\n                    {{- '\\n' }}\n                {%- endif %}\n                {%- if tool_call.function %}\n                    {%- set tool_call = tool_call.function %}\n                {%- endif %}\n                {{- '<tool_call>\\n{\"name\": \"' }}\n                {{- tool_call.name }}\n                {{- '\", \"arguments\": ' }}\n                {%- if tool_call.arguments is string %}\n                    {{- tool_call.arguments }}\n                {%- else %}\n                    {{- tool_call.arguments | tojson }}\n                {%- endif %}\n                {{- '}\\n</tool_call>' }}\n            {%- endfor %}\n        {%- endif %}\n        {{- '<|im_end|>\\n' }}\n    {%- elif message.role == \"tool\" %}\n        {%- if loop.first or (messages[loop.index0 - 1].role != \"tool\") %}\n            {{- '<|im_start|>user' }}\n        {%- endif %}\n        {{- '\\n<tool_response>\\n' }}\n        {{- message.content }}\n        {{- '\\n</tool_response>' }}\n        {%- if loop.last or (messages[loop.index0 + 1].role != \"tool\") %}\n            {{- '<|im_end|>\\n' }}\n        {%- endif %}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|im_start|>assistant\\n' }}\n    {%- if enable_thinking is defined and enable_thinking is false %}\n        {{- '<think>\\n\\n</think>\\n\\n' }}\n    {%- endif %}\n{%- endif %}",
+        "qwen3.embedding_length": "1024",
+        "qwen3.attention.head_count": "16",
+        "qwen3.feed_forward_length": "3072",
+        "qwen3.rope.freq_base": "1000000.000000",
+        "general.architecture": "qwen3",
+        "qwen3.attention.head_count_kv": "8",
+        "general.type": "model",
+        "tokenizer.ggml.bos_token_id": "151643",
+        "general.basename": "Qwen3",
+        "qwen3.block_count": "28",
+        "general.size_label": "0.6B"
+      }
+    },
+    "results": [
+      {
+        "id": "ascii",
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 16,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 16,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Hello! How can I assist you today?"
+              }
+            }
+          ],
+          "created": 1791094253,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 10,
+            "prompt_tokens": 16,
+            "total_tokens": 26,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 16,
+            "prompt_ms": 952.055,
+            "prompt_per_token_ms": 59.5034375,
+            "prompt_per_second": 16.805751768542784,
+            "predicted_n": 10,
+            "predicted_ms": 757.324,
+            "predicted_per_token_ms": 84.1471111111111,
+            "predicted_per_second": 11.883949274022743
+          }
+        }
+      },
+      {
+        "id": "chinese",
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "简短回答。"
+            },
+            {
+              "role": "user",
+              "content": "你好，请回答。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 25,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 25,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "你好！有什么可以帮助你的吗？"
+              }
+            }
+          ],
+          "created": 1791094255,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 8,
+            "prompt_tokens": 25,
+            "total_tokens": 33,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 25,
+            "prompt_ms": 1488.276,
+            "prompt_per_token_ms": 59.531040000000004,
+            "prompt_per_second": 16.797959518261397,
+            "predicted_n": 8,
+            "predicted_ms": 597.699,
+            "predicted_per_token_ms": 85.38557142857142,
+            "predicted_per_second": 11.711580578184003
+          }
+        }
+      },
+      {
+        "id": "mixed",
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Preserve dates and names."
+            },
+            {
+              "role": "user",
+              "content": "Mira 2047-06-12 支付 640 EUR。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 45,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 45,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Mira 2047-06-12 64"
+              }
+            }
+          ],
+          "created": 1791094259,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 16,
+            "prompt_tokens": 45,
+            "total_tokens": 61,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 45,
+            "prompt_ms": 2741.746,
+            "prompt_per_token_ms": 60.92768888888889,
+            "prompt_per_second": 16.41289893374514,
+            "predicted_n": 16,
+            "predicted_ms": 1355.05,
+            "predicted_per_token_ms": 90.33666666666666,
+            "predicted_per_second": 11.069702225010147
+          }
+        }
+      },
+      {
+        "id": "multi-turn",
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Hello."
+            },
+            {
+              "role": "assistant",
+              "content": "Hello."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 30,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 30,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Hello! 😊"
+              }
+            }
+          ],
+          "created": 1791094261,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 5,
+            "prompt_tokens": 30,
+            "total_tokens": 35,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 30,
+            "prompt_ms": 1794.114,
+            "prompt_per_token_ms": 59.8038,
+            "prompt_per_second": 16.721345466341603,
+            "predicted_n": 5,
+            "predicted_ms": 342.471,
+            "predicted_per_token_ms": 85.61775,
+            "predicted_per_second": 11.679821065141281
+          }
+        }
+      }
+    ],
+    "oversized": {
+      "success": true,
+      "error": "",
+      "prompt_tokens": 3821,
+      "context_tokens": 2048
+    },
+    "unsupportedError": "Error: count_chat does not support content parts or media",
+    "recovery": {
+      "success": true,
+      "error": "",
+      "prompt_tokens": 16,
+      "context_tokens": 2048
+    },
+    "reply": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "Hello! How can I assist you today?"
+          }
+        }
+      ],
+      "created": 1791094262,
+      "model": "",
+      "system_fingerprint": "wllama",
+      "object": "chat.completion",
+      "usage": {
+        "completion_tokens": 10,
+        "prompt_tokens": 16,
+        "total_tokens": 26,
+        "prompt_tokens_details": {
+          "cached_tokens": 15
+        }
+      },
+      "id": "",
+      "timings": {
+        "cache_n": 15,
+        "prompt_n": 1,
+        "prompt_ms": 83.38,
+        "prompt_per_token_ms": 83.38,
+        "prompt_per_second": 11.993283761093789,
+        "predicted_n": 10,
+        "predicted_ms": 754.155,
+        "predicted_per_token_ms": 83.795,
+        "predicted_per_second": 11.933886270063846
+      }
+    },
+    "actions": [
+      "count_chat",
+      "count_chat",
+      "completion",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "count_chat",
+      "count_chat",
+      "completion",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "count_chat",
+      "count_chat",
+      "completion",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "count_chat",
+      "count_chat",
+      "completion",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "count_chat",
+      "count_chat",
+      "count_chat",
+      "completion",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result",
+      "get_result"
+    ],
+    "capabilities": {
+      "crossOriginIsolated": true,
+      "hasJSPI": true,
+      "memory64Module": true
+    }
+  },
+  "phase": "verified",
+  "partial": {
+    "results": [
+      {
+        "id": "ascii",
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 16,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 16,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Hello! How can I assist you today?"
+              }
+            }
+          ],
+          "created": 1791094253,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 10,
+            "prompt_tokens": 16,
+            "total_tokens": 26,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 16,
+            "prompt_ms": 952.055,
+            "prompt_per_token_ms": 59.5034375,
+            "prompt_per_second": 16.805751768542784,
+            "predicted_n": 10,
+            "predicted_ms": 757.324,
+            "predicted_per_token_ms": 84.1471111111111,
+            "predicted_per_second": 11.883949274022743
+          }
+        }
+      },
+      {
+        "id": "chinese",
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "简短回答。"
+            },
+            {
+              "role": "user",
+              "content": "你好，请回答。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 25,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 25,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "你好！有什么可以帮助你的吗？"
+              }
+            }
+          ],
+          "created": 1791094255,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 8,
+            "prompt_tokens": 25,
+            "total_tokens": 33,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 25,
+            "prompt_ms": 1488.276,
+            "prompt_per_token_ms": 59.531040000000004,
+            "prompt_per_second": 16.797959518261397,
+            "predicted_n": 8,
+            "predicted_ms": 597.699,
+            "predicted_per_token_ms": 85.38557142857142,
+            "predicted_per_second": 11.711580578184003
+          }
+        }
+      },
+      {
+        "id": "mixed",
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Preserve dates and names."
+            },
+            {
+              "role": "user",
+              "content": "Mira 2047-06-12 支付 640 EUR。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 45,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 45,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "length",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Mira 2047-06-12 64"
+              }
+            }
+          ],
+          "created": 1791094259,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 16,
+            "prompt_tokens": 45,
+            "total_tokens": 61,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 45,
+            "prompt_ms": 2741.746,
+            "prompt_per_token_ms": 60.92768888888889,
+            "prompt_per_second": 16.41289893374514,
+            "predicted_n": 16,
+            "predicted_ms": 1355.05,
+            "predicted_per_token_ms": 90.33666666666666,
+            "predicted_per_second": 11.069702225010147
+          }
+        }
+      },
+      {
+        "id": "multi-turn",
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Hello."
+            },
+            {
+              "role": "assistant",
+              "content": "Hello."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "first": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 30,
+          "context_tokens": 2048
+        },
+        "second": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 30,
+          "context_tokens": 2048
+        },
+        "countActions": [
+          "count_chat",
+          "count_chat"
+        ],
+        "reply": {
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Hello! 😊"
+              }
+            }
+          ],
+          "created": 1791094261,
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion",
+          "usage": {
+            "completion_tokens": 5,
+            "prompt_tokens": 30,
+            "total_tokens": 35,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "id": "",
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 30,
+            "prompt_ms": 1794.114,
+            "prompt_per_token_ms": 59.8038,
+            "prompt_per_second": 16.721345466341603,
+            "predicted_n": 5,
+            "predicted_ms": 342.471,
+            "predicted_per_token_ms": 85.61775,
+            "predicted_per_second": 11.679821065141281
+          }
+        }
+      }
+    ],
+    "counts": [
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 16,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 16,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "简短回答。"
+            },
+            {
+              "role": "user",
+              "content": "你好，请回答。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 25,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "简短回答。"
+            },
+            {
+              "role": "user",
+              "content": "你好，请回答。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 25,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Preserve dates and names."
+            },
+            {
+              "role": "user",
+              "content": "Mira 2047-06-12 支付 640 EUR。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 45,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Preserve dates and names."
+            },
+            {
+              "role": "user",
+              "content": "Mira 2047-06-12 支付 640 EUR。"
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 45,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Hello."
+            },
+            {
+              "role": "assistant",
+              "content": "Hello."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 30,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Hello."
+            },
+            {
+              "role": "assistant",
+              "content": "Hello."
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ],
+          "temperature": 0,
+          "max_tokens": 16,
+          "stream": false
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 30,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘龘"
+            },
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ]
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 3821,
+          "context_tokens": 2048
+        }
+      },
+      {
+        "options": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "Reply with hello."
+            }
+          ]
+        },
+        "response": {
+          "success": true,
+          "error": "",
+          "prompt_tokens": 16,
+          "context_tokens": 2048
+        }
+      }
+    ]
+  }
+}

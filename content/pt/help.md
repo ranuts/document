@@ -1,10 +1,10 @@
 ---
-title: Ajuda — usando o editor de documentos online
-description: Como abrir, editar e salvar arquivos do Word, Excel, PowerPoint, CSV e PDF no navegador sem enviá-los; somente leitura e incorporação, uso offline, limites de privacidade, códigos de erro e auto-hospedagem.
+title: 'Ajuda — usando o editor de documentos online'
+description: 'Como abrir, editar, salvar e recuperar documentos; privacidade e requisitos offline. Edição local sem envio obrigatório.'
 eyebrow: Ajuda
 breadcrumb: Ajuda
 h1: Ajuda
-lead: Respostas práticas para usar o editor. Tudo roda dentro da aba do seu navegador; seus arquivos nunca são enviados.
+lead: 'Abra, veja e edite DOCX, XLSX, PPTX e CSV no navegador sem Office ou conta. A edição básica não exige enviar documentos; o uso offline depende dos recursos em cache.'
 ---
 
 ## Abrir e criar documentos
@@ -15,7 +15,7 @@ Word (`.docx`, o antigo `.doc`), Excel (`.xlsx`, o antigo `.xls`), PowerPoint (`
 
 ### Como crio um documento novo?
 
-Use **Novo Word / Novo Excel / Novo PowerPoint** na página inicial, ou abra direto `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx`. Nada é criado em servidor nenhum: o documento em branco existe só na sua aba até você baixá-lo.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
 
 ### Existe limite de tamanho?
 
@@ -25,7 +25,7 @@ Não há limite fixo. O teto prático é a memória do seu dispositivo, porque o
 
 ### Como salvo minhas alterações?
 
-Pressione **Ctrl+S / ⌘S** ou use **Arquivo → Baixar como**. Como não há servidor, «salvar» significa que o navegador entrega o arquivo para você: ele cai na sua pasta de downloads com o nome original. Escolha outro formato em **Baixar como** para converter (por exemplo DOCX → PDF, XLSX → CSV).
+No Chrome, Edge e outros navegadores com File System Access API, o primeiro salvamento pede um arquivo e os seguintes gravam nele. Outros navegadores baixam uma cópia. Exporte outros formatos em Arquivo → Baixar como. As cópias de recuperação no navegador são independentes do arquivo salvo.
 
 ### Por que o botão Salvar às vezes fica cinza?
 
@@ -33,7 +33,7 @@ Ele acende quando o editor carregou o documento por completo e você fez alguma 
 
 ### Dá para converter entre formatos?
 
-Sim, no seu dispositivo: abra um documento e escolha o formato de destino em **Baixar como**. Documentos do Word exportam para DOCX / PDF / TXT, planilhas para XLSX / CSV / PDF e apresentações para PPTX / PDF. Arquivos CSV são abertos como planilha e podem ser salvos de volta como CSV.
+Na edição básica local: Sim, no seu dispositivo: abra um documento e escolha o formato de destino em **Baixar como**. Documentos do Word exportam para DOCX / PDF / TXT, planilhas para XLSX / CSV / PDF e apresentações para PPTX / PDF. Arquivos CSV são abertos como planilha e podem ser salvos de volta como CSV.
 
 ### Meu CSV com acentos ou caracteres chineses aparece quebrado em outras ferramentas. E aqui?
 
@@ -47,7 +47,7 @@ Abrir e ler (rolar, ampliar, pesquisar), adicionar comentários e anotações de
 
 ### Dá para reescrever o texto de um PDF existente como num documento do Word?
 
-Não como texto que flui livremente — o PDF é um formato de layout fixo. Para mudar a redação, abra o DOCX / XLSX / PPTX original e exporte um novo PDF. As duas etapas acontecem no seu dispositivo.
+Na edição básica local: Não como texto que flui livremente — o PDF é um formato de layout fixo. Para mudar a redação, abra o DOCX / XLSX / PPTX original e exporte um novo PDF. As duas etapas acontecem no seu dispositivo.
 
 ## Somente leitura e incorporação
 
@@ -63,9 +63,7 @@ Sim — o editor foi feito para ser incorporado num iframe e controlado por `pos
 
 ### Um assistente de IA do meu navegador pode operar o editor?
 
-Sim, onde o navegador der suporte. O editor registra um conjunto de ferramentas WebMCP, então um agente de IA do navegador pode abrir, converter, ler e exportar documentos chamando-as diretamente, em vez de clicar pela interface. Tudo continua rodando no seu dispositivo — o agente aciona o mesmo código local que os botões, e nada é enviado.
-
-As ferramentas são `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` e `get_document_state`.
+As ferramentas WebMCP editam e convertem localmente, mas um agente do navegador pode receber texto ou arquivos exportados e enviá-los ao seu próprio serviço de IA. Confira a política de dados do agente antes de compartilhar conteúdo confidencial.
 
 ### Quais navegadores dão suporte?
 
@@ -83,7 +81,7 @@ Em documentos de texto, sim: `get_document_text` devolve o texto para o agente r
 
 ### Funciona offline?
 
-Sim. Depois da primeira visita, o editor fica em cache por um service worker; você pode instalá-lo como aplicativo pela barra de endereços do navegador (PWA) e abrir documentos sem conexão. A primeira abertura de um documento com muitas fontes ainda precisa da rede uma vez para buscá-las; depois elas também ficam em cache.
+A edição offline depende de o navegador manter em cache o app, o motor, o conversor e as fontes e recursos de formato necessários. Uma visita ou a instalação da PWA não garante isso. URLs de arquivos remotos precisam de conexão.
 
 ### Como recebo a versão mais nova?
 
@@ -93,11 +91,11 @@ O site se atualiza sozinho na próxima visita. Se uma página parecer presa numa
 
 ### Meus documentos são enviados para algum lugar?
 
-Não. O documento é lido do seu disco para a aba do navegador e processado ali com WebAssembly. Não existe endpoint de upload neste site. Você pode conferir no painel de rede do navegador enquanto abre e salva um documento — e o código é aberto sob a AGPL-3.0.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de escrita só envia texto para o destino que escolher: um serviço no seu próprio computador mantém-no no dispositivo, enquanto um endpoint na nuvem configurado com a sua própria chave de API recebe o texto selecionado e a sua instrução. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### O que a página carrega da rede?
 
-Só a própria aplicação: o JavaScript do editor, o conversor WebAssembly, as fontes e os recursos da página — tudo da origem deste site — além de um beacon do Cloudflare Web Analytics respeitoso com a privacidade (sem cookies, sem rastreamento entre sites). Se você ativar o assistente de IA opcional com a sua própria chave de API, as requisições dele vão direto do seu navegador para o provedor escolhido; nada passa por este site.
+A página carrega código, recursos do editor, fontes e uma requisição do Cloudflare Web Analytics. URLs remotas podem gerar requisições adicionais. Se configurar um destino de escrita, o pedido de escrita vai também para o endereço mostrado nas configurações do assistente. Apps anfitriões e agentes externos do navegador definem suas próprias políticas de dados. Sem ligação não é possível alcançar um destino de escrita na nuvem; nesse caso a escrita precisa de um destino neste dispositivo.
 
 ## Erros
 
@@ -117,3 +115,11 @@ Abra uma issue no [GitHub](https://github.com/ranuts/document/issues) com o nave
 ### Posso rodar a minha própria cópia?
 
 Sim. É um site estático, então qualquer servidor web serve: `docker run -d -p 8080:80 ghcr.io/ranuts/document:latest`, ou compile com `pnpm run build` e sirva a pasta `dist/`. Veja o [README](https://github.com/ranuts/document#readme) para opções de HTTPS e autenticação básica, e as [novidades](/pt/changelog) para o que mudou em cada versão.
+
+### O que fica depois de fechar a aba?
+
+Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
+
+### O assistente de IA integrado está disponível?
+
+O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.

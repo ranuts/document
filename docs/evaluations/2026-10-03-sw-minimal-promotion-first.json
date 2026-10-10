@@ -1,0 +1,19 @@
+{
+  "scope": "Isolated bare SW positive control, no product/cache/editor workflow",
+  "browserVersion": "151.0.7922.34",
+  "probeSha256": "0c5e1b8d4bc37cd51f51bcd8f4c90a62ba1251ef2b458febcb950734147b2c42",
+  "initial": {
+    "version": "old"
+  },
+  "waiting": {
+    "version": "new"
+  },
+  "delivery": {
+    "received": true,
+    "version": "new"
+  },
+  "final": {
+    "version": "new"
+  },
+  "passed": true
+}

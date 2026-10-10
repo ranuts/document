@@ -1,0 +1,42 @@
+{
+  "probeSHA256": "cc51c01ae3ba5240a43ecf368eb60a06860f8e187754532a554a8fd97aee1245",
+  "sourceSHA256": "5f194e59adfdf4ee91d94201a47afeb98d0107d664a85f858e5b3023ca7ab038",
+  "results": [
+    {
+      "preference": "reduce",
+      "matches": true,
+      "calls": [
+        {
+          "top": 3020,
+          "behavior": "auto"
+        }
+      ],
+      "gap": 0
+    },
+    {
+      "preference": "no-preference",
+      "matches": false,
+      "calls": [
+        {
+          "top": 3020,
+          "behavior": "smooth"
+        }
+      ],
+      "gap": 2
+    },
+    {
+      "preference": "reduce",
+      "matches": true,
+      "calls": [
+        {
+          "top": 3020,
+          "behavior": "auto"
+        }
+      ],
+      "gap": 0
+    }
+  ],
+  "errors": [],
+  "scope": "Chromium media emulation and real jump button, scrollTo observation plus actual endpoint; isolated source harness, not physical OS settings.",
+  "status": "completed"
+}

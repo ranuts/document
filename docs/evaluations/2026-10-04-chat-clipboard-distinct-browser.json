@@ -1,0 +1,24 @@
+{
+  "probeSHA256": "852d4666a5c48bae17800523a1cfe1728fa7079f7f42c33e946f0bd06aae0a06",
+  "sourceSHA256": "5f194e59adfdf4ee91d94201a47afeb98d0107d664a85f858e5b3023ca7ab038",
+  "results": [
+    {
+      "blocked": false,
+      "attempted": "**中文🧾**\nSecond line: 640 EUR\nLiteral \\n",
+      "label": "Copied",
+      "disabled": false,
+      "clipboard": "**中文🧾**\nSecond line: 640 EUR\nLiteral \\n"
+    },
+    {
+      "blocked": true,
+      "attempted": "Blocked candidate\n**中文🧾**\nSecond line: 640 EUR\nLiteral \\n",
+      "label": "Could not copy",
+      "disabled": false,
+      "clipboard": "**中文🧾**\nSecond line: 640 EUR\nLiteral \\n"
+    }
+  ],
+  "errors": [],
+  "scope": "Real Chromium Clipboard API under allowed/Permissions-Policy blocked writes, isolated source harness, not OS clipboard universal compatibility.",
+  "status": "completed",
+  "text": "**中文🧾**\nSecond line: 640 EUR\nLiteral \\n"
+}

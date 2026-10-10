@@ -1,0 +1,28 @@
+{
+  "scope": "Controlled WebLLM worker construction failure; actual cached CPU runtime inference, plus controlled CPU WASM fetch failure then visible Load retry. No physical OOM or device loss claim.",
+  "results": [
+    {
+      "failCPU": false,
+      "errors": [],
+      "wasmFailures": 0,
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "gpuInitFailures": 1,
+      "reply": "Hello.",
+      "newErrorCount": 0,
+      "previewCount": 0,
+      "bundles": [
+        "http://127.0.0.1:5193/assets/editor-CFQ18jr4.js",
+        "http://127.0.0.1:5193/assets/editor-vjxcAuHY.css"
+      ],
+      "passed": true
+    },
+    {
+      "failCPU": true,
+      "errors": [],
+      "wasmFailures": 0,
+      "passed": false,
+      "error": "TimeoutError: locator.waitFor: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cui-msg-error').filter({ hasText: 'Model loading failed.' }).first() to be visible\u001b[22m\n"
+    }
+  ],
+  "allPassed": false
+}

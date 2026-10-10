@@ -1,0 +1,31 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-gemma4-sampling-korean-corrected-native.json": "7fb2c9414fe459f81ab68dda128dfc697f0baa99eb8cf39095f8779d8e720ac7",
+    "2026-10-07-gemma4-sampling-korean-corrected-review.json": "cfa5fc26496a113180eef443578fe0ffd2417afb01ddedb6d5650cd036546736",
+    "2026-10-07-gemma4-sampling-korean-corrected-native.mjs": "b033c2cb8aec343d67e1477941bdaf39fdf942c4c39b47af95026c2f62439e0e",
+    "2026-10-07-gemma4-sampling-korean-corrected-protocol.md": "f849d7304d37cf995b24aa6e5f2584ec3e3e642ab69820b77f3bc2e574e6c770",
+    "2026-10-07-gemma4-sampling-seven-language-cases.json": "65e4ffe4ea447ad0c83f24f11bcb49513301aac8eed35d4098a99527df488095"
+  },
+  "initialSnapshot": {
+    "scope": "before corrected process launch; original process terminal exit1",
+    "sha256": {
+      "docs/evaluations/2026-10-07-gemma4-sampling-korean-corrected-native.mjs": "b033c2cb8aec343d67e1477941bdaf39fdf942c4c39b47af95026c2f62439e0e",
+      "docs/evaluations/2026-10-07-gemma4-sampling-korean-corrected-protocol.md": "f849d7304d37cf995b24aa6e5f2584ec3e3e642ab69820b77f3bc2e574e6c770",
+      "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-cases.json": "65e4ffe4ea447ad0c83f24f11bcb49513301aac8eed35d4098a99527df488095",
+      "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+      "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    }
+  },
+  "unchangedAfterRun": {
+    "docs/evaluations/2026-10-07-gemma4-sampling-korean-corrected-native.mjs": true,
+    "docs/evaluations/2026-10-07-gemma4-sampling-korean-corrected-protocol.md": true,
+    "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-cases.json": true,
+    "dist/sw.js": true,
+    "dist/assets/editor-C3APg_Fa.js": true,
+    "dist/assets/client-D5_UYdz1.js": true
+  },
+  "processExitCode": 0,
+  "validInferenceRows": 3,
+  "adopted": false
+}

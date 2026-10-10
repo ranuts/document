@@ -1,0 +1,10 @@
+{
+  "scope": "One known structured request on this actual Apple GPU; context default versus explicit 2048; not all-device reliability",
+  "request_equal": true,
+  "library_equal": true,
+  "default_result": "TimeoutError: page.waitForFunction: Timeout 300000ms exceeded.",
+  "explicit_2048_completed": true,
+  "explicit_2048_output": "{\"text\":\"发货记录：2049年3月12日，Zoe Ishikawa 提议发出18台传感器，但该提议尚未获得批准。配送团队只能在 Pavel Novak 签署检验报告后才能进行发货。目前，检验报告尚未签署。包装标签已打印完毕。\\n\"}",
+  "quality": "fails exact ISO date preservation",
+  "unproven": "Exact allocation or kernel cause of stall not measured"
+}

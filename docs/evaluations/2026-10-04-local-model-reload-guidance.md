@@ -1,0 +1,11 @@
+# Local model reload guidance — 2026-10-04
+
+Actual streaming Worker failure previously produced generic request-failed guidance despite requiring model reload. The presentation layer now recognizes exactly three production lifecycle errors: Worker failure, communication failure and model unloading. Seven shell locales direct the user to reload the model in existing settings and retry the request. No new controls, confirmation, automatic replay or model changes.
+
+Known errors are matched as complete strings. Additional private details still fall back to generic guidance; localized guidance survives repeated formatting and restored tool-result errors. Persisted host-guidance prose remains in its original language after a shell-language switch, consistent with current history behavior.
+
+The regression failed before implementation with generic guidance. Production build succeeded, full Vitest 116 files / 4192 tests passed, lint (oxlint, TypeScript and Docker configuration) passed. Existing PromiseRejectionHandledWarning messages appeared. Tests cover three known reasons, seven locales, restoration and unknown-error privacy. Independent read-only review found no Critical/Important issue.
+
+Actual Chromium/Qwen3 1.7B stream failure was rerun using a hash-bound diagnostic driver: after more than 80 visible streamed characters, an uncaught exception is triggered inside the real Worker. The visible error now contains the exact reload guidance. Word text is unchanged, no automatic CPU replay occurs in the observed one-second interval, and explicit Load plus a separately submitted fresh Hello succeeds. Driver syntax/scoped verifier/whitespace checks pass. No injected internal details appear in the visible error. The only real-browser locale tested is English; other locales are unit-verified.
+
+The experiment uses a warm profile with network available and service workers blocked. It does not establish physical device-loss/OOM, VRAM reclamation, cold offline, Save/reopen or writing-quality acceptance. Worker response hashes bind the controlled body, not complete app provenance. Owned browser process exited 0 and context closed. Broader local model reliability work remains active.

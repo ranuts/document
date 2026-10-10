@@ -1,0 +1,54 @@
+{
+  "scope": "Completed isolated Emscripten 6.0.10 builds; no product activation or browser inference claim. Both use identical pinned sources and native-count patch. Compiler differs from existing product pair.",
+  "artifacts": {
+    "control": {
+      "expectedMaximumPages": 65536,
+      "expectedMaximumBytes": 4294967296,
+      "files": {
+        ".scratch/wllama-memory-capacity-artifacts/control.js": {
+          "bytes": 93524,
+          "sha256": "a42a5416b7921443a8dfa94dd365e6910ad47835215f0dc36e11b3bf34941509"
+        },
+        ".scratch/wllama-memory-capacity-artifacts/control.wasm": {
+          "bytes": 6522142,
+          "sha256": "bd55b44ff0df5067e9f335251b48d064a6259d10b1b51d31a5a48422f263621f"
+        },
+        ".scratch/wllama-memory-capacity-artifacts/control-client.js": {
+          "bytes": 220313,
+          "sha256": "be149a23a37b25c147dcf28838545403f35da99f62d1d3bf6476323d77a6e37b"
+        }
+      }
+    },
+    "candidate": {
+      "expectedMaximumPages": 131072,
+      "expectedMaximumBytes": 8589934592,
+      "files": {
+        ".scratch/wllama-memory-capacity-artifacts/candidate.js": {
+          "bytes": 93525,
+          "sha256": "ad97935599d02098f61eb73f64c9888a120bd9b415cc06e9a8d54d56d31014c4"
+        },
+        ".scratch/wllama-memory-capacity-artifacts/candidate.wasm": {
+          "bytes": 6522142,
+          "sha256": "bf77ec9011cd7cbddc5d324e15e317d6d9d7f6c7af9804f678a9b730d8ed50a2"
+        },
+        ".scratch/wllama-memory-capacity-artifacts/candidate-client.js": {
+          "bytes": 220314,
+          "sha256": "19044902854dfd33df94546b4cb6f0973a16647d7a4c7154c53d9ae76c1c2f1e"
+        }
+      }
+    }
+  },
+  "warnings": [
+    "Unknown CPU architecture: generic CPU implementations",
+    "pthread with memory growth may slow non-WASM code",
+    "USE_PTHREADS and MEMORY64 options deprecated by this compiler"
+  ],
+  "productClientSha256": "d522958c39df2fcf77a05e9de526326b58c9a20e76f4517450732c4ae2eaaaf6",
+  "binaryByteDifferences": [
+    {
+      "offset": 2461,
+      "control": 4,
+      "candidate": 8
+    }
+  ]
+}

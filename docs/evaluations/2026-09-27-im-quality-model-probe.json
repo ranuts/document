@@ -1,0 +1,42 @@
+{
+  "phase": "schema-only-before-deterministic-command-guard",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "backend": "WebLLM",
+  "target": "C3",
+  "results": [
+    {
+      "instruction": "将所选单元格的值设为：Alex未批准第二阶段",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "C3",
+          "value": "将所选单元格的值设为：Alex未批准第二阶段"
+        }
+      },
+      "ms": 4241
+    },
+    {
+      "instruction": "Write the plain value 1250 to C3.",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "C3",
+          "value": "1250"
+        }
+      },
+      "ms": 824.2999997138977
+    },
+    {
+      "instruction": "Write 1250 to B2 and 2026-10-08 to C2.",
+      "plan": {
+        "tool": "set_cell",
+        "input": {
+          "cell": "C3",
+          "value": "Write 1250 to B2 and 2026-10-08 to C2."
+        }
+      },
+      "ms": 1173.4000000953674
+    }
+  ],
+  "conclusion": "Schema success does not imply semantic success: Chinese instruction copied verbatim; multi-target request not refused. These failures motivated literal assignment parsing and address guards."
+}

@@ -333,8 +333,8 @@ class I18n {
   /**
    * Get all messages
    */
-  getMessages(): I18nMessages {
-    return { ...completeMessages[LanguageCode.EN], ...messages[this.currentLanguage] };
+  getMessages(language: Language = this.currentLanguage): I18nMessages {
+    return { ...completeMessages[LanguageCode.EN], ...messages[language] };
   }
 
   /**

@@ -1,0 +1,195 @@
+{
+  "passed": true,
+  "scope": "Actual HEAD responses from Vite preview, mounted production static-web-server image, and local Wrangler Pages. No deployed-site claim.",
+  "results": [
+    {
+      "port": 5194,
+      "path": "/",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5194,
+      "path": "/editor",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5194,
+      "path": "/editor.html",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5194,
+      "path": "/sw.js",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5194,
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5194,
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5194,
+      "path": "/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": "br"
+    },
+    {
+      "port": 5195,
+      "path": "/",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5195,
+      "path": "/editor",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5195,
+      "path": "/editor.html",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5195,
+      "path": "/sw.js",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5195,
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5195,
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": null
+    },
+    {
+      "port": 5195,
+      "path": "/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "public, max-age=31536000, immutable",
+      "encoding": "br"
+    },
+    {
+      "port": 5196,
+      "path": "/",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "public, max-age=0, must-revalidate",
+      "encoding": "gzip"
+    },
+    {
+      "port": 5196,
+      "path": "/editor",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "public, max-age=0, must-revalidate",
+      "encoding": "gzip"
+    },
+    {
+      "port": 5196,
+      "path": "/editor.html",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "public, max-age=0, must-revalidate",
+      "encoding": "gzip"
+    },
+    {
+      "port": 5196,
+      "path": "/sw.js",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "no-cache",
+      "encoding": "gzip"
+    },
+    {
+      "port": 5196,
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "public, max-age=0, must-revalidate",
+      "encoding": "gzip"
+    },
+    {
+      "port": 5196,
+      "path": "/sdkjs/common/spell/spell/spell.js",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "public, max-age=0, must-revalidate",
+      "encoding": "gzip"
+    },
+    {
+      "port": 5196,
+      "path": "/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "status": 200,
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "cache": "public, max-age=31536000, immutable",
+      "encoding": "br"
+    }
+  ]
+}

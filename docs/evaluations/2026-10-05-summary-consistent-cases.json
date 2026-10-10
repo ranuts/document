@@ -1,0 +1,36 @@
+[
+  {
+    "id": "consistent-en-gallery",
+    "task": "summarize",
+    "language": "en",
+    "source": "Harriet proposed that the exhibition team hang the restored maps only after the conservation team signs the condition report. Conservation has not signed the report, and the exhibition team has not hung the maps. The reception team separately discussed visitor badges.",
+    "instruction": "Write one shorter English sentence preserving Harriet as proposer, the team responsible for hanging the maps, the signing prerequisite with its actor and object, and both current negative states. Omit visitor badges.",
+    "rubric": [
+      "Harriet proposed",
+      "exhibition team hangs restored maps",
+      "conservation signing condition report prerequisite",
+      "report not signed",
+      "maps not hung",
+      "one shorter English sentence",
+      "omit badges",
+      "no invented cause or outcome"
+    ]
+  },
+  {
+    "id": "consistent-zh-tunnel",
+    "task": "summarize",
+    "language": "zh",
+    "source": "许澄建议，只有质检组核验隧道照明系统的绝缘测试记录合格后，施工组才接通新铺设线路。质检组尚未核验记录合格，施工组也尚未接通线路。行政组另行讨论了会议室座椅的摆放。",
+    "instruction": "用更短的一句中文概括，保留建议者、接通线路的执行组、核验绝缘测试记录合格的前提及其主体，以及未核验合格和未接通的现状，省略座椅话题。",
+    "rubric": [
+      "许澄建议",
+      "施工组接通新铺设线路",
+      "质检组核验绝缘测试记录合格是前提",
+      "尚未核验合格",
+      "施工组尚未接通",
+      "更短的一句中文",
+      "省略座椅",
+      "不增加因果或结果"
+    ]
+  }
+]

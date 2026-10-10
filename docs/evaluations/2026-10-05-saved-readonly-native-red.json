@@ -1,0 +1,50 @@
+{
+  "runs": [
+    {
+      "name": "chromium",
+      "errors": [],
+      "native": {
+        "view": false,
+        "restrictions": 0,
+        "keys": [
+          "isViewMode",
+          "restrictions",
+          "IsActionRestrictionCurrent",
+          "IsActionRestrictionPrev",
+          "chartPreviewManager",
+          "textArtPreviewManager",
+          "isUseNativeViewer",
+          "tmpViewRulers",
+          "TableStylesPreviewGenerator",
+          "smartArtPreviewManager"
+        ],
+        "text": "WEBKIT_WORD_20261005\r\n"
+      },
+      "error": "Error: Saved-route readonly restriction absent",
+      "closed": true
+    },
+    {
+      "name": "webkit",
+      "errors": [],
+      "native": {
+        "view": false,
+        "restrictions": 0,
+        "keys": [
+          "isViewMode",
+          "restrictions",
+          "IsActionRestrictionCurrent",
+          "IsActionRestrictionPrev",
+          "chartPreviewManager",
+          "textArtPreviewManager",
+          "isUseNativeViewer",
+          "tmpViewRulers",
+          "TableStylesPreviewGenerator",
+          "smartArtPreviewManager"
+        ],
+        "text": "WEBKIT_WORD_20261005\r\n"
+      },
+      "error": "Error: Saved-route readonly restriction absent",
+      "closed": true
+    }
+  ]
+}

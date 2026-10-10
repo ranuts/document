@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-02T03:51:11.331Z",
+  "runtime": "isolated headless Chromium, CPU forced, no user documents",
+  "status": "completed",
+  "result": {
+    "backend": "wllama",
+    "ready": true,
+    "loadMs": 63801,
+    "firstDeltaMs": 22649.099999904633,
+    "totalMs": 22830.800000190735,
+    "chunks": 2,
+    "text": "你好！"
+  }
+}

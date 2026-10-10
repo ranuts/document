@@ -1,0 +1,14 @@
+{
+  "scope": "Post-terminal owned-profile Cache API library inspection; no model loading/inference or exact-use certificate",
+  "entries": [
+    {
+      "cache": "webllm/wasm",
+      "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/025bcaf3780fa8254f5e5efd3bfea0a5397248f4/web-llm-models/v0_2_84/base/Qwen2-7B-Instruct-q4f16_1_cs1k-webgpu.wasm",
+      "bytes": 5339669,
+      "sha256": "2aa567bea574b72ac250a25fa3524487fd28a218dad49eac8650eda2771396a3",
+      "status": 200
+    }
+  ],
+  "matchesPinnedBytes": true,
+  "closed": true
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "Driver/runtime identities recorded immediately after launch, not a prelaunch process-network snapshot",
+  "sha256": {
+    "docs/evaluations/2026-10-07-current-default-cpu-offline-restart.mjs": "f0da5389bde32d7943bc5d829b40835f9e63de048f42978c1b99eb70247f9250",
+    "dist/sw.js": "bb9f61986d4a24c11d0ebe04a765d7dcd1454ad0922742617ff81e8a478441d5",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745",
+    "dist/assets/editor-BRhW6Vt0.js": "8e8967aaef2f79ee1e74ea72980ca0abbbc269d7623f6c07707e6317a0bd7b9d"
+  },
+  "processExitCode": 0,
+  "evidenceSHA256": {
+    "2026-10-07-current-default-cpu-offline-restart.mjs": "f0da5389bde32d7943bc5d829b40835f9e63de048f42978c1b99eb70247f9250",
+    "2026-10-07-current-default-cpu-offline-restart.json": "8c2c6b76da88ee616fca2d6f1532ab6a8344327393ce0286014f273eca887ab0"
+  }
+}

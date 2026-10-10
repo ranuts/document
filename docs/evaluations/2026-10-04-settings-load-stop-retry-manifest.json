@@ -1,0 +1,12 @@
+{
+  "productCommit": "3579c4c90312644e151db6a0901e77501f477d63",
+  "probeSHA256": "e7a59d44bc23e7ee97367c81088fb06c24f1037dd5b246990318ebb1e5254eb9",
+  "builtPluginSHA256": {
+    "dist/assets/agent-plugin-DFiACKAA.js": "c1b852a73b320fc9f9fd0a18896f77973e9a531797db85ef892894328949a029"
+  },
+  "reports": {
+    "2026-10-04-settings-load-stop-retry-gpu.json": "b31720a7008962968e7619aeb0dae2933cf194a557a7f09b340217b934a0c58f",
+    "2026-10-04-settings-load-stop-retry-cpu.json": "f06ebffe8f9432f38210774b948982a3f46fbfe2c49c4c51e09fefa3b40a508f"
+  },
+  "limits": "Build hashes collected after terminal probe sessions; no response-byte capture by this driver. Existing warm model profiles, service workers blocked, no network privacy or cold-offline acceptance."
+}

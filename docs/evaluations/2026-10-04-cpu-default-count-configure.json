@@ -1,0 +1,25 @@
+{
+  "scope": "Configured CPU default memory64/JSPI native count extension build; configuration only, not runtime acceptance",
+  "sourceRevision": "e3972797f9d508887440e9d3fa87dc296f2dec44",
+  "llamaRevision": "83d855c5a6d70487121edbf4020b25c96b7a04e7",
+  "compiler": "isolated Emscripten 4.0.20",
+  "buildDirectory": "/private/tmp/document-wllama-count-default-4020",
+  "configureExitCode": 0,
+  "sourceHashes": {
+    "CMakeLists.txt": "e3469b9c125fd6f7d552291f24c6d07ec61ed8767c17e138b38388040647c5d3",
+    "cpp/wllama.cpp": "a9ed4309f1b87496f573d04ea2c58421b2a2e68e7cc4104bca36e7d8d1bf7a5d",
+    "cpp/glue.hpp": "53b79323e3c0d7ba83f4615dc0ecaba085ee6769bc7b89d4fda4074ecbf3996c",
+    "cpp/wllama-context.h": "4afdbe238620dffecef39d379d939fdfab6976aea0a6ae22537db5d4a7933a47"
+  },
+  "cacheSelections": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "CMAKE_TOOLCHAIN_FILE:FILEPATH=/private/tmp/document-emsdk-4020/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+    "GGML_WEBGPU:BOOL=OFF",
+    "LLAMA_WASM_MEM64:BOOL=ON",
+    "WLLAMA_COMPAT:UNINITIALIZED=OFF",
+    "WLLAMA_TEST_BACKEND:BOOL=OFF"
+  ],
+  "configureLog": "emcmake: cmake -S /private/tmp/document-wllama-count-361 -B /private/tmp/document-wllama-count-default-4020 -DCMAKE_BUILD_TYPE=Release -DGGML_WEBGPU=OFF -DWLLAMA_COMPAT=OFF -DLLAMA_WASM_MEM64=ON -DWLLAMA_TEST_BACKEND=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_SERVER=OFF -DCMAKE_TOOLCHAIN_FILE=/private/tmp/document-emsdk-4020/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/private/tmp/document-emsdk-4020/node/24.19.0_64bit/bin/node in directory /workspace/document\n-- llama.cpp version: 0.3.0-dev\nCMAKE_BUILD_TYPE=Release\n-- Found Git: /opt/homebrew/bin/git (found version \"2.56.0\")\n-- The ASM compiler identification is unknown\n-- Found assembler: /private/tmp/document-emsdk-4020/upstream/emscripten/emcc\n-- Setting GGML_NATIVE_DEFAULT to OFF\n-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n-- Found Threads: TRUE\n-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF\n-- CMAKE_SYSTEM_PROCESSOR: x86\n-- GGML_SYSTEM_ARCH: UNKNOWN\n-- Could NOT find OpenMP_C (missing: OpenMP_C_FLAGS OpenMP_C_LIB_NAMES) \n-- Could NOT find OpenMP_CXX (missing: OpenMP_CXX_FLAGS OpenMP_CXX_LIB_NAMES) \n-- Could NOT find OpenMP (missing: OpenMP_C_FOUND OpenMP_CXX_FOUND) \nCMake Warning at llama.cpp/ggml/src/CMakeLists.txt:345 (message):\n  OpenMP not found\n\n\n-- Including CPU backend\nCMake Warning at llama.cpp/ggml/src/ggml-cpu/CMakeLists.txt:570 (message):\n  Unknown CPU architecture.  Falling back to generic implementations.\nCall Stack (most recent call first):\n  llama.cpp/ggml/src/CMakeLists.txt:584 (ggml_add_cpu_backend_variant_impl)\n\n\n-- Adding CPU backend variant ggml-cpu: -DGGML_CPU_GENERIC \n-- ggml version: 0.22.0\n-- ggml commit:  83d855c\n-- Configuring done (10.5s)\n-- Generating done (0.1s)\n-- Build files have been written to: /private/tmp/document-wllama-count-default-4020\n",
+  "buildStarted": true,
+  "buildTerminalStatusAtRecording": null
+}

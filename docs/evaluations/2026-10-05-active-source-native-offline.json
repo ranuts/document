@@ -1,0 +1,54 @@
+{
+  "runs": [
+    {
+      "name": "chromium",
+      "errors": [],
+      "failures": [
+        {
+          "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell_ie.js",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "version": "151.0.7922.34",
+      "before": "WEBKIT_WORD_20261005\r\n",
+      "id": "c131cd62-08d2-4a92-b37f-1520f6ccdc8b",
+      "mode": "Playwright browser offline",
+      "shellFromSW": true,
+      "after": "WEBKIT_WORD_20261005\r\n",
+      "restoredId": "c131cd62-08d2-4a92-b37f-1520f6ccdc8b",
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "webkit",
+      "errors": [],
+      "failures": [
+        {
+          "url": "http://127.0.0.1:5194/sw.js?isolation=1",
+          "error": "Could not connect to the server."
+        },
+        {
+          "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell.js",
+          "error": "Could not connect to the server."
+        },
+        {
+          "url": "http://127.0.0.1:5194/sdkjs/common/spell/spell/spell_ie.js",
+          "error": "Could not connect to the server."
+        }
+      ],
+      "version": "26.5",
+      "before": "WEBKIT_WORD_20261005\r\n",
+      "id": "9aff99e1-757f-47d3-8945-6b907ba8d1bb",
+      "mode": "origin server closed; browser online",
+      "shellFromSW": true,
+      "after": "WEBKIT_WORD_20261005\r\n",
+      "restoredId": "9aff99e1-757f-47d3-8945-6b907ba8d1bb",
+      "passed": true,
+      "closed": true
+    }
+  ]
+}

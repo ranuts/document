@@ -1,0 +1,3 @@
+# Current-build compound Excel lifecycle
+
+Use the warmed desktop Chromium default-CPU profile and existing served build. After offline process restart, seed A1:B2 and C1 through native fixture setup, then submit the literal read-A1:B2-then-write-B2 IM request. Record the before/after full table, activities, replies, errors and previews; verify only B2 changes, C1 remains, Undo restores and Redo reproduces. Save actual XLSX, independently inspect ZIP/XML and reopen after a separate offline process restart. No inference substitution. This supported literal grammar is not arbitrary multi-step reasoning or general writing/model acceptance. Browser offline emulation is not physical network disconnection. Preserve failures, do not retry after observing output.

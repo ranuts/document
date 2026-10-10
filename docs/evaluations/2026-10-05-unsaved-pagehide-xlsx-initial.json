@@ -1,0 +1,100 @@
+{
+  "scope": "Unsaved document cancellation and accepted departure, populated content across real cached returns; repaired Excel SDK formula pagehide lifecycle; actual browser navigation, native Excel/PPT, no model inference, actual BFCache return then closed-grammar IM edit, Undo/Redo/Save/reopen",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "a67d2245-e526-4481-a91d-f6a13591b01b",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        },
+        {
+          "type": "hide",
+          "persisted": true
+        },
+        {
+          "type": "show",
+          "persisted": true
+        }
+      ],
+      "draft": "未发送的中文草稿",
+      "handles": 1,
+      "entries": 1,
+      "cleanupCalls": [
+        {
+          "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+          "guard": true
+        }
+      ],
+      "documentText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]"
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [
+    {
+      "loaderId": "4CBD369355E83149584D8BE036A2BD7A",
+      "frameId": "C38D642AA48E1B4A2903DEB55B93BD48",
+      "notRestoredExplanations": [
+        {
+          "type": "Circumstantial",
+          "reason": "NetworkExceedsBufferLimit"
+        }
+      ],
+      "notRestoredExplanationsTree": {
+        "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=cc832166-0904-4701-8fc7-fc68f24a5210",
+        "explanations": [],
+        "children": [
+          {
+            "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+            "explanations": [
+              {
+                "type": "Circumstantial",
+                "reason": "NetworkExceedsBufferLimit"
+              }
+            ],
+            "children": []
+          }
+        ]
+      }
+    }
+  ],
+  "token": "a67d2245-e526-4481-a91d-f6a13591b01b",
+  "beforeText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "editText": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+  "dialogs": [
+    {
+      "type": "beforeunload",
+      "phase": "cancel"
+    },
+    {
+      "type": "beforeunload",
+      "phase": "leave"
+    },
+    {
+      "type": "beforeunload",
+      "phase": "leave"
+    }
+  ],
+  "cancelNavigationError": "Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:5193/?bfc-probe=cancel\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/?bfc-probe=cancel\", waiting until \"load\"\u001b[22m\n",
+  "cancelState": {
+    "token": "a67d2245-e526-4481-a91d-f6a13591b01b",
+    "text": "[[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"2\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"3\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"},{\"value\":\"\",\"formula\":\"\"}],[{\"value\":\"\",\"formula\":\"\"},{\"value\":\"5\",\"formula\":\"SUM(B2:B3)\"},{\"value\":\"\",\"formula\":\"\"}]]",
+    "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=cc832166-0904-4701-8fc7-fc68f24a5210"
+  },
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=cc832166-0904-4701-8fc7-fc68f24a5210",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+      "registered": [],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),o=Array(i),n=0;n<i;n++)o[n]=arguments[n+e];switch(e){case 0:return t.call(this,o);case 1:return t.call(this,arguments[0],o);case 2:return t.call(this,arguments[0],arguments[1],o)}var s=Array(e+1);for(n=0;n<e;n++)s[n]=arguments[n];return s[e]=o,t.apply(this,s)}"
+    }
+  ],
+  "error": "Error: page.evaluate: TypeError: Cannot read properties of null (reading 'contentWindow')\n    at eval (eval at evaluate (:311:30), <anonymous>:1:53)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+  "contextClosed": true
+}

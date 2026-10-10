@@ -1,0 +1,166 @@
+{
+  "runs": [
+    {
+      "name": "chromium",
+      "errors": [],
+      "version": "151.0.7922.34",
+      "openText": "WEBKIT_WORD_20261005\r\n",
+      "open": {
+        "id": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+        "sources": [
+          {
+            "docId": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+            "key": "6225c8c5-a552-4897-a9f4-640da2aedda7"
+          }
+        ],
+        "pointer": "{\"docId\":\"a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d\",\"key\":\"6225c8c5-a552-4897-a9f4-640da2aedda7\"}"
+      },
+      "reloadText": "WEBKIT_WORD_20261005\r\n",
+      "reload": {
+        "id": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+        "sources": [
+          {
+            "docId": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+            "key": "99a89734-77d9-430a-8515-0c6c05502dd1"
+          }
+        ],
+        "pointer": "{\"docId\":\"a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d\",\"key\":\"99a89734-77d9-430a-8515-0c6c05502dd1\"}"
+      },
+      "editText": "LATEST_SNAPSHOT_chromium_20261005\r\n",
+      "snapshot": {
+        "id": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+        "doc": {
+          "id": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25967,
+          "totalBytes": 25967,
+          "createdAt": 1791157734707,
+          "updatedAt": 1791157734707,
+          "lastOpenedAt": 1791157734707,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+            "key": "99a89734-77d9-430a-8515-0c6c05502dd1"
+          }
+        ],
+        "pointer": "{\"docId\":\"a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d\",\"key\":\"99a89734-77d9-430a-8515-0c6c05502dd1\"}"
+      },
+      "autosaveWaitMs": 60101,
+      "latestText": "LATEST_SNAPSHOT_chromium_20261005\r\n",
+      "latest": {
+        "id": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+        "doc": {
+          "id": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25967,
+          "totalBytes": 25967,
+          "createdAt": 1791157734707,
+          "updatedAt": 1791157734707,
+          "lastOpenedAt": 1791157735752,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d",
+            "key": "bdc17386-f16c-4385-9247-86ce34079388"
+          }
+        ],
+        "pointer": "{\"docId\":\"a7cd150d-ef90-40e7-bf3d-77cb1fd20f2d\",\"key\":\"bdc17386-f16c-4385-9247-86ce34079388\"}"
+      },
+      "passed": true,
+      "closed": true
+    },
+    {
+      "name": "webkit",
+      "errors": [
+        "/127.0.0.1:5193/sdkjs/common/spell/spell/spell.js due to access control checks."
+      ],
+      "version": "26.5",
+      "openText": "WEBKIT_WORD_20261005\r\n",
+      "open": {
+        "id": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+        "sources": [
+          {
+            "docId": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+            "key": "81c4e7f7-ce9f-434f-b80f-143f26f35855"
+          }
+        ],
+        "pointer": "{\"docId\":\"6257d150-3ec8-47ec-9b95-e0d88a1f0693\",\"key\":\"81c4e7f7-ce9f-434f-b80f-143f26f35855\"}"
+      },
+      "reloadText": "WEBKIT_WORD_20261005\r\n",
+      "reload": {
+        "id": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+        "sources": [
+          {
+            "docId": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+            "key": "4dd8c101-cccc-43cf-935e-adf0a846b41f"
+          }
+        ],
+        "pointer": "{\"docId\":\"6257d150-3ec8-47ec-9b95-e0d88a1f0693\",\"key\":\"4dd8c101-cccc-43cf-935e-adf0a846b41f\"}"
+      },
+      "editText": "LATEST_SNAPSHOT_webkit_20261005\r\n",
+      "snapshot": {
+        "id": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+        "doc": {
+          "id": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25965,
+          "totalBytes": 25965,
+          "createdAt": 1791157801560,
+          "updatedAt": 1791157801560,
+          "lastOpenedAt": 1791157801560,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+            "key": "4dd8c101-cccc-43cf-935e-adf0a846b41f"
+          }
+        ],
+        "pointer": "{\"docId\":\"6257d150-3ec8-47ec-9b95-e0d88a1f0693\",\"key\":\"4dd8c101-cccc-43cf-935e-adf0a846b41f\"}"
+      },
+      "autosaveWaitMs": 65102,
+      "latestText": "LATEST_SNAPSHOT_webkit_20261005\r\n",
+      "latest": {
+        "id": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+        "doc": {
+          "id": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25965,
+          "totalBytes": 25965,
+          "createdAt": 1791157801560,
+          "updatedAt": 1791157801560,
+          "lastOpenedAt": 1791157806483,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "6257d150-3ec8-47ec-9b95-e0d88a1f0693",
+            "key": "2ea27813-5ae4-42ae-850f-6856a97f632b"
+          }
+        ],
+        "pointer": "{\"docId\":\"6257d150-3ec8-47ec-9b95-e0d88a1f0693\",\"key\":\"2ea27813-5ae4-42ae-850f-6856a97f632b\"}"
+      },
+      "error": "Error: page errors",
+      "closed": true
+    }
+  ]
+}

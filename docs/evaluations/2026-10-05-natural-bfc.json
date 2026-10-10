@@ -1,0 +1,33 @@
+{
+  "scope": "Actual browser navigation, blank native Word editor, no model inference; inspect natural BFCache admission",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "7ef37efd-ab5f-4e11-9265-eaf190bf5ea0",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        }
+      ],
+      "draft": "",
+      "handles": 1,
+      "entries": 0,
+      "notRestoredReasons": {
+        "src": null,
+        "id": null,
+        "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=33269eba-fc94-48f0-90cc-d14e90bdbb8e",
+        "name": null,
+        "reasons": [
+          {
+            "reason": "masked"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "token": "0b1dc1f3-0e44-4db1-ad3d-8d1de3f664e0",
+  "cached": false,
+  "contextClosed": true
+}

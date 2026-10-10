@@ -1,0 +1,11 @@
+{
+  "receipt_sha256": "f47270af85f48c580ab8eda2c5e68c7190bb3f6383e33031d23dd51e2b20b663",
+  "candidate_promoted": false,
+  "decisions": [
+    {
+      "id": "de-translate",
+      "verdict": "fail",
+      "reason": "Leaves German document heading Bestellprotokoll untranslated despite full Spanish translation instruction. Checked body retains people, ISO date, quantity, pending approval, ordering actor, signature prerequisite, unsigned status and product-list availability."
+    }
+  ]
+}

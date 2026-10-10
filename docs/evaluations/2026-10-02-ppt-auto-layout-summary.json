@@ -1,0 +1,36 @@
+{
+  "scope": "PPT add_slide_text measured native auto-layout; broader local-first assistant goal remains incomplete",
+  "implementation": [
+    "Native width measurement and recalculated bounds, including rotation/groups",
+    "Visible non-placeholder inherited master/layout drawings included using native visibility flags",
+    "Proportional margins/gap; original content/bounds unchanged",
+    "Paste, resize and move grouped for single native Undo/Redo",
+    "No-room cancellation and concise seven-locale feedback; no preview cards"
+  ],
+  "verification": {
+    "unitSuites": 107,
+    "unitTests": 3869,
+    "lintTypecheck": "passed",
+    "productionBuild": "passed",
+    "review": "Inherited occupancy finding fixed and independently reviewed",
+    "productionReports": [
+      "docs/evaluations/2026-10-02-ppt-auto-layout-write-read-undo-ui.json",
+      "docs/evaluations/2026-10-02-ppt-auto-layout-no-room-recovery-ui.json",
+      "docs/evaluations/2026-10-02-ppt-auto-layout-inherited-master-ui.json",
+      "docs/evaluations/2026-10-02-ppt-auto-layout-qwen35-08-ui.json",
+      "docs/evaluations/2026-10-02-ppt-auto-layout-qwen35-08-plain-ui.json"
+    ]
+  },
+  "remaining": [
+    "Existing native group cancellation discards a redo branch after prior Undo; native SaveRedoPoints/PopRedoPoints identified for follow-up",
+    "0.8B failed JSON-encoded multiline request by emitting literal backslash-n; plain multiline request passed. These fixtures do not establish general text fidelity",
+    "Updated tool not yet regressed across every offered model or physical mobile/Safari device",
+    "Shared translations present in seven locales; new feedback rendered only in English"
+  ],
+  "buildWarnings": [
+    "Existing Anthropic browser fs/path externalization and chunk-size warnings"
+  ],
+  "testWarnings": [
+    "Existing PromiseRejectionHandledWarning"
+  ]
+}

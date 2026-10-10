@@ -1,0 +1,374 @@
+{
+  "status": "completed",
+  "scope": "Actual production desktop Chromium Metal GPU IM Excel sort; explicit rectangular range, numeric key, header, neighboring cells and native Undo/Redo.",
+  "model": "Qwen3-4B-q4f16_1-MLC",
+  "language": "zh",
+  "results": [
+    {
+      "prompt": "请将 A1:B4 区域按 B 列数字升序排序，整行一起移动。第 1 行是表头，保持不变，不要修改 A1:B4 以外的单元格。",
+      "elapsedMs": 3932,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "sortMatched": true,
+      "headerPreserved": true,
+      "neighborsPreserved": true,
+      "afterUndo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "undoExact": true,
+      "afterRedo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "redoExact": true
+    },
+    {
+      "prompt": "请将 A1:B4 区域按 B 列数字降序排序，整行一起移动。第 1 行是表头，保持不变，不要修改 A1:B4 以外的单元格。",
+      "elapsedMs": 3866,
+      "before": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "after": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "feedback": [
+        "Done. Result checked; use Undo if needed.",
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "sortMatched": true,
+      "headerPreserved": true,
+      "neighborsPreserved": true,
+      "afterUndo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "undoExact": true,
+      "afterRedo": [
+        [
+          "Name",
+          "Amount",
+          "",
+          ""
+        ],
+        [
+          "Alex",
+          "30",
+          "",
+          "Outside range"
+        ],
+        [
+          "Chen",
+          "20",
+          "",
+          ""
+        ],
+        [
+          "Bo",
+          "10",
+          "",
+          ""
+        ],
+        [
+          "Below range",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+  "bundle": [
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-CFQ18jr4.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "beforeSave": [
+    [
+      "Name",
+      "Amount",
+      "",
+      ""
+    ],
+    [
+      "Alex",
+      "30",
+      "",
+      "Outside range"
+    ],
+    [
+      "Chen",
+      "20",
+      "",
+      ""
+    ],
+    [
+      "Bo",
+      "10",
+      "",
+      ""
+    ],
+    [
+      "Below range",
+      "",
+      "",
+      ""
+    ]
+  ],
+  "nativeSave": {
+    "artifact": ".scratch/ai-csp/excel-sort-Qwen3_4B_q4f16_1_MLC-zh.xlsx",
+    "bytes": 8588,
+    "sha256": "1f20fcc36b07a2f6056cbdf25934273978933e15698cb7bbafb9a91eef978a58",
+    "failure": null
+  },
+  "probeSHA256": "7e7f5aeec26e77f4b2d3e0627f0b4848bf2dd0d252334b49576d799a0fa56a31",
+  "reopened": [
+    [
+      "Name",
+      "Amount",
+      "",
+      ""
+    ],
+    [
+      "Alex",
+      "30",
+      "",
+      "Outside range"
+    ],
+    [
+      "Chen",
+      "20",
+      "",
+      ""
+    ],
+    [
+      "Bo",
+      "10",
+      "",
+      ""
+    ],
+    [
+      "Below range",
+      "",
+      "",
+      ""
+    ]
+  ],
+  "savedValuesExact": true,
+  "allPassed": true
+}

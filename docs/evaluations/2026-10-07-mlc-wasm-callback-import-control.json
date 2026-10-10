@@ -1,0 +1,22 @@
+{
+  "scope": "Static callback import comparison; no new model runtime compatibility claim",
+  "existing_model_library_sha256": "2aa567bea574b72ac250a25fa3524487fd28a218dad49eac8650eda2771396a3",
+  "existing_model_imports": [
+    {
+      "module": "env",
+      "name": "TVMFFIWasmSafeCall",
+      "kind": "function"
+    },
+    {
+      "module": "env",
+      "name": "TVMFFIWasmFunctionDeleter",
+      "kind": "function"
+    }
+  ],
+  "sdk_callback_token_counts": {
+    "TVMFFIWasmSafeCall": 3,
+    "TVMFFIWasmFunctionDeleter": 3
+  },
+  "new_source_declares_callbacks_as_frontend_implemented": true,
+  "actual_new_library_load_verified": false
+}

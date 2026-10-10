@@ -1,0 +1,30 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-gemma4-thinking-contrast-native.json": "a98839a9155de3ab5f552f7d5533a514f1110cb7f299093176de6189379359c3",
+    "2026-10-07-gemma4-thinking-contrast-analysis.md": "61f899828391d0f63e1d404fb5d869c55a9f32576e3597724b5b65b0808f786a",
+    "2026-10-07-gemma4-thinking-contrast-native.mjs": "5e3bfbd4c7ef93dd66e29a6f9c4b3f73dd1cba00cb73be1dc7e149888e198848",
+    "2026-10-07-gemma4-thinking-contrast-protocol.md": "42d37c9fe784e6c7c6aeef0de11364f939639293ec55ebf02a212a3f7e58b69f"
+  },
+  "initialSnapshot": {
+    "scope": "Before process launch",
+    "sha256": {
+      "docs/evaluations/2026-10-07-gemma4-thinking-contrast-native.mjs": "5e3bfbd4c7ef93dd66e29a6f9c4b3f73dd1cba00cb73be1dc7e149888e198848",
+      "docs/evaluations/2026-10-07-gemma4-thinking-contrast-protocol.md": "42d37c9fe784e6c7c6aeef0de11364f939639293ec55ebf02a212a3f7e58b69f",
+      "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-cases.json": "65e4ffe4ea447ad0c83f24f11bcb49513301aac8eed35d4098a99527df488095",
+      "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+      "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    }
+  },
+  "unchangedAfterRun": {
+    "docs/evaluations/2026-10-07-gemma4-thinking-contrast-native.mjs": true,
+    "docs/evaluations/2026-10-07-gemma4-thinking-contrast-protocol.md": true,
+    "docs/evaluations/2026-10-07-gemma4-sampling-seven-language-cases.json": true,
+    "dist/sw.js": true,
+    "dist/assets/editor-C3APg_Fa.js": true,
+    "dist/assets/client-D5_UYdz1.js": true
+  },
+  "processExitCode": 1,
+  "adopted": false,
+  "scope": "Completed failed contrast; thinking timeout lacks SDK failure snapshots"
+}

@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-02T04:32:37.591Z",
+  "scope": "Isolated Chromium native editor rail; blocked model download; UI entry only",
+  "status": "passed",
+  "checks": {
+    "narrowInitialOpen": true,
+    "widenMovesToRight": true,
+    "singleEntry": true,
+    "narrowKeyboardOpen": true,
+    "narrowReloadOpen": true,
+    "touchLandscapeOpen": true
+  },
+  "errors": []
+}

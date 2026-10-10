@@ -1,0 +1,5 @@
+# Truthful interruption boundary: diagnostic freeze
+
+The observed current IM sequence contains the cancelled user request followed directly by the new user request, and raw CPU output responds to the old story. Test the minimal request change of inserting the existing truthful host status `已停止。` as an assistant message between those users after actual exit/reload. Preserve both original user texts, system prompt, generation settings, model, document and real Stop/reload flow. Apply identical insertion to token counting and completion; record originals and adjusted requests. Never substitute model text or assert a completed answer on cancellation.
+
+This is a development reproduction on the observed story/BRAVO sequence, not heldout model accuracy acceptance. The prior raw diagnostic provides historical baseline; one new run is not randomized causal benchmarking. If the current instruction improves, general history persistence, conversation switching, tool exchanges and additional unused interactions need regression before production changes. Preserve partial failures and unchanged bundle bytes. Freeze executable before inference and close browser in finally.

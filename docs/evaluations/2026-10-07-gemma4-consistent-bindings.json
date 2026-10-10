@@ -1,0 +1,24 @@
+{
+  "scope": "Frozen new-case whole-request contrast; no semantic acceptance inferred",
+  "driverFreezeCommit": "7282c17",
+  "sourceHashes": {
+    "docs/evaluations/2026-10-07-gemma4-consistent-native.mjs": "b046c3e2c3c39b06393331fe291acfc2eb59acd18897b790a25283e91e355fb2",
+    "docs/evaluations/2026-10-07-gemma4-consistent-cases.json": "ef0a4b9436189bf86588e277fe334d904882e06816d22d2b0e4cef16a699041c",
+    "docs/evaluations/2026-10-05-summary-consistent-candidate.json": "1e912376275e09cfdf63e22c4ab005f77106cdb25ddc4b695f20f1a02507093b"
+  },
+  "servedAssetHashes": {
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745",
+    "dist/assets/editor-B7NLm1x8.js": "88760144ae750e986130fa5a3a577da855b3b5650670ec35fba2a343fa334807",
+    "dist/sw.js": "600d8aebee21b6aa7638aae750fa586859d9e441c304ab41cf7e7153ca33e9b5"
+  },
+  "qualityAccepted": false,
+  "afterInferenceAssetCheck": {
+    "dist/assets/client-D5_UYdz1.js": true,
+    "dist/assets/editor-B7NLm1x8.js": false,
+    "dist/sw.js": false
+  },
+  "afterInferenceAssetCheckScope": "Measured after inference, with a subsequent production build already started; missing or replaced bytes do not prove experiment mutation.",
+  "receiptSHA256": "72a248688b02052f9140cc49736afc958a048992409035454a39c9587355c7ae",
+  "processExitCode": 0,
+  "semanticAccepted": false
+}

@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-02T06:27:34.482Z",
+  "scope": "Isolated fresh WebKit browser storage and WASM primitive diagnostics",
+  "operations": {
+    "opfs": {
+      "status": "failed",
+      "name": "UnknownError",
+      "message": "The operation failed for an unknown transient reason (e.g. out of memory)."
+    },
+    "estimate": {
+      "status": "passed"
+    },
+    "cache": {
+      "status": "passed"
+    },
+    "memory64": {
+      "status": "passed"
+    },
+    "cacheWriteAndRead": {
+      "status": "passed",
+      "roundTrip": "ok"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "scope": "Production Chromium Metal, real Qwen3-1.7B model planning and Word API execution without preview",
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "elapsedMs": 2621,
+  "visibleErrors": [],
+  "feedback": [
+    "Change applied and text verified. Check formatting; use Undo if needed.Change applied and text verified. Check formatting; use Undo if needed."
+  ],
+  "previewCount": 0,
+  "documentText": "Hello tools\r\n",
+  "status": "passed"
+}

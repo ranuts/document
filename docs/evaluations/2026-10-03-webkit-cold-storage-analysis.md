@@ -1,0 +1,9 @@
+# WebKit cold offline investigation
+
+Minimal controls on isolated profiles persisted localStorage, IndexedDB, a Cache API response and the application's SW registration across process close/relaunch in both Chromium and Playwright WebKit. WebKit before/after retained one registration, core cache 126 entries and vendor runtime cache 47 entries. Therefore the observed failure cannot be explained by total profile/cache loss. These are synthetic storage controls, not full model persistence proof.
+
+Fresh WebKit offline navigation failed for /index.html and /editor, including repeated navigation in the same context, with and without an unreachable proxy. The same failure occurred on a minimal profile that never loaded a model or editor, isolating the failure from model inference and the large GGUF download. Exact root cause in cold SW navigation remains unproven; this does not justify altering model cache code or claiming Safari has the same defect. Warm WebKit offline reload verification remains distinct.
+
+Playwright official Service Workers documentation warns that service worker support is Chromium-only: https://playwright.dev/docs/service-workers . BrowserType documentation describes persistent session storage, not a guarantee for every WebKit offline navigation: https://playwright.dev/docs/api/class-browsertype#browser-type-launch-persistent-context . Observed native WebKit registrations can exist even though this automation scope is limited. Physical Safari/iOS cold behavior remains unverified.
+
+The initial synthetic probe erroneously called in-page Request.url as a method. Probe-error reports preserve this diagnostic, and corrected controls pass on both engines. No product changes were made. Root TypeScript lint passed. Reusable probe files accompany reports. Cold navigation failure remains open; future verification must use an environment supporting this browser behavior rather than weaken the offline acceptance condition.

@@ -1,0 +1,191 @@
+[
+  {
+    "id": "zh-CN-rewrite",
+    "language": "zh-CN",
+    "task": "rewrite",
+    "targetLanguage": "source",
+    "source": "设备记录：Arin Cole 提议周二重新启用扫描仪，但提议尚未获批准。只有 Mei Tan 签署安全报告后，技术团队才可启用扫描仪。报告尚未签署。库房标签已经打印。",
+    "instruction": "Rewrite in clear formal Chinese, changing wording while preserving every fact and relationship.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "zh-CN-summarize",
+    "language": "zh-CN",
+    "task": "summarize",
+    "targetLanguage": "source",
+    "source": "设备记录：Arin Cole 提议周二重新启用扫描仪，但提议尚未获批准。只有 Mei Tan 签署安全报告后，技术团队才可启用扫描仪。报告尚未签署。库房标签已经打印。",
+    "instruction": "Summarize in one shorter Chinese sentence. Explicitly preserve Arin Cole as proposer, Tuesday as proposed day, scanner reactivation, technical team as actor, Mei Tan signing the safety report as the only-after prerequisite, the report currently unsigned and the proposal currently unapproved. Omit storage labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "zh-CN-translate",
+    "language": "zh-CN",
+    "task": "translate",
+    "targetLanguage": "en",
+    "source": "设备记录：Arin Cole 提议周二重新启用扫描仪，但提议尚未获批准。只有 Mei Tan 签署安全报告后，技术团队才可启用扫描仪。报告尚未签署。库房标签已经打印。",
+    "instruction": "Translate every sentence faithfully into English. Preserve names in their original spelling, proposal status, permission and prerequisite, current unsigned report and printed labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "en-rewrite",
+    "language": "en",
+    "task": "rewrite",
+    "targetLanguage": "source",
+    "source": "Equipment note: Arin Cole suggested reactivating the scanner on Tuesday, but the proposal has not been approved. The technical team may reactivate the scanner only after Mei Tan signs the safety report. The report remains unsigned. Storage labels have already been printed.",
+    "instruction": "Rewrite in clear formal English, changing wording while preserving every fact and relationship.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "en-summarize",
+    "language": "en",
+    "task": "summarize",
+    "targetLanguage": "source",
+    "source": "Equipment note: Arin Cole suggested reactivating the scanner on Tuesday, but the proposal has not been approved. The technical team may reactivate the scanner only after Mei Tan signs the safety report. The report remains unsigned. Storage labels have already been printed.",
+    "instruction": "Summarize in one shorter English sentence. Explicitly preserve Arin Cole as proposer, Tuesday as proposed day, scanner reactivation, technical team as actor, Mei Tan signing the safety report as the only-after prerequisite, the report currently unsigned and the proposal currently unapproved. Omit storage labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "en-translate",
+    "language": "en",
+    "task": "translate",
+    "targetLanguage": "zh-CN",
+    "source": "Equipment note: Arin Cole suggested reactivating the scanner on Tuesday, but the proposal has not been approved. The technical team may reactivate the scanner only after Mei Tan signs the safety report. The report remains unsigned. Storage labels have already been printed.",
+    "instruction": "Translate every sentence faithfully into Chinese. Preserve names in their original spelling, proposal status, permission and prerequisite, current unsigned report and printed labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "ja-rewrite",
+    "language": "ja",
+    "task": "rewrite",
+    "targetLanguage": "source",
+    "source": "機器の記録：Arin Cole は火曜日にスキャナーを再稼働させることを提案したが、提案はまだ承認されていない。Mei Tan が安全報告書に署名した後に限り、技術チームはスキャナーを再稼働させることができる。報告書はまだ署名されていない。倉庫のラベルは印刷済みである。",
+    "instruction": "Rewrite in clear formal Japanese, changing wording while preserving every fact and relationship.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "ja-summarize",
+    "language": "ja",
+    "task": "summarize",
+    "targetLanguage": "source",
+    "source": "機器の記録：Arin Cole は火曜日にスキャナーを再稼働させることを提案したが、提案はまだ承認されていない。Mei Tan が安全報告書に署名した後に限り、技術チームはスキャナーを再稼働させることができる。報告書はまだ署名されていない。倉庫のラベルは印刷済みである。",
+    "instruction": "Summarize in one shorter Japanese sentence. Explicitly preserve Arin Cole as proposer, Tuesday as proposed day, scanner reactivation, technical team as actor, Mei Tan signing the safety report as the only-after prerequisite, the report currently unsigned and the proposal currently unapproved. Omit storage labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "ja-translate",
+    "language": "ja",
+    "task": "translate",
+    "targetLanguage": "en",
+    "source": "機器の記録：Arin Cole は火曜日にスキャナーを再稼働させることを提案したが、提案はまだ承認されていない。Mei Tan が安全報告書に署名した後に限り、技術チームはスキャナーを再稼働させることができる。報告書はまだ署名されていない。倉庫のラベルは印刷済みである。",
+    "instruction": "Translate every sentence faithfully into English. Preserve names in their original spelling, proposal status, permission and prerequisite, current unsigned report and printed labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "ko-rewrite",
+    "language": "ko",
+    "task": "rewrite",
+    "targetLanguage": "source",
+    "source": "장비 기록: Arin Cole은 화요일에 스캐너를 다시 가동하자고 제안했지만, 그 제안은 아직 승인되지 않았다. Mei Tan이 안전 보고서에 서명한 후에만 기술팀이 스캐너를 다시 가동할 수 있다. 보고서는 아직 서명되지 않았다. 창고 라벨은 이미 인쇄되었다.",
+    "instruction": "Rewrite in clear formal Korean, changing wording while preserving every fact and relationship.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "ko-summarize",
+    "language": "ko",
+    "task": "summarize",
+    "targetLanguage": "source",
+    "source": "장비 기록: Arin Cole은 화요일에 스캐너를 다시 가동하자고 제안했지만, 그 제안은 아직 승인되지 않았다. Mei Tan이 안전 보고서에 서명한 후에만 기술팀이 스캐너를 다시 가동할 수 있다. 보고서는 아직 서명되지 않았다. 창고 라벨은 이미 인쇄되었다.",
+    "instruction": "Summarize in one shorter Korean sentence. Explicitly preserve Arin Cole as proposer, Tuesday as proposed day, scanner reactivation, technical team as actor, Mei Tan signing the safety report as the only-after prerequisite, the report currently unsigned and the proposal currently unapproved. Omit storage labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "ko-translate",
+    "language": "ko",
+    "task": "translate",
+    "targetLanguage": "en",
+    "source": "장비 기록: Arin Cole은 화요일에 스캐너를 다시 가동하자고 제안했지만, 그 제안은 아직 승인되지 않았다. Mei Tan이 안전 보고서에 서명한 후에만 기술팀이 스캐너를 다시 가동할 수 있다. 보고서는 아직 서명되지 않았다. 창고 라벨은 이미 인쇄되었다.",
+    "instruction": "Translate every sentence faithfully into English. Preserve names in their original spelling, proposal status, permission and prerequisite, current unsigned report and printed labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "de-rewrite",
+    "language": "de",
+    "task": "rewrite",
+    "targetLanguage": "source",
+    "source": "Gerätenotiz: Arin Cole schlug vor, den Scanner am Dienstag wieder in Betrieb zu nehmen, doch der Vorschlag wurde noch nicht genehmigt. Das Technikteam darf den Scanner erst wieder in Betrieb nehmen, nachdem Mei Tan den Sicherheitsbericht unterschrieben hat. Der Bericht ist noch nicht unterschrieben. Die Lageretiketten sind bereits gedruckt.",
+    "instruction": "Rewrite in clear formal German, changing wording while preserving every fact and relationship.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "de-summarize",
+    "language": "de",
+    "task": "summarize",
+    "targetLanguage": "source",
+    "source": "Gerätenotiz: Arin Cole schlug vor, den Scanner am Dienstag wieder in Betrieb zu nehmen, doch der Vorschlag wurde noch nicht genehmigt. Das Technikteam darf den Scanner erst wieder in Betrieb nehmen, nachdem Mei Tan den Sicherheitsbericht unterschrieben hat. Der Bericht ist noch nicht unterschrieben. Die Lageretiketten sind bereits gedruckt.",
+    "instruction": "Summarize in one shorter German sentence. Explicitly preserve Arin Cole as proposer, Tuesday as proposed day, scanner reactivation, technical team as actor, Mei Tan signing the safety report as the only-after prerequisite, the report currently unsigned and the proposal currently unapproved. Omit storage labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "de-translate",
+    "language": "de",
+    "task": "translate",
+    "targetLanguage": "en",
+    "source": "Gerätenotiz: Arin Cole schlug vor, den Scanner am Dienstag wieder in Betrieb zu nehmen, doch der Vorschlag wurde noch nicht genehmigt. Das Technikteam darf den Scanner erst wieder in Betrieb nehmen, nachdem Mei Tan den Sicherheitsbericht unterschrieben hat. Der Bericht ist noch nicht unterschrieben. Die Lageretiketten sind bereits gedruckt.",
+    "instruction": "Translate every sentence faithfully into English. Preserve names in their original spelling, proposal status, permission and prerequisite, current unsigned report and printed labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "es-rewrite",
+    "language": "es",
+    "task": "rewrite",
+    "targetLanguage": "source",
+    "source": "Nota sobre el equipo: Arin Cole propuso volver a poner en funcionamiento el escáner el martes, pero la propuesta todavía no ha sido aprobada. El equipo técnico solo puede ponerlo en funcionamiento después de que Mei Tan firme el informe de seguridad. El informe sigue sin firmar. Las etiquetas del almacén ya están impresas.",
+    "instruction": "Rewrite in clear formal Spanish, changing wording while preserving every fact and relationship.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "es-summarize",
+    "language": "es",
+    "task": "summarize",
+    "targetLanguage": "source",
+    "source": "Nota sobre el equipo: Arin Cole propuso volver a poner en funcionamiento el escáner el martes, pero la propuesta todavía no ha sido aprobada. El equipo técnico solo puede ponerlo en funcionamiento después de que Mei Tan firme el informe de seguridad. El informe sigue sin firmar. Las etiquetas del almacén ya están impresas.",
+    "instruction": "Summarize in one shorter Spanish sentence. Explicitly preserve Arin Cole as proposer, Tuesday as proposed day, scanner reactivation, technical team as actor, Mei Tan signing the safety report as the only-after prerequisite, the report currently unsigned and the proposal currently unapproved. Omit storage labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "es-translate",
+    "language": "es",
+    "task": "translate",
+    "targetLanguage": "en",
+    "source": "Nota sobre el equipo: Arin Cole propuso volver a poner en funcionamiento el escáner el martes, pero la propuesta todavía no ha sido aprobada. El equipo técnico solo puede ponerlo en funcionamiento después de que Mei Tan firme el informe de seguridad. El informe sigue sin firmar. Las etiquetas del almacén ya están impresas.",
+    "instruction": "Translate every sentence faithfully into English. Preserve names in their original spelling, proposal status, permission and prerequisite, current unsigned report and printed labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "pt-rewrite",
+    "language": "pt",
+    "task": "rewrite",
+    "targetLanguage": "source",
+    "source": "Nota sobre o equipamento: Arin Cole propôs voltar a colocar o scanner em funcionamento na terça-feira, mas a proposta ainda não foi aprovada. A equipa técnica só pode colocá-lo em funcionamento depois de Mei Tan assinar o relatório de segurança. O relatório continua sem assinatura. As etiquetas do armazém já foram impressas.",
+    "instruction": "Rewrite in clear formal Portuguese, changing wording while preserving every fact and relationship.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "pt-summarize",
+    "language": "pt",
+    "task": "summarize",
+    "targetLanguage": "source",
+    "source": "Nota sobre o equipamento: Arin Cole propôs voltar a colocar o scanner em funcionamento na terça-feira, mas a proposta ainda não foi aprovada. A equipa técnica só pode colocá-lo em funcionamento depois de Mei Tan assinar o relatório de segurança. O relatório continua sem assinatura. As etiquetas do armazém já foram impressas.",
+    "instruction": "Summarize in one shorter Portuguese sentence. Explicitly preserve Arin Cole as proposer, Tuesday as proposed day, scanner reactivation, technical team as actor, Mei Tan signing the safety report as the only-after prerequisite, the report currently unsigned and the proposal currently unapproved. Omit storage labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  },
+  {
+    "id": "pt-translate",
+    "language": "pt",
+    "task": "translate",
+    "targetLanguage": "en",
+    "source": "Nota sobre o equipamento: Arin Cole propôs voltar a colocar o scanner em funcionamento na terça-feira, mas a proposta ainda não foi aprovada. A equipa técnica só pode colocá-lo em funcionamento depois de Mei Tan assinar o relatório de segurança. O relatório continua sem assinatura. As etiquetas do armazém já foram impressas.",
+    "instruction": "Translate every sentence faithfully into English. Preserve names in their original spelling, proposal status, permission and prerequisite, current unsigned report and printed labels.",
+    "scope": "Unused before this frozen run; shared source across three tasks, seven correlated language versions, not 21 independent sources."
+  }
+]

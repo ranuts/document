@@ -1,0 +1,131 @@
+{
+  "scope": "Actual local preview, static-web-server 2.42.0 and Wrangler Pages 4.146.0 response headers and Worker bytes; no deployed edge or offline upgrade claim.",
+  "worker": "webllm.worker-CMk6FPDh.js",
+  "expectedSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+  "rows": [
+    {
+      "port": 5198,
+      "pathname": "/assets/webllm.worker-CMk6FPDh.js",
+      "status": 200,
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "cacheControl": "no-cache",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "passed": true
+    },
+    {
+      "port": 5198,
+      "pathname": "/assets/agent-plugin-BsFG3rce.js",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "no-cache",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5198,
+      "pathname": "/editor",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "no-cache",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5198,
+      "pathname": "/web-apps/apps/documenteditor/main/index.html",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "no-cache",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5195,
+      "pathname": "/assets/webllm.worker-CMk6FPDh.js",
+      "status": 200,
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "passed": true
+    },
+    {
+      "port": 5195,
+      "pathname": "/assets/agent-plugin-BsFG3rce.js",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "public, max-age=31536000, immutable",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5195,
+      "pathname": "/editor",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "no-cache",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5195,
+      "pathname": "/web-apps/apps/documenteditor/main/index.html",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "no-cache",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5196,
+      "pathname": "/assets/webllm.worker-CMk6FPDh.js",
+      "status": 200,
+      "csp": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "sha256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+      "passed": true
+    },
+    {
+      "port": 5196,
+      "pathname": "/assets/agent-plugin-BsFG3rce.js",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "public, max-age=31536000, immutable",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5196,
+      "pathname": "/editor",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    },
+    {
+      "port": 5196,
+      "pathname": "/web-apps/apps/documenteditor/main/index.html",
+      "status": 200,
+      "csp": null,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "coop": "same-origin",
+      "coep": "require-corp",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

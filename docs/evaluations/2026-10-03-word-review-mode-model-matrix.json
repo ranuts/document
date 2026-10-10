@@ -1,0 +1,110 @@
+{
+  "scope": "Production IM review-mode on/off for all five configured text models, native mode and replacement Undo/Redo, sampled Unicode/tab character revision states, neighbor preservation, native Save/reopen, saved XML tracking flag. Historical row.kind labels say tracked in off reports; requestedMode and native states are authoritative. No full DOCX metadata, physical mobile, tracked Stop or external Word claims.",
+  "entries": [
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "enabled": true,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-0_8-on-planner-fixed.json",
+      "reportSHA256": "06f2a3c27c2ddd0310f33952badeb6c7ba4902020ab8e31e644b09561a491f4a",
+      "artifactSHA256": "c0ef2d5b45cd16df9fcea5199f48a8e85775b24320891c9da00396c425759ea5",
+      "savedXMLTrackingEnabled": true,
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+      "enabled": false,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-0_8-off-planner-fixed.json",
+      "reportSHA256": "91362332fffb8e36a9a305aee112b9f4b3102a9709f6acad8a47aec1fe338a7f",
+      "artifactSHA256": "d8625642c9eb1aee9056f33f6c6dac65eaf6d304fee043a6dc4901bdcd237c5b",
+      "savedXMLTrackingEnabled": false,
+      "passed": true
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "enabled": true,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-1_7-on-planner-fixed.json",
+      "reportSHA256": "5ce7f0a6a851f510ff48bea13a8aaee0d809a1747ceaefb12ad0bcb21ba4188c",
+      "artifactSHA256": "617d752614dfd5b3a0f057174cd5d6a693b33f53e6bf17f5c4bfeaad158a625d",
+      "savedXMLTrackingEnabled": true,
+      "passed": true
+    },
+    {
+      "model": "Qwen3-1.7B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "enabled": false,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-1_7-off-planner-fixed.json",
+      "reportSHA256": "e2e509f48171f3852f79c375c7e17d85057a77961e8ed8b2783c9f0fb655160e",
+      "artifactSHA256": "5170c468074d8c4bed8381739403ffb405db0aeddfc50d77ca752b6a1bc3ea0f",
+      "savedXMLTrackingEnabled": false,
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "enabled": true,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-2b-on-planner-fixed.json",
+      "reportSHA256": "6527605ce459468499b945e20125bbcce0d412fe158ad1b549e7f86ddf2262b6",
+      "artifactSHA256": "6650ec39531e5c30322876ea57d4561962e3e1de461d5d51c0ce2d5211e9f251",
+      "savedXMLTrackingEnabled": true,
+      "passed": true
+    },
+    {
+      "model": "Qwen3.5-2B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3.5-2B-q4f16_1-MLC",
+      "enabled": false,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-2b-off-planner-fixed.json",
+      "reportSHA256": "b7b1fa892a68aa983f2934e6204f6aad999a4a3d7c5ca3a4c6a7870a0ffe2b1c",
+      "artifactSHA256": "930baec99cf46e63451add4b9d719fb20df606da33dad86f7dcd8b66c9375149",
+      "savedXMLTrackingEnabled": false,
+      "passed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "enabled": true,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-4b-on-planner-fixed.json",
+      "reportSHA256": "8c59e040771b262ce14f9627fd416502a1b43bafeefed85346098cece763131b",
+      "artifactSHA256": "121d7d4245a94eae17956ca9d3941ad0d1ec4b6fd3bce1c250bec341d628d6d6",
+      "savedXMLTrackingEnabled": true,
+      "passed": true
+    },
+    {
+      "model": "Qwen3-4B-q4f16_1-MLC",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "enabled": false,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-4b-off-planner-fixed.json",
+      "reportSHA256": "fcc0a21570c14f4e35ee3c94615bddc68265f6b3c50a43c2dcde6cbcec85dc4d",
+      "artifactSHA256": "9359566d085793e7f7c73ad1d527053bae6dbd2f6150135e9cfe6cbac9486b43",
+      "savedXMLTrackingEnabled": false,
+      "passed": true
+    },
+    {
+      "model": "Qwen3-0.6B GGUF CPU",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "enabled": true,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-cpu-on-planner-fixed.json",
+      "reportSHA256": "7b91dd28c8203c4f1b14a6cf1d583f6bc74e8456c485a03213db230f68836bee",
+      "artifactSHA256": "31f193d0a25e23f63f130f36f0970ac3e5a2d29856a7e872cead943e577793e1",
+      "savedXMLTrackingEnabled": true,
+      "passed": true
+    },
+    {
+      "model": "Qwen3-0.6B GGUF CPU",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "enabled": false,
+      "report": "docs/evaluations/2026-10-03-word-review-mode-cpu-off-planner-fixed.json",
+      "reportSHA256": "2163fdca973a85a7abe8d8397cad1b56b6b8acbaa0daff8f292ed8a3a2a7d3a0",
+      "artifactSHA256": "ed74c4d7a6ba85b4e338ec4be88d3cddd92b7d289ede2ea04cabef400acbbc25",
+      "savedXMLTrackingEnabled": false,
+      "passed": true
+    }
+  ],
+  "allPassed": true,
+  "verifier": {
+    "path": "/workspace/document/docs/evaluations/verify-word-review-mode-matrix.py",
+    "sha256": "c8df32f064d359516b48b60becf5313474b5c9646205943b9e7eec480e4d22f2"
+  }
+}

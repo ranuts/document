@@ -1,0 +1,30 @@
+{
+  "scope": "Read-only binary/import and generated-JS inspection of current CPU default pair; explains impossibility of the observed allocation, not a larger-memory build or semantic acceptance.",
+  "runtime": {
+    "native/default/wllama.js": {
+      "bytes": 93118,
+      "sha256": "9ef654633a98495e82dd3eb862923eb17205eb6aa1cbfac1fb61715b8e31cbbf"
+    },
+    "native/default/wllama.wasm": {
+      "bytes": 6570369,
+      "sha256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6"
+    }
+  },
+  "memory": {
+    "importModule": "env",
+    "importName": "memory",
+    "flags": 7,
+    "address": "i64",
+    "shared": true,
+    "initialPages": 2048,
+    "maximumPages": 65536,
+    "pageBytes": 65536,
+    "maximumBytes": 4294967296,
+    "generatedJSMaximumPages": 65536
+  },
+  "failedTensorBufferBytes": 4617129952,
+  "exceedsRuntimeMaximum": true,
+  "currentCompiler": "Emscripten 6.0.10-git",
+  "productRecordedCompiler": "Emscripten 4.0.20",
+  "nextRequirement": "Recover exact pinned SDK/llama source and native count patch. A capacity experiment must bind its source/compiler and new JS/WASM pair; no JS-only maximum change or product adoption."
+}

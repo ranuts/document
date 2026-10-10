@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-02T05:42:33.627Z",
+  "scope": "New browser process starts offline using previously warmed isolated profile; no online request allowed",
+  "status": "passed",
+  "controller": "http://127.0.0.1:5193/sw.js",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "text": [
+    "Hello.Write to document"
+  ],
+  "stats": "First text: 21.84 s · Overall response rate: 0.14 token/s · 3 tokens",
+  "responseMs": 22018,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

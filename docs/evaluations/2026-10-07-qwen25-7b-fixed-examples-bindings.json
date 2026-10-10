@@ -1,0 +1,23 @@
+{
+  "processExitCode": 1,
+  "initialBindings": {
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen25-7b-fixed-examples-native.mjs": "526aafa3c353ec85d304014248e486d40d35f221d7eeff825caff298b5968ff8",
+      "docs/evaluations/2026-10-07-qwen25-7b-fixed-examples-requests.json": "fbb0f902cd899d6fa4c9e4a9a60846432e9a070bf0d9a522fe6adde1f598d817",
+      "docs/evaluations/2026-10-07-qwen25-7b-fixed-examples-protocol.md": "f54f044bafc15d517ea8602fb7dc989af9f4262821ce00f038a6f5f28fb6e3ba",
+      "docs/evaluations/probe-gpu-writing-demonstrations.mjs": "b4d53d0766392073bab8b589edc9e5795993035ec24f5a22feba81a949902cb5",
+      "docs/evaluations/2026-10-04-writing-demonstration-examples.json": "b7ea32d8434a25a2290c25f2f5019a524571a61cf3d77929640ded4f0eba999c",
+      "docs/evaluations/2026-10-07-qwen25-7b-gpu-artifact.json": "91a52d0e8579d20684014533b2c30b5cde156c20a2b01a67dace467c5271c01a",
+      "docs/evaluations/2026-10-07-qwen25-7b-gpu-native.json": "a325a928b9d9de406956b39d70dac8762d66a8afaa654c2d15108d50e19e4cf0",
+      "dist/sw.js": "c8d5ecf60bc37ce13561e652ec626967143a70d9df14ba9b8b5a319be6425bd9",
+      "dist/assets/lib-CSLy4uO1.js": "0e5b85fa4d34fc202e3fe3aef90fb0c675866c015fe1676c0e146a646632545d",
+      "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+    }
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen25-7b-fixed-examples-native.json": "4c8aa5371a06f32193d9135ad3f11e1f346d8a3d6e08e7f5de989840783e540a",
+    "2026-10-07-qwen25-7b-fixed-examples-native.mjs": "526aafa3c353ec85d304014248e486d40d35f221d7eeff825caff298b5968ff8",
+    "2026-10-07-qwen25-7b-fixed-examples-requests.json": "fbb0f902cd899d6fa4c9e4a9a60846432e9a070bf0d9a522fe6adde1f598d817",
+    "2026-10-07-qwen25-7b-fixed-examples-protocol.md": "f54f044bafc15d517ea8602fb7dc989af9f4262821ce00f038a6f5f28fb6e3ba"
+  }
+}

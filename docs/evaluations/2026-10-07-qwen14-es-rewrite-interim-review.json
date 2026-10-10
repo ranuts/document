@@ -1,0 +1,11 @@
+{
+  "receipt_sha256": "cedad54f44067ddd0b030978305ef2ac0e8fc7e669195565a4006c3becb4af46",
+  "candidate_promoted": false,
+  "decisions": [
+    {
+      "id": "es-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Spanish wording changes while preserving Carla Vega proposal, ISO date, 12 places, unapproved proposal, Omar Mendez booking actor, Luz Ibarra travel authorization prerequisite, currently unauthorized trip and prepared itinerary. Bounded manual sample, no native-speaker certification."
+    }
+  ]
+}

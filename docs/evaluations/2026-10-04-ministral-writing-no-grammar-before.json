@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-03T20:34:33.043Z",
+  "scope": "Experimental custom Ministral 3 3B MLC model with current production rewrite route; six predeclared fresh paired fixtures for payer/recipient, approval negation and confirmation prerequisite. One fixed-order sample each, not general heldout accuracy. Only response_format removed from outgoing Worker request; production prompt/temperature and validation unchanged; route-local raw response/input recording. Selected translation target through actual IM control. Native Word Undo/Redo, no preview or product change.",
+  "modelId": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+  "status": "failed",
+  "probeSHA256": "bd1740c14d23d943e2e7e5fb460f94514b72bb4c87c9e91e8ff6103d503d60a4",
+  "variants": [
+    "current"
+  ],
+  "repetitions": 1,
+  "cases": [
+    {
+      "id": "payer-alex",
+      "task": "rewrite",
+      "source": "Hey, Alex will pay Morgan 640 EUR on 2026-10-12, okay?",
+      "instruction": "Formal English; preserve payer, recipient, amount and date.",
+      "rubric": "Alex pays Morgan, not the reverse."
+    },
+    {
+      "id": "payer-morgan",
+      "task": "rewrite",
+      "source": "Hey, Morgan will pay Alex 640 EUR on 2026-10-12, okay?",
+      "instruction": "Formal English; preserve payer, recipient, amount and date.",
+      "rubric": "Morgan pays Alex, not the reverse."
+    },
+    {
+      "id": "zh-approved",
+      "task": "rewrite",
+      "source": "哎，林青已经批准在 2026-10-12 支付 640 EUR 啦。",
+      "instruction": "改为正式书面中文，保留批准状态、姓名、金额和日期。",
+      "rubric": "Approval already granted by 林青."
+    },
+    {
+      "id": "zh-not-approved",
+      "task": "rewrite",
+      "source": "哎，林青还没有批准在 2026-10-12 支付 640 EUR 啦。",
+      "instruction": "改为正式书面中文，保留批准状态、姓名、金额和日期。",
+      "rubric": "Approval not yet granted by 林青."
+    },
+    {
+      "id": "condition-before",
+      "task": "rewrite",
+      "source": "Hey, Morgan can release 640 EUR only after Alex confirms delivery on 2026-10-12, okay?",
+      "instruction": "Formal English; preserve who confirms, who releases, and the prerequisite.",
+      "rubric": "Morgan releases only after Alex confirms; no completed confirmation claim."
+    },
+    {
+      "id": "condition-without",
+      "task": "rewrite",
+      "source": "Hey, Morgan can release 640 EUR without Alex confirming delivery on 2026-10-12, okay?",
+      "instruction": "Formal English; preserve who releases and that confirmation is not required.",
+      "rubric": "Morgan can release without confirmation; do not introduce prerequisite."
+    }
+  ],
+  "bundleHashes": {
+    "plugin": "92d3ea86ea763f4193f4158c370c9da115ee4e588b23a5509dbdad1eebf5383a",
+    "diagnosticPlugin": "248a3651499a3ecc955624c4fc08fb53db017e8421e930674e2473ff670d63e2"
+  },
+  "results": [],
+  "errors": [],
+  "externalRequests": [],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 0
+  },
+  "engine": "WebGPU · Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+  "error": "Error: Sampling/schema mismatch",
+  "bundleBytesUnchanged": true
+}

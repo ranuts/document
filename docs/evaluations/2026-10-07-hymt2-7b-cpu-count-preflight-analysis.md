@@ -1,0 +1,7 @@
+# Existing CPU load guard after allocation failure
+
+A real Chromium run repeats the 7B allocation failure with unchanged model/runtime bytes. SDK load resolves, but countChatTokens rejects with the explicit loaded-text-model prerequisite error before generation. No GGML_ASSERT chat-template message is observed. The process exits 1 because the diagnostic records the intended rejection; browser/context/server close. This is successful guard evidence, not successful model loading or translation.
+
+The product WllamaProvider already invokes countChatTokens after normal SDK loading and before assigning its ready engine. The existing unit regression checks rejection, false readiness, no generation and worker disposal. All tests in wllama-cpu-loader.test.ts pass. The native test directly exercises the same SDK check, not the entire provider or panel UI. Therefore the prior raw-SDK failure does not establish a missing product guard. No speculative product fix is made.
+
+The [derived receipt](2026-10-07-hymt2-7b-cpu-count-preflight-derived.json) pins the ignored raw console receipt; compile-machine paths are not published. Earlier raw-SDK abort observations remain retained. Future candidate diagnostics should use the product-equivalent preflight before generation. A working smaller-memory artifact or changed runtime still requires verified model load and fresh semantic evaluation; rejecting this model does not solve seven-language writing reliability.

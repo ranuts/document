@@ -1,0 +1,5 @@
+# Production interrupted-history browser observation
+
+Product source: `ecdaee2`. Freeze this driver before execution. Actual native Word IM, local Qwen2.5 0.5B CPU, real streamed story, explicit Stop/native exit/ungated reload, then explicit BRAVO request. SDK observer delegates unchanged calls and stream chunks. No message insertion, saved fixture or returned output substitution.
+
+Capture the actual stopped assistant source separately from UI action labels. Inspect whether the second native request preserves the original interrupted user, exact visible assistant source, truthful stopped status and new user request. Record raw output, native document equality, errors, previews and closed browser. Mechanical `passed` is independent of exact BRAVO quality; punctuation or stale-story continuation must remain reported. This run does not establish durable IndexedDB reopening, broad model quality or physical device support. Formal representation differs from earlier combined-message diagnostic.

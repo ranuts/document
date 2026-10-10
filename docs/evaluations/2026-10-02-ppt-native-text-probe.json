@@ -1,0 +1,87 @@
+{
+  "scope": "Isolated PPT native text API feasibility, not IM tool implementation",
+  "results": [
+    {
+      "method": "pluginMethod_InputText",
+      "before": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      },
+      "after": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      },
+      "afterSettled": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      },
+      "afterUndo": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      }
+    },
+    {
+      "method": "pluginMethod_PasteText",
+      "before": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      },
+      "after": {
+        "texts": [
+          "\r\n",
+          "\r\n",
+          "PPT_NATIVE_TEXT_2026\r\n"
+        ],
+        "count": 3,
+        "history": 0
+      },
+      "afterSettled": {
+        "texts": [
+          "\r\n",
+          "\r\n",
+          "PPT_NATIVE_TEXT_2026\r\n"
+        ],
+        "count": 3,
+        "history": 0
+      },
+      "afterUndo": {
+        "texts": [
+          "\r\n",
+          "\r\n"
+        ],
+        "count": 2,
+        "history": -1
+      }
+    }
+  ],
+  "status": "completed",
+  "findings": [
+    "Selecting a placeholder shape without entering text edit mode: pluginMethod_InputText is a no-op with no history change.",
+    "pluginMethod_PasteText creates a new text shape, not a replacement of selected placeholder: shape count 2 to 3, history -1 to 0.",
+    "Native Undo restores original two shapes, empty texts and history index."
+  ],
+  "limitations": [
+    "SDK feasibility only, not IM implementation/model planning validation.",
+    "Blank default slide only; layout/text-edit-state/selection/read-only/lifetime and target expiration not tested."
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "date": "2026-10-02T17:26:10.249Z",
+  "scope": "Production offline IM with controlled 4s native preparation delay; click visible IM Stop after native preparation begins; observe whether cancelled operation writes",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790961871"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "before": {
+    "history": 0,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "stopClicked": true,
+  "responseMs": 6338,
+  "visibleErrors": [],
+  "afterLate": {
+    "history": 1,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      },
+      {
+        "text": "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 149.86,
+          "r": 230.30333333333334,
+          "b": 175.27,
+          "x": 10.159999999999997,
+          "y": 149.86,
+          "w": 220.14333333333335,
+          "h": 25.409999999999997
+        }
+      }
+    ]
+  },
+  "stopWaitMs": 8529,
+  "instrumentation": {
+    "delayed": 1,
+    "resumed": 1,
+    "groups": {
+      "start": 1,
+      "end": 1,
+      "cancel": 0
+    },
+    "busy": false
+  },
+  "cancelledOperationChangedDocument": true,
+  "nativeHistoryChanged": true,
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BB26vwDY.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "previewCount": 0,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790961973712.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "afterStop": {
+    "history": 1,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      },
+      {
+        "text": "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 149.86,
+          "r": 230.30333333333334,
+          "b": 175.27,
+          "x": 10.159999999999997,
+          "y": 149.86,
+          "w": 220.14333333333335,
+          "h": 25.409999999999997
+        }
+      }
+    ]
+  },
+  "assessment": {
+    "result": "Stop still writes after cancellation",
+    "stopWaitMsMeaning": "Includes an intentional 4500 ms observation wait; use stopResponseMs for fixed UI return timing.",
+    "delayScope": "Controlled native pre_Paste preparation delay, not measured real network/font delay."
+  },
+  "limitations": [
+    "Desktop Chromium cached WebGPU Qwen3-1.7B with failed-network probe and offline reload; not all models or physical devices.",
+    "Cancellation verified while native preparation is pending, not retroactive undo of an already committed edit.",
+    "Native file save/export persistence not exercised."
+  ]
+}

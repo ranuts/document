@@ -1,0 +1,3 @@
+# Default-model probe instrumentation failure
+
+The current editor and default WebGPU model loaded. The run then timed out after 30000 ms waiting for cleared feedback. The raw report has no workerResponseHeaders/workerHeaders and no diagnostic-device-destroyed packet. Thus Worker interception was not observed and actual destruction was not established. No GPU-loss or CPU-retry verdict follows. The cause of the missing interception is not established; cached Worker delivery is a hypothesis. The next separately named probe changes only the diagnostic Worker URL with a public query and requires an explicit hook-start packet before attempting destruction.

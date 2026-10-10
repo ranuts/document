@@ -1,0 +1,38 @@
+{
+  "scope": "Production IM rendering and restore of synthetic IndexedDB history, not model-generated long dialogue; isolated desktop Chromium viewport simulations.",
+  "errors": [],
+  "results": [
+    {
+      "height": 844,
+      "width": 390,
+      "messageClientHeight": 491,
+      "messageScrollHeight": 40790,
+      "messageHorizontalOverflow": 0,
+      "panelHorizontalOverflow": 0,
+      "sendBottom": 811,
+      "sessionWidth": 309,
+      "jumpVisible": true,
+      "afterJump": {
+        "remaining": 0
+      }
+    },
+    {
+      "height": 320,
+      "width": 320,
+      "messageClientHeight": 53,
+      "messageScrollHeight": 46622,
+      "messageHorizontalOverflow": 0,
+      "panelHorizontalOverflow": 0,
+      "sendBottom": 301,
+      "sessionWidth": 239,
+      "jumpVisible": true,
+      "afterJump": {
+        "remaining": 1
+      }
+    }
+  ],
+  "messageCount": 60,
+  "sessionCount": 12,
+  "status": "completed",
+  "allPassed": true
+}

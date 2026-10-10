@@ -1,0 +1,293 @@
+{
+  "scope": "Same-model Metal base/sg32 compiled-library diagnostic only",
+  "modelId": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+  "runs": [
+    {
+      "variant": "base",
+      "args": [],
+      "requests": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-23.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-22.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        }
+      ],
+      "library": {
+        "variant": "base",
+        "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/025bcaf3780fa8254f5e5efd3bfea0a5397248f4/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "bytes": 5297311,
+        "sha256": "aae12cd18b5c2823df914e07be5fca45768fdbaf726103781b54d8c055e5818b",
+        "localDiagnosticFile": ".scratch/2026-10-07-qwen25-base.wasm"
+      },
+      "libraryResponses": 1,
+      "errors": [],
+      "outputs": [
+        {
+          "completion": {
+            "id": "b36ddece-2acc-4eec-a41a-8d91f6cf4a5e",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"2044-09-23\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353488,
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 49,
+              "total_tokens": 67,
+              "extra": {
+                "e2e_latency_s": 1.293,
+                "prefill_tokens_per_s": 73.83076181544155,
+                "decode_tokens_per_s": 28.790786950097964,
+                "time_to_first_token_s": 0.6636799999773503,
+                "time_per_output_token_s": 0.03473333333101537,
+                "grammar_init_s": 0.2934899999797344,
+                "grammar_per_token_s": 0.00014694444504049088
+              }
+            }
+          },
+          "error": null
+        },
+        {
+          "completion": {
+            "id": "0716dd28-0198-436d-ac73-0c2a84a45f9a",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"204 Walsh Avenue, Dublin, Ireland\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353489,
+            "usage": {
+              "completion_tokens": 17,
+              "prompt_tokens": 49,
+              "total_tokens": 66,
+              "extra": {
+                "e2e_latency_s": 0.909,
+                "prefill_tokens_per_s": 164.9998316334872,
+                "decode_tokens_per_s": 28.20780858434837,
+                "time_to_first_token_s": 0.2969699999988079,
+                "time_per_output_token_s": 0.03545117647156996,
+                "grammar_init_s": 0.00008500000834465027,
+                "grammar_per_token_s": 0.00010705882486175087
+              }
+            }
+          },
+          "error": null
+        }
+      ],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "modelRecord": {
+        "model": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_id": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/025bcaf3780fa8254f5e5efd3bfea0a5397248f4/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "low_resource_required": true,
+        "vram_required_MB": 2893.64,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "loadError": null,
+      "workerVendor": "apple",
+      "finished": true,
+      "contextClosed": true
+    },
+    {
+      "variant": "sg32",
+      "args": [],
+      "requests": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-23.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-22.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        }
+      ],
+      "library": {
+        "variant": "sg32",
+        "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/025bcaf3780fa8254f5e5efd3bfea0a5397248f4/web-llm-models/v0_2_84/sg32/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "bytes": 5298374,
+        "sha256": "9e2e30d992d3cdb6b552f3a2111cb4289f933cb30501d8ecff9a0ce878755f39",
+        "localDiagnosticFile": ".scratch/2026-10-07-qwen25-sg32.wasm"
+      },
+      "libraryResponses": 1,
+      "errors": [],
+      "outputs": [
+        {
+          "completion": {
+            "id": "5831ff13-3fc3-4048-833e-0db6b89150c1",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"2044-09-23\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353494,
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 49,
+              "total_tokens": 67,
+              "extra": {
+                "e2e_latency_s": 2.28,
+                "prefill_tokens_per_s": 33.16390413622668,
+                "decode_tokens_per_s": 22.559642054791695,
+                "time_to_first_token_s": 1.4775099999904633,
+                "time_per_output_token_s": 0.04432694444225895,
+                "grammar_init_s": 0.28369500002264975,
+                "grammar_per_token_s": 0.0004319444480869506
+              }
+            }
+          },
+          "error": null
+        },
+        {
+          "completion": {
+            "id": "24cb72c5-fc0c-4c40-937e-c228710ec42d",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"204 Walsh Avenue, Dublin, Ireland\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353495,
+            "usage": {
+              "completion_tokens": 17,
+              "prompt_tokens": 49,
+              "total_tokens": 66,
+              "extra": {
+                "e2e_latency_s": 0.816,
+                "prefill_tokens_per_s": 163.5595907626722,
+                "decode_tokens_per_s": 33.01259332491518,
+                "time_to_first_token_s": 0.29958500000834465,
+                "time_per_output_token_s": 0.03029147059601896,
+                "grammar_init_s": 0.0001550000011920929,
+                "grammar_per_token_s": 0.00008176470504087561
+              }
+            }
+          },
+          "error": null
+        }
+      ],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "modelRecord": {
+        "model": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_id": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/025bcaf3780fa8254f5e5efd3bfea0a5397248f4/web-llm-models/v0_2_84/sg32/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "low_resource_required": true,
+        "vram_required_MB": 2893.64,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "loadError": null,
+      "workerVendor": "apple",
+      "finished": true,
+      "contextClosed": true
+    }
+  ],
+  "closed": true
+}

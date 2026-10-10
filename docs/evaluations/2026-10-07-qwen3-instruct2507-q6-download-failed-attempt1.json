@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "file": "Qwen3-4B-Instruct-2507-Q6_K.gguf",
+      "bytes": 841791698,
+      "sha256": "9d5a129aa89f0e0f843a71f948dca7233ab624d9b735a6de21c8020d80d4f594",
+      "durationSeconds": 139.87
+    }
+  ],
+  "scope": "Full pinned community quantization artifact byte verification before browser loading",
+  "verified": false,
+  "error": "Pinned shard integrity mismatch"
+}

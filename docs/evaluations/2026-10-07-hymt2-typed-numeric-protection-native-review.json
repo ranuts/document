@@ -1,0 +1,87 @@
+{
+  "scope": "Bounded manual known-source review. Uncertainty is not acceptance; no native-speaker certification, unused-source or product adoption. Narrow pass covers examined fixture only. Counts are not comparable controlled model rankings.",
+  "receiptSha256": "1a6f69aec16600dabd18d463aac98f7e57716aa676ac501850519a0009fa4d3b",
+  "protocolSha256": "4939509227e642c446c3d122afd8aa5ee6af98b45fb8de4391ac5412b46214bc",
+  "literalRestoration": {
+    "maskedCases": 7,
+    "restored": 7,
+    "semanticAcceptanceFromRestoration": false
+  },
+  "rows": [
+    {
+      "id": "zh-CN-translate:instruction-only",
+      "verdict": "uncertain",
+      "reason": "Dates are no longer proposal actors. Core relations appear retained; anonymization/de-identification and supervisor-team terminology require domain/native review."
+    },
+    {
+      "id": "zh-CN-translate:masked",
+      "verdict": "uncertain",
+      "reason": "Dates are no longer proposal actors. Core relations appear retained; anonymization/de-identification and supervisor-team terminology require domain/native review."
+    },
+    {
+      "id": "en-translate:instruction-only",
+      "verdict": "fail",
+      "reason": "Instruction-only changes ISO date spelling. Masked restores ISO dates and apparent payment-for-parts relation, but native Japanese quality and sign-off versus physical signature terminology remain unverified."
+    },
+    {
+      "id": "en-translate:masked",
+      "verdict": "uncertain",
+      "reason": "Instruction-only changes ISO date spelling. Masked restores ISO dates and apparent payment-for-parts relation, but native Japanese quality and sign-off versus physical signature terminology remain unverified."
+    },
+    {
+      "id": "ja-translate:instruction-only",
+      "verdict": "narrow-pass",
+      "reason": "Examined names, ISO dates, quantity, actors/recipient, calibration, both prerequisites and current states are retained. Bounded source review only, not native-speaker certification."
+    },
+    {
+      "id": "ja-translate:masked",
+      "verdict": "narrow-pass",
+      "reason": "Examined names, ISO dates, quantity, actors/recipient, calibration, both prerequisites and current states are retained. Bounded source review only, not native-speaker certification."
+    },
+    {
+      "id": "ko-translate:instruction-only",
+      "verdict": "fail",
+      "reason": "Both assign contract signing to Min Han although source leaves signer unspecified, and add identity ownership. Masked also changes checklist to report and has German article/date grammar defects."
+    },
+    {
+      "id": "ko-translate:masked",
+      "verdict": "fail",
+      "reason": "Both assign contract signing to Min Han although source leaves signer unspecified, and add identity ownership. Masked also changes checklist to report and has German article/date grammar defects."
+    },
+    {
+      "id": "de-translate:instruction-only",
+      "verdict": "uncertain",
+      "reason": "Actors, quantity and approval chain appear retained, but Anzahlungen (advance payments/deposits) becomes generic paid amounts; financial term precision is unresolved."
+    },
+    {
+      "id": "de-translate:masked",
+      "verdict": "uncertain",
+      "reason": "Actors, quantity and approval chain appear retained, but Anzahlungen (advance payments/deposits) becomes generic paid amounts; financial term precision is unresolved."
+    },
+    {
+      "id": "es-translate:instruction-only",
+      "verdict": "uncertain",
+      "reason": "Core states appear retained; Portuguese subordinate verb forms require native review. Instruction-only changes review object to request; masked has unnatural date article constructions."
+    },
+    {
+      "id": "es-translate:masked",
+      "verdict": "uncertain",
+      "reason": "Core states appear retained; Portuguese subordinate verb forms require native review. Instruction-only changes review object to request; masked has unnatural date article constructions."
+    },
+    {
+      "id": "pt-translate:instruction-only",
+      "verdict": "fail",
+      "reason": "Both change lack of deletion authorization into a causal inability to delete after inventory-taking. Archive team becomes document team; masked adds malformed Chinese date/quantity constructions."
+    },
+    {
+      "id": "pt-translate:masked",
+      "verdict": "fail",
+      "reason": "Both change lack of deletion authorization into a causal inability to delete after inventory-taking. Archive team becomes document team; masked adds malformed Chinese date/quantity constructions."
+    }
+  ],
+  "counts": {
+    "uncertain": 7,
+    "fail": 5,
+    "narrow-pass": 2
+  }
+}

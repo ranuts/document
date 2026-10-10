@@ -1,0 +1,18 @@
+{
+  "assets": [
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC",
+      "revision": "7690aaaa46df36b1be0fe93b9c9abac0497eff6c",
+      "sameParsedContent": true,
+      "differenceCount": 0,
+      "differences": []
+    },
+    {
+      "repo": "mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+      "revision": "dfa91e859b714acfa489a1464297080656c3460d",
+      "sameParsedContent": true,
+      "differenceCount": 0,
+      "differences": []
+    }
+  ]
+}

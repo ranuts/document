@@ -1,0 +1,5 @@
+# Consistent request comparison: before inference
+
+Compare frozen relations suffixes against the summary-specific consistent request on two fresh English/Chinese cases, one repetition each, fixed baseline-first order and native CPU Qwen2.5 3B. Exact sources were absent from existing evaluation JSON at creation; this is not independent semantic novelty certification. Commit cases and executable before inference. Keep source JSON byte-identical, source language, generation/schema, guards and document history unchanged. No product prompt changes.
+
+Record original and transformed completion messages and transformed count messages. Reject ambiguous task JSON extraction. Verify final counted messages equal completion messages, without claiming token-count numeric accuracy. Preserve raw outputs/refusals, exact native history and bundle identity. Review all rubric relations, concise form and language separately; successful native application is not semantic acceptance. Global adoption remains gated by broader seven-language/operation/model validation. Cases become observed after this run. Timing is descriptive only.

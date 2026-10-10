@@ -1,0 +1,97 @@
+{
+  "date": "2026-09-27",
+  "method": "Chrome DevTools; SDK request validation without inference; direct real editor tool execution, no LLM-driven editing",
+  "records": [
+    {
+      "pageId": 14,
+      "result": {
+        "sdk": "0.2.85",
+        "records": [
+          {
+            "model": "Qwen3-1.7B-q4f16_1-MLC",
+            "accepted": false,
+            "error": "UnsupportedModelIdError: Qwen3-1.7B-q4f16_1-MLC is not supported for ChatCompletionRequest.tools. Currently, models that support function calling are: Hermes-2-Pro-Llama-3-8B-q4f16_1-MLC, Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC, Hermes-2-Pro-Mistral-7B-q4f16_1-MLC, Hermes-3-Llama-3.1-8B-q4f32_1-MLC, Hermes-3-Llama-3.1-8B-q4f16_1-MLC"
+          },
+          {
+            "model": "Qwen3.5-2B-q4f16_1-MLC",
+            "accepted": false,
+            "error": "UnsupportedModelIdError: Qwen3.5-2B-q4f16_1-MLC is not supported for ChatCompletionRequest.tools. Currently, models that support function calling are: Hermes-2-Pro-Llama-3-8B-q4f16_1-MLC, Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC, Hermes-2-Pro-Mistral-7B-q4f16_1-MLC, Hermes-3-Llama-3.1-8B-q4f32_1-MLC, Hermes-3-Llama-3.1-8B-q4f16_1-MLC"
+          },
+          {
+            "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+            "accepted": false,
+            "error": "UnsupportedModelIdError: Qwen3.5-0.8B-q4f16_1-MLC is not supported for ChatCompletionRequest.tools. Currently, models that support function calling are: Hermes-2-Pro-Llama-3-8B-q4f16_1-MLC, Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC, Hermes-2-Pro-Mistral-7B-q4f16_1-MLC, Hermes-3-Llama-3.1-8B-q4f32_1-MLC, Hermes-3-Llama-3.1-8B-q4f16_1-MLC"
+          },
+          {
+            "model": "Qwen3-4B-q4f16_1-MLC",
+            "accepted": false,
+            "error": "UnsupportedModelIdError: Qwen3-4B-q4f16_1-MLC is not supported for ChatCompletionRequest.tools. Currently, models that support function calling are: Hermes-2-Pro-Llama-3-8B-q4f16_1-MLC, Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC, Hermes-2-Pro-Mistral-7B-q4f16_1-MLC, Hermes-3-Llama-3.1-8B-q4f32_1-MLC, Hermes-3-Llama-3.1-8B-q4f16_1-MLC"
+          }
+        ],
+        "functionCallingModelIds": [
+          "Hermes-2-Pro-Llama-3-8B-q4f16_1-MLC",
+          "Hermes-2-Pro-Llama-3-8B-q4f32_1-MLC",
+          "Hermes-2-Pro-Mistral-7B-q4f16_1-MLC",
+          "Hermes-3-Llama-3.1-8B-q4f32_1-MLC",
+          "Hermes-3-Llama-3.1-8B-q4f16_1-MLC"
+        ]
+      }
+    },
+    {
+      "pageId": 15,
+      "result": {
+        "kind": "docx",
+        "result": {
+          "inserted": true,
+          "length": 50
+        },
+        "read": {
+          "text": "DOCX tool probe: budget 1,250 EUR, due 2026-10-08.\n",
+          "truncated": false
+        },
+        "review": {
+          "enabled": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "pageId": 16,
+      "result": {
+        "kind": "xlsx",
+        "write": {
+          "cell": "B2",
+          "value": "1250"
+        },
+        "read": {
+          "cell": "B2",
+          "text": "1250"
+        },
+        "guard": "Error: set_review_mode is only available in the Word editor",
+        "passed": true
+      }
+    },
+    {
+      "pageId": 17,
+      "result": {
+        "kind": "pptx",
+        "write": {
+          "inserted": true,
+          "length": 15
+        },
+        "read": {
+          "text": "",
+          "truncated": false
+        },
+        "guard": "Error: set_cell is only available in the spreadsheet (Excel) editor",
+        "passed": false
+      }
+    }
+  ],
+  "pptxInspection": {
+    "selection": "drawing",
+    "getSelectedText": "",
+    "slideShapeTexts": ["\r\n", "\r\n", "PPTX tool probe\r\n"],
+    "conclusion": "Insertion succeeded; generic get_document_text did not read slide shape text."
+  }
+}

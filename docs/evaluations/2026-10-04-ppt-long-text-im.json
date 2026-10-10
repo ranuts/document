@@ -1,0 +1,132 @@
+{
+  "probeSHA256": "d676ea9c5f0119aee42dea0c99379586edb92c80ac2ba112bd11474333559480",
+  "cases": [
+    {
+      "id": "multiline",
+      "text": "Line 1: 四季 日本 ä / native text.\nLine 2: 四季 日本 ä / native text.\nLine 3: 四季 日本 ä / native text.\nLine 4: 四季 日本 ä / native text.\nLine 5: 四季 日本 ä / native text.\nLine 6: 四季 日本 ä / native text."
+    },
+    {
+      "id": "long-word",
+      "text": "ExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinary 四季 日本 ä END"
+    }
+  ],
+  "scope": "Actual default GPU IM add-slide-text literal planning and native PPT layout, two predeclared new synthetic examples; warm profile/network, no physical-device or all-format acceptance.",
+  "rows": [
+    {
+      "id": "multiline",
+      "text": "Line 1: 四季 日本 ä / native text.\nLine 2: 四季 日本 ä / native text.\nLine 3: 四季 日本 ä / native text.\nLine 4: 四季 日本 ä / native text.\nLine 5: 四季 日本 ä / native text.\nLine 6: 四季 日本 ä / native text.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "before": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 31.17675,
+            "width": 254,
+            "height": 66.32222222222222,
+            "contentHeight": 22.86
+          },
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 100.05661111111111,
+            "width": 254,
+            "height": 45.99338888888889,
+            "contentHeight": 9.144
+          }
+        ]
+      },
+      "after": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 31.17675,
+            "width": 254,
+            "height": 66.32222222222222,
+            "contentHeight": 22.86
+          },
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 100.05661111111111,
+            "width": 254,
+            "height": 45.99338888888889,
+            "contentHeight": 9.144
+          }
+        ]
+      },
+      "visibleErrors": [
+        "There is not enough space on this slide. Use less text or another slide.Restore request"
+      ],
+      "previews": 0,
+      "applied": false,
+      "documentUnchanged": true,
+      "screenshotPath": ".scratch/ai-csp/ppt-long-text-multiline.png",
+      "screenshotSHA256": "38c865b2c0f95836076fb9120a8d760853a48ae9567c5bdf7c60f765e3b2318d"
+    },
+    {
+      "id": "long-word",
+      "text": "ExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinary 四季 日本 ä END",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "before": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 31.17675,
+            "width": 254,
+            "height": 66.32222222222222,
+            "contentHeight": 22.86
+          },
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 100.05661111111111,
+            "width": 254,
+            "height": 45.99338888888889,
+            "contentHeight": 9.144
+          }
+        ]
+      },
+      "after": {
+        "width": 338.6666666666667,
+        "height": 190.5,
+        "shapes": [
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 31.17675,
+            "width": 254,
+            "height": 66.32222222222222,
+            "contentHeight": 22.86
+          },
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 100.05661111111111,
+            "width": 254,
+            "height": 45.99338888888889,
+            "contentHeight": 9.144
+          }
+        ]
+      },
+      "visibleErrors": [
+        "There is not enough space on this slide. Use less text or another slide.Restore request"
+      ],
+      "previews": 0,
+      "applied": false,
+      "documentUnchanged": true,
+      "screenshotPath": ".scratch/ai-csp/ppt-long-text-long-word.png",
+      "screenshotSHA256": "38c865b2c0f95836076fb9120a8d760853a48ae9567c5bdf7c60f765e3b2318d"
+    }
+  ],
+  "errors": [],
+  "status": "completed"
+}

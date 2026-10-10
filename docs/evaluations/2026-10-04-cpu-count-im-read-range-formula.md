@@ -1,0 +1,5 @@
+# Range read formula/value preservation
+
+Actual current CPU Excel IM read A1:B4 after native paste seeded B2 with =10+20, left B3 empty, and inserted literal <b>Davi & Mira</b> in A3. The returned ordinary message included every requested cell, evaluated B2 value 30, an explicit empty B3 value, and literal markup-like A3 text. Inspected value snapshots stayed unchanged; native B2 getFormula returned 10+20 both before and after the read. No inference action, error or preview card appeared.
+
+The first diagnostic recorded values but lacked direct formula evidence and inherited seed-history Undo/Redo; it is retained as exploratory evidence. The corrected probe removes that history exercise and directly captures the native formula before/after. The verifier checks actual formula preservation and all eight returned values. No product code changed. This establishes value-reading semantics, not formula-source export or a general XSS/rendering audit. Multiline handling remains supported by the existing execution unit test; it was not added to this actual UI fixture.

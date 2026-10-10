@@ -1,0 +1,89 @@
+{
+  "scope": "Default GPU idle loss, no automatic fallback, explicit retry with navigator.gpu hidden and real default CPU inference; simulated capability loss, not physical device acceptance",
+  "workerBaseSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+  "workerDiagnosticSHA256": "cbe49122aed2a66b18a047a1dfd80fc087e3b72b7ed645c691b7be93d9cb7294",
+  "errors": [],
+  "serviceWorkerSetup": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "removed": [
+      {
+        "scope": "http://127.0.0.1:5193/",
+        "unregistered": true
+      }
+    ]
+  },
+  "controller": null,
+  "editorScripts": [
+    "",
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-BRhW6Vt0.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "currentEditor": "editor-BRhW6Vt0.js",
+  "workerHeaders": {
+    "vary": "Origin",
+    "cross-origin-opener-policy": "same-origin",
+    "cross-origin-embedder-policy": "require-corp",
+    "content-security-policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+    "content-type": "text/javascript",
+    "last-modified": "Wed, 07 Oct 2026 09:14:15 GMT",
+    "etag": "W/\"6040111-1791364455716\"",
+    "cache-control": "no-cache",
+    "content-encoding": "gzip",
+    "date": "Wed, 07 Oct 2026 09:29:36 GMT",
+    "connection": "keep-alive",
+    "keep-alive": "timeout=5",
+    "transfer-encoding": "chunked"
+  },
+  "loadedNote": "Model loaded — you can start chatting.",
+  "loadedStatus": "WebGPU · Qwen3 · 1.7B",
+  "documentBefore": "\r\n",
+  "workersBeforeLoss": [
+    "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js?diagnostic=default-loss-20261007"
+  ],
+  "afterLoss": {
+    "messages": [
+      {
+        "kind": "diagnostic-worker-ready"
+      },
+      {
+        "kind": "diagnostic-device-destroyed",
+        "count": 1
+      }
+    ],
+    "requests": [],
+    "allWorkers": [
+      "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js?diagnostic=default-loss-20261007"
+    ],
+    "inputDisabled": false,
+    "status": "",
+    "note": "Load model",
+    "assistants": [],
+    "chatErrors": []
+  },
+  "documentAfter": "\r\n",
+  "cpuBeforeRetry": {
+    "loads": 0,
+    "completions": 0
+  },
+  "retryStatus": "CPU · Qwen3 · 0.6B",
+  "retryNote": "Model loaded — you can start chatting.",
+  "afterRetry": {
+    "requests": [],
+    "workers": 1,
+    "assistants": [
+      {
+        "text": "Hello! Let me know if you need help with anything.Write to document",
+        "interrupted": false
+      }
+    ],
+    "chatErrors": [],
+    "inputDisabled": false
+  },
+  "cpuAfterRetry": {
+    "loads": 1,
+    "completions": 1
+  },
+  "finished": true,
+  "contextClosed": true
+}

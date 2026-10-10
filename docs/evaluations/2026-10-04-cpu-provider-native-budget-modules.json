@@ -1,0 +1,14 @@
+{
+  "scope": "Compiled provider modules served to isolated native browser budget probe",
+  "providerFiles": {
+    "llm/wllama.js": "48acc438e077d6b56416e47e528dd743eba794740f1d08679016c6c4c1842565",
+    "context-budget.js": "b38af17fcb01ccd148b3fc238a61e02dc480c706f3103173cfa52c27bb840647",
+    "llm/openai-format.js": "02ac4b33d525296d9b10e1c7bb4890fedf0f37a9030eb35b21da6458029ca6a1",
+    "llm/prompt.js": "9c18dd6074bf01c59851acae510d4b0b90910b3d9b3959dce4604ac509122a6b",
+    "llm/generation.js": "fc39136b13d53900a3e8cbc0350d46a30662ec4f31e34dcd257cab5d5b907264",
+    "llm/wllama-cache-storage.js": "4157fa165f3facc9704dd4b46c31e1115db02d4d3d6d558557422812bdff88a7",
+    "llm/wllama-compat-assets.js": "80f6704d07c021694372307cde0c674296ac01f6710571245882a3f28f4cff20"
+  },
+  "probeSHA256": "41805eaff7416a739f2d80961335a89efcb1902319027b38365d747d79ed3f66",
+  "overflowProbeSHA256": "7724242c257d905641af046bc669ddc6769e468e5aab033fa945e856dbec6411"
+}

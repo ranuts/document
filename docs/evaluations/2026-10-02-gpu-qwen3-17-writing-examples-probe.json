@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-02T09:57:44.888Z",
+  "scope": "Isolated production UI experiment with temporary writing examples selected-text direct writing path; Chromium Metal GPU Qwen3-1.7B. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex将在2026-10-08支付1,250 EUR。\r\n",
+      "error": [],
+      "responseMs": 1985,
+      "exampleCalls": 1,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "taskAchieved": true,
+      "manualReview": "Formal phrasing and Alex/ISO date/amount/EUR all retained in both repetitions."
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 1938,
+      "exampleCalls": 2,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "taskAchieved": false,
+      "manualReview": "No successful rewrite; unchanged original and generic visible error."
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "The payment of 1,250 EUR proposed on 2026-10-08 has not been approved.\r\n",
+      "error": [],
+      "responseMs": 2376,
+      "exampleCalls": 3,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "taskAchieved": false,
+      "manualReview": "Concise summary retains negation, amount and date but omits Alex attribution; not full fact/name preservation."
+    },
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex将在2026-10-08支付1,250 EUR。\r\n",
+      "error": [],
+      "responseMs": 1878,
+      "exampleCalls": 4,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "taskAchieved": true,
+      "manualReview": "Formal phrasing and Alex/ISO date/amount/EUR all retained in both repetitions."
+    }
+  ],
+  "errors": [],
+  "experiment": "Same isolated temporary writing examples as the Qwen3-4B probe; no product source changes. Built module restored after the three-model run.",
+  "outputKind": "Resulting document text, not raw model response",
+  "limitations": "Three unique cases, Chinese case repeated once. Desktop Chromium only; no full language/model acceptance. Successful document write does not prove writing quality."
+}

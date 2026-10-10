@@ -1,0 +1,13 @@
+# Explicit literal long-text PPT IM — 2026-10-04
+
+Both unchanged prior source examples now write exactly on native blank slides: six mixed-language lines and the 35-times unbroken Extraordinary token with Unicode suffix. Native Undo/Redo snapshots include complete text and restore exactly. Boxes and measured content heights fit the slide; visual inspection of both screenshots shows the full multiline text and wrapped long token/suffix without obvious clipping. No preview/confirmation was introduced.
+
+Actual Qwen3 1.7B uses the existing explicitly recognized JSON-string-decoding command instead of the prior unconstrained natural-language wording. Captured Worker requests establish one actual inference per case, model ID, temperature0/max512 and schema text enum containing the exact entire source. That constrains copying rather than demonstrating improved general model ability. The unchanged source cases were predeclared earlier; this is a known-regression experiment, not fresh heldout evidence.
+
+The diagnostic now traverses native supported paragraph/run/character items for complete multiline text, following the product reader's supported item types. It is a separate diagnostic implementation, not a call to the product function, and throws on unsupported nodes. It does not extend font/style validation or generalize to arbitrary native structures. Six lines contain five internal LF breaks plus the final native paragraph terminator. Full observed text equality resolves the prior null getText diagnostic gap; the prior 35→40 literal failure is preserved as distinct evidence, not rewritten.
+
+Same native blank setup, warm independent Chromium profile, existing dark theme, 1440×1000, service workers blocked, network available. Worker instrumentation records outgoing requests without altering them. No raw model response capture, Save/reopen, font identity across devices, physical GPU/OOM, forced offline or network/privacy acceptance. Scoped verifier binds driver/cases/schema/model/native text/history/screenshot SHA. Owned process exited0 and context closed. No product change or full-suite/build repetition was needed.
+
+Independent read-only review found no Critical/Important issue and confirmed the limited screenshot observations. Driver syntax, scoped verifier and whitespace checks pass.
+
+This proves the existing explicit literal route on two samples. It does not solve ordinary paraphrased command reliability or default-slide placement limits; requiring users to author JSON is not a proposed product interaction. Keep the compact IM workflow and investigate natural-language exact-copy handling without silently deleting placeholders or adding confirmation cards.

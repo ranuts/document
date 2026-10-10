@@ -1,0 +1,46 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "blob:http://127.0.0.1:5193/e558dff4-493e-4bca-9643-d27a9c9cb8ba"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "url": "blob:http://127.0.0.1:5193/509e8de5-2960-4386-8d5e-ff0c7428d941"
+    },
+    {
+      "event": "created",
+      "id": 4,
+      "url": "blob:http://127.0.0.1:5193/e3ae75f6-2f51-4547-93c9-5cd61577f3ed"
+    },
+    {
+      "event": "created",
+      "id": 5,
+      "url": "blob:http://127.0.0.1:5193/27e226f0-c61a-4c25-8685-bc94f1e8ba8e"
+    },
+    {
+      "event": "created",
+      "id": 6,
+      "url": "blob:http://127.0.0.1:5193/80adb967-619b-424d-9323-72fb23ebae98"
+    }
+  ],
+  "offlineRequests": [],
+  "probeSHA256": "3740147c6601afd2cc6b12c33989b3fdaa719ddd444dca39bf09d7a440b4ccf7",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "status": "failed",
+  "error": "TimeoutError: page.waitForFunction: Timeout 120000ms exceeded."
+}

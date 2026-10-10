@@ -99,6 +99,62 @@
    */
   var leaving = false;
   var aborter = typeof AbortController === 'function' ? new AbortController() : null;
+  var upgrading = false;
+  var watchedRegistration = null;
+  var watchedInstalling = null;
+  var watchedWaiting = null;
+  var pendingIntents = {};
+  var runningIntents = {};
+
+  // Large warm-up responses can keep the outgoing worker busy while a waiting
+  // build tries to take control. Let promotion finish before warming its cache.
+  // This is separate from leaving: pointer/keyboard activity must not undo it.
+  function watchRegistration(registration) {
+    if (!registration) return true;
+    if (registration !== watchedRegistration) {
+      watchedRegistration = registration;
+      registration.addEventListener('updatefound', function () {
+        watchRegistration(registration);
+      });
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        watchRegistration(registration);
+      });
+    }
+    var installing = registration.installing;
+    var waiting = registration.waiting;
+    if (waiting && waiting !== watchedWaiting) {
+      watchedWaiting = waiting;
+      waiting.addEventListener('statechange', function () {
+        watchRegistration(registration);
+      });
+    }
+    if (installing && installing !== watchedInstalling) {
+      watchedInstalling = installing;
+      installing.addEventListener('statechange', function () {
+        watchRegistration(registration);
+      });
+    }
+    function pending(worker) {
+      // The native editor also installs an unrelated empty stub in this scope;
+      // the landing updater deliberately does not promote that registration.
+      if (worker && worker.scriptURL && new URL(worker.scriptURL).pathname !== '/sw.js') return false;
+      return worker && worker.state !== 'redundant' && worker.state !== 'activated';
+    }
+    var blocked = !!(pending(waiting) || pending(installing));
+    if (blocked && !upgrading) {
+      upgrading = true;
+      requested = {};
+      if (aborter) aborter.abort();
+    } else if (!blocked && upgrading) {
+      upgrading = false;
+      if (!leaving) {
+        aborter = newAborter();
+        startBackgroundWarmUp();
+        flushIntents();
+      }
+    }
+    return !upgrading;
+  }
 
   function newAborter() {
     return typeof AbortController === 'function' ? new AbortController() : null;
@@ -115,6 +171,7 @@
     leaving = false;
     aborter = newAborter();
     startBackgroundWarmUp();
+    flushIntents();
   }
 
   // `beforeunload` and not just `pagehide`: measured on WebKit, pagehide is
@@ -145,9 +202,22 @@
    * even when the browser still holds a copy.
    */
   function warm(url) {
-    if (leaving) return Promise.resolve();
+    if (!navigator.serviceWorker) return warmRequest(url);
+    return navigator.serviceWorker.ready
+      .then(watchRegistration)
+      .then(function (allowed) {
+        if (allowed) return warmRequest(url);
+      })
+      .catch(function () {
+        /* unavailable worker: leave the actual document load cold */
+      });
+  }
+
+  function warmRequest(url) {
+    if (leaving || upgrading) return Promise.resolve();
     if (requested[url]) return Promise.resolve();
-    requested[url] = true;
+    var requests = requested;
+    requests[url] = true;
     return fetch(url, {
       credentials: 'same-origin',
       priority: 'low',
@@ -157,7 +227,7 @@
       .catch(function () {
         // A warm-up failure must stay invisible: the real load will just be cold.
         // Allow a retry later rather than poisoning the URL for the session.
-        requested[url] = false;
+        requests[url] = false;
       });
   }
 
@@ -206,7 +276,29 @@
 
   function prefetchOnIntent(kind) {
     if (!allowedOnIntent()) return;
-    warmSerially([LOADER].concat(formatUrls(kind)));
+    pendingIntents[kind || ''] = true;
+    if (!navigator.serviceWorker) {
+      flushIntents();
+      return;
+    }
+    navigator.serviceWorker.ready
+      .then(watchRegistration)
+      .then(flushIntents)
+      .catch(function () {});
+  }
+
+  function flushIntents() {
+    if (upgrading || leaving) return;
+    Object.keys(pendingIntents).forEach(function (kind) {
+      if (runningIntents[kind]) return;
+      runningIntents[kind] = true;
+      var requests = requested;
+      warmSerially([LOADER].concat(formatUrls(kind))).then(function () {
+        delete runningIntents[kind];
+        if (!upgrading && !leaving && requests === requested) delete pendingIntents[kind];
+        if (requests !== requested) flushIntents();
+      });
+    });
   }
 
   function arm(el, kind) {
@@ -293,7 +385,9 @@
     if (!allowedInBackground()) return;
     if (!navigator.serviceWorker) return;
     navigator.serviceWorker.ready
-      .then(hasRoom)
+      .then(function (registration) {
+        return watchRegistration(registration) ? hasRoom() : false;
+      })
       .then(function (room) {
         if (room) warmEverything();
       })

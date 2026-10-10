@@ -1,0 +1,26 @@
+{
+  "scope": "Actual GPUDevice destruction after native-panel streaming begins; instrumented worker, not spontaneous hardware loss or full device acceptance",
+  "workerBaseSHA256": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba",
+  "workerDiagnosticSHA256": "64412fd9f4ba2b80770fb6fb424183d9c4ddfe981445b637ba77e97cce12be40",
+  "errors": [],
+  "workerHeaders": {
+    "vary": "Origin",
+    "cross-origin-opener-policy": "same-origin",
+    "cross-origin-embedder-policy": "require-corp",
+    "content-security-policy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+    "content-type": "text/javascript",
+    "last-modified": "Wed, 07 Oct 2026 08:20:41 GMT",
+    "etag": "W/\"6040111-1791361241283\"",
+    "cache-control": "no-cache",
+    "content-encoding": "gzip",
+    "date": "Wed, 07 Oct 2026 09:03:24 GMT",
+    "connection": "keep-alive",
+    "keep-alive": "timeout=5",
+    "transfer-encoding": "chunked"
+  },
+  "loadedNote": "Model loaded — you can start chatting.",
+  "loadedStatus": "WebGPU · Qwen2.5-7B-Instruct-q4f16_1-MLC",
+  "documentBefore": "\r\n",
+  "error": "TimeoutError: page.waitForFunction: Timeout 180000ms exceeded.",
+  "contextClosed": true
+}

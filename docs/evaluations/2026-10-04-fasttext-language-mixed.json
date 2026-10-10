@@ -1,0 +1,1270 @@
+{
+  "scope": "Actual fastText native fresh mixed-content controls plus previously bound classifier predictions; whole-text .8 vs exact-retained-substring abstention. No semantic acceptance, optimization on heldout set, product guard or document edits.",
+  "adopted": false,
+  "priorReportSHA256": "fc335830cea36cfb432c2a2abb411e59c0e7df7f330406b9d760fa0a0cf10109",
+  "driverSHA256": "bb6c0ba603c89d54e62d56edc6babfc9cd1cefcf1dfa87c387bfaa0dbb2a8834",
+  "modelBytes": 938013,
+  "modelSHA256": "8f3472cfe8738a7b6099e8e999c3cbfae0dcd15696aac7d7738a8039db603e83",
+  "sourceRevision": "5b5943c118b0ec5fb9cd8d20587de2b2d3966dfe",
+  "pairs": [
+    {
+      "id": "zh-to-danish",
+      "source": "Mira提议运送阀门，但仅限安全检查通过后。检查尚未完成，发货尚未获得授权。",
+      "output": "Mira forespiller at sende ventiler, men kun efter sikkerhedskontrolle.",
+      "reject": true,
+      "reason": "Chinese prose replaced with other-language prose",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.999714
+        },
+        {
+          "language": "sr",
+          "score": 0.000104287
+        },
+        {
+          "language": "wuu",
+          "score": 7.87855e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "da",
+          "score": 0.38862
+        },
+        {
+          "language": "nn",
+          "score": 0.1063
+        },
+        {
+          "language": "sv",
+          "score": 0.100232
+        }
+      ],
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain"
+    },
+    {
+      "id": "zh-to-english",
+      "source": "备件到货后方可维修，备件仍未到货，目前维修尚未开始，请保留这些必要条件。",
+      "output": "Repair will begin once spare parts arrive; work has not started.",
+      "reject": true,
+      "reason": "Chinese prose replaced with English",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.995105
+        },
+        {
+          "language": "ja",
+          "score": 0.00192362
+        },
+        {
+          "language": "wuu",
+          "score": 0.0018412
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.954966
+        },
+        {
+          "language": "ml",
+          "score": 0.00330667
+        },
+        {
+          "language": "kn",
+          "score": 0.00304065
+        }
+      ],
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "reject"
+    },
+    {
+      "id": "en-to-zh",
+      "source": "The repair requires spare parts to arrive first, and the work has not started.",
+      "output": "维修需等待备件到货，目前工作尚未开始。",
+      "reject": true,
+      "reason": "English prose replaced with Chinese",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.951335
+        },
+        {
+          "language": "ru",
+          "score": 0.00241516
+        },
+        {
+          "language": "es",
+          "score": 0.00216265
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "zh",
+          "score": 0.997443
+        },
+        {
+          "language": "wuu",
+          "score": 0.00124911
+        },
+        {
+          "language": "ja",
+          "score": 0.00109712
+        }
+      ],
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "reject"
+    },
+    {
+      "id": "zh-faithful",
+      "source": "备件到货后方可维修，备件仍未到货，目前维修尚未开始，请保留这些必要条件。",
+      "output": "备件未到，维修未开始，须待备件到货。",
+      "reject": false,
+      "reason": "Chinese retained",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.995105
+        },
+        {
+          "language": "ja",
+          "score": 0.00192362
+        },
+        {
+          "language": "wuu",
+          "score": 0.0018412
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "zh",
+          "score": 0.881533
+        },
+        {
+          "language": "wuu",
+          "score": 0.10196
+        },
+        {
+          "language": "yue",
+          "score": 0.011409
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "en-faithful",
+      "source": "The repair requires spare parts to arrive first, and the work has not started.",
+      "output": "Repair awaits spare parts; work has not started.",
+      "reject": false,
+      "reason": "English retained",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.951335
+        },
+        {
+          "language": "ru",
+          "score": 0.00241516
+        },
+        {
+          "language": "es",
+          "score": 0.00216265
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.952957
+        },
+        {
+          "language": "hi",
+          "score": 0.00302817
+        },
+        {
+          "language": "kn",
+          "score": 0.0027819
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "zh-names-only",
+      "source": "参会人员包括 Alexandria Montgomery、Christopher Richardson。会议议题涵盖设备安全检查、维修前提与尚未开始的工作安排。记录还列出了会议室位置、交通方式、签到顺序、座位安排以及会议结束后的资料分发流程，这些信息与人员名单无关。请以登记表中的正式拼写为准。",
+      "output": "Alexandria Montgomery、Christopher Richardson",
+      "reject": false,
+      "reason": "Instruction: retain only original names; intentional mixed source and names-only summary",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.994215
+        },
+        {
+          "language": "ja",
+          "score": 0.00309707
+        },
+        {
+          "language": "ko",
+          "score": 0.001105
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "ja",
+          "score": 0.440116
+        },
+        {
+          "language": "zh",
+          "score": 0.141676
+        },
+        {
+          "language": "en",
+          "score": 0.0456808
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain-retained-span"
+    },
+    {
+      "id": "zh-quoted-english",
+      "source": "记录包含一句原始口号：“Safety inspection before shipment”。其余内容介绍场地布置、灯光安排、座位编号、接待流程和餐饮管理。这些背景没有改变口号的内容，最终记录应以现场展示的文字为准。相关负责人确认口号的拼写已逐字核对，宣传材料将沿用同一版本。",
+      "output": "Safety inspection before shipment",
+      "reject": false,
+      "reason": "Instruction: summarize by retaining only the original slogan, omit unrelated Chinese narrative",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.996208
+        },
+        {
+          "language": "ja",
+          "score": 0.00249068
+        },
+        {
+          "language": "en",
+          "score": 0.000336843
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.92512
+        },
+        {
+          "language": "de",
+          "score": 0.0109445
+        },
+        {
+          "language": "zh",
+          "score": 0.0075318
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "abstain-retained-span"
+    },
+    {
+      "id": "ja-han-summary",
+      "source": "安全検査は未完了です。出荷はまだ承認されていません。別の会議で倉庫について相談します。",
+      "output": "安全検査未完了、出荷未承認。",
+      "reject": false,
+      "reason": "Japanese summary may naturally consist of Han characters",
+      "sourcePredictions": [
+        {
+          "language": "ja",
+          "score": 0.999787
+        },
+        {
+          "language": "es",
+          "score": 0.000177319
+        },
+        {
+          "language": "uk",
+          "score": 3.85328e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "ja",
+          "score": 0.591219
+        },
+        {
+          "language": "zh",
+          "score": 0.408423
+        },
+        {
+          "language": "wuu",
+          "score": 0.000244293
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain"
+    },
+    {
+      "id": "ko-faithful",
+      "source": "부품이 도착한 후에만 수리할 수 있습니다. 부품은 아직 도착하지 않았고 작업도 시작되지 않았습니다.",
+      "output": "부품 미도착으로 수리 작업은 아직 시작되지 않았습니다.",
+      "reject": false,
+      "reason": "Korean retained",
+      "sourcePredictions": [
+        {
+          "language": "ko",
+          "score": 1.00007
+        },
+        {
+          "language": "tr",
+          "score": 1.00004e-05
+        },
+        {
+          "language": "en",
+          "score": 1.00001e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "ko",
+          "score": 1.00007
+        },
+        {
+          "language": "tr",
+          "score": 1.00004e-05
+        },
+        {
+          "language": "en",
+          "score": 1.00001e-05
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "de-to-en",
+      "source": "Die Reparatur kann erst beginnen, wenn die Ersatzteile eintreffen. Die Arbeit hat noch nicht begonnen.",
+      "output": "Repair awaits spare parts; work has not started.",
+      "reject": true,
+      "reason": "German replaced with English: same script",
+      "sourcePredictions": [
+        {
+          "language": "de",
+          "score": 0.997301
+        },
+        {
+          "language": "fr",
+          "score": 0.000570684
+        },
+        {
+          "language": "en",
+          "score": 0.000539086
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.952957
+        },
+        {
+          "language": "hi",
+          "score": 0.00302817
+        },
+        {
+          "language": "kn",
+          "score": 0.0027819
+        }
+      ],
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "reject"
+    },
+    {
+      "id": "es-to-pt",
+      "source": "La reparación depende de la llegada de las piezas; el trabajo no ha comenzado.",
+      "output": "A reparação depende das peças; o trabalho ainda não começou.",
+      "reject": true,
+      "reason": "Spanish replaced with Portuguese: same script",
+      "sourcePredictions": [
+        {
+          "language": "es",
+          "score": 0.98757
+        },
+        {
+          "language": "pt",
+          "score": 0.00216077
+        },
+        {
+          "language": "gl",
+          "score": 0.0018659
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "pt",
+          "score": 0.999292
+        },
+        {
+          "language": "en",
+          "score": 0.000612356
+        },
+        {
+          "language": "mk",
+          "score": 5.85452e-05
+        }
+      ],
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "reject"
+    },
+    {
+      "id": "pt-faithful",
+      "source": "A reparação depende da chegada das peças e o trabalho ainda não começou.",
+      "output": "A reparação aguarda peças; o trabalho ainda não começou.",
+      "reject": false,
+      "reason": "Portuguese retained",
+      "sourcePredictions": [
+        {
+          "language": "pt",
+          "score": 0.99933
+        },
+        {
+          "language": "en",
+          "score": 0.000531946
+        },
+        {
+          "language": "mk",
+          "score": 8.53125e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "pt",
+          "score": 0.998988
+        },
+        {
+          "language": "en",
+          "score": 0.000852796
+        },
+        {
+          "language": "mk",
+          "score": 5.62219e-05
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-shipment-condition-en-current",
+      "source": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes. The inspection is pending and the shipment has not been authorized. A separate meeting will discuss warehouse space.",
+      "output": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, but the inspection is pending and the shipment is not authorized.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.952071
+        },
+        {
+          "language": "hi",
+          "score": 0.00269005
+        },
+        {
+          "language": "es",
+          "score": 0.00255874
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.970962
+        },
+        {
+          "language": "de",
+          "score": 0.00296369
+        },
+        {
+          "language": "th",
+          "score": 0.00162282
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-shipment-condition-en-thinking",
+      "source": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes. The inspection is pending and the shipment has not been authorized. A separate meeting will discuss warehouse space.",
+      "output": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, with the safety inspection pending and the shipment not authorized.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.952071
+        },
+        {
+          "language": "hi",
+          "score": 0.00269005
+        },
+        {
+          "language": "es",
+          "score": 0.00255874
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.936233
+        },
+        {
+          "language": "de",
+          "score": 0.00766631
+        },
+        {
+          "language": "ru",
+          "score": 0.0035174
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-shipment-condition-zh-current",
+      "source": "Mira 提议在 2036-02-19 运送价值 480 NOK 的 17 个阀门，但仅限安全检查通过后。检查尚未完成，发货尚未获得授权。另一次会议将讨论仓库空间。",
+      "output": "Mira 提议于 2036-02-19 运送 17 个阀门，价值 480 NOK，但需先通过安全检查并获得授权。",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.99981
+        },
+        {
+          "language": "ja",
+          "score": 0.000176944
+        },
+        {
+          "language": "en",
+          "score": 2.5369e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "zh",
+          "score": 0.998532
+        },
+        {
+          "language": "wuu",
+          "score": 0.00040201
+        },
+        {
+          "language": "ko",
+          "score": 0.000349865
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-shipment-condition-zh-thinking",
+      "source": "Mira 提议在 2036-02-19 运送价值 480 NOK 的 17 个阀门，但仅限安全检查通过后。检查尚未完成，发货尚未获得授权。另一次会议将讨论仓库空间。",
+      "output": "Mira forespiller at sende 17 valv (480 NOK) den 2036-02-19, men kun efter sikkerhedskontrolle. Kontrolle er ikke udført, levering er ikke godkendt.",
+      "reject": true,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.99981
+        },
+        {
+          "language": "ja",
+          "score": 0.000176944
+        },
+        {
+          "language": "en",
+          "score": 2.5369e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "da",
+          "score": 0.879392
+        },
+        {
+          "language": "no",
+          "score": 0.0710468
+        },
+        {
+          "language": "de",
+          "score": 0.00829047
+        }
+      ],
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "reject"
+    },
+    {
+      "id": "actual-payer-recipient-en-current",
+      "source": "Sana will pay Ivo 620 CHF on 2037-04-22 for repairing 8 sensors. Ivo will not pay Sana. The team will separately choose a new logo.",
+      "output": "Sana will pay Ivo 620 CHF on 2037-04-22 for repairing 8 sensors.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.88995
+        },
+        {
+          "language": "it",
+          "score": 0.0160431
+        },
+        {
+          "language": "pt",
+          "score": 0.0131274
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.932142
+        },
+        {
+          "language": "fr",
+          "score": 0.00611824
+        },
+        {
+          "language": "de",
+          "score": 0.00368271
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "abstain-retained-span"
+    },
+    {
+      "id": "actual-payer-recipient-en-thinking",
+      "source": "Sana will pay Ivo 620 CHF on 2037-04-22 for repairing 8 sensors. Ivo will not pay Sana. The team will separately choose a new logo.",
+      "output": "Sana will pay Ivo 620 CHF on 2037-04-22 for repairing 8 sensors.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.88995
+        },
+        {
+          "language": "it",
+          "score": 0.0160431
+        },
+        {
+          "language": "pt",
+          "score": 0.0131274
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.932142
+        },
+        {
+          "language": "fr",
+          "score": 0.00611824
+        },
+        {
+          "language": "de",
+          "score": 0.00368271
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "abstain-retained-span"
+    },
+    {
+      "id": "actual-attribution-denial-en-current",
+      "source": "Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.",
+      "output": "Tomas claimed Noor removed 12 files on 2038-07-03. Noor denied the claim, and no investigation confirmed it.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.927293
+        },
+        {
+          "language": "id",
+          "score": 0.00404438
+        },
+        {
+          "language": "de",
+          "score": 0.00395879
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.856796
+        },
+        {
+          "language": "de",
+          "score": 0.0101927
+        },
+        {
+          "language": "nl",
+          "score": 0.00813224
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-attribution-denial-en-thinking",
+      "source": "Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.",
+      "output": "Tomas alleged Noor removed 12 files on 2038-07-03, denying the claim and noting no confirmation.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.927293
+        },
+        {
+          "language": "id",
+          "score": 0.00404438
+        },
+        {
+          "language": "de",
+          "score": 0.00395879
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.797798
+        },
+        {
+          "language": "de",
+          "score": 0.0180287
+        },
+        {
+          "language": "nl",
+          "score": 0.0129596
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain"
+    },
+    {
+      "id": "actual-conditional-repair-zh-current",
+      "source": "Rui 计划在 2039-11-08 修理 6 台泵，前提是备件到货。备件尚未到货，修理工作还未开始。这项计划不包括更换设备。部门同时安排了午餐。",
+      "output": "Rui 计划 2039-11-08 修理 6 台泵，但备件未到货，工作未开始，不包括设备更换。",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.984481
+        },
+        {
+          "language": "ja",
+          "score": 0.0153363
+        },
+        {
+          "language": "en",
+          "score": 5.91e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "zh",
+          "score": 0.99997
+        },
+        {
+          "language": "en",
+          "score": 3.93848e-05
+        },
+        {
+          "language": "ja",
+          "score": 2.72644e-05
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-conditional-repair-zh-thinking",
+      "source": "Rui 计划在 2039-11-08 修理 6 台泵，前提是备件到货。备件尚未到货，修理工作还未开始。这项计划不包括更换设备。部门同时安排了午餐。",
+      "output": "Rui计划于2039-11-08修理6台泵，备件未到，维修未启动，不涉及设备更换。",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.984481
+        },
+        {
+          "language": "ja",
+          "score": 0.0153363
+        },
+        {
+          "language": "en",
+          "score": 5.91e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "zh",
+          "score": 0.991887
+        },
+        {
+          "language": "ja",
+          "score": 0.00720191
+        },
+        {
+          "language": "wuu",
+          "score": 0.000433743
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-cancellation-exception-en-current",
+      "source": "Lena canceled the order for 9 motors worth 750 SEK on 2040-06-14. The separate order for 4 pumps remains active and has not been canceled. The office newsletter also listed sports events.",
+      "output": "Lena canceled the order for 9 motors worth 750 SEK on 2040-06-14, while the separate order for 4 pumps remains active.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.981323
+        },
+        {
+          "language": "hi",
+          "score": 0.00144516
+        },
+        {
+          "language": "kn",
+          "score": 0.000844205
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.858344
+        },
+        {
+          "language": "hi",
+          "score": 0.00910265
+        },
+        {
+          "language": "es",
+          "score": 0.00730496
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "actual-cancellation-exception-en-thinking",
+      "source": "Lena canceled the order for 9 motors worth 750 SEK on 2040-06-14. The separate order for 4 pumps remains active and has not been canceled. The office newsletter also listed sports events.",
+      "output": "Lena canceled the 9 motors order worth 750 SEK on 2040-06-14, while the 4 pumps order remains active.",
+      "reject": false,
+      "reason": "Previously observed actual writing response; labels concern language only, not fact accuracy",
+      "sourcePredictions": [
+        {
+          "language": "en",
+          "score": 0.981323
+        },
+        {
+          "language": "hi",
+          "score": 0.00144516
+        },
+        {
+          "language": "kn",
+          "score": 0.000844205
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.847618
+        },
+        {
+          "language": "fr",
+          "score": 0.0143813
+        },
+        {
+          "language": "hi",
+          "score": 0.00980899
+        }
+      ],
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "wholeTextVerdict": "same-label",
+      "candidateVerdict": "same-label"
+    },
+    {
+      "id": "quote-exact",
+      "source": "资料记载英文口号“Safety inspection before shipment”。其余内容说明接待流程、会场安排、会议时间与座位顺序。会议负责人要求引用原文以便保持与现有宣传材料一致。相关背景无需写入摘要。",
+      "output": "Safety inspection before shipment",
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "reason": "Retain quoted foreign-language content verbatim",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.616984
+        },
+        {
+          "language": "en",
+          "score": 0.195678
+        },
+        {
+          "language": "ko",
+          "score": 0.0591315
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.92512
+        },
+        {
+          "language": "de",
+          "score": 0.0109445
+        },
+        {
+          "language": "zh",
+          "score": 0.0075318
+        }
+      ],
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain-retained-span"
+    },
+    {
+      "id": "quote-paraphrase",
+      "source": "资料记载英文口号“Safety inspection before shipment”。其余内容说明接待流程、会场安排、会议时间与座位顺序。会议负责人要求引用原文以便保持与现有宣传材料一致。相关背景无需写入摘要。",
+      "output": "Inspect for safety before shipping.",
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "reason": "Faithful English paraphrase of intentional English content, not conversion of Chinese narrative",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.616984
+        },
+        {
+          "language": "en",
+          "score": 0.195678
+        },
+        {
+          "language": "ko",
+          "score": 0.0591315
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.92208
+        },
+        {
+          "language": "id",
+          "score": 0.00907385
+        },
+        {
+          "language": "de",
+          "score": 0.00568032
+        }
+      ],
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain"
+    },
+    {
+      "id": "quote-reversed-fact",
+      "source": "资料记载英文口号“Safety inspection before shipment”。其余内容说明接待流程、会场安排、会议时间与座位顺序。会议负责人要求引用原文以便保持与现有宣传材料一致。相关背景无需写入摘要。",
+      "output": "Ship before the safety inspection.",
+      "languageMismatch": false,
+      "semanticDefect": true,
+      "reason": "English already intentional but order reversed; language conformity is not fact verification",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.616984
+        },
+        {
+          "language": "en",
+          "score": 0.195678
+        },
+        {
+          "language": "ko",
+          "score": 0.0591315
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.890414
+        },
+        {
+          "language": "es",
+          "score": 0.0106079
+        },
+        {
+          "language": "zh",
+          "score": 0.00786158
+        }
+      ],
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain"
+    },
+    {
+      "id": "copied-unsupported-action",
+      "source": "会议讨论了两个方案：“立即批准发货”和“等待安全检查”。会议最终选择等待，未批准发货。后续流程需根据安全检查结果确定，不能自行提前实施。",
+      "output": "立即批准发货",
+      "languageMismatch": false,
+      "semanticDefect": true,
+      "reason": "Exact source substring changes discussed possibility into command; copied span is not semantic approval",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.970225
+        },
+        {
+          "language": "wuu",
+          "score": 0.00950686
+        },
+        {
+          "language": "en",
+          "score": 0.0046088
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "ja",
+          "score": 0.708405
+        },
+        {
+          "language": "zh",
+          "score": 0.261553
+        },
+        {
+          "language": "es",
+          "score": 0.00918447
+        }
+      ],
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain-retained-span"
+    },
+    {
+      "id": "names-reordered",
+      "source": "参会人包括 Alexandria Montgomery、Christopher Richardson。其他信息介绍会议室位置、签到方式与资料分发流程。人员姓名应保持登记拼写；其余背景与名单无关。",
+      "output": "Christopher Richardson, Alexandria Montgomery",
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "reason": "Reordered names-only output retains intentional mixed source",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.990969
+        },
+        {
+          "language": "ja",
+          "score": 0.00627031
+        },
+        {
+          "language": "wuu",
+          "score": 0.0006621
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.457781
+        },
+        {
+          "language": "it",
+          "score": 0.0680521
+        },
+        {
+          "language": "fr",
+          "score": 0.050263
+        }
+      ],
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain"
+    },
+    {
+      "id": "latin-prose-change",
+      "source": "Esta entrega depende de una inspección de seguridad y todavía no ha sido autorizada.",
+      "output": "This shipment requires a safety inspection and has not been authorized.",
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "reason": "Unrequested Spanish to English prose conversion",
+      "sourcePredictions": [
+        {
+          "language": "es",
+          "score": 0.976685
+        },
+        {
+          "language": "pt",
+          "score": 0.00917031
+        },
+        {
+          "language": "gl",
+          "score": 0.00282376
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.991186
+        },
+        {
+          "language": "kn",
+          "score": 0.00068514
+        },
+        {
+          "language": "ru",
+          "score": 0.000670351
+        }
+      ],
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "reject"
+    },
+    {
+      "id": "short-english-change",
+      "source": "这批货物必须等待安全检查通过，当前发货仍未获准，也没有开始运送。",
+      "output": "Not authorized yet.",
+      "languageMismatch": true,
+      "semanticDefect": null,
+      "reason": "Short English drift may have lower classifier certainty",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 1.00001
+        },
+        {
+          "language": "sr",
+          "score": 2.86822e-05
+        },
+        {
+          "language": "wuu",
+          "score": 1.79653e-05
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.729377
+        },
+        {
+          "language": "de",
+          "score": 0.055649
+        },
+        {
+          "language": "hu",
+          "score": 0.021523
+        }
+      ],
+      "wholeTextVerdict": "abstain",
+      "candidateVerdict": "abstain"
+    },
+    {
+      "id": "mixed-paraphrase",
+      "source": "安装要求写明：“Keep the valve closed”。其他内容讨论仓库位置、签到流程和设备编号，应从摘要中省略无关背景。",
+      "output": "The valve must remain shut.",
+      "languageMismatch": false,
+      "semanticDefect": null,
+      "reason": "Faithful English rewording of original English installation instruction",
+      "sourcePredictions": [
+        {
+          "language": "zh",
+          "score": 0.972951
+        },
+        {
+          "language": "ja",
+          "score": 0.0149543
+        },
+        {
+          "language": "en",
+          "score": 0.00525292
+        }
+      ],
+      "outputPredictions": [
+        {
+          "language": "en",
+          "score": 0.88885
+        },
+        {
+          "language": "de",
+          "score": 0.0246283
+        },
+        {
+          "language": "nl",
+          "score": 0.0101018
+        }
+      ],
+      "wholeTextVerdict": "reject",
+      "candidateVerdict": "reject"
+    }
+  ],
+  "controls": [],
+  "freshRawStdout": "__label__zh 0.616984 __label__en 0.195678 __label__ko 0.0591315\n__label__en 0.92512 __label__de 0.0109445 __label__zh 0.0075318\n__label__zh 0.616984 __label__en 0.195678 __label__ko 0.0591315\n__label__en 0.92208 __label__id 0.00907385 __label__de 0.00568032\n__label__zh 0.616984 __label__en 0.195678 __label__ko 0.0591315\n__label__en 0.890414 __label__es 0.0106079 __label__zh 0.00786158\n__label__zh 0.970225 __label__wuu 0.00950686 __label__en 0.0046088\n__label__ja 0.708405 __label__zh 0.261553 __label__es 0.00918447\n__label__zh 0.990969 __label__ja 0.00627031 __label__wuu 0.0006621\n__label__en 0.457781 __label__it 0.0680521 __label__fr 0.050263\n__label__es 0.976685 __label__pt 0.00917031 __label__gl 0.00282376\n__label__en 0.991186 __label__kn 0.00068514 __label__ru 0.000670351\n__label__zh 1.00001 __label__sr 2.86822e-05 __label__wuu 1.79653e-05\n__label__en 0.729377 __label__de 0.055649 __label__hu 0.021523\n__label__zh 0.972951 __label__ja 0.0149543 __label__en 0.00525292\n__label__en 0.88885 __label__de 0.0246283 __label__nl 0.0101018\n",
+  "knownMixedControls": [
+    "quote-exact",
+    "quote-paraphrase",
+    "quote-reversed-fact",
+    "copied-unsupported-action",
+    "names-reordered",
+    "latin-prose-change",
+    "short-english-change",
+    "mixed-paraphrase"
+  ],
+  "falseRejections": [
+    "mixed-paraphrase"
+  ],
+  "missedMismatches": [
+    "zh-to-danish",
+    "short-english-change"
+  ]
+}

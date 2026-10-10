@@ -1,0 +1,37 @@
+{
+  "runtime": "d71a1e8",
+  "protocol": "2026-10-05-default-cpu-native-protocol.md",
+  "model": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "cases": [
+    {
+      "prompt": "不要操作文档。请用一句中文概括以下事实，不要补充信息：周宁已收到实验报告，但尚未批准上线；审批由许岚负责，预计周四完成。",
+      "errors": [],
+      "modelNote": "模型已加载，可以开始对话。",
+      "modelStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "documentBefore": "\r\n",
+      "durationMs": 3815,
+      "source": "周宁已收到实验报告，审批由许岚负责，预计周四完成。",
+      "chatErrors": [],
+      "documentAfter": "\r\n",
+      "documentUnchanged": true,
+      "finished": true,
+      "contextClosed": true
+    },
+    {
+      "prompt": "不要操作文档。输出三个英文大写字母：CAT。除 CAT 外不要输出任何内容。",
+      "errors": [],
+      "modelNote": "模型已加载，可以开始对话。",
+      "modelStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "documentBefore": "\r\n",
+      "durationMs": 2873,
+      "source": "CAT",
+      "chatErrors": [],
+      "documentAfter": "\r\n",
+      "documentUnchanged": true,
+      "finished": true,
+      "contextClosed": true
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "browserClosed": true
+}

@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-02T08:05:52.106Z",
+  "scope": "Built UI isolated Chromium desktop and compact; model download held for deterministic welcome-state review, no inference",
+  "rows": [
+    {
+      "name": "desktop",
+      "placeholder": "补充要求，例如语气或长度…",
+      "draft": "保留我的草稿",
+      "task": "translate",
+      "languageVisible": true,
+      "focused": true,
+      "overflow": false,
+      "messages": 0
+    },
+    {
+      "name": "mobile",
+      "placeholder": "补充要求，例如语气或长度…",
+      "draft": "保留我的草稿",
+      "task": "translate",
+      "languageVisible": true,
+      "focused": true,
+      "overflow": false,
+      "messages": 0
+    },
+    {
+      "name": "dark",
+      "placeholder": "补充要求，例如语气或长度…",
+      "draft": "保留我的草稿",
+      "task": "translate",
+      "languageVisible": true,
+      "focused": true,
+      "overflow": false,
+      "messages": 0
+    }
+  ]
+}

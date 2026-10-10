@@ -1,0 +1,27 @@
+{
+  "scope": "Actual production CPU Qwen 0.6B pending generation interrupted before visible text using visible Stop; plain status, restore request without resending, preserve new draft, and next real inference. Desktop Chromium; no native document mutation or physical mobile coverage.",
+  "errors": [],
+  "stopped": {
+    "status": "Stopped.Restore request",
+    "statusCount": 1,
+    "errorCount": 0,
+    "statusApplyCount": 0,
+    "borderWidth": "0px",
+    "background": "rgba(0, 0, 0, 0)",
+    "inputEnabled": true,
+    "userCount": 1
+  },
+  "restored": {
+    "draft": "Write a detailed essay with 20 paragraphs about the history of mathematics.",
+    "userCount": 1,
+    "running": false
+  },
+  "newDraftProtected": true,
+  "engineBeforeNext": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "nextReply": "Hello.",
+  "visibleErrors": [],
+  "previewCount": 0,
+  "passed": true,
+  "probeSource": "probe-im-stop-neutral-status-cpu.mjs",
+  "probeSHA256": "39cd4e3ce619feb41d85a02318e749864280c4f6034c1da1f09638b2f17513dc"
+}

@@ -1,0 +1,15 @@
+# User-request-first context ordering: no observed benefit
+
+Predeclared four fresh diagnostic cases: English greeting, Chinese greeting, English 7+8 with number-only instruction, and Chinese identifying the nonpayer in Mira/Oren. One sample each in fixed current/request-first order, new conversation per request, temperature 0 and 96-token UI settings. This is a known diagnostic, not heldout acceptance or repeated reliability. Blank Word context was {kind:word,selectionCharacters:0}.
+
+GPU Qwen3-1.7B instrumentation changed only the outgoing Worker user content, preserving system/sampling/model. CPU Qwen3-0.6B instrumentation route-served a diagnostic app bundle that wraps the existing contextual user content and moves User request before the reference-data scope. CPU navigator.gpu was disabled to select real CPU fallback. Dist files were unchanged and both browsers closed.
+
+All four paired responses were identical per backend. GPU: Hello, Chinese greeting, 15, then full Mira nonpayment sentence. CPU: Hello greeting, Chinese greeting, 7 + 8 = 15, then Mira. Thus CPU violates the explicit number-only arithmetic instruction, and GPU does not obey the name-only nonpayer instruction. Neither response sets prove general document quality. All requests completed without visible error or previews. No Save or document-edit acceptance in this chat experiment.
+
+Do not adopt the reordered wrapper: this run shows no benefit and does not explain the prior irrelevant CPU editor-scope output. Those prior runs used different sampling/system settings and different messages; they are not controlled baselines for this experiment. Scope-first wording alone cannot be identified as the cause from these observations. Fresh multi-turn/document-bearing tasks and controlled system/sampling comparisons remain needed.
+
+Run verify-chat-context-order.py for predeclared fixtures, exact input reordering, GPU parameters/system identity, bundle unchanged and paired replies. CPU captures the runtime wrapper, not native SDK sampling input; its settings were applied via the UI, so this does not separately prove CPU parameter capture. Browser screenshots and native tool-writing quality are outside this run. Production prompt/order/default model remain unchanged.
+
+## Correction after verifier failure
+
+CPU runtime-wrapper capture is empty in all eight rows. The route marker patched runtime.ts's compiled loop, while this local chat path did not execute that hook. CPU variant labels do not establish actual input changes. Treat this CPU run as an invalid instrumentation diagnostic, not a paired context-order experiment. Its visible responses remain observed, but the earlier CPU reorder/identical-pair claims above are superseded by this correction. The initial verifier failed on missing capture; the report was committed before that failure was handled, then this correction records it explicitly. GPU capture is present and its exact reorder comparison remains valid. Next CPU attempt must instrument the actual local-controller message-construction path and assert capture before interpreting outputs.

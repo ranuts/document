@@ -1,0 +1,68 @@
+{
+  "scope": "Actual production IM PPT add_slide_text on WebKit WASM CPU Qwen3-0.6B, isolated default slide, exact new shape text and native Undo snapshot verification.",
+  "status": "completed",
+  "results": [
+    {
+      "editorModule": "./assets/editor-CdyIt6Y2.js",
+      "kind": "pptx",
+      "prompt": "Add a new text box on the current slide with the exact text CPU_PPT_TEXT_2026.",
+      "expected": "Done. Result checked; use Undo if needed.",
+      "before": {
+        "shapeTexts": [
+          [
+            "\r\n",
+            "\r\n"
+          ]
+        ],
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "shapeTexts": [
+          [
+            "\r\n",
+            "\r\n",
+            "CPU_PPT_TEXT_2026\r\n"
+          ]
+        ],
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n\nCPU_PPT_TEXT_2026\r\n"
+        ]
+      },
+      "elapsedMs": 41377,
+      "feedback": [
+        "Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "previewCount": 0,
+      "contentUnchanged": false,
+      "selectionUnchanged": null,
+      "resultMatched": true,
+      "inserted": true,
+      "afterUndo": {
+        "shapeTexts": [
+          [
+            "\r\n",
+            "\r\n"
+          ]
+        ],
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "undoRestored": true
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Single short ASCII sample; not broad CPU tool reliability or writing quality.",
+    "Online cached model; not disconnected WebKit/offline proof.",
+    "Desktop Playwright WebKit only; not physical Safari/iOS.",
+    "Default text box placement/style and save/export not tested."
+  ]
+}

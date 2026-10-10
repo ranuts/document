@@ -1,0 +1,28 @@
+diff --git a/lib/index.js b/lib/index.js
+index 77e7eaf23b079e775f20d58f43c65d803ae3c9b1..9d63eeea87db0aacd3a3accbc415a6ab71da9925 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -6026,7 +6026,7 @@ fn fragment_clear(@location(0) uv : vec2<f32>) -> @location(0) vec4<f32> {
+ 		                }
+ 		                if (result != null && typeof result === "object" && "data" in result) {
+ 		                    // `storetype` not used here because the data stored in indexedDB is already in that type
+-		                    return result.data;
++		                    return result.data instanceof Blob ? yield result.data.arrayBuffer() : result.data;
+ 		                }
+ 		                throw Error("ArtifactIndexedDBCache failed to fetch: " + url);
+ 		            });
+@@ -6054,8 +6054,12 @@ fn fragment_clear(@location(0) uv : vec2<f32>) -> @location(0) vec4<f32> {
+ 		                        return;
+ 		                    }
+ 		                    const store = transaction.objectStore('urls');
+-		                    const request = store.add({ data, url }); // Index DB follows a {value, key} format, instead of {key, value} format!
+-		                    request.onsuccess = () => resolve();
++		                    // Blob payloads avoid Chromium's ~133 MB serialized-record limit for ArrayBuffers.
++		                    // Wait for transaction commit; request success can precede a transaction error.
++		                    transaction.oncomplete = () => resolve();
++		                    transaction.onerror = (event) => reject(event.target.error || transaction.error);
++		                    transaction.onabort = () => reject(transaction.error || new DOMException('Cache transaction aborted', 'AbortError'));
++		                    const request = store.add({ data: data instanceof ArrayBuffer ? new Blob([data]) : data, url });
+ 		                    request.onerror = (event) => reject(event.target.error);
+ 		                });
+ 		            });

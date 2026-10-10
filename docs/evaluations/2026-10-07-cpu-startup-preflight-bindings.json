@@ -1,0 +1,18 @@
+{
+  "processExitCode": 0,
+  "scope": "Terminal browser regression and current source/after-run runtime identities",
+  "evidenceSHA256": {
+    "2026-10-07-cpu-startup-preflight-native.json": "4a5d05645f34ba601b4a5d461ecbd6623db3b5c4c8d5181ec74dda35eb1c6b0b",
+    "2026-10-07-cpu-startup-preflight-native.mjs": "dd274dc12ab16625aeb355a5d6aca1c81d05fc2a1d5d9836007b4744e1946d39",
+    "2026-10-07-cpu-startup-preflight-analysis.md": "1f3e642b2893d7ccbb0c4a5d30bfa79c7ae457238a30931a9f7e345c435f3e44"
+  },
+  "sourceSHA256": {
+    "packages/agent-core/src/llm/wllama.ts": "b5cfb713b3e32f83ad0486666b634811f11cd43b1870ce64c84acd802fec8c2d",
+    "test/unit/wllama-cpu-loader.test.ts": "2dad9bee3bdd3f3b4077afad9373cd7910d3250af87b15fd390ee78e81845094"
+  },
+  "afterRuntimeSHA256": {
+    "dist/sw.js": "0e8241d93a83e8ee45f562623f9c00e4f42bb2d131baff106c3829ca165b3be9",
+    "dist/assets/editor-a29E5U4S.js": "eb408e146eb499d39f3d59aefa6d18ce79f8684896bc8f4a46c1106ca716f9ce",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  }
+}

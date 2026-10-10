@@ -1,0 +1,1616 @@
+{
+  "status": "completed",
+  "scope": "Actual production IM previous-answer write command in chat mode, controlled native pre_Paste delay; Stop and late callback suppression, prior redo preservation.",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "language": "zh",
+  "results": [
+    {
+      "before": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false
+              },
+              {
+                "c": "l",
+                "bold": false
+              },
+              {
+                "c": "p",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "y",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "i",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "u",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "c",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          }
+        ]
+      },
+      "afterStop": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false
+              },
+              {
+                "c": "l",
+                "bold": false
+              },
+              {
+                "c": "p",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "y",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "i",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "u",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "c",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          }
+        ]
+      },
+      "afterLate": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false
+              },
+              {
+                "c": "l",
+                "bold": false
+              },
+              {
+                "c": "p",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "y",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "i",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "u",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "c",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          }
+        ]
+      },
+      "lateWriteSuppressed": true
+    }
+  ],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-C2N-hO8C.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "setup": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "generatedAnswer": [
+    "Hello.Write to document"
+  ],
+  "priorRedo": true,
+  "insertMode": false,
+  "beforeStop": {
+    "text": " target body\r\nNeighbor unchanged\r\n",
+    "selected": "",
+    "paragraphs": [
+      {
+        "text": " target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "stopVisible": "Stop",
+  "afterStop": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "afterLate": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "preparation": {
+    "prepared": 1,
+    "resumed": 1,
+    "html": "Hello."
+  },
+  "lateWriteSuppressed": true,
+  "visibleErrors": [
+    "Stopped.Restore request"
+  ],
+  "cancelRestoresOriginal": true,
+  "exactHistoryRestored": true,
+  "nativeState": {
+    "busy": false,
+    "temporaryHtml": false,
+    "paste": false,
+    "historyIndex": 0,
+    "historyPoints": 2,
+    "canRedo": true
+  },
+  "recoveredRedo": {
+    "text": "Alpha target body\r\nNeighbor unchanged PRIOR\r\n",
+    "selected": "",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged PRIOR\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "P",
+            "bold": false
+          },
+          {
+            "c": "R",
+            "bold": false
+          },
+          {
+            "c": "I",
+            "bold": false
+          },
+          {
+            "c": "O",
+            "bold": false
+          },
+          {
+            "c": "R",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "priorRedoWorks": true,
+  "afterPriorUndo": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "priorUndoExact": true,
+  "allPassed": true
+}

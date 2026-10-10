@@ -1,0 +1,14 @@
+{
+  "scope": "Static model tensor contract; no weight integrity, device allocation, inference or quality claim",
+  "manifest_sha256": "5724f49e1b2831b5203fa78b79c26158d2ca57fc551977eddd15042e9ca44a3c",
+  "compiler_tensor_count": 533,
+  "manifest_tensor_count": 533,
+  "missing": [],
+  "extra": [],
+  "shape_dtype_mismatches": [],
+  "model_type": "qwen2",
+  "quantization": "q4f16_1",
+  "context_window_size": 2048,
+  "prefill_chunk_size": 1024,
+  "max_batch_size": 1
+}

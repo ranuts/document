@@ -1,0 +1,7 @@
+# Qwen3.5 4B evaluation plan
+
+The installed WebLLM 0.2.85 catalog provides Qwen3.5-4B-q4f16_1-MLC with its compatible cs1k WebGPU library, context override 4096 and max_history_size 1. SDK vram_required_MB 3867.82 is an estimate, not measured GPU allocation or download size. Its presence supports a browser compatibility test, not adoption.
+
+The [publisher model card](https://huggingface.co/Qwen/Qwen3.5-4B) describes multilingual capabilities of the original post-trained model. Those claims/benchmarks do not certify MLC quantization, current bounded writing prompts, temperature 0, schema or device behavior. The existing non-thinking production writing route will be used unchanged. No cloud inference or product/default change.
+
+Before execution, commit the driver. Run all 21 existing seven-language rewrite/summary/translation cases, one sample in fixed order; they are known regression inputs, not fresh heldout data. Record exact title and actual Worker model ID, raw outputs and complete inputs. Verify native Undo/Redo for edits, preservation for refusals, zero previews and unchanged served bundle. First download may require network; initial preload timeout is ten minutes. Failed downloads/fallback/partial results must remain explicit; do not restart merely because observation expires. Quality requires manual source/rubric assessment, not application counts. Semantic failure means no adoption, even when native mechanics pass.

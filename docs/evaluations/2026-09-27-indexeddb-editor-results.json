@@ -1,0 +1,47 @@
+{
+  "word": {
+    "cachedReloadNote": "Model loaded — you can start chatting.",
+    "before": {
+      "text": "\n",
+      "truncated": false
+    },
+    "historyBefore": -1,
+    "preview": {
+      "visible": true,
+      "text": "Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.",
+      "historyBeforeApply": -1
+    },
+    "after": {
+      "text": "Budget: 1,250 EUR. Due: 2026-10-08. Alex has not approved phase two.\n",
+      "truncated": false
+    },
+    "status": "Change sent to the editor. Check the result; use Undo if needed.",
+    "undone": {
+      "text": "\n",
+      "truncated": false
+    }
+  },
+  "cell": {
+    "before": {
+      "cell": "B2",
+      "text": ""
+    },
+    "preview": {
+      "text": "1250",
+      "visible": true
+    },
+    "beforeApply": {
+      "cell": "B2",
+      "text": ""
+    },
+    "after": {
+      "cell": "B2",
+      "text": "1250"
+    },
+    "status": "Change sent to the editor. Check the result; use Undo if needed.",
+    "undone": {
+      "cell": "B2",
+      "text": ""
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "scope": "Experimental COOP same-origin and COEP require-corp on same-origin responses. Real GPU inference, IM edits and native Undo/Redo, Save and actual homepage file-chooser reopen in isolated new Word, Excel and PPT documents. No production header change yet.",
+  "results": [],
+  "errors": [],
+  "passed": false,
+  "error": "TimeoutError: page.waitForEvent: Timeout 120000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================",
+  "visibleErrors": [],
+  "probeSource": "probe-isolated-editor-tools-save-picker-initial.mjs",
+  "probeSha256": "d9d17877793b4064bc2739227448e11e2bc39e728c4e1895defe3eca75aac15f",
+  "productionHeadersChanged": false,
+  "limitations": [
+    "One Chromium GPU 1.7B sample per editor.",
+    "Native download fallback tested; browser file-picker dialog was disabled in final run.",
+    "No offline, stale-header cache upgrade, physical mobile or alternative browser coverage.",
+    "Exact text snapshots do not prove complete styling or document feature fidelity."
+  ],
+  "diagnosticNote": "Download event timed out while native save picker remained enabled. No download or reopen proof. Final probe disables picker to exercise documented download fallback; the initial cause is consistent with the picker path but its invocation was not separately captured."
+}

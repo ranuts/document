@@ -1,0 +1,9 @@
+{
+  "receipt_sha256": "2eeb6d8c488151db749882f85a0ca82aa1f4cfc8695611d9bfa7547258746503",
+  "baseline_request_exact": true,
+  "baseline_raw_exact": true,
+  "pair_raw_equal": true,
+  "verdict": "both-fail",
+  "reason": "Both outputs omit delivery team as permitted shipping actor. Moving the exact policy to system does not repair this known actor omission.",
+  "candidate_promoted": false
+}

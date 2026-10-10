@@ -1,0 +1,313 @@
+{
+  "scope": "Bounded manual new-source development review, not native-speaker certification or representative model accuracy; uncertain means unproven. Compression concern is a frozen diagnostic instruction, not a universal ban on extractive summaries.",
+  "receiptSha256": "99357b2610dbbe8ee2b81cf58c3645e0f98633446ff3eea2dbef95113ce4fb7b",
+  "protocolSha256": "8fd7df3516b5ed89f44cc0909c8cc2263c8702f6a69dd72e57ec8a0e184d9e61",
+  "counts": {
+    "product": {
+      "fail": 16,
+      "uncertain": 2,
+      "narrow-pass": 3
+    },
+    "segmented": {
+      "fail": 9,
+      "narrow-pass": 5,
+      "uncertain": 7
+    }
+  },
+  "rows": [
+    {
+      "id": "zh-CN-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Dates reformatted, passed check becomes completed check, duplicate log event becomes one entry.",
+      "outputContentSha256": "a6907f82577d1df46f4c734bf5b8f77631c29894e72e2483cb9fafc121381a8a"
+    },
+    {
+      "id": "zh-CN-rewrite",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Passed check becomes completed check; awkward publication/date phrasing.",
+      "outputContentSha256": "d4e5cac82e6bdee0fb163ce6929a93890cab0dec4bdd47337b6693c5c3127bd1"
+    },
+    {
+      "id": "zh-CN-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Required permission actor/recipient, both prerequisites and proposal status incomplete; two sentences.",
+      "outputContentSha256": "98869b736bda0becf01dd0a433ea1b294e80acb0a1ea0d9fbd07612204878483"
+    },
+    {
+      "id": "zh-CN-summarize",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Proposal-date marker omitted; assembly correctly declines restoration.",
+      "outputContentSha256": "deb3e660d2f254bfc31507d39ca098bab4e74b69ee127b3a5cac60f05b63c13e"
+    },
+    {
+      "id": "zh-CN-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "De-identification becomes declassification.",
+      "outputContentSha256": "138e6802cb8bbe33604dae1c6f2e8966a6925342612bff6fafc895065276d023"
+    },
+    {
+      "id": "zh-CN-translate",
+      "variant": "segmented",
+      "verdict": "narrow-pass",
+      "reason": "Examined actors, recipient, two prerequisites/current states, dates and nonpermission retained; correct de-identification term.",
+      "outputContentSha256": "854b759a8c69aad219a0491e68c36b2a31830b86f81305539df8ee745e117f82"
+    },
+    {
+      "id": "en-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Required digit 3 becomes three; verification/confirmation wording also needs care.",
+      "outputContentSha256": "2218885c72343e51b5005489fbf704a8041fd6faed97423937c36dbdbe5523e5"
+    },
+    {
+      "id": "en-rewrite",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Required digit 3 becomes three despite date restoration.",
+      "outputContentSha256": "eaf586588ff4ef9fc064403acf37f47178d185654fc5acebde721af33c6e3733"
+    },
+    {
+      "id": "en-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Finance team, explicit proposal nonapproval and unpaid status omitted; required relations incomplete.",
+      "outputContentSha256": "b7146c537970171a340a94eb8246a6660e5d46e3e4349f94836c4bb54c637581"
+    },
+    {
+      "id": "en-summarize",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Proposal nonapproval omitted from first slot despite other actors/statuses surviving.",
+      "outputContentSha256": "81b8d81b0b48e71defc34ff265b2b157e8e665cb9b3eb0b84afeb2b3e51ba404"
+    },
+    {
+      "id": "en-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Payment for 3 parts becomes payment split into 3 portions.",
+      "outputContentSha256": "42eca1a96d24dbf99610a55ecada0ebf905a15b0b82a95ad318f38890f0d00f8"
+    },
+    {
+      "id": "en-translate",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Japanese unless-after clause ends with can pay rather than cannot pay, reversing permission prerequisite; parts wording is also poor.",
+      "outputContentSha256": "bd084945aae7f8e073fe0c61c22605eeb93a49781acea123ee0be5fd91c3af68"
+    },
+    {
+      "id": "ja-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "ISO dates reformatted and archival-convenience detail omitted.",
+      "outputContentSha256": "47492cd3afc832b4f23e6355b420119202409b6ff3d60528e76a69d0364e1c09"
+    },
+    {
+      "id": "ja-rewrite",
+      "variant": "segmented",
+      "verdict": "uncertain",
+      "reason": "Examined facts/literals retained, but wording mostly copies source; requested improvement not established.",
+      "outputContentSha256": "380e8a46dca0752c1e35a45f80c5f0bb60b02005045e8b3666a2b7b7a1e59fe8"
+    },
+    {
+      "id": "ja-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Required earlier date/activity/roles omitted; adds not yet sent and uses multiple sentences.",
+      "outputContentSha256": "77bdeadf62789c9fa976a5411eed7e8d78841bf89f163534b0533a6a2735d3c3"
+    },
+    {
+      "id": "ja-summarize",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Proposal-date marker omitted; no valid restored final body.",
+      "outputContentSha256": "58590bc307d1fc5d4d8f807c9f8e20dec40945b7834f3973a7775f7ee296e765"
+    },
+    {
+      "id": "ja-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Calibration confirmation becomes verification confirmation.",
+      "outputContentSha256": "22a87a363f2900cff73470713c5567d96a58fc334c8be8eb0db23ef9190c4d58"
+    },
+    {
+      "id": "ja-translate",
+      "variant": "segmented",
+      "verdict": "narrow-pass",
+      "reason": "Calibration term and examined roles/recipients, both states, dates and nonpermission retained.",
+      "outputContentSha256": "e46b56eca691ab5b3844070a42f3db3f697370e88edd1b4f22a85877e2065ed0"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "product",
+      "verdict": "uncertain",
+      "reason": "Examined relations appear retained, but added date-day suffix/style requires review.",
+      "outputContentSha256": "f029d2c00baa4f8cfd53e86b5375459f18382adb8714b9fdcdff771393647c84"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "segmented",
+      "verdict": "narrow-pass",
+      "reason": "Formal wording retains examined actors/recipient, quantities, exact dates, both prerequisites and current states.",
+      "outputContentSha256": "93443040713f6c43f2103b2702ad1b602600224a0e65589937892f3aa431f149"
+    },
+    {
+      "id": "ko-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Adds proposal rejection causality and ambiguous unsigned actor; earlier date/nonpermission omitted.",
+      "outputContentSha256": "112bc13e3b882733c803b6e7b1fdee78195b07f5fe5d4d49c497632479bc7bc0"
+    },
+    {
+      "id": "ko-summarize",
+      "variant": "segmented",
+      "verdict": "uncertain",
+      "reason": "Core facts retained, but clauses largely copy source and meaningful compression/idiomatic sentence assembly are unproven.",
+      "outputContentSha256": "87bac0d7bf974da9a676d4855fec3b6e7c4acc1459648d66c7a50a563afdc702"
+    },
+    {
+      "id": "ko-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "German articles/agreement poor and identity ownership is made explicit beyond source.",
+      "outputContentSha256": "06a27e3ccb49a9e179b0eb08ca43f313f3b10284b1a2d9aeaa8c04e9b8e272de"
+    },
+    {
+      "id": "ko-translate",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "German separable-verb/article errors and unsupported own-identity wording persist.",
+      "outputContentSha256": "094b4c85e62fb4015369097d8a17764072ad64db0f3c31f74c44b3e5012d06ba"
+    },
+    {
+      "id": "de-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "6 becomes sechs; refund action assigned to Max Wolf; invents same-day log event.",
+      "outputContentSha256": "3848d49f9685e1c87a74566665142f7d796079ff7ea307b5dd9a3bc937bf60d5"
+    },
+    {
+      "id": "de-rewrite",
+      "variant": "segmented",
+      "verdict": "uncertain",
+      "reason": "Actor/literals retained, but only-after becomes wenn with mixed tenses; temporal equivalence/style need review.",
+      "outputContentSha256": "5c9a9fc0a053e3f54f951df428b0987a8ecb532045d868e413e8c49cf24c6799"
+    },
+    {
+      "id": "de-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Approval/permission actor, completed status and earlier date/nonpermission omitted.",
+      "outputContentSha256": "3bc755a6dba423aed9c917ecabf81e81ca3e7a09981ebfcd694bf336911b950f"
+    },
+    {
+      "id": "de-summarize",
+      "variant": "segmented",
+      "verdict": "uncertain",
+      "reason": "Core facts retained, but nearly verbatim clauses do not establish requested meaningful compression.",
+      "outputContentSha256": "6cf9b589888e1f8f6581d0eddc7f3abb1db431fe5fb16c22990a4dbbc75a55cd"
+    },
+    {
+      "id": "de-translate",
+      "variant": "product",
+      "verdict": "narrow-pass",
+      "reason": "Examined roles, both prerequisites/states, dates, quantity and nonpermission retained.",
+      "outputContentSha256": "017574e807116adb56124c84be5d7e98bbeaeca261c8657af24eb8c1d2fd571c"
+    },
+    {
+      "id": "de-translate",
+      "variant": "segmented",
+      "verdict": "narrow-pass",
+      "reason": "Examined roles, both prerequisites/states, dates, quantity and nonpermission retained.",
+      "outputContentSha256": "694de3699977a09aaabeb0e620e4d68d4dfc056a3c7db638f11fe812d5f0f5e2"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Ivan review prerequisite removed from permission rule and refund authorization generalized.",
+      "outputContentSha256": "0ff7ca3d958838e4535c094a4220665317256d8a83adedf3ef4efaf9cad9d211"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "segmented",
+      "verdict": "uncertain",
+      "reason": "Return review becomes request review; object specificity equivalence needs native review.",
+      "outputContentSha256": "9b59d340ede8b1d9fd23d15c38aaa3c7e6b7e1c4ee0bd356574f00e24c951c34"
+    },
+    {
+      "id": "es-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Proposal nonapproval, permission actor/rule and earlier date/nonpermission omitted.",
+      "outputContentSha256": "c015b01ac6f4e557221c89c060652aee58af669f3f8578d62d74f25bae1a39e1"
+    },
+    {
+      "id": "es-summarize",
+      "variant": "segmented",
+      "verdict": "uncertain",
+      "reason": "Core facts retained, but meaningful compression beyond header/background removal is unproven.",
+      "outputContentSha256": "55969eac4442bb8bb11d3538d8ab85ad33a264f5547bea3e4f55ab08283e874a"
+    },
+    {
+      "id": "es-translate",
+      "variant": "product",
+      "verdict": "narrow-pass",
+      "reason": "Portuguese prose/headings retain examined actors, prerequisites/states and dates.",
+      "outputContentSha256": "3e3fe477c54603ce08ac835a23457ad2d9a51678672a1cc337dd2baf4833046e"
+    },
+    {
+      "id": "es-translate",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Spanish heading and date introduction remain untranslated; O before date is unidiomatic Portuguese.",
+      "outputContentSha256": "aa1d54c1e604b15a43fb9d98ddea0ebd77ffb3819b9512c7395f242e8a565248"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "product",
+      "verdict": "narrow-pass",
+      "reason": "Examined actors, dates, proposal nonapproval, prerequisites/states and nonpermission retained with changed wording.",
+      "outputContentSha256": "100ebc49da17f71c8f4a69a00d6ff54edc65d3f7aa866d27e4ec41e4350bcdd1"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "segmented",
+      "verdict": "narrow-pass",
+      "reason": "Examined actors, dates, proposal nonapproval, prerequisites/states and nonpermission retained.",
+      "outputContentSha256": "dcff700d709d9700bf3924eecdac9f76489c219f1e569101e99d9533d605df5f"
+    },
+    {
+      "id": "pt-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Archive team, proposal nonapproval and earlier date/nonpermission omitted.",
+      "outputContentSha256": "175331d6f3d9314c38098dd2142b1a3cd5760803411c7d66c8b59ebdff5629ca"
+    },
+    {
+      "id": "pt-summarize",
+      "variant": "segmented",
+      "verdict": "uncertain",
+      "reason": "Core facts retained but clauses nearly copy source; broader summarization/compression not established.",
+      "outputContentSha256": "2449859c5df4c556b1286e1bc9f23dee555c381e7a5b1863a8d79f04ff354bd0"
+    },
+    {
+      "id": "pt-translate",
+      "variant": "product",
+      "verdict": "uncertain",
+      "reason": "Chinese inventory-completion terminology/fluency poor; no complete translation certification.",
+      "outputContentSha256": "55463519284ea49b508528413658c4025e463509479c0c95ef6540b1eaa05125"
+    },
+    {
+      "id": "pt-translate",
+      "variant": "segmented",
+      "verdict": "fail",
+      "reason": "Chinese completes inventory/stock rather than an idiomatic inventory-taking completion; terminology/fluency failure.",
+      "outputContentSha256": "eb840a4ffe14d935d126e725355d98131b9d03fd7adaa9b8b552d51e4b70b852"
+    }
+  ]
+}

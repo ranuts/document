@@ -1,0 +1,16 @@
+{
+  "provider": "WebLLM",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "task": "translate",
+  "targetLanguage": "es",
+  "before": "We will process your request as soon as possible.\r\n",
+  "sourcePreview": "We will process your request as soon as possible.\n",
+  "proposed": "Haremos lo posible para procesar su solicitud lo más pronto posible.",
+  "beforeApply": "We will process your request as soon as possible.\r\n",
+  "status": "Change applied and text verified. Check formatting; use Undo if needed.",
+  "after": "Haremos lo posible para procesar su solicitud lo más pronto posible.\r\n",
+  "undo": "We will process your request as soon as possible.\r\n",
+  "cloudTaskDisplay": "none",
+  "cloudLanguageDisplay": "none",
+  "procedure": "Actual IM panel: select DOCX text, enable reviewed mode, choose translation and Spanish, type preference, submit, inspect unchanged document and source/proposal, click Apply, read actual text and verified status, Undo, switch provider. No provider substitute."
+}

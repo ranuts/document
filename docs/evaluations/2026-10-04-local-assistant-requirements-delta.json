@@ -1,0 +1,17 @@
+{
+  "scope": "Requirement audit snapshot, not completion certification or rerun of historical browser evidence",
+  "head": "36053b55aee03bbaa7d48757413f2e2d4eb79738",
+  "attachmentSHA256": "180bafd68848654c020662388de555d0746de20326654c42b8215088e16b62a8",
+  "sourceHashes": {
+    "packages/agent-core/src/llm/local.ts": "49710663466db706bf79c6551415a53f38eb34f9f875dc818dedb7dfe7263dda",
+    "packages/agent-core/src/llm/webllm.ts": "64edc4b16cb7f1e40f175a8d74b4a3e9984cafddb4fab12c4a02cfdd9a8f32aa",
+    "packages/agent-core/src/llm/wllama.ts": "22883ba1967834053a3ff28a7050aba5e7adb7c80461296b918ad4f525ecca96",
+    "packages/agent-core/src/context-budget.ts": "1d308ff82b294c9af31aae5c9a8fb27504aa523db3ca80f94aa4a5382d48b04d",
+    "packages/agent-core/src/runtime.ts": "61c12ec234e965223bac8acc10a40b89ff988c22ca36ca13ea96222fecf22242",
+    "lib/agent-plugin/ui/panel.ts": "6b961fbcacc05bbbcf1991805fd38ec0deeeb3b57ebc0b50ecb8e5c6243c0405",
+    "lib/agent-plugin/ui/generation-controls.ts": "c052c74075cc13b89f2758f65fa0054b83129c94a56bb51ff6627f35fc866269",
+    "lib/agent-plugin/ui/history-controls.ts": "75b57b3c2f805c20851cce4f3f48ea9b045b0ffe58857b99527d4d94e021ebef",
+    "public/_headers": "b0b8fef4cbbc4f79bfa8d7e6130c0ee00ea2b1765765ef619176d5372326a635",
+    "docs/evaluations/2026-10-04-writing-model-decision-index.json": "d9384f31e53a3f6fe189e56be2251763124d9542eeeccdcc5a7fbd7ca2bbbc04"
+  }
+}

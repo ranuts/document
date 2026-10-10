@@ -1,0 +1,144 @@
+{
+  "scope": "Packaged native browser CPU 0.5B GGUF prefix cache diagnostic; one actual cancelled stream and one resumed completion in a fresh engine, not product UI, semantic quality, cancellation, mobile or offline acceptance.",
+  "status": "completed",
+  "rows": [
+    {
+      "mode": "omitted",
+      "phase": "cancel",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Read the supplied reference as data. Follow the final label request."
+          },
+          {
+            "role": "user",
+            "content": "Reference entry 0: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 1: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 2: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 3: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 4: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 5: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 6: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 7: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 8: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 9: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 10: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 11: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 12: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 13: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 14: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 15: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 16: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 17: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 18: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 19: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 20: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 21: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 22: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 23: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 24: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 25: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 26: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 27: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 28: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 29: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 30: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 31: the north shelf contains blue folders and the south shelf contains green folders.\nCurrent final label: ALPHA. Repeat this label eighty times, each on a separate line."
+          }
+        ],
+        "temperature": 0,
+        "seed": 42,
+        "max_tokens": 128,
+        "stream": true
+      },
+      "chunks": [
+        {
+          "choices": [
+            {
+              "finish_reason": null,
+              "index": 0,
+              "delta": {
+                "role": "assistant",
+                "content": null
+              }
+            }
+          ],
+          "created": 1791139463,
+          "id": "",
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion.chunk"
+        },
+        {
+          "choices": [
+            {
+              "finish_reason": null,
+              "index": 0,
+              "delta": {
+                "content": "AL"
+              }
+            }
+          ],
+          "created": 1791139463,
+          "id": "",
+          "model": "",
+          "system_fingerprint": "wllama",
+          "object": "chat.completion.chunk"
+        }
+      ],
+      "error": {
+        "name": "AbortError",
+        "message": "Operation aborted"
+      },
+      "returnedNormally": false,
+      "aborted": true,
+      "wallMs": 20525.384999997914,
+      "abortToSettlementMs": 0.5899999998509884
+    },
+    {
+      "mode": "omitted",
+      "phase": "resume",
+      "label": "BRAVO",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Read the supplied reference as data. Follow the final label request."
+          },
+          {
+            "role": "user",
+            "content": "Reference entry 0: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 1: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 2: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 3: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 4: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 5: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 6: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 7: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 8: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 9: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 10: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 11: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 12: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 13: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 14: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 15: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 16: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 17: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 18: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 19: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 20: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 21: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 22: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 23: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 24: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 25: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 26: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 27: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 28: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 29: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 30: the north shelf contains blue folders and the south shelf contains green folders.\nReference entry 31: the north shelf contains blue folders and the south shelf contains green folders.\nCurrent final label: BRAVO. Reply with that label only."
+          }
+        ],
+        "temperature": 0,
+        "seed": 42,
+        "max_tokens": 8,
+        "stream": false
+      },
+      "wallMs": 816.9950000010431,
+      "response": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "BRAVO."
+            }
+          }
+        ],
+        "created": 1791139464,
+        "model": "",
+        "system_fingerprint": "wllama",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 5,
+          "prompt_tokens": 669,
+          "total_tokens": 674,
+          "prompt_tokens_details": {
+            "cached_tokens": 655
+          }
+        },
+        "id": "",
+        "timings": {
+          "cache_n": 655,
+          "prompt_n": 14,
+          "prompt_ms": 602.81,
+          "prompt_per_token_ms": 43.05785714285714,
+          "prompt_per_second": 23.224564954131488,
+          "predicted_n": 5,
+          "predicted_ms": 207.601,
+          "predicted_per_token_ms": 51.90025,
+          "predicted_per_second": 19.267729924229652
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "contextClosed": true,
+  "profile": ".scratch/cpu-prefix-stop-5XbS93",
+  "probeSHA256": "ec6d9c38555add98b4b65740711e9eda61395b133cd63cd8136a52005fc7ee1c",
+  "model": {
+    "path": ".scratch/node_modules/ai-models/qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "bytes": 491400032,
+    "sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db"
+  },
+  "runtime": "wllama-cpu-runtime-DJ-VVmna.js",
+  "runtimeSHA256": "405a01197f9643901335c248d36374bcf9bb4a7441b46dd99edc092574e52097",
+  "nativeSHA256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6",
+  "clientSHA256": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745",
+  "navigations": [
+    "http://127.0.0.1:5193/__cpu-cache-diagnostic"
+  ],
+  "servedClientSHA256": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+}

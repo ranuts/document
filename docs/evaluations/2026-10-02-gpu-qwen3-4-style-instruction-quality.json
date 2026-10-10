@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-02T09:47:48.294Z",
+  "scope": "Actual production UI selected-text direct writing path; Chromium Metal GPU Qwen3-4B. Source inserted with editor public API in isolated new documents. Uses shortened default system prompt. Writing is directly applied only in isolated test documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 3310,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "taskAchieved": false,
+      "manualReview": "Generic visible error, unchanged document; cause not captured."
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex will pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [],
+      "responseMs": 3413,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "taskAchieved": false,
+      "manualReview": "Partial rewrite preserves name, amount and ISO date but remains colloquial due to okay?."
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model returned the original text. Try a clearer instruction or another model.Restore request"
+      ],
+      "responseMs": 3847,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "taskAchieved": false,
+      "manualReview": "Original text returned; no shorter summary."
+    }
+  ],
+  "errors": [],
+  "outputKind": "Resulting document text, not raw model response",
+  "change": "Clarified instruction field as tone/style/length preferences while preserving facts; no other task request construction change.",
+  "limitations": "One run of three desktop Chromium/Qwen3-4B cases. Outputs match previous run; no demonstrated quality improvement and no causal proof of model limitations."
+}

@@ -1,0 +1,34 @@
+{
+  "scope": "Production IM actual Restore, Export download, cancel/current/all deletion of synthetic IndexedDB history. Isolated desktop Chromium; no model-generated conversation or OS privacy claim.",
+  "errors": [],
+  "results": [],
+  "messageCount": 60,
+  "sessionCount": 12,
+  "export": {
+    "sessionCount": 12,
+    "messageCount": 720,
+    "bytes": 804006,
+    "keys": [
+      "version",
+      "activeId",
+      "sessions",
+      "exportedAt"
+    ],
+    "exactSessions": true
+  },
+  "cancelPreserved": true,
+  "singleDeletion": {
+    "exactRemaining": true,
+    "diskExact": true,
+    "count": 11
+  },
+  "clearAll": {
+    "visibleMessages": 0,
+    "exportedSessions": 1,
+    "exportedMessages": 0,
+    "diskSessions": 0,
+    "revision": 3
+  },
+  "allPassed": true,
+  "status": "completed"
+}

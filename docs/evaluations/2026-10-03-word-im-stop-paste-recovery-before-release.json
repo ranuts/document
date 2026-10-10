@@ -1,0 +1,2764 @@
+{
+  "status": "failed",
+  "scope": "Actual production IM Word insertion/replacement with controlled native pre_Paste delay; Stop then resume callback to detect late document mutation; optional prior redo and subsequent IM write recovery.",
+  "model": "Qwen3-1.7B-q4f16_1-MLC",
+  "language": "zh",
+  "replacement": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+  "results": [
+    {
+      "before": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false
+              },
+              {
+                "c": "l",
+                "bold": false
+              },
+              {
+                "c": "p",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "y",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "i",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "u",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "c",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          }
+        ]
+      },
+      "afterStop": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false
+              },
+              {
+                "c": "l",
+                "bold": false
+              },
+              {
+                "c": "p",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "y",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "i",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "u",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "c",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          }
+        ]
+      },
+      "afterLate": {
+        "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+        "selected": "Alpha",
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "A",
+                "bold": false
+              },
+              {
+                "c": "l",
+                "bold": false
+              },
+              {
+                "c": "p",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "t",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "y",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          },
+          {
+            "text": "Neighbor unchanged\r\n",
+            "alignment": null,
+            "characters": [
+              {
+                "c": "N",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "i",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "b",
+                "bold": false
+              },
+              {
+                "c": "o",
+                "bold": false
+              },
+              {
+                "c": "r",
+                "bold": false
+              },
+              {
+                "c": " ",
+                "bold": false
+              },
+              {
+                "c": "u",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "c",
+                "bold": false
+              },
+              {
+                "c": "h",
+                "bold": false
+              },
+              {
+                "c": "a",
+                "bold": false
+              },
+              {
+                "c": "n",
+                "bold": false
+              },
+              {
+                "c": "g",
+                "bold": false
+              },
+              {
+                "c": "e",
+                "bold": false
+              },
+              {
+                "c": "d",
+                "bold": false
+              },
+              {
+                "c": "\r",
+                "bold": false
+              },
+              {
+                "c": "\n",
+                "bold": false
+              }
+            ]
+          }
+        ]
+      },
+      "lateWriteSuppressed": true
+    }
+  ],
+  "errors": [],
+  "diagnostics": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-CKkKDRtJ.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "setup": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "priorRedo": true,
+  "insertMode": false,
+  "beforeStop": {
+    "text": " target body\r\nNeighbor unchanged\r\n",
+    "selected": "",
+    "paragraphs": [
+      {
+        "text": " target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "stopVisible": "Stop",
+  "afterStop": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "afterLate": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "Alpha",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "preparation": {
+    "prepared": 1,
+    "resumed": 1
+  },
+  "lateWriteSuppressed": true,
+  "visibleErrors": [
+    "Stopped.Restore request"
+  ],
+  "cancelRestoresOriginal": true,
+  "exactHistoryRestored": true,
+  "nativeState": {
+    "busy": false,
+    "temporaryHtml": false,
+    "paste": false,
+    "historyIndex": 0,
+    "historyPoints": 2,
+    "canRedo": true
+  },
+  "recoveredRedo": {
+    "text": "Alpha target body\r\nNeighbor unchanged PRIOR\r\n",
+    "selected": "",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged PRIOR\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "P",
+            "bold": false
+          },
+          {
+            "c": "R",
+            "bold": false
+          },
+          {
+            "c": "I",
+            "bold": false
+          },
+          {
+            "c": "O",
+            "bold": false
+          },
+          {
+            "c": "R",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "priorRedoWorks": true,
+  "afterPriorUndo": {
+    "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+    "selected": "",
+    "paragraphs": [
+      {
+        "text": "Alpha target body\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "A",
+            "bold": false
+          },
+          {
+            "c": "l",
+            "bold": false
+          },
+          {
+            "c": "p",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "t",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "y",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      },
+      {
+        "text": "Neighbor unchanged\r\n",
+        "alignment": null,
+        "characters": [
+          {
+            "c": "N",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "i",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "b",
+            "bold": false
+          },
+          {
+            "c": "o",
+            "bold": false
+          },
+          {
+            "c": "r",
+            "bold": false
+          },
+          {
+            "c": " ",
+            "bold": false
+          },
+          {
+            "c": "u",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "c",
+            "bold": false
+          },
+          {
+            "c": "h",
+            "bold": false
+          },
+          {
+            "c": "a",
+            "bold": false
+          },
+          {
+            "c": "n",
+            "bold": false
+          },
+          {
+            "c": "g",
+            "bold": false
+          },
+          {
+            "c": "e",
+            "bold": false
+          },
+          {
+            "c": "d",
+            "bold": false
+          },
+          {
+            "c": "\r",
+            "bold": false
+          },
+          {
+            "c": "\n",
+            "bold": false
+          }
+        ]
+      }
+    ]
+  },
+  "priorUndoExact": true,
+  "nextIM": {
+    "nextBefore": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "paragraphs": [
+        {
+          "text": "Alpha target body\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "A",
+              "bold": false
+            },
+            {
+              "c": "l",
+              "bold": false
+            },
+            {
+              "c": "p",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "y",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        },
+        {
+          "text": "Neighbor unchanged\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "N",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "i",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "u",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "c",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        }
+      ]
+    },
+    "nextAfter": {
+      "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "paragraphs": [
+        {
+          "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "项",
+              "bold": false
+            },
+            {
+              "c": "目",
+              "bold": false
+            },
+            {
+              "c": "付",
+              "bold": false
+            },
+            {
+              "c": "款",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "/",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "P",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "y",
+              "bold": false
+            },
+            {
+              "c": "m",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "A",
+              "bold": false
+            },
+            {
+              "c": "l",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "x",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "1",
+              "bold": false
+            },
+            {
+              "c": ",",
+              "bold": false
+            },
+            {
+              "c": "2",
+              "bold": false
+            },
+            {
+              "c": "5",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "E",
+              "bold": false
+            },
+            {
+              "c": "U",
+              "bold": false
+            },
+            {
+              "c": "R",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "2",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": "2",
+              "bold": false
+            },
+            {
+              "c": "6",
+              "bold": false
+            },
+            {
+              "c": "-",
+              "bold": false
+            },
+            {
+              "c": "1",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": "-",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": "8",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "N",
+              "bold": false
+            },
+            {
+              "c": "O",
+              "bold": false
+            },
+            {
+              "c": "T",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "p",
+              "bold": false
+            },
+            {
+              "c": "p",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "v",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "y",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        },
+        {
+          "text": "Neighbor unchanged\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "N",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "i",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "u",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "c",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        }
+      ]
+    },
+    "nextUndo": {
+      "text": "Alpha target body\r\nNeighbor unchanged\r\n",
+      "selected": "Alpha",
+      "paragraphs": [
+        {
+          "text": "Alpha target body\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "A",
+              "bold": false
+            },
+            {
+              "c": "l",
+              "bold": false
+            },
+            {
+              "c": "p",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "y",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        },
+        {
+          "text": "Neighbor unchanged\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "N",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "i",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "u",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "c",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        }
+      ]
+    },
+    "nextRedo": {
+      "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\nNeighbor unchanged\r\n",
+      "selected": "",
+      "paragraphs": [
+        {
+          "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "项",
+              "bold": false
+            },
+            {
+              "c": "目",
+              "bold": false
+            },
+            {
+              "c": "付",
+              "bold": false
+            },
+            {
+              "c": "款",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "/",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "P",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "y",
+              "bold": false
+            },
+            {
+              "c": "m",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "A",
+              "bold": false
+            },
+            {
+              "c": "l",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "x",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "1",
+              "bold": false
+            },
+            {
+              "c": ",",
+              "bold": false
+            },
+            {
+              "c": "2",
+              "bold": false
+            },
+            {
+              "c": "5",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "E",
+              "bold": false
+            },
+            {
+              "c": "U",
+              "bold": false
+            },
+            {
+              "c": "R",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "2",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": "2",
+              "bold": false
+            },
+            {
+              "c": "6",
+              "bold": false
+            },
+            {
+              "c": "-",
+              "bold": false
+            },
+            {
+              "c": "1",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": "-",
+              "bold": false
+            },
+            {
+              "c": "0",
+              "bold": false
+            },
+            {
+              "c": "8",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "·",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "N",
+              "bold": false
+            },
+            {
+              "c": "O",
+              "bold": false
+            },
+            {
+              "c": "T",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "p",
+              "bold": false
+            },
+            {
+              "c": "p",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "v",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "t",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "y",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        },
+        {
+          "text": "Neighbor unchanged\r\n",
+          "alignment": null,
+          "characters": [
+            {
+              "c": "N",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "i",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "b",
+              "bold": false
+            },
+            {
+              "c": "o",
+              "bold": false
+            },
+            {
+              "c": "r",
+              "bold": false
+            },
+            {
+              "c": " ",
+              "bold": false
+            },
+            {
+              "c": "u",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "c",
+              "bold": false
+            },
+            {
+              "c": "h",
+              "bold": false
+            },
+            {
+              "c": "a",
+              "bold": false
+            },
+            {
+              "c": "n",
+              "bold": false
+            },
+            {
+              "c": "g",
+              "bold": false
+            },
+            {
+              "c": "e",
+              "bold": false
+            },
+            {
+              "c": "d",
+              "bold": false
+            },
+            {
+              "c": "\r",
+              "bold": false
+            },
+            {
+              "c": "\n",
+              "bold": false
+            }
+          ]
+        }
+      ]
+    },
+    "matched": true,
+    "undoExact": true,
+    "redoExact": true,
+    "noNewErrors": false
+  },
+  "allPassed": false,
+  "error": "Error: Word cancellation invariant failed"
+}

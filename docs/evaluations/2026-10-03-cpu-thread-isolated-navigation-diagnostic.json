@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-03T02:34:19.097Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright Chromium CPU Qwen3-0.6B; native JSON Schema. Source inserted with editor public API in isolated new documents. Current production writing prompt; only diagnostic raw capture is injected at response validation boundary. Writing is directly applied only in isolated test documents.",
+  "isolated": true,
+  "status": "failed",
+  "results": [],
+  "rawResponses": [],
+  "error": "Error: page.goto: net::ERR_ABORTED at http://127.0.0.1:5193/favicon.ico\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/favicon.ico\", waiting until \"load\"\u001b[22m\n",
+  "errors": [],
+  "probeSource": "probe-cpu-thread-control-initial.mjs",
+  "probeSha256": "84e0ea10ee963a7a5ef4df902bdbc94a06801118deb7efc6aa6c0ee5fc40fb5c",
+  "productionHeadersChanged": false,
+  "runnerSource": "run-cpu-thread-control.py",
+  "runnerSha256": "df054fcf8ce9860f7ddbbb84a171ea76b6361c3812c5b2c17347b2b96304fd9e",
+  "limitations": [
+    "Single request per configuration, stochastic output; not a reliability or performance benchmark.",
+    "Cross-origin isolation headers injected on same-origin test responses only.",
+    "Writing response was rejected by factual guard; speed does not establish writing quality."
+  ],
+  "diagnosticNote": "Favicon reset navigation was aborted before model checks. Final probe resets through HTML homepage instead; this is not evidence of an engine failure."
+}

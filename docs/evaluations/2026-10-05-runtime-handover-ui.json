@@ -1,0 +1,42 @@
+{
+  "scope": "Current native Word IM with actual automatic CPU fallback model, one controlled SDK exit delay, actual exit/reload/inference. Not physical teardown-fault, model-quality, offline or PWA certification.",
+  "probeSHA256": "be831f4d144aa3aec26e356244e9cd6dc20e201b804efdbdd6015573b9e801af",
+  "plugin": "agent-plugin-CUmvDCn1.js",
+  "pluginSHA256": "3ac395dd08d5567785f8c0a2c5d95f521b4dafa3a9792baead16c6255c19fd38",
+  "errors": [],
+  "engine": "CPU · Qwen3 · 0.6B",
+  "documentBefore": "\r\n",
+  "waiting": {
+    "note": "正在准备 AI…",
+    "status": "正在准备 AI…",
+    "progressVisible": true,
+    "stopVisible": true,
+    "loadDisabled": true,
+    "exits": 1,
+    "exitFinished": 0,
+    "loads": 0
+  },
+  "stopped": {
+    "note": "已停止。",
+    "progressHidden": true,
+    "loadDisabled": false
+  },
+  "afterExit": {
+    "exits": 1,
+    "exitFinished": 1,
+    "loads": 0,
+    "note": "已停止。"
+  },
+  "recovered": {
+    "exits": 1,
+    "exitFinished": 1,
+    "loads": 1,
+    "answers": 1,
+    "guidance": [],
+    "previewCount": 0
+  },
+  "documentAfter": "\r\n",
+  "passed": true,
+  "contextClosed": true,
+  "bundleBytesUnchanged": true
+}

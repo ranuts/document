@@ -1,0 +1,477 @@
+{
+  "scope": "Same-model Metal cold/reused/reset chat-state diagnostic only",
+  "modelId": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+  "runs": [
+    {
+      "variant": "cold",
+      "args": [],
+      "requests": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-23.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-22.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        }
+      ],
+      "errors": [],
+      "outputs": [
+        {
+          "completion": {
+            "id": "7ae3bbef-ff85-458e-82ae-e1b7a6b475a3",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"204 Walsh Avenue, Dublin, Ireland\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353273,
+            "usage": {
+              "completion_tokens": 17,
+              "prompt_tokens": 49,
+              "total_tokens": 66,
+              "extra": {
+                "e2e_latency_s": 1.339,
+                "prefill_tokens_per_s": 65.837649730689,
+                "decode_tokens_per_s": 28.72106774619505,
+                "time_to_first_token_s": 0.7442549999952316,
+                "time_per_output_token_s": 0.03481764706092723,
+                "grammar_init_s": 0.2930750000178814,
+                "grammar_per_token_s": 0.00013676470342804405
+              }
+            }
+          },
+          "error": null,
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+              },
+              {
+                "role": "user",
+                "content": "ISO date: 2044-09-22.\n"
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 512,
+            "response_format": {
+              "type": "json_object",
+              "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+            }
+          }
+        }
+      ],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "modelRecord": {
+        "model": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_id": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "low_resource_required": true,
+        "vram_required_MB": 2893.64,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "loadError": null,
+      "workerVendor": "apple",
+      "stage": "request-0",
+      "finished": true,
+      "contextClosed": true
+    },
+    {
+      "variant": "reused",
+      "args": [],
+      "requests": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-23.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-22.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        }
+      ],
+      "errors": [],
+      "outputs": [
+        {
+          "completion": {
+            "id": "22a33786-6a45-4945-883d-96cb4e8c3468",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"2044-09-23\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353278,
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 49,
+              "total_tokens": 67,
+              "extra": {
+                "e2e_latency_s": 1.265,
+                "prefill_tokens_per_s": 76.73875933771087,
+                "decode_tokens_per_s": 28.9107861315739,
+                "time_to_first_token_s": 0.6385300000011921,
+                "time_per_output_token_s": 0.03458916666772631,
+                "grammar_init_s": 0.2789399999976158,
+                "grammar_per_token_s": 0.00013222222361299727
+              }
+            }
+          },
+          "error": null,
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+              },
+              {
+                "role": "user",
+                "content": "ISO date: 2044-09-23.\n"
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 512,
+            "response_format": {
+              "type": "json_object",
+              "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+            }
+          }
+        },
+        {
+          "completion": {
+            "id": "774b4d16-bc70-4e4b-a007-87993ca61370",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"204 Walsh Avenue, Dublin, Ireland\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353278,
+            "usage": {
+              "completion_tokens": 17,
+              "prompt_tokens": 49,
+              "total_tokens": 66,
+              "extra": {
+                "e2e_latency_s": 0.868,
+                "prefill_tokens_per_s": 165.64126834285972,
+                "decode_tokens_per_s": 29.765813088203114,
+                "time_to_first_token_s": 0.2958199999928474,
+                "time_per_output_token_s": 0.03359558823529411,
+                "grammar_init_s": 0.00008500000834465027,
+                "grammar_per_token_s": 0.00007411764649783868
+              }
+            }
+          },
+          "error": null,
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+              },
+              {
+                "role": "user",
+                "content": "ISO date: 2044-09-22.\n"
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 512,
+            "response_format": {
+              "type": "json_object",
+              "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+            }
+          }
+        }
+      ],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "modelRecord": {
+        "model": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_id": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "low_resource_required": true,
+        "vram_required_MB": 2893.64,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "loadError": null,
+      "workerVendor": "apple",
+      "stage": "request-1",
+      "finished": true,
+      "contextClosed": true
+    },
+    {
+      "variant": "reset",
+      "args": [],
+      "requests": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-23.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+            },
+            {
+              "role": "user",
+              "content": "ISO date: 2044-09-22.\n"
+            }
+          ],
+          "temperature": 0,
+          "top_p": 0.8,
+          "max_tokens": 512,
+          "response_format": {
+            "type": "json_object",
+            "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+          }
+        }
+      ],
+      "errors": [],
+      "outputs": [
+        {
+          "completion": {
+            "id": "20148779-d12b-4569-8a28-347ac1770904",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"2044-09-23\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353283,
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 49,
+              "total_tokens": 67,
+              "extra": {
+                "e2e_latency_s": 1.273,
+                "prefill_tokens_per_s": 76.92851143172004,
+                "decode_tokens_per_s": 28.458273054662733,
+                "time_to_first_token_s": 0.636955000013113,
+                "time_per_output_token_s": 0.03513916666971313,
+                "grammar_init_s": 0.27944499999284744,
+                "grammar_per_token_s": 0.0001533333361148835
+              }
+            }
+          },
+          "error": null,
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+              },
+              {
+                "role": "user",
+                "content": "ISO date: 2044-09-23.\n"
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 512,
+            "response_format": {
+              "type": "json_object",
+              "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+            }
+          }
+        },
+        {
+          "completion": {
+            "id": "ab42a3ed-a179-4621-9fb7-92488a75bdc4",
+            "choices": [
+              {
+                "finish_reason": "stop",
+                "index": 0,
+                "logprobs": null,
+                "message": {
+                  "content": "{\n    \"text\": \"204 Walsh Avenue, Dublin, Ireland\"\n}",
+                  "role": "assistant"
+                }
+              }
+            ],
+            "model": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+            "object": "chat.completion",
+            "created": 1791353284,
+            "usage": {
+              "completion_tokens": 17,
+              "prompt_tokens": 49,
+              "total_tokens": 66,
+              "extra": {
+                "e2e_latency_s": 0.878,
+                "prefill_tokens_per_s": 166.21438262557183,
+                "decode_tokens_per_s": 29.233732291752748,
+                "time_to_first_token_s": 0.2948000000119209,
+                "time_per_output_token_s": 0.03420705881890128,
+                "grammar_init_s": 0.00007499998807907104,
+                "grammar_per_token_s": 0.00009029411217745613
+              }
+            }
+          },
+          "error": null,
+          "request": {
+            "messages": [
+              {
+                "role": "system",
+                "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+              },
+              {
+                "role": "user",
+                "content": "ISO date: 2044-09-22.\n"
+              }
+            ],
+            "temperature": 0,
+            "top_p": 0.8,
+            "max_tokens": 512,
+            "response_format": {
+              "type": "json_object",
+              "schema": "{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"text\"],\"properties\":{\"text\":{\"type\":\"string\"}}}"
+            }
+          }
+        }
+      ],
+      "version": "151.0.7922.34",
+      "adapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "isFallbackAdapter": false
+      },
+      "modelRecord": {
+        "model": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_id": "Qwen2.5-3B-Instruct-q4f32_1-MLC",
+        "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen2.5-3B-Instruct-q4f32_1_cs1k-webgpu.wasm",
+        "low_resource_required": true,
+        "vram_required_MB": 2893.64,
+        "overrides": {
+          "context_window_size": 4096
+        }
+      },
+      "loadError": null,
+      "workerVendor": "apple",
+      "stage": "request-1",
+      "resetCompleted": true,
+      "finished": true,
+      "contextClosed": true
+    }
+  ],
+  "closed": true
+}

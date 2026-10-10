@@ -1,0 +1,25 @@
+{
+  "receipt_sha256": "3abeca2cfc4b2fbe7840731374aa48112d3d8166f54da0844085c62756b2680f",
+  "three_baselines_exact": true,
+  "candidate_promoted": false,
+  "decisions": [
+    {
+      "id": "zh-CN-summarize",
+      "product": "fail",
+      "policy-system": "fail",
+      "reason": "Identical output omits delivery-team permission actor."
+    },
+    {
+      "id": "ja-rewrite",
+      "product": "fail",
+      "policy-system": "fail",
+      "reason": "Identical output changes ISO date to Japanese format."
+    },
+    {
+      "id": "es-translate",
+      "product": "fail",
+      "policy-system": "narrow-pass",
+      "reason": "System-policy output fixes two Spanish viaje occurrences to Portuguese viagem while preserving checked names, ISO date, quantity, proposal negative, booking actor, authorization prerequisite, current unauthorized trip and prepared itinerary. Known-source local improvement only."
+    }
+  ]
+}

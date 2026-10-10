@@ -1,0 +1,314 @@
+[
+  {
+    "width": 1280,
+    "height": 900,
+    "targets": {
+      ".agent-panel-settings-toggle": {
+        "x": 1196,
+        "y": 18.5,
+        "width": 30,
+        "height": 30,
+        "top": 18.5,
+        "right": 1226,
+        "bottom": 48.5,
+        "left": 1196
+      },
+      ".agent-panel-close": {
+        "x": 1230,
+        "y": 18.5,
+        "width": 30,
+        "height": 30,
+        "top": 18.5,
+        "right": 1260,
+        "bottom": 48.5,
+        "left": 1230
+      },
+      ".agent-panel-clear": {
+        "x": 1228,
+        "y": 71,
+        "width": 32,
+        "height": 32,
+        "top": 71,
+        "right": 1260,
+        "bottom": 103,
+        "left": 1228
+      },
+      ".agent-panel-quote": {
+        "x": 1175,
+        "y": 832,
+        "width": 28,
+        "height": 28,
+        "top": 832,
+        "right": 1203,
+        "bottom": 860,
+        "left": 1175
+      },
+      ".cui-send": {
+        "x": 1211,
+        "y": 829,
+        "width": 34,
+        "height": 34,
+        "top": 829,
+        "right": 1245,
+        "bottom": 863,
+        "left": 1211
+      }
+    },
+    "panel": {
+      "x": 880,
+      "y": 0,
+      "width": 400,
+      "height": 900,
+      "top": 0,
+      "right": 1280,
+      "bottom": 900,
+      "left": 880
+    },
+    "input": {
+      "x": 916,
+      "y": 757,
+      "width": 329,
+      "height": 56,
+      "top": 757,
+      "right": 1245,
+      "bottom": 813,
+      "left": 916
+    },
+    "horizontalOverflow": false
+  },
+  {
+    "width": 390,
+    "height": 900,
+    "targets": {
+      ".agent-panel-settings-toggle": {
+        "x": 278,
+        "y": 12,
+        "width": 44,
+        "height": 44,
+        "top": 12,
+        "right": 322,
+        "bottom": 56,
+        "left": 278
+      },
+      ".agent-panel-close": {
+        "x": 326,
+        "y": 12,
+        "width": 44,
+        "height": 44,
+        "top": 12,
+        "right": 370,
+        "bottom": 56,
+        "left": 326
+      },
+      ".agent-panel-clear": {
+        "x": 326,
+        "y": 69,
+        "width": 44,
+        "height": 44,
+        "top": 69,
+        "right": 370,
+        "bottom": 113,
+        "left": 326
+      },
+      ".agent-panel-quote": {
+        "x": 259,
+        "y": 823,
+        "width": 44,
+        "height": 44,
+        "top": 823,
+        "right": 303,
+        "bottom": 867,
+        "left": 259
+      },
+      ".cui-send": {
+        "x": 311,
+        "y": 823,
+        "width": 44,
+        "height": 44,
+        "top": 823,
+        "right": 355,
+        "bottom": 867,
+        "left": 311
+      }
+    },
+    "panel": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 900,
+      "top": 0,
+      "right": 390,
+      "bottom": 900,
+      "left": 0
+    },
+    "input": {
+      "x": 36,
+      "y": 751,
+      "width": 319,
+      "height": 56,
+      "top": 751,
+      "right": 355,
+      "bottom": 807,
+      "left": 36
+    },
+    "horizontalOverflow": false
+  },
+  {
+    "width": 390,
+    "height": 400,
+    "targets": {
+      ".agent-panel-settings-toggle": {
+        "x": 282,
+        "y": 5.265625,
+        "width": 44,
+        "height": 44,
+        "top": 5.265625,
+        "right": 326,
+        "bottom": 49.265625,
+        "left": 282
+      },
+      ".agent-panel-close": {
+        "x": 330,
+        "y": 5.265625,
+        "width": 44,
+        "height": 44,
+        "top": 5.265625,
+        "right": 374,
+        "bottom": 49.265625,
+        "left": 330
+      },
+      ".agent-panel-clear": {
+        "x": 326,
+        "y": 55.515625,
+        "width": 44,
+        "height": 44,
+        "top": 55.515625,
+        "right": 370,
+        "bottom": 99.515625,
+        "left": 326
+      },
+      ".agent-panel-quote": {
+        "x": 271,
+        "y": 337,
+        "width": 44,
+        "height": 44,
+        "top": 337,
+        "right": 315,
+        "bottom": 381,
+        "left": 271
+      },
+      ".cui-send": {
+        "x": 323,
+        "y": 337,
+        "width": 44,
+        "height": 44,
+        "top": 337,
+        "right": 367,
+        "bottom": 381,
+        "left": 323
+      }
+    },
+    "panel": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 400,
+      "top": 0,
+      "right": 390,
+      "bottom": 400,
+      "left": 0
+    },
+    "input": {
+      "x": 24,
+      "y": 289,
+      "width": 343,
+      "height": 40,
+      "top": 289,
+      "right": 367,
+      "bottom": 329,
+      "left": 24
+    },
+    "horizontalOverflow": false
+  },
+  {
+    "width": 320,
+    "height": 400,
+    "targets": {
+      ".agent-panel-settings-toggle": {
+        "x": 212,
+        "y": 3.09375,
+        "width": 44,
+        "height": 44,
+        "top": 3.09375,
+        "right": 256,
+        "bottom": 47.09375,
+        "left": 212
+      },
+      ".agent-panel-close": {
+        "x": 260,
+        "y": 3.09375,
+        "width": 44,
+        "height": 44,
+        "top": 3.09375,
+        "right": 304,
+        "bottom": 47.09375,
+        "left": 260
+      },
+      ".agent-panel-clear": {
+        "x": 256,
+        "y": 51.1875,
+        "width": 44,
+        "height": 44,
+        "top": 51.1875,
+        "right": 300,
+        "bottom": 95.1875,
+        "left": 256
+      },
+      ".agent-panel-quote": {
+        "x": 201,
+        "y": 337,
+        "width": 44,
+        "height": 44,
+        "top": 337,
+        "right": 245,
+        "bottom": 381,
+        "left": 201
+      },
+      ".cui-send": {
+        "x": 253,
+        "y": 337,
+        "width": 44,
+        "height": 44,
+        "top": 337,
+        "right": 297,
+        "bottom": 381,
+        "left": 253
+      }
+    },
+    "panel": {
+      "x": 0,
+      "y": 0,
+      "width": 320,
+      "height": 400,
+      "top": 0,
+      "right": 320,
+      "bottom": 400,
+      "left": 0
+    },
+    "input": {
+      "x": 24,
+      "y": 289,
+      "width": 273,
+      "height": 40,
+      "top": 289,
+      "right": 297,
+      "bottom": 329,
+      "left": 24
+    },
+    "horizontalOverflow": false
+  },
+  {
+    "settingsScrollWidth": 389,
+    "settingsClientWidth": 389
+  }
+]

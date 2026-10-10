@@ -1,0 +1,65 @@
+{
+  "probeSHA256": "aedac4c20e1adcb2d0fe46e2b99e0a554d2c263a226c478edddf5b9a60fe3b75",
+  "scope": "Reopened saved short Unicode IM samples, current desktop Chromium native editor screenshots, no AI inference or physical-device acceptance.",
+  "rows": [
+    {
+      "type": "docx",
+      "artifactSHA256": "91e837c3eee40d89b1adb93e450c899b7447be45088af335de56b64ab76fb136",
+      "screenshotPath": ".scratch/ai-csp/unicode-reopen-render-docx.png",
+      "screenshotSHA256": "254793fd92a6b9eb4ca7276c5148ce6f031a888605f7697d97a5f9e7d9f77da8",
+      "layout": {
+        "type": "docx",
+        "nativeReady": true
+      }
+    },
+    {
+      "type": "xlsx",
+      "artifactSHA256": "eb03561e8f70f0feb77cb67307e8d48b5eae3e366e2074f45c6ea97e60d31ce3",
+      "screenshotPath": ".scratch/ai-csp/unicode-reopen-render-xlsx.png",
+      "screenshotSHA256": "420fa01bcdb558db693b4694fc21ce4a5728eb29a3d2ac5ad1b7b33e336ccf7d",
+      "layout": {
+        "type": "xlsx",
+        "nativeReady": true
+      }
+    },
+    {
+      "type": "pptx",
+      "artifactSHA256": "cbf0873339d191e602a4169fdb05a5f7ae88a245a20c46f48f4b6d5ad7a826fd",
+      "screenshotPath": ".scratch/ai-csp/unicode-reopen-render-pptx.png",
+      "screenshotSHA256": "de74b60d49734e171d5a09b4f7051d6deb8c816f77332aa40e23df8ce8f8bca2",
+      "layout": {
+        "type": "pptx",
+        "slideWidth": 338.6666666666667,
+        "slideHeight": 190.5,
+        "shapes": [
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 31.17675,
+            "width": 254,
+            "height": 66.32222222222222,
+            "contentHeight": 22.86
+          },
+          {
+            "text": "\r\n",
+            "x": 42.333333333333336,
+            "y": 100.05661111111111,
+            "width": 254,
+            "height": 45.99338888888889,
+            "contentHeight": 9.144
+          },
+          {
+            "text": "IM_PPT_四季_日本_ä_2026\r\n",
+            "x": 10.16,
+            "y": 5.715,
+            "width": 220.14333333333335,
+            "height": 10.17,
+            "contentHeight": 7.62
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "status": "captured"
+}

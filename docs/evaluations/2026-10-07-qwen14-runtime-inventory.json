@@ -1,0 +1,46 @@
+{
+  "sdkVersion": "0.2.85",
+  "sdkCatalog14B": [],
+  "libraryTreeURL": "https://api.github.com/repos/mlc-ai/binary-mlc-llm-libs/git/trees/025bcaf3780fa8254f5e5efd3bfea0a5397248f4?recursive=1",
+  "libraryTreeTruncated": false,
+  "qwen14LibraryPaths": [],
+  "sdkSourceSHA256": "ea4dcbc184039e045f6b1c3dfd7511e739945ee0bcf91166f68cbfb6daf7af25",
+  "sdkCatalogModelCount": 163,
+  "modelRepository": "mlc-ai/Qwen2.5-14B-Instruct-q4f16_1-MLC",
+  "modelRevision": "5afd9575d32a566251616015e4ddfccf8bfd0366",
+  "metadata": {
+    "mlc-chat-config.json": {
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-14B-Instruct-q4f16_1-MLC/resolve/5afd9575d32a566251616015e4ddfccf8bfd0366/mlc-chat-config.json",
+      "bytes": 2046,
+      "sha256": "f8bae949cf112afebb91c9f911b0722c0973a04e9962bc656c05e565775b59a2"
+    },
+    "tensor-cache.json": {
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-14B-Instruct-q4f16_1-MLC/resolve/5afd9575d32a566251616015e4ddfccf8bfd0366/tensor-cache.json",
+      "bytes": 245933,
+      "sha256": "5724f49e1b2831b5203fa78b79c26158d2ca57fc551977eddd15042e9ca44a3c"
+    }
+  },
+  "modelType": "qwen2",
+  "quantization": "q4f16_1",
+  "modelConfig": {
+    "hidden_act": "silu",
+    "hidden_size": 5120,
+    "intermediate_size": 13824,
+    "num_attention_heads": 40,
+    "num_hidden_layers": 48,
+    "num_key_value_heads": 8,
+    "rms_norm_eps": 1e-06,
+    "rope_theta": 1000000.0,
+    "vocab_size": 152064,
+    "tie_word_embeddings": false,
+    "context_window_size": 32768,
+    "prefill_chunk_size": 2048,
+    "tensor_parallel_shards": 1,
+    "head_dim": 128,
+    "dtype": "float32",
+    "max_batch_size": 80
+  },
+  "tensorShardCount": 194,
+  "totalShardBytes": 8309352448,
+  "largestShardBytes": 389283840
+}

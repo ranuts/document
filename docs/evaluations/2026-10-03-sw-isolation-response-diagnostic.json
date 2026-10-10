@@ -1,0 +1,27 @@
+{
+  "browserVersion": "151.0.7922.34",
+  "scope": "Actual shipped worker source under isolated script hosting; old cached synthetic iframe/Worker bodies served without changing their stored metadata. Not first-upgrade or native-editor verification.",
+  "seed": {
+    "name": "document-editor-runtime-dev"
+  },
+  "result": {
+    "isolated": true,
+    "worker": {
+      "error": true
+    },
+    "policy": null
+  },
+  "stored": [
+    {
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "policy": null,
+      "body": "<p>CACHED_FRAME_BYTES</p>"
+    },
+    {
+      "path": "/sdkjs/isolation-probe-worker.js",
+      "policy": null,
+      "body": "postMessage({isolated:crossOriginIsolated});"
+    }
+  ],
+  "passed": false
+}

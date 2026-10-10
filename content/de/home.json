@@ -1,13 +1,13 @@
 {
   "title": "DOCX, XLSX & PPTX im Browser öffnen — kostenloser Dokumentenbetrachter und -editor",
-  "description": "Word- (DOCX), Excel- (XLSX), PowerPoint- (PPTX) und CSV-Dateien direkt im Browser öffnen und ansehen — ohne installiertes Office, ohne Upload, ohne Anmeldung. Bearbeiten und speichern geht auch. Kostenlos, datenschutzfreundlich, offlinefähig. Mit OnlyOffice.",
-  "ogDescription": "DOCX, XLSX, PPTX und CSV im Browser öffnen, ansehen und bearbeiten — ohne Office, ohne Upload, ohne Anmeldung. Kostenlos und offlinefähig.",
+  "description": "DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.",
+  "ogDescription": "DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.",
   "chip": "Local-first · <b>Open Source</b>",
   "h1": {
     "plain": "Word-, Excel- und PowerPoint-Dateien öffnen,",
     "accent": "direkt im Browser."
   },
-  "sub": "Kein Office installiert? Sehen Sie sich jede DOCX, XLSX oder PPTX sofort an — und bearbeiten Sie sie, wenn nötig. Alles läuft auf Ihrem Gerät: kein Upload, keine Anmeldung, funktioniert offline.",
+  "sub": "DOCX, XLSX, PPTX und CSV ohne Office oder Konto im Browser öffnen, ansehen und bearbeiten. Der Kerneditor benötigt keinen Dokument-Upload; Offline-Nutzung hängt von zwischengespeicherten Ressourcen ab.",
   "cta": {
     "open": "Datei öffnen",
     "docx": "Neues Word",
@@ -16,17 +16,22 @@
   },
   "recent": {
     "label": "Weiterbearbeiten",
-    "note": "Versehentlich den Tab geschlossen und nichts ist verloren: Ihre Änderungen werden während der Arbeit in diesem Browser gesichert. Gesicherte Kopien bleiben 7 Tage und werden dann automatisch gelöscht — oder Sie löschen sie jederzeit selbst.",
+    "note": "Bei aktivierter automatischer Sicherung bleiben Kopien 7 Tage nach dem letzten Bearbeiten oder Öffnen in diesem Browser. Unter Gespeicherte Dokumente können Sie sie löschen oder die Sicherung deaktivieren. Browserspeicher kann gelöscht werden; speichern Sie auch die Datei.",
     "all": "Gesicherte Dokumente"
   },
-  "trust": ["0 Byte hochgeladen", "kein Konto", "funktioniert offline", ".docx .xlsx .pptx .csv"],
+  "trust": [
+    "Lokale Bearbeitung",
+    "kein Konto",
+    "Offline mit zwischengespeicherten Ressourcen",
+    ".docx .xlsx .pptx .csv"
+  ],
   "docwin": {
     "file": "report.docx",
     "badge": "lokal gesichert ✓",
-    "selected": "Alles, was Sie tippen, bleibt auf diesem Gerät.",
+    "selected": "Lokal bearbeiten ohne erforderlichen Upload",
     "noteAuthor": "Sie · gerade eben",
-    "noteBody": "0 Byte hochgeladen — prüfen Sie den Netzwerk-Tab.",
-    "net": "network · 0 Anfragen · 0 Byte gesendet"
+    "noteBody": "Lokal bearbeiten ohne erforderlichen Upload",
+    "net": "Lokale Bearbeitung"
   },
   "nav": [
     {
@@ -92,9 +97,9 @@
       "h2": "Datenschutz durch Konstruktion, nicht per Versprechen",
       "items": [
         {
-          "k": "100% clientseitig",
-          "h3": "Dateien verlassen Ihr Gerät nie",
-          "p": "Jedes Dokument wird lokal geöffnet, bearbeitet und gespeichert. Es gibt keinen Server, zu dem etwas hochgeladen würde."
+          "k": "Lokale Bearbeitung",
+          "h3": "Lokal bearbeiten ohne erforderlichen Upload",
+          "p": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload."
         },
         {
           "k": "Kein Konto",
@@ -103,13 +108,13 @@
         },
         {
           "k": "PWA · offline",
-          "h3": "Installieren und im Flugzeug nutzen",
-          "p": "Auf den Startbildschirm legen — es funktioniert auch ganz ohne Internetverbindung weiter."
+          "h3": "Offline mit zwischengespeicherten Ressourcen",
+          "p": "Zwischengespeicherte Editor-Ressourcen funktionieren offline; Datei-URLs benötigen eine Verbindung."
         },
         {
           "k": "AGPL-3.0",
           "h3": "Open Source, selbst hostbar",
-          "p": "Prüfen Sie genau, was läuft, oder betreiben Sie eine eigene Kopie. Mit OnlyOffice."
+          "p": "Prüfen Sie genau, was läuft, oder betreiben Sie eine eigene Kopie."
         }
       ]
     },
@@ -126,13 +131,13 @@
         {
           "n": "02",
           "h3": "Richtig bearbeiten",
-          "p": "Vollständige Formatierung, Tabellen, Diagramme und Formeln über OnlyOffice.",
+          "p": "Vollständige Formatierung, Tabellen, Diagramme und Formeln im Browser.",
           "loc": "bleibt auf dem Gerät"
         },
         {
           "n": "03",
           "h3": "Zurückspeichern",
-          "p": "Im selben Format exportieren. Nichts wurde je hochgeladen.",
+          "p": "In die eigene Datei speichern oder eine Kopie herunterladen.",
           "loc": "bleibt auf dem Gerät"
         }
       ]
@@ -144,41 +149,29 @@
       "items": [
         {
           "q": "Speichert es zurück in meine eigene Datei oder lädt es nur eine Kopie herunter?",
-          "a": "Es speichert zurück in Ihre eigene Datei. Beim ersten Speichern wählen Sie die Datei aus; jedes weitere Speichern schreibt direkt hinein, ohne Dialog und ohne Dublette im Download-Ordner. Dafür wird die File System Access API des Browsers genutzt, das funktioniert also in Chrome, Edge und anderen Chromium-Browsern; Safari und Firefox laden stattdessen eine Kopie herunter. In beiden Fällen geht die Datei vom Browser auf Ihre eigene Festplatte und wird nie hochgeladen."
+          "a": "In Chrome, Edge und anderen Browsern mit File System Access API wählen Sie beim ersten Speichern eine Datei; spätere Speichervorgänge schreiben in diese Datei zurück. Andere Browser laden eine Kopie herunter. Andere Formate exportieren Sie über Datei → Herunterladen als. Wiederherstellungskopien im Browser sind davon unabhängig."
         },
         {
           "q": "Werden meine Dateien irgendwohin hochgeladen?",
-          "a": "Nein. Es gibt keinen Server. Dateien werden lokal auf Ihrem Gerät geöffnet und gespeichert und nie hochgeladen — Sie können es im Netzwerk-Tab prüfen oder den Quellcode lesen."
+          "a": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen."
         },
         {
           "q": "Welche Formate kann ich bearbeiten?",
-          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV, mit OnlyOffice als WebAssembly."
+          "a": "Word (DOCX), Excel (XLSX), PowerPoint (PPTX) und CSV, mit einer WebAssembly-Engine im Browser."
         },
         {
           "q": "Was passiert, wenn ich den Tab schließe oder die Seite neu lade?",
-          "a": "Nichts geht verloren. Ihre Änderungen werden während der Arbeit in diesem Browser gesichert; beim nächsten Öffnen bietet der Editor das Dokument wieder an, und ein Neuladen kehrt dorthin zurück. Die gesicherten Kopien bleiben 7 Tage auf Ihrem Gerät und werden dann automatisch gelöscht; Sie können sie auch jederzeit selbst löschen. Nichts wird hochgeladen — die Kopien existieren nur in diesem Browser."
+          "a": "Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der IndexedDB dieses Browsers für 7 Tage nach dem letzten Bearbeiten oder Öffnen. Das Schließen des Tabs löscht sie nicht. Unter /history können Sie Kopien löschen oder die automatische Sicherung deaktivieren. Browserspeicher kann gelöscht oder verdrängt werden; noch nicht gesicherte Änderungen können verloren gehen. Wiederherstellung ersetzt das Speichern der Datei nicht."
         },
         {
           "q": "Funktioniert es offline?",
-          "a": "Ja. Es ist eine installierbare PWA — einmal geladen, funktioniert es ohne Internet weiter, weil das Bearbeiten vollständig lokal im Browser läuft."
+          "a": "Offline-Bearbeitung setzt voraus, dass Browser, App, Editor-Engine, Konverter sowie benötigte Schrift- und Formatressourcen im Cache verfügbar bleiben. Ein Besuch oder eine PWA-Installation garantiert das nicht. Datei-URLs benötigen eine Netzwerkverbindung."
         },
         {
           "q": "Brauche ich ein Konto?",
           "a": "Kein Konto, keine Anmeldung, keine E-Mail. Seite öffnen und bearbeiten."
         }
       ]
-    }
-  },
-  "eco": {
-    "label": "Teil des ran-Ökosystems · alles Open Source",
-    "here": {
-      "name": "edit.chaxus.com",
-      "role": "Office-Editor"
-    },
-    "other": {
-      "href": "https://ran.chaxus.com",
-      "name": "ran.chaxus.com",
-      "role": "UI-Komponenten"
     }
   },
   "foot": {
@@ -246,15 +239,11 @@
   "featureList": [
     "DOCX, XLSX, PPTX und CSV ohne Microsoft Office öffnen und ansehen",
     "DOCX-, XLSX-, PPTX- und CSV-Dateien bearbeiten",
-    "100% clientseitig — Dateien verlassen Ihr Gerät nie",
+    "Lokal bearbeiten ohne erforderlichen Upload",
     "Kein Konto, keine Anmeldung nötig",
     "Dokumente per ?src= oder ?file= aus einer URL öffnen",
-    "Als PWA installierbar, mit Offline-Unterstützung",
+    "Offline mit zwischengespeicherten Ressourcen",
     "Über die postMessage-API einbettbar",
     "Kostenlos und quelloffen (AGPL-3.0)"
-  ],
-  "ecosystem": {
-    "name": "ran ecosystem",
-    "url": "https://ran.chaxus.com"
-  }
+  ]
 }

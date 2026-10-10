@@ -1,0 +1,81 @@
+{
+  "scope": "Actual browser navigation, native Excel/PPT, no model inference, actual BFCache return then closed-grammar IM edit, Undo/Redo/Save/reopen",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "8e300d32-52b0-45d2-a5db-4146de8a06a2",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        }
+      ],
+      "draft": "",
+      "handles": 1,
+      "entries": 0,
+      "notRestoredReasons": {
+        "src": null,
+        "id": null,
+        "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=f84db1d4-313b-4679-aa71-d7a258fc083a",
+        "name": null,
+        "reasons": [
+          {
+            "reason": "masked"
+          }
+        ],
+        "children": []
+      },
+      "cleanupCalls": []
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [
+    {
+      "loaderId": "4FEB9E39C8704F621D3906EF3526B55D",
+      "frameId": "CD1D239DBA94E5C5B018AB7F3358DFA8",
+      "notRestoredExplanations": [
+        {
+          "type": "Circumstantial",
+          "reason": "BrowsingInstanceNotSwapped"
+        },
+        {
+          "type": "PageSupportNeeded",
+          "reason": "UnloadHandlerExistsInSubFrame"
+        }
+      ],
+      "notRestoredExplanationsTree": {
+        "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=f84db1d4-313b-4679-aa71-d7a258fc083a",
+        "explanations": [
+          {
+            "type": "Circumstantial",
+            "reason": "BrowsingInstanceNotSwapped"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "token": "b011eef1-10c2-4387-92a0-bbb62d8f27fb",
+  "frames": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=xlsx&agent=1&locale=zh-CN&saved=f84db1d4-313b-4679-aa71-d7a258fc083a",
+      "registered": [],
+      "property": "null"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=xlsx",
+      "registered": [
+        {
+          "target": "window",
+          "source": "function(){Y&&aa.wb.isFormulaEditMode&&\naa.sendExternalCloseEditor()}",
+          "stack": "Error\n    at EventTarget.addEventListener (<anonymous>:3:378)\n    at p.init (http://127.0.0.1:5193/sdkjs/cell/sdk-all.js:15455:443)\n    at g._init (http://127.0.0.1:5193/sdkjs/cell/sdk-all.js:15226:34)\n    at new g (http://127.0.0.1:5193/sdkjs/cell/sdk-all.js:15179:284)\n    at e._openDocumentEndCallback (http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js:2977:31)\n    at Object.handleChanges (http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js:1192:34)\n    at e._openDocumentEndCallback (http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js:2974:436)\n    at e.asyncFontsDocumentEndLoaded (http://127.0.0.1:5193/sdkjs/cell/sdk-all-min.js:2923:494)\n    at e._LoadFonts (http://127.0.0.1:5193/sdkjs/cell/sdk-all.js:8556:178)\n    at e.check_loaded_list (http://127.0.0.1:5193/sdkjs/cell/sdk-all.js:8557:223)"
+        }
+      ],
+      "property": "function(){for(var i=Math.max(arguments.length-e,0),o=Array(i),n=0;n<i;n++)o[n]=arguments[n+e];switch(e){case 0:return t.call(this,o);case 1:return t.call(this,arguments[0],o);case 2:return t.call(this,arguments[0],arguments[1],o)}var s=Array(e+1);for(n=0;n<e;n++)s[n]=arguments[n];return s[e]=o,t.apply(this,s)}"
+    }
+  ],
+  "cached": false,
+  "error": "Error: Actual BFCache return failed",
+  "contextClosed": true
+}

@@ -1,0 +1,22 @@
+{
+  "playwright": "1.62.1",
+  "cases": [
+    {
+      "mode": "setOffline",
+      "controlled": true,
+      "navigationError": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:52112/target\", waiting until \"load\"\u001b[22m\n",
+      "closed": true
+    },
+    {
+      "mode": "originStopped",
+      "controlled": true,
+      "originStopped": true,
+      "status": 200,
+      "fromServiceWorker": true,
+      "heading": "LOCAL_LITERAL",
+      "closed": true
+    }
+  ],
+  "version": "26.5",
+  "closed": true
+}

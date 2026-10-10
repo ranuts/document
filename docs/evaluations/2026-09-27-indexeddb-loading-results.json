@@ -1,0 +1,63 @@
+{
+  "firstAttempt": {
+    "elapsedMs": 241356,
+    "progress": {
+      "progress": 0.6655857207234844,
+      "timeElapsed": 43,
+      "text": "Fetching param cache[23/30]: 615MB fetched. 66% completed, 43 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    "storage": {
+      "quota": 3871350784,
+      "usage": 650125312,
+      "usageDetails": {
+        "indexedDB": 650125312
+      }
+    },
+    "probe": {
+      "status": "downloaded",
+      "bytes": 155582464,
+      "http": 200
+    },
+    "result": "cancelled after stalled loading"
+  },
+  "before": {
+    "quota": 3871350784,
+    "usage": 650125312,
+    "usageDetails": {
+      "indexedDB": 650125312
+    }
+  },
+  "cachedBefore": false,
+  "status": "blocked-large-indexeddb-record",
+  "started": 1790502629667,
+  "results": [],
+  "largeRecordProbe": {
+    "status": "error",
+    "events": [
+      {
+        "kind": "transaction",
+        "name": "UnknownError",
+        "message": "The serialized keys and/or value are too large (size=155582510 bytes, max=133169152 bytes)."
+      }
+    ],
+    "error": "UnknownError: The serialized keys and/or value are too large (size=155582510 bytes, max=133169152 bytes)."
+  },
+  "retryProgress": {
+    "progress": 0.6655857207234844,
+    "timeElapsed": 1,
+    "text": "Fetching param cache[23/30]: 615MB fetched. 66% completed, 1 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+  },
+  "error": {
+    "name": "AbortError",
+    "message": "signal is aborted without reason",
+    "stack": "AbortError: signal is aborted without reason\n    at WebLLMProvider.dispose (http://localhost:5173/packages/agent-core/dist/llm/webllm.js:111:23)\n    at pptr:evaluateHandle;performEvaluation%20(file%3A%2F%2F%2Fhome%2Flocal-user%2F.npm%2F_npx%2F15c61037b1978c83%2Fnode_modules%2Fchrome-devtools-mcp%2Fbuild%2Fsrc%2Ftools%2Fscript.js%3A182%3A69):1:206\n    at pptr:evaluate;performEvaluation%20(file%3A%2F%2F%2Fhome%2Flocal-user%2F.npm%2F_npx%2F15c61037b1978c83%2Fnode_modules%2Fchrome-devtools-mcp%2Fbuild%2Fsrc%2Ftools%2Fscript.js%3A183%3A42):3:41"
+  },
+  "after": {
+    "quota": 3871350784,
+    "usage": 650125312,
+    "usageDetails": {
+      "indexedDB": 650125312
+    }
+  },
+  "elapsedMs": 164771
+}

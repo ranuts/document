@@ -1,0 +1,29 @@
+{
+  "model": "Qwen3-0.6B-GGUF-CPU",
+  "cpu": true,
+  "scope": "Controlled hold of actual model worker initialization message, visible loading Stop then late native postMessage on terminated worker, existing Load retry and actual inference; no download/network stall or physical OOM claim.",
+  "errors": [],
+  "before": {
+    "note": "484.2 / 484.2 MB",
+    "held": 1,
+    "constructed": 1
+  },
+  "afterStop": {
+    "note": "Stopped.",
+    "status": "",
+    "stopHidden": true,
+    "loadDisabled": false,
+    "held": 1,
+    "terminated": 1,
+    "constructed": 1
+  },
+  "afterLate": {
+    "note": "Stopped.",
+    "constructed": 1
+  },
+  "stopErrors": [],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "reply": "Hello.",
+  "visibleErrors": [],
+  "passed": true
+}

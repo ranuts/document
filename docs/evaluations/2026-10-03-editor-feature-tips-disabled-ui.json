@@ -1,0 +1,38 @@
+{
+  "status": "completed",
+  "scope": "Fresh isolated Chromium native editor first-open feature tips; no stored dismissals.",
+  "results": [
+    {
+      "kind": "xlsx",
+      "featureTipsEnabled": false,
+      "cellDirectionTipVisible": false,
+      "featureTipText": []
+    },
+    {
+      "kind": "docx",
+      "featureTipsEnabled": false,
+      "cellDirectionTipVisible": false,
+      "featureTipText": []
+    },
+    {
+      "kind": "pptx",
+      "featureTipsEnabled": false,
+      "cellDirectionTipVisible": false,
+      "featureTipText": []
+    }
+  ],
+  "bundle": "editor-BM_q-DJb.js",
+  "limitations": [
+    "Baseline confirms enabled runtime configuration but did not observe a visible promotional balloon in this fresh run.",
+    "Disables native new-feature tips only; ordinary tooltips and paste-options controls remain.",
+    "Desktop isolated Chromium only; no model inference or save regression in this check."
+  ],
+  "assessment": "All three native editors report featuresTips disabled. Excel B2 insertion remained functional; screenshot inspected without Cell text direction promotional balloon.",
+  "checks": {
+    "unitTests": 74,
+    "fullTestFiles": 108,
+    "fullTests": 3891,
+    "lint": "passed",
+    "productionBuild": "passed"
+  }
+}

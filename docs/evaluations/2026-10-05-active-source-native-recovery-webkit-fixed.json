@@ -1,0 +1,84 @@
+{
+  "runs": [
+    {
+      "name": "webkit",
+      "errors": [],
+      "version": "26.5",
+      "openText": "WEBKIT_WORD_20261005\r\n",
+      "open": {
+        "id": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+        "sources": [
+          {
+            "docId": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+            "key": "fc464d30-c288-4e3c-aed6-4cc04c9423f0"
+          }
+        ],
+        "pointer": "{\"docId\":\"89cbad63-b0f8-46a2-bc3e-a4b34a5309cb\",\"key\":\"fc464d30-c288-4e3c-aed6-4cc04c9423f0\"}"
+      },
+      "reloadText": "WEBKIT_WORD_20261005\r\n",
+      "reload": {
+        "id": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+        "sources": [
+          {
+            "docId": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+            "key": "b4c6d553-a81f-4641-8069-65a0557bf6e0"
+          }
+        ],
+        "pointer": "{\"docId\":\"89cbad63-b0f8-46a2-bc3e-a4b34a5309cb\",\"key\":\"b4c6d553-a81f-4641-8069-65a0557bf6e0\"}"
+      },
+      "editText": "LATEST_SNAPSHOT_webkit_20261005\r\n",
+      "snapshot": {
+        "id": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+        "doc": {
+          "id": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25965,
+          "totalBytes": 25965,
+          "createdAt": 1791158127396,
+          "updatedAt": 1791158127396,
+          "lastOpenedAt": 1791158127396,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+            "key": "b4c6d553-a81f-4641-8069-65a0557bf6e0"
+          }
+        ],
+        "pointer": "{\"docId\":\"89cbad63-b0f8-46a2-bc3e-a4b34a5309cb\",\"key\":\"b4c6d553-a81f-4641-8069-65a0557bf6e0\"}"
+      },
+      "autosaveWaitMs": 65098,
+      "latestText": "LATEST_SNAPSHOT_webkit_20261005\r\n",
+      "latest": {
+        "id": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+        "doc": {
+          "id": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+          "title": "webkit-embedded-font-native-saved.docx",
+          "titleLower": "webkit-embedded-font-native-saved.docx",
+          "ext": "docx",
+          "origin": "local",
+          "size": 25965,
+          "totalBytes": 25965,
+          "createdAt": 1791158127396,
+          "updatedAt": 1791158127396,
+          "lastOpenedAt": 1791158132399,
+          "revCount": 1,
+          "nextRev": 1
+        },
+        "sources": [
+          {
+            "docId": "89cbad63-b0f8-46a2-bc3e-a4b34a5309cb",
+            "key": "2d1d6f74-f5f6-4744-a2ba-ed1e6526fcea"
+          }
+        ],
+        "pointer": "{\"docId\":\"89cbad63-b0f8-46a2-bc3e-a4b34a5309cb\",\"key\":\"2d1d6f74-f5f6-4744-a2ba-ed1e6526fcea\"}"
+      },
+      "passed": true,
+      "closed": true
+    }
+  ]
+}

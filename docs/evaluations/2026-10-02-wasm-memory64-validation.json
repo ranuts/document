@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-02T06:48:07.818Z",
+  "scope": "Real browser minimal memory64 module validation versus API-constructor probe",
+  "rows": [
+    {
+      "name": "Chromium",
+      "jspi": true,
+      "memoryApi": true,
+      "validatesMemory64Module": true
+    },
+    {
+      "name": "WebKit",
+      "jspi": true,
+      "memoryApi": true,
+      "validatesMemory64Module": false
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "Four selected known-source SDK development checks; no native editor application, native-speaker review or general seven-language acceptance",
+  "reviews": [
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "fail",
+      "reason": "Chinese summary retains checked proposer/date/quantity, unapproved proposal, delivery-team actor, Pavel signing prerequisite and current unsigned report, omits labels and is shorter, but has two sentences instead of the requested one.",
+      "outputCanonicalSHA256": "297e339d7c84656b7115220559e1d6086bd6a42f79c13715de1d6a76532971ff"
+    },
+    {
+      "id": "ja-translate",
+      "verdict": "narrow-pass",
+      "reason": "Korean translation preserves Yui Mori and Ken Sato spelling, exact ISO date/quantity, proposal nonapproval, operating-team permission only after Ken validates backup, current unvalidated state and printed labels. Mixed source punctuation remains; this is a bounded manual fact check, not native-speaker certification.",
+      "outputCanonicalSHA256": "66a5dcc3fba0970e5dffb8d3084341ec66153f765708105662ce27e0001421c7"
+    },
+    {
+      "id": "de-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "German rewrite changes wording and retains grammatical schlug ... vor, all names/date/quantity, proposal nonapproval, Kai ordering only after Mila signs form, current unsigned status and available list.",
+      "outputCanonicalSHA256": "9bda1f306eed095a06ca0f4533caf0488bb8c82a145ae573ed0e647b1a7a5440"
+    },
+    {
+      "id": "es-rewrite",
+      "verdict": "narrow-pass",
+      "reason": "Spanish rewrite stays Spanish, changes wording while retaining all checked names/date/quantity, proposal nonapproval, Omar reservation permission only after Luz authorizes travel, current unauthorized status and prepared itinerary.",
+      "outputCanonicalSHA256": "caf2520f4322bac12871f03666429b5c0e796d19daa41d2a8ab819b3ae18ae4e"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Exact insertion over a partial Word selection
+
+Product `450116b` was exercised through visible IM tools mode with browser-local WebGPU Qwen3-1.7B-q4f16_1-MLC. A new native Word document was populated with `PREFIX TARGET SUFFIX`. Native cursor movement selected exactly `TARGET`; the driver asserts this before sending the request. The English exact cursor-insertion command supplied `Replacement 四季 日本 ä`.
+
+The resulting complete document is exactly `PREFIX Replacement 四季 日本 ä SUFFIX` plus native terminal CRLF. Thus both surrounding strings are preserved in this sample. Undo restores the complete original document and Redo restores the complete replacement. The captured actual Worker request has a single insert_text source enum and unsupported alternative. No recorded page errors, visible message errors or preview cards occurred.
+
+`verify-word-partial-insertion.py` independently checks full before/after/Undo/Redo text and binds the raw report to executed driver bytes by SHA-256. This adds partial-selection evidence to the earlier blank-document and select-all samples. It does not certify arbitrary paragraph boundaries, formatting or style preservation, tracked revisions, tables, Save/reopen, rendering, cold offline operation, physical devices or network privacy. The run uses an owned warm Chromium profile, network available and service workers blocked. No product code or model default changed.

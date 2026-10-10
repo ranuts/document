@@ -1,0 +1,5 @@
+# Existing operations after get_range introduction
+
+The current built CPU Excel IM replayed four positive operations after adding get_range and expanding explicit Chinese range-read recognition. Read-only A1:A3 SUM displayed 25 without modifying the inspected cells. Explicit A4 SUM wrote SUM(A1:A3) with evaluated value 25; native Undo/Redo matched the initial and edited snapshots. Numeric ascending/descending complete-row sorts preserved name/value pairs, header and the inspected outside C column; native Undo/Redo matched ascending/descending snapshots.
+
+Both executed probes used the normal model/loader with worker action observation, no inference output substitution, and an unchanged current build hash during each run. All operations counted before generation, displayed the expected result/status, and had no errors or preview cards. Dedicated verifiers check formula, exact table snapshots and native history. This verifies the four replayed operations after the capability-list change; it does not certify all tool prompts or model-wide fidelity. No product code changed.

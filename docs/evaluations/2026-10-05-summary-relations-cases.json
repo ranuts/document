@@ -1,0 +1,36 @@
+[
+  {
+    "id": "relations-en-archive",
+    "task": "summarize",
+    "language": "en",
+    "source": "Imogen suggested that the records unit move the scanned notebooks to the archive only after the preservation unit verifies the humidity log. The preservation unit has not verified the log, and the records unit has not moved the notebooks. The catering unit also compared breakfast menus.",
+    "instruction": "Summarize in one shorter English sentence. Retain the proposer, acting unit, verification of the humidity log as a prerequisite, and both current incomplete actions; omit breakfast menus.",
+    "rubric": [
+      "Imogen suggested, rather than completed or ordered",
+      "records unit moves scanned notebooks to archive",
+      "preservation unit verification of humidity log is prerequisite",
+      "preservation has not verified log",
+      "records has not moved notebooks",
+      "one shorter English sentence",
+      "omit menus",
+      "no invented cause or outcome"
+    ]
+  },
+  {
+    "id": "relations-zh-reservoir",
+    "task": "summarize",
+    "language": "zh",
+    "source": "林岚提议，只有巡检组确认储水罐的密封检测记录合格后，维护组才启用更换后的供水装置。巡检组尚未确认记录合格，维护组也尚未启用装置。后勤组另行讨论了休息室窗帘的颜色。",
+    "instruction": "用更短的一句中文概括，保留提议者、执行组、确认密封检测记录合格这一前提，以及未确认合格和未启用的现状，省略窗帘话题。",
+    "rubric": [
+      "林岚提议而非已完成或命令",
+      "维护组启用更换后的供水装置",
+      "巡检组确认密封检测记录合格是前提",
+      "巡检组尚未确认合格",
+      "维护组尚未启用",
+      "更短的一句中文",
+      "不含窗帘话题",
+      "不新增因果或结果"
+    ]
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "status": "failed",
+  "cases": [
+    {
+      "id": "greeting-en",
+      "text": "Say hello in one short sentence."
+    },
+    {
+      "id": "greeting-zh",
+      "text": "请用中文说一句简短的问候。"
+    },
+    {
+      "id": "arithmetic-en",
+      "text": "What is 7 plus 8? Reply with only the number."
+    },
+    {
+      "id": "negation-zh",
+      "text": "只回答以下句子中谁没有付款：Mira 没有向 Oren 付款。"
+    }
+  ],
+  "results": [],
+  "errors": [],
+  "plugin": "agent-plugin-DPWKbEZ4.js",
+  "pluginSHA256": "467c0460aab3ac0ee321054070b1a8a0ea88a8d1446e403b615e36b2009ba385",
+  "probeSHA256": "43370d2de8e5cc80f48a93db4b4e7cf7dcf17beaa8ad3f00986a28176fb57a6e",
+  "scope": "Known fresh diagnostic cases, one sample per variant, fixed current/request-first order. Only SDK chat messages user content order changes in route-served diagnostic SDK; actual CPU fallback model. No production adoption.",
+  "sdk": "esm-BmP3Hx_J.js",
+  "sdkSHA256": "90b5b57472a3116efff13b8376b84c724dbe22580feeb24843829839ca752414",
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "modelId": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "error": "Error: CPU capture missing or duplicate",
+  "bundleUnchanged": true
+}

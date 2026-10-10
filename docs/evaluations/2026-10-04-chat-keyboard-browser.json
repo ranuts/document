@@ -1,0 +1,70 @@
+{
+  "probeSHA256": "e8ae4e11013156e16daf8849765484af028ab8feb89be37ce1e6684d48faa18d",
+  "sourceSHA256": "d3f5bc5006c1b38d81da976143e4795b898b4e05a5af0cfbb077e480e763f3b4",
+  "results": [
+    {
+      "id": "shift-enter",
+      "value": "中文消息\n",
+      "sent": []
+    },
+    {
+      "id": "enter-send",
+      "value": "",
+      "sent": [
+        "中文消息\n"
+      ]
+    },
+    {
+      "id": "composition-enter",
+      "value": "正在选词\n",
+      "sent": [
+        "中文消息\n"
+      ]
+    },
+    {
+      "id": "legacy-229",
+      "value": "正在选词\n",
+      "sent": [
+        "中文消息\n"
+      ]
+    },
+    {
+      "id": "after-composition",
+      "value": "",
+      "sent": [
+        "中文消息\n",
+        "继续发送"
+      ]
+    },
+    {
+      "id": "running-locked",
+      "disabled": true,
+      "value": "保留草稿",
+      "sent": [
+        "中文消息\n",
+        "继续发送"
+      ]
+    },
+    {
+      "id": "unlocked-send",
+      "value": "",
+      "sent": [
+        "中文消息\n",
+        "继续发送",
+        "保留草稿"
+      ]
+    },
+    {
+      "id": "empty-enter",
+      "value": "",
+      "sent": [
+        "中文消息\n",
+        "继续发送",
+        "保留草稿"
+      ]
+    }
+  ],
+  "errors": [],
+  "scope": "Real Chromium keyboard and simulated composition events in current ChatView; not physical OS IME or native editor integration.",
+  "status": "completed"
+}

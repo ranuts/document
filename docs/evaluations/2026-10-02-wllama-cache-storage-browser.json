@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-02T07:17:34.126Z",
+  "scope": "Actual production storage helper in isolated browsers; small-file roundtrip, no model inference",
+  "rows": [
+    {
+      "name": "Chromium",
+      "backend": "default"
+    },
+    {
+      "name": "WebKit",
+      "backend": "Cache API",
+      "text": "cached",
+      "size": 6,
+      "listed": {
+        "key": "diagnostic-model/中文",
+        "size": 6
+      },
+      "deleted": true
+    }
+  ]
+}

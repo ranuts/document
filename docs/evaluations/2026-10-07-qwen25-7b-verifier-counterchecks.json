@@ -1,0 +1,17 @@
+[
+  {
+    "countercheck": "synthetic mechanics",
+    "exitCode": 0,
+    "scope": "Synthetic verifier data copied from earlier model receipt; no official 7B load or inference occurred."
+  },
+  {
+    "countercheck": "wrong shard hash",
+    "exitCode": 1,
+    "scope": "Synthetic verifier data copied from earlier model receipt; no official 7B load or inference occurred."
+  },
+  {
+    "countercheck": "wrong completion temperature",
+    "exitCode": 1,
+    "scope": "Synthetic verifier data copied from earlier model receipt; no official 7B load or inference occurred."
+  }
+]

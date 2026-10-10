@@ -3,3 +3,6 @@ packages:
 minimumReleaseAgeExclude:
   - ranui
   - ranuts
+patchedDependencies:
+  '@mlc-ai/web-llm@0.2.85': patches/@mlc-ai__web-llm@0.2.85.patch
+  '@wllama/wllama@3.6.1': patches/@wllama__wllama@3.6.1.patch

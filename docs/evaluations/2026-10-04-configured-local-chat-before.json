@@ -1,0 +1,13 @@
+{
+  "probeSHA256": "ac7aa160dec87668b603983fe37eac81e5f3d963c6062bb7e3e6ec87d6d78407",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "status": "failed",
+  "error": "TimeoutError: locator.textContent: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cui-msg-assistant').last()\u001b[22m\n"
+}

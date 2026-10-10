@@ -1,0 +1,56 @@
+[
+  {
+    "id": "conditional-transfer-zh",
+    "task": "summarize",
+    "language": "zh-CN",
+    "source": "周宁提议由设备组启用备用冷却机，但前提是实验室完成泄漏测试并出具合格报告。实验室尚未完成测试，设备组也没有启用冷却机。后勤组另行讨论办公室窗帘。",
+    "instruction": "用原文语言写一句更短的摘要，保留提议者、执行团队、测试合格报告这一前提，以及测试未完成和设备未启用的状态，省略窗帘讨论。",
+    "rubric": [
+      "Chinese",
+      "one shorter sentence",
+      "Zhou Ning proposes",
+      "equipment team activates backup cooling unit",
+      "completed leak test and qualifying report are prerequisite",
+      "lab has not completed test",
+      "equipment has not activated unit",
+      "omit curtains",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "conditional-transfer-en",
+    "task": "summarize",
+    "language": "en",
+    "source": "Tessa proposed that the dispatch team send the replacement pump only if the inspection team signs the pressure-test certificate. Inspection has not signed it, and dispatch has not sent the pump. The facilities team separately discussed bicycle racks.",
+    "instruction": "Produce one shorter sentence in the source language, preserving the proposer, sending team, signed pressure-test certificate as a prerequisite, and both unsigned certificate and unsent pump. Omit bicycle racks.",
+    "rubric": [
+      "English",
+      "one shorter sentence",
+      "Tessa proposes",
+      "dispatch sends replacement pump",
+      "inspection signature on pressure-test certificate is prerequisite",
+      "inspection has not signed",
+      "dispatch has not sent",
+      "omit bicycle racks",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "conditional-transfer-ja",
+    "task": "summarize",
+    "language": "ja",
+    "source": "直子は、情報管理部が保管規則を承認した場合に限り、運営部が新しい受付手順を開始するよう提案した。情報管理部はまだ承認しておらず、運営部も開始していない。庶務部は別件で玄関の照明を相談した。",
+    "instruction": "原文と同じ言語で、より短い一文に要約してください。提案者、開始する部署、保管規則の承認が前提であること、未承認と未開始の状態を保持し、照明の話は省いてください。",
+    "rubric": [
+      "Japanese",
+      "one shorter sentence",
+      "Naoko proposes",
+      "operations begins new reception procedure",
+      "information management approval of retention rules is prerequisite",
+      "information management has not approved",
+      "operations has not begun",
+      "omit entrance lighting",
+      "no unsupported fact"
+    ]
+  }
+]

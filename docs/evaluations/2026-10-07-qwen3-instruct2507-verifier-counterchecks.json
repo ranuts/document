@@ -1,0 +1,17 @@
+{
+  "recordedRows": 5,
+  "baselinePartialPassed": true,
+  "counterchecks": [
+    {
+      "alteration": "sampling",
+      "rejected": true,
+      "returncode": 1
+    },
+    {
+      "alteration": "native-history",
+      "rejected": true,
+      "returncode": 1
+    }
+  ],
+  "scope": "Mechanics validation only; no semantic quality assertion"
+}

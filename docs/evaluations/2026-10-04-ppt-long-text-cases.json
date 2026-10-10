@@ -1,0 +1,10 @@
+[
+  {
+    "id": "multiline",
+    "text": "Line 1: 四季 日本 ä / native text.\nLine 2: 四季 日本 ä / native text.\nLine 3: 四季 日本 ä / native text.\nLine 4: 四季 日本 ä / native text.\nLine 5: 四季 日本 ä / native text.\nLine 6: 四季 日本 ä / native text."
+  },
+  {
+    "id": "long-word",
+    "text": "ExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinaryExtraordinary 四季 日本 ä END"
+  }
+]

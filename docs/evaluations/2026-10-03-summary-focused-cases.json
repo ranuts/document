@@ -1,0 +1,38 @@
+[
+  {
+    "id": "shipment-condition-en",
+    "task": "summarize",
+    "source": "Mira proposed sending 17 valves worth 480 NOK on 2036-02-19, only if the safety inspection passes. The inspection is pending and the shipment has not been authorized. A separate meeting will discuss warehouse space.",
+    "instruction": "Summarize in one shorter sentence, preserving the proposer, goods, value, proposed date, inspection condition and lack of authorization; omit the separate meeting."
+  },
+  {
+    "id": "shipment-condition-zh",
+    "task": "summarize",
+    "source": "Mira 提议在 2036-02-19 运送价值 480 NOK 的 17 个阀门，但仅限安全检查通过后。检查尚未完成，发货尚未获得授权。另一次会议将讨论仓库空间。",
+    "instruction": "用一句更短的中文摘要，保留提议人、货物、价值、拟定日期、检查条件和尚未授权的事实，省略另一次会议。"
+  },
+  {
+    "id": "payer-recipient-en",
+    "task": "summarize",
+    "source": "Sana will pay Ivo 620 CHF on 2037-04-22 for repairing 8 sensors. Ivo will not pay Sana. The team will separately choose a new logo.",
+    "instruction": "Summarize in one shorter sentence, preserving who pays whom, amount, date and repair service; omit the logo discussion."
+  },
+  {
+    "id": "attribution-denial-en",
+    "task": "summarize",
+    "source": "Tomas alleged that Noor removed 12 files on 2038-07-03. Noor denied the allegation, and no investigation has confirmed it. A separate notice announced a cafeteria menu.",
+    "instruction": "Summarize in one shorter sentence, preserving allegation attribution, denial and lack of confirmation, the file count and date; omit the cafeteria notice."
+  },
+  {
+    "id": "conditional-repair-zh",
+    "task": "summarize",
+    "source": "Rui 计划在 2039-11-08 修理 6 台泵，前提是备件到货。备件尚未到货，修理工作还未开始。这项计划不包括更换设备。部门同时安排了午餐。",
+    "instruction": "用一句更短的中文摘要，保留人员、日期、修理数量、备件条件、尚未开始及不更换设备，省略午餐。"
+  },
+  {
+    "id": "cancellation-exception-en",
+    "task": "summarize",
+    "source": "Lena canceled the order for 9 motors worth 750 SEK on 2040-06-14. The separate order for 4 pumps remains active and has not been canceled. The office newsletter also listed sports events.",
+    "instruction": "Summarize in one shorter sentence, preserving which order was canceled, its value and date, and which order remains active; omit sports events."
+  }
+]

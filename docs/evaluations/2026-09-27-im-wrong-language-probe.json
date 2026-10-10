@@ -1,0 +1,10 @@
+{
+  "before": "We will process your request as soon as possible.\r\n",
+  "preview": "We will process your request as soon as possible.\r\n",
+  "proposed": "我们将尽快处理您的请求。",
+  "source": "We will process your request as soon as possible.\n",
+  "previewVisible": true,
+  "beforeApplyUnchanged": true,
+  "targetLanguage": "es",
+  "conclusion": "Model generated Chinese despite a Spanish translation request; proposal was not applied."
+}

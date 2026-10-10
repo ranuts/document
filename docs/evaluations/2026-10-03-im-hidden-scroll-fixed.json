@@ -1,0 +1,102 @@
+{
+  "scope": "Actual production IM with cached GPU Qwen 1.7B. Keyboard navigation, native smooth scroll during real streaming, Stop and new conversation; narrow/light/dark layout simulations in isolated Chromium.",
+  "errors": [],
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "empty": {
+    "hidden": true,
+    "display": "none",
+    "focused": "agent-configure",
+    "scrollTop": 0,
+    "remaining": 0,
+    "replyLength": 0,
+    "running": false
+  },
+  "readingBefore": {
+    "hidden": false,
+    "display": "flex",
+    "focused": "opening-document agent-docked",
+    "scrollTop": 0,
+    "remaining": 259,
+    "replyLength": 1011,
+    "running": true
+  },
+  "readingAfter": {
+    "hidden": false,
+    "display": "flex",
+    "focused": "opening-document agent-docked",
+    "scrollTop": 0,
+    "remaining": 283,
+    "replyLength": 1057,
+    "running": true
+  },
+  "afterJump": {
+    "hidden": true,
+    "display": "none",
+    "focused": "cui-messages",
+    "scrollTop": 308,
+    "remaining": 0,
+    "replyLength": 1123,
+    "running": true
+  },
+  "completed": {
+    "hidden": true,
+    "display": "none",
+    "focused": "cui-restore",
+    "scrollTop": 399,
+    "remaining": 0,
+    "replyLength": 1131,
+    "running": false
+  },
+  "layouts": [
+    {
+      "width": 1280,
+      "height": 900,
+      "colorScheme": "light",
+      "theme": null,
+      "background": "rgb(255, 255, 255)",
+      "panelWidth": 399,
+      "scrollWidth": 399,
+      "sendBottom": 863,
+      "viewportHeight": 900,
+      "sendReachable": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "theme": null,
+      "background": "rgb(255, 255, 255)",
+      "panelWidth": 389,
+      "scrollWidth": 389,
+      "sendBottom": 811,
+      "viewportHeight": 844,
+      "sendReachable": true
+    },
+    {
+      "width": 390,
+      "height": 420,
+      "colorScheme": "dark",
+      "theme": null,
+      "background": "rgb(26, 26, 26)",
+      "panelWidth": 389,
+      "scrollWidth": 389,
+      "sendBottom": 401,
+      "viewportHeight": 420,
+      "sendReachable": true
+    }
+  ],
+  "newConversation": {
+    "hidden": true,
+    "display": "none",
+    "focused": "agent-configure",
+    "scrollTop": 136,
+    "remaining": 0,
+    "replyLength": 0,
+    "running": false
+  },
+  "visibleErrors": [],
+  "previewCount": 0,
+  "passed": true,
+  "probeSource": "probe-im-hidden-scroll-fixed.mjs",
+  "probeSHA256": "9cd8468420ca7f709962e887c08bdd2cdcde3bb100521ce43d83d45137d0923e"
+}

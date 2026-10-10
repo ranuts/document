@@ -1,0 +1,18 @@
+{
+  "scope": "Packaged native browser CPU 0.5B GGUF prefix cache diagnostic; six completions across three freshly loaded engines, not product UI, semantic quality, cancellation, mobile or offline acceptance.",
+  "status": "failed",
+  "rows": [],
+  "errors": [],
+  "contextClosed": true,
+  "profile": ".scratch/cpu-prefix-cache-jLrwcQ",
+  "probeSHA256": "002a367cbce12aeb157271509e91ac6830277d506b6233a9821f53c74340140f",
+  "model": {
+    "path": ".scratch/node_modules/ai-models/qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "bytes": 491400032,
+    "sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db"
+  },
+  "runtime": "wllama-cpu-runtime-DJ-VVmna.js",
+  "runtimeSHA256": "405a01197f9643901335c248d36374bcf9bb4a7441b46dd99edc092574e52097",
+  "nativeSHA256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6",
+  "error": "Error: page.evaluate: Execution context was destroyed, most likely because of a navigation."
+}

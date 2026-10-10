@@ -1,0 +1,2418 @@
+{
+  "runtime": "d71a1e8",
+  "protocol": "2026-10-05-qwen4-native-summary-protocol.md",
+  "expectedModel": "Qwen3-4B-q4f16_1-MLC",
+  "requests": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-C7eSWAmW.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-D771JG4c.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-192.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.wasm.br",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.worker.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/index.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/en.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/de.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/es.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/pt.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/ja.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/ko.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/en.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/de.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/es.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/pt.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/ja.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/ko.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/en.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/de.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/es.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/pt.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/ja.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/ko.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/index.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/editor",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/editor.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-dark.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light-32.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-dark-32.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-32.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-180.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-192.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-512.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-maskable-512.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/add-user-DfBFkCnJ-B1fmP7dz.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-C7eSWAmW.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/arc-BODut2Nf-Cd45hEQu.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/arrow-down-B6_1Kbcg-DEfGzY_t.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/book-DUmorlwf-B2UalI4T.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/cast-B3elr6fu-JAqcYgSG.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/check-BEoPhSfZ-Cz2sWZHN.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/check-circle-CnpiEx1K-BFYv5_oA.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/circle-fold-BTxpiOuH-C_vzogpi.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/circle-line-DRB7oWlP-ZPt8ezG5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/circle-rotate-DbCoEwES-DuorpAZn.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/circle-spin-0DNX-C6W-kYkmpNIh.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/circle-turn-BXVMEyxr-DaZXNcj0.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/client-D5_UYdz1.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/close-D4AmwT1V-Dz1BZAwQ.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/close-circle-CJkjIM8m-KEkcvpue.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/copy-CqZjV4i2-e91bZHo4.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/cube-CoQphUIu-DiOWDYXg.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/cube-dim-C3XrB652-Dj8JyqT3.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/cube-fold-CzRngjX5-tYzhjJ8U.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/cube-grid-BuVRuYHG-CVruUlsG.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/dot-bar-s3ka1x3Q-BjFmgzmI.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/dot-circle-Bb9HSrui-DGvPcY0o.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/dot-line-Dc17eMQU-SiBWOg0-.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/dot-pulse-CYeqwG5l-CeGzgBcP.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/double-bounce-D6AfxJFe-BRMfGRWu.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/download-vhNSLCeg-DmRpC0Ey.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/drop-5kzMtVNd-JRMiXnio.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/drop-DBZkUjZr-BzQOAcjX.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/esm-BgvLHT16.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/eye-Ctsj5bfE-QFZMYX4C.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/eye-close-BSoIc1oj-CLZwNFpd.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/fullscreen-BU4JuuEL-Csmibi7s.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/github-CeDoYKhZ-Z69VzvoI.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/globe-DIZ0Ki22-B0DACu5m.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/history-B9M2qSzg.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/history-DlytvTnF.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/home-CcLgxiaO-CjDbOka2.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/info-circle-JzD8z-kG-DmDxv6fy.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-D771JG4c.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/issue-CWRKJS2V-BskJ-i1L.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/line-b2g7AXLN-Co5cJk-x.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/line-scale-Ds4RPBRN-BywSuOT2.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/loading--1eC6HwB-oClVEDsq.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/loading-scene-DmzV6WiL-VZ_PKgzc.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/lock-DoqyIASp-CQG7ugt5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/menu-CbeCzN4--DsQl4Apv.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/message-BCrZnSBS-DfjcNjZn.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/mic-CcjXOqQV-DuZFtf5g.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/mic-off-UhngXK2Y-pQdEXDvH.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/more-h7nyGZMk-CyxZaWji.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/pacman-h5U-SPYq-DdArsvQU.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/pause-BH0W0dLI-DqBiMHsd.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/pencil-H40a5VG9-DEyacAyg.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/pending-open-BKBmFD6R.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/pip-U67u-Uw_-SEYbpv1G.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/play-VYD6FTp--C0WDtI-3.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/plus-DxQEUhuw-A33mKXPU.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/power-off-BKpAz0aZ-Dti8Us--.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/preview-gd9ayK9s-BykPUjeS.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/pulse-Cl2nj-eH-DykGFKvj.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/recovery-DmiSe00Y.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/refresh-D2t33mZ3-BlSpgVRP.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rotate-CgvsSjDf-pAhEIuvV.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/scale-out-CWupYSU_-BQPJiQyz.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/search-DkXPfdII-DTHgrXs9.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/setting-CMt5fbYQ-CY1UmMjj.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/solar-BB6dvn8C-BTq2jOxN.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/sort-BN5B1X9F-bRALZC1V.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/sprite-CUyEIYBs-CueT7qkj.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/square-DUjZUNBe-Br8P7Rdy.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/stretch-DgU8wfiG-DxS8fHu9.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/team-C4Kz47a5-B3SCBAGS.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/text-SIeN3Zk6-D7Dh9_ID.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/triple-bounce-BcSy-fhB-D87C34Cv.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/unlock-DIzOKbH5-CWkdGrt3.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/user-BzcQqO9f-Ccg7cKvB.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/volume-BPWjdmsr-CVH6nJX_.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/volume-mute-CnXptGgN-BmehIYOm.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/warning-circle-ncTxgs_n-CXx29g01.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/without-content-DhxOdACo-ETxN-ji9.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-BIOZ48O-.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-BITawafS.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-BcotrvZo.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CaONujPU.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-D0WL0fvJ.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-J6krg_E0.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-XMlyubPs.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-cpu-runtime-BHaXJdkH.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-xnr7mLRC.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/zoom-in--8CF2Gmz-Be6YNBZ5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/zoom-out-C_uyMrpy-BBc6Pc-p.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/GeistMono-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/home.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/button.iife.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/popover.iife.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/content.iife.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ranui-iife/theme-switch.iife.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/lang-switch.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/open-local.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/landing-prefetch.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/history-recent.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sw-register.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/mlc-chat-config.json",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/api/resolve-cache/models/mlc-ai/Qwen3-4B-q4f16_1-MLC/a5c9fab855e3ccbdfed2e7e69683d75f30332161/mlc-chat-config.json?%2Fmlc-ai%2FQwen3-4B-q4f16_1-MLC%2Fresolve%2Fmain%2Fmlc-chat-config.json=&etag=%224ad8062c6b6196e674680f1e81cba295e62a67c3%22",
+      "method": "GET"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Qwen3-4B-q4f16_1_cs1k-webgpu.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/tokenizer.json",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/6aec39639a0a2d1ca966356b8c2b8426a484f80ff80731f44fa8482040713bdf?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27tokenizer.json%3B+filename%3D%22tokenizer.json%22%3B&response-content-type=application%2Fjson%3B+charset%3Dutf-8&user_id=public&Expires=1791154379&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzZhZWMzOTYzOWEwYTJkMWNhOTY2MzU2YjhjMmI4NDI2YTQ4NGY4MGZmODA3MzFmNDRmYTg0ODIwNDA3MTNiZGZcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3Rva2VuaXplci5qc29uJTNCK2ZpbGVuYW1lJTNEJTIydG9rZW5pemVyLmpzb24lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGanNvbiUzQitjaGFyc2V0JTNEdXRmLTgmdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDM3OX19fV19&Signature=MEUCIF-jt-82WP%7EO3f8BWIp5tFJnshedimtJqTCQycMh3mlBAiEAyG3D%7ERv2tNW3pEFAzAAL46fSS%7EHvHGmG-lH4JGjkLF4_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/tensor-cache.json",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/api/resolve-cache/models/mlc-ai/Qwen3-4B-q4f16_1-MLC/a5c9fab855e3ccbdfed2e7e69683d75f30332161/tensor-cache.json?%2Fmlc-ai%2FQwen3-4B-q4f16_1-MLC%2Fresolve%2Fmain%2Ftensor-cache.json=&etag=%227f1f702506ccec810ef4356038c69bed1d0b1c2b%22",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_0.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_18.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_36.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_54.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/087722edb2eccff548cfb778c614506de86ec9a6773a9adca7e6a44ed067cb76?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_54.bin%3B+filename%3D%22params_shard_54.bin%22%3B&xip=L8fQLguSjGQ&Expires=1791154383&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzA4NzcyMmVkYjJlY2NmZjU0OGNmYjc3OGM2MTQ1MDZkZTg2ZWM5YTY3NzNhOWFkY2E3ZTZhNDRlZDA2N2NiNzZcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81NC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNTQuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0MzgzfX19XX0_&Signature=MEQCIBuGXGKK1m-V0kEdG6P53qUVMZbA-9M4cfjTztN-Vf2aAiBoB3OYwtlXs1fxfIDUgJXtk7K4jmHiJgYvdeHCRWmrBg__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/8c773c57eef2fa9fd0ce42f8e77b079f557b6e67d371471d994a6d3a68b910b6?xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_18.bin%3B+filename%3D%22params_shard_18.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791154383&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzhjNzczYzU3ZWVmMmZhOWZkMGNlNDJmOGU3N2IwNzlmNTU3YjZlNjdkMzcxNDcxZDk5NGE2ZDNhNjhiOTEwYjZcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xOC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTguYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0MzgzfX19XX0_&Signature=MEUCIQDULvuku%7Ecfi0VSmLeN5l4nj3fmMPzjHvVNjnQ%7EA63oJQIgNXDIIBIG0s4VZzPAGqIc1OsgE4FEt7iGmnjLWyOUZiE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/187f8a2df5ea2b4a25765280dd10aee103e944a704637ed4707976351fdafb75?response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_0.bin%3B+filename%3D%22params_shard_0.bin%22%3B&user_id=public&X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&Expires=1791154383&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzE4N2Y4YTJkZjVlYTJiNGEyNTc2NTI4MGRkMTBhZWUxMDNlOTQ0YTcwNDYzN2VkNDcwNzk3NjM1MWZkYWZiNzVcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8wLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8wLmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDM4M319fV19&Signature=MEQCIB%7EIDVPhiUU2FwtPxK%7EOQYuNoGHsA8SKSauy4kMy-IiJAiBTRhmJvMrnEIOwvEY1PUb0%7EQ%7E9p8KwTJy0jcTbPxTEWA__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/d1b7e6892e8965f294adfd3ccdd3a26383322f7f62d2d92a82a6dfa29da7711f?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_36.bin%3B+filename%3D%22params_shard_36.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&Expires=1791154383&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2QxYjdlNjg5MmU4OTY1ZjI5NGFkZmQzY2NkZDNhMjYzODMzMjJmN2Y2MmQyZDkyYTgyYTZkZmEyOWRhNzcxMWZcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzM2LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zNi5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0MzgzfX19XX0_&Signature=MEUCIA0yH8lkVANAQqC-kVZtDNOdb72Ii238eTADmMjMWhcyAiEA945sTRAiUeHzAn5BosBuL%7ERYlqJznqQotE2V%7Ez7nv8I_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_55.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_37.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/048fa4f97a2e612c47216b11584504c2216d1cd3d2f6a450182c80f53956a6ad?response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_55.bin%3B+filename%3D%22params_shard_55.bin%22%3B&X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&Expires=1791154387&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzA0OGZhNGY5N2EyZTYxMmM0NzIxNmIxMTU4NDUwNGMyMjE2ZDFjZDNkMmY2YTQ1MDE4MmM4MGY1Mzk1NmE2YWRcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81NS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNTUuYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0Mzg3fX19XX0_&Signature=MEUCIGjkC9S25zV%7EdJB8psof21ge00NKf%7ErzG2hXtLUh52I6AiEA9FA7nmtKLn1ZplW47NltJNzAnDO2sQYOrsDrJ9L9W4E_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/fbac915c1fabaecf1e03c31f6f8a6d85b65a1aaba408d571da29c482aabdeef4?response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_37.bin%3B+filename%3D%22params_shard_37.bin%22%3B&X-Xet-Cas-Uid=public&Expires=1791154387&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2ZiYWM5MTVjMWZhYmFlY2YxZTAzYzMxZjZmOGE2ZDg1YjY1YTFhYWJhNDA4ZDU3MWRhMjljNDgyYWFiZGVlZjRcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzcuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzM3LmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0Mzg3fX19XX0_&Signature=MEYCIQDSSA11T8dLzBLDXSMiZVNhhzYGM6sAHH5aJTh8d9pZnwIhALnKPgOktGxCb9iJGQbCk7zc62hV-FHccSfIZmciQTqb&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_19.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/f15332a2ca31bec8b3cbc3da53086fba612c81fcbb5d8608225577899a72a806?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_19.bin%3B+filename%3D%22params_shard_19.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&Expires=1791154388&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2YxNTMzMmEyY2EzMWJlYzhiM2NiYzNkYTUzMDg2ZmJhNjEyYzgxZmNiYjVkODYwODIyNTU3Nzg5OWE3MmE4MDZcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzE5LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xOS5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0Mzg4fX19XX0_&Signature=MEQCIGdhZr2Lj1621UyJn7cC-pASB-opCjsmOW8B2OJYixDpAiAZfdBfJHjaLiNWzClsmv8B5cNPulaC64ItkAv3vDF83g__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_56.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_20.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_38.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/d219e4b9dbeb26bcb606fa4612ee8a4682b6e60d5c6ec973495afadfc4635fbf?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_56.bin%3B+filename%3D%22params_shard_56.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791154392&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2QyMTllNGI5ZGJlYjI2YmNiNjA2ZmE0NjEyZWU4YTQ2ODJiNmU2MGQ1YzZlYzk3MzQ5NWFmYWRmYzQ2MzVmYmZcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzU2LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81Ni5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0MzkyfX19XX0_&Signature=MEUCICWjvsQVGKfAt8tSgRH9X7N2EOuMcpLJM31IZHXNT0spAiEA7snn3zhKMJAocXkw4HMAwmxYHd7WlOYi00cTTYDrHbQ_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/b9c5e995364781508de7167ce31d83b72aa3ef0ca9779d065815ff7b905c7729?xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_20.bin%3B+filename%3D%22params_shard_20.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&X-Xet-Cas-Uid=public&Expires=1791154392&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2I5YzVlOTk1MzY0NzgxNTA4ZGU3MTY3Y2UzMWQ4M2I3MmFhM2VmMGNhOTc3OWQwNjU4MTVmZjdiOTA1Yzc3MjlcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8yMC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMjAuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0MzkyfX19XX0_&Signature=MEYCIQDS4c0zKf0Vp4r7FQoscn0G8uVRFETyK9SY5tXOq6bmBgIhAJFxx0TGU3%7E%7E80nWaM4LLXQX8ze2v3CtZUNhrxcMmyVe&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/9e177167ab6c5de2c526655042b91b0c9b5f1f7c976ab687ce8a44bf816dd8af?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_38.bin%3B+filename%3D%22params_shard_38.bin%22%3B&xip=L8fQLguSjGQ&Expires=1791154392&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzllMTc3MTY3YWI2YzVkZTJjNTI2NjU1MDQyYjkxYjBjOWI1ZjFmN2M5NzZhYjY4N2NlOGE0NGJmODE2ZGQ4YWZcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8zOC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMzguYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0MzkyfX19XX0_&Signature=MEUCIQDqEWVrgMRcJLAGcLRpRjzsFej2P9ZhCQUPFJXhsL5zagIgJzSlSDZjY5ko%7EpOAh60o3k1jNW6UDadZcZLu-QLu1PE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_57.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/85230391d1131a1184af3dd0800468a4df3ce3711db75f9edc672aa3ab272829?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_57.bin%3B+filename%3D%22params_shard_57.bin%22%3B&Expires=1791154396&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5Lzg1MjMwMzkxZDExMzFhMTE4NGFmM2RkMDgwMDQ2OGE0ZGYzY2UzNzExZGI3NWY5ZWRjNjcyYWEzYWIyNzI4MjlcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNTcuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzU3LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0Mzk2fX19XX0_&Signature=MEQCIHLz6tAO9UEd4P5zLaBV5oTVtfWTYyLSWmzOkFm0h1uRAiB4v%7EUY2c2blsmfvQzi3tqN%7EBLunlJkR4UuZk9VpaHq7g__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_39.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/aa5215b2e74b653013ac0a8a227eb847c11c5bcd2c78eccb3d27bca35dc8295d?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_39.bin%3B+filename%3D%22params_shard_39.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791154396&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2FhNTIxNWIyZTc0YjY1MzAxM2FjMGE4YTIyN2ViODQ3YzExYzViY2QyYzc4ZWNjYjNkMjdiY2EzNWRjODI5NWRcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzM5LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zOS5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0Mzk2fX19XX0_&Signature=MEYCIQDXYeIwucQo2OjVJTR%7E5jwTshmiTkQF1w5Ss8hf4Ui-dQIhAMF4Qg2sq-SkaKdWwWUUf5MdfMeyxyhO9xgcn0FFd78F&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_21.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/0ce4755db03b99a14de0e7611c229d49142fa9421d8a9b3caaf361feb6f820c7?xip=L8fQLguSjGQ&user_id=public&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_21.bin%3B+filename%3D%22params_shard_21.bin%22%3B&Expires=1791154397&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzBjZTQ3NTVkYjAzYjk5YTE0ZGUwZTc2MTFjMjI5ZDQ5MTQyZmE5NDIxZDhhOWIzY2FhZjM2MWZlYjZmODIwYzdcXD94aXA9TDhmUUxndVNqR1EmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjEuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzIxLmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0Mzk3fX19XX0_&Signature=MEQCIEqTzSWPmdh5OJnYXR3ic0%7EJn7JIwRp-FGEBtxJDDIx4AiBsof0E9tzFxZdxVrN6zrSFBwE4sEX2%7E1278%7Ekb8Pv%7E5w__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_58.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_22.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/7336fc4c705c127e709e7b89040075f466a12f124c57aea6deb5e0b248b71218?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_58.bin%3B+filename%3D%22params_shard_58.bin%22%3B&user_id=public&X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&Expires=1791154401&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzczMzZmYzRjNzA1YzEyN2U3MDllN2I4OTA0MDA3NWY0NjZhMTJmMTI0YzU3YWVhNmRlYjVlMGIyNDhiNzEyMThcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzU4LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81OC5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDAxfX19XX0_&Signature=MEYCIQD9KmR6OK9Ta017XaKPQYdcM5JmHcS0Q%7E7n0o1s45HtPAIhAMP2rs5jERi%7EmV3YUFs--56ZZ0%7EN5B1N2vjRrYZZDqPD&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_40.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/e296d5a6984d9c26b1dad8efedb4467183eeb12b92435f90bff7d7c513de2424?xip=L8fQLguSjGQ&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_22.bin%3B+filename%3D%22params_shard_22.bin%22%3B&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791154401&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2UyOTZkNWE2OTg0ZDljMjZiMWRhZDhlZmVkYjQ0NjcxODNlZWIxMmI5MjQzNWY5MGJmZjdkN2M1MTNkZTI0MjRcXD94aXA9TDhmUUxndVNqR1EmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8yMi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMjIuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDAxfX19XX0_&Signature=MEUCIQCYMtQngVR2Qhyfz4qsa9UU58ynt3076t6IUs88MEcs2gIgbNbZN1eCAGbdSPkarrp5Jd%7EfjgU245C8lJyXR6ykWFw_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/5d8741f5f15374bbcebee07757ef514cedfbad9841b16d27e7dcb70e71fa822a?X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_40.bin%3B+filename%3D%22params_shard_40.bin%22%3B&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&Expires=1791154401&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzVkODc0MWY1ZjE1Mzc0YmJjZWJlZTA3NzU3ZWY1MTRjZWRmYmFkOTg0MWIxNmQyN2U3ZGNiNzBlNzFmYTgyMmFcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80MC5iaW4lMjIlM0ImeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDAxfX19XX0_&Signature=MEYCIQDkL5R2hKTaSQUNqVmjjG8cbU6B3FTPDzgKX5d7CFvZRgIhALSj2zXN9BkoKtRRVmfQJ4MQZ3Kw-deaBq1e1%7E933CkA&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_59.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/63b8e00be262677e4e1f31726ae18a62afbf57a819da43bf3534e46eb219989a?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_59.bin%3B+filename%3D%22params_shard_59.bin%22%3B&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&user_id=public&X-Xet-Cas-Uid=public&Expires=1791154405&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzYzYjhlMDBiZTI2MjY3N2U0ZTFmMzE3MjZhZTE4YTYyYWZiZjU3YTgxOWRhNDNiZjM1MzRlNDZlYjIxOTk4OWFcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzU5LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81OS5iaW4lMjIlM0ImeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDA1fX19XX0_&Signature=MEUCICVhSq8WRmclSzY4lzMYd5D9ulpIQwdw%7ESKrDausAVtMAiEA6vO5Y4kJlBa1s84pz1yI3AViDntdtxQt56mRG4H%7EQiw_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_1.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_41.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_23.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/01eb2f4e74c8b45917d7f7d114394bd965c86de49fdb0cebfc01b77d79842cd6?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_1.bin%3B+filename%3D%22params_shard_1.bin%22%3B&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&user_id=public&X-Xet-Cas-Uid=public&Expires=1791154405&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzAxZWIyZjRlNzRjOGI0NTkxN2Q3ZjdkMTE0Mzk0YmQ5NjVjODZkZTQ5ZmRiMGNlYmZjMDFiNzdkNzk4NDJjZDZcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzEuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzEuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ4aXA9TDhmUUxndVNqR1EmdXNlcl9pZD1wdWJsaWMmWC1YZXQtQ2FzLVVpZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQwNX19fV19&Signature=MEYCIQDIKDTKd8L0Gl2VEdAdkPvluDoHSQ6kq-bMUrJPROQMiQIhAIN0NcWONFxFqZgxJwDlmwWdNAhEmYHLUMxBGRqVJuFW&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/afa701df5a5a83a18f2f74273239298a4107da4e4ed22f3b0dc2a270489b552e?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_41.bin%3B+filename%3D%22params_shard_41.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&Expires=1791154405&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2FmYTcwMWRmNWE1YTgzYTE4ZjJmNzQyNzMyMzkyOThhNDEwN2RhNGU0ZWQyMmYzYjBkYzJhMjcwNDg5YjU1MmVcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQxLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80MS5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDA1fX19XX0_&Signature=MEYCIQCtS8XRWH%7Eu3hhL4kbtb7UnTa7inQ2IH7wgp7fak7hmzgIhAM1qH0UMyhwVyDXV1u7fysMbb92rmAW8MS6lB6g5u8zA&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/ce58aaef00cf2c3864183db31472337b4d0ccbc257c867e974b694e125f21b37?X-Xet-Cas-Uid=public&user_id=public&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_23.bin%3B+filename%3D%22params_shard_23.bin%22%3B&Expires=1791154406&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2NlNThhYWVmMDBjZjJjMzg2NDE4M2RiMzE0NzIzMzdiNGQwY2NiYzI1N2M4NjdlOTc0YjY5NGUxMjVmMjFiMzdcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjMuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzIzLmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDA2fX19XX0_&Signature=MEYCIQCqI%7E4OjhhPRCcCRssPSL6D9EWtXEHdFEq2Go7QsT3TCQIhAMUbQowJ7Nyu6pW%7EWdjgQLdwoUgtfH0GH%7E9uL3otjYq-&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_60.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_2.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_24.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/52f2ed3345c7c065788d5e15a53a71a5d1f25ca3d981b74280cd88ae9d13d0dc?X-Xet-Cas-Uid=public&user_id=public&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_2.bin%3B+filename%3D%22params_shard_2.bin%22%3B&Expires=1791154409&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzUyZjJlZDMzNDVjN2MwNjU3ODhkNWUxNWE1M2E3MWE1ZDFmMjVjYTNkOTgxYjc0MjgwY2Q4OGFlOWQxM2QwZGNcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMi5iaW4lMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQwOX19fV19&Signature=MEYCIQCQNeqRcYI7Lrcq40KibuVAVVKGlMTjTGXCrTZ7fMmGfAIhAMyuYtfj8NQWH3i4paAgXmbAXFrgi3cOKFCD9PQaToW0&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/b3070f365307896b568dbf42cbfe676089b3a27385009019b1934056fe778df7?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_60.bin%3B+filename%3D%22params_shard_60.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&Expires=1791154409&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2IzMDcwZjM2NTMwNzg5NmI1NjhkYmY0MmNiZmU2NzYwODliM2EyNzM4NTAwOTAxOWIxOTM0MDU2ZmU3NzhkZjdcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzYwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF82MC5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDA5fX19XX0_&Signature=MEUCIFqp6OFCX0WerfywYJ5Pp8RRTterOgKAqcDDOJtx-Y5FAiEAlPnh3p-NK1gLwREElh-Swst0sYckMoNRL3VZViu8eGs_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_42.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/65cbe5e4a4ba7fa6265ae78178105d9974d3ba6b7549672280c9c0220bf9e4b8?xip=L8fQLguSjGQ&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_24.bin%3B+filename%3D%22params_shard_24.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791154410&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzY1Y2JlNWU0YTRiYTdmYTYyNjVhZTc4MTc4MTA1ZDk5NzRkM2JhNmI3NTQ5NjcyMjgwYzljMDIyMGJmOWU0YjhcXD94aXA9TDhmUUxndVNqR1EmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8yNC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMjQuYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDEwfX19XX0_&Signature=MEUCIQDK91t%7EahAjnyJStIt66nhVtH3CJYZriddY2FrBgBJZZQIgKT%7EmySL6HHWetV0qyXsLNWZkJcFIVV8RpECjkvd2NWA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/b12f5881dcfab5bb3c8b5aca4a17436bab635794b688746fc6f2c9eef770832f?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_42.bin%3B+filename%3D%22params_shard_42.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&Expires=1791154410&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2IxMmY1ODgxZGNmYWI1YmIzYzhiNWFjYTRhMTc0MzZiYWI2MzU3OTRiNjg4NzQ2ZmM2ZjJjOWVlZjc3MDgzMmZcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQyLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80Mi5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDEwfX19XX0_&Signature=MEUCIQCCSDFW3iqnkuW95GooqlnLGNM%7ERCh47%7Ev25HUXdFqLbQIgM0qKHmM8t08TFBo%7EHU5o3wq5Esoh22UMoyFB4f0PSIc_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_61.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_3.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/b06e413be94554ca8ea5c639fb73d839ad27806b5b3a0bcd58331898033dbe2a?user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_61.bin%3B+filename%3D%22params_shard_61.bin%22%3B&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791154413&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2IwNmU0MTNiZTk0NTU0Y2E4ZWE1YzYzOWZiNzNkODM5YWQyNzgwNmI1YjNhMGJjZDU4MzMxODk4MDMzZGJlMmFcXD91c2VyX2lkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82MS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNjEuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDEzfX19XX0_&Signature=MEYCIQCva9zghbZfvJVj%7EotuC8rZi-phscm8dgqceMiSo4YqxwIhAIuCPTHjDcH5m4bDBmGBTygOg0ZfqzLoYnL0ZqS4br7M&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/94775692966f7fbf82a022fd07e55c84db204848a2d7c441885d34894debacbf?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_3.bin%3B+filename%3D%22params_shard_3.bin%22%3B&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791154413&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5Lzk0Nzc1NjkyOTY2ZjdmYmY4MmEwMjJmZDA3ZTU1Yzg0ZGIyMDQ4NDhhMmQ3YzQ0MTg4NWQzNDg5NGRlYmFjYmZcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzMuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzMuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQxM319fV19&Signature=MEUCIEwUdFmMXyM73Hrjn0VDGq3hVr7l-%7EEErKJ02W7FqSL7AiEAo1-zPyhLpodLk93ayTmsQADZCE7DmouIihN6NU7MoEs_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_43.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_25.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/d63e98486418ea3e22dad8242b66885635e812a67a5bc1e7a23e0ba8da613a0b?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_43.bin%3B+filename%3D%22params_shard_43.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&Expires=1791154414&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2Q2M2U5ODQ4NjQxOGVhM2UyMmRhZDgyNDJiNjY4ODU2MzVlODEyYTY3YTViYzFlN2EyM2UwYmE4ZGE2MTNhMGJcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF80My5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNDMuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDE0fX19XX0_&Signature=MEUCICC3pHdFuVPE7W55LM%7EMvu%7EVH-PfqlQo0sGM1xprQIunAiEApHm8Tfegf-M0N5a%7E51X1mbLEL5h808qlUqCUrsqrsTI_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/d3e9311ef56f6bf3ec935dbdb39bc0b7800d4fa5b8cc2e5b5a43911ff94a83f4?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_25.bin%3B+filename%3D%22params_shard_25.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791154414&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2QzZTkzMTFlZjU2ZjZiZjNlYzkzNWRiZGIzOWJjMGI3ODAwZDRmYTViOGNjMmU1YjVhNDM5MTFmZjk0YTgzZjRcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzI1LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8yNS5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDE0fX19XX0_&Signature=MEQCID0IPe8dG0m8SPKQDM0UKm870GX1CjeW49SmWDvLmnvqAiBIejx3ELKgvnx6QhRO0SkizguCRopidv90lRc7BlJq3A__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_62.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/efed20cf255f8b2bcfe85bbd829569ffc9235b207fbc9b00ee84991090cb92d5?xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_62.bin%3B+filename%3D%22params_shard_62.bin%22%3B&user_id=public&Expires=1791154418&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2VmZWQyMGNmMjU1ZjhiMmJjZmU4NWJiZDgyOTU2OWZmYzkyMzViMjA3ZmJjOWIwMGVlODQ5OTEwOTBjYjkyZDVcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNjIuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzYyLmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDE4fX19XX0_&Signature=MEUCIQCudAwEHyBfVgAM1yvZGzfQOuX7yuh871N480OGkG38ngIgeGDIs99st1rSeiLj4%7EysUi-shqbg20tc-3qDkMMUWzw_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_26.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_4.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_44.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/f26bbd059293ba58a97f8125463d76aa9009b7d721db8c1896af72c1358701ee?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_26.bin%3B+filename%3D%22params_shard_26.bin%22%3B&Expires=1791154418&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2YyNmJiZDA1OTI5M2JhNThhOTdmODEyNTQ2M2Q3NmFhOTAwOWI3ZDcyMWRiOGMxODk2YWY3MmMxMzU4NzAxZWVcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjYuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzI2LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDE4fX19XX0_&Signature=MEUCIQD95tyyWm0BW2qX7L7KPCZno3dmdPxm8U96bltNVB4gZgIgD7Qj%7ECBOj1iueBRazvOZTnxpzlq35KBlh77Y8wNo4bs_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/a3e7c1fae52eb922896d28f40ef3eb1ffa5c3bdd18f82974fe3ace497191626c?user_id=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_4.bin%3B+filename%3D%22params_shard_4.bin%22%3B&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&Expires=1791154418&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2EzZTdjMWZhZTUyZWI5MjI4OTZkMjhmNDBlZjNlYjFmZmE1YzNiZGQxOGY4Mjk3NGZlM2FjZTQ5NzE5MTYyNmNcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF80LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80LmJpbiUyMiUzQiZ4aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQxOH19fV19&Signature=MEYCIQDw983%7EJjy-EcyHN7-r6eUoKLNk5%7EYT56M2-xuwg-Fs0gIhANCTojh04itbajLRFvuk5yxIV-uUvV-IFBILZRhz95fe&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/de13483ae06e53bfcfde56505c164a3f33ac2408fa090f721f3085104065cffd?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_44.bin%3B+filename%3D%22params_shard_44.bin%22%3B&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&user_id=public&xip=L8fQLguSjGQ&Expires=1791154418&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2RlMTM0ODNhZTA2ZTUzYmZjZmRlNTY1MDVjMTY0YTNmMzNhYzI0MDhmYTA5MGY3MjFmMzA4NTEwNDA2NWNmZmRcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQ0LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80NC5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDE4fX19XX0_&Signature=MEUCIQCIyb7Pz7rDP5JXWVXqd%7EWiLJ%7EQ2FIlAoXUMxjhTX3bGwIgfogC6V171xb0ZHSIsr5rK81oYZGh214Gu8vDA0GBjQo_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_63.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/e9efcc186532b40fb7655c3b02c25750272f7d2c7cac82982aff3f583abd2f8b?xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_63.bin%3B+filename%3D%22params_shard_63.bin%22%3B&user_id=public&X-Xet-Cas-Uid=public&Expires=1791154421&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2U5ZWZjYzE4NjUzMmI0MGZiNzY1NWMzYjAyYzI1NzUwMjcyZjdkMmM3Y2FjODI5ODJhZmYzZjU4M2FiZDJmOGJcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNjMuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzYzLmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDIxfX19XX0_&Signature=MEUCIGXKi60chWJTUfiGlDBE1kdbVVE7hroZOZHI2dFFRi7qAiEA0qmTyfd3S0G-6kU6Md7xBq7eSH-CacA0SvJZE-6NS0Y_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_5.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_45.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_27.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/22d9586eb6ad5e7b1165ff708d7b9fadd6078ecfcdc03f26412d79526ae90fee?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_5.bin%3B+filename%3D%22params_shard_5.bin%22%3B&xip=L8fQLguSjGQ&user_id=public&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791154422&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzIyZDk1ODZlYjZhZDVlN2IxMTY1ZmY3MDhkN2I5ZmFkZDYwNzhlY2ZjZGMwM2YyNjQxMmQ3OTUyNmFlOTBmZWVcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzUuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzUuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0iLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQyMn19fV19&Signature=MEYCIQDDUjcje3b3Pocaww8GrVWszQyfs1cPtu%7EgpDDnnLLtkAIhAOI9jgYhc1SuY7-OCTj2aX8MFf5daSpjh5vH4bgDc5Qm&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/41cffbd2e50a16ed849a64fc45f0c4183783aae9bbf75bbac479f9cc712e1d78?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_45.bin%3B+filename%3D%22params_shard_45.bin%22%3B&Expires=1791154422&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzQxY2ZmYmQyZTUwYTE2ZWQ4NDlhNjRmYzQ1ZjBjNDE4Mzc4M2FhZTliYmY3NWJiYWM0NzlmOWNjNzEyZTFkNzhcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNDUuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzQ1LmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDIyfX19XX0_&Signature=MEUCIQDXcitG%7EtnKOEhTeuImtgwrtxdi2Zq-Y6weUA5RWhi8QAIgOLBbocG5JZJmgznfRquA4xrZCDFoVfRbfbQODTPvMSc_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/f4a54766a73fa1be92cbce1e19cce0cd34538be55601a997b525cb8232503f5e?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_27.bin%3B+filename%3D%22params_shard_27.bin%22%3B&xip=L8fQLguSjGQ&user_id=public&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791154422&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2Y0YTU0NzY2YTczZmExYmU5MmNiY2UxZTE5Y2NlMGNkMzQ1MzhiZTU1NjAxYTk5N2I1MjVjYjgyMzI1MDNmNWVcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzI3LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8yNy5iaW4lMjIlM0ImeGlwPUw4ZlFMZ3VTakdRJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDIyfX19XX0_&Signature=MEUCIGm24jlOFyws2GzgmIacvCWQR0IBl9CIj03AHYml1JRpAiEAhClzC7njYewC8lN0o32JoAWoFlx6120aT93FQKfdsU0_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_64.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/145075907a331858cb48e8d05e7d92f58eb1e47e639a6b9e0ad3fd17d53675d9?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_64.bin%3B+filename%3D%22params_shard_64.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&Expires=1791154426&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzE0NTA3NTkwN2EzMzE4NThjYjQ4ZThkMDVlN2Q5MmY1OGViMWU0N2U2MzlhNmI5ZTBhZDNmZDE3ZDUzNjc1ZDlcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzY0LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF82NC5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDI2fX19XX0_&Signature=MEYCIQD6jI50qkflyfdmQoCwr0y9AUsjpVRDbQbo8BANHTZ5iQIhAI1D6jxSzOh186YsHKkPoW0pshWIaFPn%7EYthqOmMUPY9&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_28.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/15164df3e07773adafc10e609507bae17fbe6afdd188a3487e0d47af581c2ec7?response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_28.bin%3B+filename%3D%22params_shard_28.bin%22%3B&X-Xet-Cas-Uid=public&user_id=public&Expires=1791154427&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzE1MTY0ZGYzZTA3NzczYWRhZmMxMGU2MDk1MDdiYWUxN2ZiZTZhZmRkMTg4YTM0ODdlMGQ0N2FmNTgxYzJlYzdcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMjguYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzI4LmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDI3fX19XX0_&Signature=MEUCIQDmzZY0tL6aGaoTgxM9NHvA2p-0cGp0m1tXRO4ELc4UBAIgIzT-xp6oGzYu1oWrBE9LqKWBOrcbpqA9-Vaeh%7EKvuaQ_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_6.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_46.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/d7c3180a60dab6328d6b13be9659cf94cb4f92a1800acbfe966cccfbc7f7e6d0?X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_6.bin%3B+filename%3D%22params_shard_6.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791154427&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2Q3YzMxODBhNjBkYWI2MzI4ZDZiMTNiZTk2NTljZjk0Y2I0ZjkyYTE4MDBhY2JmZTk2NmNjY2ZiYzdmN2U2ZDBcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF82LmJpbiUyMiUzQiZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQyN319fV19&Signature=MEUCIQCQndG4DLnA14yoEfH1nkRhNroJCR0io9iDrRQjFWxh5wIgWFSiblVFRtH5%7EXZwmBtTInxK4btEBScugWHc2Z4PuPM_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/1610c4f6fe00cd2c2060c5d2d11eb7d126c51f8172a4063eba6ffb1140902ba2?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_46.bin%3B+filename%3D%22params_shard_46.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791154427&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzE2MTBjNGY2ZmUwMGNkMmMyMDYwYzVkMmQxMWViN2QxMjZjNTFmODE3MmE0MDYzZWJhNmZmYjExNDA5MDJiYTJcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQ2LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80Ni5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDI3fX19XX0_&Signature=MEUCID%7EuiPsugQuOLvFeL9Gdif9spcw0rUMTMLxWTEgWqXujAiEAnV5GBeSen3Yf%7ENScYTVx9RyqT3kJp5wrPMLT4TtDQ9U_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_65.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/27d04709de700a921974a138df8619f4f9185ceee6bcc90a78a6cfa9a986985a?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_65.bin%3B+filename%3D%22params_shard_65.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&Expires=1791154428&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzI3ZDA0NzA5ZGU3MDBhOTIxOTc0YTEzOGRmODYxOWY0ZjkxODVjZWVlNmJjYzkwYTc4YTZjZmE5YTk4Njk4NWFcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82NS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNjUuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDI4fX19XX0_&Signature=MEUCIHN-Opx3np2hWW-88dIm4ud%7EFFLefLw89mspnUEbIJ9SAiEAsUPbHE7dcW1mKBjtXPyfk7VYxUMYJzAqMI9HPCRNfF4_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_47.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_7.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_29.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/0f8bec5278977144f0935b6199bb56b7e3b390795e987f27d52d4dfe0898af25?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_47.bin%3B+filename%3D%22params_shard_47.bin%22%3B&user_id=public&Expires=1791154431&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzBmOGJlYzUyNzg5NzcxNDRmMDkzNWI2MTk5YmI1NmI3ZTNiMzkwNzk1ZTk4N2YyN2Q1MmQ0ZGZlMDg5OGFmMjVcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNDcuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzQ3LmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDMxfX19XX0_&Signature=MEUCIQCbN1GPPWZX3HA6aCo5baKaLCWoypIIuvA9KSXE6eERIgIgbiun%7EjS0CcSzGpQhajIvLPcNiHtfurUJt99m3FInlP4_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/0fa2779c6addcfbbb3ef237d1f8841a8bfd19ad7cb65519205462715264384b0?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_7.bin%3B+filename%3D%22params_shard_7.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791154431&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzBmYTI3NzljNmFkZGNmYmJiM2VmMjM3ZDFmODg0MWE4YmZkMTlhZDdjYjY1NTE5MjA1NDYyNzE1MjY0Mzg0YjBcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzcuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzcuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0iLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQzMX19fV19&Signature=MEUCIGvdadIyeRaGbt6EE6yjcLjzErRtumfkDttj2OwGeE-PAiEApMdVB8iVwypUXV4wUtbxdahtlStw8mPallMEid%7E0KqE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/0bb6752370b86160d0ce957c991ee4d8511fd7a52d59a94f5cea51a2c672f67e?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_29.bin%3B+filename%3D%22params_shard_29.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&Expires=1791154431&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzBiYjY3NTIzNzBiODYxNjBkMGNlOTU3Yzk5MWVlNGQ4NTExZmQ3YTUyZDU5YTk0ZjVjZWE1MWEyYzY3MmY2N2VcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzI5LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8yOS5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDMxfX19XX0_&Signature=MEUCIB6GFk7KhZD7E6D7w-%7E7PZpGTBftLgzPQVvdECsq4QKdAiEA9AGJUZsuZ8iz0wMIa2zhsLThK7Ge2GlQ6QL5fsSrLJg_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_66.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/7d49efc2af2eccb6c98d3684483ce61b3972e839e137e516752720b6953f1089?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_66.bin%3B+filename%3D%22params_shard_66.bin%22%3B&xip=L8fQLguSjGQ&Expires=1791154433&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzdkNDllZmMyYWYyZWNjYjZjOThkMzY4NDQ4M2NlNjFiMzk3MmU4MzllMTM3ZTUxNjc1MjcyMGI2OTUzZjEwODlcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82Ni5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNjYuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDMzfX19XX0_&Signature=MEYCIQDHihadfIlAYQ4fhqi4KyNJnAQyXLTou6YjO5Yi3sUX2gIhAMfJxlIosggkbZepqYW3mHSwsEzeZM1IycpEZ1ytcwWC&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_30.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_48.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/a90a9217d0b82db057b39cc96f40383c27dd21f6b9f0923af4e24c698bb972b5?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_30.bin%3B+filename%3D%22params_shard_30.bin%22%3B&Expires=1791154435&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2E5MGE5MjE3ZDBiODJkYjA1N2IzOWNjOTZmNDAzODNjMjdkZDIxZjZiOWYwOTIzYWY0ZTI0YzY5OGJiOTcyYjVcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzAuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzMwLmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDM1fX19XX0_&Signature=MEUCIQCCGsL8RLgpYJ4g-tWaXLBrppk6jn7xZhjoa20zSTGqwAIgdw5JJuEqmHOsIBsqK7jwBsFufXTdGgWXc7qoVweP9Ok_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/a29bb62fc6192c0b6ee09206d6ea6ee43b2389826ccdbd7a27004d911dd838a7?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_48.bin%3B+filename%3D%22params_shard_48.bin%22%3B&X-Xet-Cas-Uid=public&user_id=public&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&Expires=1791154435&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2EyOWJiNjJmYzYxOTJjMGI2ZWUwOTIwNmQ2ZWE2ZWU0M2IyMzg5ODI2Y2NkYmQ3YTI3MDA0ZDkxMWRkODM4YTdcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQ4LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80OC5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDM1fX19XX0_&Signature=MEUCIH63TbWqKVgrbTBkuxBk2eQq-j5HMYh1VcpA2bhF9xreAiEAxspnwRkKBSqnwvstw4fZ3V-ZJ6AA20KaVwJIXYbjPuQ_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_8.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/2c3936d80d9b9259133a55c37abbadc9924fef513c4cf6c22445c52774548d85?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_8.bin%3B+filename%3D%22params_shard_8.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791154436&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzJjMzkzNmQ4MGQ5YjkyNTkxMzNhNTVjMzdhYmJhZGM5OTI0ZmVmNTEzYzRjZjZjMjI0NDVjNTI3NzQ1NDhkODVcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF84LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF84LmJpbiUyMiUzQiZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQzNn19fV19&Signature=MEYCIQDnX3-pr2656RBMJXxOmsY%7El0BAYbKR4mHqv85ovGHojgIhAOMb56EIcP1%7EsEZzleY6Qt9KSn07jxVVX%7ECGUivyaMiH&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_67.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/7894c65921eacc785f1077bb04ad9b94859f37a363c07c89c88c72cd8bd7e8ed?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_67.bin%3B+filename%3D%22params_shard_67.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791154436&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5Lzc4OTRjNjU5MjFlYWNjNzg1ZjEwNzdiYjA0YWQ5Yjk0ODU5ZjM3YTM2M2MwN2M4OWM4OGM3MmNkOGJkN2U4ZWRcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82Ny5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNjcuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDM2fX19XX0_&Signature=MEUCID9k6uvp7iJkYBI9a5RoiBY2%7E-vX22UnJoNh8T7ib9OaAiEAudXu7hsk7ZI79rEvmWBsw0c%7Ej2Ja9LvTy1MZssnPSRc_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_49.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/caa510dfb16bfe6e79d381d5f2592662d878c51e6ad4d12ccfd19b81fab7b26c?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_49.bin%3B+filename%3D%22params_shard_49.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&Expires=1791154439&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2NhYTUxMGRmYjE2YmZlNmU3OWQzODFkNWYyNTkyNjYyZDg3OGM1MWU2YWQ0ZDEyY2NmZDE5YjgxZmFiN2IyNmNcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzQ5LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF80OS5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDM5fX19XX0_&Signature=MEUCIQD1-7PFkssNrP6fuKybUWZCck7q7qTFC2M8ckgcNmls9QIgMvdc7ozAD2J3nZUFN80W5RnHXPcV26lF-kzpyUeQEy8_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_9.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_31.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/948ee418a6cddae214ad464bb8035d9fa91688851bf9101fa5c0a80f6a31f8e9?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_9.bin%3B+filename%3D%22params_shard_9.bin%22%3B&response-content-type=application%2Foctet-stream&Expires=1791154440&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5Lzk0OGVlNDE4YTZjZGRhZTIxNGFkNDY0YmI4MDM1ZDlmYTkxNjg4ODUxYmY5MTAxZmE1YzBhODBmNmEzMWY4ZTlcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF85LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF85LmJpbiUyMiUzQiZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0iLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MTE1NDQ0MH19fV19&Signature=MEUCIEEw4xhPJuT-Hen3BILyGzCJvIZeYHcO9g3xzQZdlqR7AiEA-qTd3C0tHz2fZxBawxcL31qTgCxElAbAkDcw5okeZis_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/8d3e70d8a9831fe45b6331347e14c870f86ae86754465297a249ada13396aefb?X-Xet-Cas-Uid=public&user_id=public&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_31.bin%3B+filename%3D%22params_shard_31.bin%22%3B&Expires=1791154440&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzhkM2U3MGQ4YTk4MzFmZTQ1YjYzMzEzNDdlMTRjODcwZjg2YWU4Njc1NDQ2NTI5N2EyNDlhZGExMzM5NmFlZmJcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzEuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzMxLmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQwfX19XX0_&Signature=MEUCIQD-35xAwrAA9sJcYom-6OmI8ErBmeL%7E1vCeDRzpMXffyQIgZeN%7Epqftbxqisne2AuFri0zN-vGB-y9ex%7ELssE%7Eyg%7EI_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_68.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/2eba1e7fcf965cc7a21243d19eb2deed85de45eab7ae7a4d42aa1a6e9c0282b3?X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_68.bin%3B+filename%3D%22params_shard_68.bin%22%3B&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&Expires=1791154441&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzJlYmExZTdmY2Y5NjVjYzdhMjEyNDNkMTllYjJkZWVkODVkZTQ1ZWFiN2FlN2E0ZDQyYWExYTZlOWMwMjgyYjNcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzY4LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF82OC5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQxfX19XX0_&Signature=MEUCIQC04OPamuorfARZ6Sc3hqxoNz0biprfsb3aOopd8b6fGwIgKrrGrAH4nLXVcWQKZOxhtA9Aoveao2SNybWsBhQDNO0_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_32.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_50.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_10.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/c30dbbd5777c55e78cebba6659736905a5d4f948fe866929e2d831f6e9f179ed?response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_50.bin%3B+filename%3D%22params_shard_50.bin%22%3B&X-Xet-Cas-Uid=public&Expires=1791154444&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2MzMGRiYmQ1Nzc3YzU1ZTc4Y2ViYmE2NjU5NzM2OTA1YTVkNGY5NDhmZTg2NjkyOWUyZDgzMWY2ZTlmMTc5ZWRcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPUw4ZlFMZ3VTakdRJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNTAuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzUwLmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ0fX19XX0_&Signature=MEUCIQCgFqYFPy6obIhaPHeUTm1wqi-SLUp2MY2HJ66YYApOcwIgEmGLp0PTdRJ8V682LGgWC6VXzBiq7S8AjkMeSxQS0dU_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/18a697f7f270534cb1e1b99f88f733a93718cfa8bfda75246607b6d7a9e6b1d8?response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_32.bin%3B+filename%3D%22params_shard_32.bin%22%3B&user_id=public&Expires=1791154444&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzE4YTY5N2Y3ZjI3MDUzNGNiMWUxYjk5Zjg4ZjczM2E5MzcxOGNmYThiZmRhNzUyNDY2MDdiNmQ3YTllNmIxZDhcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzIuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzMyLmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ0fX19XX0_&Signature=MEYCIQCSWDjXZLqFVVCyRUwD%7EVCRrgh6FwV8YHF1XU-uFPhkcwIhAPN4ttstBjuiwGj5n-nE8HmZABOgX23c91%7Et132o8l7j&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/fa9315daa3dface8c3361036f3d5f34089c803326ea8327a9d8f0a7cc261966f?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_10.bin%3B+filename%3D%22params_shard_10.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&user_id=public&Expires=1791154444&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2ZhOTMxNWRhYTNkZmFjZThjMzM2MTAzNmYzZDVmMzQwODljODAzMzI2ZWE4MzI3YTlkOGYwYTdjYzI2MTk2NmZcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzEwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xMC5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD1MOGZRTGd1U2pHUSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ0fX19XX0_&Signature=MEUCIQDtymEbylVHtT-MkAof2pVOSPBdgAPOeGoGMjoXBOGS-QIgD63juDidOv5VwU5vegjviwcL%7E014qWLAH8%7EgC%7E01QQY_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_69.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/1bea62de6aa2f6fee181120468cd3a6aba1870efdc60bc62aa9291394edcc87b?response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_69.bin%3B+filename%3D%22params_shard_69.bin%22%3B&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&user_id=public&Expires=1791154444&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzFiZWE2MmRlNmFhMmY2ZmVlMTgxMTIwNDY4Y2QzYTZhYmExODcwZWZkYzYwYmM2MmFhOTI5MTM5NGVkY2M4N2JcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF82OS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNjkuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZYLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ0fX19XX0_&Signature=MEUCIQDm8TfqXMZm-BnUzYmvBvXzQwXh--zQntoO5U-QwNcQIwIgFpkpqRS1ONRFm4shUT%7Erl18x4TCyx9II9v74EOsPKzk_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_51.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_11.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/47bee708f21d5370fafa0829027a929e9a342f0d3811129c02c62e25934fc120?response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_51.bin%3B+filename%3D%22params_shard_51.bin%22%3B&X-Xet-Cas-Uid=public&user_id=public&Expires=1791154447&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzQ3YmVlNzA4ZjIxZDUzNzBmYWZhMDgyOTAyN2E5MjllOWEzNDJmMGQzODExMTI5YzAyYzYyZTI1OTM0ZmMxMjBcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0meGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNTEuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzUxLmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ3fX19XX0_&Signature=MEYCIQCtklBq17ZuWOO%7Ehfvs20EIjCeLRM4xbyxL25RXNSV13AIhANvEfjeeyFJhxLhI3DJmK-JBU4-fM14RIiI22Mm-x1aG&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/b1d462933a06d2f72bbd488993d682288662ccb48ee38369e0a1a1e70b59e76f?xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_11.bin%3B+filename%3D%22params_shard_11.bin%22%3B&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&Expires=1791154448&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2IxZDQ2MjkzM2EwNmQyZjcyYmJkNDg4OTkzZDY4MjI4ODY2MmNjYjQ4ZWUzODM2OWUwYTFhMWU3MGI1OWU3NmZcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xMS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTEuYmluJTIyJTNCJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ4fX19XX0_&Signature=MEYCIQC%7Ee%7E19iwtq2ZjhP1tKz12ydjDzlhyaUIzjPAw%7EvzV2NgIhAJ%7EjQuTHrm49MTEu1%7EtVha2YHaSBbFB2q-MkBB6e501M&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_33.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/0a4bc0e8a8b9c28760abefb2d5f3e5aa076935210fe1664933afd12a0cdc4d0a?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_33.bin%3B+filename%3D%22params_shard_33.bin%22%3B&X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&user_id=public&response-content-type=application%2Foctet-stream&Expires=1791154448&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzBhNGJjMGU4YThiOWMyODc2MGFiZWZiMmQ1ZjNlNWFhMDc2OTM1MjEwZmUxNjY0OTMzYWZkMTJhMGNkYzRkMGFcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzMzLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zMy5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ4fX19XX0_&Signature=MEUCIQDIu3huXS9ADxvo%7EEwci39vN12f-pSvDYfpBANYaLCa7AIgODkAaiDEa1XgK7z1olESjJFiOGR3TsFNmlFTWSO-OmM_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_70.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/1cba8e6b2305a42ab5cd3f3e906c1087f953c4bb27cf6027bec9edd3e137adfd?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_70.bin%3B+filename%3D%22params_shard_70.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&xip=L8fQLguSjGQ&Expires=1791154449&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzFjYmE4ZTZiMjMwNWE0MmFiNWNkM2YzZTkwNmMxMDg3Zjk1M2M0YmIyN2NmNjAyN2JlYzllZGQzZTEzN2FkZmRcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzcwLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF83MC5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDQ5fX19XX0_&Signature=MEUCIQC2UDIbmrLQzFZjtPtq3l13Sp5tWw-ZGsxKjgliZqKPwQIgMshYRTY7r-hxeCzPVRKIdiAKxtmqGupE-GJv1xKvc4E_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_52.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/c1a451f92d9ef04962df434de20929d6d54d9f178d02451e6b85fd7f56dbab77?X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_52.bin%3B+filename%3D%22params_shard_52.bin%22%3B&user_id=public&response-content-type=application%2Foctet-stream&Expires=1791154452&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2MxYTQ1MWY5MmQ5ZWYwNDk2MmRmNDM0ZGUyMDkyOWQ2ZDU0ZDlmMTc4ZDAyNDUxZTZiODVmZDdmNTZkYmFiNzdcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF81Mi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfNTIuYmluJTIyJTNCJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDUyfX19XX0_&Signature=MEYCIQC78-BhH-2054qPTbTlHGwVpuz%7EbBssAgFz106jW6nu6wIhAOfFnyos362qS%7EYlS-kZHUgG28mG94m9OSarh-B1p%7E4F&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_12.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_34.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_71.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/2ac2a5e59e84cb1e9e2a54557639830193bc529bb6e4fa3d0f3f77147a63fee9?response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_12.bin%3B+filename%3D%22params_shard_12.bin%22%3B&xip=L8fQLguSjGQ&user_id=public&X-Xet-Cas-Uid=public&Expires=1791154453&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzJhYzJhNWU1OWU4NGNiMWU5ZTJhNTQ1NTc2Mzk4MzAxOTNiYzUyOWJiNmU0ZmEzZDBmM2Y3NzE0N2E2M2ZlZTlcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xMi5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTIuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZ1c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDUzfX19XX0_&Signature=MEQCIFXzNi8IUr6mdY027bLGiqMNTWB5Usy8JPf1JaNzMwk8AiA2gqpCw5T8giPmsxNQOr8ejrRkvYc2ErRdFB6x7mHuIQ__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/10ac20b8a242b6520ea918b06c03cf4d548e099915a15de395c5d3c17c34670a?xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_34.bin%3B+filename%3D%22params_shard_34.bin%22%3B&X-Xet-Cas-Uid=public&Expires=1791154453&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzEwYWMyMGI4YTI0MmI2NTIwZWE5MThiMDZjMDNjZjRkNTQ4ZTA5OTkxNWExNWRlMzk1YzVkM2MxN2MzNDY3MGFcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMzQuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzM0LmJpbiUyMiUzQiZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDUzfX19XX0_&Signature=MEYCIQCVT-GwreSuenN3zqHdkbbaL2YJxf1SHFav1kJg6XwuwwIhALAFCJ1gfPKqSYwObzdkfjo3FtkyidX28ItP0qFx8Yi2&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/36ba9771717aecdd92c1682ed6bdb5e41ef1bfe6952a187405adf3db513ec9ca?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&user_id=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_71.bin%3B+filename%3D%22params_shard_71.bin%22%3B&Expires=1791154453&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzM2YmE5NzcxNzE3YWVjZGQ5MmMxNjgyZWQ2YmRiNWU0MWVmMWJmZTY5NTJhMTg3NDA1YWRmM2RiNTEzZWM5Y2FcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNzEuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzcxLmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDUzfX19XX0_&Signature=MEQCIGYfaXPE01qJQUCnT-tZNr1UF6%7EYwd5ryqshg9KhMKR0AiBJOg7GxwxFhb81soyDpMld2F5x-d%7ExXjoHkeCwF-V8Vw__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_53.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/285b0bdc7ace7577e22b4da2d22065b6e661b77625d5b50c6041ea3bf720aa79?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_53.bin%3B+filename%3D%22params_shard_53.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&Expires=1791154456&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzI4NWIwYmRjN2FjZTc1NzdlMjJiNGRhMmQyMjA2NWI2ZTY2MWI3NzYyNWQ1YjUwYzYwNDFlYTNiZjcyMGFhNzlcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzUzLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF81My5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDU2fX19XX0_&Signature=MEUCIQCGwxHEaNcSNsqBz-agImQoZK9T-1jRdZcMioJzvAT85QIgFq9GVS6gQmbxkTbDUD6SJfiLaYZ9N6NkqYYFEbKjnOA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_13.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_72.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_35.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/6f940062bef43c7bede24393d45df62c7f610b1280f91c6fe51bb7719603934e?xip=L8fQLguSjGQ&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_13.bin%3B+filename%3D%22params_shard_13.bin%22%3B&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&user_id=public&Expires=1791154456&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzZmOTQwMDYyYmVmNDNjN2JlZGUyNDM5M2Q0NWRmNjJjN2Y2MTBiMTI4MGY5MWM2ZmU1MWJiNzcxOTYwMzkzNGVcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xMy5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTMuYmluJTIyJTNCJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSZYLVhldC1DYXMtVWlkPXB1YmxpYyZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDU2fX19XX0_&Signature=MEYCIQDv4ZPZZnJSFv1TsOaB%7E6A5BTyCO3SeH-R9GdKv18dgpQIhALR5eABXIeCrTGZGLbg9gwiivTJ3QL4cqWs4lHB-abFM&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/acb727699ff900704c1ae9433b45d6b6528d6ddb126c5f2f1ab83b73f7b90b8b?xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&user_id=public&response-content-type=application%2Foctet-stream&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_72.bin%3B+filename%3D%22params_shard_72.bin%22%3B&Expires=1791154457&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2FjYjcyNzY5OWZmOTAwNzA0YzFhZTk0MzNiNDVkNmI2NTI4ZDZkZGIxMjZjNWYyZjFhYjgzYjczZjdiOTBiOGJcXD94aXA9TDhmUUxndVNqR1EmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfNzIuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzcyLmJpbiUyMiUzQiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDU3fX19XX0_&Signature=MEUCIQCbBHVg6oFWMHUdpYh3KteA59Tsnm00QFownKy77EOKWgIgU73zDMOk6uMfsYHL-3L3bWVD5i4JCPBJ4CTn9tJeo2k_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/a17667f09903a98030e5bcea8e8c915ce204f9f4574b909e8e9a9de11697c96c?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_35.bin%3B+filename%3D%22params_shard_35.bin%22%3B&X-Xet-Cas-Uid=public&xip=L8fQLguSjGQ&user_id=public&response-content-type=application%2Foctet-stream&Expires=1791154457&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2ExNzY2N2YwOTkwM2E5ODAzMGU1YmNlYThlOGM5MTVjZTIwNGY5ZjQ1NzRiOTA5ZThlOWE5ZGUxMTY5N2M5NmNcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzM1LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8zNS5iaW4lMjIlM0ImWC1YZXQtQ2FzLVVpZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJnVzZXJfaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDU3fX19XX0_&Signature=MEUCIQC2Wij5YJRIa9vyzZKY%7EuJl0QR8Inlmg9xmYfrPHantBgIgQznzAy6zpaxspvn0vShJEKyxzCRDIK7-W8No5ac-HY0_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_14.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_73.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/eb7495f69a892a6de43a6a7d61dbd21649959c5c093ffbc59d1b7d568b9c1afc?X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_14.bin%3B+filename%3D%22params_shard_14.bin%22%3B&xip=L8fQLguSjGQ&Expires=1791154461&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2ViNzQ5NWY2OWE4OTJhNmRlNDNhNmE3ZDYxZGJkMjE2NDk5NTljNWMwOTNmZmJjNTlkMWI3ZDU2OGI5YzFhZmNcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xNC5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTQuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDYxfX19XX0_&Signature=MEUCIEf1hiAcB47TvIv-M1HEVNlO9r3zbpmOBBiG6m3FnhbhAiEA%7EqE%7ElAOF99wnQsnfnVnVq%7E%7ErWOdirSGWUq-ZNFovNK0_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/ce8f498f6dde3d78088f1d9a632dfe52ae0419d8fb30e409ab6cdd37e63c4755?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_73.bin%3B+filename%3D%22params_shard_73.bin%22%3B&user_id=public&xip=L8fQLguSjGQ&X-Xet-Cas-Uid=public&response-content-type=application%2Foctet-stream&Expires=1791154461&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2NlOGY0OThmNmRkZTNkNzgwODhmMWQ5YTYzMmRmZTUyYWUwNDE5ZDhmYjMwZTQwOWFiNmNkZDM3ZTYzYzQ3NTVcXD9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzczLmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF83My5iaW4lMjIlM0ImdXNlcl9pZD1wdWJsaWMmeGlwPUw4ZlFMZ3VTakdRJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT1hcHBsaWNhdGlvbiUyRm9jdGV0LXN0cmVhbSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDYxfX19XX0_&Signature=MEYCIQCXTR9v9jOMLtdpW4wJ6EgTGVqfoSdPi05IVcZZT0rSRAIhAMqrzJUASBZSj-H5-nNM-ryRWO7TJSF2xfO%7E78dAm-wI&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_15.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/08bfb98e633404f771e63c0bda2b038633b2c75359537f75ba3f123677eac175?response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_15.bin%3B+filename%3D%22params_shard_15.bin%22%3B&xip=L8fQLguSjGQ&user_id=public&Expires=1791154464&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzA4YmZiOThlNjMzNDA0Zjc3MWU2M2MwYmRhMmIwMzg2MzNiMmM3NTM1OTUzN2Y3NWJhM2YxMjM2NzdlYWMxNzVcXD9yZXNwb25zZS1jb250ZW50LXR5cGU9YXBwbGljYXRpb24lMkZvY3RldC1zdHJlYW0mWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN3BhcmFtc19zaGFyZF8xNS5iaW4lM0IrZmlsZW5hbWUlM0QlMjJwYXJhbXNfc2hhcmRfMTUuYmluJTIyJTNCJnhpcD1MOGZRTGd1U2pHUSZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDY0fX19XX0_&Signature=MEUCIFAdKJilnA476KhCy-BC%7ER76iaMOXmMkzyHfc2TEbqEoAiEAq3Swtdols8wm1yymfIG%7ECe569I8H6JorJKDUmCNWjBE_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_16.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/115c0a9ce5dde7493656d28a07c887f65005760922d6841c2e662bab498d9087?xip=L8fQLguSjGQ&response-content-type=application%2Foctet-stream&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_16.bin%3B+filename%3D%22params_shard_16.bin%22%3B&user_id=public&Expires=1791154466&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5LzExNWMwYTljZTVkZGU3NDkzNjU2ZDI4YTA3Yzg4N2Y2NTAwNTc2MDkyMmQ2ODQxYzJlNjYyYmFiNDk4ZDkwODdcXD94aXA9TDhmUUxndVNqR1EmcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJlgtWGV0LUNhcy1VaWQ9cHVibGljJnJlc3BvbnNlLWNvbnRlbnQtZGlzcG9zaXRpb249aW5saW5lJTNCK2ZpbGVuYW1lJTJBJTNEVVRGLTglMjclMjdwYXJhbXNfc2hhcmRfMTYuYmluJTNCK2ZpbGVuYW1lJTNEJTIycGFyYW1zX3NoYXJkXzE2LmJpbiUyMiUzQiZ1c2VyX2lkPXB1YmxpYyIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDY2fX19XX0_&Signature=MEUCIQCL3utdyp6THaq8nKKnd06qsvcBS5eWVkuS3zNRiQzdjgIgSiG7gDeGuh2mfR2ikc5P-2QsYgAeO2bVHU3oEWTJ9jU_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen3-4B-q4f16_1-MLC/resolve/main/params_shard_17.bin",
+      "method": "GET"
+    },
+    {
+      "url": "https://us.aws.cdn.hf.co/xet-bridge-us/68132279c347c9dffafbebe9/e993a1d5d00c239f262ad0f4e183664edf23b9cfd53bb88494dcbb0bec257aab?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27params_shard_17.bin%3B+filename%3D%22params_shard_17.bin%22%3B&response-content-type=application%2Foctet-stream&user_id=public&xip=L8fQLguSjGQ&Expires=1791154469&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjgxMzIyNzljMzQ3YzlkZmZhZmJlYmU5L2U5OTNhMWQ1ZDAwYzIzOWYyNjJhZDBmNGUxODM2NjRlZGYyM2I5Y2ZkNTNiYjg4NDk0ZGNiYjBiZWMyNTdhYWJcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3cGFyYW1zX3NoYXJkXzE3LmJpbiUzQitmaWxlbmFtZSUzRCUyMnBhcmFtc19zaGFyZF8xNy5iaW4lMjIlM0ImcmVzcG9uc2UtY29udGVudC10eXBlPWFwcGxpY2F0aW9uJTJGb2N0ZXQtc3RyZWFtJnVzZXJfaWQ9cHVibGljJnhpcD1MOGZRTGd1U2pHUSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiRXBvY2hUaW1lIjoxNzkxMTU0NDY5fX19XX0_&Signature=MEYCIQCibedDAK5EpF7E9LvE4eoK519GAigXL-AgLBJaLl1sawIhAKt4n2Vnga1VXzRkKsBz4FBsSOFkEbuCQ7w-UYro5%7Elu&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.aff",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.dic",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.aff",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.dic",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.worker.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/theme-presentation.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/fonts.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-tokens.88df51ac.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-SbvfAfkX.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/builder-EH76YCFS-BT43qACE.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/rolldown-runtime-BM1aVgqh-DK3Fl9T5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-DEoPNM0j-CEoLgyYS.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/chevron-down-DRUABlJy-DIQ8yRUG.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/editor-C8c8IKfZ.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-C7eSWAmW.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-D771JG4c.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/agent-plugin-C7eSWAmW.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/input-D771JG4c.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/ran-fonts/Geist-Variable.woff2",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/lib-CSLy4uO1.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-192.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-192.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html?_dc=0&lang=zh-CN&customer=ONLYOFFICE&type=desktop&frameEditorId=iframe&isForm=false&parentOrigin=http://127.0.0.1:5193&uitheme=theme-classic-light&fileType=docx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/requirejs/require.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/css/app.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/app.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/zh.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all-min.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/cursors/svg.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/word/sdk-all.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Charts/ChartStyles.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/libfont/engine/fonts.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.wasm",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/icons/anchor.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/fonts_thumbnail_ea.png.bin",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/233",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/058",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/057",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/055",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/056",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/062",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/061",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/059",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/060",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/267",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/268",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/070",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/069",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/067",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/068",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/toc_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/img_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/content_controls/signature.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/image_url.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/table_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/chart_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/audio.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/video.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/Images/placeholders/smartart_active.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/alphabetletters.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/alphabetletters/qwertyletters.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/plugins.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig.png",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/numbering-lists.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/numbering/multilevel-lists.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconssmall@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconsbig@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/resources/img/iconshuge@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/common/main/resources/img/doc-formats/formats@2.5x.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/themes.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/manifest.json",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/icons/document-light.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.aff",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.dic",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.aff",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/dictionaries/en_US/en_US.dic",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t.worker.js",
+      "method": "GET"
+    }
+  ],
+  "workers": [
+    "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+    "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js",
+    "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+    "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+  ],
+  "cases": [
+    {
+      "prompt": {
+        "source": "审核记录：周澈周一提交了周四发布公告的草案，草案尚未获批。柳音负责审批；必须先核对数据才能批准，而数据核对目前未完成。周四发布仅是拟议日期，项目组还没有发布决定。本记录用于审核进度同步。",
+        "instruction": "压缩为一句中文摘要，保留人物、时间指向、当前状态和审批前提，不要补充事实。"
+      },
+      "errors": [],
+      "modelNote": "模型已加载，可以开始对话。",
+      "modelStatus": "WebGPU · Qwen3 · 4B",
+      "selected": "审核记录：周澈周一提交了周四发布公告的草案，草案尚未获批。柳音负责审批；必须先核对数据才能批准，而数据核对目前未完成。周四发布仅是拟议日期，项目组还没有发布决定。本记录用于审核进度同步。\r\n",
+      "documentBefore": "审核记录：周澈周一提交了周四发布公告的草案，草案尚未获批。柳音负责审批；必须先核对数据才能批准，而数据核对目前未完成。周四发布仅是拟议日期，项目组还没有发布决定。本记录用于审核进度同步。\r\n",
+      "durationMs": 5532,
+      "toolMessages": [],
+      "previewCount": 0,
+      "chatErrors": [],
+      "documentAfter": "周澈周一提交了周四发布公告的草案，草案尚未获批，柳音负责审批，需先核对数据但目前未完成，周四发布仅为拟议日期，项目组尚未决定发布。\r\n",
+      "documentUnchanged": false,
+      "afterUndo": "审核记录：周澈周一提交了周四发布公告的草案，草案尚未获批。柳音负责审批；必须先核对数据才能批准，而数据核对目前未完成。周四发布仅是拟议日期，项目组还没有发布决定。本记录用于审核进度同步。\r\n",
+      "afterRedo": "周澈周一提交了周四发布公告的草案，草案尚未获批，柳音负责审批，需先核对数据但目前未完成，周四发布仅为拟议日期，项目组尚未决定发布。\r\n",
+      "finished": true,
+      "pageClosed": true
+    },
+    {
+      "prompt": {
+        "source": "试产记录：任汐建议周二开始试产，但管理组尚未接受该建议。只有欧岳确认设备检查结果后才能排产；目前设备检查仍在进行，没有完成结果确认。周二试产不是已确定的计划，这份记录用于团队同步。",
+        "instruction": "压缩为一句中文摘要，保留建议性质、责任人、排产前提和当前未确认状态，不要补充事实。"
+      },
+      "errors": [],
+      "modelNote": "模型已加载，可以开始对话。",
+      "modelStatus": "WebGPU · Qwen3 · 4B",
+      "selected": "试产记录：任汐建议周二开始试产，但管理组尚未接受该建议。只有欧岳确认设备检查结果后才能排产；目前设备检查仍在进行，没有完成结果确认。周二试产不是已确定的计划，这份记录用于团队同步。\r\n",
+      "documentBefore": "试产记录：任汐建议周二开始试产，但管理组尚未接受该建议。只有欧岳确认设备检查结果后才能排产；目前设备检查仍在进行，没有完成结果确认。周二试产不是已确定的计划，这份记录用于团队同步。\r\n",
+      "durationMs": 3947,
+      "toolMessages": [],
+      "previewCount": 0,
+      "chatErrors": [],
+      "documentAfter": "任汐建议周二试产，但管理组未接受，排产需等待设备检查结果确认，目前检查未完成。\r\n",
+      "documentUnchanged": false,
+      "afterUndo": "试产记录：任汐建议周二开始试产，但管理组尚未接受该建议。只有欧岳确认设备检查结果后才能排产；目前设备检查仍在进行，没有完成结果确认。周二试产不是已确定的计划，这份记录用于团队同步。\r\n",
+      "afterRedo": "任汐建议周二试产，但管理组未接受，排产需等待设备检查结果确认，目前检查未完成。\r\n",
+      "finished": true,
+      "pageClosed": true
+    }
+  ],
+  "freshProfile": true,
+  "browserVersion": "151.0.7922.34",
+  "profile": ".scratch/qwen4-native-profile-20261005",
+  "contextClosed": true,
+  "browserClosed": true
+}

@@ -1,27 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { injectLocalChromeCss } from '../../lib/onlyoffice/guards/chrome';
+import { installAboutSourceNotice } from '../../lib/onlyoffice/guards/about-source';
 import { generate } from '../../bin/build-pages.mjs';
 
-/**
- * The ONLYOFFICE attribution, pinned.
- *
- * This site is a derivative work of ONLYOFFICE, whose AGPL-3.0 headers add two
- * terms under Section 7 of that license: 7(b) requires the original product
- * logo to be retained when the program is distributed, and 7(e) declines to
- * grant any rights under trademark law. Both were being violated -- the header
- * logo was hidden by an injected stylesheet and the About pane switched off in
- * the DocEditor config, which left no product mark anywhere in the interface,
- * and no trademark notice existed in the repository or on the site.
- *
- * What makes this worth a test rather than a comment is how it happened: both
- * removals were deliberate UI tidy-ups ("strip the chrome a single-user local
- * editor does not need", docs/explorations/2026-08-12-v9-pure-ui-and-issue-regression-sweep.md).
- * The next tidy-up would do it again, and nothing else in the suite would go
- * red. So: the two suppressions cannot come back, and the notices cannot be
- * dropped. The runtime half -- that the logo and the About entry are really on
- * screen -- is test/e2e/vendor-branding.spec.ts.
- */
+/** Legal attribution stays available independently of product branding. */
 const ROOT = resolve(__dirname, '../..');
 const read = (rel: string) => readFileSync(resolve(ROOT, rel), 'utf8');
 
@@ -42,30 +26,74 @@ const READMES = [
   'readme.fa.md',
 ];
 
-describe('ONLYOFFICE product logo (AGPL-3.0 Section 7(b))', () => {
-  it('is not hidden by the chrome stylesheet the guards inject', () => {
-    const guard = read('lib/onlyoffice/guards/chrome.ts');
-    expect(guard, 'the header logo must not be hidden -- see NOTICE').not.toContain('#header-logo');
-    // The guard still has a job: these two describe a collaboration session a
-    // serverless build cannot have, and hiding them is unrelated to branding.
-    expect(guard).toContain('.btn-current-user');
-    expect(guard).toContain('#tlb-box-users');
+describe('neutral editor with legal attribution', () => {
+  it('keeps a neutral title after the editor updates its document caption', async () => {
+    const frame = document.createElement('iframe');
+    frame.id = 'branding-fixture';
+    document.body.appendChild(frame);
+    const doc = frame.contentDocument!;
+    doc.title = 'Report.docx - ONLYOFFICE';
+    injectLocalChromeCss(doc);
+    expect(doc.title).toBe('Report.docx');
+    doc.title = '* Renamed.docx - ONLYOFFICE';
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(doc.title).toBe('* Renamed.docx');
+    doc.title = 'ONLYOFFICE migration.docx';
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(doc.title).toBe('ONLYOFFICE migration.docx');
   });
 
-  it('is not removed with the About pane by the DocEditor config', () => {
-    const editor = read('lib/onlyoffice-editor.ts');
-    expect(editor, 'customization.about must stay at its default -- it is where the product logo lives').not.toMatch(
-      /\babout:\s*false/,
-    );
+  afterEach(() => {
+    document.querySelector('#branding-fixture')?.remove();
+    document.querySelector('#oo-local-chrome-css')?.remove();
+  });
+  it('hides product marks but preserves the About entry, copyright and version', () => {
+    const doc = document;
+    const fixture = doc.createElement('section');
+    fixture.id = 'branding-fixture';
+    doc.body.appendChild(fixture);
+    fixture.innerHTML = `<div id="header-logo"><i></i></div>
+      <button id="left-btn-about">About</button><div id="about-menu-panel">
+      <div class="asc-about-office"></div><div id="id-about-company-logo"></div>
+      <label class="asc-about-companyname">Ascensio System SIA</label>
+      <label id="id-about-licensor-version-name">9.3.0</label></div>`;
+    injectLocalChromeCss(doc);
+    for (const selector of ['#header-logo', '.asc-about-office', '#id-about-company-logo']) {
+      expect(window.getComputedStyle(doc.querySelector(selector)!).display).toBe('none');
+    }
+    for (const selector of ['#left-btn-about', '.asc-about-companyname', '#id-about-licensor-version-name']) {
+      expect(window.getComputedStyle(doc.querySelector(selector)!).display).not.toBe('none');
+    }
   });
 
-  it("is joined in the About pane by this build's own source offer (AGPL-3.0 Section 13)", () => {
-    const guard = read('lib/onlyoffice/guards/about-source.ts');
-    expect(guard).toContain('about-menu-panel');
-    expect(guard).toContain('https://github.com/ranuts/document');
-    expect(guard).toMatch(/not an official ONLYOFFICE product/);
-    // Mounted, or it is a file nothing runs.
-    expect(read('lib/onlyoffice/iframe-guards.ts')).toContain('installAboutSourceNotice(doc)');
+  it('offers source, license, copyright and warranty information from About', () => {
+    const doc = document.implementation.createHTMLDocument('Editor');
+    doc.body.innerHTML = '<div id="about-menu-panel"><p>Ascensio System SIA</p></div>';
+    installAboutSourceNotice(doc);
+    installAboutSourceNotice(doc);
+    expect(doc.querySelectorAll('#oo-source-notice')).toHaveLength(1);
+    const notice = doc.querySelector('#oo-source-notice')!;
+    expect(notice.textContent).toContain('not an official ONLYOFFICE product');
+    expect(notice.textContent).toContain('Copyright');
+    expect(notice.textContent).toContain('WITHOUT ANY WARRANTY');
+    expect(notice.querySelector('a[href="https://github.com/ranuts/document"]')).not.toBeNull();
+    expect(notice.querySelector('a[href="/LICENSE"]')).not.toBeNull();
+    expect(notice.querySelector('a[href="/NOTICE"]')).not.toBeNull();
+  });
+
+  it('adds the legal notice when the vendor populates About lazily', async () => {
+    const panel = document.createElement('div');
+    panel.id = 'about-menu-panel';
+    document.body.appendChild(panel);
+    try {
+      installAboutSourceNotice(document);
+      panel.innerHTML = '<p>Ascensio System SIA</p>';
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(panel.querySelectorAll('#oo-source-notice')).toHaveLength(1);
+      expect(panel.textContent).toContain('WITHOUT ANY WARRANTY');
+    } finally {
+      panel.remove();
+    }
   });
 });
 

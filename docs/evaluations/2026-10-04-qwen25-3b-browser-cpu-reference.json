@@ -1,0 +1,409 @@
+{
+  "scope": "Standalone browser CPU Worker using shipped count-capable wllama resources and exact verified official Qwen 3B GGUF; no native server or external inference. Same minimal messages/schema and requested sampling, different GGUF/runtime/template/sampler from MLC. Not native IM or quality acceptance; no production edits.",
+  "probeSHA256": "d09fa0243036e100d53318a6c178b4d950cba76ffbac0b1777c8f55de2cddb25",
+  "modelSHA256": "626b4a6678b86442240e33df819e00132d3ba7dddfe1cdc4fbb18e0a9615c62d",
+  "modelBytes": 2104932768,
+  "assetHashes": {
+    "client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745",
+    "wllama-BIOZ48O-.js": "b65183da008a366ec8136cbf4273bfa5f39563a1637994259adc9dda8b425690",
+    "wllama-BITawafS.wasm": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6",
+    "wllama-BcotrvZo.js": "1ef23c6430172113ae1e2abde9f35f539d16428fe40c555753079109e6720a06",
+    "wllama-CaONujPU.js": "334f21dd6d33ed3aa9c87464336d80658b0c327f1417683b7d0a2ff83ae6571d",
+    "wllama-CmLUJC6F.wasm": "6ca9fdd1b6c03206cd3a04e359b52c8f539896d6c5fb5d36243dded4a689f0ad",
+    "wllama-D0WL0fvJ.js": "9be038cc047c3b28b3d3f5cafd6796c747e356e75dfb8cf74bab252ff6077232",
+    "wllama-DCn7BVDp.js": "cf3e565d4ad2df41b992f68a6f8a733dfb8a906a0eaf4e039a7acbc1f1da4ff2",
+    "wllama-J6krg_E0.wasm": "49eab43b5cfa4e733f8b3d42246a364f18186dfb6d1d3d9f048f37be3fb57179",
+    "wllama-XMlyubPs.js": "22d945e5e38b15bf70e365c125a3bc16238e2641c351988abf6ef97947567dce",
+    "wllama-cpu-runtime-DuOKOCDd.js": "e04c2fd293cfc5486119ad2b739ab13beae7a67bfe2f027c5d55d3c66fbeeaf2",
+    "wllama-xnr7mLRC.wasm": "3c447fe82f5376b1202f909a414348421fe196ae069e1504010f55c0454f85f4"
+  },
+  "results": [
+    {
+      "id": "date-22",
+      "source": "ISO date: 2044-09-22.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-22",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "ISO date: 2044-09-22.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "stream": false,
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "local_task",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            },
+            "strict": true
+          }
+        }
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-22\"\n}"
+            }
+          }
+        ],
+        "created": 1791126243,
+        "model": "",
+        "system_fingerprint": "wllama",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 49,
+          "total_tokens": 68,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "id": "",
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 49,
+          "prompt_ms": 4368.81,
+          "prompt_per_token_ms": 89.15938775510205,
+          "prompt_per_second": 11.215868852158824,
+          "predicted_n": 19,
+          "predicted_ms": 1942.73,
+          "predicted_per_token_ms": 107.92944444444444,
+          "predicted_per_second": 9.265312215284677
+        }
+      },
+      "exact": true,
+      "responseMs": 6338.804999999702
+    },
+    {
+      "id": "date-current",
+      "source": "ISO date: 2026-10-04.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2026-10-04",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "ISO date: 2026-10-04.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "stream": false,
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "local_task",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            },
+            "strict": true
+          }
+        }
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2026-10-04\"\n}"
+            }
+          }
+        ],
+        "created": 1791126246,
+        "model": "",
+        "system_fingerprint": "wllama",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 49,
+          "total_tokens": 68,
+          "prompt_tokens_details": {
+            "cached_tokens": 35
+          }
+        },
+        "id": "",
+        "timings": {
+          "cache_n": 35,
+          "prompt_n": 14,
+          "prompt_ms": 1279.695,
+          "prompt_per_token_ms": 91.4067857142857,
+          "prompt_per_second": 10.940106822328758,
+          "predicted_n": 19,
+          "predicted_ms": 1930.831,
+          "predicted_per_token_ms": 107.26838888888888,
+          "predicted_per_second": 9.322410920479317
+        }
+      },
+      "exact": true,
+      "responseMs": 3216.4949999991804
+    },
+    {
+      "id": "zh-date",
+      "source": "预约日期：2044-09-23。",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "预约日期：2044-09-23。\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "stream": false,
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "local_task",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            },
+            "strict": true
+          }
+        }
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-23\"\n}"
+            }
+          }
+        ],
+        "created": 1791126249,
+        "model": "",
+        "system_fingerprint": "wllama",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 48,
+          "total_tokens": 67,
+          "prompt_tokens_details": {
+            "cached_tokens": 29
+          }
+        },
+        "id": "",
+        "timings": {
+          "cache_n": 29,
+          "prompt_n": 19,
+          "prompt_ms": 1728.519,
+          "prompt_per_token_ms": 90.97468421052632,
+          "prompt_per_second": 10.992068932999867,
+          "predicted_n": 19,
+          "predicted_ms": 1928.196,
+          "predicted_per_token_ms": 107.122,
+          "predicted_per_second": 9.33515057597879
+        }
+      },
+      "exact": true,
+      "responseMs": 3664.144999999553
+    },
+    {
+      "id": "pt-date",
+      "source": "A data da reserva é 2044-09-23.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "Copy the ISO date from the user text exactly. Return only JSON with one text field containing that date."
+          },
+          {
+            "role": "user",
+            "content": "A data da reserva é 2044-09-23.\n"
+          }
+        ],
+        "temperature": 0,
+        "top_p": 0.8,
+        "max_tokens": 512,
+        "stream": false,
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "local_task",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            },
+            "strict": true
+          }
+        }
+      },
+      "completion": {
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"text\": \"2044-09-23\"\n}"
+            }
+          }
+        ],
+        "created": 1791126253,
+        "model": "",
+        "system_fingerprint": "wllama",
+        "object": "chat.completion",
+        "usage": {
+          "completion_tokens": 19,
+          "prompt_tokens": 51,
+          "total_tokens": 70,
+          "prompt_tokens_details": {
+            "cached_tokens": 29
+          }
+        },
+        "id": "",
+        "timings": {
+          "cache_n": 29,
+          "prompt_n": 22,
+          "prompt_ms": 1997.385,
+          "prompt_per_token_ms": 90.79022727272728,
+          "prompt_per_second": 11.014401329738632,
+          "predicted_n": 19,
+          "predicted_ms": 1934.066,
+          "predicted_per_token_ms": 107.44811111111112,
+          "predicted_per_second": 9.306817864540301
+        }
+      },
+      "exact": true,
+      "responseMs": 3938.390000000596
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:5193/__cpu-reference",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/client-D5_UYdz1.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-DCn7BVDp.js",
+      "method": "GET",
+      "bodyBytes": 0
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-BITawafS.wasm",
+      "method": "GET",
+      "bodyBytes": 0
+    }
+  ],
+  "cases": [
+    {
+      "id": "date-22",
+      "source": "ISO date: 2044-09-22.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-22"
+    },
+    {
+      "id": "date-current",
+      "source": "ISO date: 2026-10-04.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2026-10-04"
+    },
+    {
+      "id": "zh-date",
+      "source": "预约日期：2044-09-23。",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    },
+    {
+      "id": "pt-date",
+      "source": "A data da reserva é 2044-09-23.",
+      "task": "summarize",
+      "instruction": "Return only the ISO date in the source, copied exactly. Do not translate, reformat or add words.",
+      "expected": "2044-09-23"
+    }
+  ],
+  "runtime": {
+    "wasmUrl": "http://127.0.0.1:5193/assets/wllama-BITawafS.wasm",
+    "compatibility": false,
+    "hasInlineWorker": false,
+    "crossOriginIsolated": true,
+    "navigatorGPU": false,
+    "threads": 4,
+    "context": 2048,
+    "fileBytes": 2104932768,
+    "fileName": "qwen2.5-3b-instruct-q4_k_m.gguf"
+  },
+  "status": "completed",
+  "pageURL": "http://127.0.0.1:5193/__cpu-reference",
+  "phase": "completed"
+}

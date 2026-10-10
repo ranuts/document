@@ -1,0 +1,152 @@
+{
+  "scope": "Completed 21 SDK replies for seven known-source rewrites across three variants; no unseen-source, summary, translation, native application or full device acceptance",
+  "rows": [
+    {
+      "id": "zh-CN-rewrite",
+      "variant": "product",
+      "verdict": "narrow-pass",
+      "basis": "Preserves ISO date, names, 18 sensors, pending proposal, delivery-team only-after permission, unsigned report and printed labels.",
+      "completionSHA256": "30bbeb4079308de281dbe48d32a2a0416f8fd4547f10cfce8df6a4bc558952aa"
+    },
+    {
+      "id": "zh-CN-rewrite",
+      "variant": "minimal",
+      "verdict": "fail",
+      "basis": "Reformats exact ISO 2049-03-12 to 2049年3月12日.",
+      "completionSHA256": "c18287e0fd15b5d00d4487156a0fa6fbd807a32a338d6b0d8e3fdd028e37b43c"
+    },
+    {
+      "id": "zh-CN-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves bounded source facts and exact date; small wording changes only.",
+      "completionSHA256": "1e339c95fa83186f2ba3f39accf173d949bec4e5a625a440adcfc0d1f5562f2b"
+    },
+    {
+      "id": "en-rewrite",
+      "variant": "product",
+      "verdict": "narrow-pass",
+      "basis": "Preserves proposal actor, 15 monitors, exact date, Uma permission, Oliver receipt confirmation and current unconfirmed status.",
+      "completionSHA256": "47d0b4e404b264f436e9b88d5ad1727d816cd8faf23d9a3b3f9ac9163872484c"
+    },
+    {
+      "id": "en-rewrite",
+      "variant": "minimal",
+      "verdict": "fail",
+      "basis": "Reformats ISO date to November 8, 2047 and numeric quantity 15 to fifteen.",
+      "completionSHA256": "da17e740e335c5ccb49e17f8347c343b9da9fd5c910ac9d30e36cda95a49c5c7"
+    },
+    {
+      "id": "en-rewrite",
+      "variant": "examples",
+      "verdict": "fail",
+      "basis": "English source becomes Chinese; ISO date is reformatted. Also weakens receipt-of-payment wording to payment.",
+      "completionSHA256": "2703fa1dcaf153dd20df04b25152f2e4783b9f872e02648894b70ae8c0105af7"
+    },
+    {
+      "id": "ja-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "basis": "Reformats ISO 2046-04-19 to 2046年4月19日.",
+      "completionSHA256": "3346c9f2c726099a6ede49e5d04dcbe9395b432729d2fdd58804c6d276ac7563"
+    },
+    {
+      "id": "ja-rewrite",
+      "variant": "minimal",
+      "verdict": "fail",
+      "basis": "Reformats ISO date, drops operating-team actor, and changes conditional permission into future deletion assertion.",
+      "completionSHA256": "ae3483a99ddc645ca034f8ffdbc413002f07c83a60df6ac6a9da4e839e8d5491"
+    },
+    {
+      "id": "ja-rewrite",
+      "variant": "examples",
+      "verdict": "fail",
+      "basis": "ISO date restored, but operating-team actor is omitted; deletion is recast as an action constrained by verification rather than preserving the named actor permission.",
+      "completionSHA256": "56c087510c983306d3e5f2bfd97f6e3161c96fe51610475ed6100273e9c1b398"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "product",
+      "verdict": "fail",
+      "basis": "Korean source becomes English, ISO date is reformatted, and Hana Lee is invented as camera recipient.",
+      "completionSHA256": "d0046b0d160cc7d50f3f29fe50bb08f310e68b6d0f17fa4a411b1ab015987d30"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "minimal",
+      "verdict": "fail",
+      "basis": "Source language and actors restored but exact ISO date reformatted to 2045년 12월 3일.",
+      "completionSHA256": "84f53b036a4e30277590b62152a41a61e18151b7bf7605d3b32c960c3471832e"
+    },
+    {
+      "id": "ko-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Korean, exact ISO date, names, 27 cameras, rental-team only-after permission, pending proposal/deposit and printed notice.",
+      "completionSHA256": "e1934ee9cd69d6423984b83fbed8c94dcc7e536e11b5de5d24d1793ad550498d"
+    },
+    {
+      "id": "de-rewrite",
+      "variant": "product",
+      "verdict": "narrow-pass",
+      "basis": "Preserves German, ISO date, 46 keyboards, proposal actor/pending approval, Kai only-after permission, Mila signature and current unsigned status/product list.",
+      "completionSHA256": "30a65696ac3afd6ad3122e37acf9237c4268ca76654e6aea65416adac8f3d4c0"
+    },
+    {
+      "id": "de-rewrite",
+      "variant": "minimal",
+      "verdict": "narrow-pass",
+      "basis": "Preserves German, ISO date, 46 keyboards, proposal actor/pending approval, Kai only-after permission, Mila signature and current unsigned status/product list.",
+      "completionSHA256": "aec135be670701f595e758145a7026f6f981a7437c81428563d61edfc8220f46"
+    },
+    {
+      "id": "de-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves German, ISO date, 46 keyboards, proposal actor/pending approval, Kai only-after permission, Mila signature and current unsigned status/product list.",
+      "completionSHA256": "afcafef7e9fe213010e61948af90515be79e51cf902a83c10b1aba0ba1a6ac84"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "product",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Spanish, ISO date, 12 places, proposal actor/pending approval, Omar only-after reservation, Luz authorization/current unauthorized status and prepared itinerary.",
+      "completionSHA256": "eea636f2dd638b7bc7c4f1d97acca2affe8c0957ae3ce13a527cdee47392c42c"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "minimal",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Spanish, ISO date, 12 places, proposal actor/pending approval, Omar only-after reservation, Luz authorization/current unauthorized status and prepared itinerary.",
+      "completionSHA256": "bed12ba73628516dde808b99a06faeb624201cdd66465461b68a6c5c8d91291b"
+    },
+    {
+      "id": "es-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Spanish, exact date/quantity, proposal status, Omar permission after Luz authorization, current unauthorized status and prepared itinerary.",
+      "completionSHA256": "a94235e7e457aaa7fca983cf4d70ace6ab2ab5ab8ce23c1bf29bed7cd831afb8"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "product",
+      "verdict": "uncertain",
+      "basis": "Bounded facts retained, but formal Portuguese quality is not certified; retains the questionable phrase após que from the prior native run.",
+      "completionSHA256": "9407ca364c13a006bd7bbd0be6972cedc01ed8fa33551e79de5f5fa5bc3f5fe4"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "minimal",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Portuguese, exact date, 64 records, proposal/pending approval, archive-team only-after permission, Ana validation, current incomplete validation and printed labels; avoids prior após que construction.",
+      "completionSHA256": "3164baec0980d01b23ac33ecc76974e4c15618d80d1aef1a9c7565a8c52f88d5"
+    },
+    {
+      "id": "pt-rewrite",
+      "variant": "examples",
+      "verdict": "narrow-pass",
+      "basis": "Preserves Portuguese, exact date, 64 records, proposal/pending approval, archive-team only-after permission, Ana validation, currently unvalidated backup and printed labels.",
+      "completionSHA256": "684390c1a75a5854624fc7f2b3f26884e5707a1157cbb73b6f8460e48bd09b45"
+    }
+  ]
+}

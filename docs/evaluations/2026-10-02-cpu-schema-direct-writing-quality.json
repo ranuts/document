@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-02T12:30:12.124Z",
+  "scope": "Actual current production UI selected-text writing, desktop Playwright WebKit CPU Qwen3-0.6B with native JSON Schema; isolated DOCX fixtures.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The request could not be completed. Try again or check settings.Restore request"
+      ],
+      "responseMs": 37156,
+      "documentUnchanged": true,
+      "previewCount": 0
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08, which has not been approved.\r\n",
+      "error": [],
+      "responseMs": 40682,
+      "documentUnchanged": false,
+      "previewCount": 0
+    }
+  ],
+  "errors": [],
+  "assessments": {
+    "formalEnglish": {
+      "passed": false,
+      "documentPreserved": true,
+      "reason": "Generic guidance; raw model response was not captured, so exact failure unknown."
+    },
+    "negationSummary": {
+      "passed": true,
+      "literalFactsPreserved": true,
+      "negationPreserved": true,
+      "shorter": true
+    }
+  },
+  "limitations": [
+    "One sample per writing task, not a reliability estimate.",
+    "No undo/save roundtrip was tested after the successful summary.",
+    "Schema format alone does not prove fidelity or formal style; failure needs raw-response diagnosis."
+  ]
+}

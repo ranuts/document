@@ -1,0 +1,3 @@
+# CPU zero output limit: token-count preflight feasibility
+
+The installed public SDK exposes completion but no complete-template token count method. Test actual native CPU chat with a short harmless message and max_tokens=0 set only at the captured SDK boundary. Capture original and actual limits, system/user messages, response/statistics/errors. Existing app inference flow remains unchanged; no document operation/Save. One sample does not establish no side effects or accurate general context counting. If text/tokens are generated or the call errors without prompt-token counts, do not treat this as a read-only token preflight. No production change/default change. Source/script hash and input capture must prove the zero limit actually reached SDK.

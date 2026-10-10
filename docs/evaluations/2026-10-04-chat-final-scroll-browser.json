@@ -1,0 +1,149 @@
+{
+  "probeSHA256": "2d069f251e309ed392382202460a0b2942e4ff2de29da7afeec77670a6bb8815",
+  "sources": {
+    "packages/chat-ui/src/chat-view.ts": "d3f5bc5006c1b38d81da976143e4795b898b4e05a5af0cfbb077e480e763f3b4",
+    "packages/chat-ui/src/styles.ts": "62af404a0266b0a5dadcd3e48c38b1de3a6a6818c009fc3c73b9df9d5fb8f869",
+    "packages/chat-ui/src/markdown.ts": "2abe61a51b5fc74a8a22e3daff08ce98afd234c36ea2e1f390c07c745464b909"
+  },
+  "results": [
+    {
+      "width": 1280,
+      "format": "list",
+      "atBottom": true,
+      "before": {
+        "top": 3274,
+        "height": 3738,
+        "client": 464
+      },
+      "after": {
+        "top": 3409,
+        "height": 3873,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "format": "list",
+      "atBottom": false,
+      "before": {
+        "top": 120,
+        "height": 3738,
+        "client": 464
+      },
+      "after": {
+        "top": 120,
+        "height": 3873,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "format": "table",
+      "atBottom": true,
+      "before": {
+        "top": 3320,
+        "height": 3784,
+        "client": 464
+      },
+      "after": {
+        "top": 3656,
+        "height": 4120,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "format": "table",
+      "atBottom": false,
+      "before": {
+        "top": 120,
+        "height": 3784,
+        "client": 464
+      },
+      "after": {
+        "top": 120,
+        "height": 4120,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "format": "list",
+      "atBottom": true,
+      "before": {
+        "top": 3828,
+        "height": 4292,
+        "client": 464
+      },
+      "after": {
+        "top": 3963,
+        "height": 4427,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "format": "list",
+      "atBottom": false,
+      "before": {
+        "top": 120,
+        "height": 4292,
+        "client": 464
+      },
+      "after": {
+        "top": 120,
+        "height": 4427,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "format": "table",
+      "atBottom": true,
+      "before": {
+        "top": 3874,
+        "height": 4338,
+        "client": 464
+      },
+      "after": {
+        "top": 4210,
+        "height": 4674,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "format": "table",
+      "atBottom": false,
+      "before": {
+        "top": 120,
+        "height": 4338,
+        "client": 464
+      },
+      "after": {
+        "top": 120,
+        "height": 4674,
+        "client": 464
+      },
+      "rendered": true,
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "scope": "Real Chromium current source ChatView with production styles; isolated layout harness, no model or native editor integration.",
+  "passed": true
+}

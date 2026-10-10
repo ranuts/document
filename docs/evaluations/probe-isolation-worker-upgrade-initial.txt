@@ -1,0 +1,89 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+import http from 'node:http';
+import { execFileSync } from 'node:child_process';
+const shipped = await fs.readFile('dist/sw.js', 'utf8');
+const vendor = shipped.match(/const VENDOR_VERSION = '([^']+)'/)[1];
+const old = execFileSync('git', ['show', '2a675a7:public/sw.js'], { encoding: 'utf8' }).replaceAll('SW_VERSION_PLACEHOLDER', 'isolation-old-control').replaceAll('VENDOR_VERSION_PLACEHOLDER', vendor);
+let isolated = false;
+const served = [];
+const server = http.createServer((request, response) => {
+  const url = new URL(request.url, 'http://localhost');
+  const policy = isolated ? { 'cross-origin-opener-policy': 'same-origin', 'cross-origin-embedder-policy': 'require-corp' } : {};
+  if (url.pathname === '/sw.js' && !isolated) {
+    response.writeHead(200, { 'content-type': 'application/javascript', 'cache-control': 'no-cache', ...policy }); response.end(old); return;
+  }
+  const upstream = http.request({ hostname: '127.0.0.1', port: 5193, path: request.url, method: request.method, headers: { ...request.headers, host: '127.0.0.1:5193' } }, incoming => {
+    const headers = { ...incoming.headers, ...policy };
+    served.push({ path: request.url, isolated, status: incoming.statusCode });
+    response.writeHead(incoming.statusCode, headers); incoming.pipe(response);
+  });
+  upstream.on('error', error => { response.writeHead(502); response.end(String(error)); });
+  request.pipe(upstream);
+});
+await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+const origin = 'http://127.0.0.1:' + server.address().port;
+const browser = await chromium.launch();
+const context = await browser.newContext();
+await context.addInitScript(() => { Object.defineProperty(window, 'showSaveFilePicker', { value: undefined, configurable: true }); });
+const page = await context.newPage();
+const report = { browserVersion: browser.version(), scope: 'Real HTTP proxy (no Playwright resource routes): warm native editor caches with old nonisolated worker; change host policy; actual app registration migrates to isolated worker; native startup and offline reopening. No AI inference or physical-device coverage.', vendor, warm: [], upgraded: [], offline: [], errors: [] };
+page.on('pageerror', error => report.errors.push(error.message));
+const ready = async () => {
+  await page.waitForFunction(() => {
+    const frame = document.querySelector('#app iframe');
+    const api = frame?.contentWindow?.editor ?? frame?.contentWindow?.Asc?.editor;
+    return api?.isDocumentLoadComplete && api?.isLoadFullApi;
+  }, {}, { timeout: 120000 });
+  return page.evaluate(() => {
+    const frame = document.querySelector('#app iframe');
+    const api = frame.contentWindow.editor ?? frame.contentWindow.Asc.editor;
+    return { isolated: crossOriginIsolated, iframeIsolated: frame.contentWindow.crossOriginIsolated, fullApi: api.isLoadFullApi, loaded: api.isDocumentLoadComplete, controller: navigator.serviceWorker.controller?.scriptURL };
+  });
+};
+try {
+  for (const type of ['docx', 'xlsx', 'pptx']) {
+    await page.goto(origin + '/editor?new=' + type + '&locale=en');
+    report.warm.push({ type, ...await ready() });
+  }
+  report.oldCachedPolicy = await page.evaluate(async () => {
+    const names = await caches.keys(), name = names.find(n => n.startsWith('document-editor-runtime-'));
+    const response = await (await caches.open(name)).match('/web-apps/apps/documenteditor/main/index.html');
+    return { name, policy: response?.headers.get('cross-origin-embedder-policy') };
+  });
+  isolated = true;
+  await page.goto(origin + '/');
+  await page.waitForFunction(() => navigator.serviceWorker.controller?.scriptURL.endsWith('/sw.js?isolation=1'), {}, { timeout: 60000 });
+  for (const type of ['docx', 'xlsx', 'pptx']) {
+    await page.goto(origin + '/editor?new=' + type + '&locale=en');
+    const row = { type, ...await ready() };
+    if (!row.isolated || !row.iframeIsolated || !row.controller.endsWith('?isolation=1')) throw Error('Upgrade did not isolate ' + type);
+    const downloadPromise = page.waitForEvent('download', { timeout: 120000 });
+    await page.frameLocator('#app iframe').locator('#slot-btn-dt-save button').click();
+    const download = await downloadPromise;
+    const artifact = '.scratch/ai-csp/worker-upgrade-native.' + type;
+    await download.saveAs(artifact);
+    row.nativeSave = { bytes: (await fs.stat(artifact)).size, failure: await download.failure() };
+    if (!row.nativeSave.bytes || row.nativeSave.failure) throw Error('Native save failed');
+    await page.goto(origin + '/');
+    const chooser = page.waitForEvent('filechooser'); await page.locator('#hero-open').click(); await (await chooser).setFiles(artifact);
+    row.reopened = await ready();
+    report.upgraded.push(row);
+    console.log(JSON.stringify(row));
+  }
+  await context.setOffline(true);
+  for (const type of ['docx', 'xlsx', 'pptx']) {
+    await page.goto(origin + '/editor?new=' + type + '&locale=en');
+    await context.setOffline(false); await context.setOffline(true);
+    const row = { type, ...await ready(), ...await page.evaluate(async () => { let rejected = false; try { await fetch('/__uncached_' + Date.now()); } catch { rejected = true; } return { online: navigator.onLine, networkRejected: rejected }; }) };
+    report.offline.push(row);
+    if (row.online || !row.networkRejected || !row.isolated || !row.iframeIsolated) throw Error('Offline isolation failed');
+  }
+  report.passed = report.warm.length === 3 && report.upgraded.length === 3 && report.offline.length === 3 && report.oldCachedPolicy.policy === null && !report.errors.length;
+} catch (error) { report.error = String(error); report.passed = false; }
+finally {
+  report.spellNetworkRequests = served.filter(item => item.path.includes('/sdkjs/common/spell/'));
+  await fs.writeFile('docs/evaluations/2026-10-03-isolation-worker-upgrade.json', JSON.stringify(report, null, 2) + '\n');
+  console.log(JSON.stringify(report));
+  await context.close(); await browser.close(); await new Promise(resolve => server.close(resolve));
+}

@@ -1,10 +1,10 @@
 ---
-title: Help — using the online document editor
-description: How to open, edit and save Word, Excel, PowerPoint, CSV and PDF files in the browser without uploading them; read-only and embedding, offline use, privacy boundaries, error codes and self-hosting.
+title: 'Help — using the online document editor'
+description: 'How to open, edit, save and recover documents; privacy boundaries and offline prerequisites. Local editing without required uploads.'
 eyebrow: Help
 breadcrumb: Help
 h1: Help
-lead: Practical answers for using the editor. Everything runs inside your browser tab; your files are never uploaded.
+lead: 'Open, view and edit DOCX, XLSX, PPTX and CSV in your browser without Office or an account. Core editing requires no document upload; offline use depends on cached resources.'
 ---
 
 ## Opening and creating documents
@@ -15,7 +15,7 @@ Word (`.docx`, legacy `.doc`), Excel (`.xlsx`, legacy `.xls`), PowerPoint (`.ppt
 
 ### How do I create a new document?
 
-Use **New Word / New Excel / New PowerPoint** on the homepage, or open `/editor?new=docx`, `/editor?new=xlsx`, `/editor?new=pptx` directly. Nothing is created on any server: the blank document exists only in your tab until you download it.
+Core opening, editing and conversion run locally in your browser without a required document upload. When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 
 ### Is there a file size limit?
 
@@ -25,7 +25,7 @@ No fixed limit. The practical ceiling is your device's memory, because the whole
 
 ### How do I save my changes?
 
-Press **Ctrl+S / ⌘S** or use **File → Download as**. Because there is no server, "saving" means the browser hands you the file: it lands in your Downloads folder under the original name. Choose a different format in **Download as** to convert (for example DOCX → PDF, XLSX → CSV).
+In Chrome, Edge and other browsers supporting the File System Access API, the first save asks you to choose a file and later saves write back to it. Other browsers download a copy. Export to another format with File → Download as. Recovery copies in the browser are separate from your saved file.
 
 ### Why is the Save button sometimes greyed out?
 
@@ -63,9 +63,7 @@ Yes — the editor is designed to be embedded in an iframe and driven with `post
 
 ### Can an AI assistant in my browser drive the editor?
 
-Yes, where the browser supports it. The editor registers a set of WebMCP tools, so a browser-based AI agent can open, convert, read and export documents by calling them directly instead of clicking through the interface. Everything still runs on your device — the agent triggers the same on-device code the buttons do, and nothing is uploaded.
-
-The tools are `open_document_url`, `open_document_buffer`, `create_document`, `save_document`, `get_document_text`, `set_readonly` and `get_document_state`.
+WebMCP tools perform editing and conversion locally, but a browser agent can receive document text or exported files and may send them to its own AI service. Check the agent’s data policy before sharing confidential content.
 
 ### Which browsers support it?
 
@@ -83,7 +81,7 @@ For word-processing documents, yes: `get_document_text` returns the text so the 
 
 ### Does it work offline?
 
-Yes. After the first visit the editor is cached by a service worker; you can install it as an app from the browser's address bar (PWA) and open documents with no connection. The first open of a document that uses many fonts still needs the network once to fetch those fonts; afterwards they are cached too.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.
 
 ### How do I get the newest version?
 
@@ -93,11 +91,11 @@ The site updates itself on the next visit. If a page seems stuck on an old build
 
 ### Are my documents uploaded anywhere?
 
-No. The document is read from your disk into the browser tab and processed there with WebAssembly. There is no upload endpoint on this site. You can verify this in the browser's network panel while opening and saving a document — and the source is open under AGPL-3.0.
+Core opening, editing and conversion run locally in your browser without a required document upload. The writing assistant only sends text where you point it: a service on your own machine keeps it on the device, while a cloud endpoint you configure with your own API key receives the selected text and your instruction. An embedding host can receive exported files and upload them according to its own policy.
 
 ### What does the page load from the network?
 
-Only the application itself: the editor's JavaScript, the WebAssembly converter, fonts and the page's own assets — all from this site's origin — plus a privacy-friendly Cloudflare Web Analytics beacon (no cookies, no cross-site tracking). If you enable the optional AI assistant with your own API key, its requests go directly from your browser to the provider you chose; nothing passes through this site.
+The page loads application code, editor resources, fonts and a Cloudflare Web Analytics beacon. Remote file URLs can make additional requests. If you configure a writing destination, a writing request also goes to the address shown in the assistant's settings. Embedding hosts and external browser agents determine their own data handling. Without a connection, a cloud writing destination cannot be reached; writing then needs a destination on this device.
 
 ## Errors
 
@@ -117,3 +115,11 @@ Open an issue on [GitHub](https://github.com/ranuts/document/issues) with the br
 ### Can I run my own copy?
 
 Yes. It is a static site, so any web server works: `docker run -d -p 8080:80 ghcr.io/ranuts/document:latest`, or build with `pnpm run build` and serve the `dist/` folder. See the [README](https://github.com/ranuts/document#readme) for HTTPS and basic-auth options and the [changelog](/changelog) for what each release changed.
+
+### What remains after I close the tab?
+
+When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
+
+### Is a built-in AI assistant available?
+
+The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.

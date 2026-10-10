@@ -1,0 +1,48 @@
+{
+  "scope": "Actual production CPU Qwen 0.6B streaming generation interrupted after visible text using visible Stop; plain status, restore request without resending, preserve new draft, and next real inference. Desktop Chromium; no native document mutation or physical mobile coverage.",
+  "errors": [],
+  "partialBeforeStop": "1,2,3,",
+  "workersBeforeStop": {
+    "created": 1,
+    "terminated": 0
+  },
+  "stopToEditableMs": 28,
+  "workersAfterStop": {
+    "created": 1,
+    "terminated": 1
+  },
+  "stopped": {
+    "status": "Stopped.Restore request",
+    "statusCount": 1,
+    "errorCount": 0,
+    "statusApplyCount": 0,
+    "partial": "1,2,3,",
+    "borderWidth": "0px",
+    "background": "rgba(0, 0, 0, 0)",
+    "inputEnabled": true,
+    "userCount": 1
+  },
+  "partialAfterWait": "1,2,3,",
+  "restored": {
+    "draft": "Count from 1 to 100, separated by commas. Start immediately with 1, 2, 3 and continue.",
+    "userCount": 1,
+    "running": false
+  },
+  "newDraftProtected": true,
+  "workersAfterReinit": {
+    "created": 2,
+    "terminated": 1
+  },
+  "engineBeforeNext": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "nextReply": "hello.",
+  "visibleErrors": [],
+  "previewCount": 0,
+  "passed": true,
+  "probeSource": "probe-im-cpu-partial-stream-stop.mjs",
+  "probeSha256": "84d70a7e11c259a91d993e3fc36d7fad84fd99a90541e4e3855b5965bf771655",
+  "limitations": [
+    "One Chromium CPU 0.6B counting sample; not a latency benchmark or writing-quality assessment.",
+    "The 1500 ms post-stop observation proves no visible late text within that window; native Worker termination is separately recorded.",
+    "No document mutation, Save roundtrip, physical mobile device or GPU coverage in this probe."
+  ]
+}

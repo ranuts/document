@@ -1,0 +1,50 @@
+{
+  "scope": "Controlled native pre_Paste cancellation gate with 200ms preparation delay; not actual font/network cancellation or product integration",
+  "result": {
+    "before": {
+      "history": 0,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": false
+    },
+    "pending": {
+      "history": 2,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": true
+    },
+    "canceled": {
+      "history": 0,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": true
+    },
+    "afterLate": {
+      "history": 0,
+      "text": [
+        "\r\n",
+        "\r\n",
+        "Earlier independent edit\r\n"
+      ],
+      "busy": true
+    },
+    "prepared": 1,
+    "skipped": 1,
+    "completed": 0,
+    "helperEndSource": "function(q){if(this.Api){this.pasteStart=AscFonts.IsCheckSymbols=\n!1;this.specialPasteProps=null;this.bSaveFormat=!1;this.specialPasteStart?(this.Special_Paste_End(),this.isPasteOptions?this.SpecialPasteButton_Show():this.buttonInfo.isClean()||(this.buttonInfo.asc_setOptions(null),this.Api.asc_ShowSpecialPasteButton(this.buttonInfo))):this.SpecialPasteButton_Show();this.isPasteOptions=null;if(!q||q&&this.endRecalcDocument)this.doNotShowButton=!1;this.bIsEndTransaction&&(this.bIsEndTransaction=!1,History.EndTransaction());(q=this.Api&&this.Api.WordControl?this.Api.WordControl.m_oLogicDocument:\nnull)&&q.Action&&q.Action.Start&&this.Api._finalizeAction&&this.Api._finalizeAction()}}"
+  },
+  "released": {
+    "busy": false,
+    "lock": false
+  },
+  "status": "passed"
+}

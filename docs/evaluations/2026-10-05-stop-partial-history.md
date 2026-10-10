@@ -1,0 +1,9 @@
+# Actual partial-response history contrast
+
+Two fresh native CPU 0.5B runs completed using driver/protocol frozen at 56efc22. The interrupted assistant text is extracted exactly from the committed raw SDK chunks at b4d2100; it is not newly invented model output. Both user requests, system prompt and native generation settings are unchanged from the capped/nonstream diagnostic. Original content is preserved, with either the exact partial alone or the same partial plus truthful `[已停止。]` annotation inserted as assistant before the current request.
+
+Partial-only returns `BRVO` with stop: it approaches the current label but misses one character and fails exact requested form. Partial-plus-status returns exact `BRAVO` with stop. This small observed development contrast makes the annotated representation a candidate for actual IM follow-up, not a proven general repair. Temperature is 0.7 with no fixed seed, one sample per variant; causal attribution to the annotation and robustness are unproven. Do not silently normalize BRVO into BRAVO or count it as exact success.
+
+Model/WASM/served SDK identities verify, both engines exited, browser closed, captured page errors empty and process exit 0. No product sources/history/defaults changed. `python3 docs/evaluations/verify-stop-partial-history.py` checks exact committed source extraction, frozen driver, mode-matched requests and identities/cleanup; it prints actual outcomes separately.
+
+Next: actual IM Stop with its newly generated partial retained plus truthful interruption state, same transformation for count/completion, and raw SDK/DOM evidence. Full persistence, continuation semantics, tools, switched sessions, other languages/models, offline and physical devices remain unaccepted. A candidate that preserves real partial content must not present it as a completed answer or drop earlier completed conversation turns.

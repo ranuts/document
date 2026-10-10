@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-27",
+  "browser": "Chrome 153 macOS",
+  "provider": "wllama",
+  "version": "3.6.1",
+  "model": "Qwen3-0.6B",
+  "artifact": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/main/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "bytes": 484220320,
+  "backendEvidence": "ggml_webgpu adapter_info vendor apple architecture metal-3",
+  "context": 2048,
+  "reasoning": false,
+  "benchmarkPrompt": "请把“我们会尽快处理你的请求”改写得更礼貌，只输出一句话。/no_think",
+  "benchmark": [
+    {
+      "firstMs": 1133.3000001907349,
+      "totalMs": 1327.6000003814697,
+      "output": "“我们会尽快处理你的请求。”"
+    },
+    {
+      "firstMs": 73.39999961853027,
+      "totalMs": 265.59999990463257,
+      "output": "“我们将尽快处理你的请求。”"
+    },
+    {
+      "firstMs": 76.59999990463257,
+      "totalMs": 236.2999997138977,
+      "output": "我们会尽快处理你的请求。"
+    }
+  ],
+  "writingSystemPrompt": "WRITING_SYSTEM_PROMPT",
+  "results": [
+    {
+      "locale": "zh-CN",
+      "text": "项目预算为 1,250 EUR。请在 2026-10-08 前提交报告。负责人为 Alex。",
+      "output": "1,250 EUR. Report to be submitted before October 8, 2026. Responsible: Alex.",
+      "firstMs": 505.30000019073486,
+      "totalMs": 1290.1000003814697,
+      "literalsPreserved": false
+    },
+    {
+      "locale": "en",
+      "text": "The project budget is 1,250 EUR. Submit the report by 2026-10-08. Alex is responsible.",
+      "output": "The project budget is 1,250 EUR. Report by 2026-10-08. Alex is responsible.",
+      "firstMs": 229.69999980926514,
+      "totalMs": 1135.1999998092651,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "ja",
+      "text": "予算は 1,250 EUR です。2026-10-08 までに報告書を提出してください。担当者は Alex です。",
+      "output": "1,250 EUR です。2026-10-08 までに報告書を提出してください。担当者は Alex です。",
+      "firstMs": 231.5,
+      "totalMs": 1269.8000001907349,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "ko",
+      "text": "예산은 1,250 EUR입니다. 2026-10-08까지 보고서를 제출해 주세요. 담당자는 Alex입니다.",
+      "output": "예산: 1,250 EUR  \n제출일: 2026-10-08  \n담당자: Alex",
+      "firstMs": 234.30000019073486,
+      "totalMs": 1182.3000001907349,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "de",
+      "text": "Das Budget beträgt 1,250 EUR. Bitte reichen Sie den Bericht bis 2026-10-08 ein. Alex ist verantwortlich.",
+      "output": "1,250 EUR. Alex ist verantwortlich.",
+      "firstMs": 233.2999997138977,
+      "totalMs": 613.7999997138977,
+      "literalsPreserved": false
+    },
+    {
+      "locale": "es",
+      "text": "El presupuesto es de 1,250 EUR. Entrega el informe antes del 2026-10-08. Alex es responsable.",
+      "output": "1,250 EUR. Entrega el informe antes del 2026-10-08. Alex es responsable.",
+      "firstMs": 230.7000002861023,
+      "totalMs": 1142.9000000953674,
+      "literalsPreserved": true
+    },
+    {
+      "locale": "pt",
+      "text": "O orçamento é de 1,250 EUR. Entregue o relatório até 2026-10-08. Alex é o responsável.",
+      "output": "O orçamento é de 1,250 EUR. Entregue o relatório até 2026-10-08. Alex é o responsável.",
+      "firstMs": 230.19999980926514,
+      "totalMs": 1402.6999998092651,
+      "literalsPreserved": true
+    }
+  ]
+}

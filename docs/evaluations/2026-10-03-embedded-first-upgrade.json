@@ -1,0 +1,99 @@
+{
+  "scope": "Actual cross-origin nonisolated parent embedding isolated-policy editor after warming old nonisolated vendor caches. First upgrade must open the native document without reload or cache rewriting. Not all third-party storage partitions or model inference.",
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:52628/editor",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:52628/editor",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "console": [
+    "SW registered:  ServiceWorkerRegistration",
+    "SW registered:  ServiceWorkerRegistration",
+    "SW registered:  ServiceWorkerRegistration"
+  ],
+  "warm": {
+    "isolated": false,
+    "policy": null,
+    "controller": "http://127.0.0.1:52628/sw.js"
+  },
+  "controlMessages": [
+    {
+      "type": "document:ready",
+      "payload": {}
+    },
+    {
+      "type": "document:opened",
+      "payload": {
+        "readonly": false
+      }
+    }
+  ],
+  "controlLoaded": true,
+  "embedded": {
+    "isolated": false,
+    "framePresent": true,
+    "fullApi": true,
+    "loaded": true,
+    "controller": "http://127.0.0.1:52628/sw.js?isolation=1"
+  },
+  "isolatedMessages": [
+    {
+      "type": "document:ready",
+      "payload": {}
+    },
+    {
+      "type": "document:opened",
+      "payload": {
+        "readonly": false
+      }
+    }
+  ],
+  "parentIsolated": false,
+  "compatible": true,
+  "policy": {
+    "shellMatchWithoutIgnoreVary": true,
+    "coreEntries": [
+      {
+        "url": "http://127.0.0.1:52628/editor",
+        "vary": "Origin",
+        "coep": "require-corp"
+      },
+      {
+        "url": "http://127.0.0.1:52628/editor.html",
+        "vary": "Origin",
+        "coep": "require-corp"
+      },
+      {
+        "url": "http://127.0.0.1:52628/assets/editor-Bs2dljCm.js",
+        "vary": "Origin",
+        "coep": "require-corp"
+      },
+      {
+        "url": "http://127.0.0.1:52628/assets/editor-Ci0XLiSK.css",
+        "vary": "Origin",
+        "coep": "require-corp"
+      }
+    ],
+    "shellVary": "Origin",
+    "cacheNames": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1791008224"
+    ],
+    "registrations": [
+      {
+        "active": "activated"
+      }
+    ],
+    "shellCoep": "require-corp",
+    "shellCoop": "same-origin",
+    "nativeStoredCoep": "require-corp",
+    "workerVersion": "1791008224"
+  },
+  "firstUpgradeCompatible": true,
+  "passed": true
+}

@@ -10,6 +10,113 @@ const textResponse = (text: string): LLMResponse => ({
   assistant: { role: 'assistant', content: [{ type: 'text', text }] },
 });
 
+it('bounds model requests while returning complete archival history', async () => {
+  const history: LLMMessage[] = [
+    { role: 'user', content: 'old'.repeat(1000) },
+    { role: 'assistant', content: 'answer'.repeat(1000) },
+  ];
+  const chat = vi.fn().mockResolvedValue(textResponse('new answer'));
+  const trimmed = vi.fn();
+  const result = await runAgent({ name: 'test', isReady: () => true, chat }, 'new request', {
+    history,
+    maxContextBytes: 400,
+    onContextTrimmed: trimmed,
+  });
+  expect(chat.mock.calls[0][0]).toEqual([{ role: 'user', content: 'new request' }]);
+  expect(result.messages).toHaveLength(4);
+  expect(result.messages.slice(0, 2)).toEqual(history);
+  expect(trimmed).toHaveBeenCalledTimes(1);
+});
+it('never dispatches a tool returned after cancellation', async () => {
+  const abort = new AbortController();
+  let finish!: (response: LLMResponse) => void;
+  const execute = vi.fn();
+  const pending = runAgent(
+    {
+      name: 'test',
+      isReady: () => true,
+      chat: () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    },
+    'write',
+    {
+      signal: abort.signal,
+      tools: {
+        insert_text: { name: 'insert_text', description: 'write', inputSchema: {}, readOnlyHint: false, execute },
+      },
+    },
+  );
+  abort.abort();
+  finish(toolResponse('late', 'insert_text', { text: 'unwanted' }));
+  expect((await pending).aborted).toBe(true);
+  expect(execute).not.toHaveBeenCalled();
+});
+it('checks cancellation between tools and preserves result pairing for cancelled calls', async () => {
+  const abort = new AbortController();
+  const execute = vi.fn(async () => {
+    abort.abort();
+    return { done: true };
+  });
+  const response = toolResponse('one', 'write', {});
+  response.toolCalls.push({ id: 'two', name: 'write', input: {} });
+  const result = await runAgent({ name: 'test', isReady: () => true, chat: async () => response }, 'write', {
+    signal: abort.signal,
+    tools: { write: { name: 'write', description: 'write', inputSchema: {}, readOnlyHint: false, execute } },
+  });
+  expect(execute).toHaveBeenCalledTimes(1);
+  expect(result.aborted).toBe(true);
+  expect(result.messages.at(-1)?.content).toEqual(
+    expect.arrayContaining([expect.objectContaining({ toolUseId: 'two', isError: true })]),
+  );
+});
+it.each([1, 8])('cancels a delayed tool write with an iteration limit of %i', async (maxIterations) => {
+  const abort = new AbortController();
+  let start!: () => void;
+  const started = new Promise<void>((resolve) => {
+    start = resolve;
+  });
+  let release!: () => void;
+  const ready = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const writes: string[] = [];
+  const { provider, chat } = scripted([toolResponse('write', 'insert_text', { text: 'unwanted' })]);
+  const pending = runAgent(provider, 'write', {
+    maxIterations,
+    signal: abort.signal,
+    tools: {
+      insert_text: makeTool('insert_text', async (input, signal) => {
+        start();
+        await ready;
+        signal?.throwIfAborted();
+        writes.push(String(input.text));
+        return { inserted: true };
+      }),
+    },
+  });
+  await started;
+  abort.abort(new Error('Stopped by user'));
+  release();
+  const result = await pending;
+  expect(writes).toEqual([]);
+  expect(result.aborted).toBe(true);
+  expect(result.stoppedOnLimit).toBe(false);
+  expect(chat).toHaveBeenCalledTimes(1);
+  expect(result.messages.at(-1)?.content).toEqual([
+    { type: 'tool_result', toolUseId: 'write', content: 'Stopped by user', isError: true },
+  ]);
+});
+it('supplies fresh scope only in model requests without contaminating saved or displayed text', async () => {
+  const chat = vi.fn().mockResolvedValue(textResponse('answer'));
+  const result = await runAgent({ name: 'test', isReady: () => true, chat }, 'question', {
+    requestContext: '{"kind":"cell","range":"B2:B10"}',
+  });
+  expect(chat.mock.calls[0][0][0].content).toContain('B2:B10');
+  expect(result.messages[0]).toEqual({ role: 'user', content: 'question' });
+});
+
 const toolResponse = (id: string, name: string, input: Record<string, unknown>): LLMResponse => ({
   text: '',
   toolCalls: [{ id, name, input }],
@@ -174,4 +281,92 @@ describe('runAgent', () => {
     expect(events.find((e) => e.type === 'assistant')).toMatchObject({ text: 'Hello', streamed: true });
     expect(result.text).toBe('Hello');
   });
+});
+
+it('retains current document scope and two complete tool exchanges after trimming old history', async () => {
+  const history: LLMMessage[] = [
+    { role: 'user', content: '旧文档范围🧾'.repeat(400) },
+    { role: 'assistant', content: '旧结果'.repeat(400) },
+  ];
+  const original = structuredClone(history);
+  const { provider, snapshots } = scripted([
+    toolResponse('read-one', 'read', { range: 'B2' }),
+    toolResponse('read-two', 'read', { range: 'C2' }),
+    textResponse('完成'),
+  ]);
+  const execute = vi.fn(async ({ range }) => ({ range, value: '中文🧾' }));
+  const trimmed = vi.fn();
+  const result = await runAgent(provider, '检查这两个单元格', {
+    history,
+    requestContext: '{"kind":"cell","range":"B2:C2"}',
+    maxContextBytes: 1600,
+    tools: { read: makeTool('read', execute) },
+    onContextTrimmed: trimmed,
+  });
+  expect(snapshots).toHaveLength(3);
+  for (const request of snapshots) {
+    expect(request[0].content).toContain('B2:C2');
+    expect(request[0].content).toContain('检查这两个单元格');
+    expect(JSON.stringify(request)).not.toContain('旧文档');
+  }
+  expect(snapshots[2].slice(1)).toEqual([
+    toolResponse('read-one', 'read', { range: 'B2' }).assistant,
+    {
+      role: 'user',
+      content: [
+        { type: 'tool_result', toolUseId: 'read-one', content: '{"range":"B2","value":"中文🧾"}', isError: false },
+      ],
+    },
+    toolResponse('read-two', 'read', { range: 'C2' }).assistant,
+    {
+      role: 'user',
+      content: [
+        { type: 'tool_result', toolUseId: 'read-two', content: '{"range":"C2","value":"中文🧾"}', isError: false },
+      ],
+    },
+  ]);
+  expect(trimmed).toHaveBeenCalledTimes(1);
+  expect(execute).toHaveBeenCalledTimes(2);
+  expect(history).toEqual(original);
+  expect(result.messages.slice(0, 2)).toEqual(original);
+  expect(result.messages[2]).toEqual({ role: 'user', content: '检查这两个单元格' });
+  expect(result.messages).toHaveLength(8);
+});
+
+it('stops before another inference when the current tool exchange exceeds the context budget', async () => {
+  const { provider, chat } = scripted([toolResponse('large', 'read', {})]);
+  const execute = vi.fn(async () => '中文🧾'.repeat(500));
+  await expect(
+    runAgent(provider, '读取', {
+      tools: { read: makeTool('read', execute) },
+      maxContextBytes: 400,
+    }),
+  ).rejects.toThrow('agentContextTooLong');
+  expect(chat).toHaveBeenCalledTimes(1);
+  expect(execute).toHaveBeenCalledTimes(1);
+});
+
+it('surfaces provider token trimming while preserving archival messages', async () => {
+  const history: LLMMessage[] = [
+    { role: 'user', content: 'old' },
+    { role: 'assistant', content: 'answer' },
+  ];
+  const trimmed = vi.fn();
+  const chat = vi.fn().mockResolvedValue({ ...textResponse('new answer'), contextTrimmed: true });
+  const result = await runAgent({ name: 'test', isReady: () => true, chat }, 'new request', {
+    history,
+    onContextTrimmed: trimmed,
+  });
+  expect(trimmed).toHaveBeenCalledOnce();
+  expect(result.messages.slice(0, 2)).toEqual(history);
+  expect(result.messages).toHaveLength(4);
+});
+
+it('passes long input intact to a provider that budgets the final request by tokens', async () => {
+  const chat = vi.fn().mockResolvedValue(textResponse('answer'));
+  const provider = { name: 'measured', isReady: () => true, hasExactContextBudget: () => true, chat };
+  const request = 'a'.repeat(10000);
+  await runAgent(provider, request);
+  expect(chat.mock.calls[0][0]).toEqual([{ role: 'user', content: request }]);
+  await expect(runAgent(provider, request, { maxContextBytes: 400 })).rejects.toThrow('agentContextTooLong');
 });

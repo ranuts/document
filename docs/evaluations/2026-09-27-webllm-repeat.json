@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-27",
+  "browser": "Chrome 153 macOS",
+  "model": "Qwen3-0.6B-q4f16_1-MLC",
+  "backend": "WebGPU apple",
+  "prompt": "请把“我们会尽快处理你的请求”改写得更礼貌，只输出一句话。/no_think",
+  "results": [
+    {
+      "firstMs": 560.0999999046326,
+      "totalMs": 748.5,
+      "output": "<think>\n\n\"我们将尽快处理您的请求\"。"
+    },
+    {
+      "firstMs": 297.19999980926514,
+      "totalMs": 451.30000019073486,
+      "output": "<think>\n\n\"我们将尽快处理您的请求。\""
+    },
+    {
+      "firstMs": 293.59999990463257,
+      "totalMs": 445.09999990463257,
+      "output": "<think>\n\n\"我们将尽快处理您的请求。\""
+    }
+  ]
+}

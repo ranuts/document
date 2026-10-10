@@ -1,0 +1,7 @@
+# Model identity behind readable status
+
+The current writing regression driver verifies the readable status is WebGPU, the status title is the exact selected Qwen3-1.7B-q4f16_1-MLC ID, and every actual Worker request uses that exact ID. A friendly catalog label alone no longer serves as model identity. Historical drivers/reports remain unchanged and hash-bound; this new driver supports the current UI.
+
+Eight previously observed Chinese/English fixtures completed on the current production build. Captured complete Worker inputs, raw generated text, applied/refused outcomes and final document text exactly match the earlier explicit-renminbi-fix regression. All six native edits have exact Undo/Redo; two refusals preserve original selections. No preview cards, no harness errors, bundle bytes unchanged during the probe. Browser closed; no Save. UI shows WebGPU · Qwen3 · 1.7B, exact title and captured Worker ID both Qwen3-1.7B-q4f16_1-MLC.
+
+This proves the label change preserves these existing inference/regression outcomes; it does not independently hash model weights, certify general factual quality or turn known failures into successes. Previously documented omissions/style failures remain. Run verify-current-model-identity-writing.py for fixture/request/native mechanics and exact comparison to the earlier raw report. Evidence-only change: no production rebuild or full-suite repeat; last product build/full checks remain the readable-status validation.

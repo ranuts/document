@@ -1,0 +1,30 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+    },
+    {
+      "event": "closed",
+      "id": 2
+    }
+  ],
+  "offlineRequests": [],
+  "probeSHA256": "3de2a4baafb9ceb4ac681878b4ab555073283a607e605af1b1863b61f81e2f8b",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "status": "failed",
+  "error": "Error: Initial Workers did not close"
+}

@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-02T17:57:10.696Z",
+  "scope": "Actual production native header Save after exact IM text write, isolated persistent Chromium; warm local WebGPU model then offline reload, IM Word insertion and native Undo",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790963460"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "before": "\r\n",
+  "responseMs": 3299,
+  "after": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved\r\n",
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "inserted": true,
+  "expected": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+  "nativeSave": {
+    "suggestedFilename": "New_Document.docx",
+    "artifactPath": ".scratch/ai-csp/im-native-save.docx",
+    "bytes": 25908,
+    "failure": null,
+    "ooxmlProof": {
+      "zipValid": true,
+      "sha256": "ae25822150a700425e55389b393203a51f9e525180684ef92fa88177404102a6",
+      "contents": {
+        "paragraphs": [
+          "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved"
+        ],
+        "exactText": true
+      },
+      "scope": "Actual visible native Save download fallback; saved OOXML inspected, not an original-file OS overwrite test."
+    }
+  },
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BrS_hCZ0.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "afterUndo": "\r\n",
+  "undoRestored": true,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790963833522.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/100",
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "reopen": {
+    "status": "passed",
+    "scope": "Actual offline homepage file chooser opens saved download; no model generation during reopen.",
+    "networkControl": {
+      "reachable": false,
+      "error": "TypeError: Failed to fetch"
+    },
+    "snapshot": {
+      "text": "项目付款 / Payment · Alex · 1,250 EUR · 2026-10-08 · NOT approved\r\n"
+    },
+    "exactText": true,
+    "errors": []
+  },
+  "assessment": {
+    "bundle": "editor-BrS_hCZ0.js",
+    "productCommit": "79c71f8",
+    "scope": "Desktop Chromium cached/offline Qwen3-1.7B actual IM tool write, visible native header Save, OOXML inspection and offline homepage file-open; no new preview/confirmation UI.",
+    "visualQA": "Reopened screenshot inspected; text present in Word, exact cell values independently verified in Excel."
+  },
+  "limitations": [
+    "One short exact-text operation per editor/model, not broad formatting/formula/layout validation.",
+    "Native download fallback tested; original-file OS overwrite and physical startup offline unverified.",
+    "Save/Undo tests do not establish all style/comment/review effects."
+  ]
+}

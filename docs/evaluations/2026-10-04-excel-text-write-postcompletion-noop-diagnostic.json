@@ -1,0 +1,290 @@
+{
+  "status": "completed",
+  "hashes": {
+    "editor-action": "278280a86045baadeb6838c0204425a73a19eb85f586eba5b744ddd98ba936f9",
+    "native-redo": "b5fba0a3c1a7d5a7b280bebccc4a8e877c578c904e781ea481ba33e4d4386a58",
+    "excel-cell-format": "72cc4293d3e46b4c2477a226495e05a89e6c342df40833f59f4a4eecc172dc64",
+    "excel-history-group": "77f942701995ed53de2a070c04db7956418b0647b08e514adf6788010fd84c11",
+    "excel-history-ownership": "e6ab5d85c4d4a8132aff153196fc9986edd3664605d8465e4053faacad5f9c28",
+    "excel-native-paste": "1c64981c3e30d6db142c2dd4b69d326e0236c709a1e14cee1489601d5ea7cff0",
+    "excel-paste-guard": "7aaa4ea61cc215e2214a1bffd76fff8717207382973a7068f2be5d60200f65b7",
+    "excel-text-preflight": "5aedb3ee752621a6f5fa515d44e6d75d8c8a9362d412047612478f05c3bf1bd8",
+    "excel-text-transaction": "bb7e9d2ec04fdd42d489bc0af5aa61f73455851d01ae0dd81f93b1189fe4dd1b",
+    "excel-text-write": "fa1817f7c1fe388d5c8aae1905072889fb623790f003b85cdb4afabde6a8a671"
+  },
+  "cases": [
+    {
+      "mode": "success",
+      "originalFormat": "General",
+      "before": {
+        "value": "30",
+        "format": "General"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "00123",
+        "format": "General"
+      },
+      "foreignFormat": "General",
+      "groupIndex": -1,
+      "busy": false,
+      "undo": {
+        "value": "30",
+        "format": "General"
+      },
+      "redo": {
+        "value": "00123",
+        "format": "General"
+      }
+    },
+    {
+      "mode": "cancel",
+      "originalFormat": "General",
+      "before": {
+        "value": "30",
+        "format": "General"
+      },
+      "failure": {
+        "name": "AbortError",
+        "message": "signal is aborted without reason"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": true,
+      "after": {
+        "value": "30",
+        "format": "General"
+      },
+      "foreignFormat": "General",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "foreign",
+      "originalFormat": "General",
+      "before": {
+        "value": "30",
+        "format": "General"
+      },
+      "failure": {
+        "name": "Error",
+        "message": "Paste ownership has expired"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "30",
+        "format": "General"
+      },
+      "foreignFormat": "0%",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "foreignStop",
+      "originalFormat": "General",
+      "before": {
+        "value": "30",
+        "format": "General"
+      },
+      "failure": {
+        "name": "AbortError",
+        "message": "signal is aborted without reason"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "30",
+        "format": "General"
+      },
+      "foreignFormat": "0.0",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "postCompleteForeign",
+      "originalFormat": "General",
+      "before": {
+        "value": "30",
+        "format": "General"
+      },
+      "failure": {
+        "name": "Error",
+        "message": "Paste target has expired"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "00123",
+        "format": "General"
+      },
+      "foreignFormat": "0.000",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "postCompleteForeignStop",
+      "originalFormat": "General",
+      "before": {
+        "value": "30",
+        "format": "General"
+      },
+      "failure": {
+        "name": "AbortError",
+        "message": "signal is aborted without reason"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "30",
+        "format": "General"
+      },
+      "foreignFormat": "0.000",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "success",
+      "originalFormat": "0.00",
+      "before": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "00123",
+        "format": "0.00"
+      },
+      "foreignFormat": "0.000",
+      "groupIndex": -1,
+      "busy": false,
+      "undo": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "redo": {
+        "value": "00123",
+        "format": "0.00"
+      }
+    },
+    {
+      "mode": "cancel",
+      "originalFormat": "0.00",
+      "before": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "failure": {
+        "name": "AbortError",
+        "message": "signal is aborted without reason"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": true,
+      "after": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "foreignFormat": "0.000",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "foreign",
+      "originalFormat": "0.00",
+      "before": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "failure": {
+        "name": "Error",
+        "message": "Paste ownership has expired"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "foreignFormat": "0.00",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "foreignStop",
+      "originalFormat": "0.00",
+      "before": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "failure": {
+        "name": "AbortError",
+        "message": "signal is aborted without reason"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "foreignFormat": "0.0",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "postCompleteForeign",
+      "originalFormat": "0.00",
+      "before": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "failure": {
+        "name": "Error",
+        "message": "Paste target has expired"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "00123",
+        "format": "0.00"
+      },
+      "foreignFormat": "0.000",
+      "groupIndex": -1,
+      "busy": false
+    },
+    {
+      "mode": "postCompleteForeignStop",
+      "originalFormat": "0.00",
+      "before": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "failure": {
+        "name": "AbortError",
+        "message": "signal is aborted without reason"
+      },
+      "backupDepthBefore": 0,
+      "backupDepthAfter": 0,
+      "oldFuturePresent": false,
+      "after": {
+        "value": "30",
+        "format": "0.00"
+      },
+      "foreignFormat": "0.000",
+      "groupIndex": -1,
+      "busy": false
+    }
+  ],
+  "errors": []
+}

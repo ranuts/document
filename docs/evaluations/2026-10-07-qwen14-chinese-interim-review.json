@@ -1,0 +1,22 @@
+{
+  "scope": "Three known-source Chinese development tasks; no unseen or seven-language acceptance",
+  "receipt_sha256": "83d578666abc641a2e9de8fe84bb7c831c370d7a24ef544701bece2dea07ecf2",
+  "decisions": [
+    {
+      "id": "zh-CN-rewrite",
+      "verdict": "fail",
+      "reason": "Raw output changes ISO date to Chinese format; current editor rejects write and retains source."
+    },
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "fail",
+      "reason": "Applied summary omits delivery team as the actor permitted to ship; condition and current unsigned status retained."
+    },
+    {
+      "id": "zh-CN-translate",
+      "verdict": "narrow-pass",
+      "reason": "English translation preserves names, ISO date, count, proposal approval status, delivery-team actor, only-after signature condition, unsigned report and printed labels."
+    }
+  ],
+  "candidate_promoted": false
+}

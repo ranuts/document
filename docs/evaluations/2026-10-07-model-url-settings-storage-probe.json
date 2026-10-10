@@ -1,0 +1,31 @@
+{
+  "scope": "Fresh isolated Chromium synthetic settings persistence observation; no real credential or model inference",
+  "marker": "PUBLIC_SYNTHETIC_AUTH_20261007",
+  "modelRequests": [],
+  "errors": [],
+  "settings": [
+    {
+      "key": "agent-panel-gguf-url",
+      "requested": "https://example.invalid/synthetic-model.gguf?token=PUBLIC_SYNTHETIC_AUTH_20261007",
+      "stored": "https://example.invalid/synthetic-model.gguf?token=PUBLIC_SYNTHETIC_AUTH_20261007"
+    },
+    {
+      "key": "agent-local-model-url",
+      "requested": "https://example.invalid/models/?signature=PUBLIC_SYNTHETIC_AUTH_20261007",
+      "stored": "https://example.invalid/models/?signature=PUBLIC_SYNTHETIC_AUTH_20261007"
+    },
+    {
+      "key": "agent-local-model-lib",
+      "requested": "https://example.invalid/model.wasm?access_token=PUBLIC_SYNTHETIC_AUTH_20261007",
+      "stored": "https://example.invalid/model.wasm?access_token=PUBLIC_SYNTHETIC_AUTH_20261007"
+    }
+  ],
+  "secondPageStored": {
+    "agent-panel-gguf-url": "https://example.invalid/synthetic-model.gguf?token=PUBLIC_SYNTHETIC_AUTH_20261007",
+    "agent-local-model-url": "https://example.invalid/models/?signature=PUBLIC_SYNTHETIC_AUTH_20261007",
+    "agent-local-model-lib": "https://example.invalid/model.wasm?access_token=PUBLIC_SYNTHETIC_AUTH_20261007"
+  },
+  "persisted": true,
+  "observationPassed": true,
+  "closed": true
+}

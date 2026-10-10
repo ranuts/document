@@ -1,0 +1,13 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs/promises';
+const r={scope:'warmed desktop Chromium, browser offline emulation',errors:[],failures:[]};let c;
+try {
+ c=await chromium.launchPersistentContext('.scratch/default-cpu-process-profile-20261005',{channel:'chromium',serviceWorkers:'allow',viewport:{width:1280,height:900}});
+ for(const p of c.pages())await p.close();await c.setOffline(true);r.offline=true;
+ const p=await c.newPage();p.on('pageerror',e=>r.errors.push(e.message));p.on('requestfailed',q=>r.failures.push({url:q.url(),error:q.failure()?.errorText}));
+ const response=await p.goto('http://127.0.0.1:5193/');r.homeFromSW=response.fromServiceWorker();
+ const chooser=p.waitForEvent('filechooser');await p.locator('#hero-open').click();await(await chooser).setFiles('.scratch/2026-10-07-current-offline-xlsx-sort-sum-history.xlsx');
+ await p.waitForFunction(()=>{const a=document.querySelector('#app iframe')?.contentWindow?.Asc?.editor;return a?.isDocumentLoadComplete&&a?.isLoadFullApi;},null,{timeout:90000});
+ r.text=await p.evaluate(()=>document.querySelector('#app iframe').contentWindow.Asc.editor.wb.getWorksheet().model.getRange3(1,1,1,1).getValue());
+ r.table=await p.evaluate(()=>{const m=document.querySelector('#app iframe').contentWindow.Asc.editor.wb.getWorksheet().model;return [0,1,2,3].map(r=>[0,1,2,3].map(c=>m.getRange3(r,c,r,c).getValue()));});r.scripts=await p.evaluate(()=>Array.from(document.scripts,s=>s.src));r.passed=r.scripts.some(s=>s.endsWith('/assets/editor-a29E5U4S.js'))&&r.homeFromSW&&!r.errors.length&&JSON.stringify(r.table)===JSON.stringify([['Item','Amount','KEEP_OUTSIDE',''],['Camera','7','','37'],['Monitor','12','',''],['Sensor','18','','']]);
+}catch(e){r.error=String(e);r.passed=false;}finally{if(c)await c.close();r.closed=true;await fs.writeFile('.scratch/2026-10-07-current-offline-xlsx-sort-sum-reopen.json',JSON.stringify(r,null,2));console.log(JSON.stringify(r));}if(!r.passed)process.exitCode=1;

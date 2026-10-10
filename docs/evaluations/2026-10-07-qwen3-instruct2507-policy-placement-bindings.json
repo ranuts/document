@@ -1,0 +1,31 @@
+{
+  "processExitCode": 0,
+  "scope": "Terminal contrast; initial and after hashes unchanged; mechanics do not certify semantic quality",
+  "initial": {
+    "scope": "Before first contrast inference after original process exited 0",
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-policy-placement-native.mjs": "36386020964aef00cb5d8e77533f25efa0ca1bacef74066dba49f58eb6841aff",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-policy-placement-protocol.md": "255d05a3768dae80ff0242384b8ae494e795f66d17f8dc99b9c399faaaba906b",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+      "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+      "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    }
+  },
+  "afterSHA256": {
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-policy-placement-native.mjs": "36386020964aef00cb5d8e77533f25efa0ca1bacef74066dba49f58eb6841aff",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-policy-placement-protocol.md": "255d05a3768dae80ff0242384b8ae494e795f66d17f8dc99b9c399faaaba906b",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+    "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+    "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen3-instruct2507-policy-placement-native.json": "e8a7a7f9b6e91cb0b2b5a0b43a51a94cf6f2ebdabc165bd193624512a5a79393",
+    "2026-10-07-qwen3-instruct2507-policy-placement-review.json": "40a9cf5c6ce2412a38ff451dfd55c24f5de7982dde393a9a0bdda5cf6851b51b",
+    "2026-10-07-qwen3-instruct2507-policy-placement-analysis.md": "d0f2f14003ff8bfc9d23dea27d368521bc846a3ee10aea46e498e8c0e2ff956c",
+    "2026-10-07-qwen3-instruct2507-policy-placement-protocol.md": "255d05a3768dae80ff0242384b8ae494e795f66d17f8dc99b9c399faaaba906b",
+    "2026-10-07-qwen3-instruct2507-policy-placement-native.mjs": "36386020964aef00cb5d8e77533f25efa0ca1bacef74066dba49f58eb6841aff",
+    "2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801"
+  }
+}

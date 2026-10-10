@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-02T13:30:05.406Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local WebGPU model then offline reload and actual inference",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790947643"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "responseMs": 796,
+  "text": [
+    "Hello.Write to document"
+  ],
+  "reply": "Hello.",
+  "editorReady": {
+    "documentLoadComplete": true,
+    "fullApi": true
+  },
+  "stats": "Decode speed: 28.4 token/s · First token: 0.63 s · 2 tokens",
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790947807567.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "limitations": [
+    "Desktop Playwright Chromium Metal cached Qwen3-1.7B only; not all models/browsers/physical mobile devices.",
+    "navigator.onLine remained true despite failed uncached-network control; network failure evidence is fetch failure, not that flag.",
+    "SDK spelling helper requests aborted; no page errors and document/full API ready, but full spellchecking not proven.",
+    "Short chat inference only; offline write tools, long requests and browser restart not tested."
+  ]
+}

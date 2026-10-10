@@ -1,0 +1,53 @@
+{
+  "scope": "Natural default URL CPU load stage diagnostic in isolated WebKit27; no offline or semantic acceptance",
+  "errors": [],
+  "console": [
+    "Service Worker registration blocked by Playwright",
+    "load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden"
+  ],
+  "version": "27.2",
+  "probe": {
+    "calls": [
+      {
+        "method": "loadModelFromUrl",
+        "started": 1791371502202,
+        "finished": true,
+        "ended": 1791371558714
+      },
+      {
+        "method": "loadModel",
+        "started": 1791371557429,
+        "finished": true,
+        "ended": 1791371558714
+      },
+      {
+        "method": "countChatTokens",
+        "started": 1791371558714,
+        "finished": true,
+        "ended": 1791371558725
+      }
+    ],
+    "opens": [
+      {
+        "backend": "Le",
+        "blobType": "Blob",
+        "bytes": 484220320
+      }
+    ],
+    "readErrors": [],
+    "chunkedReads": [
+      {
+        "bytes": 87515136,
+        "chunks": 11
+      },
+      {
+        "bytes": 127626240,
+        "chunks": 16
+      }
+    ]
+  },
+  "note": "模型已加载，可以开始对话。",
+  "status": "CPU · Qwen3 · 0.6B",
+  "finished": true,
+  "closed": true
+}

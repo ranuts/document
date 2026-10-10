@@ -1,0 +1,14 @@
+# Qwen2.5-0.5B versus current CPU model: neither accepted
+
+The attachment's suggested Qwen2.5-0.5B candidate was checked against four predeclared fresh document-oriented chat tasks and the current Qwen3-0.6B using identical captured SDK requests. Both explicit CPU runs served actual local GGUF files via task-owned HTTP origins, transferred full artifacts, used temperature 0 / top_p 0.8 / 512 tokens and current system instructions. Candidate artifact hash matches the immutable third-party repository LFS hash; baseline and candidate files differ. Exact tasks/settings/system/context match between runs. One sample each fixed order is not repeated reliability or general model ranking.
+
+| Task | Qwen2.5-0.5B candidate | Qwen3-0.6B current baseline |
+| --- | --- | --- |
+| Chinese formal payment rewrite | Retains future payer, amount/date/count and reverse-payment denial, but keeps 嘿; currency becomes 欧元. Formal-style request unfulfilled. | Changes future payment phrasing and flips Davi will not pay Cora into Davi will pay Cora. Serious negation error. |
+| Chinese one-sentence conditional summary | Multiple sentences, parking included despite explicit exclusion, pending inspection omitted, date phrasing becomes awkward destination-like 运输至 2048-03-19. | Core proposal/conditions/status retained and parking removed, but three sentences rather than one. |
+| Allegation translation to Chinese | Omits Suri, refers only to Vero as claimant/denier; actor/claim attribution not faithfully preserved. | Omits Vero and makes Suri appear to replace sensors and deny the allegation. Actor and denial attribution wrong. |
+| English formal payment rewrite | Source returned unchanged, including Hey. | Source returned unchanged, including Hey. |
+
+Neither is accepted. Candidate's isolated Chinese payer-negation preservation does not compensate for style/summary/translation failures. Current baseline confirms dangerous factual errors rather than proving the default safe. Do not switch default based on smaller download or a single relative improvement. These are ordinary chat writing tasks, not structured-writing validation or native editor operation; no Write action/Save was attempted and replies are not successful document-edit outcomes. UI capture includes the Write to document button text after the response.
+
+Original model identification is linked in the [candidate plan](2026-10-04-qwen25-05b-evaluation-plan.md); the tested quantized file is third-party, with separate pinned provenance. Both browsers and model servers closed. App/runtime/model caches were warm in parts; source keys used fresh local origins and server byte logs prove full transfers. Not offline, physical mobile, HTTPS deployment or all-language acceptance. Run verify-cpu-document-chat-comparison.py for file identity, transfers, cases and exact SDK request equality. No production code/default model changed.

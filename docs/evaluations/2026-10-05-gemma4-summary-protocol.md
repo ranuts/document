@@ -1,0 +1,13 @@
+# Gemma 4 E2B desktop candidate: frozen pre-inference protocol
+
+Candidate sources: [Google model card](https://ai.google.dev/gemma/docs/core/model_card_4), [ggml-org GGUF repository](https://huggingface.co/ggml-org/gemma-4-E2B-it-GGUF). Google distinguishes 2.3B effective parameters from 5.1B including embeddings. This is a higher-resource desktop diagnostic, not a replacement for the lightweight CPU fallback or a claim that total parameters meet the preferred 3B ceiling. License is Apache 2.0 according to those sources; no weights are bundled or published.
+
+On 2026-10-05 the repository API identified revision b4243c156154b6dca9324415f8c7ccc098b4aed1, file gemma-4-E2B-it-Q4_0.gguf, 2,841,481,184 bytes, LFS SHA256 8e30dff3ac4c8434c49a7036fa15564bdbb6044e42bf04550bf1a096ad7e6a52. Download only this pinned text model; no vision/audio projector or MTP drafter. Verify size/hash before loading.
+
+The product's pinned llama.cpp 83d855c5a6d70487121edbf4020b25c96b7a04e7 architecture registry contains gemma4 and gemma4-assistant. Retrieved src/llama-arch.cpp SHA256: 6f25a7e3db536379468bcdc5fb2e88fd2ae7f87311d7d93c46514f8e2355c538. Registry presence is not runtime compatibility. The matched custom count runtime stays unchanged.
+
+Freeze: HEAD 04464c3, production core1791166289/vendorb6864850e7b3. Use the current CPU provider with imported model and built-in chat template; original product writing messages/schema, structured temperature 0/top_p 0.8/max output 512 and exact-count pipeline. Google recommends different sampling, so this diagnostic tests compatibility with the existing product configuration, not the model's best achievable performance. No prompt changes, output repair, retry, default promotion, cloud/native-server inference, or dependency upgrade.
+
+Run the four previously observed cases in 2026-10-05-summary-concise-cases.json in their frozen order, fresh Chromium context/native Word/model per case, once each. Preserve raw requests, measured budgets and actual output. Check native write/Undo/Redo independently. Stop repeated same-load attempts if model initialization fails and diagnose the failure. All four cases are development data, not held-out quality acceptance.
+
+Semantic rubric remains unchanged: every instructed actor/object/date/prerequisite/current negative status retained, one shorter sentence in the original language, distractors omitted, no invented fact or altered relationship. A semantic failure rejects this candidate for this protocol; four successes would only justify broader fresh seven-language and lifecycle/device evaluation. Compatibility, official benchmarks, effective parameter labels, and mechanical document edits do not establish summary fidelity or browser memory suitability.

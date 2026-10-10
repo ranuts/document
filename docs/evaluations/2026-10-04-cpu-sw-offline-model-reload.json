@@ -1,0 +1,150 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "blob:http://127.0.0.1:5193/5dcc0a9b-c16a-4fe9-b2bd-01a659265477"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "url": "blob:http://127.0.0.1:5193/bf062a7a-d786-4f5a-bb8e-1af076d1eb27"
+    },
+    {
+      "event": "created",
+      "id": 4,
+      "url": "blob:http://127.0.0.1:5193/07a978b8-98dc-4174-a2fc-29c102e6da17"
+    },
+    {
+      "event": "created",
+      "id": 5,
+      "url": "blob:http://127.0.0.1:5193/a2db85bf-da40-4452-a55e-67ed06a08e2b"
+    },
+    {
+      "event": "created",
+      "id": 6,
+      "url": "blob:http://127.0.0.1:5193/8fd1787e-a7aa-48bd-81d3-b5b13593e9d8"
+    },
+    {
+      "event": "closed",
+      "id": 3
+    },
+    {
+      "event": "closed",
+      "id": 4
+    },
+    {
+      "event": "closed",
+      "id": 6
+    },
+    {
+      "event": "closed",
+      "id": 5
+    },
+    {
+      "event": "closed",
+      "id": 2
+    },
+    {
+      "event": "created",
+      "id": 7,
+      "url": "blob:http://127.0.0.1:5193/a75b4ad0-50ee-4d6d-9f87-56c312204db4"
+    },
+    {
+      "event": "created",
+      "id": 8,
+      "url": "blob:http://127.0.0.1:5193/1a50d643-54a1-4a7c-88b9-4d74c0fd7ed7"
+    },
+    {
+      "event": "created",
+      "id": 9,
+      "url": "blob:http://127.0.0.1:5193/48dd814b-b9f0-4c11-b60a-a4f07a9fcf89"
+    },
+    {
+      "event": "created",
+      "id": 10,
+      "url": "blob:http://127.0.0.1:5193/620f86f0-73c2-4057-be08-aa4188a8c065"
+    },
+    {
+      "event": "created",
+      "id": 11,
+      "url": "blob:http://127.0.0.1:5193/3b705c54-e211-42cb-9b8d-8c3f0dd4459f"
+    }
+  ],
+  "offlineRequests": [
+    {
+      "url": "blob:http://127.0.0.1:5193/a75b4ad0-50ee-4d6d-9f87-56c312204db4",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/1a50d643-54a1-4a7c-88b9-4d74c0fd7ed7",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/48dd814b-b9f0-4c11-b60a-a4f07a9fcf89",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/620f86f0-73c2-4057-be08-aa4188a8c065",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "blob:http://127.0.0.1:5193/3b705c54-e211-42cb-9b8d-8c3f0dd4459f",
+      "method": "GET",
+      "hasBody": false
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/wllama-CmLUJC6F.wasm",
+      "method": "GET",
+      "hasBody": false
+    }
+  ],
+  "probeSHA256": "2f06e75d33ddfae0cf0ffd37ffbb3a32dec8ca1ab41ce3ea20092c90e054c48f",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [
+    {
+      "initialWorkerIds": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "swController": "http://127.0.0.1:5193/sw.js?isolation=1",
+      "selectedProvider": "webllm",
+      "browserOnline": false,
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting.",
+      "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "before": "\r\n",
+      "settings": "Settings affect future replies and remain in this page.",
+      "after": "\r\n",
+      "inputs": [],
+      "errors": [],
+      "previews": 0,
+      "stats": "Decode speed: 36.3 token/s · First text: 0.92 s · Overall response rate: 3.17 token/s · 3 tokens",
+      "reply": "Hello!Write to document",
+      "undo": "\r\n",
+      "redo": "\r\n",
+      "undoExact": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "initialController": "http://127.0.0.1:5193/sw.js?isolation=1",
+  "status": "completed"
+}

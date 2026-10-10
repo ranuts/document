@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-02T17:58:01.311Z",
+  "scope": "Actual production native header Save after exact IM text write, isolated persistent Chromium; warm local WebGPU model then offline reload, IM xlsx operation and native Undo",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790963460"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "neighborBefore": "Earlier independent cell",
+  "before": "",
+  "responseMs": 2662,
+  "after": "Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+  "neighborAfter": "Earlier independent cell",
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "inserted": true,
+  "expected": "Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+  "nativeSave": {
+    "suggestedFilename": "New_Document.xlsx",
+    "artifactPath": ".scratch/ai-csp/im-native-save.xlsx",
+    "bytes": 8495,
+    "failure": null,
+    "ooxmlProof": {
+      "zipValid": true,
+      "sha256": "e603feb8b97a1c54f5a8c7c3ab756dc9af21b0fabd1efe30dd7b76d74a8b06e6",
+      "contents": {
+        "cells": {
+          "A1": {
+            "value": "Earlier independent cell",
+            "type": "s",
+            "formula": null
+          },
+          "B2": {
+            "value": "Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+            "type": "s",
+            "formula": null
+          }
+        },
+        "exactText": true,
+        "neighborPreserved": true
+      },
+      "scope": "Actual visible native Save download fallback; saved OOXML inspected, not an original-file OS overwrite test."
+    }
+  },
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BrS_hCZ0.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "afterUndo": "",
+  "undoRestored": true,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790963884052.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/fonts/100",
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "reopen": {
+    "status": "passed",
+    "scope": "Actual offline homepage file chooser opens saved download; no model generation during reopen.",
+    "networkControl": {
+      "reachable": false,
+      "error": "TypeError: Failed to fetch"
+    },
+    "snapshot": {
+      "B2": "Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+      "A1": "Earlier independent cell"
+    },
+    "exactText": true,
+    "errors": []
+  },
+  "assessment": {
+    "bundle": "editor-BrS_hCZ0.js",
+    "productCommit": "79c71f8",
+    "scope": "Desktop Chromium cached/offline Qwen3-1.7B actual IM tool write, visible native header Save, OOXML inspection and offline homepage file-open; no new preview/confirmation UI.",
+    "visualQA": "Reopened screenshot inspected; text present in Word, exact cell values independently verified in Excel.",
+    "nativeOnboardingObservation": "Existing native New Cell text direction tooltip appeared on reopen screenshot and covered part of grid. This does not change verified file values; no claim of a polished first-run UI."
+  },
+  "limitations": [
+    "One short exact-text operation per editor/model, not broad formatting/formula/layout validation.",
+    "Native download fallback tested; original-file OS overwrite and physical startup offline unverified.",
+    "Save/Undo tests do not establish all style/comment/review effects.",
+    "A1 preserved through write/save/reopen; neighbor state immediately after Undo was not captured."
+  ]
+}

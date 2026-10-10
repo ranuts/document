@@ -1,0 +1,135 @@
+{
+  "scope": "Production UI real Metal GPU Qwen3-4B-q4f16_1-MLC planning: Excel get_cell and read-only sum_range; blank PPT text read. Isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "kind": "xlsx",
+      "prompt": "Read the text value in cell A1.",
+      "expected": "12",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "elapsedMs": 4581,
+      "feedback": [
+        "A1\n12A1\n12"
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": true,
+      "resultMatched": true
+    },
+    {
+      "kind": "xlsx",
+      "prompt": "Calculate the sum of range A1:A3 and report the result only. Do not write any destination cell.",
+      "expected": "A1:A3: 42",
+      "before": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":1,\"r1\":1,\"c2\":1,\"r2\":1,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":1,\"col\":1}"
+      },
+      "after": {
+        "values": [
+          "12",
+          "",
+          "",
+          "13",
+          "",
+          "",
+          "17",
+          "",
+          ""
+        ],
+        "selection": "[{\"c1\":0,\"r1\":3,\"c2\":0,\"r2\":3,\"refType1\":3,\"refType2\":3}]",
+        "activeCell": "{\"row\":3,\"col\":0}"
+      },
+      "elapsedMs": 4921,
+      "feedback": [
+        "Done. Result checked; use Undo if needed.Done. Result checked; use Undo if needed."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "selectionUnchanged": false,
+      "resultMatched": false
+    },
+    {
+      "kind": "pptx",
+      "prompt": "Read the plain text of the current presentation. Do not add or modify anything.",
+      "expected": "No readable text was found.",
+      "before": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "after": {
+        "slides": 1,
+        "text": [
+          "\r\n\n\r\n"
+        ]
+      },
+      "elapsedMs": 3330,
+      "feedback": [
+        "No readable text was found.No readable text was found."
+      ],
+      "visibleErrors": [],
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "previewCount": 0,
+      "contentUnchanged": true,
+      "resultMatched": true
+    }
+  ],
+  "errors": [],
+  "assessment": "REJECTED CANDIDATE: address-pattern restriction does not preserve read-only intent. Sum request produces verified modification feedback and moves selection B2 to A4 rather than returning sum; candidate reverted from source and build.",
+  "limitations": [
+    "Isolated test documents only.",
+    "A1:C3 snapshot excludes A4; contentUnchanged cannot prove whole-document unchanged or what was written at A4.",
+    "Model plan/raw response and A4 formula were not captured; inferred write path from verified-modification feedback and navigation, not exact formula proof.",
+    "Single 4B Chromium Metal trial.",
+    "PPT selection not captured."
+  ],
+  "candidateSchema": {
+    "targetPattern": "^[A-Za-z]{1,3}[1-9][0-9]{0,6}$",
+    "retainedInProduct": false
+  }
+}

@@ -1,0 +1,84 @@
+diff --git a/cpp/glue.hpp b/cpp/glue.hpp
+index a71b13b..52b87f5 100644
+--- a/cpp/glue.hpp
++++ b/cpp/glue.hpp
+@@ -589,6 +589,15 @@ struct glue_msg_load_res
+ 
+ /////////
+ 
++struct glue_msg_count_chat_res
++{
++  GLUE_HANDLER("cntc_res")
++  GLUE_FIELD(bool, success)
++  GLUE_FIELD(str, error)
++  GLUE_FIELD(int, prompt_tokens)
++  GLUE_FIELD(int, context_tokens)
++};
++
+ struct glue_msg_completion_req
+ {
+   GLUE_HANDLER("cmpl_req")
+diff --git a/cpp/wllama-context.h b/cpp/wllama-context.h
+index f0aed65..b3cc4f6 100644
+--- a/cpp/wllama-context.h
++++ b/cpp/wllama-context.h
+@@ -641,6 +641,47 @@ struct wllama_context
+     return res;
+   }
+ 
++  // Experimental text-only preflight. Shares generation's parser and tokenizer;
++  // never creates a response reader, posts a task, or evaluates model state.
++  glue_msg_count_chat_res action_count_chat(const char *req_raw)
++  {
++    glue_msg_count_chat_res res;
++    res.success.value = false;
++    res.error.value = "";
++    res.prompt_tokens.value = 0;
++    res.context_tokens.value = 0;
++    try
++    {
++      PARSE_REQ(glue_msg_completion_req);
++      if (!meta || !vocab || !req.is_chat.value || !req.files.arr.empty() || meta->has_mtmd)
++        throw app_exception("count_chat requires a loaded text-only chat model and no files");
++      json body = json::parse(req.data_json.value);
++      if (!body.contains("messages") || !body["messages"].is_array() || body["messages"].empty())
++        throw app_exception("count_chat requires nonempty messages");
++      for (const auto &message : body["messages"])
++      {
++        if (!message.is_object() || !message.contains("content") ||
++            !(message["content"].is_string() || message["content"].is_null()))
++          throw app_exception("count_chat does not support content parts or media");
++      }
++      std::vector<raw_buffer> files;
++      auto parsed = oaicompat_chat_params_parse(body, meta->chat_params, files);
++      if (!files.empty() || !parsed.at("prompt").is_string())
++        throw app_exception("count_chat supports one text prompt only");
++      auto prompts = tokenize_input_prompts(vocab, nullptr, parsed.at("prompt"), true, true, mtmd_helper_init_opt_default());
++      if (prompts.size() != 1 || prompts[0].size() > INT32_MAX || meta->slot_n_ctx <= 0)
++        throw app_exception("count_chat invalid prompt count or context capacity");
++      res.prompt_tokens.value = static_cast<int32_t>(prompts[0].size());
++      res.context_tokens.value = meta->slot_n_ctx;
++      res.success.value = true;
++    }
++    catch (const std::exception &e)
++    {
++      res.error.value = e.what();
++    }
++    return res;
++  }
++
+   glue_msg_completion_res action_completion(const char *req_raw)
+   {
+     PARSE_REQ(glue_msg_completion_req);
+diff --git a/cpp/wllama.cpp b/cpp/wllama.cpp
+index 81a98f6..d4b74df 100644
+--- a/cpp/wllama.cpp
++++ b/cpp/wllama.cpp
+@@ -110,6 +110,7 @@ extern "C" const char *wllama_action(const char *name, const char *req_raw)
+     }
+ 
+     WLLAMA_ACTION(load)
++    WLLAMA_ACTION(count_chat)
+     WLLAMA_ACTION(completion)
+     WLLAMA_ACTION(embedding)
+     WLLAMA_ACTION(rerank)

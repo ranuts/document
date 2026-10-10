@@ -1,0 +1,44 @@
+{
+  "browserVersion": "151.0.7922.34",
+  "scope": "Candidate worker with explicit isolation script URL, under isolated script hosting; old cached synthetic iframe/Worker bodies served without changing their stored metadata. Not first-upgrade or native-editor verification.",
+  "workerGlobal": {
+    "isolated": false,
+    "kind": "boolean"
+  },
+  "seed": {
+    "name": "document-editor-runtime-dev"
+  },
+  "result": {
+    "online": true,
+    "networkRejected": false,
+    "isolated": true,
+    "frameText": "CACHED_FRAME_BYTES",
+    "worker": {
+      "isolated": true
+    },
+    "policy": "require-corp"
+  },
+  "offline": {
+    "online": false,
+    "networkRejected": true,
+    "isolated": true,
+    "frameText": "CACHED_FRAME_BYTES",
+    "worker": {
+      "isolated": true
+    },
+    "policy": "require-corp"
+  },
+  "stored": [
+    {
+      "path": "/web-apps/apps/documenteditor/main/index.html",
+      "policy": null,
+      "body": "<p>CACHED_FRAME_BYTES</p>"
+    },
+    {
+      "path": "/sdkjs/isolation-probe-worker.js",
+      "policy": null,
+      "body": "postMessage({isolated:crossOriginIsolated});"
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,219 @@
+{
+  "scope": "Two separate explicit direct commands in warmed Chromium browser offline emulation; not a compound planner or full device acceptance",
+  "errors": [],
+  "failures": [
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "seedEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "seedProcessClosed": true,
+  "offline": true,
+  "homeFromSW": true,
+  "scripts": [
+    "",
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-a29E5U4S.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "before": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE",
+      ""
+    ],
+    [
+      "Sensor",
+      "18",
+      "",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      "",
+      ""
+    ],
+    [
+      "Monitor",
+      "12",
+      "",
+      ""
+    ]
+  ],
+  "engine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "request": "Sort A1:B4 by B ascending with header.",
+  "activities": [
+    "Done. You can undo this change."
+  ],
+  "replies": [],
+  "previewCount": 0,
+  "after": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      "",
+      ""
+    ],
+    [
+      "Monitor",
+      "12",
+      "",
+      ""
+    ],
+    [
+      "Sensor",
+      "18",
+      "",
+      ""
+    ]
+  ],
+  "chatErrors": [],
+  "sortUndo": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE",
+      ""
+    ],
+    [
+      "Sensor",
+      "18",
+      "",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      "",
+      ""
+    ],
+    [
+      "Monitor",
+      "12",
+      "",
+      ""
+    ]
+  ],
+  "sortRedo": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      "",
+      ""
+    ],
+    [
+      "Monitor",
+      "12",
+      "",
+      ""
+    ],
+    [
+      "Sensor",
+      "18",
+      "",
+      ""
+    ]
+  ],
+  "sumRequest": "Sum B2:B4 into D2.",
+  "afterSum": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      "",
+      "37"
+    ],
+    [
+      "Monitor",
+      "12",
+      "",
+      ""
+    ],
+    [
+      "Sensor",
+      "18",
+      "",
+      ""
+    ]
+  ],
+  "sumErrors": [],
+  "sumUndo": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      "",
+      ""
+    ],
+    [
+      "Monitor",
+      "12",
+      "",
+      ""
+    ],
+    [
+      "Sensor",
+      "18",
+      "",
+      ""
+    ]
+  ],
+  "sumRedo": [
+    [
+      "Item",
+      "Amount",
+      "KEEP_OUTSIDE",
+      ""
+    ],
+    [
+      "Camera",
+      "7",
+      "",
+      "37"
+    ],
+    [
+      "Monitor",
+      "12",
+      "",
+      ""
+    ],
+    [
+      "Sensor",
+      "18",
+      "",
+      ""
+    ]
+  ],
+  "passed": true,
+  "saved": true,
+  "closed": true
+}

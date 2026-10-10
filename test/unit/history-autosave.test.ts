@@ -260,4 +260,163 @@ describe('autosave session', () => {
     expect(second?.id).not.toBe(first?.id);
     expect((await listDocs()).total).toBe(2);
   });
+  it('defers a cached departure export and stores a recovery point after a stable return', async () => {
+    requestSaveDocument.mockResolvedValue(fileOf([7, 8]));
+    await beginAutosaveSession({ docId: 'cached', title: 'Cached.docx', origin: 'local' });
+    markDocumentDirty();
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+    Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+    expect(requestSaveDocument).not.toHaveBeenCalled();
+    Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    await vi.advanceTimersByTimeAsync(1999);
+    expect(requestSaveDocument).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1);
+    await vi.waitFor(async () => expect(Array.from((await getLatestSnapshot('cached'))!.bytes)).toEqual([7, 8]));
+  });
+  it('cancels the resumed export on rapid cached departure and preserves recovery on the final return', async () => {
+    requestSaveDocument.mockResolvedValue(fileOf([9]));
+    await beginAutosaveSession({ docId: 'repeated', title: 'Repeated.docx', origin: 'local' });
+    markDocumentDirty();
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    for (let cycle = 0; cycle < 2; cycle++) {
+      window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+      Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+      expect(requestSaveDocument).not.toHaveBeenCalled();
+      Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+      window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+      await vi.advanceTimersByTimeAsync(1000);
+    }
+    expect(requestSaveDocument).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1000);
+    await vi.waitFor(async () => expect(Array.from((await getLatestSnapshot('repeated'))!.bytes)).toEqual([9]));
+  });
+  it('keeps noncached hidden departure recovery enabled', async () => {
+    requestSaveDocument.mockResolvedValue(fileOf([3]));
+    await beginAutosaveSession({ docId: 'noncached', title: 'Noncached.docx', origin: 'local' });
+    markDocumentDirty();
+    window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false }));
+    Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+    await vi.waitFor(async () => expect(Array.from((await getLatestSnapshot('noncached'))!.bytes)).toEqual([3]));
+  });
+  it('waits for recent typing to settle before resumed recovery', async () => {
+    requestSaveDocument.mockResolvedValue(fileOf([4]));
+    await beginAutosaveSession({ docId: 'typing', title: 'Typing.docx', origin: 'local' });
+    markDocumentDirty();
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    await vi.advanceTimersByTimeAsync(1500);
+    markDocumentDirty();
+    await vi.advanceTimersByTimeAsync(1999);
+    expect(requestSaveDocument).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1);
+    await vi.waitFor(async () => expect(Array.from((await getLatestSnapshot('typing'))!.bytes)).toEqual([4]));
+  });
+  it('does not let a stopped session resume exports into its replacement', async () => {
+    requestSaveDocument.mockResolvedValue(fileOf([5]));
+    await beginAutosaveSession({ docId: 'old', title: 'Old.docx', origin: 'local' });
+    markDocumentDirty();
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
+    window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    stopAutosaveSession();
+    await beginAutosaveSession({ docId: 'new', title: 'New.docx', origin: 'local' });
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(requestSaveDocument).not.toHaveBeenCalled();
+    expect(await getLatestSnapshot('old')).toBeNull();
+    expect(await getLatestSnapshot('new')).toBeNull();
+  });
+  it('does not let an overdue periodic tick bypass the restored-page grace period', async () => {
+    requestSaveDocument.mockResolvedValue(fileOf([6]));
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date'] });
+    await beginAutosaveSession({ docId: 'overdue', title: 'Overdue.docx', origin: 'local' });
+    markDocumentDirty();
+    window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+    await vi.advanceTimersByTimeAsync(59000);
+    expect(requestSaveDocument).not.toHaveBeenCalled();
+    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    await vi.advanceTimersByTimeAsync(1999);
+    expect(requestSaveDocument).not.toHaveBeenCalled();
+    await vi.advanceTimersByTimeAsync(1);
+    await vi.waitFor(async () => expect(Array.from((await getLatestSnapshot('overdue'))!.bytes)).toEqual([6]));
+  });
+  it('does not store a late export from a stopped session or interfere with its replacement', async () => {
+    let finish!: (file: File) => void;
+    requestSaveDocument.mockImplementationOnce(
+      () =>
+        new Promise<File>((resolve) => {
+          finish = resolve;
+        }),
+    );
+    await beginAutosaveSession({ docId: 'old-export', title: 'Old.docx', origin: 'local' });
+    const pending = takeSnapshot();
+    stopAutosaveSession();
+    await beginAutosaveSession({ docId: 'replacement', title: 'New.docx', origin: 'local' });
+    finish(fileOf([1]));
+    expect(await pending).toBeNull();
+    expect(await getLatestSnapshot('old-export')).toBeNull();
+    expect(getAutosaveDocId()).toBe('replacement');
+    requestSaveDocument.mockResolvedValue(fileOf([2]));
+    await takeSnapshot();
+    expect(Array.from((await getLatestSnapshot('replacement'))!.bytes)).toEqual([2]);
+  });
+  it('does not let an obsolete export failure stop the new document recovery session', async () => {
+    requestSaveDocument.mockRejectedValue(new Error('export failed'));
+    await beginAutosaveSession({ docId: 'failing-old', title: 'Old.docx', origin: 'local' });
+    await takeSnapshot();
+    await takeSnapshot();
+    let fail!: (error: Error) => void;
+    requestSaveDocument.mockImplementationOnce(
+      () =>
+        new Promise<File>((_resolve, reject) => {
+          fail = reject;
+        }),
+    );
+    const pending = takeSnapshot();
+    stopAutosaveSession();
+    await beginAutosaveSession({ docId: 'healthy-new', title: 'New.docx', origin: 'local' });
+    fail(new Error('late old export failed'));
+    await pending;
+    expect(isAutosaveSessionActive()).toBe(true);
+    expect(getAutosaveDocId()).toBe('healthy-new');
+    requestSaveDocument.mockResolvedValue(fileOf([3]));
+    await takeSnapshot();
+    expect(Array.from((await getLatestSnapshot('healthy-new'))!.bytes)).toEqual([3]);
+  });
+  it('cancels old recovery storage while its quota estimate waits during document replacement', async () => {
+    let started!: () => void;
+    const estimating = new Promise<void>((resolve) => {
+      started = resolve;
+    });
+    let finish!: (value: { quota: number }) => void;
+    const estimate = new Promise<{ quota: number }>((resolve) => {
+      finish = resolve;
+    });
+    vi.stubGlobal('navigator', {
+      ...navigator,
+      storage: {
+        estimate: () => {
+          started();
+          return estimate;
+        },
+      },
+    });
+    requestSaveDocument.mockResolvedValue(fileOf([4]));
+    await beginAutosaveSession({ docId: 'old-storage', title: 'Old.docx', origin: 'local' });
+    const pending = takeSnapshot();
+    await estimating;
+    stopAutosaveSession();
+    await beginAutosaveSession({ docId: 'new-storage', title: 'New.docx', origin: 'local' });
+    finish({ quota: 1000 });
+    expect(await pending).toBeNull();
+    expect(await getLatestSnapshot('old-storage')).toBeNull();
+    expect(getAutosaveDocId()).toBe('new-storage');
+    await takeSnapshot();
+    expect(Array.from((await getLatestSnapshot('new-storage'))!.bytes)).toEqual([4]);
+  });
 });

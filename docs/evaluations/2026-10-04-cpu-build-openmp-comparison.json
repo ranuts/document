@@ -1,0 +1,31 @@
+{
+  "scope": "Configured CPU backend differences; does not establish abort cause",
+  "builds": {
+    "6.0.10": {
+      "cacheSHA256": "fa5bbb0287cc9a026c5d539742be78febca4ce0ef5299ada184a58e26d1803d3",
+      "cpuFlagsSHA256": "04333161107c06b8724f512101a62720062b76b4c631225ee24416cb5b69a0a0",
+      "openmpCache": [
+        "OpenMP_CXX_FLAGS:STRING=-fopenmp=libomp",
+        "GGML_OPENMP_ENABLED:INTERNAL=ON"
+      ],
+      "cpuFlags": [
+        "C_DEFINES = -DGGML_SCHED_MAX_COPIES=4 -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_XOPEN_SOURCE=600",
+        "CXX_DEFINES = -DGGML_SCHED_MAX_COPIES=4 -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_XOPEN_SOURCE=600",
+        "CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -msimd128 -O3 -msimd128 -DNDEBUG -frtti -pthread -gsource-map -fexceptions -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -DGGML_CPU_GENERIC -fopenmp=libomp"
+      ]
+    },
+    "4.0.20": {
+      "cacheSHA256": "f6d60e70bc306fd958deb715c08a89ef5af279872d03fe976d01bd743119c133",
+      "cpuFlagsSHA256": "42237544106ae469764f8a6231889115c3575d154811de4bbe4f73a0271c39df",
+      "openmpCache": [
+        "OpenMP_CXX_FLAGS:STRING=NOTFOUND",
+        "GGML_OPENMP_ENABLED:INTERNAL=OFF"
+      ],
+      "cpuFlags": [
+        "C_DEFINES = -DGGML_SCHED_MAX_COPIES=4 -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -D_XOPEN_SOURCE=600",
+        "CXX_DEFINES = -DGGML_SCHED_MAX_COPIES=4 -DGGML_USE_CPU_REPACK -DGGML_USE_LLAMAFILE -D_XOPEN_SOURCE=600",
+        "CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -msimd128 -O3 -msimd128 -DNDEBUG -frtti -pthread -gsource-map -fexceptions -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -DGGML_CPU_GENERIC"
+      ]
+    }
+  }
+}

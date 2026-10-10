@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-03T02:25:07.137Z",
+  "scope": "Actual production UI selected-text direct writing path; Playwright Chromium CPU official Qwen2.5-0.5B Q4_K_M loaded through current local GGUF settings; native JSON Schema. Source inserted with editor public API in isolated new documents. Current production writing prompt; only diagnostic raw capture is injected at response validation boundary. Writing is directly applied only in isolated test documents.",
+  "variant": "qwen25-local-file",
+  "status": "completed",
+  "results": [
+    {
+      "id": "formal-zh",
+      "task": "rewrite",
+      "source": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！",
+      "instruction": "改写为正式书面中文，去掉口语表达，保留事实。",
+      "selected": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "engine": "CPU · qwen2.5-0.5b-instruct-q4_k_m.gguf",
+      "output": "嘿，Alex 会在 2026-10-08 付 1,250 EUR 哦！\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 56010,
+      "documentUnchanged": true,
+      "previewCount": 0
+    },
+    {
+      "id": "formal-en",
+      "task": "rewrite",
+      "source": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?",
+      "instruction": "Rewrite in formal English. Remove colloquial language, preserving the facts.",
+      "selected": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "engine": "CPU · qwen2.5-0.5b-instruct-q4_k_m.gguf",
+      "output": "Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\r\n",
+      "error": [
+        "The model returned the original text. Try a clearer instruction or another model.Restore request"
+      ],
+      "responseMs": 56911,
+      "documentUnchanged": true,
+      "previewCount": 0
+    },
+    {
+      "id": "negation-summary",
+      "task": "summarize",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Keep the payment amount, proposed date and the fact that approval has not been granted.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "CPU · qwen2.5-0.5b-instruct-q4_k_m.gguf",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model returned the original text. Try a clearer instruction or another model.Restore request"
+      ],
+      "responseMs": 59050,
+      "documentUnchanged": true,
+      "previewCount": 0
+    }
+  ],
+  "rawResponses": [
+    {
+      "text": "{\"text\":\"你好，Alex，2026-10-08，我会付1250欧元哦！\"}",
+      "stopReason": "stop",
+      "usage": {
+        "completionTokens": 29,
+        "promptTokens": 443,
+        "promptProcessingDurationMs": 51106.4,
+        "decodingDurationMs": 4847.099,
+        "decodeTokensPerSecond": 5.7766511474182805,
+        "responseDurationMs": 55978.5,
+        "endToEndTokensPerSecond": 0.518056039372259
+      }
+    },
+    {
+      "text": "{\"text\":\"Hey, Alex is gonna pay 1,250 EUR on 2026-10-08, okay?\\n\"}",
+      "stopReason": "stop",
+      "usage": {
+        "completionTokens": 34,
+        "promptTokens": 443,
+        "promptProcessingDurationMs": 51136.5,
+        "decodingDurationMs": 5725.9,
+        "decodeTokensPerSecond": 5.763286120959151,
+        "responseDurationMs": 56887.39999961853,
+        "endToEndTokensPerSecond": 0.5976718921980613
+      }
+    },
+    {
+      "text": "{\"text\":\"Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\"}",
+      "stopReason": "stop",
+      "usage": {
+        "completionTokens": 37,
+        "promptTokens": 456,
+        "promptProcessingDurationMs": 52732.099,
+        "decodingDurationMs": 6265.1,
+        "decodeTokensPerSecond": 5.746117380408932,
+        "responseDurationMs": 59024.90000009537,
+        "endToEndTokensPerSecond": 0.626854090391347
+      }
+    }
+  ],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 0
+  },
+  "errors": [],
+  "modelArtifact": {
+    "sha": "9217f5db79a29953eb74d5343926648285ec7e67",
+    "file": {
+      "rfilename": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+      "blobId": "a0ee18ee2bcb22c2b6c95360b292c2c40a2d7a03",
+      "size": 491400032,
+      "lfs": {
+        "sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+        "size": 491400032,
+        "pointerSize": 134
+      }
+    },
+    "source": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+    "downloadUrl": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/9217f5db79a29953eb74d5343926648285ec7e67/qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "downloadSizeAndSha256Verified": true
+  },
+  "probeSource": "probe-cpu-qwen25-writing.mjs",
+  "runnerSource": "run-cpu-qwen25-writing.py",
+  "probeSha256": "6ea236b5673e06ef13092ae116613294703ab39716b5c086bfb2539195006281",
+  "runnerSha256": "c177ebce678bb1046643dc94c03f3d538e2bb9237705aef85cbd9252b4dc7592",
+  "baselineBundleSha256": "4bfd809b14bef2039fe798570cc06bc451b16c8b17730012d7213ab3ab7d9908",
+  "assessment": {
+    "candidateAdopted": false,
+    "taskPasses": 0,
+    "taskSamples": 3,
+    "originalDocumentPreservedInAllCases": true,
+    "runtimeCompatibleForTheseThreeRequests": true,
+    "generalModelQualityProven": false
+  },
+  "limitations": [
+    "One sample per task with stochastic defaults; not a reliability estimate or controlled speed benchmark.",
+    "Local-file loading avoids model HTTP/cache effects; this does not prove candidate first-download/offline recovery.",
+    "No successful document edit occurred, so candidate Undo/Save roundtrips were not exercised.",
+    "No physical mobile or alternative browser coverage."
+  ]
+}

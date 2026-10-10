@@ -1,0 +1,35 @@
+{
+  "probeSHA256": "9bf1b73a68ed4b383623d00b751a354cd1ea1a63e7e74063a0af82850da88a01",
+  "scope": "Fresh Chromium context with no app/model storage; local app remains online, all external HTTP requests aborted, navigator.gpu unavailable. Not full offline app navigation.",
+  "status": "completed",
+  "external": [
+    {
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "HEAD",
+      "bodyBytes": 0
+    },
+    {
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/60b85c0e3d8fe0f6474f406922a26d12aca4550d/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "method": "HEAD",
+      "bodyBytes": 0
+    }
+  ],
+  "errors": [],
+  "first": {
+    "note": "Model loading failed. Retry loading or choose another model.",
+    "errors": [
+      "Model loading failed. Retry loading or choose another model."
+    ],
+    "provider": "webllm",
+    "loadEnabled": true,
+    "settings": "Local AI (automatic)Local GGUF (wllama, experimental)Qwen3 · 1.7B (GPU memory ≈ 2.04 GB)Qwen3.5 · 2B (GPU memory ≈ 2.25 GB)Qwen3.5 · 0.8B (GPU memory ≈ 1.63 GB)Qwen3 · 4B (GPU memory ≈ 3.43 GB)Load modelCustom model CPULoad modelReview modeModel loading failed. Retry loading or choose another model.Response settingsSystem instructionsCreativity (temperature)Sampling (top_p)Maximum response tokensSettings affect future replies and remain in this page.ConversationsSave chat history on this deviceNew conversations stay in this page until saving is enabled.Restore saved historyImport previous chat historyExport conversationsDelete this conversationDelete all chat historyDelete this conversation? This cannot be undone.DeleteCancel"
+  },
+  "retry": {
+    "newRequests": 1,
+    "note": "Model loading failed. Retry loading or choose another model.",
+    "errors": [
+      "Model loading failed. Retry loading or choose another model.",
+      "Model loading failed. Retry loading or choose another model."
+    ]
+  }
+}

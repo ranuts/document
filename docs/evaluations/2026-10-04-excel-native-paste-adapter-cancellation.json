@@ -1,0 +1,89 @@
+{
+  "status": "completed",
+  "adapterSHA256": "a7e0d7696da0922534c431e4afa0c38cd55bef9d08d18d026239622bda967ae4",
+  "pasteSHA256": "e62fdcf91169f55d2317acf08bf711f900129b3badb772520b6c3d2e99ef163b",
+  "sourceSHA256": "bb7e9d2ec04fdd42d489bc0af5aa61f73455851d01ae0dd81f93b1189fe4dd1b",
+  "errors": [],
+  "cases": [
+    {
+      "value": "00123",
+      "originalFormat": "General",
+      "completion": {
+        "failure": {
+          "name": "AbortError",
+          "message": "Stopped"
+        },
+        "restoredBeforeRelease": "General",
+        "latePreparationReleased": true
+      },
+      "before": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "undo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "30",
+        "format": "General",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      }
+    },
+    {
+      "value": "00123",
+      "originalFormat": "0.00",
+      "completion": {
+        "failure": {
+          "name": "AbortError",
+          "message": "Stopped"
+        },
+        "restoredBeforeRelease": "0.00",
+        "latePreparationReleased": true
+      },
+      "before": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "after": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "undo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      },
+      "redo": {
+        "value": "30",
+        "format": "0.00",
+        "type": 0,
+        "raw": "30",
+        "edit": "30"
+      }
+    }
+  ]
+}

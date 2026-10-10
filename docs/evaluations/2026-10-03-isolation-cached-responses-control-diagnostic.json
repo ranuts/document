@@ -1,0 +1,50 @@
+{
+  "scope": "Actual Chromium and shipped Service Worker with synthetic same-origin iframe/Worker cache bodies; compare old response metadata with isolation headers added to identical bytes. Not a full editor/model or deployment check.",
+  "seed": {
+    "name": "document-editor-runtime-59e2dc593998"
+  },
+  "before": {
+    "isolated": true,
+    "worker": {
+      "error": true
+    }
+  },
+  "changed": [
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/spreadsheeteditor/main/index.html",
+      "bytes": 144653
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/presentationeditor/main/index.html",
+      "bytes": 120110
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/index.html",
+      "bytes": 25
+    },
+    {
+      "url": "http://127.0.0.1:5193/assets/isolation-probe-worker.js",
+      "bytes": 25505
+    }
+  ],
+  "after": {
+    "isolated": true,
+    "frameText": "CACHED_FRAME_BYTES",
+    "worker": {
+      "error": true
+    },
+    "online": true,
+    "networkRejected": true
+  },
+  "probeSource": "probe-isolation-cached-responses-initial.mjs",
+  "probeSha256": "f99e3d13c1524729fb2b28dd8c633784df1a585908042ff85278f1ddee58c50d",
+  "shippedWorkerSha256": "b9439ad789c0e0399730b3f9e58f6d2c2aabfab24959f9e44fdd353592ffe305",
+  "productionConfigurationChanged": false,
+  "limitations": [
+    "Synthetic iframe and Worker bodies under owned same-origin test URLs, not full native editors or model weights.",
+    "No actual deployment header migration, browser HTTP-cache upgrade or physical device coverage.",
+    "This tests Cache API response metadata with the shipped worker; header migration was performed by the test, not implemented in the product."
+  ],
+  "passed": false,
+  "diagnosticNote": "Initial synthetic worker URL used stale-while-revalidate and was overwritten by a 25,505-byte server fallback; worker failed after metadata update. Offline emulation also reported navigator.onLine true after navigation. Final uses vendor cache-first Worker URL, changes only two target entries, reapplies offline emulation after navigation and verifies byte identity. Initial run is not proof of migration success."
+}

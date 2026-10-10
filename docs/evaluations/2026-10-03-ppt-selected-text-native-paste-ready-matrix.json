@@ -1,0 +1,5951 @@
+{
+  "scope": "Isolated production PPT selected-text native feasibility; not an IM implementation or model validation",
+  "results": [
+    {
+      "method": "asc_PasteData",
+      "literal": "Alex",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "Alex target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "Alex target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "Alex target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": true,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    },
+    {
+      "method": "asc_PasteData",
+      "literal": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 39033,
+                    "codePoint": 39033,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 30446,
+                    "codePoint": 30446,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20184,
+                    "codePoint": 20184,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 27454,
+                    "codePoint": 27454,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 47,
+                    "codePoint": 47,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 49,
+                    "codePoint": 49,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 44,
+                    "codePoint": 44,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 53,
+                    "codePoint": 53,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 69,
+                    "codePoint": 69,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 85,
+                    "codePoint": 85,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 82,
+                    "codePoint": 82,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 54,
+                    "codePoint": 54,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 45,
+                    "codePoint": 45,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 49,
+                    "codePoint": 49,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 45,
+                    "codePoint": 45,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 56,
+                    "codePoint": 56,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 78,
+                    "codePoint": 78,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 79,
+                    "codePoint": 79,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 84,
+                    "codePoint": 84,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 118,
+                    "codePoint": 118,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 39033,
+                    "codePoint": 39033,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 30446,
+                    "codePoint": 30446,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20184,
+                    "codePoint": 20184,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 27454,
+                    "codePoint": 27454,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 47,
+                    "codePoint": 47,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 49,
+                    "codePoint": 49,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 44,
+                    "codePoint": 44,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 53,
+                    "codePoint": 53,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 69,
+                    "codePoint": 69,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 85,
+                    "codePoint": 85,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 82,
+                    "codePoint": 82,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 54,
+                    "codePoint": 54,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 45,
+                    "codePoint": 45,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 49,
+                    "codePoint": 49,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 45,
+                    "codePoint": 45,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 56,
+                    "codePoint": 56,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 78,
+                    "codePoint": 78,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 79,
+                    "codePoint": 79,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 84,
+                    "codePoint": 84,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 118,
+                    "codePoint": 118,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "项目付款 / Alex · 1,250 EUR · 2026-10-08 · NOT approved",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 39033,
+                    "codePoint": 39033,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 30446,
+                    "codePoint": 30446,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20184,
+                    "codePoint": 20184,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 27454,
+                    "codePoint": 27454,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 47,
+                    "codePoint": 47,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 49,
+                    "codePoint": 49,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 44,
+                    "codePoint": 44,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 53,
+                    "codePoint": 53,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 69,
+                    "codePoint": 69,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 85,
+                    "codePoint": 85,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 82,
+                    "codePoint": 82,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 50,
+                    "codePoint": 50,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 54,
+                    "codePoint": 54,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 45,
+                    "codePoint": 45,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 49,
+                    "codePoint": 49,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 45,
+                    "codePoint": 45,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 48,
+                    "codePoint": 48,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 56,
+                    "codePoint": 56,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 183,
+                    "codePoint": 183,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 78,
+                    "codePoint": 78,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 79,
+                    "codePoint": 79,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 84,
+                    "codePoint": 84,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 118,
+                    "codePoint": 118,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": true,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    },
+    {
+      "method": "asc_PasteData",
+      "literal": "第一行 Alex\n  第二行 NOT approved  ",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "第一行 Alex\r\n  第二行 NOT approved   target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "第一行 Alex\r\n",
+            "runs": [
+              {
+                "text": "第一行 Alex",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 19968,
+                    "codePoint": 19968,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "text": "  第二行 NOT approved   target body\r\n",
+            "runs": [
+              {
+                "text": "  第二行 NOT approved  ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20108,
+                    "codePoint": 20108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 78,
+                    "codePoint": 78,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 79,
+                    "codePoint": 79,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 84,
+                    "codePoint": 84,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 118,
+                    "codePoint": 118,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "第一行 Alex\r\n  第二行 NOT approved   target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "第一行 Alex\r\n",
+            "runs": [
+              {
+                "text": "第一行 Alex",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 19968,
+                    "codePoint": 19968,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "text": "  第二行 NOT approved   target body\r\n",
+            "runs": [
+              {
+                "text": "  第二行 NOT approved  ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20108,
+                    "codePoint": 20108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 78,
+                    "codePoint": 78,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 79,
+                    "codePoint": 79,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 84,
+                    "codePoint": 84,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 118,
+                    "codePoint": 118,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "第一行 Alex\r\n  第二行 NOT approved   target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "第一行 Alex\r\n",
+            "runs": [
+              {
+                "text": "第一行 Alex",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 19968,
+                    "codePoint": 19968,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "text": "  第二行 NOT approved   target body\r\n",
+            "runs": [
+              {
+                "text": "  第二行 NOT approved  ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 31532,
+                    "codePoint": 31532,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 20108,
+                    "codePoint": 20108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 34892,
+                    "codePoint": 34892,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 78,
+                    "codePoint": 78,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 79,
+                    "codePoint": 79,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 84,
+                    "codePoint": 84,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 118,
+                    "codePoint": 118,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": true,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    },
+    {
+      "method": "asc_PasteData",
+      "literal": "  Alex  ",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "  Alex   target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "  Alex   target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "  Alex  ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "  Alex   target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "  Alex   target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "  Alex  ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "  Alex   target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "  Alex   target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "  Alex  ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": true,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    },
+    {
+      "method": "asc_PasteData",
+      "literal": "Alex\tPayment",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "Alex Payment target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex Payment target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex Payment",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 21,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 80,
+                    "codePoint": 80,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 109,
+                    "codePoint": 109,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 110,
+                    "codePoint": 110,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "Alex Payment target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex Payment target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex Payment",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 21,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 80,
+                    "codePoint": 80,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 109,
+                    "codePoint": 109,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 110,
+                    "codePoint": 110,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "Alex Payment target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex Payment target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex Payment",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 21,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 80,
+                    "codePoint": 80,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 109,
+                    "codePoint": 109,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 110,
+                    "codePoint": 110,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": false,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    },
+    {
+      "method": "asc_PasteData",
+      "literal": "Alex 😀",
+      "available": "function",
+      "before": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "returned": true,
+      "after": {
+        "texts": [
+          "Alex  target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex  target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 128512,
+                    "codePoint": 128512,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterSettled": {
+        "texts": [
+          "Alex  target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex  target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 128512,
+                    "codePoint": 128512,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterUndo": {
+        "texts": [
+          "Alpha target body\r\n",
+          "\r\n"
+        ],
+        "selected": "Alpha",
+        "count": 2,
+        "historyIndex": 0,
+        "paragraphs": [
+          {
+            "text": "Alpha target body\r\n",
+            "runs": [
+              {
+                "text": "Alpha target body",
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 112,
+                    "codePoint": 112,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 104,
+                    "codePoint": 104,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "afterRedo": {
+        "texts": [
+          "Alex  target body\r\n",
+          "\r\n"
+        ],
+        "selected": "",
+        "count": 2,
+        "historyIndex": 1,
+        "paragraphs": [
+          {
+            "text": "Alex  target body\r\n",
+            "runs": [
+              {
+                "text": "",
+                "items": []
+              },
+              {
+                "text": "Alex ",
+                "bold": false,
+                "size": 60,
+                "items": [
+                  {
+                    "type": 1,
+                    "value": 65,
+                    "codePoint": 65,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 108,
+                    "codePoint": 108,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 120,
+                    "codePoint": 120,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 128512,
+                    "codePoint": 128512,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": "",
+                "bold": false,
+                "size": 60,
+                "items": []
+              },
+              {
+                "text": " target body",
+                "items": [
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 97,
+                    "codePoint": 97,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 114,
+                    "codePoint": 114,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 103,
+                    "codePoint": 103,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 101,
+                    "codePoint": 101,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 116,
+                    "codePoint": 116,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 2,
+                    "value": 32,
+                    "codePoint": 32,
+                    "constructor": "b"
+                  },
+                  {
+                    "type": 1,
+                    "value": 98,
+                    "codePoint": 98,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 111,
+                    "codePoint": 111,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 100,
+                    "codePoint": 100,
+                    "constructor": "e"
+                  },
+                  {
+                    "type": 1,
+                    "value": 121,
+                    "codePoint": 121,
+                    "constructor": "e"
+                  }
+                ]
+              },
+              {
+                "text": "\r\n",
+                "items": [
+                  {
+                    "type": 4,
+                    "constructor": "b"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "selectedExact": true,
+      "replaced": false,
+      "neighborUnchanged": true,
+      "undoExact": true,
+      "shapeCountUnchanged": true,
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "status": "completed",
+  "allPassed": false
+}

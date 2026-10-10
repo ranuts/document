@@ -1,0 +1,38 @@
+{
+  "processExitCode": 0,
+  "initialBindings": {
+    "scope": "Before first Q4/Q6 contrast load/inference; complete Q6 integrity verified after continuation",
+    "sha256": {
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-artifact.json": "5e7e3ab001a935ab3d68eb894907baff55ed9eef9d3952fcdeecbf85dc697b62",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-protocol.md": "f652506d2ed44617faa75c276ad6785931ec641f965eded98afe5ec00a2ddee2",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-native.mjs": "95792a051b1946feb3c198b2d2a122209f06bfb534d993ea35e46644bf387b83",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-resumed-download.json": "77549750062818922e98e9803bdbb28a55a8b060cd71f046b28ea28870f0af32",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+      "docs/evaluations/2026-10-07-qwen3-instruct2507-artifact.json": "d42bb02b4b4ef1e8b460eff2cb0a85dc950aca31d6d8fbd00bfc8efa85f03c9b",
+      "dist/sw.js": "0e8241d93a83e8ee45f562623f9c00e4f42bb2d131baff106c3829ca165b3be9",
+      "dist/assets/editor-a29E5U4S.js": "eb408e146eb499d39f3d59aefa6d18ce79f8684896bc8f4a46c1106ca716f9ce",
+      "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+    }
+  },
+  "afterSHA256": {
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-artifact.json": "5e7e3ab001a935ab3d68eb894907baff55ed9eef9d3952fcdeecbf85dc697b62",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-protocol.md": "f652506d2ed44617faa75c276ad6785931ec641f965eded98afe5ec00a2ddee2",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-native.mjs": "95792a051b1946feb3c198b2d2a122209f06bfb534d993ea35e46644bf387b83",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-q6-resumed-download.json": "77549750062818922e98e9803bdbb28a55a8b060cd71f046b28ea28870f0af32",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801",
+    "docs/evaluations/2026-10-07-qwen3-instruct2507-artifact.json": "d42bb02b4b4ef1e8b460eff2cb0a85dc950aca31d6d8fbd00bfc8efa85f03c9b",
+    "dist/sw.js": "0e8241d93a83e8ee45f562623f9c00e4f42bb2d131baff106c3829ca165b3be9",
+    "dist/assets/editor-a29E5U4S.js": "eb408e146eb499d39f3d59aefa6d18ce79f8684896bc8f4a46c1106ca716f9ce",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  },
+  "evidenceSHA256": {
+    "2026-10-07-qwen3-instruct2507-q6-native.json": "c585ddddf398ba4bc4c078b8fd2de08909e57eb6032030f704aeee77b7fce6ad",
+    "2026-10-07-qwen3-instruct2507-q6-review.json": "25015d9758cfc7c3b759438cea1e200dee36a9a46d991c6268b6c770eb2e09f0",
+    "2026-10-07-qwen3-instruct2507-q6-analysis.md": "7e8c70d2c676fb3ccca5521cab07b66974355ef4ae6977b7fd32260c6cdcc0c7",
+    "2026-10-07-qwen3-instruct2507-q6-native.mjs": "95792a051b1946feb3c198b2d2a122209f06bfb534d993ea35e46644bf387b83",
+    "2026-10-07-qwen3-instruct2507-q6-protocol.md": "f652506d2ed44617faa75c276ad6785931ec641f965eded98afe5ec00a2ddee2",
+    "2026-10-07-qwen3-instruct2507-q6-artifact.json": "5e7e3ab001a935ab3d68eb894907baff55ed9eef9d3952fcdeecbf85dc697b62",
+    "2026-10-07-qwen3-instruct2507-q6-metadata-comparison.json": "f9253658fce12d5d844305b6925526f22fd4e927a2a3126c4e5afde602d5586a",
+    "2026-10-07-qwen3-instruct2507-seven-language-cases.json": "fda3d99605a1b8e1a775cc617434ab3535fb20ff350916c4c16fe379dbc96801"
+  }
+}

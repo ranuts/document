@@ -1,0 +1,53 @@
+{
+  "scope": "Derived diagnostic excerpts, not exact raw receipt. Raw log retained ignored because it contains compile-machine source paths. No generated translations or quality claim.",
+  "rawReceiptSha256": "a47c5bbfe602c960f243fdc32ee6cce7eecc1dfee32c1d3001306723c64df006",
+  "protocolSha256": "25ae739ec7043a17bce94abdc93a7edfc2e132cdcf99773e07aa4ade08722329",
+  "load": {
+    "ready": true,
+    "isolated": true
+  },
+  "error": "Error: RuntimeError: (ABORT) ",
+  "runtime": {
+    "/client.js": {
+      "bytes": 219093,
+      "sha256": "d522958c39df2fcf77a05e9de526326b58c9a20e76f4517450732c4ae2eaaaf6"
+    },
+    "/model.wasm": {
+      "bytes": 6570369,
+      "sha256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6"
+    }
+  },
+  "observations": [
+    {
+      "type": "error",
+      "text": "ggml_aligned_malloc: insufficient memory (attempted to allocate 4403.24 MB)"
+    },
+    {
+      "type": "error",
+      "text": "ggml_backend_cpu_buffer_type_alloc_buffer: failed to allocate buffer of size 4617129952"
+    },
+    {
+      "type": "error",
+      "text": "llama_model_load: error loading model: unable to allocate CPU buffer"
+    },
+    {
+      "type": "error",
+      "text": "llama_model_load_from_file_impl: failed to load model"
+    },
+    {
+      "type": "error",
+      "text": "cmn  common_init_: failed to load model 'models/model-00001-of-00001.gguf'"
+    },
+    {
+      "type": "error",
+      "text": "srv    load_model: failed to load model, 'models/model-00001-of-00001.gguf'"
+    },
+    {
+      "type": "log",
+      "text": "<native-source>/common/chat.cpp:3908: GGML_ASSERT(chat_templates != nullptr) failed"
+    }
+  ],
+  "contextClosed": true,
+  "browserClosed": true,
+  "serverClosed": true
+}

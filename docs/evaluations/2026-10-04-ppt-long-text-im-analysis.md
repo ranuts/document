@@ -1,0 +1,13 @@
+# Long/multiline PPT IM initial layout test — 2026-10-04
+
+Both predeclared operations were refused with insufficient-slide-space guidance on the default title/subtitle slide: six mixed-language lines, and a 35-times repeated unbroken Extraordinary token with a short Unicode suffix. No successful long-text rendering claim follows. This reveals a practical default-layout limitation even for six ordinary lines, while native preservation works.
+
+Commit `dba942f` predeclared cases and executed driver before inference. Actual Qwen3 1.7B GPU IM tools mode requests literal new-text-box addition; no mock plan or tool result, no new previews/confirmation. Request/plan bytes were not separately captured, so the observed native layout refusal is not a parameter-level or raw model-copy-quality judgment. Both native snapshots after refusal exactly match shape text/geometry/content-height snapshots before the request. No added shape remains. Screenshots after closing the panel show the unchanged empty title/subtitle placeholders. Driver SHA/cases/screenshot SHA/refusal mechanics are independently checked by the scoped verifier.
+
+The default placeholders occupy x=42.3333mm through 296.3333mm, y=31.17675mm through 146.05mm across title/subtitle areas on a 338.6667×190.5mm slide. New-box placement preserves existing shapes and avoids occupied rectangles. That constraint limits available regions despite visually empty placeholders. It does not establish that the text could never fit on a blank slide, or justify deleting/reusing a placeholder when the user requested adding a new box. A blank-layout control is the next useful test before changing placement logic.
+
+Independent desktop Chromium, warm persistent GPU profile, network available, service workers blocked, 1440×1000 viewport. The existing profile's dark editor theme appears in screenshots; no theme assertion was made. No headers changed, no network log/forced offline, physical devices or OOM claim. No edits succeeded, so Undo/Redo was not exercised; no Save/reopen occurred here. Prior short-text rendering/save evidence is separate. Both images were visually inspected and native shapes remained unchanged. Owned process exited 0 and context closed. Evidence-only work needs no product build/full-suite repetition.
+
+Independent read-only review found no Critical/Important evidence issue. Snapshot equality covers the recorded shape properties, not history object identity or every metadata field.
+
+Keep this negative result rather than shrinking the test to a short passing string. It establishes rejection preservation, not usable long-text document layout. Long/multiline layout on a genuinely blank slide and support for intentional placeholder editing remain unresolved.

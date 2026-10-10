@@ -1,0 +1,47 @@
+{
+  "scope": "All six known-source diagnostic rows; one pair improves, two pairs remain failed; no unused-source transfer, native-speaker certification or model adoption",
+  "reviews": [
+    {
+      "id": "zh-CN-summarize",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Reproduces English summary of Chinese source and omitted delivery-team actor; length guard refuses. Exact original request and raw choice match previous screen.",
+      "rowCanonicalSHA256": "532136137c5bf5ac0028c703d7ff028d0af36e6eb8b368dd4103d3279777694b"
+    },
+    {
+      "id": "zh-CN-summarize",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Actual count/completion messages pass exact preamble-to-system transformation checks, yet raw choice is identical to product baseline: English, omitted delivery-team actor and refusal. No improvement in this known summary pair.",
+      "rowCanonicalSHA256": "d08f023cee795a8c187f6ca3227cf103d62c381741cae2b604d3484154c8ea86"
+    },
+    {
+      "id": "en-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Repeated English-to-Japanese product request and raw choice exactly match original screen. All original Roman name spellings become katakana despite unchanged-name instruction; native application/history passes but task does not.",
+      "rowCanonicalSHA256": "6a93d9dea8ee0310e2c4c80de42194bf644581cb4d2633bbdfa5f36cd4a67d98"
+    },
+    {
+      "id": "en-translate",
+      "variant": "policy-system",
+      "verdict": "narrow-pass",
+      "reason": "Japanese output preserves Lina Ford, Uma Rao and Oliver Zhou in original spelling, ISO date, quantity, proposal nonapproval, Uma shipping only after Oliver confirms receipt of payment, current nonconfirmation and available supplier catalogue. Native application/history pass. This improves the known-source pair only; no unused-source or native-speaker acceptance.",
+      "rowCanonicalSHA256": "ba0ecd16c9d8ef9214fde284a0410baf1c6ae832239fbc61b57b625f16b513cc"
+    },
+    {
+      "id": "ja-translate",
+      "variant": "product",
+      "verdict": "fail",
+      "reason": "Exact request and raw choice reproduce original Japanese-to-Korean failure: malformed ISO date 2046-04--19 and missing prerequisite actor Ken Sato. Date guard refuses and preserves source; no opposite actor claim inferred solely from missing name.",
+      "rowCanonicalSHA256": "e3a69aee33b7977cb2e2c7acb958f8a6ab09c7c55143f3b74e16c51fc97cfff7"
+    },
+    {
+      "id": "ja-translate",
+      "variant": "policy-system",
+      "verdict": "fail",
+      "reason": "Korean output still omits prerequisite actor Ken Sato and changes ISO date to 2046-04-019. Date guard refuses. Different raw output does not repair facts or exact date format; no opposite actor assignment inferred solely from omission.",
+      "rowCanonicalSHA256": "c49d8362d04c400a4a2cb0fba1d4c2952b597f86365d3a36cabeadb3977082d7"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "failed",
+  "scope": "Actual offline homepage file-open of saved downloaded PPTX; no model generation during reopen.",
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "openScriptCached": false,
+  "fileInputCount": 0,
+  "error": "Error: Offline homepage file-open bootstrap did not initialize",
+  "errors": []
+}

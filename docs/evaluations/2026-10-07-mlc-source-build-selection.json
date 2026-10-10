@@ -1,0 +1,185 @@
+{
+  "purpose": "Build a matched diagnostic compiler for browser model quality evaluation",
+  "source_repository": "https://github.com/mlc-ai/mlc-llm",
+  "mlc_revision": "8978ea9aec626d64096aaa92fbc89bda2e3ea802",
+  "tvm_gitlink_revision": "201fa0001c81431ccce05419b442c47779ea917c",
+  "source_submodule_checkout": "completed, clone exit 0",
+  "installed_wheel_skip_native_probe_exit": 1,
+  "installed_wheel_skip_native_failure": "Cannot find object type index for mlc.serve.Data",
+  "llvm_config_available": true,
+  "compiler_built": false,
+  "model_library_compiled": false,
+  "existing_product_sdk_changed": false,
+  "submodules": [
+    {
+      "revision": "557948f1236db9e27089959de837cc23de6c6bbd",
+      "path": "3rdparty/argparse",
+      "aligned": true
+    },
+    {
+      "revision": "45804691223635953f311cf31a10c632553bbfc3",
+      "path": "3rdparty/googletest",
+      "aligned": true
+    },
+    {
+      "revision": "ae721c50eaf761660b4f90cc590453cdb0c2acd0",
+      "path": "3rdparty/stb",
+      "aligned": true
+    },
+    {
+      "revision": "34885cfd7b9ef27b859c28a41e71413dd31926f5",
+      "path": "3rdparty/tokenizers-cpp",
+      "aligned": true
+    },
+    {
+      "revision": "092bc69b6e815980bce7808595c914dd3a29f905",
+      "path": "3rdparty/tokenizers-cpp/msgpack",
+      "aligned": true
+    },
+    {
+      "revision": "11051e3b73b3a6222a52acd720e39805dc7545ab",
+      "path": "3rdparty/tokenizers-cpp/sentencepiece",
+      "aligned": true
+    },
+    {
+      "revision": "201fa0001c81431ccce05419b442c47779ea917c",
+      "path": "3rdparty/tvm",
+      "aligned": true
+    },
+    {
+      "revision": "b590a6bfe034ea3a418b7b523e3490956bcb367a",
+      "path": "3rdparty/tvm/3rdparty/OpenCL-Headers",
+      "aligned": true
+    },
+    {
+      "revision": "b2dd65dc864e09688245b316ac46c4a6cd07e15c",
+      "path": "3rdparty/tvm/3rdparty/cutlass",
+      "aligned": true
+    },
+    {
+      "revision": "96b48221df9d010c2d5b7f65d1664f198c664d28",
+      "path": "3rdparty/tvm/3rdparty/cutlass_fpA_intB_gemm",
+      "aligned": true
+    },
+    {
+      "revision": "cc85b64cf676c45f98a17e3a47c0aafcf817f088",
+      "path": "3rdparty/tvm/3rdparty/cutlass_fpA_intB_gemm/cutlass",
+      "aligned": true
+    },
+    {
+      "revision": "07ba35bae96900e51b4d63ef3487ba24850da870",
+      "path": "3rdparty/tvm/3rdparty/libflash_attn",
+      "aligned": true
+    },
+    {
+      "revision": "e0aaa3c3b38db9a89c31f04fef91e92123ad5e2e",
+      "path": "3rdparty/tvm/3rdparty/libflash_attn/cutlass",
+      "aligned": true
+    },
+    {
+      "revision": "df463f9bd269867fc7f4d578d62d80cc2a11d004",
+      "path": "3rdparty/tvm/3rdparty/tvm-ffi",
+      "aligned": true
+    },
+    {
+      "revision": "84d107bf416c6bab9ae68ad285876600d230490d",
+      "path": "3rdparty/tvm/3rdparty/tvm-ffi/3rdparty/dlpack",
+      "aligned": true
+    },
+    {
+      "revision": "793921876c981ce49759114d7bb89bb89b2d3a2d",
+      "path": "3rdparty/tvm/3rdparty/tvm-ffi/3rdparty/libbacktrace",
+      "aligned": true
+    },
+    {
+      "revision": "d4f57c440f3da8e7330a1e5d50bba9c31f9433ea",
+      "path": "3rdparty/xgrammar",
+      "aligned": true
+    },
+    {
+      "revision": "bbd2f4d32427e548797929af08cfe2a9cbb3cf12",
+      "path": "3rdparty/xgrammar/3rdparty/dlpack",
+      "aligned": true
+    }
+  ],
+  "llvm_candidate": {
+    "version": "19.1.7",
+    "bottle_sha256": "7c5f193a831e4296a73ae06d611be2bcbab357510bfb1110c2a124a7da2f9ff4",
+    "download_state": "download completed; SHA256 verified; unpacked in ignored local directory; llvm-config returned 19.1.7"
+  },
+  "tvm_cmake_configure_exit": 0,
+  "tvm_build": "completed exit 0",
+  "wasm_runtime_prep_exit": 2,
+  "wasm_runtime_prep_failure": "Final tvmjs_runtime.wasm link failed with undefined C++ standard-library symbols under emcc 6.0.10; compiler suggested em++ or DEFAULT_TO_CXX",
+  "partial_bitcode_outputs": [
+    {
+      "name": "mlc_wasm_runtime.bc",
+      "bytes": 2424,
+      "sha256": "4db6ec142ba8949cf55cd46b1dba683fe92f8efb2d8cacdbac6024341e412b44"
+    },
+    {
+      "name": "tvmjs_support.bc",
+      "bytes": 185732,
+      "sha256": "89bdabf655c86c11f428ea84099f7cf0f2e94a809c04f5138854d1db02fd215c"
+    },
+    {
+      "name": "wasm_runtime.bc",
+      "bytes": 11684424,
+      "sha256": "49efe199edd19ea1b1c75c53aea63ebf20acfe132e72426b24010b9b7aa21c0f"
+    },
+    {
+      "name": "webgpu_runtime.bc",
+      "bytes": 305992,
+      "sha256": "a6aab4f3383319fd5fc2ca1c14d773cd4866db1fe6f25d9250246626886907c0"
+    }
+  ],
+  "mlc_native_cmake_configure_exit": 0,
+  "mlc_native_build": "completed exit 0",
+  "wasm_link_retry": "make EMCC=em++; completed exit 0",
+  "wasm_link_retry_warnings": [
+    "undefined symbol: TVMFFIWasmFunctionDeleter",
+    "undefined symbol: TVMFFIWasmSafeCall"
+  ],
+  "pinned_model_configs": [
+    {
+      "model": "Qwen2.5-7B-Instruct-q4f16_1-MLC",
+      "revision": "691c5f2512745eeae9607266e7df43e67339f403",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-7B-Instruct-q4f16_1-MLC/resolve/691c5f2512745eeae9607266e7df43e67339f403/mlc-chat-config.json",
+      "sha256": "5970017bb74d1edb6b5c014813f0c172033c999b628751c4c22e8f17f8cc84c0",
+      "bytes": 2046
+    },
+    {
+      "model": "Qwen2.5-14B-Instruct-q4f16_1-MLC",
+      "revision": "5afd9575d32a566251616015e4ddfccf8bfd0366",
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-14B-Instruct-q4f16_1-MLC/resolve/5afd9575d32a566251616015e4ddfccf8bfd0366/mlc-chat-config.json",
+      "sha256": "f8bae949cf112afebb91c9f911b0722c0973a04e9962bc656c05e565775b59a2",
+      "bytes": 2046
+    }
+  ],
+  "built_tvm_runtime": {
+    "bytes": 5895018,
+    "sha256": "25c831d24b5e82ac526aa8019f21639778bc0499bcb82819ee1fc591e7887a82",
+    "webassembly_module_parse": "passed in Node",
+    "model_library": false,
+    "browser_load_verified": false
+  },
+  "built_mlc_native_module": {
+    "bytes": 13088216,
+    "sha256": "b6bb7510d4765d87e454a0a9d62401addd0f38aede6f469f55487a8f3b2228f6"
+  },
+  "mlc_source_import_with_installed_tvm": {
+    "first_exit": 1,
+    "first_failure": "missing psutil",
+    "psutil_installed_version": "7.2.2",
+    "retry_exit": 1,
+    "retry_failure": "installed TVM lacks tvm.script.s_tir expected by pinned MLC source",
+    "next_action": "Use pinned paired TVM source and its in-progress native compiler build"
+  },
+  "built_tvm_compiler": {
+    "bytes": 103576080,
+    "sha256": "731ad67f11cd09da89c4fa568a3d2aa12c86de9d095ffaf4cee8820d65b375fd",
+    "local_bottle_relocation": "LLVM dependency placeholder replaced with ignored toolchain location; LLVM zstd dependency mapped to installed Homebrew zstd; changed libraries signed locally"
+  },
+  "paired_compile_help_exit": 0,
+  "qwen7_compile": "started; model export and graph optimizations observed; no completion claim"
+}

@@ -1,0 +1,44 @@
+{
+  "receiptSha256": "a6b6b196af104cd632771d571fb11fb43a6397ae96fa6fc89d782d8706717f2c",
+  "baselineChecks": [
+    {
+      "id": "zh-CN-summarize",
+      "baselineExact": true
+    },
+    {
+      "id": "ja-rewrite",
+      "baselineExact": true
+    },
+    {
+      "id": "es-translate",
+      "baselineExact": true
+    },
+    {
+      "id": "pt-summarize",
+      "baselineExact": true
+    }
+  ],
+  "scope": "Bounded manual known-source review, not semantic certification or native editor application",
+  "rows": [
+    {
+      "id": "zh-CN-summarize",
+      "verdict": "narrow-pass",
+      "reason": "Delivery-team actor, names, date, quantity, unapproved proposal and unsigned prerequisite are retained in one shorter sentence."
+    },
+    {
+      "id": "ja-rewrite",
+      "verdict": "fail",
+      "reason": "ISO date is reformatted as 2046年4月19日. Extracted ledger also omitted printed-label status."
+    },
+    {
+      "id": "es-translate",
+      "verdict": "narrow-pass",
+      "reason": "Portuguese heading/prose retain all examined roles, proposal status, permission, prerequisite, current nonauthorization and itinerary status."
+    },
+    {
+      "id": "pt-summarize",
+      "verdict": "fail",
+      "reason": "Archive-team actor and explicit unapproved proposal are omitted; permission becomes future removal even though these constraints existed in the ledger."
+    }
+  ]
+}

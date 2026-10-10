@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-02T08:12:38.083Z",
+  "scope": "Actual built UI with isolated persistent Playwright Chromium Metal / GPU Qwen3-1.7B, fresh navigation per case; three bounded quality probes, not full model/language acceptance",
+  "status": "completed",
+  "results": [
+    {
+      "id": "zh-facts",
+      "locale": "zh-CN",
+      "prompt": "请用中文将这句话改写得更正式，保留所有事实、金额、币种、姓名和日期，只输出改写后的句子：Alex 将于 2026-10-08 支付 1,250 EUR。",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex 将于 2026年10月8日支付 1,250欧元。",
+      "responseMs": 1768,
+      "stats": "Decode speed: 44.9 token/s · First token: 1.18 s · 24 tokens",
+      "literalFactsPreserved": false,
+      "manualReview": "Name, date and amount/currency meanings preserved; localized date/currency make literal matching false."
+    },
+    {
+      "id": "en-negation",
+      "locale": "en",
+      "prompt": "Summarize in one English sentence without adding facts: Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved. Do not claim that the payment is approved or scheduled.",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "Alex proposed a 1,250 EUR payment on 2026-10-08, but it has not been approved.",
+      "responseMs": 1805,
+      "stats": "Decode speed: 44.6 token/s · First token: 1.07 s · 31 tokens",
+      "manualReview": "Proposed payment remains explicitly unapproved; no approval or scheduled payment invented."
+    },
+    {
+      "id": "strict-json",
+      "locale": "en",
+      "prompt": "Return exactly this JSON object and nothing else, without markdown fences: {\"answer\":\"hello\"}",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "output": "{\"answer\":\"hello\"}",
+      "responseMs": 1303,
+      "stats": "Decode speed: 39.1 token/s · First token: 1.15 s · 5 tokens",
+      "jsonStructureExact": true,
+      "manualReview": "Requested JSON object only; structure and values correct."
+    }
+  ],
+  "errors": [],
+  "coverage": {
+    "model": "Qwen3-1.7B-q4f16_1-MLC",
+    "device": "Isolated Chromium with explicit Metal WebGPU flags",
+    "fullModelAndLanguageAcceptanceComplete": false
+  }
+}

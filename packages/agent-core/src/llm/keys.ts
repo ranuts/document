@@ -38,3 +38,31 @@ export function setApiKey(provider: string, key: string): void {
 export function clearApiKey(provider: string): void {
   write(`${KEY_PREFIX}${provider}`, '');
 }
+
+/**
+ * Key slots for a user-named endpoint, addressed by origin.
+ *
+ * The provider-keyed slots above cannot hold two OpenAI-compatible services at
+ * once -- configuring a second one would overwrite the first one's key -- so a
+ * user-supplied endpoint gets its own slot derived from its origin.
+ */
+const ENDPOINT_KEY_PREFIX = 'agent_endpoint_key_';
+
+function endpointSlot(origin: string): string {
+  const trimmed = origin.trim().replace(/\/+$/, '');
+  if (!trimmed) throw new Error('An endpoint key requires an origin');
+  return `${ENDPOINT_KEY_PREFIX}${encodeURIComponent(trimmed)}`;
+}
+
+export function getEndpointKey(origin: string): string | undefined {
+  const value = read(endpointSlot(origin));
+  return value ? value : undefined;
+}
+
+export function setEndpointKey(origin: string, key: string): void {
+  write(endpointSlot(origin), key);
+}
+
+export function clearEndpointKey(origin: string): void {
+  write(endpointSlot(origin), '');
+}

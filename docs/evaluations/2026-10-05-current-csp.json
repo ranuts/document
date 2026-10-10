@@ -1,0 +1,25 @@
+{
+  "scope": "Current source contracts and built bytes only; no response-header runtime, deployed edge, external-request or device acceptance.",
+  "sourceCommit": "6cfdf8579155f787015c7a8608d4d7f9362a8e98",
+  "files": {
+    "vite.config.ts": "807783ae0277da38683fff5bc7a9e3eae89b2f4084d778bbc59f44dab1ed53a3",
+    "public/_headers": "b0b8fef4cbbc4f79bfa8d7e6130c0ee00ea2b1765765ef619176d5372326a635",
+    "sws.toml": "69e220dd72ce0cabfbcfdc8ae9aeb55cfc594ee9e4f4d1266b881dca427c1580",
+    "bin/editor-csp.mjs": "89d75f946b43ac6d68528456b3631df45da6fb85628837ff2c433561e07172f3",
+    "dist/editor.html": "d7a73bfdd40427cc933ba3923048dccb7a2b1652b9fa88dff3217820d098be83",
+    "dist/assets/webllm.worker-CMk6FPDh.js": "663218a9e1fa6790319dd16308de55c2eb7fbc329f2b379101de2cec7a0de8ba"
+  },
+  "shellPolicy": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-/BuXJ9xzpX2dEgzl0U0gjOZptCml34s3D5tvR3ySscU='; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; frame-src 'self' blob:; connect-src 'self' https: http: blob:; object-src 'none'; base-uri 'self'; form-action 'self'",
+  "workerPolicy": "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https: http: blob:; worker-src 'self' blob:",
+  "checks": {
+    "shellInlineHashesMatch": true,
+    "shellArbitraryInlineAndEvalDisallowed": true,
+    "workerSourceHostingAndFingerprintMatch": true
+  },
+  "privacyAccepted": false,
+  "remaining": [
+    "Broad HTTP/HTTPS connect permissions are not an exfiltration barrier.",
+    "Native vendor dynamic compilation and blob Workers require their own scoped evidence.",
+    "Current deployed response policies and physical mobile devices remain unverified."
+  ]
+}

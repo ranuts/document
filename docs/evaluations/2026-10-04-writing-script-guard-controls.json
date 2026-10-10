@@ -1,0 +1,267 @@
+{
+  "scope": "Predeclared synthetic positive/negative script controls, no actual model inference. Broad Latin vs CJK buckets, .8 source dominance, minimum lengths, complete dominant-script disappearance. Not a language detector, accuracy ranking or production gate.",
+  "adopted": false,
+  "driverSHA256": "a5095a44a7d9eecae1c4479dbed675687bc90b66852fb11e50497f403320fc74",
+  "rows": [
+    {
+      "id": "zh-to-danish",
+      "source": "Mira提议运送阀门，但仅限安全检查通过后。检查尚未完成，发货尚未获得授权。",
+      "output": "Mira forespiller at sende ventiler, men kun efter sikkerhedskontrolle.",
+      "reject": true,
+      "reason": "Chinese prose replaced with other-language prose",
+      "sourceCounts": [
+        4,
+        30
+      ],
+      "outputCounts": [
+        60,
+        0
+      ],
+      "candidateRejected": true,
+      "correct": true
+    },
+    {
+      "id": "zh-to-english",
+      "source": "备件到货后方可维修，备件仍未到货，目前维修尚未开始，请保留这些必要条件。",
+      "output": "Repair will begin once spare parts arrive; work has not started.",
+      "reject": true,
+      "reason": "Chinese prose replaced with English",
+      "sourceCounts": [
+        0,
+        32
+      ],
+      "outputCounts": [
+        52,
+        0
+      ],
+      "candidateRejected": true,
+      "correct": true
+    },
+    {
+      "id": "en-to-zh",
+      "source": "The repair requires spare parts to arrive first, and the work has not started.",
+      "output": "维修需等待备件到货，目前工作尚未开始。",
+      "reject": true,
+      "reason": "English prose replaced with Chinese",
+      "sourceCounts": [
+        63,
+        0
+      ],
+      "outputCounts": [
+        0,
+        17
+      ],
+      "candidateRejected": true,
+      "correct": true
+    },
+    {
+      "id": "zh-faithful",
+      "source": "备件到货后方可维修，备件仍未到货，目前维修尚未开始，请保留这些必要条件。",
+      "output": "备件未到，维修未开始，须待备件到货。",
+      "reject": false,
+      "reason": "Chinese retained",
+      "sourceCounts": [
+        0,
+        32
+      ],
+      "outputCounts": [
+        0,
+        15
+      ],
+      "candidateRejected": false,
+      "correct": true
+    },
+    {
+      "id": "en-faithful",
+      "source": "The repair requires spare parts to arrive first, and the work has not started.",
+      "output": "Repair awaits spare parts; work has not started.",
+      "reject": false,
+      "reason": "English retained",
+      "sourceCounts": [
+        63,
+        0
+      ],
+      "outputCounts": [
+        39,
+        0
+      ],
+      "candidateRejected": false,
+      "correct": true
+    },
+    {
+      "id": "zh-names-only",
+      "source": "参会人员包括 Alexandria Montgomery、Christopher Richardson。会议议题涵盖设备安全检查、维修前提与尚未开始的工作安排。记录还列出了会议室位置、交通方式、签到顺序、座位安排以及会议结束后的资料分发流程，这些信息与人员名单无关。请以登记表中的正式拼写为准。",
+      "output": "Alexandria Montgomery、Christopher Richardson",
+      "reject": false,
+      "reason": "Instruction: retain only original names; intentional mixed source and names-only summary",
+      "sourceCounts": [
+        41,
+        93
+      ],
+      "outputCounts": [
+        41,
+        0
+      ],
+      "candidateRejected": false,
+      "correct": true
+    },
+    {
+      "id": "zh-quoted-english",
+      "source": "记录包含一句原始口号：“Safety inspection before shipment”。其余内容介绍场地布置、灯光安排、座位编号、接待流程和餐饮管理。这些背景没有改变口号的内容，最终记录应以现场展示的文字为准。相关负责人确认口号的拼写已逐字核对，宣传材料将沿用同一版本。",
+      "output": "Safety inspection before shipment",
+      "reject": false,
+      "reason": "Instruction: summarize by retaining only the original slogan, omit unrelated Chinese narrative",
+      "sourceCounts": [
+        30,
+        93
+      ],
+      "outputCounts": [
+        30,
+        0
+      ],
+      "candidateRejected": false,
+      "correct": true
+    },
+    {
+      "id": "ja-han-summary",
+      "source": "安全検査は未完了です。出荷はまだ承認されていません。別の会議で倉庫について相談します。",
+      "output": "安全検査未完了、出荷未承認。",
+      "reject": false,
+      "reason": "Japanese summary may naturally consist of Han characters",
+      "sourceCounts": [
+        0,
+        40
+      ],
+      "outputCounts": [
+        0,
+        12
+      ],
+      "candidateRejected": false,
+      "correct": true
+    },
+    {
+      "id": "ko-faithful",
+      "source": "부품이 도착한 후에만 수리할 수 있습니다. 부품은 아직 도착하지 않았고 작업도 시작되지 않았습니다.",
+      "output": "부품 미도착으로 수리 작업은 아직 시작되지 않았습니다.",
+      "reject": false,
+      "reason": "Korean retained",
+      "sourceCounts": [
+        0,
+        41
+      ],
+      "outputCounts": [
+        0,
+        23
+      ],
+      "candidateRejected": false,
+      "correct": true
+    },
+    {
+      "id": "de-to-en",
+      "source": "Die Reparatur kann erst beginnen, wenn die Ersatzteile eintreffen. Die Arbeit hat noch nicht begonnen.",
+      "output": "Repair awaits spare parts; work has not started.",
+      "reject": true,
+      "reason": "German replaced with English: same script",
+      "sourceCounts": [
+        85,
+        0
+      ],
+      "outputCounts": [
+        39,
+        0
+      ],
+      "candidateRejected": false,
+      "correct": false
+    },
+    {
+      "id": "es-to-pt",
+      "source": "La reparación depende de la llegada de las piezas; el trabajo no ha comenzado.",
+      "output": "A reparação depende das peças; o trabalho ainda não começou.",
+      "reject": true,
+      "reason": "Spanish replaced with Portuguese: same script",
+      "sourceCounts": [
+        63,
+        0
+      ],
+      "outputCounts": [
+        49,
+        0
+      ],
+      "candidateRejected": false,
+      "correct": false
+    },
+    {
+      "id": "pt-faithful",
+      "source": "A reparação depende da chegada das peças e o trabalho ainda não começou.",
+      "output": "A reparação aguarda peças; o trabalho ainda não começou.",
+      "reject": false,
+      "reason": "Portuguese retained",
+      "sourceCounts": [
+        59,
+        0
+      ],
+      "outputCounts": [
+        46,
+        0
+      ],
+      "candidateRejected": false,
+      "correct": true
+    }
+  ],
+  "falseRejections": [],
+  "missedMismatches": [
+    "de-to-en",
+    "es-to-pt"
+  ],
+  "thresholdSweep": [
+    {
+      "dominanceThreshold": 0.5,
+      "falseRejections": [
+        "zh-names-only",
+        "zh-quoted-english"
+      ],
+      "missedMismatches": [
+        "de-to-en",
+        "es-to-pt"
+      ]
+    },
+    {
+      "dominanceThreshold": 0.6,
+      "falseRejections": [
+        "zh-names-only",
+        "zh-quoted-english"
+      ],
+      "missedMismatches": [
+        "de-to-en",
+        "es-to-pt"
+      ]
+    },
+    {
+      "dominanceThreshold": 0.7,
+      "falseRejections": [
+        "zh-quoted-english"
+      ],
+      "missedMismatches": [
+        "de-to-en",
+        "es-to-pt"
+      ]
+    },
+    {
+      "dominanceThreshold": 0.8,
+      "falseRejections": [],
+      "missedMismatches": [
+        "de-to-en",
+        "es-to-pt"
+      ]
+    },
+    {
+      "dominanceThreshold": 0.9,
+      "falseRejections": [],
+      "missedMismatches": [
+        "zh-to-danish",
+        "de-to-en",
+        "es-to-pt"
+      ]
+    }
+  ]
+}

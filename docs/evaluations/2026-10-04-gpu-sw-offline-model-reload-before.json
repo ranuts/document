@@ -1,0 +1,26 @@
+{
+  "workerEvents": [
+    {
+      "event": "created",
+      "id": 1,
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "url": "http://127.0.0.1:5193/assets/webllm.worker-CMk6FPDh.js"
+    }
+  ],
+  "offlineRequests": [],
+  "probeSHA256": "ede1a3ed32a2e4c5e6fa688effa1d3460aceb654a4d0cfed09d9b05a20b88a3a",
+  "cases": [
+    {
+      "id": "configured-chat",
+      "text": "Reply with a brief greeting."
+    }
+  ],
+  "rows": [],
+  "errors": [],
+  "status": "failed",
+  "error": "TimeoutError: page.waitForFunction: Timeout 120000ms exceeded."
+}

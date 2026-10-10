@@ -1,0 +1,21 @@
+{
+  "scope": "Restore owned diagnostic profile registration and verify current served Worker bytes; no offline inference certification",
+  "state": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "registrations": [
+      {
+        "scope": "http://127.0.0.1:5193/",
+        "active": "http://127.0.0.1:5193/sw.js?isolation=1"
+      }
+    ],
+    "caches": [
+      "document-editor-runtime-b6864850e7b3",
+      "document-editor-core-1791364456"
+    ]
+  },
+  "status": 200,
+  "servedSHA256": "bb9f61986d4a24c11d0ebe04a765d7dcd1454ad0922742617ff81e8a478441d5",
+  "distSHA256": "bb9f61986d4a24c11d0ebe04a765d7dcd1454ad0922742617ff81e8a478441d5",
+  "finished": true,
+  "contextClosed": true
+}

@@ -1,0 +1,22 @@
+{
+  "scope": "Pinned remote tensor manifests compared by canonical parsed JSON, not whitespace-dependent bytes; no shard verification.",
+  "assets": [
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f16_1-MLC/resolve/7690aaaa46df36b1be0fe93b9c9abac0497eff6c/tensor-cache.json",
+      "revision": "7690aaaa46df36b1be0fe93b9c9abac0497eff6c",
+      "sha256": "36931207ccd09207ddceeea9e62b07333a0b6b2745e8b1a45f06d8e6b826ab2e",
+      "semanticSHA256": "2b4c3fb13a2677eeddea21ce9c5185b57fcaecf1a4b13abf4ee709f865df6c75",
+      "cachedSemanticSHA256": "591bef5b5f821b34f231f825d2a12cee0a4f9a2651e3d3ad22ee99758d63a089",
+      "sameParsedContent": false
+    },
+    {
+      "url": "https://huggingface.co/mlc-ai/Qwen2.5-3B-Instruct-q4f32_1-MLC/resolve/dfa91e859b714acfa489a1464297080656c3460d/tensor-cache.json",
+      "revision": "dfa91e859b714acfa489a1464297080656c3460d",
+      "sha256": "fee95d8aa50484c813e909c28081d3cd283a11170354984f4c8dd3f05f99584b",
+      "semanticSHA256": "42b310d205b773278b5e0ab626b7c0c004d295134f0f5cdd69a5586976907a50",
+      "cachedSemanticSHA256": "107dd6879b61a1406a1aa7546df6b7a74d0adaa89f34a6853c350255455c3d8d",
+      "sameParsedContent": false
+    }
+  ],
+  "status": "completed"
+}

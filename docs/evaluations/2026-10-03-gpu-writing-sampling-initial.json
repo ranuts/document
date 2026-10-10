@@ -1,0 +1,417 @@
+{
+  "date": "2026-10-03T08:16:54.047Z",
+  "scope": "Actual cached Qwen3-1.7B WebGPU writing: temperature 0 vs 0.7 only. Identical production prompts, schema, top-p, maximum tokens and guards. Route-local instrumentation; native selected-text actions and Undo/Redo; no product/default change or broad quality claim.",
+  "status": "completed",
+  "probeSHA256": "f067077ec3e062404986808bee0d769339ba6ebf3d162d2bb8046f7712372397",
+  "variants": [
+    "current",
+    "sampled"
+  ],
+  "repetitions": 2,
+  "cases": [
+    {
+      "id": "formal-en-new",
+      "task": "rewrite",
+      "source": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?",
+      "instruction": "Rewrite in formal English. Preserve all facts and remove conversational expressions."
+    },
+    {
+      "id": "formal-zh-new",
+      "task": "rewrite",
+      "source": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！",
+      "instruction": "改写成正式书面中文，去除口语，保留全部事实。"
+    },
+    {
+      "id": "proposal-summary-new",
+      "task": "summarize",
+      "source": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.",
+      "instruction": "Summarize in one sentence. Preserve the proposed delivery, its value, date and unapproved status."
+    }
+  ],
+  "bundleHashes": {
+    "plugin": "b683596633ea2c4399522a22bfd912aa30e81ad044bdaf21dad73059b4119c06",
+    "diagnosticPlugin": "9bab7ca2b6ac77833b80f730493e8b0001062b6ed952810026e64a8f6b5a3eb0"
+  },
+  "results": [
+    {
+      "id": "formal-en-new",
+      "task": "rewrite",
+      "source": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?",
+      "instruction": "Rewrite in formal English. Preserve all facts and remove conversational expressions.",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "output": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1958,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 29,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 48.02954648388594,
+            "timeToFirstTokenMs": 1058.965000152588
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "undoExact": true,
+      "redoText": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "formal-en-new",
+      "task": "rewrite",
+      "source": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?",
+      "instruction": "Rewrite in formal English. Preserve all facts and remove conversational expressions.",
+      "repetition": 0,
+      "variant": "sampled",
+      "selected": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "output": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1367,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 29,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 49.92769095824844,
+            "timeToFirstTokenMs": 762.295000076294
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "undoExact": true,
+      "redoText": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "formal-zh-new",
+      "task": "rewrite",
+      "source": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！",
+      "instruction": "改写成正式书面中文，去除口语，保留全部事实。",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "output": "Nora 将于 2032-07-19 按照 42 EUR 的价值交付物资。\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1658,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\": \"Nora 将于 2032-07-19 按照 42 EUR 的价值交付物资。\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 34,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 50.133813049342976,
+            "timeToFirstTokenMs": 760.2399997711182
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "undoExact": true,
+      "redoText": "Nora 将于 2032-07-19 按照 42 EUR 的价值交付物资。\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "formal-zh-new",
+      "task": "rewrite",
+      "source": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！",
+      "instruction": "改写成正式书面中文，去除口语，保留全部事实。",
+      "repetition": 0,
+      "variant": "sampled",
+      "selected": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "output": "Nora 将于 2032-07-19 交付价值 42 EUR 的物资。\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1388,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"Nora 将于 2032-07-19 交付价值 42 EUR 的物资。\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 30,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 49.841752339671515,
+            "timeToFirstTokenMs": 759.4850001335144
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "undoExact": true,
+      "redoText": "Nora 将于 2032-07-19 交付价值 42 EUR 的物资。\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "proposal-summary-new",
+      "task": "summarize",
+      "source": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.",
+      "instruction": "Summarize in one sentence. Preserve the proposed delivery, its value, date and unapproved status.",
+      "repetition": 0,
+      "variant": "current",
+      "selected": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "output": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1534,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 33,
+            "promptTokens": 370,
+            "decodeTokensPerSecond": 48.748061204731286,
+            "timeToFirstTokenMs": 832.1950001716614
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "undoExact": true,
+      "redoText": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "proposal-summary-new",
+      "task": "summarize",
+      "source": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.",
+      "instruction": "Summarize in one sentence. Preserve the proposed delivery, its value, date and unapproved status.",
+      "repetition": 0,
+      "variant": "sampled",
+      "selected": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "output": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1519,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 33,
+            "promptTokens": 370,
+            "decodeTokensPerSecond": 49.5837966901738,
+            "timeToFirstTokenMs": 830.5599999427795
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "undoExact": true,
+      "redoText": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "formal-en-new",
+      "task": "rewrite",
+      "source": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?",
+      "instruction": "Rewrite in formal English. Preserve all facts and remove conversational expressions.",
+      "repetition": 1,
+      "variant": "sampled",
+      "selected": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "output": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1357,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 29,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 50.11968215821721,
+            "timeToFirstTokenMs": 756.6950001716614
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "undoExact": true,
+      "redoText": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "formal-en-new",
+      "task": "rewrite",
+      "source": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?",
+      "instruction": "Rewrite in formal English. Preserve all facts and remove conversational expressions.",
+      "repetition": 1,
+      "variant": "current",
+      "selected": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "output": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1357,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 29,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 49.64520803617639,
+            "timeToFirstTokenMs": 753.3249998092651
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Yo, Nora is gonna deliver 42 EUR worth of supplies on 2032-07-19, alright?\r\n",
+      "undoExact": true,
+      "redoText": "The amount of 42 EUR will be delivered on 2032-07-19 by Nora.\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "formal-zh-new",
+      "task": "rewrite",
+      "source": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！",
+      "instruction": "改写成正式书面中文，去除口语，保留全部事实。",
+      "repetition": 1,
+      "variant": "sampled",
+      "selected": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "output": "Nora 将于 2032-07-19 预计交付价值 42 EUR 的物资。\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1656,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\": \"Nora 将于 2032-07-19 预计交付价值 42 EUR 的物资。\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 34,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 50.315210009051164,
+            "timeToFirstTokenMs": 768.8599996566772
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "undoExact": true,
+      "redoText": "Nora 将于 2032-07-19 预计交付价值 42 EUR 的物资。\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "formal-zh-new",
+      "task": "rewrite",
+      "source": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！",
+      "instruction": "改写成正式书面中文，去除口语，保留全部事实。",
+      "repetition": 1,
+      "variant": "current",
+      "selected": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "output": "Nora 将于 2032-07-19 按照 42 EUR 的价值交付物资。\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1457,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\": \"Nora 将于 2032-07-19 按照 42 EUR 的价值交付物资。\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 34,
+            "promptTokens": 349,
+            "decodeTokensPerSecond": 50.40472007849582,
+            "timeToFirstTokenMs": 760.6150002479553
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "喂，Nora 会在 2032-07-19 交付价值 42 EUR 的物资啦！\r\n",
+      "undoExact": true,
+      "redoText": "Nora 将于 2032-07-19 按照 42 EUR 的价值交付物资。\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "proposal-summary-new",
+      "task": "summarize",
+      "source": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.",
+      "instruction": "Summarize in one sentence. Preserve the proposed delivery, its value, date and unapproved status.",
+      "repetition": 1,
+      "variant": "sampled",
+      "selected": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "output": "Nora proposed a delivery of 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1699,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"Nora proposed a delivery of 42 EUR on 2032-07-19, which is still awaiting approval.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 33,
+            "promptTokens": 370,
+            "decodeTokensPerSecond": 49.79065282188599,
+            "timeToFirstTokenMs": 834.3699998855591
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "undoExact": true,
+      "redoText": "Nora proposed a delivery of 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "redoExact": true
+    },
+    {
+      "id": "proposal-summary-new",
+      "task": "summarize",
+      "source": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.",
+      "instruction": "Summarize in one sentence. Preserve the proposed delivery, its value, date and unapproved status.",
+      "repetition": 1,
+      "variant": "current",
+      "selected": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "output": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "documentUnchanged": false,
+      "responseMs": 1533,
+      "errors": [],
+      "previewCount": 0,
+      "raw": [
+        {
+          "text": "<think>\n\n</think>\n\n{\"text\":\"Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\"}",
+          "stopReason": "stop",
+          "usage": {
+            "completionTokens": 33,
+            "promptTokens": 370,
+            "decodeTokensPerSecond": 48.9803187993218,
+            "timeToFirstTokenMs": 837.0150003433228
+          }
+        }
+      ],
+      "isolated": true,
+      "undoText": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19. The delivery has not been approved and is still awaiting approval.\r\n",
+      "undoExact": true,
+      "redoText": "Nora proposed delivering supplies worth 42 EUR on 2032-07-19, which is still awaiting approval.\r\n",
+      "redoExact": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "cacheReset": {
+    "registrations": 0,
+    "removed": 4
+  },
+  "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+  "bundleBytesUnchanged": true
+}

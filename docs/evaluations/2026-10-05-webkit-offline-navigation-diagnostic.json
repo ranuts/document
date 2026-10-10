@@ -1,0 +1,77 @@
+{
+  "version": "26.5",
+  "scope": "fresh shell-only context; no model inference",
+  "failures": [
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN",
+      "error": "WebKit encountered an internal error"
+    },
+    {
+      "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN",
+      "error": "WebKit encountered an internal error"
+    }
+  ],
+  "cases": [
+    {
+      "mode": "reload",
+      "error": "Error: page.reload: WebKit encountered an internal error\nCall log:\n\u001b[2m  - waiting for navigation until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "mode": "newPage",
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    }
+  ],
+  "online": {
+    "controller": "http://127.0.0.1:5193/sw.js?isolation=1",
+    "caches": [
+      {
+        "name": "document-editor-runtime-70cdcd40a53e",
+        "entries": []
+      },
+      {
+        "name": "document-editor-core-1791146346",
+        "entries": [
+          {
+            "url": "http://127.0.0.1:5193/editor",
+            "status": 200,
+            "type": "basic",
+            "headers": {
+              "cache-control": "no-cache",
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "text/html;charset=utf-8",
+              "cross-origin-embedder-policy": "require-corp",
+              "cross-origin-opener-policy": "same-origin",
+              "date": "Sun, 04 Oct 2026 22:06:04 GMT",
+              "etag": "W/\"3613-1791146345575\"",
+              "keep-alive": "timeout=5",
+              "last-modified": "Sun, 04 Oct 2026 20:39:05 GMT",
+              "transfer-encoding": "Identity",
+              "vary": "Origin"
+            }
+          },
+          {
+            "url": "http://127.0.0.1:5193/editor.html",
+            "status": 200,
+            "type": "basic",
+            "headers": {
+              "cache-control": "no-cache",
+              "connection": "keep-alive",
+              "content-encoding": "gzip",
+              "content-type": "text/html;charset=utf-8",
+              "cross-origin-embedder-policy": "require-corp",
+              "cross-origin-opener-policy": "same-origin",
+              "date": "Sun, 04 Oct 2026 22:06:04 GMT",
+              "etag": "W/\"3613-1791146345575\"",
+              "keep-alive": "timeout=5",
+              "last-modified": "Sun, 04 Oct 2026 20:39:05 GMT",
+              "transfer-encoding": "Identity",
+              "vary": "Origin"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "closed": true
+}

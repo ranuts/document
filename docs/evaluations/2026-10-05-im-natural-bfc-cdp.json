@@ -1,0 +1,69 @@
+{
+  "scope": "Actual browser navigation, blank native Word editor, no model inference; inspect natural BFCache admission",
+  "errors": [],
+  "cycles": [
+    {
+      "token": "e41d77cc-220c-4bc3-9b7d-c2baad99a38a",
+      "events": [
+        {
+          "type": "show",
+          "persisted": false
+        }
+      ],
+      "draft": "",
+      "handles": 1,
+      "entries": 0,
+      "notRestoredReasons": {
+        "src": null,
+        "id": null,
+        "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=c811ad98-660a-47f8-a8ac-fbc7e868306d",
+        "name": null,
+        "reasons": [
+          {
+            "reason": "masked"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "browserVersion": "151.0.7922.34",
+  "commandLineError": "Error: cdpSession.send: Protocol error (Browser.getBrowserCommandLine): Command line not returned because --enable-automation not set.",
+  "cacheDiagnostics": [
+    {
+      "loaderId": "2D05990EFB8E179C15FC0CD8702C63D9",
+      "frameId": "79BB6D1984118A63D566BFAAF8525D08",
+      "notRestoredExplanations": [
+        {
+          "type": "Circumstantial",
+          "reason": "BrowsingInstanceNotSwapped"
+        },
+        {
+          "type": "Circumstantial",
+          "reason": "BackForwardCacheDisabledForDelegate"
+        },
+        {
+          "type": "PageSupportNeeded",
+          "reason": "UnloadHandlerExistsInSubFrame"
+        }
+      ],
+      "notRestoredExplanationsTree": {
+        "url": "http://127.0.0.1:5193/editor?new=docx&agent=1&locale=zh-CN&saved=c811ad98-660a-47f8-a8ac-fbc7e868306d",
+        "explanations": [
+          {
+            "type": "Circumstantial",
+            "reason": "BrowsingInstanceNotSwapped"
+          },
+          {
+            "type": "Circumstantial",
+            "reason": "BackForwardCacheDisabledForDelegate"
+          }
+        ],
+        "children": []
+      }
+    }
+  ],
+  "token": "7a5510b1-dfea-4430-a232-a319f0b35c0f",
+  "cached": false,
+  "contextClosed": true
+}

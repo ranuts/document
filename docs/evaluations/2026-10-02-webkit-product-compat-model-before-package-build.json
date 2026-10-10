@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-02T07:20:25.372Z",
+  "scope": "Actual Playwright WebKit editor and CPU inference, fresh isolated context; not iOS hardware",
+  "status": "failed",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+  "loadMs": 674,
+  "notes": [
+    "Model loading failed. Retry loading or choose another model.",
+    "Review local suggestions before applying them."
+  ],
+  "engine": "",
+  "error": "Error: Model failed to load",
+  "errors": [],
+  "failed": [],
+  "visibleErrors": [
+    "The request could not be completed. Try again or check settings."
+  ]
+}

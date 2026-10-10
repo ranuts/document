@@ -1,0 +1,8 @@
+{
+  "scope": "Actual production CPU Qwen 0.6B generation interrupted using visible Stop; plain status, restore request without resending, preserve new draft, and next real inference. Desktop Chromium; no native document mutation or physical mobile coverage.",
+  "errors": [],
+  "passed": false,
+  "error": "TimeoutError: page.waitForFunction: Timeout 90000ms exceeded.",
+  "probeSource": "probe-im-stop-neutral-status-cpu-initial.mjs",
+  "probeSHA256": "71505c6c9710a755b3f6d6b1a41c737dfe6ff90811bfdf46633f7d225bc049da"
+}

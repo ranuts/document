@@ -1,0 +1,11 @@
+# Gemma 4 consistent-task comparison on unused sources
+
+Question: does the existing consistent-task message candidate preserve explicitly requested current negative states better than the product prompt for Gemma 4? The remaining development screen omitted a pending budget state and changed unapproved relocation into an added approval prerequisite. The candidate explicitly separates conditions from current facts. It failed the previous Qwen2.5 3B single-sentence screen; its behavior cannot be assumed to transfer to this model.
+
+Freeze the two new source/instruction fixtures and driver before any generation. Run product then consistent once per fixture in separate native Word/Chromium contexts. Keep the pinned Gemma 4 artifact, matched CPU runtime, tokenizer/template, structured schema, temperature 0, top_p 0.8, output limit 512, guards and native execution unchanged. The consistent variant substitutes the frozen system from 2026-10-05-summary-consistent-candidate.json and removes generic preamble instructions, preserving the original task JSON byte-for-byte. Apply the identical transformation to counting and completion, and record both requests.
+
+This is a whole-request contrast: role placement, prompt wording and length change together. It tests a candidate, not a proven causal explanation. Existing baseline/remaining-screen sources are not reused. New sources become development data immediately after observation.
+
+Rubric: exactly one shorter sentence in the original language; every specified proposer, proposed day/object, acting team, prerequisite actor/object, and explicit current negative state; omit only the stated distractor; no invented or strengthened relationship. Check actual source/raw output manually, separately from exact native writes/Undo/Redo. A failure leaves the candidate unadopted. Even four successes only justify unused seven-language rewrite/summary/translation and lifecycle/device validation; do not promote defaults or alter product code.
+
+Served build remains core1791295582/vendorb6864850e7b3. The separate cancellation fix is not included in these app bundles. Record hashes before/after and retain setup failures, generation failures and cleanup status. Model weights remain ignored, diagnostic artifacts are scanned for personal paths before committing.

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "single-extra-zh-CN",
+    "task": "summarize",
+    "language": "zh-CN",
+    "source": "许澄建议由试验组启用新的测量台，但必须先由计量组完成校准并确认精度合格。计量组尚未完成校准，试验组也没有启用测量台。行政组另行讨论休息室座椅。",
+    "instruction": "用原文语言写一句更短的摘要，保留提议者、启用设备的团队、校准和精度确认的前提，以及校准未完成和设备未启用的状态，省略座椅讨论。",
+    "rubric": [
+      "zh-CN",
+      "one shorter sentence",
+      "Xu Cheng proposes",
+      "test team activates new measurement bench",
+      "metrology calibration and accuracy confirmation prerequisite",
+      "calibration not completed",
+      "bench not activated",
+      "omit chairs",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "single-extra-ko",
+    "task": "summarize",
+    "language": "ko",
+    "source": "민준은 보안팀이 접근 규칙을 승인한 경우에만 운영팀이 새 로그인 절차를 시작하도록 제안했다. 보안팀은 아직 승인하지 않았고 운영팀도 시작하지 않았다. 총무팀은 별도로 휴게실 가구를 논의했다.",
+    "instruction": "원문과 같은 언어로 더 짧은 한 문장으로 요약하세요. 제안자, 절차를 시작할 팀, 접근 규칙 승인이 전제라는 점, 미승인과 미시작 상태를 유지하고 가구 이야기는 생략하세요.",
+    "rubric": [
+      "ko",
+      "one shorter sentence",
+      "Minjun proposes",
+      "operations starts new login procedure",
+      "security approval of access rules prerequisite",
+      "security has not approved",
+      "operations has not started",
+      "omit furniture",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "single-extra-de",
+    "task": "summarize",
+    "language": "de",
+    "source": "Leonie schlug vor, dass das Montageteam die neue Lüftungsanlage erst einschaltet, wenn das Wartungsteam die Dichtheitsprüfung abgeschlossen und das Prüfprotokoll freigegeben hat. Die Wartung hat die Prüfung noch nicht abgeschlossen, und die Montage hat die Anlage noch nicht eingeschaltet. Das Verwaltungsteam besprach getrennt die Farbe der Eingangstür.",
+    "instruction": "Fasse den Text in einem kürzeren Satz in der Ausgangssprache zusammen. Erhalte die vorschlagende Person, das einschaltende Team, Prüfung und Protokollfreigabe als Voraussetzung sowie die noch nicht abgeschlossene Prüfung und die noch nicht eingeschaltete Anlage. Lasse die Türfarbe weg.",
+    "rubric": [
+      "de",
+      "one shorter sentence",
+      "Leonie proposes",
+      "assembly turns on new ventilation system",
+      "maintenance completes leak test and releases test record prerequisite",
+      "maintenance test incomplete",
+      "assembly has not turned system on",
+      "omit door colour",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "single-extra-es",
+    "task": "summarize",
+    "language": "es",
+    "source": "Lucía propuso que el equipo editorial publique el boletín corregido solo cuando el equipo jurídico apruebe el anexo de confidencialidad. Jurídico todavía no ha aprobado el anexo y editorial no ha publicado el boletín. El equipo de recepción habló por separado del menú de la cafetería.",
+    "instruction": "Resume en una sola frase más corta y en el idioma original. Conserva a la proponente, el equipo que publica, la aprobación del anexo como requisito y los estados de falta de aprobación y de publicación. Omite el menú.",
+    "rubric": [
+      "es",
+      "one shorter sentence",
+      "Lucía proposes",
+      "editorial publishes corrected bulletin",
+      "legal approval of confidentiality appendix prerequisite",
+      "appendix not approved",
+      "bulletin not published",
+      "omit menu",
+      "no unsupported fact"
+    ]
+  },
+  {
+    "id": "single-extra-pt",
+    "task": "summarize",
+    "language": "pt",
+    "source": "Rita propôs que a equipe técnica ative o novo sistema de alarmes apenas depois que a equipe de segurança aprovar o plano de evacuação. A segurança ainda não aprovou o plano e a equipe técnica não ativou o sistema. A equipe administrativa discutiu separadamente as plantas do jardim.",
+    "instruction": "Resuma em uma única frase mais curta, no idioma original. Preserve a proponente, a equipe que ativa o sistema, a aprovação do plano como condição e os estados de plano não aprovado e sistema não ativado. Omita as plantas do jardim.",
+    "rubric": [
+      "pt",
+      "one shorter sentence",
+      "Rita proposes",
+      "technical team activates new alarm system",
+      "security approval of evacuation plan prerequisite",
+      "plan not approved",
+      "system not activated",
+      "omit garden plants",
+      "no unsupported fact"
+    ]
+  }
+]

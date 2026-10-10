@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-02T05:21:44.089Z",
+  "scope": "Production preview, isolated persistent Chromium; warm local CPU model then offline reload and actual inference",
+  "status": "failed",
+  "warmEngine": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-68889b4854d8",
+      "document-editor-core-1790918288"
+    ]
+  },
+  "offlineController": "http://127.0.0.1:5193/sw.js",
+  "error": "TimeoutError: locator.click: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#app iframe').contentFrame().locator('.agent-sidebar-entry')\u001b[22m\n",
+  "errors": [
+    "Script error for \"allfonts\"\nhttps://requirejs.org/docs/errors.html#scripterror",
+    "Script error for \"xregexp\"\nhttps://requirejs.org/docs/errors.html#scripterror",
+    "Script error for \"socketio\"\nhttps://requirejs.org/docs/errors.html#scripterror",
+    "Script error for \"x2t\"\nhttps://requirejs.org/docs/errors.html#scripterror",
+    "Script error for \"allfonts\"\nhttps://requirejs.org/docs/errors.html#scripterror",
+    "Script error for \"xregexp\"\nhttps://requirejs.org/docs/errors.html#scripterror",
+    "Script error for \"socketio\"\nhttps://requirejs.org/docs/errors.html#scripterror",
+    "Script error for \"x2t\"\nhttps://requirejs.org/docs/errors.html#scripterror"
+  ],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/en.json",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/locale/en.json",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/AllFonts.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/xregexp/xregexp-all-min.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/vendor/socketio/socket.io.min.js",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/wasm/x2t/x2t_helper.js",
+      "error": "net::ERR_FAILED"
+    }
+  ],
+  "visibleErrors": []
+}

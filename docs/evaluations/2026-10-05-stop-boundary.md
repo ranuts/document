@@ -1,0 +1,9 @@
+# Truthful interruption boundary: insufficient repair
+
+The native IM reproduction completed using the diagnostic driver frozen at 194835a. After real Stop, one native exit/reload and the next explicit Enter, both user messages and the system prompt remained unchanged. The only diagnostic message insertion was assistant `已停止。` between the users. The final counted messages match actual completion messages. No model output was substituted; built product sources were unchanged.
+
+Raw second SDK output is `好的，我已经记住了。`; the DOM equals this text plus the apply-action label. The model no longer answers the clock-story request, but still does not follow the current BRAVO-only instruction. This fails the requested outcome. Prior baselines yielded different old-story answers, so a single historical contrast does not isolate a robust causal effect or prove global history-boundary correctness. The diagnostic boundary is truthful, but is not adopted as a demonstrated fix.
+
+Actual exit/reload/send mechanics and unchanged native document remain verified. Process exit 0, browser closed, no recorded page/guidance errors, no previews. The passed flag in the raw report is mechanical, not semantic. `python3 docs/evaluations/verify-stop-boundary.py` checks frozen driver, exact original/adjusted messages, count/completion parity, raw output and DOM correspondence.
+
+This observed sequence is development data. Further investigation should separate the small model's multi-turn instruction limitations from history representation using another already-supported model and controlled matched requests, before production history changes. This result does not accept cross-session/tool-exchange persistence, GPU/native faults, offline/PWA, physical devices or model quality. Product defaults remain unchanged.

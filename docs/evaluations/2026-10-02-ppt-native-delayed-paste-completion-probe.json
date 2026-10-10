@@ -1,0 +1,90 @@
+{
+  "scope": "Native PPT completion callback with controlled 200ms delay in native pre_Paste; not actual cold font download or shipped migration",
+  "result": {
+    "format": 1,
+    "results": [
+      {
+        "text": "Earlier independent edit",
+        "before": [
+          "\r\n",
+          "\r\n"
+        ],
+        "events": [
+          {
+            "event": "returned",
+            "elapsed": 2.1999998092651367,
+            "text": [
+              "\r\n",
+              "\r\n"
+            ]
+          },
+          {
+            "event": "callback",
+            "elapsed": 218.19999980926514,
+            "text": [
+              "\r\n",
+              "\r\n",
+              "Earlier independent edit\r\n"
+            ]
+          }
+        ],
+        "prepCalls": 1,
+        "after": [
+          "\r\n",
+          "\r\n",
+          "Earlier independent edit\r\n"
+        ]
+      },
+      {
+        "text": "项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved",
+        "before": [
+          "\r\n",
+          "\r\n",
+          "Earlier independent edit\r\n"
+        ],
+        "events": [
+          {
+            "event": "returned",
+            "elapsed": 0.8000001907348633,
+            "text": [
+              "\r\n",
+              "\r\n",
+              "Earlier independent edit\r\n"
+            ]
+          },
+          {
+            "event": "callback",
+            "elapsed": 210.30000019073486,
+            "text": [
+              "\r\n",
+              "\r\n",
+              "Earlier independent edit\r\n",
+              "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+            ]
+          }
+        ],
+        "prepCalls": 1,
+        "after": [
+          "\r\n",
+          "\r\n",
+          "Earlier independent edit\r\n",
+          "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+        ]
+      }
+    ],
+    "beforeUndo": [
+      "\r\n",
+      "\r\n",
+      "Earlier independent edit\r\n",
+      "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+    ],
+    "afterUndo": [
+      "\r\n",
+      "\r\n",
+      "Earlier independent edit\r\n"
+    ],
+    "busy": false,
+    "lock": false
+  },
+  "status": "passed"
+}

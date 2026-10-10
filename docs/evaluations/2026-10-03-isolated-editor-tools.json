@@ -1,0 +1,107 @@
+{
+  "scope": "Experimental COOP same-origin and COEP require-corp on same-origin responses. Real GPU inference, IM edits and native Undo/Redo, Save and actual homepage file-chooser reopen in isolated new Word, Excel and PPT documents. No production header change yet.",
+  "results": [
+    {
+      "type": "docx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "\r\n",
+      "after": "ISOLATED_WORD_2026\r\n",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "\r\n",
+      "afterRedo": "ISOLATED_WORD_2026\r\n",
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/isolated-saved.docx",
+        "bytes": 25848,
+        "failure": null
+      },
+      "reopened": "ISOLATED_WORD_2026\r\n",
+      "reopenExact": true
+    },
+    {
+      "type": "xlsx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": "",
+      "after": "ISOLATED_CELL_2026",
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": "",
+      "afterRedo": "ISOLATED_CELL_2026",
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/isolated-saved.xlsx",
+        "bytes": 8426,
+        "failure": null
+      },
+      "reopened": "ISOLATED_CELL_2026",
+      "reopenExact": true
+    },
+    {
+      "type": "pptx",
+      "engine": "WebGPU · Qwen3-1.7B-q4f16_1-MLC",
+      "isolated": true,
+      "iframeIsolated": true,
+      "before": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "after": [
+        [
+          "\r\n",
+          "\r\n",
+          "ISOLATED_PPT_2026\r\n"
+        ]
+      ],
+      "visibleErrors": [],
+      "previewCount": 0,
+      "afterUndo": [
+        [
+          "\r\n",
+          "\r\n"
+        ]
+      ],
+      "afterRedo": [
+        [
+          "\r\n",
+          "\r\n",
+          "ISOLATED_PPT_2026\r\n"
+        ]
+      ],
+      "undoExact": true,
+      "redoExact": true,
+      "nativeSave": {
+        "artifactPath": ".scratch/ai-csp/isolated-saved.pptx",
+        "bytes": 33959,
+        "failure": null
+      },
+      "reopened": [
+        [
+          "\r\n",
+          "\r\n",
+          "ISOLATED_PPT_2026\r\n"
+        ]
+      ],
+      "reopenExact": true
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "probeSource": "probe-isolated-editor-tools.mjs",
+  "probeSha256": "f1c7ae6e9352c213d5ab9b47974cdd186698894531dcf6c210f2ece9255325b4",
+  "productionHeadersChanged": false,
+  "limitations": [
+    "One Chromium GPU 1.7B sample per editor.",
+    "Native download fallback tested; browser file-picker dialog was disabled in final run.",
+    "No offline, stale-header cache upgrade, physical mobile or alternative browser coverage.",
+    "Exact text snapshots do not prove complete styling or document feature fidelity."
+  ]
+}

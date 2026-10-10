@@ -1,0 +1,25 @@
+{
+  "scope": "Derived native preflight evidence. Same actual 7B allocation failure; existing SDK count guard rejects before generation. Not full panel UI/fallback testing. Raw console retained ignored.",
+  "rawReceiptSha256": "60f5dfb81923ab470c98e5c7e817741607d5c9dfe9198967944efc04c29dbbba",
+  "protocolSha256": "266571c1bfb4689f2ad76a58bca4a53f0946921f60d1e44adf65d11348a626a1",
+  "runtime": {
+    "/client.js": {
+      "bytes": 219093,
+      "sha256": "d522958c39df2fcf77a05e9de526326b58c9a20e76f4517450732c4ae2eaaaf6"
+    },
+    "/model.wasm": {
+      "bytes": 6570369,
+      "sha256": "c1e814006eb3b62c60ddf9f4cce7f39f9fb87e324015fbaa252dd3b18937c6b6"
+    }
+  },
+  "load": {
+    "ready": true,
+    "isolated": true
+  },
+  "error": "Error: Error: count_chat requires a loaded text-only chat model and no files",
+  "generationAttempted": false,
+  "chatTemplateAssertionObserved": false,
+  "contextClosed": true,
+  "browserClosed": true,
+  "serverClosed": true
+}

@@ -1,0 +1,41 @@
+{
+  "scope": "Fresh WebKit process navigation with persisted app cache, actual failed uncached control; no model inference.",
+  "phases": [
+    {
+      "proxy": false,
+      "route": "/editor?new=docx&agent=1&locale=en",
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "status": "failed"
+    },
+    {
+      "proxy": false,
+      "route": "/index.html",
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/index.html\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "status": "failed"
+    },
+    {
+      "proxy": false,
+      "route": "/editor?new=docx&agent=1&locale=en",
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "status": "failed"
+    },
+    {
+      "proxy": true,
+      "route": "/editor?new=docx&agent=1&locale=en",
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "status": "failed"
+    },
+    {
+      "proxy": true,
+      "route": "/index.html",
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/index.html\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "status": "failed"
+    },
+    {
+      "proxy": true,
+      "route": "/editor?new=docx&agent=1&locale=en",
+      "error": "Error: page.goto: WebKit encountered an internal error\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:5193/editor?new=docx&agent=1&locale=en\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "status": "failed"
+    }
+  ]
+}

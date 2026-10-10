@@ -1,0 +1,14 @@
+{
+  "probeSHA256": "5454709c7cbfef9cc75e8e22adcb0528a3b9336f723124869f012d62e68a778b",
+  "sources": {
+    "packages/chat-ui/src/chat-view.ts": "837bb820c90b60d8c7be145cdbcb2e167c953c693ec8ed59915022091c9547f4",
+    "packages/chat-ui/src/markdown.ts": "2abe61a51b5fc74a8a22e3daff08ce98afd234c36ea2e1f390c07c745464b909"
+  },
+  "results": [],
+  "requests": [],
+  "errors": [],
+  "dialogs": [],
+  "scope": "Current source ChatView served by isolated Vite harness, real Chromium, no CSP; not deployed editor integration or model inference.",
+  "passed": false,
+  "error": "TimeoutError: page.waitForFunction: Timeout 30000ms exceeded."
+}

@@ -1,0 +1,9 @@
+# Ministral tokenizer artifact comparison
+
+Fetched tokenizer JSON/config from pinned official BF16 revision `b6d637bef2393152b3da2b2fde72eecdee30557e` and MLC revision `eebad8da4ac64947d8dc9507007fc0279bf52454`. Raw report retains revision URLs, lengths, hashes and owned scratch artifact paths. This compares repository files, not tokenizer execution or actual browser cache contents from earlier inference.
+
+Files differ bytewise. Independent structural comparison finds ordinary vocabulary token→ID mappings identical across 131072 entries except token names at IDs 34/35: official `<SPECIAL_34>`/`<SPECIAL_35>` become MLC `[THINK]`/`[/THINK]`. IDs remain 34/35. Added tokens are otherwise identical. Merges, normalizer, pre-tokenizer, decoder and post-processor match exactly. BOS/EOS are 1/2, instruction boundaries 3/4, system boundaries 17/18 in both. Tokenizer configs differ only in added-token decoder and additional-special-token fields; neither contains a chat_template field, so equal absent fields are not template-equivalence proof.
+
+Conclusion: these pinned files do not show ordinary/digit vocabulary index remapping that directly explains numeric degeneration. The special-token names differ and should be checked against actual runtime/template use before asserting compatibility. Do not claim there is no tokenizer defect: runtime implementation, special-token recognition, cached revision, prompt assembly and compiled weights remain unverified. No product changes or model adoption.
+
+Verifier hashes each downloaded scratch file then independently recomputes the structural comparison. Large public tokenizer files stay in scratch rather than Git. Future scratch loss requires fetching the exact pinned revisions again; metadata alone does not reproduce the comparison. No model weights were fetched in this audit. This is not browser/weight integrity, provenance-chain, offline/device, performance or writing acceptance certification.

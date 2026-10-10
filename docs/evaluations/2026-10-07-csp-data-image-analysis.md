@@ -1,0 +1,9 @@
+# Embedded-image reads under editor CSP
+
+PR run 37618025513 failed the two xlsx-panes tests on both Pages semantics and Docker due to CSP blocking fetch(data:image/png;base64,...). The editor shell permitted data images for img-src, but did not permit the byte-read operation through connect-src. The fix adds data: only to the generated editor connect-src. Script-src and worker-src retain their restrictions; the dedicated WebLLM worker response policy remains unchanged.
+
+The new policy regression failed before the change and passed afterward; related policy/hosting tests: 2 files/22 tests passed. Full unit suite: 142 files/4542 tests passed with asynchronous rejection-handling warnings in the local log. TypeScript, changed-file lint/format, whitespace checks and production build passed (core 1791376336, vendor b6864850e7b3).
+
+A real Chromium control using the original/fixed generator fails reading the synthetic embedded PNG before the repair and returns exact expected bytes afterward. Both policies block execution of a data script and a data worker, observed through actual load/error/message outcomes. The first observer incorrectly treated a returned Worker object as execution; its failed receipt/driver and actual CSP errors remain preserved. The corrected observer waits for the asynchronous worker outcome and exits 0 with owned browser/server closed.
+
+The rebuilt product passed both existing xlsx-panes tests against the preview host: file-borne frozen panes/autofilter survive Save and SDK pane toggling persists. This is targeted native evidence, not a complete rerun of the deployed Pages/Docker matrix. The preview enforces the built meta policy, while static-host response headers have separate tests. Repository-wide format/lint issues in archived evaluation artifacts remain unresolved; no all-green CI claim is made. Multilingual writing transfer uses unchanged SDK/model/input protocols and is separate from this shell policy repair.

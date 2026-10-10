@@ -1,0 +1,14 @@
+{
+  "probeSHA256": "ea956c13bd3ff1671000a799618a0ca5494474948e84a4264c167de65a765a17",
+  "markers": {
+    "docx": "IM_WORD_四季_日本_ä_2026",
+    "xlsx": "IM_CELL_四季_日本_ä_2026",
+    "pptx": "IM_PPT_四季_日本_ä_2026"
+  },
+  "scope": "Current preview isolation headers, warm Chromium GPU model. Real Excel IM B2 write with seeded 3x3 neighbors including formulas, native Undo/Redo, Save and actual file chooser reopen. No header injection; no complete workbook or physical device certification.",
+  "results": [],
+  "errors": [],
+  "passed": false,
+  "error": "TimeoutError: page.waitForEvent: Timeout 120000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================",
+  "visibleErrors": []
+}

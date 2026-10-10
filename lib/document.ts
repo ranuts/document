@@ -5,7 +5,11 @@ import { t } from '@ranuts/shared/i18n';
 import 'ranui/message';
 import { handleDocumentOperation, loadEditorApi } from './converter';
 import { showLoading } from './loading';
-import { startDocumentSession } from './history/session';
+import { startDocumentSession, newDocumentId } from './history/session';
+import { stopAutosaveSession } from './history/autosave';
+import { rememberActiveSource, clearActiveSource } from './active-document-source';
+let openOperation = 0;
+let mountedOperation = 0;
 
 // Import UI functions with type-only to avoid circular dependency
 // These will be passed as callbacks or called after document operations
@@ -36,6 +40,7 @@ const fileInput = View('input')
 document.body.appendChild(fileInput);
 
 export const onCreateNew = async (ext: string, options?: { docId?: string }): Promise<void> => {
+  const operation = ++openOperation;
   // Callers own the loading indicator (the control panel shows it around this
   // call), so showing one here too would stack two of them.
   try {
@@ -49,6 +54,11 @@ export const onCreateNew = async (ext: string, options?: { docId?: string }): Pr
     await loadEditorApi();
     const { fileName, file: fileBlob } = getDocmentObj();
     await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
+    if (operation < mountedOperation) return;
+    mountedOperation = operation;
+    stopAutosaveSession();
+    await clearActiveSource();
+    if (operation !== mountedOperation) return;
     // Recovery points from here on. A blank document is the case with the most
     // to lose: there is no file on disk to fall back to at all.
     startDocumentSession({ title: fileName, origin: 'new', docId: options?.docId });
@@ -69,8 +79,10 @@ export const openLocalFile = async (
   options?: {
     /** Continue an existing history row (the file came out of the history). */
     historyId?: string;
+    readonly?: boolean;
   },
 ): Promise<void> => {
+  const operation = ++openOperation;
   const { removeLoading } = showLoading();
   try {
     if (hideControlPanelFn) {
@@ -82,8 +94,16 @@ export const openLocalFile = async (
       url: await createObjectURL(file),
     });
     const { fileName, file: fileBlob } = getDocmentObj();
-    await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob });
-    startDocumentSession({ title: file.name, origin: 'local', docId: options?.historyId });
+    await handleDocumentOperation({ file: fileBlob, fileName, isNew: !fileBlob, readonly: options?.readonly });
+    if (operation < mountedOperation) return;
+    mountedOperation = operation;
+    // The replacement editor now owns exports; retire the previous identity
+    // before asynchronous source storage, while delaying URL stamping until commit.
+    stopAutosaveSession();
+    const docId = options?.historyId || newDocumentId();
+    await rememberActiveSource(docId, file);
+    if (operation !== mountedOperation) return;
+    startDocumentSession({ title: file.name, origin: 'local', docId });
   } catch (error) {
     console.error('Error opening document:', error);
     // Ensure control panel is shown on error
@@ -164,6 +184,7 @@ export const openDocumentFromUrl = async (
     docId?: string;
   },
 ): Promise<void> => {
+  const operation = ++openOperation;
   const { removeLoading } = showLoading();
   try {
     if (hideControlPanelFn) {
@@ -227,6 +248,11 @@ export const openDocumentFromUrl = async (
       isNew: !fileBlob,
       readonly: options?.readonly,
     });
+    if (operation < mountedOperation) return;
+    mountedOperation = operation;
+    stopAutosaveSession();
+    await clearActiveSource();
+    if (operation !== mountedOperation) return;
     startDocumentSession({ title: docFileName, origin: 'url', docId: options?.docId });
   } catch (error) {
     console.error('Error opening document from URL:', error);

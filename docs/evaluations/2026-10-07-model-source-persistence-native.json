@@ -1,0 +1,21 @@
+{
+  "scope": "Synthetic marker UI persistence diagnostic; no model load, real credential or complete cache/privacy acceptance",
+  "marker": "synthetic-privacy-probe-20261007",
+  "rows": [
+    {
+      "key": "agent-local-model-url",
+      "value": "https://example.invalid/models/?token=synthetic-privacy-probe-20261007",
+      "stored": "https://example.invalid/models/?token=synthetic-privacy-probe-20261007",
+      "fullValuePersisted": true
+    },
+    {
+      "key": "agent-local-model-lib",
+      "value": "https://example.invalid/model.wasm?signature=synthetic-privacy-probe-20261007",
+      "stored": "https://example.invalid/model.wasm?signature=synthetic-privacy-probe-20261007",
+      "fullValuePersisted": true
+    }
+  ],
+  "cleaned": true,
+  "finished": true,
+  "browserClosed": true
+}

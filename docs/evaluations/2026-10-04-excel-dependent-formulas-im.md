@@ -1,0 +1,9 @@
+# Excel IM numeric write and dependent formula recalculation
+
+Actual warm Chromium WebGPU/Qwen3-1.7B IM request: `Set cell B2 to the numeric value 7.` A fresh native Excel sheet is seeded with B2=5, C2=`B2*3`, C3=`C2+1`, and six other cells including Unicode strings, numeric inputs and independent formulas. Native snapshots retain each of the nine cells' value and formula at every stage.
+
+After the IM request B2 is 7, C2 is 21 and C3 is 22. All formula expressions remain unchanged; other cell values are identical. Native Undo restores B2=5/C2=15/C3=16 and the complete original snapshot. Redo restores the complete edited snapshot. Toolbar Save yields a real 8548-byte XLSX download; homepage file-chooser reopening reproduces the edited native snapshot exactly. No preview cards, visible IM errors, page errors or browser dialogs occur. The owned browser context closes normally.
+
+`verify-excel-dependent-formulas-im.py` independently checks concrete seeded values/formulas, every retained snapshot, driver hash, saved artifact SHA-256 and ZIP CRC. It also inspects saved OOXML: B2 is numeric 7, C2 retains `B2*3` with cached numeric 21, and C3 retains `C2+1` with cached numeric 22. Saved SHA-256: `edb334531fe3a1dd1b8744ba98f8fd1f458c37af515aa8502aebeee9958d91ec`.
+
+This establishes one two-step within-sheet arithmetic dependency chain with native history and persistence, not all spreadsheet calculations. Cross-sheet references, dynamic arrays, volatile functions, external links, formatting and large workbooks remain unverified. Current isolated preview headers apply; service workers are blocked and the model cache is warm. No offline/physical-device/performance/privacy certification or model-quality benchmark. No product change was required. The earlier separate save timeout remains unexplained. Finalization captures message metadata after navigation, so empty `saveEvents` does not prove absence of prior export events.

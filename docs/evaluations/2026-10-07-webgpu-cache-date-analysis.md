@@ -1,0 +1,7 @@
+# Chat-state contrast rejects reset as a repair for the known date error
+
+All three fresh engine/context sequences completed, process exit0, with Worker-reported GPU vendor apple and page adapter metal-3. Cold date22 alone, date22 after successful date23, and date22 after successful date23 plus awaited resetChat(false) all produced the identical unrelated address “204 Walsh Avenue, Dublin, Ireland”. Date23 was correctly copied in both sequences containing it. Raw completions, exact requests, reset completion and usage are retained.
+
+This shows previous-request state reuse is not necessary for the observed date22 error, and explicit chat-state reset does not repair this case. It does not identify whether the model weights, compiled model implementation, runtime or driver causes the error. No blanket reset is added to production. The direct Worker diagnostic does not test native editing, seven-language writing quality, arbitrary instructions or physical-device/lifecycle acceptance.
+
+The frozen driver, protocol, requests, served WebLLM client and Worker bytes match the prelaunch snapshot after completion. Model record equality is observed; model weights and remote library bytes were not independently hashed before launch, so do not claim pinned binary equivalence beyond the recorded configuration. No model adoption follows. Further runtime/compiler isolation is required, while the full requested quality/device scope remains open.

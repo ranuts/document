@@ -1,15 +1,15 @@
 ---
-title: Einen Dokumenteneditor in die eigene Website einbetten — iframe + postMessage-API
-description: Einen Editor für DOCX, XLSX, PPTX und CSV mit einem iframe und einer postMessage-API in Ihre Web-App einbetten. Auth und Dateien bleiben in Ihrer App — der Editor sieht Ihre Tokens nie. Quelloffen (AGPL-3.0), selbst hostbar, White-Label.
+title: 'Einen Dokumenteneditor in die eigene Website einbetten — iframe + postMessage-API'
+description: 'Einen Editor per iframe und postMessage einbetten; die einbettende Anwendung kontrolliert Dateien und Uploads.'
 eyebrow: Für Entwickler · Einbetten
 h1: Einen Dokumenteneditor in Ihre Web-App einbetten
 lead: 'Ergänzen Sie Ihr Produkt um einen Editor für **DOCX, XLSX, PPTX und CSV** — mit einem einzigen iframe und einer **postMessage**-API. Ihre App behält Auth, Dateizugriff und Upload; der Editor bearbeitet nur und sieht die Tokens Ihrer Nutzer nie.'
 cta: Live-Demo öffnen →
 ctaHref: /embed-demo.html
-ogDescription: Einen DOCX/XLSX/PPTX/CSV-Editor mit einem iframe in Ihre App einbetten. Auth bleibt in Ihrer App, der Editor sieht Ihre Tokens nie. Quelloffen und selbst hostbar.
+ogDescription: 'Einen Editor per iframe und postMessage einbetten; die einbettende Anwendung kontrolliert Dateien und Uploads.'
 breadcrumb: Embed Document Editor
 howTo: Einen Dokumenteneditor in die eigene Website einbetten
-appDescription: Ein Dokumenteneditor im Browser, der sich per iframe und postMessage-API in Ihre eigene Web-App einbetten lässt.
+appDescription: 'Einen Editor per iframe und postMessage einbetten; die einbettende Anwendung kontrolliert Dateien und Uploads.'
 ---
 
 Der Editor läuft vollständig im Browser mit der WebAssembly-Engine von OnlyOffice, Dokumente werden also auf dem Client dargestellt und bearbeitet — Sie betreiben keinen Dokumentenserver. Das empfohlene Muster hält die Grenze sauber: **Die Eltern-App übernimmt Authentifizierung, Laden und Speichern; das iframe übernimmt nur das Bearbeiten.** Tokens, Cookies und Geschäfts-APIs bleiben in Ihrer App.
@@ -44,7 +44,7 @@ iframe.contentWindow.postMessage({ id, type: 'document:save', payload: { targetE
 - Öffnen aus einer **URL, einer File oder einem ArrayBuffer**, den Ihre App mit eigenen Zugangsdaten geholt hat
 - Zurückspeichern nach **XLSX, DOCX, PPTX oder CSV**, zurückgegeben als `File`, das Ihre App hochlädt
 - Schreibgeschützter Modus, Origin-Sperre pro Nachricht (`embedOrigin`) und eine Statusabfrage
-- Kein Dokumentenserver zu betreiben — bearbeitet wird zu 100% clientseitig mit WebAssembly
+- Bei der lokalen Kernbearbeitung: Kein Dokumentenserver zu betreiben — bearbeitet wird zu 100% clientseitig mit WebAssembly
 - Quelloffen (AGPL-3.0) und selbst hostbar — betten Sie ihn unter Ihrer eigenen Domain ein
 
 ## So funktioniert es

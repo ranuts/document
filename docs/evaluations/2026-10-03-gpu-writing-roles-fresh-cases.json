@@ -1,0 +1,50 @@
+[
+  {
+    "id": "fresh-formal-en",
+    "task": "rewrite",
+    "source": "Yo, Leon will inspect 23 pumps on 2034-09-16, okay?",
+    "instruction": "Rewrite in formal English. Remove conversational expressions; preserve all facts."
+  },
+  {
+    "id": "fresh-formal-zh",
+    "task": "rewrite",
+    "source": "嘿，Leon 会在 2034-09-16 检查 23 台水泵哦！",
+    "instruction": "改写为正式中文，去掉口语，保留全部事实。"
+  },
+  {
+    "id": "fresh-formal-ja",
+    "task": "rewrite",
+    "source": "ねえ、Leon は 2034-09-16 にポンプを 23 台点検するよ！",
+    "instruction": "正式な日本語に書き換えてください。口語を除き、すべての事実を保持してください。"
+  },
+  {
+    "id": "fresh-formal-ko",
+    "task": "rewrite",
+    "source": "야, Leon이 2034-09-16에 펌프 23대를 점검할 거야!",
+    "instruction": "공식적인 한국어로 다시 작성하세요. 구어체를 제거하고 모든 사실을 유지하세요."
+  },
+  {
+    "id": "fresh-formal-de",
+    "task": "rewrite",
+    "source": "Hey, Leon wird am 2034-09-16 insgesamt 23 Pumpen prüfen, okay?",
+    "instruction": "Formulieren Sie in formellem Deutsch. Entfernen Sie umgangssprachliche Ausdrücke und bewahren Sie alle Fakten."
+  },
+  {
+    "id": "fresh-formal-es",
+    "task": "rewrite",
+    "source": "Oye, Leon inspeccionará 23 bombas el 2034-09-16, ¿vale?",
+    "instruction": "Reescribe en español formal. Elimina expresiones coloquiales y conserva todos los hechos."
+  },
+  {
+    "id": "fresh-formal-pt",
+    "task": "rewrite",
+    "source": "Ei, Leon vai inspecionar 23 bombas em 2034-09-16, tá bom?",
+    "instruction": "Reescreva em português formal. Remova expressões coloquiais e preserve todos os fatos."
+  },
+  {
+    "id": "fresh-conditional-summary",
+    "task": "summarize",
+    "source": "Leon proposed shipping 23 pumps worth 260 CAD on 2034-09-16, subject to inspection. The inspection has not happened and the shipment has not been approved.",
+    "instruction": "Summarize faithfully in one shorter sentence; retain goods, value, proposed date, inspection condition and lack of approval."
+  }
+]

@@ -1,0 +1,390 @@
+{
+  "date": "2026-10-02T17:32:02.759Z",
+  "scope": "Production offline IM with controlled 4s native preparation delay; click visible IM Stop after native preparation begins; observe whether cancelled operation writes",
+  "model": "Qwen3-4B-q4f16_1-MLC",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790962138"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+  "before": {
+    "canRedo": true,
+    "points": 2,
+    "redoDepth": 0,
+    "history": 0,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "stopClicked": true,
+  "stopResponseMs": 1,
+  "responseMs": 5015,
+  "afterStop": {
+    "canRedo": true,
+    "points": 2,
+    "redoDepth": 0,
+    "history": 0,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "visibleErrors": [
+    "Stopped.Restore request"
+  ],
+  "afterLate": {
+    "canRedo": true,
+    "points": 2,
+    "redoDepth": 0,
+    "history": 0,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "stopWaitMs": 4523,
+  "instrumentation": {
+    "delayed": 1,
+    "resumed": 1,
+    "groups": {
+      "start": 1,
+      "end": 0,
+      "cancel": 1
+    },
+    "busy": false
+  },
+  "cancelledOperationChangedDocument": false,
+  "nativeHistoryChanged": false,
+  "redone": {
+    "canRedo": false,
+    "points": 2,
+    "redoDepth": 0,
+    "history": 1,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      },
+      {
+        "text": "Earlier undone edit\r\n",
+        "bounds": {
+          "l": 138.4661238606771,
+          "t": 90.17,
+          "r": 200.20054280598958,
+          "b": 100.33,
+          "x": 138.4661238606771,
+          "y": 90.17,
+          "w": 61.734418945312484,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "recovered": {
+    "canRedo": false,
+    "points": 2,
+    "redoDepth": 0,
+    "history": 1,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      },
+      {
+        "text": "RECOVERED_AFTER_STOP_2026\r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 5.715000000000001,
+          "r": 230.30333333333334,
+          "b": 15.885000000000002,
+          "x": 10.159999999999997,
+          "y": 5.715000000000001,
+          "w": 220.14333333333335,
+          "h": 10.170000000000002
+        }
+      }
+    ]
+  },
+  "afterRecoveryUndo": {
+    "canRedo": true,
+    "points": 2,
+    "redoDepth": 0,
+    "history": 0,
+    "busy": false,
+    "pasteStart": false,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "Earlier independent edit\r\n",
+        "bounds": {
+          "l": 130.85555867513023,
+          "t": 90.17,
+          "r": 207.8111079915365,
+          "b": 100.33,
+          "x": 130.85555867513023,
+          "y": 90.17,
+          "w": 76.95554931640626,
+          "h": 10.159999999999997
+        }
+      }
+    ]
+  },
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-BrS_hCZ0.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "previewCount": 0,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790962326294.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "limitations": [
+    "Single desktop Chromium cached/offline model sequence with controlled 4-second native preparation delay.",
+    "No physical-device, real font-delay, save/export, or broad language/tool reliability proof.",
+    "Cancelled bilingual paste is not proof that model preserved exact requested text; successful follow-up uses short ASCII text.",
+    "stopWaitMs includes deliberate 4500 ms observation wait; stopResponseMs measures UI re-enable time in this sample."
+  ]
+}

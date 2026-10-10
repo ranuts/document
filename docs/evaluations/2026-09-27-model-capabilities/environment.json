@@ -1,0 +1,33 @@
+{
+  "device": "Apple M1 Pro",
+  "ramGiB": 16,
+  "os": "macOS 15.5 (24F74)",
+  "browser": "Chrome 153.0.0.0",
+  "gpu": {
+    "vendor": "apple",
+    "architecture": "metal-3"
+  },
+  "sdk": "@mlc-ai/web-llm@0.2.85",
+  "formalCases": 29,
+  "formalRepetitions": 3,
+  "diagnosticRepetitions": 1,
+  "completedOutputs": 348,
+  "modelsWithOutputs": 3,
+  "qwen4B": {
+    "status": "load-failed",
+    "downloadManifestBytes": 2262920192,
+    "shards": 74,
+    "freshContextInitialQuotaBytes": 3221225472,
+    "lastProgressMB": 961,
+    "error": "QuotaExceededError: Quota exceeded.",
+    "rootCause": "not established; cache clearing and fresh isolated context did not resolve it"
+  },
+  "limitations": [
+    "No native-speaker fluency scoring",
+    "No full editor-concurrency evaluation",
+    "No Windows or mobile evaluation",
+    "No long-context or offline-reopen verification",
+    "No token-per-second measurement",
+    "Diagnostic timings may overlap engineering checks"
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "date": "2026-10-02T13:23:16.297Z",
+  "scope": "Actual production IM selected-Word seven-language translation on qwen3-4, desktop Chromium Metal GPU, isolated documents.",
+  "status": "completed",
+  "results": [
+    {
+      "id": "zh-CN",
+      "language": "zh-CN",
+      "task": "translate",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "亚历克斯提议于2026-10-08支付1,250欧元。该支付尚未得到批准。\r\n",
+      "error": [],
+      "responseMs": 3815,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "manualReview": "Applied despite changing original Alex spelling; name-preservation requirement unmet."
+    },
+    {
+      "id": "en",
+      "language": "en",
+      "task": "translate",
+      "source": "Alex 提议在 2026-10-08 支付 1,250 EUR。这笔付款尚未获批。",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex 提议在 2026-10-08 支付 1,250 EUR。这笔付款尚未获批。\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex proposed to pay 1,250 EUR on 2026-10-08. This payment has not been approved.\r\n",
+      "error": [],
+      "responseMs": 3730,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "manualReview": "Applied result; manual semantic quality remains separate from route success."
+    },
+    {
+      "id": "ja",
+      "language": "ja",
+      "task": "translate",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 3938,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "manualReview": "Rejected; original document unchanged. Exact raw failure not captured."
+    },
+    {
+      "id": "ko",
+      "language": "ko",
+      "task": "translate",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "아렉은 2026-10-08에 1,250 EUR의 결제를 제안했습니다. 이 결제는 승인되지 않았습니다.\r\n",
+      "error": [],
+      "responseMs": 4295,
+      "documentUnchanged": false,
+      "previewCount": 0,
+      "manualReview": "Applied despite changing original Alex spelling; name-preservation requirement unmet."
+    },
+    {
+      "id": "de",
+      "language": "de",
+      "task": "translate",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 4076,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "manualReview": "Rejected; original document unchanged. Exact raw failure not captured."
+    },
+    {
+      "id": "es",
+      "language": "es",
+      "task": "translate",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 3904,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "manualReview": "Rejected; original document unchanged. Exact raw failure not captured."
+    },
+    {
+      "id": "pt",
+      "language": "pt",
+      "task": "translate",
+      "source": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.",
+      "instruction": "Translate faithfully. Preserve Alex, 1,250 EUR, 2026-10-08 and the fact that the payment has not been approved.",
+      "selected": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "engine": "WebGPU · Qwen3-4B-q4f16_1-MLC",
+      "output": "Alex proposed a payment of 1,250 EUR on 2026-10-08. The payment has NOT been approved.\r\n",
+      "error": [
+        "The model changed or omitted source numbers or date formatting. Try again or use another model.Restore request"
+      ],
+      "responseMs": 3927,
+      "documentUnchanged": true,
+      "previewCount": 0,
+      "manualReview": "Rejected; original document unchanged. Exact raw failure not captured."
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "One short sample per target language; not broad language quality or reliability evidence.",
+    "Raw responses not captured for failures; displayed errors alone do not establish exact generated wording.",
+    "English source date attachment is ambiguous; cleaner fixtures needed."
+  ]
+}

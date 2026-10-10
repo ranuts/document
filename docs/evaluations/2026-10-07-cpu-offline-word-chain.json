@@ -1,0 +1,52 @@
+{
+  "runtime": "8e73aec",
+  "core": "1791345713",
+  "profile": ".scratch/default-cpu-process-profile-20261005",
+  "errors": [],
+  "failures": [
+    {
+      "url": "http://127.0.0.1:5193/",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/web-apps/apps/documenteditor/main/code.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "restoredPages": [
+    "about:blank"
+  ],
+  "onlineCaches": [
+    "document-editor-runtime-70cdcd40a53e",
+    "document-editor-runtime-b6864850e7b3",
+    "document-editor-core-1791345713"
+  ],
+  "onlineStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "firstProcessClosed": true,
+  "browserOffline": true,
+  "homeFromSW": true,
+  "explicitAgentOptIn": true,
+  "before": "WEBKIT_WORD_20261005\r\n",
+  "offlineScripts": [
+    "",
+    "http://127.0.0.1:5193/theme-presentation.js",
+    "http://127.0.0.1:5193/assets/editor-C3APg_Fa.js",
+    "http://127.0.0.1:5193/web-apps/apps/api/documents/api.js"
+  ],
+  "offlineStatus": "CPU · Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "after": "OFFLINE_CHAIN_20261007\r\n",
+  "chatErrors": [],
+  "undo": "WEBKIT_WORD_20261005\r\n",
+  "redo": "OFFLINE_CHAIN_20261007\r\n",
+  "saved": true,
+  "passed": true,
+  "closed": true
+}

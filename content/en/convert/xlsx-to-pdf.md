@@ -1,15 +1,15 @@
 ---
-title: Convert XLSX to PDF in Your Browser — Free, No Upload
-description: Turn an Excel (XLSX) spreadsheet into a PDF without uploading it anywhere. The conversion runs entirely on your device — free, no account, no Excel, works offline.
+title: 'Convert XLSX to PDF in Your Browser — Free, No Upload'
+description: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 eyebrow: Convert · .xlsx → .pdf
 h1: Convert XLSX to PDF in Your Browser
-lead: Turn an Excel **.xlsx** spreadsheet into a **.pdf** — without uploading it anywhere. The whole conversion happens locally in your browser.
+lead: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 cta: Open your XLSX →
 ctaHref: /
-ogDescription: Convert Excel XLSX spreadsheets to PDF locally in your browser. Nothing uploaded, no account, free and open source.
+ogDescription: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 breadcrumb: xlsx-to-pdf
 howTo: How to convert an XLSX to PDF without uploading it
-appDescription: Convert Excel XLSX spreadsheets to PDF in the browser, with no upload and no account.
+appDescription: 'Convert XLSX to PDF locally in your browser without Office or an account. Local editing without required uploads.'
 ---
 
 ## How it works
@@ -33,7 +33,7 @@ Open the XLSX in the editor, then use Download as / Save as and choose PDF. The 
 
 ### Is my spreadsheet uploaded to convert it?
 
-No. It is opened and converted entirely inside your browser tab, so your data never leaves your device.
+Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need Excel or an account?
 
@@ -57,4 +57,4 @@ Yes. Both .xlsx and the older .xls open with the same engine and can be exported
 
 ### Does the conversion work offline?
 
-Yes. Once loaded it is an installable PWA, so it keeps converting with no internet connection.
+Offline editing requires the application, editor engine, converter and relevant fonts and format resources to be cached and retained by your browser. One visit or PWA installation does not guarantee this. Remote file URLs require a network connection.

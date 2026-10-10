@@ -1,0 +1,9 @@
+# Native count prototype package source check
+
+Applied the structured-rejection patch to clean files taken from the pinned SDK commit, then regenerated TypeScript glue using that clean source's generator. All three modified C++ files and generated messages.ts matched the tested isolated checkout byte-for-byte. Six completed runtime reports match the current generated JS/WASM hashes: basic counts/rejection, tool/schema, boundaries, captured app request, history trim and retirement.
+
+Created `/private/tmp/document-cpu-native-count-prototype.zip` with the checked source files, patch, native runtime, revision/hash manifest and SDK/llama.cpp license texts. Every ZIP entry was read back and compared against its source bytes. [Manifest and package hash](2026-10-04-cpu-native-count-package-source-check.json) records the result. This is a reviewable isolated prototype package, not a ready product SDK distribution; its README explicitly requires matching count response client glue. The initial packaging command stopped on the SDK license filename (`LICENCE`, not `LICENSE`); after correcting that path, packaging and entry verification completed successfully at 13,211,620 bytes.
+
+This proves clean patch/glue reproducibility and exact artifact packaging. It does not prove a second full native build is bitwise reproducible, the source map is portable, all distribution variants are built, licensing review is complete, or production app integration works. Existing runtime experiments supply their scoped evidence only. Product assets, dependencies, UI and defaults remain unchanged.
+
+Next implement a matching public client count method and validate it through the provider queue, rather than shipping diagnostics that access a private proxy. The application must count final prepared options and retain original turn boundaries for trimming.

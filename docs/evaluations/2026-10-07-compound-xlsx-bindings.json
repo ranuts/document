@@ -1,0 +1,21 @@
+{
+  "processExitCodes": {
+    "chain": 0,
+    "reopen": 0
+  },
+  "scope": "Evidence file identities and after-run served hashes only, not initial-to-final immutable runtime certification",
+  "evidenceSHA256": {
+    "2026-10-07-compound-xlsx-chain.json": "21fc20e5e15eef0658d5672aa8bd50ebaf8d1ba5eb8489b45fc954ca012055ee",
+    "2026-10-07-compound-xlsx-reopen.json": "0131f333f3fa3c36a9d610384798b7803f65c4772cefae6a785033718945ec4b",
+    "2026-10-07-compound-xlsx-saved-inspection.json": "7dec7f97ca29201f26dda901e5fa675bbd9b45842c3175ef9c251c5e258fe2cf",
+    "2026-10-07-compound-xlsx-analysis.md": "33ee943dd45f4e8b4aec51544f59b3e7a4c0fda6836466250ea04fc409de1aec",
+    "2026-10-07-compound-xlsx-chain.mjs": "467ba5e14e50dac75860ff592ba8c40a9f67a36288352114e92ebe3d2a3719c2",
+    "2026-10-07-compound-xlsx-reopen.mjs": "439e816ebfd9a1ce71152cfdf4d3b880cffd1034dcb446598d09192c7c53efee",
+    "2026-10-07-compound-xlsx-protocol.md": "deece3dba6298ba8508025231d4d483b2b55fa34972bb8d9f258bdfbebe91316"
+  },
+  "afterRuntimeSHA256": {
+    "dist/sw.js": "3010032cc62e0025136352e2c741fc6a7dc9447378bbe41686a5a8f133a8416d",
+    "dist/assets/editor-C3APg_Fa.js": "1e57380c31bfd97cdbb3d35294b3b2a4c6ace2990d6ec31b8b59cff3da065dd7",
+    "dist/assets/client-D5_UYdz1.js": "90a8b6063930ea12fff32dc5795f3c7b580ab67c9f5061dc7d3a080770f45745"
+  }
+}

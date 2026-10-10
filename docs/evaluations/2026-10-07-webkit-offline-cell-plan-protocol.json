@@ -1,0 +1,19 @@
+{
+  "scope": "Diagnostic rerun of unchanged product: capture actual CPU requests/completions for quoted Excel literal assignment. Initial offline office failure retained separately. Not overall office acceptance.",
+  "runner": "1.65.0-alpha-2026-10-07",
+  "coreVersion": "1791380207",
+  "vendorVersion": "b6864850e7b3",
+  "profile": ".scratch/webkit27-offline-cell-plan-profile-20261007",
+  "origin": "http://127.0.0.1:5193",
+  "cpuClient": "/assets/client-De9uuIvK.js",
+  "expectedModel": "CPU \u00b7 Qwen3 \u00b7 0.6B",
+  "chatPrompt": "Reply briefly with a greeting in English.",
+  "cases": [
+    {
+      "kind": "xlsx",
+      "commands": ["Set B2 to \"00123\"."],
+      "expectedLiteral": "00123",
+      "historySteps": 1
+    }
+  ]
+}

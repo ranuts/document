@@ -329,13 +329,17 @@ test.describe('real-document corpus matrix', () => {
           async ({ code, spreadsheet, ooxmlText, withChecks }) => {
             const started = Date.now();
             try {
-              // x2t_helper posts the stream to both window.parent (the app)
-              // and window.top (this demo page). Listen here, in our own
-              // realm: a listener attached to the app window from this
-              // evaluate() would compare the app-realm ArrayBuffer against
-              // this realm's constructor and never match -- which silently
-              // turned every successful save into a 180 s timeout in the
-              // second corpus run.
+              // Export bytes belong to the editor's immediate host. Use a
+              // realm-independent buffer check for the nested app window.
+              const saveWin = window.__ooFrames.find((win) => {
+                const api = (win as any).Asc?.editor || (win as any).editor;
+                return typeof api?.asc_DownloadAs === 'function';
+              }) as any;
+              const found = saveWin ? { api: saveWin.Asc?.editor || saveWin.editor, win: saveWin } : null;
+              if (!found) return { ok: false, ms: 0, error: 'no editor api for save' };
+              if (!(found.api.isDocumentLoadComplete && found.api.isLoadFullApi)) {
+                return { ok: false, ms: 0, error: 'editor lost readiness before save' };
+              }
               const isArrayBuffer = (v: unknown) => Object.prototype.toString.call(v) === '[object ArrayBuffer]';
               const streamPromise = new Promise<{
                 size: number;
@@ -346,7 +350,7 @@ test.describe('real-document corpus matrix', () => {
                 const onMsg = (e: MessageEvent) => {
                   const d = e.data;
                   if (d && d.type === 'onlyoffice-file-stream' && isArrayBuffer(d.buffer)) {
-                    window.removeEventListener('message', onMsg);
+                    found.win.parent.removeEventListener('message', onMsg);
                     const b = new Uint8Array(d.buffer);
                     resolve({
                       size: b.byteLength,
@@ -356,17 +360,8 @@ test.describe('real-document corpus matrix', () => {
                     });
                   }
                 };
-                window.addEventListener('message', onMsg);
+                found.win.parent.addEventListener('message', onMsg);
               });
-              const saveWin = window.__ooFrames.find((win) => {
-                const api = (win as any).Asc?.editor || (win as any).editor;
-                return typeof api?.asc_DownloadAs === 'function';
-              }) as any;
-              const found = saveWin ? { api: saveWin.Asc?.editor || saveWin.editor, win: saveWin } : null;
-              if (!found) return { ok: false, ms: 0, error: 'no editor api for save' };
-              if (!(found.api.isDocumentLoadComplete && found.api.isLoadFullApi)) {
-                return { ok: false, ms: 0, error: 'editor lost readiness before save' };
-              }
               found.api.asc_DownloadAs(new found.win.Asc.asc_CDownloadOptions(code));
               const out = await Promise.race([
                 streamPromise,

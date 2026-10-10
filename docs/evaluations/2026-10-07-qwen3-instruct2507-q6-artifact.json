@@ -1,0 +1,13 @@
+{
+  "scope": "Pinned higher-precision desktop candidate, not memory-fit or semantic acceptance",
+  "repository": "lmstudio-community/Qwen3-4B-Instruct-2507-GGUF",
+  "revision": "4edb920b6f14e3b9284d4502a6485103d72cde05",
+  "files": [
+    {
+      "file": "Qwen3-4B-Instruct-2507-Q6_K.gguf",
+      "bytes": 3306260928,
+      "sha256": "a106607decc709a2269d1d7b1d30c8e574cc5a1669d20ce36f8f5d7a3885c575",
+      "url": "https://huggingface.co/lmstudio-community/Qwen3-4B-Instruct-2507-GGUF/resolve/4edb920b6f14e3b9284d4502a6485103d72cde05/Qwen3-4B-Instruct-2507-Q6_K.gguf"
+    }
+  ]
+}

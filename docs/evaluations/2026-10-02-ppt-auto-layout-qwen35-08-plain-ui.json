@@ -1,0 +1,275 @@
+{
+  "date": "2026-10-02T15:50:21.105Z",
+  "scope": "Production auto-layout integration; isolated Chromium, offline WebGPU IM multilingual PPT write/read with native bounds, unchanged originals and single Undo/Redo",
+  "model": "Qwen3.5-0.8B-q4f16_1-MLC",
+  "status": "passed",
+  "warmEngine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "serviceWorker": {
+    "controller": true,
+    "controllerURL": "http://127.0.0.1:5193/sw.js",
+    "registrations": 1,
+    "caches": [
+      "document-editor-runtime-59e2dc593998",
+      "document-editor-core-1790955976"
+    ]
+  },
+  "networkControl": {
+    "reachable": false,
+    "error": "TypeError: Failed to fetch"
+  },
+  "offlineController": {
+    "url": "http://127.0.0.1:5193/sw.js",
+    "online": true
+  },
+  "offlineEngine": "WebGPU · Qwen3.5-0.8B-q4f16_1-MLC",
+  "geometryBefore": {
+    "history": -1,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      }
+    ]
+  },
+  "before": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "userRequest": "Add a new text box on the current slide with exactly this text, preserving all line breaks and characters: \n项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved",
+  "responseMs": 2684,
+  "blocking": {
+    "events": [
+      {
+        "name": "sync_StartAction",
+        "args": [
+          1,
+          9
+        ]
+      },
+      {
+        "name": "sync_EndAction",
+        "args": [
+          1,
+          9
+        ]
+      }
+    ],
+    "groups": {
+      "start": 1,
+      "end": 1,
+      "cancel": 0
+    },
+    "nativePastes": 1,
+    "nativeCompletions": 1,
+    "pluginPastes": 0,
+    "busy": false
+  },
+  "bundles": [
+    "http://127.0.0.1:5193/assets/editor-CMoTK6Rk.js",
+    "http://127.0.0.1:5193/assets/editor-d8dvtCRV.css"
+  ],
+  "after": [
+    [
+      "\r\n",
+      "\r\n",
+      "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+    ]
+  ],
+  "geometryAfter": {
+    "history": 0,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 149.86,
+          "r": 230.30333333333334,
+          "b": 175.27,
+          "x": 10.159999999999997,
+          "y": 149.86,
+          "w": 220.14333333333335,
+          "h": 25.409999999999997
+        }
+      }
+    ]
+  },
+  "layoutValid": true,
+  "originalBoundsUnchanged": true,
+  "feedback": [
+    "Done. Result checked; use Undo if needed."
+  ],
+  "visibleErrors": [],
+  "previewCount": 0,
+  "requestedText": "项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved",
+  "inserted": true,
+  "readMs": 1561,
+  "readFeedback": [
+    "Done. Result checked; use Undo if needed.",
+    "Slide 1:\n项目付款 / Payment\nAlex · 1,250 EUR · 2026-10-08\n付款尚未获批 / NOT approved"
+  ],
+  "readMatched": true,
+  "readErrors": [],
+  "afterRead": [
+    [
+      "\r\n",
+      "\r\n",
+      "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n"
+    ]
+  ],
+  "readUnchanged": true,
+  "geometryUndo": {
+    "history": -1,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      }
+    ]
+  },
+  "geometryRedo": {
+    "history": 0,
+    "width": 338.6666666666667,
+    "height": 190.5,
+    "shapes": [
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 31.17675,
+          "r": 296.33333333333337,
+          "b": 97.49897222222222,
+          "x": 42.33333333333334,
+          "y": 31.17675,
+          "w": 254.00000000000003,
+          "h": 66.32222222222222
+        }
+      },
+      {
+        "text": "\r\n",
+        "bounds": {
+          "l": 42.33333333333334,
+          "t": 100.05661111111111,
+          "r": 296.33333333333337,
+          "b": 146.05,
+          "x": 42.33333333333334,
+          "y": 100.05661111111111,
+          "w": 254.00000000000003,
+          "h": 45.9933888888889
+        }
+      },
+      {
+        "text": "项目付款 / Payment\r\nAlex · 1,250 EUR · 2026-10-08\r\n付款尚未获批 / NOT approved\r\n",
+        "bounds": {
+          "l": 10.159999999999997,
+          "t": 149.86,
+          "r": 230.30333333333334,
+          "b": 175.27,
+          "x": 10.159999999999997,
+          "y": 149.86,
+          "w": 220.14333333333335,
+          "h": 25.409999999999997
+        }
+      }
+    ]
+  },
+  "afterUndo": [
+    [
+      "\r\n",
+      "\r\n"
+    ]
+  ],
+  "undoRestored": true,
+  "errors": [],
+  "failed": [
+    {
+      "url": "http://127.0.0.1:5193/__offline_ai_probe_1790956223580.txt",
+      "error": "net::ERR_FAILED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell.js",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:5193/sdkjs/common/spell/spell/spell_ie.js",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "ja": [
+    {
+      "input": {
+        "text": "えっと、Miraは2027-02-19にOwenへ860 CADを支払うよ、いい？",
+        "instruction": "Rewrite in formal ja, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Miraは2027-02-19にOwenへ860 CADを支払います。"
+      }
+    },
+    {
+      "input": {
+        "text": "えっと、林溪は2027-02-19に640 GBPを返金することをまだ承認してないよ。",
+        "instruction": "Rewrite in formal ja, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "林溪は2027-02-19に640 GBPを返金することをまだ承認していません。"
+      }
+    },
+    {
+      "input": {
+        "text": "えっと、InésはPabloが2027-02-19の配達を確認した後に限り950 USDを支払うことができるよ、いい？",
+        "instruction": "Rewrite in formal ja, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "InésはPabloが2027-02-19の配達を確認した後に限り950 USDを支払うことができます。"
+      }
+    },
+    {
+      "input": {
+        "text": "えっと、Léaは2027-02-19にMarcへ27箱を送ることを提案しているよ、わかる？",
+        "instruction": "Rewrite in formal ja, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Léaは2027-02-19にMarcへ27箱を送ることを提案しています。"
+      }
+    }
+  ],
+  "ko": [
+    {
+      "input": {
+        "text": "음, Mira는 2027-02-19에 Owen에게 860 CAD를 지급할 거예요, 알겠죠?",
+        "instruction": "Rewrite in formal ko, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Mira는 2027-02-19에 Owen에게 860 CAD를 지급할 것입니다."
+      }
+    },
+    {
+      "input": {
+        "text": "음, 林溪는 2027-02-19에 640 GBP를 환불하는 것을 아직 승인하지 않았어요, 알겠죠?",
+        "instruction": "Rewrite in formal ko, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "林溪는 2027-02-19에 640 GBP를 환불하는 것을 아직 승인하지 않았습니다."
+      }
+    },
+    {
+      "input": {
+        "text": "음, Inés는 Pablo가 2027-02-19의 배송을 확인한 후에만 950 USD를 지급할 수 있어요, 알겠죠?",
+        "instruction": "Rewrite in formal ko, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Inés는 Pablo가 2027-02-19의 배송을 확인한 후에만 950 USD를 지급할 수 있습니다."
+      }
+    },
+    {
+      "input": {
+        "text": "음, Léa는 2027-02-19에 Marc에게 27상자를 보내자고 제안해요, 알겠죠?",
+        "instruction": "Rewrite in formal ko, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Léa는 2027-02-19에 Marc에게 27상자를 보내자고 제안합니다."
+      }
+    }
+  ],
+  "de": [
+    {
+      "input": {
+        "text": "Hey, Mira wird Owen am 2027-02-19 860 CAD zahlen, okay?",
+        "instruction": "Rewrite in formal de, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Mira wird Owen am 2027-02-19 860 CAD zahlen."
+      }
+    },
+    {
+      "input": {
+        "text": "Also, 林溪 hat die Erstattung von 640 GBP am 2027-02-19 noch nicht genehmigt, okay?",
+        "instruction": "Rewrite in formal de, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "林溪 hat die Erstattung von 640 GBP am 2027-02-19 noch nicht genehmigt."
+      }
+    },
+    {
+      "input": {
+        "text": "Also, Inés darf 950 USD erst freigeben, nachdem Pablo die Lieferung am 2027-02-19 bestätigt, okay?",
+        "instruction": "Rewrite in formal de, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Inés darf 950 USD erst freigeben, nachdem Pablo die Lieferung am 2027-02-19 bestätigt."
+      }
+    },
+    {
+      "input": {
+        "text": "Also, Léa schlägt vor, Marc am 2027-02-19 27 Kisten zu senden, verstehst du?",
+        "instruction": "Rewrite in formal de, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Léa schlägt vor, Marc am 2027-02-19 27 Kisten zu senden."
+      }
+    }
+  ],
+  "pt": [
+    {
+      "input": {
+        "text": "Olha, Mira pagará 860 CAD a Owen em 2027-02-19, tá?",
+        "instruction": "Rewrite in formal pt, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Mira pagará 860 CAD a Owen em 2027-02-19."
+      }
+    },
+    {
+      "input": {
+        "text": "Olha, 林溪 ainda não autorizou o reembolso de 640 GBP em 2027-02-19, tá?",
+        "instruction": "Rewrite in formal pt, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "林溪 ainda não autorizou o reembolso de 640 GBP em 2027-02-19."
+      }
+    },
+    {
+      "input": {
+        "text": "Olha, Inés pode liberar 950 USD somente depois que Pablo confirmar a entrega em 2027-02-19, tá?",
+        "instruction": "Rewrite in formal pt, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Inés pode liberar 950 USD somente depois que Pablo confirmar a entrega em 2027-02-19."
+      }
+    },
+    {
+      "input": {
+        "text": "Olha, Léa propõe enviar 27 caixas a Marc em 2027-02-19, tá?",
+        "instruction": "Rewrite in formal pt, preserving all participants, facts, modality and status."
+      },
+      "output": {
+        "text": "Léa propõe enviar 27 caixas a Marc em 2027-02-19."
+      }
+    }
+  ]
+}

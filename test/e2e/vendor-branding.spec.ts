@@ -1,20 +1,7 @@
 import { expect, test } from './lib/l0';
 import type { Frame, Page } from '@playwright/test';
 
-/**
- * The ONLYOFFICE attribution, on screen.
- *
- * Section 7(b) of the vendor's AGPL terms requires a derivative work to retain
- * the original product logo. This build used to hide it: an injected stylesheet
- * took out `#header-logo` and the DocEditor config set `customization.about`
- * to false, which between them left no product mark anywhere in the interface.
- * The unit half of this (test/unit/branding-notice.test.ts) pins the two source
- * changes; this is the half that proves the result is actually visible, which
- * is the only claim the license cares about.
- *
- * Reverse-verified: re-adding `#header-logo` to guards/chrome.ts fails the
- * first case, and setting `about: false` back fails the second and third.
- */
+/** Neutral presentation must keep legal attribution accessible. */
 const editorFrame = (page: Page) => page.frames().find((f) => /documenteditor/.test(f.url()));
 
 async function openBlankDocument(page: Page): Promise<Frame> {
@@ -45,31 +32,28 @@ async function openAbout(frame: Frame): Promise<string> {
   return text();
 }
 
-test.describe('ONLYOFFICE branding (AGPL-3.0 Section 7(b))', () => {
-  test('the product logo is visible in the editor header', async ({ page }) => {
-    const frame = await openBlankDocument(page);
-    await expect
-      .poll(() => frame.evaluate(() => !!document.querySelector('#header-logo')), { timeout: 30_000 })
-      .toBe(true);
-
-    const logo = await frame.evaluate(() => {
-      const el = document.querySelector('#header-logo') as HTMLElement;
-      const mark = (el.querySelector('i') as HTMLElement) || el;
-      const box = mark.getBoundingClientRect();
-      return {
-        hidden: getComputedStyle(el).display === 'none' || getComputedStyle(el).visibility === 'hidden',
-        image: getComputedStyle(mark).backgroundImage,
-        width: box.width,
-        height: box.height,
-      };
+test.describe('neutral editor presentation and legal notices', () => {
+  for (const format of ['docx', 'xlsx', 'pptx']) {
+    test(`${format} hides product logos and keeps legal information reachable`, async ({ page }) => {
+      test.setTimeout(90_000);
+      await page.goto(`/editor?new=${format}`);
+      const frame = () =>
+        page.frames().find((f) => /(?:document|spreadsheet|presentation)editor\/main\//.test(f.url()));
+      await expect.poll(() => frame()?.url() ?? null, { timeout: 60_000 }).not.toBeNull();
+      const editor = frame()!;
+      await expect(editor.locator('#left-btn-about')).toBeVisible({ timeout: 60_000 });
+      await expect(editor.locator('#header-logo')).toBeHidden();
+      await expect.poll(() => editor.title()).not.toMatch(/ONLYOFFICE$/i);
+      await openAbout(editor);
+      await expect(editor.locator('.asc-about-office')).toBeHidden();
+      await expect(editor.locator('#id-about-company-logo')).toBeHidden();
+      await expect(editor.locator('#oo-source-notice')).toContainText('Ascensio System SIA');
+      await expect(editor.locator('#oo-source-notice')).toContainText('WITHOUT ANY WARRANTY');
+      await expect(editor.locator('#oo-source-notice a[href="/LICENSE"]')).toBeVisible();
+      await expect(editor.locator('#oo-source-notice a[href="/NOTICE"]')).toBeVisible();
+      await expect(editor.locator('#id-about-licensor-version-name')).toBeVisible();
     });
-
-    expect(logo.hidden, 'the ONLYOFFICE header logo must not be hidden -- see NOTICE').toBe(false);
-    // Painted, not a zero-sized element that merely exists in the DOM.
-    expect(logo.image).toContain('header-logo');
-    expect(logo.width).toBeGreaterThan(20);
-    expect(logo.height).toBeGreaterThan(8);
-  });
+  }
 
   test('the About entry is reachable and carries the vendor copyright', async ({ page }) => {
     const frame = await openBlankDocument(page);
@@ -102,6 +86,15 @@ test.describe('ONLYOFFICE branding (AGPL-3.0 Section 7(b))', () => {
     expect(notice.height).toBeGreaterThan(0);
     expect(notice.text).toContain('not an official ONLYOFFICE product');
     expect(notice.href).toBe('https://github.com/ranuts/document');
+
+    for (const [url, text] of [
+      ['/LICENSE', 'GNU AFFERO GENERAL PUBLIC LICENSE'],
+      ['/NOTICE', 'Ascensio System SIA'],
+    ]) {
+      const response = await page.request.get(url);
+      expect(response.ok()).toBe(true);
+      expect(await response.text()).toContain(text);
+    }
   });
 });
 
@@ -116,6 +109,31 @@ test.describe('trademark notice (AGPL-3.0 Section 7(e))', () => {
     test(`${route} states whose mark ONLYOFFICE is`, async ({ page }) => {
       await page.goto(route);
       await expect(page.locator('.tm').first()).toContainText(expected);
+      await expect(page.locator('.logo, .eco, .ghmark')).toHaveCount(0);
+      await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute(
+        'href',
+        /\/icons\/document-(?:light|dark)\.svg$/,
+      );
     });
   }
+});
+
+test('PWA icons are served and decode at their declared dimensions', async ({ page }) => {
+  await page.goto('/');
+  const icons = await page.evaluate(async () => {
+    const manifest = await (await fetch('/manifest.json')).json();
+    return Promise.all(
+      manifest.icons.map(async (icon: { src: string; sizes: string; purpose: string }) => {
+        const response = await fetch(new URL(icon.src, new URL('/manifest.json', location.origin)));
+        if (!response.ok) throw new Error(`Icon request failed: ${icon.src}`);
+        const bitmap = await createImageBitmap(await response.blob());
+        const dimensions = `${bitmap.width}x${bitmap.height}`;
+        bitmap.close();
+        return { declared: icon.sizes, dimensions, purpose: icon.purpose };
+      }),
+    );
+  });
+  expect(icons.length).toBeGreaterThanOrEqual(3);
+  expect(icons.some((icon) => icon.purpose === 'maskable')).toBe(true);
+  for (const icon of icons) expect(icon.dimensions).toBe(icon.declared);
 });

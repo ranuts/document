@@ -1,0 +1,9 @@
+# Native count first runtime failure
+
+The prototype build completed with exit code 0. Its first browser test failed when exercising unsupported content parts: native console logged `count_chat does not support content parts or media`, followed by `Invalid typed array length: 1163217991` in the SDK worker's `runAction`. [Raw capture](2026-10-04-cpu-native-count-prototype.json) preserves the terminal failure; browser and server closed.
+
+Source tracing identifies a protocol error path: the native dispatcher catches `std::exception` and returns `nullptr` without writing response length into the request buffer. The SDK worker continues reading that buffer's initial four bytes as length. The reported value is the glue magic `0x45554c47`, not a valid response length. Throwing for a normal unsupported count request therefore does not provide a usable SDK rejection. This finding concerns this actual exception path; it does not prove every SDK failure has the same cause.
+
+The driver buffers successful comparisons until the whole page evaluation returns, so the raw failed report contains no per-case count values. Although the unsupported-input check occurs after those comparisons in the driver, do not claim a completed four-case count acceptance from this indirect evidence. The next driver must preserve incremental results and explicit phases before each awaited operation.
+
+Next change: return a structured count response containing success/error and count/capacity fields for expected input rejection, rather than throwing through the nullable dispatcher return. Update matching client decoding and assert that unsupported input fails explicitly while a following valid count and generation remain usable. Preserve this first failure unchanged. Product runtime, context budget and IM remain untouched.

@@ -1,0 +1,21 @@
+# Qwen3-8B seven-language writing: no default adoption
+
+Actual WebGPU Qwen3-8B-q4f16_1-MLC completed 21 known seven-language cases, one sample each fixed order. Exact status title and every captured Worker model ID match. Current production JSON schema, non-thinking controls, temperature 0, 512-token limit and guards were unchanged. This is a known regression diagnostic, not heldout accuracy or a controlled global model ranking. SDK estimate 5695.78 MB is not measured memory/device compatibility. Cached desktop run, not cold offline/mobile acceptance.
+
+18 native edits, three refusals; all edited outputs have exact native Undo/Redo, refusals preserve original selection, previews zero, bundle bytes unchanged and no harness errors. Counts describe mechanics, not quality. Browser closed; no Save. Inherited raw scope prose should not be read as overriding the bound 21-case fixture; the captured cases/request identities are authoritative.
+
+| Language | Observed failures and narrow positives |
+| --- | --- |
+| Chinese | Summary is English; refused because not shorter. Rewrite preserves future payer, recipient, date/amount/count, repair and reversed-payment denial, with awkward fee phrasing. Translation retains claimant/actor/denier, ISO date/count and unconfirmed status in this isolated sample. |
+| English | Summary is one faithful shorter sentence retaining proposal, count/value/date, pass prerequisite, pending inspection and unauthorized shipping. Rewrite changes payment denial into reimbursement denial; applied. Translation retains allegation/denial/unconfirmed facts in this isolated output. |
+| Japanese | Summary retains core source facts but uses two sentences rather than requested one. Rewrite is English, changes 5 to five; refused. Translation reformats names/date and invents that no investigation was conducted; refused. |
+| Korean | Summary makes Rika the inspection-pass subject, loses explicit current inspection-pending/unauthorized status and substitutes future shipping after completed/approved inspection; two sentences. Rewrite is English and applies. Translation asserts no investigation occurred and adds that as the reason the claim is unconfirmed; applies. |
+| German | Summary retains proposal, date/count/value and inspection-pass/pending/unauthorized states in one sentence. Rewrite introduces Rückzahlung (repayment), rather than preserving simple payment direction/denial. Translation retains core allegation/denial/unconfirmed status in this isolated output. |
+| Spanish | Summary retains proposal, date/count, pass prerequisite and pending/unauthorized states, though por 430 PLN is price-like rather than explicitly goods value. Rewrite is English and applies. Translation retains claimant/actor/denial/unconfirmed facts in this isolated output. |
+| Portuguese | Summary adds unsupported causality: shipping not authorized because inspection is pending. Rewrite is English and applies. Translation retains core allegation/denial/unconfirmed facts in this isolated output. |
+
+Do not adopt as default. Several summaries and translations show narrow improvements, but wrong-language rewrites, reimbursement semantics and unsupported investigation/causal claims remain, including accepted document edits. Increasing model capacity is not sufficient evidence of faithful seven-language writing. Numeric/schema/native history checks cannot establish these semantic properties.
+
+Run verify-qwen3-8b-seven-language-writing.py for exact cases, model/request identities, raw-body/native normalization and edit/refusal history mechanics. The earlier [four-case screen](2026-10-04-qwen3-8b-document-writing.md) and this extension have different fixtures and must remain separate. Further prompt/model/semantic-verification work needs representative fresh cases and repeated reliability, not edit-count ranking. No production default/prompt/guard changed.
+
+Source-grounded correction: the seven-language English source explicitly contains pay Neri back, and German contains zurückzahlen. Treating all corresponding reimbursement/repayment wording as necessarily invented was too strong. See [the correction](2026-10-04-repayment-fixture-correction.md), which supersedes that categorical interpretation while leaving raw results, mechanics and independent failures unchanged.

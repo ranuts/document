@@ -131,6 +131,17 @@
   // halves of the record shape stay pinned to each other.
   window.__openLocal = { stashFile: stashFile, DB_NAME: DB_NAME, STORE: STORE, KEY: KEY };
 
+  function navigate(href) {
+    var ready = window.__prepareLocalNavigation;
+    if (typeof ready !== 'function') {
+      location.href = href;
+      return;
+    }
+    return ready().then(function () {
+      location.href = href;
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var buttons = document.querySelectorAll('[data-open-local]');
     if (!buttons.length) return;
@@ -155,17 +166,19 @@
     input.addEventListener('change', function () {
       var file = input.files && input.files[0];
       if (!file) return;
-      stashFile(file)
-        .then(function () {
-          location.href = targetHref;
-        })
-        .catch(function () {
+      stashFile(file).then(
+        function () {
+          return navigate(targetHref);
+        },
+        function () {
           // IndexedDB unavailable (e.g. some private-browsing modes): fall back
           // to the app homepage where the user can pick the file again.
-          location.href = targetHref.replace(/([?&])open=local(&?)/, function (_m, sep, tail) {
+          var fallbackHref = targetHref.replace(/([?&])open=local(&?)/, function (_m, sep, tail) {
             return tail ? sep : '';
           });
-        });
+          return navigate(fallbackHref);
+        },
+      );
     });
   });
 })();

@@ -1,0 +1,15 @@
+{
+  "evidenceSHA256": {
+    "2026-10-07-cpu-offline-word-chain.json": "503be632afb58b02fdba46547fd1516fb1c52d80d66b254e6f7ebee2599c00e7",
+    "2026-10-07-cpu-offline-word-reopen.json": "add1f9ad9f2d03c22ede8e6c669c9c974d9dfa7c8f9ecfa52c9ebfe6b5bc7083",
+    "2026-10-07-cpu-offline-word-reopen.mjs": "e4dceb11e155748b3615320da74af29bba075ce9515cd3c7fe4ff75c328edb2f",
+    "2026-10-07-cpu-offline-word-chain.mjs": "c12cf734bbba7d53275c782064a4d304f6c355c7aef63e56f404f3b76801f2a3"
+  },
+  "savedDocx": {
+    "path": ".scratch/2026-10-07-cpu-offline-word-chain.docx",
+    "bytes": 25966,
+    "sha256": "11333de9182719c9a4663079fefe4318313baec0682dd1c80f4b7b9d32a07a08",
+    "wordDocumentText": "OFFLINE_CHAIN_20261007"
+  },
+  "scope": "Warmed desktop Chromium browser offline emulation; preview origin remained running. Saved binary retained locally, not committed."
+}

@@ -1,0 +1,98 @@
+{
+  "scope": "Actual three-editor parent/frame keyboard focus, native rail relocation and retained IM draft; model Worker initialization held, no inference/Save or physical mobile claim.",
+  "driverSHA256": "a591ab32d0a8e81737ae0aa032131ce6246c53676d8598e666178276df706e26",
+  "samples": [
+    {
+      "type": "docx",
+      "width": 1280,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "right",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "docx",
+      "width": 768,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "right",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "docx",
+      "width": 375,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "left",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "xlsx",
+      "width": 1280,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "right",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "xlsx",
+      "width": 768,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "right",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "xlsx",
+      "width": 375,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "left",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "pptx",
+      "width": 1280,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "right",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "pptx",
+      "width": 768,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "right",
+      "reopened": true,
+      "draft": "Keep my draft"
+    },
+    {
+      "type": "pptx",
+      "width": 375,
+      "hidden": true,
+      "frameFocused": true,
+      "railFocused": true,
+      "rail": "left",
+      "reopened": true,
+      "draft": "Keep my draft"
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

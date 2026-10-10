@@ -1,0 +1,43 @@
+[
+  {
+    "id": "formal-zh",
+    "text": "请用正式中文改写，只输出改写后的正文，保持事实不变：嘿，Cora 将于 2047-06-12 向 Davi 支付 640 EUR，作为修理 7 个阀门的费用。Davi 不会向 Cora 付款。",
+    "rubric": [
+      "Chinese formal prose",
+      "Cora future payer; Davi receiver",
+      "2047-06-12 / 640 EUR / 7 valves retained",
+      "reverse-payment denial; no reimbursement invention"
+    ]
+  },
+  {
+    "id": "summary-zh",
+    "text": "用一句中文概括下文，保留条件和当前状态，不提停车：Lena 提议于 2048-03-19 运送价值 920 PLN 的 13 个过滤器，前提是安全检查通过。检查仍待完成，运输尚未获准。另有会议讨论停车安排。",
+    "rubric": [
+      "one shorter Chinese sentence",
+      "proposal remains proposal",
+      "passing inspection prerequisite and pending inspection",
+      "shipment unauthorized",
+      "date/count/value retained; no parking"
+    ]
+  },
+  {
+    "id": "translate-zh",
+    "text": "翻译为中文，只输出译文：Suri alleged that Vero replaced 6 sensors on 2049-01-23. Vero denied the allegation, and no investigation has confirmed it.",
+    "rubric": [
+      "Chinese output",
+      "Suri claimant; Vero alleged actor",
+      "2049-01-23 / 6 sensors retained",
+      "allegation, denial, unconfirmed investigation retained"
+    ]
+  },
+  {
+    "id": "formal-en",
+    "text": "Rewrite in formal English, preserving all facts and outputting only the rewritten paragraph: Hey, Cora will pay Davi 640 EUR on 2047-06-12 for repairing 7 valves. Davi will not pay Cora.",
+    "rubric": [
+      "formal English",
+      "future Cora pays Davi, repair not delivery/replacement",
+      "date/amount/count retained",
+      "reverse payment denial; no refund assertion"
+    ]
+  }
+]
