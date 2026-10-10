@@ -95,7 +95,7 @@ La apertura, edición y conversión básicas se ejecutan localmente en el navega
 
 ### ¿Qué carga la página desde la red?
 
-La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas pueden generar solicitudes adicionales. Si configuras un destino de escritura, la solicitud de escritura también va a la dirección que muestra la configuración del asistente. Las aplicaciones anfitrionas y los agentes externos del navegador tienen sus propias políticas de datos.
+La página carga código, recursos del editor, fuentes y una baliza de Cloudflare Web Analytics. Las URL remotas pueden generar solicitudes adicionales. Si configuras un destino de escritura, la solicitud de escritura también va a la dirección que muestra la configuración del asistente. Las aplicaciones anfitrionas y los agentes externos del navegador tienen sus propias políticas de datos. Sin conexión no se puede acceder a un destino de escritura en la nube; en ese caso la escritura necesita un destino en este dispositivo.
 
 ## Errores
 

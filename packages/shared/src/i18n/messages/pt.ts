@@ -117,6 +117,9 @@ export const pt: Partial<I18nMessages> = {
   agentWritePreference: 'Destino preferido',
   agentWritePreferDevice: 'Este dispositivo primeiro',
   agentWritePreferRemote: 'Endpoint na nuvem primeiro',
+  agentWritingOfflineNeedsDevice:
+    'Sem ligação, o destino de escrita tem de estar neste dispositivo. Ligue um serviço local ou ative a escrita local experimental.',
+  agentEndpointOfflineHint: 'sem ligação: não é possível alcançar um endpoint na nuvem',
   agentLocalWritingConsent:
     'Permitir escrita com o modelo local do navegador (experimental, sem validação de qualidade)',
   agentWritingNeedsLocalService:

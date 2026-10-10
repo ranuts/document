@@ -113,6 +113,9 @@ export const en: I18nMessages = {
   agentWritePreference: 'Preferred destination',
   agentWritePreferDevice: 'This device first',
   agentWritePreferRemote: 'Cloud endpoint first',
+  agentWritingOfflineNeedsDevice:
+    'Writing needs a destination on this device while you are offline. Connect a local service, or enable experimental browser-local writing.',
+  agentEndpointOfflineHint: 'offline: a cloud endpoint cannot be reached',
   agentLocalWritingConsent: 'Allow browser-local model writing (experimental, not quality-accepted)',
   agentWritingNeedsLocalService:
     'The browser-local models have not passed writing quality acceptance. Connect a local service, or enable experimental local writing.',

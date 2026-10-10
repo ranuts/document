@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { resolveWritingRoute } from '../../packages/agent-core/src/llm/writing-route';
 
 const local = { backend: 'webllm' as const, model: 'Qwen3-1.7B-q4f16_1-MLC' };
@@ -112,4 +112,49 @@ it('does not mutate the endpoints it receives', () => {
   expect(route).toMatchObject({ endpoint: { model: 'qwen3:8b' } });
   expect(loopback).toEqual({ kind: 'loopback', baseUrl: 'http://127.0.0.1:11434', model: 'qwen3:8b' });
   expect(local).toEqual({ backend: 'webllm', model: 'Qwen3-1.7B-q4f16_1-MLC' });
+});
+
+describe('offline', () => {
+  it('drops the cloud endpoint, because it cannot be reached without a connection', () => {
+    // Even with "cloud first" chosen, an unreachable destination is not attempted.
+    expect(
+      resolveWritingRoute({ remote, preference: 'remote-first', offline: true, localWritingConsent: false, local }),
+    ).toEqual({ kind: 'blocked', reason: 'offline-needs-device-destination' });
+  });
+
+  it('still uses the loopback service, which needs no connection', () => {
+    expect(
+      resolveWritingRoute({
+        loopback,
+        remote,
+        preference: 'remote-first',
+        offline: true,
+        localWritingConsent: false,
+        local,
+      }),
+    ).toMatchObject({ kind: 'endpoint', endpoint: loopback, dataPath: 'device' });
+  });
+
+  it('reports its own reason instead of claiming nothing is configured', () => {
+    expect(
+      resolveWritingRoute({ remote, preference: 'device-first', offline: true, localWritingConsent: false, local }),
+    ).toEqual({ kind: 'blocked', reason: 'offline-needs-device-destination' });
+    // With consent the device-local engine is still available offline, and is
+    // reported as experimental rather than silently substituted.
+    expect(
+      resolveWritingRoute({ remote, preference: 'device-first', offline: true, localWritingConsent: true, local }),
+    ).toEqual({ kind: 'local', binding: local, dataPath: 'device', experimental: true });
+  });
+
+  it('still rejects a malformed endpoint while offline instead of hiding it', () => {
+    expect(() =>
+      resolveWritingRoute({
+        remote: { kind: 'openai-compatible', baseUrl: 'http://api.example.com', model: 'm' },
+        preference: 'device-first',
+        offline: true,
+        localWritingConsent: true,
+        local,
+      }),
+    ).toThrow();
+  });
 });

@@ -117,6 +117,8 @@ export interface I18nMessages {
   agentWritePreferDevice: string;
   agentWritePreferRemote: string;
   /** Explicit opt-in to the experimental browser-local writing route. */
+  agentWritingOfflineNeedsDevice: string;
+  agentEndpointOfflineHint: string;
   agentLocalWritingConsent: string;
   agentWritingNeedsLocalService: string;
   agentChooseModelFiles: string;

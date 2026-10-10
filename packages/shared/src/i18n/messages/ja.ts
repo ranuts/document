@@ -116,6 +116,9 @@ export const ja: Partial<I18nMessages> = {
   agentWritePreference: '優先する書き込み先',
   agentWritePreferDevice: 'この端末を優先',
   agentWritePreferRemote: 'クラウドエンドポイントを優先',
+  agentWritingOfflineNeedsDevice:
+    'オフラインでは書き込み先をこの端末上にする必要があります。ローカルサービスに接続するか、実験的なローカル書き込みを有効にしてください。',
+  agentEndpointOfflineHint: 'オフライン：クラウドエンドポイントには到達できません',
   agentLocalWritingConsent: 'ブラウザ内モデルでの書き込みを許可（実験的、品質検証は未通過）',
   agentWritingNeedsLocalService:
     'ブラウザ内モデルは書き込み品質の検証に合格していません。ローカルサービスに接続するか、実験的なローカル書き込みを有効にしてください。',

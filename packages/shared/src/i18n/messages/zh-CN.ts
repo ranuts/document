@@ -111,6 +111,8 @@ export const zhCN: I18nMessages = {
   agentWritePreference: '优先使用',
   agentWritePreferDevice: '优先本机',
   agentWritePreferRemote: '优先云端端点',
+  agentWritingOfflineNeedsDevice: '离线时写作只能使用本机终点。请连接本机服务，或开启实验性本地写作。',
+  agentEndpointOfflineHint: '离线：云端端点不可达',
   agentLocalWritingConsent: '允许浏览器本地模型写作（实验性，尚未通过质量验收）',
   agentWritingNeedsLocalService: '浏览器本地模型尚未通过写作质量验收。请连接本机服务，或勾选实验性本地写作。',
   agentChooseModelFiles: '选择模型文件',

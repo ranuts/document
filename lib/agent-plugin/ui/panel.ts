@@ -716,6 +716,9 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       loopback: endpoint?.kind === 'loopback' ? endpoint : null,
       remote: endpoint && endpoint.kind !== 'loopback' ? endpoint : null,
       preference: endpointSettings.preference,
+      // Offline the only workable destinations are on this device, so a cloud
+      // endpoint is dropped here rather than attempted and then failed.
+      offline: navigator.onLine === false,
       localWritingConsent: localWritingConsent.checked,
       local: { backend: currentProvider(), model: selectedLocalModel() },
     });
@@ -728,13 +731,14 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       route = null;
     }
     const title = t('agentWriteDestinationTitle');
+    const offlineNote = navigator.onLine === false ? ` · ${t('agentEndpointOfflineHint')}` : '';
     if (!route || route.kind === 'blocked') {
-      writeDestination.textContent = `${title}: ${t('agentWriteNeedsDestination')}`;
+      writeDestination.textContent = `${title}: ${t('agentWriteNeedsDestination')}${offlineNote}`;
       return;
     }
     const where = route.dataPath === 'device' ? t('agentWriteDestinationDevice') : t('agentWriteDestinationRemote');
     const name = route.kind === 'local' ? route.binding.model : route.endpoint.model;
-    writeDestination.textContent = `${title}: ${where} · ${name}`;
+    writeDestination.textContent = `${title}: ${where} · ${name}${offlineNote}`;
   };
   const syncEndpointForm = (): void => {
     const kind = endpointKindValue();
@@ -909,6 +913,10 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   };
   window.addEventListener('pagehide', resetController);
   window.addEventListener('pagehide', disconnectEndpoint);
+  // Losing the connection changes which destinations can work at all, so the
+  // reported destination has to follow it.
+  window.addEventListener('online', syncEndpointForm);
+  window.addEventListener('offline', syncEndpointForm);
   window.addEventListener('pagehide', () => sidebar.dispose());
   window.addEventListener('document:content-ready', invalidatePlans);
   ggufUrl.addEventListener('change', () => {
@@ -1400,7 +1408,12 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
         } catch {
           route = null;
         }
-        if (!route || route.kind === 'blocked') throw new Error('agentWritingNeedsLocalService');
+        if (!route || route.kind === 'blocked')
+          throw new Error(
+            route?.kind === 'blocked' && route.reason === 'offline-needs-device-destination'
+              ? 'agentWritingOfflineNeedsDevice'
+              : 'agentWritingNeedsLocalService',
+          );
         const writingProvider = route.kind === 'endpoint' ? endpointProvider : webllmProvider;
         if (!writingProvider) throw new Error('agentWritingNeedsLocalService');
         const body = await generateWriting(

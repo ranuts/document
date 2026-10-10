@@ -95,7 +95,7 @@ Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser,
 
 ### Was lädt die Seite aus dem Netz?
 
-Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs können weitere Anfragen auslösen. Ist ein Schreibziel konfiguriert, geht die Schreibanfrage zusätzlich an die in den Assistenten-Einstellungen angezeigte Adresse. Einbettende Anwendungen und externe Browser-Agenten bestimmen ihre eigene Datenverarbeitung.
+Die Seite lädt Anwendungscode, Editor-Ressourcen, Schriften und einen Cloudflare-Web-Analytics-Beacon. Datei-URLs können weitere Anfragen auslösen. Ist ein Schreibziel konfiguriert, geht die Schreibanfrage zusätzlich an die in den Assistenten-Einstellungen angezeigte Adresse. Einbettende Anwendungen und externe Browser-Agenten bestimmen ihre eigene Datenverarbeitung. Ohne Verbindung ist ein Cloud-Schreibziel nicht erreichbar; das Schreiben braucht dann ein Ziel auf diesem Gerät.
 
 ## Fehler
 

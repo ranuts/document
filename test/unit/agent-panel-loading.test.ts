@@ -131,6 +131,7 @@ afterEach(() => {
   localStorage.removeItem('agent-panel-provider');
   localStorage.removeItem('agent-panel-gguf-url');
   localStorage.removeItem('agent-writing-endpoint');
+  Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
   window.dispatchEvent(new Event('pagehide'));
   document.body.replaceChildren();
   state.preload.mockReset();
@@ -409,6 +410,40 @@ it('shows where the writing will actually go, and says when it leaves the device
     expect(destination.textContent).toContain(t('agentWriteDestinationRemote'));
     expect(destination.textContent).toContain('gpt-4o-mini');
   });
+});
+it('says a cloud destination cannot work offline instead of failing vaguely', async () => {
+  // Offline, the only workable destinations are on this device. The route drops
+  // the cloud endpoint, so the user is told why rather than getting a network error.
+  Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
+  state.ready = true;
+  state.source = 'Original';
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(t('agentEndpointOfflineHint')),
+  );
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Polish this';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(state.writing).not.toHaveBeenCalled();
+  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingOfflineNeedsDevice'));
 });
 it('routes translation with the captured source and explicit language', async () => {
   state.ready = true;

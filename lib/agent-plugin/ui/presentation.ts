@@ -81,6 +81,7 @@ export function displayError(error: unknown): string {
     return t('agentWritingUnchanged');
   if (text === 'agentContextTooLong') return t('agentContextTooLong');
   if (text === 'agentWritingNeedsLocalService') return t('agentWritingNeedsLocalService');
+  if (text === 'agentWritingOfflineNeedsDevice') return t('agentWritingOfflineNeedsDevice');
   if (text === 'Writing changed or omitted source numbers; review the request') return t('agentWritingNumbersChanged');
   if (text === 'agentToolNotChosen') return t('agentToolNotChosen');
   const office: Record<string, [string, string]> = {

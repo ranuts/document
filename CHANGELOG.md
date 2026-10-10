@@ -65,6 +65,11 @@ notes. Entries describe what users experience, not internal refactors.
   no destination connected, asking for a rewrite tells you so instead of silently
   using the in-browser model. Tick "Allow browser-local model writing" in Settings
   to use it anyway; it is marked experimental, because it is.
+- **Offline, only a destination on this device can work.** A cloud endpoint is not
+  attempted without a connection -- the panel says so (next to the destination it
+  would use) instead of failing with a network error. A local service and the
+  in-browser model both keep working offline, and the choice between them is still
+  yours rather than an automatic substitution.
 
 - **The editor gives its memory back while you work.** Converting a document
   used to reserve a few hundred megabytes and hold them for as long as the tab

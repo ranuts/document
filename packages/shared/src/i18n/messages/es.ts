@@ -118,6 +118,9 @@ export const es: Partial<I18nMessages> = {
   agentWritePreference: 'Destino preferido',
   agentWritePreferDevice: 'Este dispositivo primero',
   agentWritePreferRemote: 'Endpoint en la nube primero',
+  agentWritingOfflineNeedsDevice:
+    'Sin conexión, el destino de escritura tiene que estar en este dispositivo. Conecta un servicio local o activa la escritura local experimental.',
+  agentEndpointOfflineHint: 'sin conexión: no se puede acceder a un endpoint en la nube',
   agentLocalWritingConsent:
     'Permitir escritura con el modelo local del navegador (experimental, sin validación de calidad)',
   agentWritingNeedsLocalService:

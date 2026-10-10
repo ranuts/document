@@ -95,7 +95,7 @@ Core opening, editing and conversion run locally in your browser without a requi
 
 ### What does the page load from the network?
 
-The page loads application code, editor resources, fonts and a Cloudflare Web Analytics beacon. Remote file URLs can make additional requests. If you configure a writing destination, a writing request also goes to the address shown in the assistant's settings. Embedding hosts and external browser agents determine their own data handling.
+The page loads application code, editor resources, fonts and a Cloudflare Web Analytics beacon. Remote file URLs can make additional requests. If you configure a writing destination, a writing request also goes to the address shown in the assistant's settings. Embedding hosts and external browser agents determine their own data handling. Without a connection, a cloud writing destination cannot be reached; writing then needs a destination on this device.
 
 ## Errors
 

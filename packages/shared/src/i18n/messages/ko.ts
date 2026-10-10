@@ -116,6 +116,9 @@ export const ko: Partial<I18nMessages> = {
   agentWritePreference: '우선할 대상',
   agentWritePreferDevice: '이 기기 우선',
   agentWritePreferRemote: '클라우드 엔드포인트 우선',
+  agentWritingOfflineNeedsDevice:
+    '오프라인에서는 작성 대상을 이 기기로 두어야 합니다. 로컬 서비스에 연결하거나 실험적 로컬 쓰기를 켜세요.',
+  agentEndpointOfflineHint: '오프라인: 클라우드 엔드포인트에 연결할 수 없음',
   agentLocalWritingConsent: '브라우저 내장 모델 쓰기 허용(실험적, 품질 검증 미통과)',
   agentWritingNeedsLocalService:
     '브라우저 내장 모델은 쓰기 품질 검증을 통과하지 못했습니다. 로컬 서비스에 연결하거나 실험적 로컬 쓰기를 켜세요.',

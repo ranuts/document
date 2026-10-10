@@ -95,7 +95,7 @@ A abertura, edição e conversão básicas rodam localmente no navegador sem exi
 
 ### O que a página carrega da rede?
 
-A página carrega código, recursos do editor, fontes e uma requisição do Cloudflare Web Analytics. URLs remotas podem gerar requisições adicionais. Se configurar um destino de escrita, o pedido de escrita vai também para o endereço mostrado nas configurações do assistente. Apps anfitriões e agentes externos do navegador definem suas próprias políticas de dados.
+A página carrega código, recursos do editor, fontes e uma requisição do Cloudflare Web Analytics. URLs remotas podem gerar requisições adicionais. Se configurar um destino de escrita, o pedido de escrita vai também para o endereço mostrado nas configurações do assistente. Apps anfitriões e agentes externos do navegador definem suas próprias políticas de dados. Sem ligação não é possível alcançar um destino de escrita na nuvem; nesse caso a escrita precisa de um destino neste dispositivo.
 
 ## Erros
 

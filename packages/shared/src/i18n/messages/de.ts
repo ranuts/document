@@ -121,6 +121,9 @@ export const de: Partial<I18nMessages> = {
   agentWritePreference: 'Bevorzugtes Ziel',
   agentWritePreferDevice: 'Dieses Gerät zuerst',
   agentWritePreferRemote: 'Cloud-Endpunkt zuerst',
+  agentWritingOfflineNeedsDevice:
+    'Offline muss das Schreibziel auf diesem Gerät liegen. Verbinden Sie einen lokalen Dienst oder aktivieren Sie experimentelles lokales Schreiben.',
+  agentEndpointOfflineHint: 'offline: ein Cloud-Endpunkt ist nicht erreichbar',
   agentLocalWritingConsent: 'Schreiben mit browsereigenem Modell erlauben (experimentell, Qualität nicht freigegeben)',
   agentWritingNeedsLocalService:
     'Die browsereigenen Modelle haben die Qualitätsprüfung fürs Schreiben nicht bestanden. Verbinden Sie einen lokalen Dienst oder aktivieren Sie experimentelles lokales Schreiben.',
