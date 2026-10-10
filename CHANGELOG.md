@@ -45,6 +45,20 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Changed
 
+- **Writing help now goes to a model on your own machine by default.** Rewrite,
+  summarize and translate used to run on the small model inside the browser tab.
+  We tested sixteen of those models and none of them kept dates, names, roles or
+  negations straight across the seven interface languages -- and a rewrite that
+  quietly turns "not approved" into "approved" is worse than no rewrite. So the
+  assistant now talks to a model service you run yourself (Ollama on
+  `http://localhost:11434` by default, set up under Settings -> Local service);
+  your file still never leaves the device, because only a loopback address is
+  accepted. Chat, the structured edit commands and offline use are unchanged.
+- **Browser-local writing is still available, but you have to ask for it.** With
+  no local service connected, asking for a rewrite tells you so instead of
+  silently using the in-browser model. Tick "Allow browser-local model writing"
+  in Settings to use it anyway; it is marked experimental, because it is.
+
 - **The editor gives its memory back while you work.** Converting a document
   used to reserve a few hundred megabytes and hold them for as long as the tab
   was open; that work now happens off to one side and is released once it is

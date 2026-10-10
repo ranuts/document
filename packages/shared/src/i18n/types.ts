@@ -83,6 +83,19 @@ export interface I18nMessages {
   agentProviderOllama: string;
   agentOllamaModelPlaceholder: string;
   agentOllamaHint: string;
+  /** Optional native loopback service, used as the writing backend. */
+  agentProviderLoopback: string;
+  agentLoopbackUrl: string;
+  agentLoopbackModel: string;
+  agentLoopbackConnect: string;
+  agentLoopbackDisconnect: string;
+  agentLoopbackConnecting: string;
+  agentLoopbackConnected: string;
+  agentLoopbackFailed: string;
+  agentLoopbackModelRequired: string;
+  /** Explicit opt-in to the experimental browser-local writing route. */
+  agentLocalWritingConsent: string;
+  agentWritingNeedsLocalService: string;
   agentChooseModelFiles: string;
   agentLoadModel: string;
   agentModelLoaded: string;

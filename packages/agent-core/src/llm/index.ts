@@ -28,6 +28,7 @@ export {
 export { AnthropicProvider, type AnthropicProviderOptions } from './anthropic';
 export { OpenAIProvider, type OpenAIProviderOptions } from './openai';
 export { OllamaProvider, type OllamaProviderOptions } from './ollama';
+export { LoopbackProvider, validateLoopbackUrl, type LoopbackProviderOptions } from './loopback';
 export { GeminiProvider, type GeminiProviderOptions } from './gemini';
 
 export { WllamaProvider, type WllamaProviderOptions } from './wllama';
@@ -41,3 +42,4 @@ export {
   type TaskModelPreferences,
   type ResolvedTaskModel,
 } from './task-model';
+export { resolveWritingRoute, type WritingRoute, type WritingRouteInput } from './writing-route';

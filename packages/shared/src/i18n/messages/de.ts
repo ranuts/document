@@ -89,6 +89,18 @@ export const de: Partial<I18nMessages> = {
   agentOllamaModelPlaceholder: 'Modellname, z. B. llama3.2',
   agentOllamaHint:
     'Verbindet sich mit dem lokalen Ollama (http://localhost:11434); kein API-Schlüssel nötig – achten Sie darauf, dass das Modell läuft.',
+  agentProviderLoopback: 'Lokaler Dienst',
+  agentLoopbackUrl: 'Dienstadresse',
+  agentLoopbackModel: 'Modellname',
+  agentLoopbackConnect: 'Verbinden',
+  agentLoopbackDisconnect: 'Trennen',
+  agentLoopbackConnecting: 'Verbindung zum lokalen Dienst …',
+  agentLoopbackConnected: 'Mit dem lokalen Dienst verbunden',
+  agentLoopbackFailed: 'Der lokale Dienst ist nicht erreichbar',
+  agentLoopbackModelRequired: 'Bitte zuerst einen Modellnamen eingeben',
+  agentLocalWritingConsent: 'Schreiben mit browsereigenem Modell erlauben (experimentell, Qualität nicht freigegeben)',
+  agentWritingNeedsLocalService:
+    'Die browsereigenen Modelle haben die Qualitätsprüfung fürs Schreiben nicht bestanden. Verbinden Sie einen lokalen Dienst oder aktivieren Sie experimentelles lokales Schreiben.',
   agentChooseModelFiles: 'Modelldateien auswählen',
   agentLoadModel: 'Modell laden',
   agentModelLoaded: 'Modell geladen – Sie können loslegen.',

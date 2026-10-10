@@ -53,9 +53,13 @@ Files: new `packages/agent-core/src/llm/loopback.ts`, tests `test/unit/agent-loo
 
 Interface: local lifecycle provider with explicit service URL/model, native Ollama availability checks, JSON schema generation and cancellation. URL validation accepts loopback only, rejects credentials and non-HTTP(S) schemes. Secrets are not persisted. Preserve existing generic Ollama provider API.
 
-- [ ] Add failing URL, missing model, connection, schema, timeout and streaming cancellation cases.
-- [ ] Implement service adapter and user-initiated settings connection; update exact CSP allowlist.
+- [x] Add failing URL, missing model, connection, schema, timeout and streaming cancellation cases.
+- [x] Implement service adapter and user-initiated settings connection; update exact CSP allowlist.
 - [ ] Run tests and real local-service requests if available; retain unsupported evidence honestly; commit.
+      Unit cases pass and the settings connection is implemented. **Real local-service
+      requests are still unverified** (no Ollama instance was available), so this box
+      stays unticked; the CSP needed no change because `connect-src` already allows
+      `http:`. See `docs/evaluations/2026-10-10-local-model-writing-scope-decision.md`.
 
 ## Task 4: Writing review and editor application
 
@@ -95,3 +99,7 @@ Use fixed revisions, runtime/template/quantization/sampling and actual measured 
 2026-10-07 implementation checkpoint: Task resolver and browser preset preferences are integrated into the panel. Translation settings are target-language scoped; absent settings preserve legacy global source/provider preferences. Switching a different route invalidates old loading callbacks and awaits existing resource cleanup before a new load. Only known model IDs are persisted in these new settings. Optional loopback bindings, acceptance receipt registration and generic translation-task controls remain pending. Existing lifecycle owner is reused rather than introducing a second runtime owner.
 
 Verification: 145 test files / 4,573 tests pass, including route selection, independent global preferences and stale-load callbacks. TypeScript, changed code lint/format and production build pass. Two existing PromiseRejectionHandledWarning messages remain. Native UI/model and device acceptance are not established by these unit results.
+
+2026-10-10 checkpoint (Task 3 completed, plus the writing-scope narrowing the evidence called for): `LoopbackProvider` is reachable through the factory (`ProviderId` gains `loopback`, which requires an explicit model), exported from `llm/index.ts`, and has connection/timeout/cancellation/tool-refusal/incomplete-response cases. The panel gained a Local service settings block (origin, model, connect/disconnect, status) and an explicit browser-local writing consent. New `packages/agent-core/src/llm/writing-route.ts` decides the writing backend: connected loopback first, browser-local only with consent and marked experimental, otherwise a localized refusal. Settings persist only a validated loopback origin plus a model name. Reverse verification: disabling the consent gate turns both the policy case and (after rebuilding the package) the panel case red. Full checks: 148 files / 4,598 tests, `lint:ts`, `format:check` and `pnpm build` pass.
+
+Not done, and deliberately so: Task 5 (structured long-document batching) remains open; loopback is used for writing only, never for chat or tool calls; no cloud or LAN fallback is introduced. Real-device Ollama connectivity and a real-browser writing run were **not** verified -- no local service was available, so those stay listed as unverified rather than accepted. See `docs/evaluations/2026-10-10-local-model-writing-scope-decision.md`.

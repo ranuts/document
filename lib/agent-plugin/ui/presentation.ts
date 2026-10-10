@@ -80,6 +80,7 @@ export function displayError(error: unknown): string {
   if (['No rewrite was proposed', 'No summary was proposed', 'No translation was proposed'].includes(text))
     return t('agentWritingUnchanged');
   if (text === 'agentContextTooLong') return t('agentContextTooLong');
+  if (text === 'agentWritingNeedsLocalService') return t('agentWritingNeedsLocalService');
   if (text === 'Writing changed or omitted source numbers; review the request') return t('agentWritingNumbersChanged');
   if (text === 'agentToolNotChosen') return t('agentToolNotChosen');
   const office: Record<string, [string, string]> = {

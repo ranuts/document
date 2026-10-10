@@ -10,15 +10,19 @@ import { GeminiProvider, type GeminiProviderOptions } from './gemini';
 import type { LLMProvider } from './types';
 import { WllamaProvider, type WllamaProviderOptions } from './wllama';
 import { WebLLMProvider, type WebLLMProviderOptions } from './webllm';
+import { LoopbackProvider, type LoopbackProviderOptions } from './loopback';
 
-export type ProviderId = 'anthropic' | 'openai' | 'webllm' | 'ollama' | 'gemini' | 'wllama';
+export type ProviderId = 'anthropic' | 'openai' | 'webllm' | 'ollama' | 'gemini' | 'wllama' | 'loopback';
 
+// `model` is required on the loopback options, so they join the intersection as
+// Partial to keep ProviderOptions all-optional for every other provider.
 export type ProviderOptions = AnthropicProviderOptions &
   OpenAIProviderOptions &
   OllamaProviderOptions &
   GeminiProviderOptions &
   WebLLMProviderOptions &
-  WllamaProviderOptions;
+  WllamaProviderOptions &
+  Partial<LoopbackProviderOptions>;
 
 export function createProvider(id: ProviderId, options: ProviderOptions = {}): LLMProvider {
   switch (id) {
@@ -32,6 +36,10 @@ export function createProvider(id: ProviderId, options: ProviderOptions = {}): L
       return new OllamaProvider(options);
     case 'gemini':
       return new GeminiProvider(options);
+    case 'loopback':
+      // A loopback service is explicitly named; there is no default model to guess.
+      if (!options.model?.trim()) throw new Error('A local model name is required');
+      return new LoopbackProvider({ ...options, model: options.model });
     default:
       return new AnthropicProvider(options);
   }

@@ -130,6 +130,7 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
 afterEach(() => {
   localStorage.removeItem('agent-panel-provider');
   localStorage.removeItem('agent-panel-gguf-url');
+  localStorage.removeItem('agent-loopback');
   window.dispatchEvent(new Event('pagehide'));
   document.body.replaceChildren();
   state.preload.mockReset();
@@ -151,6 +152,15 @@ afterEach(() => {
   state.usage = undefined;
   vi.useRealTimers();
 });
+
+/**
+ * Browser-local writing is opt-in: the engines never passed seven-language
+ * quality acceptance, so a document write needs the explicit consent that the
+ * loopback settings block persists. Writing cases call this before mounting.
+ */
+function allowBrowserLocalWriting(): void {
+  localStorage.setItem('agent-loopback', JSON.stringify({ version: 1, url: '', model: '', localWritingConsent: true }));
+}
 it('starts hidden and waits for the editor and idle time before background loading', async () => {
   vi.useFakeTimers();
   state.ready = true;
@@ -317,10 +327,54 @@ it('requires selection before starting a writing task', async () => {
   expect(state.generate).not.toHaveBeenCalled();
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentNoSelection'));
 });
+it('refuses browser-local writing until a service is connected or consent is given', async () => {
+  // The narrowing this change delivers: a document write is no longer silently
+  // routed to a browser-local engine that never passed quality acceptance.
+  state.ready = true;
+  state.source = 'Budget 1250 EUR';
+  const panel = createAgentPanel();
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Polish this';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(state.writing).not.toHaveBeenCalled();
+  expect(state.apply).not.toHaveBeenCalled();
+  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
+});
+it('persists the loopback origin, model and browser-local writing consent from the settings block', () => {
+  const panel = createAgentPanel();
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-loopback-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-loopback-model')!;
+  const consent = panel.querySelector<HTMLInputElement>('.agent-panel-local-writing')!;
+  url.value = 'http://127.0.0.1:11434/';
+  url.dispatchEvent(new Event('change'));
+  model.value = '  qwen3:8b  ';
+  model.dispatchEvent(new Event('change'));
+  consent.checked = true;
+  consent.dispatchEvent(new Event('change'));
+  expect(JSON.parse(localStorage.getItem('agent-loopback')!)).toEqual({
+    version: 1,
+    url: 'http://127.0.0.1:11434',
+    model: 'qwen3:8b',
+    localWritingConsent: true,
+  });
+});
+it('never persists a non-loopback service origin', () => {
+  const panel = createAgentPanel();
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-loopback-url')!;
+  url.value = 'https://example.com';
+  url.dispatchEvent(new Event('change'));
+  expect(localStorage.getItem('agent-loopback')).toBeNull();
+});
 it('routes translation with the captured source and explicit language', async () => {
   state.ready = true;
   state.source = 'Budget 1250 EUR';
   state.writing.mockResolvedValue('预算 1250 EUR');
+  allowBrowserLocalWriting();
   const panel = createAgentPanel();
   const task = panel.querySelector('.agent-writing-task') as HTMLElement & { value: string };
   task.value = 'translate';
@@ -349,6 +403,7 @@ it('records a writing request and verified outcome without copying selected docu
     state.ready = true;
     state.source = 'Private selected source';
     state.writing.mockResolvedValue('Private rewritten body');
+    allowBrowserLocalWriting();
     const panel = createAgentPanel();
     const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
     task.value = 'rewrite';
@@ -382,6 +437,7 @@ it('records a failed writing request as an error and never reports document succ
     state.ready = true;
     state.source = 'Original';
     state.writing.mockRejectedValue(new Error('No rewrite was proposed'));
+    allowBrowserLocalWriting();
     const panel = createAgentPanel();
     const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
     task.value = 'rewrite';
@@ -415,6 +471,7 @@ it.each(['resolve', 'reject'] as const)(
           reject = no;
         }),
     );
+    allowBrowserLocalWriting();
     const panel = createAgentPanel();
     const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
     const originalSession = sessions.value;
@@ -454,6 +511,7 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   });
   if (mode === 'rewrite') state.writing.mockReturnValue(pending);
   else state.toolPlan.mockReturnValue(pending);
+  allowBrowserLocalWriting();
   const panel = createAgentPanel();
   const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
   const original = sessions.value;
@@ -533,6 +591,7 @@ it('executes successive explicit writing requests without review cards', async (
   state.ready = true;
   state.source = 'Original';
   state.writing.mockResolvedValueOnce('First proposal').mockResolvedValueOnce('Second proposal');
+  allowBrowserLocalWriting();
   const panel = createAgentPanel();
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   task.value = 'rewrite';

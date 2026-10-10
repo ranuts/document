@@ -84,6 +84,18 @@ export const ja: Partial<I18nMessages> = {
   agentOllamaModelPlaceholder: 'モデル名（例：llama3.2）',
   agentOllamaHint:
     'ローカルの Ollama（http://localhost:11434）に接続します。API キーは不要ですが、モデルが起動していることをご確認ください。',
+  agentProviderLoopback: 'ローカルサービス',
+  agentLoopbackUrl: 'サービスアドレス',
+  agentLoopbackModel: 'モデル名',
+  agentLoopbackConnect: '接続',
+  agentLoopbackDisconnect: '切断',
+  agentLoopbackConnecting: 'ローカルサービスに接続しています…',
+  agentLoopbackConnected: 'ローカルサービスに接続しました',
+  agentLoopbackFailed: 'ローカルサービスに接続できませんでした',
+  agentLoopbackModelRequired: '先にモデル名を入力してください',
+  agentLocalWritingConsent: 'ブラウザ内モデルでの書き込みを許可（実験的、品質検証は未通過）',
+  agentWritingNeedsLocalService:
+    'ブラウザ内モデルは書き込み品質の検証に合格していません。ローカルサービスに接続するか、実験的なローカル書き込みを有効にしてください。',
   agentChooseModelFiles: 'モデルファイルを選択',
   agentLoadModel: 'モデルを読み込む',
   agentModelLoaded: 'モデルを読み込みました。チャットを始められます。',

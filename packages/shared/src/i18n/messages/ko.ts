@@ -84,6 +84,18 @@ export const ko: Partial<I18nMessages> = {
   agentOllamaModelPlaceholder: '모델 이름 (예: llama3.2)',
   agentOllamaHint:
     '로컬 Ollama(http://localhost:11434)에 연결합니다. API 키는 필요 없지만 모델이 실행 중인지 확인하세요.',
+  agentProviderLoopback: '로컬 서비스',
+  agentLoopbackUrl: '서비스 주소',
+  agentLoopbackModel: '모델 이름',
+  agentLoopbackConnect: '연결',
+  agentLoopbackDisconnect: '연결 해제',
+  agentLoopbackConnecting: '로컬 서비스에 연결하는 중…',
+  agentLoopbackConnected: '로컬 서비스에 연결됨',
+  agentLoopbackFailed: '로컬 서비스에 연결할 수 없습니다',
+  agentLoopbackModelRequired: '먼저 모델 이름을 입력하세요',
+  agentLocalWritingConsent: '브라우저 내장 모델 쓰기 허용(실험적, 품질 검증 미통과)',
+  agentWritingNeedsLocalService:
+    '브라우저 내장 모델은 쓰기 품질 검증을 통과하지 못했습니다. 로컬 서비스에 연결하거나 실험적 로컬 쓰기를 켜세요.',
   agentChooseModelFiles: '모델 파일 선택',
   agentLoadModel: '모델 불러오기',
   agentModelLoaded: '모델을 불러왔습니다. 대화를 시작하세요.',

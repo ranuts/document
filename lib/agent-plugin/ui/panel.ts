@@ -28,7 +28,16 @@ import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agen
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
 import { resolveModelArtifactUrl } from '@ranuts/agent-core/llm/model-source';
 import { resolveTaskModel, type ModelTask } from '@ranuts/agent-core/llm/task-model';
+import { resolveWritingRoute } from '@ranuts/agent-core/llm/writing-route';
+import { LoopbackProvider } from '@ranuts/agent-core/llm/loopback';
 import { readTaskModelPreferences, writeTaskModelPreference } from './task-model-preferences';
+import {
+  DEFAULT_LOOPBACK_URL,
+  loopbackBinding,
+  readLoopbackSettings,
+  writeLoopbackSettings,
+  type LoopbackSettings,
+} from './loopback-settings';
 import { WllamaProvider } from '@ranuts/agent-core/llm/wllama';
 import {
   generateWriting,
@@ -89,8 +98,13 @@ const PROVIDER_LABEL_KEY: Record<ProviderId, keyof I18nMessages> = {
   webllm: 'agentProviderLocal',
   wllama: 'agentProviderWllama',
   ollama: 'agentProviderOllama',
+  loopback: 'agentProviderLoopback',
 };
+// The loopback service is not a browser engine: it has its own settings block
+// rather than a slot in the provider dropdown.
 const PROVIDER_IDS: ProviderId[] = ['webllm', 'wllama'];
+/** Persisted loopback origin + model + browser-local writing consent. */
+const LOOPBACK_SETTINGS_KEY = 'agent-loopback';
 
 /** An r-button (ranui builder) with a label and class. */
 const ranButton = (text: string, className: string): HTMLElement =>
@@ -345,10 +359,46 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   const note = Div().class('agent-panel-note').build();
   note.setAttribute('role', 'status');
 
+  // ── Optional native loopback service ─────────────────────────────────────
+  // Writing into a document is high-stakes, and the browser-local engines never
+  // reached seven-language quality acceptance. A service the user runs on their
+  // own machine is therefore the preferred writing backend: it keeps the same
+  // "the file never leaves the device" property because only a loopback origin
+  // is accepted, while the model can be far larger than the page could host.
+  let loopbackSettings: LoopbackSettings = readLoopbackSettings(localStorageGetItem(LOOPBACK_SETTINGS_KEY));
+  const loopbackUrl = ranInput('agent-panel-loopback-url', 'text');
+  loopbackUrl.value = loopbackSettings.url || DEFAULT_LOOPBACK_URL;
+  loopbackUrl.placeholder = DEFAULT_LOOPBACK_URL;
+  loopbackUrl.setAttribute('aria-label', t('agentLoopbackUrl'));
+  const loopbackModel = ranInput('agent-panel-loopback-model', 'text');
+  loopbackModel.value = loopbackSettings.model;
+  loopbackModel.placeholder = 'qwen3:8b';
+  loopbackModel.setAttribute('aria-label', t('agentLoopbackModel'));
+  const loopbackConnect = ranButton(t('agentLoopbackConnect'), 'agent-panel-loopback-connect');
+  const loopbackStatus = Span().class('agent-panel-loopback-status').attr('role', 'status').build();
+  const localWritingConsent = document.createElement('input');
+  localWritingConsent.type = 'checkbox';
+  localWritingConsent.className = 'agent-panel-local-writing';
+  localWritingConsent.checked = loopbackSettings.localWritingConsent;
+  const consentLabel = document.createElement('label');
+  consentLabel.className = 'agent-panel-local-writing-label';
+  consentLabel.append(localWritingConsent, t('agentLocalWritingConsent'));
+  const loopbackRow = Div()
+    .class('agent-panel-loopback')
+    .children(
+      Span().class('agent-panel-loopback-title').text(t('agentProviderLoopback')).build(),
+      loopbackUrl,
+      loopbackModel,
+      loopbackConnect,
+      loopbackStatus,
+      consentLabel,
+    )
+    .build();
+
   const settings = Div()
     .class('agent-panel-settings agent-panel-settings-hidden')
     .id('agent-settings')
-    .children(providerSelect, modelRow, modelSources, ggufRow)
+    .children(providerSelect, modelRow, modelSources, ggufRow, loopbackRow)
     .build();
   settings.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || event.isComposing || event.keyCode === 229) return;
@@ -599,6 +649,65 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   let conversationRevision = 0;
   let loadAttempt = 0;
   let webllmProvider: LocalLLMProvider | null = null;
+  // Independent of the browser-local lifecycle: switching or unloading a browser
+  // model must not disconnect a service the user deliberately connected.
+  let loopbackProvider: LoopbackProvider | null = null;
+  const rememberLoopback = (): void => {
+    const next: LoopbackSettings = {
+      url: loopbackUrl.value.trim(),
+      model: loopbackModel.value.trim(),
+      localWritingConsent: localWritingConsent.checked,
+    };
+    loopbackSettings = next;
+    try {
+      localStorageSetItem(LOOPBACK_SETTINGS_KEY, writeLoopbackSettings(next));
+    } catch {
+      // A non-loopback origin is refused when connecting; it is never persisted.
+    }
+  };
+  const syncLoopbackStatus = (): void => {
+    loopbackStatus.textContent = loopbackProvider?.isReady() ? t('agentLoopbackConnected') : '';
+    loopbackConnect.textContent = loopbackProvider ? t('agentLoopbackDisconnect') : t('agentLoopbackConnect');
+  };
+  const disconnectLoopback = (): void => {
+    const previous = loopbackProvider;
+    loopbackProvider = null;
+    if (previous) void previous.dispose();
+    syncLoopbackStatus();
+  };
+  const connectLoopback = async (): Promise<void> => {
+    if (loopbackProvider) {
+      disconnectLoopback();
+      return;
+    }
+    if (!loopbackModel.value.trim()) {
+      loopbackStatus.textContent = t('agentLoopbackModelRequired');
+      return;
+    }
+    loopbackStatus.textContent = t('agentLoopbackConnecting');
+    try {
+      rememberLoopback();
+      const provider = new LoopbackProvider({
+        model: loopbackModel.value.trim(),
+        baseUrl: loopbackUrl.value.trim() || DEFAULT_LOOPBACK_URL,
+      });
+      await provider.preload();
+      loopbackProvider = provider;
+    } catch {
+      loopbackProvider = null;
+      loopbackStatus.textContent = t('agentLoopbackFailed');
+      note.textContent = t('agentLoopbackFailed');
+    }
+    syncLoopbackStatus();
+  };
+  loopbackConnect.addEventListener('click', () => void connectLoopback());
+  loopbackModel.addEventListener('change', () => {
+    rememberLoopback();
+    syncLoopbackStatus();
+  });
+  loopbackUrl.addEventListener('change', rememberLoopback);
+  localWritingConsent.addEventListener('change', rememberLoopback);
+  syncLoopbackStatus();
   let runtimeDescription = '';
   let latestUsage: LLMResponse['usage'];
   const syncGenerationStats = (): void => {
@@ -703,6 +812,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     }
   };
   window.addEventListener('pagehide', resetController);
+  window.addEventListener('pagehide', disconnectLoopback);
   window.addEventListener('pagehide', () => sidebar.dispose());
   window.addEventListener('document:content-ready', invalidatePlans);
   ggufUrl.addEventListener('change', () => {
@@ -1176,7 +1286,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
           if (generation === controllerGeneration && conversation === conversationRevision)
             appendTurn({ role: 'tool', text: resultText });
         }
-      } else if (proposalMode && (currentProvider() === 'webllm' || currentProvider() === 'wllama')) {
+      } else if (proposalMode) {
         operationHistory.push({ role: 'user', content: trimmed });
         invalidatePlans();
         const target = captureActionTarget();
@@ -1184,8 +1294,19 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
         planning = abort;
         appendTurn({ role: 'user', text: trimmed });
         if (target.editor !== 'word' || !target.selectedText.trim()) throw new Error(t('agentNoSelection'));
+        // A connected loopback service serves writing; the browser-local engines
+        // only do so with an explicit opt-in, because they never passed quality
+        // acceptance and a document write is high-stakes.
+        const route = resolveWritingRoute({
+          loopback: loopbackProvider?.isReady() ? loopbackBinding(loopbackSettings) : null,
+          localWritingConsent: localWritingConsent.checked,
+          local: { backend: currentProvider(), model: selectedLocalModel() },
+        });
+        if (route.kind === 'blocked') throw new Error('agentWritingNeedsLocalService');
+        const writingProvider = route.kind === 'loopback' ? loopbackProvider : webllmProvider;
+        if (!writingProvider) throw new Error('agentWritingNeedsLocalService');
         const body = await generateWriting(
-          webllmProvider!,
+          writingProvider,
           {
             task: writingSelect.value as WritingTask,
             text: target.selectedText,
