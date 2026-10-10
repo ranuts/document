@@ -11,7 +11,8 @@ export function secureEditorHtml(html) {
     .map((match) => `'sha256-${createHash('sha256').update(match[2]).digest('base64')}'`);
   const policy = [
     "default-src 'self'",
-    `script-src 'self' 'wasm-unsafe-eval' ${[...new Set(hashes)].join(' ')}`,
+    // Cloudflare Pages injects its analytics beacon into this HTML at the edge.
+    `script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com ${[...new Set(hashes)].join(' ')}`,
     "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
