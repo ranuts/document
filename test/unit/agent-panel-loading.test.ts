@@ -594,6 +594,36 @@ it('serves a writing request through a connected endpoint with no local model lo
   // And it was not diverted into the model-download prompt.
   expect(panel.textContent).not.toContain(t('agentModelFirstDownload'));
 });
+it('still asks for the local model when an endpoint is connected but the operation is open-ended', async () => {
+  // The endpoint serves the writing tasks; it does not choose document operations.
+  // An open-ended request therefore still needs the browser-local model, and must
+  // not slip past the model gate just because some endpoint answers.
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+  const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  mode.value = 'tools';
+  mode.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  input.value = 'Create another slide using this layout';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-panel-note')?.textContent).toContain(t('agentModelFirstDownload')),
+  );
+  expect(state.toolPlan).not.toHaveBeenCalled();
+});
 it('routes translation with the captured source and explicit language', async () => {
   state.ready = true;
   state.source = 'Budget 1250 EUR';

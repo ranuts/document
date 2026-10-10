@@ -73,7 +73,9 @@ notes. Entries describe what users experience, not internal refactors.
 - **The assistant no longer asks you to download a model you are not going to use.**
   With a cloud endpoint connected, writing goes there even if no in-browser model
   is loaded; previously that combination quietly did nothing but tell you to load
-  one. Changing the address, model or key now also disconnects the endpoint (and
+  one. A fixed spreadsheet command such as "read A1:A5, then set B1 to `done`"
+  likewise runs without any model loaded, because choosing the operation is not
+  something it needs help with. Changing the address, model or key now also disconnects the endpoint (and
   does not carry the key to a different address) instead of leaving the panel
   showing one destination while requests went to another.
 

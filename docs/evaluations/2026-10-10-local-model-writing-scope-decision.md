@@ -208,3 +208,42 @@ loopback 与浏览器内推理守得住"文件不出设备"，自带 Key 的云�
 - 清掉上一轮命名遗留的 8 个死 i18n 键（7 语言共 56 条）。
 
 检查：149 文件 / 4621 用例、`lint:ts`、`format:check`、`pnpm build` 全部通过。
+
+## 追加（同日）：agent 写入的第一条 E2E + 首下门禁的第三处修正
+
+review 时确认了两件事：**agent 的写入工具此前没有任何 E2E**（只有单测），而且首下门禁还漏了一个入口。
+
+### E2E：`test/e2e/agent-write-tools.spec.ts`（真实 v9 编辑器，3 条，约 9 秒）
+
+三条用例各覆盖一条写入机制，**全部不需要模型**——这是能在 CI 里跑的前提：
+
+| 用例     | 机制                                   | 入口（无模型）                                          |
+| -------- | -------------------------------------- | ------------------------------------------------------- |
+| 写单元格 | `writeExcelCellText`（表格模型级写入） | tools 任务的封闭句式 `read A1:A5, then set B1 to "..."` |
+| 写 Word  | `pasteWordHtml`（原生 HTML 粘贴包装）  | 固定语法"把上一条回答写入文档"                          |
+| 加幻灯片 | `slide_action`                         | 固定语法"新增幻灯片"                                    |
+
+每条都断言**真实变更 + 编辑器原生 Undo 往返**（写入必须是一步可撤销的）。
+面板不自动下载模型：夹具把 provider 固定为没有模型的 GGUF 路径，使 `hasStartupModel()` 为假。
+
+两处夹具说明（诚实标注，不是放宽断言）：
+
+- Word 那条需要"上一条回答"，而会话历史在面板自己的 store（内存 + 可选 IndexedDB）里，
+  没有 localStorage 记录可播种。用例只注入 `getLastAnswer()` 真正读取的那个节点
+  （`.cui-msg-agent` 的 `dataset.source`），其下游（意图解析、粘贴、撤销分组）全是真实代码。
+- **仍未覆盖**：模型驱动的工具选择（需要真实模型或假的本机服务）。这是缺口，不是隐含通过。
+
+### 门禁第三处修正：固定句式不该要模型
+
+`generateDocumentToolSequence` 里那条"读区域→写单元格"是**确定性路径**（`document-tool-sequence.ts`
+匹配后直接返回计划，根本不碰 provider），但首下门禁是按"tools 任务一律需要模型"判的，于是这条
+无模型路径**永远到不了**。现在把"哪些请求真的需要模型"变成可声明的纯函数
+`isModelFreeToolRequest(request, context)`，门禁问它而不是猜：
+
+- 同时修掉上一节我引入的一个洞：`writingEndpointReady` 曾让**所有** tools 请求绕过门禁，
+  而端点只服务写作任务、不负责选工具——开式操作会拿着空 provider 往下走。
+  现在 tools 分支只在固定句式时免责。
+- 反向验证：把 tools 分支改回"一律免责" → 新增用例变红。
+
+检查：149 文件 / 4628 用例、`lint:ts`、`format:check`、`pnpm build` 通过；
+`E2E_PORT=4180 playwright test test/e2e/agent-write-tools.spec.ts` 3 passed。

@@ -52,7 +52,7 @@ import {
   type WritingLanguage,
 } from '@ranuts/agent-core/llm/writing-task';
 import { captureActionTarget, ReviewedAction } from '../reviewed-action';
-import { generateDocumentToolSequence } from '../document-tool-sequence';
+import { generateDocumentToolSequence, isModelFreeToolRequest } from '../document-tool-sequence';
 import { captureDocumentToolTarget, DocumentToolAction } from '../document-tool-action';
 import { ChatView, type ChatViewLabels } from '@ranuts/chat-ui';
 import { AgentChatController, type ChatTurn } from './controller';
@@ -1372,19 +1372,21 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       return;
     }
     const ctl = buildController();
-    // The browser-local model is only needed when it is the writing destination.
-    // With a connected endpoint, a writing task must not sit behind a model
-    // download it will never use.
-    const writingEndpointReady = ((): boolean => {
-      if (!proposalMode) return false;
+    // Which requests actually need the browser-local model: a connected endpoint
+    // serves the writing tasks, the fixed tool phrases need no model at all, and
+    // chat or an open-ended tool request still does. Asking this is what keeps a
+    // model download from standing in front of work that would never use it.
+    const localModelNeeded = ((): boolean => {
+      if (writingSelect.value === 'tools') return !isModelFreeToolRequest(text, captureDocumentContext());
+      if (!proposalMode) return true;
       try {
-        return resolveRoute().kind === 'endpoint';
+        return resolveRoute().kind !== 'endpoint';
       } catch {
-        return false;
+        return true;
       }
     })();
     if (
-      !writingEndpointReady &&
+      localModelNeeded &&
       (currentProvider() === 'wllama' || currentProvider() === 'webllm') &&
       !webllmProvider?.isReady()
     ) {

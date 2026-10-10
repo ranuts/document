@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { generateDocumentToolSequence } from '../../lib/agent-plugin/document-tool-sequence';
+import { generateDocumentToolSequence, isModelFreeToolRequest } from '../../lib/agent-plugin/document-tool-sequence';
 const provider = {
   name: 'probe',
   isReady: () => true,
@@ -87,3 +87,20 @@ it('marks JSON quoted numbers as text while plain numeric literals retain native
   );
   expect(numeric[1].input).toEqual({ cell: 'B2', value: '99' });
 });
+
+const modelFreeCases: Array<[string, Parameters<typeof isModelFreeToolRequest>[1], boolean]> = [
+  ['read A1:B4, then set B2 to 99', { kind: 'cell' }, true],
+  ['读取 A1:B4 的内容，然后将 B2 设置为 99。', { kind: 'cell' }, true],
+  // Refused locally rather than planned: still answered without a model.
+  ['read A1:B4, then delete B2', { kind: 'cell' }, true],
+  // Open-ended operation: the model has to choose the tool.
+  ['Create another slide using this layout', { kind: 'cell' }, false],
+  ['read A1:B4, then set B2 to 99', { kind: 'word' }, false],
+  ['read A1:B4, then set B2 to 99', null, false],
+];
+it.each(modelFreeCases)(
+  'answers without a model only for the closed cell phrases: %s',
+  (request, context, expected) => {
+    expect(isModelFreeToolRequest(request, context)).toBe(expected);
+  },
+);
