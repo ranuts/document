@@ -10,6 +10,7 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const pt: Partial<I18nMessages> = {
+  editorBackHome: 'Voltar ao início',
   agentSpeechInput: 'Entrada de voz',
   agentSpeechStop: 'Parar ditado',
   agentSpeechLanguage: 'Idioma de reconhecimento',

@@ -256,6 +256,29 @@ describe('onlyoffice-editor', () => {
       return DocEditor.mock.calls[0][1] as any;
     }
 
+    it.each(['docx', 'xlsx', 'pptx'])(
+      'provides same-window home navigation for standalone %s editors',
+      async (fileType) => {
+        const config = await createAndGetConfig({ fileName: `test.${fileType}`, fileType });
+        expect(config.editorConfig.customization.goback).toEqual({
+          url: new URL('/', location.href).href,
+          blank: false,
+          text: expect.any(String),
+        });
+      },
+    );
+
+    it('does not expose home navigation in an embedded editor', async () => {
+      const previousUrl = location.href;
+      history.replaceState(null, '', '/editor?embed=true');
+      try {
+        const config = await createAndGetConfig({ fileName: 'test.docx', fileType: 'docx' });
+        expect(config.editorConfig.customization.goback).toBeUndefined();
+      } finally {
+        history.replaceState(null, '', previousUrl);
+      }
+    });
+
     // The bytes are kept only so an environment-class open failure can be
     // retried with them (#144). Once the document is open that retry is
     // unreachable, and a third copy of a large document (the editor holds one,
