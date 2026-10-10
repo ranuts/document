@@ -1,10 +1,13 @@
+import { t } from '@ranuts/shared/i18n';
 /** A captured pointer plus a temporary shield prevents the editor iframe stealing drags. */
 export function mountPanelResize(panel: HTMLElement): () => void {
   const handle = document.createElement('div');
   handle.className = 'agent-panel-resizer';
   handle.tabIndex = 0;
   handle.setAttribute('role', 'separator');
-  handle.setAttribute('aria-label', 'Resize AI panel');
+  const label = () => handle.setAttribute('aria-label', t('agentResizePanel'));
+  label();
+  window.addEventListener('languagechange', label);
   handle.setAttribute('aria-orientation', 'vertical');
   panel.prepend(handle);
   let preferred = 432;
@@ -81,6 +84,7 @@ export function mountPanelResize(panel: HTMLElement): () => void {
     finish();
     window.removeEventListener('resize', resize);
     window.removeEventListener('blur', finish);
+    window.removeEventListener('languagechange', label);
     handle.remove();
   };
 }

@@ -35,6 +35,7 @@ export class ChatView {
    * collapses when empty.
    */
   readonly actionsEl: HTMLDivElement;
+  readonly contextEl = Div().class('cui-context').build();
   readonly emptyActionsEl: HTMLDivElement;
 
   private readonly messagesEl: HTMLDivElement;
@@ -122,7 +123,11 @@ export class ChatView {
 
     const composer = Div()
       .class('cui-composer')
-      .children(this.input, Div().class('cui-composer-bar').children(this.actionsEl, this.sendBtn).build())
+      .children(
+        this.contextEl,
+        this.input,
+        Div().class('cui-composer-bar').children(this.actionsEl, this.sendBtn).build(),
+      )
       .build();
 
     // Footer hosts the jump-to-latest button (floats just above it), the action
@@ -204,7 +209,12 @@ export class ChatView {
         }
       });
       actions.append(copy);
-      if (this.options.onApplyMessage && !message.interrupted && !message.copyOnly) {
+      if (
+        this.options.onApplyMessage &&
+        (this.options.canApplyMessage?.() ?? true) &&
+        !message.interrupted &&
+        !message.copyOnly
+      ) {
         const apply = ButtonBuilder().class('cui-apply').attr('type', 'button').build();
         apply.textContent = this.labels.applyMessage ?? 'Write to document';
         apply.title = this.labels.applyTip ?? 'Insert at the cursor or replace the selected text';

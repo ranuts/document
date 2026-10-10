@@ -17,6 +17,9 @@ const state = vi.hoisted(() => ({
   progress: [] as Array<(value: { text: string; progress?: number }) => void>,
   unavailable: undefined as undefined | (() => void),
   ready: false,
+  cached: false,
+  deleteCache: vi.fn().mockResolvedValue(undefined),
+  editorKind: 'word' as 'word' | 'cell' | 'slide',
   readonly: false,
   activeBackend: undefined as 'webllm' | 'wllama' | undefined,
   stalled: false,
@@ -35,7 +38,7 @@ const state = vi.hoisted(() => ({
 vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
   ...(await original<typeof import('@ranuts/agent-core/llm/webllm')>()),
   isWebGPUAvailable: () => true,
-  isModelCached: async () => false,
+  isModelCached: async (id: string) => state.cached && id === 'Qwen3-1.7B-q4f16_1-MLC',
   WebLLMProvider: class {
     constructor(options: { onProgress: (value: { text: string }) => void }) {
       state.progress.push(options.onProgress);
@@ -48,10 +51,56 @@ vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
   },
 }));
 vi.mock('../../lib/onlyoffice/readonly', () => ({ getReadonlyMode: () => state.readonly }));
+vi.mock('@ranuts/agent-core/llm/model-cache', () => ({
+  deleteCachedModel: state.deleteCache,
+  listCachedGGUF: async () => [],
+  deleteCachedGGUF: state.deleteCache,
+  rememberedModelSources: () => [],
+  rememberModelSource: () => {},
+}));
 vi.mock('../../lib/agent-plugin/editor-bridge', () => ({
   getEditorApi: () =>
     state.editorReady
-      ? { isDocumentLoadComplete: true, isLoadFullApi: true, pluginMethod_GetSelectedText: () => state.source }
+      ? {
+          isDocumentLoadComplete: true,
+          isLoadFullApi: true,
+          pluginMethod_GetSelectedText: () => state.source,
+          ...(state.editorKind === 'cell'
+            ? {
+                asc_getActiveRangeStr: () => 'B2',
+                asc_getActiveWorksheetName: () => 'Sheet 1',
+                wb: { getWorksheet: () => ({ model: { getRange3: () => ({ getValue: () => state.source }) } }) },
+              }
+            : state.editorKind === 'slide'
+              ? {
+                  getCurrentPage: () => 0,
+                  WordControl: {
+                    m_oLogicDocument: {
+                      Slides: [],
+                      GetCurrentController: () => ({
+                        getTargetDocContent: () => ({
+                          Content: [
+                            {
+                              Content: [
+                                {
+                                  Type: 39,
+                                  Selection: { Use: true, StartPos: 0, EndPos: state.source.length },
+                                  Content: [...state.source].map((character) => ({
+                                    Type: 1,
+                                    GetCodePoint: () => character.codePointAt(0),
+                                  })),
+                                },
+                              ],
+                            },
+                          ],
+                          GetSelectedText: () => state.source,
+                        }),
+                      }),
+                    },
+                  },
+                }
+              : {}),
+        }
       : null,
 }));
 vi.mock('@ranuts/agent-core/llm/writing-task', async (original) => ({
@@ -87,6 +136,9 @@ vi.mock('@ranuts/agent-core/llm/local', async (original) => ({
             'abort',
             () => {
               state.ready = false;
+              state.cached = false;
+              state.editorKind = 'word';
+              state.deleteCache.mockReset().mockResolvedValue(undefined);
               reject(signal.reason);
             },
             { once: true },
@@ -129,6 +181,10 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
     isCurrent: () => true,
   }),
   DocumentToolAction: class {
+    cancel() {}
+    isCurrent() {
+      return true;
+    }
     apply = state.apply;
     get result() {
       return state.readText === undefined ? { verified: true, page: 2, count: 2 } : { text: state.readText };
@@ -150,6 +206,9 @@ afterEach(() => {
   state.dispose.mockClear();
   state.progress.length = 0;
   state.ready = false;
+  state.cached = false;
+  state.editorKind = 'word';
+  state.deleteCache.mockReset().mockResolvedValue(undefined);
   state.readonly = false;
   state.unavailable = undefined;
   state.activeBackend = undefined;
@@ -159,6 +218,7 @@ afterEach(() => {
   state.toolContext = 'slide';
   state.apply.mockClear();
   state.writing.mockReset();
+  state.editorReady = true;
   state.source = '';
   state.readText = undefined;
   state.editorReady = false;
@@ -352,12 +412,13 @@ it('requires selection before starting a writing task', async () => {
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(state.writing).not.toHaveBeenCalled();
   expect(state.generate).not.toHaveBeenCalled();
-  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentNoSelection'));
+  expect(panel.querySelector('.cui-msg-status')?.textContent).toContain(t('agentSelectText'));
 });
 it('refuses browser-local writing until a service is connected or consent is given', async () => {
   // The narrowing this change delivers: a document write is no longer silently
   // routed to a browser-local engine that never passed quality acceptance.
   state.ready = true;
+  state.editorReady = true;
   state.source = 'Budget 1250 EUR';
   const panel = createAgentPanel();
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -376,7 +437,11 @@ it('explains a blocked writing route without requiring an unrelated model downlo
   // The narrowing this change delivers: a document write is no longer silently
   // routed to a browser-local engine that never passed quality acceptance.
   state.ready = false;
+  state.cached = false;
+  state.editorKind = 'word';
+  state.deleteCache.mockReset().mockResolvedValue(undefined);
   localStorage.setItem('agent-panel-provider', 'wllama');
+  state.editorReady = true;
   state.source = 'Budget 1250 EUR';
   const panel = createAgentPanel();
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -451,6 +516,7 @@ it('says a cloud destination cannot work offline instead of failing vaguely', as
   // the cloud endpoint, so the user is told why rather than getting a network error.
   Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
   state.ready = true;
+  state.editorReady = true;
   state.source = 'Original';
   const panel = createAgentPanel();
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
@@ -578,6 +644,7 @@ it('says the configured cloud endpoint is unavailable offline rather than "not c
 });
 it('asks for the model to be loaded when consent is on but no model is ready', async () => {
   allowBrowserLocalWriting();
+  state.editorReady = true;
   state.source = 'Original';
   const panel = createPreparedPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
@@ -599,6 +666,7 @@ it('serves a writing request through a connected endpoint with no local model lo
   // Regression: the first-download gate used to fire for every submit, so a user
   // with a cloud endpoint and no browser model got asked to download a model and
   // the request never went anywhere.
+  state.editorReady = true;
   state.source = 'Original selected text';
   state.writing.mockResolvedValue('Rewritten body');
   const panel = createAgentPanel();
@@ -632,7 +700,7 @@ it('serves a writing request through a connected endpoint with no local model lo
   // And it was not diverted into the model-download prompt.
   expect(panel.textContent).not.toContain(t('agentModelFirstDownload'));
 });
-it('still asks for the local model when an endpoint is connected but the operation is open-ended', async () => {
+it('uses the connected endpoint to plan an open-ended operation', async () => {
   // The endpoint serves the writing tasks; it does not choose document operations.
   // An open-ended request therefore still needs the browser-local model, and must
   // not slip past the model gate just because some endpoint answers.
@@ -657,13 +725,11 @@ it('still asks for the local model when an endpoint is connected but the operati
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   input.value = 'Create another slide using this layout';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() =>
-    expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentPrepareRequired')),
-  );
-  expect(state.toolPlan).not.toHaveBeenCalled();
+  await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalled());
 });
 it('routes translation with the captured source and explicit language', async () => {
   state.ready = true;
+  state.editorReady = true;
   state.source = 'Budget 1250 EUR';
   state.writing.mockResolvedValue('预算 1250 EUR');
   allowBrowserLocalWriting();
@@ -675,14 +741,14 @@ it('routes translation with the captured source and explicit language', async ()
   language.value = 'zh-CN';
   language.dispatchEvent(new Event('change'));
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Preserve numbers';
+  input.value = 'Translate into Chinese, preserve numbers';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(state.writing.mock.calls[0][1]).toEqual({
     task: 'translate',
     text: 'Budget 1250 EUR',
     targetLanguage: 'zh-CN',
-    instruction: 'Preserve numbers',
+    instruction: 'Translate into Chinese, preserve numbers',
   });
   expect(state.generate).not.toHaveBeenCalled();
   expect(state.apply).not.toHaveBeenCalled();
@@ -695,6 +761,7 @@ it('records a writing request and verified outcome without copying selected docu
   const record = vi.spyOn(AgentChatController.prototype, 'recordExternalMessages');
   try {
     state.ready = true;
+    state.editorReady = true;
     state.source = 'Private selected source';
     state.writing.mockResolvedValue('Private rewritten body');
     allowBrowserLocalWriting();
@@ -703,7 +770,7 @@ it('records a writing request and verified outcome without copying selected docu
     task.value = 'rewrite';
     task.dispatchEvent(new Event('change'));
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-    input.value = 'Make it clearer';
+    input.value = 'Rewrite it more clearly';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await vi.waitFor(() =>
       expect(panel.querySelector('.agent-plan-content')?.textContent).toBe('Private rewritten body'),
@@ -712,7 +779,7 @@ it('records a writing request and verified outcome without copying selected docu
     await vi.waitFor(() => expect(state.apply).toHaveBeenCalled());
     await vi.waitFor(() => expect(input.disabled).toBe(false));
     expect(record.mock.calls.flatMap(([messages]) => messages)).toEqual([
-      { role: 'user', content: 'Make it clearer' },
+      { role: 'user', content: 'Rewrite it more clearly' },
       { role: 'assistant', content: 'Private rewritten body', copyOnly: true },
       { role: 'assistant', content: t('agentPlanReady'), hostGuidance: 'tool' },
       { role: 'assistant', content: t('agentPlanVerified'), hostGuidance: 'tool' },
@@ -720,10 +787,10 @@ it('records a writing request and verified outcome without copying selected docu
     const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
     const originalSession = sessions.value;
     panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
-    expect(panel.querySelector('.cui-messages')?.textContent ?? '').not.toContain('Make it clearer');
+    expect(panel.querySelector('.cui-messages')?.textContent ?? '').not.toContain('Rewrite it more clearly');
     sessions.value = originalSession;
     sessions.dispatchEvent(new Event('change'));
-    expect(panel.textContent).toContain('Make it clearer');
+    expect(panel.textContent).toContain('Rewrite it more clearly');
     expect(panel.textContent).toContain('Private rewritten body');
     expect(panel.querySelector('.agent-plan-apply')).toBeNull();
     expect(panel.querySelector('.cui-apply')).toBeNull();
@@ -739,6 +806,7 @@ it('records a failed writing request as an error and never reports document succ
   const record = vi.spyOn(AgentChatController.prototype, 'recordExternalMessages');
   try {
     state.ready = true;
+    state.editorReady = true;
     state.source = 'Original';
     state.writing.mockRejectedValue(new Error('No rewrite was proposed'));
     allowBrowserLocalWriting();
@@ -747,12 +815,12 @@ it('records a failed writing request as an error and never reports document succ
     task.value = 'rewrite';
     task.dispatchEvent(new Event('change'));
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-    input.value = 'Use formal wording';
+    input.value = 'Rewrite using formal wording';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await vi.waitFor(() => expect(input.disabled).toBe(false));
     const messages = record.mock.calls.flatMap(([items]) => items);
     expect(messages).toEqual([
-      { role: 'user', content: 'Use formal wording' },
+      { role: 'user', content: 'Rewrite using formal wording' },
       { role: 'assistant', content: t('agentWritingUnchanged'), hostGuidance: 'error' },
     ]);
     expect(state.apply).not.toHaveBeenCalled();
@@ -765,6 +833,7 @@ it.each(['resolve', 'reject'] as const)(
   'keeps a late writing %s in its original conversation after switching',
   async (settlement) => {
     state.ready = true;
+    state.editorReady = true;
     state.source = 'Original selection';
     let resolve!: (body: string) => void;
     let reject!: (error: Error) => void;
@@ -783,7 +852,7 @@ it.each(['resolve', 'reject'] as const)(
     task.value = 'rewrite';
     task.dispatchEvent(new Event('change'));
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-    input.value = 'Old request';
+    input.value = 'Rewrite this old request';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await vi.waitFor(() => expect(state.writing).toHaveBeenCalledOnce());
     const signal = state.writing.mock.calls[0][2] as AbortSignal;
@@ -793,12 +862,12 @@ it.each(['resolve', 'reject'] as const)(
     else reject(new Error('No rewrite was proposed'));
     await new Promise((done) => setTimeout(done, 0));
     expect(state.apply).not.toHaveBeenCalled();
-    expect(panel.querySelector('.cui-messages')?.textContent).not.toContain('Old request');
+    expect(panel.querySelector('.cui-messages')?.textContent).not.toContain('Rewrite this old request');
     expect(panel.querySelector('.cui-msg-error')).toBeNull();
     expect(input.disabled).toBe(false);
     sessions.value = originalSession;
     sessions.dispatchEvent(new Event('change'));
-    expect(panel.textContent).toContain('Old request');
+    expect(panel.textContent).toContain('Rewrite this old request');
     expect(panel.querySelector(settlement === 'resolve' ? '.cui-msg-status' : '.cui-msg-error')?.textContent).toContain(
       t(settlement === 'resolve' ? 'agentStopped' : 'agentWritingUnchanged'),
     );
@@ -808,6 +877,7 @@ it.each(['resolve', 'reject'] as const)(
 
 it.each(['rewrite', 'tools'])('retains a late %s failure when returning before it settles', async (mode) => {
   state.ready = true;
+  state.editorReady = true;
   state.source = 'Original selection';
   let reject!: (error: Error) => void;
   const pending = new Promise<string>((_resolve, no) => {
@@ -823,7 +893,7 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   task.value = mode;
   task.dispatchEvent(new Event('change'));
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Pending original request';
+  input.value = mode === 'rewrite' ? 'Rewrite pending original request' : 'Create a slide from this request';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(mode === 'rewrite' ? state.writing : state.toolPlan).toHaveBeenCalledOnce());
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
@@ -842,7 +912,9 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
   sessions.value = original;
   sessions.dispatchEvent(new Event('change'));
-  expect(panel.querySelector('.cui-messages')?.textContent).toContain('Pending original request');
+  expect(panel.querySelector('.cui-messages')?.textContent).toContain(
+    mode === 'rewrite' ? 'Rewrite pending original request' : 'Create a slide from this request',
+  );
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentToolNotChosen'));
   expect(panel.querySelector('.cui-messages')?.textContent).toContain('Subsequent message');
   expect(state.apply).not.toHaveBeenCalled();
@@ -893,6 +965,7 @@ it('shows a clear result when the current document has no readable text', async 
 
 it('executes successive explicit writing requests only after separate confirmations', async () => {
   state.ready = true;
+  state.editorReady = true;
   state.source = 'Original';
   state.writing.mockResolvedValueOnce('First proposal').mockResolvedValueOnce('Second proposal');
   allowBrowserLocalWriting();
@@ -983,7 +1056,7 @@ it('requires explicit preparation after Stop without replaying the request', asy
   expect(panel.querySelector<HTMLButtonElement>('.cui-send')!.disabled).toBe(false);
 });
 
-it('executes a model-selected document operation without a preview or second confirmation', async () => {
+it('previews a model-selected document operation before applying', async () => {
   state.ready = true;
   state.toolPlan.mockResolvedValue({ tool: 'slide_action', input: { action: 'add' }, readOnly: false });
   const panel = createPreparedPanel();
@@ -993,9 +1066,12 @@ it('executes a model-selected document operation without a preview or second con
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Create another slide using this layout';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-content')).not.toBeNull());
+  expect(state.apply).not.toHaveBeenCalled();
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
   await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
   expect(state.toolPlan.mock.calls[0][2]).toEqual({ kind: 'slide', page: 1 });
-  expect(panel.querySelector('.agent-plan-preview')).toBeNull();
+  expect(panel.querySelector('.agent-plan-preview')).not.toBeNull();
   expect(panel.textContent).toContain(t('agentPlanVerified'));
 });
 
@@ -1019,13 +1095,16 @@ it('clears loaded runtime feedback when a failed operation retires its provider'
   state.ready = true;
   state.toolPlan.mockImplementation(async () => {
     state.ready = false;
+    state.cached = false;
+    state.editorKind = 'word';
+    state.deleteCache.mockReset().mockResolvedValue(undefined);
     throw new WebAssembly.RuntimeError('Length out of range of buffer');
   });
   state.preload.mockResolvedValue(undefined);
   const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
   const configure = panel.querySelector<HTMLButtonElement>('.agent-configure')!;
-  expect(configure.hidden).toBe(true);
+  expect(configure).toBeNull();
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
@@ -1036,15 +1115,15 @@ it('clears loaded runtime feedback when a failed operation retires its provider'
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentLoadModel'));
   expect(panel.querySelector('.agent-model-status')?.textContent).toBe('');
-  expect(configure.hidden).toBe(false);
+  expect(configure).toBeNull();
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
-  expect(panel.querySelector<HTMLButtonElement>('.agent-configure')!.hidden).toBe(false);
+  expect(panel.querySelector('.agent-configure')).toBeNull();
   state.preload.mockImplementationOnce(async () => {
     state.ready = true;
   });
   panel.querySelector<HTMLButtonElement>('.agent-panel-load')!.click();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
-  expect(panel.querySelector<HTMLButtonElement>('.agent-configure')!.hidden).toBe(true);
+  expect(panel.querySelector('.agent-configure')).toBeNull();
 });
 
 it('preserves raw tool request whitespace through planning and the transcript', async () => {
@@ -1150,12 +1229,12 @@ it('hides the redundant configure action when the model is ready, retaining sett
   state.preload.mockResolvedValue(undefined);
   const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
-  expect(panel.querySelector<HTMLButtonElement>('.agent-configure')!.hidden).toBe(true);
+  expect(panel.querySelector('.agent-configure')).toBeNull();
   expect(panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.hidden).toBe(false);
   const provider = panel.querySelector<HTMLSelectElement>('.agent-panel-provider')!;
   provider.value = 'wllama';
   provider.dispatchEvent(new Event('change'));
-  expect(panel.querySelector<HTMLButtonElement>('.agent-configure')!.hidden).toBe(false);
+  expect(panel.querySelector('.agent-configure')).toBeNull();
 });
 
 it.each([
@@ -1275,10 +1354,15 @@ it('retains the completed read and verification error without reporting sequence
   input.value = '读取 A1:B4 的内容，然后将 B2 设置为 "00123"。';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.disabled).toBe(false));
-  expect(state.apply).toHaveBeenCalledTimes(2);
+  expect(state.apply).toHaveBeenCalledTimes(1);
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(state.apply).toHaveBeenCalledTimes(2));
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-plan-status')?.textContent).toContain(t('agentPlanUnverified')),
+  );
   const check = () => {
     expect(panel.querySelector('.cui-activity')?.textContent).toContain('B2: "30"');
-    expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentPlanUnverified'));
+    expect(panel.textContent).not.toContain(t('agentPlanVerified'));
     expect(panel.textContent).not.toContain(t('agentPlanVerified'));
   };
   check();
@@ -1407,11 +1491,14 @@ it('clears loaded feedback when the engine becomes unavailable after chat has fi
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentUseDevice'));
   state.ready = false;
+  state.cached = false;
+  state.editorKind = 'word';
+  state.deleteCache.mockReset().mockResolvedValue(undefined);
   state.readonly = false;
   state.unavailable?.();
   expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentLoadModel'));
   expect(panel.querySelector('.agent-model-status')?.textContent).toBe('');
-  expect(configure.hidden).toBe(false);
+  expect(configure).toBeNull();
   expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('answer');
 });
 
@@ -1535,6 +1622,7 @@ it('generates copyable writing in read-only mode without creating a write action
   state.ready = true;
   state.readonly = true;
   state.editorReady = true;
+  state.editorReady = true;
   state.source = 'Original';
   state.writing.mockResolvedValue('Copyable suggestion');
   allowBrowserLocalWriting();
@@ -1550,4 +1638,64 @@ it('generates copyable writing in read-only mode without creating a write action
   expect(panel.querySelector('.cui-apply')).toBeNull();
   expect(panel.querySelector('.cui-copy')).not.toBeNull();
   expect(state.apply).not.toHaveBeenCalled();
+});
+
+it.each(['word', 'cell', 'slide'] as const)(
+  'naturally routes a rewrite with %s selection into a reviewable proposal',
+  async (kind) => {
+    state.ready = true;
+    state.editorReady = true;
+    state.editorKind = kind;
+    state.source = 'Original selected text';
+    state.writing.mockResolvedValue('Refined selected text');
+    allowBrowserLocalWriting();
+    const panel = createPreparedPanel();
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = 'Rewrite selected text clearly';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() =>
+      expect(panel.querySelector('.agent-plan-content')?.textContent).toBe('Refined selected text'),
+    );
+    expect(state.writing.mock.calls[0][1]).toMatchObject({ task: 'rewrite', text: state.source });
+    expect(state.apply).not.toHaveBeenCalled();
+    panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+    await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
+  },
+);
+it('requires confirmation and completed unload before deleting the running cached model', async () => {
+  state.ready = true;
+  state.cached = true;
+  const panel = createPreparedPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-cache-delete')).not.toBeNull());
+  const remove = panel.querySelector<HTMLElement>('.agent-cache-delete')!;
+  remove.click();
+  expect(state.deleteCache).not.toHaveBeenCalled();
+  let release!: () => void;
+  state.dispose.mockImplementationOnce(
+    () =>
+      new Promise<void>((resolve) => {
+        release = resolve;
+      }),
+  );
+  remove.click();
+  await Promise.resolve();
+  expect(state.deleteCache).not.toHaveBeenCalled();
+  release();
+  await vi.waitFor(() => expect(state.deleteCache).toHaveBeenCalledOnce());
+});
+it('does not delete caches when runtime unload fails', async () => {
+  state.ready = true;
+  state.cached = true;
+  const panel = createPreparedPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-cache-delete')).not.toBeNull());
+  state.dispose.mockRejectedValueOnce(new Error('unload failed'));
+  const remove = panel.querySelector<HTMLElement>('.agent-cache-delete')!;
+  remove.click();
+  remove.click();
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-model-cache')?.textContent).toContain(t('agentModelCleanupFailed')),
+  );
+  expect(state.deleteCache).not.toHaveBeenCalled();
 });

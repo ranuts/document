@@ -35,7 +35,7 @@ import {
   type WritingEndpointKind,
 } from '@ranuts/agent-core/llm/endpoint';
 import { clearEndpointKey, getEndpointKey, setEndpointKey } from '@ranuts/agent-core/llm/keys';
-import { readTaskModelPreferences, writeTaskModelPreference } from './task-model-preferences';
+import { readTaskModelPreferences } from './task-model-preferences';
 import {
   ENDPOINT_SETTINGS_KEY,
   configuredEndpoint,
@@ -65,6 +65,15 @@ import { createSidebarEntry } from './sidebar-entry';
 import { mountPanelResize } from './panel-resize';
 import { mountPanelViewport } from './panel-viewport';
 import { ActionPreview } from './action-preview';
+import { captureComposerContext } from './composer-context';
+import { classifyRequest } from './request-intent';
+import {
+  deleteCachedModel,
+  listCachedGGUF,
+  deleteCachedGGUF,
+  rememberedModelSources,
+  rememberModelSource,
+} from '@ranuts/agent-core/llm/model-cache';
 
 /** ranui custom elements expose a `value` accessor (r-select / r-input). */
 type ValueEl = HTMLElement & { value: string };
@@ -164,7 +173,11 @@ export function createAgentPanel(
     return existing as HTMLElement;
   }
 
-  const panel = Div().class('agent-panel agent-runtime-panel').build();
+  const panel = Div()
+    .class('agent-panel agent-runtime-panel')
+    .attr('role', 'complementary')
+    .attr('aria-label', t('agentTitle'))
+    .build();
   let disposeResize = mountPanelResize(panel);
   let disposeViewport = mountPanelViewport(panel);
   window.addEventListener('pagehide', () => disposeViewport());
@@ -178,8 +191,8 @@ export function createAgentPanel(
     sidebar = mountSidebar();
     syncSidebar();
     clearInterval(scopeTimer);
-    scopeTimer = setInterval(updateScope, 1000);
-    updateScope();
+    scopeTimer = setInterval(syncContext, 1000);
+    syncContext();
     syncReviewControl();
     syncProviderUi();
     syncRuntimeStatus();
@@ -367,18 +380,30 @@ export function createAgentPanel(
     'agent-panel-model',
     WEBLLM_MODELS.map((model) => ({
       value: model.id,
-      label: `${model.label} (${t('agentModelMemory').replace('{memory}', (model.vramMB / 1000).toFixed(2))})`,
+      label: model.label,
     })),
     DEFAULT_WEBLLM_MODEL,
   );
   const presetIds = WEBLLM_MODELS.map((model) => model.id);
-  let taskPreferences = readTaskModelPreferences(localStorageGetItem('agent-task-models'), presetIds);
+  const taskPreferences = readTaskModelPreferences(localStorageGetItem('agent-task-models'), presetIds);
   const savedPreset = localStorageGetItem('agent-local-preset');
   if (WEBLLM_MODELS.some((model) => model.id === savedPreset)) modelSelect.value = savedPreset!;
   modelSelect.setAttribute('aria-label', t('agentModelLabel'));
   const loadBtn = ranButton(t('agentLoadModel'), 'agent-panel-load');
   loadBtn.addEventListener('click', () => void loadModel());
   const modelRow = Div().class('agent-panel-model-row').children(modelSelect, loadBtn).build();
+  const modelMemory = document.createElement('p');
+  modelMemory.className = 'agent-model-memory';
+  modelMemory.id = 'agent-model-memory';
+  modelSelect.setAttribute('aria-describedby', 'agent-model-memory');
+  const syncModelMemory = () => {
+    modelMemory.hidden = providerSelect.value === 'wllama';
+    const model = WEBLLM_MODELS.find((item) => item.id === modelSelect.value);
+    modelMemory.textContent = model ? t('agentModelMemory').replace('{memory}', (model.vramMB / 1000).toFixed(2)) : '';
+  };
+  modelSelect.addEventListener('change', syncModelMemory);
+  providerSelect.addEventListener('change', syncModelMemory);
+  syncModelMemory();
   const loadStop = ranButton(t('agentStop'), 'agent-panel-load-stop');
   loadStop.hidden = true;
   loadStop.addEventListener('click', () => {
@@ -401,7 +426,7 @@ export function createAgentPanel(
   // text is sent there). The resolved destination is always shown, because the
   // two are not equivalent and the choice belongs to the user.
   let endpointSettings: EndpointSettings = readEndpointSettings(localStorageGetItem(ENDPOINT_SETTINGS_KEY));
-  const endpointKind = compactSelect(
+  const endpointKind = ranSelect(
     'agent-endpoint-kind',
     [
       { value: 'loopback', label: t('agentEndpointLoopback') },
@@ -426,9 +451,15 @@ export function createAgentPanel(
   endpointKey.placeholder = t('agentEndpointKey');
   endpointKey.setAttribute('aria-label', t('agentEndpointKey'));
   const endpointConnect = ranButton(t('agentEndpointConnect'), 'agent-panel-endpoint-connect');
-  const endpointStatus = Span().class('agent-panel-endpoint-status').attr('role', 'status').build();
+  const endpointStatus = Span()
+    .class('agent-panel-endpoint-status')
+    .attr('role', 'status')
+    .id('agent-endpoint-status')
+    .build();
+  for (const control of [endpointKind, endpointBaseUrl, endpointModel, endpointKey])
+    control.setAttribute('aria-describedby', 'agent-endpoint-status');
   const writeDestination = Span().class('agent-panel-write-destination').attr('role', 'status').build();
-  const writePreference = compactSelect(
+  const writePreference = ranSelect(
     'agent-write-preference',
     [
       { value: 'device-first', label: t('agentWritePreferDevice') },
@@ -466,7 +497,7 @@ export function createAgentPanel(
     .children(providerSelect, modelRow, ggufRow, endpointRow)
     .build();
   settings.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || event.isComposing || event.keyCode === 229) return;
+    if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing || event.keyCode === 229) return;
     event.stopPropagation();
     showView('chat');
     settingsBtn.focus();
@@ -476,10 +507,7 @@ export function createAgentPanel(
   const reviewCheck = View('r-checkbox').build();
   const reviewText = Span().text(t('agentReviewMode')).build();
   const reviewLabel = Label().class('agent-panel-review').children(reviewCheck, reviewText).build();
-  const quoteBtn = ButtonBuilder().class('agent-panel-quote').attr('type', 'button').build();
-  quoteBtn.innerHTML =
-    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12M6 12h8M6 16h10M3 3h18v18H3z"/></svg>';
-  quoteBtn.title = t('agentQuoteTip');
+
   const clearBtn = ButtonBuilder().class('agent-panel-clear').attr('type', 'button').build();
   clearBtn.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
@@ -492,6 +520,7 @@ export function createAgentPanel(
   let modelLoading = false;
   let runtimeCleanup: Promise<void> | null = null;
   let runtimeCleanupFailed = false;
+  let cacheBusy = false;
   let loadingFraction: number | undefined;
   let loadingBackend: 'webllm' | 'wllama' | undefined;
   const chatLabels = (): ChatViewLabels => ({
@@ -518,23 +547,22 @@ export function createAgentPanel(
   };
   const chat = new ChatView({
     canSend: (text) => {
-      if (!enabled || runtimeCleanup) return false;
-      if (directIntent(text.trim())) return true;
-      if (writingSelect.value === 'tools')
-        return !!webllmProvider?.isReady() || isModelFreeToolRequest(text, captureDocumentContext());
-      if (!proposalMode)
+      if (!enabled || runtimeCleanup || cacheBusy) return false;
+      if (parseDirectDocumentIntent(resolveContextCommand(text.trim(), captureDocumentContext()))) return true;
+      const request = classifyRequest(text);
+      if (['rewrite', 'summarize', 'translate'].includes(request.task)) return true;
+      if (request.task === 'tools')
         return (
-          !!webllmProvider?.isReady() ||
-          (!!endpointProvider?.isReady() && (endpointSettings.kind === 'loopback' || navigator.onLine !== false))
+          !!webllmProvider?.isReady() || useEndpointForChat() || isModelFreeToolRequest(text, captureDocumentContext())
         );
-      try {
-        const route = resolveRoute();
-        return route.kind === 'endpoint' || (route.kind === 'local' && !!webllmProvider?.isReady());
-      } catch {
-        return false;
-      }
+      if (directIntent(text.trim())) return true;
+      return (
+        !!webllmProvider?.isReady() ||
+        (!!endpointProvider?.isReady() && (endpointSettings.kind === 'loopback' || navigator.onLine !== false))
+      );
     },
     onSend: (text) => void submit(text),
+    canApplyMessage: () => captureDocumentContext()?.kind === 'word' && !getReadonlyMode(),
     onApplyMessage: (text) => applyReply(text),
     onStop: () => {
       controller?.stop();
@@ -542,14 +570,6 @@ export function createAgentPanel(
     },
     labels: chatLabels(),
   });
-  const configureBtn = ButtonBuilder()
-    .class('agent-configure')
-    .attr('type', 'button')
-    .on('click', () => {
-      showView('settings');
-    })
-    .build();
-  chat.emptyActionsEl.append(configureBtn);
   const readiness = document.createElement('p');
   readiness.className = 'agent-readiness';
   readiness.setAttribute('role', 'status');
@@ -578,7 +598,7 @@ export function createAgentPanel(
     'chat',
   );
   writingSelect.setAttribute('aria-label', t('agentTaskLabel'));
-  writingSelect.hidden = false;
+  writingSelect.hidden = true;
   const languageSelect = compactSelect(
     'agent-writing-language',
     WRITING_LANGUAGES.map((value) => ({
@@ -606,62 +626,18 @@ export function createAgentPanel(
       backend: 'webllm',
       model: localModelId.value.trim() || modelSelect.value,
     });
-  const taskModelLabel = document.createElement('label');
-  const taskModelTitle = document.createElement('span');
-  const taskModelPicker = compactSelect(
-    'agent-task-model',
-    [
-      { value: '', label: t('agentTaskModelInherit') },
-      ...WEBLLM_MODELS.map((model) => ({ value: model.id, label: model.label })),
-    ],
-    '',
-  );
-  const taskModelStatus = document.createElement('span');
-  taskModelStatus.setAttribute('role', 'status');
-  taskModelLabel.append(taskModelTitle, taskModelPicker, taskModelStatus);
-  settings.append(taskModelLabel);
-  const syncTaskModelPicker = () => {
-    const request = taskRequest();
-    taskModelPicker.value =
-      request.task === 'translate'
-        ? (taskPreferences.translations?.[request.targetLanguage!]?.model ?? '')
-        : (taskPreferences.tasks?.[request.task]?.model ?? '');
-    taskModelTitle.textContent = t('agentTaskModelLabel');
-    taskModelPicker.setAttribute('aria-label', t('agentTaskModelLabel'));
-    taskModelPicker.options[0].textContent = t('agentTaskModelInherit');
-    taskModelStatus.textContent = t('agentTaskModelExperimental');
-  };
-  syncTaskModelPicker();
-  chat.actionsEl.append(writingSelect, languageSelect, quoteBtn);
+  chat.actionsEl.append(writingSelect, languageSelect);
   writingSelect.addEventListener('change', () => {
     proposalMode = writingSelect.value !== 'chat';
     invalidatePlans();
-    languageSelect.hidden = !proposalMode || writingSelect.value !== 'translate';
+    languageSelect.hidden = true;
     chat.setLabels(chatLabels());
   });
   languageSelect.addEventListener('change', () => invalidatePlans());
-  const starterTasks = [
-    ['rewrite', 'agentTaskRewrite'],
-    ['summarize', 'agentTaskSummarize'],
-    ['translate', 'agentTaskTranslate'],
-  ] as const;
-  const starters = Div().class('agent-writing-starters').build();
-  const starterButtons = starterTasks.map(([task, label]) => {
-    const button = ButtonBuilder()
-      .attr('type', 'button')
-      .attr('data-writing-starter', task)
-      .text(t(label))
-      .on('click', () => {
-        writingSelect.value = task;
-        writingSelect.dispatchEvent(new Event('change'));
-        if (!chat.getInput().trim()) chat.setInput(t(label));
-        chat.focus();
-      })
-      .build();
-    starters.append(button);
-    return button;
-  });
-  chat.emptyActionsEl.prepend(starters);
+  const welcomeHint = document.createElement('p');
+  welcomeHint.className = 'agent-welcome-hint';
+  welcomeHint.textContent = t('agentWelcomeHint');
+  chat.emptyActionsEl.prepend(welcomeHint);
   let quotedSelection = '';
   const quoteContext = document.createElement('div');
   quoteContext.className = 'agent-quote-context';
@@ -670,22 +646,14 @@ export function createAgentPanel(
   const quoteSummary = document.createElement('summary');
   const quoteText = document.createElement('pre');
   quoteText.className = 'agent-quoted-text';
-  const removeQuote = document.createElement('button');
-  removeQuote.type = 'button';
-  removeQuote.className = 'agent-quote-remove';
-  removeQuote.textContent = '×';
   quoteDetails.append(quoteSummary, quoteText);
-  quoteContext.append(quoteDetails, removeQuote);
-  chat.el.querySelector('.cui-composer')!.prepend(quoteContext);
+  quoteContext.append(quoteDetails);
+  chat.contextEl.append(quoteContext);
   const clearQuote = () => {
     quotedSelection = '';
     quoteText.textContent = '';
     quoteContext.hidden = true;
   };
-  removeQuote.addEventListener('click', () => {
-    clearQuote();
-    chat.focus();
-  });
   window.addEventListener('document:content-ready', clearQuote);
 
   const invalidatePlans = (): void => {
@@ -701,7 +669,7 @@ export function createAgentPanel(
   const sessionBar = Div().class('agent-session-bar').children(sessionRow).build();
   const scopeLabel = Span().class('agent-document-scope').build();
   scopeLabel.setAttribute('role', 'note');
-  sessionBar.append(scopeLabel);
+
   const updateScope = (): void => {
     const context = captureDocumentContext();
     const label = context
@@ -713,9 +681,34 @@ export function createAgentPanel(
       : '';
     if (scopeLabel.textContent !== label) scopeLabel.textContent = label;
   };
-  let scopeTimer = setInterval(updateScope, 1000);
+  const syncContext = () => {
+    updateScope();
+    const snapshot = captureComposerContext();
+    const context = snapshot.context;
+    quoteContext.hidden = !context || (context.kind === 'word' && !snapshot.text);
+    const label =
+      context?.kind === 'cell'
+        ? `${context.sheet ?? 'Excel'} · ${context.range ?? ''}`
+        : context?.kind === 'slide'
+          ? `${t('agentSlideContext').replace('{page}', String(context.page ?? ''))}`
+          : snapshot.text
+            ? t('agentSelectionContext').replace('{count}', String(snapshot.text.length))
+            : t('agentCurrentDocument');
+    if (quoteSummary.textContent !== label) quoteSummary.textContent = label;
+    if (quoteText.textContent !== snapshot.text) quoteText.textContent = snapshot.text || t('agentContextOnSend');
+    const releaseControl = settings.querySelector<HTMLElement>('.agent-release-memory');
+    if (releaseControl) releaseControl.hidden = !webllmProvider?.isReady();
+    const welcome =
+      context?.kind === 'cell'
+        ? 'agentWelcomeCell'
+        : context?.kind === 'slide'
+          ? 'agentWelcomeSlide'
+          : 'agentWelcomeWord';
+    if (welcomeHint.textContent !== t(welcome)) welcomeHint.textContent = t(welcome);
+  };
+  let scopeTimer = setInterval(syncContext, 1000);
   window.addEventListener('pagehide', () => clearInterval(scopeTimer));
-  updateScope();
+  syncContext();
   let historyControls: ReturnType<typeof createHistoryControls> | undefined;
   const conversations = createConversationStore(
     () => {
@@ -820,8 +813,9 @@ export function createAgentPanel(
     });
   };
   const syncWriteDestination = (): void => {
+    writeDestination.hidden = false;
     if (writingSelect.value === 'chat' || writingSelect.value === 'tools') {
-      const endpoint = writingSelect.value === 'chat' && useEndpointForChat();
+      const endpoint = useEndpointForChat();
       const ready = endpoint || !!webllmProvider?.isReady() || writingSelect.value === 'tools';
       const where =
         endpoint && endpointSettings.kind !== 'loopback'
@@ -829,6 +823,7 @@ export function createAgentPanel(
           : 'agentWriteDestinationDevice';
       const unavailable =
         endpointProvider?.isReady() && endpointSettings.kind !== 'loopback' && navigator.onLine === false;
+      writeDestination.hidden = !ready && !unavailable;
       writeDestination.textContent = `${t('agentWriteDestinationTitle')}: ${t(ready ? where : unavailable ? 'agentWriteDestinationOfflineUnavailable' : 'agentWriteNeedsDestination')}`;
       return;
     }
@@ -844,6 +839,7 @@ export function createAgentPanel(
       // "not configured" would be false when a cloud endpoint is configured but
       // cannot be used right now; say what is actually configured.
       const configured = endpointProvider?.isReady() ? configuredEndpoint(endpointSettings) : null;
+      writeDestination.hidden = !configured;
       if (configured && configured.kind !== 'loopback')
         writeDestination.textContent = `${title}: ${t('agentWriteDestinationOfflineUnavailable')} · ${configured.model}`;
       else writeDestination.textContent = `${title}: ${t('agentWriteNeedsDestination')}${offlineNote}`;
@@ -984,7 +980,6 @@ export function createAgentPanel(
       (writingSelect.value !== 'tools' &&
         !!endpointProvider?.isReady() &&
         (endpointSettings.kind === 'loopback' || navigator.onLine !== false));
-    configureBtn.hidden = ready;
     readiness.textContent = ready ? '' : t('agentPrepareRequired');
     if (proposalMode && writingSelect.value !== 'tools') {
       try {
@@ -1012,7 +1007,8 @@ export function createAgentPanel(
         ? t('agentUseDevice')
         : '';
     syncWriteDestination();
-    runtimeRow.hidden = !loadingStatus.textContent;
+    runtimeRow.hidden = !loadingStatus.textContent || (panel.dataset.view === 'settings' && !modelLoading);
+    note.hidden = modelLoading && panel.dataset.view === 'settings';
     loadProgress.hidden = !modelLoading;
     if (loadingFraction === undefined) loadProgress.removeAttribute('value');
     else loadProgress.value = loadingFraction;
@@ -1030,7 +1026,6 @@ export function createAgentPanel(
   };
   const generationOptions = normalizeGenerationOptions();
   const resetController = (): void => {
-    configureBtn.hidden = false;
     syncSidebar();
     modelLoading = false;
 
@@ -1113,9 +1108,9 @@ export function createAgentPanel(
 
   // Writing and document-operation modes are available for browser-local engines.
   const syncChatOnlyHint = (): void => {
-    const local = currentProvider() === 'wllama' || currentProvider() === 'webllm';
-    writingSelect.hidden = !local;
-    languageSelect.hidden = !local || !proposalMode || writingSelect.value !== 'translate';
+    writingSelect.hidden = true;
+
+    languageSelect.hidden = true;
   };
 
   const syncProviderUi = (): void => {
@@ -1150,7 +1145,6 @@ export function createAgentPanel(
   const routeKey = () => JSON.stringify([currentProvider(), selectedLocalModel(), localSource()]);
   let previousRoute = routeKey();
   const taskRouteChanged = () => {
-    syncTaskModelPicker();
     const next = routeKey();
     if (next !== previousRoute) resetController();
     previousRoute = next;
@@ -1159,12 +1153,6 @@ export function createAgentPanel(
   };
   writingSelect.addEventListener('change', taskRouteChanged);
   languageSelect.addEventListener('change', taskRouteChanged);
-  taskModelPicker.addEventListener('change', () => {
-    taskPreferences = writeTaskModelPreference(taskPreferences, taskRequest(), taskModelPicker.value, presetIds);
-    localStorageSetItem('agent-task-models', JSON.stringify({ version: 1, ...taskPreferences }));
-    taskRouteChanged();
-  });
-
   const buildController = (localOnly = false): AgentChatController | null => {
     if (runtimeCleanup) return null;
     const id = currentProvider();
@@ -1175,9 +1163,10 @@ export function createAgentPanel(
     };
     const options = {
       ...controllerOptions,
+      tools: {},
       storage: historyStorage,
       getRequestContext: (): string | undefined => {
-        const context = captureDocumentContext();
+        const context = captureComposerContext().context;
         return context || quotedSelection
           ? JSON.stringify({ ...context, ...(quotedSelection ? { quotedSelection } : {}) })
           : undefined;
@@ -1287,7 +1276,7 @@ export function createAgentPanel(
   // Load (download + warm) the selected WebLLM model. Used by the Load button and
   // only triggered by a deliberate preparation action.
   const loadModel = async (): Promise<void> => {
-    if (!enabled || modelLoading || planning || controller?.isRunning() || replyAbort) return;
+    if (!enabled || cacheBusy || modelLoading || planning || controller?.isRunning() || replyAbort) return;
     const generation = controllerGeneration;
     let loading: typeof webllmProvider = null;
     modelLoading = true;
@@ -1311,7 +1300,14 @@ export function createAgentPanel(
       await loading.preload();
       if (loading === webllmProvider && generation === controllerGeneration) {
         note.textContent = t('agentModelLoaded');
+        if (currentProvider() === 'webllm')
+          rememberModelSource({
+            id: selectedLocalModel(),
+            label: WEBLLM_MODELS.find((item) => item.id === selectedLocalModel())?.label ?? selectedLocalModel(),
+            ...localSource(),
+          });
         syncSidebar();
+        void refreshCache();
       }
     } catch (error) {
       if (generation === controllerGeneration && loading === webllmProvider) {
@@ -1383,6 +1379,30 @@ export function createAgentPanel(
   const submit = async (text: string): Promise<void> => {
     const trimmed = text.trim();
     if (!enabled || !trimmed) return;
+    const request = classifyRequest(trimmed);
+    writingSelect.value = request.task;
+    languageSelect.value = request.language;
+    writingSelect.dispatchEvent(new Event('change'));
+    const snapshot = captureComposerContext();
+    quotedSelection = snapshot.text;
+    if (['rewrite', 'summarize', 'translate'].includes(request.task) && (!snapshot.text.trim() || snapshot.truncated)) {
+      appendTurn({ role: 'user', text: trimmed });
+      appendTurn({
+        role: 'status',
+        text: t(
+          snapshot.truncated
+            ? 'agentContextTooLarge'
+            : snapshot.context?.kind === 'cell'
+              ? 'agentSelectCells'
+              : snapshot.context?.kind === 'slide'
+                ? 'agentSelectSlideText'
+                : 'agentSelectText',
+        ),
+      });
+      chat.setInput(trimmed);
+      chat.focus();
+      return;
+    }
     const intent = directIntent(trimmed);
     if (intent) {
       const answer = chat.getLastAnswer();
@@ -1480,6 +1500,7 @@ export function createAgentPanel(
         else originStorage.save([...originStorage.load(), ...messages]);
         if (revision === conversationRevision) {
           if (directGeneration === controllerGeneration) {
+            syncContext();
             chat.setRunning(false);
             chat.focus();
           }
@@ -1493,7 +1514,8 @@ export function createAgentPanel(
     // chat or an open-ended tool request still does. Asking this is what keeps a
     // model download from standing in front of work that would never use it.
     const localModelNeeded = ((): boolean => {
-      if (writingSelect.value === 'tools') return !isModelFreeToolRequest(text, captureDocumentContext());
+      if (writingSelect.value === 'tools')
+        return !useEndpointForChat() && !isModelFreeToolRequest(text, captureDocumentContext());
       if (!proposalMode)
         return !endpointProvider?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false);
       try {
@@ -1508,8 +1530,7 @@ export function createAgentPanel(
       !webllmProvider?.isReady()
     ) {
       chat.setInput(text);
-      settings.classList.remove('agent-panel-settings-hidden');
-      settingsBtn.setAttribute('aria-expanded', 'true');
+      showView('settings');
       note.textContent = t(runtimeCleanupFailed ? 'agentModelCleanupFailed' : 'agentModelFirstDownload');
       return;
     }
@@ -1536,11 +1557,17 @@ export function createAgentPanel(
         const abort = new AbortController();
         planning = abort;
         appendTurn({ role: 'user', text });
-        const plans = await generateDocumentToolSequence(webllmProvider!, text, target.context, abort.signal, {
-          stableCapabilityPrefix:
-            webllmProvider instanceof WllamaProvider ||
-            (webllmProvider instanceof LocalInferenceProvider && webllmProvider.backend === 'wllama'),
-        });
+        const plans = await generateDocumentToolSequence(
+          useEndpointForChat() ? endpointProvider! : webllmProvider!,
+          text,
+          target.context,
+          abort.signal,
+          {
+            stableCapabilityPrefix:
+              webllmProvider instanceof WllamaProvider ||
+              (webllmProvider instanceof LocalInferenceProvider && webllmProvider.backend === 'wllama'),
+          },
+        );
         if (!plans.length || plans.length > 4 || plans.slice(0, -1).some((plan) => !plan.readOnly))
           throw new Error('agentToolNotChosen');
         for (const [index, plan] of plans.entries()) {
@@ -1550,6 +1577,19 @@ export function createAgentPanel(
           if (generation !== controllerGeneration || conversation !== conversationRevision)
             throw new Error(t('agentPlanExpired'));
           const action = new DocumentToolAction(target, plan);
+          if (!plan.readOnly) {
+            preview = new ActionPreview();
+            previews.add(preview);
+            preview.show(action, (outcome) => {
+              if (generation === controllerGeneration && conversation === conversationRevision)
+                appendTurn({
+                  role: 'status',
+                  text: t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied'),
+                });
+            });
+            chat.el.insertBefore(preview.el, chat.el.lastElementChild);
+            break;
+          }
           const outcome = await action.apply(abort.signal);
           const result = action.result as
             { text?: string; cell?: string; sum?: number; range?: string; page?: number; count?: number } | undefined;
@@ -1568,15 +1608,17 @@ export function createAgentPanel(
         operationHistory.push({ role: 'user', content: trimmed });
         invalidatePlans();
         const readonly = getReadonlyMode();
-        const target = readonly ? null : captureActionTarget();
-        const source =
-          target?.selectedText ??
-          getEditorApi()?.pluginMethod_GetSelectedText({ TabSymbol: '\t', Numbering: false }) ??
-          '';
+        const target =
+          readonly || request.task === 'summarize' || snapshot.context?.kind !== 'word' ? null : captureActionTarget();
+        const officeTarget =
+          !readonly && (request.task === 'summarize' || snapshot.context?.kind !== 'word')
+            ? captureDocumentToolTarget()
+            : null;
+        const source = target?.selectedText ?? snapshot.text ?? '';
         const abort = new AbortController();
         planning = abort;
         appendTurn({ role: 'user', text: trimmed });
-        if ((target && target.editor !== 'word') || !source.trim()) throw new Error(t('agentNoSelection'));
+        if (!source.trim()) throw new Error(t('agentNoSelection'));
         if (quotedSelection && source.replace(/\r\n/g, '\n') !== quotedSelection)
           throw new Error(t('agentPlanExpired'));
         // The writing destination: a connected endpoint (loopback keeps the text on
@@ -1614,18 +1656,34 @@ export function createAgentPanel(
         if (
           generation !== controllerGeneration ||
           conversation !== conversationRevision ||
-          (target && !target.isCurrent())
+          (target && !target.isCurrent()) ||
+          (officeTarget && !officeTarget.isCurrent())
         )
           throw new Error(t('agentPlanExpired'));
         operationHistory.push({ role: 'assistant', content: body, copyOnly: true });
-        if (!target) {
+        if (request.task === 'summarize') {
           appendTurn({ role: 'agent', text: body, copyOnly: true });
-          appendTurn({ role: 'status', text: t('agentDocumentReadOnly') });
+          return;
+        }
+        const singleCell =
+          snapshot.context?.kind === 'cell' && snapshot.context.range && !snapshot.context.range.includes(':');
+        if (!target && (!officeTarget || (snapshot.context?.kind === 'cell' && !singleCell))) {
+          appendTurn({ role: 'agent', text: body, copyOnly: true });
+          appendTurn({ role: 'status', text: t(readonly ? 'agentDocumentReadOnly' : 'agentRangeCopyOnly') });
           return;
         }
         preview = new ActionPreview();
         previews.add(preview);
-        const action = new ReviewedAction(target, plan);
+        const action = target
+          ? new ReviewedAction(target, plan)
+          : new DocumentToolAction(
+              { ...officeTarget!, selectedText: source },
+              {
+                tool: singleCell ? 'set_cell' : 'replace_selection',
+                input: singleCell ? { cell: snapshot.context!.range!, value: body, valueType: 'text' } : { text: body },
+                readOnly: false,
+              },
+            );
         preview.show(action, (outcome) => {
           if (!enabled || generation !== controllerGeneration || conversation !== conversationRevision) return;
           const text = t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
@@ -1707,23 +1765,6 @@ export function createAgentPanel(
   });
   settings.append(historyControls.el);
 
-  // Quote the current selection (Word text / Excel cells / PPT shape text) into
-  // the input so the user can ask about it. Works across editor types because
-  // pluginMethod_GetSelectedText is part of the shared plugin command API.
-  quoteBtn.addEventListener('click', () => {
-    const selected = getEditorApi()?.pluginMethod_GetSelectedText() ?? '';
-    if (!selected.trim()) {
-      appendTurn({ role: 'error', text: t('agentNoSelection') });
-      return;
-    }
-    quotedSelection = selected.replace(/\r\n/g, '\n');
-    quoteSummary.textContent = t('agentQuote');
-    removeQuote.setAttribute('aria-label', t('agentPlanCancel') + ' · ' + t('agentQuote'));
-    quoteText.textContent = quotedSelection;
-    quoteContext.hidden = false;
-    chat.focus();
-  });
-
   // Review-mode toggle reads/sets track-changes directly on the editor. r-checkbox
   // reports the new state via the change event's detail (a real boolean), and its
   // initial state is set through the `checked` attribute.
@@ -1759,6 +1800,7 @@ export function createAgentPanel(
       typeof api.asc_GetGlobalTrackRevisions === 'function' &&
       typeof api.asc_SetLocalTrackRevisions === 'function';
     reviewCheck.toggleAttribute('disabled', !canReview);
+    reviewLabel.hidden = !canReview;
     const checked = String(typeof api?.asc_IsTrackRevisions === 'function' && !!api.asc_IsTrackRevisions());
     syncingReview = true;
     try {
@@ -1789,10 +1831,8 @@ export function createAgentPanel(
     lang(); // subscribe: re-run whenever the language changes
     syncSidebar();
     title.textContent = t('agentTitle');
-    configureBtn.textContent = t('agentConfigure');
-    starterButtons.forEach((button, index) => {
-      button.textContent = t(starterTasks[index][1]);
-    });
+    panel.setAttribute('aria-label', t('agentTitle'));
+    welcomeHint.textContent = t('agentWelcomeHint');
     syncRuntimeStatus();
     settingsBtn.title = t('agentSettings');
     settingsBtn.setAttribute('aria-label', t('agentSettings'));
@@ -1812,13 +1852,11 @@ export function createAgentPanel(
     loadProgress.setAttribute('aria-label', t('agentPreparing'));
     for (const opt of modelSelect.querySelectorAll('r-option')) {
       const model = WEBLLM_MODELS.find((m) => m.id === opt.getAttribute('value'));
-      if (model)
-        opt.textContent = `${model.label} (${t('agentModelMemory').replace('{memory}', (model.vramMB / 1000).toFixed(2))})`;
+      if (model) opt.textContent = model.label;
     }
+    syncModelMemory();
     reviewText.textContent = t('agentReviewMode');
     reviewCheck.setAttribute('aria-label', t('agentReviewMode'));
-    quoteBtn.setAttribute('aria-label', t('agentQuote'));
-    quoteBtn.title = t('agentQuoteTip');
     clearBtn.title = t('agentNewConversation');
     clearBtn.setAttribute('aria-label', t('agentNewConversation'));
     renderSessions();
@@ -1832,7 +1870,6 @@ export function createAgentPanel(
     } as const;
     for (const option of writingSelect.querySelectorAll('option'))
       option.textContent = t(keys[option.getAttribute('value') as keyof typeof keys]);
-    syncTaskModelPicker();
     writingSelect.setAttribute('aria-label', t('agentTaskLabel'));
     languageSelect.setAttribute('aria-label', t('agentTaskLanguage'));
     chat.setLabels(chatLabels()); // Send/Stop/placeholder/empty + role chips
@@ -1844,36 +1881,272 @@ export function createAgentPanel(
   historyBtn.className = 'agent-history-toggle';
   historyBtn.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11a9 9 0 1 1 3 8M3 5v6h6M12 7v6l4 2"/></svg>';
-  const expandBtn = document.createElement('button');
-  expandBtn.type = 'button';
-  expandBtn.className = 'agent-expand';
-  expandBtn.innerHTML =
-    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>';
-  expandBtn.setAttribute('aria-pressed', 'false');
-  expandBtn.addEventListener('click', () => {
-    const expanded = panel.classList.toggle('agent-expanded');
-    expandBtn.setAttribute('aria-pressed', String(expanded));
-  });
-  const back = document.createElement('button');
-  back.type = 'button';
-  back.className = 'agent-view-back';
-  const settingsHeading = document.createElement('h2');
+  const settingsHeading = View('h2').build();
   settingsHeading.tabIndex = -1;
-  const localCard = document.createElement('section');
-  localCard.className = 'agent-use-card';
-  const localTitle = document.createElement('h3');
-  const localHint = document.createElement('p');
-  localCard.append(localTitle, localHint, modelRow, consentLabel);
-  const serviceCard = document.createElement('details');
-  serviceCard.className = 'agent-use-card';
-  const serviceTitle = document.createElement('summary');
-  const serviceHint = document.createElement('p');
-  serviceCard.append(serviceTitle, serviceHint, endpointRow);
-  const advanced = document.createElement('details');
+  const localCard = View('section').build();
+  localCard.className = 'agent-use-card agent-device-section';
+  const modelChoice = Div().build();
+  modelChoice.className = 'agent-model-choice';
+  modelChoice.append(modelSelect, modelMemory);
+  modelRow.replaceChildren(modelChoice, loadBtn);
+  localCard.append(modelRow, ggufRow);
+  const serviceCard = View<HTMLDetailsElement>('details').build();
+  serviceCard.className = 'agent-use-card agent-service-section';
+  const serviceHint = View('p').build();
+  const fieldLabels: Array<{ title: HTMLElement; key: keyof I18nMessages }> = [];
+  const field = (control: HTMLElement, key: keyof I18nMessages) => {
+    const wrapper = Label().build();
+    wrapper.className = 'agent-settings-field';
+    const title = Span().build();
+    fieldLabels.push({ title, key });
+    wrapper.append(title, control);
+    return wrapper;
+  };
+  endpointRow.replaceChildren(
+    field(endpointKind, 'agentEndpointKind'),
+    field(endpointBaseUrl, 'agentEndpointUrl'),
+    field(endpointModel, 'agentEndpointModel'),
+    field(endpointKey, 'agentEndpointKey'),
+    endpointConnect,
+    endpointStatus,
+  );
+  serviceCard.open = true;
+  serviceCard.append(endpointRow, serviceHint);
+  const advanced = View<HTMLDetailsElement>('details').build();
   advanced.className = 'agent-preferences';
-  const advancedTitle = document.createElement('summary');
-  advanced.append(advancedTitle, providerSelect, ggufRow, taskModelLabel, reviewLabel);
-  settings.replaceChildren(back, settingsHeading, localCard, serviceCard, note, advanced);
+  const advancedSummary = View('summary').build();
+  const advancedTitle = Span().build();
+  advancedSummary.append(advancedTitle);
+  advanced.append(
+    advancedSummary,
+    field(providerSelect, 'agentProviderLabel'),
+    consentLabel,
+    field(writePreference, 'agentWritePreference'),
+    reviewLabel,
+  );
+  const customSources = View<HTMLDetailsElement>('details')
+    .class('agent-custom-sources')
+    .children(
+      View('summary').text(t('agentCustomModel')).build(),
+      field(localModelId, 'agentModelId'),
+      field(localModelUrl, 'agentModelUrl'),
+      field(localModelLib, 'agentModelRuntimeUrl'),
+    )
+    .build();
+  advanced.append(customSources);
+  const settingsHero = Div().build();
+  settingsHero.className = 'agent-settings-hero';
+  settingsHero.append(settingsHeading);
+  const sourcePicker = ranSelect(
+    'agent-source-picker',
+    [
+      { value: 'local', label: t('agentSourceLocal') },
+      { value: 'service', label: t('agentSourceService') },
+    ],
+    configuredEndpoint(endpointSettings) ? 'service' : 'local',
+  );
+  sourcePicker.setAttribute('aria-label', t('agentSourceLabel'));
+  const syncSource = () => {
+    localCard.hidden = sourcePicker.value !== 'local';
+    serviceCard.hidden = sourcePicker.value !== 'service';
+    cacheList.hidden = sourcePicker.value !== 'local';
+  };
+  sourcePicker.addEventListener('change', syncSource);
+  const cacheList = View<HTMLDetailsElement>('details').class('agent-model-cache').build();
+  const cacheSummary = View('summary')
+    .attr('tabindex', '0')
+    .text(t('agentDownloadedModels').replace('{count}', '…'))
+    .build();
+  const cacheRows = Div().class('agent-model-cache-rows').build();
+  const cacheStatus = Span().attr('role', 'status').build();
+  cacheList.append(cacheSummary, cacheRows, cacheStatus);
+  let cacheRevision = 0;
+  const refreshCache = async () => {
+    const revision = ++cacheRevision;
+    const sources = [...WEBLLM_MODELS, ...rememberedModelSources()];
+    const unique = sources.filter(
+      (model, index) =>
+        sources.findIndex(
+          (item) =>
+            item.id === model.id &&
+            ('modelUrl' in item ? item.modelUrl : undefined) === ('modelUrl' in model ? model.modelUrl : undefined),
+        ) === index,
+    );
+    const cached = await Promise.all(
+      unique.map(async (model) => ({ model, cached: await isModelCached(model.id, 'modelUrl' in model ? model : {}) })),
+    );
+
+    let ggufs: Awaited<ReturnType<typeof listCachedGGUF>> = [];
+    try {
+      ggufs = await listCachedGGUF();
+    } catch {
+      cacheStatus.textContent = t('agentCacheUnavailable');
+    }
+    if (revision !== cacheRevision) return;
+    cacheSummary.textContent = t('agentDownloadedModels').replace(
+      '{count}',
+      String(cached.filter((item) => item.cached).length + ggufs.length),
+    );
+    cacheRows.replaceChildren();
+    for (const { model, cached: exists } of cached) {
+      if (!exists) continue;
+      const row = Div().class('agent-model-cache-row').attr('role', 'group').build();
+      const active =
+        !!webllmProvider?.isReady() &&
+        selectedLocalModel() === model.id &&
+        !(webllmProvider instanceof LocalInferenceProvider && webllmProvider.backend === 'wllama');
+      const name = Span()
+        .text(model.label + (active ? ' · ' + t('agentModelInUse') : ''))
+        .build();
+      const use = ranButton(t('agentUseModel'), 'agent-cache-use');
+      use.addEventListener('click', () => {
+        if (cacheBusy) return;
+        providerSelect.value = 'webllm';
+        providerSelect.dispatchEvent(new Event('change'));
+        if (WEBLLM_MODELS.some((item) => item.id === model.id)) {
+          localModelId.value = '';
+          localModelUrl.value = '';
+          localModelLib.value = '';
+          localModelId.dispatchEvent(new Event('change'));
+          modelSelect.value = model.id;
+          modelSelect.dispatchEvent(new Event('change'));
+        } else {
+          localModelId.value = model.id;
+          localModelUrl.value = 'modelUrl' in model ? String(model.modelUrl ?? '') : '';
+          localModelLib.value = 'modelLibUrl' in model ? String(model.modelLibUrl ?? '') : '';
+          localModelId.dispatchEvent(new Event('change'));
+        }
+        void loadModel();
+      });
+      const remove = ranButton(t('agentDeleteDownload'), 'agent-cache-delete');
+      let confirming = false;
+      const cancel = ranButton(t('agentPlanCancel'), 'agent-cache-cancel');
+      cancel.hidden = true;
+      cancel.addEventListener('click', () => {
+        confirming = false;
+        cancel.hidden = true;
+        remove.textContent = t('agentDeleteDownload');
+        remove.focus();
+      });
+      remove.addEventListener('click', () => {
+        if (cacheBusy) return;
+        if (!confirming) {
+          confirming = true;
+          remove.textContent = t('agentConfirmDeleteDownload');
+          cancel.hidden = false;
+          cacheStatus.textContent = t('agentDeleteDownloadHint');
+          return;
+        }
+        void (async () => {
+          remove.setAttribute('disabled', '');
+          cacheBusy = true;
+          chat.refreshSendAvailability();
+          try {
+            if (selectedLocalModel() === model.id) {
+              resetController();
+              if (runtimeCleanup) await runtimeCleanup;
+              if (runtimeCleanupFailed) throw new Error(t('agentModelCleanupFailed'));
+            }
+            await deleteCachedModel(model.id, 'modelUrl' in model ? model : {});
+            cacheStatus.textContent = t('agentDownloadDeleted');
+            await refreshCache();
+            cacheSummary.focus();
+          } catch {
+            cacheStatus.textContent = t(runtimeCleanupFailed ? 'agentModelCleanupFailed' : 'agentCacheDeleteFailed');
+            remove.removeAttribute('disabled');
+          } finally {
+            cacheBusy = false;
+            chat.refreshSendAvailability();
+          }
+        })();
+      });
+      row.setAttribute('aria-label', name.textContent ?? '');
+      row.append(name, use, remove, cancel);
+      cacheRows.append(row);
+    }
+    for (const item of ggufs) {
+      const row = Div().class('agent-model-cache-row').attr('role', 'group').build();
+      const name = Span()
+        .text(
+          `${new URL(item.url).pathname.split('/').pop() ?? item.name} · ${(item.size / 1e9).toFixed(2)} GB${item.complete ? '' : ' · ' + t('agentDownloadIncomplete')}`,
+        )
+        .build();
+      const use = ranButton(t('agentUseModel'), 'agent-cache-use');
+      use.addEventListener('click', () => {
+        if (cacheBusy) return;
+        providerSelect.value = 'wllama';
+        providerSelect.dispatchEvent(new Event('change'));
+        ggufUrl.value = item.url;
+        ggufUrl.dispatchEvent(new Event('change'));
+        void loadModel();
+      });
+      const remove = ranButton(t('agentDeleteDownload'), 'agent-cache-delete');
+      const cancel = ranButton(t('agentPlanCancel'), 'agent-cache-cancel');
+      cancel.hidden = true;
+      let confirming = false;
+      cancel.addEventListener('click', () => {
+        confirming = false;
+        cancel.hidden = true;
+        remove.textContent = t('agentDeleteDownload');
+        remove.focus();
+      });
+      remove.addEventListener('click', () => {
+        if (cacheBusy) return;
+        if (!confirming) {
+          confirming = true;
+          remove.textContent = t('agentConfirmDeleteDownload');
+          cacheStatus.textContent = t('agentDeleteDownloadHint');
+          cancel.hidden = false;
+          return;
+        }
+        remove.setAttribute('disabled', '');
+        cacheBusy = true;
+        chat.refreshSendAvailability();
+        void (async () => {
+          try {
+            // Automatic CPU fallback may own this GGUF even when the GPU picker is selected.
+            resetController();
+            if (runtimeCleanup) await runtimeCleanup;
+            if (runtimeCleanupFailed) throw new Error(t('agentModelCleanupFailed'));
+            await deleteCachedGGUF(item.name);
+            await refreshCache();
+            cacheStatus.textContent = t('agentDownloadDeleted');
+            cacheSummary.focus();
+          } catch {
+            cacheStatus.textContent = t(runtimeCleanupFailed ? 'agentModelCleanupFailed' : 'agentCacheDeleteFailed');
+            remove.removeAttribute('disabled');
+          } finally {
+            cacheBusy = false;
+            chat.refreshSendAvailability();
+          }
+        })();
+      });
+      row.setAttribute('aria-label', name.textContent ?? '');
+      row.append(name, use, remove, cancel);
+      cacheRows.append(row);
+    }
+  };
+  cacheList.addEventListener('toggle', () => {
+    if (cacheList.open) void refreshCache();
+  });
+  const release = ranButton(t('agentReleaseMemory'), 'agent-release-memory');
+  release.hidden = true;
+  release.addEventListener('click', () => {
+    if (cacheBusy) return;
+    resetController();
+    void (async () => {
+      try {
+        if (runtimeCleanup) await runtimeCleanup;
+        note.textContent = t('agentMemoryReleased');
+      } catch (error) {
+        note.textContent = displayError(error);
+      }
+    })();
+  });
+  localCard.append(release);
+  syncSource();
+  void refreshCache();
+  settings.replaceChildren(settingsHero, sourcePicker, localCard, serviceCard, cacheList, note, advanced);
   const disableRow = document.createElement('div');
   disableRow.className = 'agent-enable-row';
   const disableLabel = document.createElement('span');
@@ -1889,39 +2162,30 @@ export function createAgentPanel(
     else void panelHandle?.setEnabled(false);
   });
   disableRow.append(disableLabel, disable);
-  settings.append(disableRow, disableHint);
+  advanced.append(disableRow, disableHint);
   const historyView = document.createElement('section');
   historyView.className = 'agent-history-view';
   historyView.hidden = true;
-  const historyBack = document.createElement('button');
-  historyBack.type = 'button';
-  historyBack.className = 'agent-view-back';
-  historyView.append(historyBack, sessionBar, historyControls.el);
+  historyView.append(sessionBar, historyControls.el);
   header.insertBefore(historyBtn, settingsBtn);
   header.insertBefore(clearBtn, settingsBtn);
-  header.insertBefore(expandBtn, closeBtn);
   sessionRow.replaceChildren(sessionSelect);
-  chat.actionsEl.append(scopeLabel);
+
   chat.el.append(writeDestination);
   function showView(view: 'chat' | 'settings' | 'history'): void {
     panel.dataset.view = view;
+    if (view === 'settings') settings.insertBefore(runtimeRow, note);
+    else panel.insertBefore(runtimeRow, settings);
     settings.classList.toggle('agent-panel-settings-hidden', view !== 'settings');
     chat.el.hidden = view !== 'chat';
     historyView.hidden = view !== 'history';
     settingsBtn.setAttribute('aria-expanded', String(view === 'settings'));
+    syncRuntimeStatus();
     historyBtn.setAttribute('aria-expanded', String(view === 'history'));
     if (view === 'settings') settingsHeading.focus();
     else if (view === 'history') sessionSelect.focus();
     else chat.focus();
   }
-  back.addEventListener('click', () => {
-    showView('chat');
-    settingsBtn.focus();
-  });
-  historyBack.addEventListener('click', () => {
-    showView('chat');
-    historyBtn.focus();
-  });
   historyBtn.addEventListener('click', () => showView(panel.dataset.view === 'history' ? 'chat' : 'history'));
   historyView.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && !event.isComposing) {
@@ -1931,11 +2195,10 @@ export function createAgentPanel(
     }
   });
   const syncProductLabels = () => {
-    back.textContent = historyBack.textContent = t('agentBackToChat');
+    fieldLabels.forEach(({ title, key }) => {
+      title.textContent = t(key);
+    });
     settingsHeading.textContent = t('agentSettings');
-    localTitle.textContent = t('agentUseDevice');
-    localHint.textContent = t('agentUseDeviceHint');
-    serviceTitle.textContent = t('agentUseService');
     serviceHint.textContent = t('agentUseServiceHint');
     advancedTitle.textContent = t('agentPreferences');
     disableLabel.textContent = t('agentEnable');
@@ -1943,8 +2206,6 @@ export function createAgentPanel(
     disable.setAttribute('aria-label', t('agentEnable'));
     historyBtn.title = t('agentConversations');
     historyBtn.setAttribute('aria-label', t('agentConversations'));
-    expandBtn.title = t('agentExpand');
-    expandBtn.setAttribute('aria-label', t('agentExpand'));
   };
   syncProductLabels();
   window.addEventListener('languagechange', syncProductLabels);

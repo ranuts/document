@@ -45,6 +45,7 @@ export interface ChatViewOptions {
   /** Called when the user clicks Send while a turn is running (i.e. Stop). */
   onStop?: () => void;
   /** Host-owned document operation; the model never executes this action. */
+  canApplyMessage?: () => boolean;
   onApplyMessage?: (text: string) => Promise<'verified' | 'sent' | 'retry' | 'failed'>;
   /** Initial labels; change later with {@link ChatView.setLabels}. */
   labels?: ChatViewLabels;
