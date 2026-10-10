@@ -6,6 +6,40 @@
  * different languages no longer touch the same lines.
  */
 export interface I18nMessages {
+  agentDownloadIncomplete: string;
+  agentModelInUse: string;
+  agentCacheDeleteFailed: string;
+  agentResizePanel: string;
+  agentModelId: string;
+  agentModelUrl: string;
+  agentModelRuntimeUrl: string;
+
+  agentCacheUnavailable: string;
+  agentWelcomeWord: string;
+  agentWelcomeCell: string;
+  agentWelcomeSlide: string;
+
+  agentSlideContext: string;
+  agentSelectionContext: string;
+  agentCurrentDocument: string;
+  agentContextOnSend: string;
+  agentContextTooLarge: string;
+  agentSelectCells: string;
+  agentSelectSlideText: string;
+  agentSelectText: string;
+  agentRangeCopyOnly: string;
+  agentSourceLocal: string;
+  agentSourceService: string;
+  agentSourceLabel: string;
+  agentDownloadedModels: string;
+  agentUseModel: string;
+  agentDeleteDownload: string;
+  agentConfirmDeleteDownload: string;
+  agentDeleteDownloadHint: string;
+  agentDownloadDeleted: string;
+  agentReleaseMemory: string;
+  agentMemoryReleased: string;
+
   // UI text
   webOffice: string;
   uploadDocument: string;
@@ -38,6 +72,8 @@ export interface I18nMessages {
   agentDefaultOff: string;
   agentIntro: string;
   agentStartNote: string;
+  agentMoreActions: string;
+  agentSetupIntro: string;
   agentUseDevice: string;
   agentUseDeviceHint: string;
   agentUseService: string;
@@ -60,6 +96,10 @@ export interface I18nMessages {
   agentPreparing: string;
   agentTaskChat: string;
   agentWelcome: string;
+  agentWelcomeHint: string;
+  agentStarterRewrite: string;
+  agentStarterSummarize: string;
+  agentStarterTranslate: string;
   agentComposeHint: string;
   agentWritingHint: string;
   agentRequestFailed: string;

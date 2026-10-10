@@ -316,17 +316,17 @@ body.agent-panel-resizing #app iframe {
 r-dropdown[role='listbox'] {
   z-index: 100000;
 }
-.agent-panel-model-row {
-  display: flex;
-  gap: 8px;
-}
+
 /* r-select / r-button below render themselves — host carries layout only. */
 .agent-panel-model {
   flex: 1;
   min-width: 0;
 }
 .agent-panel-load {
+  box-shadow: none;
+  width: fit-content;
   flex-shrink: 0;
+  width: 100%;
 }
 
 /* ranui controls in the model row own their internal appearance. */
@@ -486,13 +486,6 @@ r-dropdown[role='listbox'] {
     width: 100% !important;
   }
 }
-
-.agent-model-status {
-  font-size: 11px;
-  color: var(--ran-color-text-secondary);
-  padding: 0 var(--ran-space-4) var(--ran-space-2);
-  overflow-wrap: anywhere;
-}
 .agent-model-status:empty {
   display: none;
 }
@@ -500,6 +493,9 @@ r-dropdown[role='listbox'] {
 /* A writing surface beside the document: quiet chrome, readable conversation,
    and task choices that prepare a draft instead of sending on the user's behalf. */
 .agent-model-status {
+  overflow-wrap: anywhere;
+  color: var(--ran-color-text-secondary);
+  font-size: 11px;
   margin: 0 20px 12px;
   padding: 0 0 0 10px;
   border-left: 2px solid var(--ran-color-primary);
@@ -526,48 +522,54 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel .cui-messages {
   padding: 28px 22px;
-  gap: 28px;
+  gap: var(--ran-space-4);
   line-height: 1.75;
 }
 .agent-panel .cui-empty {
   width: 100%;
   max-width: 320px;
   box-sizing: border-box;
-  padding: 28px 0;
-  font-size: 25px;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.45;
+  padding: 20px 0;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.4;
 }
 .agent-panel .cui-empty-actions {
-  margin-top: 24px;
-}
-.agent-writing-starters {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 0 12px;
+  margin-top: 10px;
 }
-.agent-writing-starters button {
-  min-height: 40px;
-  padding: 9px 14px;
-  border-radius: 10px;
-  background: var(--ran-color-bg-muted);
-  border-color: transparent;
-  color: var(--ran-color-text);
-  font-size: 13px;
-}
-.agent-writing-starters button:hover {
-  background: var(--ran-color-bg-hover);
-  border-color: var(--ran-color-border);
+.agent-welcome-hint {
+  flex: 0 0 100%;
+  margin: 0 0 20px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+  color: var(--ran-color-text-secondary);
 }
 .agent-panel .cui-empty-actions .agent-configure {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0;
+  min-height: 28px;
+  padding: 0;
   border: 0;
-  padding: 4px 0;
-  min-height: 32px;
-  border-radius: 0;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  background: transparent;
+  color: var(--ran-color-text-secondary);
+  font-size: 11px;
+  font-weight: 400;
+  text-decoration: none;
+}
+.agent-panel .agent-configure::after {
+  content: '→';
+}
+.agent-panel .cui-empty-actions .agent-configure:hover {
+  color: var(--ran-color-text);
 }
 .agent-panel .cui-message-actions {
   gap: 10px;
@@ -746,9 +748,10 @@ r-dropdown[role='listbox'] {
   overflow: auto;
   flex: 1 1 auto;
   max-height: none;
-  padding: 24px;
-  gap: 16px;
+  padding: var(--ran-space-6);
+  gap: var(--ran-space-4);
   border-bottom: 0;
+  scrollbar-width: thin;
 }
 .agent-panel-settings-hidden {
   display: none;
@@ -759,62 +762,78 @@ r-dropdown[role='listbox'] {
 }
 .agent-panel-settings h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: var(--ran-text-heading-3);
   font-weight: 600;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.045em;
+  line-height: 1.3;
 }
 .agent-use-card {
-  padding: 16px;
-  border: 1px solid var(--ran-color-border);
-  border-radius: var(--ran-radius-md);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 .agent-use-card h3,
 .agent-use-card summary {
   font-size: 14px;
   margin: 0;
   font-weight: 600;
+  letter-spacing: -0.015em;
 }
 .agent-use-card p {
   color: var(--ran-color-text-secondary);
   font-size: 12px;
-  line-height: 1.8;
-  margin: 8px 0 16px;
+  line-height: 1.65;
+  margin: 12px 0 16px;
 }
 .agent-use-card summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
   cursor: pointer;
+}
+.agent-use-card summary::-webkit-details-marker,
+.agent-preferences summary::-webkit-details-marker {
+  display: none;
+}
+.agent-use-card summary::after,
+.agent-preferences summary::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+.agent-use-card[open] > summary::after,
+.agent-preferences[open] > summary::after {
+  transform: rotate(225deg);
 }
 .agent-use-card .agent-panel-endpoint {
   padding: 0;
   border: 0;
   margin: 0;
 }
-.agent-preferences {
-  font-size: 12px;
-  color: var(--ran-color-text-secondary);
-}
 .agent-preferences summary {
   cursor: pointer;
-  padding: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  padding: 12px 0;
+  font-weight: 500;
 }
 .agent-preferences > :not(summary) {
   margin-top: 16px;
-}
-.agent-view-back {
-  border: 0;
-  background: transparent;
-  color: var(--ran-color-text-secondary);
-  font: inherit;
-  font-size: 12px;
-  padding: 8px 0;
-  text-align: start;
-  align-self: flex-start;
-  cursor: pointer;
 }
 .agent-history-view {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: 24px;
+  padding: var(--ran-space-6);
 }
 .agent-history-view .agent-session-bar {
   padding: 12px 0;
@@ -824,7 +843,7 @@ r-dropdown[role='listbox'] {
   overflow: auto;
 }
 .agent-welcome h2 {
-  font-size: 26px;
+  font-size: var(--ran-text-heading-3);
   line-height: 1.4;
   letter-spacing: -0.04em;
   margin: 0 0 16px;
@@ -841,8 +860,8 @@ r-dropdown[role='listbox'] {
   justify-content: space-between;
   border-top: 1px solid var(--ran-color-border);
   padding: 18px 0 0;
-  margin-top: 24px;
-  font-size: 13px;
+  margin-top: 0;
+  font-size: 12px;
 }
 .agent-enable-switch {
   width: 40px;
@@ -874,7 +893,6 @@ r-dropdown[role='listbox'] {
   cursor: wait;
 }
 .agent-enable-switch:focus-visible,
-.agent-view-back:focus-visible,
 .agent-use-card summary:focus-visible,
 .agent-preferences summary:focus-visible {
   outline: 2px solid var(--ran-color-primary);
@@ -921,22 +939,14 @@ r-dropdown[role='listbox'] {
   margin: 0;
   max-width: 100%;
 }
-.agent-expanded {
-  width: min(760px, 100vw);
-}
-body.agent-docked:has(.agent-expanded:not(.agent-panel-hidden)) #app iframe {
-  width: calc(100% - min(760px, 100vw)) !important;
-}
 @media (max-width: 760px) {
   .agent-panel {
     width: 100vw;
   }
-  .agent-panel-resizer,
-  .agent-expand {
+  .agent-panel-resizer {
     display: none !important;
   }
-  body.agent-docked #app iframe,
-  body.agent-docked:has(.agent-expanded) #app iframe {
+  body.agent-docked #app iframe {
     width: 100% !important;
   }
 }
@@ -995,33 +1005,9 @@ body.agent-docked:has(.agent-expanded:not(.agent-panel-hidden)) #app iframe {
 .agent-panel-settings h2:focus {
   outline: none;
 }
-.agent-panel-local-writing-label {
-  font-size: 12px;
-  line-height: 1.75;
-  color: var(--ran-color-text-secondary);
-}
-.agent-quote-context {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 0 0 10px;
-  font-size: 11px;
-  color: var(--ran-color-text-secondary);
-}
 .agent-quote-context details {
   flex: 1;
   min-width: 0;
-}
-.agent-quote-context summary {
-  cursor: pointer;
-}
-.agent-quoted-text {
-  max-height: 120px;
-  overflow: auto;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  margin: 8px 0;
-  font: inherit;
 }
 .agent-quote-remove {
   border: 0;
@@ -1030,4 +1016,223 @@ body.agent-docked:has(.agent-expanded:not(.agent-panel-hidden)) #app iframe {
   cursor: pointer;
   width: 28px;
   height: 28px;
+}
+
+/* Settings share one field rhythm across native and ranui controls. */
+.agent-settings-field,
+.agent-task-model-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ran-color-text-secondary);
+}
+.agent-settings-field:has(> [hidden]) {
+  display: none;
+}
+.agent-panel-endpoint {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.agent-panel-settings r-input,
+.agent-panel-settings r-select {
+  width: 100%;
+  min-width: 0;
+  --ran-input-border-radius: 8px;
+  --ran-input-min-height: 40px;
+  --ran-input-content-min-height: 38px;
+  --ran-input-content-font-size: 13px;
+  --ran-input-content-padding: 0 12px;
+  --ran-select-border-radius: 8px;
+  --ran-select-height: 40px;
+  --ran-select-font-size: 13px;
+}
+.agent-panel-settings r-button::part(content) {
+  box-sizing: border-box;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  padding: 9px 14px;
+}
+.agent-panel-load::part(content),
+.agent-panel-endpoint-connect::part(content) {
+  border-color: var(--ran-color-primary);
+  background: var(--ran-color-primary);
+  color: var(--ran-color-primary-text);
+}
+.agent-panel-endpoint-connect {
+  align-self: flex-start;
+}
+.agent-panel-endpoint-status:empty {
+  display: none;
+}
+.agent-use-card .agent-model-memory {
+  margin: 12px 0 0;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.agent-model-memory:empty {
+  display: none;
+}
+.agent-panel-local-writing-label {
+  color: var(--ran-color-text-secondary);
+  line-height: 1.75;
+  font-size: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.agent-panel-local-writing {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  margin: 3px 0 0;
+  accent-color: var(--ran-color-primary);
+}
+.agent-panel-header button[aria-expanded='true'] {
+  background: var(--ran-color-bg-muted);
+  color: var(--ran-color-text);
+}
+.agent-panel-settings > .agent-panel-note {
+  margin: -8px 0 0;
+}
+@container agent-panel (max-width: 370px) {
+  .agent-panel-settings {
+    padding: 16px;
+  }
+
+  .agent-settings-hero h2 {
+    font-size: 24px;
+  }
+}
+
+/* Compact model settings: one source and one active configuration. */
+.agent-source-picker {
+  width: 100%;
+}
+.agent-model-choice {
+  min-width: 0;
+  flex: 1;
+}
+.agent-model-caption {
+  display: none;
+}
+.agent-model-choice r-select {
+  width: 100%;
+}
+.agent-model-cache {
+  border-top: 1px solid var(--ran-color-border);
+  padding-top: var(--ran-space-4);
+}
+.agent-model-cache > summary {
+  cursor: pointer;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  font-size: var(--ran-text-label-2);
+  color: var(--ran-color-text-secondary);
+}
+.agent-model-cache-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ran-space-2);
+}
+.agent-model-cache-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ran-space-2);
+  padding-block: var(--ran-space-3);
+  border-bottom: 1px solid var(--ran-color-border);
+}
+.agent-model-cache-row > span {
+  flex: 1 1 100%;
+  font-size: var(--ran-text-label-2);
+}
+.agent-cache-delete {
+  --ran-btn-color: var(--ran-color-danger);
+}
+.agent-release-memory {
+  align-self: flex-start;
+  margin-top: var(--ran-space-2);
+}
+.agent-preferences {
+  color: var(--ran-color-text-secondary);
+  font-size: 12px;
+  border-top: 1px solid var(--ran-color-border);
+  padding-top: var(--ran-space-4);
+}
+.agent-preferences .agent-settings-icon {
+  display: none;
+}
+.agent-preferences > summary {
+  min-height: 32px;
+}
+.agent-preferences[open] > summary {
+  margin-bottom: var(--ran-space-4);
+}
+.agent-panel :is(button, summary, r-select, r-input, r-button):focus-visible {
+  outline: var(--ran-focus-ring, 2px solid var(--ran-color-link));
+  outline-offset: 2px;
+}
+.agent-quote-context {
+  color: var(--ran-color-text-secondary);
+  font-size: 11px;
+  gap: 8px;
+  align-items: flex-start;
+  display: flex;
+  margin-bottom: var(--ran-space-3);
+  border: 0;
+  padding: 0;
+}
+.agent-quote-context summary {
+  min-height: 24px;
+  font-size: var(--ran-text-label-3);
+  color: var(--ran-color-text-secondary);
+  cursor: pointer;
+}
+.agent-quoted-text {
+  font: inherit;
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  max-height: 160px;
+  overflow: auto;
+  font-size: var(--ran-text-label-3);
+  background: var(--ran-color-bg-muted);
+  border-radius: var(--ran-radius-sm);
+  padding: var(--ran-space-3);
+}
+
+.agent-panel-model-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ran-space-3);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+.agent-model-memory {
+  margin: var(--ran-space-2) 0 0;
+  color: var(--ran-color-text-secondary);
+  font-size: var(--ran-text-label-3);
+}
+.agent-service-section {
+  border: 0;
+  padding: 0;
+}
+
+.agent-panel-load,
+.agent-release-memory {
+  box-shadow: none;
+  align-self: flex-start;
+  width: fit-content;
 }

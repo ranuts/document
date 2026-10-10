@@ -1,23 +1,30 @@
 import { Div, Span, View } from 'ranui/builder';
 import { t } from '@ranuts/shared/i18n';
 import { displayError } from './presentation';
-import { ReviewedAction } from '../reviewed-action';
+interface PreviewAction {
+  target: { label: string; selectedText: string };
+  plan: { tool: string; input: Readonly<Record<string, unknown>> };
+  isCurrent(): boolean;
+  cancel(): void;
+  apply(signal?: AbortSignal): Promise<'sent' | 'verified'>;
+}
 
 /** Transient, text-only preview. Proposed actions are never persisted/replayed. */
 export class ActionPreview {
-  readonly el = Div().class('agent-plan-preview').attr('aria-live', 'polite').build();
+  readonly el = Div().class('agent-plan-preview').attr('role', 'region').build();
   private readonly title = Span().build();
   private readonly target = Span().class('agent-plan-target').build();
   private readonly beforeLabel = Span().build();
   private readonly before = View('pre').class('agent-plan-before').build();
   private readonly afterLabel = Span().build();
   private readonly content = View('pre').class('agent-plan-content').build();
-  private readonly status = Span().class('agent-plan-status').build();
+  private readonly status = Span().class('agent-plan-status').attr('role', 'status').build();
   private readonly applyButton = View('r-button').class('agent-plan-apply').build();
   private readonly copyButton = View('r-button').class('agent-plan-copy').build();
   private readonly cancelButton = View('r-button').class('agent-plan-cancel').build();
-  private action: ReviewedAction | null = null;
+  private action: PreviewAction | null = null;
   private settled = false;
+  private returnFocus?: HTMLElement;
   private abort?: AbortController;
   private onApplied?: (outcome: 'sent' | 'verified') => void;
   private timer?: ReturnType<typeof setInterval>;
@@ -46,6 +53,7 @@ export class ActionPreview {
   }
   private labels(): void {
     this.title.textContent = t('agentPlanTitle');
+    this.el.setAttribute('aria-label', t('agentPlanTitle'));
     this.beforeLabel.textContent = t('agentPlanBefore');
     this.afterLabel.textContent = t('agentPlanAfter');
     this.applyButton.textContent = t('agentPlanApply');
@@ -59,9 +67,10 @@ export class ActionPreview {
           : t(action.target.selectedText ? 'agentPlanSelection' : 'agentPlanCursor')
       }`;
   }
-  show(action: ReviewedAction, onApplied?: (outcome: 'sent' | 'verified') => void): void {
+  show(action: PreviewAction, onApplied?: (outcome: 'sent' | 'verified') => void): void {
     this.hide();
     this.action = action;
+    this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
     this.abort = new AbortController();
     this.onApplied = onApplied;
     this.settled = false;
@@ -69,7 +78,11 @@ export class ActionPreview {
     this.before.textContent = action.target.selectedText;
     this.before.hidden = this.beforeLabel.hidden = !action.target.selectedText;
     this.before.parentElement!.hidden = !action.target.selectedText;
-    this.content.textContent = action.plan.tool === 'set_cell' ? action.plan.input.value : action.plan.input.text;
+    this.content.textContent = String(
+      action.plan.tool === 'set_cell'
+        ? action.plan.input.value
+        : (action.plan.input.text ?? JSON.stringify(action.plan.input)),
+    );
     this.status.textContent = t('agentPlanReady');
     this.applyButton.removeAttribute('disabled');
     this.labels();
@@ -88,11 +101,13 @@ export class ActionPreview {
     this.status.textContent = t('agentPlanExpired');
   }
   hide(): void {
+    const restore = this.el.contains(document.activeElement);
     this.abort?.abort();
     this.action?.cancel();
     this.action = null;
     clearInterval(this.timer);
     this.el.hidden = true;
+    if (restore && this.returnFocus?.isConnected) this.returnFocus.focus();
   }
   private async copy(): Promise<void> {
     const action = this.action;

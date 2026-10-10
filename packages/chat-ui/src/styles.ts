@@ -10,7 +10,7 @@ import { Style } from 'ranui/builder';
  * with an embedded circular send button; subtle tool/error chips.
  */
 export const CHAT_UI_CSS = `
-.cui-root { --cui-accent:#171717; --cui-accent-contrast:#fff; --cui-bg:#fff; --cui-user-bg:#f4f4f4; --cui-text:#171717; --cui-muted:#737373; --cui-border:#e5e5e5; position:relative; display:flex; flex-direction:column; min-height:0; height:100%; background:var(--cui-bg); color:var(--cui-text); font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+.cui-root { --cui-accent:var(--ran-color-primary, #171717); --cui-accent-contrast:var(--ran-color-primary-text, #fff); --cui-bg:var(--ran-color-bg, #fff); --cui-user-bg:var(--ran-color-bg-muted, #f4f4f4); --cui-text:var(--ran-color-text, #171717); --cui-muted:var(--ran-color-text-secondary, #737373); --cui-border:var(--ran-color-border, #e5e5e5); position:relative; display:flex; flex-direction:column; min-height:0; height:100%; background:var(--cui-bg); color:var(--cui-text); font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased; }
 .cui-messages { flex:1 1 auto; min-height:0; overflow:auto; overflow-x:hidden; padding:24px 20px; display:flex; flex-direction:column; gap:24px; overscroll-behavior:contain; scrollbar-width:thin; }
 .cui-empty { margin:auto; max-width:260px; padding:32px 8px; text-align:left; font-size:22px; font-weight:500; line-height:1.45; letter-spacing:-.035em; color:var(--cui-text); }
 .cui-empty-actions { margin-top:20px; font-size:12px; letter-spacing:0; font-weight:400; }
@@ -39,7 +39,7 @@ export const CHAT_UI_CSS = `
 .cui-message-actions button { border:0; background:transparent; color:var(--cui-muted); cursor:pointer; font:inherit; font-size:11px; min-height:28px; padding:4px; border-radius:6px; }
 .cui-message-actions button:hover { color:var(--cui-text); background:var(--cui-user-bg); }
 .cui-message-actions button:disabled { opacity:.5; cursor:default; }
-.cui-root button:focus-visible { outline:2px solid var(--cui-accent); outline-offset:3px; }
+.cui-root button:focus-visible { outline:var(--ran-focus-ring, 2px solid var(--ran-color-link, #0070f3)); outline-offset:3px; }
 .cui-streaming .cui-message-actions { display:none; }
 .cui-streaming .cui-bubble { white-space:pre-wrap; }
 .cui-activity { color:var(--cui-muted); font-size:12px; margin:-10px 0; white-space:pre-wrap; overflow-wrap:anywhere; }
@@ -57,6 +57,7 @@ export const CHAT_UI_CSS = `
 .cui-composer:focus-within { border-color:var(--cui-muted); }
 .cui-composer-bar { display:flex; align-items:center; gap:8px; margin-top:12px; }
 .cui-actions { display:flex; flex:1; min-width:0; align-items:center; gap:6px; font-size:12px; flex-wrap:wrap; }
+.cui-context:empty { display:none; }
 .cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:40px; }
 .cui-input::placeholder { color:var(--cui-muted); }
 .cui-send { flex:0 0 auto; width:30px; height:30px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:8px; cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); }

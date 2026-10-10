@@ -36,32 +36,12 @@ afterEach(() => {
   editorState.api = null;
 });
 
-it('opens a writing task from the welcome screen without sending or changing the draft', () => {
-  const panel = createAgentPanel();
-  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Keep this draft';
-  const chatPlaceholder = input.placeholder;
-  const action = panel.querySelector<HTMLButtonElement>('[data-writing-starter="translate"]');
-  expect(action).not.toBeNull();
-  action!.click();
-  expect((panel.querySelector('.agent-writing-task') as HTMLSelectElement).value).toBe('translate');
-  expect((panel.querySelector('.agent-writing-language') as HTMLElement).hidden).toBe(false);
-  expect(input.value).toBe('Keep this draft');
-  expect(input.placeholder).not.toBe(chatPlaceholder);
-  expect(input.placeholder).toBeTruthy();
-  expect(document.activeElement).toBe(input);
-  expect(panel.querySelector('.cui-msg-user')).toBeNull();
-  const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
-  mode.value = 'chat';
-  mode.dispatchEvent(new Event('change'));
-  expect(input.placeholder).toBe(chatPlaceholder);
-});
-
 it('offers only browser-local backends and keeps remote credentials out of the product', () => {
   const panel = createAgentPanel();
   const mode = panel.querySelector('.agent-writing-task');
   expect(mode).not.toBeNull();
-  expect((mode as HTMLElement).hidden).toBe(false);
+  expect((mode as HTMLElement).hidden).toBe(true);
+  expect(panel.querySelector('.agent-composer-tools')).toBeNull();
   const select = panel.querySelector('.agent-panel-provider') as HTMLElement & { value: string };
   expect(Array.from(select.querySelectorAll('r-option')).map((option) => option.getAttribute('value'))).toEqual([
     'webllm',
@@ -80,8 +60,8 @@ it('groups conversation switching and creation ahead of the transcript', () => {
   expect(panel.querySelector('.agent-panel-header .agent-panel-clear')).not.toBeNull();
   panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
   expect(bar.closest('.agent-history-view')?.hasAttribute('hidden')).toBe(false);
-  expect(panel.querySelector('.agent-document-scope')?.getAttribute('role')).toBe('note');
-  expect(panel.querySelector('.agent-document-scope')?.hasAttribute('aria-live')).toBe(false);
+
+  expect(panel.querySelector('.agent-document-scope')).toBeNull();
 });
 
 it('labels provider and model controls in settings', () => {
@@ -194,7 +174,8 @@ it('exposes explicit writing tasks and hides them for cloud backends', () => {
 
   const tasks = panel.querySelector('.agent-writing-task') as HTMLElement & { value: string };
   const language = panel.querySelector('.agent-writing-language') as HTMLElement;
-  expect(tasks.hidden).toBe(false);
+  expect(tasks.hidden).toBe(true);
+  expect(panel.querySelector('.agent-composer-tools')).toBeNull();
   expect([...tasks.querySelectorAll('option')].map((o) => o.getAttribute('value'))).toEqual([
     'chat',
     'tools',
@@ -204,12 +185,13 @@ it('exposes explicit writing tasks and hides them for cloud backends', () => {
   ]);
   tasks.value = 'translate';
   tasks.dispatchEvent(new Event('change'));
-  expect(language.hidden).toBe(false);
+  expect(language.hidden).toBe(true);
   const provider = panel.querySelector('.agent-panel-provider') as HTMLElement & { value: string };
   provider.value = 'anthropic';
   provider.dispatchEvent(new Event('change'));
-  expect(tasks.hidden).toBe(false);
-  expect(language.hidden).toBe(false);
+  expect(tasks.hidden).toBe(true);
+  expect(panel.querySelector('.agent-composer-tools')).toBeNull();
+  expect(language.hidden).toBe(true);
 });
 
 it('names the review-mode checkbox with its visible localized label', () => {
@@ -429,15 +411,14 @@ it('creates a runtime beside the lightweight off welcome rather than treating it
   expect(panel.querySelector('.cui-input')).not.toBeNull();
 });
 
-it('quotes a selection as removable context without overwriting the draft', () => {
-  editorState.api = { pluginMethod_GetSelectedText: () => 'Private selected words' };
+it('automatically exposes selected text without changing the draft', () => {
+  editorState.api = {
+    isDocumentLoadComplete: true,
+    isLoadFullApi: true,
+    pluginMethod_GetSelectedText: () => 'Private selected words',
+  };
   const panel = createAgentPanel();
-  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Keep this question';
-  panel.querySelector<HTMLButtonElement>('.agent-panel-quote')!.click();
-  expect(input.value).toBe('Keep this question');
+  expect(panel.querySelector('.agent-panel-quote')).toBeNull();
   expect(panel.querySelector('.agent-quoted-text')?.textContent).toBe('Private selected words');
-  panel.querySelector<HTMLButtonElement>('.agent-quote-remove')!.click();
-  expect(panel.querySelector<HTMLElement>('.agent-quote-context')!.hidden).toBe(true);
-  expect(input.value).toBe('Keep this question');
+  expect(panel.querySelector('.agent-composer-tools')).toBeNull();
 });

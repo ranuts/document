@@ -53,3 +53,4 @@ export {
   type WritingEndpoint,
   type WritingEndpointKind,
 } from './endpoint';
+export { deleteCachedModel } from './model-cache';
