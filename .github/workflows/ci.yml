@@ -17,10 +17,9 @@ concurrency:
 permissions:
   contents: read
 
-# The three E2E suites run the same ~95 specs against three different servers
+# The three E2E suites run the same tests against three different servers
 # (vite preview, the production container, wrangler pages dev), which is the
-# whole cost of this workflow -- install, vite build and docker build together
-# are under two minutes. Each suite is therefore split across three runners,
+# main cost of this workflow. Each suite is split across independent runners,
 # and a summary job carries the name the branch protection requires.
 #
 # Sharding, not more workers: the runner has 4 cores, the editor is a WASM
@@ -88,25 +87,11 @@ jobs:
           browsers: chromium
 
       - name: Run E2E tests
-        # `@serial` is excluded here and measured in the next step: those cases
+        # `@serial` is excluded here and measured in their own job: those cases
         # assert wall-clock budgets, and four WASM editors sharing four cores
         # push them past their bound (the font-system wait measured 3.4 s
-        # against a 2 s budget). See the next step and CLAUDE.md.
+        # against a 2 s budget). See the e2e-serial job and CLAUDE.md.
         run: pnpm exec playwright test --shard=${{ matrix.shard }}/3 --grep-invert @serial
-
-      - name: Run the timing-budget E2E cases with the runner to themselves
-        # Run in every shard rather than one: each shard is its own VM, so this
-        # pass really is alone, and every shard stays a copy of the others (an
-        # asymmetric shard is how a step gets dropped unnoticed). Deliberately
-        # not sharded -- it is a single case.
-        #
-        # The case itself takes seconds, but the step does not: this is a second
-        # `playwright test` process, and `reuseExistingServer` is false in CI, so
-        # each shard pays another full `vite build` + preview startup (~1 min)
-        # for it. That is the price of testing the budget at all -- measured
-        # against three WASM editors it is the machine that fails, not the code
-        # -- but it is a minute per shard, not seconds.
-        run: pnpm exec playwright test --grep @serial --workers=1
 
       - name: Upload Playwright report
         if: failure()
@@ -116,22 +101,49 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  # Timing budgets need an idle VM, but do not need to run once per shard.
+  e2e-serial:
+    name: E2E timing budgets
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up the toolchain
+        uses: ./.github/actions/setup
+        with:
+          browsers: chromium
+
+      - name: Run timing-budget E2E cases
+        run: pnpm exec playwright test --grep @serial --workers=1
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-serial
+          path: playwright-report/
+          retention-days: 7
+
   # Summary jobs. Branch protection matches required checks by name, so the
   # three names below must stay exactly as they are -- the sharded jobs are
   # named "... shard N" precisely so these can keep the original names.
   e2e:
     name: E2E
     runs-on: ubuntu-latest
-    needs: e2e-shard
+    needs: [e2e-shard, e2e-serial]
     if: always()
     timeout-minutes: 5
     steps:
       - name: Report the shard verdict
         env:
           RESULT: ${{ needs.e2e-shard.result }}
+          SERIAL_RESULT: ${{ needs.e2e-serial.result }}
         run: |
           echo "shards: $RESULT"
           [ "$RESULT" = "success" ] || exit 1
+          [ "$SERIAL_RESULT" = "success" ] || exit 1
 
   # Deploy artifact + host semantics: bin/build.sh output served by
   # `wrangler pages dev`, which reproduces Cloudflare Pages' index.html -> 308
@@ -140,11 +152,10 @@ jobs:
   e2e-pages-shard:
     name: E2E (Cloudflare Pages semantics) shard ${{ matrix.shard }}
     runs-on: ubuntu-latest
-    # Five shards rather than three: this suite still serves wrangler with a
-    # single worker on purpose (see playwright.pages.config.ts), so it is the
-    # slowest of the three and sets the critical path. Every shard also pays a
-    # fixed ~2 minutes for its own bin/build.sh and wrangler start, which is
-    # what stops the split from paying off much beyond this.
+    # Five shards: distribute individual tests while serving wrangler with a
+    # single worker on purpose (see playwright.pages.config.ts). Keep the
+    # runner count unchanged while improving the distribution; installing and
+    # starting a server in more jobs also adds overhead.
     timeout-minutes: 30
     strategy:
       fail-fast: false
