@@ -19,8 +19,8 @@ declare global {
  *  - Presentations go through the slide tools (`slide_action`).
  *
  * Every entry here was chosen because it is reachable **without a model**: the
- * closed "read <range>, then set <cell> to \"<literal>\"" phrase is applied
- * directly, and the write-the-last-answer / slide intents are a fixed grammar.
+ * closed "read <range>, then set <cell> to \"<literal>\"" phrase produces a
+ * preview for confirmation, and the write-the-last-answer / slide intents are a fixed grammar.
  * That is what makes the suite usable in CI, where no model runs. Model-driven
  * tool choice is therefore still uncovered -- a gap, not an implied pass.
  *
@@ -38,7 +38,8 @@ test.describe('agent document writes (real editor)', () => {
     await page.evaluate(() => window.__toggleAgentPanel?.());
     await page.locator('.agent-enable-switch').click();
     await expect(page.locator('.agent-runtime-panel')).not.toHaveClass(/agent-panel-hidden/);
-    await page.locator('.agent-view-back').first().click();
+    await page.locator('.agent-panel-settings-toggle').click();
+    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   };
 
   /**
@@ -61,8 +62,7 @@ test.describe('agent document writes (real editor)', () => {
     }, answer);
 
   /** Type a request into the panel and send it. */
-  const send = async (page: Page, task: string, text: string): Promise<void> => {
-    await page.selectOption('.agent-writing-task', task);
+  const send = async (page: Page, text: string): Promise<void> => {
     const input = page.locator('.cui-input');
     // Sending is refused while the panel is busy; wait rather than race it.
     await expect(input).toBeEnabled();
@@ -89,6 +89,16 @@ test.describe('agent document writes (real editor)', () => {
         .model.getRange3(row, column - 1, row, column - 1)
         .getValue();
     }, address);
+
+  /** A read-then-write request must leave the cell untouched until confirmation. */
+  const confirmCellWrite = async (page: Page, address: string, value: string): Promise<void> => {
+    const preview = page.locator('.agent-plan-preview').last();
+    await expect(preview).toBeVisible();
+    await expect(preview.locator('.agent-plan-target')).toContainText(address);
+    await expect(preview.locator('.agent-plan-content')).toHaveText(value);
+    expect(await readCell(page, address)).toBe('');
+    await preview.locator('.agent-plan-apply').click();
+  };
 
   const readWordText = (page: Page) =>
     page.evaluate(() => {
@@ -120,7 +130,8 @@ test.describe('agent document writes (real editor)', () => {
 
   test('writes a spreadsheet cell through the model-level writer', async ({ page }) => {
     await openEditorWithPanel(page, 'xlsx');
-    await send(page, 'tools', 'read A1:A5, then set B1 to "agent wrote this"');
+    await send(page, 'read A1:A5, then set B1 to "agent wrote this"');
+    await confirmCellWrite(page, 'B1', 'agent wrote this');
     await expect.poll(() => readCell(page, 'B1'), { timeout: 30_000 }).toBe('agent wrote this');
     await undo(page);
     await expect.poll(() => readCell(page, 'B1')).not.toBe('agent wrote this');
@@ -128,10 +139,11 @@ test.describe('agent document writes (real editor)', () => {
 
   test('writes auto numeric values and SUM formulas as separate undo steps', async ({ page }) => {
     await openEditorWithPanel(page, 'xlsx');
-    await send(page, 'tools', 'read A1:A5, then set A1 to 1.0');
+    await send(page, 'read A1:A5, then set A1 to 1.0');
+    await confirmCellWrite(page, 'A1', '1.0');
     await expect.poll(() => readCell(page, 'A1')).toBe('1');
     await expect(page.locator('.cui-input')).toBeEnabled();
-    await send(page, 'tools', 'sum A1:A1 into B1');
+    await send(page, 'sum A1:A1 into B1');
     await expect.poll(() => readCell(page, 'B1')).toBe('1');
     await expect(page.locator('.cui-input')).toBeEnabled();
     expect(
@@ -159,7 +171,8 @@ test.describe('agent document writes (real editor)', () => {
     test(`a stopped ${operation} write cannot resume through a delayed native font callback`, async ({ page }) => {
       await openEditorWithPanel(page, 'xlsx');
       if (operation === 'sum') {
-        await send(page, 'tools', 'read A1:A5, then set A1 to 5');
+        await send(page, 'read A1:A5, then set A1 to 5');
+        await confirmCellWrite(page, 'A1', '5');
         await expect.poll(() => readCell(page, 'A1')).toBe('5');
         await expect(page.locator('.cui-input')).toBeEnabled();
       }
@@ -178,9 +191,13 @@ test.describe('agent document writes (real editor)', () => {
           };
         };
       });
-      await send(page, 'tools', operation === 'auto' ? 'read A1:A5, then set B1 to 7' : 'sum A1:A1 into B1');
+      await send(page, operation === 'auto' ? 'read A1:A5, then set B1 to 7' : 'sum A1:A1 into B1');
+      if (operation === 'auto') await confirmCellWrite(page, 'B1', '7');
       await page.waitForFunction(() => window.__agentPastePending === true);
-      await page.locator('.cui-send-stop').click();
+      if (operation === 'auto') {
+        await page.locator('.agent-plan-preview').last().locator('.agent-plan-cancel').click();
+        await expect(page.locator('.agent-plan-preview').last()).toBeHidden();
+      } else await page.locator('.cui-send-stop').click();
       await page.evaluate(async () => {
         window.__releaseAgentPaste?.();
         await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
@@ -194,7 +211,7 @@ test.describe('agent document writes (real editor)', () => {
   test('writes into a Word document through the native paste wrapper', async ({ page }) => {
     await openEditorWithPanel(page, 'docx');
     await seedAnswer(page, 'SEEDED ANSWER FOR THE AGENT');
-    await send(page, 'chat', '把上一条回答写入文档');
+    await send(page, '把上一条回答写入文档');
     await expect.poll(readWordText.bind(null, page), { timeout: 30_000 }).toContain('SEEDED ANSWER FOR THE AGENT');
     await undo(page);
     await expect.poll(readWordText.bind(null, page)).not.toContain('SEEDED ANSWER FOR THE AGENT');
@@ -203,7 +220,7 @@ test.describe('agent document writes (real editor)', () => {
   test('adds a slide through the presentation tools', async ({ page }) => {
     await openEditorWithPanel(page, 'pptx');
     const before = await countSlides(page);
-    await send(page, 'chat', '新增幻灯片');
+    await send(page, '新增幻灯片');
     await expect.poll(() => countSlides(page), { timeout: 30_000 }).toBe(before + 1);
     await undo(page);
     await expect.poll(() => countSlides(page)).toBe(before);
