@@ -6,3 +6,10 @@ minimumReleaseAgeExclude:
 patchedDependencies:
   '@mlc-ai/web-llm@0.2.85': patches/@mlc-ai__web-llm@0.2.85.patch
   '@wllama/wllama@3.6.1': patches/@wllama__wllama@3.6.1.patch
+# Security fixes for transitive dependencies; remove when upstream ranges
+# select patched releases (KaTeX currently remains on Mermaid's 0.16 range).
+overrides:
+  dompurify: 3.4.16
+  katex: 0.18.2
+  source-map-js: 1.2.2
+  undici: 8.10.2
