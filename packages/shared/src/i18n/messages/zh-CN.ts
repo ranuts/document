@@ -7,6 +7,7 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const zhCN: I18nMessages = {
+  editorBackHome: '返回首页',
   agentSpeechInput: '语音输入',
   agentSpeechStop: '停止听写',
   agentSpeechLanguage: '识别语言',

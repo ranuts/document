@@ -1,3 +1,4 @@
+import { isEmbedMode } from './embed-mode';
 import 'ranui/message';
 import { waitForAppWorkerControl } from './offline-worker-control';
 import { getOnlyOfficeLang, t } from '@ranuts/shared/i18n';
@@ -217,6 +218,9 @@ function createPersonalEditorInstance(config: {
         name: 'Guest',
       },
       customization: {
+        ...(!isEmbedMode()
+          ? { goback: { url: new URL('/', location.href).href, blank: false, text: t('editorBackHome') } }
+          : {}),
         help: false,
         // Keep About reachable for copyright, version, license and source
         // information. Product marks are hidden separately; see NOTICE.

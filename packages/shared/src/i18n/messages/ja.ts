@@ -10,6 +10,7 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const ja: Partial<I18nMessages> = {
+  editorBackHome: 'ホームに戻る',
   agentSpeechInput: '音声入力',
   agentSpeechStop: '音声入力を停止',
   agentSpeechLanguage: '認識言語',

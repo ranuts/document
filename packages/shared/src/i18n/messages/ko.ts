@@ -10,6 +10,7 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const ko: Partial<I18nMessages> = {
+  editorBackHome: '홈으로 돌아가기',
   agentSpeechInput: '음성 입력',
   agentSpeechStop: '받아쓰기 중지',
   agentSpeechLanguage: '인식 언어',

@@ -7,6 +7,7 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const en: I18nMessages = {
+  editorBackHome: 'Back to home',
   agentSpeechInput: 'Voice input',
   agentSpeechStop: 'Stop dictation',
   agentSpeechLanguage: 'Recognition language',

@@ -6,6 +6,7 @@
  * different languages no longer touch the same lines.
  */
 export interface I18nMessages {
+  editorBackHome: string;
   agentSpeechInput: string;
   agentSpeechStop: string;
   agentSpeechLanguage: string;
