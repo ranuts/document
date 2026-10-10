@@ -32,17 +32,13 @@ test.describe('agent document writes (real editor)', () => {
 
   /** Mount the editor with the panel open, with nothing to auto-download. */
   const openEditorWithPanel = async (page: Page, fresh: 'xlsx' | 'docx' | 'pptx'): Promise<void> => {
-    await page.addInitScript(() => {
-      // Pin the GGUF provider with no model configured, so the panel's idle
-      // auto-load has nothing to fetch: an E2E run must not pull a multi-gigabyte
-      // browser model. Every agent path under test here is model-free.
-      localStorage.setItem('agent-panel-provider', 'wllama');
-    });
-    await page.goto(`/editor?new=${fresh}&agent=1`);
+    await page.goto(`/editor?new=${fresh}`);
     await page.waitForFunction(() => Boolean(window.__ooFrames.readyEditor()));
     await page.waitForFunction(() => typeof window.__toggleAgentPanel === 'function');
     await page.evaluate(() => window.__toggleAgentPanel?.());
-    await expect(page.locator('.agent-panel')).not.toHaveClass(/agent-panel-hidden/);
+    await page.locator('.agent-enable-switch').click();
+    await expect(page.locator('.agent-runtime-panel')).not.toHaveClass(/agent-panel-hidden/);
+    await page.locator('.agent-view-back').first().click();
   };
 
   /**

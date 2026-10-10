@@ -40,7 +40,7 @@ Sim. Ele abre o PDF direto no navegador com o motor de PDF do OnlyOffice — sem
 
 ### Meu PDF é enviado para algum lugar?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA está desativado por padrão. Ative-o no editor; você inicia downloads e conexões. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Dá para anotar o PDF, não só ler?
 

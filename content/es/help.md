@@ -59,24 +59,6 @@ Sí. Añade `&readonly=1` a un enlace `/editor?file=`, o envía `document:set-re
 
 Sí: el editor está pensado para integrarse en un iframe y controlarse con `postMessage`. Tu página obtiene el archivo (con su propia autenticación), lo envía al iframe y recibe de vuelta el `File` editado para subirlo donde quieras. Consulta la [referencia de la Embed API](/es/help/embed-api) y la [demo en vivo](/embed-demo.html).
 
-## Agentes de IA del navegador (WebMCP)
-
-### ¿Puede un asistente de IA de mi navegador manejar el editor?
-
-Las herramientas WebMCP editan y convierten localmente, pero un agente del navegador puede recibir texto o archivos exportados y enviarlos a su propio servicio de IA. Revisa su política de datos antes de compartir contenido confidencial.
-
-### ¿Qué navegadores lo admiten?
-
-WebMCP es una propuesta del W3C Web Machine Learning Community Group, disponible actualmente en Chrome tras una prueba de origen. Firefox y Safari no han anunciado soporte. Donde el navegador no ofrece la API, no se registra nada y nada cambia: es una adición pura.
-
-### ¿Funciona en un editor integrado?
-
-No, por diseño. Las herramientas solo se registran cuando el editor es la página de nivel superior. Un iframe de otro origen necesitaría que la página que lo integra concediera `allow="tools"`, lo que choca con el sentido de la integración: si integras el editor, contrólalo con la [Embed API](/es/help/embed-api).
-
-### ¿Puede el agente leer el texto del documento?
-
-En documentos de texto, sí: `get_document_text` devuelve el texto para que el agente pueda responder preguntas sobre el contenido sin exportar nada. Las hojas de cálculo y las presentaciones no exponen lectura de texto completo en este motor; la herramienta lo dice explícitamente (en vez de devolver una respuesta vacía que parecería un archivo vacío) y sugiere exportar.
-
 ## Sin conexión e instalación
 
 ### ¿Funciona sin conexión?
@@ -122,4 +104,8 @@ Con el guardado automático activado, las copias de recuperación permanecen en 
 
 ### ¿Está disponible un asistente de IA integrado?
 
-El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Desactivado por defecto · Solo este navegador. [Cómo usarlo](/es/ai-document-assistant). La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+
+## Asistente de documentos con IA
+
+Selecciona un texto para reescribirlo, resumirlo o traducirlo. Revisa el resultado antes de añadirlo al documento. Desactivado por defecto · Solo este navegador. [Cómo usarlo](/es/ai-document-assistant).

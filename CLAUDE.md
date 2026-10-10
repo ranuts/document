@@ -1132,3 +1132,7 @@ E2E 回归套件覆盖**（`pnpm run test:e2e` 的 embed-regression.spec：打�
 - `getSavedFileMimeType` / `getNormalizedFile` / `toUint8Array` — 纯计算逻辑
 - `setReadonlyMode` / `getReadonlyMode` — 状态读写
 - `requestSaveDocument` — 所有拒绝路径（无编辑器、只读、并发、超时、不支持 downloadAs）
+
+### AI assistant product entry
+
+`lib/agent-entry.ts` owns the discoverable entry and browser-local default-off preference. URL `agent` flags do not enable it. Opening restores only UI/preferences; loading a model or connecting a service requires an explicit user action. Generated writing must be reviewed before applying. Developer transport and provider details belong in developer references, not product onboarding.

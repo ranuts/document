@@ -17,6 +17,8 @@ export interface ChatTurn {
   role: 'user' | 'agent' | 'tool' | 'status' | 'error';
   text: string;
   interrupted?: true;
+  /** Text-only result; no host write action may be reconstructed. */
+  copyOnly?: true;
 }
 
 export interface AgentChatControllerOptions {

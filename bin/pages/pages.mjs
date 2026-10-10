@@ -8,6 +8,7 @@ import { ROOT } from './constants.mjs';
 import { LOCALES } from './locales.mjs';
 
 export const LANDING_SLUGS = [
+  'ai-document-assistant',
   'offline-document-editor',
   // en + zh only, on purpose: this one targets people searching for ONLYOFFICE
   // itself, and the shell derives hreflang and the language switch from the

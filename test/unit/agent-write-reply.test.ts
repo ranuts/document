@@ -116,7 +116,7 @@ it('writes the exact answer through the editor only after an explicit click and 
   button.click();
   button.click();
   await vi.waitFor(() => expect(button.textContent).toBe(t('agentReplyWritten')));
-  expect(state.execute).toHaveBeenCalledExactlyOnceWith({ text: '秋日的天空明净。' }, undefined);
+  expect(state.execute).toHaveBeenCalledExactlyOnceWith({ text: '秋日的天空明净。' }, expect.any(AbortSignal));
   expect(state.capture).toHaveBeenCalledTimes(1);
 });
 it('routes an explicit write instruction to the previous answer without asking a model', async () => {

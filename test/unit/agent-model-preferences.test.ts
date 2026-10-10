@@ -31,7 +31,7 @@ afterEach(() => {
   state.cpu.mockClear();
   state.auto.mockClear();
 });
-it('restores the selected CPU URL and starts loading it without re-entering settings', async () => {
+it('restores the selected file URL but prepares only after the user starts it', async () => {
   localStorage.setItem('agent-panel-provider', 'wllama');
   localStorage.setItem('agent-panel-gguf-url', 'https://models.example/local.gguf');
   const panel = createAgentPanel();
@@ -39,6 +39,8 @@ it('restores the selected CPU URL and starts loading it without re-entering sett
   expect((panel.querySelector('.agent-panel-gguf-url') as HTMLElement & { value: string }).value).toBe(
     'https://models.example/local.gguf',
   );
+  expect(state.cpu).not.toHaveBeenCalled();
+  panel.querySelector<HTMLElement>('.agent-panel-gguf-load')!.click();
   await vi.waitFor(() => expect(state.cpu).toHaveBeenCalledOnce());
   expect(state.source).toBe('https://models.example/local.gguf');
   expect(state.auto).not.toHaveBeenCalled();
@@ -100,6 +102,7 @@ it('loads the configured writing model and restores the default for chat', async
     JSON.stringify({ version: 1, tasks: { rewrite: { backend: 'webllm', model: 'Qwen3-4B-q4f16_1-MLC' } } }),
   );
   const panel = createAgentPanel();
+  panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
   await vi.waitFor(() => expect(state.model).toBe('Qwen3-1.7B-q4f16_1-MLC'));
   const task = panel.querySelector('.agent-writing-task') as HTMLSelectElement;
   task.value = 'rewrite';

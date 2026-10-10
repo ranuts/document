@@ -10,6 +10,24 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const de: Partial<I18nMessages> = {
+  agentEnable: 'KI-Assistent aktivieren',
+  agentDefaultOff: 'Standardmäßig aus · Nur dieser Browser',
+  agentIntro:
+    'Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen.',
+  agentStartNote:
+    'Nach dem Aktivieren die Nutzung wählen. Den ersten Download starten Sie selbst und können ihn abbrechen.',
+  agentUseDevice: 'Auf diesem Computer nutzen',
+  agentUseDeviceHint:
+    'Der Text wird auf diesem Gerät verarbeitet. Die erste Einrichtung lädt Dateien und kann den Computer verlangsamen; Abbruch ist möglich.',
+  agentUseService: 'Eigenen KI-Dienst nutzen',
+  agentUseServiceHint:
+    'Gesendeter Text geht an den gewählten Dienst. Eigene Zugangsdaten sind erforderlich; es können Kosten entstehen.',
+  agentPreferences: 'Weitere Einstellungen',
+  agentBackToChat: 'Zurück zum Gespräch',
+  agentExpand: 'Assistent vergrößern',
+  agentSetupFailed: 'Assistent konnte nicht geöffnet werden. Bitte erneut versuchen. Das Dokument ist unverändert.',
+  agentOffNote: 'Ausschalten stoppt die aktuelle Aufgabe und behält Dokument und Entwurf.',
+  agentPrepareRequired: 'Nutzungsweise wählen und Einrichtung abschließen. Der Entwurf bleibt bearbeitbar.',
   webOffice: 'Web Office',
   uploadDocument: 'Dokument öffnen / bearbeiten',
   newWord: 'Neues Word-Dokument',
@@ -62,7 +80,7 @@ export const de: Partial<I18nMessages> = {
   agentUpdateCell: 'Zelle ändern',
   agentExecute: 'Dokumentaktion',
   agentClose: 'Assistent schließen',
-  agentConfigure: 'KI einrichten',
+  agentConfigure: 'KI-Nutzung',
   agentWriteReply: 'In Dokument schreiben',
   agentWriteReplyTip: 'Fügt Text an der Cursorposition ein; ausgewählter Text wird ersetzt.',
   agentWritingReply: 'Wird geschrieben…',
@@ -71,7 +89,7 @@ export const de: Partial<I18nMessages> = {
   agentWordOnly: 'Antworten können in Textdokumente geschrieben werden. Für Tabellen eine Bearbeitungsaufgabe wählen.',
   agentTitle: 'KI-Assistent',
   agentOpenTip: 'KI-Assistenten öffnen',
-  agentSettings: 'Einstellungen',
+  agentSettings: 'KI-Nutzung',
   agentCustomModel: 'Benutzerdefiniertes Modell',
   agentProviderLabel: 'KI-Anbieter',
   agentModelLabel: 'Lokales Modell',
@@ -82,9 +100,10 @@ export const de: Partial<I18nMessages> = {
   agentProviderClaude: 'Claude (Cloud, API-Schlüssel erforderlich)',
   agentProviderOpenAI: 'OpenAI (Cloud, API-Schlüssel erforderlich)',
   agentProviderGemini: 'Gemini (Cloud, API-Schlüssel erforderlich)',
-  agentProviderWllama: 'Lokales GGUF (wllama, experimentell)',
-  agentWllamaHint: 'GGUF-Modell-URL; CPU-Modus kann langsam sein. Oder lokale GGUF-Dateien wählen.',
-  agentProviderLocal: 'Lokale KI (automatisch)',
+  agentProviderWllama: 'Heruntergeladene Dateien nutzen',
+  agentWllamaHint:
+    'Wählen Sie heruntergeladene Dateien oder geben Sie eine Download-Adresse ein. Die Geschwindigkeit hängt vom Gerät ab.',
+  agentProviderLocal: 'Automatisch wählen',
   agentProviderOllama: 'Ollama (lokaler Server, selbst gestartet)',
   agentOllamaModelPlaceholder: 'Modellname, z. B. llama3.2',
   agentOllamaHint:
@@ -113,23 +132,21 @@ export const de: Partial<I18nMessages> = {
   agentWritePreference: 'Bevorzugtes Ziel',
   agentWritePreferDevice: 'Dieses Gerät zuerst',
   agentWritePreferRemote: 'Cloud-Endpunkt zuerst',
-  agentWritingOfflineNeedsDevice:
-    'Offline muss das Schreibziel auf diesem Gerät liegen. Verbinden Sie einen lokalen Dienst oder aktivieren Sie experimentelles lokales Schreiben.',
+  agentWritingOfflineNeedsDevice: 'Sie sind offline. Verarbeitung auf diesem Gerät wählen.',
   agentEndpointOfflineHint: 'offline: ein Cloud-Endpunkt ist nicht erreichbar',
   agentEndpointKeyRequired: 'Bitte zuerst einen API-Schlüssel für diesen Endpunkt eingeben',
   agentWriteDestinationOfflineUnavailable: 'der konfigurierte Cloud-Endpunkt (offline nicht verfügbar)',
-  agentLocalWritingConsent: 'Schreiben mit browsereigenem Modell erlauben (experimentell, Qualität nicht freigegeben)',
+  agentLocalWritingConsent: 'Text auf diesem Gerät erzeugen; vor dem Einfügen prüfe ich das Ergebnis.',
   agentWritingNeedsLocalService:
-    'Die browsereigenen Modelle haben die Qualitätsprüfung fürs Schreiben nicht bestanden. Verbinden Sie einen lokalen Dienst oder aktivieren Sie experimentelles lokales Schreiben.',
-  agentChooseModelFiles: 'Modelldateien auswählen',
-  agentLoadModel: 'Modell laden',
+    'Nutzungsweise wählen. Für lokal erzeugte Änderungen bestätigen, dass Sie das Ergebnis prüfen.',
+  agentChooseModelFiles: 'Dateien wählen',
+  agentLoadModel: 'Einrichtung starten',
   agentModelLoaded: 'Modell geladen – Sie können loslegen.',
   agentCheckingCache: 'Modell-Cache wird geprüft …',
   agentModelCached:
     'Modellgewichte wurden im Cache gefunden. Laden Sie das Modell; zusätzliche Dateien müssen möglicherweise heruntergeladen werden.',
-  agentModelMemory: 'GPU-Speicher ca. {memory} GB',
-  agentModelFirstDownload:
-    'Laden Sie zuerst das Modell. Beim ersten Laden werden Modelldateien heruntergeladen. Der Browser kann wiederverwendbare Cache-Dateien löschen.',
+  agentModelMemory: 'Etwa {memory} GB auf diesem Gerät',
+  agentModelFirstDownload: 'Einrichtung starten. Der erste Download kann groß sein und lässt sich abbrechen.',
   agentNoWebGPU: 'Dieser Browser unterstützt kein WebGPU; der lokale Modus steht nicht zur Verfügung.',
   agentLocalChatOnly: 'Prüfen Sie lokal erzeugte Vorschläge vor dem Anwenden.',
   agentSwitchCloud: 'zur Cloud wechseln →',
@@ -158,7 +175,7 @@ export const de: Partial<I18nMessages> = {
   agentPlanBefore: 'Ausgangstext',
   agentPlanAfter: 'Vorgeschlagener Text',
   agentPlanTitle: 'Änderung prüfen',
-  agentPlanApply: 'Änderung anwenden',
+  agentPlanApply: 'Ausgewählten Text ersetzen',
   agentPlanCancel: 'Abbrechen',
   agentPlanExpired: 'Dieser Vorschlag ist veraltet. Erstellen Sie einen neuen.',
   agentPlanVerified: 'Erledigt. Sie können die Änderung rückgängig machen.',
@@ -220,7 +237,7 @@ export const de: Partial<I18nMessages> = {
   agentRestoreRequest: 'Anfrage wiederherstellen',
   agentWaiting: 'Antwort wird erstellt…',
   agentScrollLatest: 'Zur neuesten Nachricht',
-  agentModelSourceInvalid: 'Verwenden Sie eine HTTP/HTTPS-Modelladresse oder wählen Sie lokale GGUF-Dateien.',
+  agentModelSourceInvalid: 'Geben Sie eine Download-Adresse ein oder wählen Sie heruntergeladene Dateien.',
   agentModelCleanupFailed:
     'Das vorherige Modell konnte nicht beendet werden. Laden Sie die Seite neu, bevor Sie ein anderes Modell laden.',
   agentModelLoadFailed: 'Modell konnte nicht geladen werden. Erneut versuchen oder anderes Modell wählen.',

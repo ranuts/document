@@ -190,3 +190,10 @@ public/pt/index.html
 
 # Hash-pinned generated CPU runtime and upstream source patches.
 packages/agent-core/vendor/wllama-count/
+
+# Local implementation plans and verification logs.
+/.superpowers/
+
+# Generated assistant guides.
+/public/ai-document-assistant.html
+/public/*/ai-document-assistant.html

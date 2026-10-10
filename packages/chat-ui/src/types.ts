@@ -6,6 +6,8 @@ export interface ChatMessage {
   role: ChatRole;
   text: string;
   interrupted?: true;
+  /** Text-only result; no host write action may be reconstructed. */
+  copyOnly?: true;
 }
 
 /** Text shown in the UI. Everything is optional so the component works untranslated. */

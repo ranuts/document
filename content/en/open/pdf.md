@@ -40,7 +40,7 @@ Yes. It opens PDF directly in your browser with the OnlyOffice PDF engine — no
 
 ### Is my PDF uploaded anywhere?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The AI assistant is off by default. Enable it in the editor; downloads and service connections start only when you choose them. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can I annotate the PDF, not just read it?
 

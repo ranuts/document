@@ -34,6 +34,19 @@ device, so documents are never uploaded, and no account is involved.
 
 ---
 
+## AI document assistant
+
+Select a passage to rewrite, summarize or translate. Review the result before adding it to your document. Off by default · This browser only.
+
+Choose how to use the assistant after enabling it. You start the first download and can cancel at any time.
+
+- **Use on this computer**: Text is processed on this device. First-time setup downloads files and may slow your computer; you can cancel.
+- **Use your own AI service**: Text you send goes to the selected service. Your own service details are required; service fees may apply.
+
+Compare the original with the result, then confirm to replace the selection. You can also copy it. Use editor Undo if needed; changed selections require a new proposal.
+
+[How to use it](https://edit.chaxus.com/ai-document-assistant)
+
 ## ✨ Features
 
 - 🔒 **Nothing is uploaded** — every conversion, edit and export happens in the tab
@@ -126,7 +139,7 @@ delete on every row, a delete-all, and a switch to turn autosave off entirely.
 Deleting there takes effect immediately. On a shared machine, that is the page
 to visit.
 
-The built-in AI assistant is unfinished and is not a released feature. The repository contains experimental AI modules; their presence does not mean the assistant is ready to use. Development tests that connect these modules to a cloud provider can transmit prompts and tool-returned content. In embed mode, exported files are returned to the parent application, which controls subsequent uploads.
+Off by default · This browser only. Selected text goes to the destination you choose. In embed mode, exported files are returned to the parent application, which controls subsequent uploads.
 
 ---
 

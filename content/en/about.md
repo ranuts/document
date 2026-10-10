@@ -11,7 +11,7 @@ lead: Who builds this, what it actually does, and how you can check both.
 
 An **in-browser editor for office documents**. You open a Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV or PDF file and edit it directly in a browser tab.
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.
 
 When autosave is enabled, recovery copies are kept in this browser’s IndexedDB for 7 days after the last edit or open. Closing a tab does not remove them. You can delete copies or disable autosave at /history. Browser storage can be cleared or evicted, and edits not yet autosaved may be lost; recovery is not a replacement for saving your file.
 

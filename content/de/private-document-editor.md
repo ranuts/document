@@ -11,7 +11,7 @@ breadcrumb: Privater Editor
 appDescription: 'DOCX, XLSX, PPTX und CSV lokal bearbeiten; einbettende Anwendungen kontrollieren weitere Datei-Uploads.'
 ---
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 Damit eignet er sich für Verträge, Finanztabellen, ärztliche Notizen, Personalunterlagen — alles, was Sie ungern Dritten geben. Sie bekommen einen originalgetreuen Editor auf Basis der OnlyOffice-Engine, in dem Schriften, Tabellen, Formeln und Layout erhalten bleiben, ohne den Preis, die Datei vorher wegzuschicken.
 
@@ -38,7 +38,7 @@ Bei der lokalen Kernbearbeitung: Ihre Dateien werden vollständig in Ihrem eigen
 
 ### Werden meine Dateien jemals hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Brauche ich ein Konto, damit meine Dateien privat bleiben?
 
@@ -46,7 +46,7 @@ Kein Konto, keine Anmeldung und kein Login. Sie öffnen den Editor und arbeiten 
 
 ### Kann ich überprüfen, dass nichts hochgeladen wird?
 
-Prüfen Sie im Netzwerk-Tab das Öffnen, Bearbeiten und Speichern einer lokalen Datei. Testen Sie optionale KI, Datei-URLs und einbettende Anwendungen separat; deren Anfragen gehören nicht zur rein lokalen Kernbearbeitung. Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Prüfen Sie im Netzwerk-Tab das Öffnen, Bearbeiten und Speichern einer lokalen Datei. Testen Sie optionale KI, Datei-URLs und einbettende Anwendungen separat; deren Anfragen gehören nicht zur rein lokalen Kernbearbeitung. Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Funktioniert er auch ohne Internetverbindung?
 
@@ -58,4 +58,4 @@ Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der 
 
 ### Ist ein integrierter KI-Assistent verfügbar?
 
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

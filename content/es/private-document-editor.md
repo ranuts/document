@@ -11,7 +11,7 @@ breadcrumb: Editor privado
 appDescription: 'Edita DOCX, XLSX, PPTX y CSV localmente; la aplicación anfitriona controla las subidas posteriores.'
 ---
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. Desactivado por defecto · Solo este navegador. [Cómo usarlo](/es/ai-document-assistant). La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 Eso lo hace adecuado para contratos, hojas financieras, notas médicas, papeleo de recursos humanos o cualquier cosa que prefieras no entregar a un tercero. Obtienes un editor de fidelidad completa — con el motor de OnlyOffice, así que se conservan fuentes, tablas, fórmulas y maquetación — sin el peaje de enviar antes el archivo.
 
@@ -58,4 +58,4 @@ Con el guardado automático activado, las copias de recuperación permanecen en 
 
 ### ¿Está disponible un asistente de IA integrado?
 
-El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Desactivado por defecto · Solo este navegador. [Cómo usarlo](/es/ai-document-assistant). La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

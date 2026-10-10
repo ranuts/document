@@ -7,9 +7,9 @@ export function mountPanelResize(panel: HTMLElement): () => void {
   handle.setAttribute('aria-label', 'Resize AI panel');
   handle.setAttribute('aria-orientation', 'vertical');
   panel.prepend(handle);
-  let preferred = 400;
+  let preferred = 432;
   try {
-    preferred = Number(localStorage.getItem('agent-panel-width')) || 400;
+    preferred = Number(localStorage.getItem('agent-panel-width')) || 432;
   } catch {
     /* Storage is optional. */
   }

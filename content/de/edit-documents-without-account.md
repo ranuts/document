@@ -58,4 +58,4 @@ Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der 
 
 ### Ist ein integrierter KI-Assistent verfügbar?
 
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

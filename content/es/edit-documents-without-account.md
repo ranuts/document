@@ -58,4 +58,4 @@ Con el guardado automático activado, las copias de recuperación permanecen en 
 
 ### ¿Está disponible un asistente de IA integrado?
 
-El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Desactivado por defecto · Solo este navegador. [Cómo usarlo](/es/ai-document-assistant). La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

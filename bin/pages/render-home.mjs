@@ -279,6 +279,16 @@ ${rows}
         </div>
       </div>
 
+      <section class="section wrap assistant-feature" aria-labelledby="assistant-heading">
+        <div class="assistant-feature-copy">
+          <span class="eyebrow">${e(data.sections.assistant.eyebrow)}</span>
+          <h2 id="assistant-heading">${e(data.sections.assistant.h2)}</h2>
+          <p>${e(data.sections.assistant.p)}</p>
+          <a class="assistant-guide" href="${e(data.sections.assistant.href)}">${e(data.sections.assistant.cta)} &rarr;</a>
+        </div>
+        <div class="assistant-feature-example"><span>${e(data.sections.assistant.note)}</span><blockquote>${e(data.sections.assistant.example)}</blockquote></div>
+      </section>
+
       <div class="section wrap">
         <div class="section-head">
           <span class="eyebrow">${e(data.sections.pillars.eyebrow)}</span>

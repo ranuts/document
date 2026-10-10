@@ -59,24 +59,6 @@ Sim. Acrescente `&readonly=1` a um link `/editor?file=`, ou envie `document:set-
 
 Sim — o editor foi feito para ser incorporado num iframe e controlado por `postMessage`: sua página busca o arquivo (com a própria autenticação), envia para o iframe e recebe de volta o `File` editado para enviar aonde quiser. Veja a [referência da Embed API](/pt/help/embed-api) e a [demo ao vivo](/embed-demo.html).
 
-## Agentes de IA do navegador (WebMCP)
-
-### Um assistente de IA do meu navegador pode operar o editor?
-
-As ferramentas WebMCP editam e convertem localmente, mas um agente do navegador pode receber texto ou arquivos exportados e enviá-los ao seu próprio serviço de IA. Confira a política de dados do agente antes de compartilhar conteúdo confidencial.
-
-### Quais navegadores dão suporte?
-
-O WebMCP é uma proposta do W3C Web Machine Learning Community Group, disponível hoje no Chrome atrás de um origin trial. Firefox e Safari não anunciaram suporte. Onde o navegador não oferece a API, nada é registrado e nada muda — é uma adição pura.
-
-### Funciona num editor incorporado?
-
-Não, por design. As ferramentas só são registradas quando o editor é a página de nível superior. Um iframe de outra origem exigiria que a página incorporadora concedesse `allow="tools"`, o que conflita com o sentido da incorporação — se você incorporar o editor, controle-o pela [Embed API](/pt/help/embed-api).
-
-### O agente pode ler o texto do documento?
-
-Em documentos de texto, sim: `get_document_text` devolve o texto para o agente responder perguntas sobre o conteúdo sem exportar nada. Planilhas e apresentações não expõem leitura de texto completo neste motor; a ferramenta diz isso explicitamente (em vez de devolver uma resposta vazia que pareceria um arquivo vazio) e aponta para a exportação.
-
 ## Offline e instalação
 
 ### Funciona offline?
@@ -122,4 +104,8 @@ Com o salvamento automático ativado, cópias de recuperação ficam na IndexedD
 
 ### O assistente de IA integrado está disponível?
 
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+
+## Assistente de documentos com IA
+
+Selecione um trecho para reescrever, resumir ou traduzir. Revise o resultado antes de adicioná-lo ao documento. Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant).

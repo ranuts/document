@@ -58,4 +58,4 @@ When autosave is enabled, recovery copies are kept in this browser’s IndexedDB
 
 ### Is a built-in AI assistant available?
 
-The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.

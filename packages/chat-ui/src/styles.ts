@@ -53,13 +53,13 @@ export const CHAT_UI_CSS = `
 .cui-footer { position:relative; flex:0 0 auto; padding:12px 16px 16px; }
 .cui-scroll-bottom { position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:32px; height:32px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:1px solid var(--cui-border); border-radius:50%; background:var(--cui-bg); color:var(--cui-muted); cursor:pointer; box-shadow:0 2px 6px #00000012; }
 .cui-scroll-bottom[hidden] { display:none; }
-.cui-composer { display:flex; flex-direction:column; padding:12px; border:1px solid var(--cui-border); border-radius:16px; background:var(--cui-bg); }
+.cui-composer { display:flex; flex-direction:column; padding:12px; border:1px solid var(--cui-border); border-radius:12px; background:var(--cui-bg); }
 .cui-composer:focus-within { border-color:var(--cui-muted); }
 .cui-composer-bar { display:flex; align-items:center; gap:8px; margin-top:12px; }
 .cui-actions { display:flex; flex:1; min-width:0; align-items:center; gap:6px; font-size:12px; flex-wrap:wrap; }
 .cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:40px; }
 .cui-input::placeholder { color:var(--cui-muted); }
-.cui-send { flex:0 0 auto; width:30px; height:30px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:50%; cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); }
+.cui-send { flex:0 0 auto; width:30px; height:30px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:8px; cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); }
 .cui-send:disabled { opacity:.35; cursor:default; }
 .cui-streaming .cui-bubble::after { content:''; display:inline-block; width:6px; height:6px; margin-left:5px; border-radius:50%; background:currentColor; vertical-align:middle; }
 `;

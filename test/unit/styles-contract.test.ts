@@ -17,7 +17,10 @@ import { describe, expect, it } from 'vitest';
  * E2E case opens, which is why the check is cheap and lives here.
  */
 const ROOT = resolve(__dirname, '../..');
-const css = readFileSync(resolve(ROOT, 'styles/base.css'), 'utf8');
+const css =
+  readFileSync(resolve(ROOT, 'styles/base.css'), 'utf8') +
+  '\n' +
+  readFileSync(resolve(ROOT, 'styles/assistant.css'), 'utf8');
 const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf8')) as {
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;

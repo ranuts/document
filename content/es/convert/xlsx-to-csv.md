@@ -33,7 +33,7 @@ Abre el XLSX en el editor y usa Descargar como / Guardar como CSV: la conversió
 
 ### ¿Se sube mi archivo para convertirlo?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA está desactivado por defecto. Actívalo en el editor; tú inicias las descargas y conexiones. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Necesito Excel o una cuenta?
 

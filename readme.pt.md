@@ -33,6 +33,19 @@ quem visita, por isso os documentos nunca são enviados para lado nenhum e não 
 
 ---
 
+## Assistente de documentos com IA
+
+Selecione um trecho para reescrever, resumir ou traduzir. Revise o resultado antes de adicioná-lo ao documento. Desativado por padrão · Só este navegador.
+
+Escolha como usar após ativar. Você inicia o primeiro download e pode cancelar.
+
+- **Usar neste computador**: O texto é processado neste dispositivo. A primeira preparação baixa arquivos e pode deixá-lo mais lento; você pode cancelar.
+- **Usar seu próprio serviço de IA**: O texto enviado vai para o serviço escolhido. Seus dados de serviço são necessários; pode haver custos.
+
+Compare o original e o resultado antes de confirmar a substituição. Você também pode copiar. Use Desfazer se precisar. Se a seleção mudar, gere uma nova proposta.
+
+[Como usar](https://edit.chaxus.com/pt/ai-document-assistant)
+
 ## ✨ Funcionalidades
 
 - 🔒 **Nada é enviado** — cada conversão, edição e exportação acontece dentro do separador
@@ -122,7 +135,7 @@ eliminar em cada linha, um para eliminar tudo e um interruptor para desligar por
 gravação automática. Eliminar ali tem efeito imediato. Num computador partilhado, é a página
 a visitar.
 
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. Os módulos de IA no repositório são experimentais e não significam que o assistente esteja pronto. Testes de desenvolvimento com um provedor na nuvem podem transmitir instruções e resultados das ferramentas. No modo incorporado, o app anfitrião recebe os arquivos exportados e controla seus envios posteriores.
+Desativado por padrão · Só este navegador. Os módulos de IA no repositório são experimentais e não significam que o assistente esteja pronto. Testes de desenvolvimento com um provedor na nuvem podem transmitir instruções e resultados das ferramentas. No modo incorporado, o app anfitrião recebe os arquivos exportados e controla seus envios posteriores.
 
 ---
 

@@ -34,6 +34,21 @@ export interface I18nMessages {
   editorErrorOutOfMemory: string;
   editorOpenRetrying: string;
 
+  agentEnable: string;
+  agentDefaultOff: string;
+  agentIntro: string;
+  agentStartNote: string;
+  agentUseDevice: string;
+  agentUseDeviceHint: string;
+  agentUseService: string;
+  agentUseServiceHint: string;
+  agentPreferences: string;
+  agentBackToChat: string;
+  agentExpand: string;
+  agentSetupFailed: string;
+  agentOffNote: string;
+  agentPrepareRequired: string;
+
   // AI agent panel
   agentSlideNoRoom: string;
   agentDocumentActionTimeout: string;

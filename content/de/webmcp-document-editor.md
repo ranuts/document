@@ -23,7 +23,7 @@ Für einen KI-Agenten sind die meisten Web-Apps undurchsichtig. Er sieht eine Se
 
 open_document_url, open_document_buffer, create_document, save_document, get_document_text, set_readonly, get_document_state. WebMCP-Werkzeuge bearbeiten und konvertieren lokal. Ein Browser-Agent kann jedoch Dokumenttext oder exportierte Dateien erhalten und an seinen eigenen KI-Dienst senden. Prüfen Sie seine Datenrichtlinie vor der Freigabe vertraulicher Inhalte.
 
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 Zwei Grenzen sind Absicht. Tools werden nur registriert, wenn der Editor die oberste Seite ist — ein Cross-Origin-iframe bräuchte vom einbettenden Dokument ein `allow="tools"`, was dem Sinn des Einbettens widerspricht; eingebettete Editoren werden deshalb über die postMessage-API gesteuert. Und das Lesen des Volltexts steht für Textdokumente zur Verfügung; Tabellen und Präsentationen bieten es auf dieser Engine nicht an, also sagt das Tool das ausdrücklich, statt eine leere Antwort zu liefern, die ein Agent für eine leere Datei halten könnte.
 
@@ -59,4 +59,4 @@ Ja. save_document nimmt ein Zielformat entgegen, ein Agent kann also eine DOCX, 
 
 ### Brauche ich ein Konto oder einen API-Schlüssel?
 
-Für die WebMCP-Werkzeuge brauchen Sie weder Konto noch API-Schlüssel. Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Für die WebMCP-Werkzeuge brauchen Sie weder Konto noch API-Schlüssel. Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

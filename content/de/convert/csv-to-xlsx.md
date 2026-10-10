@@ -33,7 +33,7 @@ Kundenlisten, Buchhaltungsexporte, Log-Auszüge — je weniger Sie sie einem fre
 
 ### Wird meine Datei zum Umwandeln hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der KI-Assistent ist standardmäßig aus. Aktivieren Sie ihn im Editor; Downloads und Verbindungen starten Sie selbst. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Brauche ich Excel oder ein Konto?
 

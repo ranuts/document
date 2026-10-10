@@ -39,7 +39,7 @@ No. There is no sign up, no login and no account of any kind. Open the editor an
 
 ### Are my files uploaded to a server?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.
 
 ### Is it really free?
 
@@ -67,4 +67,4 @@ When autosave is enabled, recovery copies are kept in this browser’s IndexedDB
 
 ### Is a built-in AI assistant available?
 
-The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.

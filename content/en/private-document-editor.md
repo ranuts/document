@@ -11,7 +11,7 @@ breadcrumb: Private document editor
 appDescription: 'Edit DOCX, XLSX, PPTX and CSV locally; embedding hosts control onward file uploads.'
 ---
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.
 
 That makes it a good fit for contracts, financial spreadsheets, medical notes, HR paperwork or anything else you would rather not hand to a third party. You get a full-fidelity editor — powered by the OnlyOffice engine, so fonts, tables, formulas and layout are preserved — without the trade-off of sending the file away first.
 
@@ -38,7 +38,7 @@ Core local editing: Your files are opened and edited entirely inside your own br
 
 ### Do my files ever get uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.
 
 ### Do I need an account to keep my files private?
 
@@ -46,7 +46,7 @@ No account, no sign-up and no login. You open the editor and start working immed
 
 ### Can I verify that nothing is uploaded?
 
-Inspect the browser’s network panel while opening, editing and saving a local file. Test optional AI, remote URLs and host integrations separately; their requests are not covered by the core local-editing claim. Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Inspect the browser’s network panel while opening, editing and saving a local file. Test optional AI, remote URLs and host integrations separately; their requests are not covered by the core local-editing claim. Core opening, editing and conversion run locally in your browser without a required document upload. Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.
 
 ### Does it still work without an internet connection?
 
@@ -58,4 +58,4 @@ When autosave is enabled, recovery copies are kept in this browser’s IndexedDB
 
 ### Is a built-in AI assistant available?
 
-The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Off by default · This browser only. [How to use it](/ai-document-assistant). An embedding host can receive exported files and upload them according to its own policy.

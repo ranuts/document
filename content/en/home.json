@@ -148,7 +148,7 @@
         },
         {
           "q": "Are my files uploaded anywhere?",
-          "a": "Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy."
+          "a": "Core opening, editing and conversion run locally in your browser without a required document upload. The AI assistant is off by default. Enable it in the editor; downloads and service connections start only when you choose them. An embedding host can receive exported files and upload them according to its own policy."
         },
         {
           "q": "Which formats can I edit?",
@@ -167,6 +167,15 @@
           "a": "No account, no sign-up, no email. Open the page and edit."
         }
       ]
+    },
+    "assistant": {
+      "eyebrow": "AI document assistant",
+      "h2": "Make your writing clearer. Keep the decision yours.",
+      "p": "Select a passage to rewrite, summarize or translate. Review the result before adding it to your document.",
+      "example": "Make this paragraph shorter. Keep all dates and numbers.",
+      "note": "Off by default · This browser only",
+      "cta": "How to use it",
+      "href": "/ai-document-assistant"
     }
   },
   "foot": {
@@ -179,14 +188,6 @@
       {
         "href": "/changelog",
         "label": "Changelog"
-      },
-      {
-        "href": "/embed-document-editor",
-        "label": "Embed API"
-      },
-      {
-        "href": "/webmcp-document-editor",
-        "label": "WebMCP"
       },
       {
         "href": "/private-document-editor",

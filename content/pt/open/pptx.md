@@ -45,7 +45,7 @@ Sim. O motor do OnlyOffice preserva layouts de slide, imagens, formas e texto.
 
 ### Minha apresentação é enviada?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA está desativado por padrão. Ative-o no editor; você inicia downloads e conexões. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Dá para editar os slides, não só visualizar?
 

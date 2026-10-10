@@ -45,7 +45,7 @@ Sí. El motor de OnlyOffice conserva diseños de diapositiva, imágenes, formas 
 
 ### ¿Se sube mi presentación?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA está desactivado por defecto. Actívalo en el editor; tú inicias las descargas y conexiones. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Puedo editar las diapositivas, no solo verlas?
 
