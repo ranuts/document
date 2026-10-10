@@ -25,7 +25,8 @@ export const de: Partial<I18nMessages> = {
   agentSpeechUnsupported: 'Spracheingabe ist in diesem Browser nicht verfügbar.',
   agentDownloadIncomplete: 'Download unvollständig',
   agentModelInUse: 'Wird verwendet',
-  agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',
+  agentCacheDeleteFailed:
+    'Der Download konnte nicht gelöscht werden. Prüfen Sie die Speicherberechtigungen des Browsers und versuchen Sie es erneut.',
   agentResizePanel: 'Breite des KI-Panels ändern',
   agentModelId: 'Modell-ID',
   agentModelUrl: 'URL des Modellverzeichnisses',

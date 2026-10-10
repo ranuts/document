@@ -24,7 +24,8 @@ export const pt: Partial<I18nMessages> = {
   agentSpeechUnsupported: 'Este navegador não suporta entrada de voz.',
   agentDownloadIncomplete: 'Download incompleto',
   agentModelInUse: 'Em uso',
-  agentCacheDeleteFailed: 'The download could not be deleted. Check browser storage permissions and try again.',
+  agentCacheDeleteFailed:
+    'Não foi possível excluir o download. Verifique as permissões de armazenamento do navegador e tente novamente.',
   agentResizePanel: 'Ajustar largura do painel de IA',
   agentModelId: 'ID do modelo',
   agentModelUrl: 'URL do diretório do modelo',
@@ -35,7 +36,7 @@ export const pt: Partial<I18nMessages> = {
   agentWelcomeCell: 'Analise os dados selecionados, explique fórmulas ou organize esta planilha.',
   agentWelcomeSlide: 'Melhore o texto selecionado ou organize esta apresentação.',
 
-  agentSlideContext: 'Slide {page}',
+  agentSlideContext: 'Página {page}',
   agentSelectionContext: 'Texto selecionado · {count} caracteres',
   agentCurrentDocument: 'Documento atual',
   agentContextOnSend: 'A seleção é lida ao enviar.',
