@@ -43,7 +43,7 @@ Sim. Ele roda em qualquer navegador moderno — Chromebook, notebook, Windows, m
 
 ### Meus arquivos são enviados?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Quais formatos posso editar?
 
@@ -67,4 +67,4 @@ Com o salvamento automático ativado, cópias de recuperação ficam na IndexedD
 
 ### O assistente de IA integrado está disponível?
 
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.

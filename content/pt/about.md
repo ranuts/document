@@ -11,7 +11,7 @@ lead: Quem faz isto, o que ele realmente faz — e como você pode verificar as 
 
 Um **editor de documentos de escritório dentro do navegador**. Você abre um arquivo do Word (DOCX), Excel (XLSX), PowerPoint (PPTX), CSV ou PDF e edita direto na aba.
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 Com o salvamento automático ativado, cópias de recuperação ficam na IndexedDB deste navegador por 7 dias após a última edição ou abertura. Fechar a aba não as apaga. Em /history você pode excluir cópias ou desativar o salvamento automático. O navegador pode limpar ou remover seu armazenamento, e edições ainda não salvas podem se perder; a recuperação não substitui salvar o arquivo.
 

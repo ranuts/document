@@ -4,6 +4,12 @@ import { t } from '@ranuts/shared/i18n';
 import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
 HTMLElement.prototype.scrollTo = vi.fn();
+// Runtime tests explicitly prepare, as a user must now do from settings.
+function createPreparedPanel() {
+  const panel = createAgentPanel();
+  panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
+  return panel;
+}
 
 const state = vi.hoisted(() => ({
   preload: vi.fn(),
@@ -11,6 +17,7 @@ const state = vi.hoisted(() => ({
   progress: [] as Array<(value: { text: string; progress?: number }) => void>,
   unavailable: undefined as undefined | (() => void),
   ready: false,
+  readonly: false,
   activeBackend: undefined as 'webllm' | 'wllama' | undefined,
   stalled: false,
   generate: vi.fn(),
@@ -40,8 +47,12 @@ vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
     }
   },
 }));
+vi.mock('../../lib/onlyoffice/readonly', () => ({ getReadonlyMode: () => state.readonly }));
 vi.mock('../../lib/agent-plugin/editor-bridge', () => ({
-  getEditorApi: () => (state.editorReady ? { isDocumentLoadComplete: true, isLoadFullApi: true } : null),
+  getEditorApi: () =>
+    state.editorReady
+      ? { isDocumentLoadComplete: true, isLoadFullApi: true, pluginMethod_GetSelectedText: () => state.source }
+      : null,
 }));
 vi.mock('@ranuts/agent-core/llm/writing-task', async (original) => ({
   ...(await original<typeof import('@ranuts/agent-core/llm/writing-task')>()),
@@ -139,6 +150,7 @@ afterEach(() => {
   state.dispose.mockClear();
   state.progress.length = 0;
   state.ready = false;
+  state.readonly = false;
   state.unavailable = undefined;
   state.activeBackend = undefined;
   state.stalled = false;
@@ -173,7 +185,7 @@ function allowBrowserLocalWriting(): void {
     }),
   );
 }
-it('starts hidden and waits for the editor and idle time before background loading', async () => {
+it('stays hidden without preparing a model even after the editor becomes idle', async () => {
   vi.useFakeTimers();
   state.ready = true;
   state.preload.mockResolvedValue(undefined);
@@ -185,13 +197,16 @@ it('starts hidden and waits for the editor and idle time before background loadi
   expect(state.preload).not.toHaveBeenCalled();
   state.editorReady = true;
   await vi.advanceTimersByTimeAsync(1500);
-  expect(state.preload).toHaveBeenCalledOnce();
+  expect(state.preload).not.toHaveBeenCalled();
   expect(panel.classList.contains('agent-panel-hidden')).toBe(true);
 });
-it('automatically loads the default model even without cached weights', async () => {
+it('opening the default model leaves preparation to the user', async () => {
   state.preload.mockResolvedValue(undefined);
-  createAgentPanel();
-  await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(1));
+  const panel = createAgentPanel();
+  await Promise.resolve();
+  expect(state.preload).not.toHaveBeenCalled();
+  panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
+  await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
 });
 it('keeps the AI rail entry accessible before the model loads and after a load fails', async () => {
   const iframe = document.createElement('iframe');
@@ -209,7 +224,7 @@ it('keeps the AI rail entry accessible before the model loads and after a load f
 it('creates a fresh conversation without disposing or reloading the local model', async () => {
   state.ready = true;
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(1));
   (panel.querySelector('.agent-panel-clear') as HTMLElement).click();
   expect(state.dispose).not.toHaveBeenCalled();
@@ -226,7 +241,7 @@ it('keeps a cleared conversation empty when a pending proposal fails later', asy
         fail = reject;
       }),
   );
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const editTask = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   editTask.value = 'tools';
   editTask.dispatchEvent(new Event('change'));
@@ -247,16 +262,15 @@ it('chooses a preset without retaining a previous custom model override', () => 
     localStorage.setItem(keys[0], 'Qwen3-4B-q4f16_1-MLC');
     localStorage.setItem(keys[1], '/models/custom');
     localStorage.setItem(keys[2], '/models/custom.wasm');
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const preset = panel.querySelector('.agent-panel-model') as HTMLElement & { value: string };
     preset.value = 'Qwen3.5-0.8B-q4f16_1-MLC';
     preset.dispatchEvent(new Event('change'));
     for (const key of keys.slice(0, 3)) {
-      expect((panel.querySelector('.' + key) as HTMLElement & { value: string }).value).toBe('');
       expect(localStorage.getItem(key)).toBe('');
     }
     expect(localStorage.getItem(keys[3])).toBe(preset.value);
-    const reopened = createAgentPanel();
+    const reopened = createPreparedPanel();
     expect((reopened.querySelector('.agent-panel-model') as HTMLElement & { value: string }).value).toBe(preset.value);
   } finally {
     keys.forEach((key, index) =>
@@ -269,10 +283,10 @@ it('explains invalid model addresses without suggesting another download', async
   const error = new Error('Model artifacts require HTTP or HTTPS');
   error.name = 'ModelSourceError';
   state.preload.mockRejectedValue(error);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await Promise.resolve();
   (panel.querySelector('.agent-panel-load') as HTMLElement).click();
-  const message = 'Use an HTTP/HTTPS model address or choose local GGUF files.';
+  const message = t('agentModelSourceInvalid');
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(message));
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(message);
   expect(panel.querySelector('.agent-panel-load')?.hasAttribute('disabled')).toBe(false);
@@ -280,7 +294,7 @@ it('explains invalid model addresses without suggesting another download', async
 
 it('replaces stale progress with an actionable loading failure and enables retry', async () => {
   state.preload.mockRejectedValue(new DOMException('Quota exceeded', 'QuotaExceededError'));
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await Promise.resolve();
   (panel.querySelector('.agent-panel-load') as HTMLElement).click();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoadFailed')));
@@ -296,7 +310,7 @@ it('offers cancellation for WebLLM loading and rejects old progress and late com
         finish = resolve;
       }),
   );
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await Promise.resolve();
   (panel.querySelector('.agent-panel-load') as HTMLElement).click();
   const cancel = panel.querySelector<HTMLElement>('.agent-panel-load-stop');
@@ -327,7 +341,8 @@ it('offers cancellation for WebLLM loading and rejects old progress and late com
 
 it('requires selection before starting a writing task', async () => {
   state.ready = true;
-  const panel = createAgentPanel();
+  allowBrowserLocalWriting();
+  const panel = createPreparedPanel();
   const task = panel.querySelector('.agent-writing-task') as HTMLElement & { value: string };
   task.value = 'rewrite';
   task.dispatchEvent(new Event('change'));
@@ -351,11 +366,11 @@ it('refuses browser-local writing until a service is connected or consent is giv
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
+  await vi.waitFor(() => expect(panel.querySelector('.agent-readiness')?.textContent).toBeTruthy());
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(state.writing).not.toHaveBeenCalled();
   expect(state.apply).not.toHaveBeenCalled();
-  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
+  expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentWritingNeedsLocalService'));
 });
 it('explains a blocked writing route without requiring an unrelated model download', async () => {
   // The narrowing this change delivers: a document write is no longer silently
@@ -370,14 +385,14 @@ it('explains a blocked writing route without requiring an unrelated model downlo
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
+  await vi.waitFor(() => expect(panel.querySelector('.agent-readiness')?.textContent).toBeTruthy());
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(state.writing).not.toHaveBeenCalled();
   expect(state.apply).not.toHaveBeenCalled();
-  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
+  expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentWritingNeedsLocalService'));
 });
 it('persists the writing destination, model and browser-local writing consent', () => {
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
   const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
   const consent = panel.querySelector<HTMLInputElement>('.agent-panel-local-writing')!;
@@ -397,7 +412,7 @@ it('persists the writing destination, model and browser-local writing consent', 
   });
 });
 it('never persists a plain-http remote endpoint, which would leak the key and the text', () => {
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
   kind.value = 'openai-compatible';
   kind.dispatchEvent(new Event('change'));
@@ -410,7 +425,7 @@ it('never persists a plain-http remote endpoint, which would leak the key and th
   expect(localStorage.getItem('agent-writing-endpoint')).toBeNull();
 });
 it('shows where the writing will actually go, and says when it leaves the device', () => {
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const destination = panel.querySelector('.agent-panel-write-destination')!;
   expect(destination.textContent).toContain(t('agentWriteNeedsDestination'));
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
@@ -428,7 +443,7 @@ it('shows where the writing will actually go, and says when it leaves the device
   panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
   return vi.waitFor(() => {
     expect(destination.textContent).toContain(t('agentWriteDestinationRemote'));
-    expect(destination.textContent).toContain('gpt-4o-mini');
+    expect(panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!.value).toBe('gpt-4o-mini');
   });
 });
 it('says a cloud destination cannot work offline instead of failing vaguely', async () => {
@@ -462,15 +477,15 @@ it('says a cloud destination cannot work offline instead of failing vaguely', as
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
+  await vi.waitFor(() => expect(panel.querySelector('.agent-readiness')?.textContent).toBeTruthy());
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(state.writing).not.toHaveBeenCalled();
-  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingOfflineNeedsDevice'));
+  expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentWritingOfflineNeedsDevice'));
 });
 it('disconnects the endpoint when a field that defines the destination changes', async () => {
   // Otherwise the panel would report the new destination while requests still
   // went to the old one -- a different origin, with the old key.
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
   kind.value = 'openai-compatible';
   kind.dispatchEvent(new Event('change'));
@@ -504,7 +519,7 @@ it('disconnects the endpoint when a field that defines the destination changes',
   expect(connect.textContent).toBe(t('agentEndpointDisconnect'));
 });
 it('removes a stored endpoint key when the field is cleared, instead of keeping it forever', () => {
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
   kind.value = 'openai-compatible';
   kind.dispatchEvent(new Event('change'));
@@ -520,7 +535,7 @@ it('removes a stored endpoint key when the field is cleared, instead of keeping 
   expect(getEndpointKey('https://api.example.com/v1')).toBeUndefined();
 });
 it('asks for the API key instead of reporting a generic failure', async () => {
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
   kind.value = 'openai-compatible';
   kind.dispatchEvent(new Event('change'));
@@ -536,7 +551,7 @@ it('asks for the API key instead of reporting a generic failure', async () => {
   );
 });
 it('says the configured cloud endpoint is unavailable offline rather than "not configured"', async () => {
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
   kind.value = 'openai-compatible';
   kind.dispatchEvent(new Event('change'));
@@ -551,7 +566,9 @@ it('says the configured cloud endpoint is unavailable offline rather than "not c
   key.dispatchEvent(new Event('change'));
   panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
   await vi.waitFor(() =>
-    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain('gpt-4o-mini'),
+    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(
+      t('agentWriteDestinationRemote'),
+    ),
   );
   Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
   window.dispatchEvent(new Event('offline'));
@@ -562,7 +579,7 @@ it('says the configured cloud endpoint is unavailable offline rather than "not c
 it('asks for the model to be loaded when consent is on but no model is ready', async () => {
   allowBrowserLocalWriting();
   state.source = 'Original';
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   // The panel auto-loads on open; canSend is false while that is in flight, so a
   // keypress sent before it settles would be swallowed rather than tested.
@@ -609,7 +626,9 @@ it('serves a writing request through a connected endpoint with no local model lo
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.writing).toHaveBeenCalled());
   await vi.waitFor(() => expect(input.disabled).toBe(false));
-  expect(state.apply).toHaveBeenCalled();
+  expect(state.apply).not.toHaveBeenCalled();
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
   // And it was not diverted into the model-download prompt.
   expect(panel.textContent).not.toContain(t('agentModelFirstDownload'));
 });
@@ -639,7 +658,7 @@ it('still asks for the local model when an endpoint is connected but the operati
   input.value = 'Create another slide using this layout';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() =>
-    expect(panel.querySelector('.agent-panel-note')?.textContent).toContain(t('agentModelFirstDownload')),
+    expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentPrepareRequired')),
   );
   expect(state.toolPlan).not.toHaveBeenCalled();
 });
@@ -648,7 +667,7 @@ it('routes translation with the captured source and explicit language', async ()
   state.source = 'Budget 1250 EUR';
   state.writing.mockResolvedValue('预算 1250 EUR');
   allowBrowserLocalWriting();
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const task = panel.querySelector('.agent-writing-task') as HTMLElement & { value: string };
   task.value = 'translate';
   task.dispatchEvent(new Event('change'));
@@ -666,8 +685,10 @@ it('routes translation with the captured source and explicit language', async ()
     instruction: 'Preserve numbers',
   });
   expect(state.generate).not.toHaveBeenCalled();
-  expect(state.apply).toHaveBeenCalledOnce();
-  expect(panel.querySelector('.agent-plan-preview')).toBeNull();
+  expect(state.apply).not.toHaveBeenCalled();
+  expect(panel.querySelector('.agent-plan-content')?.textContent).toBe('预算 1250 EUR');
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
 });
 
 it('records a writing request and verified outcome without copying selected document content into history', async () => {
@@ -677,17 +698,23 @@ it('records a writing request and verified outcome without copying selected docu
     state.source = 'Private selected source';
     state.writing.mockResolvedValue('Private rewritten body');
     allowBrowserLocalWriting();
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
     task.value = 'rewrite';
     task.dispatchEvent(new Event('change'));
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
     input.value = 'Make it clearer';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() =>
+      expect(panel.querySelector('.agent-plan-content')?.textContent).toBe('Private rewritten body'),
+    );
+    panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
     await vi.waitFor(() => expect(state.apply).toHaveBeenCalled());
     await vi.waitFor(() => expect(input.disabled).toBe(false));
     expect(record.mock.calls.flatMap(([messages]) => messages)).toEqual([
       { role: 'user', content: 'Make it clearer' },
+      { role: 'assistant', content: 'Private rewritten body', copyOnly: true },
+      { role: 'assistant', content: t('agentPlanReady'), hostGuidance: 'tool' },
       { role: 'assistant', content: t('agentPlanVerified'), hostGuidance: 'tool' },
     ]);
     const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
@@ -697,6 +724,10 @@ it('records a writing request and verified outcome without copying selected docu
     sessions.value = originalSession;
     sessions.dispatchEvent(new Event('change'));
     expect(panel.textContent).toContain('Make it clearer');
+    expect(panel.textContent).toContain('Private rewritten body');
+    expect(panel.querySelector('.agent-plan-apply')).toBeNull();
+    expect(panel.querySelector('.cui-apply')).toBeNull();
+    expect(panel.querySelector('.cui-copy')).not.toBeNull();
     expect(panel.textContent).toContain(t('agentPlanVerified'));
     expect(panel.querySelector('.cui-msg-error')).toBeNull();
   } finally {
@@ -711,7 +742,7 @@ it('records a failed writing request as an error and never reports document succ
     state.source = 'Original';
     state.writing.mockRejectedValue(new Error('No rewrite was proposed'));
     allowBrowserLocalWriting();
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
     task.value = 'rewrite';
     task.dispatchEvent(new Event('change'));
@@ -745,7 +776,7 @@ it.each(['resolve', 'reject'] as const)(
         }),
     );
     allowBrowserLocalWriting();
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
     const originalSession = sessions.value;
     const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -785,7 +816,7 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   if (mode === 'rewrite') state.writing.mockReturnValue(pending);
   else state.toolPlan.mockReturnValue(pending);
   allowBrowserLocalWriting();
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
   const original = sessions.value;
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -820,7 +851,7 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
 it('restores a failed document operation with its error in the original conversation', async () => {
   state.ready = true;
   state.toolPlan.mockRejectedValue(new Error('agentToolNotChosen'));
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
   const original = sessions.value;
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -842,7 +873,7 @@ it('shows a clear result when the current document has no readable text', async 
   state.ready = true;
   state.readText = '';
   state.toolPlan.mockResolvedValue({ tool: 'get_presentation_text', input: {}, readOnly: true });
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
@@ -860,12 +891,12 @@ it('shows a clear result when the current document has no readable text', async 
   expect(panel.querySelector('.cui-msg-error')).toBeNull();
 });
 
-it('executes successive explicit writing requests without review cards', async () => {
+it('executes successive explicit writing requests only after separate confirmations', async () => {
   state.ready = true;
   state.source = 'Original';
   state.writing.mockResolvedValueOnce('First proposal').mockResolvedValueOnce('Second proposal');
   allowBrowserLocalWriting();
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   task.value = 'rewrite';
   task.dispatchEvent(new Event('change'));
@@ -873,11 +904,17 @@ it('executes successive explicit writing requests without review cards', async (
   input.value = 'Rewrite first';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.disabled).toBe(false));
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await Promise.resolve();
 
   input.value = 'Rewrite second';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.disabled).toBe(false));
-  expect(panel.querySelector('.agent-plan-preview')).toBeNull();
+  panel.querySelectorAll<HTMLElement>('.agent-plan-apply')[1]!.click();
+  await Promise.resolve();
+  expect(panel.textContent).toContain('First proposal');
+  expect(panel.textContent).toContain('Second proposal');
+  expect(panel.querySelector('.agent-plan-preview')).not.toBeNull();
   expect(state.apply).toHaveBeenCalledTimes(2);
   expect(panel.querySelectorAll('.cui-activity')).toHaveLength(2);
   expect(panel.querySelector('details.cui-activity')).toBeNull();
@@ -886,44 +923,19 @@ it('executes successive explicit writing requests without review cards', async (
 it('retains the actual CPU fallback and model identity after loading finishes', async () => {
   state.ready = true;
   state.preload.mockImplementation(async () => state.backend?.('wllama'));
-  const panel = createAgentPanel();
-  await vi.waitFor(() => expect(panel.querySelector('.agent-model-status')?.textContent).toContain('CPU'));
-  expect(panel.querySelector('.agent-model-status')?.textContent).toBe('CPU · Qwen3 · 0.6B');
+  const panel = createPreparedPanel();
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentUseDevice')),
+  );
+  expect(panel.querySelector('.agent-model-status')?.textContent).toBe(t('agentUseDevice'));
   expect(panel.querySelector<HTMLElement>('.agent-model-status')?.title).toBe('Qwen_Qwen3-0.6B-Q4_K_M.gguf');
   window.dispatchEvent(new Event('languagechange'));
-  expect(panel.querySelector('.agent-model-status')?.textContent).toContain('CPU');
+  expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentUseDevice'));
   window.dispatchEvent(new Event('pagehide'));
   expect(panel.querySelector('.agent-model-status')?.textContent).toBe('');
 });
 
-it('shows backend generation statistics and clears them when switching conversations', async () => {
-  state.ready = true;
-  state.preload.mockResolvedValue(undefined);
-  state.usage = {
-    completionTokens: 7,
-    decodeTokensPerSecond: 12.5,
-    timeToFirstTokenMs: 200,
-    timeToFirstTextMs: 250,
-    endToEndTokensPerSecond: 1.25,
-  };
-  const panel = createAgentPanel();
-  await vi.waitFor(() => expect(state.preload).toHaveBeenCalled());
-  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Hello';
-  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(panel.querySelector('.agent-generation-stats')?.textContent).toContain('12.5 token/s'));
-  expect(panel.querySelector('.agent-generation-stats')?.textContent).toBe(`${t('agentDecodeSpeed')}: 12.5 token/s`);
-  const details = panel.querySelector('.agent-generation-options .agent-generation-details')!;
-  expect(details.textContent).toContain('0.20 s');
-  expect(details.textContent).toContain('7 tokens');
-  expect(details.textContent).toContain(`${t('agentFirstText')}: 0.25 s`);
-  expect(details.textContent).toContain(`${t('agentResponseRate')}: 1.25 token/s`);
-  panel.querySelector<HTMLElement>('.agent-panel-clear')!.click();
-  expect(panel.querySelector('.agent-generation-stats')?.textContent).toBe('');
-  expect(details.textContent).toBe('');
-});
-
-it('restores a terminated model after Stop without replaying the request', async () => {
+it('requires explicit preparation after Stop without replaying the request', async () => {
   state.ready = true;
   state.stalled = true;
   let restore!: () => void;
@@ -936,7 +948,7 @@ it('restores a terminated model after Stop without replaying the request', async
         };
       }),
   );
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   document.body.append(panel);
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
@@ -944,10 +956,13 @@ it('restores a terminated model after Stop without replaying the request', async
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(input.disabled).toBe(true));
   panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(state.preload).toHaveBeenCalledOnce();
+  panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(2));
   expect(input.disabled).toBe(false);
   expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(1);
-  expect(panel.querySelector('.agent-model-status')?.textContent).toBe(t('agentPreparing'));
+  expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentPreparing'));
   input.value = 'Next question';
   input.dispatchEvent(new Event('input'));
   expect(panel.querySelector<HTMLButtonElement>('.cui-send')!.disabled).toBe(true);
@@ -971,7 +986,7 @@ it('restores a terminated model after Stop without replaying the request', async
 it('executes a model-selected document operation without a preview or second confirmation', async () => {
   state.ready = true;
   state.toolPlan.mockResolvedValue({ tool: 'slide_action', input: { action: 'add' }, readOnly: false });
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
@@ -988,7 +1003,7 @@ it.each(['webllm', 'wllama'] as const)('uses the actual %s backend to choose too
   state.ready = true;
   state.activeBackend = backend;
   state.toolPlan.mockResolvedValue({ tool: 'get_presentation_text', input: {}, readOnly: true });
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
@@ -1007,7 +1022,7 @@ it('clears loaded runtime feedback when a failed operation retires its provider'
     throw new WebAssembly.RuntimeError('Length out of range of buffer');
   });
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
   const configure = panel.querySelector<HTMLButtonElement>('.agent-configure')!;
   expect(configure.hidden).toBe(true);
@@ -1035,7 +1050,7 @@ it('clears loaded runtime feedback when a failed operation retires its provider'
 it('preserves raw tool request whitespace through planning and the transcript', async () => {
   state.ready = true;
   state.toolPlan.mockResolvedValue({ tool: 'slide_action', input: { action: 'add' }, readOnly: false });
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
@@ -1050,7 +1065,7 @@ it('preserves raw tool request whitespace through planning and the transcript', 
 
 it('identifies model download failures and retries without exposing network internals', async () => {
   state.preload.mockRejectedValueOnce(new Error('Failed to fetch https://private-model.example/secret'));
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() =>
     expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentModelLoadFailed')),
   );
@@ -1067,7 +1082,7 @@ it('identifies model download failures and retries without exposing network inte
 it('cancels native writing of the previous answer from the visible Stop button', async () => {
   state.ready = true;
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Hello';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
@@ -1106,7 +1121,7 @@ it('does not let late GPU progress replace CPU fallback progress', async () => {
         finish = resolve;
       }),
   );
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
   await vi.waitFor(() => expect(finish).toBeTypeOf('function'));
   try {
@@ -1123,7 +1138,7 @@ it('does not let late GPU progress replace CPU fallback progress', async () => {
     expect(panel.querySelector('.agent-model-status')?.textContent).not.toContain('100%');
     state.progress[0]({ text: 'Late GPU progress', progress: 0.95 });
     expect(progress.hasAttribute('value')).toBe(false);
-    expect(panel.querySelector('.agent-model-status')?.textContent).toContain('CPU');
+    expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentUseDevice'));
     expect(panel.querySelector('.agent-panel-note')?.textContent).not.toBe('Late GPU progress');
   } finally {
     finish();
@@ -1133,7 +1148,7 @@ it('does not let late GPU progress replace CPU fallback progress', async () => {
 it('hides the redundant configure action when the model is ready, retaining settings access', async () => {
   state.ready = true;
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
   expect(panel.querySelector<HTMLButtonElement>('.agent-configure')!.hidden).toBe(true);
   expect(panel.querySelector<HTMLButtonElement>('.agent-panel-settings-toggle')!.hidden).toBe(false);
@@ -1146,16 +1161,16 @@ it('hides the redundant configure action when the model is ready, retaining sett
 it.each([
   ['Qwen3-1.7B-q4f16_1-MLC', 'Qwen3 · 1.7B'],
   ['my-custom-model-q4', 'my-custom-model-q4'],
-])('shows a readable GPU label for %s while retaining the exact ID', async (id, label) => {
+])('shows a readable GPU label for %s while retaining the exact ID', async (id, _label) => {
   localStorage.setItem('agent-local-model-id', id);
   state.ready = true;
   state.preload.mockImplementation(async () => {
     state.backend?.('webllm');
   });
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
   const status = panel.querySelector<HTMLElement>('.agent-model-status')!;
-  expect(status.textContent).toBe(`WebGPU · ${label}`);
+  expect(status.textContent).toBe(t('agentUseDevice'));
   expect(status.title).toBe(id);
   localStorage.removeItem('agent-local-model-id');
 });
@@ -1173,7 +1188,7 @@ it.each(['stop', 'new conversation', 'switch conversation'] as const)(
           finishRead = resolve;
         }),
     );
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
     const originalSession = sessions.value;
     if (interruption === 'switch conversation') {
@@ -1220,7 +1235,7 @@ it('processes Stop after showing an immediate read result and before starting th
   state.ready = true;
   state.toolContext = 'cell';
   state.readText = 'A1:B4\nB2: "30"';
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const observer = new MutationObserver(() => {
     if (!panel.querySelector('.cui-activity')) return;
     observer.disconnect();
@@ -1250,7 +1265,7 @@ it('retains the completed read and verification error without reporting sequence
   state.apply
     .mockResolvedValueOnce('sent')
     .mockRejectedValueOnce(new Error('The change could not be verified. Check the document and use Undo if needed.'));
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
   const originalSession = sessions.value;
   const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -1276,7 +1291,7 @@ it('retains the completed read and verification error without reporting sequence
 
 it('waits for the previous runtime to exit before loading the newly selected model', async () => {
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   (panel.querySelector('.agent-panel-load') as HTMLElement).click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(1));
   let finish!: () => void;
@@ -1297,7 +1312,7 @@ it('waits for the previous runtime to exit before loading the newly selected mod
 
 it('keeps a failed runtime exit from starting a replacement after further model changes', async () => {
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   (panel.querySelector('.agent-panel-load') as HTMLElement).click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(1));
   state.dispose.mockRejectedValueOnce(new Error('Worker exit failed'));
@@ -1324,7 +1339,7 @@ it('keeps a failed runtime exit from starting a replacement after further model 
 
 it('does not load a superseded selection when runtime cleanup finishes', async () => {
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   (panel.querySelector('.agent-panel-load') as HTMLElement).click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(1));
   let finish!: () => void;
@@ -1348,7 +1363,7 @@ it('does not load a superseded selection when runtime cleanup finishes', async (
 
 it('shows preparation and allows stopping while the previous runtime is exiting', async () => {
   state.preload.mockResolvedValue(undefined);
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   (panel.querySelector('.agent-panel-load') as HTMLElement).click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(1));
   let finish!: () => void;
@@ -1382,7 +1397,7 @@ it('shows preparation and allows stopping while the previous runtime is exiting'
 it('clears loaded feedback when the engine becomes unavailable after chat has finished', async () => {
   state.ready = true;
   state.preload.mockImplementation(async () => state.backend?.('webllm'));
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
   const configure = panel.querySelector<HTMLButtonElement>('.agent-configure')!;
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
@@ -1390,8 +1405,9 @@ it('clears loaded feedback when the engine becomes unavailable after chat has fi
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('answer'));
   await vi.waitFor(() => expect(input.disabled).toBe(false));
-  expect(panel.querySelector('.agent-model-status')?.textContent).toContain('WebGPU');
+  expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentUseDevice'));
   state.ready = false;
+  state.readonly = false;
   state.unavailable?.();
   expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentLoadModel'));
   expect(panel.querySelector('.agent-model-status')?.textContent).toBe('');
@@ -1402,7 +1418,7 @@ it('clears loaded feedback when the engine becomes unavailable after chat has fi
 it('ignores an unavailable notification from a replaced model', async () => {
   state.ready = true;
   state.preload.mockImplementation(async () => state.backend?.('webllm'));
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentModelLoaded')));
   const previous = state.unavailable;
   expect(previous).toBeTypeOf('function');
@@ -1432,7 +1448,7 @@ it('ignores old loading progress after switching to a different task model', asy
         complete = resolve;
       }),
   );
-  const panel = createAgentPanel();
+  const panel = createPreparedPanel();
   await vi.waitFor(() => expect(panel.querySelector('.agent-panel-load')?.hasAttribute('disabled')).toBe(true));
   const oldProgress = state.progress[0];
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
@@ -1452,7 +1468,7 @@ it('keeps endpoint keys isolated when switching cloud kinds', () => {
   localStorage.setItem(slot + 'anthropic', 'anthropic-key');
   localStorage.setItem(slot + 'gemini', 'gemini-key');
   try {
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
     const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
     kind.value = 'anthropic';
@@ -1478,7 +1494,7 @@ it('discards a pending endpoint connection after its destination changes', async
   );
   vi.stubGlobal('fetch', fetchMock);
   try {
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
     model.value = 'old-model';
     model.dispatchEvent(new Event('change'));
@@ -1501,7 +1517,7 @@ it('discards a pending endpoint connection after its destination changes', async
 it('keeps the endpoint connection failure visible in settings', async () => {
   vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Unavailable')));
   try {
-    const panel = createAgentPanel();
+    const panel = createPreparedPanel();
     const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
     model.value = 'model';
     model.dispatchEvent(new Event('change'));
@@ -1513,4 +1529,25 @@ it('keeps the endpoint connection failure visible in settings', async () => {
   } finally {
     vi.unstubAllGlobals();
   }
+});
+
+it('generates copyable writing in read-only mode without creating a write action', async () => {
+  state.ready = true;
+  state.readonly = true;
+  state.editorReady = true;
+  state.source = 'Original';
+  state.writing.mockResolvedValue('Copyable suggestion');
+  allowBrowserLocalWriting();
+  const panel = createPreparedPanel();
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Simplify';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('Copyable suggestion'));
+  expect(panel.querySelector('.agent-plan-apply')).toBeNull();
+  expect(panel.querySelector('.cui-apply')).toBeNull();
+  expect(panel.querySelector('.cui-copy')).not.toBeNull();
+  expect(state.apply).not.toHaveBeenCalled();
 });

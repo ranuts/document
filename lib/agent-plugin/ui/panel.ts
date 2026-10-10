@@ -7,7 +7,7 @@
  * the reusable @ranuts/chat-ui ChatView. Form controls are ranui Web Components
  * built with the ranui `builder` (View/Div/... fluent factories). All
  * orchestration lives in the controller and the LLM factory; this file only
- * builds DOM and forwards events. Loaded behind `?agent=1`.
+ * builds DOM and forwards events. Loaded after an explicit product opt-in.
  */
 import 'ranui/button';
 import 'ranui/input';
@@ -21,7 +21,7 @@ import { getEditorApi, type EditorApi } from '../editor-bridge';
 import { agentTools } from '../tools';
 import { parseDirectDocumentIntent } from '../direct-intent';
 import { captureDocumentContext, resolveContextCommand } from '../document-context';
-import type { LLMMessage, LLMProvider, LLMResponse } from '@ranuts/agent-core/llm/types';
+import type { LLMMessage, LLMProvider } from '@ranuts/agent-core/llm/types';
 import type { ProviderId } from '@ranuts/agent-core/llm/factory';
 import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
 import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
@@ -60,10 +60,11 @@ import { displayError } from './presentation';
 import { historyToTurns } from './storage';
 import { createConversationStore } from './sessions';
 import { createHistoryControls } from './history-controls';
-import { createGenerationControls } from './generation-controls';
-import { createSidebarEntry, scheduleIdleLoad } from './sidebar-entry';
+import { normalizeGenerationOptions } from '@ranuts/agent-core/llm/generation';
+import { createSidebarEntry } from './sidebar-entry';
 import { mountPanelResize } from './panel-resize';
 import { mountPanelViewport } from './panel-viewport';
+import { ActionPreview } from './action-preview';
 
 /** ranui custom elements expose a `value` accessor (r-select / r-input). */
 type ValueEl = HTMLElement & { value: string };
@@ -131,7 +132,15 @@ const ranInput = (className: string, type: string): InputEl =>
  * mounted in the editor's right rail, posting `agent:toggle`) can open/close
  * it without building a second panel. Set on first {@link createAgentPanel}.
  */
-let panelHandle: { setOpen: (open: boolean) => void; isOpen: () => boolean } | null = null;
+let panelHandle: {
+  setOpen: (open: boolean) => void;
+  isOpen: () => boolean;
+  setEnabled: (enabled: boolean) => Promise<void>;
+} | null = null;
+export const setAgentPanelOpen = (open: boolean): void => panelHandle?.setOpen(open);
+export const setAgentPanelEnabled = async (enabled: boolean): Promise<void> => {
+  await panelHandle?.setEnabled(enabled);
+};
 
 /** Open the panel (creating it on first use), close it, or flip it. */
 export function toggleAgentPanel(): void {
@@ -140,15 +149,22 @@ export function toggleAgentPanel(): void {
 }
 
 /** Build the Agent panel, append it to the body, and return its root element. */
-export function createAgentPanel(options: { background?: boolean } = {}): HTMLElement {
+export function createAgentPanel(
+  options: {
+    background?: boolean;
+    externalEntry?: boolean;
+    onDisable?: () => Promise<void>;
+    onClose?: () => void;
+  } = {},
+): HTMLElement {
   // Idempotent: a second call just reveals the existing panel.
-  const existing = document.querySelector('.agent-panel');
+  const existing = document.querySelector('.agent-runtime-panel');
   if (existing) {
     if (!options.background) panelHandle?.setOpen(true);
     return existing as HTMLElement;
   }
 
-  const panel = Div().class('agent-panel').build();
+  const panel = Div().class('agent-panel agent-runtime-panel').build();
   let disposeResize = mountPanelResize(panel);
   let disposeViewport = mountPanelViewport(panel);
   window.addEventListener('pagehide', () => disposeViewport());
@@ -171,10 +187,12 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   window.addEventListener('pagehide', () => disposeResize());
 
   let open = true;
+  let enabled = true;
   const mountSidebar = () =>
     createSidebarEntry(
       () => setOpen(!open),
       () => t('agentOpenTip'),
+      () => !options.externalEntry,
     );
   let sidebar = mountSidebar();
   // Configuration, loading progress and retry remain reachable even without a ready model.
@@ -194,10 +212,34 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     if (returnToDocument && !sidebar.focus()) frame?.focus();
     if (next)
       queueMicrotask(() => {
-        if (open) chat.focus();
+        if (open) {
+          if (panel.dataset.view === 'settings') settingsHeading.focus();
+          else if (panel.dataset.view === 'history') sessionSelect.focus();
+          else chat.focus();
+        }
       });
   };
-  panelHandle = { setOpen, isOpen: () => open };
+  panelHandle = {
+    setOpen,
+    isOpen: () => open,
+    setEnabled: async (next) => {
+      if (next && runtimeCleanup) {
+        try {
+          await runtimeCleanup;
+        } catch {
+          throw new Error(t('agentModelCleanupFailed'));
+        }
+      }
+      enabled = next;
+      if (!next) {
+        resetController();
+        disconnectEndpoint();
+        setOpen(false);
+        if (runtimeCleanup) await runtimeCleanup;
+      }
+      syncRuntimeStatus();
+    },
+  };
 
   // ── Header ──────────────────────────────────────────────────────────────
   const title = Span().class('agent-panel-title').text(t('agentTitle')).build();
@@ -210,16 +252,17 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     .attr('aria-expanded', 'false')
     .attr('aria-controls', 'agent-settings')
     .on('click', () => {
-      const collapsed = settings.classList.toggle('agent-panel-settings-hidden');
-      settingsBtn.setAttribute('aria-expanded', String(!collapsed));
-      if (!collapsed) providerSelect.focus();
+      showView(panel.dataset.view === 'settings' ? 'chat' : 'settings');
     })
     .build();
   const closeBtn = ButtonBuilder()
     .class('agent-panel-close')
     .attr('type', 'button')
     .aria('label', t('agentClose'))
-    .on('click', () => setOpen(false))
+    .on('click', () => {
+      if (options.onClose) options.onClose();
+      else setOpen(false);
+    })
     .build();
   settingsBtn.innerHTML =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2.5" fill="var(--ran-color-bg-elevated)"/><circle cx="15" cy="17" r="2.5" fill="var(--ran-color-bg-elevated)"/></svg>';
@@ -237,8 +280,6 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     .attr('hidden', '')
     .children(Div().class('agent-runtime-main').children(loadingStatus, loadProgress).build())
     .build();
-  const generationStats = Span().class('agent-generation-stats').attr('role', 'status').build();
-  const generationDetails = Span().class('agent-generation-details').build();
   const header = Div().class('agent-panel-header').children(title, settingsBtn, closeBtn).build();
 
   // ── Settings (collapsed by default; opened via the gear) ──────────────────
@@ -279,8 +320,6 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   ggufCpu.type = 'checkbox';
   ggufCpu.checked = true;
   ggufCpu.className = 'agent-panel-gguf-cpu';
-  const cpuLabel = document.createElement('label');
-  cpuLabel.append(ggufCpu, ' CPU');
   const ggufStop = ranButton(t('agentStop'), 'agent-panel-gguf-stop');
   ggufStop.hidden = true;
   ggufStop.addEventListener('click', () => {
@@ -288,10 +327,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     note.textContent = t('agentStopped');
     chat.focus();
   });
-  const ggufRow = Div()
-    .class('agent-panel-gguf-row')
-    .children(ggufUrl, ggufChoose, ggufNames, cpuLabel, ggufLoad)
-    .build();
+  const ggufRow = Div().class('agent-panel-gguf-row').children(ggufUrl, ggufChoose, ggufNames, ggufLoad).build();
 
   // Public artifact URLs and API endpoint preferences; never store a key here.
   const sourceInput = (className: string, placeholder: string): InputEl => {
@@ -317,12 +353,6 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   const localModelId = sourceInput('agent-local-model-id', 'Custom MLC model ID (optional)');
   const localModelUrl = sourceInput('agent-local-model-url', 'MLC model directory URL (/models/…)');
   const localModelLib = sourceInput('agent-local-model-lib', 'Compatible model WASM URL (/models/…/model.wasm)');
-  const modelSources = document.createElement('details');
-  modelSources.className = 'agent-model-sources';
-  const modelSourcesLabel = document.createElement('summary');
-  modelSourcesLabel.textContent = t('agentCustomModel');
-  modelSources.append(modelSourcesLabel, localModelId, localModelUrl, localModelLib);
-  modelSources.open = [localModelId, localModelUrl, localModelLib].some((input) => !!input.value.trim());
   const localSource = () =>
     activeTaskModel().source !== 'default'
       ? {}
@@ -433,13 +463,12 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   const settings = Div()
     .class('agent-panel-settings agent-panel-settings-hidden')
     .id('agent-settings')
-    .children(providerSelect, modelRow, modelSources, ggufRow, endpointRow)
+    .children(providerSelect, modelRow, ggufRow, endpointRow)
     .build();
   settings.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape' || event.isComposing || event.keyCode === 229) return;
     event.stopPropagation();
-    settings.classList.add('agent-panel-settings-hidden');
-    settingsBtn.setAttribute('aria-expanded', 'false');
+    showView('chat');
     settingsBtn.focus();
   });
 
@@ -488,13 +517,26 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     return writingSelect.value === 'tools' && intent?.kind === 'clarify' ? null : intent;
   };
   const chat = new ChatView({
-    canSend: (text) => !modelLoading || webllmProvider?.isReady() || !!directIntent(text.trim()),
+    canSend: (text) => {
+      if (!enabled || runtimeCleanup) return false;
+      if (directIntent(text.trim())) return true;
+      if (writingSelect.value === 'tools')
+        return !!webllmProvider?.isReady() || isModelFreeToolRequest(text, captureDocumentContext());
+      if (!proposalMode)
+        return (
+          !!webllmProvider?.isReady() ||
+          (!!endpointProvider?.isReady() && (endpointSettings.kind === 'loopback' || navigator.onLine !== false))
+        );
+      try {
+        const route = resolveRoute();
+        return route.kind === 'endpoint' || (route.kind === 'local' && !!webllmProvider?.isReady());
+      } catch {
+        return false;
+      }
+    },
     onSend: (text) => void submit(text),
     onApplyMessage: (text) => applyReply(text),
     onStop: () => {
-      restoreAfterStop = true;
-      latestUsage = undefined;
-      syncGenerationStats();
       controller?.stop();
       invalidatePlans();
     },
@@ -504,17 +546,26 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     .class('agent-configure')
     .attr('type', 'button')
     .on('click', () => {
-      settings.classList.remove('agent-panel-settings-hidden');
-      settingsBtn.setAttribute('aria-expanded', 'true');
-      providerSelect.focus();
+      showView('settings');
     })
     .build();
   chat.emptyActionsEl.append(configureBtn);
+  const readiness = document.createElement('p');
+  readiness.className = 'agent-readiness';
+  readiness.setAttribute('role', 'status');
+  chat.el.append(readiness);
+  let preview = new ActionPreview();
+  const previews = new Set([preview]);
+  const clearPreviews = (): void => {
+    for (const item of previews) item.dispose();
+    previews.clear();
+  };
+  window.addEventListener('pagehide', clearPreviews);
   const appendTurn = (turn: ChatTurn): void => {
     chat.append(turn.role === 'error' ? { ...turn, text: displayError(turn.text) } : turn);
   };
   let planning: AbortController | null = null;
-  let restoreAfterStop = false;
+
   const writingSelect = compactSelect(
     'agent-writing-task',
     [
@@ -603,6 +654,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       .on('click', () => {
         writingSelect.value = task;
         writingSelect.dispatchEvent(new Event('change'));
+        if (!chat.getInput().trim()) chat.setInput(t(label));
         chat.focus();
       })
       .build();
@@ -610,8 +662,35 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     return button;
   });
   chat.emptyActionsEl.prepend(starters);
+  let quotedSelection = '';
+  const quoteContext = document.createElement('div');
+  quoteContext.className = 'agent-quote-context';
+  quoteContext.hidden = true;
+  const quoteDetails = document.createElement('details');
+  const quoteSummary = document.createElement('summary');
+  const quoteText = document.createElement('pre');
+  quoteText.className = 'agent-quoted-text';
+  const removeQuote = document.createElement('button');
+  removeQuote.type = 'button';
+  removeQuote.className = 'agent-quote-remove';
+  removeQuote.textContent = '×';
+  quoteDetails.append(quoteSummary, quoteText);
+  quoteContext.append(quoteDetails, removeQuote);
+  chat.el.querySelector('.cui-composer')!.prepend(quoteContext);
+  const clearQuote = () => {
+    quotedSelection = '';
+    quoteText.textContent = '';
+    quoteContext.hidden = true;
+  };
+  removeQuote.addEventListener('click', () => {
+    clearQuote();
+    chat.focus();
+  });
+  window.addEventListener('document:content-ready', clearQuote);
 
   const invalidatePlans = (): void => {
+    preview.invalidate();
+    replyAbort?.abort();
     planning?.abort();
     planning = null;
   };
@@ -680,6 +759,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
 
   let controller: AgentChatController | null = null;
   let controllerKind = '';
+  let localProviderKey = '';
   let controllerGeneration = 0;
   let conversationRevision = 0;
   let loadAttempt = 0;
@@ -717,6 +797,15 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       }
     }
   };
+  const useEndpointForChat = (): boolean => {
+    if (!endpointProvider?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false))
+      return false;
+    return (
+      endpointSettings.kind === 'loopback' ||
+      endpointSettings.preference === 'remote-first' ||
+      !webllmProvider?.isReady()
+    );
+  };
   const resolveRoute = (): WritingRoute => {
     const endpoint = endpointProvider?.isReady() ? configuredEndpoint(endpointSettings) : null;
     return resolveWritingRoute({
@@ -731,6 +820,18 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     });
   };
   const syncWriteDestination = (): void => {
+    if (writingSelect.value === 'chat' || writingSelect.value === 'tools') {
+      const endpoint = writingSelect.value === 'chat' && useEndpointForChat();
+      const ready = endpoint || !!webllmProvider?.isReady() || writingSelect.value === 'tools';
+      const where =
+        endpoint && endpointSettings.kind !== 'loopback'
+          ? 'agentWriteDestinationRemote'
+          : 'agentWriteDestinationDevice';
+      const unavailable =
+        endpointProvider?.isReady() && endpointSettings.kind !== 'loopback' && navigator.onLine === false;
+      writeDestination.textContent = `${t('agentWriteDestinationTitle')}: ${t(ready ? where : unavailable ? 'agentWriteDestinationOfflineUnavailable' : 'agentWriteNeedsDestination')}`;
+      return;
+    }
     let route: WritingRoute | null = null;
     try {
       route = resolveRoute();
@@ -749,8 +850,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       return;
     }
     const where = route.dataPath === 'device' ? t('agentWriteDestinationDevice') : t('agentWriteDestinationRemote');
-    const name = route.kind === 'local' ? route.binding.model : route.endpoint.model;
-    writeDestination.textContent = `${title}: ${where} · ${name}${offlineNote}`;
+    writeDestination.textContent = `${title}: ${where}${offlineNote}`;
   };
   // Filling the key field is a deliberate act (mount, or a different endpoint
   // kind). Rendering status must not do it: it would overwrite a key the user is
@@ -770,9 +870,16 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       : status;
     endpointConnect.textContent = endpointProvider ? t('agentEndpointDisconnect') : t('agentEndpointConnect');
     syncWriteDestination();
+    chat.refreshSendAvailability();
   };
   const disconnectEndpoint = (): void => {
     endpointAttempt++;
+    if (controllerKind.startsWith('endpoint:')) {
+      controller?.dispose();
+      controller = null;
+      chat.setRunning(false);
+    }
+    invalidatePlans();
     const pending = pendingEndpoint;
     pendingEndpoint = null;
     if (pending && 'dispose' in pending && typeof pending.dispose === 'function') void pending.dispose();
@@ -782,6 +889,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     syncEndpointForm();
   };
   const connectEndpoint = async (): Promise<void> => {
+    if (!enabled) return;
     if (endpointProvider || pendingEndpoint) {
       disconnectEndpoint();
       return;
@@ -827,6 +935,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     }
     pendingEndpoint = null;
     syncEndpointForm(failure);
+    syncRuntimeStatus();
   };
   endpointConnect.addEventListener('click', () => void connectEndpoint());
   // A field that defines the destination invalidates the connected provider.
@@ -862,25 +971,6 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   });
   loadStoredKeyIntoForm();
   syncEndpointForm();
-  let runtimeDescription = '';
-  let latestUsage: LLMResponse['usage'];
-  const syncGenerationStats = (): void => {
-    const values: string[] = [];
-    const decodeSpeed =
-      latestUsage?.decodeTokensPerSecond !== undefined
-        ? `${t('agentDecodeSpeed')}: ${latestUsage.decodeTokensPerSecond.toFixed(1)} token/s`
-        : '';
-    if (decodeSpeed) values.push(decodeSpeed);
-    if (latestUsage?.timeToFirstTokenMs !== undefined)
-      values.push(`${t('agentFirstToken')}: ${(latestUsage.timeToFirstTokenMs / 1000).toFixed(2)} s`);
-    if (latestUsage?.timeToFirstTextMs !== undefined)
-      values.push(`${t('agentFirstText')}: ${(latestUsage.timeToFirstTextMs / 1000).toFixed(2)} s`);
-    if (latestUsage?.endToEndTokensPerSecond !== undefined)
-      values.push(`${t('agentResponseRate')}: ${latestUsage.endToEndTokensPerSecond.toFixed(2)} token/s`);
-    if (latestUsage?.completionTokens !== undefined) values.push(`${latestUsage.completionTokens} tokens`);
-    generationStats.textContent = decodeSpeed;
-    generationDetails.textContent = values.join(' · ');
-  };
   const modelName = (url: string): string => {
     try {
       return decodeURIComponent(new URL(url, location.href).pathname.split('/').pop() || url);
@@ -888,24 +978,40 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       return url;
     }
   };
-  const cpuModelLabel = (url: string): string => {
-    const name = modelName(url);
-    return url === DEFAULT_CPU_MODEL_URL && name === 'Qwen_Qwen3-0.6B-Q4_K_M.gguf' ? 'Qwen3 · 0.6B' : name;
-  };
   const syncRuntimeStatus = (): void => {
-    configureBtn.hidden = webllmProvider?.isReady() ?? false;
+    const ready =
+      !!webllmProvider?.isReady() ||
+      (writingSelect.value !== 'tools' &&
+        !!endpointProvider?.isReady() &&
+        (endpointSettings.kind === 'loopback' || navigator.onLine !== false));
+    configureBtn.hidden = ready;
+    readiness.textContent = ready ? '' : t('agentPrepareRequired');
+    if (proposalMode && writingSelect.value !== 'tools') {
+      try {
+        const route = resolveRoute();
+        if (route.kind === 'blocked')
+          readiness.textContent = t(
+            route.reason === 'offline-needs-device-destination'
+              ? 'agentWritingOfflineNeedsDevice'
+              : 'agentWritingNeedsLocalService',
+          );
+      } catch {
+        readiness.textContent = t('agentPrepareRequired');
+      }
+    }
     chat.refreshSendAvailability();
     loadingStatus.textContent = modelLoading
       ? [
           t('agentPreparing'),
-          runtimeDescription,
+          t('agentUseDevice'),
           loadingFraction === undefined ? '' : `${Math.round(loadingFraction * 100)}%`,
         ]
           .filter(Boolean)
           .join(' · ')
       : webllmProvider?.isReady()
-        ? runtimeDescription
+        ? t('agentUseDevice')
         : '';
+    syncWriteDestination();
     runtimeRow.hidden = !loadingStatus.textContent;
     loadProgress.hidden = !modelLoading;
     if (loadingFraction === undefined) loadProgress.removeAttribute('value');
@@ -922,16 +1028,12 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     // Finishing file reads does not finish native model initialization.
     updateLoadProgress(Number.isFinite(total) && total > 0 && loaded < total ? loaded / total : undefined);
   };
-  const generationControls = createGenerationControls((value) => webllmProvider?.setGenerationOptions?.(value));
-  generationControls.el.append(generationDetails);
-  settings.append(generationControls.el);
+  const generationOptions = normalizeGenerationOptions();
   const resetController = (): void => {
     configureBtn.hidden = false;
     syncSidebar();
     modelLoading = false;
-    runtimeDescription = '';
-    latestUsage = undefined;
-    syncGenerationStats();
+
     loadingStatus.textContent = '';
     loadingStatus.title = '';
     runtimeRow.hidden = true;
@@ -951,6 +1053,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     controller = null;
     const previous = webllmProvider;
     webllmProvider = null;
+    localProviderKey = '';
     if (previous) {
       const cleanup = previous.dispose();
       runtimeCleanup = cleanup;
@@ -1017,7 +1120,6 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
 
   const syncProviderUi = (): void => {
     const id = currentProvider();
-    modelSources.hidden = id !== 'webllm';
     modelRow.style.display = id === 'webllm' ? '' : 'none';
     ggufRow.style.display = id === 'wllama' ? '' : 'none';
     syncChatOnlyHint();
@@ -1053,6 +1155,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     if (next !== previousRoute) resetController();
     previousRoute = next;
     syncProviderUi();
+    syncRuntimeStatus();
   };
   writingSelect.addEventListener('change', taskRouteChanged);
   languageSelect.addEventListener('change', taskRouteChanged);
@@ -1062,7 +1165,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     taskRouteChanged();
   });
 
-  const buildController = (): AgentChatController | null => {
+  const buildController = (localOnly = false): AgentChatController | null => {
     if (runtimeCleanup) return null;
     const id = currentProvider();
     const generation = controllerGeneration;
@@ -1072,15 +1175,12 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     };
     const options = {
       ...controllerOptions,
-      onUsage: (usage: NonNullable<LLMResponse['usage']>): void => {
-        if (generation !== controllerGeneration || conversation !== conversationRevision) return;
-        latestUsage = usage;
-        syncGenerationStats();
-      },
       storage: historyStorage,
       getRequestContext: (): string | undefined => {
         const context = captureDocumentContext();
-        return context ? JSON.stringify(context) : undefined;
+        return context || quotedSelection
+          ? JSON.stringify({ ...context, ...(quotedSelection ? { quotedSelection } : {}) })
+          : undefined;
       },
       onContextTrimmed: (): void => {
         if (generation === controllerGeneration && conversation === conversationRevision)
@@ -1093,10 +1193,21 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
         if (generation === controllerGeneration && conversation === conversationRevision) chat.endStream();
       },
     };
+    if (!localOnly && !proposalMode && useEndpointForChat() && endpointProvider) {
+      const kind = `endpoint:${endpointAttempt}`;
+      if (!controller || controllerKind !== kind) {
+        controller?.dispose();
+        controller = new AgentChatController(endpointProvider, emit, { ...options, tools: {} });
+        controllerKind = kind;
+      }
+      return controller;
+    }
     if (id === 'wllama') {
-      if (!controller) {
+      if (!controller || controllerKind !== 'wllama') {
+        controller?.dispose();
+        localProviderKey = 'wllama';
         webllmProvider ??= new WllamaProvider({
-          generation: generationControls.value(),
+          generation: generationOptions,
           modelUrl: ggufUrl.value.trim(),
           modelFiles: Array.from(ggufFiles.files ?? []),
           cpuOnly: ggufCpu.checked,
@@ -1116,9 +1227,11 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       if (!controller || controllerKind !== kind) {
         // Local writing candidates use text generation; the app owns any future
         // preview/apply workflow instead of exposing native model tools.
-        if (!webllmProvider || controllerKind !== kind)
+        controller?.dispose();
+        if (!webllmProvider || localProviderKey !== kind) {
+          localProviderKey = kind;
           webllmProvider = new LocalInferenceProvider({
-            generation: generationControls.value(),
+            generation: generationOptions,
             webllm: {
               model: selectedLocalModel(),
               ...localSource(),
@@ -1154,10 +1267,6 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
               if (generation === controllerGeneration && modelLoading) {
                 loadingBackend = backend;
                 note.textContent = t('agentPreparing');
-                runtimeDescription =
-                  backend === 'wllama'
-                    ? `CPU · ${cpuModelLabel(ggufUrl.value.trim() || DEFAULT_CPU_MODEL_URL)}`
-                    : `WebGPU · ${WEBLLM_MODELS.find((model) => model.id === selectedLocalModel())?.label ?? selectedLocalModel()}`;
                 loadingStatus.title =
                   backend === 'wllama'
                     ? modelName(ggufUrl.value.trim() || DEFAULT_CPU_MODEL_URL)
@@ -1166,6 +1275,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
               }
             },
           });
+        }
         controller = new AgentChatController(webllmProvider, emit, options);
         controllerKind = kind;
       }
@@ -1175,22 +1285,14 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   };
 
   // Load (download + warm) the selected WebLLM model. Used by the Load button and
-  // auto-triggered on open when the default provider is local.
+  // only triggered by a deliberate preparation action.
   const loadModel = async (): Promise<void> => {
-    if (modelLoading) return;
+    if (!enabled || modelLoading || planning || controller?.isRunning() || replyAbort) return;
     const generation = controllerGeneration;
     let loading: typeof webllmProvider = null;
     modelLoading = true;
     loadingBackend = currentProvider() === 'wllama' ? 'wllama' : undefined;
     chat.refreshSendAvailability();
-    runtimeDescription =
-      currentProvider() === 'wllama'
-        ? `${ggufCpu.checked ? 'CPU' : 'wllama'} · ${
-            Array.from(ggufFiles.files ?? [])
-              .map((file) => file.name)
-              .join(', ') || modelName(ggufUrl.value.trim())
-          }`
-        : '';
     syncSidebar();
     loadingFraction = undefined;
     syncRuntimeStatus();
@@ -1203,7 +1305,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     try {
       if (runtimeCleanup) await runtimeCleanup;
       if (generation !== controllerGeneration) return;
-      buildController();
+      buildController(true);
       loading = webllmProvider;
       if (!loading) return;
       await loading.preload();
@@ -1249,8 +1351,9 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   };
 
   let writingReply = false;
+  let replyAbort: AbortController | null = null;
   const applyReply = async (text: string): Promise<'verified' | 'sent' | 'retry' | 'failed'> => {
-    if (writingReply) return 'retry';
+    if (!enabled || writingReply) return 'retry';
     const revision = conversationRevision;
     let attempted = false;
     writingReply = true;
@@ -1260,7 +1363,8 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       invalidatePlans();
       const action = new ReviewedAction(target, { tool: 'insert_text', input: { text } });
       attempted = true;
-      const outcome = await action.apply();
+      replyAbort = new AbortController();
+      const outcome = await action.apply(replyAbort.signal);
       if (revision === conversationRevision && outcome === 'sent')
         appendTurn({ role: 'tool', text: t('agentPlanApplied') });
       return outcome;
@@ -1270,6 +1374,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       return attempted ? 'failed' : 'retry';
     } finally {
       writingReply = false;
+      replyAbort = null;
     }
   };
 
@@ -1277,7 +1382,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   // just runs a turn. `submit` is passed to ChatView's onSend above.
   const submit = async (text: string): Promise<void> => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!enabled || !trimmed) return;
     const intent = directIntent(trimmed);
     if (intent) {
       const answer = chat.getLastAnswer();
@@ -1290,8 +1395,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       const originStorage = historyStorage;
       const originSession = conversations.activeId;
       appendTurn({ role: 'user', text: trimmed });
-      latestUsage = undefined;
-      syncGenerationStats();
+
       chat.setRunning(true);
       let directAbort: AbortController | undefined;
       try {
@@ -1305,7 +1409,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
           invalidatePlans();
           directAbort = new AbortController();
           planning = directAbort;
-          restoreAfterStop = false;
+
           let name: string;
           let input: Record<string, unknown>;
           let result: unknown;
@@ -1390,7 +1494,8 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     // model download from standing in front of work that would never use it.
     const localModelNeeded = ((): boolean => {
       if (writingSelect.value === 'tools') return !isModelFreeToolRequest(text, captureDocumentContext());
-      if (!proposalMode) return true;
+      if (!proposalMode)
+        return !endpointProvider?.isReady() || (endpointSettings.kind !== 'loopback' && navigator.onLine === false);
       try {
         return resolveRoute().kind === 'local';
       } catch {
@@ -1416,13 +1521,11 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       });
       return;
     }
-    latestUsage = undefined;
-    syncGenerationStats();
-    restoreAfterStop = false;
+
     chat.setRunning(true);
     const generation = controllerGeneration;
     const conversation = conversationRevision;
-    const operationHistory: Array<LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error' }> = [];
+    const operationHistory: Array<LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error'; copyOnly?: true }> = [];
     const operationStorage = historyStorage;
     const operationSession = conversations.activeId;
     try {
@@ -1464,11 +1567,18 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       } else if (proposalMode) {
         operationHistory.push({ role: 'user', content: trimmed });
         invalidatePlans();
-        const target = captureActionTarget();
+        const readonly = getReadonlyMode();
+        const target = readonly ? null : captureActionTarget();
+        const source =
+          target?.selectedText ??
+          getEditorApi()?.pluginMethod_GetSelectedText({ TabSymbol: '\t', Numbering: false }) ??
+          '';
         const abort = new AbortController();
         planning = abort;
         appendTurn({ role: 'user', text: trimmed });
-        if (target.editor !== 'word' || !target.selectedText.trim()) throw new Error(t('agentNoSelection'));
+        if ((target && target.editor !== 'word') || !source.trim()) throw new Error(t('agentNoSelection'));
+        if (quotedSelection && source.replace(/\r\n/g, '\n') !== quotedSelection)
+          throw new Error(t('agentPlanExpired'));
         // The writing destination: a connected endpoint (loopback keeps the text on
         // this machine, a cloud endpoint sends it there), otherwise the browser-local
         // engines only with an explicit opt-in, because they never passed quality
@@ -1493,7 +1603,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
           writingProvider,
           {
             task: writingSelect.value as WritingTask,
-            text: target.selectedText,
+            text: source,
             instruction: trimmed,
             targetLanguage: languageSelect.value as WritingLanguage,
           },
@@ -1501,16 +1611,31 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
         );
         const plan = { tool: 'insert_text' as const, input: { text: body } };
         abort.signal.throwIfAborted();
-        if (generation !== controllerGeneration || conversation !== conversationRevision || !target.isCurrent())
+        if (
+          generation !== controllerGeneration ||
+          conversation !== conversationRevision ||
+          (target && !target.isCurrent())
+        )
           throw new Error(t('agentPlanExpired'));
-        const outcome = await new ReviewedAction(target, plan).apply(abort.signal);
-        operationHistory.push({
-          role: 'assistant',
-          content: t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied'),
-          hostGuidance: 'tool',
+        operationHistory.push({ role: 'assistant', content: body, copyOnly: true });
+        if (!target) {
+          appendTurn({ role: 'agent', text: body, copyOnly: true });
+          appendTurn({ role: 'status', text: t('agentDocumentReadOnly') });
+          return;
+        }
+        preview = new ActionPreview();
+        previews.add(preview);
+        const action = new ReviewedAction(target, plan);
+        preview.show(action, (outcome) => {
+          if (!enabled || generation !== controllerGeneration || conversation !== conversationRevision) return;
+          const text = t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
+          appendTurn({ role: 'tool', text });
+          const messages: LLMMessage[] = [{ role: 'assistant', content: text, hostGuidance: 'tool' } as LLMMessage];
+          if (controller && conversations.activeId === operationSession) controller.recordExternalMessages(messages);
+          else operationStorage.save([...operationStorage.load(), ...messages]);
         });
-        if (generation === controllerGeneration && conversation === conversationRevision)
-          appendTurn({ role: 'tool', text: t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied') });
+        chat.appendContent(preview.el);
+        operationHistory.push({ role: 'assistant', content: t('agentPlanReady'), hostGuidance: 'tool' });
       } else {
         invalidatePlans();
         await ctl.send(trimmed);
@@ -1542,19 +1667,19 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
         if (webllmProvider && !webllmProvider.isReady()) {
           syncRuntimeStatus();
           note.textContent = t('agentLoadModel');
-          if (restoreAfterStop) void loadModel();
+          // A stopped task never restarts preparation on its own.
         }
       }
     }
   };
   const switchConversation = (id: string, focus = true): void => {
-    latestUsage = undefined;
-    syncGenerationStats();
     conversationRevision++;
     invalidatePlans();
     controller?.dispose();
     controller = null;
     conversations.select(id);
+    clearPreviews();
+    clearQuote();
     historyStorage = conversations.history();
     chat.clear();
     chat.setRunning(false);
@@ -1591,8 +1716,11 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       appendTurn({ role: 'error', text: t('agentNoSelection') });
       return;
     }
-    const quoted = `${t('agentQuotePrefix')}\n"""\n${selected.replace(/\r\n/g, '\n')}\n"""\n\n`;
-    chat.setInput(quoted + chat.getInput());
+    quotedSelection = selected.replace(/\r\n/g, '\n');
+    quoteSummary.textContent = t('agentQuote');
+    removeQuote.setAttribute('aria-label', t('agentPlanCancel') + ' · ' + t('agentQuote'));
+    quoteText.textContent = quotedSelection;
+    quoteContext.hidden = false;
     chat.focus();
   });
 
@@ -1666,12 +1794,10 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       button.textContent = t(starterTasks[index][1]);
     });
     syncRuntimeStatus();
-    syncGenerationStats();
     settingsBtn.title = t('agentSettings');
     settingsBtn.setAttribute('aria-label', t('agentSettings'));
     providerSelect.setAttribute('aria-label', t('agentProviderLabel'));
     modelSelect.setAttribute('aria-label', t('agentModelLabel'));
-    modelSourcesLabel.textContent = t('agentCustomModel');
     closeBtn.title = t('agentClose');
     closeBtn.setAttribute('aria-label', t('agentClose'));
     const selected = providerSelect.value;
@@ -1697,7 +1823,6 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     clearBtn.setAttribute('aria-label', t('agentNewConversation'));
     renderSessions();
     historyControls?.sync();
-    generationControls.sync();
     const keys = {
       chat: 'agentTaskChat',
       tools: 'agentTaskTools',
@@ -1714,30 +1839,126 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     syncProviderUi(); // refresh key placeholder / model hint in the new language
   });
 
+  const historyBtn = document.createElement('button');
+  historyBtn.type = 'button';
+  historyBtn.className = 'agent-history-toggle';
+  historyBtn.innerHTML =
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11a9 9 0 1 1 3 8M3 5v6h6M12 7v6l4 2"/></svg>';
+  const expandBtn = document.createElement('button');
+  expandBtn.type = 'button';
+  expandBtn.className = 'agent-expand';
+  expandBtn.innerHTML =
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>';
+  expandBtn.setAttribute('aria-pressed', 'false');
+  expandBtn.addEventListener('click', () => {
+    const expanded = panel.classList.toggle('agent-expanded');
+    expandBtn.setAttribute('aria-pressed', String(expanded));
+  });
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.className = 'agent-view-back';
+  const settingsHeading = document.createElement('h2');
+  settingsHeading.tabIndex = -1;
+  const localCard = document.createElement('section');
+  localCard.className = 'agent-use-card';
+  const localTitle = document.createElement('h3');
+  const localHint = document.createElement('p');
+  localCard.append(localTitle, localHint, modelRow, consentLabel);
+  const serviceCard = document.createElement('details');
+  serviceCard.className = 'agent-use-card';
+  const serviceTitle = document.createElement('summary');
+  const serviceHint = document.createElement('p');
+  serviceCard.append(serviceTitle, serviceHint, endpointRow);
+  const advanced = document.createElement('details');
+  advanced.className = 'agent-preferences';
+  const advancedTitle = document.createElement('summary');
+  advanced.append(advancedTitle, providerSelect, ggufRow, taskModelLabel, reviewLabel);
+  settings.replaceChildren(back, settingsHeading, localCard, serviceCard, note, advanced);
+  const disableRow = document.createElement('div');
+  disableRow.className = 'agent-enable-row';
+  const disableLabel = document.createElement('span');
+  const disableHint = document.createElement('p');
+  disableHint.className = 'agent-entry-note';
+  const disable = document.createElement('button');
+  disable.type = 'button';
+  disable.className = 'agent-enable-switch agent-disable-switch';
+  disable.setAttribute('role', 'switch');
+  disable.setAttribute('aria-checked', 'true');
+  disable.addEventListener('click', () => {
+    if (options.onDisable) void options.onDisable();
+    else void panelHandle?.setEnabled(false);
+  });
+  disableRow.append(disableLabel, disable);
+  settings.append(disableRow, disableHint);
+  const historyView = document.createElement('section');
+  historyView.className = 'agent-history-view';
+  historyView.hidden = true;
+  const historyBack = document.createElement('button');
+  historyBack.type = 'button';
+  historyBack.className = 'agent-view-back';
+  historyView.append(historyBack, sessionBar, historyControls.el);
+  header.insertBefore(historyBtn, settingsBtn);
+  header.insertBefore(clearBtn, settingsBtn);
+  header.insertBefore(expandBtn, closeBtn);
+  sessionRow.replaceChildren(sessionSelect);
+  chat.actionsEl.append(scopeLabel);
+  chat.el.append(writeDestination);
+  function showView(view: 'chat' | 'settings' | 'history'): void {
+    panel.dataset.view = view;
+    settings.classList.toggle('agent-panel-settings-hidden', view !== 'settings');
+    chat.el.hidden = view !== 'chat';
+    historyView.hidden = view !== 'history';
+    settingsBtn.setAttribute('aria-expanded', String(view === 'settings'));
+    historyBtn.setAttribute('aria-expanded', String(view === 'history'));
+    if (view === 'settings') settingsHeading.focus();
+    else if (view === 'history') sessionSelect.focus();
+    else chat.focus();
+  }
+  back.addEventListener('click', () => {
+    showView('chat');
+    settingsBtn.focus();
+  });
+  historyBack.addEventListener('click', () => {
+    showView('chat');
+    historyBtn.focus();
+  });
+  historyBtn.addEventListener('click', () => showView(panel.dataset.view === 'history' ? 'chat' : 'history'));
+  historyView.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !event.isComposing) {
+      event.stopPropagation();
+      showView('chat');
+      historyBtn.focus();
+    }
+  });
+  const syncProductLabels = () => {
+    back.textContent = historyBack.textContent = t('agentBackToChat');
+    settingsHeading.textContent = t('agentSettings');
+    localTitle.textContent = t('agentUseDevice');
+    localHint.textContent = t('agentUseDeviceHint');
+    serviceTitle.textContent = t('agentUseService');
+    serviceHint.textContent = t('agentUseServiceHint');
+    advancedTitle.textContent = t('agentPreferences');
+    disableLabel.textContent = t('agentEnable');
+    disableHint.textContent = t('agentOffNote');
+    disable.setAttribute('aria-label', t('agentEnable'));
+    historyBtn.title = t('agentConversations');
+    historyBtn.setAttribute('aria-label', t('agentConversations'));
+    expandBtn.title = t('agentExpand');
+    expandBtn.setAttribute('aria-label', t('agentExpand'));
+  };
+  syncProductLabels();
+  window.addEventListener('languagechange', syncProductLabels);
+  clearBtn.addEventListener('click', () => showView('chat'));
+  sessionSelect.addEventListener('change', () => showView('chat'));
   clearBtn.title = t('agentNewConversation');
   clearBtn.setAttribute('aria-label', t('agentNewConversation'));
-  panel.append(header, runtimeRow, generationStats, sessionBar, settings, chat.el);
+  panel.append(header, runtimeRow, settings, historyView, chat.el);
   document.body.append(panel);
   setOpen(!options.background);
   void historyControls.start();
+  showView(options.externalEntry ? 'settings' : 'chat');
 
-  // Opening restores the selected URL model, or loads the automatic default.
-  // The user can cancel/retry from settings; CPU is the local fallback.
-  const hasStartupModel = () => currentProvider() === 'webllm' || !!ggufUrl.value.trim();
-  if (hasStartupModel()) {
-    if (options.background) {
-      const cancel = scheduleIdleLoad(
-        () => {
-          const api = getEditorApi();
-          return !!api?.isDocumentLoadComplete && !!api.isLoadFullApi;
-        },
-        () => {
-          if (hasStartupModel() && !webllmProvider?.isReady()) void loadModel();
-        },
-      );
-      window.addEventListener('pagehide', cancel, { once: true });
-    } else void loadModel();
-  }
+  // Opening only restores preferences, never starts a download or connection.
 
   return panel;
 }

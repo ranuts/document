@@ -39,7 +39,7 @@ Nein. Es gibt keine Anmeldung, kein Login und kein Konto irgendeiner Art. Öffne
 
 ### Werden meine Dateien auf einen Server hochgeladen?
 
-Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
 
 ### Ist es wirklich kostenlos?
 
@@ -67,4 +67,4 @@ Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der 
 
 ### Ist ein integrierter KI-Assistent verfügbar?
 
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.

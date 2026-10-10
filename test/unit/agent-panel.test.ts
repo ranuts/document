@@ -76,10 +76,12 @@ it('groups conversation switching and creation ahead of the transcript', () => {
   const panel = createAgentPanel();
   const bar = panel.querySelector('.agent-session-bar')!;
   expect(bar.querySelector('.agent-session-select')).not.toBeNull();
-  expect(bar.querySelector('.agent-panel-clear')).not.toBeNull();
-  expect(panel.querySelector('.agent-panel-header .agent-panel-clear')).toBeNull();
-  expect(bar.querySelector('.agent-document-scope')?.getAttribute('role')).toBe('note');
-  expect(bar.querySelector('.agent-document-scope')?.hasAttribute('aria-live')).toBe(false);
+  expect(bar.closest('.agent-history-view')?.hasAttribute('hidden')).toBe(true);
+  expect(panel.querySelector('.agent-panel-header .agent-panel-clear')).not.toBeNull();
+  panel.querySelector<HTMLButtonElement>('.agent-history-toggle')!.click();
+  expect(bar.closest('.agent-history-view')?.hasAttribute('hidden')).toBe(false);
+  expect(panel.querySelector('.agent-document-scope')?.getAttribute('role')).toBe('note');
+  expect(panel.querySelector('.agent-document-scope')?.hasAttribute('aria-live')).toBe(false);
 });
 
 it('labels provider and model controls in settings', () => {
@@ -152,11 +154,12 @@ it('offers an explicit GGUF backend without changing the default provider', () =
 it('retains local model settings if an invalid remote provider value is injected', () => {
   const panel = createAgentPanel();
   const provider = panel.querySelector('.agent-panel-provider') as HTMLElement & { value: string };
-  const artifact = panel.querySelector('.agent-local-model-url') as HTMLElement;
-  expect(artifact.style.display).toBe('');
+  localStorage.setItem('agent-local-model-url', '/models/saved');
   provider.value = 'openai';
   provider.dispatchEvent(new Event('change'));
-  expect(artifact.style.display).toBe('');
+  expect(localStorage.getItem('agent-local-model-url')).toBe('/models/saved');
+  expect(localStorage.getItem('agent-panel-provider')).toBe('webllm');
+  localStorage.removeItem('agent-local-model-url');
   expect(panel.querySelector('.agent-api-model')).toBeNull();
 });
 
@@ -243,32 +246,6 @@ it('syncs native tracking changes without writing settings and detaches on pageh
   expect(setter).not.toHaveBeenCalled();
   window.dispatchEvent(new Event('pagehide'));
   expect(unregister).toHaveBeenCalledWith('asc_onOnTrackRevisionsChange', callback);
-});
-
-it('groups custom GPU sources in a disclosure and exposes stored overrides', () => {
-  localStorage.setItem('agent-panel-provider', 'webllm');
-  localStorage.setItem('agent-local-model-id', 'custom-model');
-  const panel = createAgentPanel();
-  const sources = panel.querySelector<HTMLDetailsElement>('.agent-model-sources')!;
-  expect(sources).not.toBeNull();
-  expect(sources.open).toBe(true);
-  expect(sources.querySelectorAll('r-input')).toHaveLength(3);
-  sources.open = false;
-  expect((sources.querySelector('.agent-local-model-id') as HTMLElement & { value: string }).value).toBe(
-    'custom-model',
-  );
-  const provider = panel.querySelector('.agent-panel-provider') as HTMLElement & { value: string };
-  provider.value = 'wllama';
-  provider.dispatchEvent(new Event('change'));
-  expect(sources.hidden).toBe(true);
-  provider.value = 'webllm';
-  provider.dispatchEvent(new Event('change'));
-  expect(sources.hidden).toBe(false);
-  expect((sources.querySelector('.agent-local-model-id') as HTMLElement & { value: string }).value).toBe(
-    'custom-model',
-  );
-  localStorage.removeItem('agent-local-model-id');
-  localStorage.removeItem('agent-panel-provider');
 });
 
 it('returns keyboard focus to the document rail when closing a focused panel', async () => {
@@ -441,4 +418,26 @@ it.each([
   } finally {
     execute.mockRestore();
   }
+});
+
+it('creates a runtime beside the lightweight off welcome rather than treating it as the runtime', () => {
+  const welcome = document.createElement('aside');
+  welcome.className = 'agent-panel agent-onboarding';
+  document.body.append(welcome);
+  const panel = createAgentPanel({ externalEntry: true, background: true });
+  expect(panel).not.toBe(welcome);
+  expect(panel.querySelector('.cui-input')).not.toBeNull();
+});
+
+it('quotes a selection as removable context without overwriting the draft', () => {
+  editorState.api = { pluginMethod_GetSelectedText: () => 'Private selected words' };
+  const panel = createAgentPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Keep this question';
+  panel.querySelector<HTMLButtonElement>('.agent-panel-quote')!.click();
+  expect(input.value).toBe('Keep this question');
+  expect(panel.querySelector('.agent-quoted-text')?.textContent).toBe('Private selected words');
+  panel.querySelector<HTMLButtonElement>('.agent-quote-remove')!.click();
+  expect(panel.querySelector<HTMLElement>('.agent-quote-context')!.hidden).toBe(true);
+  expect(input.value).toBe('Keep this question');
 });

@@ -45,7 +45,7 @@ Yes. The OnlyOffice engine preserves formulas, number formats and styling.
 
 ### Is my spreadsheet uploaded?
 
-Core opening, editing and conversion run locally in your browser without a required document upload. The built-in AI assistant is unfinished and is not a released feature. An embedding host can receive exported files and upload them according to its own policy.
+Core opening, editing and conversion run locally in your browser without a required document upload. The AI assistant is off by default. Enable it in the editor; downloads and service connections start only when you choose them. An embedding host can receive exported files and upload them according to its own policy.
 
 ### Can I export it to CSV?
 

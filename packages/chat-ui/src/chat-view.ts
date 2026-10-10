@@ -204,7 +204,7 @@ export class ChatView {
         }
       });
       actions.append(copy);
-      if (this.options.onApplyMessage && !message.interrupted) {
+      if (this.options.onApplyMessage && !message.interrupted && !message.copyOnly) {
         const apply = ButtonBuilder().class('cui-apply').attr('type', 'button').build();
         apply.textContent = this.labels.applyMessage ?? 'Write to document';
         apply.title = this.labels.applyTip ?? 'Insert at the cursor or replace the selected text';

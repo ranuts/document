@@ -36,3 +36,5 @@ console.log(result.text);
 
 The runtime is fully unit-testable with a scripted provider and mock tools — it
 only knows the `LLMProvider` interface and the `AgentTool` registry.
+
+The document product uses a default-off assistant switch. Opening the panel never downloads a model or connects a service. Runtime configuration is reached through the usage settings; generated selection edits require explicit review and confirmation. Browser-agent tools are documented separately in the developer reference.

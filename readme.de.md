@@ -33,6 +33,19 @@ Dokumente werden also nie hochgeladen, und ein Konto braucht es auch nicht.
 
 ---
 
+## KI-Dokumentassistent
+
+Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen. Standardmäßig aus · Nur dieser Browser.
+
+Nach dem Aktivieren die Nutzung wählen. Den ersten Download starten Sie selbst und können ihn abbrechen.
+
+- **Auf diesem Computer nutzen**: Der Text wird auf diesem Gerät verarbeitet. Die erste Einrichtung lädt Dateien und kann den Computer verlangsamen; Abbruch ist möglich.
+- **Eigenen KI-Dienst nutzen**: Gesendeter Text geht an den gewählten Dienst. Eigene Zugangsdaten sind erforderlich; es können Kosten entstehen.
+
+Original und Ergebnis vergleichen und das Ersetzen bestätigen. Kopieren ist ebenfalls möglich. Bei Bedarf im Editor rückgängig machen. Eine geänderte Auswahl erfordert einen neuen Vorschlag.
+
+[Anleitung](https://edit.chaxus.com/de/ai-document-assistant)
+
 ## ✨ Funktionen
 
 - 🔒 **Nichts wird hochgeladen** — jede Umwandlung, jede Änderung, jeder Export passiert im Tab
@@ -122,7 +135,7 @@ Löschen pro Zeile, einem Alles-Löschen und einem Schalter, der das automatisch
 ganz abstellt. Löschen wirkt dort sofort. Auf einem gemeinsam genutzten Rechner ist das
 die Seite, die man aufsucht.
 
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Die KI-Module im Repository sind experimentell und bedeuten nicht, dass der Assistent einsatzbereit ist. Entwicklungstests mit Cloud-Anbietern können Eingaben und Werkzeugergebnisse übertragen. Im eingebetteten Modus gehen Exporte an die übergeordnete Anwendung, die weitere Uploads kontrolliert.
+Standardmäßig aus · Nur dieser Browser. Die KI-Module im Repository sind experimentell und bedeuten nicht, dass der Assistent einsatzbereit ist. Entwicklungstests mit Cloud-Anbietern können Eingaben und Werkzeugergebnisse übertragen. Im eingebetteten Modus gehen Exporte an die übergeordnete Anwendung, die weitere Uploads kontrolliert.
 
 ---
 

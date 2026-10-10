@@ -59,24 +59,6 @@ Ja. Ergänzen Sie einen `/editor?file=`-Link um `&readonly=1` oder senden Sie `d
 
 Ja — der Editor ist dafür gebaut, in einem iframe eingebettet und per `postMessage` gesteuert zu werden: Ihre Seite holt die Datei (mit eigener Authentifizierung), schickt sie ins iframe und bekommt die bearbeitete `File` zurück, die Sie hochladen können, wohin Sie wollen. Siehe die [Embed-API-Referenz](/de/help/embed-api) und die [Live-Demo](/embed-demo.html).
 
-## KI-Agenten im Browser (WebMCP)
-
-### Kann ein KI-Assistent in meinem Browser den Editor bedienen?
-
-WebMCP-Werkzeuge bearbeiten und konvertieren lokal. Ein Browser-Agent kann jedoch Dokumenttext oder exportierte Dateien erhalten und an seinen eigenen KI-Dienst senden. Prüfen Sie seine Datenrichtlinie vor der Freigabe vertraulicher Inhalte.
-
-### Welche Browser unterstützen es?
-
-WebMCP ist ein Vorschlag der W3C Web Machine Learning Community Group und derzeit in Chrome hinter einem Origin Trial verfügbar. Firefox und Safari haben keine Unterstützung angekündigt. Wo der Browser die API nicht bereitstellt, wird nichts registriert und nichts ändert sich — es ist eine reine Ergänzung.
-
-### Funktioniert es in einem eingebetteten Editor?
-
-Nein, aus Prinzip. Tools werden nur registriert, wenn der Editor die oberste Seite ist. Ein Cross-Origin-iframe bräuchte vom einbettenden Dokument ein `allow="tools"`, was dem Sinn des Einbettens widerspricht — wenn Sie den Editor einbetten, steuern Sie ihn stattdessen über die [Embed-API](/de/help/embed-api).
-
-### Kann der Agent den Text des Dokuments lesen?
-
-Bei Textdokumenten ja: `get_document_text` gibt den Text zurück, sodass der Agent inhaltliche Fragen beantworten kann, ohne etwas zu exportieren. Tabellen und Präsentationen bieten auf dieser Engine kein Volltext-Lesen; das Tool sagt das ausdrücklich (statt eine leere Antwort zu liefern, die wie eine leere Datei aussähe) und verweist auf den Export.
-
 ## Offline und Installation
 
 ### Funktioniert es offline?
@@ -122,4 +104,8 @@ Bei aktivierter automatischer Sicherung bleiben Wiederherstellungskopien in der 
 
 ### Ist ein integrierter KI-Assistent verfügbar?
 
-Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant). Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen.
+
+## KI-Dokumentassistent
+
+Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen. Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant).

@@ -76,32 +76,3 @@ export function createSidebarEntry(toggle: () => void, label: () => string, isAv
     },
   };
 }
-/** Defer until the editor is ready, the page is visible, and idle work can run. */
-export function scheduleIdleLoad(editorReady: () => boolean, load: () => void) {
-  let cancelled = false;
-  let timeout: ReturnType<typeof setTimeout> | undefined;
-  let idle: number | undefined;
-  const run = () => {
-    if (cancelled) return;
-    if (document.visibilityState === 'hidden' || !editorReady()) {
-      timeout = setTimeout(run, 500);
-      return;
-    }
-    const invoke = () => {
-      if (cancelled) return;
-      if (document.visibilityState === 'hidden' || !editorReady()) {
-        timeout = setTimeout(run, 500);
-        return;
-      }
-      load();
-    };
-    if (typeof window.requestIdleCallback === 'function') idle = window.requestIdleCallback(invoke);
-    else timeout = setTimeout(invoke, 500);
-  };
-  timeout = setTimeout(run, 0);
-  return () => {
-    cancelled = true;
-    if (timeout !== undefined) clearTimeout(timeout);
-    if (idle !== undefined) window.cancelIdleCallback?.(idle);
-  };
-}

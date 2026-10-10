@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { createSidebarEntry, scheduleIdleLoad } from '../../lib/agent-plugin/ui/sidebar-entry';
+import { createSidebarEntry } from '../../lib/agent-plugin/ui/sidebar-entry';
 afterEach(() => {
   document.body.replaceChildren();
   vi.useRealTimers();
@@ -23,27 +23,6 @@ it('only mounts a native rail entry when ready and removes it when unavailable',
   expect(doc.querySelector('.agent-sidebar-entry')).toBeNull();
   entry.dispose();
 });
-it('waits for editor readiness then schedules a cancellable idle load', async () => {
-  vi.useFakeTimers();
-  let ready = false;
-  const load = vi.fn();
-  const cancel = scheduleIdleLoad(() => ready, load);
-  await vi.advanceTimersByTimeAsync(1000);
-  expect(load).not.toHaveBeenCalled();
-  ready = true;
-  await vi.advanceTimersByTimeAsync(1500);
-  expect(load).toHaveBeenCalledOnce();
-  cancel();
-});
-it('does not load after cancellation', async () => {
-  vi.useFakeTimers();
-  const load = vi.fn();
-  const cancel = scheduleIdleLoad(() => true, load);
-  cancel();
-  await vi.advanceTimersByTimeAsync(2000);
-  expect(load).not.toHaveBeenCalled();
-});
-
 it('moves the same entry to the left rail in compact layouts and restores it on widening', () => {
   const iframe = document.createElement('iframe');
   document.body.append(iframe);

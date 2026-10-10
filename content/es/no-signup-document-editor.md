@@ -39,7 +39,7 @@ No. No hay registro, ni inicio de sesión, ni cuenta de ningún tipo. Abre el ed
 
 ### ¿Mis archivos se suben a un servidor?
 
-La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. Desactivado por defecto · Solo este navegador. [Cómo usarlo](/es/ai-document-assistant). La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
 
 ### ¿Es realmente gratis?
 
@@ -67,4 +67,4 @@ Con el guardado automático activado, las copias de recuperación permanecen en 
 
 ### ¿Está disponible un asistente de IA integrado?
 
-El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.
+Desactivado por defecto · Solo este navegador. [Cómo usarlo](/es/ai-document-assistant). La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política.

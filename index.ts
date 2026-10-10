@@ -22,6 +22,7 @@ import 'ranui/button';
 import 'ranui/card';
 import 'ranui/select';
 import { initWebMcp } from './lib/web-mcp';
+import { createAgentEntry } from './lib/agent-entry';
 import { hasUnsavedChanges, installUnsavedChangesGuard } from './lib/unsaved-guard';
 import { initDocumentHistory } from './lib/history';
 import '@khmyznikov/pwa-install';
@@ -109,35 +110,18 @@ createControlPanel();
 //   ?file=https://example.com/doc.docx
 //   ?src=https://example.com/doc.docx
 //   ?file=doc1.docx&src=doc2.xlsx (will use file: doc1.docx)
-const { file, src, readonly, agent } = params;
+const { file, src, readonly } = params;
 const documentUrl = file || src;
 // Pure preview mode: ?readonly=true (also accepts ?readonly=1 or bare ?readonly).
 // Opens the document with editing/download disabled (#25, #85, #87).
 const isReadonly = parseReadonly(readonly);
-// Experimental AI agent panel: opt-in via ?agent=1 (also ?agent=true or bare ?agent).
-const agentEnabled = agent === '1' || agent === 'true' || agent === '';
-// Expose the opt-in to the editor iframe (same-origin) so its injected patch only
-// adds the "AI" button when the agent feature is enabled — otherwise the button
-// stays hidden. The panel mounts its native rail entry only after idle model loading succeeds.
-(window as unknown as { __agentEnabled?: boolean }).__agentEnabled = agentEnabled;
-if (agentEnabled) {
-  void import('./lib/agent-plugin/agent-plugin').then(({ createAgentPanel }) => createAgentPanel({ background: true }));
-}
-// Bridge: the AI entry in the editor's right rail lives inside the
-// (same-origin) editor iframe. It toggles the panel either by calling this
-// global directly or, as a fallback, by posting `agent:toggle` to this window.
-const toggleAgentPanelLazy = (): void => {
-  void import('./lib/agent-plugin/agent-plugin').then(({ toggleAgentPanel }) => toggleAgentPanel());
-};
+// A discoverable product entry; shared URL flags never opt a user in.
+const agentEntry = createAgentEntry();
+const toggleAgentPanelLazy = (): void => agentEntry.toggle();
 (window as unknown as { __toggleAgentPanel?: () => void }).__toggleAgentPanel = toggleAgentPanelLazy;
 window.addEventListener('message', (event: MessageEvent) => {
   const frame = document.querySelector<HTMLIFrameElement>('#app iframe');
-  if (
-    agentEnabled &&
-    event.origin === location.origin &&
-    event.source === frame?.contentWindow &&
-    event.data?.type === 'agent:toggle'
-  )
+  if (event.origin === location.origin && event.source === frame?.contentWindow && event.data?.type === 'agent:toggle')
     toggleAgentPanelLazy();
 });
 // Deep-link to a blank document: ?new=docx|xlsx|pptx opens the editor straight

@@ -236,3 +236,10 @@ public/pt/index.html
 
 # Temporary ignore lists used by archive-aware quality checks.
 /.archive-quality-*.ignore
+
+# Generated AI assistant product guides.
+/public/ai-document-assistant.html
+/public/*/ai-document-assistant.html
+
+# Local implementation plans and verification logs.
+/.superpowers/

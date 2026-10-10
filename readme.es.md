@@ -33,6 +33,19 @@ de quien visita la página, así que los documentos nunca se suben y no hace fal
 
 ---
 
+## Asistente de documentos con IA
+
+Selecciona un texto para reescribirlo, resumirlo o traducirlo. Revisa el resultado antes de añadirlo al documento. Desactivado por defecto · Solo este navegador.
+
+Elige cómo usarlo al activarlo. Tú inicias la primera descarga y puedes cancelarla.
+
+- **Usar en este ordenador**: El texto se procesa en este dispositivo. La primera preparación descarga archivos y puede ralentizarlo; puedes cancelarla.
+- **Usar tu propio servicio de IA**: El texto enviado se procesa en el servicio elegido. Necesitas tus datos de servicio; puede haber cargos.
+
+Compara el original y el resultado antes de confirmar el reemplazo. También puedes copiarlo. Usa Deshacer si lo necesitas. Si cambia la selección, genera una nueva propuesta.
+
+[Cómo usarlo](https://edit.chaxus.com/es/ai-document-assistant)
+
 ## ✨ Características
 
 - 🔒 **No se sube nada** — cada conversión, edición y exportación ocurre dentro de la pestaña
@@ -122,7 +135,7 @@ borrar en cada fila, otro para borrarlo todo y un interruptor para desactivar po
 el guardado automático. Borrar ahí surte efecto de inmediato. En un ordenador compartido,
 esa es la página a la que ir.
 
-El asistente de IA integrado está sin terminar y no es una función publicada. Los módulos de IA del repositorio son experimentales y no implican que el asistente esté listo. Las pruebas de desarrollo conectadas a un proveedor en la nube pueden transmitir instrucciones y resultados de herramientas. En modo integrado, la aplicación anfitriona recibe los archivos exportados y controla sus subidas posteriores.
+Desactivado por defecto · Solo este navegador. Los módulos de IA del repositorio son experimentales y no implican que el asistente esté listo. Las pruebas de desarrollo conectadas a un proveedor en la nube pueden transmitir instrucciones y resultados de herramientas. En modo integrado, la aplicación anfitriona recibe los archivos exportados y controla sus subidas posteriores.
 
 ---
 

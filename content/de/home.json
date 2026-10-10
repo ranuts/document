@@ -153,7 +153,7 @@
         },
         {
           "q": "Werden meine Dateien irgendwohin hochgeladen?",
-          "a": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der integrierte KI-Assistent ist noch nicht fertig und keine veröffentlichte Funktion. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen."
+          "a": "Das Öffnen, Bearbeiten und Konvertieren im Kerneditor erfolgt lokal im Browser, ohne einen erforderlichen Dokument-Upload. Der KI-Assistent ist standardmäßig aus. Aktivieren Sie ihn im Editor; Downloads und Verbindungen starten Sie selbst. Eine einbettende Anwendung kann exportierte Dateien empfangen und nach ihrer eigenen Richtlinie hochladen."
         },
         {
           "q": "Welche Formate kann ich bearbeiten?",
@@ -172,6 +172,15 @@
           "a": "Kein Konto, keine Anmeldung, keine E-Mail. Seite öffnen und bearbeiten."
         }
       ]
+    },
+    "assistant": {
+      "eyebrow": "KI-Dokumentassistent",
+      "h2": "Klarer schreiben. Selbst entscheiden.",
+      "p": "Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen.",
+      "example": "Diesen Absatz kürzen und alle Daten und Zahlen erhalten.",
+      "note": "Standardmäßig aus · Nur dieser Browser",
+      "cta": "Anleitung",
+      "href": "/de/ai-document-assistant"
     }
   },
   "foot": {
@@ -184,14 +193,6 @@
       {
         "href": "/de/changelog",
         "label": "Änderungen"
-      },
-      {
-        "href": "/de/embed-document-editor",
-        "label": "Embed API"
-      },
-      {
-        "href": "/de/webmcp-document-editor",
-        "label": "WebMCP"
       },
       {
         "href": "/de/private-document-editor",

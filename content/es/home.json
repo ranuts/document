@@ -148,7 +148,7 @@
         },
         {
           "q": "¿Mis archivos se suben a algún sitio?",
-          "a": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA integrado está sin terminar y no es una función publicada. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política."
+          "a": "La apertura, edición y conversión básicas se ejecutan localmente en el navegador sin exigir subir el documento. El asistente de IA está desactivado por defecto. Actívalo en el editor; tú inicias las descargas y conexiones. La aplicación anfitriona puede recibir archivos exportados y subirlos según su propia política."
         },
         {
           "q": "¿Qué formatos puedo editar?",
@@ -167,6 +167,15 @@
           "a": "Ni cuenta, ni registro, ni correo. Abre la página y edita."
         }
       ]
+    },
+    "assistant": {
+      "eyebrow": "Asistente de documentos con IA",
+      "h2": "Escribe con más claridad. Tú decides.",
+      "p": "Selecciona un texto para reescribirlo, resumirlo o traducirlo. Revisa el resultado antes de añadirlo al documento.",
+      "example": "Acorta este párrafo y conserva las fechas y los números.",
+      "note": "Desactivado por defecto · Solo este navegador",
+      "cta": "Cómo usarlo",
+      "href": "/es/ai-document-assistant"
     }
   },
   "foot": {
@@ -179,14 +188,6 @@
       {
         "href": "/es/changelog",
         "label": "Novedades"
-      },
-      {
-        "href": "/es/embed-document-editor",
-        "label": "Embed API"
-      },
-      {
-        "href": "/es/webmcp-document-editor",
-        "label": "WebMCP"
       },
       {
         "href": "/es/private-document-editor",

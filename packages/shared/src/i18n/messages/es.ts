@@ -10,6 +10,23 @@ import type { I18nMessages } from '../types';
  * message-placeholders cases in test/unit/i18n.test.ts check that.
  */
 export const es: Partial<I18nMessages> = {
+  agentEnable: 'Activar asistente de IA',
+  agentDefaultOff: 'Desactivado por defecto · Solo este navegador',
+  agentIntro:
+    'Selecciona un texto para reescribirlo, resumirlo o traducirlo. Revisa el resultado antes de añadirlo al documento.',
+  agentStartNote: 'Elige cómo usarlo al activarlo. Tú inicias la primera descarga y puedes cancelarla.',
+  agentUseDevice: 'Usar en este ordenador',
+  agentUseDeviceHint:
+    'El texto se procesa en este dispositivo. La primera preparación descarga archivos y puede ralentizarlo; puedes cancelarla.',
+  agentUseService: 'Usar tu propio servicio de IA',
+  agentUseServiceHint:
+    'El texto enviado se procesa en el servicio elegido. Necesitas tus datos de servicio; puede haber cargos.',
+  agentPreferences: 'Más preferencias',
+  agentBackToChat: 'Volver a la conversación',
+  agentExpand: 'Ampliar asistente',
+  agentSetupFailed: 'No se pudo abrir el asistente. Inténtalo de nuevo. El documento no ha cambiado.',
+  agentOffNote: 'Desactivar detiene la tarea actual y conserva el documento y el borrador.',
+  agentPrepareRequired: 'Elige cómo usarlo y completa la preparación. Puedes seguir editando el borrador.',
   webOffice: 'Web Office',
   uploadDocument: 'Abrir / editar documento',
   newWord: 'Nuevo documento de Word',
@@ -58,7 +75,7 @@ export const es: Partial<I18nMessages> = {
   agentUpdateCell: 'Actualizar celda',
   agentExecute: 'Acción de documento',
   agentClose: 'Cerrar asistente',
-  agentConfigure: 'Configurar IA',
+  agentConfigure: 'Uso de IA',
   agentWriteReply: 'Escribir en documento',
   agentWriteReplyTip: 'Inserta texto sin formato en el cursor; reemplaza el texto seleccionado.',
   agentWritingReply: 'Escribiendo…',
@@ -68,7 +85,7 @@ export const es: Partial<I18nMessages> = {
     'Las respuestas se pueden escribir en documentos de texto. Para hojas de cálculo, elige una tarea de edición.',
   agentTitle: 'Asistente de IA',
   agentOpenTip: 'Abrir el asistente de IA',
-  agentSettings: 'Ajustes',
+  agentSettings: 'Uso de IA',
   agentCustomModel: 'Modelo personalizado',
   agentProviderLabel: 'Proveedor de IA',
   agentModelLabel: 'Modelo local',
@@ -79,9 +96,10 @@ export const es: Partial<I18nMessages> = {
   agentProviderClaude: 'Claude (nube, requiere clave de API)',
   agentProviderOpenAI: 'OpenAI (nube, requiere clave de API)',
   agentProviderGemini: 'Gemini (nube, requiere clave de API)',
-  agentProviderWllama: 'GGUF local (wllama, experimental)',
-  agentWllamaHint: 'URL del modelo GGUF; el modo CPU puede ser lento. También puede elegir archivos GGUF locales.',
-  agentProviderLocal: 'IA local (automática)',
+  agentProviderWllama: 'Usar archivos descargados',
+  agentWllamaHint:
+    'Elige archivos descargados o introduce una dirección de descarga. La velocidad depende de tu dispositivo.',
+  agentProviderLocal: 'Elegir automáticamente',
   agentProviderOllama: 'Ollama (servidor local, lo ejecutas tú)',
   agentOllamaModelPlaceholder: 'Nombre del modelo, p. ej. llama3.2',
   agentOllamaHint:
@@ -110,24 +128,22 @@ export const es: Partial<I18nMessages> = {
   agentWritePreference: 'Destino preferido',
   agentWritePreferDevice: 'Este dispositivo primero',
   agentWritePreferRemote: 'Endpoint en la nube primero',
-  agentWritingOfflineNeedsDevice:
-    'Sin conexión, el destino de escritura tiene que estar en este dispositivo. Conecta un servicio local o activa la escritura local experimental.',
+  agentWritingOfflineNeedsDevice: 'Sin conexión. Elige procesar en este dispositivo.',
   agentEndpointOfflineHint: 'sin conexión: no se puede acceder a un endpoint en la nube',
   agentEndpointKeyRequired: 'Introduce primero una clave de API para este endpoint',
   agentWriteDestinationOfflineUnavailable: 'el endpoint en la nube configurado (no disponible sin conexión)',
   agentLocalWritingConsent:
     'Permitir escritura con el modelo local del navegador (experimental, sin validación de calidad)',
   agentWritingNeedsLocalService:
-    'Los modelos locales del navegador no han superado la validación de calidad de escritura. Conecta un servicio local o activa la escritura local experimental.',
-  agentChooseModelFiles: 'Elegir archivos del modelo',
-  agentLoadModel: 'Cargar modelo',
+    'Elige cómo usar la IA. Confirma que revisarás los cambios generados en este dispositivo.',
+  agentChooseModelFiles: 'Elegir archivos',
+  agentLoadModel: 'Iniciar preparación',
   agentModelLoaded: 'Modelo cargado: ya puedes empezar a escribir.',
   agentCheckingCache: 'Comprobando la caché del modelo…',
   agentModelCached:
     'Se encontraron pesos del modelo en la caché. Carga el modelo; puede que se necesiten descargar archivos adicionales.',
-  agentModelMemory: 'Memoria GPU aprox. {memory} GB',
-  agentModelFirstDownload:
-    'Carga primero el modelo. La primera carga descarga archivos del modelo. La caché se puede reutilizar, pero el navegador puede eliminarla.',
+  agentModelMemory: 'Unos {memory} GB en este dispositivo',
+  agentModelFirstDownload: 'Inicia la preparación. La primera descarga puede ser grande y se puede cancelar.',
   agentNoWebGPU: 'Este navegador no admite WebGPU, así que el modo local no está disponible.',
   agentLocalChatOnly: 'Revisa las propuestas generadas localmente antes de aplicarlas.',
   agentSwitchCloud: 'cambia a la nube →',
@@ -153,7 +169,7 @@ export const es: Partial<I18nMessages> = {
   agentPlanBefore: 'Texto original',
   agentPlanAfter: 'Texto propuesto',
   agentPlanTitle: 'Revisar el cambio',
-  agentPlanApply: 'Aplicar cambio',
+  agentPlanApply: 'Reemplazar texto seleccionado',
   agentPlanCancel: 'Cancelar',
   agentPlanExpired: 'La propuesta ha caducado. Genera una nueva.',
   agentPlanVerified: 'Hecho. Puedes deshacer el cambio.',
@@ -213,7 +229,7 @@ export const es: Partial<I18nMessages> = {
   agentRestoreRequest: 'Recuperar solicitud',
   agentWaiting: 'Generando respuesta…',
   agentScrollLatest: 'Ir al último mensaje',
-  agentModelSourceInvalid: 'Usa una dirección HTTP/HTTPS del modelo o selecciona archivos GGUF locales.',
+  agentModelSourceInvalid: 'Introduce una dirección de descarga o elige archivos descargados.',
   agentModelCleanupFailed: 'No se pudo cerrar el modelo anterior. Actualiza la página antes de cargar otro modelo.',
   agentModelLoadFailed: 'No se pudo cargar el modelo. Reintenta o elige otro modelo.',
   agentModelQuota:

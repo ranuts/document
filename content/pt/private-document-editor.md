@@ -11,7 +11,7 @@ breadcrumb: Editor privado
 appDescription: 'Edite DOCX, XLSX, PPTX e CSV localmente; o app anfitrião controla o envio posterior dos arquivos.'
 ---
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 Isso serve bem para contratos, planilhas financeiras, anotações médicas, papelada de RH ou qualquer coisa que você prefira não entregar a terceiros. E você tem um editor de fidelidade completa — com o motor do OnlyOffice, então fontes, tabelas, fórmulas e layout são preservados — sem o preço de mandar o arquivo antes.
 
@@ -38,7 +38,7 @@ Na edição básica local: Seus arquivos são abertos e editados inteiramente de
 
 ### Meus arquivos chegam a ser enviados?
 
-A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Preciso de conta para manter meus arquivos privados?
 
@@ -46,7 +46,7 @@ Sem conta, sem cadastro e sem login. Você abre o editor e trabalha na hora, e n
 
 ### Dá para verificar que nada é enviado?
 
-Confira no painel de rede a abertura, edição e salvamento de um arquivo local. Teste separadamente a IA opcional, URLs remotas e apps que incorporam o editor; suas requisições não fazem parte da edição básica local. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Confira no painel de rede a abertura, edição e salvamento de um arquivo local. Teste separadamente a IA opcional, URLs remotas e apps que incorporam o editor; suas requisições não fazem parte da edição básica local. A abertura, edição e conversão básicas rodam localmente no navegador sem exigir o envio do documento. Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
 
 ### Continua funcionando sem conexão com a internet?
 
@@ -58,4 +58,4 @@ Com o salvamento automático ativado, cópias de recuperação ficam na IndexedD
 
 ### O assistente de IA integrado está disponível?
 
-O assistente de IA integrado ainda não está concluído e não é uma função publicada. O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.
+Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant). O app que incorpora o editor pode receber arquivos exportados e enviá-los conforme sua própria política.

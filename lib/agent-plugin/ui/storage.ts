@@ -19,6 +19,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 export function isMessage(value: unknown): value is LLMMessage {
   if (!isRecord(value) || (value.role !== 'user' && value.role !== 'assistant')) return false;
+  if (value.copyOnly !== undefined && value.copyOnly !== true) return false;
   if (value.interrupted !== undefined && value.interrupted !== true) return false;
   if (value.hostGuidance !== undefined && !['tool', 'status', 'error'].includes(String(value.hostGuidance)))
     return false;
@@ -91,6 +92,7 @@ export function historyToTurns(messages: LLMMessage[]): ChatTurn[] {
             (message as LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error' }).hostGuidance ??
             (message.role === 'assistant' ? 'agent' : 'user'),
           text,
+          ...((message as LLMMessage & { copyOnly?: true }).copyOnly ? { copyOnly: true as const } : {}),
           ...(message.role === 'assistant' &&
           !(message as LLMMessage & { hostGuidance?: string }).hostGuidance &&
           (message.interrupted ||
