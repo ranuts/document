@@ -470,13 +470,13 @@ describe('the runtime cache outlives deploys, so it has to be kept honest', () =
     expect(Object.keys(stores)).not.toContain('document-editor-runtime-oldvendor');
   });
 
-  it('sweeps a stale CORE cache even under an open window (it holds no vendor assets)', async () => {
+  it('keeps a stale CORE cache under an open window for its old lazy chunks', async () => {
     const stores = { 'document-editor-core-1787000000': fakeCache(['/index.html']), [OWN_RUNTIME]: fakeCache([]) };
     const worker = loadWorker(stores, [{ id: 'window-1' }]);
 
     await dispatch(worker, 'activate');
 
-    expect(Object.keys(stores)).not.toContain('document-editor-core-1787000000');
+    expect(Object.keys(stores)).toContain('document-editor-core-1787000000');
   });
 
   it('trims an app asset rather than the vendor binary the trim was protecting', async () => {

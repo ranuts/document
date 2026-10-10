@@ -277,3 +277,53 @@ it('captures literal tabs without generated numbering in the Word tool target', 
   Object.assign(api, { WordControl: { m_oLogicDocument: {} }, pluginMethod_GetSelectedText: getter });
   expect(captureDocumentToolTarget().selectedText).toBe('😀\t');
 });
+
+// Native numeric entry normalizes its lexical representation (for example 1.0 -> 1).
+it.each(['1.0', '001', '-0', '1e3', '-2.5E-2', '.5'])(
+  'verifies auto numeric entry %s by its stored numeric value',
+  async (input) => {
+    const state = mount();
+    const number = Number(input);
+    const model = {
+      selectionRange: { ranges: [{ c1: 0, c2: 0, r1: 0, r2: 0 }], activeCell: { row: 0, col: 0 } },
+      getRange3: () => ({
+        getValue: () => String(number),
+        getNumberValue: () => number,
+        getValueData: () => ({ value: { type: 0 } }),
+      }),
+    };
+    Object.assign(state.api, {
+      asc_getActiveRangeStr: () => 'A1',
+      asc_getActiveWorksheetIndex: () => 0,
+      wb: { getWorksheet: () => ({ model }) },
+    });
+    const scope = captureDocumentToolTarget();
+    await expect(scope.verify!(plan('set_cell', { cell: 'A1', value: input }, 'cell'))).resolves.toBe(true);
+  },
+);
+it('does not accept numeric normalization for a literal text assignment', async () => {
+  vi.useFakeTimers();
+  try {
+    const state = mount();
+    const model = {
+      selectionRange: { ranges: [{ c1: 0, c2: 0, r1: 0, r2: 0 }], activeCell: { row: 0, col: 0 } },
+      getRange3: () => ({
+        getValue: () => '1',
+        getNumberValue: () => 1,
+        getValueData: () => ({ value: { type: 0 } }),
+      }),
+    };
+    Object.assign(state.api, {
+      asc_getActiveRangeStr: () => 'A1',
+      asc_getActiveWorksheetIndex: () => 0,
+      wb: { getWorksheet: () => ({ model }) },
+    });
+    const outcome = captureDocumentToolTarget().verify!(
+      plan('set_cell', { cell: 'A1', value: '001', valueType: 'text' }, 'cell'),
+    );
+    await vi.runAllTimersAsync();
+    await expect(outcome).resolves.toBe(false);
+  } finally {
+    vi.useRealTimers();
+  }
+});

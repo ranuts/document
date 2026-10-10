@@ -357,6 +357,25 @@ it('refuses browser-local writing until a service is connected or consent is giv
   expect(state.apply).not.toHaveBeenCalled();
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
 });
+it('explains a blocked writing route without requiring an unrelated model download', async () => {
+  // The narrowing this change delivers: a document write is no longer silently
+  // routed to a browser-local engine that never passed quality acceptance.
+  state.ready = false;
+  localStorage.setItem('agent-panel-provider', 'wllama');
+  state.source = 'Budget 1250 EUR';
+  const panel = createAgentPanel();
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Polish this';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(state.writing).not.toHaveBeenCalled();
+  expect(state.apply).not.toHaveBeenCalled();
+  expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingNeedsLocalService'));
+});
 it('persists the writing destination, model and browser-local writing consent', () => {
   const panel = createAgentPanel();
   const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
@@ -1426,4 +1445,72 @@ it('ignores old loading progress after switching to a different task model', asy
   expect(panel.querySelector('.agent-panel-note')?.textContent).not.toBe(t('agentModelLoaded'));
   expect(panel.querySelector('.agent-panel-load')?.hasAttribute('disabled')).toBe(false);
   localStorage.removeItem('agent-task-models');
+});
+
+it('keeps endpoint keys isolated when switching cloud kinds', () => {
+  const slot = 'agent_endpoint_key_';
+  localStorage.setItem(slot + 'anthropic', 'anthropic-key');
+  localStorage.setItem(slot + 'gemini', 'gemini-key');
+  try {
+    const panel = createAgentPanel();
+    const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+    const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+    kind.value = 'anthropic';
+    kind.dispatchEvent(new Event('change'));
+    expect(key.value).toBe('anthropic-key');
+    kind.value = 'gemini';
+    kind.dispatchEvent(new Event('change'));
+    expect(key.value).toBe('gemini-key');
+    expect(getEndpointKey('anthropic')).toBe('anthropic-key');
+  } finally {
+    localStorage.removeItem(slot + 'anthropic');
+    localStorage.removeItem(slot + 'gemini');
+  }
+});
+
+it('discards a pending endpoint connection after its destination changes', async () => {
+  let finish!: (response: Response) => void;
+  const fetchMock = vi.fn(
+    () =>
+      new Promise<Response>((resolve) => {
+        finish = resolve;
+      }),
+  );
+  vi.stubGlobal('fetch', fetchMock);
+  try {
+    const panel = createAgentPanel();
+    const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+    model.value = 'old-model';
+    model.dispatchEvent(new Event('change'));
+    const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+    connect.click();
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    model.value = 'new-model';
+    model.dispatchEvent(new Event('change'));
+    finish(new Response(JSON.stringify({ models: [{ name: 'old-model' }] })));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(connect.textContent).toBe(t('agentEndpointConnect'));
+    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(
+      t('agentWriteNeedsDestination'),
+    );
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
+it('keeps the endpoint connection failure visible in settings', async () => {
+  vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Unavailable')));
+  try {
+    const panel = createAgentPanel();
+    const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+    model.value = 'model';
+    model.dispatchEvent(new Event('change'));
+    panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+    await vi.waitFor(() =>
+      expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentEndpointFailed')),
+    );
+    expect(panel.querySelector('.agent-panel-endpoint-status')?.textContent).toBe(t('agentEndpointFailed'));
+  } finally {
+    vi.unstubAllGlobals();
+  }
 });

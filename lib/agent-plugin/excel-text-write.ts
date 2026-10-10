@@ -35,17 +35,24 @@ export interface ExcelTextWriteScope {
 }
 
 /** Exact single-cell text insertion through the native paste pipeline. */
-export async function writeExcelLiteralText(
+export function writeExcelLiteralText(scope: ExcelTextWriteScope, text: string, signal?: AbortSignal): Promise<void> {
+  return writeExcelNativeText(scope, text, signal, true);
+}
+
+/** Native numeric/formula parsing with the same cancellation and history ownership as literal text. */
+export async function writeExcelNativeText(
   scope: ExcelTextWriteScope,
   text: string,
   signal?: AbortSignal,
+  literal = false,
+  verify?: () => boolean,
 ): Promise<void> {
   signal?.throwIfAborted();
   if (typeof text !== 'string' || !text.length || text.length > 8000 || /[\t\r\n]/.test(text))
     throw new Error('Invalid document tool parameters');
   if (!scope.isCurrent()) throw new Error('Paste target has expired');
   assertExcelTextWritable(scope.api, scope.model, scope.cell, scope.nativeRange, scope.readonly);
-  const format = captureExcelCellFormat(scope.cell);
+  const format = literal ? captureExcelCellFormat(scope.cell) : undefined;
   let editOwned = true;
   let completedOwnership: (() => boolean) | undefined;
   // Navigation invalidates insertion, but does not transfer ownership of our
@@ -71,62 +78,72 @@ export async function writeExcelLiteralText(
         const targetCurrent = () => ownsGroup() && scope.isCurrent();
         let temporaryFormatAttempted = false;
         let pendingOwnership: (() => boolean) | undefined;
-        await withExcelTextFormat(
-          {
-            originalFormat: format.originalFormat,
-            isCurrent: targetCurrent,
-            createPoint: () => scope.history.Create_NewPoint(),
-            startTransaction: () => scope.history.StartTransaction(),
-            endTransaction: () => {
-              const owned = current();
-              scope.history.EndTransaction();
-              if (owned) captureCompletion();
-            },
-            setFormat: (value) => {
-              if (temporaryFormatAttempted) {
-                current();
-                const currentFormat = scope.cell.getNumFormat()?.sFormat;
-                if (!scope.isDocumentCurrent() || (currentFormat !== '@' && currentFormat !== format.originalFormat)) {
-                  editOwned = false;
-                  throw new Error('Paste target has expired');
+        const paste = async () => {
+          try {
+            await pasteExcelText(scope.api, scope.view, scope.clipboardFormat, text, {
+              signal,
+              isCurrent: targetCurrent,
+              endPaste: scope.endPaste,
+              onNativeCompletion: captureCompletion,
+              captureOwnership: () => {
+                const proof = captureExcelHistoryOwnership(scope.history, ownsGroup);
+                pendingOwnership = proof;
+                return () => {
+                  const owned = proof();
+                  pendingOwnership = undefined;
+                  return owned;
+                };
+              },
+              onOwnershipLost: () => {
+                editOwned = false;
+              },
+            });
+          } catch (error) {
+            // Stop/timeout can settle before a native continuation checks its proof.
+            if (pendingOwnership && !pendingOwnership()) editOwned = false;
+            throw error;
+          }
+        };
+        if (format)
+          await withExcelTextFormat(
+            {
+              originalFormat: format.originalFormat,
+              isCurrent: targetCurrent,
+              createPoint: () => scope.history.Create_NewPoint(),
+              startTransaction: () => scope.history.StartTransaction(),
+              endTransaction: () => {
+                const owned = current();
+                scope.history.EndTransaction();
+                if (owned) captureCompletion();
+              },
+              setFormat: (value) => {
+                if (temporaryFormatAttempted) {
+                  current();
+                  const currentFormat = scope.cell.getNumFormat()?.sFormat;
+                  if (
+                    !scope.isDocumentCurrent() ||
+                    (currentFormat !== '@' && currentFormat !== format.originalFormat)
+                  ) {
+                    editOwned = false;
+                    throw new Error('Paste target has expired');
+                  }
+                  if (currentFormat === format.originalFormat) return;
                 }
-                if (currentFormat === format.originalFormat) return;
-              }
-              temporaryFormatAttempted = true;
-              format.setFormat(value);
-              if (completedOwnership && editOwned) captureCompletion();
+                temporaryFormatAttempted = true;
+                format.setFormat(value);
+                if (completedOwnership && editOwned) captureCompletion();
+              },
             },
-          },
-          async () => {
-            try {
-              await pasteExcelText(scope.api, scope.view, scope.clipboardFormat, text, {
-                signal,
-                isCurrent: targetCurrent,
-                endPaste: scope.endPaste,
-                onNativeCompletion: captureCompletion,
-                captureOwnership: () => {
-                  const proof = captureExcelHistoryOwnership(scope.history, ownsGroup);
-                  pendingOwnership = proof;
-                  return () => {
-                    const owned = proof();
-                    pendingOwnership = undefined;
-                    return owned;
-                  };
-                },
-                onOwnershipLost: () => {
-                  editOwned = false;
-                },
-              });
-            } catch (error) {
-              // Stop/timeout can settle before a native continuation checks its proof.
-              if (pendingOwnership && !pendingOwnership()) editOwned = false;
-              throw error;
-            }
-          },
-        );
+            paste,
+          );
+        else await paste();
         signal?.throwIfAborted();
         if (!targetCurrent()) throw new Error('Paste target has expired');
-        if (scope.cell.getValue() !== text || scope.cell.getNumFormat()?.sFormat !== format.originalFormat)
+        if (
+          (format &&
+            (scope.cell.getValue() !== text || scope.cell.getNumFormat()?.sFormat !== format.originalFormat)) ||
+          (verify && !verify())
+        )
           throw new Error('The change could not be verified. Check the document and use Undo if needed.');
       },
       () => scope.isDocumentCurrent(),

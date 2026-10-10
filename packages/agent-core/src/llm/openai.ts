@@ -45,13 +45,15 @@ export class OpenAIProvider implements LLMProvider {
     return !!this.apiKey;
   }
 
-  async chat(messages: LLMMessage[], tools: LLMToolDef[]): Promise<LLMResponse> {
+  async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+    signal?.throwIfAborted();
     if (!this.apiKey) {
       throw new Error('OpenAI API key is not configured');
     }
     const doFetch = this.fetchImpl ?? (globalThis.fetch.bind(globalThis) as FetchLike);
     const response = await doFetch(`${this.baseURL}/chat/completions`, {
       method: 'POST',
+      ...(signal ? { signal } : {}),
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` },
       body: JSON.stringify({
         model: this.model,
@@ -65,6 +67,7 @@ export class OpenAIProvider implements LLMProvider {
       throw new Error(`OpenAI request failed: ${response.status} ${detail}`.trim());
     }
     const completion = (await response.json()) as OpenAICompletion;
+    signal?.throwIfAborted();
     return parseOpenAIResponse(completion);
   }
 }

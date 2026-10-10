@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const excelCellText = vi.hoisted(() => vi.fn(async (_cell: string, _text: string, _signal?: AbortSignal) => {}));
-vi.mock('../../lib/agent-plugin/excel-cell-write', () => ({ writeExcelCellText: excelCellText }));
+const excelCellValue = vi.hoisted(() => vi.fn(async (_cell: string, _text: string, _signal?: AbortSignal) => {}));
+vi.mock('../../lib/agent-plugin/excel-cell-write', () => ({
+  writeExcelCellText: excelCellText,
+  writeExcelCellValue: excelCellValue,
+}));
 
 // Mock the bridge so tool tests don't depend on a live editor iframe.
 const pasteHtml = vi.fn();
@@ -380,18 +384,17 @@ describe('agent tools', () => {
       expect(pasteText).not.toHaveBeenCalled();
     });
 
-    it('navigates to the cell and writes the value', async () => {
-      const result = await setCellTool.execute({ cell: 'B2', value: 'Revenue' });
-      expect(findCell).toHaveBeenCalledWith('B2');
-      expect(pasteText).toHaveBeenCalledWith('Revenue');
+    it('uses the protected native writer for default auto values and forwards Stop', async () => {
+      const abort = new AbortController();
+      const result = await setCellTool.execute({ cell: 'B2', value: 'Revenue' }, abort.signal);
+      expect(excelCellValue).toHaveBeenCalledWith('B2', 'Revenue', abort.signal);
+      expect(pasteText).not.toHaveBeenCalled();
       expect(result).toEqual({ cell: 'B2', value: 'Revenue' });
     });
 
     it('errors when the editor is not a spreadsheet (no asc_findCell)', async () => {
-      requireEditorApi.mockImplementationOnce(
-        () => ({ pluginMethod_PasteText: pasteText }) as ReturnType<typeof makeApi>,
-      );
-      await expect(setCellTool.execute({ cell: 'A1', value: 'x' })).rejects.toThrow('spreadsheet');
+      excelCellValue.mockRejectedValueOnce(new Error('officeSpreadsheetOnly'));
+      await expect(setCellTool.execute({ cell: 'A1', value: 'x' })).rejects.toThrow('officeSpreadsheetOnly');
     });
 
     it('throws a TypeError for non-string params', async () => {

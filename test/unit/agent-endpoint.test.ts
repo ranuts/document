@@ -1,16 +1,10 @@
 import { expect, it } from 'vitest';
 import {
   createEndpointProvider,
-  isLoopbackHost,
   validateRemoteEndpointUrl,
   validateWritingEndpoint,
   writingEndpointDataPath,
 } from '../../packages/agent-core/src/llm/endpoint';
-
-it('identifies the loopback hosts that may run over plain http', () => {
-  for (const host of ['localhost', '127.0.0.1', '[::1]']) expect(isLoopbackHost(host)).toBe(true);
-  for (const host of ['example.com', '192.168.1.9', 'localhost.evil.test']) expect(isLoopbackHost(host)).toBe(false);
-});
 
 it('requires https for a remote endpoint and keeps its API path', () => {
   expect(validateRemoteEndpointUrl('https://api.example.com/v1/')).toBe('https://api.example.com/v1');

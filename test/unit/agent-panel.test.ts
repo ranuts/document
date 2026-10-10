@@ -325,7 +325,7 @@ it('executes an explicit slide command directly in tools mode without a ready mo
     input.value = 'Add a slide';
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    await vi.waitFor(() => expect(execute).toHaveBeenCalledExactlyOnceWith({ action: 'add' }));
+    await vi.waitFor(() => expect(execute).toHaveBeenCalledExactlyOnceWith({ action: 'add' }, expect.any(AbortSignal)));
     await vi.waitFor(() => expect(panel.querySelector('.cui-activity')?.textContent).toContain(t('agentPlanVerified')));
   } finally {
     execute.mockRestore();
@@ -402,4 +402,43 @@ it('shows selected local model filenames safely and clears them when switching t
   url.value = 'https://example.com/model.gguf';
   url.dispatchEvent(new Event('change'));
   expect(names!.textContent).toBe('');
+});
+
+it.each([
+  ['sum_range', 'sum A1:A1 into B1'],
+  ['slide_action', 'Add a slide'],
+  ['set_bold', 'bold selected text'],
+] as const)('Stop cancels an explicit %s command before its deferred document write', async (name, command) => {
+  const { agentTools } = await import('../../lib/agent-plugin/tools');
+  let release!: () => void;
+  let wrote = false;
+  const execute = vi.spyOn(agentTools[name], 'execute').mockImplementation(async (_input, signal) => {
+    await new Promise<void>((resolve, reject) => {
+      release = () => {
+        if (!signal?.aborted) wrote = true;
+        resolve();
+      };
+      signal?.addEventListener('abort', () => reject(signal.reason), { once: true });
+    });
+    return { verified: true } as never;
+  });
+  try {
+    const panel = createAgentPanel();
+    document.body.append(panel);
+    const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+    mode.value = 'tools';
+    mode.dispatchEvent(new Event('change'));
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    input.value = command;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() => expect(release).toBeTypeOf('function'));
+    panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+    release();
+    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    expect(wrote).toBe(false);
+    expect(panel.textContent).toContain(t('agentStopped'));
+  } finally {
+    execute.mockRestore();
+  }
 });

@@ -5,6 +5,8 @@ declare global {
   interface Window {
     /** Set by the editor entry (`index.ts`) when the agent feature is enabled. */
     __toggleAgentPanel?: () => void;
+    __agentPastePending?: boolean;
+    __releaseAgentPaste?: () => void;
   }
 }
 
@@ -12,7 +14,7 @@ declare global {
  * The agent's document writes, driven through the real panel against a real v9 editor.
  *
  * The three write mechanisms this covers are the ones the tools actually use:
- *  - Excel writes the spreadsheet model directly (`writeExcelCellText`).
+ *  - Excel uses a protected native paste pipeline (`writeExcelCellText` / auto value entry).
  *  - Word goes through the native HTML paste wrapper (`pasteWordHtml`).
  *  - Presentations go through the slide tools (`slide_action`).
  *
@@ -127,6 +129,71 @@ test.describe('agent document writes (real editor)', () => {
     await undo(page);
     await expect.poll(() => readCell(page, 'B1')).not.toBe('agent wrote this');
   });
+
+  test('writes auto numeric values and SUM formulas as separate undo steps', async ({ page }) => {
+    await openEditorWithPanel(page, 'xlsx');
+    await send(page, 'tools', 'read A1:A5, then set A1 to 1.0');
+    await expect.poll(() => readCell(page, 'A1')).toBe('1');
+    await expect(page.locator('.cui-input')).toBeEnabled();
+    await send(page, 'tools', 'sum A1:A1 into B1');
+    await expect.poll(() => readCell(page, 'B1')).toBe('1');
+    await expect(page.locator('.cui-input')).toBeEnabled();
+    expect(
+      await page.evaluate(() => {
+        const win = window.__ooFrames.readyEditor() as unknown as { Asc: { editor: unknown } };
+        const api = win.Asc.editor as {
+          wb: {
+            getWorksheet(): {
+              model: { getRange3(r1: number, c1: number, r2: number, c2: number): { getFormula(): string } };
+            };
+          };
+        };
+        return api.wb.getWorksheet().model.getRange3(0, 1, 0, 1).getFormula().replace(/^=/, '');
+      }),
+    ).toBe('SUM(A1:A1)');
+    await undo(page);
+    await expect.poll(() => readCell(page, 'B1')).toBe('');
+    expect(await readCell(page, 'A1')).toBe('1');
+    await undo(page);
+    await expect.poll(() => readCell(page, 'A1')).toBe('');
+    await expect(page.locator('.cui-msg-error')).toHaveCount(0);
+  });
+
+  for (const operation of ['auto', 'sum'] as const) {
+    test(`a stopped ${operation} write cannot resume through a delayed native font callback`, async ({ page }) => {
+      await openEditorWithPanel(page, 'xlsx');
+      if (operation === 'sum') {
+        await send(page, 'tools', 'read A1:A5, then set A1 to 5');
+        await expect.poll(() => readCell(page, 'A1')).toBe('5');
+        await expect(page.locator('.cui-input')).toBeEnabled();
+      }
+      await page.evaluate(() => {
+        const win = window.__ooFrames.readyEditor() as unknown as { Asc: { editor: unknown } };
+        const api = win.Asc.editor as {
+          wb: { getWorksheet(): { _loadFonts(fonts: unknown, done: () => void): void } };
+        };
+        const view = api.wb.getWorksheet();
+        const original = view._loadFonts;
+        view._loadFonts = function (_fonts, done) {
+          window.__agentPastePending = true;
+          window.__releaseAgentPaste = () => {
+            view._loadFonts = original;
+            Reflect.apply(done, view, []);
+          };
+        };
+      });
+      await send(page, 'tools', operation === 'auto' ? 'read A1:A5, then set B1 to 7' : 'sum A1:A1 into B1');
+      await page.waitForFunction(() => window.__agentPastePending === true);
+      await page.locator('.cui-send-stop').click();
+      await page.evaluate(async () => {
+        window.__releaseAgentPaste?.();
+        await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      });
+      await expect(page.locator('.cui-input')).toBeEnabled();
+      expect(await readCell(page, 'B1')).toBe('');
+      if (operation === 'sum') expect(await readCell(page, 'A1')).toBe('5');
+    });
+  }
 
   test('writes into a Word document through the native paste wrapper', async ({ page }) => {
     await openEditorWithPanel(page, 'docx');

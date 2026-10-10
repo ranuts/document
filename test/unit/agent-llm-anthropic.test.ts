@@ -1,11 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { APIUserAbortError } from '../../packages/agent-core/node_modules/@anthropic-ai/sdk';
 import {
   AnthropicProvider,
   parseAnthropicResponse,
   toAnthropicMessage,
   toAnthropicTool,
-} from '@ranuts/agent-core/llm/anthropic';
-import { clearApiKey, setApiKey } from '@ranuts/agent-core/llm/keys';
+} from '../../packages/agent-core/src/llm/anthropic';
+import { clearApiKey, setApiKey } from '../../packages/agent-core/src/llm/keys';
 import type { LLMMessage } from '@ranuts/agent-core/llm/types';
 
 describe('anthropic provider conversion', () => {
@@ -149,3 +150,36 @@ describe('AnthropicProvider', () => {
     expect(result.text).toBe('fallback');
   });
 });
+
+it.each(['chat', 'stream', 'fallback'] as const)(
+  'cancels a pending Anthropic %s request through the SDK signal',
+  async (mode) => {
+    const abort = new AbortController();
+    const request = (_body: Record<string, unknown>, options?: { signal?: AbortSignal }) => {
+      expect(options?.signal).toBe(abort.signal);
+      return new Promise<never>((_resolve, reject) => {
+        options!.signal!.addEventListener('abort', () => reject(new APIUserAbortError()), { once: true });
+      });
+    };
+    const provider = new AnthropicProvider({
+      client: {
+        messages: {
+          create: request,
+          ...(mode === 'stream'
+            ? {
+                stream: (body, options) => {
+                  const result = request(body, options);
+                  return { on: () => {}, finalMessage: () => result };
+                },
+              }
+            : {}),
+        },
+      },
+    });
+    const typed = provider as import('@ranuts/agent-core/llm/types').LLMProvider;
+    const pending =
+      mode === 'chat' ? typed.chat([], [], abort.signal) : typed.chatStream!([], [], () => {}, abort.signal);
+    abort.abort();
+    await expect(pending).rejects.toMatchObject({ name: 'AbortError' });
+  },
+);

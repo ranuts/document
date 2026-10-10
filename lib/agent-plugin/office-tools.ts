@@ -1,3 +1,4 @@
+import { writeExcelCellValue } from './excel-cell-write';
 import type { AgentTool } from '@ranuts/agent-core/types';
 import { requireEditorApi, getEditorContext, type EditorApi } from './editor-bridge';
 import { pasteSlideText, type NativePasteApi } from './native-paste';
@@ -200,7 +201,8 @@ export const sumRangeTool: AgentTool<
   },
   // The optional target makes this a potentially mutating tool.
   readOnlyHint: false,
-  execute: async ({ range, target }) => {
+  execute: async ({ range, target }, signal) => {
+    signal?.throwIfAborted();
     const bounds = parseOfficeRange(range);
     const destination = target === undefined ? undefined : parseOfficeRange(target);
     if (
@@ -235,14 +237,11 @@ export const sumRangeTool: AgentTool<
       ensureWritable(view, destination);
       const cell = model.getRange3(destination.r1, destination.c1, destination.r2, destination.c2);
       if (cell.getValue() || cell.getFormula() || cell.hasMerged?.()) fail('officeTargetNotEmpty');
-      if (typeof api.asc_findCell !== 'function' || typeof api.pluginMethod_PasteText !== 'function')
-        fail('officeSpreadsheetOnly');
       const formula = `SUM(${range.toUpperCase()})`;
-      api.asc_findCell(target!);
-      api.pluginMethod_PasteText(`=${formula}`);
-      await verify(
-        api,
-        () => api.wb?.getWorksheet() === view,
+      await writeExcelCellValue(
+        target!,
+        `=${formula}`,
+        signal,
         () =>
           cell.getFormula().replace(/^=/, '').toUpperCase() === formula &&
           Math.abs((cell.getNumberValue() ?? NaN) - sum) <= 1e-9 * Math.max(1, Math.abs(sum)),

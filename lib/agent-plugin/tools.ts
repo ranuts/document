@@ -1,5 +1,5 @@
 import { setDocumentReviewMode } from './review-mode';
-import { writeExcelCellText } from './excel-cell-write';
+import { writeExcelCellText, writeExcelCellValue } from './excel-cell-write';
 import { pasteWordHtml } from './word-paste';
 import { addSlideTextTool, replaceSlideText } from './office-tools';
 /**
@@ -309,12 +309,7 @@ export const setCellTool: AgentTool<SetCellParams, { cell: string; value: string
       await writeExcelCellText(cell, value, signal);
       return { cell, value };
     }
-    const api = requireEditorApi();
-    if (typeof api.asc_findCell !== 'function' || typeof api.pluginMethod_PasteText !== 'function') {
-      throw new Error('set_cell is only available in the spreadsheet (Excel) editor');
-    }
-    api.asc_findCell(cell);
-    api.pluginMethod_PasteText(value);
+    await writeExcelCellValue(cell, value, signal);
     return { cell, value };
   },
 };

@@ -352,6 +352,14 @@ const holdsVendorAssetsForOpenWindow = (cacheName) =>
       })
     : Promise.resolve(false);
 
+// Precached lazy chunks live in core, and a live page still imports its old
+// hashed URLs after a new worker takes control. Keep that build available
+// until no window can depend on it; the next activation can retire it.
+const holdsCoreAssetsForOpenWindow = (cacheName) =>
+  cacheName.startsWith('document-editor-core-')
+    ? self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windows) => windows.length > 0)
+    : Promise.resolve(false);
+
 // Activate event: Retire owned app caches from previous versions.
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -361,9 +369,10 @@ self.addEventListener('activate', (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (isOwnedAppCache(cacheName) && cacheName !== CORE_CACHE && cacheName !== RUNTIME_CACHE) {
-              return holdsVendorAssetsForOpenWindow(cacheName).then((keep) =>
-                keep ? undefined : caches.delete(cacheName),
-              );
+              return Promise.all([
+                holdsVendorAssetsForOpenWindow(cacheName),
+                holdsCoreAssetsForOpenWindow(cacheName),
+              ]).then((keep) => (keep.some(Boolean) ? undefined : caches.delete(cacheName)));
             }
           }),
         );
@@ -537,12 +546,14 @@ self.addEventListener('fetch', (event) => {
   // Same strategy as HTML: these files must match the HTML of the current deploy.
   const isNetworkFirst = isHtml || DEPLOY_COUPLED.test(url.pathname);
   const cachedNavigation = async () => {
-    const exact = await caches.match(event.request);
+    // Retained old cores serve old hashed chunks to existing pages only.
+    // Stable URLs must use this build's shell and deploy-coupled resources.
+    const core = await caches.open(CORE_CACHE);
+    const exact = await core.match(event.request);
     if (exact) return exact;
     // Local document ids live in the URL; the HTML shell is identical for them.
     // Limit the fallback to editor navigations and this build's core cache.
     if (event.request.mode === 'navigate' && EDITOR_ROUTE.test(url.pathname)) {
-      const core = await caches.open(CORE_CACHE);
       return core.match(new URL('/editor.html', self.location.origin).href);
     }
     return undefined;

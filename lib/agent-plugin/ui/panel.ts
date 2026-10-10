@@ -687,6 +687,8 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   // Independent of the browser-local lifecycle: switching or unloading a browser
   // model must not disconnect a writing endpoint the user deliberately connected.
   let endpointProvider: LLMProvider | null = null;
+  let pendingEndpoint: LLMProvider | null = null;
+  let endpointAttempt = 0;
   const endpointKindValue = (): WritingEndpointKind => endpointKind.value as WritingEndpointKind;
   const endpointKeySlot = (kind: WritingEndpointKind): string =>
     kind === 'openai-compatible' ? endpointBaseUrl.value.trim() : kind;
@@ -758,25 +760,29 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     const slot = isCloudEndpointKind(kind) ? endpointKeySlot(kind) : '';
     endpointKey.value = slot ? (getEndpointKey(slot) ?? '') : '';
   };
-  const syncEndpointForm = (): void => {
+  const syncEndpointForm = (status = ''): void => {
     const kind = endpointKindValue();
     const cloud = isCloudEndpointKind(kind);
     endpointBaseUrl.hidden = kind === 'anthropic' || kind === 'gemini';
     endpointKey.hidden = !cloud;
     endpointStatus.textContent = endpointProvider?.isReady()
       ? t(cloud ? 'agentEndpointConfigured' : 'agentEndpointConnected')
-      : '';
+      : status;
     endpointConnect.textContent = endpointProvider ? t('agentEndpointDisconnect') : t('agentEndpointConnect');
     syncWriteDestination();
   };
   const disconnectEndpoint = (): void => {
+    endpointAttempt++;
+    const pending = pendingEndpoint;
+    pendingEndpoint = null;
+    if (pending && 'dispose' in pending && typeof pending.dispose === 'function') void pending.dispose();
     const previous = endpointProvider;
     endpointProvider = null;
     if (previous && 'dispose' in previous && typeof previous.dispose === 'function') void previous.dispose();
     syncEndpointForm();
   };
   const connectEndpoint = async (): Promise<void> => {
-    if (endpointProvider) {
+    if (endpointProvider || pendingEndpoint) {
       disconnectEndpoint();
       return;
     }
@@ -797,24 +803,30 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
         return;
       }
     }
+    const attempt = ++endpointAttempt;
     endpointStatus.textContent = t('agentEndpointConnecting');
+    let failure = '';
     try {
       rememberEndpoint();
       const endpoint = configuredEndpoint(endpointSettings);
       if (!endpoint) throw new Error('Incomplete writing endpoint');
       const stored = isCloudEndpointKind(kind) ? getEndpointKey(endpointKeySlot(kind)) : undefined;
       const provider = createEndpointProvider(endpoint, endpointKey.value.trim() || stored);
+      pendingEndpoint = provider;
       // Only the loopback service has a real connection check; a cloud endpoint
       // reports "configured" because readiness is not reachability.
       if ('preload' in provider && typeof provider.preload === 'function') await provider.preload();
+      if (attempt !== endpointAttempt) return;
       if (!provider.isReady()) throw new Error('Writing endpoint is not ready');
       endpointProvider = provider;
     } catch {
-      endpointProvider = null;
-      endpointStatus.textContent = t('agentEndpointFailed');
-      note.textContent = t('agentEndpointFailed');
+      if (attempt !== endpointAttempt) return;
+      disconnectEndpoint();
+      failure = t('agentEndpointFailed');
+      note.textContent = failure;
     }
-    syncEndpointForm();
+    pendingEndpoint = null;
+    syncEndpointForm(failure);
   };
   endpointConnect.addEventListener('click', () => void connectEndpoint());
   // A field that defines the destination invalidates the connected provider.
@@ -844,8 +856,8 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     // A different kind is a different destination: never keep the old provider.
     disconnectEndpoint();
     endpointBaseUrl.value = endpointKindValue() === 'loopback' ? DEFAULT_LOOPBACK_ENDPOINT : '';
-    rememberEndpoint();
     loadStoredKeyIntoForm();
+    rememberEndpoint();
     syncEndpointForm();
   });
   loadStoredKeyIntoForm();
@@ -957,8 +969,8 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
   window.addEventListener('pagehide', disconnectEndpoint);
   // Losing the connection changes which destinations can work at all, so the
   // reported destination has to follow it.
-  window.addEventListener('online', syncEndpointForm);
-  window.addEventListener('offline', syncEndpointForm);
+  window.addEventListener('online', () => syncEndpointForm());
+  window.addEventListener('offline', () => syncEndpointForm());
   window.addEventListener('pagehide', () => sidebar.dispose());
   window.addEventListener('document:content-ready', invalidatePlans);
   ggufUrl.addEventListener('change', () => {
@@ -1313,7 +1325,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
             name = intent.kind === 'slide' ? 'slide_action' : intent.kind;
             const { kind: _kind, ...parameters } = intent;
             input = parameters;
-            result = await agentTools[name].execute(input);
+            result = await agentTools[name].execute(input, directAbort.signal);
           } else {
             name = intent.kind === 'bold' ? 'set_bold' : 'set_paragraph_alignment';
             input = intent.kind === 'bold' ? { enabled: intent.enabled } : { alignment: intent.alignment };
@@ -1323,7 +1335,7 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
               getEditorApi()?.pluginMethod_GetSelectedText().trim()
             )
               throw new Error('agentParagraphSelectionConflict');
-            result = await agentTools[name].execute(input);
+            result = await agentTools[name].execute(input, directAbort.signal);
           }
           const id = `direct-${crypto.randomUUID()}`;
           messages.push(
@@ -1380,9 +1392,9 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       if (writingSelect.value === 'tools') return !isModelFreeToolRequest(text, captureDocumentContext());
       if (!proposalMode) return true;
       try {
-        return resolveRoute().kind !== 'endpoint';
+        return resolveRoute().kind === 'local';
       } catch {
-        return true;
+        return false;
       }
     })();
     if (

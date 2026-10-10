@@ -301,6 +301,7 @@ if ('serviceWorker' in navigator) {
               void healStaleController({
                 registration,
                 waiting,
+                ownScriptURL,
                 controller: controllerAtBoot,
                 controllerVersion: controllerVersionAtBoot,
                 hasUnsavedChanges,

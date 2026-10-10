@@ -124,7 +124,7 @@ export function parseGeminiResponse(response: GeminiResponse): LLMResponse {
   return {
     text,
     toolCalls,
-    stopReason: candidate?.finishReason ?? 'stop',
+    stopReason: candidate?.finishReason === 'MAX_TOKENS' ? 'max_tokens' : (candidate?.finishReason ?? 'stop'),
     assistant: { role: 'assistant', content: assistant },
   };
 }
@@ -158,7 +158,8 @@ export class GeminiProvider implements LLMProvider {
     return !!this.apiKey;
   }
 
-  async chat(messages: LLMMessage[], tools: LLMToolDef[]): Promise<LLMResponse> {
+  async chat(messages: LLMMessage[], tools: LLMToolDef[], signal?: AbortSignal): Promise<LLMResponse> {
+    signal?.throwIfAborted();
     if (!this.apiKey) {
       throw new Error('Gemini API key is not configured');
     }
@@ -172,6 +173,7 @@ export class GeminiProvider implements LLMProvider {
 
     const response = await doFetch(`${this.baseURL}/models/${this.model}:generateContent`, {
       method: 'POST',
+      ...(signal ? { signal } : {}),
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': this.apiKey },
       body: JSON.stringify(body),
     });
@@ -180,6 +182,7 @@ export class GeminiProvider implements LLMProvider {
       throw new Error(`Gemini request failed: ${response.status} ${detail}`.trim());
     }
     const data = (await response.json()) as GeminiResponse;
+    signal?.throwIfAborted();
     return parseGeminiResponse(data);
   }
 }

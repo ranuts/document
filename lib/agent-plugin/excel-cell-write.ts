@@ -2,10 +2,20 @@ import { getEditorContext, requireEditorContext } from './editor-bridge';
 import { getReadonlyMode } from '../onlyoffice/readonly';
 import { parseOfficeRange } from './office-tools';
 import { assertExcelTextWritable } from './excel-text-preflight';
-import { writeExcelLiteralText, type ExcelTextWriteScope } from './excel-text-write';
+import { writeExcelLiteralText, writeExcelNativeText, type ExcelTextWriteScope } from './excel-text-write';
 
 /** Capture all native objects before selecting or changing the target. */
-export async function writeExcelCellText(address: string, text: string, signal?: AbortSignal): Promise<void> {
+export function writeExcelCellText(address: string, text: string, signal?: AbortSignal): Promise<void> {
+  return writeExcelCellValue(address, text, signal, undefined, true);
+}
+
+export async function writeExcelCellValue(
+  address: string,
+  text: string,
+  signal?: AbortSignal,
+  verify?: () => boolean,
+  literal = false,
+): Promise<void> {
   signal?.throwIfAborted();
   const bounds = parseOfficeRange(address);
   if (bounds.c1 !== bounds.c2 || bounds.r1 !== bounds.r2) throw new Error('officeInvalidRange');
@@ -84,42 +94,39 @@ export async function writeExcelCellText(address: string, text: string, signal?:
     );
   };
   api.asc_findCell(address.toUpperCase());
-  await writeExcelLiteralText(
-    {
-      api: nativeApi,
-      view: view!,
-      model,
-      cell,
-      history: history as ExcelTextWriteScope['history'],
-      nativeRange,
-      readonly: getReadonlyMode(),
-      codes: { BlockInteraction: type, ApplyChanges: action },
-      clipboardFormat,
-      closedGroupDescription: closed,
-      isDocumentCurrent: documentCurrent,
-      isCurrent: () => {
-        const selection = model.selectionRange;
-        return (
-          documentCurrent() &&
-          !getReadonlyMode() &&
-          wb!.getWorksheet() === view &&
-          getEditorContext()?.AscCommon?.g_specialPasteHelper === paste &&
-          paste.Api === api &&
-          selection.activeCell.row === bounds.r1 &&
-          selection.activeCell.col === bounds.c1 &&
-          selection.ranges.length === 1 &&
-          selection.ranges.every(
-            (range) =>
-              range.r1 === bounds.r1 && range.r2 === bounds.r2 && range.c1 === bounds.c1 && range.c2 === bounds.c2,
-          )
-        );
-      },
-      endPaste: () => {
-        if (getEditorContext()?.AscCommon?.g_specialPasteHelper === paste && paste.Api === api)
-          paste.Paste_Process_End();
-      },
+  const scope: ExcelTextWriteScope = {
+    api: nativeApi,
+    view: view!,
+    model,
+    cell,
+    history: history as ExcelTextWriteScope['history'],
+    nativeRange,
+    readonly: getReadonlyMode(),
+    codes: { BlockInteraction: type, ApplyChanges: action },
+    clipboardFormat,
+    closedGroupDescription: closed,
+    isDocumentCurrent: documentCurrent,
+    isCurrent: () => {
+      const selection = model.selectionRange;
+      return (
+        documentCurrent() &&
+        !getReadonlyMode() &&
+        wb!.getWorksheet() === view &&
+        getEditorContext()?.AscCommon?.g_specialPasteHelper === paste &&
+        paste.Api === api &&
+        selection.activeCell.row === bounds.r1 &&
+        selection.activeCell.col === bounds.c1 &&
+        selection.ranges.length === 1 &&
+        selection.ranges.every(
+          (range) =>
+            range.r1 === bounds.r1 && range.r2 === bounds.r2 && range.c1 === bounds.c1 && range.c2 === bounds.c2,
+        )
+      );
     },
-    text,
-    signal,
-  );
+    endPaste: () => {
+      if (getEditorContext()?.AscCommon?.g_specialPasteHelper === paste && paste.Api === api) paste.Paste_Process_End();
+    },
+  };
+  if (literal) await writeExcelLiteralText(scope, text, signal);
+  else await writeExcelNativeText(scope, text, signal, false, verify);
 }

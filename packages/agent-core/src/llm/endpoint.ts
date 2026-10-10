@@ -22,10 +22,6 @@ export interface WritingEndpoint {
 export const CLOUD_ENDPOINT_KINDS: readonly WritingEndpointKind[] = ['openai-compatible', 'anthropic', 'gemini'];
 export const DEFAULT_LOOPBACK_ENDPOINT = 'http://localhost:11434';
 
-export function isLoopbackHost(hostname: string): boolean {
-  return ['localhost', '127.0.0.1', '[::1]'].includes(hostname);
-}
-
 /**
  * A remote endpoint must be HTTPS. Plain HTTP to anything but loopback puts the
  * API key and the selected document text on the wire in clear text, and a URL
@@ -36,7 +32,7 @@ export function validateRemoteEndpointUrl(value: string): string {
   if (url.protocol !== 'https:') throw new Error('A remote endpoint must use https');
   if (url.username || url.password || url.search || url.hash)
     throw new Error('A remote endpoint must not carry credentials, a query or a fragment');
-  return url.origin + url.pathname.replace(/\/+$/, '') || url.origin;
+  return url.origin + url.pathname.replace(/\/+$/, '');
 }
 
 /** Normalise and validate an endpoint; invalid input throws rather than silently falling back. */

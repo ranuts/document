@@ -27,7 +27,16 @@ interface SheetModel {
     ranges: Array<{ c1: number; c2: number; r1: number; r2: number }>;
     activeCell: { col: number; row: number };
   };
-  getRange3(r1: number, c1: number, r2: number, c2: number): { getValue(): string };
+  getRange3(
+    r1: number,
+    c1: number,
+    r2: number,
+    c2: number,
+  ): {
+    getValue(): string;
+    getNumberValue?(): number | null;
+    getValueData?(): { value: { type: number } } | null;
+  };
 }
 interface ScopeApi extends EditorApi {
   isViewMode?: boolean;
@@ -177,7 +186,19 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
         return true;
       if (cellEdit) {
         const cell = parseOfficeRange(String(plan.input.cell));
-        if (model!.getRange3(cell.r1, cell.c1, cell.r2, cell.c2).getValue() === plan.input.value) return true;
+        const stored = model!.getRange3(cell.r1, cell.c1, cell.r2, cell.c2);
+        if (stored.getValue() === plan.input.value) return true;
+        // Auto entry parses numbers; native storage normalizes 001, 1.0 and -0.
+        // Literal text must retain every character and never use numeric equivalence.
+        const value = String(plan.input.value);
+        if (
+          plan.input.valueType !== 'text' &&
+          /^-?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(value) &&
+          Number.isFinite(Number(value)) &&
+          stored.getValueData?.()?.value.type === 0 &&
+          stored.getNumberValue?.() === Number(value)
+        )
+          return true;
       }
       if (attempt < 30) await new Promise((resolve) => setTimeout(resolve, 50));
     }

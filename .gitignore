@@ -17,7 +17,7 @@ dist
 # test artifacts
 coverage/
 playwright-report/
-playwright-report-docker/
+playwright-report-*/
 test-results/
 public/fonts/__fallback__/
 
@@ -37,11 +37,6 @@ corpus/
 corpus-src/
 dist-e2e-*/
 test-results-*/
-playwright-report-browsers/
-test-results-prod/
-playwright-report-prod/
-test-results-pages/
-playwright-report-pages/
 .wrangler/
 
 # Pages rendered from markdown at build/dev time by bin/build-pages.mjs (vite
@@ -238,3 +233,6 @@ public/pt/index.html
 
 # Locally mirrored model artifacts (deploy separately, keep out of Git).
 /public/models/
+
+# Temporary ignore lists used by archive-aware quality checks.
+/.archive-quality-*.ignore

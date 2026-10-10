@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { OpenAIProvider } from '@ranuts/agent-core/llm/openai';
-import { clearApiKey, setApiKey } from '@ranuts/agent-core/llm/keys';
+import { OpenAIProvider } from '../../packages/agent-core/src/llm/openai';
+import { clearApiKey, setApiKey } from '../../packages/agent-core/src/llm/keys';
 
 const okResponse = (body: unknown): Response => ({ ok: true, json: async () => body }) as unknown as Response;
 
@@ -66,4 +66,31 @@ describe('OpenAIProvider', () => {
     const provider = new OpenAIProvider({ apiKey: undefined });
     await expect(provider.chat([{ role: 'user', content: 'x' }], [])).rejects.toThrow('not configured');
   });
+});
+
+it('cancels a pending cloud request when Stop aborts its signal', async () => {
+  const abort = new AbortController();
+  const provider = new OpenAIProvider({
+    apiKey: 'test',
+    fetchImpl: async (_url, init) => {
+      expect(init.signal).toBe(abort.signal);
+      return new Promise((_resolve, reject) => {
+        init.signal!.addEventListener('abort', () => reject(init.signal!.reason), { once: true });
+      });
+    },
+  });
+  const pending = (provider as import('@ranuts/agent-core/llm/types').LLMProvider).chat([], [], abort.signal);
+  abort.abort();
+  await expect(pending).rejects.toMatchObject({ name: 'AbortError' });
+});
+
+it('does not send an already cancelled cloud request', async () => {
+  const fetchImpl = vi.fn(async () => okResponse({ choices: [] }));
+  const abort = new AbortController();
+  abort.abort();
+  const provider = new OpenAIProvider({ apiKey: 'test', fetchImpl });
+  await expect(
+    (provider as import('@ranuts/agent-core/llm/types').LLMProvider).chat([], [], abort.signal),
+  ).rejects.toMatchObject({ name: 'AbortError' });
+  expect(fetchImpl).not.toHaveBeenCalled();
 });

@@ -47,7 +47,6 @@ export {
   CLOUD_ENDPOINT_KINDS,
   DEFAULT_LOOPBACK_ENDPOINT,
   createEndpointProvider,
-  isLoopbackHost,
   validateRemoteEndpointUrl,
   validateWritingEndpoint,
   writingEndpointDataPath,
