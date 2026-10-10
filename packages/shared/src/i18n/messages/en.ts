@@ -82,14 +82,6 @@ export const en: I18nMessages = {
   agentOllamaModelPlaceholder: 'Model name, e.g. llama3.2',
   agentOllamaHint: 'Connects to local Ollama (http://localhost:11434); no API Key — make sure the model is running.',
   agentProviderLoopback: 'Local service',
-  agentLoopbackUrl: 'Service address',
-  agentLoopbackModel: 'Model name',
-  agentLoopbackConnect: 'Connect',
-  agentLoopbackDisconnect: 'Disconnect',
-  agentLoopbackConnecting: 'Connecting to the local service…',
-  agentLoopbackConnected: 'Connected to the local service',
-  agentLoopbackFailed: 'Could not reach the local service',
-  agentLoopbackModelRequired: 'Enter a model name first',
   agentEndpointKind: 'Writing destination',
   agentEndpointLoopback: 'Local service (on this machine)',
   agentEndpointOpenAICompatible: 'OpenAI-compatible endpoint',
@@ -116,6 +108,8 @@ export const en: I18nMessages = {
   agentWritingOfflineNeedsDevice:
     'Writing needs a destination on this device while you are offline. Connect a local service, or enable experimental browser-local writing.',
   agentEndpointOfflineHint: 'offline: a cloud endpoint cannot be reached',
+  agentEndpointKeyRequired: 'Enter an API key for this endpoint first',
+  agentWriteDestinationOfflineUnavailable: 'the configured cloud endpoint (unavailable offline)',
   agentLocalWritingConsent: 'Allow browser-local model writing (experimental, not quality-accepted)',
   agentWritingNeedsLocalService:
     'The browser-local models have not passed writing quality acceptance. Connect a local service, or enable experimental local writing.',

@@ -85,14 +85,6 @@ export const ja: Partial<I18nMessages> = {
   agentOllamaHint:
     'ローカルの Ollama（http://localhost:11434）に接続します。API キーは不要ですが、モデルが起動していることをご確認ください。',
   agentProviderLoopback: 'ローカルサービス',
-  agentLoopbackUrl: 'サービスアドレス',
-  agentLoopbackModel: 'モデル名',
-  agentLoopbackConnect: '接続',
-  agentLoopbackDisconnect: '切断',
-  agentLoopbackConnecting: 'ローカルサービスに接続しています…',
-  agentLoopbackConnected: 'ローカルサービスに接続しました',
-  agentLoopbackFailed: 'ローカルサービスに接続できませんでした',
-  agentLoopbackModelRequired: '先にモデル名を入力してください',
   agentEndpointKind: '書き込み先',
   agentEndpointLoopback: 'ローカルサービス（この端末上）',
   agentEndpointOpenAICompatible: 'OpenAI 互換エンドポイント',
@@ -119,6 +111,8 @@ export const ja: Partial<I18nMessages> = {
   agentWritingOfflineNeedsDevice:
     'オフラインでは書き込み先をこの端末上にする必要があります。ローカルサービスに接続するか、実験的なローカル書き込みを有効にしてください。',
   agentEndpointOfflineHint: 'オフライン：クラウドエンドポイントには到達できません',
+  agentEndpointKeyRequired: '先にこのエンドポイントの API キーを入力してください',
+  agentWriteDestinationOfflineUnavailable: '設定済みのクラウドエンドポイント（オフラインでは利用不可）',
   agentLocalWritingConsent: 'ブラウザ内モデルでの書き込みを許可（実験的、品質検証は未通過）',
   agentWritingNeedsLocalService:
     'ブラウザ内モデルは書き込み品質の検証に合格していません。ローカルサービスに接続するか、実験的なローカル書き込みを有効にしてください。',

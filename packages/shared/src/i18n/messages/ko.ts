@@ -85,14 +85,6 @@ export const ko: Partial<I18nMessages> = {
   agentOllamaHint:
     '로컬 Ollama(http://localhost:11434)에 연결합니다. API 키는 필요 없지만 모델이 실행 중인지 확인하세요.',
   agentProviderLoopback: '로컬 서비스',
-  agentLoopbackUrl: '서비스 주소',
-  agentLoopbackModel: '모델 이름',
-  agentLoopbackConnect: '연결',
-  agentLoopbackDisconnect: '연결 해제',
-  agentLoopbackConnecting: '로컬 서비스에 연결하는 중…',
-  agentLoopbackConnected: '로컬 서비스에 연결됨',
-  agentLoopbackFailed: '로컬 서비스에 연결할 수 없습니다',
-  agentLoopbackModelRequired: '먼저 모델 이름을 입력하세요',
   agentEndpointKind: '작성 대상',
   agentEndpointLoopback: '로컬 서비스(이 기기)',
   agentEndpointOpenAICompatible: 'OpenAI 호환 엔드포인트',
@@ -119,6 +111,8 @@ export const ko: Partial<I18nMessages> = {
   agentWritingOfflineNeedsDevice:
     '오프라인에서는 작성 대상을 이 기기로 두어야 합니다. 로컬 서비스에 연결하거나 실험적 로컬 쓰기를 켜세요.',
   agentEndpointOfflineHint: '오프라인: 클라우드 엔드포인트에 연결할 수 없음',
+  agentEndpointKeyRequired: '먼저 이 엔드포인트의 API 키를 입력하세요',
+  agentWriteDestinationOfflineUnavailable: '설정된 클라우드 엔드포인트(오프라인에서는 사용 불가)',
   agentLocalWritingConsent: '브라우저 내장 모델 쓰기 허용(실험적, 품질 검증 미통과)',
   agentWritingNeedsLocalService:
     '브라우저 내장 모델은 쓰기 품질 검증을 통과하지 못했습니다. 로컬 서비스에 연결하거나 실험적 로컬 쓰기를 켜세요.',

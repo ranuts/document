@@ -34,7 +34,7 @@ import {
   createEndpointProvider,
   type WritingEndpointKind,
 } from '@ranuts/agent-core/llm/endpoint';
-import { getEndpointKey, setEndpointKey } from '@ranuts/agent-core/llm/keys';
+import { clearEndpointKey, getEndpointKey, setEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { readTaskModelPreferences, writeTaskModelPreference } from './task-model-preferences';
 import {
   ENDPOINT_SETTINGS_KEY,
@@ -704,10 +704,15 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     } catch {
       // An endpoint the route would refuse is never persisted.
     }
-    if (isCloudEndpointKind(next.kind) && endpointKey.value.trim()) {
+    if (isCloudEndpointKind(next.kind)) {
       const slot = endpointKeySlot(next.kind);
       // No address yet means no slot to address; the key is simply not stored.
-      if (slot) setEndpointKey(slot, endpointKey.value.trim());
+      // Clearing the field removes the stored key: a secret the user cannot
+      // delete is worse than one they have to retype.
+      if (slot) {
+        if (endpointKey.value.trim()) setEndpointKey(slot, endpointKey.value.trim());
+        else clearEndpointKey(slot);
+      }
     }
   };
   const resolveRoute = (): WritingRoute => {
@@ -733,22 +738,31 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     const title = t('agentWriteDestinationTitle');
     const offlineNote = navigator.onLine === false ? ` · ${t('agentEndpointOfflineHint')}` : '';
     if (!route || route.kind === 'blocked') {
-      writeDestination.textContent = `${title}: ${t('agentWriteNeedsDestination')}${offlineNote}`;
+      // "not configured" would be false when a cloud endpoint is configured but
+      // cannot be used right now; say what is actually configured.
+      const configured = endpointProvider?.isReady() ? configuredEndpoint(endpointSettings) : null;
+      if (configured && configured.kind !== 'loopback')
+        writeDestination.textContent = `${title}: ${t('agentWriteDestinationOfflineUnavailable')} · ${configured.model}`;
+      else writeDestination.textContent = `${title}: ${t('agentWriteNeedsDestination')}${offlineNote}`;
       return;
     }
     const where = route.dataPath === 'device' ? t('agentWriteDestinationDevice') : t('agentWriteDestinationRemote');
     const name = route.kind === 'local' ? route.binding.model : route.endpoint.model;
     writeDestination.textContent = `${title}: ${where} · ${name}${offlineNote}`;
   };
+  // Filling the key field is a deliberate act (mount, or a different endpoint
+  // kind). Rendering status must not do it: it would overwrite a key the user is
+  // in the middle of typing, before it has been stored.
+  const loadStoredKeyIntoForm = (): void => {
+    const kind = endpointKindValue();
+    const slot = isCloudEndpointKind(kind) ? endpointKeySlot(kind) : '';
+    endpointKey.value = slot ? (getEndpointKey(slot) ?? '') : '';
+  };
   const syncEndpointForm = (): void => {
     const kind = endpointKindValue();
     const cloud = isCloudEndpointKind(kind);
     endpointBaseUrl.hidden = kind === 'anthropic' || kind === 'gemini';
     endpointKey.hidden = !cloud;
-    if (cloud) {
-      const slot = endpointKeySlot(kind);
-      endpointKey.value = slot ? (getEndpointKey(slot) ?? '') : '';
-    }
     endpointStatus.textContent = endpointProvider?.isReady()
       ? t(cloud ? 'agentEndpointConfigured' : 'agentEndpointConnected')
       : '';
@@ -775,6 +789,14 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       endpointStatus.textContent = t('agentEndpointUrlRequired');
       return;
     }
+    if (isCloudEndpointKind(kind) && !endpointKey.value.trim()) {
+      const slot = endpointKeySlot(kind);
+      if (!slot || !getEndpointKey(slot)) {
+        // A cloud endpoint without a key is not "failed", it is incomplete.
+        endpointStatus.textContent = t('agentEndpointKeyRequired');
+        return;
+      }
+    }
     endpointStatus.textContent = t('agentEndpointConnecting');
     try {
       rememberEndpoint();
@@ -795,7 +817,25 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     syncEndpointForm();
   };
   endpointConnect.addEventListener('click', () => void connectEndpoint());
-  for (const input of [endpointBaseUrl, endpointModel, endpointKey, localWritingConsent, writePreference])
+  // A field that defines the destination invalidates the connected provider.
+  // Without this the panel would report the new destination while requests still
+  // went to the old one -- including a different origin, and the old key.
+  endpointBaseUrl.addEventListener('change', () => {
+    // A different address is a different service, so the old secret does not
+    // travel to the new origin with it.
+    disconnectEndpoint();
+    endpointKey.value = '';
+    rememberEndpoint();
+    syncEndpointForm();
+  });
+  for (const input of [endpointModel, endpointKey])
+    input.addEventListener('change', () => {
+      // Store what was typed first: disconnecting re-renders the form.
+      rememberEndpoint();
+      disconnectEndpoint();
+    });
+  // These two do not define where the text goes, so they keep the connection.
+  for (const input of [localWritingConsent, writePreference])
     input.addEventListener('change', () => {
       rememberEndpoint();
       syncEndpointForm();
@@ -805,8 +845,10 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
     disconnectEndpoint();
     endpointBaseUrl.value = endpointKindValue() === 'loopback' ? DEFAULT_LOOPBACK_ENDPOINT : '';
     rememberEndpoint();
+    loadStoredKeyIntoForm();
     syncEndpointForm();
   });
+  loadStoredKeyIntoForm();
   syncEndpointForm();
   let runtimeDescription = '';
   let latestUsage: LLMResponse['usage'];
@@ -1330,7 +1372,22 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
       return;
     }
     const ctl = buildController();
-    if ((currentProvider() === 'wllama' || currentProvider() === 'webllm') && !webllmProvider?.isReady()) {
+    // The browser-local model is only needed when it is the writing destination.
+    // With a connected endpoint, a writing task must not sit behind a model
+    // download it will never use.
+    const writingEndpointReady = ((): boolean => {
+      if (!proposalMode) return false;
+      try {
+        return resolveRoute().kind === 'endpoint';
+      } catch {
+        return false;
+      }
+    })();
+    if (
+      !writingEndpointReady &&
+      (currentProvider() === 'wllama' || currentProvider() === 'webllm') &&
+      !webllmProvider?.isReady()
+    ) {
       chat.setInput(text);
       settings.classList.remove('agent-panel-settings-hidden');
       settingsBtn.setAttribute('aria-expanded', 'true');
@@ -1415,7 +1472,9 @@ export function createAgentPanel(options: { background?: boolean } = {}): HTMLEl
               : 'agentWritingNeedsLocalService',
           );
         const writingProvider = route.kind === 'endpoint' ? endpointProvider : webllmProvider;
-        if (!writingProvider) throw new Error('agentWritingNeedsLocalService');
+        // The gate above normally covers an unready browser-local model; this stays
+        // as a guard for readiness that flipped between the gate and here.
+        if (!writingProvider || !writingProvider.isReady()) throw new Error('agentWritingNeedsLocalService');
         const body = await generateWriting(
           writingProvider,
           {

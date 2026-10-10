@@ -1,6 +1,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { createAgentPanel } from '../../lib/agent-plugin/ui/panel';
 import { t } from '@ranuts/shared/i18n';
+import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
 HTMLElement.prototype.scrollTo = vi.fn();
 
@@ -432,7 +433,9 @@ it('says a cloud destination cannot work offline instead of failing vaguely', as
   key.dispatchEvent(new Event('change'));
   panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
   await vi.waitFor(() =>
-    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(t('agentEndpointOfflineHint')),
+    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(
+      t('agentWriteDestinationOfflineUnavailable'),
+    ),
   );
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   task.value = 'rewrite';
@@ -444,6 +447,152 @@ it('says a cloud destination cannot work offline instead of failing vaguely', as
   await vi.waitFor(() => expect(input.disabled).toBe(false));
   expect(state.writing).not.toHaveBeenCalled();
   expect(panel.querySelector('.cui-msg-error')?.textContent).toContain(t('agentWritingOfflineNeedsDevice'));
+});
+it('disconnects the endpoint when a field that defines the destination changes', async () => {
+  // Otherwise the panel would report the new destination while requests still
+  // went to the old one -- a different origin, with the old key.
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+  connect.click();
+  await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+  // Editing the address must drop the connection rather than leave it stale.
+  url.value = 'https://other.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  expect(connect.textContent).toBe(t('agentEndpointConnect'));
+  expect(panel.querySelector('.agent-panel-endpoint-status')?.textContent).toBe('');
+  // The new address is a different service: the key did not travel with it, so
+  // reconnecting needs a key for that origin.
+  key.value = 'sk-second';
+  key.dispatchEvent(new Event('change'));
+  connect.click();
+  await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+  // A preference or consent change defines no destination, so it keeps the link.
+  const preference = panel.querySelector<HTMLSelectElement>('.agent-write-preference')!;
+  preference.value = 'remote-first';
+  preference.dispatchEvent(new Event('change'));
+  expect(connect.textContent).toBe(t('agentEndpointDisconnect'));
+});
+it('removes a stored endpoint key when the field is cleared, instead of keeping it forever', () => {
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  expect(getEndpointKey('https://api.example.com/v1')).toBe('sk-test');
+  key.value = '';
+  key.dispatchEvent(new Event('change'));
+  expect(getEndpointKey('https://api.example.com/v1')).toBeUndefined();
+});
+it('asks for the API key instead of reporting a generic failure', async () => {
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-panel-endpoint-status')?.textContent).toBe(t('agentEndpointKeyRequired')),
+  );
+});
+it('says the configured cloud endpoint is unavailable offline rather than "not configured"', async () => {
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+  await vi.waitFor(() =>
+    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain('gpt-4o-mini'),
+  );
+  Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
+  window.dispatchEvent(new Event('offline'));
+  const destination = panel.querySelector('.agent-panel-write-destination')!;
+  expect(destination.textContent).toContain(t('agentWriteDestinationOfflineUnavailable'));
+  expect(destination.textContent).not.toContain(t('agentWriteNeedsDestination'));
+});
+it('asks for the model to be loaded when consent is on but no model is ready', async () => {
+  allowBrowserLocalWriting();
+  state.source = 'Original';
+  const panel = createAgentPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  // The panel auto-loads on open; canSend is false while that is in flight, so a
+  // keypress sent before it settles would be swallowed rather than tested.
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  input.value = 'Polish this';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  // It asks for the model rather than telling the user to enable the switch they
+  // already enabled, and it does not pretend to have run anything.
+  expect(state.writing).not.toHaveBeenCalled();
+  expect(panel.textContent).toContain(t('agentModelFirstDownload'));
+});
+it('serves a writing request through a connected endpoint with no local model loaded', async () => {
+  // Regression: the first-download gate used to fire for every submit, so a user
+  // with a cloud endpoint and no browser model got asked to download a model and
+  // the request never went anywhere.
+  state.source = 'Original selected text';
+  state.writing.mockResolvedValue('Rewritten body');
+  const panel = createAgentPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+  connect.click();
+  await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = 'rewrite';
+  task.dispatchEvent(new Event('change'));
+  input.value = 'Polish this';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(state.writing).toHaveBeenCalled());
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(state.apply).toHaveBeenCalled();
+  // And it was not diverted into the model-download prompt.
+  expect(panel.textContent).not.toContain(t('agentModelFirstDownload'));
 });
 it('routes translation with the captured source and explicit language', async () => {
   state.ready = true;

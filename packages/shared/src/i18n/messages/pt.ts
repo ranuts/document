@@ -86,14 +86,6 @@ export const pt: Partial<I18nMessages> = {
   agentOllamaHint:
     'Conecta ao Ollama local (http://localhost:11434); não precisa de chave de API — confirme que o modelo está rodando.',
   agentProviderLoopback: 'Serviço local',
-  agentLoopbackUrl: 'Endereço do serviço',
-  agentLoopbackModel: 'Nome do modelo',
-  agentLoopbackConnect: 'Ligar',
-  agentLoopbackDisconnect: 'Desligar',
-  agentLoopbackConnecting: 'A ligar ao serviço local…',
-  agentLoopbackConnected: 'Ligado ao serviço local',
-  agentLoopbackFailed: 'Não foi possível contactar o serviço local',
-  agentLoopbackModelRequired: 'Introduza primeiro o nome do modelo',
   agentEndpointKind: 'Destino de escrita',
   agentEndpointLoopback: 'Serviço local (neste computador)',
   agentEndpointOpenAICompatible: 'Endpoint compatível com OpenAI',
@@ -120,6 +112,8 @@ export const pt: Partial<I18nMessages> = {
   agentWritingOfflineNeedsDevice:
     'Sem ligação, o destino de escrita tem de estar neste dispositivo. Ligue um serviço local ou ative a escrita local experimental.',
   agentEndpointOfflineHint: 'sem ligação: não é possível alcançar um endpoint na nuvem',
+  agentEndpointKeyRequired: 'Introduza primeiro uma chave de API para este endpoint',
+  agentWriteDestinationOfflineUnavailable: 'o endpoint na nuvem configurado (indisponível sem ligação)',
   agentLocalWritingConsent:
     'Permitir escrita com o modelo local do navegador (experimental, sem validação de qualidade)',
   agentWritingNeedsLocalService:

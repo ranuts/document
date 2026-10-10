@@ -70,6 +70,12 @@ notes. Entries describe what users experience, not internal refactors.
   would use) instead of failing with a network error. A local service and the
   in-browser model both keep working offline, and the choice between them is still
   yours rather than an automatic substitution.
+- **The assistant no longer asks you to download a model you are not going to use.**
+  With a cloud endpoint connected, writing goes there even if no in-browser model
+  is loaded; previously that combination quietly did nothing but tell you to load
+  one. Changing the address, model or key now also disconnects the endpoint (and
+  does not carry the key to a different address) instead of leaving the panel
+  showing one destination while requests went to another.
 
 - **The editor gives its memory back while you work.** Converting a document
   used to reserve a few hundred megabytes and hold them for as long as the tab
