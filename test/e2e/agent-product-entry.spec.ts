@@ -20,17 +20,20 @@ test('default off and remembered on never prepare models or connect services on 
   await page.locator('.agent-onboarding .agent-enable-switch').click();
   await expect(page.locator('.agent-runtime-panel')).toBeVisible();
   await expect(page.locator('.agent-panel-settings')).toBeVisible();
-  await page.locator('.agent-view-back').first().click();
+  await page.locator('.agent-panel-settings-toggle').click();
+  await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   await page.locator('.cui-input').fill('My draft');
   await expect(page.locator('.cui-send')).toBeDisabled();
   await page.locator('.agent-panel-settings-toggle').click();
-  await page.locator('.agent-view-back').first().click();
+  await page.locator('.agent-panel-settings-toggle').click();
+  await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
   await expect(page.locator('.cui-input')).toHaveValue('My draft');
   await page.locator('.agent-runtime-panel .agent-panel-close').click();
   await expect(page.locator('.agent-runtime-panel')).toBeHidden();
   await frame.locator('.agent-sidebar-entry').click();
   await expect(page.locator('.agent-runtime-panel')).toBeVisible();
   await page.locator('.agent-panel-settings-toggle').click();
+  await page.locator('.agent-preferences > summary').click();
   await page.locator('.agent-disable-switch').click();
   await expect(page.locator('.agent-onboarding')).toBeVisible();
   await page.locator('.agent-onboarding .agent-enable-switch').click();
@@ -57,11 +60,13 @@ for (const width of [1280, 375, 320]) {
     await page.locator('.agent-onboarding .agent-enable-switch').click();
     await expect(page.locator('.agent-runtime-panel')).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath('settings.png') });
-    await page.locator('.agent-view-back').first().click();
+    await page.locator('.agent-panel-settings-toggle').click();
+    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
     await page.locator('.cui-input').fill('Keep this draft while switching views');
     await page.locator('.agent-history-toggle').click();
     await expect(page.locator('.agent-history-view')).toBeVisible();
-    await page.locator('.agent-history-view .agent-view-back').click();
+    await page.locator('.agent-history-toggle').click();
+    await expect(page.locator('.agent-runtime-panel')).toHaveAttribute('data-view', 'chat');
     await expect(page.locator('.cui-input')).toHaveValue('Keep this draft while switching views');
     const fits = await page.locator('.agent-runtime-panel').evaluate((panel) => {
       const box = panel.getBoundingClientRect();
