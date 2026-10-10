@@ -207,7 +207,7 @@ describe('.github/workflows/ci.yml', () => {
   });
 
   it.each([
-    ['e2e', 'E2E', 'e2e-shard'],
+    ['e2e', 'E2E', '[e2e-shard, e2e-serial]'],
     ['e2e-pages', 'E2E (Cloudflare Pages semantics)', 'e2e-pages-shard'],
     ['e2e-docker', 'E2E (Docker image)', 'e2e-docker-shard'],
   ])('%s reports the shard verdict under the name branch protection requires', (id, checkName, shardJob) => {
@@ -217,9 +217,9 @@ describe('.github/workflows/ci.yml', () => {
     const job = ciJobs.find(({ name }) => name === id);
     expect(job).toBeDefined();
     expect(job!.body).toMatch(new RegExp(`^ {4}name: ${checkName.replace(/[()]/g, '\\$&')}$`, 'm'));
-    expect(job!.body).toMatch(new RegExp(`^ {4}needs: ${shardJob}$`, 'm'));
+    expect(job!.body.split('\n')).toContain(`    needs: ${shardJob}`);
     expect(job!.body).toMatch(/^ {4}if: always\(\)$/m);
-    expect(job!.body).toMatch(new RegExp(`RESULT: \\$\\{\\{ needs\\.${shardJob}\\.result \\}\\}`));
+    expect(job!.body).toContain('needs.' + (id === 'e2e' ? 'e2e-shard' : shardJob) + '.result');
     expect(job!.body).toMatch(/\[ "\$RESULT" = "success" \] \|\| exit 1/);
   });
 
@@ -232,7 +232,11 @@ describe('.github/workflows/ci.yml', () => {
     const e2e = ciJobs.find(({ name }) => name === 'e2e-shard');
     expect(e2e).toBeDefined();
     expect(e2e!.body).toMatch(/--shard=\$\{\{ matrix\.shard \}\}\/3 --grep-invert @serial/);
-    expect(e2e!.body).toMatch(/playwright test --grep @serial --workers=1/);
+    const serial = ciJobs.find(({ name }) => name === 'e2e-serial');
+    expect(serial?.body).toMatch(/playwright test --grep @serial --workers=1/);
+    expect(e2e!.body).not.toMatch(/playwright test --grep @serial/);
+    expect(ciJobs.find(({ name }) => name === 'e2e')?.body).toContain('needs.e2e-serial.result');
+    expect(ciJobs.find(({ name }) => name === 'e2e')?.body).toContain('[ "$SERIAL_RESULT" = "success" ] || exit 1');
   });
 
   it('leaves the timing budgets to the primary suite only', () => {
@@ -453,4 +457,10 @@ describe('.github/workflows/nightly-corpus.yml', () => {
       expect(exclude.test(`corpus/document/${name}`), `${name} should still run`).toBe(false);
     }
   });
+});
+
+it('balances Pages shards at test level without concurrent workerd requests', () => {
+  const src = readFileSync(resolve(ROOT, 'playwright.pages.config.ts'), 'utf8');
+  expect(src).toMatch(/fullyParallel: true/);
+  expect(src).toMatch(/workers: 1/);
 });

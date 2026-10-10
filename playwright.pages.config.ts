@@ -37,7 +37,9 @@ export default defineConfig({
   grepInvert: /@serial/,
   outputDir: 'test-results-pages',
   reporter: [['list'], ['html', { outputFolder: 'playwright-report-pages', open: 'never' }]],
-  fullyParallel: false,
+  // Test-level sharding avoids assigning a whole large spec to one runner.
+  // workers: 1 still executes one test at a time against workerd.
+  fullyParallel: true,
   workers: 1,
   retries: 1,
   use: { ...base.use, baseURL: `http://127.0.0.1:${PORT}` },
