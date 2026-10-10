@@ -35,3 +35,22 @@ it('allows embedded-image byte reads without allowing data scripts or workers', 
   expect(directives.get('script-src')).not.toContain('data:');
   expect(directives.get('worker-src')).not.toContain('data:');
 });
+
+it('permits the Cloudflare analytics script without permitting arbitrary external scripts', () => {
+  const html = secureEditorHtml('<html><head></head></html>');
+  const policy = html.match(/content="([^"]+)"/)![1];
+  const directives = new Map(
+    policy.split(';').map((part) => {
+      const [name, ...sources] = part.trim().split(/\s+/);
+      return [name, sources];
+    }),
+  );
+  expect(directives.get('script-src')).toEqual([
+    "'self'",
+    "'wasm-unsafe-eval'",
+    'https://static.cloudflareinsights.com',
+  ]);
+  expect(directives.get('connect-src')).toContain("'self'");
+  expect(directives.get('connect-src')).toContain('https:');
+  expect(directives.get('script-src-attr')).toEqual(["'none'"]);
+});
