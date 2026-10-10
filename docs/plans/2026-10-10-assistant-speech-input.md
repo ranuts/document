@@ -11,6 +11,7 @@
 验证：回归测试覆盖语言映射、临时与最终结果、取消、停止、权限错误、会话结束的迟到回调及手动编辑保护。浏览器验证入口、语言选择、说明、取消与窄侧栏；未启动真实麦克风，识别准确率和浏览器服务可用性未实测。
 
 参考：
+
 - https://help.openai.com/en/articles/12168547-voice-dictation-faq
 - https://support.google.com/gemini/answer/14554984
 - https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition
