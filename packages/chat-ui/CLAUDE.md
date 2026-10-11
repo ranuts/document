@@ -51,6 +51,7 @@ container.appendChild(chat.el); // mount the root element
 | `clear()`                                            | Remove all messages, restore empty state.                                             |
 | `getInput()` / `setInput(text)` / `focus()`          | Input helpers (e.g. prepend a quote).                                                 |
 | `setLabels(labels)`                                  | Re-apply labels live (e.g. language change).                                          |
+| `dispose()`                                          | Release resize observers and copy-feedback timers when unmounting.                    |
 
 `chat.actionsEl` is a host-populated slot directly above the input (an IM-style
 compose toolbar) — append your own controls; it collapses when empty.
@@ -78,6 +79,8 @@ onSend: async (text) => {
 - Streaming: call `appendDelta` repeatedly, then exactly one `endStream`. Don't `append` an agent message during a stream.
 - The send button is an **icon** (up-arrow ⇄ stop square); `labels.send`/`labels.stop` become its `title`/`aria-label`. It auto-disables when the input is empty (and idle).
 - Modern look: assistant messages are bubble-less/full-width, the user gets an accent bubble, tool/error render as subtle chips; a jump-to-latest button appears when scrolled up and new content only auto-scrolls when already near the bottom.
+- Width changes reflow the draft. Layout changes keep following the latest reply only while the reader is attached to the end; browsing history preserves its position.
+- Copy feedback uses fixed-size icons and a separate polite announcement. Clipboard failure leaves the action available to retry; feedback never replaces running activity.
 - Restyle via CSS custom properties on `.cui-root` (`--cui-accent`, `--cui-user-bg`, …) — don't depend on internal `cui-*` class names.
 - DOM is built with the ranui `builder` (View/Div/Span/ButtonBuilder) and the scroll handler is throttled via ranuts; the package depends on `ranui` + `ranuts`.
 

@@ -12,6 +12,10 @@ const ICON_DOWN =
   '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>';
 const ICON_COPY =
   '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg>';
+const ICON_COPIED =
+  '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>';
+const ICON_COPY_ERROR =
+  '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></svg>';
 
 /** Distance (px) from the bottom within which we keep auto-scrolling on new content. */
 const STICK_THRESHOLD = 60;
@@ -50,6 +54,16 @@ export class ChatView {
   private composing = false;
   private lastUserText = '';
   private readonly statusEl = Div().class('cui-status').attr('role', 'status').build();
+  private readonly feedbackEl = Div().class('cui-feedback').attr('role', 'status').attr('aria-atomic', 'true').build();
+  private readonly resizeObserver?: ResizeObserver;
+  private inputWidth = 0;
+  private inputNeedsResize = false;
+  private layoutFrame?: number;
+  private following = true;
+  private scrollHeight = 0;
+  private viewportHeight = 0;
+  private disposed = false;
+  private readonly copyTimers = new Map<HTMLButtonElement, ReturnType<typeof setTimeout>>();
   /** The agent bubble currently receiving streamed deltas, if any. */
   private liveMsg: HTMLDivElement | null = null;
   private liveText = '';
@@ -64,15 +78,21 @@ export class ChatView {
     this.emptyActionsEl = Div().class('cui-empty-actions').build();
     this.emptyEl = Div().class('cui-empty').children(this.emptyTitle, this.emptyActionsEl).build();
 
+    const updateScroll = throttle(() => this.updateScrollBtn(), 100);
     this.messagesEl = Div()
       .class('cui-messages')
       .attr('role', 'log')
       .attr('aria-busy', 'false')
       .attr('tabindex', '-1')
-      .on(
-        'scroll',
-        throttle(() => this.updateScrollBtn(), 100),
-      )
+      .on('scroll', () => {
+        // Reflow can emit scroll before ResizeObserver. Changed geometry does
+        // not establish that the reader intentionally scrolled away.
+        const unchanged =
+          this.scrollHeight === this.messagesEl.scrollHeight && this.viewportHeight === this.messagesEl.clientHeight;
+        if (!this.scrollHeight || unchanged || this.nearBottom()) this.following = this.nearBottom();
+        this.recordScrollGeometry();
+        updateScroll();
+      })
       .children(this.emptyEl)
       .build();
 
@@ -135,7 +155,39 @@ export class ChatView {
     // slot, and the composer.
     const footer = Div().class('cui-footer').children(this.scrollBtn, composer).build();
 
-    this.el = Div().class('cui-root').children(this.messagesEl, this.statusEl, footer).build();
+    this.el = Div().class('cui-root').children(this.messagesEl, this.statusEl, footer, this.feedbackEl).build();
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver((entries) => {
+        if (this.disposed) return;
+        for (const entry of entries) {
+          if (
+            entry.target === this.input &&
+            entry.contentRect.width > 0 &&
+            entry.contentRect.width !== this.inputWidth
+          ) {
+            this.inputWidth = entry.contentRect.width;
+            this.inputNeedsResize = true;
+          }
+        }
+        // Write in the next frame, outside observer delivery. Resizing a sibling
+        // viewport here can otherwise produce undelivered-notification errors.
+        if (this.layoutFrame !== undefined) return;
+        this.layoutFrame = requestAnimationFrame(() => {
+          this.layoutFrame = undefined;
+          if (this.disposed) return;
+          if (this.inputNeedsResize) {
+            this.inputNeedsResize = false;
+            this.autoGrow();
+          }
+          if (this.following) this.scrollToEnd();
+          else {
+            this.recordScrollGeometry();
+            this.updateScrollBtn();
+          }
+        });
+      });
+      this.observeLayout();
+    }
     this.setLabels(this.labels);
     this.updateSendState();
   }
@@ -164,6 +216,7 @@ export class ChatView {
     }
     if (message.role === 'user') this.lastUserText = message.text;
     const stick = this.nearBottom();
+    this.following = stick;
     this.emptyEl.remove();
     if (message.role === 'tool') {
       const last = this.messagesEl.lastElementChild;
@@ -180,6 +233,7 @@ export class ChatView {
           const details = document.createElement('details');
           details.className = 'cui-activity';
           details.append(document.createElement('summary'), document.createElement('ul'));
+          this.resizeObserver?.unobserve(group);
           group.replaceWith(details);
           group = details;
         } else {
@@ -192,6 +246,7 @@ export class ChatView {
       }
       if (stick) this.scrollToEnd();
       else this.updateScrollBtn();
+      this.resizeObserver?.observe(group);
       return item;
     }
 
@@ -202,19 +257,34 @@ export class ChatView {
     const actions = Div().class('cui-message-actions').build();
     if (message.role === 'agent') {
       const copy = ButtonBuilder().class('cui-copy').attr('type', 'button').build();
-      copy.innerHTML = ICON_COPY;
-      copy.title = this.labels.copy ?? 'Copy';
-      copy.setAttribute('aria-label', copy.title);
+      this.updateCopyButton(copy);
       copy.addEventListener('click', async () => {
+        if (this.disposed || copy.disabled) return;
+        clearTimeout(this.copyTimers.get(copy));
+        this.copyTimers.delete(copy);
+        this.feedbackEl.textContent = '';
         copy.disabled = true;
+        let state: 'copied' | 'failed';
         try {
           await navigator.clipboard.writeText(row.dataset.source ?? message.text);
-          copy.textContent = this.labels.copied ?? 'Copied';
+          state = 'copied';
         } catch {
-          copy.textContent = this.labels.copyFailed ?? 'Could not copy';
+          state = 'failed';
         } finally {
           copy.disabled = false;
         }
+        if (this.disposed || !this.messagesEl.contains(row)) return;
+        copy.dataset.state = state;
+        this.updateCopyButton(copy);
+        this.feedbackEl.textContent = copy.title;
+        this.copyTimers.set(
+          copy,
+          setTimeout(() => {
+            this.copyTimers.delete(copy);
+            delete copy.dataset.state;
+            this.updateCopyButton(copy);
+          }, 1800),
+        );
       });
       actions.append(copy);
       if (
@@ -268,6 +338,7 @@ export class ChatView {
     if (message.interrupted) row.dataset.interrupted = 'true';
 
     this.messagesEl.appendChild(row);
+    this.resizeObserver?.observe(row);
     this.updateRestoreState();
     if (stick) this.scrollToEnd();
     else this.updateScrollBtn();
@@ -281,6 +352,7 @@ export class ChatView {
   appendDelta(delta: string): void {
     if (!delta) return;
     const stick = this.nearBottom();
+    this.following = stick;
     if (!this.liveMsg) {
       this.liveMsg = this.append({ role: 'agent', text: '' }).parentElement as HTMLDivElement;
       this.liveMsg.classList.add('cui-streaming');
@@ -295,6 +367,7 @@ export class ChatView {
   /** Finalise the current streaming bubble (removes the caret). */
   endStream(): void {
     const stick = this.nearBottom();
+    this.following = stick;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
     if (bubble) renderMarkdown(bubble, this.liveText);
     this.liveMsg?.classList.remove('cui-streaming');
@@ -307,7 +380,9 @@ export class ChatView {
   appendContent(content: HTMLElement): void {
     this.emptyEl.remove();
     const stick = this.nearBottom();
+    this.following = stick;
     this.messagesEl.append(content);
+    this.resizeObserver?.observe(content);
     if (stick) this.scrollToEnd();
     else this.updateScrollBtn();
   }
@@ -342,11 +417,15 @@ export class ChatView {
 
   /** Remove all messages and restore the empty state. */
   clear(): void {
+    this.clearCopyFeedback();
+    this.resizeObserver?.disconnect();
     this.messagesEl.replaceChildren(this.emptyEl);
     this.emptyTitle.textContent = this.labels.empty ?? '';
     this.liveMsg = null;
     this.liveText = '';
     this.lastUserText = '';
+    this.following = true;
+    this.observeLayout();
     this.updateScrollBtn();
   }
 
@@ -379,10 +458,8 @@ export class ChatView {
     this.input.setAttribute('aria-label', labels.placeholder ?? 'Message');
     this.scrollBtn.setAttribute('aria-label', labels.scrollLatest ?? 'Scroll to latest');
     this.updateActivity();
-    for (const button of this.messagesEl.querySelectorAll<HTMLElement>('.cui-copy')) {
-      button.title = labels.copy ?? 'Copy';
-      button.setAttribute('aria-label', button.title);
-    }
+    for (const button of this.messagesEl.querySelectorAll<HTMLButtonElement>('.cui-copy'))
+      this.updateCopyButton(button);
     for (const button of this.messagesEl.querySelectorAll<HTMLElement>('.cui-apply')) {
       const state = button.dataset.state;
       button.title = labels.applyTip ?? 'Insert at the cursor or replace the selected text';
@@ -434,21 +511,62 @@ export class ChatView {
     this.input.style.height = `${Math.min(this.input.scrollHeight, 160)}px`;
   }
 
+  /** Release layout observers and transient feedback when the host unmounts. */
+  dispose(): void {
+    if (this.disposed) return;
+    this.disposed = true;
+    if (this.layoutFrame !== undefined) cancelAnimationFrame(this.layoutFrame);
+    this.layoutFrame = undefined;
+    this.resizeObserver?.disconnect();
+    this.clearCopyFeedback();
+  }
+
+  private observeLayout(): void {
+    if (this.disposed) return;
+    for (const element of [this.messagesEl, this.input, this.emptyEl]) this.resizeObserver?.observe(element);
+  }
+
+  private clearCopyFeedback(): void {
+    for (const timer of this.copyTimers.values()) clearTimeout(timer);
+    this.copyTimers.clear();
+    this.feedbackEl.textContent = '';
+  }
+
+  private updateCopyButton(button: HTMLButtonElement): void {
+    const state = button.dataset.state;
+    button.innerHTML = state === 'copied' ? ICON_COPIED : state === 'failed' ? ICON_COPY_ERROR : ICON_COPY;
+    button.title =
+      state === 'copied'
+        ? (this.labels.copied ?? 'Copied')
+        : state === 'failed'
+          ? (this.labels.copyFailed ?? 'Could not copy')
+          : (this.labels.copy ?? 'Copy');
+    button.setAttribute('aria-label', button.title);
+  }
+
   private nearBottom(): boolean {
     const el = this.messagesEl;
     return el.scrollHeight - el.scrollTop - el.clientHeight < STICK_THRESHOLD;
   }
 
+  private recordScrollGeometry(): void {
+    this.scrollHeight = this.messagesEl.scrollHeight;
+    this.viewportHeight = this.messagesEl.clientHeight;
+  }
+
   private scrollToEnd(smooth = false): void {
+    this.following = true;
     const reduceMotion = smooth && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     this.messagesEl.scrollTo({
       top: this.messagesEl.scrollHeight,
       behavior: smooth && !reduceMotion ? 'smooth' : 'auto',
     });
+    this.recordScrollGeometry();
     this.updateScrollBtn();
   }
 
   private updateScrollBtn(): void {
+    if (this.disposed) return;
     const hidden = this.emptyEl.parentElement === this.messagesEl || this.nearBottom();
     // Keep focus in the conversation when its jump control disappears.
     if (hidden && document.activeElement === this.scrollBtn) this.messagesEl.focus({ preventScroll: true });

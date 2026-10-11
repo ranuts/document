@@ -61,6 +61,16 @@ it('renders useful Markdown safely and leaves user text literal', () => {
   expect(view.el.querySelector('.cui-msg-user strong')).toBeNull();
   expect(view.el.querySelector('.cui-role')).toBeNull();
 });
+it('makes code and table overflow keyboard reachable without losing table semantics', () => {
+  const { view } = mount();
+  view.append({
+    role: 'agent',
+    text: '```txt\nLong code line\n```\n\n| Name | Value |\n| --- | --- |\n| Budget | 120 |',
+  });
+  expect(view.el.querySelector('pre')?.getAttribute('tabindex')).toBe('0');
+  expect(view.el.querySelector('.cui-table')?.getAttribute('tabindex')).toBe('0');
+  expect(view.el.querySelector('th')?.getAttribute('scope')).toBe('col');
+});
 it('shows one execution result directly without a duplicate or empty disclosure', () => {
   const { view } = mount();
   view.append({ role: 'tool', text: 'A1\n12 <script>literal</script>' });
@@ -156,11 +166,16 @@ it('copies exact message text and reports clipboard failures without executing a
   const copy = view.el.querySelector<HTMLButtonElement>('.cui-copy')!;
   expect(copy).not.toBeNull();
   copy.click();
-  await vi.waitFor(() => expect(copy.textContent).toBe('Copied'));
+  await vi.waitFor(() => expect(copy.getAttribute('aria-label')).toBe('Copied'));
+  expect(copy.querySelector('svg')).not.toBeNull();
+  expect(view.el.querySelector('.cui-feedback')?.textContent).toBe('Copied');
   expect(writeText).toHaveBeenCalledWith('<b>plain text</b>');
   writeText.mockRejectedValue(new Error('Denied'));
   copy.click();
-  await vi.waitFor(() => expect(copy.textContent).toBe('Could not copy'));
+  await vi.waitFor(() => expect(copy.getAttribute('aria-label')).toBe('Could not copy'));
+  expect(copy.querySelector('svg')).not.toBeNull();
+  expect(copy.disabled).toBe(false);
+  expect(view.el.querySelector('.cui-feedback')?.textContent).toBe('Could not copy');
 });
 it('restores failed requests into the draft without sending and preserves an existing draft', () => {
   const { view, input, onSend } = mount();
