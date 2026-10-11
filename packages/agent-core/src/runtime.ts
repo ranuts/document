@@ -11,6 +11,8 @@
  * with a scripted provider and mock tools.
  */
 import type { AgentTool } from './types';
+import { validateToolInput } from './tool-validation';
+export { validateToolInput } from './tool-validation';
 import { budgetMessages } from './context-budget';
 import type { LLMContent, LLMMessage, LLMProvider, LLMResponse, LLMToolDef } from './llm/types';
 
@@ -27,6 +29,10 @@ export interface AgentRunOptions {
   tools?: Record<string, AgentTool>;
   /** Maximum chat↔tool round trips before giving up (default 8). */
   maxIterations?: number;
+  /** Total requested calls per turn, including refused calls (default 16). */
+  maxToolCalls?: number;
+  /** Identical read-call limit per turn (default 3); identical mutations execute at most once. */
+  maxRepeatedCalls?: number;
   /** Prior conversation to continue. */
   history?: LLMMessage[];
   /** UTF-8 budget for request messages; full history is returned unchanged. */
@@ -78,6 +84,11 @@ export async function runAgent(
   const currentRequest: LLMMessage = { role: 'user', content: userMessage };
   const messages: LLMMessage[] = [...(options.history ?? []), currentRequest];
   let toolCallCount = 0;
+  const maxToolCalls = options.maxToolCalls ?? 16;
+  const maxRepeatedCalls = options.maxRepeatedCalls ?? 3;
+  if (![maxIterations, maxToolCalls, maxRepeatedCalls].every((n) => Number.isSafeInteger(n) && n > 0))
+    throw new Error('Agent limits must be positive integers');
+  const seenCalls = new Map<string, number>();
   let contextNoticeSent = false;
 
   for (let iteration = 0; iteration < maxIterations; iteration++) {
@@ -88,6 +99,9 @@ export async function runAgent(
     // otherwise fall back to a single blocking chat call. Either way the final
     // response shape is identical, so the rest of the loop is unchanged.
     let streamed = false;
+    // Tool-bearing streams cannot be classified until the response closes.
+    // Keep their prose out of the UI until we know it is an ordinary answer.
+    const deferredDeltas: string[] = [];
     const contextualMessages = options.requestContext
       ? messages.map((message) =>
           message === currentRequest
@@ -113,7 +127,8 @@ export async function runAgent(
           (delta) => {
             if (!delta) return;
             streamed = true;
-            options.onEvent?.({ type: 'assistant_delta', text: delta });
+            if (toolDefs.length) deferredDeltas.push(delta);
+            else options.onEvent?.({ type: 'assistant_delta', text: delta });
           },
           options.signal,
         )
@@ -125,26 +140,52 @@ export async function runAgent(
     }
     if (response.usage) options.onEvent?.({ type: 'usage', usage: response.usage });
     messages.push(response.assistant);
-    if (response.text) options.onEvent?.({ type: 'assistant', text: response.text, streamed });
+    if (!response.toolCalls.length) {
+      for (const delta of deferredDeltas) options.onEvent?.({ type: 'assistant_delta', text: delta });
+      if (response.text) options.onEvent?.({ type: 'assistant', text: response.text, streamed });
+    }
 
     if (response.toolCalls.length === 0) {
       return { text: response.text, messages, toolCallCount, stoppedOnLimit: false, aborted: false };
     }
 
     const results: LLMContent[] = [];
+    let terminal = false;
+    let limited = false;
     for (const call of response.toolCalls) {
-      if (options.signal?.aborted) {
-        results.push({ type: 'tool_result', toolUseId: call.id, content: 'Cancelled before execution', isError: true });
+      if (options.signal?.aborted || terminal) {
+        results.push({
+          type: 'tool_result',
+          toolUseId: call.id,
+          content: options.signal?.aborted ? 'Cancelled before execution' : 'Turn concluded before execution',
+          isError: true,
+        });
         continue;
       }
       toolCallCount++;
       options.onEvent?.({ type: 'tool_call', name: call.name, input: call.input });
-      const { content, isError } = await executeToolCall(tools, call.name, call.input, options.signal);
+      const tool = Object.hasOwn(tools, call.name) ? tools[call.name] : undefined;
+      const key = JSON.stringify([call.name, canonicalInput(call.input)]);
+      const repeats = (seenCalls.get(key) ?? 0) + 1;
+      seenCalls.set(key, repeats);
+      const policyError =
+        toolCallCount > maxToolCalls
+          ? 'Tool call budget exceeded'
+          : tool && repeats > (tool.readOnlyHint ? maxRepeatedCalls : 1)
+            ? 'Repeated identical tool call refused; inspect the prior result before continuing'
+            : undefined;
+      const { content, isError } = policyError
+        ? { content: policyError, isError: true }
+        : await executeToolCall(tools, call.name, call.input, options.signal);
+      if (policyError) limited = terminal = true;
+      if (!isError && tool?.concludesTurn) terminal = true;
       options.onEvent?.({ type: 'tool_result', name: call.name, content, isError });
       results.push({ type: 'tool_result', toolUseId: call.id, content, isError });
     }
     messages.push({ role: 'user', content: results });
     options.onToolExchange?.(structuredClone(messages));
+    if (terminal && !options.signal?.aborted)
+      return { text: '', messages, toolCallCount, stoppedOnLimit: limited, aborted: false };
     if (options.signal?.aborted) return { text: '', messages, toolCallCount, stoppedOnLimit: false, aborted: true };
   }
 
@@ -157,14 +198,28 @@ async function executeToolCall(
   input: Record<string, unknown>,
   signal?: AbortSignal,
 ): Promise<{ content: string; isError: boolean }> {
-  const tool = tools[name];
+  const tool = Object.hasOwn(tools, name) ? tools[name] : undefined;
   if (!tool) {
     return { content: `Unknown tool: ${name}`, isError: true };
   }
   try {
+    const invalid = validateToolInput(tool, input);
+    if (invalid) return { content: `Invalid tool arguments: ${invalid}`, isError: true };
     const output = await (signal ? tool.execute(input, signal) : tool.execute(input));
     return { content: JSON.stringify(output ?? null), isError: false };
   } catch (error) {
     return { content: error instanceof Error ? error.message : String(error), isError: true };
   }
+}
+
+/** Stable JSON comparison; property order must not evade repeat-call policy. */
+function canonicalInput(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalInput);
+  if (value && typeof value === 'object')
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map((key) => [key, canonicalInput((value as Record<string, unknown>)[key])]),
+    );
+  return value;
 }

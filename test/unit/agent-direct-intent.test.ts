@@ -29,3 +29,14 @@ it.each(['把全文加粗', '加粗并居中', '整篇排版一下'])(
     expect(parseDirectDocumentIntent(text)).toEqual({ kind: 'clarify' });
   },
 );
+
+it.each(['写入到文档中', '请写入到当前文档中', '把上面的文章写入到文档中'])(
+  'executes an explicit request to write the previous answer: %s',
+  (text) => {
+    expect(parseDirectDocumentIntent(text)).toEqual({ kind: 'write_reply', requireSelection: false });
+  },
+);
+it.each(['不要写入到文档中', '如何写入到文档中？', '“写入到文档中”是什么意思'])(
+  'keeps write discussions and negation conversational: %s',
+  (text) => expect(parseDirectDocumentIntent(text)).toBeNull(),
+);

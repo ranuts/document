@@ -16,9 +16,57 @@ export async function writeExcelCellValue(
   verify?: () => boolean,
   literal = false,
 ): Promise<void> {
+  return writeExcelTarget(address, text, signal, verify, literal);
+}
+
+/** Numeric-only rectangular insertion with strict dimensions and native readback. */
+export async function writeExcelRangeValues(address: string, values: number[][], signal?: AbortSignal): Promise<void> {
   signal?.throwIfAborted();
   const bounds = parseOfficeRange(address);
-  if (bounds.c1 !== bounds.c2 || bounds.r1 !== bounds.r2) throw new Error('officeInvalidRange');
+  const rows = bounds.r2 - bounds.r1 + 1,
+    cols = bounds.c2 - bounds.c1 + 1;
+  if (
+    rows * cols > 1000 ||
+    values.length !== rows ||
+    values.some((row) => row.length !== cols || row.some((value) => !Number.isSafeInteger(value)))
+  )
+    throw new Error('Invalid numeric range values');
+  const context = requireEditorContext();
+  const model = (
+    context.api.wb as {
+      getWorksheet(): {
+        model: {
+          getRange3(
+            r1: number,
+            c1: number,
+            r2: number,
+            c2: number,
+          ): { getNumberValue(): number; getValueData(): { value: { type: number } } };
+        };
+      };
+    }
+  ).getWorksheet().model;
+  const verify = () =>
+    values.every((row, r) =>
+      row.every((value, c) => {
+        const cell = model.getRange3(bounds.r1 + r, bounds.c1 + c, bounds.r1 + r, bounds.c1 + c);
+        return cell.getValueData().value.type === 0 && cell.getNumberValue() === value;
+      }),
+    );
+  await writeExcelTarget(address, values.map((row) => row.join('\t')).join('\n'), signal, verify, false, true);
+}
+
+async function writeExcelTarget(
+  address: string,
+  text: string,
+  signal?: AbortSignal,
+  verify?: () => boolean,
+  literal = false,
+  rectangular = false,
+): Promise<void> {
+  signal?.throwIfAborted();
+  const bounds = parseOfficeRange(address);
+  if (!rectangular && (bounds.c1 !== bounds.c2 || bounds.r1 !== bounds.r2)) throw new Error('officeInvalidRange');
   const context = requireEditorContext(),
     api = context.api;
   const wb = api.wb as
@@ -128,5 +176,5 @@ export async function writeExcelCellValue(
     },
   };
   if (literal) await writeExcelLiteralText(scope, text, signal);
-  else await writeExcelNativeText(scope, text, signal, false, verify);
+  else await writeExcelNativeText(scope, text, signal, false, verify, rectangular);
 }

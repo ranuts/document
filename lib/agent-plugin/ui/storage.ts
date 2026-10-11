@@ -20,6 +20,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 export function isMessage(value: unknown): value is LLMMessage {
   if (!isRecord(value) || (value.role !== 'user' && value.role !== 'assistant')) return false;
   if (value.copyOnly !== undefined && value.copyOnly !== true) return false;
+  if (
+    value.documentArtifact !== undefined &&
+    (value.documentArtifact !== true || value.role !== 'assistant' || typeof value.content !== 'string')
+  )
+    return false;
   if (value.interrupted !== undefined && value.interrupted !== true) return false;
   if (value.hostGuidance !== undefined && !['tool', 'status', 'error'].includes(String(value.hostGuidance)))
     return false;
@@ -92,6 +97,7 @@ export function historyToTurns(messages: LLMMessage[]): ChatTurn[] {
             (message as LLMMessage & { hostGuidance?: 'tool' | 'status' | 'error' }).hostGuidance ??
             (message.role === 'assistant' ? 'agent' : 'user'),
           text,
+          ...(message.documentArtifact ? { documentArtifact: true as const } : {}),
           ...((message as LLMMessage & { copyOnly?: true }).copyOnly ? { copyOnly: true as const } : {}),
           ...(message.role === 'assistant' &&
           !(message as LLMMessage & { hostGuidance?: string }).hostGuidance &&
@@ -102,8 +108,10 @@ export function historyToTurns(messages: LLMMessage[]): ChatTurn[] {
         });
       continue;
     }
+    const containsCalls = message.role === 'assistant' && message.content.some((block) => block.type === 'tool_use');
     for (const block of message.content) {
       if (block.type === 'text') {
+        if (containsCalls) continue;
         const text = message.role === 'assistant' ? assistantPresentation(block.text) : block.text;
         if (text)
           turns.push({

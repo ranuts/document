@@ -3,6 +3,7 @@ import { createAgentPanel } from '../../lib/agent-plugin/ui/panel';
 import { t } from '@ranuts/shared/i18n';
 import { getEndpointKey } from '@ranuts/agent-core/llm/keys';
 import { AgentChatController } from '../../lib/agent-plugin/ui/controller';
+import { createHistoryStorage } from '../../lib/agent-plugin/ui/storage';
 HTMLElement.prototype.scrollTo = vi.fn();
 // Runtime tests explicitly prepare, as a user must now do from settings.
 function createPreparedPanel() {
@@ -17,6 +18,7 @@ const state = vi.hoisted(() => ({
   progress: [] as Array<(value: { text: string; progress?: number }) => void>,
   unavailable: undefined as undefined | (() => void),
   ready: false,
+  nativeEndpoint: false,
   cached: false,
   deleteCache: vi.fn().mockResolvedValue(undefined),
   editorKind: 'word' as 'word' | 'cell' | 'slide',
@@ -25,6 +27,9 @@ const state = vi.hoisted(() => ({
   stalled: false,
   generate: vi.fn(),
   toolPlan: vi.fn(),
+  routing: vi.fn(),
+  semanticResponse: undefined as string | undefined,
+  targetCurrent: true,
   toolContext: 'slide' as 'slide' | 'cell',
   apply: vi.fn().mockResolvedValue('verified'),
   writing: vi.fn(),
@@ -35,6 +40,20 @@ const state = vi.hoisted(() => ({
   cpuProgress: undefined as undefined | ((value: { loaded: number; total: number }) => void),
   usage: undefined as import('@ranuts/agent-core/llm/types').LLMResponse['usage'],
 }));
+// Existing routing fixtures exercise the bounded workflow for endpoints without
+// native tool support. Native transport is covered separately below.
+vi.mock('@ranuts/agent-core/llm/openai', async (original) => {
+  const actual = await original<typeof import('@ranuts/agent-core/llm/openai')>();
+  return {
+    ...actual,
+    OpenAIProvider: class extends actual.OpenAIProvider {
+      constructor(...args: ConstructorParameters<typeof actual.OpenAIProvider>) {
+        super(...args);
+        if (!state.nativeEndpoint) Object.defineProperty(this, 'toolCallingMode', { value: 'schema' });
+      }
+    },
+  };
+});
 vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
   ...(await original<typeof import('@ranuts/agent-core/llm/webllm')>()),
   isWebGPUAvailable: () => true,
@@ -129,6 +148,11 @@ vi.mock('@ranuts/agent-core/llm/local', async (original) => ({
     isReady() {
       return state.ready;
     }
+    get generateJSON() {
+      return state.semanticResponse === undefined
+        ? undefined
+        : async () => ({ text: state.semanticResponse!, toolCalls: [], stopReason: 'stop' });
+    }
     async chatStream(_messages: unknown, _tools: unknown, delta: (text: string) => void, signal?: AbortSignal) {
       if (state.stalled)
         await new Promise((_resolve, reject) =>
@@ -169,6 +193,18 @@ vi.mock('../../lib/agent-plugin/reviewed-action', () => ({
     apply = state.apply;
   },
 }));
+vi.mock('../../lib/agent-plugin/ui/request-intent', async (original) => {
+  const actual = await original<typeof import('../../lib/agent-plugin/ui/request-intent')>();
+  return {
+    ...actual,
+    resolveRequestIntent: async (...args: unknown[]) =>
+      state.semanticResponse !== undefined
+        ? actual.resolveRequestIntent(...(args as Parameters<typeof actual.resolveRequestIntent>))
+        : state.routing.getMockImplementation()
+          ? state.routing(...args)
+          : actual.classifyRequest(args[1] as string),
+  };
+});
 vi.mock('../../lib/agent-plugin/document-tool-plan', async (original) => ({
   ...(await original<typeof import('../../lib/agent-plugin/document-tool-plan')>()),
   generateDocumentToolPlan: state.toolPlan,
@@ -178,7 +214,7 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
     context: state.toolContext === 'cell' ? { kind: 'cell' } : { kind: 'slide', page: 1 },
     label: 'PPT · 1',
     selectedText: '',
-    isCurrent: () => true,
+    isCurrent: () => state.targetCurrent,
   }),
   DocumentToolAction: class {
     cancel() {}
@@ -206,6 +242,7 @@ afterEach(() => {
   state.dispose.mockClear();
   state.progress.length = 0;
   state.ready = false;
+  state.nativeEndpoint = false;
   state.cached = false;
   state.editorKind = 'word';
   state.deleteCache.mockReset().mockResolvedValue(undefined);
@@ -217,6 +254,9 @@ afterEach(() => {
   state.toolPlan.mockReset();
   state.toolContext = 'slide';
   state.apply.mockClear();
+  state.routing.mockReset();
+  state.semanticResponse = undefined;
+  state.targetCurrent = true;
   state.writing.mockReset();
   state.editorReady = true;
   state.source = '';
@@ -727,6 +767,46 @@ it('uses the connected endpoint to plan an open-ended operation', async () => {
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalled());
 });
+it('rejects a changed editor target while semantic routing is pending', async () => {
+  // The endpoint serves the writing tasks; it does not choose document operations.
+  // An open-ended request therefore still needs the browser-local model, and must
+  // not slip past the model gate just because some endpoint answers.
+  let resolveRouting!: (value: { task: string; language: string }) => void;
+  state.routing.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        resolveRouting = resolve;
+      }),
+  );
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'gpt-4o-mini';
+  model.dispatchEvent(new Event('change'));
+  key.value = 'sk-test';
+  key.dispatchEvent(new Event('change'));
+  panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+  const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  mode.value = 'tools';
+  mode.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  input.value = 'Create another slide using this layout';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(state.routing).toHaveBeenCalled());
+  state.targetCurrent = false;
+  resolveRouting({ task: 'tools', language: 'en' });
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(state.toolPlan).not.toHaveBeenCalled();
+  expect(state.apply).not.toHaveBeenCalled();
+  expect(panel.textContent).toContain(t('agentPlanExpired'));
+});
 it('routes translation with the captured source and explicit language', async () => {
   state.ready = true;
   state.editorReady = true;
@@ -989,8 +1069,14 @@ it('executes successive explicit writing requests only after separate confirmati
   expect(panel.textContent).toContain('Second proposal');
   expect(panel.querySelector('.agent-plan-preview')).not.toBeNull();
   expect(state.apply).toHaveBeenCalledTimes(2);
-  expect(panel.querySelectorAll('.cui-activity')).toHaveLength(2);
+  expect(panel.querySelectorAll('.agent-plan-preview[data-state=verified]')).toHaveLength(2);
+  expect(panel.querySelectorAll('.cui-activity')).toHaveLength(0);
   expect(panel.querySelector('details.cui-activity')).toBeNull();
+  input.value = '你好';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+  expect(panel.querySelector('.cui-msg-error')).toBeNull();
+  expect(state.apply).toHaveBeenCalledTimes(2);
 });
 
 it('retains the actual CPU fallback and model identity after loading finishes', async () => {
@@ -1160,12 +1246,14 @@ it('identifies model download failures and retries without exposing network inte
 
 it('cancels native writing of the previous answer from the visible Stop button', async () => {
   state.ready = true;
+  state.editorReady = true;
   state.preload.mockResolvedValue(undefined);
   const panel = createPreparedPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  input.value = 'Hello';
-  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  createHistoryStorage().save([{ role: 'assistant', content: 'Document body', documentArtifact: true }]);
+  panel.querySelector<HTMLButtonElement>('.agent-history-import')!.click();
+  await vi.waitFor(() => expect(panel.querySelector('.cui-apply')).not.toBeNull());
+  createHistoryStorage().clear();
   let finish!: () => void;
   let forwarded: AbortSignal | undefined;
   state.apply.mockImplementationOnce(
@@ -1698,4 +1786,193 @@ it('does not delete caches when runtime unload fails', async () => {
     expect(panel.querySelector('.agent-model-cache')?.textContent).toContain(t('agentModelCleanupFailed')),
   );
   expect(state.deleteCache).not.toHaveBeenCalled();
+});
+
+it('marks a loaded local model ready and prevents redundant loading', async () => {
+  state.preload.mockImplementation(async () => {
+    state.ready = true;
+  });
+  const panel = createPreparedPanel();
+  const button = panel.querySelector<HTMLElement>('.agent-panel-load')!;
+  await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
+  await vi.waitFor(() => expect(button.textContent).toBe(t('agentModelInUse')));
+  expect(button.hasAttribute('disabled')).toBe(true);
+  button.click();
+  expect(state.preload).toHaveBeenCalledOnce();
+});
+it('allows the main button to warm a cached model in a new spreadsheet page', async () => {
+  state.cached = true;
+  state.editorKind = 'cell';
+  state.preload.mockImplementation(async () => {
+    state.ready = true;
+  });
+  const panel = createPreparedPanel();
+  await vi.waitFor(() => expect(state.preload).toHaveBeenCalledOnce());
+  expect(panel.querySelector('.agent-panel-load')!.textContent).toBe(t('agentModelInUse'));
+});
+
+it('keeps the prepared model when the editor changes in the same page', async () => {
+  state.cached = true;
+  state.preload.mockImplementation(async () => {
+    state.ready = true;
+  });
+  const panel = createPreparedPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-panel-load')!.textContent).toBe(t('agentModelInUse')));
+  state.editorKind = 'cell';
+  window.dispatchEvent(new Event('document:content-ready'));
+  expect(state.dispose).not.toHaveBeenCalled();
+  expect(state.preload).toHaveBeenCalledOnce();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-cache-use')!.textContent).toBe(t('agentModelInUse')));
+  const use = panel.querySelector<HTMLElement>('.agent-cache-use')!;
+  expect(use.hasAttribute('disabled')).toBe(true);
+  use.click();
+  expect(state.preload).toHaveBeenCalledOnce();
+  expect(state.dispose).not.toHaveBeenCalled();
+});
+it('lets a ready semantic planner handle a slide request outside the fixed shortcut grammar', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.editorKind = 'slide';
+  state.routing.mockResolvedValue({ task: 'tools', language: 'zh-CN' });
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  for (const [selector, value] of [
+    ['.agent-panel-endpoint-url', 'https://api.example.com/v1'],
+    ['.agent-panel-endpoint-model', 'gpt-4o-mini'],
+    ['.agent-panel-endpoint-key', 'sk-test'],
+  ]) {
+    const field = panel.querySelector<HTMLInputElement>(selector)!;
+    field.value = value;
+    field.dispatchEvent(new Event('change'));
+  }
+  panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  input.value = '在当前幻灯片新增文本框，内容为：秋天的故事';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(state.routing).toHaveBeenCalled());
+  await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalled());
+  expect(panel.textContent).not.toContain('请明确操作范围');
+});
+
+it('sends current-editor native tools and displays a proposal without executing it', async () => {
+  state.nativeEndpoint = true;
+  state.editorReady = true;
+  state.editorKind = 'slide';
+  state.toolContext = 'slide';
+  const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
+    const body = JSON.parse(String(init.body));
+    const native = body.tools?.length;
+    return new Response(
+      JSON.stringify({
+        choices: [
+          {
+            message: native
+              ? {
+                  content: null,
+                  tool_calls: [
+                    {
+                      id: 'native-1',
+                      type: 'function',
+                      function: {
+                        name: 'add_slide_text',
+                        arguments: JSON.stringify({ text: 'Native slide text' }),
+                      },
+                    },
+                  ],
+                }
+              : { content: 'connected' },
+            finish_reason: native ? 'tool_calls' : 'stop',
+          },
+        ],
+      }),
+    );
+  });
+  vi.stubGlobal('fetch', fetchMock);
+  try {
+    const panel = createAgentPanel();
+    const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+    kind.value = 'openai-compatible';
+    kind.dispatchEvent(new Event('change'));
+    for (const [selector, value] of [
+      ['.agent-panel-endpoint-url', 'https://api.example.com/v1'],
+      ['.agent-panel-endpoint-model', 'tool-model'],
+      ['.agent-panel-endpoint-key', 'sk-test'],
+    ]) {
+      const field = panel.querySelector<HTMLInputElement>(selector)!;
+      field.value = value;
+      field.dispatchEvent(new Event('change'));
+    }
+    const connect = panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!;
+    connect.click();
+    await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+    const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+    const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+    mode.value = 'tools';
+    mode.dispatchEvent(new Event('change'));
+    input.value = 'Put a title on this slide';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await vi.waitFor(() => expect(panel.querySelector('.agent-plan-apply')).not.toBeNull());
+    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    const request = fetchMock.mock.calls
+      .map(([, init]) => JSON.parse(String(init.body)))
+      .find((body) => body.tools?.length);
+    expect(request.tools.some((tool: { function: { name: string } }) => tool.function.name === 'add_slide_text')).toBe(
+      true,
+    );
+    expect(request.tools.some((tool: { function: { name: string } }) => tool.function.name === 'set_cell')).toBe(false);
+    expect(state.apply).not.toHaveBeenCalled();
+    expect(state.toolPlan).not.toHaveBeenCalled();
+    expect(state.routing).not.toHaveBeenCalled();
+    panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+    await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+it('requires review for a model-selected numeric fill even if the target is empty', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.editorKind = 'cell';
+  state.toolContext = 'cell';
+  state.routing.mockResolvedValue({ task: 'tools', language: 'en' });
+  state.toolPlan.mockResolvedValue({ tool: 'fill_series', input: { cell: 'A1', first: 1, last: 10 }, readOnly: false });
+  const panel = createPreparedPanel();
+  const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  mode.value = 'tools';
+  mode.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  input.value = 'Create a numeric series';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-apply')).not.toBeNull());
+  expect(state.apply).not.toHaveBeenCalled();
+  panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
+});
+
+it('preserves a failed routing request and lets the next Excel question start fresh', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.editorKind = 'cell';
+  state.toolContext = 'cell';
+  state.semanticResponse = '{"task":"compose","language":"en"}';
+  const panel = createPreparedPanel();
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  input.value = 'What can you do?';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
+  expect(panel.querySelector('.cui-msg-user')?.textContent).toBe('What can you do?');
+  expect(panel.querySelector('.cui-msg-error')?.textContent).not.toContain(t('agentWordOnly'));
+  expect(state.apply).not.toHaveBeenCalled();
+  state.semanticResponse = '{"task":"chat","language":"en"}';
+  input.value = '你好';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toBe('answer'));
+  expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(2);
+  expect(panel.querySelectorAll('.cui-msg-error')).toHaveLength(1);
+  expect(state.apply).not.toHaveBeenCalled();
 });

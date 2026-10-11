@@ -1,8 +1,9 @@
 import { Div, Span, View } from 'ranui/builder';
 import { t } from '@ranuts/shared/i18n';
 import { displayError } from './presentation';
+import { buildSeries, type SeriesInput } from '../fill-series';
 interface PreviewAction {
-  target: { label: string; selectedText: string };
+  target: { label: string; selectedText: string; reviewText?: string; context?: { kind: string; sheet?: string } };
   plan: { tool: string; input: Readonly<Record<string, unknown>> };
   isCurrent(): boolean;
   cancel(): void;
@@ -52,19 +53,33 @@ export class ActionPreview {
     this.labels();
   }
   private labels(): void {
-    this.title.textContent = t('agentPlanTitle');
-    this.el.setAttribute('aria-label', t('agentPlanTitle'));
+    this.title.textContent = t(this.action?.plan.tool === 'clear_document' ? 'agentClearDocument' : 'agentPlanTitle');
+    this.el.setAttribute('aria-label', this.title.textContent);
     this.beforeLabel.textContent = t('agentPlanBefore');
     this.afterLabel.textContent = t('agentPlanAfter');
-    this.applyButton.textContent = t('agentPlanApply');
-    this.cancelButton.textContent = t('agentPlanCancel');
+    this.applyButton.textContent = t(
+      this.action?.plan.tool === 'clear_document'
+        ? 'agentClearDocument'
+        : this.action?.plan.tool === 'insert_text'
+          ? this.action.target.selectedText
+            ? 'agentReplaceContent'
+            : 'agentInsertContent'
+          : this.action?.plan.tool === 'replace_selection'
+            ? 'agentReplaceContent'
+            : 'agentPlanApply',
+    );
+    this.cancelButton.textContent = t(this.el.dataset.state === 'applying' ? 'agentStop' : 'agentPlanCancel');
     this.copyButton.textContent = t('agentCopy');
     const action = this.action;
     if (action)
-      this.target.textContent = `${action.target.label} · ${
-        action.plan.tool === 'set_cell'
-          ? action.plan.input.cell
-          : t(action.target.selectedText ? 'agentPlanSelection' : 'agentPlanCursor')
+      this.target.textContent = `${action.target.context?.kind === 'cell' ? ['Excel', action.target.context.sheet].filter(Boolean).join(' · ') : action.target.label} · ${
+        action.plan.tool === 'clear_document'
+          ? t('agentCurrentDocument')
+          : action.plan.tool === 'fill_series'
+            ? buildSeries(action.plan.input as unknown as SeriesInput).range
+            : action.plan.tool === 'set_cell'
+              ? action.plan.input.cell
+              : t(action.target.selectedText ? 'agentPlanSelection' : 'agentPlanCursor')
       }`;
   }
   show(action: PreviewAction, onApplied?: (outcome: 'sent' | 'verified') => void): void {
@@ -74,16 +89,32 @@ export class ActionPreview {
     this.abort = new AbortController();
     this.onApplied = onApplied;
     this.settled = false;
+    this.el.dataset.state = 'pending';
+    this.title.hidden = false;
+    this.el.querySelector<HTMLElement>('.agent-plan-buttons')!.hidden = false;
+    this.content.hidden = this.afterLabel.hidden = false;
+    this.copyButton.hidden = action.plan.tool === 'clear_document';
     this.el.hidden = false;
-    this.before.textContent = action.target.selectedText;
-    this.before.hidden = this.beforeLabel.hidden = !action.target.selectedText;
-    this.before.parentElement!.hidden = !action.target.selectedText;
+    const original = action.plan.tool === 'clear_document' ? action.target.reviewText : action.target.selectedText;
+    this.before.textContent = original?.slice(0, 8000) ?? '';
+    this.before.hidden = this.beforeLabel.hidden = !original;
+    this.before.parentElement!.hidden = !original;
     this.content.textContent = String(
-      action.plan.tool === 'set_cell'
-        ? action.plan.input.value
-        : (action.plan.input.text ?? JSON.stringify(action.plan.input)),
+      action.plan.tool === 'clear_document'
+        ? t('agentClearDocument')
+        : action.plan.tool === 'fill_series'
+          ? buildSeries(action.plan.input as unknown as SeriesInput)
+              .values.map((row) => row.join('\t'))
+              .join('\n')
+          : action.plan.tool === 'set_cell'
+            ? action.plan.input.value
+            : (action.plan.input.text ?? JSON.stringify(action.plan.input)),
     );
-    this.status.textContent = t('agentPlanReady');
+    this.status.textContent =
+      action.plan.tool === 'clear_document' && original !== undefined
+        ? t('agentClearImpact').replace('{count}', String(Array.from(original).length))
+        : '';
+    if (action.plan.tool === 'clear_document') this.afterLabel.hidden = this.content.hidden = true;
     this.applyButton.removeAttribute('disabled');
     this.labels();
     this.timer = setInterval(() => {
@@ -99,6 +130,7 @@ export class ActionPreview {
     clearInterval(this.timer);
     this.applyButton.setAttribute('disabled', '');
     this.status.textContent = t('agentPlanExpired');
+    this.finish('expired');
   }
   hide(): void {
     const restore = this.el.contains(document.activeElement);
@@ -125,16 +157,32 @@ export class ActionPreview {
     this.settled = true;
     clearInterval(this.timer);
     this.applyButton.setAttribute('disabled', '');
+    this.el.dataset.state = 'applying';
+    this.copyButton.hidden = true;
+    this.status.textContent = t('agentPlanApplying');
+    this.labels();
     try {
       const result = await action.apply(this.abort?.signal);
       if (this.action === action && !this.abort?.signal.aborted) {
         this.onApplied?.(result);
         this.status.textContent = t(result === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
+        this.finish(result);
       }
     } catch (error) {
-      if (this.action === action)
+      if (this.action === action) {
         this.status.textContent = this.abort?.signal.aborted ? t('agentStopped') : displayError(error);
+        this.finish('failed');
+      }
     }
+  }
+  private finish(state: string): void {
+    const restore = this.el.contains(document.activeElement);
+    this.el.dataset.state = state;
+    this.el.querySelector<HTMLElement>('.agent-plan-buttons')!.hidden = true;
+    this.content.hidden = this.afterLabel.hidden = true;
+    this.before.parentElement!.hidden = true;
+    this.title.hidden = true;
+    if (restore && this.returnFocus?.isConnected) this.returnFocus.focus();
   }
   dispose(): void {
     this.hide();

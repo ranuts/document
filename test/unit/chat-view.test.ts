@@ -15,6 +15,18 @@ function mount() {
   document.body.append(view.el);
   return { view, onSend, input: view.el.querySelector('textarea')! };
 }
+it('offers document writes only for explicit artifacts when the host requires them', async () => {
+  const apply = vi.fn().mockResolvedValue('verified');
+  const view = new ChatView({ onSend: vi.fn(), onApplyMessage: apply, requireDocumentArtifact: true });
+  view.append({ role: 'agent', text: 'I will write it into your document.' });
+  expect(view.el.querySelector('.cui-apply')).toBeNull();
+  view.append({ role: 'agent', text: 'The actual body', documentArtifact: true });
+  view.append({ role: 'agent', text: 'What else can I do?' });
+  expect(view.getLastDocumentBody()).toBe('The actual body');
+  const button = view.el.querySelector<HTMLButtonElement>('.cui-apply')!;
+  button.click();
+  await vi.waitFor(() => expect(apply).toHaveBeenCalledWith('The actual body'));
+});
 it('applies the finished streamed answer only on click and prevents duplicate writes', async () => {
   const apply = vi.fn().mockResolvedValue('verified');
   const view = new ChatView({

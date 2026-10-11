@@ -10,6 +10,9 @@ export interface DocumentContext {
 export function captureDocumentContext(): DocumentContext | null {
   const api = getEditorApi();
   if (!api?.isDocumentLoadComplete || !api.isLoadFullApi) return null;
+  // PDF has its own annotation API, not the Word body/selection contract.
+  // Do not expose Word tools merely because spreadsheet/slide methods are absent.
+  if (typeof api.isPdfEditor === 'function' && (api.isPdfEditor as () => boolean)()) return null;
   if (typeof api.asc_getActiveRangeStr === 'function') {
     const range = (api.asc_getActiveRangeStr as () => string)();
     const sheet =

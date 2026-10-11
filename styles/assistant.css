@@ -1239,6 +1239,9 @@ r-dropdown[role='listbox'] {
 
 .agent-speech {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 .agent-speech-mic {
   display: grid;
@@ -1256,45 +1259,73 @@ r-dropdown[role='listbox'] {
   background: var(--ran-bg-secondary, #f3f3f3);
   color: var(--ran-text-primary, #171717);
 }
-.agent-speech-details {
+.agent-speech-language,
+.agent-speech-cancel {
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ran-text-secondary, #666);
+  font-size: 12px;
+  cursor: pointer;
+}
+.agent-speech-language:hover,
+.agent-speech-cancel:hover {
+  background: var(--ran-bg-secondary, #f3f3f3);
+}
+.agent-speech-language-picker {
   position: absolute;
   bottom: 44px;
   left: 0;
-  box-sizing: border-box;
-  width: min(260px, calc(100vw - 80px));
-  padding: 16px;
-  border: 1px solid var(--ran-border, #ddd);
-  border-radius: 12px;
-  background: var(--ran-bg-primary, #fff);
-  box-shadow: 0 8px 24px #00000012;
-  z-index: 3;
+  width: min(180px, calc(100vw - 80px));
+  z-index: 4;
 }
-.agent-speech-details[hidden] {
-  display: none;
-}
-.agent-speech-details p,
-.agent-speech-details [role='status'] {
-  font-size: 12px;
-  line-height: 1.6;
-}
-.agent-speech-details r-select {
+.agent-speech-language-picker r-select {
   width: 100%;
 }
-.agent-speech-details button {
-  border: 0;
-  border-radius: 6px;
+.agent-speech-feedback {
+  position: absolute;
+  bottom: 44px;
+  left: 0;
+  width: min(260px, calc(100vw - 80px));
+  box-sizing: border-box;
   padding: 8px 12px;
-  margin-right: 8px;
-  background: var(--ran-bg-secondary, #f3f3f3);
-  color: inherit;
-  cursor: pointer;
+  border: 1px solid var(--ran-border, #ddd);
+  border-radius: 8px;
+  background: var(--ran-bg-primary, #fff);
+  color: var(--ran-text-secondary, #666);
+  font-size: 12px;
+  line-height: 1.6;
+  z-index: 3;
 }
-.agent-speech-details [role='status'] {
-  display: block;
-  margin-top: 8px;
+.agent-speech-feedback p {
+  margin: 4px 0 0;
+}
+.agent-speech [hidden] {
+  display: none;
+}
+.agent-speech button:disabled {
+  cursor: default;
+  opacity: 0.6;
 }
 .agent-speech button:focus-visible,
 .agent-speech r-select:focus-visible {
   outline: 2px solid var(--ran-focus-ring, #1677ff);
   outline-offset: 2px;
+}
+
+.agent-plan-buttons[hidden],
+.agent-plan-preview [hidden] {
+  display: none;
+}
+.agent-plan-preview[data-state='verified'],
+.agent-plan-preview[data-state='sent'] {
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+}
+.agent-plan-content {
+  max-height: 240px;
+  overflow: auto;
 }

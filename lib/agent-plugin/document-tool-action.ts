@@ -1,4 +1,5 @@
 import { readWordBodyText } from './word-text-read';
+import { buildSeries, type SeriesInput } from './fill-series';
 import type { DocumentContext } from './document-context';
 import { captureDocumentContext } from './document-context';
 import type { DocumentToolPlan } from './document-tool-plan';
@@ -14,6 +15,7 @@ export interface DocumentToolTarget {
   readonly context: DocumentContext;
   readonly label: string;
   readonly selectedText: string;
+  readonly reviewText?: string;
   isCurrent(write?: boolean): boolean;
   assertSupported?(plan: DocumentToolPlan): void;
   verify?(plan: DocumentToolPlan): Promise<boolean | undefined>;
@@ -164,6 +166,17 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
   };
   const verify = async (plan: DocumentToolPlan): Promise<boolean | undefined> => {
     if (plan.readOnly) return undefined;
+    if (plan.tool === 'clear_document')
+      return sameDocument() && state.revision === revision && readWordBodyText(logic)?.trim() === '';
+    if (plan.tool === 'fill_series' && model) {
+      if (!sameDocument() || state.revision !== revision) return false;
+      const series = buildSeries(plan.input as unknown as SeriesInput);
+      const range = parseOfficeRange(series.range);
+      return series.values.every(([value], index) => {
+        const stored = model.getRange3(range.r1 + index, range.c1, range.r1 + index, range.c1);
+        return stored.getValueData?.()?.value.type === 0 && stored.getNumberValue?.() === value;
+      });
+    }
     if (plan.tool === 'set_review_mode') return sameDocument() && api.asc_IsTrackRevisions() === plan.input.enabled;
     const textEdit = ['insert_text', 'replace_selection'].includes(plan.tool) && typeof beforeText === 'string';
     const cellEdit = plan.tool === 'set_cell' && !!model;
@@ -213,6 +226,7 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
           ? `Excel · ${context.sheet ?? ''} ${context.range ?? ''}`
           : 'DOCX',
     selectedText,
+    reviewText: beforeText,
     assertSupported: (plan: DocumentToolPlan) => {
       if (
         context.kind === 'word' &&

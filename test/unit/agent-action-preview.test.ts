@@ -85,3 +85,36 @@ it('copies a proposal without applying it', async () => {
   expect(execute).not.toHaveBeenCalled();
   view.dispose();
 });
+
+it('uses operation-specific labels and hides irrelevant controls for clear', () => {
+  const view = new ActionPreview();
+  view.show({
+    target: { label: 'DOCX', selectedText: '' },
+    plan: { tool: 'clear_document', input: {} },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: vi.fn(),
+  });
+  expect(view.el.querySelector('.agent-plan-copy')?.hasAttribute('hidden')).toBe(true);
+  expect(view.el.querySelector('.agent-plan-apply')?.textContent).not.toBe('Apply changes');
+  view.dispose();
+});
+it('settles a completed proposal without actionable cancel or apply controls', async () => {
+  const view = new ActionPreview();
+  const action = {
+    target: { label: 'DOCX', selectedText: '' },
+    plan: { tool: 'insert_text', input: { text: 'Hello' } },
+    isCurrent: () => true,
+    cancel: vi.fn(),
+    apply: vi.fn(async () => 'verified' as const),
+  };
+  view.show(action);
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(view.el.dataset.state).toBe('verified');
+  expect(view.el.querySelector('.agent-plan-buttons')?.hasAttribute('hidden')).toBe(true);
+  expect(view.el.querySelector('.agent-plan-content')?.hasAttribute('hidden')).toBe(true);
+  view.el.querySelector<HTMLElement>('.agent-plan-apply')!.click();
+  expect(action.apply).toHaveBeenCalledTimes(1);
+  view.dispose();
+});

@@ -11,6 +11,13 @@ import type { I18nMessages } from '../types';
  */
 export const ko: Partial<I18nMessages> = {
   editorBackHome: '홈으로 돌아가기',
+  agentSpeechNoResult: '음성을 인식하지 못했습니다. 마이크를 확인하고 다시 시도하세요.',
+  agentClearImpact: '문서 본문의 {count}자를 삭제합니다.',
+  agentInsertContent: '내용 삽입',
+  agentReplaceContent: '내용 바꾸기',
+  agentPlanApplying: '변경 적용 중…',
+  agentClearDocument: '본문 지우기 (실행 취소 가능)',
+  agentFillSeries: '숫자 연속 값 채우기',
   agentSpeechInput: '음성 입력',
   agentSpeechStop: '받아쓰기 중지',
   agentSpeechLanguage: '인식 언어',
@@ -216,7 +223,7 @@ export const ko: Partial<I18nMessages> = {
   agentPlanBefore: '원문',
   agentPlanAfter: '제안된 텍스트',
   agentPlanTitle: '변경 제안 검토',
-  agentPlanApply: '선택한 글 바꾸기',
+  agentPlanApply: '변경 사항 적용',
   agentPlanCancel: '취소',
   agentPlanExpired: '제안이 만료되었습니다. 다시 생성하세요.',
   agentPlanVerified: '완료했습니다. 실행 취소할 수 있습니다.',

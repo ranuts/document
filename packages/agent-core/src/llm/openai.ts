@@ -26,6 +26,7 @@ export interface OpenAIProviderOptions {
 }
 
 export class OpenAIProvider implements LLMProvider {
+  readonly toolCallingMode = 'native' as const;
   readonly name = 'openai';
   private readonly apiKey?: string;
   private readonly model: string;

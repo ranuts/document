@@ -139,6 +139,7 @@ export interface GeminiProviderOptions {
 }
 
 export class GeminiProvider implements LLMProvider {
+  readonly toolCallingMode = 'native' as const;
   readonly name = 'gemini';
   private readonly apiKey?: string;
   private readonly model: string;

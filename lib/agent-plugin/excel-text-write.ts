@@ -46,10 +46,13 @@ export async function writeExcelNativeText(
   signal?: AbortSignal,
   literal = false,
   verify?: () => boolean,
+  rectangular = false,
 ): Promise<void> {
   signal?.throwIfAborted();
-  if (typeof text !== 'string' || !text.length || text.length > 8000 || /[\t\r\n]/.test(text))
+  if (typeof text !== 'string' || !text.length || text.length > 8000 || (!rectangular && /[\t\r\n]/.test(text)))
     throw new Error('Invalid document tool parameters');
+  if (rectangular && (literal || !verify || text.split(/\n|\t/).some((value) => !/^-?\d+(?:\.\d+)?$/.test(value))))
+    throw new Error('Invalid numeric range values');
   if (!scope.isCurrent()) throw new Error('Paste target has expired');
   assertExcelTextWritable(scope.api, scope.model, scope.cell, scope.nativeRange, scope.readonly);
   const format = literal ? captureExcelCellFormat(scope.cell) : undefined;

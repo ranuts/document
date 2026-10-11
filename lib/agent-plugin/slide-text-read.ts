@@ -1,4 +1,5 @@
 export interface SlideTextShape {
+  spTree?: SlideTextShape[];
   getText?(): string | undefined;
   getDocContent?():
     | {
@@ -128,4 +129,14 @@ export function readSlideTextSelection(
   } catch {
     return undefined;
   }
+}
+
+/** Shared reader for ordinary text shapes and nested presentation groups. */
+export function readPresentationShapeText(shape: SlideTextShape): string {
+  if (shape.spTree) return shape.spTree.map(readPresentationShapeText).filter(Boolean).join('\n');
+  return (
+    (readSlideShapeText(shape) ?? shape.getDocContent?.()?.GetText({}) ?? shape.getText?.())
+      ?.replace(/\r\n?/g, '\n')
+      .trim() ?? ''
+  );
 }

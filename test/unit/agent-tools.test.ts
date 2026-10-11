@@ -32,7 +32,9 @@ const pasteText = vi.fn();
 const findCell = vi.fn();
 const getCellInfo = vi.fn(() => ({ asc_getText: () => 'cellValue' }));
 const makeApi = () => ({
-  WordControl: { m_oLogicDocument: { IsSelectionLocked: () => false } as Record<string, unknown> },
+  WordControl: {
+    m_oLogicDocument: { IsSelectionLocked: () => false, GetText: () => getSelectedText() } as Record<string, unknown>,
+  },
   isDocumentLoadComplete: true,
   isLoadFullApi: true,
   asc_SetGlobalTrackRevisions: setGlobalTrackRevisions,
@@ -324,11 +326,11 @@ describe('agent tools', () => {
       expect(getDocumentTextTool.readOnlyHint).toBe(true);
     });
 
-    it('selects all, reads CRLF-normalised text, then clears the selection', async () => {
+    it('reads CRLF-normalised body text without changing selection', async () => {
       getSelectedText.mockReturnValue('Alpha.\r\nBeta.');
       const result = await getDocumentTextTool.execute({});
-      expect(editSelectAll).toHaveBeenCalledTimes(1);
-      expect(removeSelection).toHaveBeenCalledTimes(1);
+      expect(editSelectAll).not.toHaveBeenCalled();
+      expect(removeSelection).not.toHaveBeenCalled();
       expect(result).toEqual({ text: 'Alpha.\nBeta.', truncated: false });
     });
 
@@ -428,7 +430,7 @@ describe('agent tools', () => {
   });
 
   describe('get_document_text robustness', () => {
-    it('does not call asc_RemoveSelection when it is absent (spreadsheet)', async () => {
+    it('reports an unavailable reader without selecting all or clearing the caret', async () => {
       requireEditorApi.mockImplementationOnce(
         () =>
           ({
@@ -437,8 +439,9 @@ describe('agent tools', () => {
             // no asc_RemoveSelection
           }) as unknown as ReturnType<typeof makeApi>,
       );
-      const result = await getDocumentTextTool.execute({});
-      expect(result.text).toBe('a\tb');
+      await expect(getDocumentTextTool.execute({})).rejects.toThrow('unavailable');
+      expect(editSelectAll).not.toHaveBeenCalled();
+      expect(removeSelection).not.toHaveBeenCalled();
     });
   });
 });

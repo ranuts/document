@@ -4,10 +4,13 @@ test('default off and remembered on never prepare models or connect services on 
   test.setTimeout(120_000);
   const inference: string[] = [];
   page.on('request', (request) => {
+    const url = new URL(request.url());
+    // Dependency module names in development are not inference requests.
     if (
-      /huggingface|mlc-ai|web-llm|localhost:11434|127\.0\.0\.1:11434|api\.openai|anthropic|generativelanguage|\.gguf(?:\?|$)/i.test(
-        request.url(),
-      )
+      /huggingface|mlc-ai|api\.openai|api\.anthropic|generativelanguage/i.test(url.hostname) ||
+      /^(?:localhost|127\.0\.0\.1):11434$/.test(url.host) ||
+      /\.gguf$/i.test(url.pathname) ||
+      (url.hostname === 'raw.githubusercontent.com' && url.pathname.includes('/mlc-ai/'))
     )
       inference.push(request.url());
   });

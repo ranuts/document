@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.106.0",
+    "@cfworker/json-schema": "^4.1.1",
     "@mlc-ai/web-llm": "0.2.85",
     "@wllama/wllama": "3.6.1",
     "@wllama/wllama-compat": "3.6.1"

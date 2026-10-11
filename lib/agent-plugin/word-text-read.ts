@@ -3,9 +3,25 @@ import { readSlideShapeText } from './slide-text-read';
 /** Read shared native text items without the SDK GetText Unicode/tab conversion. */
 export function readWordBodyText(document: unknown): string | undefined {
   try {
-    const logic = document as { GetAllParagraphs?(options: object): unknown[]; GetText?(): string };
+    const logic = document as {
+      Content?: Array<{ GetAllParagraphs?(options: object, target: unknown[]): void }>;
+      GetAllParagraphs?(options: object): unknown[];
+      GetText?(): string;
+    };
     if (typeof logic.GetAllParagraphs !== 'function') return logic.GetText?.();
-    const paragraphs = logic.GetAllParagraphs({ OnlyMainDocument: true, All: true });
+    // CDocument.GetAllParagraphs can return AllParagraphsList left over from a delete/Undo.
+    // Walk the current main-body elements through their native reader without changing SDK caches.
+    const paragraphs: unknown[] = [];
+    if (Array.isArray(logic.Content)) {
+      for (const element of logic.Content) {
+        if (typeof element.GetAllParagraphs !== 'function') return undefined;
+        element.GetAllParagraphs({ All: true }, paragraphs);
+      }
+    } else {
+      const legacy = logic.GetAllParagraphs({ OnlyMainDocument: true, All: true });
+      if (!Array.isArray(legacy)) return undefined;
+      paragraphs.push(...legacy);
+    }
     if (!Array.isArray(paragraphs)) return undefined;
     return readSlideShapeText({ getDocContent: () => ({ Content: paragraphs, GetText: () => '' }) });
   } catch {

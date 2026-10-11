@@ -11,6 +11,13 @@ import type { I18nMessages } from '../types';
  */
 export const es: Partial<I18nMessages> = {
   editorBackHome: 'Volver al inicio',
+  agentSpeechNoResult: 'No se reconoció ninguna voz. Comprueba el micrófono e inténtalo de nuevo.',
+  agentClearImpact: 'Elimina {count} caracteres del cuerpo del documento.',
+  agentInsertContent: 'Insertar contenido',
+  agentReplaceContent: 'Reemplazar contenido',
+  agentPlanApplying: 'Aplicando cambio…',
+  agentClearDocument: 'Vaciar el documento (se puede deshacer)',
+  agentFillSeries: 'Rellenar serie numérica',
   agentSpeechInput: 'Entrada de voz',
   agentSpeechStop: 'Detener dictado',
   agentSpeechLanguage: 'Idioma de reconocimiento',
@@ -224,7 +231,7 @@ export const es: Partial<I18nMessages> = {
   agentPlanBefore: 'Texto original',
   agentPlanAfter: 'Texto propuesto',
   agentPlanTitle: 'Revisar el cambio',
-  agentPlanApply: 'Reemplazar texto seleccionado',
+  agentPlanApply: 'Aplicar cambios',
   agentPlanCancel: 'Cancelar',
   agentPlanExpired: 'La propuesta ha caducado. Genera una nueva.',
   agentPlanVerified: 'Hecho. Puedes deshacer el cambio.',

@@ -57,6 +57,7 @@ test.describe('agent document writes (real editor)', () => {
       const row = document.createElement('div');
       row.className = 'cui-msg cui-msg-agent';
       row.dataset.source = text;
+      row.dataset.documentArtifact = 'true';
       row.textContent = text;
       messages.append(row);
     }, answer);
@@ -131,6 +132,7 @@ test.describe('agent document writes (real editor)', () => {
   test('writes a spreadsheet cell through the model-level writer', async ({ page }) => {
     await openEditorWithPanel(page, 'xlsx');
     await send(page, 'read A1:A5, then set B1 to "agent wrote this"');
+    expect(await readCell(page, 'B1')).toBe('');
     await confirmCellWrite(page, 'B1', 'agent wrote this');
     await expect.poll(() => readCell(page, 'B1'), { timeout: 30_000 }).toBe('agent wrote this');
     await undo(page);
