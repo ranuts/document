@@ -108,4 +108,6 @@ Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assist
 
 ## Assistente de documentos com IA
 
-Selecione um trecho para reescrever, resumir ou traduzir. Revise o resultado antes de adicioná-lo ao documento. Desativado por padrão · Só este navegador. [Como usar](/pt/ai-document-assistant).
+Diga o que quer fazer: consultar conteúdo, trabalhar em textos ou organizar dados. Revise as alterações antes de aplicar.
+
+PDF: consulte, resuma ou traduza texto selecionável da página atual; adicione uma nota a uma página específica. O assistente lê a página atual, não o PDF inteiro. Texto em imagens digitalizadas não é reconhecido; a indisponibilidade é informada. Notas são anexadas à página e não reescrevem o texto do PDF. Para alterar a disposição do texto, use o Word original. [Guia do assistente de IA](/pt/ai-document-assistant).

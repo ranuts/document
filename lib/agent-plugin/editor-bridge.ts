@@ -1,3 +1,4 @@
+import type { PdfDocument } from './pdf-tools';
 import type { RedoHistory } from './native-redo';
 
 /**
@@ -29,6 +30,7 @@ const EDITOR_FRAME_NAME = 'frameEditor';
  * / `asc_*` methods reachable without `any` casts at every call site.
  */
 export interface EditorApi {
+  DocumentRenderer?: unknown;
   /** Insert HTML at the current cursor position. */
   pluginMethod_PasteHtml(html: string): void;
   /** Type plain text at the current cursor (preserves surrounding formatting). */
@@ -83,6 +85,7 @@ export interface EditorAsc {
 
 /** Editor API plus the frame's `Asc` namespace, needed to build SDK objects. */
 export interface EditorCommon {
+  CreateGUID?(): string;
   changestype_Document_Settings?: number;
   IsHiddenObj?(shape: unknown): boolean;
   c_oAscClipboardDataFormat?: { Text: number };
@@ -97,7 +100,11 @@ export interface EditorCommon {
 }
 
 export interface EditorContext {
-  AscDFH?: { historydescription_GroupPoints: number };
+  AscDFH?: { historydescription_GroupPoints: number; historydescription_Pdf_AddComment?: number };
+  AscPDF?: {
+    ANNOTATIONS_TYPES: { Text: number };
+    CreateAnnotByProps(props: Record<string, unknown>, doc: PdfDocument): PdfDocument['annots'][number];
+  };
   AscCommon?: EditorCommon;
   api: EditorApi;
   Asc: EditorAsc;
@@ -110,6 +117,7 @@ export interface EditorContext {
  * from either. `Asc` also carries the namespace used to build SDK objects.
  */
 interface EditorWindow {
+  AscPDF?: EditorContext['AscPDF'];
   AscDFH?: EditorContext['AscDFH'];
   AscCommon?: EditorCommon;
   editor?: unknown;
@@ -188,6 +196,7 @@ export function getEditorContext(): EditorContext | null {
     ? {
         api,
         Asc: win.Asc,
+        ...(win.AscPDF ? { AscPDF: win.AscPDF } : {}),
         ...(win.AscCommon ? { AscCommon: win.AscCommon } : {}),
         ...(win.AscDFH ? { AscDFH: win.AscDFH } : {}),
       }

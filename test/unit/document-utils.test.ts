@@ -15,6 +15,18 @@ describe('document utils', () => {
     expect(getDocumentType('pptx')).toBe('slide');
   });
 
+  it.each([
+    ['ODT', 'word'],
+    ['rtf', 'word'],
+    ['txt', 'word'],
+    ['ODS', 'cell'],
+    ['odp', 'slide'],
+    ['pdf', 'pdf'],
+    ['unknown', null],
+  ])('classifies supported import format %s for editor and tool routing', (extension, kind) => {
+    expect(getDocumentType(extension)).toBe(kind);
+  });
+
   it('normalizes extension casing for MIME lookup', () => {
     expect(getMimeTypeFromExtension('XLSX')).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   });

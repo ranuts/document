@@ -4,6 +4,7 @@ import { getReadonlyMode } from '../onlyoffice/readonly';
 import { requireEditorApi, getEditorApi } from './editor-bridge';
 import { agentTools } from './tools';
 import { assertReviewSelection, captureReviewCharacters, matchesTextEdit } from './verify-text-edit';
+import type { ChangeReview } from './ui/change-review';
 
 interface HistoryState {
   Index: number;
@@ -193,14 +194,24 @@ export function captureActionTarget(): ActionTarget {
 /** A user-confirmed proposal is consumed before executing, including on error. */
 export class ReviewedAction {
   readonly plan: Readonly<ActionPlan>;
+  readonly review?: ChangeReview;
   private consumed = false;
   constructor(
     readonly target: ActionTarget,
     plan: ActionPlan,
   ) {
     this.plan = parseActionPlan(JSON.stringify(plan), target.editor);
+    if (this.plan.tool === 'insert_text')
+      this.review = { kind: 'text', before: target.selectedText, after: this.plan.input.text };
     if (target.editor === 'cell' && (!target.cell || this.plan.input.cell !== target.cell))
       throw new Error('Proposal does not match the captured cell');
+  }
+  revise(text: string): ReviewedAction {
+    if (!this.isCurrent()) throw new Error('This proposal has expired. Generate a new proposal.');
+    if (this.plan.tool !== 'insert_text') throw new Error('This operation cannot be edited as text');
+    const replacement = new ReviewedAction(this.target, { tool: 'insert_text', input: { text } });
+    this.cancel();
+    return replacement;
   }
   isCurrent(): boolean {
     return !this.consumed && this.target.isCurrent();

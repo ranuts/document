@@ -20,6 +20,8 @@ const state = vi.hoisted(() => ({
   ready: false,
   nativeEndpoint: false,
   cached: false,
+  cachedModel: 'Qwen3-4B-q4f16_1-MLC',
+  cpuCached: false,
   deleteCache: vi.fn().mockResolvedValue(undefined),
   editorKind: 'word' as 'word' | 'cell' | 'slide',
   readonly: false,
@@ -57,7 +59,7 @@ vi.mock('@ranuts/agent-core/llm/openai', async (original) => {
 vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
   ...(await original<typeof import('@ranuts/agent-core/llm/webllm')>()),
   isWebGPUAvailable: () => true,
-  isModelCached: async (id: string) => state.cached && id === 'Qwen3-1.7B-q4f16_1-MLC',
+  isModelCached: async (id: string) => state.cached && id === state.cachedModel,
   WebLLMProvider: class {
     constructor(options: { onProgress: (value: { text: string }) => void }) {
       state.progress.push(options.onProgress);
@@ -72,7 +74,10 @@ vi.mock('@ranuts/agent-core/llm/webllm', async (original) => ({
 vi.mock('../../lib/onlyoffice/readonly', () => ({ getReadonlyMode: () => state.readonly }));
 vi.mock('@ranuts/agent-core/llm/model-cache', () => ({
   deleteCachedModel: state.deleteCache,
-  listCachedGGUF: async () => [],
+  listCachedGGUF: async () =>
+    state.cpuCached
+      ? [{ name: 'cpu-model.gguf', url: 'https://models.example/cpu-model.gguf', size: 100, complete: true }]
+      : [],
   deleteCachedGGUF: state.deleteCache,
   rememberedModelSources: () => [],
   rememberModelSource: () => {},
@@ -219,7 +224,7 @@ vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
   DocumentToolAction: class {
     cancel() {}
     isCurrent() {
-      return true;
+      return state.targetCurrent;
     }
     apply = state.apply;
     get result() {
@@ -244,6 +249,8 @@ afterEach(() => {
   state.ready = false;
   state.nativeEndpoint = false;
   state.cached = false;
+  state.cachedModel = 'Qwen3-4B-q4f16_1-MLC';
+  state.cpuCached = false;
   state.editorKind = 'word';
   state.deleteCache.mockReset().mockResolvedValue(undefined);
   state.readonly = false;
@@ -364,7 +371,7 @@ it('chooses a preset without retaining a previous custom model override', () => 
     localStorage.setItem(keys[2], '/models/custom.wasm');
     const panel = createPreparedPanel();
     const preset = panel.querySelector('.agent-panel-model') as HTMLElement & { value: string };
-    preset.value = 'Qwen3.5-0.8B-q4f16_1-MLC';
+    preset.value = 'Qwen3-4B-q4f16_1-MLC';
     preset.dispatchEvent(new Event('change'));
     for (const key of keys.slice(0, 3)) {
       expect(localStorage.getItem(key)).toBe('');
@@ -1612,6 +1619,7 @@ it('ignores an unavailable notification from a replaced model', async () => {
 
 it('ignores old loading progress after switching to a different task model', async () => {
   localStorage.clear();
+  localStorage.setItem('agent-local-model-id', 'custom-model-q4');
   localStorage.setItem(
     'agent-task-models',
     JSON.stringify({ version: 1, tasks: { rewrite: { backend: 'webllm', model: 'Qwen3-4B-q4f16_1-MLC' } } }),
@@ -1636,6 +1644,7 @@ it('ignores old loading progress after switching to a different task model', asy
   expect(panel.querySelector('.agent-panel-note')?.textContent).not.toBe(t('agentModelLoaded'));
   expect(panel.querySelector('.agent-panel-load')?.hasAttribute('disabled')).toBe(false);
   localStorage.removeItem('agent-task-models');
+  localStorage.removeItem('agent-local-model-id');
 });
 
 it('keeps endpoint keys isolated when switching cloud kinds', () => {
@@ -1975,4 +1984,163 @@ it('preserves a failed routing request and lets the next Excel question start fr
   expect(panel.querySelectorAll('.cui-msg-user')).toHaveLength(2);
   expect(panel.querySelectorAll('.cui-msg-error')).toHaveLength(1);
   expect(state.apply).not.toHaveBeenCalled();
+});
+
+it('preserves an unexecuted suggestion after stopping refinement and ignores a late replacement', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.routing.mockResolvedValue({ task: 'tools', language: 'en' });
+  state.toolPlan.mockResolvedValueOnce({ tool: 'add_slide_text', input: { text: 'Original draft' }, readOnly: false });
+  let resolve!: (plan: unknown) => void;
+  const late = new Promise((done) => {
+    resolve = done;
+  });
+  state.toolPlan.mockReturnValueOnce(late);
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Add text to the slide';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  const original = panel.querySelector<HTMLElement>('.agent-plan-preview')!;
+  original.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+  input.value = 'Shorten this suggestion';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalledTimes(2));
+  const signal = state.toolPlan.mock.calls[1][3] as AbortSignal;
+  panel.querySelector<HTMLElement>('.cui-send-stop')!.click();
+  expect(signal.aborted).toBe(true);
+  resolve({ tool: 'add_slide_text', input: { text: 'Late replacement' }, readOnly: false });
+  await vi.waitFor(() => expect(original.hasAttribute('aria-busy')).toBe(false));
+  expect(original.dataset.state).toBe('pending');
+  expect(original.querySelector('.agent-plan-apply')?.hasAttribute('disabled')).toBe(false);
+  expect(panel.querySelectorAll('.agent-plan-preview')).toHaveLength(1);
+  expect(panel.textContent).not.toContain('Late replacement');
+  expect(state.apply).not.toHaveBeenCalled();
+});
+
+it('does not claim an unchanged suggestion is available after the document changes during refinement', async () => {
+  state.ready = true;
+  state.editorReady = true;
+  state.routing.mockResolvedValue({ task: 'tools', language: 'en' });
+  state.toolPlan.mockResolvedValueOnce({ tool: 'add_slide_text', input: { text: 'Original draft' }, readOnly: false });
+  let reject!: (error: Error) => void;
+  state.toolPlan.mockReturnValueOnce(
+    new Promise((_done, fail) => {
+      reject = fail;
+    }),
+  );
+  const panel = createPreparedPanel();
+  document.body.append(panel);
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Add text to the slide';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(panel.querySelector('.agent-plan-preview[data-state=pending]')).not.toBeNull());
+  panel.querySelector<HTMLElement>('.agent-plan-refine')!.click();
+  input.value = 'Shorten this suggestion';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalledTimes(2));
+  state.targetCurrent = false;
+  reject(new Error('agentProposalUnchanged'));
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(panel.textContent).not.toContain(t('agentProposalUnchanged'));
+  expect(panel.textContent).toContain(t('agentPlanExpired'));
+  expect(panel.querySelector('.agent-plan-preview')?.getAttribute('data-state')).toBe('expired');
+  expect(state.apply).not.toHaveBeenCalled();
+});
+
+it.each(['chat', 'tools'] as const)('keeps connected-service readiness accurate in %s mode', async (mode) => {
+  const panel = createAgentPanel();
+  const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
+  kind.value = 'openai-compatible';
+  kind.dispatchEvent(new Event('change'));
+  const url = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-url')!;
+  const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+  const key = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-key')!;
+  url.value = 'https://api.example.com/v1';
+  url.dispatchEvent(new Event('change'));
+  model.value = 'probe';
+  model.dispatchEvent(new Event('change'));
+  key.value = 'synthetic-key';
+  key.dispatchEvent(new Event('change'));
+  const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  task.value = mode;
+  task.dispatchEvent(new Event('change'));
+  const connect = panel.querySelector<HTMLElement>('.agent-panel-endpoint-connect')!;
+  connect.click();
+  await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+  const readiness = panel.querySelector('.agent-readiness')!;
+  expect(readiness.textContent).toBe('');
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Hello';
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  expect(panel.querySelector('.cui-send')?.hasAttribute('disabled')).toBe(false);
+  Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
+  window.dispatchEvent(new Event('offline'));
+  expect(readiness.textContent).toBe(t('agentPrepareRequired'));
+  expect(panel.querySelector('.cui-send')?.hasAttribute('disabled')).toBe(true);
+  expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(
+    t('agentWriteDestinationOfflineUnavailable'),
+  );
+  Object.defineProperty(navigator, 'onLine', { value: true, configurable: true });
+  window.dispatchEvent(new Event('online'));
+  expect(readiness.textContent).toBe('');
+  connect.click();
+  expect(readiness.textContent).toBe(t('agentPrepareRequired'));
+  expect(panel.querySelector('.agent-panel-write-destination')?.textContent).not.toContain(
+    t('agentWriteDestinationDevice'),
+  );
+});
+it('keeps a connected local service available for editing while offline', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => new Response(JSON.stringify({ models: [{ name: 'probe' }] }))),
+  );
+  try {
+    const panel = createAgentPanel();
+    const model = panel.querySelector<HTMLInputElement>('.agent-panel-endpoint-model')!;
+    model.value = 'probe';
+    model.dispatchEvent(new Event('change'));
+    const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+    task.value = 'tools';
+    task.dispatchEvent(new Event('change'));
+    const connect = panel.querySelector<HTMLElement>('.agent-panel-endpoint-connect')!;
+    connect.click();
+    await vi.waitFor(() => expect(connect.textContent).toBe(t('agentEndpointDisconnect')));
+    Object.defineProperty(navigator, 'onLine', { value: false, configurable: true });
+    window.dispatchEvent(new Event('offline'));
+    expect(panel.querySelector('.agent-readiness')?.textContent).toBe('');
+    expect(panel.querySelector('.agent-panel-write-destination')?.textContent).toContain(
+      t('agentWriteDestinationDevice'),
+    );
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
+it('keeps retired model downloads removable without offering to use them', async () => {
+  state.cached = true;
+  state.cachedModel = 'Qwen3-1.7B-q4f16_1-MLC';
+  const panel = createAgentPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-cache-delete')).not.toBeNull());
+  const row = panel.querySelector<HTMLElement>('.agent-model-cache-row')!;
+  expect(row.textContent).toContain('Qwen3 · 1.7B');
+  expect(row.querySelector('.agent-cache-use')).toBeNull();
+  const remove = row.querySelector<HTMLElement>('.agent-cache-delete')!;
+  remove.click();
+  expect(state.deleteCache).not.toHaveBeenCalled();
+  remove.click();
+  await vi.waitFor(() => expect(state.deleteCache).toHaveBeenCalledWith('Qwen3-1.7B-q4f16_1-MLC', {}));
+  expect(state.preload).not.toHaveBeenCalled();
+});
+
+it('retains the use and delete actions for a cached custom CPU model', async () => {
+  state.cpuCached = true;
+  const panel = createAgentPanel();
+  await vi.waitFor(() => expect(panel.querySelector('.agent-model-cache-row')).not.toBeNull());
+  const row = panel.querySelector<HTMLElement>('.agent-model-cache-row')!;
+  expect(row.textContent).toContain('cpu-model.gguf');
+  expect(row.querySelector('.agent-cache-use')?.textContent).toBe(t('agentUseModel'));
+  expect(row.querySelector('.agent-cache-use')?.hasAttribute('disabled')).toBe(false);
+  expect(row.querySelector('.agent-cache-delete')).not.toBeNull();
 });

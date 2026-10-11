@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { parseDocumentToolPlan, generateDocumentToolPlan } from '../../lib/agent-plugin/document-tool-plan';
+import {
+  parseDocumentToolPlan,
+  generateDocumentToolPlan,
+  isLiteralDocumentToolRequest,
+} from '../../lib/agent-plugin/document-tool-plan';
 import { agentTools } from '../../lib/agent-plugin/tools';
 import type { LLMProvider, LLMResponse } from '@ranuts/agent-core/llm/types';
 const json = (tool: string, input: Record<string, unknown> = {}) => JSON.stringify({ tool, input });
@@ -983,4 +987,156 @@ it('retains native numeric entry for an unquoted cell assignment', async () => {
   expect(
     (await generateDocumentToolPlan(provider, 'Set B2 to 123.', { kind: 'cell' }, new AbortController().signal)).input,
   ).toEqual({ cell: 'B2', value: '123' });
+});
+
+it('refines unexecuted reference data with the current editor capabilities and validates the replacement', async () => {
+  const generateJSON = vi.fn(async () => response(json('insert_text', { text: 'Refined' })));
+  const provider = { generateJSON } as unknown as LLMProvider;
+  const pendingProposal = { tool: 'insert_text', input: { text: 'Unexecuted draft' } };
+  const revised = await generateDocumentToolPlan(
+    provider,
+    'Shorten the suggestion',
+    { kind: 'word' },
+    new AbortController().signal,
+    { pendingProposal },
+  );
+  expect(revised.input.text).toBe('Refined');
+  const messages = generateJSON.mock.calls[0] as unknown as [Array<{ role: string; content: string }>];
+  expect(messages[0]).toHaveLength(1);
+  expect(messages[0][0].role).toBe('user');
+  expect(messages[0][0].content).toContain('Unexecuted draft');
+  expect(messages[0][0].content).toContain('executed":false');
+  expect(messages[0][0].content).not.toContain('Choose exactly one document API operation');
+  expect(messages[0][0].content).toContain('Preserve all values not changed by the request');
+  expect(messages[0][0].content.indexOf('Unexecuted draft')).toBeLessThan(
+    messages[0][0].content.indexOf('User request:'),
+  );
+  await expect(
+    generateDocumentToolPlan(provider, 'Shorten', { kind: 'cell', range: 'A1' }, new AbortController().signal, {
+      pendingProposal,
+    }),
+  ).rejects.toThrow('not available');
+});
+
+it('recognizes exact literal commands independently of small-model semantic routing', () => {
+  expect(isLiteralDocumentToolRequest('在当前光标处逐字插入以下文本：秋天来了。', { kind: 'word' })).toBe(true);
+  expect(
+    isLiteralDocumentToolRequest('Explain this command: Insert exactly this plain text at the cursor: autumn', {
+      kind: 'word',
+    }),
+  ).toBe(false);
+  expect(isLiteralDocumentToolRequest('Insert exactly this plain text at the cursor: autumn', { kind: 'cell' })).toBe(
+    false,
+  );
+  expect(
+    isLiteralDocumentToolRequest('Add a new text box on the current slide with this exact plain text: autumn', {
+      kind: 'slide',
+    }),
+  ).toBe(true);
+});
+
+it('constrains refinement to its original operation and refuses a changed tool', async () => {
+  const generateJSON = vi.fn(async (_messages: unknown, _schema: unknown) =>
+    response(json('replace_selection', { text: 'Winter' })),
+  );
+  const provider = { generateJSON } as unknown as LLMProvider;
+  await expect(
+    generateDocumentToolPlan(
+      provider,
+      'Change Autumn to Winter',
+      { kind: 'word', selectionCharacters: 4 },
+      new AbortController().signal,
+      {
+        pendingProposal: { tool: 'insert_text', input: { text: 'Autumn' } },
+      },
+    ),
+  ).rejects.toThrow(/operation/);
+  expect(JSON.stringify(generateJSON.mock.calls[0][1])).not.toContain('replace_selection');
+});
+it('does not offer selection replacement when Word has a known empty selection', () => {
+  expect(() =>
+    parseDocumentToolPlan(json('replace_selection', { text: 'Winter' }), { kind: 'word', selectionCharacters: 0 }),
+  ).toThrow('not available');
+});
+
+it('does not bypass refinement constraints through literal cell reads', async () => {
+  const generateJSON = vi.fn(async () => response(json('get_range', { range: 'A1:A2' })));
+  await expect(
+    generateDocumentToolPlan(
+      { generateJSON } as unknown as LLMProvider,
+      '读取 A1:A2 的内容',
+      { kind: 'cell' },
+      new AbortController().signal,
+      { pendingProposal: { tool: 'set_cell', input: { cell: 'B1', value: 'draft' } } },
+    ),
+  ).rejects.toThrow(/operation/);
+  expect(generateJSON).toHaveBeenCalledOnce();
+});
+
+it('keeps the existing destination available when refining a sum write', async () => {
+  const generateJSON = vi.fn(async (_messages: unknown, _schema: unknown) =>
+    response(json('sum_range', { range: 'A1:A5', target: 'B1' })),
+  );
+  const plan = await generateDocumentToolPlan(
+    { generateJSON } as unknown as LLMProvider,
+    'Include row five too',
+    { kind: 'cell', range: 'A1:A4' },
+    new AbortController().signal,
+    { pendingProposal: { tool: 'sum_range', input: { range: 'A1:A4', target: 'B1' } } },
+  );
+  expect(plan.input.target).toBe('B1');
+  expect(JSON.stringify(generateJSON.mock.calls[0][1])).toContain('B1');
+});
+
+it.each([
+  [
+    { tool: 'slide_action', input: { action: 'duplicate' } },
+    { tool: 'slide_action', input: { action: 'navigate', page: 2 } },
+    { kind: 'slide', page: 1 },
+  ],
+  [
+    { tool: 'sum_range', input: { range: 'A1:A4', target: 'B1' } },
+    { tool: 'sum_range', input: { range: 'A1:A5' } },
+    { kind: 'cell', range: 'A1:A4' },
+  ],
+])('refinement preserves the effect of a conditional tool %#', async (pendingProposal, returned, context) => {
+  const generateJSON = vi.fn(async () => response(JSON.stringify(returned)));
+  await expect(
+    generateDocumentToolPlan(
+      { generateJSON } as unknown as LLMProvider,
+      'Adjust the suggestion',
+      context as Parameters<typeof generateDocumentToolPlan>[2],
+      new AbortController().signal,
+      { pendingProposal },
+    ),
+  ).rejects.toThrow(/operation/);
+});
+
+it('isolates PDF notes and page reads from Word body and spreadsheet writes', () => {
+  const context = { kind: 'pdf' as const, page: 1, pages: 2 };
+  expect(
+    parseDocumentToolPlan('{"tool":"add_pdf_comment","input":{"page":2,"text":"Check budget"}}', context),
+  ).toMatchObject({ readOnly: false });
+  expect(parseDocumentToolPlan('{"tool":"get_pdf_text","input":{}}', context)).toMatchObject({ readOnly: true });
+  for (const tool of ['insert_text', 'clear_document', 'replace_selection', 'set_cell'])
+    expect(() => parseDocumentToolPlan(JSON.stringify({ tool, input: { text: 'unsafe' } }), context)).toThrow();
+  expect(() =>
+    parseDocumentToolPlan('{"tool":"add_pdf_comment","input":{"page":3,"text":"invalid"}}', context),
+  ).toThrow();
+});
+
+it.each([
+  [{ kind: 'word' }, 'insert_text', { text: 'Spring' }],
+  [{ kind: 'cell' }, 'set_cell', { cell: 'B2', value: '42' }],
+  [{ kind: 'slide', page: 1 }, 'add_slide_text', { text: 'Spring' }],
+  [{ kind: 'pdf', page: 1, pages: 2 }, 'add_pdf_comment', { page: 2, text: 'Spring' }],
+] as const)('does not treat identical parameters as a revised suggestion for %j', async (context, tool, input) => {
+  const provider = {
+    generateJSON: async () => response(json(tool, Object.fromEntries(Object.entries(input).reverse()))),
+  } as unknown as LLMProvider;
+  await expect(
+    generateDocumentToolPlan(provider, 'Change this suggestion', context, new AbortController().signal, {
+      pendingProposal: { tool, input },
+    }),
+  ).rejects.toThrow('agentProposalUnchanged');
 });

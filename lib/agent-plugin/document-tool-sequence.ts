@@ -61,11 +61,11 @@ export async function generateDocumentToolSequence(
   request: string,
   context: DocumentContext,
   signal: AbortSignal,
-  options: { stableCapabilityPrefix?: boolean } = {},
+  options: { stableCapabilityPrefix?: boolean; pendingProposal?: Pick<DocumentToolPlan, 'tool' | 'input'> } = {},
 ): Promise<readonly DocumentToolPlan[]> {
   signal.throwIfAborted();
   if (!request.trim() || request.length > 8000) throw new Error('Invalid document operation request');
-  if (context.kind === 'cell') {
+  if (context.kind === 'cell' && !options.pendingProposal) {
     const sequence = plansForCellSequence(request.trim(), context);
     if (sequence) return sequence;
     // Do not send an unrecognized explicit sequence to a one-operation planner.

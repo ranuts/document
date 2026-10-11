@@ -87,16 +87,17 @@ it('retains remembered task preferences without exposing a duplicate task select
   const panel = createAgentPanel();
   expect(panel.querySelector('.agent-task-model')).toBeNull();
   expect(localStorage.getItem('agent-task-models')).toBe(preference);
-  expect(localStorage.getItem('agent-local-preset')).toBe('Qwen3-1.7B-q4f16_1-MLC');
+  expect(localStorage.getItem('agent-local-preset')).toBe('Qwen3-4B-q4f16_1-MLC');
 });
 it('loads the configured writing model and restores the default for chat', async () => {
+  localStorage.setItem('agent-local-model-id', 'custom-model-q4');
   localStorage.setItem(
     'agent-task-models',
     JSON.stringify({ version: 1, tasks: { rewrite: { backend: 'webllm', model: 'Qwen3-4B-q4f16_1-MLC' } } }),
   );
   const panel = createAgentPanel();
   panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
-  await vi.waitFor(() => expect(state.model).toBe('Qwen3-1.7B-q4f16_1-MLC'));
+  await vi.waitFor(() => expect(state.model).toBe('custom-model-q4'));
   const task = panel.querySelector('.agent-writing-task') as HTMLSelectElement;
   task.value = 'rewrite';
   task.dispatchEvent(new Event('change'));
@@ -107,7 +108,7 @@ it('loads the configured writing model and restores the default for chat', async
   task.dispatchEvent(new Event('change'));
   await new Promise((resolve) => setTimeout(resolve, 0));
   panel.querySelector('.agent-panel-load')!.dispatchEvent(new Event('click'));
-  await vi.waitFor(() => expect(state.model).toBe('Qwen3-1.7B-q4f16_1-MLC'));
+  await vi.waitFor(() => expect(state.model).toBe('custom-model-q4'));
 });
 
 it('keeps the global engine choice when a task-specific GPU model is selected', () => {
@@ -121,3 +122,21 @@ it('keeps the global engine choice when a task-specific GPU model is selected', 
   provider.dispatchEvent(new Event('change'));
   expect(localStorage.getItem('agent-panel-provider')).toBe('wllama');
 });
+
+it.each(['Qwen3-1.7B-q4f16_1-MLC', 'Qwen3.5-2B-q4f16_1-MLC', 'Qwen3.5-0.8B-q4f16_1-MLC'])(
+  'replaces a retired preset and task binding %s with the current default',
+  async (retired) => {
+    localStorage.setItem('agent-local-preset', retired);
+    localStorage.setItem(
+      'agent-task-models',
+      JSON.stringify({ version: 1, tasks: { chat: { backend: 'webllm', model: retired } } }),
+    );
+    const panel = createAgentPanel();
+    expect((panel.querySelector('.agent-panel-model') as HTMLElement & { value: string }).value).toBe(
+      'Qwen3-4B-q4f16_1-MLC',
+    );
+    expect(localStorage.getItem('agent-local-preset')).toBe('Qwen3-4B-q4f16_1-MLC');
+    panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
+    await vi.waitFor(() => expect(state.model).toBe('Qwen3-4B-q4f16_1-MLC'));
+  },
+);

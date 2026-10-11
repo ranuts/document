@@ -11,8 +11,7 @@ const api = vi.hoisted(() => ({
 vi.mock('../../lib/agent-plugin/editor-bridge', () => ({ getEditorApi: () => api }));
 
 it('does not advertise Word document operations for the PDF annotation editor', () => {
-  expect(captureDocumentContext()).toBeNull();
-  expect(api.pluginMethod_GetSelectedText).not.toHaveBeenCalled();
+  expect(captureDocumentContext()).toMatchObject({ kind: 'pdf', selectionCharacters: 0 });
 });
 
 it('uses the editor discriminator rather than the presence of an annotation method', () => {

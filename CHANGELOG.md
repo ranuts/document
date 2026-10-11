@@ -9,6 +9,13 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Ask the assistant about the current PDF page and review notes before adding them.**
+  It can read selectable page text and add page notes that you can undo. Scanned
+  pages still need text recognition elsewhere; the assistant does not rewrite PDF text.
+- **Review changes where they belong.** Text changes and spreadsheet values show
+  what will change before you approve. You can refine a suggestion in conversation,
+  and completed changes stay in a compact record instead of a separate panel.
+
 - **Embed API: the host page can tell when a document has unsaved edits.**
   `document:dirty-changed` is pushed when the flag flips, and `dirty` is
   reported on `document:state` and `document:saved`, so an embedding page can
@@ -44,6 +51,10 @@ notes. Entries describe what users experience, not internal refactors.
   separate.
 
 ### Changed
+
+- **Browser model choices now start at Qwen3 4B.** Smaller presets are no longer
+  offered, and saved choices move to 4B. Previously downloaded smaller models can
+  still be deleted in settings. Browser models remain experimental.
 
 - **Writing help now goes to a model on your own machine by default.** Rewrite,
   summarize and translate used to run on the small model inside the browser tab.

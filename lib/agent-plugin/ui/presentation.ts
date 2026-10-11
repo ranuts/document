@@ -87,6 +87,7 @@ export function displayError(error: unknown): string {
   if (text === 'agentWritingNeedsLocalService') return t('agentWritingNeedsLocalService');
   if (text === 'agentWritingOfflineNeedsDevice') return t('agentWritingOfflineNeedsDevice');
   if (text === 'Writing changed or omitted source numbers; review the request') return t('agentWritingNumbersChanged');
+  if (text === 'agentProposalUnchanged') return t('agentProposalUnchanged');
   if (text === 'agentToolNotChosen') return t('agentToolNotChosen');
   const office: Record<string, [string, string]> = {
     officeReviewSettingsLocked: [

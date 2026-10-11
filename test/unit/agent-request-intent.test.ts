@@ -1,6 +1,20 @@
 import { describe, expect, it, vi } from 'vitest';
 import { classifyRequest, resolveRequestIntent } from '../../lib/agent-plugin/ui/request-intent';
 import type { LLMProvider } from '@ranuts/agent-core/llm/types';
+it('allows refinement only when a live unexecuted proposal was supplied', async () => {
+  const provider = {
+    generateJSON: async () => ({ text: '{"task":"refine","language":"zh-CN"}', toolCalls: [], stopReason: 'stop' }),
+  } as unknown as LLMProvider;
+  const proposal = { tool: 'insert_text', input: { text: 'original suggestion' } };
+  expect(
+    await resolveRequestIntent(provider, '保留标题，缩短第二段', { kind: 'word' }, new AbortController().signal, {
+      pendingProposal: proposal,
+    }),
+  ).toEqual({ task: 'tools', language: 'zh-CN', refinement: true });
+  await expect(
+    resolveRequestIntent(provider, '你好', { kind: 'word' }, new AbortController().signal),
+  ).rejects.toThrow();
+});
 describe('natural request routing', () => {
   it('recognizes instructions but keeps questions in chat', () => {
     expect(classifyRequest('请把选中文字润色得更专业').task).toBe('rewrite');

@@ -14,7 +14,8 @@ export function captureComposerContext(): ComposerContext {
   let text = '';
   let truncated = false;
   try {
-    if (context?.kind === 'word') text = api?.pluginMethod_GetSelectedText({ TabSymbol: '\t', Numbering: false }) ?? '';
+    if (context?.kind === 'word' || context?.kind === 'pdf')
+      text = api?.pluginMethod_GetSelectedText({ TabSymbol: '\t', Numbering: false }) ?? '';
     else if (context?.kind === 'slide') {
       const logic = (
         api?.WordControl as

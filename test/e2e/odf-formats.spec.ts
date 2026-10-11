@@ -1,4 +1,5 @@
-import { makeStoredZip, toBase64 } from './lib/ooxml';
+import { toBase64 } from './lib/ooxml';
+import { buildOdf, ODF_FIXTURES } from './lib/odf';
 import { expect, test } from './lib/l0';
 import { settleEditor } from './lib/visual';
 
@@ -18,53 +19,10 @@ import { settleEditor } from './lib/visual';
  * matrix's job.
  */
 
-const NS = [
-  'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"',
-  'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"',
-  'xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"',
-  'xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"',
-  'office:version="1.2"',
-].join(' ');
-
-const manifest = (mime: string) =>
-  `<?xml version="1.0" encoding="UTF-8"?><manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.2"><manifest:file-entry manifest:full-path="/" manifest:media-type="${mime}"/><manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/></manifest:manifest>`;
-
-const DOCS = [
-  {
-    ext: 'odt',
-    label: 'ODT (OpenDocument Text)',
-    mime: 'application/vnd.oasis.opendocument.text',
-    body: '<office:text><text:p>ODF round trip paragraph</text:p></office:text>',
-  },
-  {
-    ext: 'ods',
-    label: 'ODS (OpenDocument Spreadsheet)',
-    mime: 'application/vnd.oasis.opendocument.spreadsheet',
-    body: '<office:spreadsheet><table:table table:name="Sheet1"><table:table-row><table:table-cell office:value-type="string"><text:p>ODF round trip cell</text:p></table:table-cell></table:table-row></table:table></office:spreadsheet>',
-  },
-  {
-    ext: 'odp',
-    label: 'ODP (OpenDocument Presentation)',
-    mime: 'application/vnd.oasis.opendocument.presentation',
-    body: '<office:presentation><draw:page draw:name="page1"><draw:frame><draw:text-box><text:p>ODF round trip slide</text:p></draw:text-box></draw:frame></draw:page></office:presentation>',
-  },
-] as const;
-
-const buildOdf = (doc: (typeof DOCS)[number]): Uint8Array =>
-  makeStoredZip([
-    // mimetype first, as the ODF package spec requires.
-    { name: 'mimetype', data: doc.mime },
-    { name: 'META-INF/manifest.xml', data: manifest(doc.mime) },
-    {
-      name: 'content.xml',
-      data: `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${NS}><office:body>${doc.body}</office:body></office:document-content>`,
-    },
-  ]);
-
 test.describe('OpenDocument formats (real editor)', () => {
   test.describe.configure({ timeout: 180_000 });
 
-  for (const doc of DOCS) {
+  for (const doc of ODF_FIXTURES) {
     test(`${doc.label}: opens, saves back as ${doc.ext.toUpperCase()}, and exports to PDF`, async ({ page }) => {
       await page.goto('/embed-demo.html');
       await expect(page.locator('#status')).toHaveText('ready', { timeout: 60_000 });

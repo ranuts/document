@@ -108,4 +108,6 @@ Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant
 
 ## KI-Dokumentassistent
 
-Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen. Standardmäßig aus · Nur dieser Browser. [Anleitung](/de/ai-document-assistant).
+Beschreiben Sie Ihren Wunsch: Inhalte lesen, Texte bearbeiten oder Daten ordnen. Änderungen können Sie vorher prüfen.
+
+PDF: auswählbaren Text der aktuellen Seite erfragen, zusammenfassen oder übersetzen; Notizen auf einer bestimmten Seite hinzufügen. Der Assistent liest die aktuelle Seite, nicht die gesamte PDF-Datei. Text in gescannten Bildern wird nicht erkannt; fehlender Zugriff wird angezeigt. Seitennotizen ändern keinen PDF-Fließtext. Für Änderungen am Textlayout verwenden Sie die ursprüngliche Word-Datei. [Anleitung für den KI-Assistenten](/de/ai-document-assistant).

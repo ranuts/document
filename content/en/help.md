@@ -108,4 +108,6 @@ Off by default · This browser only. [How to use it](/ai-document-assistant). An
 
 ## AI document assistant
 
-Select a passage to rewrite, summarize or translate. Review the result before adding it to your document. Off by default · This browser only. [How to use it](/ai-document-assistant).
+Say what you want to do. Ask about content, work on text or organize data, then review changes before applying them.
+
+For PDFs, the assistant reads selectable text on the current page and can add a note to a specified page after review. It does not read the whole PDF or recognize text in scanned images. Notes do not rewrite PDF body text. [How to use it](/ai-document-assistant).

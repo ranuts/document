@@ -36,16 +36,7 @@ export const parseReadonly = (value: string | undefined): boolean => {
  */
 export function getDocumentType(fileType: string): string | null {
   const type = fileType.toLowerCase();
-  if (type === 'docx' || type === 'doc') {
-    return 'word';
-  } else if (type === 'xlsx' || type === 'xls' || type === 'csv') {
-    return 'cell';
-  } else if (type === 'pptx' || type === 'ppt') {
-    return 'slide';
-  } else if (type === 'pdf') {
-    return 'pdf';
-  }
-  return null;
+  return Object.hasOwn(DOCUMENT_TYPE_MAP, type) ? DOCUMENT_TYPE_MAP[type] : null;
 }
 
 /**

@@ -35,14 +35,15 @@ Dokumente werden also nie hochgeladen, und ein Konto braucht es auch nicht.
 
 ## KI-Dokumentassistent
 
-Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen. Standardmäßig aus · Nur dieser Browser.
+Beschreiben Sie Ihren Wunsch: Inhalte lesen, Texte bearbeiten oder Daten ordnen. Änderungen können Sie vorher prüfen.
 
-Nach dem Aktivieren die Nutzung wählen. Den ersten Download starten Sie selbst und können ihn abbrechen.
+Aktivieren Sie den Assistenten und wählen Sie ein lokales Modell oder Ihren KI-Dienst. Modelldateien bleiben in diesem Browser; beim Öffnen einer anderen Datei kann eine erneute Vorbereitung nötig sein. Vorhandene Dateien werden wiederverwendet.
 
-- **Auf diesem Computer nutzen**: Der Text wird auf diesem Gerät verarbeitet. Die erste Einrichtung lädt Dateien und kann den Computer verlangsamen; Abbruch ist möglich.
-- **Eigenen KI-Dienst nutzen**: Gesendeter Text geht an den gewählten Dienst. Eigene Zugangsdaten sind erforderlich; es können Kosten entstehen.
+Word: Inhalte erfragen, Texte entwerfen und ausgewählte Absätze verbessern. Excel und CSV: Tabellen lesen, Daten eintragen, Zahlenfolgen erzeugen, Summen berechnen oder sortieren. PowerPoint: Folientexte erfragen, Texte und Folien hinzufügen, Folien kopieren oder wechseln. PDF: auswählbaren Text der aktuellen Seite erfragen, zusammenfassen oder übersetzen; Notizen auf einer bestimmten Seite hinzufügen.
 
-Original und Ergebnis vergleichen und das Ersetzen bestätigen. Kopieren ist ebenfalls möglich. Bei Bedarf im Editor rückgängig machen. Eine geänderte Auswahl erfordert einen neuen Vorschlag.
+Vorschläge zeigen Ort und Inhalt. Bearbeiten Sie den Vorschlag oder bitten Sie um Anpassungen, bevor Sie ihn anwenden. Unerwünschte Vorschläge können Sie abbrechen; Änderungen lassen sich im Editor rückgängig machen. Löschen und Überschreiben erfordern Bestätigung. Schreibgeschützte Dateien lassen sich nur ansehen.
+
+Der Assistent liest die aktuelle Seite, nicht die gesamte PDF-Datei. Text in gescannten Bildern wird nicht erkannt; fehlender Zugriff wird angezeigt. Seitennotizen ändern keinen PDF-Fließtext. Für Änderungen am Textlayout verwenden Sie die ursprüngliche Word-Datei.
 
 [Anleitung](https://edit.chaxus.com/de/ai-document-assistant)
 
