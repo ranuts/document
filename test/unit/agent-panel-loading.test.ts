@@ -37,6 +37,7 @@ const state = vi.hoisted(() => ({
   writing: vi.fn(),
   source: '',
   readText: undefined as string | undefined,
+  readAnswer: vi.fn().mockResolvedValue('120'),
   editorReady: false,
   backend: undefined as undefined | ((backend: 'webllm' | 'wllama') => void),
   cpuProgress: undefined as undefined | ((value: { loaded: number; total: number }) => void),
@@ -214,6 +215,7 @@ vi.mock('../../lib/agent-plugin/document-tool-plan', async (original) => ({
   ...(await original<typeof import('../../lib/agent-plugin/document-tool-plan')>()),
   generateDocumentToolPlan: state.toolPlan,
 }));
+vi.mock('../../lib/agent-plugin/document-read-answer', () => ({ generateReadAnswer: state.readAnswer }));
 vi.mock('../../lib/agent-plugin/document-tool-action', () => ({
   captureDocumentToolTarget: () => ({
     context: state.toolContext === 'cell' ? { kind: 'cell' } : { kind: 'slide', page: 1 },
@@ -259,6 +261,7 @@ afterEach(() => {
   state.stalled = false;
   state.generate.mockReset();
   state.toolPlan.mockReset();
+  state.readAnswer.mockReset().mockResolvedValue('120');
   state.toolContext = 'slide';
   state.apply.mockClear();
   state.routing.mockReset();
@@ -2143,4 +2146,47 @@ it('retains the use and delete actions for a cached custom CPU model', async () 
   expect(row.querySelector('.agent-cache-use')?.textContent).toBe(t('agentUseModel'));
   expect(row.querySelector('.agent-cache-use')?.hasAttribute('disabled')).toBe(false);
   expect(row.querySelector('.agent-cache-delete')).not.toBeNull();
+});
+
+it.each(['cancel', 'target'] as const)('discards a late grounded answer after %s changes', async (change) => {
+  state.ready = true;
+  state.readText = 'Budget is 120';
+  state.toolPlan.mockResolvedValue({ tool: 'get_presentation_text', input: {}, readOnly: true });
+  let finish!: (text: string) => void;
+  state.readAnswer.mockImplementation(
+    () =>
+      new Promise<string>((resolve) => {
+        finish = resolve;
+      }),
+  );
+  const panel = createPreparedPanel();
+  const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  mode.value = 'tools';
+  mode.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Read this presentation';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(state.readAnswer).toHaveBeenCalled());
+  if (change === 'target') state.targetCurrent = false;
+  else panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
+  finish('LATE ANSWER');
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(panel.textContent).not.toContain('LATE ANSWER');
+  expect(state.apply).toHaveBeenCalledTimes(1);
+});
+
+it('shows the grounded answer without leading model reasoning protocol', async () => {
+  state.ready = true;
+  state.readText = 'Budget is 120';
+  state.toolPlan.mockResolvedValue({ tool: 'get_presentation_text', input: {}, readOnly: true });
+  state.readAnswer.mockResolvedValue('<think>\n\n</think>\n120');
+  const panel = createPreparedPanel();
+  const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  mode.value = 'tools';
+  mode.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Read this presentation';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('120');
 });

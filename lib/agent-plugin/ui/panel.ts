@@ -1,3 +1,4 @@
+import { generateReadAnswer } from '../document-read-answer';
 import { createDocumentAgentTools } from '../document-agent-tools';
 import { mountSpeechInput } from './speech-input';
 /**
@@ -64,7 +65,7 @@ import { captureDocumentToolTarget, DocumentToolAction } from '../document-tool-
 import { documentTools, isLiteralDocumentToolRequest } from '../document-tool-plan';
 import { ChatView, type ChatViewLabels } from '@ranuts/chat-ui';
 import { AgentChatController, type ChatTurn } from './controller';
-import { displayError } from './presentation';
+import { assistantPresentation, displayError } from './presentation';
 import { historyToTurns } from './storage';
 import { createConversationStore } from './sessions';
 import { createHistoryControls } from './history-controls';
@@ -1809,6 +1810,13 @@ export function createAgentPanel(
         );
         if (!plans.length || plans.length > 4 || plans.slice(0, -1).some((plan) => !plan.readOnly))
           throw new Error('agentToolNotChosen');
+        const answerFromReads =
+          // Navigation needs no approval, but is not a content read to synthesize.
+          plans.every((plan) => plan.readOnly && plan.tool !== 'slide_action') &&
+          !!routingProvider?.isReady() &&
+          !isModelFreeToolRequest(trimmed, target.context);
+        const readExchange: LLMMessage[] = [];
+        let unavailableRead = false;
         for (const [index, plan] of plans.entries()) {
           // Let the result render and process Stop/session/editor events before the next operation.
           if (index > 0) await new Promise<void>((resolve) => setTimeout(resolve, 0));
@@ -1875,6 +1883,7 @@ export function createAgentPanel(
               ],
             },
           );
+          if (answerFromReads) readExchange.push(...operationHistory.slice(-2));
           const result = action.result as
             | {
                 text?: string;
@@ -1895,9 +1904,28 @@ export function createAgentPanel(
                   ? `${result.range ?? ''}: ${result.sum}`
                   : `${target.label} → ${result?.page ?? ''} / ${result?.count ?? ''}`
             : `${result?.range ? result.range + ' · ' : ''}${t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied')}`;
-          operationHistory.push({ role: 'assistant', content: resultText, hostGuidance: 'tool' });
-          if (generation === controllerGeneration && conversation === conversationRevision)
-            appendTurn({ role: 'tool', text: resultText });
+          unavailableRead ||= !!result?.unavailable || (typeof result?.text === 'string' && !result.text.trim());
+          if (!answerFromReads || unavailableRead) {
+            operationHistory.push({ role: 'assistant', content: resultText, hostGuidance: 'tool' });
+            if (generation === controllerGeneration && conversation === conversationRevision)
+              appendTurn({ role: 'tool', text: resultText });
+          }
+        }
+        if (answerFromReads && !unavailableRead) {
+          const answer = await generateReadAnswer(
+            routingProvider!,
+            trimmed,
+            target.context,
+            readExchange,
+            abort.signal,
+          );
+          abort.signal.throwIfAborted();
+          if (generation !== controllerGeneration || conversation !== conversationRevision || !target.isCurrent(false))
+            throw new Error(t('agentPlanExpired'));
+          const visibleAnswer = assistantPresentation(answer).trim();
+          if (!visibleAnswer) throw new Error('Incomplete document answer');
+          operationHistory.push({ role: 'assistant', content: answer });
+          appendTurn({ role: 'agent', text: visibleAnswer });
         }
       } else if (proposalMode) {
         operationHistory.push({ role: 'user', content: trimmed });

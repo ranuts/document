@@ -130,6 +130,7 @@ test('PDF assistant reads scoped content and reviews a page note before a revers
     ),
   );
   let grounded = false;
+  let groundedReadContinuation = false;
   await page.route('http://localhost:11434/api/**', async (route) => {
     if (route.request().method() === 'OPTIONS') {
       await route.fulfill({
@@ -147,14 +148,27 @@ test('PDF assistant reads scoped content and reviews a page note before a revers
     let output: unknown;
     if (request.format?.properties?.task)
       output = {
-        task: prompt.includes('Add a note') ? 'tools' : prompt.includes('Rewrite the selected') ? 'rewrite' : 'chat',
+        task:
+          prompt.includes('Add a note') || prompt.includes('Only the amount')
+            ? 'tools'
+            : prompt.includes('Rewrite the selected')
+              ? 'rewrite'
+              : 'chat',
         language: 'en',
       };
     else if (request.format?.properties?.text) output = { text: 'The budget is 120 and needs review.' };
-    else if (request.format) output = { tool: 'add_pdf_comment', input: { page: 1, text: 'Please check the budget.' } };
+    else if (request.format)
+      output = prompt.includes('Only the amount')
+        ? { tool: 'get_pdf_text', input: {} }
+        : { tool: 'add_pdf_comment', input: { page: 1, text: 'Please check the budget.' } };
     else {
       grounded = prompt.includes('pdf-page') && prompt.includes('Budget is 120');
-      output = 'The current PDF page says the budget is 120.';
+      groundedReadContinuation =
+        prompt.includes('Original question:') &&
+        prompt.includes('Only the amount') &&
+        prompt.includes('Budget is 120') &&
+        prompt.includes('get_pdf_text');
+      output = groundedReadContinuation ? '120' : 'The current PDF page says the budget is 120.';
     }
     await route.fulfill({
       json: {
@@ -185,6 +199,10 @@ test('PDF assistant reads scoped content and reviews a page note before a revers
   await input.press('Enter');
   await expect(page.locator('.cui-messages')).toContainText('budget is 120');
   expect(grounded).toBe(true);
+  await input.fill('What is the budget on this page? Only the amount.');
+  await input.press('Enter');
+  await expect(page.locator('.cui-msg-agent .cui-bubble').last()).toHaveText('120');
+  expect(groundedReadContinuation).toBe(true);
   await input.fill('Add a note to page 1: Please check the budget.');
   await input.press('Enter');
   const preview = page.locator('.agent-plan-preview').last();

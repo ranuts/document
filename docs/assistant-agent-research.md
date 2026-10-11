@@ -205,3 +205,17 @@ In a separate fresh conversation, “请在当前 PDF 第 1 页添加批注：Re
 ### Product default change after the first trials
 
 At the user's explicit request, the browser GPU preset list now contains only Qwen3 4B. The former 1.7B, 2B and 0.8B presets are retained solely as cache identities so previously downloaded files remain discoverable and removable without a Use action. Restored retired preset/task choices fall back to 4B. The preparation script also defaults to 4B. This is a product selection decision, not a model-quality acceptance result; the failures above remain open. Custom model sources and the existing CPU path are separate from this preset change.
+
+## Grounded read continuation repair
+
+The schema-planned read path now uses the same tool-call/tool-result continuation described in [AI SDK tool calling](https://ai-sdk.dev/docs/ai-sdk-core/tools-and-tool-calling). After a content read, it sends the original question, captured scope and matching tool receipts back to the selected provider with no tools available. It rejects empty, truncated or tool-calling responses. Source text is identified as untrusted data; no claim is made that prompt wording alone proves resistance to document injection. Native tool transports continue to use the existing runtime loop.
+
+The host checks cancellation and captured document identity again before displaying the final answer. Empty/unavailable source retains the explicit source-unavailable message. A navigation result is not treated as a content read, and mixed read/write sequences retain their native review flow.
+
+A real PDF editor regression asks for the current page budget with only the amount requested, verifies that the continuation receives the actual tool result and displays only `120`, then checks annotations and Undo. Eight imported-format cases verify the same continuation on actual Word, spreadsheet and presentation adapters before reviewing an edit and restoring it with Undo. Responses are controlled to validate orchestration; repeated real 4B comprehension trials remain open.
+
+Actual 4B follow-up: the first stable Chinese budget question on a synthetic TXT document failed before reading, with no executable operation chosen. The planner prompt had treated requests needing multiple operations as unsupported without explaining that reading and answering a content question is one editor read followed by application continuation. Added that general distinction for all available read capabilities; it does not match budget wording or fabricate an answer. The interrupted hot-reload attempt before this stable run is excluded from model grading. The same request must be rerun after this clarification.
+
+After the planner clarification, the identical fresh-conversation Chinese budget question returned the correct amount `120` with the actual Qwen3 4B browser model. It also exposed an empty leading reasoning protocol block, which the new answer path had bypassed the existing presentation filter for. Reused that filter before rendering, preserving the provider transcript for continuation; a new panel test reproduced the visible tags before the repair. This is one successful comprehension trial, not repeated multilingual qualification.
+
+Final-code browser trial: the same synthetic TXT source and Chinese question produced visible text exactly `120` after the presentation repair. This confirms the corrected path on one actual 4B run; repeated multilingual comprehension and real screen-reader acceptance remain unverified.
