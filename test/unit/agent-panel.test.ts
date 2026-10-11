@@ -394,7 +394,7 @@ it.each([
     await vi.waitFor(() => expect(release).toBeTypeOf('function'));
     panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
     release();
-    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     expect(wrote).toBe(false);
     expect(panel.textContent).toContain(t('agentStopped'));
   } finally {

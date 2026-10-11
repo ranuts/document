@@ -361,7 +361,7 @@ it('keeps a cleared conversation empty when a pending proposal fails later', asy
   expect(state.toolPlan).toHaveBeenCalled();
   (panel.querySelector('.agent-panel-clear') as HTMLElement).click();
   fail(new Error('Late failure'));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.querySelectorAll('.cui-msg')).toHaveLength(0);
 });
 
@@ -459,7 +459,7 @@ it('requires selection before starting a writing task', async () => {
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Please polish';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.writing).not.toHaveBeenCalled();
   expect(state.generate).not.toHaveBeenCalled();
   expect(panel.querySelector('.cui-msg-status')?.textContent).toContain(t('agentSelectText'));
@@ -478,7 +478,7 @@ it('refuses browser-local writing until a service is connected or consent is giv
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.agent-readiness')?.textContent).toBeTruthy());
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.writing).not.toHaveBeenCalled();
   expect(state.apply).not.toHaveBeenCalled();
   expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentWritingNeedsLocalService'));
@@ -501,7 +501,7 @@ it('explains a blocked writing route without requiring an unrelated model downlo
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.agent-readiness')?.textContent).toBeTruthy());
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.writing).not.toHaveBeenCalled();
   expect(state.apply).not.toHaveBeenCalled();
   expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentWritingNeedsLocalService'));
@@ -594,7 +594,7 @@ it('says a cloud destination cannot work offline instead of failing vaguely', as
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.agent-readiness')?.textContent).toBeTruthy());
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.writing).not.toHaveBeenCalled();
   expect(panel.querySelector('.agent-readiness')?.textContent).toContain(t('agentWritingOfflineNeedsDevice'));
 });
@@ -700,13 +700,13 @@ it('asks for the model to be loaded when consent is on but no model is ready', a
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   // The panel auto-loads on open; canSend is false while that is in flight, so a
   // keypress sent before it settles would be swallowed rather than tested.
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   const task = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
   task.value = 'rewrite';
   task.dispatchEvent(new Event('change'));
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   // It asks for the model rather than telling the user to enable the switch they
   // already enabled, and it does not pretend to have run anything.
   expect(state.writing).not.toHaveBeenCalled();
@@ -721,7 +721,7 @@ it('serves a writing request through a connected endpoint with no local model lo
   state.writing.mockResolvedValue('Rewritten body');
   const panel = createAgentPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   const kind = panel.querySelector<HTMLSelectElement>('.agent-endpoint-kind')!;
   kind.value = 'openai-compatible';
   kind.dispatchEvent(new Event('change'));
@@ -743,7 +743,7 @@ it('serves a writing request through a connected endpoint with no local model lo
   input.value = 'Polish this';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.writing).toHaveBeenCalled());
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.apply).not.toHaveBeenCalled();
   panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
   await vi.waitFor(() => expect(state.apply).toHaveBeenCalledOnce());
@@ -772,7 +772,7 @@ it('uses the connected endpoint to plan an open-ended operation', async () => {
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   input.value = 'Create another slide using this layout';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalled());
@@ -806,13 +806,13 @@ it('rejects a changed editor target while semantic routing is pending', async ()
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   input.value = 'Create another slide using this layout';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.routing).toHaveBeenCalled());
   state.targetCurrent = false;
   resolveRouting({ task: 'tools', language: 'en' });
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.toolPlan).not.toHaveBeenCalled();
   expect(state.apply).not.toHaveBeenCalled();
   expect(panel.textContent).toContain(t('agentPlanExpired'));
@@ -833,7 +833,7 @@ it('routes translation with the captured source and explicit language', async ()
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Translate into Chinese, preserve numbers';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.writing.mock.calls[0][1]).toEqual({
     task: 'translate',
     text: 'Budget 1250 EUR',
@@ -867,7 +867,7 @@ it('records a writing request and verified outcome without copying selected docu
     );
     panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
     await vi.waitFor(() => expect(state.apply).toHaveBeenCalled());
-    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     expect(record.mock.calls.flatMap(([messages]) => messages)).toEqual([
       { role: 'user', content: 'Rewrite it more clearly' },
       { role: 'assistant', content: 'Private rewritten body', copyOnly: true },
@@ -907,7 +907,7 @@ it('records a failed writing request as an error and never reports document succ
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
     input.value = 'Rewrite using formal wording';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     const messages = record.mock.calls.flatMap(([items]) => items);
     expect(messages).toEqual([
       { role: 'user', content: 'Rewrite using formal wording' },
@@ -993,12 +993,12 @@ it.each(['rewrite', 'tools'])('retains a late %s failure when returning before i
   task.dispatchEvent(new Event('change'));
   input.value = 'Subsequent message';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   reject(new Error('agentToolNotChosen'));
   await new Promise((done) => setTimeout(done, 0));
   input.value = 'After settlement';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
   sessions.value = original;
   sessions.dispatchEvent(new Event('change'));
@@ -1022,7 +1022,7 @@ it('restores a failed document operation with its error in the original conversa
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Read cell A1';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   panel.querySelector<HTMLButtonElement>('.agent-panel-clear')!.click();
   sessions.value = original;
   sessions.dispatchEvent(new Event('change'));
@@ -1042,7 +1042,7 @@ it('shows a clear result when the current document has no readable text', async 
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Read this presentation';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.querySelector('.cui-activity')?.textContent).toContain('No readable text was found.');
   const sessions = panel.querySelector<HTMLSelectElement>('.agent-session-select')!;
   const original = sessions.value;
@@ -1066,13 +1066,13 @@ it('executes successive explicit writing requests only after separate confirmati
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Rewrite first';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
   await Promise.resolve();
 
   input.value = 'Rewrite second';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   panel.querySelectorAll<HTMLElement>('.agent-plan-apply')[1]!.click();
   await Promise.resolve();
   expect(panel.textContent).toContain('First proposal');
@@ -1123,9 +1123,9 @@ it('requires explicit preparation after Stop without replaying the request', asy
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Hello';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(true));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).not.toBeNull());
   panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.preload).toHaveBeenCalledOnce();
   panel.querySelector<HTMLElement>('.agent-panel-load')!.click();
   await vi.waitFor(() => expect(state.preload).toHaveBeenCalledTimes(2));
@@ -1184,7 +1184,7 @@ it.each(['webllm', 'wllama'] as const)('uses the actual %s backend to choose too
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalledOnce());
   expect(state.toolPlan.mock.calls[0][4]).toEqual({ stableCapabilityPrefix: backend === 'wllama' });
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
 });
 
 it('clears loaded runtime feedback when a failed operation retires its provider', async () => {
@@ -1208,7 +1208,7 @@ it('clears loaded runtime feedback when a failed operation retires its provider'
   input.value = 'Read presentation';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalledOnce());
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.querySelector('.agent-panel-note')?.textContent).toBe(t('agentLoadModel'));
   expect(panel.querySelector('.agent-model-status')?.textContent).toBe('');
   expect(configure).toBeNull();
@@ -1281,7 +1281,7 @@ it('cancels native writing of the previous answer from the visible Stop button',
   try {
     expect(forwarded).toBeInstanceOf(AbortSignal);
     expect(forwarded!.aborted).toBe(true);
-    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     expect(panel.querySelector('.cui-msg-status')?.textContent).toContain(t('agentStopped'));
     expect(panel.querySelector('.cui-msg-status .cui-restore')).not.toBeNull();
     expect(panel.querySelector('.cui-msg-error')).toBeNull();
@@ -1426,7 +1426,7 @@ it('processes Stop after showing an immediate read result and before starting th
     const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
     input.value = '读取 A1:B4 的内容，然后将 B2 设置为 99。';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     expect(state.apply).toHaveBeenCalledOnce();
     expect(panel.textContent).toContain(t('agentStopped'));
     expect(panel.textContent).not.toContain(t('agentPlanVerified'));
@@ -1451,7 +1451,7 @@ it('retains the completed read and verification error without reporting sequence
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = '读取 A1:B4 的内容，然后将 B2 设置为 "00123"。';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(state.apply).toHaveBeenCalledTimes(1);
   panel.querySelector<HTMLElement>('.agent-plan-apply')!.click();
   await vi.waitFor(() => expect(state.apply).toHaveBeenCalledTimes(2));
@@ -1586,7 +1586,7 @@ it('clears loaded feedback when the engine becomes unavailable after chat has fi
   input.value = 'Explain rain formation';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.cui-msg-agent')?.textContent).toContain('answer'));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.querySelector('.agent-model-status')?.textContent).toContain(t('agentUseDevice'));
   state.ready = false;
   state.cached = false;
@@ -1861,7 +1861,7 @@ it('lets a ready semantic planner handle a slide request outside the fixed short
   }
   panel.querySelector<HTMLButtonElement>('.agent-panel-endpoint-connect')!.click();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   input.value = '在当前幻灯片新增文本框，内容为：秋天的故事';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(state.routing).toHaveBeenCalled());
@@ -1927,7 +1927,7 @@ it('sends current-editor native tools and displays a proposal without executing 
     input.value = 'Put a title on this slide';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     await vi.waitFor(() => expect(panel.querySelector('.agent-plan-apply')).not.toBeNull());
-    await vi.waitFor(() => expect(input.disabled).toBe(false));
+    await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
     const request = fetchMock.mock.calls
       .map(([, init]) => JSON.parse(String(init.body)))
       .find((body) => body.tools?.length);
@@ -1956,7 +1956,7 @@ it('requires review for a model-selected numeric fill even if the target is empt
   mode.value = 'tools';
   mode.dispatchEvent(new Event('change'));
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   input.value = 'Create a numeric series';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.agent-plan-apply')).not.toBeNull());
@@ -1973,7 +1973,7 @@ it('preserves a failed routing request and lets the next Excel question start fr
   state.semanticResponse = '{"task":"compose","language":"en"}';
   const panel = createPreparedPanel();
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   input.value = 'What can you do?';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   await vi.waitFor(() => expect(panel.querySelector('.cui-msg-error')).not.toBeNull());
@@ -2045,7 +2045,7 @@ it('does not claim an unchanged suggestion is available after the document chang
   await vi.waitFor(() => expect(state.toolPlan).toHaveBeenCalledTimes(2));
   state.targetCurrent = false;
   reject(new Error('agentProposalUnchanged'));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.textContent).not.toContain(t('agentProposalUnchanged'));
   expect(panel.textContent).toContain(t('agentPlanExpired'));
   expect(panel.querySelector('.agent-plan-preview')?.getAttribute('data-state')).toBe('expired');
@@ -2170,7 +2170,7 @@ it.each(['cancel', 'target'] as const)('discards a late grounded answer after %s
   if (change === 'target') state.targetCurrent = false;
   else panel.querySelector<HTMLButtonElement>('.cui-send-stop')!.click();
   finish('LATE ANSWER');
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.textContent).not.toContain('LATE ANSWER');
   expect(state.apply).toHaveBeenCalledTimes(1);
 });
@@ -2187,6 +2187,39 @@ it('shows the grounded answer without leading model reasoning protocol', async (
   const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
   input.value = 'Read this presentation';
   input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-  await vi.waitFor(() => expect(input.disabled).toBe(false));
+  await vi.waitFor(() => expect(input.closest('.cui-root')!.querySelector('.cui-send-stop')).toBeNull());
   expect(panel.querySelector('.cui-msg-agent .cui-bubble')?.textContent).toBe('120');
+});
+
+it('preserves external focus and the next draft when a grounded response completes', async () => {
+  state.ready = true;
+  state.readText = 'Budget is 120';
+  state.toolPlan.mockResolvedValue({ tool: 'get_presentation_text', input: {}, readOnly: true });
+  let finish!: (text: string) => void;
+  state.readAnswer.mockImplementation(
+    () =>
+      new Promise<string>((resolve) => {
+        finish = resolve;
+      }),
+  );
+  const panel = createPreparedPanel();
+  const mode = panel.querySelector<HTMLSelectElement>('.agent-writing-task')!;
+  mode.value = 'tools';
+  mode.dispatchEvent(new Event('change'));
+  const input = panel.querySelector<HTMLTextAreaElement>('.cui-input')!;
+  input.value = 'Read this presentation';
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(state.readAnswer).toHaveBeenCalled());
+  expect(input.disabled).toBe(false);
+  expect(panel.querySelector('.cui-status')?.textContent).toBe(t('agentWaiting'));
+  input.value = 'My next request';
+  input.dispatchEvent(new Event('input'));
+  const external = document.createElement('button');
+  external.textContent = 'Document action';
+  document.body.append(external);
+  external.focus();
+  finish('120');
+  await vi.waitFor(() => expect(panel.querySelector('.cui-send-stop')).toBeNull());
+  expect(input.value).toBe('My next request');
+  expect(document.activeElement).toBe(external);
 });

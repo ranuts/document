@@ -312,6 +312,8 @@ export const es: Partial<I18nMessages> = {
   agentCopyFailed: 'No se pudo copiar',
   agentRestoreRequest: 'Recuperar solicitud',
   agentWaiting: 'Generando respuesta…',
+  agentReadingContent: 'Leyendo el contenido actual…',
+  agentPreparingTask: 'Preparando tu solicitud…',
   agentScrollLatest: 'Ir al último mensaje',
   agentModelSourceInvalid: 'Introduce una dirección de descarga o elige archivos descargados.',
   agentModelCleanupFailed: 'No se pudo cerrar el modelo anterior. Actualiza la página antes de cargar otro modelo.',

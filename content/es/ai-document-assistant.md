@@ -11,6 +11,8 @@ Activa el asistente y elige un modelo local o conecta tu servicio de IA. Los arc
 
 El modelo predeterminado del navegador es Qwen3 4B. El uso estimado de memoria gráfica es de unos 3,43 GB; no corresponde al tamaño de descarga ni al uso total de memoria del dispositivo. Sigue siendo experimental. Puedes eliminar los modelos pequeños descargados anteriormente en la sección de modelos descargados.
 
+Mientras el asistente trabaja, puedes redactar tu próxima solicitud. Envíala cuando termine la actual; los borradores nunca se envían automáticamente. Se muestran avisos breves al leer, responder y esperar tu revisión. Las nuevas respuestas y propuestas no te llevan al final mientras lees mensajes anteriores.
+
 ## Según el archivo
 
 - Word: consulta contenido, redacta o mejora párrafos seleccionados.

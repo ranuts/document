@@ -147,12 +147,14 @@ for (const fixture of fixtures) {
     await input.press('Enter');
     await expect(page.locator('.cui-messages')).toContainText(`The file contains ${marker}.`);
     expect(grounded).toBe(true);
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
     reading = true;
     await input.fill('Read this file and answer with only its opening text.');
     await input.press('Enter');
     await expect(page.locator('.cui-msg-agent .cui-bubble').last()).toHaveText(marker);
     expect(readContinuation).toBe(true);
     expect(await read()).toBe(before);
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
     reading = false;
     editing = true;
     await input.fill(
@@ -168,6 +170,7 @@ for (const fixture of fixtures) {
     expect(await read()).toBe(before);
     const historyIndex = () => page.evaluate(() => (window.__ooFrames.readyEditor() as any).AscCommon.History.Index);
     const previousHistory = fixture.expectNoSpace ? await historyIndex() : undefined;
+    await expect(page.locator('.cui-send-stop')).toHaveCount(0);
     await review.locator('.agent-plan-apply').click();
     if (fixture.expectNoSpace) {
       await expect(review.locator('[role="status"]')).toContainText('There is not enough space on this slide');

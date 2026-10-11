@@ -300,6 +300,8 @@ export const ko: Partial<I18nMessages> = {
   agentCopyFailed: '복사 실패',
   agentRestoreRequest: '요청 복원',
   agentWaiting: '응답 생성 중…',
+  agentReadingContent: '현재 내용을 읽는 중…',
+  agentPreparingTask: '요청을 준비하는 중…',
   agentScrollLatest: '최신 메시지로 이동',
   agentModelSourceInvalid: '다운로드 주소를 입력하거나 다운로드한 파일을 선택하세요.',
   agentModelCleanupFailed: '이전 모델을 종료하지 못했습니다. 페이지를 새로고침한 후 모델을 다시 로드하세요.',

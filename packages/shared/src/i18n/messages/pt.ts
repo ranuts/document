@@ -308,6 +308,8 @@ export const pt: Partial<I18nMessages> = {
   agentCopyFailed: 'Falha ao copiar',
   agentRestoreRequest: 'Restaurar pedido',
   agentWaiting: 'Gerando resposta…',
+  agentReadingContent: 'Lendo o conteúdo atual…',
+  agentPreparingTask: 'Preparando sua solicitação…',
   agentScrollLatest: 'Ir para a mensagem mais recente',
   agentModelSourceInvalid: 'Informe um endereço de download ou escolha arquivos baixados.',
   agentModelCleanupFailed:

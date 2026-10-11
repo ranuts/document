@@ -302,6 +302,8 @@ export interface I18nMessages {
   agentCopyFailed: string;
   agentRestoreRequest: string;
   agentWaiting: string;
+  agentReadingContent: string;
+  agentPreparingTask: string;
   agentScrollLatest: string;
   agentModelCleanupFailed: string;
   agentModelLoadFailed: string;

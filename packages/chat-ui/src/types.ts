@@ -29,6 +29,8 @@ export interface ChatViewLabels {
   copyFailed?: string;
   restore?: string;
   waiting?: string;
+  reading?: string;
+  planning?: string;
   scrollLatest?: string;
   applyMessage?: string;
   applyTip?: string;

@@ -129,3 +129,32 @@ Final host boundary checks passed after restoration. Temporarily removing the po
 The new reasoning-display regression first failed by rendering the model's leading `<think>` block alongside `120`. The answer path now reuses the existing presentation filter; no parallel reasoning parser was introduced.
 
 A fresh browser run with the final presentation filter and actual Qwen3 4B model answered “当前文档里的预算是多少？请只回答金额。” with visible text exactly `120` on the synthetic TXT source. No reasoning protocol tags were displayed. This single final-code trial does not establish repeated multilingual model qualification.
+
+## Composer and reading-focus follow-up
+
+- Keep the next request editable while a response is pending. Enter cannot submit
+  or queue it during the active request, and completion does not send the draft.
+- Announce actual reading and response phases in the existing polite status.
+  Pending review uses the existing inline status and retains destructive scope
+  information; completed changes remain compact.
+- Appending a review follows the latest message only when already near the end.
+  Completing a response does not move keyboard focus away from historical reading
+  or another control. A focused Stop returns to the editable draft.
+- Four native-editor cases cover pending drafts and focus in DOCX, XLSX, PPTX and
+  PDF. The final combined browser run passed all 24 cases, including eight imported
+  formats with the public legacy corpus enabled, native writes and Undo.
+- Ordinary sequential request tests now wait for the active request to end rather
+  than treating an editable input as completion. Initial parallel verification
+  had two imported-file readback failures; both passed in isolated rechecks and
+  the final sequential run. A repeated three-worker run alongside the heavy
+  type check still had three failures; a dedicated six-case parallel rerun passed
+  after the type check ended. Reliability under competing heavy workloads remains
+  an open observation; the timing checks and native readback assertions remain intact.
+- The first full unit run exceeded the existing timeout in the bounded model-file
+  read test while other checks were running. Both file-read cases passed in an
+  isolated recheck. No timeout or acceptance condition was relaxed.
+
+Final full unit regression: 166 files, 4,949 tests passed. Formatting, strict lint and TypeScript checks passed.
+
+These interaction checks use controlled provider responses. They do not establish
+seven-language model quality or actual screen-reader acceptance.

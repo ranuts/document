@@ -291,6 +291,8 @@ export const zhCN: I18nMessages = {
   agentCopyFailed: '复制失败',
   agentRestoreRequest: '恢复请求',
   agentWaiting: '正在生成回复…',
+  agentReadingContent: '正在读取当前内容…',
+  agentPreparingTask: '正在准备任务…',
   agentScrollLatest: '回到最新消息',
   agentModelSourceInvalid: '请输入下载地址，或选择已下载的文件。',
   agentModelCleanupFailed: '旧模型未能正常退出，请刷新页面后重新加载。',
