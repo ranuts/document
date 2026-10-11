@@ -35,14 +35,15 @@ de quien visita la página, así que los documentos nunca se suben y no hace fal
 
 ## Asistente de documentos con IA
 
-Selecciona un texto para reescribirlo, resumirlo o traducirlo. Revisa el resultado antes de añadirlo al documento. Desactivado por defecto · Solo este navegador.
+Describe lo que necesitas: consultar contenido, trabajar con texto u organizar datos. Revisa los cambios antes de aplicarlos.
 
-Elige cómo usarlo al activarlo. Tú inicias la primera descarga y puedes cancelarla.
+Activa el asistente y elige un modelo local o conecta tu servicio de IA. Los archivos del modelo quedan en este navegador; al abrir otro documento puede ser necesario prepararlo de nuevo, aprovechando los archivos guardados.
 
-- **Usar en este ordenador**: El texto se procesa en este dispositivo. La primera preparación descarga archivos y puede ralentizarlo; puedes cancelarla.
-- **Usar tu propio servicio de IA**: El texto enviado se procesa en el servicio elegido. Necesitas tus datos de servicio; puede haber cargos.
+Word: consulta contenido, redacta o mejora párrafos seleccionados. Excel y CSV: lee tablas, introduce datos, genera series, calcula totales u ordena. PowerPoint: consulta texto de diapositivas, añade texto o crea, duplica y cambia diapositivas. PDF: consulta, resume o traduce texto seleccionable de la página actual, o añade una nota a una página concreta.
 
-Compara el original y el resultado antes de confirmar el reemplazo. También puedes copiarlo. Usa Deshacer si lo necesitas. Si cambia la selección, genera una nueva propuesta.
+Las propuestas muestran dónde y qué cambiará. Puedes editarlas o pedir ajustes antes de aplicarlas. Cancela lo que no quieras y usa Deshacer tras aplicar. Borrar o sobrescribir contenido requiere confirmación. Los archivos de solo lectura solo pueden consultarse.
+
+Se lee la página actual, no todo el PDF. No se reconoce texto en imágenes escaneadas; se indica cuando el texto no está disponible. Las notas se adjuntan a la página y no reescriben el texto del PDF. Para cambiar la distribución del texto, usa el Word original.
 
 [Cómo usarlo](https://edit.chaxus.com/es/ai-document-assistant)
 

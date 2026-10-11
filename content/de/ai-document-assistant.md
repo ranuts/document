@@ -1,30 +1,48 @@
 ---
-title: 'KI-Dokumentassistent — Klarer schreiben. Selbst entscheiden.'
-description: 'Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen. Standardmäßig aus · Nur dieser Browser'
+title: 'KI-Dokumentassistent'
+description: 'Beschreiben Sie Ihren Wunsch: Inhalte lesen, Texte bearbeiten oder Daten ordnen. Änderungen können Sie vorher prüfen.'
 ---
 
-Text auswählen und umformulieren, zusammenfassen oder übersetzen. Prüfen Sie das Ergebnis, bevor Sie es einfügen.
+Beschreiben Sie Ihren Wunsch: Inhalte lesen, Texte bearbeiten oder Daten ordnen. Änderungen können Sie vorher prüfen.
 
-## KI-Assistent aktivieren
+## Erste Schritte
 
-Standardmäßig aus · Nur dieser Browser. Nach dem Aktivieren die Nutzung wählen. Den ersten Download starten Sie selbst und können ihn abbrechen. Panel schließen und weiter bearbeiten. Ausschalten in den Einstellungen stoppt Aufgaben. Gespräche bleiben standardmäßig nur in dieser Sitzung; Speicherung im Verlauf ausdrücklich aktivieren.
+Aktivieren Sie den Assistenten und wählen Sie ein lokales Modell oder Ihren KI-Dienst. Modelldateien bleiben in diesem Browser; beim Öffnen einer anderen Datei kann eine erneute Vorbereitung nötig sein. Vorhandene Dateien werden wiederverwendet.
 
-## KI-Nutzung
+Das Standardmodell im Browser ist Qwen3 4B. Der geschätzte Grafikspeicherbedarf beträgt etwa 3,43 GB; dies ist weder die Downloadgröße noch der gesamte Speicherbedarf des Geräts. Die Funktion ist weiterhin experimentell. Früher heruntergeladene kleinere Modelle können unter „Heruntergeladene Modelle“ entfernt werden.
 
-**Auf diesem Computer nutzen** — Der Text wird auf diesem Gerät verarbeitet. Die erste Einrichtung lädt Dateien und kann den Computer verlangsamen; Abbruch ist möglich.
+## Je nach Dateityp
 
-**Eigenen KI-Dienst nutzen** — Gesendeter Text geht an den gewählten Dienst. Eigene Zugangsdaten sind erforderlich; es können Kosten entstehen.
+- Word: Inhalte erfragen, Texte entwerfen und ausgewählte Absätze verbessern.
 
-## Anleitung
+- Excel und CSV: Tabellen lesen, Daten eintragen, Zahlenfolgen erzeugen, Summen berechnen oder sortieren.
 
-Eine Passage auswählen, dann umformulieren, zusammenfassen oder übersetzen. Aufgaben füllen nur den Entwurf und senden nicht automatisch.
+- PowerPoint: Folientexte erfragen, Texte und Folien hinzufügen, Folien kopieren oder wechseln.
 
-> Diesen Absatz kürzen und alle Daten und Zahlen erhalten.
+- PDF: auswählbaren Text der aktuellen Seite erfragen, zusammenfassen oder übersetzen; Notizen auf einer bestimmten Seite hinzufügen.
 
-Original und Ergebnis vergleichen und das Ersetzen bestätigen. Kopieren ist ebenfalls möglich. Bei Bedarf im Editor rückgängig machen. Eine geänderte Auswahl erfordert einen neuen Vorschlag.
+## Vorher prüfen
 
-Einrichtung und Generierung lassen sich stoppen. Fehler behalten den Entwurf. Schreibgeschützte Dokumente lassen sich nicht ändern. Offline-Nutzung erfordert bereits vorbereitete Dateien.
+Vorschläge zeigen Ort und Inhalt. Bearbeiten Sie den Vorschlag oder bitten Sie um Anpassungen, bevor Sie ihn anwenden. Unerwünschte Vorschläge können Sie abbrechen; Änderungen lassen sich im Editor rückgängig machen. Löschen und Überschreiben erfordern Bestätigung. Schreibgeschützte Dateien lassen sich nur ansehen.
 
-KI kann Fakten auslassen oder verändern. Daten, Zahlen und Namen prüfen. Umformulieren, Zusammenfassen und Übersetzen unterstützen derzeit Word-Auswahlen; andere Dokumente unterstützen bestehende ausdrückliche Aktionen.
+Wenn eine Anpassung fehlschlägt oder denselben Inhalt zurückgibt, bleibt der ursprüngliche Vorschlag verfügbar, solange Dokument und Auswahl unverändert sind.
 
-[Anleitung](/de/help)
+## PDF-Umfang
+
+Der Assistent liest die aktuelle Seite, nicht die gesamte PDF-Datei. Text in gescannten Bildern wird nicht erkannt; fehlender Zugriff wird angezeigt. Seitennotizen ändern keinen PDF-Fließtext. Für Änderungen am Textlayout verwenden Sie die ursprüngliche Word-Datei.
+
+Laden Sie die Datei nach dem Hinzufügen von Notizen als PDF herunter, um sie zu behalten. Beim erneuten Öffnen bleiben die Notizen erhalten. Eine Antwort können Sie auch ohne Notiz kopieren.
+
+## Beispiele
+
+- „Fasse die aktuelle Seite zusammen.“
+
+- „Füge auf Seite 2 eine Notiz hinzu: Bitte das Budget prüfen.“
+
+- „Fülle A1 bis A100 mit 1 bis 100.“
+
+## Bitte beachten
+
+KI kann Wünsche missverstehen oder Details übersehen. Prüfen Sie Zahlen, Daten und Namen. Lokale Modelle verarbeiten Text auf Ihrem Gerät; verbundene Dienste erhalten den Text Ihrer Anfrage. Spracherkennung kann einen Online-Dienst verwenden. Diktierter Text bleibt im Entwurf und wird nicht automatisch gesendet.
+
+[Hilfe](/de/help)

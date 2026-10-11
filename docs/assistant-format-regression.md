@@ -77,3 +77,43 @@ content, never solely on the assistant's completion text.
   the updated CSV, then send 你好 and receive a normal greeting again.
 - Native editor Undo remains the recovery mechanism. A dedicated action-owned
   Undo button and rich editor-inline diffs are not introduced by this follow-up.
+
+## PDF assistant follow-up
+
+The assistant now reads selectable text on the current PDF page and can propose a page note for review. It identifies the page being read and does not claim to have read the whole file. Scanned image text is unavailable. Notes are attached to pages and do not replace body text; selected-text transformations are shown as copyable replies.
+
+Cancellation leaves the file unchanged. Confirmed notes can be undone in the editor and survive saving and reopening. An injected failure after adding a note is rolled back, and the next note can still be added and undone. The desktop PDF editor exposes the same assistant entry on its existing left toolbar.
+
+Updated ordinary-user guidance is available in the seven localized assistant and help pages, with matching README summaries. Model interpretation quality remains a separate acceptance requirement.
+
+Final verification: 165 unit files and 4,915 tests passed. Type checking, lint, formatting and the production build passed. The final PDF editor run also verified a note on the second page, one-step Undo and persistence after saving and reopening. These controlled-response checks verify editor behavior, not the default model’s interpretation quality.
+
+## Imported assistant formats
+
+A new real-editor suite covers ODT, ODS, ODP, RTF and TXT using shared synthetic, non-private fixtures. Each case opens through the product file picker, verifies that the service receives the imported content as request context, waits for review without changing the file, confirms one native edit, reads the result independently and restores the original content with one native Undo. These checks cover the application contract with controlled service responses, not model interpretation quality.
+
+All five assistant cases passed. Together with existing OpenDocument/text save and PDF export cases and picker coverage, the final run passed 11 tests. The initial ODS failure was a test-provider parameter mismatch (`address` instead of the schema's `cell`), verified in the captured response; the application rejected it without changing the cell. Corrected the fixture response and reran the complete set successfully.
+
+DOC, XLS and PPT acceptance now uses genuine public legacy binary files. DOC insertion and XLS cell replacement pass review, native readback and one-step Undo. The PPT fixture has reserved title/body/footer regions: adding another box correctly fails for lack of room and rolls back, then editing the selected existing title succeeds after review and one Undo restores it. This does not imply arbitrary new text fits every slide. The opt-in corpus suite is not evidence of a pass when no corpus has been supplied.
+
+### Reproducing the public legacy run
+
+The legacy assistant cases use public LibreOffice regression files at pinned revision `63a2e191551b157adad367d020835e9ec21fc964`:
+
+- [Word zoom.doc](https://github.com/LibreOffice/core/blob/63a2e191551b157adad367d020835e9ec21fc964/sw/qa/extras/ww8export/data/zoom.doc)
+- [Spreadsheet universal-content.xls](https://github.com/LibreOffice/core/blob/63a2e191551b157adad367d020835e9ec21fc964/sc/qa/unit/data/xls/universal-content.xls)
+- [Presentation tdf49561.ppt](https://github.com/LibreOffice/core/blob/63a2e191551b157adad367d020835e9ec21fc964/sd/qa/unit/data/ppt/tdf49561.ppt)
+
+Download verification checks exact byte size, compound-file signature and SHA-256. Downloaded binaries remain in an ignored test output directory, not the repository. No private corpus is needed.
+
+```sh
+node bin/fetch-agent-legacy-fixtures.mjs
+LEGACY_AGENT_CORPUS_DIR=test-results-legacy-fixtures pnpm exec playwright test test/e2e/agent-imported-formats.spec.ts --workers=1
+CORPUS_DIR=test-results-legacy-fixtures CORPUS_DEEP=1 pnpm exec playwright test test/e2e/corpus.spec.ts --workers=1
+```
+
+Without the explicit corpus directory, the three legacy assistant cases are reported as skipped. They must not be counted as verified by the default suite. These representative files establish basic format-specific acceptance; they do not certify every legacy layout or every model's decisions.
+
+The public legacy corpus run also passed three files with no findings, covering import, save, trusted editing, PDF export and read-only behavior. The first PPT test mixed multi-line native text with rendered paragraph text; its marker now uses the first native text line. A subsequent insertion attempt correctly rolled back because reserved boxes left no free area. The final PPT case checks that failure explicitly and then verifies a real selected-title edit and Undo. No product code was weakened to make a crowded insertion pass.
+
+Final current-code imported assistant run: all eight cases passed with the explicit public corpus, including the legacy PPT insertion rollback followed by reviewed title replacement and exact Undo. No skipped legacy cases were counted. Targeted lint, formatting and diff checks passed; added-content privacy scan found zero local-path, username or token-shaped-secret matches.

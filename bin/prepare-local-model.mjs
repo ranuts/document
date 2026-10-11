@@ -6,7 +6,7 @@ import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import { resolve } from 'node:path';
 
-const modelId = process.argv.find((arg) => arg.startsWith('--model='))?.slice(8) || 'Qwen3-1.7B-q4f16_1-MLC';
+const modelId = process.argv.find((arg) => arg.startsWith('--model='))?.slice(8) || 'Qwen3-4B-q4f16_1-MLC';
 const record = prebuiltAppConfig.model_list.find((item) => item.model_id === modelId);
 if (!record) throw new Error('Choose a model ID in the installed WebLLM catalog');
 const repo = new URL(record.model).pathname.replace(/^\//, '').replace(/\/$/, '');

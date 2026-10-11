@@ -35,14 +35,15 @@ quem visita, por isso os documentos nunca são enviados para lado nenhum e não 
 
 ## Assistente de documentos com IA
 
-Selecione um trecho para reescrever, resumir ou traduzir. Revise o resultado antes de adicioná-lo ao documento. Desativado por padrão · Só este navegador.
+Diga o que quer fazer: consultar conteúdo, trabalhar em textos ou organizar dados. Revise as alterações antes de aplicar.
 
-Escolha como usar após ativar. Você inicia o primeiro download e pode cancelar.
+Ative o assistente e escolha um modelo local ou conecte seu serviço de IA. Os arquivos do modelo ficam neste navegador; outro documento pode exigir uma nova preparação, reutilizando arquivos já armazenados.
 
-- **Usar neste computador**: O texto é processado neste dispositivo. A primeira preparação baixa arquivos e pode deixá-lo mais lento; você pode cancelar.
-- **Usar seu próprio serviço de IA**: O texto enviado vai para o serviço escolhido. Seus dados de serviço são necessários; pode haver custos.
+Word: consulte conteúdo, crie textos ou melhore parágrafos selecionados. Excel e CSV: leia tabelas, preencha dados, crie sequências, calcule totais ou ordene. PowerPoint: consulte textos, adicione texto e crie, duplique ou mude slides. PDF: consulte, resuma ou traduza texto selecionável da página atual; adicione uma nota a uma página específica.
 
-Compare o original e o resultado antes de confirmar a substituição. Você também pode copiar. Use Desfazer se precisar. Se a seleção mudar, gere uma nova proposta.
+As sugestões mostram o local e o conteúdo. Edite ou peça ajustes antes de aplicar. Cancele o que não quiser; depois de aplicar, use Desfazer no editor. Limpar ou sobrescrever conteúdo exige confirmação. Arquivos somente leitura permitem apenas consulta.
+
+O assistente lê a página atual, não o PDF inteiro. Texto em imagens digitalizadas não é reconhecido; a indisponibilidade é informada. Notas são anexadas à página e não reescrevem o texto do PDF. Para alterar a disposição do texto, use o Word original.
 
 [Como usar](https://edit.chaxus.com/pt/ai-document-assistant)
 

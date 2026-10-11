@@ -31,6 +31,47 @@ afterEach(() => {
   document.body.replaceChildren();
   vi.restoreAllMocks();
 });
+it('revises a text proposal through validation and consumes only the replaced proposal', () => {
+  const scope = { context: { kind: 'word' as const }, label: 'DOCX', selectedText: 'old', isCurrent: () => true };
+  const action = new DocumentToolAction(scope, plan('insert_text', { text: 'first' }, 'word'));
+  expect(() => action.revise('')).toThrow();
+  expect(action.isCurrent()).toBe(true);
+  const revised = action.revise('second');
+  expect(revised.plan.input.text).toBe('second');
+  expect(revised.review).toEqual({ kind: 'text', before: 'old', after: 'second' });
+  expect(action.isCurrent()).toBe(false);
+  expect(revised.isCurrent()).toBe(true);
+});
+it('does not revive an expired target through revision', () => {
+  const scope = { context: { kind: 'word' as const }, label: 'DOCX', selectedText: '', isCurrent: () => false };
+  const action = new DocumentToolAction(scope, plan('insert_text', { text: 'first' }, 'word'));
+  expect(() => action.revise('second')).toThrow(/expired/);
+});
+it('captures actual Excel values and formulas for the explicit target, without moving selection', () => {
+  const state = mount();
+  const model = {
+    selectionRange: { ranges: [{ c1: 0, c2: 0, r1: 0, r2: 0 }], activeCell: { col: 0, row: 0 } },
+    getRange3: (r: number, c: number) => ({ getValue: () => `${r}:${c}`, getFormula: () => '=A1+1' }),
+  };
+  Object.assign(state.api, {
+    asc_getActiveRangeStr: () => 'A1',
+    asc_getActiveWorksheetIndex: () => 0,
+    asc_getWorksheetName: () => 'Budget',
+    wb: { getWorksheet: () => ({ model }) },
+  });
+  const action = new DocumentToolAction(
+    captureDocumentToolTarget(),
+    plan('set_cell', { cell: 'B2', value: '9' }, 'cell'),
+  );
+  expect(action.review).toEqual({
+    kind: 'cells',
+    total: 1,
+    sampled: false,
+    rows: [{ address: 'B2', before: '1:1', formula: '=A1+1', after: '9' }],
+  });
+  expect(model.selectionRange.activeCell).toEqual({ col: 0, row: 0 });
+  expect(action.target.context.sheet).toBe('Budget');
+});
 it('captures the native PPT selection as exact Unicode text for the tool context', () => {
   const state = mount();
   const content = {
@@ -326,4 +367,59 @@ it('does not accept numeric normalization for a literal text assignment', async 
   } finally {
     vi.useRealTimers();
   }
+});
+
+it('reviews a comment as an addition and preserves the selected anchor', () => {
+  const { api } = mount();
+  Object.assign(api, {
+    WordControl: { m_oLogicDocument: {} },
+    pluginMethod_GetSelectedText: () => 'Existing paragraph',
+  });
+  const action = new DocumentToolAction(
+    captureDocumentToolTarget(),
+    plan('add_comment', { text: 'Please check this' }, 'word'),
+  );
+  expect(action.review).toEqual({ kind: 'text', before: '', after: 'Please check this', anchor: 'Existing paragraph' });
+});
+
+it('reviews a new slide text box as an addition even when the target has selected text', () => {
+  const scope = { ...target(), selectedText: 'Existing title' };
+  const action = new DocumentToolAction(scope, plan('add_slide_text', { text: 'New text box' }, 'slide'));
+  expect(action.review).toEqual({ kind: 'text', before: '', after: 'New text box', anchor: 'Existing title' });
+});
+
+it('binds a PDF proposal to its page, history and document identity, and allows a text revision', () => {
+  const state = mount();
+  const pdf = { annots: [], History: state.history };
+  Object.assign(state.api, {
+    isPdfEditor: () => true,
+    getPDFDoc: () => pdf,
+    DocumentRenderer: { file: { pages: [{ text: [] }], Selection: {} } },
+    pluginMethod_GetSelectedText: () => '',
+  });
+  const target = captureDocumentToolTarget();
+  const action = new DocumentToolAction(target, {
+    tool: 'add_pdf_comment',
+    input: { page: 1, text: 'Check budget' },
+    readOnly: false,
+  });
+  expect(action.isCurrent()).toBe(true);
+  expect(action.review).toEqual({ kind: 'text', before: '', after: 'Check budget' });
+  const revised = action.revise('Check dates');
+  expect(revised.plan.input.page).toBe(1);
+  state.navigate();
+  expect(revised.isCurrent()).toBe(false);
+});
+it('expires a PDF note when the document history changes before confirmation', () => {
+  const state = mount();
+  const pdf = { annots: [], History: state.history };
+  Object.assign(state.api, {
+    isPdfEditor: () => true,
+    getPDFDoc: () => pdf,
+    DocumentRenderer: { file: { pages: [{ text: [] }], Selection: {} } },
+    pluginMethod_GetSelectedText: () => '',
+  });
+  const target = captureDocumentToolTarget();
+  state.history.Index++;
+  expect(target.isCurrent()).toBe(false);
 });

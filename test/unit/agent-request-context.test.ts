@@ -62,3 +62,29 @@ it('reads nested slide groups using the same shape reader as the presentation to
     content: { scope: 'presentation-text', text: 'Slide 1:\nGrouped title', truncated: false },
   });
 });
+it('attaches only the exact current PDF page and never presents it as the whole document', () => {
+  Object.assign(state.api, {
+    isPdfEditor: () => true,
+    getCurrentPage: () => 1,
+    DocumentRenderer: {
+      file: {
+        pages: [{}, { text: [] }],
+        copySelection(_page: number, out: { Text: string }) {
+          out.Text = 'Budget 120';
+        },
+      },
+    },
+  });
+  expect(captureRequestContext()).toMatchObject({
+    editor: { kind: 'pdf', page: 2, pages: 2 },
+    content: { scope: 'pdf-page', page: 2, pages: 2, text: 'Budget 120' },
+  });
+});
+it('reports a PDF page without extracted text as unavailable, not empty', () => {
+  Object.assign(state.api, {
+    isPdfEditor: () => true,
+    getCurrentPage: () => 0,
+    DocumentRenderer: { file: { pages: [{}] } },
+  });
+  expect(captureRequestContext()).toMatchObject({ content: { scope: 'pdf-page', page: 1, unavailable: true } });
+});

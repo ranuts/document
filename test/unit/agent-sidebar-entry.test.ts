@@ -80,3 +80,16 @@ it('does not steal parent composer focus when moving an inactive remembered rail
   expect(refocus).not.toHaveBeenCalled();
   entry.dispose();
 });
+
+it('uses the left rail when a desktop PDF has no right rail', () => {
+  const frame = document.createElement('iframe');
+  document.body.append(frame);
+  frame.contentDocument!.body.innerHTML = '<div id="left-menu"><div class="tool-menu-btns"></div></div>';
+  const entry = createSidebarEntry(
+    () => {},
+    () => 'AI Assistant',
+  );
+  entry.update(true, false);
+  expect(frame.contentDocument!.querySelector('#left-menu .agent-sidebar-entry')).not.toBeNull();
+  entry.dispose();
+});

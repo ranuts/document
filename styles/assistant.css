@@ -245,11 +245,12 @@ body.agent-panel-resizing #app iframe {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 12px;
+  padding: 16px 0;
   margin: 0;
-  border: 1px solid var(--ran-color-border);
-  border-radius: 8px;
-  background: var(--ran-color-bg-elevated);
+  border: 0;
+  border-block-start: 1px solid var(--ran-color-border);
+  border-radius: 0;
+  background: transparent;
   color: var(--ran-color-text);
   max-height: none;
   overflow: auto;
@@ -275,8 +276,26 @@ body.agent-panel-resizing #app iframe {
 }
 .agent-plan-buttons {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 4px 8px;
   flex-wrap: wrap;
+}
+.agent-plan-buttons r-button {
+  font-size: 12px;
+  --ran-btn-font-size: 12px;
+  --ran-btn-padding: 6px 10px;
+  --ran-btn-font-weight: 500;
+  --ran-btn-box-shadow: none;
+}
+.agent-panel .agent-plan-buttons r-button::part(content) {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
 }
 .agent-panel .cui-msg-error .cui-bubble {
   background: transparent;
@@ -464,9 +483,9 @@ r-dropdown[role='listbox'] {
   line-height: 1.65;
 }
 .agent-plan-content {
-  padding: 12px;
-  background: var(--ran-color-bg-muted);
-  border-radius: 6px;
+  padding: 4px 0;
+  background: transparent;
+  border-radius: 0;
 }
 .agent-plan-original {
   font-size: 12px;
@@ -1328,4 +1347,98 @@ r-dropdown[role='listbox'] {
 .agent-plan-content {
   max-height: 240px;
   overflow: auto;
+}
+.agent-plan-comparison {
+  max-height: 280px;
+  overflow: auto;
+  border-radius: 0;
+  background: transparent;
+  padding: 4px 0;
+}
+.agent-plan-comparison table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.agent-plan-comparison caption {
+  text-align: start;
+  padding-bottom: 8px;
+  color: var(--ran-color-text-secondary);
+}
+.agent-plan-comparison th,
+.agent-plan-comparison td {
+  text-align: start;
+  vertical-align: top;
+  border-bottom: 1px solid var(--ran-color-border);
+  padding: 6px;
+  overflow-wrap: anywhere;
+}
+.agent-plan-comparison code {
+  white-space: pre-wrap;
+}
+.agent-plan-diff,
+.agent-plan-record pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0;
+}
+.agent-plan-diff del,
+.agent-plan-diff ins {
+  display: block;
+  padding: 3px 6px;
+  border-inline-start: 2px solid currentColor;
+  text-decoration: none;
+}
+.agent-plan-diff del {
+  background: var(--ran-color-bg-elevated);
+}
+.agent-plan-diff ins {
+  font-weight: 400;
+}
+.agent-plan-record summary {
+  cursor: pointer;
+  padding: 6px 0;
+  font-size: 12px;
+}
+.agent-plan-draft {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  border: 1px solid var(--ran-color-border);
+  border-radius: 6px;
+  background: var(--ran-color-bg-elevated);
+  color: var(--ran-color-text);
+  font: inherit;
+  line-height: 1.6;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.agent-refinement-context {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--ran-color-text-secondary);
+}
+.agent-refinement-context[hidden] {
+  display: none;
+}
+.agent-refinement-context button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.agent-plan-preview:focus-visible,
+.agent-plan-preview :is(summary, textarea, r-button):focus-visible {
+  outline: 2px solid var(--ran-focus-ring, #1677ff);
+  outline-offset: 2px;
 }

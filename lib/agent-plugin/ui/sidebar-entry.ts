@@ -20,7 +20,10 @@ export function createSidebarEntry(toggle: () => void, label: () => string, isAv
           frame.contentWindow?.matchMedia?.(
             `(max-width: ${COMPACT_VIEWPORT_MAX_WIDTH}px), (pointer: coarse) and (max-height: ${COMPACT_VIEWPORT_MAX_WIDTH}px)`,
           ).matches ?? false;
-        rail = doc?.querySelector(compact ? '#left-menu .tool-menu-btns' : '#right-menu .tool-menu-btns') ?? null;
+        rail =
+          doc?.querySelector(compact ? '#left-menu .tool-menu-btns' : '#right-menu .tool-menu-btns') ??
+          doc?.querySelector('#left-menu .tool-menu-btns') ??
+          null;
       } catch {
         /* Cross-origin frames are not editor targets. */
       }

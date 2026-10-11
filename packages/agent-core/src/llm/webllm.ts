@@ -38,15 +38,17 @@ export interface WebLLMModel {
 }
 
 /** Small multilingual candidates for writing tasks; native tools remain disabled. */
-export const WEBLLM_MODELS: WebLLMModel[] = [
+export const WEBLLM_MODELS: WebLLMModel[] = [{ id: 'Qwen3-4B-q4f16_1-MLC', label: 'Qwen3 · 4B', vramMB: 3431.59 }];
+
+/** Former presets are discoverable for cache removal only, never model selection. */
+export const RETIRED_WEBLLM_MODELS: readonly WebLLMModel[] = [
   { id: 'Qwen3-1.7B-q4f16_1-MLC', label: 'Qwen3 · 1.7B', vramMB: 2036.66 },
   { id: 'Qwen3.5-2B-q4f16_1-MLC', label: 'Qwen3.5 · 2B', vramMB: 2245.44 },
   { id: 'Qwen3.5-0.8B-q4f16_1-MLC', label: 'Qwen3.5 · 0.8B', vramMB: 1629.49 },
-  { id: 'Qwen3-4B-q4f16_1-MLC', label: 'Qwen3 · 4B', vramMB: 3431.59 },
 ];
 
 /** Provisional benchmark baseline, pending per-language and real-device validation. */
-export const DEFAULT_WEBLLM_MODEL = 'Qwen3-1.7B-q4f16_1-MLC';
+export const DEFAULT_WEBLLM_MODEL = 'Qwen3-4B-q4f16_1-MLC';
 
 /** Initial non-thinking Qwen settings; quality and latency still require evaluation. */
 
@@ -307,7 +309,10 @@ export class WebLLMProvider implements LocalLLMProvider {
                   messages,
                   'Return only JSON matching the supplied schema. Follow the bounded task instructions. /no_think',
                 ),
-                temperature: 0,
+                // Qwen3 recommends sampling even in non-thinking mode. JSON
+                // grammar constrains syntax; forcing greedy decoding does not
+                // establish task accuracy and overrides the chosen settings.
+                temperature: this.model.startsWith('Qwen3-') ? this.generation.temperature : 0,
                 response_format: { type: 'json_object', schema: JSON.stringify(schema) },
               }
             : {}),

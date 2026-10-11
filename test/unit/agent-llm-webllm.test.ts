@@ -15,11 +15,12 @@ describe('WebLLMProvider', () => {
   });
 
   it('exposes a curated model list with the default included', () => {
-    expect(WEBLLM_MODELS.length).toBeGreaterThanOrEqual(2);
+    expect(WEBLLM_MODELS.map((m) => m.id)).toEqual(['Qwen3-4B-q4f16_1-MLC']);
+    expect(DEFAULT_WEBLLM_MODEL).toBe('Qwen3-4B-q4f16_1-MLC');
     expect(WEBLLM_MODELS.map((m) => m.id)).toContain(DEFAULT_WEBLLM_MODEL);
   });
 
-  it('defaults to the balanced model but accepts an override', () => {
+  it('defaults to Qwen3 4B but accepts a custom override', () => {
     expect(new WebLLMProvider().model).toBe(DEFAULT_WEBLLM_MODEL);
     expect(new WebLLMProvider({ model: 'Llama-3.2-1B-Instruct-q4f16_1-MLC' }).model).toBe(
       'Llama-3.2-1B-Instruct-q4f16_1-MLC',
@@ -118,7 +119,7 @@ describe('WebLLMProvider', () => {
     await provider.generateJSON([{ role: 'user', content: 'bounded task' }], schema);
     const body = create.mock.calls[0][0];
     expect(body.response_format).toEqual({ type: 'json_object', schema: JSON.stringify(schema) });
-    expect(body.temperature).toBe(0);
+    expect(body.temperature).toBe(0.7);
     expect(body.tools).toBeUndefined();
     expect(body.tool_choice).toBeUndefined();
     expect(body.messages[0].content).not.toContain(CHAT_ONLY_SYSTEM_PROMPT);

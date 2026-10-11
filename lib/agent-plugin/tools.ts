@@ -1,3 +1,4 @@
+import { getPdfTextTool, addPdfCommentTool } from './pdf-tools';
 import { setDocumentReviewMode } from './review-mode';
 import { fillSeriesTool } from './fill-series';
 import { clearDocumentTool } from './clear-document';
@@ -345,6 +346,8 @@ export const getCellTool: AgentTool<GetCellParams, { cell: string; text: string 
 
 /** All registered agent tools, keyed by name for lookup by the runtime. */
 export const agentTools: Record<string, AgentTool> = {
+  [getPdfTextTool.name]: getPdfTextTool,
+  [addPdfCommentTool.name]: addPdfCommentTool,
   [fillSeriesTool.name]: fillSeriesTool as unknown as AgentTool,
   [clearDocumentTool.name]: clearDocumentTool as unknown as AgentTool,
   [addSlideTextTool.name]: addSlideTextTool as unknown as AgentTool,
