@@ -1,3 +1,4 @@
+import { getPdfDocument } from './pdf-tools';
 import { readWordBodyText } from './word-text-read';
 import { buildSeries, type SeriesInput } from './fill-series';
 import type { DocumentContext } from './document-context';
@@ -10,12 +11,14 @@ import { agentTools } from './tools';
 import { parseOfficeRange } from './office-tools';
 import { assertReviewSelection, captureReviewCharacters, matchesTextEdit } from './verify-text-edit';
 import { readSlideTextSelection, type SlideTextShape } from './slide-text-read';
+import { reviewCells, type ChangeReview } from './ui/change-review';
 
 export interface DocumentToolTarget {
   readonly context: DocumentContext;
   readonly label: string;
   readonly selectedText: string;
   readonly reviewText?: string;
+  getReview?(plan: DocumentToolPlan): ChangeReview | undefined;
   isCurrent(write?: boolean): boolean;
   assertSupported?(plan: DocumentToolPlan): void;
   verify?(plan: DocumentToolPlan): Promise<boolean | undefined>;
@@ -36,6 +39,7 @@ interface SheetModel {
     c2: number,
   ): {
     getValue(): string;
+    getFormula?(): string;
     getNumberValue?(): number | null;
     getValueData?(): { value: { type: number } } | null;
   };
@@ -91,7 +95,8 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
   });
   if (!frame?.contentWindow || !frame.contentDocument) throw new Error('Editor frame is unavailable');
   const win = frame.contentWindow as unknown as { AscCommon?: { History?: History } };
-  const history = win.AscCommon?.History;
+  const pdf = context.kind === 'pdf' ? getPdfDocument(api) : undefined;
+  const history = pdf?.History ?? win.AscCommon?.History;
   const historyIndex = history?.Index;
   const points = history?.Points?.map((point) => ({ point, length: point.Items.length }));
   const tracked = Number.isInteger(historyIndex) && !!points;
@@ -103,6 +108,11 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
   const state = interaction(frame.contentDocument),
     revision = state.revision;
   const position = () => {
+    if (context.kind === 'pdf')
+      return JSON.stringify([
+        api.getCurrentPage?.(),
+        (api.DocumentRenderer as { file?: { Selection?: unknown } })?.file?.Selection,
+      ]);
     if (context.kind === 'slide') {
       const selection = selectedContent?.GetSelectionState?.();
       if (selectedContent && selection == null) return undefined;
@@ -133,6 +143,7 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
     frame.isConnected &&
     getEditorApi() === api &&
     api.WordControl?.m_oLogicDocument === logic &&
+    (!pdf || getPdfDocument(api) === pdf) &&
     (!model || api.wb?.getWorksheet().model === model);
   const sameSlideSelection = () =>
     context.kind !== 'slide' ||
@@ -155,7 +166,7 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
       if (write && (getReadonlyMode() || api.isViewMode || !tracked || capturedPosition === undefined)) return false;
       if (!history) return !write;
       return (
-        win.AscCommon?.History === history &&
+        (pdf ? pdf.History === history : win.AscCommon?.History === history) &&
         history.Index === historyIndex &&
         history.Points.length === points!.length &&
         points!.every(({ point, length }, index) => history.Points[index] === point && point.Items.length === length)
@@ -224,9 +235,33 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
         ? `PPT · ${context.page ?? ''}`
         : context.kind === 'cell'
           ? `Excel · ${context.sheet ?? ''} ${context.range ?? ''}`
-          : 'DOCX',
+          : context.kind === 'pdf'
+            ? `PDF · ${context.page ?? ''}`
+            : 'DOCX',
     selectedText,
     reviewText: beforeText,
+    getReview: (plan: DocumentToolPlan): ChangeReview | undefined => {
+      if (!isCurrent(false)) return undefined;
+      if (model && ['set_cell', 'fill_series'].includes(plan.tool)) {
+        const series = plan.tool === 'fill_series' ? buildSeries(plan.input as unknown as SeriesInput) : undefined;
+        return reviewCells(series?.range ?? String(plan.input.cell), series?.values ?? [[plan.input.value]], (r, c) => {
+          const cell = model.getRange3(r, c, r, c);
+          return { value: cell.getValue(), formula: cell.getFormula?.() };
+        });
+      }
+      if (plan.tool === 'clear_document' && beforeText !== undefined)
+        return { kind: 'text', before: beforeText, after: '' };
+      if (typeof plan.input.text === 'string') {
+        const additive = ['add_comment', 'add_slide_text', 'add_pdf_comment'].includes(plan.tool);
+        return {
+          kind: 'text',
+          before: additive ? '' : selectedText,
+          after: plan.input.text,
+          ...(additive && selectedText ? { anchor: selectedText } : {}),
+        };
+      }
+      return undefined;
+    },
     assertSupported: (plan: DocumentToolPlan) => {
       if (
         context.kind === 'word' &&
@@ -246,6 +281,7 @@ export function captureDocumentToolTarget(): DocumentToolTarget {
 /** Confirmation is consumed before execution, including failed API calls. */
 export class DocumentToolAction {
   readonly plan: DocumentToolPlan;
+  readonly review?: ChangeReview;
   private consumed = false;
   private output: unknown;
   get result(): unknown {
@@ -256,6 +292,33 @@ export class DocumentToolAction {
     plan: DocumentToolPlan,
   ) {
     this.plan = parseDocumentToolPlan(JSON.stringify({ tool: plan.tool, input: plan.input }), target.context);
+    this.review =
+      target.getReview?.(this.plan) ??
+      (typeof this.plan.input.text === 'string'
+        ? {
+            kind: 'text',
+            before: ['add_comment', 'add_slide_text', 'add_pdf_comment'].includes(this.plan.tool)
+              ? ''
+              : target.selectedText,
+            after: this.plan.input.text,
+            ...(['add_comment', 'add_slide_text', 'add_pdf_comment'].includes(this.plan.tool) && target.selectedText
+              ? { anchor: target.selectedText }
+              : {}),
+          }
+        : undefined);
+  }
+  revise(text: string): DocumentToolAction {
+    if (!this.isCurrent()) throw new Error('This proposal has expired. Generate a new proposal.');
+    if (
+      !['insert_text', 'replace_selection', 'add_slide_text', 'add_comment', 'add_pdf_comment'].includes(this.plan.tool)
+    )
+      throw new Error('This operation cannot be edited as text');
+    const replacement = new DocumentToolAction(this.target, {
+      ...this.plan,
+      input: { ...this.plan.input, text },
+    });
+    this.cancel();
+    return replacement;
   }
   isCurrent(): boolean {
     return !this.consumed && this.target.isCurrent(!this.plan.readOnly);

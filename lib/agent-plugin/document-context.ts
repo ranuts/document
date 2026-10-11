@@ -1,9 +1,10 @@
 import { getEditorApi } from './editor-bridge';
 import { readSlideTextSelection, type SlideTextShape } from './slide-text-read';
 export interface DocumentContext {
-  kind: 'word' | 'cell' | 'slide';
+  kind: 'word' | 'cell' | 'slide' | 'pdf';
   range?: string;
   page?: number;
+  pages?: number;
   sheet?: string;
   selectionCharacters?: number;
 }
@@ -12,13 +13,30 @@ export function captureDocumentContext(): DocumentContext | null {
   if (!api?.isDocumentLoadComplete || !api.isLoadFullApi) return null;
   // PDF has its own annotation API, not the Word body/selection contract.
   // Do not expose Word tools merely because spreadsheet/slide methods are absent.
-  if (typeof api.isPdfEditor === 'function' && (api.isPdfEditor as () => boolean)()) return null;
+  if (typeof api.isPdfEditor === 'function' && (api.isPdfEditor as () => boolean)()) {
+    const page = typeof api.getCurrentPage === 'function' ? (api.getCurrentPage as () => number)() + 1 : undefined;
+    const pages = (api.DocumentRenderer as { file?: { pages?: unknown[] } } | undefined)?.file?.pages?.length;
+    return {
+      kind: 'pdf',
+      page,
+      pages,
+      selectionCharacters: api.pluginMethod_GetSelectedText?.({ TabSymbol: '\t', Numbering: false }).length ?? 0,
+    };
+  }
   if (typeof api.asc_getActiveRangeStr === 'function') {
     const range = (api.asc_getActiveRangeStr as () => string)();
-    const sheet =
+    let sheet =
       typeof api.asc_getActiveWorksheetName === 'function'
         ? (api.asc_getActiveWorksheetName as () => string)()
         : undefined;
+    if (
+      !sheet &&
+      typeof api.asc_getWorksheetName === 'function' &&
+      typeof api.asc_getActiveWorksheetIndex === 'function'
+    )
+      sheet = (api.asc_getWorksheetName as (index: number) => string)(
+        (api.asc_getActiveWorksheetIndex as () => number)(),
+      );
     return {
       kind: 'cell',
       ...(typeof range === 'string' && /^[A-Z]{1,3}[1-9]\d*(?::[A-Z]{1,3}[1-9]\d*)?$/.test(range) ? { range } : {}),

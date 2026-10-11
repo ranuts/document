@@ -1,3 +1,4 @@
+import { readPdfPageText } from '../pdf-text-read';
 import { getEditorApi } from '../editor-bridge';
 import { readWordBodyText } from '../word-text-read';
 import { readPresentationShapeText } from '../slide-text-read';
@@ -5,7 +6,9 @@ import { captureComposerContext } from './composer-context';
 import type { DocumentContext } from '../document-context';
 
 interface ReadContent {
-  scope: 'document-body' | 'active-sheet-used-range' | 'presentation-text';
+  page?: number;
+  pages?: number;
+  scope: 'pdf-page' | 'document-body' | 'active-sheet-used-range' | 'presentation-text';
   text?: string;
   range?: string;
   truncated?: boolean;
@@ -34,12 +37,27 @@ export function captureRequestContext(): RequestContext {
   const api = getEditorApi();
   if (!selected.context || !api) return result;
   const scope: ReadContent['scope'] =
-    selected.context.kind === 'cell'
-      ? 'active-sheet-used-range'
-      : selected.context.kind === 'slide'
-        ? 'presentation-text'
-        : 'document-body';
+    selected.context.kind === 'pdf'
+      ? 'pdf-page'
+      : selected.context.kind === 'cell'
+        ? 'active-sheet-used-range'
+        : selected.context.kind === 'slide'
+          ? 'presentation-text'
+          : 'document-body';
   result.content = { scope, unavailable: true };
+  if (selected.context.kind === 'pdf') {
+    const page = selected.context.page;
+    result.content = { scope, page, pages: selected.context.pages, unavailable: true };
+    if (page) {
+      try {
+        const read = readPdfPageText(api, page);
+        if (read) result.content = { scope, ...read };
+      } catch {
+        /* Keep unavailable distinct from an empty page. */
+      }
+    }
+    return result;
+  }
   try {
     let text: string | undefined;
     let truncated = false;

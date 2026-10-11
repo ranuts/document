@@ -46,6 +46,7 @@ export class ChatView {
   private readonly scrollBtn: HTMLButtonElement;
   private labels: ChatViewLabels;
   private running = false;
+  private activity: 'responding' | 'reading' | 'planning' = 'responding';
   private composing = false;
   private lastUserText = '';
   private readonly statusEl = Div().class('cui-status').attr('role', 'status').build();
@@ -305,18 +306,38 @@ export class ChatView {
   /** Mount a host-owned review card in chronological conversation order. */
   appendContent(content: HTMLElement): void {
     this.emptyEl.remove();
+    const stick = this.nearBottom();
     this.messagesEl.append(content);
-    this.scrollToEnd();
+    if (stick) this.scrollToEnd();
+    else this.updateScrollBtn();
   }
 
-  /** Toggle the running state: Send becomes Stop and the input locks. */
+  /** Toggle Send/Stop while keeping the next draft editable and never queued. */
   setRunning(running: boolean): void {
+    const restore = !running && this.running && document.activeElement === this.sendBtn;
     this.running = running;
-    this.input.disabled = running;
-    this.statusEl.textContent = running ? (this.labels.waiting ?? 'Thinking…') : '';
+    if (!running) this.activity = 'responding';
+    this.updateActivity();
     if (!running) this.endStream();
     this.messagesEl.setAttribute('aria-busy', String(running));
     this.updateSendState();
+    if (restore) this.input.focus({ preventScroll: true });
+  }
+
+  /** Host-reported activity, not inferred model thoughts or estimated progress. */
+  setActivity(activity: 'responding' | 'reading' | 'planning'): void {
+    this.activity = activity;
+    this.updateActivity();
+  }
+
+  private updateActivity(): void {
+    this.statusEl.textContent = !this.running
+      ? ''
+      : this.activity === 'reading'
+        ? (this.labels.reading ?? 'Reading content…')
+        : this.activity === 'planning'
+          ? (this.labels.planning ?? 'Preparing task…')
+          : (this.labels.waiting ?? 'Generating a response…');
   }
 
   /** Remove all messages and restore the empty state. */
@@ -357,7 +378,7 @@ export class ChatView {
     this.input.placeholder = labels.placeholder ?? '';
     this.input.setAttribute('aria-label', labels.placeholder ?? 'Message');
     this.scrollBtn.setAttribute('aria-label', labels.scrollLatest ?? 'Scroll to latest');
-    this.statusEl.textContent = this.running ? (labels.waiting ?? 'Thinking…') : '';
+    this.updateActivity();
     for (const button of this.messagesEl.querySelectorAll<HTMLElement>('.cui-copy')) {
       button.title = labels.copy ?? 'Copy';
       button.setAttribute('aria-label', button.title);

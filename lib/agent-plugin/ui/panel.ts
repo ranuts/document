@@ -1,3 +1,4 @@
+import { generateReadAnswer } from '../document-read-answer';
 import { createDocumentAgentTools } from '../document-agent-tools';
 import { mountSpeechInput } from './speech-input';
 /**
@@ -26,7 +27,12 @@ import { captureDocumentContext, resolveContextCommand } from '../document-conte
 import type { LLMMessage, LLMProvider } from '@ranuts/agent-core/llm/types';
 import type { ProviderId } from '@ranuts/agent-core/llm/factory';
 import { DEFAULT_CPU_MODEL_URL, LocalInferenceProvider } from '@ranuts/agent-core/llm/local';
-import { DEFAULT_WEBLLM_MODEL, isModelCached, WEBLLM_MODELS } from '@ranuts/agent-core/llm/webllm';
+import {
+  DEFAULT_WEBLLM_MODEL,
+  isModelCached,
+  RETIRED_WEBLLM_MODELS,
+  WEBLLM_MODELS,
+} from '@ranuts/agent-core/llm/webllm';
 import type { LocalLLMProvider } from '@ranuts/agent-core/llm/types';
 import { resolveModelArtifactUrl } from '@ranuts/agent-core/llm/model-source';
 import { resolveTaskModel, type ModelTask } from '@ranuts/agent-core/llm/task-model';
@@ -56,10 +62,10 @@ import {
 import { captureActionTarget, ReviewedAction } from '../reviewed-action';
 import { generateDocumentToolSequence, isModelFreeToolRequest } from '../document-tool-sequence';
 import { captureDocumentToolTarget, DocumentToolAction } from '../document-tool-action';
-import { documentTools } from '../document-tool-plan';
+import { documentTools, isLiteralDocumentToolRequest } from '../document-tool-plan';
 import { ChatView, type ChatViewLabels } from '@ranuts/chat-ui';
 import { AgentChatController, type ChatTurn } from './controller';
-import { displayError } from './presentation';
+import { assistantPresentation, displayError } from './presentation';
 import { historyToTurns } from './storage';
 import { createConversationStore } from './sessions';
 import { createHistoryControls } from './history-controls';
@@ -68,6 +74,7 @@ import { createSidebarEntry } from './sidebar-entry';
 import { mountPanelResize } from './panel-resize';
 import { mountPanelViewport } from './panel-viewport';
 import { ActionPreview } from './action-preview';
+import { ProposalContext } from './proposal-context';
 import { captureComposerContext } from './composer-context';
 import { captureRequestContext } from './request-context';
 import { classifyRequest, resolveRequestIntent } from './request-intent';
@@ -395,6 +402,7 @@ export function createAgentPanel(
   const taskPreferences = readTaskModelPreferences(localStorageGetItem('agent-task-models'), presetIds);
   const savedPreset = localStorageGetItem('agent-local-preset');
   if (WEBLLM_MODELS.some((model) => model.id === savedPreset)) modelSelect.value = savedPreset!;
+  else if (savedPreset) localStorageSetItem('agent-local-preset', DEFAULT_WEBLLM_MODEL);
   modelSelect.setAttribute('aria-label', t('agentModelLabel'));
   const loadBtn = ranButton(t('agentLoadModel'), 'agent-panel-load');
   loadBtn.addEventListener('click', () => void loadModel());
@@ -541,6 +549,8 @@ export function createAgentPanel(
     copyFailed: t('agentCopyFailed'),
     restore: t('agentRestoreRequest'),
     waiting: t('agentWaiting'),
+    reading: t('agentReadingContent'),
+    planning: t('agentPreparingTask'),
     scrollLatest: t('agentScrollLatest'),
     applyMessage: t('agentWriteReply'),
     applyTip: t('agentWriteReplyTip'),
@@ -575,7 +585,8 @@ export function createAgentPanel(
     onApplyMessage: (text) => applyReply(text),
     onStop: () => {
       controller?.stop();
-      invalidatePlans();
+      if (refiningPreview) planning?.abort();
+      else invalidatePlans();
     },
     labels: chatLabels(),
   });
@@ -584,6 +595,7 @@ export function createAgentPanel(
   readiness.setAttribute('role', 'status');
   chat.el.append(readiness);
   let preview = new ActionPreview();
+  let refiningPreview: ActionPreview | undefined;
   const previews = new Set([preview]);
   const clearPreviews = (): void => {
     for (const item of previews) item.dispose();
@@ -641,8 +653,12 @@ export function createAgentPanel(
     invalidatePlans();
     languageSelect.hidden = true;
     chat.setLabels(chatLabels());
+    syncRuntimeStatus();
   });
-  languageSelect.addEventListener('change', () => invalidatePlans());
+  languageSelect.addEventListener('change', () => {
+    invalidatePlans();
+    syncRuntimeStatus();
+  });
   speech = mountSpeechInput(chat, () => enabled && !planning && !controller?.isRunning() && !replyAbort);
   const welcomeHint = document.createElement('p');
   welcomeHint.className = 'agent-welcome-hint';
@@ -659,6 +675,29 @@ export function createAgentPanel(
   quoteDetails.append(quoteSummary, quoteText);
   quoteContext.append(quoteDetails);
   chat.contextEl.append(quoteContext);
+  const refinement = new ProposalContext();
+  const refinementRow = Div().class('agent-refinement-context').build();
+  const refinementLabel = Span().build();
+  const refinementCancel = ButtonBuilder().attr('type', 'button').build();
+  refinementRow.append(refinementLabel, refinementCancel);
+  refinementRow.hidden = true;
+  chat.contextEl.append(refinementRow);
+  const clearRefinement = (): void => {
+    refinement.clear();
+    refinementRow.hidden = true;
+  };
+  refinementCancel.addEventListener('click', () => {
+    clearRefinement();
+    chat.focus();
+  });
+  const selectRefinement = (card: ActionPreview): void => {
+    if (!card.pending()) return;
+    refinement.select(() => card.pending()?.plan);
+    refinementLabel.textContent = t('agentRefiningProposal');
+    refinementCancel.textContent = t('agentPlanCancel');
+    refinementRow.hidden = false;
+    chat.focus();
+  };
   const clearQuote = () => {
     quotedSelection = '';
     quoteText.textContent = '';
@@ -667,6 +706,7 @@ export function createAgentPanel(
   window.addEventListener('document:content-ready', clearQuote);
 
   const invalidatePlans = (): void => {
+    clearRefinement();
     preview.invalidate();
     replyAbort?.abort();
     planning?.abort();
@@ -687,7 +727,9 @@ export function createAgentPanel(
         ? `Excel · ${context.sheet ?? ''} ${context.range ?? ''}`
         : context.kind === 'slide'
           ? `PPT · ${context.page ?? ''}`
-          : 'DOCX'
+          : context.kind === 'pdf'
+            ? 'PDF'
+            : 'DOCX'
       : '';
     if (scopeLabel.textContent !== label) scopeLabel.textContent = label;
   };
@@ -712,9 +754,11 @@ export function createAgentPanel(
     const welcome =
       context?.kind === 'cell'
         ? 'agentWelcomeCell'
-        : context?.kind === 'slide'
-          ? 'agentWelcomeSlide'
-          : 'agentWelcomeWord';
+        : context?.kind === 'pdf'
+          ? 'agentWelcomePdf'
+          : context?.kind === 'slide'
+            ? 'agentWelcomeSlide'
+            : 'agentWelcomeWord';
     if (welcomeHint.textContent !== t(welcome)) welcomeHint.textContent = t(welcome);
   };
   let scopeTimer = setInterval(syncContext, 1000);
@@ -827,7 +871,7 @@ export function createAgentPanel(
     writeDestination.hidden = false;
     if (writingSelect.value === 'chat' || writingSelect.value === 'tools') {
       const endpoint = useEndpointForChat();
-      const ready = endpoint || !!webllmProvider?.isReady() || writingSelect.value === 'tools';
+      const ready = endpoint || !!webllmProvider?.isReady();
       const where =
         endpoint && endpointSettings.kind !== 'loopback'
           ? 'agentWriteDestinationRemote'
@@ -876,8 +920,7 @@ export function createAgentPanel(
       ? t(cloud ? 'agentEndpointConfigured' : 'agentEndpointConnected')
       : status;
     endpointConnect.textContent = endpointProvider ? t('agentEndpointDisconnect') : t('agentEndpointConnect');
-    syncWriteDestination();
-    chat.refreshSendAvailability();
+    syncRuntimeStatus();
   };
   const disconnectEndpoint = (): void => {
     endpointAttempt++;
@@ -985,17 +1028,13 @@ export function createAgentPanel(
       return url;
     }
   };
-  const syncRuntimeStatus = (): void => {
+  function syncRuntimeStatus(): void {
     const localReady = !!webllmProvider?.isReady();
     for (const button of [loadBtn, ggufLoad]) {
       button.textContent = t(modelLoading ? 'agentPreparing' : localReady ? 'agentModelInUse' : 'agentLoadModel');
       button.toggleAttribute('disabled', modelLoading || localReady || !enabled || cacheBusy);
     }
-    const ready =
-      !!webllmProvider?.isReady() ||
-      (writingSelect.value !== 'tools' &&
-        !!endpointProvider?.isReady() &&
-        (endpointSettings.kind === 'loopback' || navigator.onLine !== false));
+    const ready = localReady || useEndpointForChat();
     readiness.textContent = ready ? '' : t('agentPrepareRequired');
     if (proposalMode && writingSelect.value !== 'tools') {
       try {
@@ -1028,7 +1067,7 @@ export function createAgentPanel(
     loadProgress.hidden = !modelLoading;
     if (loadingFraction === undefined) loadProgress.removeAttribute('value');
     else loadProgress.value = loadingFraction;
-  };
+  }
   const updateLoadProgress = (fraction?: number): void => {
     loadingFraction =
       typeof fraction === 'number' && Number.isFinite(fraction) && fraction >= 0 && fraction <= 1
@@ -1196,28 +1235,40 @@ export function createAgentPanel(
             if (generation !== controllerGeneration || conversation !== conversationRevision)
               throw new Error(t('agentPlanExpired'));
             const card = new ActionPreview();
+            preview = card;
             previews.add(card);
-            card.show(action, (outcome) => {
-              if (generation === controllerGeneration && conversation === conversationRevision) {
-                const receipt = {
-                  role: 'assistant' as const,
-                  content: JSON.stringify({ status: outcome, result: action.result }),
-                  hostGuidance: 'tool' as const,
-                };
-                controller?.recordExternalMessages([receipt]);
-              }
-            });
+            card.show(
+              action,
+              (outcome, appliedAction) => {
+                if (generation === controllerGeneration && conversation === conversationRevision) {
+                  const receipt = {
+                    role: 'assistant' as const,
+                    content: JSON.stringify({
+                      status: outcome,
+                      tool: appliedAction.plan.tool,
+                      input: appliedAction.plan.input,
+                      result: appliedAction.result,
+                    }),
+                    hostGuidance: 'tool' as const,
+                  };
+                  controller?.recordExternalMessages([receipt]);
+                }
+              },
+              () => selectRefinement(card),
+            );
             chat.appendContent(card.el);
           },
           receipt: (_name, result) => {
             if (generation !== controllerGeneration || conversation !== conversationRevision) return;
-            const value = result as { text?: string } | undefined;
+            const value = result as { text?: string; page?: number } | undefined;
             appendTurn({
               role: 'tool',
               text:
-                typeof value?.text === 'string'
-                  ? value.text.trim() || t('agentNoReadableText')
-                  : JSON.stringify(result) || t('agentNoReadableText'),
+                _name === 'get_pdf_text' && !value?.text?.trim()
+                  ? t('agentPdfTextUnavailable')
+                  : typeof value?.text === 'string'
+                    ? value.text.trim() || t('agentNoReadableText')
+                    : JSON.stringify(result) || t('agentNoReadableText'),
             });
           },
         });
@@ -1458,15 +1509,32 @@ export function createAgentPanel(
   const submit = async (text: string): Promise<void> => {
     const trimmed = text.trim();
     if (!enabled || !trimmed) return;
+    const refinementContext = refinement.capture();
+    if (refinementContext.kind === 'expired') {
+      clearRefinement();
+      appendTurn({ role: 'status', text: t('agentPlanExpired') });
+      chat.setInput(trimmed);
+      chat.focus();
+      return;
+    }
+    // Snapshot before mode changes invalidate the previous action. This is reference
+    // data only: a fresh target is still captured before the next model request.
+    const previousPreview = preview.pending() ? preview : undefined;
+    const pendingProposal = refinementContext.kind === 'selected' ? refinementContext.plan : preview.pending()?.plan;
     let request = classifyRequest(trimmed);
+    if (refinementContext.kind === 'selected') request.task = 'tools';
     writingSelect.value = request.task;
     languageSelect.value = request.language;
-    writingSelect.dispatchEvent(new Event('change'));
+    proposalMode = writingSelect.value !== 'chat';
+    languageSelect.hidden = true;
+    chat.setLabels(chatLabels());
     const snapshot = captureComposerContext();
-    if (isModelFreeToolRequest(trimmed, snapshot.context)) {
+    const literalToolRequest = isLiteralDocumentToolRequest(trimmed, snapshot.context);
+    if (literalToolRequest || isModelFreeToolRequest(trimmed, snapshot.context)) {
       request.task = 'tools';
       writingSelect.value = 'tools';
-      writingSelect.dispatchEvent(new Event('change'));
+      proposalMode = true;
+      chat.setLabels(chatLabels());
     }
     quotedSelection = snapshot.text;
     const intentProvider = useEndpointForChat() ? endpointProvider : webllmProvider;
@@ -1492,7 +1560,7 @@ export function createAgentPanel(
       chat.focus();
       return;
     }
-    const intent = directIntent(trimmed);
+    const intent = refinementContext.kind === 'selected' ? null : directIntent(trimmed);
     if (intent) {
       const answer = chat.getLastDocumentBody();
       const chinese = getLanguage().startsWith('zh');
@@ -1591,7 +1659,6 @@ export function createAgentPanel(
           if (directGeneration === controllerGeneration) {
             syncContext();
             chat.setRunning(false);
-            chat.focus();
           }
         }
       }
@@ -1647,27 +1714,41 @@ export function createAgentPanel(
       }
     })();
     let routingStarted = false;
+    if (previousPreview) {
+      refiningPreview = previousPreview;
+      previousPreview.setRefining(true);
+    }
     try {
       const routingProvider = useEndpointForChat() ? endpointProvider : webllmProvider;
-      if (
+      if (refinementContext.kind === 'selected') {
+        request = { task: 'tools', language: request.language, refinement: true };
+        writingSelect.value = 'tools';
+      } else if (
         routingProvider?.isReady() &&
         routingProvider.toolCallingMode === 'native' &&
+        !pendingProposal &&
         !['rewrite', 'summarize', 'translate'].includes(request.task) &&
+        !literalToolRequest &&
         !isModelFreeToolRequest(trimmed, snapshot.context)
       ) {
+        chat.setActivity('responding');
         await ctl.send(trimmed);
         return;
       }
       if (
+        refinementContext.kind !== 'selected' &&
         routingProvider?.isReady() &&
+        !literalToolRequest &&
         !isModelFreeToolRequest(trimmed, snapshot.context) &&
         (routingProvider.generateJSON || typeof routingProvider.chat === 'function')
       ) {
         const abort = new AbortController();
         planning = abort;
         routingStarted = true;
+        chat.setActivity('planning');
         request = await resolveRequestIntent(routingProvider, trimmed, snapshot.context, abort.signal, {
           hasSelection: !!snapshot.text.trim() && !snapshot.truncated,
+          pendingProposal,
         });
         abort.signal.throwIfAborted();
         if (generation !== controllerGeneration || conversation !== conversationRevision)
@@ -1694,6 +1775,7 @@ export function createAgentPanel(
             ),
           );
       }
+      if (previousPreview && !request.refinement) invalidatePlans();
       if (request.task === 'compose') {
         if (snapshot.context?.kind !== 'word') throw new Error(t('agentWordOnly'));
         if (!routingProvider?.isReady()) throw new Error(t('agentLoadModel'));
@@ -1701,6 +1783,7 @@ export function createAgentPanel(
         appendTurn({ role: 'user', text: trimmed });
         const abort = new AbortController();
         planning = abort;
+        chat.setActivity('responding');
         const body = await generateDocumentDraft(routingProvider, trimmed, abort.signal);
         abort.signal.throwIfAborted();
         if (generation !== controllerGeneration || conversation !== conversationRevision)
@@ -1711,18 +1794,20 @@ export function createAgentPanel(
       }
       if (writingSelect.value === 'tools') {
         operationHistory.push({ role: 'user', content: text });
-        invalidatePlans();
+        if (!request.refinement) invalidatePlans();
         const target = requestTarget;
         if (!target || !target.isCurrent(false)) throw new Error(t('agentPlanExpired'));
         const abort = new AbortController();
         planning = abort;
         appendTurn({ role: 'user', text });
+        chat.setActivity('planning');
         const plans = await generateDocumentToolSequence(
           useEndpointForChat() ? endpointProvider! : webllmProvider!,
           text,
           target.context,
           abort.signal,
           {
+            pendingProposal: request.refinement ? pendingProposal : undefined,
             stableCapabilityPrefix:
               webllmProvider instanceof WllamaProvider ||
               (webllmProvider instanceof LocalInferenceProvider && webllmProvider.backend === 'wllama'),
@@ -1730,6 +1815,13 @@ export function createAgentPanel(
         );
         if (!plans.length || plans.length > 4 || plans.slice(0, -1).some((plan) => !plan.readOnly))
           throw new Error('agentToolNotChosen');
+        const answerFromReads =
+          // Navigation needs no approval, but is not a content read to synthesize.
+          plans.every((plan) => plan.readOnly && plan.tool !== 'slide_action') &&
+          !!routingProvider?.isReady() &&
+          !isModelFreeToolRequest(trimmed, target.context);
+        const readExchange: LLMMessage[] = [];
+        let unavailableRead = false;
         for (const [index, plan] of plans.entries()) {
           // Let the result render and process Stop/session/editor events before the next operation.
           if (index > 0) await new Promise<void>((resolve) => setTimeout(resolve, 0));
@@ -1738,32 +1830,47 @@ export function createAgentPanel(
             throw new Error(t('agentPlanExpired'));
           const action = new DocumentToolAction(target, plan);
           if (!plan.readOnly) {
+            if (request.refinement && !previousPreview?.pending()) throw new Error(t('agentPlanExpired'));
             preview = new ActionPreview();
             previews.add(preview);
-            preview.show(action, (outcome) => {
-              if (generation === controllerGeneration && conversation === conversationRevision) {
-                const id = crypto.randomUUID();
-                const feedback: LLMMessage[] = [
-                  { role: 'assistant', content: [{ type: 'tool_use', id, name: plan.tool, input: { ...plan.input } }] },
-                  {
-                    role: 'user',
-                    content: [
-                      {
-                        type: 'tool_result',
-                        toolUseId: id,
-                        content: JSON.stringify({ outcome, result: action.result }),
-                      },
-                    ],
-                  },
-                ];
-                if (controller && conversations.activeId === operationSession)
-                  controller.recordExternalMessages(feedback);
-                else operationStorage.save([...operationStorage.load(), ...feedback]);
-              }
-            });
+            preview.show(
+              action,
+              (outcome, appliedAction) => {
+                if (generation === controllerGeneration && conversation === conversationRevision) {
+                  const id = crypto.randomUUID();
+                  const feedback: LLMMessage[] = [
+                    {
+                      role: 'assistant',
+                      content: [
+                        { type: 'tool_use', id, name: appliedAction.plan.tool, input: { ...appliedAction.plan.input } },
+                      ],
+                    },
+                    {
+                      role: 'user',
+                      content: [
+                        {
+                          type: 'tool_result',
+                          toolUseId: id,
+                          content: JSON.stringify({ outcome, result: appliedAction.result }),
+                        },
+                      ],
+                    },
+                  ];
+                  if (controller && conversations.activeId === operationSession)
+                    controller.recordExternalMessages(feedback);
+                  else operationStorage.save([...operationStorage.load(), ...feedback]);
+                }
+              },
+              () => selectRefinement(preview),
+            );
+            if (request.refinement) {
+              previousPreview?.supersede();
+              clearRefinement();
+            }
             chat.appendContent(preview.el);
             break;
           }
+          chat.setActivity('reading');
           const outcome = await action.apply(abort.signal);
           const exchangeId = crypto.randomUUID();
           operationHistory.push(
@@ -1782,18 +1889,50 @@ export function createAgentPanel(
               ],
             },
           );
+          if (answerFromReads) readExchange.push(...operationHistory.slice(-2));
           const result = action.result as
-            { text?: string; cell?: string; sum?: number; range?: string; page?: number; count?: number } | undefined;
+            | {
+                text?: string;
+                unavailable?: boolean;
+                cell?: string;
+                sum?: number;
+                range?: string;
+                page?: number;
+                count?: number;
+              }
+            | undefined;
           const resultText = plan.readOnly
-            ? typeof result?.text === 'string'
-              ? `${result.cell ? result.cell + '\n' : ''}${result.text.trim() ? result.text : t('agentNoReadableText')}`
-              : typeof result?.sum === 'number'
-                ? `${result.range ?? ''}: ${result.sum}`
-                : `${target.label} → ${result?.page ?? ''} / ${result?.count ?? ''}`
+            ? plan.tool === 'get_pdf_text' && (result?.unavailable || !result?.text?.trim())
+              ? t('agentPdfTextUnavailable')
+              : typeof result?.text === 'string'
+                ? `${plan.tool === 'get_pdf_text' ? t('agentPdfPageContext', { page: result.page ?? '' }) + '\n' : result.cell ? result.cell + '\n' : ''}${result.text.trim() ? result.text : t('agentNoReadableText')}`
+                : typeof result?.sum === 'number'
+                  ? `${result.range ?? ''}: ${result.sum}`
+                  : `${target.label} → ${result?.page ?? ''} / ${result?.count ?? ''}`
             : `${result?.range ? result.range + ' · ' : ''}${t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied')}`;
-          operationHistory.push({ role: 'assistant', content: resultText, hostGuidance: 'tool' });
-          if (generation === controllerGeneration && conversation === conversationRevision)
-            appendTurn({ role: 'tool', text: resultText });
+          unavailableRead ||= !!result?.unavailable || (typeof result?.text === 'string' && !result.text.trim());
+          if (!answerFromReads || unavailableRead) {
+            operationHistory.push({ role: 'assistant', content: resultText, hostGuidance: 'tool' });
+            if (generation === controllerGeneration && conversation === conversationRevision)
+              appendTurn({ role: 'tool', text: resultText });
+          }
+        }
+        if (answerFromReads && !unavailableRead) {
+          chat.setActivity('responding');
+          const answer = await generateReadAnswer(
+            routingProvider!,
+            trimmed,
+            target.context,
+            readExchange,
+            abort.signal,
+          );
+          abort.signal.throwIfAborted();
+          if (generation !== controllerGeneration || conversation !== conversationRevision || !target.isCurrent(false))
+            throw new Error(t('agentPlanExpired'));
+          const visibleAnswer = assistantPresentation(answer).trim();
+          if (!visibleAnswer) throw new Error('Incomplete document answer');
+          operationHistory.push({ role: 'assistant', content: answer });
+          appendTurn({ role: 'agent', text: visibleAnswer });
         }
       } else if (proposalMode) {
         operationHistory.push({ role: 'user', content: trimmed });
@@ -1832,6 +1971,7 @@ export function createAgentPanel(
         // The gate above normally covers an unready browser-local model; this stays
         // as a guard for readiness that flipped between the gate and here.
         if (!writingProvider || !writingProvider.isReady()) throw new Error('agentWritingNeedsLocalService');
+        chat.setActivity('responding');
         const body = await generateWriting(
           writingProvider,
           {
@@ -1852,7 +1992,7 @@ export function createAgentPanel(
         )
           throw new Error(t('agentPlanExpired'));
         operationHistory.push({ role: 'assistant', content: body, copyOnly: true });
-        if (request.task === 'summarize') {
+        if (request.task === 'summarize' || snapshot.context?.kind === 'pdf') {
           appendTurn({ role: 'agent', text: body, copyOnly: true });
           return;
         }
@@ -1875,22 +2015,32 @@ export function createAgentPanel(
                 readOnly: false,
               },
             );
-        preview.show(action, (outcome) => {
-          if (!enabled || generation !== controllerGeneration || conversation !== conversationRevision) return;
-          const text = t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
-          const messages: LLMMessage[] = [{ role: 'assistant', content: text, hostGuidance: 'tool' } as LLMMessage];
-          if (controller && conversations.activeId === operationSession) controller.recordExternalMessages(messages);
-          else operationStorage.save([...operationStorage.load(), ...messages]);
-        });
+        preview.show(
+          action,
+          (outcome) => {
+            if (!enabled || generation !== controllerGeneration || conversation !== conversationRevision) return;
+            const text = t(outcome === 'verified' ? 'agentPlanVerified' : 'agentPlanApplied');
+            const messages: LLMMessage[] = [{ role: 'assistant', content: text, hostGuidance: 'tool' } as LLMMessage];
+            if (controller && conversations.activeId === operationSession) controller.recordExternalMessages(messages);
+            else operationStorage.save([...operationStorage.load(), ...messages]);
+          },
+          () => selectRefinement(preview),
+        );
         chat.appendContent(preview.el);
         operationHistory.push({ role: 'assistant', content: t('agentPlanReady'), hostGuidance: 'tool' });
       } else {
         invalidatePlans();
+        chat.setActivity('responding');
         await ctl.send(trimmed);
       }
-    } catch (error) {
+    } catch (caughtError) {
+      const error =
+        caughtError instanceof Error && caughtError.message === 'agentProposalUnchanged' && !previousPreview?.pending()
+          ? new Error(t('agentPlanExpired'))
+          : caughtError;
       const stopped = error instanceof Error && error.name === 'AbortError';
-      const role = stopped ? 'status' : 'error';
+      const role =
+        stopped || (error instanceof Error && error.message === 'agentProposalUnchanged') ? 'status' : 'error';
       // Routing happens before any branch records the request. Preserve failed
       // requests too, without duplicating a chat/controller-owned user turn.
       if (routingStarted && !operationHistory.length) {
@@ -1907,9 +2057,11 @@ export function createAgentPanel(
       if (generation === controllerGeneration && conversation === conversationRevision)
         appendTurn({
           role,
-          text: stopped ? t('agentStopped') : error instanceof Error ? error.message : String(error),
+          text: stopped ? t('agentStopped') : displayError(error),
         });
     } finally {
+      previousPreview?.setRefining(false);
+      if (refiningPreview === previousPreview) refiningPreview = undefined;
       if (operationHistory.length) {
         const owner = conversations.activeId === operationSession ? controller : null;
         if (owner) owner.recordExternalMessages(operationHistory);
@@ -1918,9 +2070,8 @@ export function createAgentPanel(
       if (generation === controllerGeneration && conversation === conversationRevision) {
         planning = null;
         chat.setRunning(false);
-        chat.focus();
+        syncRuntimeStatus();
         if (webllmProvider && !webllmProvider.isReady()) {
-          syncRuntimeStatus();
           note.textContent = t('agentLoadModel');
           // A stopped task never restarts preparation on its own.
         }
@@ -1994,6 +2145,7 @@ export function createAgentPanel(
     }
     const canReview =
       !!api &&
+      captureDocumentContext()?.kind === 'word' &&
       api.isDocumentLoadComplete &&
       api.isLoadFullApi &&
       !api.isViewMode &&
@@ -2165,7 +2317,7 @@ export function createAgentPanel(
   let cacheRevision = 0;
   const refreshCache = async () => {
     const revision = ++cacheRevision;
-    const sources = [...WEBLLM_MODELS, ...rememberedModelSources()];
+    const sources = [...WEBLLM_MODELS, ...RETIRED_WEBLLM_MODELS, ...rememberedModelSources()];
     const unique = sources.filter(
       (model, index) =>
         sources.findIndex(
@@ -2264,7 +2416,9 @@ export function createAgentPanel(
         })();
       });
       row.setAttribute('aria-label', name.textContent ?? '');
-      row.append(name, use, remove, cancel);
+      row.append(name);
+      if (!RETIRED_WEBLLM_MODELS.some((item) => item.id === model.id)) row.append(use);
+      row.append(remove, cancel);
       cacheRows.append(row);
     }
     for (const item of ggufs) {
@@ -2404,6 +2558,8 @@ export function createAgentPanel(
     fieldLabels.forEach(({ title, key }) => {
       title.textContent = t(key);
     });
+    refinementLabel.textContent = t('agentRefiningProposal');
+    refinementCancel.textContent = t('agentPlanCancel');
     settingsHeading.textContent = t('agentSettings');
     serviceHint.textContent = t('agentUseServiceHint');
     advancedTitle.textContent = t('agentPreferences');

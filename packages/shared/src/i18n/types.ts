@@ -36,10 +36,16 @@ export interface I18nMessages {
   agentModelRuntimeUrl: string;
 
   agentCacheUnavailable: string;
+  agentPdfTextUnavailable: string;
+  agentWelcomePdf: string;
+  agentPdfPageContext: string;
+  agentAddPdfComment: string;
   agentWelcomeWord: string;
   agentWelcomeCell: string;
   agentWelcomeSlide: string;
 
+  agentReviewAddSlide: string;
+  agentReviewDuplicateSlide: string;
   agentSlideContext: string;
   agentSelectionContext: string;
   agentCurrentDocument: string;
@@ -220,6 +226,22 @@ export interface I18nMessages {
   agentTaskModelExperimental: string;
   agentTaskLabel: string;
   agentTaskLanguage: string;
+  agentRefineProposal: string;
+  agentProposalUnchanged: string;
+  agentPlanSuperseded: string;
+  agentSelectionAnchor: string;
+  agentRefiningProposal: string;
+  agentEditProposal: string;
+  agentSaveProposal: string;
+  agentDiscardProposal: string;
+  agentViewChanges: string;
+  agentCellImpact: string;
+  agentReviewCell: string;
+  agentEmptyCell: string;
+  agentReviewFormula: string;
+  agentReviewSample: string;
+  agentRemoved: string;
+  agentAdded: string;
   agentPlanTitle: string;
   agentPlanBefore: string;
   agentPlanAfter: string;
@@ -280,6 +302,8 @@ export interface I18nMessages {
   agentCopyFailed: string;
   agentRestoreRequest: string;
   agentWaiting: string;
+  agentReadingContent: string;
+  agentPreparingTask: string;
   agentScrollLatest: string;
   agentModelCleanupFailed: string;
   agentModelLoadFailed: string;

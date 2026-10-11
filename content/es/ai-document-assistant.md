@@ -1,30 +1,50 @@
 ---
-title: 'Asistente de documentos con IA — Escribe con más claridad. Tú decides.'
-description: 'Selecciona un texto para reescribirlo, resumirlo o traducirlo. Revisa el resultado antes de añadirlo al documento. Desactivado por defecto · Solo este navegador'
+title: 'Asistente de documentos con IA'
+description: 'Describe lo que necesitas: consultar contenido, trabajar con texto u organizar datos. Revisa los cambios antes de aplicarlos.'
 ---
 
-Selecciona un texto para reescribirlo, resumirlo o traducirlo. Revisa el resultado antes de añadirlo al documento.
+Describe lo que necesitas: consultar contenido, trabajar con texto u organizar datos. Revisa los cambios antes de aplicarlos.
 
-## Activar asistente de IA
+## Empezar
 
-Desactivado por defecto · Solo este navegador. Elige cómo usarlo al activarlo. Tú inicias la primera descarga y puedes cancelarla. Cierra el panel para seguir editando. Desactivar en los ajustes detiene las tareas. Las conversaciones duran esta sesión por defecto; activa su guardado en el historial si quieres conservarlas.
+Activa el asistente y elige un modelo local o conecta tu servicio de IA. Los archivos del modelo quedan en este navegador; al abrir otro documento puede ser necesario prepararlo de nuevo, aprovechando los archivos guardados.
 
-## Uso de IA
+El modelo predeterminado del navegador es Qwen3 4B. El uso estimado de memoria gráfica es de unos 3,43 GB; no corresponde al tamaño de descarga ni al uso total de memoria del dispositivo. Sigue siendo experimental. Puedes eliminar los modelos pequeños descargados anteriormente en la sección de modelos descargados.
 
-**Usar en este ordenador** — El texto se procesa en este dispositivo. La primera preparación descarga archivos y puede ralentizarlo; puedes cancelarla.
+Mientras el asistente trabaja, puedes redactar tu próxima solicitud. Envíala cuando termine la actual; los borradores nunca se envían automáticamente. Se muestran avisos breves al leer, responder y esperar tu revisión. Las nuevas respuestas y propuestas no te llevan al final mientras lees mensajes anteriores.
 
-**Usar tu propio servicio de IA** — El texto enviado se procesa en el servicio elegido. Necesitas tus datos de servicio; puede haber cargos.
+## Según el archivo
 
-## Cómo usarlo
+- Word: consulta contenido, redacta o mejora párrafos seleccionados.
 
-Selecciona un texto y elige reescribir, resumir o traducir. Los botones rellenan el borrador sin enviarlo automáticamente.
+- Excel y CSV: lee tablas, introduce datos, genera series, calcula totales u ordena.
 
-> Acorta este párrafo y conserva las fechas y los números.
+- PowerPoint: consulta texto de diapositivas, añade texto o crea, duplica y cambia diapositivas.
 
-Compara el original y el resultado antes de confirmar el reemplazo. También puedes copiarlo. Usa Deshacer si lo necesitas. Si cambia la selección, genera una nueva propuesta.
+- PDF: consulta, resume o traduce texto seleccionable de la página actual, o añade una nota a una página concreta.
 
-Puedes detener la preparación o la generación. Los errores conservan el borrador. Los documentos de solo lectura no se pueden modificar. El uso sin conexión necesita archivos ya preparados.
+## Revisar y aplicar
 
-La IA puede omitir o cambiar hechos. Revisa fechas, cifras y nombres. Reescritura, resumen y traducción funcionan actualmente con selecciones de Word; otros documentos admiten operaciones explícitas existentes.
+Las propuestas muestran dónde y qué cambiará. Puedes editarlas o pedir ajustes antes de aplicarlas. Cancela lo que no quieras y usa Deshacer tras aplicar. Borrar o sobrescribir contenido requiere confirmación. Los archivos de solo lectura solo pueden consultarse.
 
-[Cómo usarlo](/es/help)
+Si un ajuste falla o devuelve el mismo contenido, la sugerencia original sigue disponible mientras el documento y la selección no cambien.
+
+## Alcance en PDF
+
+Se lee la página actual, no todo el PDF. No se reconoce texto en imágenes escaneadas; se indica cuando el texto no está disponible. Las notas se adjuntan a la página y no reescriben el texto del PDF. Para cambiar la distribución del texto, usa el Word original.
+
+Después de añadir notas, descarga el archivo como PDF para conservarlas. Seguirán disponibles al volver a abrirlo. Puedes copiar una respuesta sin añadir una nota.
+
+## Ejemplos
+
+- «Resume la página actual».
+
+- «Añade una nota a la página 2: Revisar el presupuesto».
+
+- «Rellena A1 a A100 con números del 1 al 100».
+
+## Ten en cuenta
+
+La IA puede interpretar mal una petición u omitir detalles. Revisa cifras, fechas y nombres. Los modelos locales procesan texto en tu dispositivo; los servicios conectados reciben el texto solicitado. El reconocimiento de voz puede usar un servicio en línea. El dictado queda en el borrador y no se envía automáticamente.
+
+[Ayuda](/es/help)

@@ -77,3 +77,84 @@ content, never solely on the assistant's completion text.
   the updated CSV, then send 你好 and receive a normal greeting again.
 - Native editor Undo remains the recovery mechanism. A dedicated action-owned
   Undo button and rich editor-inline diffs are not introduced by this follow-up.
+
+## PDF assistant follow-up
+
+The assistant now reads selectable text on the current PDF page and can propose a page note for review. It identifies the page being read and does not claim to have read the whole file. Scanned image text is unavailable. Notes are attached to pages and do not replace body text; selected-text transformations are shown as copyable replies.
+
+Cancellation leaves the file unchanged. Confirmed notes can be undone in the editor and survive saving and reopening. An injected failure after adding a note is rolled back, and the next note can still be added and undone. The desktop PDF editor exposes the same assistant entry on its existing left toolbar.
+
+Updated ordinary-user guidance is available in the seven localized assistant and help pages, with matching README summaries. Model interpretation quality remains a separate acceptance requirement.
+
+Final verification: 165 unit files and 4,915 tests passed. Type checking, lint, formatting and the production build passed. The final PDF editor run also verified a note on the second page, one-step Undo and persistence after saving and reopening. These controlled-response checks verify editor behavior, not the default model’s interpretation quality.
+
+## Imported assistant formats
+
+A new real-editor suite covers ODT, ODS, ODP, RTF and TXT using shared synthetic, non-private fixtures. Each case opens through the product file picker, verifies that the service receives the imported content as request context, waits for review without changing the file, confirms one native edit, reads the result independently and restores the original content with one native Undo. These checks cover the application contract with controlled service responses, not model interpretation quality.
+
+All five assistant cases passed. Together with existing OpenDocument/text save and PDF export cases and picker coverage, the final run passed 11 tests. The initial ODS failure was a test-provider parameter mismatch (`address` instead of the schema's `cell`), verified in the captured response; the application rejected it without changing the cell. Corrected the fixture response and reran the complete set successfully.
+
+DOC, XLS and PPT acceptance now uses genuine public legacy binary files. DOC insertion and XLS cell replacement pass review, native readback and one-step Undo. The PPT fixture has reserved title/body/footer regions: adding another box correctly fails for lack of room and rolls back, then editing the selected existing title succeeds after review and one Undo restores it. This does not imply arbitrary new text fits every slide. The opt-in corpus suite is not evidence of a pass when no corpus has been supplied.
+
+### Reproducing the public legacy run
+
+The legacy assistant cases use public LibreOffice regression files at pinned revision `63a2e191551b157adad367d020835e9ec21fc964`:
+
+- [Word zoom.doc](https://github.com/LibreOffice/core/blob/63a2e191551b157adad367d020835e9ec21fc964/sw/qa/extras/ww8export/data/zoom.doc)
+- [Spreadsheet universal-content.xls](https://github.com/LibreOffice/core/blob/63a2e191551b157adad367d020835e9ec21fc964/sc/qa/unit/data/xls/universal-content.xls)
+- [Presentation tdf49561.ppt](https://github.com/LibreOffice/core/blob/63a2e191551b157adad367d020835e9ec21fc964/sd/qa/unit/data/ppt/tdf49561.ppt)
+
+Download verification checks exact byte size, compound-file signature and SHA-256. Downloaded binaries remain in an ignored test output directory, not the repository. No private corpus is needed.
+
+```sh
+node bin/fetch-agent-legacy-fixtures.mjs
+LEGACY_AGENT_CORPUS_DIR=test-results-legacy-fixtures pnpm exec playwright test test/e2e/agent-imported-formats.spec.ts --workers=1
+CORPUS_DIR=test-results-legacy-fixtures CORPUS_DEEP=1 pnpm exec playwright test test/e2e/corpus.spec.ts --workers=1
+```
+
+Without the explicit corpus directory, the three legacy assistant cases are reported as skipped. They must not be counted as verified by the default suite. These representative files establish basic format-specific acceptance; they do not certify every legacy layout or every model's decisions.
+
+The public legacy corpus run also passed three files with no findings, covering import, save, trusted editing, PDF export and read-only behavior. The first PPT test mixed multi-line native text with rendered paragraph text; its marker now uses the first native text line. A subsequent insertion attempt correctly rolled back because reserved boxes left no free area. The final PPT case checks that failure explicitly and then verifies a real selected-title edit and Undo. No product code was weakened to make a crowded insertion pass.
+
+Final current-code imported assistant run: all eight cases passed with the explicit public corpus, including the legacy PPT insertion rollback followed by reviewed title replacement and exact Undo. No skipped legacy cases were counted. Targeted lint, formatting and diff checks passed; added-content privacy scan found zero local-path, username or token-shaped-secret matches.
+
+## Read results followed by grounded answers
+
+The controlled-provider PDF case now verifies a schema-planned content read followed by a separate tool-free answer, rather than allowing an initial chat response to stand in for that path. The expected answer is exactly `120`, and the provider must receive the native page text and matching read receipt. All eight imported-format cases similarly require a read-tool continuation before their existing native edit/review/Undo checks.
+
+Helper tests cover all four editor kinds, unavailable completion, unexpected tool calls and a provider that ignores Stop. Panel tests verify late answers are discarded after Stop or captured target invalidation. The empty-presentation regression remains unchanged and still shows an explicit unavailable-source result. Full unit regression initially passed 4,940 tests; final follow-up includes two additional host boundary cases. These are application-contract tests, not default-model qualification.
+
+Final host boundary checks passed after restoration. Temporarily removing the post-answer target guard made the target-invalidation test fail by displaying `LATE ANSWER`; restoring the guard made both Stop and target-invalidation cases pass. Final full unit run passed 166 files / 4,943 tests, including the reasoning-display regression. The combined PDF and imported-format browser run passed all 10 cases. Strict lint, TypeScript and formatting checks passed.
+
+The new reasoning-display regression first failed by rendering the model's leading `<think>` block alongside `120`. The answer path now reuses the existing presentation filter; no parallel reasoning parser was introduced.
+
+A fresh browser run with the final presentation filter and actual Qwen3 4B model answered “当前文档里的预算是多少？请只回答金额。” with visible text exactly `120` on the synthetic TXT source. No reasoning protocol tags were displayed. This single final-code trial does not establish repeated multilingual model qualification.
+
+## Composer and reading-focus follow-up
+
+- Keep the next request editable while a response is pending. Enter cannot submit
+  or queue it during the active request, and completion does not send the draft.
+- Announce actual reading and response phases in the existing polite status.
+  Pending review uses the existing inline status and retains destructive scope
+  information; completed changes remain compact.
+- Appending a review follows the latest message only when already near the end.
+  Completing a response does not move keyboard focus away from historical reading
+  or another control. A focused Stop returns to the editable draft.
+- Four native-editor cases cover pending drafts and focus in DOCX, XLSX, PPTX and
+  PDF. The final combined browser run passed all 24 cases, including eight imported
+  formats with the public legacy corpus enabled, native writes and Undo.
+- Ordinary sequential request tests now wait for the active request to end rather
+  than treating an editable input as completion. Initial parallel verification
+  had two imported-file readback failures; both passed in isolated rechecks and
+  the final sequential run. A repeated three-worker run alongside the heavy
+  type check still had three failures; a dedicated six-case parallel rerun passed
+  after the type check ended. Reliability under competing heavy workloads remains
+  an open observation; the timing checks and native readback assertions remain intact.
+- The first full unit run exceeded the existing timeout in the bounded model-file
+  read test while other checks were running. Both file-read cases passed in an
+  isolated recheck. No timeout or acceptance condition was relaxed.
+
+Final full unit regression: 166 files, 4,949 tests passed. Formatting, strict lint and TypeScript checks passed.
+
+These interaction checks use controlled provider responses. They do not establish
+seven-language model quality or actual screen-reader acceptance.

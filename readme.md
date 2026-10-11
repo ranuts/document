@@ -36,14 +36,13 @@ device, so documents are never uploaded, and no account is involved.
 
 ## AI document assistant
 
-Select a passage to rewrite, summarize or translate. Review the result before adding it to your document. Off by default · This browser only.
+Say what you want to do: ask about content, work on text or organize data. Review changes before applying them. Off by default · This browser only.
 
-Choose how to use the assistant after enabling it. You start the first download and can cancel at any time.
+Choose a local model or connect your AI service. Model files stay in this browser and cached files can be reused when preparing the model for another document.
 
-- **Use on this computer**: Text is processed on this device. First-time setup downloads files and may slow your computer; you can cancel.
-- **Use your own AI service**: Text you send goes to the selected service. Your own service details are required; service fees may apply.
+Word supports drafting and selected-text work; Excel and CSV support data operations; PowerPoint supports slide text and pages. PDF supports questions, summaries and translations of selectable text on the current page, plus reviewed page notes. Scanned image text is not recognized, and page notes do not rewrite PDF body text.
 
-Compare the original with the result, then confirm to replace the selection. You can also copy it. Use editor Undo if needed; changed selections require a new proposal.
+Suggestions show their location and content. Edit them or ask for adjustments before applying. Cancel unwanted changes, or use editor Undo after applying. Clearing or overwriting content requires confirmation; read-only files can only be viewed.
 
 [How to use it](https://edit.chaxus.com/ai-document-assistant)
 

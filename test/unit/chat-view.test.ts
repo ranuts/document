@@ -382,3 +382,54 @@ it('preserves interrupted block-array protection through history restoration int
   expect(view.el.querySelector('.cui-apply')).toBeNull();
   expect(view.el.querySelector('.cui-copy')).not.toBeNull();
 });
+
+it('keeps a next draft editable during a response without sending or queuing it', () => {
+  const { view, input, onSend } = mount();
+  view.setRunning(true);
+  expect(input.disabled).toBe(false);
+  view.setInput('Next request');
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  expect(onSend).not.toHaveBeenCalled();
+  expect(input.value).toBe('Next request');
+  view.setRunning(false);
+  expect(onSend).not.toHaveBeenCalled();
+  expect(input.value).toBe('Next request');
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  expect(onSend).toHaveBeenCalledExactlyOnceWith('Next request');
+});
+
+it('does not interrupt historical reading when a review is appended', () => {
+  const { view } = mount();
+  const messages = view.el.querySelector<HTMLElement>('.cui-messages')!;
+  Object.defineProperties(messages, { scrollHeight: { value: 1000 }, clientHeight: { value: 200 } });
+  messages.scrollTop = 100;
+  vi.mocked(messages.scrollTo).mockClear();
+  const review = document.createElement('section');
+  review.textContent = 'Review changes';
+  view.appendContent(review);
+  expect(messages.contains(review)).toBe(true);
+  expect(messages.scrollTo).not.toHaveBeenCalled();
+  expect(view.el.querySelector<HTMLButtonElement>('.cui-scroll-bottom')!.hidden).toBe(false);
+});
+
+it('returns focus from Stop to the editable draft when the response finishes', () => {
+  const { view, input } = mount();
+  view.setRunning(true);
+  view.el.querySelector<HTMLButtonElement>('.cui-send')!.focus();
+  view.setRunning(false);
+  expect(document.activeElement).toBe(input);
+});
+
+it('announces the actual active phase once and resets it after completion', () => {
+  const { view } = mount();
+  view.setLabels({ waiting: 'Generating', reading: 'Reading', planning: 'Preparing' });
+  view.setRunning(true);
+  view.setActivity('reading');
+  expect(view.el.querySelector('[role="status"]')?.textContent).toBe('Reading');
+  view.setLabels({ waiting: '生成中', reading: '读取中', planning: '准备中' });
+  expect(view.el.querySelector('[role="status"]')?.textContent).toBe('读取中');
+  view.setRunning(false);
+  expect(view.el.querySelector('[role="status"]')?.textContent).toBe('');
+  view.setRunning(true);
+  expect(view.el.querySelector('[role="status"]')?.textContent).toBe('生成中');
+});
