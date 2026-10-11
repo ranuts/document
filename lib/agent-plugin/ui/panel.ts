@@ -591,6 +591,9 @@ export function createAgentPanel(
     labels: chatLabels(),
   });
   const readiness = document.createElement('p');
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted) chat.dispose();
+  });
   readiness.className = 'agent-readiness';
   readiness.setAttribute('role', 'status');
   chat.el.append(readiness);

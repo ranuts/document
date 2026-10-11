@@ -30,10 +30,12 @@ function appendTokens(parent: Node, tokens: Token[]): void {
       const table = token as Tokens.Table;
       const wrapper = document.createElement('div');
       wrapper.className = 'cui-table';
+      wrapper.tabIndex = 0;
       const el = document.createElement('table');
       const head = el.createTHead().insertRow();
       for (const cell of table.header) {
         const th = document.createElement('th');
+        th.scope = 'col';
         appendTokens(th, cell.tokens);
         head.append(th);
       }
@@ -48,6 +50,7 @@ function appendTokens(parent: Node, tokens: Token[]): void {
     }
     if (token.type === 'code') {
       const pre = document.createElement('pre');
+      pre.tabIndex = 0;
       const code = document.createElement('code');
       code.textContent = (token as Tokens.Code).text;
       pre.append(code);

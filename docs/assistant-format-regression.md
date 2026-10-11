@@ -158,3 +158,58 @@ Final full unit regression: 166 files, 4,949 tests passed. Formatting, strict li
 
 These interaction checks use controlled provider responses. They do not establish
 seven-language model quality or actual screen-reader acceptance.
+
+## Sidebar interaction details
+
+The draft reflows when the sidebar width changes; long drafts scroll within the
+existing input. Layout changes keep the latest answer visible only when the reader
+was following the end. Reading history does not resume following implicitly.
+Copy uses fixed-size success/failure icons, a separate polite announcement and an
+available retry action. Feedback does not replace running activity. Message block
+edges, nested lists and table text use the existing theme and type scale. Code
+and overflowing tables are keyboard-reachable and retain their own scroll areas.
+
+The first browser run found a real viewport-ordering defect: a scroll event from
+composer growth was mistaken for intentional scrolling. A new regression models
+that event arriving before the resize notification. A later run rejected resize
+observer delivery errors through the existing L0 check. Layout writes now run in
+the next animation frame and only changed widths trigger input reflow, following
+the [browser guidance on resize observation errors](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver#observation_errors).
+The L0 check and its error allowlist were not changed. A separate test-locator
+failure was corrected to select the runtime sidebar rather than the hidden
+onboarding panel; no product assertion was removed.
+
+Final current-code verification: 167 unit files and 4,956 tests passed. The
+production-build browser run passed all 24 cases, including sidebar resizing,
+long drafts, history position, clipboard feedback and keyboard scrolling in
+DOCX/XLSX/PPTX/PDF, eight imported formats, native writes, Undo and scoped PDF
+behavior. These interaction cases use controlled provider responses; actual
+screen-reader acceptance and repeated multilingual model qualification remain open.
+
+## Exploratory repeated model reading
+
+A separate on-device Qwen3 4B session used a synthetic DOCX containing exactly
+`Project budget: 120.Due date: 2026-11-01.` plus the native final newline. The
+question asked for the budget alone, with expected visible answer `120`. The UI
+language stayed English; question languages varied. Each request started a new
+conversation. Native reads before and after the session confirmed the source
+was unchanged.
+
+| Question language | Trials | Exact expected answers | Observed failures                                                            |
+| ----------------- | -----: | ---------------------: | ---------------------------------------------------------------------------- |
+| English           |      3 |                      3 | None in these trials                                                         |
+| Chinese           |      2 |                      2 | None in these trials                                                         |
+| Japanese          |      1 |                      1 | None in this trial                                                           |
+| Korean            |      1 |                      1 | None in this trial                                                           |
+| German            |      1 |                      1 | None in this trial                                                           |
+| Spanish           |      1 |                      1 | None in this trial                                                           |
+| Portuguese        |      3 |                      0 | One operation-selection refusal; two answers included the unrelated due date |
+
+These are exploratory observations, not a balanced benchmark or final-build
+qualification. Repeating the question after a temporary prompt-order experiment
+still produced a selection refusal and an answer with the extra date. Delivery
+of that experimental prompt was not independently attested in the live session,
+so this is not a controlled A/B result. The experiment was removed instead of
+being promoted as a fix. The local model's multilingual task selection and answer
+formatting remain unqualified; neither a green CI run nor passing editor adapter
+tests establish those capabilities.

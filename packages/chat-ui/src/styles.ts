@@ -31,15 +31,24 @@ export const CHAT_UI_CSS = `
 .cui-bubble code { font-family:ui-monospace,monospace; font-size:.88em; background:var(--cui-user-bg); padding:2px 4px; border-radius:4px; }
 .cui-bubble pre { margin:12px 0; background:var(--cui-user-bg); padding:12px; border-radius:10px; overflow:auto; white-space:pre; }
 .cui-bubble pre code { padding:0; background:none; }
+.cui-bubble > :first-child { margin-top:0; }
+.cui-bubble > :last-child { margin-bottom:0; }
+.cui-bubble li > p { margin:0 0 6px; }
+.cui-bubble li > :last-child { margin-bottom:0; }
+.cui-bubble li > :is(ul,ol) { margin-bottom:0; }
+.cui-bubble pre,.cui-table { max-width:100%; box-sizing:border-box; overscroll-behavior-x:contain; }
 .cui-bubble a { color:var(--cui-text); text-underline-offset:3px; }
-.cui-table { overflow:auto; }
-.cui-table table { border-collapse:collapse; font-size:13px; }
+.cui-table { overflow:auto; margin:12px 0; }
+.cui-table table { border-collapse:collapse; font-size:inherit; min-width:100%; overflow-wrap:normal; }
 .cui-table th,.cui-table td { border-bottom:1px solid var(--cui-border); padding:8px; text-align:left; }
 .cui-message-actions { display:flex; gap:8px; }
 .cui-message-actions button { border:0; background:transparent; color:var(--cui-muted); cursor:pointer; font:inherit; font-size:11px; min-height:28px; padding:4px; border-radius:6px; }
 .cui-message-actions button:hover { color:var(--cui-text); background:var(--cui-user-bg); }
 .cui-message-actions button:disabled { opacity:.5; cursor:default; }
-.cui-root button:focus-visible { outline:var(--ran-focus-ring, 2px solid var(--ran-color-link, #0070f3)); outline-offset:3px; }
+.cui-message-actions .cui-copy { flex:0 0 28px; width:28px; display:inline-flex; align-items:center; justify-content:center; }
+.cui-message-actions .cui-copy svg { flex-shrink:0; }
+.cui-feedback { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+.cui-root :is(button,pre,.cui-table):focus-visible { outline:var(--ran-focus-ring, 2px solid var(--ran-color-link, #0070f3)); outline-offset:3px; }
 .cui-streaming .cui-message-actions { display:none; }
 .cui-streaming .cui-bubble { white-space:pre-wrap; }
 .cui-activity { color:var(--cui-muted); font-size:12px; margin:-10px 0; white-space:pre-wrap; overflow-wrap:anywhere; }
@@ -58,7 +67,7 @@ export const CHAT_UI_CSS = `
 .cui-composer-bar { display:flex; align-items:center; gap:8px; margin-top:12px; }
 .cui-actions { display:flex; flex:1; min-width:0; align-items:center; gap:6px; font-size:12px; flex-wrap:wrap; }
 .cui-context:empty { display:none; }
-.cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:40px; }
+.cui-input { min-width:0; width:100%; box-sizing:border-box; resize:none; overflow-y:auto; border:0; outline:none; background:transparent; padding:0; font:inherit; line-height:1.5; color:inherit; max-height:160px; min-height:40px; }
 .cui-input::placeholder { color:var(--cui-muted); }
 .cui-send { flex:0 0 auto; width:30px; height:30px; box-sizing:border-box; padding:0; display:flex; align-items:center; justify-content:center; border:0; border-radius:8px; cursor:pointer; background:var(--cui-accent); color:var(--cui-accent-contrast); }
 .cui-send:disabled { opacity:.35; cursor:default; }

@@ -12,6 +12,8 @@ notes. Entries describe what users experience, not internal refactors.
 - **Keep writing while the assistant responds.** Prepare the next request without
   sending it automatically. Reading older messages keeps your place, and activity
   hints distinguish reading, responding and waiting for your review.
+  The draft adapts when you resize the sidebar, and long drafts scroll inside the
+  input. Copy feedback stays compact; code and tables can be navigated by keyboard.
 
 - **Ask the assistant about the current PDF page and review notes before adding them.**
   It can read selectable page text and add page notes that you can undo. Scanned

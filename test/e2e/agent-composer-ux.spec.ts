@@ -4,7 +4,9 @@ import { buildDocx, toBase64 } from './lib/ooxml';
 // Controlled latency verifies editing and focus during a real panel request,
 // independently of model quality. No request is queued or sent automatically.
 for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
-  test(`${ext}: a pending response preserves an editable next draft and historical focus`, async ({ page }) => {
+  test(`${ext}: a pending response preserves an editable next draft and historical focus`, async ({
+    page,
+  }, testInfo) => {
     test.setTimeout(120_000);
     let pdf: number[] | undefined;
     if (ext === 'pdf') {
@@ -56,7 +58,19 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       else {
         answers++;
         if (answers === 1) await hold;
-        content = 'Completed response';
+        content =
+          answers === 1
+            ? 'Completed response'
+            : [
+                '# Result',
+                ...Array.from(
+                  { length: 24 },
+                  (_, index) => `Paragraph ${index + 1}: A readable answer in a narrow document sidebar.`,
+                ),
+                '- First point\n- Second point',
+                '```txt\n' + 'long_code_value_'.repeat(30) + '\n```',
+                '| First | Second | Third | Fourth | Fifth | Sixth | Seventh | Eighth |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 |',
+              ].join('\n\n');
       }
       await route.fulfill({ json: { done: true, message: { role: 'assistant', content } } });
     });
@@ -95,6 +109,52 @@ for (const ext of ['docx', 'xlsx', 'pptx', 'pdf'] as const) {
       await input.press('Enter');
       await expect.poll(() => answers).toBe(2);
       await expect(page.locator('.cui-msg-user')).toHaveCount(2);
+      await expect(page.locator('.cui-send-stop')).toHaveCount(0);
+      await expect(page.locator('.cui-msg-agent')).toHaveCount(2);
+      const resize = page.getByRole('separator', { name: 'Resize AI panel' });
+      const draft = 'Keep this next draft editable while I resize the sidebar. '.repeat(8);
+      await resize.press('Home');
+      await input.fill(draft);
+      await expect.poll(() => input.evaluate((el) => el.clientHeight)).toBe(160);
+      expect(await input.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+      await expect.poll(() => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThan(3);
+      const narrowHeight = await input.evaluate((el) => el.clientHeight);
+      await resize.press('End');
+      await expect.poll(() => input.evaluate((el) => el.clientHeight)).toBeLessThan(narrowHeight);
+      await expect(input).toHaveValue(draft);
+      await expect.poll(() => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThan(3);
+      await log.evaluate((el) => {
+        el.scrollTop = 0;
+      });
+      await resize.press('Home');
+      await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+      await input.fill(draft + draft);
+      await expect.poll(() => log.evaluate((el) => el.scrollTop)).toBe(0);
+      await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+      const copy = page.locator('.cui-copy').first();
+      const width = (await copy.boundingBox())!.width;
+      await copy.click();
+      await expect(copy).toHaveAccessibleName('Copied');
+      await expect(page.locator('.cui-feedback')).toHaveText('Copied');
+      expect((await copy.boundingBox())!.width).toBe(width);
+      await expect(copy).toHaveAccessibleName('Copy');
+      await expect(page.locator('.cui-msg-agent pre')).toHaveAttribute('tabindex', '0');
+      await expect(page.locator('.cui-msg-agent .cui-table')).toHaveAttribute('tabindex', '0');
+      await expect
+        .poll(() => page.locator('.agent-runtime-panel').evaluate((el) => el.scrollWidth - el.clientWidth))
+        .toBeLessThan(2);
+      expect(answers).toBe(2);
+      await page.getByRole('button', { name: 'Scroll to latest' }).click();
+      await expect.poll(() => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThan(3);
+      const code = page.locator('.cui-msg-agent pre');
+      await code.focus();
+      await code.press('ArrowRight');
+      await expect.poll(() => code.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+      const table = page.locator('.cui-msg-agent .cui-table');
+      await table.focus();
+      await table.press('ArrowRight');
+      await expect.poll(() => table.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+      await page.screenshot({ path: testInfo.outputPath('chat-details.png') });
     } finally {
       release();
     }
