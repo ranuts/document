@@ -59,6 +59,8 @@ export class ChatView {
   private inputWidth = 0;
   private inputNeedsResize = false;
   private layoutFrame?: number;
+  // Content mutations consume this state; only scrolling, jumping to the end,
+  // or clearing a conversation may change it. Reflow is not reader intent.
   private following = true;
   private scrollHeight = 0;
   private viewportHeight = 0;
@@ -215,8 +217,7 @@ export class ChatView {
       this.endStream();
     }
     if (message.role === 'user') this.lastUserText = message.text;
-    const stick = this.nearBottom();
-    this.following = stick;
+    const stick = this.following;
     this.emptyEl.remove();
     if (message.role === 'tool') {
       const last = this.messagesEl.lastElementChild;
@@ -351,8 +352,7 @@ export class ChatView {
    */
   appendDelta(delta: string): void {
     if (!delta) return;
-    const stick = this.nearBottom();
-    this.following = stick;
+    const stick = this.following;
     if (!this.liveMsg) {
       this.liveMsg = this.append({ role: 'agent', text: '' }).parentElement as HTMLDivElement;
       this.liveMsg.classList.add('cui-streaming');
@@ -366,8 +366,7 @@ export class ChatView {
 
   /** Finalise the current streaming bubble (removes the caret). */
   endStream(): void {
-    const stick = this.nearBottom();
-    this.following = stick;
+    const stick = this.following;
     const bubble = this.liveMsg?.querySelector<HTMLElement>('.cui-bubble');
     if (bubble) renderMarkdown(bubble, this.liveText);
     this.liveMsg?.classList.remove('cui-streaming');
@@ -379,8 +378,7 @@ export class ChatView {
   /** Mount a host-owned review card in chronological conversation order. */
   appendContent(content: HTMLElement): void {
     this.emptyEl.remove();
-    const stick = this.nearBottom();
-    this.following = stick;
+    const stick = this.following;
     this.messagesEl.append(content);
     this.resizeObserver?.observe(content);
     if (stick) this.scrollToEnd();

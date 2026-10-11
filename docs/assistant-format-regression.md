@@ -213,3 +213,21 @@ so this is not a controlled A/B result. The experiment was removed instead of
 being promoted as a fix. The local model's multilingual task selection and answer
 formatting remain unqualified; neither a green CI run nor passing editor adapter
 tests establish those capabilities.
+
+## Reflow and content-arrival interleaving
+
+Layout tests reproduced a loss of bottom following when a streamed delta, a
+finished message, Markdown completion or a review arrived after viewport reflow
+but before its scheduled layout frame. Content arrivals were overwriting reader
+attachment using the temporarily changed geometry. They now consume the existing
+following state; scroll handling updates attachment, and jumping to the end or
+clearing the conversation resets it.
+
+Four regression cases failed before the repair and pass afterwards. A fifth case
+checks that scrolling into history before the pending frame still prevents the
+next delta from pulling the reader back. The full unit suite passed 4,961 tests;
+two asynchronous Promise warnings were emitted during that run. The production
+composer UX suite passed all four DOCX, XLSX, PPTX and PDF cases, covering draft
+reflow, bottom following, historical position, focus and keyboard interaction.
+Those browser cases use controlled provider responses and do not qualify actual
+model accuracy or independently reproduce the exact frame interleaving.

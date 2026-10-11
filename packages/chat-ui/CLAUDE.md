@@ -80,6 +80,7 @@ onSend: async (text) => {
 - The send button is an **icon** (up-arrow ⇄ stop square); `labels.send`/`labels.stop` become its `title`/`aria-label`. It auto-disables when the input is empty (and idle).
 - Modern look: assistant messages are bubble-less/full-width, the user gets an accent bubble, tool/error render as subtle chips; a jump-to-latest button appears when scrolled up and new content only auto-scrolls when already near the bottom.
 - Width changes reflow the draft. Layout changes keep following the latest reply only while the reader is attached to the end; browsing history preserves its position.
+- Message arrivals consume the current following state. They must not recompute it from post-reflow geometry: scroll handling owns reader attachment, while jumping to the end and clearing reset it.
 - Copy feedback uses fixed-size icons and a separate polite announcement. Clipboard failure leaves the action available to retry; feedback never replaces running activity.
 - Restyle via CSS custom properties on `.cui-root` (`--cui-accent`, `--cui-user-bg`, …) — don't depend on internal `cui-*` class names.
 - DOM is built with the ranui `builder` (View/Div/Span/ButtonBuilder) and the scroll handler is throttled via ranuts; the package depends on `ranui` + `ranuts`.
