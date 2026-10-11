@@ -214,6 +214,48 @@ being promoted as a fix. The local model's multilingual task selection and answe
 formatting remain unqualified; neither a green CI run nor passing editor adapter
 tests establish those capabilities.
 
+### Equal-count follow-up on 2026-10-11
+
+A fresh workspace development session loaded the cached
+`Qwen3-4B-q4f16_1-MLC` model and used the same synthetic DOCX text above. The UI
+remained English. Each request started a new conversation; the seven questions
+were repeated in the same order for three rounds. There was no prompt experiment,
+provider substitution or answer postprocessing. The current copy-feedback DOM
+marker was present. Native reads before and after all 21 requests returned the
+exact same source text and final newline.
+
+| Question language | Trials | Exact `120` answers | Failures                                         |
+| ----------------- | -----: | ------------------: | ------------------------------------------------ |
+| English           |      3 |                   3 | None                                             |
+| Chinese           |      3 |                   3 | None                                             |
+| Japanese          |      3 |                   3 | None                                             |
+| Korean            |      3 |                   3 | None                                             |
+| German            |      3 |                   3 | None                                             |
+| Spanish           |      3 |                   1 | Rounds 1 and 2: no executable operation selected |
+| Portuguese        |      3 |                   3 | None                                             |
+
+Questions, unchanged between rounds:
+
+- English: What is the budget in the current document? Answer with the amount only.
+- Chinese: 当前文档里的预算是多少？请只回答金额。
+- Japanese: 現在の文書の予算はいくらですか？金額だけを答えてください。
+- Korean: 현재 문서의 예산은 얼마인가요? 금액만 답해주세요.
+- German: Wie hoch ist das Budget im aktuellen Dokument? Antworte nur mit dem Betrag.
+- Spanish: ¿Cuál es el presupuesto del documento actual? Responde solo con el importe.
+- Portuguese: Qual é o orçamento no documento atual? Responda apenas com o valor.
+
+The visible Spanish error was "No executable operation was selected. Clarify the
+request or try another model." Raw provider selection output was not captured,
+so this does not identify a malformed selection, unsupported operation or model
+reasoning error as the specific cause. The condition that only Portuguese fails
+is contradicted by this session; language support remains unchanged. Earlier
+Portuguese failures remain recorded rather than replaced by these successes.
+
+This is an equal-count reading probe, not full language acceptance. It covers one
+short source, one question per language, an English UI, three samples and a
+development server. It does not qualify production delivery, matching-language
+UIs, writing fidelity, complex operations, other formats or long contexts.
+
 ## Reflow and content-arrival interleaving
 
 Layout tests reproduced a loss of bottom following when a streamed delta, a
